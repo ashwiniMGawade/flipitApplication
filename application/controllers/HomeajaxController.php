@@ -9,7 +9,7 @@ class HomeajaxController extends Zend_Controller_Action
         $topCategoriesOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             "all_hometocategoryoffers". $categoryId ."_list",
             array(
-                'function' => 'Category::getCategoryVoucherCodes',
+                'function' => 'KC\Repository\Category::getCategoryVoucherCodes',
                 'parameters' => array($categoryId, 0, 'homePage')
             )
         );
@@ -32,7 +32,7 @@ class HomeajaxController extends Zend_Controller_Action
     {
         $newOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             "all_homenewoffer_list",
-            array('function' => 'Offer::getNewestOffers', 'parameters' => array('newest', 10, '', '', 'homePage'))
+            array('function' => 'KC\Repository\Offer::getNewestOffers', 'parameters' => array('newest', 10, '', '', 'homePage'))
         );
         $homePagePartials = new FrontEnd_Helper_HomePagePartialFunctions();
         $rightDivWithContent = $homePagePartials->getRightDivByAjax(
@@ -49,7 +49,7 @@ class HomeajaxController extends Zend_Controller_Action
     {
         $moneySavingGuidesList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             "all_homemanisaving_list",
-            array('function' => 'Articles::getAllArticles', 'parameters' => array(10))
+            array('function' => 'KC\Repository\Articles::getAllArticles', 'parameters' => array(10))
         );
         $homePagePartials = new FrontEnd_Helper_HomePagePartialFunctions();
         $guidesHtml = $homePagePartials->getMoneySavingGuidesRightForAjax(

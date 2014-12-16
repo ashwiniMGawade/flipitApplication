@@ -249,22 +249,16 @@ class Offer Extends \KC\Entity\Offer
     public static function getTopOffers($limit)
     {
         $topCouponCodes = self::getTopCouponCodes(array(), $limit);
+       
         if (count($topCouponCodes) < $limit) {
             $newestCodesLimit = $limit - count($topCouponCodes);
             $newestTopVouchercodes = self::getNewestOffers('newest', $newestCodesLimit);
-            foreach ($newestTopVouchercodes as $value) {
-                $topCouponCodes[] = array(
-                    'id'=> $value['shop']['id'],
-                    'permalink' => $value['shop']['permalink'],
-                    'offer' => $value
-                 );
-            }
         }
-        $topOffers = array();
-        foreach ($topCouponCodes as $value) {
-            $topOffers[] = $value['offer'];
+        $topOffers = array_merge($topCouponCodes, $newestTopVouchercodes);
+        foreach ($topOffers as $value) {
+            $offers[] = $value['popularcode'];
         }
-        return $topOffers;
+        return $offers;
     }
 
     public static function getTopCouponCodes($shopCategories, $limit = 5)
@@ -272,44 +266,35 @@ class Offer Extends \KC\Entity\Offer
         $currentDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select(
-            'p.id as PopularCodeId,o.id as offerId,o.couponCodeType,o.refURL,
-            o.discountType,o.title,o.discountvalueType,o.Visability as visability,o.exclusiveCode,
-            o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,
-            o.startDate as startdate,o.endDate as enddate,o.refOfferUrl,
-            o.extendedUrl,s.id as shopId,s.name,s.permaLink as permalink,s.usergenratedcontent,s.deepLink,
-            s.deepLinkStatus, s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name'
+            'p,o,s,terms,img'
         )
         ->from('KC\Entity\PopularCode', 'p')
         ->leftJoin('p.popularcode', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('s.logo', 'img')
         ->leftJoin('o.offertermandcondition', 'terms')
-        ->setParameter(1, 0)
-        ->where('o.deleted = ?1')
+
+        ->where('o.deleted = 0')
         ->andWhere(
             "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
             cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
         )
-        ->setParameter(3, 0)
-        ->andWhere('s.deleted = ?3')
-        ->setParameter(4, 0)
-        ->andWhere('o.offline = ?4');
+    
+        ->andWhere('s.deleted = 0')
+     
+        ->andWhere('o.offline = 0');
 
         if (!empty($shopCategories)) {
             $query = $query->leftJoin('s.categoryshops', 'sc')
-            ->setParameter(5, $shopCategories)
-            ->andWhere($entityManagerUser->expr()->in('sc.shop', '?5'));
+            ->andWhere($entityManagerUser->expr()->in('sc.shop', $shopCategories));
         }
-        $query->setParameter(5, 1)
-            ->andWhere('s.status = ?5')
+        $query
+            ->andWhere('s.status = 1')
             ->andWhere('o.endDate >'."'".$currentDate."'")
             ->andWhere('o.startDate <='."'".$currentDate."'")
-            ->setParameter(7, 'CD')
-            ->andWhere('o.discountType = ?7')
-            ->setParameter(8, 0)
-            ->andWhere('o.userGenerated = ?8')
-            ->setParameter(9, 'MEM')
-            ->andWhere('o.Visability != ?9')
+            ->andWhere("o.discountType = 'CD'")
+            ->andWhere('o.userGenerated = 0')
+            ->andWhere("o.Visability != 'MEM'")
             ->orderBy('p.position', 'ASC')
             ->setMaxResults($limit);
         $topCouponCodes = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -321,15 +306,7 @@ class Offer Extends \KC\Entity\Offer
         $currentDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select(
-            's.id as shopId,s.name as shopName,
-            s.permaLink as permalink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,
-            s.actualUrl,terms.content,
-            o.id,o.Visability as visability,o.userGenerated,o.title,o.authorId,
-            o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,
-            o.discount,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refURL as refUrl,o.extendedUrl,
-            o.discountType,o.startDate as startdate,o.endDate as enddate,
-            img.path as shopPath, img.name as shopImage, logo.name, logo.path,
-            vot.id as voteId,vot.vote'
+            's, o, logo, vot, fv, terms'
         )
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')

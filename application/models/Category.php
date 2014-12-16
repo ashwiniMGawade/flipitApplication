@@ -73,7 +73,7 @@ class Category extends BaseCategory
         ->from('PopularCategory p')
         ->addSelect(
             "(
-                SELECT  count(*) FROM refOfferCategory roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  WHERE  
+                SELECT  count(*) FROM refOfferCategory roc LEFT JOIN roc.offer off LEFT JOIN off.shop s  WHERE  
                 off.deleted = 0 and s.deleted = 0 and roc.categoryId = p.categoryId and off.enddate >'"
             .$currentDateAndTime."' and off.discounttype='CD' and off.Visability!='MEM') as countOff"
         )

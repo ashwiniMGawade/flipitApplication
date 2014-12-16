@@ -63,7 +63,7 @@ class Category extends \KC\Entity\Category
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDateAndTime = date('Y-m-d 00:00:00');
         $popularCategories = $queryBuilder
-            ->select('p,o,i')
+            ->select('p, o, i')
             ->from('KC\Entity\PopularCategory', 'p')
             ->addSelect(
                 "(
@@ -79,7 +79,7 @@ class Category extends \KC\Entity\Category
                     as totalOffers"
             )
             ->leftJoin('p.category', 'o')
-            ->leftJoin('o.categoryoffres', 'i')
+            ->leftJoin('o.categoryicon', 'i')
             ->where('o.deleted=0')
             ->andWhere('o.status= 1')
             ->orderBy("countOff", "DESC")

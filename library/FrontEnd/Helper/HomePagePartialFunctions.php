@@ -56,8 +56,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
         foreach ($categories as $category) {
             $categoryImage =
                 PUBLIC_PATH_CDN
-                .$category['category']['categoryicon']['path']
-                . $category['category']['categoryicon']['name'];
+                .$category[0]['category'][0]['categoryicon']['path']
+                . $category[0]['category'][0]['categoryicon']['name'];
             $categoriesOffers =
                 $category['totalOffers'] . ' '
                 . FrontEnd_Helper_viewHelper::__form('form_Offers'). ' ' . $category['countOff']
@@ -66,11 +66,11 @@ class FrontEnd_Helper_HomePagePartialFunctions
             $categoriesHtml .= $this->getLeftColumnContent(
                 'categories',
                 $categoryImage,
-                $category['category']['name'],
+                $category[0]['category']['name'],
                 70,
-                $category['category']['permaLink'],
+                $category[0]['category']['permaLink'],
                 $categoriesOffers,
-                $category['category']['id']
+                $category[0]['category']['id']
             );
         }
         return $categoriesHtml;
@@ -230,7 +230,9 @@ class FrontEnd_Helper_HomePagePartialFunctions
     {
         $topOfferRightHtml = '';
         foreach ($this->homePageData['topOffers'] as $topOffer) {
-            $topOfferRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($topOffer);
+            if (!empty($topOffer)) {
+                $topOfferRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($topOffer);
+            }
         }
         return $topOfferRightHtml;
     }
@@ -251,9 +253,9 @@ class FrontEnd_Helper_HomePagePartialFunctions
     public function getRightColumnOffersHtmlForAllOffersTypes($offer)
     {
         $shopImage =
-            PUBLIC_PATH_CDN.ltrim($offer['shop']['logo']['path'], "/") .'thum_medium_'. $offer['shop']['logo']['name'];
-        $shopPermalink = $offer['shop']['permalink'];
-        $shopName = $offer['shop']['name'];
+            PUBLIC_PATH_CDN.ltrim($offer['shopOffers']['logo']['path'], "/") .'thum_medium_'. $offer['shopOffers']['logo']['name'];
+        $shopPermalink = $offer['shopOffers']['permaLink'];
+        $shopName = $offer['shopOffers']['name'];
         $offerTitle = mb_strlen($offer['title'], 'UTF-8') > 160
             ? mb_substr($offer['title'], 0, 160, 'UTF-8') . "..."
             : $offer['title'];
