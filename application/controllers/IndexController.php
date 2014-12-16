@@ -21,10 +21,6 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        echo "<pre>";
-        $a = new FrontEnd_Helper_viewHelper();
-        print_r($a->gethomeSections('category'));
-        die('END');
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();
