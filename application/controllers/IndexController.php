@@ -21,10 +21,10 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        /*echo "<pre>";
-        $a = new \KC\Repository\ViewCount();
-        print_r($a->getAmountClickoutsLastWeek(1,3));
-        die('END');*/
+        echo "<pre>";
+        $a = new FrontEnd_Helper_viewHelper();
+        print_r($a->gethomeSections('category'));
+        die('END');
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();

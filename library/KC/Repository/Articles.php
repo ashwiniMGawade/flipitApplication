@@ -28,13 +28,13 @@ class Articles extends \KC\Entity\Articles
         $query = $queryBuilder->select('p, o, a, chap')
             ->from('\KC\Entity\MoneysavingArticle', 'p')
             ->leftJoin('p.moneysaving', 'o')
-            ->leftJoin('o.imagearticle', 'a')
+            ->leftJoin('o.thumbnail', 'a')
             ->leftJoin('o.articleChapter', 'chap')
             ->setParameter(1, '0')
             ->where('o.deleted = ?1')
             ->orderBy('p.position', 'ASC')
             ->setMaxResults($limit);
-        $moneySavingArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        echo $moneySavingArticles = $query->getQuery()->getSQL(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $moneySavingArticles;
     }
 
@@ -45,10 +45,10 @@ class Articles extends \KC\Entity\Articles
             ->from('KC\Entity\Articles', 'a')
             ->leftJoin('a.storearticles', 'stores')
             ->leftJoin('a.category', 'related')
-            ->leftJoin('related.articlecategory', 'category')
+            ->leftJoin('related.refArticlecategoryRelatedcategory', 'category')
             ->leftJoin('a.articleChapter', 'chapter')
-            ->leftJoin('a.imagearticle', 'artimg')
-            ->leftJoin('a.imagearticle', 'thum')
+            ->leftJoin('a.articleImage', 'artimg')
+            ->leftJoin('a.thumbnail', 'thum')
             ->leftJoin('stores.articleshops', 'shops')
             ->setParameter(1, $permalink)
             ->where('a.permalink = ?1')
@@ -64,14 +64,14 @@ class Articles extends \KC\Entity\Articles
     {
         $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('a, stores, related, category, chapter, artimg')
+        $query = $queryBuilder->select('a, stores, related, category, chapter, artimg, thumb')
             ->from('KC\Entity\Articles', 'a')
             ->leftJoin('a.storearticles', 'stores')
             ->leftJoin('a.category', 'related')
-            ->leftJoin('related.articlecategory', 'category')
+            ->leftJoin('related.refArticlecategoryRelatedcategory', 'category')
             ->leftJoin('a.articleChapter', 'chapter')
-            ->leftJoin('a.imagearticle', 'artimg')
-            ->leftJoin('a.imagearticle', 'thum')
+            ->leftJoin('a.articleImage', 'artimg')
+            ->leftJoin('a.thumbnail', 'thumb')
             ->setParameter(1, '1')
             ->where('a.publish = ?1')
             ->setParameter(2, '0')

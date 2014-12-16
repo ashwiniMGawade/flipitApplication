@@ -629,11 +629,8 @@ EOD;
             case "category":
                 $result = \KC\Repository\Category::getPopularCategories($limit);
                 break;
-            case "specialList":
-                $result = $data = SpecialList::getfronendsplpage($limit);
-                break;
             case "moneySaving":
-                $result = \KC\Repository\Articles::getmoneySavingArticles($limit);
+                $result = \KC\Repository\Articles::getAllArticles($limit);
                 break;
             case "asseenin":
                 $result = \KC\Repository\SeenIn::getSeenInContent();
@@ -697,7 +694,7 @@ EOD;
 
     public static function getDbConnectionDetails()
     {
-        $application = new Zend_Application(
+        $application = new \Zend_Application(
             APPLICATION_ENV,
             APPLICATION_PATH . '/configs/application.ini'
         );
@@ -725,12 +722,13 @@ EOD;
     public static function fillupTopCodeWithNewest($offers, $number)
     {
         if (count($offers) < $number) {
+            $offers = array();
             $additionalCodes = $number - count($offers);
             $additionalTopVouchercodes = \KC\Repository\Offer::getCommonNewestOffers('newest', $additionalCodes);
             foreach ($additionalTopVouchercodes as $additionalTopVouchercodekey => $additionalTopVouchercodevalue) {
                 $offers[] = array(
-                    'id'=> $additionalTopVouchercodevalue['shop']['id'],
-                    'permalink' => $additionalTopVouchercodevalue['shop']['permalink'],
+                    'id'=> $additionalTopVouchercodevalue['shopId'],
+                    'permalink' => $additionalTopVouchercodevalue['permalink'],
                     'offer' => $additionalTopVouchercodevalue
                 );
             }
@@ -822,13 +820,13 @@ EOD;
         foreach ($topVouchercodes as $offer) {
             $top10Offers = $offer['offer'];
             $xml->startElement("item");
-            $xml->writeElement($shopName, $top10Offers['shop']['name']);
+            $xml->writeElement($shopName, $top10Offers['shopName']);
             if (mb_strlen($top10Offers['title'], 'UTF-8') > 42) {
                 $xml->writeElement($description, mb_substr($top10Offers['title'], 0, 42, 'UTF-8')."...");
             } else {
                 $xml->writeElement($description, $top10Offers['title']);
             }
-            $xml->writeElement('link', $domainName . '/' . $top10Offers['shop']['permaLink']);
+            $xml->writeElement('link', $domainName . '/' . $top10Offers['permalink']);
             $xml->endElement();
         }
         if ($feedCheck == false) {
@@ -855,7 +853,7 @@ EOD;
 
     public static function getPagePermalink()
     {
-        $pagePermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $pagePermalink = ltrim(\Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $explodedPagePermalink = explode('/', $pagePermalink);
 
         if (LOCALE != '') {
