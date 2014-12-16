@@ -230,7 +230,9 @@ class FrontEnd_Helper_HomePagePartialFunctions
     {
         $topOfferRightHtml = '';
         foreach ($this->homePageData['topOffers'] as $topOffer) {
-            $topOfferRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($topOffer);
+            if (!empty($topOffer)) {
+                $topOfferRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($topOffer);
+            }
         }
         return $topOfferRightHtml;
     }
