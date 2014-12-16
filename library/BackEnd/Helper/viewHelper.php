@@ -27,8 +27,8 @@ class BackEnd_Helper_viewHelper
 
     public static function getLocaleByWebsite($localeId)
     {
-        $websiteDetails = \KC\Repositor\Website::getWebsiteDetails($localeId);
-        $localeName = explode('/', $websiteDetails['name']);
+        $websiteDetails = \KC\Repository\Website::getWebsiteDetails($localeId);
+        $localeName = explode('/', $websiteDetails[0]['name']);
         $locale = isset($localeName[1]) ?  $localeName[1] : "en";
         return $locale;
     }

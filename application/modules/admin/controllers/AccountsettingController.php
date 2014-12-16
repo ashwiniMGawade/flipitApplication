@@ -37,24 +37,24 @@ class Admin_AccountsettingController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $params = $this->_getAllParams();
-        if (!Auth_StaffAdapter::hasIdentity()) {
-            $referer = new Zend_Session_Namespace('referer');
+        if (!\Auth_StaffAdapter::hasIdentity()) {
+            $referer = new \Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
 
 
         # redirect of a user don't have any permission for this controller
-        $sessionNamespace = new Zend_Session_Namespace();
+        $sessionNamespace = new \Zend_Session_Namespace();
         $this->_settings  = $sessionNamespace->settings['rights'] ;
 
 
-        if(! $this->getRequest()->isXmlHttpRequest()) {
+        if (! $this->getRequest()->isXmlHttpRequest()) {
 
             # add action as new case which needs to be viewed by other users
             switch(strtolower($this->view->action)) {
@@ -62,7 +62,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                 case 'mandrill':
                 break;
                 default:
-                    if( $this->_settings['system manager']['rights'] != '1' ) {
+                    if ($this->_settings['system manager']['rights'] != '1') {
                         $this->_redirect('/admin/auth/index');
                     }
 
@@ -74,13 +74,13 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             switch(strtolower($this->view->action)) {
                 case 'madrill':
                 case 'changemailconfirmation':
-                case 'saveemailcontent' :
-                case 'email-header-footer' :
+                case 'saveemailcontent':
+                case 'email-header-footer':
                 break;
                 default:
-                    if( $this->_settings['system manager']['rights'] != '1' ) {
+                    if ($this->_settings['system manager']['rights'] != '1') {
                         $this->getResponse()->setHttpResponseCode(404);
-                        $this->_helper->redirector('index' , 'index' , null ) ;
+                        $this->_helper->redirector('index', 'index', null);
                     }
 
             }
@@ -124,7 +124,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
     public function changemailconfirmationAction()
     {
         $status=$this->getRequest()->getParam("status");
-        Signupmaxaccount::changeEmailConfimationSetting($status);
+        \KC\Repository\Signupmaxaccount::changeEmailConfimationSetting($status);
         die;
     }
 
@@ -135,7 +135,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             $isScheduled = $this->getRequest()->getParam("isScheduled", false);
 
             if ($isScheduled) {
-                if (Signupmaxaccount::saveScheduledNewsletter($this->getRequest())) {
+                if (\KC\Repository\Signupmaxaccount::saveScheduledNewsletter($this->getRequest())) {
                     $flash->addMessage(
                         array(
                             'success' => $this->view->translate('Newsletter has been successfully scheduled')
@@ -152,33 +152,33 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                 $this->_helper->redirector('emailcontent', 'accountsetting', null);
             }
 
-            Signupmaxaccount::updateNewsletterSchedulingStatus();
+            \KC\Repository\Signupmaxaccount::updateNewsletterSchedulingStatus();
             set_time_limit(10000);
             ini_set('max_execution_time', 115200);
             ini_set("memory_limit", "1024M");
 
-            $topVouchercodes = Offer::getTopOffers(10);
-            $categoryflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularCategories_list');
+            $topVouchercodes = \KC\Repository\Offer::getTopOffers(10);
+            $categoryflag =  \FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularCategories_list');
             if ($categoryflag) {
                 $topCategories = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);
-                FrontEnd_Helper_viewHelper::setInCache('10_popularCategories_list', $topCategories);
+                \FrontEnd_Helper_viewHelper::setInCache('10_popularCategories_list', $topCategories);
             } else {
-                $topCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
+                $topCategories = \FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
             }
 
-            $emailDetails = Signupmaxaccount::getAllMaxAccounts();
+            $emailDetails = \KC\Repository\Signupmaxaccount::getAllMaxAccounts();
             $mandrillSenderEmailAddress = $emailDetails[0]['emailperlocale'];
             $mandrillNewsletterSubject = $emailDetails[0]['emailsubject'];
             $mandrillSenderName = $emailDetails[0]['sendername'];
-            BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this);
-            BackEnd_Helper_MandrillHelper::getHeaderFooterContent($this);
+            \BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this);
+            \BackEnd_Helper_MandrillHelper::getHeaderFooterContent($this);
             $mandrill = new Mandrill_Init($this->getInvokeArg('mandrillKey'));
             $categoryVouchers = array_slice(Category::getCategoryVoucherCodes($topCategories[0]['categoryId']), 0, 3);
             $categoryName = $topCategories[0]['category']['name'];
             $categoryPermalink = $topCategories[0]['category']['permaLink'];
-            $newsletterHeader = Signupmaxaccount::getEmailHeaderFooter();
+            $newsletterHeader = \KC\Repository\Signupmaxaccount::getEmailHeaderFooter();
             try {
-                FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
+                \FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
                     $topVouchercodes,
                     $categoryVouchers,
                     $categoryName.'|'.$categoryPermalink,
@@ -207,18 +207,18 @@ class Admin_AccountsettingController extends Zend_Controller_Action
     public function emailHeaderFooterAction()
     {
         $headerFooterContent = mysqli_real_escape_string(
-            FrontEnd_Helper_viewHelper::getDbConnectionDetails(),
-            BackEnd_Helper_viewHelper::stripSlashesFromString(
+            \FrontEnd_Helper_viewHelper::getDbConnectionDetails(),
+            \BackEnd_Helper_viewHelper::stripSlashesFromString(
                 $this->getRequest()->getParam('data')
             )
         );
 
         switch($this->getRequest()->getParam('template')) {
             case 'email-header':
-                Signupmaxaccount::updateHeaderContent($headerFooterContent);
+                \KC\Repository\Signupmaxaccount::updateHeaderContent($headerFooterContent);
                 break;
             case 'email-footer':
-                Signupmaxaccount::updateFooterContent($headerFooterContent);
+                \KC\Repository\Signupmaxaccount::updateFooterContent($headerFooterContent);
                 break;
         }
         die;
@@ -238,71 +238,70 @@ class Admin_AccountsettingController extends Zend_Controller_Action
     {
         # sanitize data
         $val = mysql_escape_string(
-                            BackEnd_Helper_viewHelper::stripSlashesFromString(
-                                        $this->getRequest()->getParam('val'))) ;
-
+            \BackEnd_Helper_viewHelper::stripSlashesFromString(
+                $this->getRequest()->getParam('val')
+            )
+        ) ;
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         switch ($this->getRequest()->getParam('name')){
             case 'senderEmail':
-                $senderEmail = Doctrine_Query::create()->update('Signupmaxaccount')
-                                ->set('emailperlocale','"'.	$val .'"')->execute();
-            break;
+                $queryBuilder ->update('KC\Entity\Signupmaxaccount', 'sa')
+                ->set('sa.emailperlocale', "'".$val."'")
+                ->getQuery()->execute();
+                break;
             case 'senderName':
-                $senderEmail = Doctrine_Query::create()->update('Signupmaxaccount')
-                            ->set('sendername','"'. $val .'"')->execute();
-            break;
+                $queryBuilder ->update('KC\Entity\Signupmaxaccount', 'sm')
+                ->set('sm.sendername', "'".$val."'")
+                ->getQuery()->execute();
+                break;
             case 'emailSubject':
-                $senderEmail = Doctrine_Query::create()->update('Signupmaxaccount')
-                         ->set('emailsubject','"'. $val .'"')->execute();
-            break;
+                $queryBuilder ->update('KC\Entity\Signupmaxaccount', 'su')
+                ->set('su.emailsubject', "'".$val."'")
+                ->getQuery()->execute();
+                break;
             case 'testEmail':
-                $senderEmail = Doctrine_Query::create()->update('Signupmaxaccount')
-                          ->set('testemail','"'.$val.'"')->execute();
-            break;
-
+                $queryBuilder ->update('KC\Entity\Signupmaxaccount', 'sx')
+                ->set('sx.testemail', "'".$val."'")
+                ->getQuery()->execute();
+                break;
         }
-
         die;
     }
 
-
     public function saveTestimonialsAction()
     {
-
-
-        if($this->_settings['content']['rights'] != '1') {
+        if ($this->_settings['content']['rights'] != '1') {
             $this->getResponse()->setHttpResponseCode(404);
             echo $this->_helper->json('This page does not exist');
-
         }
-
         # sanitize data
-        $content =  mysql_escape_string(
-                         BackEnd_Helper_viewHelper::stripSlashesFromString(
-                                $this->getRequest()->getParam('content') ));
-
-
+        $content =  mysql_real_escape_string(
+            \BackEnd_Helper_viewHelper::stripSlashesFromString(
+                $this->getRequest()->getParam('content')
+            )
+        );
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         switch ($this->getRequest()->getParam('type')){
             case 'testimonial1':
-                $senderEmail = Doctrine_Query::create()->update('Signupmaxaccount')
-                ->set('testimonial1', '"'. $content .'"')
-                ->execute();
+                $queryBuilder ->update('KC\Entity\Signupmaxaccount', 'sa')
+                ->set('sa.testimonial1', "'".$content."'")
+                ->getQuery()->execute();
                 break;
             case 'testimonial2':
-                $senderEmail = Doctrine_Query::create()->update('Signupmaxaccount')
-                ->set('testimonial2','"'. $content.'"')
-                ->execute();
+                $queryBuilder ->update('KC\Entity\Signupmaxaccount', 'sm')
+                ->set('sm.testimonial2', "'".$content."'")
+                ->getQuery()->execute();
                 break;
             case 'testimonial3':
-                $senderEmail = Doctrine_Query::create()->update('Signupmaxaccount')
-                ->set('testimonial3','"'. $content .'"')
-                ->execute();
+                $queryBuilder ->update('KC\Entity\Signupmaxaccount', 'su')
+                ->set('su.testimonial3', "'".$content."'")
+                ->getQuery()->execute();
                 break;
             case 'showTestimonial':
-                $senderEmail = Doctrine_Query::create()->update('Signupmaxaccount')
-                ->set('showTestimonial', $content)
-                ->execute();
+                $queryBuilder ->update('KC\Entity\Signupmaxaccount', 'sx')
+                ->set('sx.showTestimonial', "'".$content."'")
+                ->getQuery()->execute();
                 break;
-
         }
         die;
 
@@ -310,20 +309,19 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
     public function totalRecepientsAction()
     {
-
-         if($this->_settings['content']['rights'] != '1') {
+        if ($this->_settings['content']['rights'] != '1') {
             $this->getResponse()->setHttpResponseCode(404);
             echo $this->_helper->json('This page does not exist');
 
         }
-
-
-        $visitors = Doctrine_Query::create()->select('count(id) as recepients')
-                    ->from('Visitor v')
-                    ->where('status = 1')
-                    ->andWhere('active = 1')
-                    ->andWhere('weeklyNewsLetter = 1')
-                    ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->select('count(v.id) as recepients')
+        ->from('KC\Entity\Visitor', 'v')
+        ->where('v.status = 1')
+        ->andWhere('v.active = 1')
+        ->andWhere('v.weeklyNewsLetter = 1');
+        $visitors = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         echo $this->_helper->json(array('recepients' => $visitors['recepients']), true);
     }
 
@@ -332,12 +330,15 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         if ($this->_request->isPost()) {
             $flash = $this->_helper->getHelper('FlashMessenger');
 
-            if (Signupmaxaccount::updateNewsletterSchedulingStatus()) {
-                $flash->addMessage(array('success' => $this->view->translate('Newsletter schedule has been successfully disabled')));
+            if (\KC\Repository\Signupmaxaccount::updateNewsletterSchedulingStatus()) {
+                $flash->addMessage(
+                    array(
+                        'success' => $this->view->translate('Newsletter schedule has been successfully disabled')
+                    )
+                );
             }
 
-            $this->_helper->redirector('emailcontent' , 'accountsetting' , null );
+            $this->_helper->redirector('emailcontent', 'accountsetting', null);
         }
     }
-
 }

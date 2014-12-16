@@ -82,7 +82,7 @@ class Admin_SplashController extends Zend_Controller_Action
             if ($localeId) {
                 $locale = \BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
                 $connectionObject = \BackEnd_Helper_DatabaseManager::addConnection($locale);
-                $offers = new \KC\Entity\Offer($connectionObject['connName']);
+                $offers = new \KC\Repository\Offer($connectionObject['connName']);
                 $offerKeyword = $this->getRequest()->getParam('keyword');
                 $activeCoupons = $offers->getActiveCoupons($offerKeyword);
                 BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);

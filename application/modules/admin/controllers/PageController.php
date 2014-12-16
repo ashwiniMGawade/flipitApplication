@@ -152,7 +152,7 @@ class Admin_PageController extends Zend_Controller_Action
     public function pagelistAction()
     {
         $params = $this->_getAllParams();
-        $pageObj = new KC\Repository\Page();
+        $pageObj = new \KC\Repository\Page();
         // cal to function in network model class
         $pageList =  $pageObj->getPages($params);
         echo Zend_Json::encode ($pageList);

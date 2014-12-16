@@ -306,11 +306,14 @@ function getKeywordList(iStart,iSortCol,iSortDir){
 						{
 							"fnRender" : function(obj) {
 								var tag = '';
-								var dat = obj.aData.created_at;
+								if(obj.aData.created_at!=undefined && obj.aData.created_at!=''){
+								var dat = obj.aData.created_at.date;
 								tag = dat.split("-");
 								tag2 = tag[2];
 								var da = tag2.split(" ");
-								return "<a href='javascript:void(0);'>" + (da[0]+'-'+tag[1]+'-'+tag[0]) + "</a>";
+								return "<a href='javascript:void(0)'>" +  (da[0]+'-'+tag[1]+'-'+tag[0]) + "</a>";
+								}
+								return "<a href='javascript:void(0)'></a>";
 								 
 							},
 							

@@ -54,22 +54,16 @@ class ExcludedKeyword extends \KC\Entity\ExcludedKeyword
 
     public static function getKeywordList($params)
     {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $keywordList = $queryBuilder
-            ->select('e.keyword as keyword,e.action as action,e.created_at as created_at')
-            ->from("KC\Entity\ExcludedKeyword", "e")
-            ->orderBy("e.keyword", "ASC");
-        $request = \DataTable_Helper::createSearchRequest($params, array());
+        $request  = \DataTable_Helper::createSearchRequest($params, array('keyword', 'action', 'created_at'));
+        $qb = \Zend_Registry::get('emLocale')->createQueryBuilder()->from('KC\Entity\ExcludedKeyword', 'e');
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
-            ->setQueryBuilder($keywordList)
-            ->add('number', 'e.id')
-            ->add('text', 'keyword')
-            ->add('text', 'action')
-            ->add('text', 'created_at');
-        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $list = \DataTable_Helper::getResponse($data, $request);
-        return $list;
+            ->setQueryBuilder($qb)
+            ->add('text', 'e.keyword')
+            ->add('text', 'e.action')
+            ->add('number', 'e.created_at');
+        $results = $builder->getTable()->getResponseArray();
+        return $results;
     }
 
     public static function getKeywordForEdit($id)

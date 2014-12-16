@@ -26,7 +26,7 @@ class Admin_RobotController extends Zend_Controller_Action
             $this->_redirect('/admin');
         }
         $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        $this->robotObject = new Robot();
+        $this->robotObject = new \KC\Repository\Robot();
     }
 
     public function indexAction()

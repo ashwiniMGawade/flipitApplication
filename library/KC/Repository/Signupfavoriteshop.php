@@ -7,11 +7,11 @@ class Signupfavoriteshop extends \KC\Entity\Signupfavoriteshop
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-        ->select('p.id,p.entered_uid,p.store_id,p.created_at,s.name,s.id,l.path,l.name as image')
+        ->select('p.id,p.entered_uid,p.created_at,s.name,s.id as shopId,l.path,l.name as image')
         ->from("\KC\Entity\Signupfavoriteshop", "p")
         ->leftJoin('p.signupfavoriteshop', 's')
         ->leftJoin('s.logo', 'l')
-        ->where("p.store_id = s.id")
+        ->where("p.signupfavoriteshop = s.id")
         ->andwhere('s.deleted=0')
         ->andwhere('s.status=1')
         ->orderBy("s.name", "ASC");
