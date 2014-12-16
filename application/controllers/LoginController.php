@@ -130,7 +130,6 @@ class LoginController extends Zend_Controller_Action
     {
         Auth_VisitorAdapter::clearIdentity();
         setcookie('kc_unique_user_id', "", time() - 64800, '/');
-        setcookie('membersonly', "", time() - 64800, '/');
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         Zend_Session::namespaceUnset('favouriteShopId');
@@ -320,15 +319,19 @@ class LoginController extends Zend_Controller_Action
     {
         $username = base64_decode($this->getRequest()->getParam("email"));
         $password = $this->getRequest()->getParam("pwd");
-
+        $shopName = Shop::getShopName(base64_decode($this->getRequest()->getParam("shopid")));
         if ($type == 'codealert') {
-            $message = FrontEnd_Helper_viewHelper::__translate('You are successfully unsubscribed to our code alert');
-            $updateWeekNewLttr =
-                Doctrine_Query::create()
-                ->update('Visitor')
-                ->set('codealert', 0)
-                ->where("email = '".$username."'")
-                ->execute();
+            $message = $shopName.' '.FrontEnd_Helper_viewHelper::__translate('have been removed from your favorite shops');
+            $visitorsId = Visitor::getVisitorDetailsByEmail($username);
+            $visitorsId = !empty($visitorsId) ? $visitorsId[0]['id'] : '';
+            if (isset($visitorsId) && $visitorsId != '') {
+                $updateWeekNewLttr =
+                    Doctrine_Query::create()->delete()
+                        ->from('FavoriteShop fs')
+                        ->where("fs.shopId=" . base64_decode($this->getRequest()->getParam("shopid")))
+                        ->andWhere('fs.visitorId='.$visitorsId)
+                        ->execute();
+            }
         } else {
             $message = FrontEnd_Helper_viewHelper::__translate('You are successfully unsubscribed to our newsletter');
             $updateWeekNewLttr =

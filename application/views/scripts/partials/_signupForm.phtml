@@ -1,7 +1,5 @@
 <?php
-$cookieName = isset($this->codesWidget) && $this->codesWidget == '1' ? 'membersonly' : 'registered_user';
-
-if (!isset($_COOKIE[$cookieName])) {
+if (!isset($_COOKIE['registered_user'])) {
     if ($this->zendForm!='' && $this->zendForm!=null) {
         $signUpForm = $this->partial(
             'partials/_signupwidget.phtml',

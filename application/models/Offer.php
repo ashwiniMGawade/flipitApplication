@@ -3447,4 +3447,33 @@ class Offer extends BaseOffer
 
         return $Ids;
     }
+
+    public static function getOfferDetailOnShop($id)
+    {
+        $nowDate = date("Y-m-d H:i");
+        $offers = Doctrine_Query::create()
+            ->select(
+                'o.id,o.authorId,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
+                o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,
+                o.endDate,o.refOfferUrl,o.couponCodeType, o.extendedUrl,l.*,t.*,s.id,s.name,s.permalink as permalink,
+                s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path,
+                img.name,vot.id,vot.vote'
+            )
+            ->from('Offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('o.logo l')
+            ->leftJoin('s.logo img')
+            ->leftJoin('o.termandcondition terms')
+            ->leftJoin('o.vote vot')
+            ->leftJoin('o.tiles t')
+            ->where('o.deleted = 0');
+
+        $offers= $offers->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('o.discountType != "NW"')
+            ->andWhere('o.id='.$id);
+
+        $offers = $offers->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return $offers;
+    }
 }

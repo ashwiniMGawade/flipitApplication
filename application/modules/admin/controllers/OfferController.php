@@ -146,6 +146,15 @@ class Admin_OfferController extends Zend_Controller_Action
         die;
     }
 
+    public function favouriteshopdetailAction()
+    {
+        $params = $this->_getAllParams();
+        $favoriteShop = new FavoriteShop();
+        $getVisitorsCount = $favoriteShop->getVisitorsCountByFavoriteShopId($params['shopId']);
+        echo $getVisitorsCount;
+        die;
+    }
+
     public function saveofferAction()
     {
         $params = $this->_getAllParams();

@@ -719,7 +719,17 @@ function setFormData(data){
 	//getAllTiles();
 	
 	selectOfferImage(tile_id);
-	
+	var fvshopId = jQuery('#selctedshop').val();
+	jQuery("#code-alert-visitors-count").text('Updating...');
+	jQuery.ajax({
+		url : HOST_PATH + "admin/offer/favouriteshopdetail/shopId/" + fvshopId,
+			dataType : "json",
+			success : function(data) {
+			jQuery("#code-alert-visitors-count").text(data);
+			},
+			error: function(message) {
+	        }
+	});
 }
 
 function newschangelinkStatus(el)
@@ -868,6 +878,16 @@ function getShopDetail(value){
 		        }
 
 		 });
+		jQuery("#code-alert-visitors-count").text('Updating...');
+		jQuery.ajax({
+			url : HOST_PATH + "admin/offer/favouriteshopdetail/shopId/" + value,
+				dataType : "json",
+				success : function(data) {
+				jQuery("#code-alert-visitors-count").text(data);
+				},
+				error: function(message) {
+		        }
+		});
 	} else{
 		jQuery("#updateOfferBtn").removeClass("disabled").removeAttr('disabled','disabled');
 		jQuery(".strict-confirmation-alert").hide();

@@ -337,6 +337,11 @@ class Admin_EmailController extends Zend_Controller_Action
         $this->getFlashMessage();
     }
 
+    public function codeAlertLogListAction()
+    {
+        $this->getFlashMessage();
+    }
+
     public function codeAlertSettingsAction()
     {
         $codeAlertSettings = CodeAlertSettings::getCodeAlertSettings();
@@ -430,5 +435,13 @@ class Admin_EmailController extends Zend_Controller_Action
         $message = $this->view->translate($messageText);
         $this->flashMessenger->addMessage(array('success' => $message));
         return $this;
+    }
+
+    public function codealertsentlistAction()
+    {
+        $params = $this->_getAllParams();
+        $codeAlertQueue = CodeAlertQueue::getCodeAlertList($params, true);
+        echo Zend_Json::encode($codeAlertQueue);
+        die();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-class Admin_PopularArticlesController extends Zend_Controller_Action
+class Admin_PopulararticlesController extends Zend_Controller_Action
 {
     public function preDispatch()
     {

@@ -2,6 +2,10 @@
 
 class Admin_ShopController extends Zend_Controller_Action
 {
+    public $mandrillKey = '';
+    public $exportPassword = '';
+    public $mandrillSenderEmailAddress = '';
+    public $mandrillSenderName = '';
     /**
      * check authentication before load the page
      * @see Zend_Controller_Action::preDispatch()
@@ -1569,7 +1573,59 @@ class Admin_ShopController extends Zend_Controller_Action
         }
     }
 
+    public function globalExportXlxPasswordAction()
+    {
+        $this->saveGlobalExportPassword();
+        $this->sendMailToSuperAdmin();
+        exit();
+    }
 
+    protected function saveGlobalExportPassword()
+    {
+        GlobalExportPassword::savePasswordForExportDownloads('shopExport');
+        $this->exportPassword = GlobalExportPassword::getPasswordForExportDownloads('shopExport');
+    }
+
+    protected function sendMailToSuperAdmin()
+    {
+        $application = new Zend_Application(
+            APPLICATION_ENV,
+            APPLICATION_PATH . '/configs/application.ini'
+        );
+        $frontControlerObject = $application->getOption('resources');
+        $this->mandrillKey = $frontControlerObject['frontController']['params']['mandrillKey'];
+        $mailer  = new FrontEnd_Helper_Mailer(array('mandrillKey' => $this->mandrillKey));
+        $basePath = new Zend_View();
+        $basePath->setBasePath(APPLICATION_PATH . '/views/');
+        $content = array(
+            'name'    => 'content',
+            'content' => $basePath->partial(
+                'emails/exportScriptPassword.phtml',
+                array(
+                    'password' => $this->exportPassword
+                )
+            )
+        );
+        
+        $settings = Signupmaxaccount::getAllMaxAccounts();
+        $this->mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
+        $this->mandrillSenderName = $settings[0]['sendername'];
+        $mailer->send(
+            $this->mandrillSenderName,
+            $this->mandrillSenderEmailAddress,
+            'Arthur',
+            'export@imbull.com',
+            'Global Export password',
+            $content,
+            '',
+            '',
+            '',
+            '',
+            array(
+                'exportScript' => 'yes'
+            )
+        );
+    }
 
     /**
      * change shop status(online/ofline)

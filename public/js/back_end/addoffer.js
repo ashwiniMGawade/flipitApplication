@@ -541,6 +541,16 @@ function getShopDetail(value){
 	        }
 
 		 });
+		jQuery("#code-alert-visitors-count").text('Updating...');
+		jQuery.ajax({
+			url : HOST_PATH + "admin/offer/favouriteshopdetail/shopId/" + value,
+				dataType : "json",
+				success : function(data) {
+				jQuery("#code-alert-visitors-count").text(data);
+				},
+				error: function(message) {
+		        }
+		});
 	
 }
 

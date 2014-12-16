@@ -42,6 +42,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($shopPermalink);
         $shopRecordsLimit = 10;
         $shopParams = $this->_getAllParams();
+
         if (isset($shopParams['popup']) && $shopParams['popup'] != '') {
             $offerVisiblity = Offer::getOfferVisiblity($shopParams['popup']);
             if (!Auth_VisitorAdapter::hasIdentity() && $offerVisiblity == 1) {
@@ -140,6 +141,12 @@ class StoreController extends Zend_Controller_Action
             $explodedPermalink = explode("/", $shopPermalink);
             $shopPermalink = $explodedPermalink[1];
         }
+        $shopPermalink =  explode("?", $shopPermalink);
+        if (isset($shopPermalink[0])) {
+            $shopPermalink = $shopPermalink[0];
+        }
+        $this->view->storePageUrl = $shopPermalink;
+
         $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopInformation[0]['permaLink']);
         if ($this->view->currentStoreInformation[0]['discussions'] == 1) {
             $this->view->discussionComments =

@@ -28,6 +28,7 @@ foreach ($this->offers as $offer) {
     if (isset($offer->couponCodeType) && $offer->couponCodeType == 'UN') {
          $couponCode = '';
     }
+
     $offerHolderClass = "offer-holder";
     if ($offer->exclusiveCode == '1') {
         $offerClass = "orange-block";
@@ -41,6 +42,9 @@ foreach ($this->offers as $offer) {
     } else {
         $offerClass = "active";
     }
+
+    $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
+
     ?>
     <article class="block <?php echo $offerClass; ?>">
         <div class="holder <?php echo $offerHolderClass; ?>" id="<?php echo $offer->id; ?>">
@@ -63,23 +67,28 @@ foreach ($this->offers as $offer) {
                         ?>
                     </p>
                     <?php 
-                    echo $offerPartial->getCommonRedirectUrlForOffer(
-                        $offer,
-                        $urlToShow,
-                        $offerBounceRate,
-                        $offerTitle,
-                        'offerTitle'
-                    );
+                    if ($offer->Visability == 'MEM') {
+                        echo $this->esi($esiLocale.'signup/signupmembersonlytitle?shopId='.$offer->shop['id']
+                            .'&signupFormWidgetType=widgetWithinOffers&offerId='.$offer->id.'&shopLogoOrDefaultImage=');
+                    } else {
+                        echo $offerPartial->getCommonRedirectUrlForOffer(
+                            $offer,
+                            $urlToShow,
+                            $offerBounceRate,
+                            $offerTitle,
+                            'offerTitle'
+                        ); 
+                    }
                     ?>
                 </div>
                 <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
     <?php
     $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shop['permalink'];
-    if (!empty(Auth_VisitorAdapter::getIdentity()->id)) {
-        $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
-    }
-    
-    if (!empty($visitorInformation)) {
+
+    if ($offer->Visability == 'MEM') {
+        echo $this->esi($esiLocale.'signup/signupwidgetcodes?shopId='.$offer->shop['id']
+            .'&signupFormWidgetType=widgetWithinOffers&offerId='.$offer->id.'&shopLogoOrDefaultImage=');
+    } else {
         echo $offerPartial->getCommonRedirectUrlForOffer(
             $offer,
             $urlToShow,
@@ -87,43 +96,16 @@ foreach ($this->offers as $offer) {
             $permalink,
             'mainOfferClickoutButton'
         );
-        echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink);
-    } else {
-        if ($offer->Visability == 'MEM') {
-            echo $this->esi($this->locale.'signup/signupwidgetcodes?shopId='.$offer->shop['id']
-                .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage=');
-        } else {
-            echo $offerPartial->getCommonRedirectUrlForOffer(
-                $offer,
-                $urlToShow,
-                $offerBounceRate,
-                $permalink,
-                'mainOfferClickoutButton'
-            );
-            echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink); 
-        }
+        echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink); 
     }
     ?>
                 </div>
-                <?php if (!empty($visitorInformation)) { ?>
-                    <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
-                        <span class="instruction">
-                            <strong><?php echo $this->translate('enter this code at checkout')?></strong>
-                        </span>
-                        <strong class="code-value"><?php echo $couponCode;?></strong>
-                    </div>
-                <?php } else {
-                    if ($offer->Visability != 'MEM') {?>     
-                        <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
-                            <span class="instruction">
-                                <strong><?php echo $this->translate('enter this code at checkout')?></strong>
-                            </span>
-                            <strong class="code-value"><?php echo $couponCode;?></strong>
-                        </div>
-                    <?php
-                    }
-                }
-                ?>
+                <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
+                    <span class="instruction">
+                        <strong><?php echo $this->translate('enter this code at checkout')?></strong>
+                    </span>
+                    <strong class="code-value"><?php echo $couponCode;?></strong>
+                </div>
                 <ul class="view-list">
     <?php 
     if (isset($offer->extendedOffer) && $offer->extendedOffer =='1') {

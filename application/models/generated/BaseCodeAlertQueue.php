@@ -86,7 +86,12 @@ abstract class BaseCodeAlertQueue extends Doctrine_Record
                 'name' => 'updated_at',
             ),
         ));
+        $softdelete0 = new Doctrine_Template_SoftDelete(array(
+             'name' => 'deleted',
+             'type' => 'boolean',
+             ));
 
         $this->actAs($timestampable0);
+        $this->actAs($softdelete0);
     }
 }
