@@ -54,16 +54,19 @@ class ImageArticlesThumb extends \KC\Entity\ImageArticlesThumb implements \Doctr
         return parent::__set($property, $value);
     }
 
-    public function test($value)
+    public function getId()
     {
+        if ($this->__isInitialized__ === false) {
+            return (int) $this->_identifier["id"];
+        }
         $this->__load();
-        return parent::test($value);
+        return parent::getId();
     }
 
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'ext', 'path', 'name', 'deleted', 'created_at', 'updated_at', 'articles');
+        return array('__isInitialized__', 'id', 'ext', 'path', 'name', 'deleted', 'created_at', 'updated_at', 'menu', 'mainmenu', 'articles');
     }
 
     public function __clone()

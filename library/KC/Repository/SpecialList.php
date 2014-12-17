@@ -102,18 +102,20 @@ class SpecialList extends \KC\Entity\SpecialList
             }
 
         }
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPagesHome_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPagesHome_list');
         return $flag;
     }
 
     public static function deletePapularCode($id, $position)
     {
         if ($id) {
+            $queryBuilderDelete = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilderDelete->delete('KC\Entity\SpecialList', 's')
+                ->where('s.page ='.$id)
+                ->getQuery();
+            $query->execute();
+
             $entityManagerLocale  =\Zend_Registry::get('emLocale');
-            $repo = $entityManagerLocale->getRepository('KC\Entity\SpecialList');
-            $pc = $repo->findOneBy(array('id' =>  $id));
-            $entityManagerLocale->remove($pc);
-            $entityManagerLocale->flush();
             $queryBuilder = $entityManagerLocale->createQueryBuilder();
             $query = $queryBuilder->update('KC\Entity\SpecialList', 'p')
                 ->set('p.position', $queryBuilder->expr()->literal('p.position -1'))
@@ -121,7 +123,7 @@ class SpecialList extends \KC\Entity\SpecialList
                 ->add('where', $queryBuilder->expr()->gt('p.position', '?1'))
                 ->getQuery();
             $query->execute();
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPagesHome_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPagesHome_list');
             return true;
         }
         return false;
