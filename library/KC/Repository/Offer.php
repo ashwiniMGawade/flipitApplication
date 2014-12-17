@@ -253,12 +253,23 @@ class Offer Extends \KC\Entity\Offer
         if (count($topCouponCodes) < $limit) {
             $newestCodesLimit = $limit - count($topCouponCodes);
             $newestTopVouchercodes = self::getNewestOffers('newest', $newestCodesLimit);
+            foreach ($newestTopVouchercodes as $value) {
+                $topCouponCodes[] = array(
+                    'id'=> $value['shopOffers']['id'],
+                    'permaLink' => $value['shopOffers']['permaLink'],
+                    'popularcode' => $value
+                 );
+            }
         }
-        $topOffers = array_merge($topCouponCodes, $newestTopVouchercodes);
-        foreach ($topOffers as $value) {
-            $offers[] = $value['popularcode'];
+        $topOffers = array();
+        foreach ($topCouponCodes as $value) {
+            $topOffers[] = $value['popularcode'];
         }
-        return $offers;
+
+       /* echo "<pre>";
+        print_r($topOffers);
+        die;*/
+        return $topOffers;
     }
 
     public static function getTopCouponCodes($shopCategories, $limit = 5)
@@ -306,11 +317,10 @@ class Offer Extends \KC\Entity\Offer
         $currentDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select(
-            's, o, logo, vot, fv, terms'
+            's, o, img, vot, fv, terms'
         )
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
-            ->leftJoin('o.logo', 'logo')
             ->leftJoin('o.votes', 'vot')
             ->leftJoin('s.logo', 'img')
             ->leftJoin('s.visitors', 'fv')

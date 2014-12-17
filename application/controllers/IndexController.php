@@ -21,6 +21,9 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        /*echo "<pre>";
+        print_r(KC\Repository\SpecialList::getSpecialPages());
+        die;*/
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();
@@ -58,6 +61,8 @@ class IndexController extends Zend_Controller_Action
                 ''
             );
             $this->view->specialListPages = $specialListPages;
+            /*echo "<pre>";
+            print_r($specialListPages);*/
 
             $specialListCountKey ="all_specialPages_count";
             $cacheStatus =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($specialListCountKey);
@@ -67,6 +72,10 @@ class IndexController extends Zend_Controller_Action
             } else {
                 $specialPagesOffers  = FrontEnd_Helper_viewHelper::getFromCacheByKey($specialListCountKey);
             }
+
+            /*echo "<pre>";
+            print_r($specialPagesOffers);
+            die;*/
             $this->view->specialPagesOffers = $specialPagesOffers;
             $this->view->moneySavingGuidesCount = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_moneySaving_list",
@@ -87,13 +96,13 @@ class IndexController extends Zend_Controller_Action
 
             $this->view->seeninContents = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_homeSeenIn_list",
-                array('function' => 'SeenIn::getSeenInContent', 'parameters' => array(10)
+                array('function' => 'KC\Repository\SeenIn::getSeenInContent', 'parameters' => array(10)
                 ),
                 ''
             );
             $this->view->aboutTabs = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_about_page",
-                array('function' => 'About::getAboutContent', 'parameters' => array(1)
+                array('function' => 'KC\Repository\About::getAboutContent', 'parameters' => array(1)
                 ),
                 ''
             );

@@ -36,13 +36,13 @@ class RefOfferCategory
      * @ORM\ManyToOne(targetEntity="KC\Entity\Category", inversedBy="categoryoffres")
      * @ORM\JoinColumn(name="categoryId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
-    private $offer;
+    private $categories;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="categoryoffres")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
-    private $category;
+    private $offers;
 
     public function __get($property)
     {

@@ -81,8 +81,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $specialPageHtml = '';
         $specialListPages = $this->homePageData['specialPages'];
         foreach ($specialListPages as $indexOfPage => $specialListPage) {
-            $specialPageListIndex = $specialListPage['page'][0]['permaLink'] .','
-               .$specialListPage['page'][0]['pageTitle'];
+            $specialPageListIndex = $specialListPage[0]['page']['permalink'] .','
+               .$specialListPage[0]['page']['pageTitle'];
             $totalCouponsCount =
                 is_array($this->homePageData['specialPagesOffers'][$specialPageListIndex])==true
                 ? count($this->homePageData['specialPagesOffers'][$specialPageListIndex])
@@ -92,9 +92,9 @@ class FrontEnd_Helper_HomePagePartialFunctions
                 $this->getLeftColumnContent(
                     'special',
                     '',
-                    $specialListPage['page'][0]['pageTitle'],
+                    $specialListPage[0]['page']['pageTitle'],
                     70,
-                    $specialListPage['page'][0]['permaLink'],
+                    $specialListPage[0]['page']['permalink'],
                     $specialListPageOffers
                 );
         }

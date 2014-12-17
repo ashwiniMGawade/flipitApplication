@@ -215,7 +215,7 @@ class Offer
     private $popularVouchercodes;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\RefOfferCategory", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefOfferCategory", mappedBy="offers")
      */
     private $categoryoffres;
 

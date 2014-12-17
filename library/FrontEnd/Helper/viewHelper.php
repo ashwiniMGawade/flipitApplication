@@ -642,7 +642,21 @@ EOD;
         }
         return $result;
     }
-
+    public static function objectToArray($obj)
+    {
+        if (is_object($obj)) {
+            $obj = (array) $obj;
+        }
+        if (is_array($obj)) {
+            $new = array();
+            foreach ($obj as $key => $val) {
+                $new[$key] = self::objectToArray($val);
+            }
+        } else {
+            $new = $obj;
+        }
+        return $new;
+    }
     public static function replaceKeyword(&$item, $key)
     {
         $item = str_replace(
@@ -657,6 +671,8 @@ EOD;
 
     public static function replaceStringArray($originalArray)
     {
+        
+        $originalArray = self::objectToArray($originalArray);
         $obj = new self();
         array_walk_recursive($originalArray, array($obj, 'replaceKeyword'));
         return $originalArray;

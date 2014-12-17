@@ -92,15 +92,11 @@ class Shop extends \KC\Entity\Shop
     {
         $currentDate = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select(
-            'o.id,o.exclusiveCode,p.id,s.name,s.permaLink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,
-            s.Deliverytime, s.returnPolicy, s.freeDelivery, p.type,p.position,IDENTITY(p.popularshops) as shopId, img.path as imgpath, 
-            img.name as imgname'
-        )
+        $query = $queryBuilder->select('p, s, img')
             ->from('KC\Entity\PopularShop', 'p')
-            ->addSelect(
+            /*->addSelect(
                 "(SELECT COUNT(exclusive) FROM KC\Entity\Offer exclusive WHERE exclusive.shopOffers = s.id AND
-                (o.exclusiveCode=1 AND exclusive.endDate > '$currentDate')) as exclusiveCount"
+                (o.exclusiveCode =1 AND exclusive.endDate > '$currentDate')) as exclusiveCount"
             )
             ->addSelect("(SELECT COUNT(pc) FROM KC\Entity\PopularCode pc WHERE pc.popularcode = o.id ) as popularCount")
             ->addSelect(
@@ -109,22 +105,19 @@ class Shop extends \KC\Entity\Shop
                     AND active.deleted = 0
                 )
                 ) as activeCount"
-            )
+            )*/
             ->leftJoin('p.popularshops', 's')
-            ->leftJoin('s.offer', 'o')
+            //->leftJoin('s.offer', 'o')
             ->leftJoin('s.logo', 'img')
-            ->setParameter(1, '0')
-            ->where('s.deleted= ?1')
-            ->setParameter(2, '1')
-            ->andWhere('s.status= ?2')
+            ->where('s.deleted= 0')
+            ->andWhere('s.status= 1')
             ->orderBy('p.position', 'ASC');
         
         if ($shopId) {
-            $query = $query->setParameter(3, $shopId)->andWhere("s.id = ?3 ");
+            $query = $query->andWhere("s.id =".$shopId);
         } else {
             $query = $query->setMaxResults($limit);
         }
-        
         $popularStoreData = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $popularStoreData;
     }

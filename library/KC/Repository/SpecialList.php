@@ -7,18 +7,19 @@ class SpecialList extends \KC\Entity\SpecialList
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDateAndTime = date('Y-m-d H:i:s');
-        $specialPages = $queryBuilder->select('sp.type,sp.position,IDENTITY(sp.page) as specialpageId,p.pageTitle,p.permalink,l.name,l.path')
+        $query = $queryBuilder->select('sp, p, l')
             ->addSelect("(SELECT count(roc) FROM KC\Entity\RefOfferPage roc LEFT JOIN roc.refoffers off LEFT JOIN off.shopOffers s  WHERE roc.offers = sp.page and off.deleted = 0 and s.deleted = 0 and off.endDate >'".$currentDateAndTime."' and off.startDate <= '".$currentDateAndTime."'  and off.discountType='CD'  and off.Visability!='MEM') as totalCoupons")
             ->addSelect("(SELECT count(roc1) FROM KC\Entity\RefOfferPage roc1 LEFT JOIN roc1.refoffers off1 LEFT JOIN off1.shopOffers s1  WHERE roc1.offers = sp.page and off1.deleted = 0 and s1.deleted = 0 and off1.endDate >'".$currentDateAndTime."' and off1.startDate <= '".$currentDateAndTime."' and off1.Visability!='MEM') as totalOffers")
             ->from('KC\Entity\SpecialList', 'sp')
             ->leftJoin('sp.page', 'p')
             ->leftJoin('p.logo', 'l')
             ->where('p.deleted = 0')
-            ->andWhere('p.publish = 1')
-            ->setMaxResults($limit)
-            ->orderBy('sp.position', 'ASC')
-            ->getQuery()
-            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            ->andWhere('p.publish = 1');
+        if ($limit!= '') {
+            $query->setMaxResults($limit);
+        }
+        $query->orderBy('sp.position', 'ASC');
+        $specialPages = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $specialPages;
     }
 

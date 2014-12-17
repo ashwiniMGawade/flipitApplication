@@ -11,41 +11,38 @@ class Category extends \KC\Entity\Category
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDateAndTime = date('Y-m-d 00:00:00');
-        $categoryOffersList = $queryBuilder
-        ->select(
-            "roc.offerId as oid,roc.categoryId as cid,c.permalink as categoryPermalink,c.name as categoryName,
-            o.*,s.id as shopId, s.refUrl, s.actualUrl, s.name,s.permaLink as permalink,l.path,l.name,
-            fv.shopId,fv.visitorId,fv.Id,terms.content"
-        )
+        $query = $queryBuilder
+        ->select("roc, c, o, s, terms, l, fv")
         ->from("KC\Entity\RefOfferCategory", "roc")
-        ->leftJoin("roc.Category", "c")
-        ->leftJoin("roc.Offer", "o")
-        ->leftJoin("o.shop", "s")
-        ->leftJoin('o.termandcondition', 'terms')
+        ->leftJoin("roc.categories", "c")
+        ->leftJoin("roc.offers", "o")
+        ->leftJoin("o.shopOffers", "s")
+        ->leftJoin('o.offertermandcondition', 'terms')
         ->leftJoin("s.logo", "l")
         ->leftJoin('s.favoriteshops', 'fv')
-        ->where("roc.categoryId =".$categoryId)
+        ->where("roc.categories =".$categoryId)
         ->andWhere("c.deleted = 0")
         ->andWhere("c.status= 1")
-        ->andWhere('o.discounttype="CD"')
+        ->andWhere("o.discountType=" . $queryBuilder->expr()->literal('CD'))
         ->andWhere(
-            "(couponCodeType = 'UN' AND (
-            SELECT count(id)  FROM KC\Entity\CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0
-            ) or couponCodeType = 'GN'"
+            "(o.couponCodeType = 'UN' AND (
+            SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status=1)  > 0
+            ) or o.couponCodeType = 'GN'"
         )
         ->andWhere("s.deleted = 0")
         ->andWhere("s.status = 1")
         ->andWhere("o.deleted = 0")
         ->andWhere("o.userGenerated = 0")
-        ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
-        ->andWhere('o.startdate < "'.$currentDateAndTime.'"')
-        ->andWhere('o.discounttype="CD"')
-        ->andWhere('o.Visability!="MEM"')
+        ->andWhere('o.endDate > '. $queryBuilder->expr()->literal($currentDateAndTime))
+        ->andWhere('o.startDate < '. $queryBuilder->expr()->literal($currentDateAndTime))
+        ->andWhere('o.discountType='. $queryBuilder->expr()->literal('CD'))
+        ->andWhere('o.Visability!='. $queryBuilder->expr()->literal('MEM'))
         ->orderBy('o.exclusiveCode', 'DESC')
-        ->addOrderBy('o.startDate', 'DESC')
-        ->setMaxResults($numberOfOffers)
-        ->getQuery()
-        ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        ->addOrderBy('o.startDate', 'DESC');
+        if ($numberOfOffers!=0) {
+            $query->setMaxResults($numberOfOffers);
+        }
+        $categoryOffersList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return self::changeDataAccordingToOfferHtml($categoryOffersList);
     }
 
@@ -53,7 +50,7 @@ class Category extends \KC\Entity\Category
     {
         $categoryOffers = array();
         foreach ($categoryOffersList as $offer) {
-            $categoryOffers[] = $offer['Offer'];
+            $categoryOffers[] = $offer['offers'];
         }
         return $categoryOffers;
     }
@@ -67,8 +64,8 @@ class Category extends \KC\Entity\Category
             ->from('KC\Entity\PopularCategory', 'p')
             ->addSelect(
                 "(
-                    SELECT  count(roc) FROM KC\Entity\RefOfferCategory roc LEFT JOIN roc.category off LEFT JOIN off.shopOffers s  WHERE  
-                    off.deleted = 0 and s.deleted = 0 and roc.offer = p.category and off.endDate >'"
+                    SELECT  count(roc) FROM KC\Entity\RefOfferCategory roc LEFT JOIN roc.offers off LEFT JOIN off.shopOffers s  WHERE  
+                    off.deleted = 0 and s.deleted = 0 and roc.offers = p.category and off.endDate >'"
                 .$currentDateAndTime."' and off.discountType='CD' and off.Visability!='MEM') as countOff"
             )
             ->addSelect(

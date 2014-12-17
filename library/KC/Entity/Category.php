@@ -99,7 +99,7 @@ class Category
     private $refArticlecategoryRelatedcategory;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\RefOfferCategory", mappedBy="offer")
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefOfferCategory", mappedBy="categories")
      */
     private $categoryoffres;
 

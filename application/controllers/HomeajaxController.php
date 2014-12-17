@@ -14,8 +14,9 @@ class HomeajaxController extends Zend_Controller_Action
             )
         );
         $offers = count($topCategoriesOffers) > 10
-                  ? $this->_helper->Index->removeDuplicateCode($topCategoriesOffers, 'homePage')
-                  :  $topCategoriesOffers;
+            ? $this->_helper->Index->removeDuplicateCode($topCategoriesOffers, 'homePage')
+            :  $topCategoriesOffers;
+        
         $homePagePartials = new FrontEnd_Helper_HomePagePartialFunctions();
         $rightDivWithContent = $homePagePartials->getRightDivByAjax(
             $offers,
