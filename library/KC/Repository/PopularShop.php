@@ -58,35 +58,36 @@ class PopularShop Extends \KC\Entity\PopularShop
         if (sizeof($shop) > 0) {
 
             //check offer exist or not
-            $query = $queryBuilder
+            $queryBuildershopId = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuildershopId
             ->select('px')
             ->from('KC\Entity\PopularShop', 'px')
             ->leftJoin('px.popularshops', 'ps')
             ->where('ps.id ='.$shop[0]['id']);
             $pc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
             if (sizeof($pc) > 0) {
             } else {
 
                 $flag = '1';
             //find last postion  from database
-                $query = $queryBuilder
+                $queryBuilderPosition = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                $query = $queryBuilderPosition
                 ->select('p.position')
                 ->from('KC\Entity\PopularShop', 'p')
                 ->orderBy('p.position', 'DESC')
                 ->setMaxResults(1);
                 $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
                 if (sizeof($data) > 0) {
-                    $NewPos = $data[0]['position'];
+                    $NewPos = $data[0]['position']+1;
                 } else {
                     $NewPos = 1;
-                }               //add new offer if not exist in datbase
+                }
+                //add new offer if not exist in datbase
                 $entityManagerLocale  = \Zend_Registry::get('emLocale');
                 $pc = new \KC\Entity\PopularShop();
                 $pc->type = 'MN';
                 $pc->popularshops = $entityManagerLocale->find('KC\Entity\Shop', $shop[0]['id']);
-                $pc->position = (intval($NewPos) + 1);
+                $pc->position = (intval($NewPos));
                 $pc->deleted = 0;
                 $pc->created_at = new \DateTime('now');
                 $pc->updated_at = new \DateTime('now');
@@ -178,10 +179,9 @@ class PopularShop Extends \KC\Entity\PopularShop
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         if (!empty($shopId)) {
-            $queryBuilder->getQuery('SET FOREIGN_KEY_CHECKS = 0;')->execute();
-            $queryBuilder->getQuery('TRUNCATE TABLE popular_shop')->execute();
-            $queryBuilder->getQuery('SET FOREIGN_KEY_CHECKS = 1;')->execute();
-   
+            $query = $queryBuilder->delete('KC\Entity\PopularShop', 'p')
+                ->where('p.id > 0')
+                ->getQuery()->execute();
             $shopId = explode(',', $shopId);
             $i = 1;
             foreach ($shopId as $shopIdValue) {
@@ -189,6 +189,10 @@ class PopularShop Extends \KC\Entity\PopularShop
                 $popularShop->popularshops = $entityManagerLocale->find('KC\Entity\Shop', $shopIdValue);
                 $popularShop->position = $i;
                 $popularShop->type = "MN";
+                $popularShop->deleted = 0;
+                $popularShop->status = 1;
+                $popularShop->created_at = new \DateTime('now');
+                $popularShop->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($popularShop);
                 $entityManagerLocale->flush();
                 $i++;
