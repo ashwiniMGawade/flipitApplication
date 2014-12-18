@@ -5,12 +5,12 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         if (
             $currentOffer->refURL != ""
-            || $currentOffer->shop['refUrl']!= ""
-            || $currentOffer->shop['actualUrl'] != ""
+            || $currentOffer->shopOffers['refUrl']!= ""
+            || $currentOffer->shopOffers['actualUrl'] != ""
         ) {
             $urlToShow = self::getOfferBounceUrl($currentOffer->id, $constants);
         } else {
-            $urlToShow = $constants.$currentOffer->shop['permalink'];
+            $urlToShow = $constants.$currentOffer->shopOffers['permalink'];
         }
         if ($currentOffer->discountType=='PA' || $currentOffer->discountType=='PR') {
             if ($currentOffer->refOfferUrl != null) {
@@ -115,14 +115,13 @@ class FrontEnd_Helper_OffersPartialFunctions
                 $offerDates .= $daysTillOfferExpires;
                 $offerDates .= '&nbsp;';
                 $offerDates .= FrontEnd_Helper_viewHelper::__translate('day left!');
-
             } elseif ($daysTillOfferExpires == 0) {
                 $offerDates .= FrontEnd_Helper_viewHelper::__translate('Expires today');
-        } else {
+            } else {
                 $endDate = new Zend_Date($currentOffer->endDate->format('Y-m-d'));
                 $offerDates .= FrontEnd_Helper_viewHelper::__translate('Expires on').': ';
                 $offerDates .= ucwords($endDate->get(Zend_Date::DATE_MEDIUM));
-        } elseif (
+            } elseif (
                 $currentOffer->discountType == "PR"
                 || $currentOffer->discountType == "SL"
                 || $currentOffer->discountType == "PA"
@@ -155,7 +154,7 @@ class FrontEnd_Helper_OffersPartialFunctions
             $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);
         } else {
             $offerDiscountImage = self::getShopLogoForOffer($currentOffer);
-            $altAttributeText = $currentOffer->shop['name'];
+            $altAttributeText = $currentOffer->shopOffers['name'];
             $imageTag = self::getImageTag($offerDiscountImage, $altAttributeText, true);
             $offerImageDiv =
                 $imageTag . '<footer class="bottom">'
@@ -168,8 +167,8 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getShopLogoForOffer($currentOffer)
     {
         return
-            PUBLIC_PATH_CDN.ltrim($currentOffer->shop['logo']['path'], "/").'thum_medium_store_'
-            . $currentOffer->shop['logo']['name'];
+            PUBLIC_PATH_CDN.ltrim($currentOffer->shopOffers['logo']['path'], "/").'thum_medium_store_'
+            . $currentOffer->shopOffers['logo']['name'];
     }
     
     public function getImageTag($offerDiscountImage, $altAttributeText, $shopCodeHolder)
@@ -263,7 +262,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                 $onClick = $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
                 $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id),
                 ga('send', 'event', 'aff', '$offerBounceRate'),
-                OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')";
+                OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')";
                 $offerLink =
                     '<a id="'.$currentOffer->id.'" class="'.$class.'" 
                     href="'.$urlToShow.'" vote="0" rel="nofollow" 
@@ -285,7 +284,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                 }
                 $onClick =
                     self::getUserIsLoggedInOrNot() == "true"
-                    ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')"
+                    ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')"
                     : HTTP_PATH_LOCALE."accountlogin";
                 $offerLink =
                     '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
@@ -324,8 +323,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         $offerBounceRate,
         $offerAnchorTagContent,
         $type
-    )
-    {
+    ) {
         $redirectUrl = '';
         switch ($type){
             case 'mainOfferClickoutButton':

@@ -230,7 +230,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'page_header'.$pageDetails[0]['id'].'_image',
             array(
-                'function' => 'KC\Repository\Page::getPageLogo',
+                'function' => 'KC\Repository\Logo::getPageLogo',
                 'parameters' => array($pageDetails['pageHeaderImageId'])
             )
         );

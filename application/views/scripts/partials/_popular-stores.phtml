@@ -6,11 +6,13 @@
         <?php
         foreach ($this->popularStores as $popularStore)
         { 
-            $popularStore = isset($popularStore['shop']) ?  $popularStore['shop'] :  $popularStore;
+            $popularStore = $popularStore['popularshops']
+                ?  $popularStore['popularshops'] 
+                :  $popularStore;
             $popularStoreImage =
                 isset($popularStore['logo']) ? 
-                PUBLIC_PATH_CDN.ltrim($popularStore['logo']['imgpath'], '/')
-                ."thum_big_".$popularStore['logo']['imgname'] : '';    
+                PUBLIC_PATH_CDN.ltrim($popularStore['logo']['path'], '/')
+                ."thum_big_".$popularStore['logo']['name'] : '';    
             echo '<li>
                 <a href="' .HTTP_PATH_LOCALE. $popularStore['permaLink']. '">
                     <img src="' . $popularStoreImage . '"  

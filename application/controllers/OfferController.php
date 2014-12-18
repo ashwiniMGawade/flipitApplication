@@ -22,35 +22,35 @@ class OfferController extends Zend_Controller_Action
     {
         $pageName = 'top-20';
         $pagePermalink = FrontEnd_Helper_viewHelper::getPagePermalink();
-        $pageDetails = Page::getPageDetailsFromUrl($pagePermalink);
+        $pageDetails = \KC\Repository\Page::getPageDetailsFromUrl($pagePermalink);
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
+        $pageDetails = $pageDetails[0];
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'page_header'.$pageDetails->id.'_image',
+            'page_header'.$pageDetails[0]['id'].'_image',
             array(
-                'function' => 'Logo::getPageLogo',
-                'parameters' => array($pageDetails->pageHeaderImageId)
-            ),
-            ''
+                'function' => '\KC\Repository\Logo::getPageLogo',
+                'parameters' => array($pageDetails['pageHeaderImageId'])
+            )
         );
-        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
+        $this->view->pageTitle = isset($pageDetails[0]['pageTitle']) ? $pageDetails[0]['pageTitle'] : '';
         $this->viewHelperObject->getMetaTags(
             $this,
-            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
-            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
-            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
-            FrontEnd_Helper_viewHelper::__link($pageName),
+            isset($pageDetails[0]['pageTitle']) ? $pageDetails[0]['pageTitle'] : '',
+            isset($pageDetails[0]['metaTitle']) ? $pageDetails[0]['metaTitle'] : '',
+            isset($pageDetails[0]['metaDescription']) ? $pageDetails[0]['metaDescription'] : '',
+            isset($pageDetails[0]['permaLink']) ? $pageDetails[0]['permaLink'] : '',
             FACEBOOK_IMAGE,
-            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
+            isset($pageDetails[0]['customHeader']) ? $pageDetails[0]['customHeader'] : ''
         );
         $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'20_topOffers_list',
-            (array)array('function' => 'Offer::getTopOffers', 'parameters' => array(20)
+            (array)array('function' => '\KC\Repository\Offer::getTopOffers', 'parameters' => array(20)
             ),
             ''
         );
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'10_popularShops_list',
-            (array)array('function' => 'Shop::getAllPopularStores', 'parameters' => array(10)
+            (array)array('function' => '\KC\Repository\Shop::getAllPopularStores', 'parameters' => array(10)
             ),
             ''
         );

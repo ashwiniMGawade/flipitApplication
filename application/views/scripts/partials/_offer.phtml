@@ -46,7 +46,7 @@ foreach ($this->offers as $offer) {
                 </div>
                 <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
     <?php
-    $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shop['permalink'];
+    $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shopOffers['permaLink'];
     echo $offerPartial->getCommonRedirectUrlForOffer(
         $offer,
         $urlToShow,
@@ -79,10 +79,14 @@ foreach ($this->offers as $offer) {
         
         echo $offerPartial->getExtendedOfferLink($offer);
         if($this->offersType!='simple'):
-            echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], $showHyphen);
+            echo $offerPartial->getViewAllCodeLink(
+                $offer->shopOffers['name'],
+                $offer->shopOffers['permaLink'],
+                $showHyphen
+            );
         endif;
     } else {
-        echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], '');
+        echo $offerPartial->getViewAllCodeLink($offer->shopOffers['name'], $offer->shopOffers['permaLink'], '');
     }
     ?>
                 </ul>
@@ -101,7 +105,7 @@ foreach ($this->offers as $offer) {
                 <span><?php echo $this->translate('Grab this offer now:');?></span>
                 <a target = "_blank" href="<?php echo $urlToShow;?>" rel= "nofollow">
                 <?php echo $this->translate('Open ');?>
-                <?php echo $offer->shop['name']; ?>
+                <?php echo $offer->shopOffers['name']; ?>
                 <?php echo $this->translate(' website');?>
                 </a>
             </div>
@@ -116,7 +120,7 @@ foreach ($this->offers as $offer) {
         <?php endif; ?>
     </article>
     <?php
-    $shopLogoOrDefaultImage = $offerPartial->getShopLogoForSignUp($this->shop);
+    $shopLogoOrDefaultImage = $offerPartial->getShopLogoForSignUp($this->shopOffers);
 
     if($offerCounter == 1) :
         if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage'
@@ -137,9 +141,9 @@ if ($this->offersType!='extendedOffer') {
     }
     if (isset($this->pageType) && $this->pageType == 'howToGuide') {
         $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-        echo '<a class="link-box" href="'.$domainName.$offer->shop['permalink'].'">
+        echo '<a class="link-box" href="'.$domainName.$offer->shopOffers['permaLink'].'">
                 <hr class="alt2">
-                '.$this->translate('View all voucher codes from').' '.$offer->shop['name'].'
+                '.$this->translate('View all voucher codes from').' '.$offer->shopOffers['name'].'
             </a>';
     }
     ?>
