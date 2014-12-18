@@ -6,8 +6,8 @@ class Admin_IndexController extends Zend_Controller_Action
     public function preDispatch()
     {
 
-        if (!Auth_StaffAdapter::hasIdentity()) {
-            $referer = new Zend_Session_Namespace('referer');
+        if (!\Auth_StaffAdapter::hasIdentity()) {
+            $referer = new \Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
 
@@ -16,8 +16,7 @@ class Admin_IndexController extends Zend_Controller_Action
     }
     public function init()
     {
-       BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
-
+        \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages();
         $this->view->messageSuccess = isset($message[0]['success']) ?
@@ -28,23 +27,20 @@ class Admin_IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-
-
         $data = KC\Repository\Dashboard::getDashboardToDisplay();
         $this->view->data = $data;
-
         $lastweek = $data['total_no_of_shops_online_code_lastweek'];
         $thisweek = $data['total_no_of_shops_online_code_thisweek'];
-        if($lastweek > 0 ):
-        $percent = (($thisweek/$lastweek) - 1) * 100;
-        $prcnt = explode('.',round($percent, 2));
-        else:
-        $percent = '0.00';
-        $prcnt = explode('.',$percent);
-        endif;
+        if ($lastweek > 0) {
+            $percent = (($thisweek/$lastweek) - 1) * 100;
+            $prcnt = explode('.', round($percent, 2));
+        } else {
+            $percent = '0.00';
+            $prcnt = explode('.', $percent);
+        }
         $green_img = 'arrow-green-dashboard';
         $green_cls = 'green-text-arrow';
-        if($percent < 0){
+        if ($percent < 0) {
             $green_img = 'arrow-red-dashboard';
             $green_cls = 'red-text-arrow';
         }
@@ -61,23 +57,29 @@ class Admin_IndexController extends Zend_Controller_Action
 
     public function saveadmintextAction()
     {
-        $text = BackEnd_Helper_viewHelper::stripSlashesFromString($this->getRequest()->getParam('content'));
+        $text = \BackEnd_Helper_viewHelper::stripSlashesFromString($this->getRequest()->getParam('content'));
         $textCond = trim($text);
-        $checkDataExist = Doctrine_Query::create()->from('Dashboard')->fetchArray();
-        if(count($checkDataExist) == 0){
-            $saveMessage = new Dashboard();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('d')
+            ->from('KC\Entity\Dashboard', 'd');
+        $checkDataExist = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        if (count($checkDataExist) == 0) {
+            $entityManagerLocale  = \Zend_Registry::get('emLocale');
+            $saveMessage = new KC\Repository\Dashboard();
             $saveMessage->id = 1;
             $saveMessage->message = trim($text);
-            $saveMessage->save();
-
-
-        }else{
-            $updateMessage = Doctrine_Query::create()->update('Dashboard')->set("message","'".trim($text)."'")->execute();
-
+            $entityManagerLocale->persist($saveMessage);
+            $entityManagerLocale->flush();
+        } else {
+            $queryBuilderUpdateMessage = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $queryBuilderUpdateMessage ->update('KC\Entity\Dashboard', 'db')
+            ->set('db.message', "'".trim($text)."'")
+            ->getQuery()->execute();
         }
-        if($textCond=='' || $textCond == null){
+        if ($textCond=='' || $textCond == null) {
             echo $this->view->translate('Click here and write a message for employees.');
-        }else{
+        } else {
 
             echo '1';
         }
@@ -91,7 +93,7 @@ class Admin_IndexController extends Zend_Controller_Action
      */
     public static function getdataAction()
     {
-        $name = ShopViewCount::getTotalAmountClicksOfShop(465);
+        $name = KC\Repository\ShopViewCount::getTotalAmountClicksOfShop(465);
         echo "<pre>"; print_r($name);
         die();
     }
@@ -103,6 +105,4 @@ class Admin_IndexController extends Zend_Controller_Action
     {
 
     }
-
-
 }
