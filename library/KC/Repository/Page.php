@@ -4,19 +4,25 @@ class Page Extends \KC\Entity\Page
 {
     #####################################################
     ############ REFECTORED CODE ########################
+    public static function getPageLogo($logoId)
+    {
+        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerLocale->select('l')
+            ->from('KC\Entity\Logo', 'l')
+            ->where("l.id = ".$logoId);
+        $pageLogo = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return  !empty($pageLogo[0]) ? $pageLogo[0] : '';
+    }
     public static function getPageDetailsInError($permalink)
     {
         $currentDate = date('Y-m-d 00:00:00');
-        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('page')
+        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerLocale->select('page')
             ->from('KC\Entity\Page', 'page')
             ->leftJoin('page.pagewidget', 'pagewidget')
-            ->setParameter(1, $permalink)
-            ->where('page.permalink = ?1')
-            ->setParameter(2, $currentDate)
-            ->andWhere('page.publishdate <= ?2')
-            ->setParameter(3, 0)
-            ->andWhere('page.deleted = ?3');
+            ->where('page.permalink = ' . $entityManagerLocale->expr()->literal($permalink))
+            ->andWhere('page.publishDate <=' . $entityManagerLocale->expr()->literal($currentDate))
+            ->andWhere('page.deleted = 0');
         $pageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageDetails;
     }
@@ -34,9 +40,10 @@ class Page Extends \KC\Entity\Page
     public static function getPageDetailsByPermalink($permalink)
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('page, img.id, img.path, img.name')
+        $query = $entityManagerUser->select('page, img.id, img.path, img.name, himg.id as pageHeaderImageId')
             ->from('KC\Entity\Page', 'page')
             ->leftJoin('page.logo', 'img')
+            ->leftJoin('page.pageHeaderImageId', 'himg')
             ->where('page.permalink ='."'".$permalink."'")
             ->setParameter(2, 1)
             ->andWhere('page.publish = ?2')

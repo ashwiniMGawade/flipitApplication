@@ -186,7 +186,7 @@ class Shop extends \KC\Entity\Shop
     public static function getAllPopularStores($limit)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('p.id,s.name,s.permaLink,img.path as imgpath, img.name as imgname')
+        $query = $queryBuilder->select('p, s, img')
         ->from('KC\Entity\PopularShop', 'p')
         ->leftJoin('p.popularshops', 's')
         ->leftJoin('s.logo', 'img')
@@ -1607,16 +1607,20 @@ class Shop extends \KC\Entity\Shop
 
     public static function getshopStatus($shopId)
     {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('s.id')
-        ->from("KC\Entity\Shop", "s")
-        ->where('s.id='.$shopId)
-        ->andWhere('s.status = 1');
-        $Q = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
-        if (empty($Q)) {
-            $online = true;
-            return $online;
+        if ($shopId!='') {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder->select('s.id')
+                ->from("KC\Entity\Shop", "s")
+                ->where('s.id='.$shopId)
+                ->andWhere('s.status = 1');
+            $Q = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            if (empty($Q)) {
+                $online = true;
+                return $online;
+            } else {
+                $online = false;
+                return $online;
+            }
         } else {
             $online = false;
             return $online;
