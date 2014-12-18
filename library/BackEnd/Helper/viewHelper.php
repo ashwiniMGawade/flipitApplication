@@ -164,18 +164,18 @@ class BackEnd_Helper_viewHelper
 
     public static function addConnection()
     {
-
-        //      $manager = Doctrine_Manager::getInstance();
-        //      $bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap');
-        //      $options = $bootstrap->getOptions();
-        //      $conn2 = $manager->connection($options['doctrine']['imbull'],
-        //              "connection1");
-        //      $conn2->execute('SHOW TABLES');
-        //      if ($conn2 === $manager->getCurrentConnection()) {
-        //          //echo 'jee';
-        //         return $conn2;
-        //      }
-
+        /*$manager = \Zend_Registry::get('emLocale');
+        $bootstrap = \Zend_Controller_Front::getInstance()->getParam('bootstrap');
+        $options = $bootstrap->getOptions();
+        echo "<pre>";print_r($options);die;
+        $conn2 = $manager->connection(
+            $options['doctrine']['imbull'],
+            "connection1"
+        );
+        $conn2->execute('SHOW TABLES');
+        if ($conn2 === $manager->getCurrentConnection()) {
+            return $conn2;
+        }*/
     }
 
     public static function addConnectionSite()

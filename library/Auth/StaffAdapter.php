@@ -6,10 +6,8 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
     
     public function __construct($email, $password, $loginMode = null)
     {
-        //$this->email = FrontEnd_Helper_viewHelper::sanitize( $email );
-        //$this->password = FrontEnd_Helper_viewHelper::sanitize( $password );
-        $this->email = $email;
-        $this->password = $password;
+        $this->email = \FrontEnd_Helper_viewHelper::sanitize($email);
+        $this->password = \FrontEnd_Helper_viewHelper::sanitize($password);
     }
     
     

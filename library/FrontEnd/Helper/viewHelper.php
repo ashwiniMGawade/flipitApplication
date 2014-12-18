@@ -721,7 +721,6 @@ EOD;
         foreach ($doctrineConnections['doctrine'] as $connection) {
             $dbConnection = $connection;
         }
-
         $splitDbName = explode('//', $dbConnection);
         $splitDbName = explode('/', $splitDbName[1]);
         $dbName = $splitDbName[1];
@@ -730,7 +729,6 @@ EOD;
         $dbUserName = $splitDbPasswordAndHost[0];
         $dbUserPassword = $splitDbPassword[0];
         $dbHost = $splitDbPassword[1];
-
         $mysqlConnection = mysqli_connect($dbHost, $dbUserName, $dbUserPassword, $dbName);
         return $mysqlConnection;
     }
