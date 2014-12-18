@@ -61,9 +61,7 @@ class IndexController extends Zend_Controller_Action
                 ''
             );
             $this->view->specialListPages = $specialListPages;
-            /*echo "<pre>";
-            print_r($specialListPages);*/
-
+           
             $specialListCountKey ="all_specialPages_count";
             $cacheStatus =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($specialListCountKey);
             if ($cacheStatus) {
@@ -73,9 +71,6 @@ class IndexController extends Zend_Controller_Action
                 $specialPagesOffers  = FrontEnd_Helper_viewHelper::getFromCacheByKey($specialListCountKey);
             }
 
-            /*echo "<pre>";
-            print_r($specialPagesOffers);
-            die;*/
             $this->view->specialPagesOffers = $specialPagesOffers;
             $this->view->moneySavingGuidesCount = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_moneySaving_list",
@@ -83,7 +78,6 @@ class IndexController extends Zend_Controller_Action
                 ),
                 ''
             );
-
 
             $this->view->topStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_popularShops_list",

@@ -404,6 +404,7 @@ class Offer Extends \KC\Entity\Offer
 
     public static function getSpecialOffersByPage($pageId, $currentDate)
     {
+        $pageId = 8;
         $specialPageOffers = self::getOffersByPageId($pageId, $currentDate);
         return self::removeDuplicateOffers($specialPageOffers);
     }
@@ -411,17 +412,10 @@ class Offer Extends \KC\Entity\Offer
     public static function getOffersByPageId($pageId, $currentDate)
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select(
-            'o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL as refUrl,o.refOfferUrl,
-            o.discountType,o.startDate as startdate,o.endDate as enddate,o.authorId,o.authorName,
-            o.Visability as visability,o.couponCode,o.exclusiveCode,
-            o.editorPicks,o.discount,o.discountvalueType,o.extendedOffer,o.extendedUrl,s.name as shopName,s.refUrl as shopRefUrl,
-            s.actualUrl,s.permaLink as permalink,s.views,l.name,l.path,fv.id as visitorId,vot.id,vot.vote,
-            ologo.path,ologo.name'
-        )
+        $query = $entityManagerUser->select('op, o, p, s, vot, l, fv')
         ->from('KC\Entity\RefOfferPage', 'op')
         ->leftJoin('op.refoffers', 'o')
-        ->leftJoin('o.logo', 'ologo')
+        ->leftJoin('o.offers', 'p')
         ->andWhere(
             "(o.couponCodeType = 'UN' AND (SELECT count(cc.id) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status=1)  > 0)
             or o.couponCodeType = 'GN'"
@@ -430,20 +424,15 @@ class Offer Extends \KC\Entity\Offer
         ->leftJoin('o.votes', 'vot')
         ->leftJoin('s.logo', 'l')
         ->leftJoin('s.visitors', 'fv')
-        ->setParameter(7, $pageId)
-        ->where('op.offers = ?7')
+        ->where('op.offers ='. $pageId)
         ->andWhere('o.endDate >'."'".$currentDate."'")
         ->andWhere('o.startDate <='."'".$currentDate."'")
-        ->setParameter(2, 0)
-        ->andWhere('o.deleted = ?2')
-        ->setParameter(3, 0)
-        ->andWhere('s.deleted = ?3')
-        ->setParameter(4, 1)
-        ->andWhere('s.status = ?4')
-        ->setParameter(5, 'CD')
-        ->andWhere('o.discountType = ?5')
-        ->setParameter(6, 'MEM')
-        ->andWhere('o.Visability != ?6')
+        
+        ->andWhere('o.deleted = 0')
+        ->andWhere('s.deleted = 0')
+        ->andWhere('s.status = 1')
+        ->andWhere('o.discountType ='.$entityManagerUser->expr()->literal('CD'))
+        ->andWhere('o.Visability !='.$entityManagerUser->expr()->literal('MEM'))
         ->orderBy('o.exclusiveCode', 'DESC')
         ->addOrderBy('o.startDate', 'DESC');
         $specialPageOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -456,7 +445,7 @@ class Offer Extends \KC\Entity\Offer
         if (count($specialPageOffers) > 0) {
             $countOfSpecialPageOffers = count($specialPageOffers);
             for ($offerIndex = 0; $offerIndex < $countOfSpecialPageOffers; $offerIndex++) {
-                $specialOffersWithoutDuplication[$offerIndex] = $specialPageOffers[$offerIndex]['Offer'];
+                $specialOffersWithoutDuplication[$offerIndex] = $specialPageOffers[$offerIndex]['refoffers'];
             }
         }
         return $specialOffersWithoutDuplication;
@@ -689,18 +678,12 @@ class Offer Extends \KC\Entity\Offer
             $countOfSpecialOffersByConstraints = count($specialOffersByConstraints);
             for ($offerIndex = 0; $offerIndex < $countOfSpecialOffersByConstraints; $offerIndex++) {
 
-                $offerPublishDate = $specialOffersByConstraints[$offerIndex]['startdate'];
-                $offerExpiredDate = $specialOffersByConstraints[$offerIndex]['enddate'];
+                $offerPublishDate = $specialOffersByConstraints[$offerIndex]['startdate']->format('Y-m-d');
+                $offerExpiredDate = $specialOffersByConstraints[$offerIndex]['enddate']->format('Y-m-d');
                 $offerSubmissionDaysIncreasedBy = ' +'.$specialPage['timenumberOfDays'].' days';
                 $offerSubmissionDaysDecreasedBy  = ' -'.$specialPage['timenumberOfDays'].' days';
-                $increasedOfferPublishDate = date(
-                    'Y-m-d',
-                    strtotime($offerPublishDate .$offerSubmissionDaysIncreasedBy)
-                );
-                $decreasedOfferExpiredDate = date(
-                    'Y-m-d',
-                    strtotime($offerExpiredDate .$offerSubmissionDaysDecreasedBy)
-                );
+                $increasedOfferPublishDate = date($offerPublishDate .$offerSubmissionDaysIncreasedBy);
+                $decreasedOfferExpiredDate = date($offerExpiredDate .$offerSubmissionDaysDecreasedBy);
                 $currentDate = strtotime(date("Y-m-d"));
                 $newOfferPublishDate = strtotime($increasedOfferPublishDate);
                 $newOfferExprationDate = strtotime($decreasedOfferExpiredDate);
