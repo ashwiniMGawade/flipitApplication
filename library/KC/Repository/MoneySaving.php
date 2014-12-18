@@ -141,4 +141,20 @@ class MoneySaving Extends \KC\Entity\MoneySaving
             $query->execute();
         return true;
     }
+
+    public static function generateShopMoneySavingGuideArticle($slug, $limit, $shopId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('a, ai, at, rs, chap')
+        ->from('\KC\Entity\Articles', 'a')
+        ->leftJoin('a.articleImage', 'ai')
+        ->leftJoin('a.thumbnail', 'at')
+        ->leftJoin('a.storearticles', 'rs')
+        ->leftJoin('a.articleChapter', 'chap')
+        ->where('rs.articleshops='.$shopId)
+        ->andWhere('a.deleted=0')
+        ->setMaxResults($limit);
+        $shopMoneySavingGuideArticle = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $shopMoneySavingGuideArticle;
+    }
 }

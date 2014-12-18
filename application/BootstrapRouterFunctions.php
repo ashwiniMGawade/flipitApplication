@@ -113,7 +113,7 @@ class BootstrapRouterFunctions
     public static function getPageUrls($getPermalinkFromDb)
     {
         // get the page detail from page table on the basis of permalink
-        $pageDetail = KC\Repositoy\RoutePermalink::getPageProperties(
+        $pageDetail = KC\Repository\RoutePermalink::getPageProperties(
             strtolower($getPermalinkFromDb[0]['permalink'])
         );
         //check if there exist page belongs to the permalink then append the

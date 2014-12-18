@@ -134,20 +134,20 @@ EOD;
             if ($i%2==0) {
                 $class = 'class="none"';
             }
-            if ($popularStores[$i]['shop']['deepLink']!=null) {
-                $popularStoreUrl = $popularStores[$i]['shop']['deepLink'];
-            } elseif ($popularStores[$i]['shop']['refUrl']!=null) {
-                $popularStoreUrl = $popularStores[$i]['shop']['refUrl'];
-            } elseif ($popularStores[$i]['shop']['actualUrl']) {
-                $popularStoreUrl = $popularStores[$i]['shop']['actualUrl'];
+            if ($popularStores[$i]['popularshops']['deepLink']!=null) {
+                $popularStoreUrl = $popularStores[$i]['popularshops']['deepLink'];
+            } elseif ($popularStores[$i]['popularshops']['refUrl']!=null) {
+                $popularStoreUrl = $popularStores[$i]['popularshops']['refUrl'];
+            } elseif ($popularStores[$i]['popularshops']['actualUrl']) {
+                $popularStoreUrl = $popularStores[$i]['popularshops']['actualUrl'];
             } else {
-                $popularStoreUrl = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
+                $popularStoreUrl = HTTP_PATH_LOCALE .$popularStores[$i]['popularshops']['permaLink'];
             }
-            $popularStoreUrl = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
+            $popularStoreUrl = HTTP_PATH_LOCALE .$popularStores[$i]['popularshops']['permaLink'];
             $popularStoresContent .=
                 '<li '.$class.'>
-                    <a title='.$popularStores[$i]['shop']['name'].' 
-                    href='.$popularStoreUrl.'>'.ucfirst(self::substring($popularStores[$i]['shop']['name'], 200))
+                    <a title='.$popularStores[$i]['popularshops']['name'].' 
+                    href='.$popularStoreUrl.'>'.ucfirst(self::substring($popularStores[$i]['popularshops']['name'], 200))
                     .'</a>
                 </li>';
         }

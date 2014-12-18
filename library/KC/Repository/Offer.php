@@ -17,10 +17,7 @@ class Offer Extends \KC\Entity\Offer
     {
         $expiredDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select(
-            'o.id, o.title, o.Visability, o.couponCode, o.refOfferUrl, o.endDate,
-            o.extendedOffer, o.extendedUrl, s.id as shopId, s.affliateProgram'
-        )
+        $query = $entityManagerUser->select('o, s')
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->setParameter(1, 0)
@@ -1099,26 +1096,17 @@ class Offer Extends \KC\Entity\Offer
         $nowDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
-            ->select(
-                'o.id,o.authorId,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
-                o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,
-                o.endDate,o.refOfferUrl,o.couponCodeType, o.extendedUrl,l.name,l.path,t.path,t.name,
-                s.id as shopId,s.name,s.permaLink as permalink,
-                s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path,
-                img.name,vot.id,vot.vote'
-            )
+            ->select('o, s, img, terms, vot, t')
         ->from('KC\Entity\Offer', 'o')
         ->addSelect(
             "(SELECT count(c.id)  FROM KC\Entity\CouponCode c WHERE c.offer = o.id and c.status=1) as totalAvailableCodes"
         )
         ->leftJoin('o.shopOffers', 's')
-        ->leftJoin('o.logo', 'l')
         ->leftJoin('s.logo', 'img')
         ->leftJoin('o.offertermandcondition', 'terms')
         ->leftJoin('o.votes', 'vot')
         ->leftJoin('o.offerTiles', 't')
-        ->setParameter(1, 0)
-        ->where('o.deleted = ?1');
+        ->where('o.deleted = 0');
 
         if (!$includingOffline) {
             $query = $query
@@ -1128,23 +1116,18 @@ class Offer Extends \KC\Entity\Offer
         }
             
         $query = $query->andWhere(
-            '(o.userGenerated = 0 and o.approved = 0) or (o.userGenerated = 1 and o.approved = 1)
-            '
+            '(o.userGenerated = 0 and o.approved = 0) or (o.userGenerated = 1 and o.approved = 1)'
         )
-            ->setParameter(5, $id)
-            ->andWhere('s.id = ?5')
-            ->setParameter(6, 0)
-            ->andWhere('s.deleted = ?6')
-            ->setParameter(7, 'NW')
-            ->andWhere('o.discountType != ?7')
-            ->setParameter(8, 'MEM')
-            ->andWhere('o.Visability != ?8')
-            ->orderBy('o.editorPicks', 'DESC')
-            ->addOrderBy('o.exclusiveCode', 'DESC')
-            ->addOrderBy('o.discountType', 'ASC')
-            ->addOrderBy('o.startDate', 'DESC')
-            ->addOrderBy('o.popularityCount', 'DESC')
-            ->addOrderBy('o.title', 'ASC');
+        ->andWhere('s.id ='. $id)
+        ->andWhere('s.deleted = 0')
+        ->andWhere('o.discountType !='.$entityManagerUser->expr()->literal('NW'))
+        ->andWhere('o.Visability != '.$entityManagerUser->expr()->literal('MEM'))
+        ->orderBy('o.editorPicks', 'DESC')
+        ->addOrderBy('o.exclusiveCode', 'DESC')
+        ->addOrderBy('o.discountType', 'ASC')
+        ->addOrderBy('o.startDate', 'DESC')
+        ->addOrderBy('o.popularityCount', 'DESC')
+        ->addOrderBy('o.title', 'ASC');
 
         if ($getExclusiveOnly) {
             $query = $query->andWhere('o.exclusiveCode = 1');

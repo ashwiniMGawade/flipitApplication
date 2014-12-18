@@ -7,11 +7,11 @@ echo $expiredOffersPartialClass->getExpiredOffersHeader($this->shopName);?>
 foreach ($this->expiredOffers as $offer) :
     $offer = (object) $offer;
     $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-    $shopUrl = $domainName.'out/shop/'.$offer->shop['id'];
+    $shopUrl = $domainName.'out/shop/'.$offer->shopOffers['id'];
     ?>
     <div class="line">
     <?php
-    if($offer->shop['affliateProgram']==1) {
+    if($offer->shopOffers['affliateProgram']==1) {
         ?>
         <a href="<?php echo $shopUrl;?>"
         rel="nofollow" target="<?php echo $offer->extendedOffer==1 ? '_self' : '_blank';?>">
@@ -34,9 +34,9 @@ foreach ($this->expiredOffers as $offer) :
                 <?php echo $expiredOffersPartialClass->getOfferCouponCode($offer->couponCode)?>
             </div>
         </div>
-        <span class="date"><?php echo $expiredOffersPartialClass->getExpiredOnDate($offer->endDate);?></span>
+        <span class="date"><?php echo $expiredOffersPartialClass->getExpiredOnDate($offer->endDate->format('Y-d-m'));?></span>
     <?php
-    if($offer->shop['affliateProgram']==1) {
+    if($offer->shopOffers['affliateProgram']==1) {
         ?>
         </a>
         <?php

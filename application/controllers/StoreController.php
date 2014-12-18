@@ -84,7 +84,7 @@ class StoreController extends Zend_Controller_Action
             $moneySavingGuideArticle = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)'shop_moneySavingArticles_'.$ShopList,
                 array(
-                    'function' => 'FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle',
+                    'function' => 'KC\Repository\MoneySaving::generateShopMoneySavingGuideArticle',
                     'parameters' => array('moneysaving', 3, $shopId)
                 ),
                 ''
@@ -110,16 +110,16 @@ class StoreController extends Zend_Controller_Action
 
             $shopImage = PUBLIC_PATH_CDN.ltrim($shopInformation[0]['logo']['path'], "/")
                 .'thum_medium_store_'.$shopInformation[0]['logo']['name'];
-            $this->view->shopBranding = Shop::getShopBranding($shopId);
+            $this->view->shopBranding = KC\Repository\Shop::getShopBranding($shopId);
         } else {
             $urlToRedirect = HTTP_PATH_LOCALE. 'store/index';
             $this->_redirect($urlToRedirect);
         }
-
+        
         $this->view->currentStoreInformation = $shopInformation;
         $this->view->moneySavingGuideArticle = $moneySavingGuideArticle;
         $this->view->latestShopUpdates = $latestShopUpdates;
-        $this->view->offers = $offers;
+        $this->view->offers = $offers[0];
 
         if ($this->view->currentStoreInformation[0]['affliateProgram']==0 && count($this->view->offers) <=0) {
             $offers = $this->_helper->Store->topStorePopularOffers($shopId, $offers);
@@ -142,6 +142,7 @@ class StoreController extends Zend_Controller_Action
                     ''
                 );
         }
+
         $this->view->expiredOffers = $expiredOffers;
         if ($shopInformation[0]['affliateProgram'] == 0) {
             $numberOfSimilarOffers = 10;
