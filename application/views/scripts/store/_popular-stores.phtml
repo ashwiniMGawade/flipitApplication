@@ -10,19 +10,19 @@ foreach ($this->popularStores as $popularStore) :
         break;
     endif;
 
-    if (count($popularStore['shop']['logo']) > 0) :
+    if (count($popularStore['popularshops']['logo']) > 0) :
         $popularStoreImage =
     		PUBLIC_PATH_CDN
-    		.ltrim($popularStore['shop']['logo']['imgpath'], "/")
-    		."thum_medium_".$popularStore['shop']['logo']['imgname'];
+    		.ltrim($popularStore['popularshops']['logo']['path'], "/")
+    		."thum_medium_".$popularStore['popularshops']['logo']['name'];
     else :
         $popularStoreImage = HTTP_PATH . "public/images/NoImage/storeLogo100_50.jpg";
     endif;
 
     echo '<li>
-        <a href="'.HTTP_PATH_LOCALE.$popularStore['shop']['permaLink'].'">
+        <a href="'.HTTP_PATH_LOCALE.$popularStore['popularshops']['permaLink'].'">
             <img src="' . $popularStoreImage . '"  
-            alt="' .$popularStore['shop']['name'] . '" width="92" height="47" />
+            alt="' .$popularStore['popularshops']['name'] . '" width="92" height="47" />
         </a>
     </li>';
 endforeach;

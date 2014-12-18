@@ -18,7 +18,7 @@ class StoreController extends Zend_Controller_Action
         }
 
         $shopId = $this->getRequest()->getParam('id');
-        $shopdetail = Shop::getshopStatus($shopId);
+        $shopdetail = \KC\Repository\Shop::getshopStatus($shopId);
         if ($shopdetail) {
             $request = $this->getRequest();
             $request->setControllerName('error');
@@ -50,7 +50,7 @@ class StoreController extends Zend_Controller_Action
             $allShopDetailKey = 'shopDetails_'.$ShopList;
             $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allShopDetailKey,
-                array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId)
+                array('function' => 'KC\Repository\Shop::getStoreDetails', 'parameters' => array($shopId)
                 ),
                 ''
             );
@@ -224,26 +224,30 @@ class StoreController extends Zend_Controller_Action
     {
         $permalink = FrontEnd_Helper_viewHelper::getPagePermalink();
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
+        $pageDetails = KC\Repository\Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
+        
+        $pageDetails = $pageDetails[0];
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'page_header'.$pageDetails->id.'_image',
+            'page_header'.$pageDetails[0]['id'].'_image',
             array(
-                'function' => 'Logo::getPageLogo',
-                'parameters' => array($pageDetails->pageHeaderImageId)
+                'function' => 'KC\Repository\Page::getPageLogo',
+                'parameters' => array($pageDetails['pageHeaderImageId'])
             )
         );
-        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
+        $this->view->pageTitle = isset($pageDetails[0]['pageTitle']) ? $pageDetails[0]['pageTitle'] : '';
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $allStoresList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'all_shops_list',
-            array('function' => 'Shop::getallStoresForFrontEnd', 'parameters' => array('all', null)),
+            array('function' => '\KC\Repository\Shop::getallStoresForFrontEnd', 'parameters' => array('all', null)),
             true
         );
+
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             '10_popularShops_list',
-            array('function' => 'Shop::getAllPopularStores', 'parameters' => array(10)),
+            array('function' => '\KC\Repository\Shop::getAllPopularStores', 'parameters' => array(10)),
             true
         );
+
         $storeSearchByAlphabet = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'all_searchPanel_list',
             array('function' => 'FrontEnd_Helper_viewHelper::alphabetList', 'parameters' => array()),
@@ -251,12 +255,12 @@ class StoreController extends Zend_Controller_Action
         );
         $this->viewHelperObject->getMetaTags(
             $this,
-            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
-            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
-            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
-            isset($pageDetails->permaLink) ? $pageDetails->permaLink : '',
+            isset($pageDetails[0]['pageTitle']) ? $pageDetails[0]['pageTitle'] : '',
+            isset($pageDetails[0]['metaTitle']) ? $pageDetails[0]['metaTitle'] : '',
+            isset($pageDetails[0]['metaDescription']) ? $pageDetails[0]['metaDescription'] : '',
+            isset($pageDetails[0]['permaLink']) ? $pageDetails[0]['permaLink'] : '',
             FACEBOOK_IMAGE,
-            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
+            isset($pageDetails[0]['customHeader']) ? $pageDetails[0]['customHeader'] : ''
         );
 
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(

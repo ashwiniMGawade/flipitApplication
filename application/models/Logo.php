@@ -25,7 +25,7 @@ class Logo extends BaseLogo
     public static function getPageLogo($logoId)
     {
         $pageLogo = Doctrine_Query::create()->select()
-        ->from('logo l')
+        ->from('\KC\Entity\Logo l')
         ->where("l.id = ?", $logoId)
         ->fetchArray();
         return  !empty($pageLogo[0]) ? $pageLogo[0] : '';
