@@ -117,7 +117,9 @@ class UserGeneratedOffer extends BaseOffer
         $offer->couponCode = BackEnd_Helper_viewHelper::stripSlashesFromString($parameters['code']);
         $offer->startDate =  date('Y-m-d H:i:s');
         $offer->endDate = date('Y-m-d', strtotime($parameters['expireDate']));
-        $offer->termandcondition[]->content = BackEnd_Helper_viewHelper::stripSlashesFromString(
+        $site = LOCALE == '' ? "Kortingscode" : "Flipit";
+        $defaultText = FrontEnd_Helper_viewHelper::__translate('This code is not verified by').' '.$site.' ';
+        $offer->termandcondition[]->content = $defaultText.BackEnd_Helper_viewHelper::stripSlashesFromString(
             $parameters['offerDetails']
         );
         $offer->shopId = base64_decode($parameters['shopId']);

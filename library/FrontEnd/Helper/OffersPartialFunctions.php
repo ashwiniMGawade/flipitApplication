@@ -74,7 +74,7 @@ class FrontEnd_Helper_OffersPartialFunctions
             $offerOptionHtml = '<strong class="exclusive">
             <span class="glyphicon glyphicon-star"></span>'.$offerOption.'</strong>';
         } else if ($type == 'sc') {
-            $offerOptionHtml = '<strong class="exclusive">
+            $offerOptionHtml = '<strong class="social-color">
             <span class="social-icon"></span>'.$offerOption.'</strong>';
         }
         return $offerOptionHtml;
@@ -88,7 +88,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         elseif ($currentOffer->editorPicks =='1'):
             $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Editor'), 'ed');
         elseif ($currentOffer->userGenerated =='1'):
-            $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('social'), 'sc');
+            $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Social Code'), 'sc');
         endif;
         return $offerOption;
     }
