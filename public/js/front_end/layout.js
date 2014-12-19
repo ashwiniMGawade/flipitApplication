@@ -5,7 +5,13 @@ $(document).ready(function(){
             $('a.dropdown-toggle b').removeClass('arrow-menu-down').addClass('arrow-menu-up');
         }
     });
+    loopImages();
 });
+var loopImages = function(){
+    $('#text-box').fadeIn(2500, function(){
+        $('#text-box').fadeOut(3000, loopImages);
+    });
+}
 function showArticleOnClick(id) {
     if(id == 0) {
         $("#first").addClass("active");
