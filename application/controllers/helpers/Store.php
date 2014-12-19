@@ -27,7 +27,7 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
     {
         $removeDuplicateShop = '';
         foreach ($similarShopsOffers as $offerIndex => $offer) {
-            $removeDuplicateShop[$offer['shop']['id']] = $similarShopsOffers[$offerIndex];
+            $removeDuplicateShop[$offer['shopOffers']['id']] = $similarShopsOffers[$offerIndex];
         }
         $offersUnique = '';
         foreach ($removeDuplicateShop as $shopIndex => $offer) {

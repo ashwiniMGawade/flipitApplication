@@ -119,8 +119,8 @@ class StoreController extends Zend_Controller_Action
         $this->view->currentStoreInformation = $shopInformation;
         $this->view->moneySavingGuideArticle = $moneySavingGuideArticle;
         $this->view->latestShopUpdates = $latestShopUpdates;
-        $this->view->offers = $offers[0];
-
+        $this->view->offers = $offers;
+      
         if ($this->view->currentStoreInformation[0]['affliateProgram']==0 && count($this->view->offers) <=0) {
             $offers = $this->_helper->Store->topStorePopularOffers($shopId, $offers);
             $this->view->topPopularOffers = $offers;

@@ -58,14 +58,7 @@ class Offer Extends \KC\Entity\Offer
         if (count($similarShopsIds) > 0) {
             $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $entityManagerUser
-                ->select(
-                    's.id as shopId,s.permaLink as permalink,s.name as shopName,s.deepLink,s.usergenratedcontent,s.deepLinkStatus,
-                    o.refURL, o.refOfferUrl, s.refUrl as shopRefUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability,
-                    o.discountType, o.couponCode, o.startDate as startdate, o.endDate as enddate, o.exclusiveCode,
-                    o.editorPicks,o.extendedOffer as extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName,
-                    o.userGenerated,o.couponCodeType, o.approved,o.discountvalueType,img.path,
-                    img.name,fv.id as visitorId,vot.id as voteId,vot.vote'
-                )
+                ->select('o, s, fv, terms, vot, c, img')
                 ->from('KC\Entity\Offer', 'o')
                 ->addSelect(
                     "(SELECT count(cc.id) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status=1) as totalAvailableCodes"
@@ -76,29 +69,22 @@ class Offer Extends \KC\Entity\Offer
                 ->leftJoin('o.votes', 'vot')
                 ->leftJoin('s.categoryshops', 'c')
                 ->leftJoin('s.logo', 'img')
-                ->setParameter(1, 0)
-                ->where('o.deleted = ?1')
-                ->setParameter(2, 'MEM')
-                ->andWhere('o.Visability != ?2')
+                ->where('o.deleted = 0')
+                ->andWhere('o.Visability != '.$entityManagerUser->expr()->literal('MEM'))
                 ->andWhere('o.endDate >'."'".$date."'")
                 ->andWhere('o.startDate <='."'".$date."'")
-                ->setParameter(4, 'CD')
-                ->andWhere('o.discountType = ?4')
-                ->setParameter(5, 0)
-                ->andWhere('s.deleted = ?5')
-                ->setParameter(6, 1)
-                ->andWhere('s.status = ?6')
-                ->setParameter(8, 0)
-                ->andWhere('o.userGenerated = ?8')
-                ->setParameter(9, $shopId)
-                ->andWhere('o.shopOffers != ?9')
-                ->setParameter(10, 1)
-                ->andWhere('s.affliateProgram = ?10')
-                ->setParameter(11, $similarShopsIds)
-                ->andWhere($entityManagerUser->expr()->in('o.shopOffers', '?11'))
-                ->orderBy('o.startDate', 'DESC')
-                ->setMaxResults($limit);
-                $similarShopsOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+                ->andWhere('o.discountType !='.$entityManagerUser->expr()->literal('CD'))
+                ->andWhere('s.deleted = 0')
+                ->andWhere('s.status = 1')
+                ->andWhere('o.userGenerated = 0')
+                ->andWhere('o.shopOffers !='. $shopId)
+                ->andWhere('s.affliateProgram = 1')
+                ->andWhere($entityManagerUser->expr()->in('o.shopOffers', $similarShopsIds))
+                ->orderBy('o.startDate', 'DESC');
+            if ($limit!='') {
+                $query->setMaxResults($limit);
+            }
+            $similarShopsOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         } else {
             $similarShopsOffers = array();
         }
@@ -124,15 +110,7 @@ class Offer Extends \KC\Entity\Offer
             $commaSepratedCategroyIdValues = implode(', ', $similarCategoriesIds);
             $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $entityManagerUser
-            ->select(
-                's.id as shopId,s.permaLink as permalink,s.name as shopName,s.deepLink,s.usergenratedcontent,s.deepLinkStatus,
-                o.refURL,
-                o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType,
-                o.couponCodeType, o.couponCode, o.refOfferUrl as refofferurl, o.startDate as startdate,
-                o.endDate as enddate, o.exclusiveCode, o.editorPicks,
-                o.extendedOffer as extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName,
-                o.userGenerated, o.approved,o.discountvalueType,img.path, img.name,fv.id as visitorId,vot.id as voteId,vot.vote'
-            )
+            ->select('o, s, fv, terms, vot, c, img')
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->leftJoin('s.visitors', 'fv')
@@ -140,26 +118,17 @@ class Offer Extends \KC\Entity\Offer
             ->leftJoin('o.votes', 'vot')
             ->leftJoin('s.categoryshops', 'c')
             ->leftJoin('s.logo', 'img')
-            ->setParameter(1, 0)
-            ->where('o.deleted = ?1')
-            ->setParameter(5, 0)
-            ->andWhere('s.deleted = ?5')
-            ->setParameter(6, 1)
-            ->andWhere('s.status = ?6')
-            ->setParameter(10, 1)
-            ->andWhere('s.affliateProgram = ?10')
-            ->setParameter(4, 'CD')
-            ->andWhere('o.discountType = ?4')
-            ->setParameter(2, 'MEM')
-            ->andWhere('o.Visability != ?2')
+            ->where('o.deleted = 0')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('s.status = 1')
+            ->andWhere('s.affliateProgram = 1')
+            ->andWhere('o.Visability != '.$entityManagerUser->expr()->literal('MEM'))
             ->andWhere('o.endDate >'."'".$date."'")
             ->andWhere('o.startDate <='."'".$date."'")
-            ->setParameter(8, 0)
-            ->andWhere('o.userGenerated = ?8')
-            ->setParameter(11, $commaSepratedCategroyIdValues)
-            ->andWhere($entityManagerUser->expr()->in('c.categoryId', '?11'))
-            ->setParameter(9, $shopId)
-            ->andWhere('o.shopOffers != ?9')
+            ->andWhere('o.discountType !='.$entityManagerUser->expr()->literal('CD'))
+            ->andWhere('o.userGenerated = 0')
+            ->andWhere($entityManagerUser->expr()->in('c.categoryId', $commaSepratedCategroyIdValues))
+            ->andWhere('o.shopOffers !='. $shopId)
             ->orderBy('o.startDate', 'DESC')
             ->setMaxResults($limit);
             $similarCategoriesOffer = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -217,7 +186,7 @@ class Offer Extends \KC\Entity\Offer
     {
         $NewOffersOfRelatedShops = array();
         foreach ($similarShopsOffers as $shopOffer):
-            $NewOfferOfRelatedShops["'".$shopOffer['id']."'"] = $shopOffer;
+            $NewOfferOfRelatedShops["'".$shopOffer[0]['id']."'"] = $shopOffer[0];
         endforeach;
         return $NewOffersOfRelatedShops;
     }
@@ -1096,28 +1065,23 @@ class Offer Extends \KC\Entity\Offer
         $nowDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
-            ->select('o, s, img, terms, vot, t')
+            ->select('o, s')
         ->from('KC\Entity\Offer', 'o')
-        ->addSelect(
-            "(SELECT count(c.id)  FROM KC\Entity\CouponCode c WHERE c.offer = o.id and c.status=1) as totalAvailableCodes"
-        )
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('s.logo', 'img')
         ->leftJoin('o.offertermandcondition', 'terms')
         ->leftJoin('o.votes', 'vot')
         ->leftJoin('o.offerTiles', 't')
         ->where('o.deleted = 0');
-
+        
         if (!$includingOffline) {
             $query = $query
                 ->andWhere('o.offline = 0')
                 ->andWhere('o.endDate >='."'".$nowDate."'")
                 ->andWhere('o.startDate <='."'".$nowDate."'");
         }
-            
-        $query = $query->andWhere(
-            '(o.userGenerated = 0 and o.approved = 0) or (o.userGenerated = 1 and o.approved = 1)'
-        )
+        
+        $query->andWhere('o.userGenerated = 0')
         ->andWhere('s.id ='. $id)
         ->andWhere('s.deleted = 0')
         ->andWhere('o.discountType !='.$entityManagerUser->expr()->literal('NW'))
