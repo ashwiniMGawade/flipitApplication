@@ -41,6 +41,7 @@ class Translations extends BaseTranslations
 
     public function saveTranslations($translations)
     {
+        $translations = BackEnd_Helper_viewHelper::removeScriptTag($translations);
         $existingTranslation =  self::getExistingTranslation($translations);
         if (!empty($existingTranslation[0]['id'])) {
             $translationQuery = Doctrine_Query::create()
