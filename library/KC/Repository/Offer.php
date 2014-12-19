@@ -1110,20 +1110,9 @@ class Offer Extends \KC\Entity\Offer
         $currentDateTime = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
-                ->select(
-                    's.id as shopId,s.name as shopName, s.permaLink as permalink,s.deepLink,s.deepLinkStatus,
-                    s.usergenratedcontent,s.refUrl,s.actualUrl,terms.content,o.id,
-                    o.extendedUrl as extendedurl,o.extendedOffer as extendedoffer,
-                    o.editorPicks as editorpicks,o.Visability,o.userGenerated,o.title,o.authorId,o.discountvalueType,
-                    o.exclusiveCode,
-                    o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refURL as refUrl,
-                    o.discountType,
-                    o.startDate,o.endDate,img.id as imageId, img.path, img.name,fv.id as visitorId,
-                    vot.id,vot.vote'
-                )
+                ->select('o, s, vot, img, fv, terms')
                 ->from('KC\Entity\Offer', 'o')
                 ->leftJoin('o.shopOffers', 's')
-                ->leftJoin('o.logo', 'ologo')
                 ->leftJoin('o.votes', 'vot')
                 ->leftJoin('s.logo', 'img')
                 ->leftJoin('s.visitors', 'fv')
@@ -1144,10 +1133,10 @@ class Offer Extends \KC\Entity\Offer
                 ->andWhere('o.userGenerated = 0')
                 ->orderBy('o.startDate', 'DESC');
         if ($shopId!='') {
-                    $query->andWhere('s.id = '.$shopId);
+            $query->andWhere('s.id = '.$shopId);
         }
         if ($userId!="") {
-                    $query->andWhere('o.authorId = '.$userId);
+            $query->andWhere('o.authorId = '.$userId);
         }
         $query->setMaxResults($limit);
         $newOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
