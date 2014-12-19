@@ -415,28 +415,28 @@ function deleteShop(id) {
  * @author blal
  */
 function changeStatus(id,obj,status){
-	 	 addOverLay();
-		 $(obj).addClass("btn-primary").siblings().removeClass("btn-primary");
-		 $.ajax({
-				type : "POST",
-				url : HOST_PATH+"admin/shop/shopstatus",
-				data : "id="+id+"&status="+status,
-				success: function(ret)
-				{
-					if(ret)
-					{
-	
-						$(obj).parents('td').next('td').html( "<a href='javascript:void(0);'>"+ ret +"</a>");
-					}else {
-						
-						$(obj).parents('td').next('td').html( "");
-					}
-					
-					
-					
-				}
-			}).done(removeOverLay); 
-	 
+	addOverLay();
+ 	$(obj).addClass("btn-primary").siblings().removeClass("btn-primary");
+ 	$.ajax({
+		type : "POST",
+		url : HOST_PATH+"admin/shop/shopstatus",
+		data : "id="+id+"&status="+status,
+		success: function(ret)
+		{
+			if(ret)
+			{	
+				$(obj).parents('td').next('td').html( "<a href='javascript:void(0);'>"+ ret.date +"</a>");
+			}else {
+				$(obj).parents('td').next('td').html( "");
+			}
+			if(ret.message == 1) {
+				bootbox.alert(__('There is an how to guide for this shop. Please notify search to redirect!'));
+				setTimeout(function(){
+				bootbox.hideAll();
+				}, 3000);
+			}
+		}
+	}).done(removeOverLay);
 }
 
 /**
