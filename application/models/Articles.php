@@ -317,14 +317,13 @@ class Articles extends BaseArticles
         if(isset($params['savePagebtn']) && $params['savePagebtn'] == 'draft'){
             $data->publish = Articles::ArticleStatusDraft;
             $data->publishdate = date('Y-m-d');
-        }else if($params['savePagebtn'] == 'publish' && date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']))  > date('Y-m-d H:i:s')){
+        }else if($params['savePagebtn'] == 'publish' && date('Y-m-d',strtotime($params['publishDate']))  > date('Y-m-d')){
             $data->publish = Articles::ArticleStatusPublished;
-            $data->publishdate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']));
-
+            $data->publishdate = date('Y-m-d',strtotime($params['publishDate']));
             $isDraft  = false ;
         }else{
             $data->publish = Articles::ArticleStatusPublished;
-            $data->publishdate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']));
+            $data->publishdate = date('Y-m-d',strtotime($params['publishDate']));
             $isDraft  = false ;
         }
 
@@ -507,17 +506,13 @@ class Articles extends BaseArticles
             date(
                 'Y-m-d',
                 strtotime($params['publishDate'])
-            ).' '.
-            date(
-                'H:i:s',
-                strtotime($params['publishTimehh'])
             );
-        }else if($params['savePagebtn'] == 'publish' && date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']))  > date('Y-m-d H:i:s')){
+        }else if($params['savePagebtn'] == 'publish' && date('Y-m-d',strtotime($params['publishDate'])) > date('Y-m-d')){
             $data->publish = Articles::ArticleStatusPublished;
-            $data->publishdate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']));
+            $data->publishdate = date('Y-m-d',strtotime($params['publishDate']));
         }else{
             $data->publish = Articles::ArticleStatusPublished;
-            $data->publishdate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']));
+            $data->publishdate = date('Y-m-d',strtotime($params['publishDate']));
         }
         $getcategory = Doctrine_Query::create()->select()->from('Articles')->where('id = '.$params['id'] )->fetchArray();
         if(!empty($getcategory[0]['permalink'])){
