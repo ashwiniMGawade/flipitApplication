@@ -73,7 +73,9 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
         foreach ($categoryWiseArticles as $key => $categoryWiseArticle) {
             $categoryWiseArticles[$key]['authorDetails'] =
                 User::getUserDetails($categoryWiseArticle['articles']['authorid']);
-            $categoryWiseArticles[$key]['artcileCategoryType'] = $categoryWiseArticle['articles']['articlecategory'][0]['name'];
+            $articleCategoryType = !empty($categoryWiseArticle['articles']['articlecategory'])
+                ? $categoryWiseArticle['articles']['articlecategory'][0]['name'] : '';
+            $categoryWiseArticles[$key]['artcileCategoryType'] = $articleCategoryType;
         }
         
         return $categoryWiseArticles;

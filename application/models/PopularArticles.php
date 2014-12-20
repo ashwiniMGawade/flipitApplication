@@ -84,7 +84,7 @@ class PopularArticles extends BasePopularArticles
             ->where('a.publish = "1"')
             ->andWhere("a.deleted= 0")
             ->andWhere('a.publishdate <="'.$currentDateTime.'"')
-            ->orderBy('p.position ASC')
+            ->orderBy('p.id DESC')
             ->fetchArray();
         return $popularArticles;
     }
