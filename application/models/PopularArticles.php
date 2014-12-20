@@ -24,6 +24,15 @@ class PopularArticles extends BasePopularArticles
         return true;
     }
 
+    public static function updateArticles($changedArticlesDataForSorting)
+    {
+        foreach ($changedArticlesDataForSorting as $id) {
+            $articleQuery = Doctrine_Query::create()->update('PopularArticles')
+            ->set('position', 'position + 1')->where('articleId=' . $id);
+            $articleQuery->execute();
+        }
+    }
+
     public static function savePopularArticle($articleId, $position)
     {
         $popularArticle = new PopularArticles();
@@ -84,7 +93,7 @@ class PopularArticles extends BasePopularArticles
             ->where('a.publish = "1"')
             ->andWhere("a.deleted= 0")
             ->andWhere('a.publishdate <="'.$currentDateTime.'"')
-            ->orderBy('p.id DESC')
+            ->orderBy('p.position ASC')
             ->fetchArray();
         return $popularArticles;
     }
