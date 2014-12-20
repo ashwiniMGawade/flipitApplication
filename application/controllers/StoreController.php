@@ -45,11 +45,16 @@ class StoreController extends Zend_Controller_Action
 
         if (isset($shopParams['popup']) && $shopParams['popup'] != '') {
             $offerVisiblity = Offer::getOfferVisiblity($shopParams['popup']);
+            $shopInfo = Shop::getShopInformation($this->getRequest()->getParam('id'));
             if (!Auth_VisitorAdapter::hasIdentity() && $offerVisiblity == 1) {
-                $shopInfo = Shop::getShopInformation($this->getRequest()->getParam('id'));
                 if (!empty($shopInfo) && isset($shopInfo[0]['permaLink'])) {
                     $this->_redirect(HTTP_PATH_LOCALE. $shopInfo[0]['permaLink']);
                 }
+            }
+            $referer = $_SERVER['HTTP_REFERER'];
+            if ($referer == '') {
+                $this->_redirect(HTTP_PATH_LOCALE. $shopInfo[0]['permaLink']);
+                exit();
             }
         }
 
