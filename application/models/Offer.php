@@ -794,7 +794,7 @@ class Offer extends BaseOffer
                 's.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.refURL,o.discountType,
                 o.id,o.title,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, o.refofferurl, o.startdate,
                 o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount, o.authorId, o.authorName,
-                o.shopid, o.offerlogoid, img.id, img.path, img.name,fv.shopId,fv.visitorId,o.couponCodeType'
+                o.shopid, o.offerlogoid, o.userGenerated, o.approved, o.nickname, img.id, img.path, img.name,fv.shopId,fv.visitorId,o.couponCodeType'
             )
             ->from('Offer o')
             ->leftJoin('o.shop s')
