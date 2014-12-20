@@ -23,48 +23,20 @@ class Application_Form_SocialCodeSettingForm extends Application_Form_Base
         }
         $store->addMultiOptions($shopsValues);
         
-        $day = new Zend_Form_Element_Select('day');
-        $day->setRequired(true);
-        $day->setAttrib('class', 'form-control');
-        $dayValue = '';
-        for ($start = 1; $start <=31; $start++) {
-            if ($start < 10) {
-                $start = 0 . $start;
-            }
-            $dayValue[$start] = $start;
-        }
-        $day->addMultiOptions($dayValue);
-
-        $month = new Zend_Form_Element_Select('month');
-        $month->setRequired(true);
-        $month->setAttrib('class', 'form-control');
-        $monthValue = '';
-        for ($start = 1; $start <=12; $start++) {
-            if ($start < 10) {
-                $start = 0 . $start;
-            }
-            $monthValue[$start] = $start;
-        }
-        $month->addMultiOptions($monthValue);
-
-        $year = new Zend_Form_Element_Select('year');
-        $year->setRequired(true);
-        $year->setAttrib('class', 'form-control');
-        $yearValue = '';
-        for ($start = 2000; $start <=2050; $start++) {
-            $yearValue[$start] = $start;
-        }
-        $year->addMultiOptions($yearValue);
+        $expireDate = new Zend_Form_Element_Text('expireDate');
+        $expireDate->setRequired(true);
+        $expireDate->setAttrib('class', 'form-control');
+        $expireDate->setAttrib('placeholder', 'Expire date');
 
         $title = new Zend_Form_Element_Text('title');
         $title->setRequired(true);
         $title->setAttrib('class', 'form-control');
-        $title->setAttrib('placeholder', 'Offer Title');
+        $title->setAttrib('placeholder', 'Coupon title');
 
         $offerUrl = new Zend_Form_Element_Text('offerUrl');
         $offerUrl->setRequired(true);
         $offerUrl->setAttrib('class', 'form-control');
-        $offerUrl->setAttrib('placeholder', 'Offer URL');
+        $offerUrl->setAttrib('placeholder', 'Couon link');
 
         $code = new Zend_Form_Element_Text('code');
         $code->setRequired(true);
@@ -74,14 +46,12 @@ class Application_Form_SocialCodeSettingForm extends Application_Form_Base
         $offerDetails = new Zend_Form_Element_Textarea('offerDetails');
         $offerDetails->setRequired(true);
         $offerDetails->setAttrib('class', 'form-control');
-        $offerDetails->setAttrib('placeholder', 'Offer Details');
+        $offerDetails->setAttrib('placeholder', 'Term and Conditions');
 
         $this->addElements(array(
             $nickname,
             $store,
-            $day,
-            $month,
-            $year,
+            $expireDate,
             $title,
             $offerUrl,
             $code,

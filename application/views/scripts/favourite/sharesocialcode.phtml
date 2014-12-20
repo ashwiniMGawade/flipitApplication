@@ -1,11 +1,6 @@
-<?php echo $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/addsocialcode.js");
-if($this->successMessage!='' || $this->errorMessage!='') : ?>
-    <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox alert-warning">
-        <span class='glyphicon glyphicon-warning-sign'></span>
-        <strong><?php echo $this->successMessage!='' ? $this->successMessage : $this->errorMessage;?></strong>
-    </div>
-    <?php 
-endif;
+<?php 
+echo $this->minifyHeadLink()->prependStylesheet("/public/css/jquery-ui.min.css");
+echo $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/addsocialcode.js");
 ?>
 <div class="title">
     <?php 
@@ -23,14 +18,46 @@ foreach ($socialcodeForm->getElements() as $formElement) {
 ?>
 <div class="section">
     <div class="row">
-        <div class="col-lg-5 col-md-5 col-sm-5">
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <?php 
+        if($this->successMessage!='' || $this->errorMessage!='') :
+            ?>
+            <div id='socialCodeDiv' class="widget">
+                <h1><?php echo $this->translate('Share your social codes');?>
+                    <small>
+                    <?php 
+                    echo $this->translate('Did your a new coupon code worth sharing with flipit community?');
+                    ?>
+                    </small>
+                </h1>
+                <strong class="sub-title"><?php echo $this->translate('Thank you for sharing your offer!');?></strong>
+                <div class="sub-text">
+                    <p>
+                    <?php echo $this->translate('Thanks for sharing your coupon with the Flipit Community! Our team will check the details and publish the code');?>
+                    </p>
+                </div>
+                <?php
+                $sharecodeLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_alle-winkels');
+                if (Auth_VisitorAdapter::hasIdentity()) {
+                    $sharecodeLink = HTTP_PATH_LOCALE 
+                        . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') . "/" 
+                        . FrontEnd_Helper_viewHelper::__link('link_sharesocialcode');
+                }
+                ?>
+                <a href="<?php echo $sharecodeLink;?>">
+                    <?php echo $this->translate('Share coupon codes for other shops');?>
+                </a>
+            </div>
+            <?php
+        else :
+            ?>
             <form id="socialcodeForm" class="widget-form" name="socialcodeForm" method="POST" action="">
                 <div class="title">
-                    <h1><?php echo $this->translate('Deel jouw');?><br>
-                        <?php echo $this->translate('social kortingscodes');?>
+                    <h1><?php echo $this->translate('Share your social codes');?>
                         <small>
-                            <?php echo $this->translate('Heeft u een nieuwe kortingsbon gevonden');?><br>
-                            <?php echo $this->translate('die het delen waard is?');?>
+                        <?php 
+                        echo $this->translate('Did your a new coupon code worth sharing with flipit community?');
+                        ?>
                         </small>
                     </h1>
                 </div>
@@ -38,20 +65,20 @@ foreach ($socialcodeForm->getElements() as $formElement) {
                 <span class="fake-select">
                     <?php echo $socialcodeForm->store->renderViewHelper();?>
                 </span>
-                <span class="label">Expiry date</span>
-                <div class="select-box">
-                    <?php echo $socialcodeForm->day->renderViewHelper();?>
-                    <?php echo $socialcodeForm->month->renderViewHelper();?>
-                    <?php echo $socialcodeForm->year->renderViewHelper();?>
-                </div>
                 <?php echo $socialcodeForm->title->renderViewHelper();?>
                 <?php echo $socialcodeForm->offerUrl->renderViewHelper();?>
-                <?php echo $socialcodeForm->code->renderViewHelper();?>
+                <div class="select-box">
+                    <?php echo $socialcodeForm->code->renderViewHelper();?>
+                    <?php echo $socialcodeForm->expireDate->renderViewHelper();?>
+                </div>
                 <?php echo $socialcodeForm->offerDetails->renderViewHelper();?>
                 <button type='submit' id='sharecode' class="submit btn blue btn-primary">
                     <?php echo $this->translate('SHARE CODE');?>
                 </button>
             </form>
+            <?php
+        endif;
+        ?>
         </div>
         <div class="col-lg-7 col-md-7 col-sm-7">
         <?php 

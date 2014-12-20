@@ -391,8 +391,17 @@
 		.title{
 			padding:8px 0 23px;
 			h1{
-				font-size:42px;
+				font-size:34px;
 				line-height:40px;
+				color:#878a8d;
+				&:before {
+	                content:'';
+	                display:inline-block;
+	                background:url(../../images/sprite.png) no-repeat -188px -545px;
+	                width: 18px;
+	                height: 20px;
+	                margin:0 16px 0 0;
+            	}
 				small{
 					color:#878a8d;
 					font-size:14px;
@@ -419,6 +428,12 @@
 			resize:none;
 			background:#fff;
 		}
+		textarea::-webkit-input-placeholder {color: #9a9b9d;}
+        textarea:-moz-placeholder {color: #9a9b9d;}
+        textarea::-moz-placeholder {color: #9a9b9d; opacity: 1;}
+        select::-webkit-input-placeholder {color: #9a9b9d;}
+        select:-moz-placeholder {color: #9a9b9d;}
+        select::-moz-placeholder {color: #9a9b9d; opacity: 1;}
 		.label{
 			float:left;
 			.border-radius(0);
@@ -436,10 +451,11 @@
 		.select-box{
 			overflow:hidden;
 			margin:0 0 19px;
-			select.form-control{
-				width:111px;
-				margin:0 0 0 12px;
-				&:first-child{margin:0;}
+			input#code{
+				margin-right: 37px;
+			}
+			.form-control{
+				width: 45.34%;
 			}
 		}
 	}
@@ -460,6 +476,56 @@
 			margin:-2px 3px 0 0;
 		}
 	}
+	.widget{
+        padding:29px 30px 21px 27px;
+        color:#fff;
+        margin:0 0 27px;
+        min-height:225px;
+        a{
+            font-size:13px;
+            line-height:16px;
+            text-decoration:none;
+            color: #0077cc;
+            &:hover{text-decoration:underline;}
+        }
+        p{
+            margin:0 0 22px;
+            color: #7D7D7D;
+        }
+        h1{
+            font-size:30px;
+            line-height:33px;
+            margin:0 0 12px;
+            color: #7D7D7D;
+            &:before{
+                content:'';
+                display:inline-block;
+                background:url(../../images/sprite.png) no-repeat -188px -545px;
+                width: 18px;
+                height: 20px;
+                margin:0 16px 0 0;
+            }
+            small{
+				color:#878a8d;
+				font-size:14px;
+				line-height:18px;
+				display:block;
+				font-weight:bold;
+				padding:10px 0 0;
+			}
+        }
+        .sub-title{
+            display:block;
+            font-size:16px;
+            line-height:20px;
+            margin:0 0 16px;
+            color: #33383e;
+        }
+        .sub-text{
+            font-size:12px;
+            line-height:14px;
+        }
+    }
 }
 @media only screen and (max-width: 1199px){
 	.edit-page{
@@ -472,10 +538,12 @@
 	.social-page{
 		.section{
 			.select-box{
-				select.form-control{
-					width:81px;
-					margin:0 0 0 11px;
-					&:first-child{margin:0;}
+				&:first-child{
+					margin: 0px;
+				}
+				.form-control{
+					width: 100%;
+					margin:0 0 19px;
 				}
 			}
 		}
