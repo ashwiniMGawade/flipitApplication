@@ -280,6 +280,9 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id),
                     ga('send', 'event', 'aff', '$offerBounceRate'),
                     OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')";
+                    if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
+                        $onClick = '';
+                    }
                     $offerLink =
                         '<a  id="'.$currentOffer->id.'" class="'.$class.'" 
                         href="'.$urlToShow.'" vote="0" rel="nofollow" 
@@ -397,6 +400,11 @@ class FrontEnd_Helper_OffersPartialFunctions
                 "showCodeInformation($currentOffer->id), showCodePopUp(this),
                 ga('send','event', 'aff','$offerBounceRate'),
                 OpenInNewTab('".HTTP_PATH_LOCALE. $permalink.$popupLink."')";
+
+            if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
+                $onClick = '';
+            }
+            
             $buttonWithCodeforOffer =
             '<a id="'.$currentOffer->id.'" 
             class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" 

@@ -35,9 +35,11 @@ foreach ($this->offers as $offer) {
     } else if ($offer->userGenerated == '1') {
         $offerClass = "";
         $offerHolderClass = "";
+        $urlToShow = 'javascript:void(0);';
         if ($offer->approved == '1') {
             $offerClass = "social-block"; 
             $offerHolderClass = "offer-holder";
+            $urlToShow = $offerPartial->getUrlToShow($offer);
         }
     } else {
         $offerClass = "active";

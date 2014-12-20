@@ -23,9 +23,9 @@ foreach ($socialcodeForm->getElements() as $formElement) {
         echo $socialcodeForm->shopId->renderViewHelper();
         echo $socialcodeForm->shopPermalink->renderViewHelper();
         echo $this->formSubmit(
-         'sharecode',
-         FrontEnd_Helper_viewHelper::__form('form_share vouchercode'),
-         array('class'=>'btn btn-primary', 'id'=>'sharecode')
+            'sharecode',
+            FrontEnd_Helper_viewHelper::__form('form_share vouchercode'),
+            array('class'=>'btn btn-primary', 'id'=>'sharecode')
         ); 
         $sharecodeLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_alle-winkels');
         if (Auth_VisitorAdapter::hasIdentity()) {
