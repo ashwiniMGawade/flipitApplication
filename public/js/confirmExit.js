@@ -2,12 +2,10 @@
 	$.fn.confirmExit = function (message) {
 		var confirmExit = false;
 		$('input, textarea, select', this).on('change keyup', function () {
-		// Do not set the event handler if not needed
 		if (!confirmExit) {
 			confirmExit = true;
 			window.onbeforeunload = function (event) {
 			var e = event || window.event;
-			// For old IE and Firefox
 			if (e) {
 				e.returnValue = message;
 			}
