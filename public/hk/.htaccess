@@ -1,0 +1,4 @@
+Options -Indexes
+ErrorDocument 403 /public/hk/403.php
+RewriteEngine on
+RewriteRule ^403.php$ http://www.flipit.com/hk [L,R=301]
