@@ -741,28 +741,12 @@ class Articles extends BaseArticles
 
     public static function deleteArticles($id)
     {
-            $getVal = Doctrine_Query::create()->from('Articles a')
-                ->leftJoin('a.relatedstores')
-                ->where('a.id='.$id)->fetchArray();
-
-            foreach ($getVal[0]['relatedstores'] as $st):
-                $key = 'shop_moneySavingArticles_'  . $st['storeid'] . '_list';
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-                $permalinkWithoutSpecilaChracter = str_replace("-", "", $st['permalink']);
-                $key = 'article_'.$permalinkWithoutSpecilaChracter.'_details';
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            endforeach;
-
-
+            
         $O = Doctrine_Query::create()->update('Articles')->set('deleted', '2')
         ->where('id=' . $id);
         $O->execute();
         //call cache function
-
-
-
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
-
         $pageIds = self::findPageIds($id);
             $artArr = array();
             for($i=0;$i<count($pageIds);$i++) {
@@ -856,49 +840,31 @@ class Articles extends BaseArticles
         if ($id) {
             //find record by id
             $u = Doctrine_Core::getTable("Articles")->find($id);
-            $getVal = Doctrine_Query::create()->from('Articles a')
-                ->leftJoin('a.relatedstores')
-                ->where('a.id='.$id)->fetchArray();
-
-            foreach ($getVal[0]['relatedstores'] as $st):
-                $key = 'shop_moneySavingArticles_'  . $st['storeid'] . '_list';
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-                $key = 'article_'.$st['permalink'].'_details';
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            endforeach;
-
             $u->delete();
-
-
         } else {
-
             $id = null;
         }
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
         $pageIds = self::findPageIds($id);
-            $artArr = array();
-            for($i=0;$i<count($pageIds);$i++) {
-                $artArr[] = $pageIds[$i]['pageid'];
-            }
-            $page_ids = array_unique($artArr);
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
+        $artArr = array();
+        for ($i=0; $i<count($pageIds); $i++) {
+            $artArr[] = $pageIds[$i]['pageid'];
+        }
+        $page_ids = array_unique($artArr);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
-            $catIds = self::findCategoryId($id);
-            $catArr = array();
-            for($i=0;$i<count($catIds);$i++){
-                $catArr[] = $catIds[$i]['relatedcategoryid'];
-            }
-
-
-
+        $catIds = self::findCategoryId($id);
+        $catArr = array();
+        for ($i=0; $i<count($catIds); $i++) {
+            $catArr[] = $catIds[$i]['relatedcategoryid'];
+        }
         return $id;
-
     }
 
 
