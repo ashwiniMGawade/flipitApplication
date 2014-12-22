@@ -127,7 +127,6 @@ class FavouriteController extends Zend_Controller_Action
             if ($this->getRequest()->isPost()) {
                 if ($socialcodeForm->isValid($this->getRequest()->getPost())) {
                     $socialcode = $socialcodeForm->getValues();
-                    $endDate = $socialcode['day'].'-'.$socialcode['month'].'-'.$socialcode['year'];
                     $parameters =  array(
                         'nickname' => $socialcode['nickname'],
                         'shopId'=> base64_encode($socialcode['store']),
@@ -135,7 +134,7 @@ class FavouriteController extends Zend_Controller_Action
                         'offerUrl'=> $socialcode['offerUrl'],
                         'code'=> $socialcode['code'],
                         'offerDetails'=>$socialcode['offerDetails'],
-                        'expireDate'=>$endDate
+                        'expireDate'=>$socialcode['expireDate']
                     );
                     UserGeneratedOffer::addOffer($parameters);
                     $socialcodeForm->reset();
