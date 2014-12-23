@@ -1458,6 +1458,8 @@ public static function getShopDetail($shopId)
                  $conversion = Conversions::getConversionId( $data['id'] , $ip , 'shop') ;
 
                  $subid = str_replace('A2ASUBID',$conversion['subid'] , $subid );
+                $clientId = FrontEnd_Helper_viewHelper::getClientIdByCookie();
+                $subid = $subid.$clientId;
             }
         }
 
