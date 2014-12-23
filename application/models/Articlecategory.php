@@ -140,7 +140,7 @@ class Articlecategory extends BaseArticlecategory
         BackEnd_Helper_viewHelper::resizeImage($files[$file] , $newName , 64, 32, $path);
 
 
-        $path = ROOT_PATH . $uploadPath . "thum_articleCategory_samll_" . $newName;
+        $path = ROOT_PATH . $uploadPath . "thum_articleCategory_small_" . $newName;
         BackEnd_Helper_viewHelper::resizeImage($files[$file] , $newName , 60, 45, $path);
 
         $path = ROOT_PATH . $uploadPath . "thum_articleCategory_medium_" . $newName;

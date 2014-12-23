@@ -621,7 +621,7 @@ class Articles extends BaseArticles
         BackEnd_Helper_viewHelper::resizeImage($files[$file] , $newName , 64, 32, $path);
 
 
-        $path = ROOT_PATH . $uploadPath . "thum_article_samll_" . $newName;
+        $path = ROOT_PATH . $uploadPath . "thum_article_small_" . $newName;
         BackEnd_Helper_viewHelper::resizeImage($files[$file] , $newName , 0 , 46, $path);
 
         $path = ROOT_PATH . $uploadPath . "thum_article_medium_" . $newName;
