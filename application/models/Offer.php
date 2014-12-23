@@ -360,7 +360,7 @@ class Offer extends BaseOffer
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = '6_topOffers'  . $shopId . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        $key = 'shop_latestUpdates'  . $shopId . '_list';
+        $key = '4_shopLatestUpdates'  . $shopId . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shop_expiredOffers'  . $shopId . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -1198,7 +1198,7 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $shophowtokey = '6_topOffersHowto'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
-            $key = 'shop_latestUpdates'  .$u->shopId . '_list';
+            $key = '4_shopLatestUpdates'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  . $u->shopId . '_list';
@@ -1258,7 +1258,7 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $shophowtokey = '6_topOffersHowto'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
-            $key = 'shop_latestUpdates'  .$u->shopId . '_list';
+            $key = '4_shopLatestUpdates'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  . $u->shopId . '_list';
@@ -1371,7 +1371,7 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $shophowtokey = '6_topOffersHowto'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
-            $key = 'shop_latestUpdates'  .$u->shopId . '_list';
+            $key = '4_shopLatestUpdates'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  . $u->shopId . '_list';
@@ -1708,7 +1708,7 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $shophowtokey = '6_topOffersHowto'  . intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
-            $key = 'shop_latestUpdates'  . intval($params['selctedshop']) . '_list';
+            $key = '4_shopLatestUpdates'  . intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  . intval($params['selctedshop']) . '_list';
@@ -2033,7 +2033,7 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $shophowtokey = '6_topOffersHowto'  . intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
-            $key = 'shop_latestUpdates'  . intval($params['selctedshop']) . '_list';
+            $key = '4_shopLatestUpdates_'  . intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  .intval($params['selctedshop']) . '_list';
@@ -2748,14 +2748,11 @@ class Offer extends BaseOffer
 
     public static function getLatestUpdates($type, $limit, $shopId = 0)
     {
-        $expiredtime=date("Y-m-d 00:00:00");
         $data = Doctrine_Query::create()
                     ->from('OfferNews n')
                     ->andWhere('n.shopId = ' . $shopId)
-                    ->orderBy('n.startdate DESC');
-
+                    ->orderBy('n.created_at DESC');
         $data = $data->limit($limit)->fetchArray();
-
         return $data;
     }
 
