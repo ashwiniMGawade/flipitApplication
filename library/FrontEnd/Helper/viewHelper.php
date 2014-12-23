@@ -1036,11 +1036,4 @@ EOD;
         }
         return $editorText;
     }
-    
-    public static function getClientIdByCookie()
-    {
-        $clientId = isset($_COOKIE['_ga']) && $_COOKIE['_ga'] != ''
-            ? '&zpar1=[['.$_COOKIE['_ga'].']]' : '';
-        return $clientId;
-    }
 }
