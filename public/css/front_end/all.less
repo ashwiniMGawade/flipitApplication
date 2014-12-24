@@ -222,8 +222,8 @@ body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
 	}
 }
 .logo.flipit{
-	width:109px;
-	height:49px;
+	width:231px;
+	height:50px;
 } 
 img.logo.kortingscode{
 	width:300px;
@@ -2384,6 +2384,7 @@ hr.alt2{
 		width:92px;
 		text-transform:uppercase;
 		box-shadow:0 1px 5px rgba(0,0,0,0.1);
+		border-radius: 10px;
 	}
 	.text-box:before { 
 		position: absolute;
@@ -4433,10 +4434,15 @@ span.pop{
 }
 @media only screen and (max-width: 479px){
 
-img.logo.kortingscode{
-	width:210px;
-	margin-top: 0;
-}
+	img.logo.kortingscode{
+		width:210px;
+		margin-top: 0;
+	}
+	img.logo.flipit{
+		margin:0 40px;
+		float:none;
+		display:block;
+	}
 	.message{
 		margin:0 2px 24px;
 		.ico-warning{

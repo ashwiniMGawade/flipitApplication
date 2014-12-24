@@ -23,7 +23,7 @@ if(LOCALE == ''):
     $websiteName = 'http://'.$httpScheme.'.kortingscode.nl';
 else :
     $logoCssClass = 'logo flipit';
-    $logoPath = HTTP_PATH.'public/images/flipit-logo.png';
+    $logoPath = HTTP_PATH.'public/images/flipit-logo-'.LOCALE.'.png';
     $logoAlt = "flipit.com";
     $websiteName = 'http://'.$httpScheme.'.flipit.com/'.LOCALE;
 endif;
