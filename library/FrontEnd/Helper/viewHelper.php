@@ -1036,4 +1036,10 @@ EOD;
         }
         return $editorText;
     }
+
+    public static function setClientIdForTracking($subId = '')
+    {
+        $clientId = str_replace('GOOGLEANALYTICSTRACKINCID', $_COOKIE['_ga'], $subId);
+        return $clientId;
+    }
 }
