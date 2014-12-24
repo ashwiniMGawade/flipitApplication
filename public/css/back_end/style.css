@@ -3486,3 +3486,7 @@ div#error-message {
     padding-bottom: 20px;
     color: red;
 }
+#poststuff .alert-custom-wrapper{
+	padding: 0 10px;
+	text-indent: 0;
+}
