@@ -1458,7 +1458,7 @@ public static function getShopDetail($shopId)
                  $conversion = Conversions::getConversionId( $data['id'] , $ip , 'shop') ;
 
                  $subid = str_replace('A2ASUBID',$conversion['subid'] , $subid );
-                $subid = str_replace('CID', $_COOKIE['_ga'], $subid);
+                $subid = FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
             }
         }
 

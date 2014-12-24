@@ -965,7 +965,7 @@ class Offer extends BaseOffer
                  # get click detail and replcae A2ASUBID click subid
                  $conversion = Conversions::getConversionId($shopData['id'], $clientProperAddress, 'offer');
                  $subid = str_replace('A2ASUBID', $conversion['subid'], $subid);
-                $subid = str_replace('CID', $_COOKIE['_ga'], $subid);
+                $subid = FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
             }
         }
 
