@@ -26,13 +26,10 @@ foreach ($socialcodeForm->getElements() as $formElement) {
             'sharecode',
             FrontEnd_Helper_viewHelper::__form('form_share vouchercode'),
             array('class'=>'btn btn-primary', 'id'=>'sharecode')
-        ); 
-        $sharecodeLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_alle-winkels');
-        if (Auth_VisitorAdapter::hasIdentity()) {
-            $sharecodeLink = HTTP_PATH_LOCALE 
-                . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') . "/" 
-                . FrontEnd_Helper_viewHelper::__link('link_sharesocialcode');
-        }
+        );
+        $sharecodeLink = HTTP_PATH_LOCALE 
+            . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') . "/" 
+            . FrontEnd_Helper_viewHelper::__link('link_sharesocialcode');
         ?>
         <a
         href="<?php echo $sharecodeLink; ?>">
