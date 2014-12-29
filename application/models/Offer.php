@@ -874,7 +874,7 @@ class Offer extends BaseOffer
             ->from("Offer o")
             ->leftJoin('o.shop s')
             ->where('o.deleted='.$deletedStatus)
-            ->andWhere('o.userGenerated=0');
+            ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")');
         if ($userRole=='4') {
             $getOffersQuery->andWhere("o.Visability='DE'");
         }
@@ -1427,8 +1427,8 @@ class Offer extends BaseOffer
         ->from("Offer o")
         ->where('o.deleted=' . "'$flag'")
         ->andWhere("o.title LIKE ?", "$keyword%")
+        ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
         ->orderBy("o.title ASC")
-        ->andWhere('o.userGenerated=0')
         ->limit(5)
         ->fetchArray();
 
