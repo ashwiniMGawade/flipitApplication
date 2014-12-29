@@ -36,7 +36,7 @@ class Application_Form_SocialCodeSettingForm extends Application_Form_Base
         $offerUrl = new Zend_Form_Element_Text('offerUrl');
         $offerUrl->setRequired(true);
         $offerUrl->setAttrib('class', 'form-control');
-        $offerUrl->setAttrib('placeholder', 'Couon link');
+        $offerUrl->setAttrib('placeholder', 'Coupon link');
 
         $code = new Zend_Form_Element_Text('code');
         $code->setRequired(true);

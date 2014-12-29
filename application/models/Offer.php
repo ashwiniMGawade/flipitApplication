@@ -329,7 +329,7 @@ class Offer extends BaseOffer
             ->andWhere('o.Visability != "MEM"')
             ->orderBy('o.startdate DESC');
         if ($type == 'UserGeneratedOffers') {
-            $newestCouponCodes->andWhere('o.userGenerated=1');
+            $newestCouponCodes->andWhere('o.userGenerated=1 and o.approved="0"');
         } else {
             $newestCouponCodes->andWhere('o.userGenerated=0');
         }

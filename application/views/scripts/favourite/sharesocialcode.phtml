@@ -94,6 +94,9 @@ foreach ($socialcodeForm->getElements() as $formElement) {
                     'zendForm'=>''
                 )
             );
+        else :
+            $imgPath = HTTP_PATH. 'public/images/static_socialcode.jpg';
+            echo "<img src='".$imgPath."' title='static_socialcode'/>";
         endif;
         ?>
         </div>
