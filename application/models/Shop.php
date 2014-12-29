@@ -1453,6 +1453,7 @@ public static function getShopDetail($shopId)
                  $conversion = Conversions::getConversionId( $data['id'] , $ip , 'shop') ;
 
                  $subid = str_replace('A2ASUBID',$conversion['subid'] , $subid );
+                $subid = str_replace('CID', $_COOKIE['_ga'], $subid);
             }
         }
 
@@ -1631,28 +1632,22 @@ public static function getShopDetail($shopId)
     public static function changeStatus($params)
     {
         $status = $params['status'] == 'offline' ? '0' : '1';
-
         $shop = Doctrine_Core::getTable("Shop")->find($params['id']);
-
-        if($params['status'] == 'offline') {
-            $date = date('Y-m-d H:i:s')  ;
-            $status = 0 ;
+        if ($params['status'] == 'offline') {
+            $date = date('Y-m-d H:i:s');
+            $status = 0;
         } else {
             $status = 1 ;
-            $date = NULL ;
+            $date = NULL;
         }
-
         $shop->status = $status;
         $shop->offlineSicne = $date;
         $shop->save();
-        
         $key = 'shop_similar_shops';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shopDetails_'.$params['id'].'_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        return $shop->offlineSicne;
-
-
+        return array('offlineSince'=>$shop->offlineSicne, 'howToUse'=>$shop->howToUse);
     }
 
 

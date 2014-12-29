@@ -1027,4 +1027,13 @@ EOD;
         }
         return $shopSecondText;
     }
+
+    public static function getEditorText($shopName, $text)
+    {
+        $editorText = self::__translate('Hello');
+        if (!empty($text)) {
+            $editorText = str_replace('[shop]', $shopName, $text);
+        }
+        return $editorText;
+    }
 }

@@ -33,11 +33,12 @@ $howToUse = $this->partial(
                 </span>
                 <div class="photo">
                 <?php
-
-                    $editorText = isset($this->shopEditor['editorText']) ? $this->shopEditor['editorText']
-                    : $this->translate('Hello');
+                    $editorText = FrontEnd_Helper_viewHelper::getEditorText(
+                        $this->shop['name'],
+                        $this->shopEditor['editorText']
+                    );
                 ?>
-                    <span class="text-box"><?php echo $editorText ; ?></span>
+                    <span id="text-box" class="text-box"><?php echo $editorText ; ?></span>
                     <a href="<?php echo $profileLink;?>">
                         <img alt="<?php echo $authorName; ?>" class=""
                         src="<?php echo $shopEditorPath; ?>" width="120" height="120"/>
