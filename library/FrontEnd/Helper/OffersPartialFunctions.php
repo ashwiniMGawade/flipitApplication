@@ -281,13 +281,14 @@ class FrontEnd_Helper_OffersPartialFunctions
                     ga('send', 'event', 'aff', '$offerBounceRate'),
                     OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')";
                     if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
-                        $onClick = '';
+                        $offerLink ='<span class="'.$class.'">'.$offerAnchorText.' </span>';
+                    } else {
+                        $offerLink =
+                            '<a  id="'.$currentOffer->id.'" class="'.$class.'" 
+                            href="'.$urlToShow.'" vote="0" rel="nofollow" 
+                            target="_self" onClick="'.$onClick.'">
+                        '.$offerAnchorText.' </a>';
                     }
-                    $offerLink =
-                        '<a  id="'.$currentOffer->id.'" class="'.$class.'" 
-                        href="'.$urlToShow.'" vote="0" rel="nofollow" 
-                        target="_self" onClick="'.$onClick.'">
-                    '.$offerAnchorText.' </a>';
                 } else if ($currentOffer->discountType == "SL") {
                     if ($class == "btn blue btn-primary") {
                         $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
@@ -402,14 +403,14 @@ class FrontEnd_Helper_OffersPartialFunctions
                 OpenInNewTab('".HTTP_PATH_LOCALE. $permalink.$popupLink."')";
 
             if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
-                $onClick = '';
+                 $buttonWithCodeforOffer ='<span class="btn orange btn-warning btn-code"></span>';
+            } else {
+                $buttonWithCodeforOffer =
+                '<a id="'.$currentOffer->id.'" 
+                class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" 
+                rel="nofollow" target="_self" onClick="'.$onClick.'">'
+                .FrontEnd_Helper_viewHelper::__translate('Get this offer').'</a>';
             }
-            
-            $buttonWithCodeforOffer =
-            '<a id="'.$currentOffer->id.'" 
-            class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" 
-            rel="nofollow" target="_self" onClick="'.$onClick.'">'
-            .FrontEnd_Helper_viewHelper::__translate('Get this offer').'</a>';
         } else if ($currentOffer->discountType == "SL") {
             $buttonWithCodeforOffer = '';
         }
