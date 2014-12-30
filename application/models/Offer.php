@@ -888,7 +888,11 @@ class Offer extends BaseOffer
             $getOffersQuery->andWhere("o.couponcode LIKE ?", "%".$searchCoupon."%");
         }
         if ($searchCouponType!='') {
-            $getOffersQuery->andWhere("o.discountType='".$searchCouponType."'");
+            if ($searchCouponType != 'EX') {
+                $getOffersQuery->andWhere("o.discountType='".$searchCouponType."'");
+            } else {
+                $getOffersQuery->andWhere("o.extendedOffer = 1");
+            }
         }
         $offersList = DataTable_Helper::generateDataTableResponse(
             $getOffersQuery,
