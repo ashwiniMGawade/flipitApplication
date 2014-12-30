@@ -178,7 +178,7 @@ class Visitor extends BaseVisitor
             $visitorId = Auth_VisitorAdapter::getIdentity()->id;
             $vistor = new Visitor();
             $vistor->updateLoginTime($visitorId);
-            setcookie('kc_unique_user_id', $visitorId, time() + 64800, '/');
+            setcookie('kc_unique_user_id', $visitorId, time() + (86400 * 3), '/');
             $visitorLoginStatus = true;
         }
         return $visitorLoginStatus;

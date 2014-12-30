@@ -1,0 +1,4 @@
+Options -Indexes
+ErrorDocument 403 /public/sg/403.php
+RewriteEngine on
+RewriteRule ^403.php$ http://www.flipit.com/sg [L,R=301]

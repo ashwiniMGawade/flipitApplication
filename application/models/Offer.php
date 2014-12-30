@@ -329,7 +329,7 @@ class Offer extends BaseOffer
             ->andWhere('o.Visability != "MEM"')
             ->orderBy('o.startdate DESC');
         if ($type == 'UserGeneratedOffers') {
-            $newestCouponCodes->andWhere('o.userGenerated=1');
+            $newestCouponCodes->andWhere('o.userGenerated=1 and o.approved="0"');
         } else {
             $newestCouponCodes->andWhere('o.userGenerated=0');
         }
@@ -360,7 +360,7 @@ class Offer extends BaseOffer
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = '6_topOffers'  . $shopId . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        $key = 'shop_latestUpdates'  . $shopId . '_list';
+        $key = '4_shopLatestUpdates'  . $shopId . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shop_expiredOffers'  . $shopId . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -794,7 +794,7 @@ class Offer extends BaseOffer
                 's.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.refURL,o.discountType,
                 o.id,o.title,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, o.refofferurl, o.startdate,
                 o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount, o.authorId, o.authorName,
-                o.shopid, o.offerlogoid, img.id, img.path, img.name,fv.shopId,fv.visitorId,o.couponCodeType'
+                o.shopid, o.offerlogoid, o.userGenerated, o.approved, o.nickname, img.id, img.path, img.name,fv.shopId,fv.visitorId,o.couponCodeType'
             )
             ->from('Offer o')
             ->leftJoin('o.shop s')
@@ -874,7 +874,7 @@ class Offer extends BaseOffer
             ->from("Offer o")
             ->leftJoin('o.shop s')
             ->where('o.deleted='.$deletedStatus)
-            ->andWhere('o.userGenerated=0');
+            ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")');
         if ($userRole=='4') {
             $getOffersQuery->andWhere("o.Visability='DE'");
         }
@@ -1199,7 +1199,7 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $shophowtokey = '6_topOffersHowto'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
-            $key = 'shop_latestUpdates'  .$u->shopId . '_list';
+            $key = '4_shopLatestUpdates'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  . $u->shopId . '_list';
@@ -1259,7 +1259,7 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $shophowtokey = '6_topOffersHowto'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
-            $key = 'shop_latestUpdates'  .$u->shopId . '_list';
+            $key = '4_shopLatestUpdates'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  . $u->shopId . '_list';
@@ -1372,7 +1372,7 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $shophowtokey = '6_topOffersHowto'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
-            $key = 'shop_latestUpdates'  .$u->shopId . '_list';
+            $key = '4_shopLatestUpdates'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  . $u->shopId . '_list';
@@ -1427,8 +1427,8 @@ class Offer extends BaseOffer
         ->from("Offer o")
         ->where('o.deleted=' . "'$flag'")
         ->andWhere("o.title LIKE ?", "$keyword%")
+        ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
         ->orderBy("o.title ASC")
-        ->andWhere('o.userGenerated=0')
         ->limit(5)
         ->fetchArray();
 
@@ -1709,7 +1709,7 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $shophowtokey = '6_topOffersHowto'  . intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
-            $key = 'shop_latestUpdates'  . intval($params['selctedshop']) . '_list';
+            $key = '4_shopLatestUpdates'  . intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  . intval($params['selctedshop']) . '_list';
@@ -2034,7 +2034,7 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $shophowtokey = '6_topOffersHowto'  . intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
-            $key = 'shop_latestUpdates'  . intval($params['selctedshop']) . '_list';
+            $key = '4_shopLatestUpdates_'  . intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  .intval($params['selctedshop']) . '_list';
@@ -2749,14 +2749,11 @@ class Offer extends BaseOffer
 
     public static function getLatestUpdates($type, $limit, $shopId = 0)
     {
-        $expiredtime=date("Y-m-d 00:00:00");
         $data = Doctrine_Query::create()
                     ->from('OfferNews n')
                     ->andWhere('n.shopId = ' . $shopId)
-                    ->orderBy('n.startdate DESC');
-
+                    ->orderBy('n.created_at DESC');
         $data = $data->limit($limit)->fetchArray();
-
         return $data;
     }
 

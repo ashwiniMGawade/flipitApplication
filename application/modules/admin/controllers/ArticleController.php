@@ -88,12 +88,16 @@ class Admin_ArticleController extends Zend_Controller_Action
 
             //echo "<pre>"; print_r($this->getRequest()->getParams()); die;
             $result = Articles::saveArticle($this->getRequest()->getParams());
+
             $flash = $this->_helper->getHelper('FlashMessenger');
 
             //echo "<pre>"; print_r($result);die;
 
             if($result){
-
+                $popularArticles = PopularArticles::getPopularArticles();
+                $changedArticlesDataForSorting = PopularArticles::changeArticlesDataForSorting($popularArticles);
+                PopularArticles::updateArticles($changedArticlesDataForSorting);
+                PopularArticles::savePopularArticle($result['articleId'], 1);
                 # update only when article is being published immedately or some time later
                 if(! $result['isDraft']) {
                     self::updateVarnish($result['articleId']);
