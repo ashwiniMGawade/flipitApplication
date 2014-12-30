@@ -755,11 +755,11 @@ class BackEnd_Helper_viewHelper
 	 * @param boolean $stripTags set true for strip out all tags
 	 */
 
-	static function  removeScriptTag($input,$stripTags = false) {
+	public static function  removeScriptTag($input,$stripTags = false) {
 
  		if (is_array($input)) {
 			foreach($input as $var=>$val) {
-				$output[$var] = self::sanitize($val);
+				$output[$var] = FrontEnd_Helper_viewHelper::sanitize($val);
 			}
 		}
 		else {

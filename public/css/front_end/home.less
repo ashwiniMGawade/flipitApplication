@@ -999,3 +999,139 @@
 		}
 	}
 }
+#sidebar{
+    .widget{
+        padding:29px 30px 21px 27px;
+        background: #f4f4f4;
+        color:#fff;
+        border:1px solid #d8d8d8;
+        .border-radius (2px);
+        margin:0 0 27px;
+        min-height:225px;
+        text-align:center;
+        a{
+            font-size:13px;
+            line-height:16px;
+            text-decoration:none;
+            color: #0077cc;
+            &:hover{text-decoration:underline;}
+        }
+        p{
+            margin:0 0 22px;
+            color: #7D7D7D;
+        }
+        h3{
+            font-size:30px;
+            line-height:33px;
+            text-align:center;
+            margin:0 0 12px;
+            color: #7D7D7D;
+            &:before{
+                content:'';
+                display:inline-block;
+                background:url(../../images/sprite.png) no-repeat -188px -545px;
+                width: 18px;
+                height: 20px;
+                margin:0 16px 0 0;
+            }
+        }
+        .sub-title{
+            display:block;
+            font-size:16px;
+            line-height:20px;
+            margin:0 0 16px;
+            color: #33383e;
+        }
+        .sub-text{
+            font-size:12px;
+            line-height:14px;
+        }
+        .widget-form{
+            textarea,
+            input[type="text"]{
+                .border-radius (3px);
+                display:block;
+                width:100%;
+                height:47px;
+                margin:0 0 18px;
+                padding:10px 10px 12px;
+                .box-shadow(none);
+                color:#9a9b9d;
+            }
+            textarea::-webkit-input-placeholder {color: #9a9b9d;}
+            textarea:-moz-placeholder {color: #9a9b9d;}
+            textarea::-moz-placeholder {
+                color: #9a9b9d;
+                opacity: 1;
+            }
+            textarea{
+                resize:none;
+                height:77px;
+            }
+            .input-block{
+                &:after {.after;}
+                input[type="text"]{
+                        margin:0 0 0 29px;
+                        width:45.34%;
+                        margin:0 0 18px 9.32%;
+                        &:first-child{margin:0;}
+                        float:left;
+                    }
+                }
+            }
+            .btn-primary{
+                background: #7abdea;
+                background: -moz-linear-gradient(top,  #7abdea 0%, #43a2e3 3%, #2b86c1 100%);
+                background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7abdea), color-stop(3%,#43a2e3), color-stop(100%,#2b86c1));
+                background: -webkit-linear-gradient(top,  #7abdea 0%,#43a2e3 3%,#2b86c1 100%);
+                background: -o-linear-gradient(top,  #7abdea 0%,#43a2e3 3%,#2b86c1 100%);
+                background: -ms-linear-gradient(top,  #7abdea 0%,#43a2e3 3%,#2b86c1 100%);
+                background: linear-gradient(to bottom,  #7abdea 0%,#43a2e3 3%,#2b86c1 100%);
+                font-size:14px;
+                line-height:17px;
+                text-transform:uppercase;
+                display:block;
+                border:1px solid #2181c0;
+                width:100%;
+                font-weight:bold;
+                margin:0px 0 14px;
+                padding:10px 0 9px;
+                height:41px;
+                &:hover{background:#1a73bc;}
+            }
+    }
+}
+@media only screen and (max-width: 1199px){
+    #sidebar{
+        .widget{
+            .widget-form{
+                input[type="text"],
+                textarea{
+                    padding:10px 5px 12px;
+                }
+            }
+        }
+    }
+}
+@media only screen and (max-width: 991px){
+    #sidebar{
+        .widget{
+            padding:29px 10px 21px;
+            h3{
+                font-size:22px;
+            }
+            .widget-form{
+                input[type="text"],
+                textarea{
+                    padding:10px 5px 12px;
+                }
+                .input-block{
+                    input[type="text"]{
+                        margin:0 0 18px 1.32%;
+                        width:49.34%;
+                    }
+                }
+            }
+        }
+    }
+}

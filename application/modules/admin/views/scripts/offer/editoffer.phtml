@@ -549,8 +549,14 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 						<input type="checkbox" name="exclusivecheckbox" id="exclusivecheckbox" value="1" style="display: none;" />
 						<input type="checkbox" name="editorpickcheckbox" id="editorpickcheckbox" value="2" style="display: none;" />
 						<input type="checkbox" name="nonecheckbox" id="nonecheckbox" value="0" style="display: none;" />
+						<input type="checkbox" name="socialcodecheckbox" id="socialcodecheckbox" 
+                            value="3" style="display: none;" />
 						<button type="button" class="btn" id="exclusivebtn" style="border-radius: 4px 0 0 4px;" value="exclusive" onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('Exclusive Code'); ?></button>
 						<button type="button" class="btn" id="editorpicbtn" value = "editorpic" onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('Editors-pick'); ?></button>
+						<button type="button" class="btn" id="socialcodebtn" 
+                            value = "socialcode" onCLick="exclusiveeditorpick(event)">
+                            <?php echo $this->translate('Social Code'); ?>
+                        </button>
 						<button type="button" style="border-radius: 0 4px 4px 0;" class="btn" id="nonebtn" value="none" onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('None'); ?></button>
 					</div>
 				</div>

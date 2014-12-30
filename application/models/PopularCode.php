@@ -281,7 +281,7 @@ class PopularCode extends BasePopularCode
         $format = 'Y-m-j H:i:s';
         $date = date($format);
         $data = Doctrine_Query::create()
-        ->select('o.title as title,o.id as id')
+        ->select('o.title as title,o.id as id, o.userGenerated')
         ->from("Offer o")
         ->leftJoin('o.shop s')
         ->where('o.deleted=0')

@@ -350,6 +350,20 @@ class Shop extends BaseShop
             ->fetchArray();
         return $shop;
     }
+
+    public function getAllShopNames($keyword = '')
+    {
+        $query = Doctrine_Query::create()
+            ->select('s.name,s.permaLink,s.id')
+            ->from("Shop s")
+            ->where('s.deleted = ?', 0);
+        if ($keyword!='') {
+            $query->andWhere("s.status=1")
+            ->andWhere("s.name LIKE ?", "$keyword%");
+        }
+        return $allShops = $query->fetchArray();
+    }
+
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -366,26 +380,7 @@ class Shop extends BaseShop
         $this->save();
 
     }
-    /**
-     * getAllShopNames
-     *
-     * fetch all shop names
-     * @param string $keyword shop name for search
-     * @return array
-     * @author sp singh
-     */
-    public function getAllShopNames($keyword)
-    {
-        return   Doctrine_Query::create()
-                    ->select('s.name,s.permaLink,s.id')
-                    ->from("Shop s")
-                    ->where('s.deleted = ?', 0)
-                    ->andWhere("s.status=1")
-                    ->andWhere("s.name LIKE ?", "$keyword%")
-                    ->fetchArray();
-    }
-
-
+   
     /**
      * getshopList fetch all record from database table shop
      * also search according to keyword if present.
@@ -1637,28 +1632,22 @@ public static function getShopDetail($shopId)
     public static function changeStatus($params)
     {
         $status = $params['status'] == 'offline' ? '0' : '1';
-
         $shop = Doctrine_Core::getTable("Shop")->find($params['id']);
-
-        if($params['status'] == 'offline') {
-            $date = date('Y-m-d H:i:s')  ;
-            $status = 0 ;
+        if ($params['status'] == 'offline') {
+            $date = date('Y-m-d H:i:s');
+            $status = 0;
         } else {
             $status = 1 ;
-            $date = NULL ;
+            $date = NULL;
         }
-
         $shop->status = $status;
         $shop->offlineSicne = $date;
         $shop->save();
-        
         $key = 'shop_similar_shops';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shopDetails_'.$params['id'].'_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        return $shop->offlineSicne;
-
-
+        return array('offlineSince'=>$shop->offlineSicne, 'howToUse'=>$shop->howToUse);
     }
 
 

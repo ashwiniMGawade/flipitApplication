@@ -38,8 +38,10 @@ class SearchController extends Zend_Controller_Action
         );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
 
-        $searchedKeywords = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialCharacterAndReplacedWithHyphen(
-            $this->getRequest()->getParam('searchField')
+        $searchedKeywords = strtolower(
+            FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialCharacterAndReplacedWithHyphen(
+                $this->getRequest()->getParam('searchField')
+            )
         );
         $shopIds = "";
         $shopIds =$this->_helper->Search->getExcludedShopIdsBySearchedKeywords($searchedKeywords);

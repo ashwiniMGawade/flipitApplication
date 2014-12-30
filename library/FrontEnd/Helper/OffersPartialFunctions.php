@@ -68,10 +68,15 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $userLoginStatus;
     }
 
-    public function getOfferOption($offerOption)
+    public function getOfferOption($offerOption, $type)
     {
-        $offerOptionHtml = '<strong class="exclusive">
-        <span class="glyphicon glyphicon-star"></span>'.$offerOption.'</strong>';
+        if ($type == 'ex' || $type == 'ed') {
+            $offerOptionHtml = '<strong class="exclusive">
+            <span class="glyphicon glyphicon-star"></span>'.$offerOption.'</strong>';
+        } else if ($type == 'sc') {
+            $offerOptionHtml = '<strong class="social-color">
+            <span class="social-icon"></span>'.$offerOption.'</strong>';
+        }
         return $offerOptionHtml;
     }
 
@@ -79,9 +84,11 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         $offerOption = '';
         if ($currentOffer->exclusiveCode == '1'):
-            $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Exclusive'));
+            $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Exclusive'), 'ex');
         elseif ($currentOffer->editorPicks =='1'):
-            $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Editor'));
+            $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Editor'), 'ed');
+        elseif ($currentOffer->userGenerated =='1'):
+            $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Social Code'), 'sc');
         endif;
         return $offerOption;
     }
@@ -152,7 +159,13 @@ class FrontEnd_Helper_OffersPartialFunctions
         if ($offersType == 'simple' || $offersType == 'extendedOffer') {
             $offerDiscountImage = self::getDiscountImage($currentOffer);
             $altAttributeText = isset($currentOffer->tiles['label']) ? $currentOffer->tiles['label'] : '';
-            $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);
+            if ($currentOffer->userGenerated == 1 and $currentOffer->approved == '0') {
+                $offerDiscountImage = HTTP_PATH ."public/images/front_end/box_bg_orange_16.png";
+                $altAttributeText = 'Social code';
+                $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);
+            } else {
+                $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);
+            }
         } else {
             $offerDiscountImage = self::getShopLogoForOffer($currentOffer);
             $altAttributeText = $currentOffer->shop['name'];
@@ -273,11 +286,15 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id),
                     ga('send', 'event', 'aff', '$offerBounceRate'),
                     OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')";
-                    $offerLink =
-                        '<a  id="'.$currentOffer->id.'" class="'.$class.'" 
-                        href="'.$urlToShow.'" vote="0" rel="nofollow" 
-                        target="_self" onClick="'.$onClick.'">
-                    '.$offerAnchorText.' </a>';
+                    if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
+                        $offerLink ='<span class="'.$class.'">'.$offerAnchorText.' </span>';
+                    } else {
+                        $offerLink =
+                            '<a  id="'.$currentOffer->id.'" class="'.$class.'" 
+                            href="'.$urlToShow.'" vote="0" rel="nofollow" 
+                            target="_self" onClick="'.$onClick.'">
+                        '.$offerAnchorText.' </a>';
+                    }
                 } else if ($currentOffer->discountType == "SL") {
                     if ($class == "btn blue btn-primary") {
                         $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
@@ -390,11 +407,16 @@ class FrontEnd_Helper_OffersPartialFunctions
                 "showCodeInformation($currentOffer->id), showCodePopUp(this),
                 ga('send','event', 'aff','$offerBounceRate'),
                 OpenInNewTab('".HTTP_PATH_LOCALE. $permalink.$popupLink."')";
-            $buttonWithCodeforOffer =
-            '<a id="'.$currentOffer->id.'" 
-            class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" 
-            rel="nofollow" target="_self" onClick="'.$onClick.'">'
-            .FrontEnd_Helper_viewHelper::__translate('Get this offer').'</a>';
+
+            if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
+                 $buttonWithCodeforOffer ='<span class="btn orange btn-warning btn-code"></span>';
+            } else {
+                $buttonWithCodeforOffer =
+                '<a id="'.$currentOffer->id.'" 
+                class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" 
+                rel="nofollow" target="_self" onClick="'.$onClick.'">'
+                .FrontEnd_Helper_viewHelper::__translate('Get this offer').'</a>';
+            }
         } else if ($currentOffer->discountType == "SL") {
             $buttonWithCodeforOffer = '';
         }

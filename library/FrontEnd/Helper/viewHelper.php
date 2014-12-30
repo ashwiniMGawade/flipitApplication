@@ -1033,4 +1033,13 @@ EOD;
         $clientId = str_replace('GOOGLEANALYTICSTRACKINCID', $_COOKIE['_ga'], $subId);
         return $clientId;
     }
+
+    public static function getEditorText($shopName, $text)
+    {
+        $editorText = self::__translate('Hello');
+        if (!empty($text)) {
+            $editorText = str_replace('[shop]', $shopName, $text);
+        }
+        return $editorText;
+    }
 }

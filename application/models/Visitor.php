@@ -178,7 +178,7 @@ class Visitor extends BaseVisitor
             $visitorId = Auth_VisitorAdapter::getIdentity()->id;
             $vistor = new Visitor();
             $vistor->updateLoginTime($visitorId);
-            setcookie('kc_unique_user_id', $visitorId, time() + 64800, '/');
+            setcookie('kc_unique_user_id', $visitorId, time() + (86400 * 3), '/');
             $visitorLoginStatus = true;
         }
         return $visitorLoginStatus;
@@ -218,7 +218,7 @@ class Visitor extends BaseVisitor
         ->select(
             'fv.id as fvid,
             fv.visitorId as visitorId,s.name as name,
-            s.permalink as permaLink,o.id, o.title,l.path,l.name,l.id'
+            s.permalink as permaLink,o.id, o.userGenerated, o.title,l.path,l.name,l.id'
         )
         ->addSelect(
             "(SELECT COUNT(*) FROM Offer active WHERE

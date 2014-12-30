@@ -691,6 +691,9 @@ function setFormData(data){
 	}else if(data[0].editorPicks){
 	    jQuery('#editorpicbtn').addClass('btn-primary'); 
 	    jQuery('input#editorpickcheckbox').attr('checked', 'checked') ;
+	} else if (data[0].userGenerated) {
+        jQuery('#socialcodebtn').addClass('btn-primary'); 
+        jQuery('input#socialcodecheckbox').attr('checked', 'checked');
 	 } else {
 		 jQuery('#nonebtn').addClass('btn-primary'); 
 		 jQuery('input#nonecheckbox').attr('checked', 'checked') ;
@@ -1135,15 +1138,22 @@ function exclusiveeditorpick(e){
 			jQuery("input#exclusivecheckbox").attr('checked' , 'checked') ;
 			jQuery("input#editorpickcheckbox").removeAttr('checked') ;
 			jQuery("input#nonecheckbox").removeAttr('checked') ;
+			jQuery("input#socialcodecheckbox").removeAttr('checked');
 	     }else if(btn.value=='editorpic'){
 	    	jQuery("input#editorpickcheckbox").attr('checked' , 'checked') ;
 	    	jQuery("input#exclusivecheckbox").removeAttr('checked') ;
 	    	jQuery("input#nonecheckbox").removeAttr('checked') ;
-		     
+	    	jQuery("input#socialcodecheckbox").removeAttr('checked');
+		} else if (btn.value=='socialcode') {
+            jQuery("input#socialcodecheckbox").attr('checked' , 'checked');
+            jQuery("input#exclusivecheckbox").removeAttr('checked');
+            jQuery("input#nonecheckbox").removeAttr('checked');
+            jQuery("input#editorpickcheckbox").removeAttr('checked');
 	     }else {
 		    jQuery("input#nonecheckbox").attr('checked' , 'checked') ;
 		   	jQuery("input#exclusivecheckbox").removeAttr('checked') ;
 		   	jQuery("input#editorpickcheckbox").removeAttr('checked') ;
+		   	jQuery("input#socialcodecheckbox").removeAttr('checked');
 			     
 		 }
   } 

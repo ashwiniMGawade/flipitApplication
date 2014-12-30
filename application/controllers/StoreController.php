@@ -45,11 +45,16 @@ class StoreController extends Zend_Controller_Action
 
         if (isset($shopParams['popup']) && $shopParams['popup'] != '') {
             $offerVisiblity = Offer::getOfferVisiblity($shopParams['popup']);
+            $shopInfo = Shop::getShopInformation($this->getRequest()->getParam('id'));
             if (!Auth_VisitorAdapter::hasIdentity() && $offerVisiblity == 1) {
-                $shopInfo = Shop::getShopInformation($this->getRequest()->getParam('id'));
                 if (!empty($shopInfo) && isset($shopInfo[0]['permaLink'])) {
                     $this->_redirect(HTTP_PATH_LOCALE. $shopInfo[0]['permaLink']);
                 }
+            }
+            $referer = $_SERVER['HTTP_REFERER'];
+            if ($referer == '') {
+                $this->_redirect(HTTP_PATH_LOCALE. $shopInfo[0]['permaLink']);
+                exit();
             }
         }
 
@@ -414,5 +419,31 @@ class StoreController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
         $this->view->shopId = $this->getRequest()->getParam('shopid');
         $this->view->permalink = $this->getRequest()->getParam('permalink');
+    }
+
+    public function socialcodeAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $shopPermalink = $this->getRequest()->getParam('shopPermalink');
+        $socialcodeForm = new Application_Form_SocialCode();
+        $socialcodeForm->getElement('shopPermalink')->setValue($shopPermalink);
+        $this->view->zendForm = $socialcodeForm;
+        if ($this->getRequest()->isPost()) {
+            if ($socialcodeForm->isValid($this->getRequest()->getPost())) {
+                $socialcode = $socialcodeForm->getValues();
+                UserGeneratedOffer::addOffer($socialcode);
+                $shareCodeStatus = new Zend_Session_Namespace('shareCodeStatus');
+                $shareCodeStatus->shareCodeStatus = true;
+                $this->_redirect(HTTP_PATH_LOCALE. $socialcode['shopPermalink']);
+                exit();
+            } else {
+                $socialcodeForm->highlightErrorElements();
+            }
+        }
+    }
+
+    public function socialcodethanksAction()
+    {
+        $this->_helper->layout()->disableLayout();
     }
 }

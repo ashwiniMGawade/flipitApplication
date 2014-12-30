@@ -1,0 +1,24 @@
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $('html, body').animate({
+        scrollTop: $('#socialCodeDiv').offset().top
+    }, 'slow');
+});
+</script>
+<div id='socialCodeDiv' class="widget">
+    <h3><?php echo $this->translate('Social Code');?></h3>
+    <strong class="sub-title"><?php echo $this->translate('Thank you for sharing your offer!');?></strong>
+    <div class="sub-text">
+        <p>
+        <?php echo $this->translate('Thanks for sharing your coupon with the Flipit Community! Our team will check the details and publish the code');?>
+        </p>
+    </div>
+    <?php
+    $sharecodeLink = HTTP_PATH_LOCALE
+        . FrontEnd_Helper_viewHelper::__link('link_sharesocialcode');
+    ?>
+    <a href="<?php echo $sharecodeLink;?>">
+        <?php echo $this->translate('Share coupon codes for other shops');?>
+    </a>
+</div>
