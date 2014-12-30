@@ -8,6 +8,7 @@ $(document).ready(function(){
         }
     });
 });
+
 var validator =  null;
 function validateProfile() {
     validator = $('form#resetPassword')
@@ -41,14 +42,14 @@ function validateProfile() {
               }
         },
         onfocusin : function(element) {
-            if($(element).valid() == 0){
+            if($(element).valid() == 0) {
                 $(element).removeClass('input-error').removeClass('input-success');
             } else {
                 $(element).removeClass('input-error').addClass('input-success');
             }
         },
         onfocusout :function(element) {
-            if($(element).valid() == 0){
+            if($(element).valid() == 0) {
                 $(element).removeClass('input-success').addClass('input-error');
             } else {
                 $(element).removeClass('input-error').addClass('input-success');

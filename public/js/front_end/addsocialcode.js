@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
     $('input#shopId').val($('input#currentShop').val())
     $('#expireDate').datepicker({
@@ -13,6 +12,7 @@ $(document).ready(function(){
         }
     });
 });
+
 var validator =  null;
 function validateAddSocialCode() {
     validator = $('form#socialcodeForm')

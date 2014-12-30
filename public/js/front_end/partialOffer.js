@@ -6,18 +6,22 @@ $(document).ready(function() {
        }
     }
 });
+
 function OpenInNewTab(url) {
     var windowObject=window.open(url, '_blank');
     windowObject.focus();
 }
+
 function showTermAndConditions(id) {
     $('#termAndConditions'+id).toggle();
     $('a#termAndConditionLink'+id).toggleClass('uparrow'); 
 }
+
 function showPopupTermAndConditions(id) {
     $('div#termAndConditionsPopup'+id).slideToggle();
     $('a#termAndConditionLinkPopup'+id).toggleClass('uparrow'); 
 }
+
 function showCodeInformation(id) {
     var codeType = getQueryStringParams("codetype");
     if (codeType == 'un') {
