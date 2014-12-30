@@ -147,7 +147,6 @@ class FavouriteController extends Zend_Controller_Action
                     )
                 );
                 $redirectUrl = HTTP_PATH_LOCALE
-                    . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten')."/"
                     .FrontEnd_Helper_viewHelper::__link('link_sharesocialcode');
                 $this->_redirect($redirectUrl);
             } else {

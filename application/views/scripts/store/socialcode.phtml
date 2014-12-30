@@ -27,8 +27,7 @@ foreach ($socialcodeForm->getElements() as $formElement) {
             FrontEnd_Helper_viewHelper::__form('form_share vouchercode'),
             array('class'=>'btn btn-primary', 'id'=>'sharecode')
         );
-        $sharecodeLink = HTTP_PATH_LOCALE 
-            . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') . "/" 
+        $sharecodeLink = HTTP_PATH_LOCALE
             . FrontEnd_Helper_viewHelper::__link('link_sharesocialcode');
         ?>
         <a
