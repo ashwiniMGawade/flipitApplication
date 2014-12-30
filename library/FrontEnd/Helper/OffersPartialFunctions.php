@@ -159,7 +159,13 @@ class FrontEnd_Helper_OffersPartialFunctions
         if ($offersType == 'simple' || $offersType == 'extendedOffer') {
             $offerDiscountImage = self::getDiscountImage($currentOffer);
             $altAttributeText = isset($currentOffer->tiles['label']) ? $currentOffer->tiles['label'] : '';
-            $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);
+            if ($currentOffer->userGenerated == 1 and $currentOffer->approved == '0') {
+                $offerDiscountImage = HTTP_PATH ."public/images/front_end/box_bg_orange_16.png";
+                $altAttributeText = 'Social code';
+                $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);
+            } else {
+                $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);
+            }
         } else {
             $offerDiscountImage = self::getShopLogoForOffer($currentOffer);
             $altAttributeText = $currentOffer->shop['name'];
