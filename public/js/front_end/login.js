@@ -41,23 +41,23 @@ function validatelogin()
             }
         },
         messages : {
-             emailAddress : {
-                 required: '',
-                 email: ''
-              },
-              password: {
-                  required: ''
-              }
+            emailAddress : {
+                required: '',
+                email: ''
+            },
+            password: {
+                required: ''
+            }
         },
         onfocusin : function(element) {
-            if($(element).valid() == 0){
+            if($(element).valid() == 0) {
                 $(element).removeClass('input-error').removeClass('input-success');
             } else {
                 $(element).removeClass('input-error').addClass('input-success');
             }
         },
         onfocusout :function(element) {
-            if($(element).valid() == 0){
+            if($(element).valid() == 0) {
                 $(element).removeClass('input-success').addClass('input-error');
             } else {
                 $(element).removeClass('input-error').addClass('input-success');

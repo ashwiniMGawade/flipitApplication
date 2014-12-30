@@ -1,6 +1,6 @@
 $(function() {
     $('form#branding :input').change(function(){
-        var cssElement    = $(this).data("css-selector");
+        var cssElement = $(this).data("css-selector");
         if(cssElement) $(cssElement).css($(this).data("css-property"), this.value);
     });
 
