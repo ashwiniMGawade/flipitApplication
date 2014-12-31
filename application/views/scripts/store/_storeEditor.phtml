@@ -27,9 +27,7 @@ $howToUse = $this->partial(
         <div class="deal">
             <div class="deal-holder">
                 <span class="text"><?php echo $shopHeader; ?>
-                    <a href="<?php echo $profileLink;?>">
-                        <span class="name"><?php echo $authorName; ?></span>
-                    </a>
+                    <span class="name"><?php echo $authorName; ?></span>
                 </span>
                 <div class="photo">
                 <?php
@@ -39,10 +37,10 @@ $howToUse = $this->partial(
                     );
                 ?>
                     <span id="text-box" class="text-box"><?php echo $editorText ; ?></span>
-                    <a href="<?php echo $profileLink;?>">
-                        <img alt="<?php echo $authorName; ?>" class=""
+                    <span>
+                        <img title="<?php echo $authorName; ?>" alt="<?php echo $authorName; ?>" class=""
                         src="<?php echo $shopEditorPath; ?>" width="120" height="120"/>
-                    </a>    
+                    </span>    
                 </div>
             </div>
         </div>
