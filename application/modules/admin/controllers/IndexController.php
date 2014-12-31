@@ -35,16 +35,16 @@ class Admin_IndexController extends Zend_Controller_Action
 
         $lastweek = $data['total_no_of_shops_online_code_lastweek'];
         $thisweek = $data['total_no_of_shops_online_code_thisweek'];
-        if($lastweek > 0 ):
-        $percent = (($thisweek/$lastweek) - 1) * 100;
-        $prcnt = explode('.',round($percent, 2));
+        if ($lastweek > 0) :
+            $percent = (($thisweek/$lastweek) - 1) * 100;
+            $prcnt = explode('.', round($percent, 2));
         else:
-        $percent = '0.00';
-        $prcnt = explode('.',$percent);
+            $percent = '0.00';
+            $prcnt = explode('.', $percent);
         endif;
         $green_img = 'arrow-green-dashboard';
         $green_cls = 'green-text-arrow';
-        if($percent < 0){
+        if ($percent < 0) {
             $green_img = 'arrow-red-dashboard';
             $green_cls = 'red-text-arrow';
         }
