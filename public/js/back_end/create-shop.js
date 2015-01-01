@@ -119,7 +119,18 @@ function init()
 		max_chars: 150,
 		prefixString : __("Shop meta description length ")
 	});
-
+	jQuery('#reasonsubtitle1').NobleCount('#reasonsubtitle1count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title1 length ")
+	});
+	jQuery('#reasonsubtitle2').NobleCount('#reasonsubtitle2count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title2 length ")
+	});
+	jQuery('#reasonsubtitle3').NobleCount('#reasonsubtitle3count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title3 length ")
+	});
 	jQuery('#pagemetaTitle').NobleCount('#pagemetaTitleLeft',{
 		max_chars: 68,
 		prefixString : __("Shop meta title length ")
@@ -130,8 +141,24 @@ function init()
 		prefixString : __("Shop page meta description length ")
 	});
 
-
- 
+	
+ 	$('#addreason').click(function(){
+		$('#reasons2').show();
+		$('#addreason').hide();
+		$('#addreason1').show();
+	});
+	
+	$('#addreason1').click(function(){
+		$('#reasons3').show();
+	});
+	$('#deletereason').click(function(){
+		$('#reasons2').hide();
+		$('#addreason1').hide();
+		$('#addreason').show();
+	});
+	$('#deletereason1').click(function(){
+		$('#reasons3').hide();
+	});
 
 	$('button#prefillData').click(function(){
 		updateTitleSubtitle();
@@ -299,6 +326,7 @@ function init()
 	
 	validateFormAddNewShop();
 }
+
 
 function word_count(field,msg,count) {
 
