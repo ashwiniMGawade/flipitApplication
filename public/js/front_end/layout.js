@@ -6,11 +6,22 @@ $(document).ready(function(){
         }
     });
     loopImages();
+    loop(0);
 });
 
 var loopImages = function(){
-    $('#text-box').fadeIn(2500, function(){
-        $('#text-box').fadeOut(3000, loopImages);
+    $('#text-box').fadeIn(1000, function(){
+        $('#text-box').fadeOut(10000, loopImages);
+    });
+}
+
+function loop(idx){
+  $("#text-box-"+idx)
+    .delay(100)
+    .fadeIn(1000)
+    .delay(100)
+    .fadeOut(10000, function(){
+        loop((idx+1)%$('.text-box-ballon').length);
     });
 }
 

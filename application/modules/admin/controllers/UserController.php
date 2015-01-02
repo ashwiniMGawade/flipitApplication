@@ -618,8 +618,11 @@ class Admin_UserController extends Zend_Controller_Action
          $this->view->catArray = '';
          if(isset($catArray) && count($catArray)>0){
 
-             $this->view->catArray =  $catArray  ;
+            $this->view->catArray =  $catArray;
          }
+
+        $this->view->ballonData = EditorBallonText::getEditorText($id);
+
          //pas value on phtml page
          $this->view->categoryList = $categoryList['aaData'] ;
          $this->view->favoritesShop = $favShop;
@@ -957,5 +960,24 @@ class Admin_UserController extends Zend_Controller_Action
             echo Zend_Json::encode(false);
         }
         die();
+    }
+
+    public function addballontextAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        if ($this->getRequest()->getParam('partialCounter') > 0) {
+            $count = $this->getRequest()->getParam('partialCounter');
+            $this->view->partialCounter = $count;
+        }
+    }
+
+    public function deleteballontextAction()
+    {
+        $textId = $this->getRequest()->getParam('id');
+        if (!empty($textId)) {
+            $ballonText = EditorBallonText::deletetext($textId);
+            echo Zend_Json::encode($ballonText);
+        }
+        die;
     }
 }

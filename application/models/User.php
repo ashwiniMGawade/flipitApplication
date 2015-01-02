@@ -273,6 +273,18 @@ class User extends BaseUser
             }
         }
         $this->save();
+        if (!empty($params['content'])) {
+            foreach ($params['content'] as $key => $content) {
+                if (!empty($params['content'][$key])) {
+                    $ballonText = new EditorBallonText();
+                    $ballonText->userid = $this->id;
+                    $ballonText->ballontext = BackEnd_Helper_viewHelper::stripSlashesFromString($params['content'][$key]);
+                    $ballonText->deleted = 0;
+                    $ballonText->save();
+                }
+            }
+        }
+
         //save interesting category in database
         if (isset($params['selectedCategoryies'])) {
             $connUser = BackEnd_Helper_viewHelper::addConnection();
@@ -496,6 +508,20 @@ class User extends BaseUser
             }
         }
         $this->save();
+
+        if (!empty($params['content'])) {
+          $delEditorText = Doctrine_Query::create()->delete("EditorBallonText e")->where("e.userid = ".$this->id)->execute();
+            foreach ($params['content'] as $key => $content) {
+                if (!empty($params['content'][$key])) {
+                    $ballonText = new EditorBallonText();
+                    $ballonText->userid = $this->id;
+                    $ballonText->ballontext = BackEnd_Helper_viewHelper::stripSlashesFromString($params['content'][$key]);
+                    $ballonText->deleted = 0;
+                    $ballonText->save();
+                }
+            }
+        }
+
         $fullName = $params['firstName'] . " " . $params['lastName'];
         // update session if profile is being updated
         if ($this->id == Auth_StaffAdapter::getIdentity()->id) {
@@ -533,6 +559,7 @@ class User extends BaseUser
             BackEnd_Helper_viewHelper::closeConnection($connSite);
             $connUser = BackEnd_Helper_viewHelper::addConnection();
         }
+
         //end code of enteresting category in database
         //save favorite store in database
         if (!empty($params['fevoriteStore'])) {
@@ -569,7 +596,9 @@ class User extends BaseUser
 
         $favouriteShopkey ="user_". "favouriteShop".$this->id ."_data";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($favouriteShopkey);
+
         self::updateInDatabase($this->id, $fullName, 0);//change name of the author etc
+
         return array(
           "ret" => $this->id ,
           "status" => self::SUCCESS,
