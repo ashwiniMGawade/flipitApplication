@@ -23,6 +23,19 @@ function showPopupTermAndConditions(id) {
 }
 
 function showCodeInformation(id) {
+    if (LOCALE == 'be' || LOCALE == 'es' || LOCALE == 'br' || LOCALE == 'ch'|| LOCALE == 'sg'|| LOCALE == 'au') {
+        var locale = LOCALE;
+    } else if (LOCALE == '') {
+        locale = 'nl';
+    } else {
+        locale = '';
+    }
+    if (locale != '') {
+        try {
+            __adroll.record_user({"adroll_segments": locale+"_clickout"});
+        } catch(err){}
+    }
+
     var codeType = getQueryStringParams("codetype");
     if (codeType == 'un') {
         $.ajax({
