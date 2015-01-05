@@ -1042,4 +1042,14 @@ EOD;
         $clientId = str_replace('GOOGLEANALYTICSTRACKINCID', $_COOKIE['_ga'], $subId);
         return $clientId;
     }
+
+    public static function getCurrentDate()
+    {
+        $currentDate = new Zend_Date();
+        $currentMonth = $currentDate->get(Zend_Date::MONTH);
+        $currentYear = $currentDate->get(Zend_Date::YEAR);
+        $currentDay = $currentDate->get(Zend_Date::DAY);
+        $currentDateFormation = $currentYear.'-'.$currentMonth.'-'.$currentDay;
+        return $currentDateFormation;
+    }
 }
