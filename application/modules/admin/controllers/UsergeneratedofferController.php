@@ -13,9 +13,6 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
         $sessionNamespace = new Zend_Session_Namespace();
-        if ($sessionNamespace->settings['rights']['system manager']['rights'] != '1') {
-            $this->_redirect('/admin/auth/index');
-        }
     }
 
     public function getofferAction()
