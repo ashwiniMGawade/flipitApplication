@@ -25,7 +25,7 @@ $rowClass = !empty($this->offers) ? '' : 'socialCodeRow';
         <?php 
         if($this->successMessage!='' || $this->errorMessage!='') :
             ?>
-            <div id='socialCodeDiv' class="widget">
+            <div id='socialCodeDiv' class="widget <?php echo $rowClass;?>">
                 <h1><?php echo $this->translate('Share your social codes');?>
                     <small>
                     <?php 
