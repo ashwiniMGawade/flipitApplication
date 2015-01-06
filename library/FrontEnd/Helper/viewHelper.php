@@ -1031,7 +1031,7 @@ EOD;
     public static function getEditorText($shopName, $text, $ballonText)
     {
         $editorText = self::__translate('Hello');
-        if (count($ballonText) > 0) {
+        if (!empty($ballonText)) {
             $editorText = array();
             foreach ($ballonText as $text) {
                 $editorText[] = str_replace('[shop]', $shopName, $text['ballontext']);

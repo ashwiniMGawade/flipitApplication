@@ -21,7 +21,8 @@ class EditorBallonText extends BaseEditorBallonText
                 ->fetchArray();
             return $editorTextInformation;
         } else {
-            return true;
+            $editorTextInformation = array();
         }
+        return $editorTextInformation;
     }
 }
