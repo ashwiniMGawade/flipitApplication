@@ -891,15 +891,32 @@ class Shop extends BaseShop
         }
         // screenshot has been deleted from edit and add shop but we need set a default in database
         $this->screenshotId = 0;
-        try {
 
+        try {
+            
             $this->refShopRelatedshop->delete();
             $this->save();
-    
+            if (!empty($shopDetail['reasontitle1']) || !empty($shopDetail['reasontitle2']) || !empty($shopDetail['reasontitle1'])) {
+                $shopReasons = array();
+                $shopReasons['reasontitle1'] = !empty($shopDetail['reasontitle1'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle1']) : '';
+                $shopReasons['reasonsubtitle1'] = !empty($shopDetail['reasonsubtitle1'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle1']) : '';
+                $shopReasons['reasontitle2'] = !empty($shopDetail['reasontitle2'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle2']) : '';
+                $shopReasons['reasonsubtitle2'] = !empty($shopDetail['reasonsubtitle2'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle2']) : '';
+                $shopReasons['reasontitle3'] = !empty($shopDetail['reasontitle3'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle3']) : '';
+                $shopReasons['reasonsubtitle3'] = !empty($shopDetail['reasonsubtitle3'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle3']) : '';
+                ShopReasons::saveReasons($shopReasons, $this->id);
+            }
+
             $key = 'shop_similar_shops';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            if(!empty($getRouteLink)){
+            if (!empty($getRouteLink)) {
 
                 $exactLink = 'store/storedetail/id/'.$this->id;
                 $howtoguide = 'store/howtoguide/shopid/'.$this->id;
