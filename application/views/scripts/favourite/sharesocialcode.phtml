@@ -17,9 +17,10 @@ $socialcodeForm = $this->zendForm;
 foreach ($socialcodeForm->getElements() as $formElement) {
     $formElement->getDecorator('label')->setOption('tag', null);
 }
+$rowClass = !empty($this->offers) ? '' : 'socialCodeRow';
 ?>
 <div class="section">
-    <div class="row">
+    <div class="row <?php echo $rowClass;?>">
     <div class="col-lg-5 col-md-5 col-sm-5">
         <?php 
         if($this->successMessage!='' || $this->errorMessage!='') :
@@ -51,7 +52,7 @@ foreach ($socialcodeForm->getElements() as $formElement) {
             <?php
         else :
             ?>
-            <form id="socialcodeForm" class="widget-form" name="socialcodeForm" method="POST" action="">
+            <form id="socialcodeForm" class="widget-form <?php echo $rowClass;?>" name="socialcodeForm" method="POST" action="">
                 <div class="title">
                     <h1><?php echo $this->translate('Share your social codes');?>
                         <small>
@@ -80,10 +81,10 @@ foreach ($socialcodeForm->getElements() as $formElement) {
         endif;
         ?>
         </div>
-        <div class="col-lg-7 col-md-7 col-sm-7">
         <?php 
-        if(!empty($this->offers)):
-            echo $this->partial(
+        if(!empty($this->offers)):?>
+            <div class="col-lg-7 col-md-7 col-sm-7">
+        <?php  echo $this->partial(
                 'partials/_offer.phtml',
                 array(
                     'offers' => $this->offers,
@@ -93,11 +94,8 @@ foreach ($socialcodeForm->getElements() as $formElement) {
                     'zendForm'=>''
                 )
             );
-        else :
-            $imgPath = HTTP_PATH. 'public/images/static_socialcode.jpg';
-            echo "<img src='".$imgPath."' title='static_socialcode'/>";
-        endif;
         ?>
-        </div>
+            </div>
+        <?php  endif; ?>
     </div>
 </div>
