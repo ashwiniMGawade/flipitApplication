@@ -38,16 +38,16 @@ $howToUse = $this->partial(
                     );
                     $i = 0;
                     if (is_array($editorText)) { ?>
-                            <?php foreach ($editorText as $text) { ?>
-                                    <span class = "text-box text-box-ballon" id="text-box-<?php echo $i;?>" style="display:none;"><?php echo $text; ?></span>
-                            <?php 
-                            $i++;
-                            } ?>
-                    <?php } else { ?>
+                         <?php foreach ($editorText as $text) { ?>
+                                <span class = "text-box text-box-ballon" id="text-box-<?php echo $i;?>" style="display:none;"><?php echo $text; ?></span>
+                        <?php 
+                        $i++;
+                        } ?>
+              <?php } else { ?>
                         <span id="text-box" class="text-box">
                             <?php echo $editorText;?>
                         </span>
-                    <?php }  ?>
+              <?php }  ?>
                     <span>
                         <img title="<?php echo $authorName; ?>" alt="<?php echo $authorName; ?>" class=""
                         src="<?php echo $shopEditorPath; ?>" width="120" height="120"/>
