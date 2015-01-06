@@ -161,7 +161,6 @@ class Admin_ArticleController extends Zend_Controller_Action
         $this->view->authorList = Articles::getAuthorList($site_name);
 
         $articlcData = Articles::getArticleData($this->_getAllParams());
-
         #redirect to article list
         if(! $articlcData) {
             $this->_helper->redirector(null , 'article' , null ) ;

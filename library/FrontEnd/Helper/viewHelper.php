@@ -1028,10 +1028,15 @@ EOD;
         return $shopSecondText;
     }
 
-    public static function getEditorText($shopName, $text)
+    public static function getEditorText($shopName, $text, $ballonText)
     {
         $editorText = self::__translate('Hello');
-        if (!empty($text)) {
+        if (count($ballonText) > 0) {
+            $editorText = array();
+            foreach ($ballonText as $text) {
+                $editorText[] = str_replace('[shop]', $shopName, $text['ballontext']);
+            }
+        } else {
             $editorText = str_replace('[shop]', $shopName, $text);
         }
         return $editorText;

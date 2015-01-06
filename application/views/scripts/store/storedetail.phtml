@@ -109,11 +109,14 @@ $headerBlock = $frontShopHeaderHelper->getShopHeader(
     $offerTitle = 'storeDetail'
 );
 $shopEditor = '';
-if($this->shopEditor != null):
+if($this->shopEditor != null || $this->ballonEditorText != null):
     $shopEditor = $this->partial(
         $storeViewPartialPath.'_storeEditor.phtml',
         array(
-           'shopEditor' => $this->shopEditor,
+           'shopEditor' => array(
+                 $this->shopEditor,
+                 $this->ballonEditorText
+            ),
            'shop' => $this->currentStoreInformation[0],
            'howToUseGuidePermalink'=>$howToUseGuidePermalink,
            'actualUrl'=>$actualUrl
