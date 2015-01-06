@@ -10,7 +10,7 @@ class Application_Form_SocialCodeSettingForm extends Application_Form_Base
         $nickname = new Zend_Form_Element_Text('nickname');
         $nickname->setRequired(true);
         $nickname->setAttrib('class', 'form-control');
-        $nickname->setAttrib('placeholder', 'nickname');
+        $nickname->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_nickname'));
 
         $store = new Zend_Form_Element_Select('store');
         $store->setRequired(true);
@@ -26,27 +26,27 @@ class Application_Form_SocialCodeSettingForm extends Application_Form_Base
         $expireDate = new Zend_Form_Element_Text('expireDate');
         $expireDate->setRequired(true);
         $expireDate->setAttrib('class', 'form-control');
-        $expireDate->setAttrib('placeholder', 'Expire date');
+        $expireDate->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_Expire date'));
 
         $title = new Zend_Form_Element_Text('title');
         $title->setRequired(true);
         $title->setAttrib('class', 'form-control');
-        $title->setAttrib('placeholder', 'Coupon title');
+        $title->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_Coupon title'));
 
         $offerUrl = new Zend_Form_Element_Text('offerUrl');
         $offerUrl->setRequired(true);
         $offerUrl->setAttrib('class', 'form-control');
-        $offerUrl->setAttrib('placeholder', 'Coupon link');
+        $offerUrl->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_Coupon link'));
 
         $code = new Zend_Form_Element_Text('code');
         $code->setRequired(true);
         $code->setAttrib('class', 'form-control');
-        $code->setAttrib('placeholder', 'Coupon code');
+        $code->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_Coupon code'));
 
         $offerDetails = new Zend_Form_Element_Textarea('offerDetails');
         $offerDetails->setRequired(true);
         $offerDetails->setAttrib('class', 'form-control');
-        $offerDetails->setAttrib('placeholder', 'Term and Conditions');
+        $offerDetails->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_Term and Conditions'));
 
         $this->addElements(array(
             $nickname,
