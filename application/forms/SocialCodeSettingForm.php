@@ -26,7 +26,7 @@ class Application_Form_SocialCodeSettingForm extends Application_Form_Base
         $expireDate = new Zend_Form_Element_Text('expireDate');
         $expireDate->setRequired(true);
         $expireDate->setAttrib('class', 'form-control');
-        $expireDate->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_Expire_date'));
+        $expireDate->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_expireddate'));
 
         $title = new Zend_Form_Element_Text('title');
         $title->setRequired(true);
