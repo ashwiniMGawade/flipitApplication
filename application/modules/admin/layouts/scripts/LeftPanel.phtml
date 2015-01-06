@@ -26,24 +26,20 @@
 
 	               		<a href="<?php echo HTTP_PATH ;?>admin/offer/addoffer" class="<?php echo $offerColorClass;?>" tabindex="1"><?php echo $this->translate('Create Offers');?> </a>
 	               	</li>
-                    <?php #make available only for admin and super admin user
-                    if($sessionNamespace->settings['rights']['system manager']['rights'] == '1' ) : 
+                    <li>
+                        <?php 
+                        if($controller == 'usergeneratedoffer') 
+                        {
+                            $offerColorClass = "new-blue"; 
+                        } else { 
+                            $offerColorClass = "new-gray"; 
+                        }
                         ?>
-                        <li>
-                            <?php 
-                            if($controller == 'usergeneratedoffer') 
-                            {
-                                $offerColorClass = "new-blue"; 
-                            } else { 
-                                $offerColorClass = "new-gray"; 
-                            }
-                            ?>
-                            <a href="<?php echo HTTP_PATH ;?>admin/usergeneratedoffer" 
-                             class="<?php echo $offerColorClass;?>" tabindex="1">
-                            <?php echo $this->translate('Social Codes');?>
-                            </a>
-                        </li>
-                    <?php endif;?>
+                        <a href="<?php echo HTTP_PATH ;?>admin/usergeneratedoffer" 
+                         class="<?php echo $offerColorClass;?>" tabindex="1">
+                        <?php echo $this->translate('Social Codes');?>
+                        </a>
+                    </li>
 	           </ul>
 	          </div>
 	        </div>
