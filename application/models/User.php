@@ -1298,7 +1298,7 @@ class User extends BaseUser
         if ($type == 'update') {
             $delEditorText = Doctrine_Query::create()
             ->delete("EditorBallonText e")
-            ->where("e.userid = ".$this->id)
+            ->where("e.userid = ".$userId)
             ->execute();
         }
         foreach ($params['content'] as $key => $content) {
