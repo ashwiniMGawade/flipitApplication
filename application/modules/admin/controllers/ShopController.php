@@ -562,7 +562,7 @@ class Admin_ShopController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $shopId = $this->getRequest()->getParam('shopId');
         ShopReasons::deleteReasons($id, $shopId);
-        die();
+        exit();
     }
 
     /**

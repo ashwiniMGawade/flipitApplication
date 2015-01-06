@@ -32,12 +32,15 @@ class ShopReasons extends BaseShopReasons
 
     public static function deleteReasons($id, $shopId)
     {
-        for ($i = $id; $i <= $id +1; $i++) {
-            Doctrine_Query::create()
-            ->delete('shopreasons s')
-            ->where('s.id ='.$i)
-            ->andWhere('s.shopid = '.$shopId)
-            ->execute();
+        if (!empty($id)) {
+            for ($i = $id; $i <= $id +1; $i++) {
+                Doctrine_Query::create()
+                ->delete('shopreasons s')
+                ->where('s.id ='.$i)
+                ->andWhere('s.shopid = '.$shopId)
+                ->execute();
+            }
         }
+        return true;
     }
 }
