@@ -1042,13 +1042,14 @@ function moveToTrash(id){
 	});
 }
 
-function deleteShopReason(id, shopId) {
+function deleteShopReason(firstFieldName, secondFieldName, shopId) {
 	addOverLay();
 	$.ajax({
 		url : HOST_PATH + "admin/shop/deleteshopreason",
 		method : "post",
 		data : {
-			'id' : id,
+			'firstFieldName' : firstFieldName,
+			'secondFieldName' : secondFieldName,
 			'shopId' : shopId
 		},
 		dataType : "json",

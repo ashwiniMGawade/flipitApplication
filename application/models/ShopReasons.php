@@ -30,17 +30,20 @@ class ShopReasons extends BaseShopReasons
         return $shopReasons;
     }
 
-    public static function deleteReasons($id, $shopId)
+    public static function deleteReasons($firstFieldName, $secondFieldName, $shopId)
     {
-        if (!empty($id)) {
-            for ($i = $id; $i <= $id +1; $i++) {
-                Doctrine_Query::create()
-                ->delete('shopreasons s')
-                ->where('s.id ='.$i)
-                ->andWhere('s.shopid = '.$shopId)
-                ->execute();
-            }
-        }
+        Doctrine_Query::create()
+        ->delete('shopreasons s')
+        ->where('s.fieldname ="'.$firstFieldName.'"')
+        ->andWhere('s.shopid = '.$shopId)
+        ->execute();
+        
+        Doctrine_Query::create()
+        ->delete('shopreasons s')
+        ->where('s.fieldname ="'.$secondFieldName.'"')
+        ->andWhere('s.shopid = '.$shopId)
+        ->execute();
+
         return true;
     }
 }

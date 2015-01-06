@@ -317,7 +317,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <div class="mainpage-content-right">
                             <div class="coupon-sidebar-content-box-shop mb10">
                                 <button class="btn down" id="addreason1" href="#" type="button"><?php echo $this->translate('Add More Reason');?></button>
-                                <button class="btn" href="#" onclick="deleteShopReason(3,<?php echo $this->shopReasons[0]['shopid'];?>)" type="button" id="deletereason"><?php echo $this->translate('Delete Reason 2');?></button>
+                                <button class="btn" href="#" onclick="deleteShopReason('reasontitle2','reasonsubtitle2',<?php echo $shopId = !empty($this->shopReasons) ? $this->shopReasons[0]['shopid'] : '';?>)" type="button" id="deletereason"><?php echo $this->translate('Delete Reason 2');?></button>
                             </div>
                         </div>
                     </div>  
@@ -350,7 +350,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                     <div class="mainpage-content-line">
                         <div class="mainpage-content-right">
                             <div class="coupon-sidebar-content-box-shop mb10">
-                                <button class="btn" href="#" onclick="deleteShopReason(5,<?php echo $this->shopReasons[0]['shopid'];?>)" type="button" id="deletereason1"><?php echo $this->translate('Delete Reason 3');?></button>
+                                <button class="btn" href="#" onclick="deleteShopReason('reasontitle3','reasonsubtitle3', <?php echo $shopId = !empty($this->shopReasons) ? $this->shopReasons[0]['shopid'] : '';?>)" type="button" id="deletereason1"><?php echo $this->translate('Delete Reason 3');?></button>
                             </div>
                         </div>
                     </div>
