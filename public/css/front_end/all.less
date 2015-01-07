@@ -1177,6 +1177,27 @@ div.box a.remove-fovourite.blue{
 	.offer-box{
 		display:none;
 	}
+	.recommendedOffer{
+    	font-size: 12px;
+    	line-height: 18px;
+    	padding: 10px 10px 10px 75px;
+    	span{
+    		color: blue;
+    		text-decoration: bold;
+    	}
+	}
+	.recommendedOffer:before{ /*arrow added to uparrowdiv DIV*/
+		content:'';
+		display:block;
+		position:absolute;
+		top:-20px; /*should be set to -border-width x 2 */
+		left:30px;
+		width:0;
+		height:0;
+		border-color: transparent transparent black transparent; /*border color should be same as div div background color*/
+		border-style: solid;
+		border-width: 10px;
+	}
 	.offer{
 		font-size:15px;
 		line-height:18px;
