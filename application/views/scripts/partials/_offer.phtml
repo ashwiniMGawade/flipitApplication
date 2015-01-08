@@ -155,7 +155,9 @@ foreach ($this->offers as $offer) {
                     <img src="<?php echo HTTP_PATH.'public/images/rec-thumb.png';?>" class="recommended-thumb" alt="thumb">
                     <?php echo $this->translate('Recommended by staff');?>
                 </span>
-                <?php echo ' - '.$offer->authorName.' '.$this->translate('Recommended this code');?>
+                <?php
+                $authroName = !empty($offer->authorName) ?$offer->authorName : ''; 
+                echo ' - '.$authorName.' '.$this->translate('Recommended this code');?>
             </div>
         </div>
     <?php } ?>    

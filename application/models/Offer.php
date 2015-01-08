@@ -70,8 +70,8 @@ class Offer extends BaseOffer
                 ->select(
                     's.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus,
                     o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability,
-                    o.discountType, o.couponCode, o.refofferurl, o.startdate, o.userGenerated, o.nickname, o.approved,
-                    o.enddate, o.exclusiveCode,
+                    o.discountType, o.couponCode,  o.refofferurl, o.startdate, o.userGenerated, o.nickname, o.approved,
+                    o.enddate, o.exclusiveCode, o.authorName,
                     o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid,
                     o.offerlogoid, o.couponCodeType, o.approved,o.discountvalueType,img.id, img.path,
                     img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote'
@@ -132,7 +132,7 @@ class Offer extends BaseOffer
                 o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,
                 o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid,
                 o.discountvalueType,o.userGenerated, o.approved, o.nickname,img.id, img.path, img.name,fv.shopId,fv.visitorId,
-                fv.id,vot.id,vot.vote'
+                fv.id,vot.id,vot.vote, o.authorName'
             )
             ->from('Offer o')
             ->addSelect("(SELECT count(id) FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
@@ -259,7 +259,7 @@ class Offer extends BaseOffer
         ->select(
             'p.id,o.id,sc.categoryId,o.couponCodeType,o.refURL,
             o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
-            o.editorPicks,o.couponCode,o.extendedOffer,o.totalViewcount,
+            o.editorPicks,o.couponCode,o.extendedOffer,o.totalViewcount,o.authorName,
             o.startDate,o.endDate,o.refOfferUrl,o.userGenerated,o.nickname, o.approved,
             o.extendedUrl,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,
             s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name'
@@ -303,7 +303,7 @@ class Offer extends BaseOffer
                 s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,
                 s.actualUrl,terms.content,
                 o.id,o.Visability,o.userGenerated,o.title,o.authorId,
-                o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,
+                o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,o.authorName,
                 o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.extendedUrl,
                 o.discountType,o.startdate,o.endDate,o.nickname,o.approved,
                 img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote'
@@ -457,7 +457,7 @@ class Offer extends BaseOffer
             'o.title,o.couponCodeType,o.discountType,o.totalViewcount as clicks,o.startDate,o.endDate,o.refURL,
             o.refOfferUrl,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,
             o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,
-            fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name'
+            fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name,o.authorName'
         )
         ->from('Offer o')
         ->leftJoin('o.logo ologo')
@@ -706,7 +706,7 @@ class Offer extends BaseOffer
         $currentDate = date("Y-m-d H:i");
         $activeCoupons = Doctrine_Query::create()
         ->select(
-            's.id,o.id, o.title, o.visability, o.couponcode, o.refofferurl, o.enddate, o.extendedoffer,
+            's.id,o.id, o.title, o.visability, o.authorName,o.editorPicks, o.couponcode, o.refofferurl, o.enddate, o.extendedoffer,
             o.extendedUrl, o.shopid'
         )
         ->from('Offer o')
@@ -728,7 +728,7 @@ class Offer extends BaseOffer
             ->select(
                 'o.id,o.Visability,o.title,o.authorId,
                 o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,
-                o.discount,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,
+                o.discount,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.authorName,
                 o.discountType,o.startdate,o.endDate, o.shopId'
             )
             ->from('Offer o')
@@ -1082,7 +1082,7 @@ class Offer extends BaseOffer
                 ->select(
                     's.id,s.name, s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,
                     s.usergenratedcontent,s.refUrl,s.actualUrl,terms.content,o.id,o.extendedoffer,o.extendedurl,
-                    o.editorpicks,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,
+                    o.editorpicks,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.authorName,
                     o.discount,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,
                     o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote'
                 )
