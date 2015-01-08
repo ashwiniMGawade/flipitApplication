@@ -156,7 +156,7 @@ foreach ($this->offers as $offer) {
                     <?php echo $this->translate('Recommended by staff');?>
                 </span>
                 <?php
-                $authroName = !empty($offer->authorName) ?$offer->authorName : ''; 
+                $authorName = !empty($offer->authorName) ? $offer->authorName : ''; 
                 echo ' - '.$authorName.' '.$this->translate('Recommended this code');?>
             </div>
         </div>
