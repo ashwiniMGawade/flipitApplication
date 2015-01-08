@@ -148,12 +148,15 @@ foreach ($this->offers as $offer) {
     if ($offer->editorPicks == 1) {
     ?>
         <hr class="alt2">
-        <div class="recommendedOffer">
-            <span>
-                <img src="<?php echo HTTP_PATH.'public/images/rec-thumb.png';?>" alt="thumb">
-                <?php echo $this->translate('Recommended by staff');?>
-            </span>
-            <?php echo ' - '.$offer->authorName.' '.$this->translate('Recommended this code');?>
+        <div class="recommended-outerDiv">
+            <div class="recommended-arrow"></div>
+            <div class="recommendedOffer">
+                <span>
+                    <img src="<?php echo HTTP_PATH.'public/images/rec-thumb.png';?>" class="recommended-thumb" alt="thumb">
+                    <?php echo $this->translate('Recommended by staff');?>
+                </span>
+                <?php echo ' - '.$offer->authorName.' '.$this->translate('Recommended this code');?>
+            </div>
         </div>
     <?php } ?>    
         <div class="offer-box" id="websiteOfferLink<?php echo $offer->id ;?>" <?php echo $style;?>>
