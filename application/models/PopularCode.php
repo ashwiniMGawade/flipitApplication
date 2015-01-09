@@ -418,9 +418,6 @@ class PopularCode extends BasePopularCode
      */
     public static function addOfferInList($id)
     {
-        //find offer by title
-        //$title=addslashes($title);
-
         $Offer = Doctrine_query::create()->from('Offer')
                 ->where('id=' . $id)->limit(1)
                 ->fetchArray();
