@@ -132,7 +132,7 @@ foreach ($this->offers as $offer) {
     }
     if ($offer->userGenerated == 1 && ($offer->approved == '1' || $offer->approved == '0')) : ?>
         <li id="fr">
-            <?php echo $this->translate('Code shared by ').$offer->nickname;?>
+            <?php echo $this->translate('Code shared by').' '.$offer->nickname;?>
         </li>
         <?php endif;
     ?>

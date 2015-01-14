@@ -70,7 +70,7 @@ $("input#searchFieldBrandHeader").autocomplete({
             if (searchedKeywordValue == 'Vind kortingscodes voor jouw favoriete winkels..') {
                 return false;
             }
-            var searchUrl = HOST_PATH_LOCALE + __("mijn-favorieten");     
+            var searchUrl = HOST_PATH_LOCALE + __("link_mijn-favorieten");     
         }
         redirect($("input#searchedBrandKeyword").val());
     }
@@ -114,7 +114,7 @@ function __highlight(s, t) {
 }
 
 function redirect (url) {
-    var Return_URL = HOST_PATH_LOCALE + __("mijn-favorieten");
+    var Return_URL = HOST_PATH_LOCALE + __("link_mijn-favorieten");
     var form = $('<form action="' + Return_URL + '" method="post">' +
     '<input type="text" name="searchBrand" value="' + url + '" />' +
     '</form>');

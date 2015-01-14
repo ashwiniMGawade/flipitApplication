@@ -1028,12 +1028,6 @@ EOD;
         return $shopSecondText;
     }
 
-    public static function setClientIdForTracking($subId = '')
-    {
-        $clientId = str_replace('GOOGLEANALYTICSTRACKINCID', $_COOKIE['_ga'], $subId);
-        return $clientId;
-    }
-
     public static function getEditorText($shopName, $text)
     {
         $editorText = self::__translate('Hello');
@@ -1041,5 +1035,11 @@ EOD;
             $editorText = str_replace('[shop]', $shopName, $text);
         }
         return $editorText;
+    }
+
+    public static function setClientIdForTracking($subId = '')
+    {
+        $clientId = str_replace('GOOGLEANALYTICSTRACKINCID', $_COOKIE['_ga'], $subId);
+        return $clientId;
     }
 }
