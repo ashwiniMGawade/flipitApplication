@@ -378,6 +378,44 @@ function addCategory(e,catgory){
 	}
 }
 
+function getBallonTexthtml(el){
+		editCount = parseInt($(el).attr('rel'));
+		count = editCount != undefined ? editCount + 1 : count;
+		$.ajax({
+			url : HOST_PATH + "admin/shop/addballontext",
+			type : "post",
+			data : {'partialCounter' : count},
+			success : function(data) {
+				$("div#multidiv").append(data);
+				$(el).attr('rel',count);
+				count++ ;
+			}
+		});
+	}
+
+function removeballontexthtml(el) {
+	bootbox.confirm(__("Are you sure you want to delete this Ballon Text ?"),__('No'),__('Yes'),function(r){
+		if(!r){
+			return false;
+		}
+		else{
+			$.ajax({
+				url : HOST_PATH + "admin/shop/deleteballontext",
+				type : "post",
+				data : {'id' : $(el).attr('rel')},
+				success : function(data) {
+					var textNumber = $(el).attr('rel');
+					$(el).parents('div.multidivchild').remove();
+					if (textNumber != '') {
+						window.location.reload(true);
+					}
+				}
+			});
+		}
+	});
+}
+
+
 
 /**
  * assign value to accountManagerName,editorName hidden fields

@@ -273,10 +273,6 @@ class User extends BaseUser
             }
         }
         $this->save();
-    
-        if (!empty($params['content'])) {
-            self::saveEditorBallonText($params, $this->id, 'add');
-        }
 
         //save interesting category in database
         if (isset($params['selectedCategoryies'])) {
@@ -501,10 +497,6 @@ class User extends BaseUser
             }
         }
         $this->save();
-
-        if (!empty($params['content'])) {
-            self::saveEditorBallonText($params, $this->id, 'update');
-        }
 
         $fullName = $params['firstName'] . " " . $params['lastName'];
         // update session if profile is being updated
@@ -1293,22 +1285,5 @@ class User extends BaseUser
         return true;
     }
 
-    public static function saveEditorBallonText($params, $userId, $type)
-    {
-        if ($type == 'update') {
-            $delEditorText = Doctrine_Query::create()
-            ->delete("EditorBallonText e")
-            ->where("e.userid = ".$userId)
-            ->execute();
-        }
-        foreach ($params['content'] as $key => $content) {
-            if (!empty($params['content'][$key])) {
-                $ballonText = new EditorBallonText();
-                $ballonText->userid = $userId;
-                $ballonText->ballontext = BackEnd_Helper_viewHelper::stripSlashesFromString($params['content'][$key]);
-                $ballonText->deleted = 0;
-                $ballonText->save();
-            }
-        }
-    }
+    
 }

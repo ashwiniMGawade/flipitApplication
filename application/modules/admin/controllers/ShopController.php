@@ -477,7 +477,7 @@ class Admin_ShopController extends Zend_Controller_Action
         //display shop reasons
         $shopReasons = new ShopReasons();
         $this->view->shopReasons = $shopReasons->getShopReasons($id);
-
+        $this->view->ballonData = EditorBallonText::getEditorText($id);
         // display managers and account managers list
         $users = new User();
         $this->view->MangersList = $users->getManagersLists($site_name);
@@ -1661,5 +1661,24 @@ class Admin_ShopController extends Zend_Controller_Action
         } else {
             $this->_helper->json($ret['offlineSince']);
         }
+    }
+
+    public function addballontextAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        if ($this->getRequest()->getParam('partialCounter') > 0) {
+            $count = $this->getRequest()->getParam('partialCounter');
+            $this->view->partialCounter = $count;
+        }
+    }
+
+    public function deleteballontextAction()
+    {
+        $textId = $this->getRequest()->getParam('id');
+        if (!empty($textId)) {
+            $ballonText = EditorBallonText::deletetext($textId);
+            echo Zend_Json::encode($ballonText);
+        }
+        die;
     }
 }

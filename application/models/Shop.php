@@ -896,6 +896,19 @@ class Shop extends BaseShop
             
             $this->refShopRelatedshop->delete();
             $this->save();
+
+            if (!empty($shopDetail['content'])) {
+                if (isset($shopDetail['id']) && $shopDetail['id'] != '') {
+                    $type = 'update';
+                    $shopId = $shopDetail['id'];
+                } else {
+                    $type = 'add';
+                    $shopId = $this->id;
+                }
+
+                self::saveEditorBallonText($shopDetail, $shopId, $type);
+            }
+           
             if (!empty($shopDetail['reasontitle1']) || !empty($shopDetail['reasontitle2']) || !empty($shopDetail['reasontitle1'])) {
                 $shopReasons = array();
                 $shopReasons['reasontitle1'] = !empty($shopDetail['reasontitle1'])
@@ -1985,6 +1998,26 @@ public static function getShopDetail($shopId)
         ->fetchArray(Doctrine::HYDRATE_SINGLE_SCALAR);
 
         return (!empty($brandingCss[0]['brandingcss'])) ? unserialize($brandingCss[0]['brandingcss']) : null;
+    }
+
+    public static function saveEditorBallonText($params, $shopId, $type)
+    {
+        if ($type == 'update') {
+            $delEditorText = Doctrine_Query::create()
+            ->delete("EditorBallonText e")
+            ->where("e.shopid = ".$shopId)
+            ->execute();
+        }
+        $contentInfo = array_map('trim', $params['content']);
+        foreach ($contentInfo as $key => $content) {
+            if (isset($content) && $content != '') {
+                $ballonText = new EditorBallonText();
+                $ballonText->shopid = $shopId;
+                $ballonText->ballontext = BackEnd_Helper_viewHelper::stripSlashesFromString($params['content'][$key]);
+                $ballonText->deleted = 0;
+                $ballonText->save();
+            }
+        }
     }
 
 }

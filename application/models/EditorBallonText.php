@@ -11,13 +11,13 @@ class EditorBallonText extends BaseEditorBallonText
         return $deleteText;
     }
 
-    public static function getEditorText($userId)
+    public static function getEditorText($shopId)
     {
-        if (!empty($userId)) {
+        if (!empty($shopId)) {
             $editorTextInformation = Doctrine_Query::create()
                 ->select("e.ballontext")
                 ->from("EditorBallonText e")
-                ->where('e.userid ='.$userId)
+                ->where('e.shopid ='.$shopId)
                 ->fetchArray();
             return $editorTextInformation;
         } else {
