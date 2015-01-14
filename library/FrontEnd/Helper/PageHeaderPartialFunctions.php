@@ -5,7 +5,7 @@ class FrontEnd_Helper_PageHeaderPartialFunctions
     {
         $headertitle = '<h1>' . $headerText . '</h1>';
         $header = '<div class="banner-block">
-            <img alt="' . $headerText . '" src="' .  $headerImage . '" class="image">
+            <img alt="' . $headerText . '" src="' .  $headerImage . '" class="image" title="' . $headerText . '">
             <div class="bar">' . $headertitle . '</div>
             </div>';
         return $header;
