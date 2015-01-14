@@ -30,7 +30,7 @@ foreach ($this->popularStores as $popularStore) :
     echo '<li>
         <a href="'.HTTP_PATH_LOCALE.$popularStore['shop']['permaLink'].'">
             <img src="' . $popularStoreImage . '"  
-            alt="' .$popularStore['shop']['name'] . '" width="100" height="50" />
+            alt="' .$popularStore['shop']['name'] . '" title="' .$popularStore['shop']['name'] . '" width="100" height="50" />
         </a>
     </li>';
 endforeach;

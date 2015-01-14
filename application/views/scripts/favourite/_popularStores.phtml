@@ -8,7 +8,7 @@ foreach ($this->popularShops as $popularShop) :
             <div class="text-holder">
                 <a href="<?php echo $popularShop['permaLink']; ?>" class="img-ico">
                     <img width="132" src="<?php echo $shopImage; ?>" 
-                    alt="<?php echo $popularShop['name']; ?>">
+                    alt="<?php echo $popularShop['name']; ?>" title="<?php echo $popularShop['name']; ?>" >
                 </a>
                 <div class="text">
                     <a href="<?php echo HTTP_PATH_LOCALE. $popularShop["permaLink"];?>" class="link">

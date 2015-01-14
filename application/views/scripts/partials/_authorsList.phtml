@@ -24,7 +24,7 @@ foreach ($this->authors as $author) :
                     </h2>
                     <img width="87" height="87"
                     alt="<?php echo isset($author['profileimage']['name']) ? $author['profileimage']['name'] : '';?>" 
-                    src="<?php echo $authorPicture;?>" class="photo-image">
+                    src="<?php echo $authorPicture;?>" class="photo-image" title="<?php echo isset($author['profileimage']['name']) ? $author['profileimage']['name'] : '';?>" >
                     <strong class="status"><?php echo $this->translate('deal spotter');?></strong>
                     <span>
                     <?php echo $author['popularKortingscode'];?><?php echo ' ' . $this->translate('offers');?>

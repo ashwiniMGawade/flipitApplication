@@ -11,7 +11,7 @@ $profileLink = $this->profileLink;
                 $authorImage = HTTP_PATH_CDN . ltrim($userDetails['profileimage']['path'], "/")
                 .'thum_medium_'.$userDetails['profileimage']['name'];
             ?>
-        <img width="120" height="120" alt="<?php echo $authorName; ?>" src="<?php echo $authorImage; ?>">
+        <img width="120" height="120" alt="<?php echo $authorName; ?>" src="<?php echo $authorImage; ?>" title="<?php echo $authorName; ?>">
     </div>
     <div class="text-box">
         <p>

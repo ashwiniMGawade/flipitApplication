@@ -21,7 +21,7 @@ if (!isset($_COOKIE['registered_user'])) {
             $shop = Shop::getShopLogoByShopId($shopId);
             if($shop!='') {
                 $shopLogoImage = PUBLIC_PATH_CDN.ltrim($shop['logo']['path'], "/").'thum_medium_'. $shop['logo']['name'];
-                $shopLogoOrDefaultImage = '<img alt="' . $shop['permaLink']. '" src="'. $shopLogoImage .'">';
+                $shopLogoOrDefaultImage = '<img alt="' . $shop['permaLink']. '" src="'. $shopLogoImage .'" title="' . $shop['permaLink']. '">';
             }
         }
 

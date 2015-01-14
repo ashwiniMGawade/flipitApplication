@@ -27,7 +27,7 @@ if (LOCALE == '') {
     <body class="page404">
         <?php echo FrontEnd_Helper_LayoutContent::loadGoogleTagManager(); ?>
         <div class="bg-stretch">
-            <img src="<?php echo HTTP_PATH; ?>public/images/front_end/img-46.jpg" alt="" />
+            <img src="<?php echo HTTP_PATH; ?>public/images/front_end/img-46.jpg" alt="" title="image"/>
         </div>
         <?php 
             require_once(APPLICATION_PATH.'/layouts/scripts/mobile_menu.phtml'); 
@@ -98,7 +98,7 @@ if (LOCALE == '') {
                                                <img width="90" height="45" alt="<?php echo $popularShop['shop']['name']; ?>"
                                                src="<?php echo PUBLIC_PATH_CDN
                                                .ltrim($popularShop['shop']['logo']['imgpath'], '/')
-                                               .'thum_medium_'.$popularShop['shop']['logo']['imgname']; ?>">
+                                               .'thum_medium_'.$popularShop['shop']['logo']['imgname']; ?>" title="Shop Logo">
                                             </a>
                                         </li>
                                         <?php
