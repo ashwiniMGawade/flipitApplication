@@ -156,8 +156,9 @@ foreach ($this->offers as $offer) {
                     <?php echo $this->translate('Recommended by staff');?>
                 </span>
                 <?php
-                $authorName = !empty($offer->authorName) ? $offer->authorName : ''; 
-                echo ' - '.$authorName.' '.$this->translate('Recommended this code');?>
+                $explodeEditorName = explode(' ', $this->shop['contentManagerName']);
+                $editorName = !empty($explodeEditorName[0]) ? $explodeEditorName[0] : ''; 
+                echo ' - '.ucfirst($editorName).' '.$this->translate('recommended this code');?>
             </div>
         </div>
     <?php } ?>    
