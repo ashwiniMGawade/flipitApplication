@@ -31,7 +31,7 @@ for ($couponCounter = 0; $couponCounter<count($topPopularCouponCode); $couponCou
     ?>
     <li>
         <a href="<?php echo HTTP_PATH_LOCALE.$topPopularCouponCode[$couponCounter]['offer']['shop']['permaLink'];  ?>" class="coupon-image" target="_blank">
-            <img  src="<?php  echo $couponImage; ?>" alt="<?php echo $topPopularCouponCode[$couponCounter]['offer']['shop']['name'];?>" width="70" height="36" >
+            <img  src="<?php  echo $couponImage; ?>" alt="<?php echo $topPopularCouponCode[$couponCounter]['offer']['shop']['name'];?>" width="70" height="36" title="<?php echo $topPopularCouponCode[$couponCounter]['offer']['shop']['name'];?>" >
         </a>
         <div class="coupon-content">
         <h1 class="title">

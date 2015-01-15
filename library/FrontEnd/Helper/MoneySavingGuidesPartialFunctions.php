@@ -41,9 +41,9 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                             <a href= "'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink().'/'
                                 .$article['articles']['permalink'].'">
                                 <img class="lazy" data-original="'.$articleImage.'"
-                                width="270" height="192" alt="'.$altTitle.'">
+                                width="270" height="192" alt="'.$altTitle.'" title="'.$altTitle.'">
                                 <noscript>
-                                    <img src="'.$articleImage.'" width="270" height="192" alt="'.$altTitle.'">
+                                    <img src="'.$articleImage.'" width="270" height="192" alt="'.$altTitle.'" title="'.$altTitle.'">
                                 </noscript>
                             </a>    
                         </div>

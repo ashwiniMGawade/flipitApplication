@@ -40,7 +40,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
     ) {
         $shopImage = '<img class="radiusImg" 
             src="'. PUBLIC_PATH_CDN . $shop['logo']['path'] . "thum_big_" . $shop['logo']['name']. '" 
-            alt="'.$shop['name'].'" width="176" height="89" />';
+            alt="'.$shop['name'].'" width="176" height="89" title="'.$shop['name'].'" />';
         $shopImageContent = $affliateUrl != '#' ? '<a target="_blank" rel="nofollow" 
             class="text-blue-link store-header-link '.$affliateClass.'"  '.$affliateDisabled.'
             onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">'.$shopImage.'</a>' : $shopImage;

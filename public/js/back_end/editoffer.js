@@ -605,7 +605,7 @@ function setFormData(data){
 		    if(data[0].logo){
 			var image = data[0].logo.path+"/thum_"+data[0].logo.name;
 	        var imgSrc = PUBLIC_PATH_LOCALE + image;
-			jQuery('span#offerLogoId').append('<img src="'+imgSrc+'" id="uplodedOffer" alt="uploaded offer">');
+			jQuery('span#offerLogoId').append('<img src="'+imgSrc+'" id="uplodedOffer" alt="uploaded offer" title="uploaded offer">');
 	        //jQuery('#uplodedOffer').show().attr('src', imgSrc);
 			jQuery("#uploadOfferOption").click();
 		  }

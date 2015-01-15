@@ -186,7 +186,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
     {
         $leftImage =
         '<img src="'.$imageName.'" width="'.$imageSize.'" height="'.$imageSize.'" 
-        alt="'. $imageDescription.'">';
+        alt="'. $imageDescription.'" title="'. $imageDescription.'">';
         return $leftImage;
     }
 
@@ -337,7 +337,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
         <li>
             <a href="'.HTTP_PATH_LOCALE.$shopPermalink.'">
                 <div class="logo-box '.$dynamicDivId.'">
-                    <img '.$imageDimensions.' alt="' . $shopName .'" src="' . $shopImage .'">
+                    <img '.$imageDimensions.' alt="' . $shopName .'" src="' . $shopImage .'" title="' . $shopName .'">
                 </div>
                 <div class="box">
                     <h3>

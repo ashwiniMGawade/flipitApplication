@@ -54,7 +54,8 @@
                   $img = PUBLIC_PATH_CDN.ltrim($value['offer']['shop']['logo']['path'], "/") .'thum_big_'. $value['offer']['shop']['logo']['name'];
               
                     ?>
-            <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'shop logo');" href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shop']['permaLink'];  ?>" class="zalando"><img src="<?php echo $img; ?>" alt="<?php echo $this->translate($value['offer']['shop']['name'])?>" />&nbsp;</a>
+            <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'shop logo');" href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shop']['permaLink'];  ?>" class="zalando"><img src="<?php echo $img; ?>" alt="<?php echo $this->translate($value['offer']['shop']['name'])?>" 
+              title="<?php echo $this->translate($value['offer']['shop']['name'])?>"/>&nbsp;</a>
           </div>
    <?php    
         $i ++   ;
@@ -74,11 +75,11 @@
       </div>
       <div class="boxrt">
       <h1><?php echo $this->translate('Kortingscodes via Marktplaats Aanbiedingen'); ?></h1>
-      <p><span><?php echo $this->translate('Klik op  &#34;Profiteer nu&#34; bij de webshop van uw keuze'); ?></span><img src="<?php echo PUBLIC_PATH ?>images/marktplaatsfeed/icon1.png" alt="" /></p>
+      <p><span><?php echo $this->translate('Klik op  &#34;Profiteer nu&#34; bij de webshop van uw keuze'); ?></span><img src="<?php echo PUBLIC_PATH ?>images/marktplaatsfeed/icon1.png" alt="" title="image" /></p>
       <div class="greyarrow"></div>
-      <p><span><?php echo $this->translate('Klik op &#34;Pak code &amp; open site&#34; op kortingscode.nl'); ?></span><img src="<?php echo PUBLIC_PATH ?>images/marktplaatsfeed/doc.png" alt="" /></p>
+      <p><span><?php echo $this->translate('Klik op &#34;Pak code &amp; open site&#34; op kortingscode.nl'); ?></span><img src="<?php echo PUBLIC_PATH ?>images/marktplaatsfeed/doc.png" alt="" title="image" /></p>
       <div class="greyarrow"></div>
-      <p><span><?php echo $this->translate('Verzilver deze code bij de webshop'); ?></span><img src="<?php echo PUBLIC_PATH ?>images/marktplaatsfeed/hme.png" alt="" /></p>
+      <p><span><?php echo $this->translate('Verzilver deze code bij de webshop'); ?></span><img src="<?php echo PUBLIC_PATH ?>images/marktplaatsfeed/hme.png" alt="" title="image" /></p>
        </div>
 
       
@@ -104,7 +105,7 @@
                      $img = PUBLIC_PATH_CDN.$category[$c]['category']['categoryicon']['path']  .'thum_small_'. $category[$c]['category']['categoryicon']['name'];
                 
                         ?>
-                        <img class="" src="<?php  echo $img ; ?>" alt="<?php echo $category[$c]['category']['name'];?>" />
+                        <img class="" src="<?php  echo $img ; ?>" alt="<?php echo $category[$c]['category']['name'];?>" title="<?php echo $category[$c]['category']['name'];?>" />
                     </div>
               <?php } endif;?>
       </div>
