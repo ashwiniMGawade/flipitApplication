@@ -909,7 +909,13 @@ class Shop extends BaseShop
                 self::saveEditorBallonText($shopDetail, $shopId, $type);
             }
            
-            if (!empty($shopDetail['reasontitle1']) || !empty($shopDetail['reasontitle2']) || !empty($shopDetail['reasontitle1'])) {
+                if (!empty($shopDetail['reasontitle1'])
+                || !empty($shopDetail['reasontitle2'])
+                || !empty($shopDetail['reasontitle3'])
+                || !empty($shopDetail['reasontitle4'])
+                || !empty($shopDetail['reasontitle5'])
+                || !empty($shopDetail['reasontitle6'])
+                ) {
                 $shopReasons = array();
                 $shopReasons['reasontitle1'] = !empty($shopDetail['reasontitle1'])
                     ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle1']) : '';
@@ -923,6 +929,18 @@ class Shop extends BaseShop
                     ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle3']) : '';
                 $shopReasons['reasonsubtitle3'] = !empty($shopDetail['reasonsubtitle3'])
                     ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle3']) : '';
+                $shopReasons['reasontitle4'] = !empty($shopDetail['reasontitle4'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle4']) : '';
+                $shopReasons['reasonsubtitle4'] = !empty($shopDetail['reasonsubtitle4'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle4']) : '';
+                $shopReasons['reasontitle5'] = !empty($shopDetail['reasontitle4'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle5']) : '';
+                $shopReasons['reasonsubtitle5'] = !empty($shopDetail['reasonsubtitle5'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle5']) : '';
+                $shopReasons['reasontitle6'] = !empty($shopDetail['reasontitle6'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle6']) : '';
+                $shopReasons['reasonsubtitle6'] = !empty($shopDetail['reasonsubtitle6'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle6']) : '';
                 ShopReasons::saveReasons($shopReasons, $this->id);
             }
 

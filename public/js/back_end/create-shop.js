@@ -142,21 +142,33 @@ function init()
 	});
 
 	
- 	$('#addreason').click(function(){
-		$('#reasons2').show();
-		$('#addreason').hide();
-		$('#addreason1').show();
+ 	$('#addreason1').click(function(){
+		$('#reasons3').show();
+		$('#addreason1').hide();
+		$('#addreason2').show();
 	});
 	
-	$('#addreason1').click(function(){
-		$('#reasons3').show();
+	$('#addreason2').click(function(){
+		$('#reasons4').show();
+		$('#addreason2').hide();
 	});
+
+	$('#deletereason').click(function(){
+		$('#buyReasons').hide();
+		setOnOff(event,'reasons','off');
+	});
+
 	$('#deletereason').click(function(){
 		$('#reasons2').hide();
 		$('#addreason1').hide();
 		$('#addreason').show();
 	});
+
 	$('#deletereason1').click(function(){
+		$('#reasons4').hide();
+	});
+
+	$('#deletereason2').click(function(){
 		$('#reasons3').hide();
 	});
 
@@ -483,7 +495,6 @@ function removeballontexthtml(el) {
  
  function setOnOff(e, name ,status){
 	 var btn = e.target  ? e.target :  e.srcElement ;
-	 
 	 switch(name)
 		{
 			case "deepLink" :
@@ -559,6 +570,17 @@ function removeballontexthtml(el) {
 				
 			break;
 			
+			case 'reasons' :
+				 $(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
+				if(status=='on'){
+			    	$('#buyReasons').show();
+			    }else{
+			    	$('#buyReasons').hide();
+			    }
+				
+			break;
+
+
 			default:
 				
 				if(status == 'toggle-btn')
