@@ -1,5 +1,5 @@
 <?php
-Doctrine_Manager::getInstance()->bindComponent('EditorBallonText', 'doctrine');
+//Doctrine_Manager::getInstance()->bindComponent('EditorBallonText', 'doctrine');
 
 abstract class BaseEditorBallonText extends Doctrine_Record
 {
