@@ -20,7 +20,7 @@ class ShopReasons extends BaseShopReasons
         return true;
     }
 
-    public function getShopReasons($shopId)
+    public static function getShopReasons($shopId)
     {
         $shopReasons = Doctrine_Query::create()
             ->select('*')

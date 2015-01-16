@@ -439,6 +439,10 @@ abstract class BaseShop extends Doctrine_Record
                 'local' => 'id',
                 'foreign' => 'shopid'));
 
+        $this->hasMany('ShopReasons as shopreasons', array(
+                'local' => 'id',
+                'foreign' => 'shopid'));
+
         $timestampable0 = new Doctrine_Template_Timestampable(array(
              'created' =>
              array(

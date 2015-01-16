@@ -35,4 +35,13 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         }
         return  $offersUnique;
     }
+
+    public static function changeIndexOfSixReasons($sixShopReasons)
+    {
+        $sixShopReasonWithIndex = '';
+        foreach ($sixShopReasons as $reason) {
+            $sixShopReasonWithIndex[$reason['fieldname']] = $reason['fieldvalue'];
+        }
+        return  array_chunk($sixShopReasonWithIndex, 2);
+    }
 }
