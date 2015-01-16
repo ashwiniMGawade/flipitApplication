@@ -561,8 +561,10 @@ class Admin_ShopController extends Zend_Controller_Action
     {
         $firstFieldName = $this->getRequest()->getParam('firstFieldName');
         $secondFieldName = $this->getRequest()->getParam('secondFieldName');
+        $thirdFieldName = $this->getRequest()->getParam('thirdFieldName');
+        $forthFieldName = $this->getRequest()->getParam('forthFieldName');
         $shopId = $this->getRequest()->getParam('shopId');
-        ShopReasons::deleteReasons($firstFieldName, $secondFieldName, $shopId);
+        ShopReasons::deleteReasons($firstFieldName, $secondFieldName, $thirdFieldName, $forthFieldName, $shopId);
         exit();
     }
 

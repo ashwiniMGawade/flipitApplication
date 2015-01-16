@@ -270,7 +270,9 @@ echo $this->headTitle()->append('Edit Shop');?>
                 <div class="clear"></div>
                 </div> 
             </div> 
-
+            <?php
+                if (empty($this->shopReasons)) { 
+            ?>
             <div class="mainpage-content">
                 <div class="mainpage-content-line mb10">
                     <div class="mainpage-content-left"><strong><?php echo $this->translate("add reasons to buy"); ?></strong></div>
@@ -282,6 +284,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                     </div>          
                 </div>
             </div>
+            <?php } ?>
             <div class="mainpage-content" id = "buyReasons">
                 <div class="mainpage-content-line mb10">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate("6 Reasons to Choose Shop");?></strong></label>
@@ -307,9 +310,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <div class="mainpage-content-right">
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-left-other">
-                                <textarea id="reasonsubtitle1" class="input-xlarge mbot bbot ignore" name="reasonsubtitle1" rows="3" >
-                                <?php echo $value =  !empty($this->shopReasons[1]['fieldvalue']) ? $this->shopReasons[1]['fieldvalue'] : '';?>
-                                </textarea>
+                                <textarea id="reasonsubtitle1" class="input-xlarge mbot bbot ignore" name="reasonsubtitle1" rows="3" ><?php echo $value =  !empty($this->shopReasons[1]['fieldvalue']) ? $this->shopReasons[1]['fieldvalue'] : '';?></textarea>
                                 <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
                                 <span id="reasonsubtitle1count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
                             </div>
@@ -334,9 +335,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <div class="mainpage-content-right">
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-left-other">
-                                <textarea id="reasonsubtitle2" class="input-xlarge mbot bbot ignore" name="reasonsubtitle2" rows="3" >
-                                    <?php echo $value = !empty($this->shopReasons[3]['fieldvalue']) ? $this->shopReasons[3]['fieldvalue'] : '';?>
-                                </textarea>
+                                <textarea id="reasonsubtitle2" class="input-xlarge mbot bbot ignore" name="reasonsubtitle2" rows="3"><?php echo $value = !empty($this->shopReasons[3]['fieldvalue']) ? $this->shopReasons[3]['fieldvalue'] : '';?></textarea>
                                 <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
                                 <span id="reasonsubtitle2count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
                             </div>    
@@ -346,7 +345,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <div class="mainpage-content-right">
                             <div class="coupon-sidebar-content-box-shop mb10">
                                 <button class="btn down" id="addreason1" href="#" type="button"><?php echo $this->translate('Add More Reason');?></button>
-                                <button class="btn" href="#" type="button" id="deletereason" onclick="deleteShopReason('reasontitle1','reasonsubtitle1',<?php echo $shopId = !empty($this->shopReasons) ? $this->shopReasons[0]['shopid'] : '';?>)"><?php echo $this->translate('Delete Reasons');?></button>
+                                <button class="btn" href="#" type="button" id="deletereason" onclick="deleteShopReason('reasontitle1','reasonsubtitle1', 'reasontitle2', 'reasonsubtitle2',<?php echo $shopId = !empty($this->shopReasons) ? $this->shopReasons[0]['shopid'] : '';?>)"><?php echo $this->translate('Delete Reasons');?></button>
                             </div>
                         </div>
                     </div>  
@@ -370,9 +369,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <div class="mainpage-content-right">
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-left-other">
-                                <textarea id="reasonsubtitle3" class="input-xlarge mbot bbot ignore" name="reasonsubtitle3" rows="3">
-                                    <?php echo $value = !empty($this->shopReasons[5]['fieldvalue']) ? $this->shopReasons[5]['fieldvalue'] : '';?>
-                                </textarea>
+                                <textarea id="reasonsubtitle3" class="input-xlarge mbot bbot ignore" name="reasonsubtitle3" rows="3"><?php echo $value = !empty($this->shopReasons[5]['fieldvalue']) ? $this->shopReasons[5]['fieldvalue'] : '';?></textarea>
                                 <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
                                 <span id="reasonsubtitle3count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
                             </div>    
@@ -396,9 +393,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <div class="mainpage-content-right">
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-left-other">
-                                <textarea id="reasonsubtitle4" class="input-xlarge mbot bbot ignore" name="reasonsubtitle4" rows="3">
-                                    <?php echo $value = !empty($this->shopReasons[7]['fieldvalue']) ? $this->shopReasons[7]['fieldvalue'] : '';?>
-                                </textarea>
+                                <textarea id="reasonsubtitle4" class="input-xlarge mbot bbot ignore" name="reasonsubtitle4" rows="3"><?php echo $value = !empty($this->shopReasons[7]['fieldvalue']) ? $this->shopReasons[7]['fieldvalue'] : '';?></textarea>
                                 <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
                                 <span id="reasonsubtitle4count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
                             </div>    
@@ -408,7 +403,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <div class="mainpage-content-right">
                             <div class="coupon-sidebar-content-box-shop mb10">
                                 <button class="btn down" id="addreason2" href="#" type="button"><?php echo $this->translate('Add More Reason');?></button>
-                                <button class="btn" href="#" type="button" id="deletereason2" onclick="deleteShopReason('reasontitle3','reasonsubtitle3',<?php echo $shopId = !empty($this->shopReasons) ? $this->shopReasons[0]['shopid'] : '';?>)"><?php echo $this->translate('Delete Reason');?></button>
+                                <button class="btn" href="#" type="button" id="deletereason1" onclick="deleteShopReason('reasontitle3','reasonsubtitle3','reasontitle4','reasonsubtitle4',<?php echo $shopId = !empty($this->shopReasons) ? $this->shopReasons[0]['shopid'] : '';?>)"><?php echo $this->translate('Delete Reasons');?></button>
                             </div>
                         </div>
                     </div>
@@ -432,9 +427,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <div class="mainpage-content-right">
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-left-other">
-                                <textarea id="reasonsubtitle5" class="input-xlarge mbot bbot ignore" name="reasonsubtitle5" rows="3">
-                                    <?php echo $value = !empty($this->shopReasons[9]['fieldvalue']) ? $this->shopReasons[9]['fieldvalue'] : '';?>
-                                </textarea>
+                                <textarea id="reasonsubtitle5" class="input-xlarge mbot bbot ignore" name="reasonsubtitle5" rows="3"><?php echo $value = !empty($this->shopReasons[9]['fieldvalue']) ? $this->shopReasons[9]['fieldvalue'] : '';?></textarea>
                                 <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
                                 <span id="reasonsubtitle5count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
                             </div>    
@@ -458,9 +451,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <div class="mainpage-content-right">
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-left-other">
-                                <textarea id="reasonsubtitle6" class="input-xlarge mbot bbot ignore" name="reasonsubtitle6" rows="3">
-                                     <?php echo $value = !empty($this->shopReasons[11]['fieldvalue']) ? $this->shopReasons[11]['fieldvalue'] : '';?>
-                                </textarea>
+                                <textarea id="reasonsubtitle6" class="input-xlarge mbot bbot ignore" name="reasonsubtitle6" rows="3"><?php echo $value = !empty($this->shopReasons[11]['fieldvalue']) ? $this->shopReasons[11]['fieldvalue'] : '';?></textarea>
                                 <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
                                 <span id="reasonsubtitle6count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
                             </div>    
@@ -469,7 +460,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                     <div class="mainpage-content-line">
                         <div class="mainpage-content-right">
                             <div class="coupon-sidebar-content-box-shop mb10">
-                                <button class="btn" href="#" type="button" onclick="deleteShopReason('reasontitle5','reasonsubtitle5',<?php echo $shopId = !empty($this->shopReasons) ? $this->shopReasons[0]['shopid'] : '';?>)" id="deletereason1"><?php echo $this->translate('Delete Reason');?></button>
+                                <button class="btn" href="#" type="button" onclick="deleteShopReason('reasontitle5','reasonsubtitle5','reasontitle6','reasonsubtitle6',<?php echo $shopId = !empty($this->shopReasons) ? $this->shopReasons[0]['shopid'] : '';?>)" id="deletereason2"><?php echo $this->translate('Delete Reasons');?></button>
                             </div>
                         </div>
                     </div>

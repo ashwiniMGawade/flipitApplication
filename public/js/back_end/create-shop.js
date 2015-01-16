@@ -121,15 +121,27 @@ function init()
 	});
 	jQuery('#reasonsubtitle1').NobleCount('#reasonsubtitle1count',{
 		max_chars: 512,
-		prefixString : __("Shop reason sub title1 length ")
+		prefixString : __("Shop reason sub title length ")
 	});
 	jQuery('#reasonsubtitle2').NobleCount('#reasonsubtitle2count',{
 		max_chars: 512,
-		prefixString : __("Shop reason sub title2 length ")
+		prefixString : __("Shop reason sub title length ")
 	});
 	jQuery('#reasonsubtitle3').NobleCount('#reasonsubtitle3count',{
 		max_chars: 512,
-		prefixString : __("Shop reason sub title3 length ")
+		prefixString : __("Shop reason sub title length ")
+	});
+	jQuery('#reasonsubtitle4').NobleCount('#reasonsubtitle4count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
+	});
+	jQuery('#reasonsubtitle5').NobleCount('#reasonsubtitle5count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
+	});
+	jQuery('#reasonsubtitle6').NobleCount('#reasonsubtitle6count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
 	});
 	jQuery('#pagemetaTitle').NobleCount('#pagemetaTitleLeft',{
 		max_chars: 68,
@@ -141,35 +153,36 @@ function init()
 		prefixString : __("Shop page meta description length ")
 	});
 
-	
- 	$('#addreason1').click(function(){
+	$('#addreason2').click(function() {
+		$('#addreason2').hide();
+	});
+
+	$('#addreason1').click(function(){
 		$('#reasons3').show();
 		$('#addreason1').hide();
 		$('#addreason2').show();
+		if ($('#reasons4').css('display') == 'block') {
+			$('#addreason2').hide();
+		}
 	});
 	
 	$('#addreason2').click(function(){
 		$('#reasons4').show();
-		$('#addreason2').hide();
 	});
 
 	$('#deletereason').click(function(){
+		$("#off").addClass("btn-primary").siblings().removeClass("btn-primary");
 		$('#buyReasons').hide();
-		setOnOff(event,'reasons','off');
-	});
-
-	$('#deletereason').click(function(){
-		$('#reasons2').hide();
-		$('#addreason1').hide();
-		$('#addreason').show();
 	});
 
 	$('#deletereason1').click(function(){
-		$('#reasons4').hide();
+		$('#reasons3').hide();
+		$('#addreason1').show();
 	});
 
 	$('#deletereason2').click(function(){
-		$('#reasons3').hide();
+		$('#reasons4').hide();
+		$('#addreason2').show();
 	});
 
 	$('button#prefillData').click(function(){
@@ -571,7 +584,7 @@ function removeballontexthtml(el) {
 			break;
 			
 			case 'reasons' :
-				 $(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
+				$(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
 				if(status=='on'){
 			    	$('#buyReasons').show();
 			    }else{

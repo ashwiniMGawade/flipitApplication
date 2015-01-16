@@ -101,24 +101,36 @@ $(document).ready(init);
 
 function init()
 {
-	$('#addreason1').click(function() {
+	if ($('#reasontitle1').val() == '' &&  $('#reasontitle2').val() == '' ) {
+		$('#buyReasons').hide();
+	}
+
+	if ($('#reasons3').css('display') == 'block') {
 		$('#addreason1').hide();
-	});
+	}
 
-	if ($('#reasons2').css('display') == 'block') {
+	if ($('#reasons4').css('display') == 'block') {
+		$('#addreason2').hide();
+	}
+
+	if ($('#reasons').css('display') == 'block') {
+		$('#addreason1').show();
+	}
+
+	if ($('#reasontitle3').val() != '' &&  $('#reasontitle4').val() != '' ) {
 		$('#addreason1').hide();
 	}
 
-	if ($('#reasontitle2').val() == '') {
-		$('#reasons2').hide();
+	if ($('#reasontitle5').val() == '' &&  $('#reasontitle6').val() == '' ) {
+		$('#addreason2').show();
 	}
-
-	if ($('#reasonsubtitle2').val() != '') {
-		$('#addreason').hide();
-	}
-
+	
 	if ($('#reasontitle3').val() == '') {
 		$('#reasons3').hide();
+	}
+
+	if ($('#reasontitle5').val() == '') {
+		$('#reasons4').hide();
 	}
 	
 	word_count("#shopNotes", __("Short note about the shop length "),"#shopNotesLeft");
@@ -146,17 +158,28 @@ function init()
 
 	jQuery('#reasonsubtitle1').NobleCount('#reasonsubtitle1count',{
 		max_chars: 512,
-		prefixString : __("Shop reason sub title1 length ")
+		prefixString : __("Shop reason sub title length ")
 	});
 	jQuery('#reasonsubtitle2').NobleCount('#reasonsubtitle2count',{
 		max_chars: 512,
-		prefixString : __("Shop reason sub title2 length ")
+		prefixString : __("Shop reason sub title length ")
 	});
 	jQuery('#reasonsubtitle3').NobleCount('#reasonsubtitle3count',{
 		max_chars: 512,
-		prefixString : __("Shop reason sub title3 length ")
+		prefixString : __("Shop reason sub title length ")
 	});
-
+	jQuery('#reasonsubtitle4').NobleCount('#reasonsubtitle4count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
+	});
+	jQuery('#reasonsubtitle5').NobleCount('#reasonsubtitle5count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
+	});
+	jQuery('#reasonsubtitle6').NobleCount('#reasonsubtitle6count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
+	});
 	jQuery('#pagemetaTitle').NobleCount('#pagemetaTitleLeft',{
 		max_chars: 68,
 		prefixString : __("Shop meta title length ")
@@ -167,22 +190,35 @@ function init()
 		prefixString : __("Shop page meta description length ")
 	});
 
-	$('#addreason').click(function(){
-		$('#reasons2').show();
-		$('#addreason').hide();
-		$('#addreason1').show();
+	$('#addreason2').click(function() {
+		$('#addreason2').hide();
 	});
-	
+
 	$('#addreason1').click(function(){
 		$('#reasons3').show();
-	});
-	$('#deletereason').click(function(){
-		$('#reasons2').hide();
 		$('#addreason1').hide();
-		$('#addreason').show();
+		$('#addreason2').show();
+		if ($('#reasons4').css('display') == 'block') {
+			$('#addreason2').hide();
+		}
 	});
+	
+	$('#addreason2').click(function(){
+		$('#reasons4').show();
+	});
+
+	$('#deletereason').click(function(){
+		$('#reasons').hide();
+	});
+
 	$('#deletereason1').click(function(){
 		$('#reasons3').hide();
+		$('#addreason1').show();
+	});
+
+	$('#deletereason2').click(function(){
+		$('#reasons4').hide();
+		$('#addreason2').show();
 	});
 	
 	$('button#prefillData').click(function(){
@@ -568,8 +604,16 @@ function removeballontexthtml(el) {
 				    }
 				
 			break;
-			
-			
+			case 'reasons' :
+				$(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
+				if(status=='on'){
+			    	$('#buyReasons').show();
+			    }else{
+			    	$('#buyReasons').hide();
+			    }
+				
+			break;
+
 			default:
 				
 				if(status == 'toggle-btn')
@@ -1080,7 +1124,7 @@ function moveToTrash(id){
 	});
 }
 
-function deleteShopReason(firstFieldName, secondFieldName, shopId) {
+function deleteShopReason(firstFieldName, secondFieldName, thirdFieldName, forthFieldName, shopId) {
 	addOverLay();
 	$.ajax({
 		url : HOST_PATH + "admin/shop/deleteshopreason",
@@ -1088,6 +1132,8 @@ function deleteShopReason(firstFieldName, secondFieldName, shopId) {
 		data : {
 			'firstFieldName' : firstFieldName,
 			'secondFieldName' : secondFieldName,
+			'thirdFieldName' : thirdFieldName,
+			'forthFieldName' : forthFieldName,
 			'shopId' : shopId
 		},
 		dataType : "json",
