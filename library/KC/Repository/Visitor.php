@@ -63,16 +63,18 @@ class Visitor extends \KC\Entity\Visitor
         $entityManagerLocale->flush();
     }
 
-    public static function addVisitor($visitorInformation)
+    public static function addVisitor($visitorInformation, $profileUpdate = '')
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         if (\Auth_VisitorAdapter::hasIdentity()) {
             $visitorId = \Auth_VisitorAdapter::getIdentity()->id;
             $visitor = \Zend_Registry::get('emLocale')->find("\KC\Entity\Visitor", $visitorId);
             $visitor->weeklyNewsLetter = $visitorInformation['weeklyNewsLetter'];
+            $visitor->codealert = $visitorInformation['codealert'];
         } else {
             $visitor = new \KC\Entity\Visitor();
             $visitor->weeklyNewsLetter = '1';
+            $visitor->codealert = '1';
             $visitor->currentLogIn = '0000-00-00';
             $visitor->lastLogIn = '0000-00-00';
             $visitor->active_codeid = '';
@@ -95,16 +97,18 @@ class Visitor extends \KC\Entity\Visitor
         $visitor->firstName = \FrontEnd_Helper_viewHelper::sanitize($visitorInformation['firstName']);
         $visitor->lastName = \FrontEnd_Helper_viewHelper::sanitize($visitorInformation['lastName']);
         $visitor->gender = \FrontEnd_Helper_viewHelper::sanitize($visitorInformation['gender'] == 'M' ? 0 : 1);
-        $visitor->dateOfBirth =
-            (
-                $visitorInformation['dateOfBirthYear'].'-'
-                .$visitorInformation['dateOfBirthMonth'].'-'
-                .$visitorInformation['dateOfBirthDay']
-            );
-        $visitor->postalCode =
-            \FrontEnd_Helper_viewHelper::sanitize(
-                isset($visitorInformation['postCode']) ? $visitorInformation['postCode'] : ''
-            );
+        if ($profileUpdate != '') {
+            $visitor->dateOfBirth =
+                (
+                    $visitorInformation['dateOfBirthYear'].'-'
+                    .$visitorInformation['dateOfBirthMonth'].'-'
+                    .$visitorInformation['dateOfBirthDay']
+                );
+            $visitor->postalCode =
+                \FrontEnd_Helper_viewHelper::sanitize(
+                    isset($visitorInformation['postCode']) ? $visitorInformation['postCode'] : ''
+                );
+        }
         if (!empty($visitorInformation['password'])) {
             $visitor->password = \FrontEnd_Helper_viewHelper::sanitize(md5($visitorInformation['password']));
         }
@@ -155,12 +159,27 @@ class Visitor extends \KC\Entity\Visitor
         return $userDetails;
     }
 
+    public static function getUserFirstName($visitorId)
+    {
+        $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('v.firstName')
+            ->from("\KC\Entity\Visitor', v")
+            ->where('v.id='.$visitorId);
+        $userDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $userDetails;
+    }
+
     public static function getVisitorDetailsByEmail($visitorEmail)
     {
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v')
-            ->from('\KC\Entity\Visitor', 'v')
-            ->where('v.email ='. $queryBuilder->expr()->literal($visitorEmail));
+            ->from('\KC\Entity\Visitor', 'v');
+        if (!ctype_digit($visitorEmail)) {
+            $query = $query->where("v.email=".$queryBuilder->expr()->literal($visitorEmail));
+        } else {
+            $query = $query->where("v.id=".$queryBuilder->expr()->literal($visitorEmail));
+        }
         $visitorDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $visitorDetails;
     }
@@ -192,7 +211,7 @@ class Visitor extends \KC\Entity\Visitor
         if (Auth_VisitorAdapter::hasIdentity()) {
             $visitorId = Auth_VisitorAdapter::getIdentity()->id;
             self::updateLoginTime($visitorId);
-            setcookie('kc_unique_user_id', $visitorId, time() + 64800, '/');
+            setcookie('kc_unique_user_id', $visitorId, time() + (86400 * 3), '/');
             $visitorLoginStatus = true;
         }
         return $visitorLoginStatus;
@@ -214,7 +233,10 @@ class Visitor extends \KC\Entity\Visitor
         $currentDate = date('Y-m-d 00:00:00');
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-        $query = $queryBuilder->select("fv.id as id,s.name as name,s.permaLink,s.id as id, l")
+        $query = $queryBuilder->select(
+            "fv.id as id,s.name as name,s.permaLink,s.id as id,
+            l.path as imgpath, l.name as imgname"
+        )
         ->addSelect(
             "(SELECT COUNT(active) FROM \KC\Entity\Offer active WHERE
             (active.shopOffers = s.id AND active.endDate >= '$currentDate' AND active.deleted=0)) as activeCount"
@@ -234,9 +256,9 @@ class Visitor extends \KC\Entity\Visitor
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select(
-            'fv.id as fvid,fv.shopId as shopId,s.refUrl,
-            s.actualUrl,fv.visitorId as visitorId,s.name as name,s.logoid as slogoId,
-            s.permalink as permaLink,o.id, o.title, o.totalViewcount as clicks,l.path,l.name,l.id'
+            'fv.id as fvid,fv.visitorId as visitorId,s.name as name,
+            s.permalink as permaLink,o.id, o.userGenerated, 
+            o.title,l.path,l.name,l.id'
         )
         ->addSelect(
             "(SELECT COUNT(active) FROM \KC\Entity\Offer active WHERE
@@ -254,7 +276,6 @@ class Visitor extends \KC\Entity\Visitor
         ->andWhere('o.discountType="CD"')
         ->andWhere('o.Visability!="MEM"')
         ->andWhere('o.userGenerated=0')
-        ->orderBy('o.totalViewcount DESC')
         ->setMaxResults($limit);
         $favouriteShopsOffers = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $favouriteShopsOffers;
@@ -321,9 +342,9 @@ class Visitor extends \KC\Entity\Visitor
         $visitor->created_at = $visitor->created_at;
         $visitor->updated_at = new \DateTime('now');
 
-        if (!$isUpdatedByAdmin) {
-            if (self::validateEmail($params['emailAddress'])) {
-                $visitor->email = \FrontEnd_Helper_viewHelper::sanitize($params['emailAddress']);
+        if ($isUpdatedByAdmin) {
+            if (self::validateEmail($params['email'])) {
+                $visitor->email = \FrontEnd_Helper_viewHelper::sanitize($params['email']);
             } else {
                 return false ;
             }
@@ -343,22 +364,22 @@ class Visitor extends \KC\Entity\Visitor
             $visitor->weeklyNewsLetter = 0;
         }
 
-        if (isset($params['travel'])) {
+        if (isset($params['travel']) && $params['travel'] != '') {
             $visitor->travelNewsLetter = \FrontEnd_Helper_viewHelper::sanitize($params['travel']);
         } else {
             $visitor->travelNewsLetter = 0;
         }
 
-        if (isset($params['fashion'])) {
+        if (isset($params['fashion']) && $params['fashion'] != '') {
             $visitor->fashionNewsLetter = \FrontEnd_Helper_viewHelper::sanitize($params['fashion']);
         } else {
             $visitor->fashionNewsLetter = 0;
         }
 
-        if (isset($params['code'])) {
-            $visitor->codeAlert = \FrontEnd_Helper_viewHelper::sanitize($params['code']);
+        if (isset($params['code']) && $params['code'] != '') {
+            $visitor->codealert = \FrontEnd_Helper_viewHelper::sanitize($params['code']);
         } else {
-            $visitor->codeAlert = 0;
+            $visitor->codealert = 0;
         }
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -378,12 +399,21 @@ class Visitor extends \KC\Entity\Visitor
             }
         }
 
-        if ($params['gender']=='female') {
+        if (isset($params['gender']) && $params['gender']=='1') {
             $visitor->gender = 1;
         }
 
-        if ($params['gender']=='male') {
+        if (isset($params['gender']) && $params['gender']=='0') {
             $visitor->gender = 0;
+        }
+
+        if (
+            (isset($params['newPassword']) && $params['newPassword'] != '') &&
+            (isset($params['confirmNewPassword']) && $params['confirmNewPassword'] != '')
+        ) {
+            if ($params['newPassword'] == $params['confirmNewPassword']) {
+                $visitor->password = FrontEnd_Helper_viewHelper::sanitize(md5($params['newPassword']));
+            }
         }
 
         $entityManagerLocale->persist($visitor);
@@ -670,17 +700,46 @@ class Visitor extends \KC\Entity\Visitor
         return $data;
     }
 
-    public function getVisitorsToSendNewsletter($recordPerPage = 1000)
+    public function getVisitorsToSendNewsletter($visitorId = '')
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v.email,v.password,v.firstName,v.lastName,k.keyword')
             ->from('\KC\Entity\Visitor', 'v')
             ->leftJoin("v.visitorKeyword k")
             ->where('v.status = 1')
-            ->andWhere('v.active = 1')
-            ->andWhere('v.weeklyNewsLetter = 1')
-            ->orderBy("k.keyword", 'ASC');
-        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $data;
+            ->andWhere('v.active = 1');
+        if ($visitorId != '') {
+            $query = $query->andWhere('v.id IN('.$visitorId.')');
+        } else {
+            $query = $query->andWhere('weeklyNewsLetter = 1');
+        }
+        $visitorsToSendNewsletter = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $visitorsToSendNewsletter;
+    }
+
+    public static function addCodeAlertTimeStampForVisitor($visitorIds)
+    {
+        if (!empty($visitorIds)) {
+            $visitorIds = explode(',', $visitorIds);
+            foreach ($visitorIds as $visitorIdValue) {
+                $entityManagerLocale = \Zend_Registry::get('emLocale');
+                $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                $query = $queryBuilder->update('\KC\Entity\Visitor', 'v')
+                    ->set('v.code_alert_send_date', "'".  date('Y-m-d 00:00:00') ."'")
+                    ->where('v.id='. FrontEnd_Helper_viewHelper::sanitize($visitorIdValue));
+                $query->getQuery()->execute();
+            }
+        }
+        return true;
+    }
+
+    public static function getVisitorCodeAlertSendDate($visitorId = '')
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('v.code_alert_send_date')
+            ->from('\KC\Entity\Visitor', 'v')
+            ->where('v.id='. FrontEnd_Helper_viewHelper::sanitize($visitorId));
+        $codeAlertSendDate = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return !empty($codeAlertSendDate) ?  $codeAlertSendDate[0]['code_alert_send_date'] : 0;
     }
 }
