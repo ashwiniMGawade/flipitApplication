@@ -880,6 +880,9 @@ class Shop extends BaseShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popularShops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
+        $shopList = $this->id.'_list';
+        $key = 'shop_sixReasons_'.$shopList;
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
         if(!empty($shopDetail['id'])) {
             $getcategory = Doctrine_Query::create()->select()->from('Shop')->where('id = '.$shopDetail['id'] )->fetchArray();
