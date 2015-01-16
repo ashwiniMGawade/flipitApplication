@@ -8,25 +8,27 @@ class UserGeneratedOffer extends \KC\Entity\Offer
         $userRole           = \Auth_StaffAdapter::getIdentity()->users->id;
         $searchOffer        = $parameters["offerText"]!='undefined' ? $parameters["offerText"] : '';
         $searchShop         = $parameters["shopText"]!='undefined' ? $parameters["shopText"] : '';
+        $searchCoupon       = @$parameters["shopCoupon"]!='undefined' ? @$parameters["shopCoupon"] : '';
         $searchCouponType   = $parameters["couponType"]!='undefined' ? $parameters["couponType"] : '';
         $deletedStatus      = $parameters['flag'];
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $getOffersQuery = $entityManagerUser
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
-            ->setParameter(1, $deletedStatus)
-            ->where('o.deleted = ?1')
-            ->setParameter(2, 1)
-            ->andWhere('o.userGenerated = ?2');
+            ->where('o.deleted ='. $deletedStatus)
+            ->andWhere("o.userGenerated = 1")
+            ->andWhere("o.approved = '0'");
         if ($userRole=='4') {
-            $getOffersQuery->setParameter(3, 'DE');
-            $getOffersQuery->andWhere('o.Visability =?3');
+            $getOffersQuery->andWhere('o.Visability ="DE"');
         }
         if ($searchOffer != '') {
             $getOffersQuery->andWhere("o.title LIKE '%$searchOffer%'");
         }
         if ($searchShop!='') {
             $getOffersQuery->andWhere("s.name LIKE '%$searchShop%'");
+        }
+        if ($searchCoupon!='') {
+            $getOffersQuery->andWhere("o.couponcode LIKE ?", "%".$searchCoupon."%");
         }
         if ($searchCouponType!='') {
             $getOffersQuery->andWhere('o.discountType ='."'".$searchCouponType."'");
@@ -54,112 +56,6 @@ class UserGeneratedOffer extends \KC\Entity\Offer
         $offersList = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
         $offersList = \DataTable_Helper::getResponse($offersList, $request);
         return $offersList;
-    }
-
-    public static function moveToTrash($id)
-    {
-        if ($id) {
-            $entityManager  = \Zend_Registry::get('emLocale');
-            $u = $entityManager->find('KC\Entity\Offer', $id);
-            $u->deleted = 1;
-            $key = '6_topOffers'  . $u->shopOffers->id . '_list';
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'shop_latestUpdates'  .$u->shopOffers->id . '_list';
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'shop_expiredOffers'  . $u->shopOffers->id . '_list';
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
-            $entityManager->persist($u);
-            $entityManager->flush();
-        } else {
-            $id = null;
-        }
-        return $id;
-    }
-
-    public static function deleteOffer($id)
-    {
-        if ($id) {
-            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $entityManager  = \Zend_Registry::get('emLocale');
-            $u = $entityManager->find('KC\Entity\Offer', $id);
-            $key = '6_topOffers'  . $u->shopOffers->id . '_list';
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'shop_latestUpdates'  .$u->shopOffers->id. '_list';
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'shop_expiredOffers'  . $u->shopOffers->id . '_list';
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
-            $del = $queryBuilder->delete('KC\Entity\Offer', 'o')
-                ->where("o.id=" . $id)
-                ->getQuery()
-                ->execute();
-        } else {
-            $id = null;
-        }
-        return $id;
-    }
-
-    public static function restoreOffer($id)
-    {
-        if ($id) {
-            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $entityManager  = \Zend_Registry::get('emLocale');
-            $u = $entityManager->find('KC\Entity\Offer', $id);
-            $key = '6_topOffers'  . $u->shopOffers->id . '_list';
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'shop_latestUpdates'  .$u->shopOffers->id . '_list';
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'shop_expiredOffers'  . $u->shopOffers->id . '_list';
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
-            $O = $queryBuilder
-                ->update('KC\Entity\Offer', 'o')
-                ->set('o.deleted', '0')
-                ->where('o.id=' . $id)
-                ->getQuery();
-            $O->execute();
-        } else {
-            $id = null;
-        }
-        return $id;
-    }
-
-    public static function makeToOffline($id, $offvalue)
-    {
-        if ($id) {
-            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $entityManager  = \Zend_Registry::get('emLocale');
-            $u = $entityManager->find('KC\Entity\Offer', $id);
-            $key = '6_topOffers'  . $u->shopOffers->id . '_list';
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'shop_latestUpdates'  .$u->shopOffers->id . '_list';
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'shop_expiredOffers'  . $u->shopOffers->id . '_list';
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
-            $O = $queryBuilder
-                ->update('KC\Entity\Offer', 'o')
-                ->set('o.offline', $offvalue)
-                ->where('o.id=' . $id)
-                ->getQuery();
-            $O->execute();
-        } else {
-            $id = null;
-        }
-        return $id;
     }
 
     public static function searchToFiveOffer($keyword, $flag)
