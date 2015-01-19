@@ -142,8 +142,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                         'newsletter_emailHeader_emailFooter',
                         array('function' => 'Signupmaxaccount::getEmailHeaderFooter', 'parameters' => array()),
                         ''
-                    );
-                
+                    );                
                     $topCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                         'newsletter_top_categories',
                         array(
@@ -151,9 +150,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                             'parameters' => array('category', 10)),
                         ''
                     );
-
                     $topCategories = array_slice($topCategories, 0, 1);
-
                     FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                         'newsletter_top_offers',
                         array(
@@ -161,7 +158,6 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                             'parameters' => array(10)),
                         ''
                     );
-
                     FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                         'newsletter_category_vouchercodes',
                         array(
@@ -169,8 +165,6 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                             'parameters' => array($topCategories[0]['categoryId'])),
                         ''
                     );
-
-
                     $flash->addMessage(
                         array(
                             'success' => $this->view->translate('Newsletter has been successfully scheduled')

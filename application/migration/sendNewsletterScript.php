@@ -214,7 +214,6 @@ class SendNewsletter
             array('function' => 'Signupmaxaccount::getEmailHeaderFooter', 'parameters' => array()),
             ''
         );
-    
         $topCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'newsletter_top_categories',
             array(
@@ -222,9 +221,7 @@ class SendNewsletter
                 'parameters' => array('category', 10)),
             ''
         );
-
         $topCategories = array_slice($topCategories, 0, 1);
-
         $topVouchercodes = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'newsletter_top_offers',
             array(
@@ -232,7 +229,6 @@ class SendNewsletter
                 'parameters' => array(10)),
             ''
         );
-
         $categoryVouchers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'newsletter_category_vouchercodes',
             array(
@@ -240,9 +236,7 @@ class SendNewsletter
                 'parameters' => array($topCategories[0]['categoryId'])),
             ''
         );
-
         $categoryVouchers = array_slice($categoryVouchers, 0, 3);
-
         BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'scheduleNewsletterSender', '', $this->_mandrillKey);
         $mandrill = new Mandrill_Init($this->_mandrillKey);
         $mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
