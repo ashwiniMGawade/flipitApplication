@@ -29,8 +29,14 @@
 	          	<button  onClick="window.location.href='<?php echo HTTP_PATH ?>admin/newsticker/createnewsticker'" class="btn ml10" id="">
 	          		<?php echo $this->translate('Add New Newsticker');?>
 	          	</button>
-	          
-          </h1>
+		</h1>
+        <div class="clear"></div>
+        <p class="text-right">
+            <a href='<?php echo HTTP_PATH ?>admin/newsticker/exportxlx'>
+                <?php echo $this->translate('Export List'); ?>
+            </a>
+        </p>
+          
           <!--<form class="well form-search searchbarbox"  name="searchform" id="searchform">
               	<div class="mainpage-content-searchbart" style="width: 100%; float:left;">
                     <div class="mainpage-content-right-searchbar">
