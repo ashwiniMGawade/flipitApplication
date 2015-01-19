@@ -116,7 +116,7 @@ class MoneySaving Extends \KC\Entity\MoneySaving
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select(
-                'chap.id as chapterId, chap.content as chapterContent, a.id, a.title, a.permalink, a.content,
+                'chap.id as chapterId, chap.content as chapterContent, a.id, a.title, a.plusTitle, a.permalink, a.content,
                 a.authorid, a.authorname, a.plusTitle, a.created_at, a.publishdate, ai.path as articleImagePath,
                 ai.name as articleImageName, aai.path, aai.name, ac.categorytitlecolor'
             )
@@ -160,5 +160,28 @@ class MoneySaving Extends \KC\Entity\MoneySaving
         ->setMaxResults($limit);
         $shopMoneySavingGuideArticle = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopMoneySavingGuideArticle;
+    }
+
+    public static function getPopularArticlesAndCategory()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select(
+                'p, chap, a.id, a.title, a.plusTitle, a.permalink, a.content, a.authorid, 
+                a.authorname, a.created_at, a.publishdate, ai.path, ai.name,aai.path, aai.name,
+                ac.categorytitlecolor, ac.name'
+            )
+            ->from('\KC\Entity\PopularArticles', 'p')
+            ->leftJoin('p.articles', 'a')
+            ->leftJoin('a.thumbnail', 'ai')
+            ->leftJoin('a.articleImage', 'aai')
+            ->leftJoin('a.refArticleCategory', 'r')
+            ->leftjoin('a.category', 'ac')
+            ->leftJoin('a.articleChapter', 'chap')
+            ->andWhere('a.deleted = 0')
+            ->andWhere('a.publish = 1')
+            ->orderBy('p.position', 'ASC');
+        $popularArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $popularArticles;
     }
 }
