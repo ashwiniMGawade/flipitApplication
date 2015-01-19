@@ -103,6 +103,7 @@ else:
 endif;
 
 $frontShopHeaderHelper = new FrontEnd_Helper_ShopHeaderPartialFunctions();
+$disqusReplyCounter = $frontShopHeaderHelper->getDisqusReplyCounter($this->currentStoreInformation[0]);
 $headerBlock = $frontShopHeaderHelper->getShopHeader(
     $this->currentStoreInformation[0],
     $message = 'storeDetail',
@@ -130,6 +131,7 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
 <?php
 echo $this->esi($this->locale.'store/followbutton?shopid='.$this->currentStoreInformation[0]['id']
     .'&permalink='.urlencode($this->currentStoreInformation[0]['permaLink'])); 
+echo $disqusReplyCounter;
 ?>
 </div></div>
 <div class="row"> 

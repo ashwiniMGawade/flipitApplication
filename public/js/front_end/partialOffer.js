@@ -7,6 +7,11 @@ $(document).ready(function() {
     }
 });
 
+function scrollToDisqus(){
+    var divTag = $('#disqus_thread');
+    $('html,body').animate({scrollTop: divTag.offset().top},'slow');
+}
+
 function OpenInNewTab(url) {
     var windowObject=window.open(url, '_blank');
     windowObject.focus();
