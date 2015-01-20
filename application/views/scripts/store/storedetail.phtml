@@ -131,7 +131,7 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
 <?php
 echo $this->esi($this->locale.'store/followbutton?shopid='.$this->currentStoreInformation[0]['id']
     .'&permalink='.urlencode($this->currentStoreInformation[0]['permaLink'])); 
-echo $disqusReplyCounter;
+echo !empty($disqusReplyCounter) ? $disqusReplyCounter : '';
 ?>
 </div></div>
 <div class="row"> 

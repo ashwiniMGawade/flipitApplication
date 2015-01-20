@@ -85,10 +85,11 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
     {
         $shopPermalink = $shop['permaLink'];
         $disqusUrl = HTTP_PATH_LOCALE.$shopPermalink;
-        $anchorTag = '<a href="javascript:void(0);" onClick="scrollToDisqus();" 
-            class="btn text-blue-link fl store-header-link  pop btn btn-sm btn-default" 
-            rel="nofollow"><span class="disqus-comment-count" data-disqus-url="'.$disqusUrl.'"> </span>
-                </a>';
+        $anchorTag =
+            '<a href="javascript:void(0);" onClick="scrollToDisqus();" 
+                class="btn text-blue-link fl store-header-link  pop btn btn-sm btn-default" 
+                rel="nofollow"><span class="disqus-comment-count" data-disqus-url="'.$disqusUrl.'"> </span>
+            </a>';
         return $anchorTag;
     }
 }

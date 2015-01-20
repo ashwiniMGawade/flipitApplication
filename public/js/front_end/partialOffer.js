@@ -8,8 +8,8 @@ $(document).ready(function() {
 });
 
 function scrollToDisqus(){
-    var divTag = $('#disqus_thread');
-    $('html,body').animate({scrollTop: divTag.offset().top},'slow');
+    var disqusDivId = $('#disqus_thread');
+    $('html,body').animate({scrollTop: disqusDivId.offset().top},'slow');
 }
 
 function OpenInNewTab(url) {
