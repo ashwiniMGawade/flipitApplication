@@ -138,4 +138,15 @@ class OfferNews extends BaseOfferNews
         }
         return $urlsArray ;
     }
+
+    public static function getnewstickerListForExport()
+    {
+        $newstickerList = Doctrine_Query::create()
+            ->select('n.id as id,n.shopId,n.title as title,n.startdate,s.name,n.linkstatus, n.url, n.content')
+            ->from("OfferNews n")
+            ->leftJoin("n.shop s")
+            ->where("n.deleted = 0")
+            ->orderBy("n.title ASC")->fetchArray();
+        return $newstickerList;
+    }
 }
