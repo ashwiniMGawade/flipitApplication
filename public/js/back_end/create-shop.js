@@ -223,6 +223,15 @@ function init()
 				toolbar :  'BasicToolbar'  ,
 				height : "300"
 	});
+
+	CKEDITOR.replace('shopCustomText',
+			{
+				//fullPage : true,
+				////extraPlugins : 'wordcount',
+				customConfig : 'config.js' ,  
+				toolbar :  'BasicToolbar'  ,
+				height : "300"
+	});
 	
  
 /*	$('#shopDescription').textareaCount(options3, function(data){
@@ -518,6 +527,27 @@ function addCategory(e,catgory){
 			    	$('#howTouseStatus').val(0);
 			    	$("select[name=shopHowToUsePageId]")
 			    	 .attr('disabled', 'disabled' );
+			    }
+				
+			break;
+
+
+
+
+
+
+
+
+
+
+			case 'customText' :
+				$(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
+				if(status=='on'){
+			    	$('#customText').show();
+			    	$('#showcustomtext').val(1);
+			    }else{
+			    	$('#customText').hide();
+			    	$('#showcustomtext').val(0);
 			    }
 				
 			break;

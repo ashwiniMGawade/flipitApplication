@@ -120,6 +120,11 @@ function init()
 	if ($('#reasontitle3').val() == '') {
 		$('#reasons3').hide();
 	}
+
+	if ($('#showcustomtext').val() == '') {
+		$('#customText').hide();
+	}
+
 	
 	word_count("#shopNotes", __("Short note about the shop length "),"#shopNotesLeft");
 	$('#shopNotes').keyup(function(){
@@ -250,6 +255,14 @@ function init()
 	});
 
  	CKEDITOR.replace( 'shopDescription',
+			{
+				//fullPage : true,
+				////extraPlugins : 'wordcount',
+				customConfig : 'config.js' ,  
+				toolbar :  'BasicToolbar'  ,
+				height : "300"
+	});
+	CKEDITOR.replace( 'shopCustomText',
 			{
 				//fullPage : true,
 				////extraPlugins : 'wordcount',
@@ -531,6 +544,24 @@ function addCategory(e,catgory){
 				
 			break;
 			
+
+
+
+
+
+
+
+			case 'customText' :
+				$(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
+				if(status=='on'){
+			    	$('#customText').show();
+			    	$('#showcustomtext').val(1);
+			    }else{
+			    	$('#customText').hide();
+			    	$('#showcustomtext').val(0);
+			    }
+				
+			break;
 			
 			default:
 				

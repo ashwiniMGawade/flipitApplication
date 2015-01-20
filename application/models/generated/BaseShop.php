@@ -345,11 +345,17 @@ abstract class BaseShop extends Doctrine_Record
         $this->hasColumn('lightboxfirsttext', 'string', 255, array(
              'type' => 'string',
              'length' => '255',
-             ));
+        ));
         $this->hasColumn('lightboxsecondtext', 'string', 255, array(
              'type' => 'string',
              'length' => '255',
-             ));
+        ));
+        $this->hasColumn('customtext', 'blob', null, array(
+             'type' => 'blob',
+        ));
+        $this->hasColumn('showcustomtext', 'boolean', null, array(
+                'type' => 'boolean',
+        ));
     }
 
     public function setUp()

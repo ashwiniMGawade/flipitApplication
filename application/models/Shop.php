@@ -647,7 +647,6 @@ class Shop extends BaseShop
      */
     public function CreateNewShop($shopDetail)
     {
-        //echo "<pre>"; print_r($shopDetail);die;
         $this->name = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopName']);
         $this->permaLink = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
         $this->metaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopMetaDescription']);
@@ -663,6 +662,7 @@ class Shop extends BaseShop
         $this->subTitle =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopSubTitle']);
         $this->overriteTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopOverwriteTitle']);
         $this->shopText = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopDescription']);
+        $this->customtext = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomText']);
         $shopViewCount = isset($shopDetail['shopViewCount']) ? $shopDetail['shopViewCount'] : '0';
         $this->views = BackEnd_Helper_viewHelper::stripSlashesFromString($shopViewCount);
 
@@ -679,7 +679,6 @@ class Shop extends BaseShop
         $this->showChains = BackEnd_Helper_viewHelper::stripSlashesFromString($showChains);
         $strictConfirmation = !empty($shopDetail['strictConfirmation']) ? $shopDetail['strictConfirmation'] : '0';
         $this->strictConfirmation = BackEnd_Helper_viewHelper::stripSlashesFromString($strictConfirmation);
-
         // shop extra properties
         $displayExtraProperties = !empty($shopDetail['displayExtraProperties']) ? $shopDetail['displayExtraProperties'] : '0';
         $this->displayExtraProperties = BackEnd_Helper_viewHelper::stripSlashesFromString($displayExtraProperties);
@@ -719,6 +718,7 @@ class Shop extends BaseShop
             $this->discussions = '1';
         }
 
+        $this->showcustomtext = $shopDetail['showcustomtext'];
         $this->usergenratedcontent = '0';
 
         if(isset($shopDetail['usergenratedchk'])){

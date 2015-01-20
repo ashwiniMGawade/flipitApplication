@@ -510,12 +510,10 @@ class Admin_ShopController extends Zend_Controller_Action
                     ->where("s.id = ?" , $id)
                     ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
 
-
             //var_dump($data) ;
 
             $this->view->data = $data ;
-            //echo "<pre>";
-            //print_r($data); die;
+
 
             $existingCategories  = $data['category'] ;
             $catArray  = array();
