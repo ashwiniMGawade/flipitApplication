@@ -490,4 +490,14 @@ class FrontEnd_Helper_OffersPartialFunctions
         }
         return $siteImage;
     }
+
+    public static function getVerifiedText()
+    {
+        $verifiedText = "
+            <div class='verified-text'>
+                <strong>" . FrontEnd_Helper_viewHelper::__translate('Verified') . "</strong>
+                <span class='glyphicon glyphicon-ok'></span>
+            </div>";
+        return $verifiedText;
+    }
 }

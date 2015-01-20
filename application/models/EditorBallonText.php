@@ -13,7 +13,7 @@ class EditorBallonText extends BaseEditorBallonText
 
     public static function getEditorText($userId)
     {
-        if (!empty($userId)) {
+        /*if (!empty($userId)) {
             $editorTextInformation = Doctrine_Query::create()
                 ->select("e.ballontext")
                 ->from("EditorBallonText e")
@@ -23,6 +23,6 @@ class EditorBallonText extends BaseEditorBallonText
         } else {
             $editorTextInformation = array();
         }
-        return $editorTextInformation;
+        return $editorTextInformation;*/
     }
 }
