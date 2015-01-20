@@ -221,10 +221,11 @@ class Admin_NewstickerController extends Zend_Controller_Action
         $objPHPExcel->getActiveSheet()->setCellValue('F1', $this->view->translate('Description'));
         $column = 2;
         $row = 2;
+
         foreach ($newstickerList as $newsticker) {
-            $status = $this->view->translate('Off');
+            $newstickerStatus = $this->view->translate('Off');
             if ($newsticker['linkstatus'] == true) {
-                $status = $this->view->translate('On');
+                $newstickerStatus = $this->view->translate('On');
             }
             $tickerUrl = '';
             if ($newsticker['url']!= null && $newsticker['url']!='') {
@@ -234,7 +235,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
             $objPHPExcel->getActiveSheet()->setCellValue('A' . $column, $newsticker['title']);
             $objPHPExcel->getActiveSheet()->setCellValue('B' . $column, $newsticker['shop']['name']);
             $objPHPExcel->getActiveSheet()->setCellValue('C' . $column, $startDate);
-            $objPHPExcel->getActiveSheet()->setCellValue('D' . $column, $status);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . $column, $newstickerStatus);
             $objPHPExcel->getActiveSheet()->setCellValue('E' . $column, $tickerUrl);
             $objPHPExcel->getActiveSheet()->setCellValue('F' . $column, $newsticker['content']);
             $column ++;
@@ -256,16 +257,13 @@ class Admin_NewstickerController extends Zend_Controller_Action
                 )
             )
         );
-        
         $objPHPExcel->getActiveSheet()->getStyle('A1:' . 'F1')->applyFromArray($headerStyle);
         $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getAlignment()->setHorizontal(
             PHPExcel_Style_Alignment::HORIZONTAL_CENTER
         );
-       
         $objPHPExcel->getActiveSheet()->getStyle('A1:' . 'F1')->applyFromArray($borderStyle);
         $borderColumn = (intval($column) - 1);
         $objPHPExcel->getActiveSheet()->getStyle('A1:' . 'F' . $borderColumn)->applyFromArray($borderStyle);
-
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
