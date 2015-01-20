@@ -28,6 +28,36 @@ class Page Extends \KC\Entity\Page
         }
     }
 
+    public static function getSpecialPageDetailForMobileMenu()
+    {
+        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerLocale
+        ->select('p.permalink, p.pagetitle')
+        ->from('KC\Entity\Page', 'p')
+        ->where('p.deleted = 0')
+        ->andWhere('p.showinmobilemenu = 1')
+        ->setMaxResults(2);
+        $pageDetail = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $pageDetail;
+    }
+
+    public static function getPageHomeImageByPermalink($permalink)
+    {
+        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerLocale
+            ->select('p.id,homepageimage')
+            ->from('KC\Entity\Page', 'p')
+            ->leftJoin("p.homepageimage", "homepageimage")
+            ->where('p.permalink="'.$permalink.'"');
+        $pageHomeImage = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $imagePath = '';
+        if (!empty($pageHomeImage->homepageimage)) {
+            $imagePath = PUBLIC_PATH_CDN.$pageHomeImage->homepageimage->path
+                .$pageHomeImage->homepageimage->name;
+        }
+        return $imagePath;
+    }
+
     public static function getPageDetailsByPermalink($permalink)
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -259,6 +289,7 @@ class Page Extends \KC\Entity\Page
             ->from('KC\Entity\Page', 'p')
             ->leftJoin('p.logo', 'logo')
             ->leftJoin('p.pageHeaderImageId', 'pageHeaderImage')
+            ->leftJoin("p.homepageimage", "homepageimage")
             ->leftJoin('p.pagewidget', 'pagewidget')
             ->leftJoin('pagewidget.page', 'w')
             ->leftJoin('p.page', 'pa')
@@ -720,6 +751,28 @@ class Page Extends \KC\Entity\Page
                 return false;
             }
         }
+
+
+        if (isset($_FILES['homepageFile']['name']) && $_FILES['homepageFile']['name'] != '') {
+            $result = self::uploadImage('homepageFile');
+            $savePage->pageHomeImageId = 0;
+            if ($result['status'] == '200') {
+                $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
+                $homepageimage  = new \KC\Entity\HomePageImage();
+                $homepageimage->ext = $ext;
+                $homepageimage->path = $result['path'];
+                $homepageimage->name = $result['fileName'];
+                $homepageimage->deleted = 0;
+                $homepageimage->created_at = new \DateTime('now');
+                $homepageimage->updated_at = new \DateTime('now');
+                $entityManagerLocale->persist($homepageimage);
+                $entityManagerLocale->flush();
+                $savePage->pageHomeImageId = $entityManagerLocale->find('KC\Entity\HomePageImage', $homepageimage->getId());
+            } else {
+                return false;
+            }
+        }
+
         if (isset($params['publishDate']) && $params['publishDate']!='') {
             $publishDate= date('Y-m-d', strtotime($params['publishDate']))
                 .' '.date('H:i:s', strtotime($params['publishTimehh']));
@@ -738,7 +791,12 @@ class Page Extends \KC\Entity\Page
         if (isset($params['lockPageStatuschk'])) {
             $savePage->pageLock = 1;
         }
-        isset($params['showSitemapStatuscheck']) ? $savePage->showsitemap = 1 : $savePage->showsitemap = 0;
+        
+        isset($params['showSitemapStatuscheck']) && $params['showSitemapStatuscheck'] == 1
+        ? $savePage->showsitemap = 1 : $savePage->showsitemap = 0;
+        isset($params['showMobileMenuStatuscheck']) && $params['showMobileMenuStatuscheck'] == 1
+        ? $savePage->showinmobilemenu = 1 : $savePage->showinmobilemenu = 0;
+
         if (trim($params['pageTemplate'])!='') {
             $savePage->page = $entityManagerLocale->find('KC\Entity\PageAttribute', $params['pageTemplate']);
         }
@@ -884,7 +942,7 @@ class Page Extends \KC\Entity\Page
             }
 
             $updatePage->enableClickConstraint=0;
-            $updatePage->numberOfClicks = '';
+            $updatePage->numberOfClicks = '0';
 
             if (isset($params['clickCostraintchk'])) {
                 $updatePage->enableClickConstraint = 1;
@@ -976,6 +1034,25 @@ class Page Extends \KC\Entity\Page
                 $entityManagerLocale->persist($pageImage);
                 $entityManagerLocale->flush();
                 $updatePage->pageHeaderImageId =  $entityManagerLocale->find('KC\Entity\Logo', $pageImage->getId());
+            } else {
+                return false;
+            }
+        }
+
+        if (isset($_FILES['homepageFile']['name']) && $_FILES['homepageFile']['name'] != '') {
+            $result = self::uploadImage('homepageFile');
+            if ($result['status'] == '200') {
+                $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
+                $homepageimage  = new \KC\Entity\HomePageImage();
+                $homepageimage->ext = $ext;
+                $homepageimage->path = $result['path'];
+                $homepageimage->name = $result['fileName'];
+                $homepageimage->deleted = 0;
+                $homepageimage->created_at = new \DateTime('now');
+                $homepageimage->updated_at = new \DateTime('now');
+                $entityManagerLocale->persist($homepageimage);
+                $entityManagerLocale->flush();
+                $updatePage->pageHomeImageId = $entityManagerLocale->find('KC\Entity\HomePageImage', $homepageimage->getId());
             } else {
                 return false;
             }
