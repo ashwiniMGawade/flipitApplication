@@ -220,7 +220,8 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
               p.email_header,p.email_footer,
               p.emailperlocale,p.sendername,p.emailsubject,p.testemail,p.showtestimonial,p.testimonial1,
               p.testimonial2,p.testimonial3,p.homepagebanner_path,p.homepagebanner_name,p.homepage_widget_banner_path,
-              p.homepage_widget_banner_name,p.newletter_is_scheduled,p.newletter_status,p.newletter_scheduled_time
+              p.homepage_widget_banner_name,p.newletter_is_scheduled,p.newletter_status,
+              p.newsletter_sent_time, p.newletter_scheduled_time
               '.$localeTimezoneValues
           )
           ->from('KC\Entity\Signupmaxaccount', 'p')
@@ -513,21 +514,24 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
                     "msg" => "Please upload the valid file");
         }
     }
+    
     public static function updateNewsletterSchedulingStatus()
     {
         $date = new DateTime();
         $date->modify("+1 days");
         $date = $date->format('Y-m-d H:i:s');
+        $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
-                    ->set('signupmaxaccount.newletter_scheduled_time', '?', $date)
-                    ->set('signupmaxaccount.newletter_is_scheduled', '?', 0)
-                    ->set('signupmaxaccount.newletter_status', '?', 1)
-                    ->setParameter(1, 1)
-                    ->where('signupmaxaccount.id = ?1')
-                    ->getQuery();
+            ->set('signupmaxaccount.newletter_scheduled_time', '?', $date)
+            ->set('signupmaxaccount.newletter_is_scheduled', '?', 0)
+            ->set('signupmaxaccount.newletter_status', '?', 1)
+            ->set('newsletter_sent_time', '?', $currentDate)
+            ->where('signupmaxaccount.id = 1')
+            ->getQuery();
         $query->execute();
     }
+
     public static function saveScheduledNewsletter($request)
     {
         $scheduledDate = $request->getParam("sendDate", false);
@@ -535,6 +539,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
         $timezone = $request->getParam("timezone", false);
         $scheduledDate = explode('-', $scheduledDate);
         $scheduledDate = $scheduledDate[1].'-'.$scheduledDate[0].'-'.$scheduledDate[2];
+        $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
         $timestamp = date('Y-m-d', strtotime($scheduledDate)).' '.date('H:i:s', strtotime($scheduledTime));
         try {
             $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -557,8 +562,8 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
                     ->set('signupmaxaccount.newletter_scheduled_time', '?', $timestamp)
                     ->set('signupmaxaccount.newletter_is_scheduled', '?', $request->getParam("isScheduled", false))
                     ->set('signupmaxaccount.newletter_status', '?', 0)
-                    ->setParameter(1, 1)
-                    ->where('signupmaxaccount.id = ?1')
+                    ->set('newsletter_sent_time', '?', $currentDate)
+                    ->where('signupmaxaccount.id = 1')
                     ->getQuery();
                 $query->execute();
                 return true;
