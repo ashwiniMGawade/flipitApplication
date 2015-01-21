@@ -33,6 +33,7 @@ var validRules = {
 	shopCustomHeader : __("Custom header looks great"),
 	selecteditors :  __("Editor looks great"),
 	'title[]' : __("Chapter title  looks great"),
+	customtextposition : __("Position looks great"),
 	//deliveryCost : __("Delivery cost looks great"),
 	//Deliverytime : __("Delivery time looks great"),
 	//returnPolicy : __("Return policy looks great")
@@ -68,6 +69,7 @@ var focusRules = {
 	shopCustomHeader : __("Enter Custom header"),
 	selecteditors :  __("Select an editor"),
 	'title[]' : __("Enter chapter title"),
+	customtextposition : __("Enter Position below 10"),
 	//deliveryCost : __("Enter Delivery cost"),
 	//Deliverytime : __("Enter Delivery time"),
 	//returnPolicy : __("Enter Return policy")
@@ -123,6 +125,8 @@ function init()
 
 	if ($('#showcustomtext').val() == '') {
 		$('#customText').hide();
+		$('#customtextposition').hide();
+		
 	}
 
 	
@@ -555,9 +559,11 @@ function addCategory(e,catgory){
 				$(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
 				if(status=='on'){
 			    	$('#customText').show();
+			    	$('#customtextposition').show();
 			    	$('#showcustomtext').val(1);
 			    }else{
 			    	$('#customText').hide();
+			    	$('#customtextposition').hide();
 			    	$('#showcustomtext').val(0);
 			    }
 				
@@ -704,7 +710,10 @@ function validateFormAddNewShop(){
 					selecteditors : {
 						
 						required : true
-					} 
+					},
+					customtextposition : {
+						regex : /^([1-9]|10)$/
+					}
 				},
 				// error messages
 				messages : {
@@ -750,6 +759,9 @@ function validateFormAddNewShop(){
 					selecteditors : {
 						
 						required : __("Please select an editor")
+					},
+					customtextposition :{
+						regex : __("Please enter numeric value less than 10")
 					}
 						
 				},

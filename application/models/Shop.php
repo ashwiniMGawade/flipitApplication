@@ -718,6 +718,7 @@ class Shop extends BaseShop
             $this->discussions = '1';
         }
 
+        $this->customtextposition = $shopDetail['customtextposition'];
         $this->showcustomtext = $shopDetail['showcustomtext'];
         $this->usergenratedcontent = '0';
 
@@ -859,6 +860,9 @@ class Shop extends BaseShop
         }
 
         //call cache function
+
+        $key = '6_topOffers'  . $this->id . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shopDetails_'  . $this->id . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $cacheKeyOfferDetails = 'offerDetails_'  . $this->id . '_list';

@@ -38,6 +38,7 @@ var validRules = {
 	smallLogoFile : __("Main image lightbox! ok"),
 	bigLogoFile : __("Second image lightbox! ok "),
 	'title[]' : __("Chapter title  looks great"),
+	customtextposition : __("Position looks great"),
 	//returnPolicy : "Return policy looks great"
 };
 
@@ -76,6 +77,7 @@ var focusRules = {
 	smallLogoFile : __("Upload main image lightbox"),
 	bigLogoFile : __("Upload second image lightbox"),
 	'title[]' : __("Enter chapter title"),
+	customtextposition : __("Enter Position below 10"),
 	//deliveryCost : "Enter Delivery cost",
 	//Deliverytime : "Enter Delivery time",
 	//returnPolicy : "Enter Return policy"
@@ -544,9 +546,11 @@ function addCategory(e,catgory){
 				$(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
 				if(status=='on'){
 			    	$('#customText').show();
+			    	$('#customtextposition').show();
 			    	$('#showcustomtext').val(1);
 			    }else{
 			    	$('#customText').hide();
+			    	$('#customtextposition').hide();
 			    	$('#showcustomtext').val(0);
 			    }
 				
@@ -680,6 +684,9 @@ function validateFormAddNewShop(){
 					selecteditors : {
 						required : true
 					},
+					customtextposition : {
+						regex : /^([1-9]|10)$/
+					},
 					pageTitle :  
 					{
  						required : function(el)
@@ -807,6 +814,9 @@ function validateFormAddNewShop(){
 					bigLogoFile : {
 						
 						required : __("Please upload second image lightbox")
+					},
+					customtextposition :{
+						regex : __("Please enter numeric value less than 10")
 					}
 						
 				},

@@ -708,7 +708,20 @@ echo $this->headTitle()->append('Edit Shop');?>
                     <div class="mainpage-content-right">
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div class="mainpage-content-right-inner-left-other">
-                        <textarea rows="3" id="shopCustomText" name="shopCustomText"  class="input-xlarge mbot bbot ignore word_count"><?php echo $this->data['customtext'];?></textarea>
+                        <textarea rows="3" id="shopCustomText" name="shopCustomText"  class="input-xlarge mbot bbot ignore word_count"><?php echo $value = !empty($this->data['customtext']) ? $this->data['customtext'] : '';?></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div id="customtextposition" class="mainpage-content-line">
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('Custom text Under Offer number'); ?></strong></label>
+                    </div>
+                    <div class="mainpage-content-right" >
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" class="span3" 
+                            placeholder="<?php echo $this->translate('Custom text Under Offer number'); ?>" 
+                            name="customtextposition"  value="<?php echo $value = !empty($this->data['customtextposition']) ? $this->data['customtextposition'] : '';?>">
                         </div>
                     </div>
                 </div>

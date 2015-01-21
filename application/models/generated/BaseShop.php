@@ -356,6 +356,9 @@ abstract class BaseShop extends Doctrine_Record
         $this->hasColumn('showcustomtext', 'boolean', null, array(
                 'type' => 'boolean',
         ));
+        $this->hasColumn('customtextposition', 'integer', 20, array(
+                'type' => 'integer',
+        ));
     }
 
     public function setUp()
