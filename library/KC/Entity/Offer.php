@@ -85,6 +85,21 @@ class Offer
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    private $extendedoffertitle;
+
+    /**
+     * @ORM\Column(type="string", length=500, nullable=true)
+     */
+    private $offerUrl;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $nickname;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     private $extendedUrl;
 
     /**

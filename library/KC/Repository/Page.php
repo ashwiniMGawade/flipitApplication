@@ -758,7 +758,7 @@ class Page Extends \KC\Entity\Page
             $savePage->pageHomeImageId = 0;
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $homepageimage  = new \KC\Entity\HomePageImage();
+                $homepageimage  = new \KC\Entity\Image();
                 $homepageimage->ext = $ext;
                 $homepageimage->path = $result['path'];
                 $homepageimage->name = $result['fileName'];
@@ -767,7 +767,7 @@ class Page Extends \KC\Entity\Page
                 $homepageimage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($homepageimage);
                 $entityManagerLocale->flush();
-                $savePage->pageHomeImageId = $entityManagerLocale->find('KC\Entity\HomePageImage', $homepageimage->getId());
+                $savePage->pageHomeImageId = $entityManagerLocale->find('KC\Entity\Logo', $homepageimage->getId());
             } else {
                 return false;
             }
@@ -1043,7 +1043,7 @@ class Page Extends \KC\Entity\Page
             $result = self::uploadImage('homepageFile');
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $homepageimage  = new \KC\Entity\HomePageImage();
+                $homepageimage  = new \KC\Entity\Image();
                 $homepageimage->ext = $ext;
                 $homepageimage->path = $result['path'];
                 $homepageimage->name = $result['fileName'];
@@ -1052,7 +1052,7 @@ class Page Extends \KC\Entity\Page
                 $homepageimage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($homepageimage);
                 $entityManagerLocale->flush();
-                $updatePage->pageHomeImageId = $entityManagerLocale->find('KC\Entity\HomePageImage', $homepageimage->getId());
+                $updatePage->pageHomeImageId = $entityManagerLocale->find('KC\Entity\Logo', $homepageimage->getId());
             } else {
                 return false;
             }
