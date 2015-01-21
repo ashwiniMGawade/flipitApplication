@@ -1,6 +1,8 @@
 <?php
 echo $this->minifyHeadLink()->prependStylesheet("/public/css/jquery-ui.min.css");
-echo $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/addsocialcode.js");
+if (APPLICATION_ENV == 'development') {
+    echo $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/addsocialcode.js");
+}
 $socialcodeForm = $this->zendForm;
 foreach ($socialcodeForm->getElements() as $formElement) {
     $formElement->getDecorator('label')->setOption('tag', null);
