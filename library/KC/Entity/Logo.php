@@ -27,6 +27,11 @@ class Logo extends \KC\Entity\Image
      */
     private $shop;
 
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\Page", mappedBy="homepageimage")
+     */
+    private $homepageimage;
+
     public function __get($property)
     {
         return parent::__get($property);

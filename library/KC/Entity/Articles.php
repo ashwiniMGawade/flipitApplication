@@ -81,6 +81,21 @@ class Articles
     private $thumbnailsmallid;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $plusTitle;
+
+    /**
+     * @ORM\Column(type="integer", length=1, nullable=true)
+     */
+    private $featuredImageStatus;
+
+    /**
+     * @ORM\Column(type="integer", length=8, nullable=true)
+     */
+    private $featuredImage;
+    
+    /**
      * @ORM\OneToMany(targetEntity="KC\Entity\ArticleChapter", mappedBy="article")
      */
     private $articleChapter;
@@ -126,6 +141,11 @@ class Articles
      * @ORM\OneToMany(targetEntity="KC\Entity\RefArticleCategory", mappedBy="articles")
      */
     private $refArticleCategory;
+
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\PopularArticles", mappedBy="articles")
+     */
+    private $populararticles;
 
     public function __get($property)
     {
