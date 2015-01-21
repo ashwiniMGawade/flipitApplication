@@ -135,6 +135,11 @@ class Signupmaxaccount
      */
     private $newletter_scheduled_time;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $newsletter_sent_time;
+
     public function __get($property)
     {
         return $this->$property;

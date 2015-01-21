@@ -260,6 +260,11 @@ class Page
     private $offersCount;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $showinmobilemenu;
+
+    /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="page")
      * @ORM\JoinColumn(name="logoid", referencedColumnName="id", unique=true)
      */
@@ -300,6 +305,12 @@ class Page
      * @ORM\OneToMany(targetEntity="KC\Entity\SpecialPagesOffers", mappedBy="pages")
      */
     private $specialPagesOffers;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Logo", inversedBy="homepageimage")
+     * @ORM\JoinColumn(name="pageHomeImageId", referencedColumnName="id")
+     */
+    private $homepageimage;
 
     public function __get($property)
     {
