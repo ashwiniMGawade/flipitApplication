@@ -78,6 +78,14 @@ class LoginController extends Zend_Controller_Action
             $shopIdNameSpace = new Zend_Session_Namespace('shopId');
             if ($shopIdNameSpace->shopId) {
                 $shopName = Shop::getShopName(base64_decode($shopIdNameSpace->shopId));
+				$membersNamespace = new Zend_Session_Namespace('membersOnly');
+                if (isset($membersNamespace->membersOnly) && $membersNamespace->membersOnly == '1') {
+                    $shopInfo = Shop::getShopInformation(base64_decode($shopIdNameSpace->shopId));
+                    $shopPermalink = !empty($shopInfo) ? $shopInfo[0]['permaLink'] : '';
+                } else {
+                    $shopPermalink = FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
+                }
+                $membersNamespace->membersOnly = '';
                 $visitorFavouriteShopStatus = Visitor::getFavoriteShopsForUser(
                     Auth_VisitorAdapter::getIdentity()->id,
                     base64_decode($shopIdNameSpace->shopId)
@@ -93,7 +101,7 @@ class LoginController extends Zend_Controller_Action
                 }
                 $shopIdNameSpace->shopId = '';
                 $message = $shopName. " ".  FrontEnd_Helper_viewHelper::__translate($messageText);
-                $redirectUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
+                $redirectUrl = HTTP_PATH_LOCALE. $shopPermalink;
                 self::addFlashMessage($message, $redirectUrl, 'success');
             } else {
                 $this->_redirect($redirectUrl);
@@ -121,8 +129,8 @@ class LoginController extends Zend_Controller_Action
     public function logoutAction()
     {
         Auth_VisitorAdapter::clearIdentity();
-        setcookie('kc_unique_user_id', "", time() - 64800, '/');
-        setcookie('registered_user', "", time() - 10 * 365 * 24 * 60 * 60, '/');
+        setcookie('kc_unique_user_id', "", time() - (86400 * 3), '/');
+       
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         Zend_Session::namespaceUnset('favouriteShopId');
@@ -287,7 +295,7 @@ class LoginController extends Zend_Controller_Action
             $userid = Auth_VisitorAdapter::getIdentity()->id;
             $obj = new Visitor();
             $obj->updateLoginTime($userid);
-            setcookie('kc_unique_user_id', $userid, time() + 64800, '/');
+            $this->_helper->Login->setUserCookies();
             $url =
                 HTTP_PATH_LOCALE
                 . FrontEnd_Helper_viewHelper::__link('link_inschrijven')
@@ -300,15 +308,44 @@ class LoginController extends Zend_Controller_Action
     #this function used in mandrill
     public function directloginunsubscribeAction()
     {
+		$this->directUnsubscribe();
+    }
+
+    public function directcodealertunsubscribeAction()
+    {
+        $this->directUnsubscribe('codealert');
+    }
+
+    public function directUnsubscribe($type = '')
+    {
         $username = base64_decode($this->getRequest()->getParam("email"));
         $password = $this->getRequest()->getParam("pwd");
-        $updateWeekNewLttr =
-            Doctrine_Query::create()
-            ->update('Visitor')
-            ->set('weeklyNewsLetter', 0)
-            ->where("email = '".$username."'")
-            ->execute();
-        $moduleKey = $this->getRequest()->getParam('lang', null);
+        
+
+        $shopName = Shop::getShopName(base64_decode($this->getRequest()->getParam("shopid")));
+        if ($type == 'codealert') {
+            $message = $shopName.' '.FrontEnd_Helper_viewHelper::__translate('have been removed from your favorite shops');
+            $visitorsId = Visitor::getVisitorDetailsByEmail($username);
+            $visitorsId = !empty($visitorsId) ? $visitorsId[0]['id'] : '';
+            if (isset($visitorsId) && $visitorsId != '') {
+                $updateWeekNewLttr =
+                    Doctrine_Query::create()->delete()
+                        ->from('FavoriteShop fs')
+                        ->where("fs.shopId=" . base64_decode($this->getRequest()->getParam("shopid")))
+                        ->andWhere('fs.visitorId='.$visitorsId)
+                        ->execute();
+            }
+        } else {
+            $message = FrontEnd_Helper_viewHelper::__translate('You are successfully unsubscribed to our newsletter');
+            $updateWeekNewLttr =
+                Doctrine_Query::create()
+                ->update('Visitor')
+                ->set('weeklyNewsLetter', 0)
+                ->where("email = '".$username."'")
+                ->execute();
+        }
+		
+		$moduleKey = $this->getRequest()->getParam('lang', null);
         $data_adapter = new Auth_VisitorAdapter($username, $password);
         $auth = Zend_Auth::getInstance();
         $auth->setStorage(new Zend_Auth_Storage_Session('front_login'));
@@ -317,9 +354,9 @@ class LoginController extends Zend_Controller_Action
             $userid = Auth_VisitorAdapter::getIdentity()->id;
             $obj = new Visitor();
             $obj->updateLoginTime($userid);
-            setcookie('kc_unique_user_id', $userid, time() + 64800, '/');
+            $this->_helper->Login->setUserCookies();
             $flash = $this->_helper->getHelper('FlashMessenger');
-            $message = FrontEnd_Helper_viewHelper::__translate('You are successfully unsubscribed to our newsletter');
+            
             $flash->addMessage(array('success' => $message));
             $this->getResponse()->setHeader('X-Nocache', 'no-cache');
             $this->_helper->redirector(

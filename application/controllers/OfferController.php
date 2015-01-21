@@ -22,25 +22,27 @@ class OfferController extends Zend_Controller_Action
     {
         $pageName = 'top-20';
         $pagePermalink = FrontEnd_Helper_viewHelper::getPagePermalink();
+		$pagePermalink = explode('?', $pagePermalink);
+        $pagePermalink = isset($pagePermalink[0]) ? $pagePermalink[0] : '';
         $pageDetails = \KC\Repository\Page::getPageDetailsFromUrl($pagePermalink);
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
-        $pageDetails = $pageDetails[0];
+
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'page_header'.$pageDetails[0]['id'].'_image',
+            'page_header'.$pageDetails->id.'_image',
             array(
                 'function' => '\KC\Repository\Logo::getPageLogo',
-                'parameters' => array($pageDetails['pageHeaderImageId'])
+                'parameters' => array($pageDetails->pageHeaderImageId)
             )
         );
-        $this->view->pageTitle = isset($pageDetails[0]['pageTitle']) ? $pageDetails[0]['pageTitle'] : '';
+        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->viewHelperObject->getMetaTags(
             $this,
-            isset($pageDetails[0]['pageTitle']) ? $pageDetails[0]['pageTitle'] : '',
-            isset($pageDetails[0]['metaTitle']) ? $pageDetails[0]['metaTitle'] : '',
-            isset($pageDetails[0]['metaDescription']) ? $pageDetails[0]['metaDescription'] : '',
-            isset($pageDetails[0]['permaLink']) ? $pageDetails[0]['permaLink'] : '',
+            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
+            FrontEnd_Helper_viewHelper::__link($pageName),
             FACEBOOK_IMAGE,
-            isset($pageDetails[0]['customHeader']) ? $pageDetails[0]['customHeader'] : ''
+            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
         $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'20_topOffers_list',
@@ -196,32 +198,35 @@ class OfferController extends Zend_Controller_Action
         }
         $pageDetails = $pageDetails[0];
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'page_header'.$pageDetails[0]['id'].'_image',
+            'page_header'.$pageDetails->id.'_image',
             array(
                 'function' => '\KC\Repository\Logo::getPageLogo',
-                'parameters' => array($pageDetails['pageHeaderImageId'])
+                'parameters' => array($pageDetails->pageHeaderImageId)
             )
         );
-        $this->view->pageTitle = isset($pageDetails[0]['pageTitle']) ? $pageDetails[0]['pageTitle'] : '';
-        $this->viewHelperObject->getMetaTags(
-            $this,
-            isset($pageDetails[0]['pageTitle']) ? $pageDetails[0]['pageTitle'] : '',
-            isset($pageDetails[0]['metaTitle']) ? $pageDetails[0]['metaTitle'] : '',
-            isset($pageDetails[0]['metaDescription']) ? $pageDetails[0]['metaDescription'] : '',
-            FrontEnd_Helper_viewHelper::__link('link_nieuw'),
-            FACEBOOK_IMAGE,
-            isset($pageDetails[0]['customHeader']) ? $pageDetails[0]['customHeader'] : ''
-        );
-
+		$this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->actionName = $this->getRequest()->getActionName();
         $this->view->top20PopularOffers = $offers;
-        
+        $this->viewHelperObject->getMetaTags(
+            $this,
+            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
+            FrontEnd_Helper_viewHelper::__link('link_nieuw'),
+            FACEBOOK_IMAGE,
+            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
+        );
+
+
+
+
+       
         $this->view->shopId = '';
         $this->view->controllerName = $params['controller'];
         $this->view->offersType = 'newestOffer';
         $this->view->shopName = 'top20';
-        $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination($offers, $this->_getAllParams(), 20, 3);
+        $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination($offers, $this->_getAllParams(), 20, 9);
         $this->view->offersWithPagination = $offersWithPagination;
         $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'largeSignupForm',

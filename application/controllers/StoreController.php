@@ -42,6 +42,22 @@ class StoreController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($shopPermalink);
         $shopRecordsLimit = 10;
         $shopParams = $this->_getAllParams();
+
+		if (isset($shopParams['popup']) && $shopParams['popup'] != '') {
+            $offerVisiblity = Offer::getOfferVisiblity($shopParams['popup']);
+            $shopInfo = Shop::getShopInformation($this->getRequest()->getParam('id'));
+            if (!Auth_VisitorAdapter::hasIdentity() && $offerVisiblity == 1) {
+                if (!empty($shopInfo) && isset($shopInfo[0]['permaLink'])) {
+                    $this->_redirect(HTTP_PATH_LOCALE. $shopInfo[0]['permaLink']);
+                }
+            }
+            $referer = $_SERVER['HTTP_REFERER'];
+            if ($referer == '') {
+                $this->_redirect(HTTP_PATH_LOCALE. $shopInfo[0]['permaLink']);
+                exit();
+            }
+        }
+
         $currentShopId = $shopParams['id'];
         $shopId = $this->getRequest()->getParam('id');
 
@@ -130,6 +146,11 @@ class StoreController extends Zend_Controller_Action
             $explodedPermalink = explode("/", $shopPermalink);
             $shopPermalink = $explodedPermalink[1];
         }
+		$shopPermalink =  explode("?", $shopPermalink);
+        if (isset($shopPermalink[0])) {
+            $shopPermalink = $shopPermalink[0];
+        }
+        $this->view->storePageUrl = $shopPermalink;
         $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopInformation[0]['permaLink']);
         if ($this->view->currentStoreInformation[0]['discussions'] == 1) {
             $this->view->discussionComments =
@@ -147,7 +168,7 @@ class StoreController extends Zend_Controller_Action
         if ($shopInformation[0]['affliateProgram'] == 0) {
             $numberOfSimilarOffers = 10;
         } else {
-            $numberOfSimilarOffers = 4;
+            $numberOfSimilarOffers = 3;
         }
 
         $similarShopsAndSimilarCategoriesOffers = FrontEnd_Helper_viewHelper::getShopCouponCode(
@@ -178,7 +199,8 @@ class StoreController extends Zend_Controller_Action
                 ),
                 ''
             );
-
+		$contentManagerId = !empty($shopInformation[0]['contentManagerId']) ? $shopInformation[0]['contentManagerId'] : '';
+        $this->view->ballonEditorText = EditorBallonText::getEditorText($contentManagerId);
         $customHeader = isset($shopInformation[0]['customHeader']) ? $shopInformation[0]['customHeader'] : '';
         $this->viewHelperObject->getMetaTags(
             $this,
@@ -227,15 +249,15 @@ class StoreController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
         $pageDetails = KC\Repository\Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         
-        $pageDetails = $pageDetails[0];
+        
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'page_header'.$pageDetails[0]['id'].'_image',
+            'page_header'.$pageDetails->id.'_image',
             array(
                 'function' => 'KC\Repository\Logo::getPageLogo',
-                'parameters' => array($pageDetails['pageHeaderImageId'])
+                'parameters' => array($pageDetails->pageHeaderImageId)
             )
         );
-        $this->view->pageTitle = isset($pageDetails[0]['pageTitle']) ? $pageDetails[0]['pageTitle'] : '';
+        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $allStoresList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'all_shops_list',
@@ -256,12 +278,12 @@ class StoreController extends Zend_Controller_Action
         );
         $this->viewHelperObject->getMetaTags(
             $this,
-            isset($pageDetails[0]['pageTitle']) ? $pageDetails[0]['pageTitle'] : '',
-            isset($pageDetails[0]['metaTitle']) ? $pageDetails[0]['metaTitle'] : '',
-            isset($pageDetails[0]['metaDescription']) ? $pageDetails[0]['metaDescription'] : '',
-            isset($pageDetails[0]['permaLink']) ? $pageDetails[0]['permaLink'] : '',
+            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
+            isset($pageDetails->permaLink) ? $pageDetails->permaLink : '',
             FACEBOOK_IMAGE,
-            isset($pageDetails[0]['customHeader']) ? $pageDetails[0]['customHeader'] : ''
+            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
 
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
@@ -324,7 +346,7 @@ class StoreController extends Zend_Controller_Action
                 $howToGuides[0]['id'])
             )
         );
-        $allOffersInStoreKey = '6_topOffers'.$ShopList;
+        $allOffersInStoreKey = '6_topOffersHowto'.$ShopList;
         $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             $allOffersInStoreKey,
             array('function' => 'FrontEnd_Helper_viewHelper::commonfrontendGetCode',
@@ -402,5 +424,31 @@ class StoreController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
         $this->view->shopId = $this->getRequest()->getParam('shopid');
         $this->view->permalink = $this->getRequest()->getParam('permalink');
+    }
+
+	public function socialcodeAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $shopPermalink = $this->getRequest()->getParam('shopPermalink');
+        $socialcodeForm = new Application_Form_SocialCode();
+        $socialcodeForm->getElement('shopPermalink')->setValue($shopPermalink);
+        $this->view->zendForm = $socialcodeForm;
+        if ($this->getRequest()->isPost()) {
+            if ($socialcodeForm->isValid($this->getRequest()->getPost())) {
+                $socialcode = $socialcodeForm->getValues();
+                UserGeneratedOffer::addOffer($socialcode);
+                $shareCodeStatus = new Zend_Session_Namespace('shareCodeStatus');
+                $shareCodeStatus->shareCodeStatus = true;
+                $this->_redirect(HTTP_PATH_LOCALE. $socialcode['shopPermalink']);
+                exit();
+            } else {
+                $socialcodeForm->highlightErrorElements();
+            }
+        }
+    }
+
+    public function socialcodethanksAction()
+    {
+        $this->_helper->layout()->disableLayout();
     }
 }

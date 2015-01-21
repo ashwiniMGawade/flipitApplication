@@ -37,7 +37,12 @@ class SearchController extends Zend_Controller_Action
             ''
         );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
-        $searchedKeywords = $this->getRequest()->getParam('searchField');
+        
+		$searchedKeywords = strtolower(
+            FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialCharacterAndReplacedWithHyphen(
+                $this->getRequest()->getParam('searchField')
+            )
+        );
         $shopIds = "";
         $shopIds =$this->_helper->Search->getExcludedShopIdsBySearchedKeywords($searchedKeywords);
         $shopsByShopIds = $this->_helper->Search->getshopsByExcludedShopIds($shopIds);
@@ -50,13 +55,15 @@ class SearchController extends Zend_Controller_Action
             true
         );
         $offersBySearchedKeywords = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'offers_by_searchedkeywords',
+            'offers_by_searchedkeywords'.FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter(
+                str_replace(" ", "", $searchedKeywords)
+            ),
             array('function' => 'Offer::searchOffers',
                 'parameters' => array($this->_getAllParams(), $shopIds, 12)),
             true
         );
 
-        if ($searchedKeywords == '') {
+        if (empty($offersBySearchedKeywords) || $searchedKeywords == '') {
             $this->view->popularStores = $popularStores;
             $this->view->offers = array();
         } else {

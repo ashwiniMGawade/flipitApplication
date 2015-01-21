@@ -42,14 +42,14 @@ class CategoryController extends Zend_Controller_Action
                 'category_'.$cacheKey.'_voucherCodes',
                 array(
                     'function' => 'Category::getCategoryVoucherCodes',
-                    'parameters' => array($categoryDetails[0]['id'], 71)
+                    'parameters' => array($categoryDetails[0]['id'])
                 )
             );
             $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination(
                 $categoryVoucherCodes,
                 $this->_getAllParams(),
-                20,
-                4
+               20,
+                9
             );
             $this->view->offersWithPagination = $offersWithPagination;
             $this->view->categoryDetails = $categoryDetails;
@@ -79,6 +79,8 @@ class CategoryController extends Zend_Controller_Action
     public function indexAction()
     {
         $categoryPermalink = FrontEnd_Helper_viewHelper::getPagePermalink();
+        $categoryPermalink = explode('?', $categoryPermalink);
+        $categoryPermalink = isset($categoryPermalink[0]) ? $categoryPermalink[0] : '';
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink);
         $pageDetails = Page::getPageDetailsFromUrl($categoryPermalink);
         $this->viewHelperObject->getMetaTags(

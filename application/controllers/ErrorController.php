@@ -23,10 +23,10 @@ class ErrorController extends Zend_Controller_Action
                 $pageDetails = $this->getPageDetails($pagePermalink, $pageNumber);
                 if (isset($pageDetails['pageType']) && $pageDetails['pageType']=='default') {
                     if ($pageNumber > 0) {
-                        $pageNumber = 4;
+                        $pageNumber = 10;
                     }
                 }
-                if ($pageNumber >= 4) {
+                if ($pageNumber >= 10) {
                     $this->_helper->layout()->disableLayout();
                     FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
                 }
@@ -53,7 +53,7 @@ class ErrorController extends Zend_Controller_Action
                     }
                     $specialPageOffers = FrontEnd_Helper_viewHelper::
                         getRequestedDataBySetGetCache(
-                            'error_specialPage_offers',
+                            'error_specialPage'.$pageDetails->id.'_offers',
                             array(
                                 'function' => 'Offer::getSpecialPageOffers', 'parameters' => array($pageDetails)
                             ),
@@ -64,7 +64,7 @@ class ErrorController extends Zend_Controller_Action
                         $specialPageOffers,
                         $paginationNumber,
                         20,
-                        5
+                        9
                     );
 
                     $frontendViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();

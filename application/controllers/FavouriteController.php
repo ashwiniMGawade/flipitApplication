@@ -45,26 +45,26 @@ class FavouriteController extends Zend_Controller_Action
             } else {
                 $stores = $this->_helper->Favourite->getPopularStores();
             }
-            $this->view->popularShops = FavoriteShop::filterAlreadyFavouriteShops($stores);
-            $this->view->favouriteShops = FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache(
-                'all_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShops',
-                array(
-                    'function' => 'Visitor::getFavoriteShops',
-                    'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
-                )
-            );
+
+            $favouriteShops = $this->_helper->Favourite->getFavoritesStores();
+           
+            $this->view->popularShops = $this->_helper->Favourite->filterAlreadyFavouriteShops($stores, $favouriteShops);
+       
+            $this->view->favouriteShops = $favouriteShops;
+            
+
+
 
             $userDetails = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 'visitor_'.Auth_VisitorAdapter::getIdentity()->id.'_details',
                 array(
-                    'function' => 'Visitor::getUserDetails',
+                    'function' => 'Visitor::getUserFirstName',
                     'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
                 )
             );
             $this->view->userDetails = isset($userDetails[0]) ? $userDetails[0] : '';
-            $this->view->pageCssClass = 'brands-page';
+            $this->view->pageCssClass = 'profile-page';
         } else {
             $this->_redirect('/');
         }
@@ -88,15 +88,73 @@ class FavouriteController extends Zend_Controller_Action
             getRequestedDataBySetGetCache(
                 'visitor_'.Auth_VisitorAdapter::getIdentity()->id.'_details',
                 array(
-                    'function' => 'Visitor::getUserDetails',
+                    'function' => 'Visitor::getUserFirstName',
                     'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
                 )
             );
             $this->view->favouriteShopsOffers = $offers;
             $this->view->userDetails = $userDetails[0];
-            $this->view->pageCssClass = 'youroffers-page';
+            $this->view->pageCssClass = 'profile-page';
         } else {
             $this->_redirect('/');
+		}
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+    }
+	
+	public function sharesocialcodeAction()
+    {
+        $flashMessage = $this->_helper->getHelper('FlashMessenger');
+        $message = $flashMessage->getMessages();
+        $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] : '';
+        $this->view->errorMessage = isset($message[0]['error']) ? $message[0]['error'] : '';
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+        $this->view->pageCssClass = 'social-page';
+
+        $this->view->offers = '';
+        if (Auth_VisitorAdapter::hasIdentity()) {
+            $userDetails = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'visitor_'.Auth_VisitorAdapter::getIdentity()->id.'_details',
+                array(
+                    'function' => 'Visitor::getUserFirstName',
+                    'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
+                )
+            );
+            $this->view->offers = Offer::getNewestOffers(
+                'UserGeneratedOffers',
+                '',
+                '',
+                Auth_VisitorAdapter::getIdentity()->id
+            );
+        }
+        $this->view->userDetails = isset($userDetails[0]) ? $userDetails[0] : '';
+        $socialcodeForm = new Application_Form_SocialCodeSettingForm();
+        $this->view->zendForm = $socialcodeForm;
+        if ($this->getRequest()->isPost()) {
+            if ($socialcodeForm->isValid($this->getRequest()->getPost())) {
+                $socialcode = $socialcodeForm->getValues();
+                $parameters =  array(
+                    'nickname' => $socialcode['nickname'],
+                    'shopId'=> base64_encode($socialcode['store']),
+                    'title'=> $socialcode['title'],
+                    'offerUrl'=> $socialcode['offerUrl'],
+                    'code'=> $socialcode['code'],
+                    'offerDetails'=>$socialcode['offerDetails'],
+                    'expireDate'=>$socialcode['expireDate']
+                );
+                UserGeneratedOffer::addOffer($parameters);
+                $socialcodeForm->reset();
+                $flashMessage->addMessage(
+                    array(
+                        'success' => FrontEnd_Helper_viewHelper::__translate('Thanks for sharing your coupon with the Flipit Community! Our team will check the details and publish the code')
+                    )
+                );
+                $redirectUrl = HTTP_PATH_LOCALE
+                    .FrontEnd_Helper_viewHelper::__link('link_sharesocialcode');
+                $this->_redirect($redirectUrl);
+            } else {
+                $socialcodeForm->highlightErrorElements();
+            }
         }
     }
 }
