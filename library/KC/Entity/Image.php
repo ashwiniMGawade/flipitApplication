@@ -18,7 +18,8 @@ use Doctrine\ORM\Mapping AS ORM;
  *     "ARTCATICON"="KC\Entity\ImageArticleCategoryIcon",
  *     "ARTICON"="KC\Entity\ImageArticlesIcon",
  *     "ARTTHUMB"="KC\Entity\ImageArticlesThumb",
- *     "SCREENSHOT"="KC\Entity\WebsiteScrenshot"
+ *     "SCREENSHOT"="KC\Entity\WebsiteScrenshot",
+ *     "ARTFEATIMG"="KC\Entity\ImageArticleFeaturedImage"
  * }
  * )
  */

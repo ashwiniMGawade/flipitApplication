@@ -260,6 +260,11 @@ class Offer
      */
     private $favoriteOffer;
 
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\SpecialPagesOffers", mappedBy="offers")
+     */
+    private $specialPagesOffers;
+
     public function __get($property)
     {
         return $this->$property;

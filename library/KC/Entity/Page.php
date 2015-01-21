@@ -296,6 +296,11 @@ class Page
      */
     private $page;
 
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\SpecialPagesOffers", mappedBy="pages")
+     */
+    private $specialPagesOffers;
+
     public function __get($property)
     {
         return $this->$property;
