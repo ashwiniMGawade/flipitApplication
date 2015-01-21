@@ -401,7 +401,7 @@ class Offer extends BaseOffer
         $specialPageOffers = Doctrine_Query::create()
         ->select(
             'op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,
-            o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
+            o.discountType,o.userGenerated,o.approved,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
             o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,
             o.updated_at as lastUpdate,s.name,s.refUrl,
             s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path,
@@ -454,9 +454,9 @@ class Offer extends BaseOffer
     {
         $offersConstraintsQuery = Doctrine_Query::create()
         ->select(
-            'o.title,o.couponCodeType,o.discountType,o.totalViewcount as clicks,o.startDate,o.endDate,o.refURL,
+            'o.title, o.userGenerated, o.approved, o.couponCodeType,o.discountType,o.totalViewcount as clicks,o.startDate,o.endDate,o.refURL,
             o.refOfferUrl,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,
-            o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,
+            o.updated_at as lastUpdate, o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,
             fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name,o.authorName'
         )
         ->from('Offer o')

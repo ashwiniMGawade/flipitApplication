@@ -111,32 +111,37 @@ class generateOffersFeedOnCategories
         $currentDate = date("Y-m-d H:i");
         $offers = array();
         $specialListPagesDetails = Page::getSpecialListPages();
-        
         foreach ($specialListPagesDetails as $specialListPagesDetail) {
             $entries = array();
-            if ($specialListPagesDetail['offersCount'] != 0) {
-                $offers = Offer::getSpecialOffersByPage($specialListPagesDetail['id'], $currentDate);
+            $offers = Offer::getSpecialPageOffers($specialListPagesDetail);
+            if (!empty($offers)) {
                 foreach ($offers as $offer) {
                     $shopImage = '<img src="'.$this->_public_cdn_path.ltrim($offer['shop']['logo']['path'], '/').'thum_big_'.$offer['shop']['logo']['name'].'" alt="'.$offer['shop']['logo']['name'].'">';
-                    $offerTermsWithShopImage = isset($offer['termandcondition'][0]) ? $offer['termandcondition'][0] ['terms'].$shopImage : $shopImage;
+                    
+                    $offerTermsWithShopImage = $shopImage;
+                    if (!empty($offer['termandcondition'][0])) {
+                        $offerTermsWithShopImage = isset($offer['termandcondition'][0]['terms'])
+                            ? $offer['termandcondition'][0]['terms'].$shopImage
+                            : $shopImage;
+                    }
                     $entry = array(
-                                'title'       => $offer['title'] ,
-                                'link'        => $this->_hostName . '/' . $offer['shop']['permalink'],
-                                'description' => "{$offerTermsWithShopImage}",
-                                'lastUpdate' =>  strtotime($offer['lastUpdate']),
-                                'guid' => $offer['id'] );
+                        'title'       => $offer['title'] ,
+                        'link'        => $this->_hostName . '/' . $offer['shop']['permalink'],
+                        'description' => "{$offerTermsWithShopImage}",
+                        'lastUpdate' =>  strtotime($offer['lastUpdate']),
+                        'guid' => $offer['id'] );
                     if ($entry) {
                         array_push($entries, $entry);
                     }
                 }
 
                 $feedData = array(
-                        'title'=> FrontEnd_Helper_viewHelper::__form('form_Special Page offers') ,
-                        'link'=> $this->_hostName ,
-                        'language' =>  str_replace('_', '-', Zend_Registry::get('Zend_Locale')) ,
-                        'charset'=>'UTF-8',
-                        'image' => $this->_logo,
-                        'entries'=>$entries
+                    'title'=> FrontEnd_Helper_viewHelper::__form('form_Special Page offers') ,
+                    'link'=> $this->_hostName ,
+                    'language' =>  str_replace('_', '-', Zend_Registry::get('Zend_Locale')) ,
+                    'charset'=>'UTF-8',
+                    'image' => $this->_logo,
+                    'entries'=>$entries
                 );
                 $feed = Zend_Feed::importArray($feedData, 'rss');
                 $rssDirectory = PUBLIC_PATH. $this->_localePath ."rss/";
@@ -144,7 +149,7 @@ class generateOffersFeedOnCategories
                 $offerXml = $rssDirectory. "{$fileName}.xml";
 
                 if (!file_exists($rssDirectory)) {
-                    mkdir($rssDirectory, 0775, TRUE);
+                    mkdir($rssDirectory, 0775, true);
                 }
 
                 if (file_exists($offerXml)) {
