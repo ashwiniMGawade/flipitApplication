@@ -1028,7 +1028,11 @@ EOD;
         return $shopSecondText;
     }
 
+<<<<<<< HEAD
     public static function getEditorText($shopName, $text, $ballonText)
+=======
+    public static function getEditorText($shopName, $text)
+>>>>>>> hotfix/Social_code.js_minified
     {
         $editorText = self::__translate('Hello');
         if (!empty($ballonText)) {
