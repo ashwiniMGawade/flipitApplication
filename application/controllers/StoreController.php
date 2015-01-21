@@ -438,6 +438,8 @@ class StoreController extends Zend_Controller_Action
                 exit();
             } else {
                 $socialcodeForm->highlightErrorElements();
+                $socialcode = $socialcodeForm->getValues();
+                $this->_redirect(HTTP_PATH_LOCALE. $socialcode['shopPermalink']);
             }
         }
     }
