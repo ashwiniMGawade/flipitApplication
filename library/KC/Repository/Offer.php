@@ -110,7 +110,10 @@ class Offer Extends \KC\Entity\Offer
             $commaSepratedCategroyIdValues = implode(', ', $similarCategoriesIds);
             $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $entityManagerUser
-            ->select('o, s, fv, terms, vot, c, img')
+            ->select(
+                'o, s, terms, c, img.id as imageId, img.path, img.name, fv.shopId, fv.visitorId, 
+                fv.id as favoriteId, vot.id as voteId,vot.vote'
+            )
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->leftJoin('s.visitors', 'fv')
@@ -307,11 +310,14 @@ class Offer Extends \KC\Entity\Offer
             ->andWhere('o.discountType = ?2')
             ->setParameter(3, 'NW')
             ->andWhere('o.discountType != ?3')
-            ->setParameter(4, 0)
-            ->andWhere('o.userGenerated = ?4')
             ->setParameter(5, 'MEM')
             ->andWhere('o.Visability != ?5')
             ->orderBy('o.startDate', 'DESC');
+        if ($type == 'UserGeneratedOffers') {
+            $newestCouponCodes->andWhere('o.userGenerated=1 and o.approved="0"');
+        } else {
+            $newestCouponCodes->andWhere('o.userGenerated=0');
+        }
         if ($shopId!='') {
             $query->setParameter(6, $shopId);
             $query->andWhere('s.id = ?6');
@@ -344,10 +350,12 @@ class Offer Extends \KC\Entity\Offer
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = '6_topOffers'  . $shopId . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        $key = 'shop_latestUpdates'  . $shopId . '_list';
+        $key = '4_shopLatestUpdates'  . $shopId . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shop_expiredOffers'  . $shopId . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $shophowtokey = '6_topOffersHowto'  . $shopId . '_list';
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allMoneySavingGuideLists');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allOfferList');
@@ -356,6 +364,7 @@ class Offer Extends \KC\Entity\Offer
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allHomeNewOfferList');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('extended_coupon_details');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
+        self::clearSpecialPagesCache($offerId);
     }
 
     public static function getSpecialPageOffers($specialPage)
@@ -364,6 +373,10 @@ class Offer Extends \KC\Entity\Offer
         $pageRelatedOffers = self::getSpecialOffersByPage($specialPage['id'], $currentDate);
         $constraintsRelatedOffers = self::getOffersByPageConstraints($specialPage, $currentDate);
         $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
+        $pageRelatedOffersAndPageConstraintsOffers = array_merge(
+            \KC\Repository\SpecialPagesOffers::getSpecialPageOffersByPageIdForFrontEnd($specialPage['id']),
+            $pageRelatedOffersAndPageConstraintsOffers
+        );
         $specialOffers = self::getDataForOfferPhtml($pageRelatedOffersAndPageConstraintsOffers, $specialPage);
         return $specialOffers;
     }
@@ -389,15 +402,14 @@ class Offer Extends \KC\Entity\Offer
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('o.votes', 'vot')
         ->leftJoin('s.logo', 'l')
+        ->leftJoin('o.offertermandcondition', 'terms')
         ->leftJoin('s.visitors', 'fv')
         ->where('op.offers ='. $pageId)
         ->andWhere('o.endDate >'."'".$currentDate."'")
         ->andWhere('o.startDate <='."'".$currentDate."'")
-        
         ->andWhere('o.deleted = 0')
         ->andWhere('s.deleted = 0')
         ->andWhere('s.status = 1')
-        ->andWhere('o.discountType ='.$entityManagerUser->expr()->literal('CD'))
         ->andWhere('o.Visability !='.$entityManagerUser->expr()->literal('MEM'))
         ->orderBy('o.exclusiveCode', 'DESC')
         ->addOrderBy('o.startDate', 'DESC');
@@ -427,9 +439,11 @@ class Offer Extends \KC\Entity\Offer
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $offersConstraintsQuery = $entityManagerUser->select(
-            'o.title,o.couponCodeType,o.discountType,o.totalViewcount as clicks,o.startDate as startdate,o.endDate as enddate ,o.refURL as refUrl ,
-            o.refOfferUrl,o.authorId,o.authorName,o.Visability as visability ,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,
-            o.discountvalueType,s.name as shopName,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.name,l.path,fv.id as visitorId, vot.id as voteId, vot.vote, ologo.path, ologo.name'
+            'o.title, o.couponCodeType, o.discountType, o.totalViewcount as clicks ,o.startDate as startdate,
+            o.endDate as enddate, o.refURL as refUrl, o.refOfferUrl,o.authorId,o.authorName,o.Visability as visability,
+            o.couponCode, o.exclusiveCode, o.editorPicks,o.discount, o.discountvalueType, s.name as shopName, s.refUrl,
+            s.actualUrl,s.permaLink as permalink,s.views,l.name,l.path,fv.id as visitorId, vot.id as voteId, vot.vote,
+            ologo.path, ologo.name,o.authorName'
         )
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.logo', 'ologo')
@@ -698,7 +712,8 @@ class Offer Extends \KC\Entity\Offer
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select(
             's.id as shopId,o.id, o.title, o.Visability as visability, o.couponCode as couponcode,
-            o.refOfferUrl as refofferurl,o.endDate as enddate, o.extendedOffer as extendedoffer,o.extendedUrl'
+            o.refOfferUrl as refofferurl, o.endDate as enddate, o.extendedOffer as extendedoffer,o.extendedUrl,
+            o.authorName, o.editorPicks'
         )
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
@@ -802,7 +817,7 @@ class Offer Extends \KC\Entity\Offer
                 o.couponCode as couponcode , o.refOfferUrl as refofferurl,
                 o.startDate as startdate ,o.endDate as enddate, o.exclusiveCode as exclusivecode,
                 o.editorPicks as editorpicks, o.extendedOffer as extendedoffer,o.discount, o.authorId,
-                o.authorName, o.userGenerated, o.approved,fv.id as visitorId,img.path,
+                o.authorName, o.userGenerated, o.approved, o.nickname, fv.id as visitorId,img.path,
                 img.name'
             )
             ->from('KC\Entity\Offer', 'o')
@@ -865,10 +880,15 @@ class Offer Extends \KC\Entity\Offer
             ->setParameter(6, 'MEM')
             ->andWhere('o.Visability != ?6')
             ->andWhere(
-                $entityManagerUser->expr()->orX(
-                    "s.name LIKE '%$searchKeyword%'",
-                    "o.title LIKE '%$searchKeyword%'"
-                )
+                "s.name LIKE '%".mysqli_real_escape_string(
+                    \FrontEnd_Helper_viewHelper::getDbConnectionDetails(),
+                    $searchKeyword
+                )."%' or o.title LIKE '%".mysqli_real_escape_string(
+                    \FrontEnd_Helper_viewHelper::getDbConnectionDetails(),
+                    $searchKeyword
+                )."%'",
+                $searchKeyword,
+                $searchKeyword
             )
             ->orderBy('s.name', 'ASC');
         $shopOffersBySearchedKeywords = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -890,7 +910,8 @@ class Offer Extends \KC\Entity\Offer
             ->setParameter(1, $deletedStatus)
             ->where('o.deleted = ?1')
             ->setParameter(2, 0)
-            ->andWhere('o.userGenerated = ?2');
+            ->andWhere('o.userGenerated = ?2')
+            ->andWhere('o.approved = "0"');
         if ($userRole=='4') {
             $getOffersQuery->setParameter(3, 'DE');
             $getOffersQuery->andWhere('o.Visability =?3');
@@ -905,7 +926,11 @@ class Offer Extends \KC\Entity\Offer
             $getOffersQuery->andWhere("o.couponCode LIKE '%$searchCoupon%'");
         }
         if ($searchCouponType!='') {
-            $getOffersQuery->andWhere('o.discountType ='."'".$searchCouponType."'");
+            if ($searchCouponType != 'EX') {
+                $getOffersQuery->andWhere("o.discountType='".$searchCouponType."'");
+            } else {
+                $getOffersQuery->andWhere("o.extendedOffer = 1");
+            }
         }
 
         $request  = \DataTable_Helper::createSearchRequest(
@@ -989,50 +1014,47 @@ class Offer Extends \KC\Entity\Offer
         ->setParameter(1, $offerId)
         ->where('o.id = ?1');
         $shopData = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        $network = Shop::getAffliateNetworkDetail($shopData['shopId']);
+        $network = \KC\Repository\Shop::getAffliateNetworkDetail($shopData['shopId']);
         if ($checkRefUrl) {
             # retur false if s shop is not associated with any network
-            if (!isset($network['affname'])) {
+            if (! isset($network['affliatenetwork'])) {
                 return false;
             }
 
-            if ($shopData['refUrl'] != "") {
+            if ($shopData['refURL'] != "") {
                 return true ;
 
-            } else if ($shopData['shoprefUrl'] != "") {
+            } else if ($shopData['shop']['refUrl'] != "") {
                 return true;
             } else {
                 return true;
             }
         }
         $subid = "" ;
-        if (isset($network['affname'])) {
+        if (isset($network['affliatenetwork'])) {
             if (!empty($network['subid'])) {
-                $subid = "&". $network['subid'];
-                $clientIP = \FrontEnd_Helper_viewHelper::getRealIpAddress();
-                $clientProperAddress = ip2long($clientIP);
-                # get click detail and replcae A2ASUBID click subid
-                $conversion = \KC\Repository\Conversions::getConversionId(
-                    $offerId,
-                    $clientProperAddress,
-                    'offer'
-                );
-                $subid = str_replace('A2ASUBID', $conversion['subid'], $subid);
+                 $subid = "&". $network['subid'];
+                 $clientIP = \FrontEnd_Helper_viewHelper::getRealIpAddress();
+                 $clientProperAddress = ip2long($clientIP);
+                 # get click detail and replcae A2ASUBID click subid
+                 $conversion = \KC\Repository\Conversions::getConversionId($shopData['id'], $clientProperAddress, 'offer');
+                 $subid = str_replace('A2ASUBID', $conversion['subid'], $subid);
+                $subid = \FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
             }
         }
-        if ($shopData['refUrl'] != "") {
-            $url = $shopData['refUrl'];
+        if ($shopData['refURL'] != "") {
+            $url = $shopData['refURL'];
             $url .= $subid;
 
-        } else if ($shopData['shoprefUrl'] != "") {
+        } else if ($shopData['shop']['refUrl'] != "") {
 
-            $url = $shopData['shoprefUrl'];
+            $url = $shopData['shop']['refUrl'];
             $url .=  $subid;
 
-        } else if ($shopData['actualUrl'] != "") {
-            $url = $shopData['actualUrl'];
+        } else if ($shopData['shop']['actualUrl'] != "") {
+            $url = $shopData['shop']['actualUrl'];
         } else {
-            $urll = $shopData['permalink'];
+            $urll = $shopData['shop']['permalink'];
             $url = HTTP_PATH_LOCALE.$urll;
         }
         return $url;
@@ -1060,12 +1082,12 @@ class Offer Extends \KC\Entity\Offer
         return $OfferDetails;
     }
 
-    public static function getAllOfferOnShop($id, $limit = null, $getExclusiveOnly = false, $includingOffline = false)
+    public static function getAllOfferOnShop($id, $limit = null, $getExclusiveOnly = false, $includingOffline = false, $visibility = false)
     {
         $nowDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
-            ->select('o, s')
+            ->select('o, s, img, vot, t')
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('s.logo', 'img')
@@ -1081,11 +1103,10 @@ class Offer Extends \KC\Entity\Offer
                 ->andWhere('o.startDate <='."'".$nowDate."'");
         }
         
-        $query->andWhere('o.userGenerated = 0')
+        $query->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
         ->andWhere('s.id ='. $id)
         ->andWhere('s.deleted = 0')
         ->andWhere('o.discountType !='.$entityManagerUser->expr()->literal('NW'))
-        ->andWhere('o.Visability != '.$entityManagerUser->expr()->literal('MEM'))
         ->orderBy('o.editorPicks', 'DESC')
         ->addOrderBy('o.exclusiveCode', 'DESC')
         ->addOrderBy('o.discountType', 'ASC')
@@ -1095,6 +1116,10 @@ class Offer Extends \KC\Entity\Offer
 
         if ($getExclusiveOnly) {
             $query = $query->andWhere('o.exclusiveCode = 1');
+        }
+
+        if ($visibility) {
+            $offers = $offers->andWhere('o.Visability != "MEM"');
         }
 
         if ($limit) {
@@ -1141,6 +1166,38 @@ class Offer Extends \KC\Entity\Offer
         $query->setMaxResults($limit);
         $newOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $newOffers;
+    }
+
+    public static function clearSpecialPagesCache($offerID)
+    {
+        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerLocale
+            ->select('r')
+            ->from('KC\Entity\RefOfferPage', 'r')
+            ->where('r.offers = '.$offerID);
+        $specialPagesCacheRefresh = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        if (!empty($specialPagesCacheRefresh)) {
+            foreach ($specialPagesCacheRefresh as $specialPageCacheRefresh) {
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll(
+                    'error_specialPage'.$specialPageCacheRefresh['pageId'].'_offers'
+                );
+            }
+        }
+
+        return true;
+    }
+
+    public static function getOfferVisiblity($offerId)
+    {
+        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerLocale
+            ->select('o.id')
+            ->from("KC\Entity\Offer", "o")
+            ->where("o.Visability ='MEM'")
+            ->andWhere("o.id =".$offerId);
+        $offerVisiblity = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return !empty($offerVisiblity) ? true : false;
     }
     
     public static function getrelatedOffers($shopId)
@@ -1196,7 +1253,9 @@ class Offer Extends \KC\Entity\Offer
 
             $key = '6_topOffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'shop_latestUpdates'  .$u['shopId'] . '_list';
+            $shophowtokey = '6_topOffersHowto'  . $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
+            $key = '4_shopLatestUpdates'  .$u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_expiredOffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -1207,6 +1266,7 @@ class Offer Extends \KC\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+            self::clearSpecialPagesCache($id);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
@@ -1243,17 +1303,21 @@ class Offer Extends \KC\Entity\Offer
             $newcodekey ="all_". "newestcode".$uid ."_list";
             $key = '6_topOffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'shop_latestUpdates'  .$u['shopId'] . '_list';
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $shophowtokey = '6_topOffersHowto'  . $u['shopId'] . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
+            $key = '4_shopLatestUpdates'  .$u['shopId'] . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_expiredOffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'extendedTopOffer_of_'.$u['shopId'];
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'extended_'.
-                \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($u['extendedUrl']).
-                '_couponDetails';
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            
+            if (!empty($u['extendedUrl'])) {
+                $key = 'extended_'.
+                    \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($u['extendedUrl']).
+                    '_couponDetails';
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            }
             $key = 'offer_'.$id.'_details';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
@@ -1263,6 +1327,7 @@ class Offer Extends \KC\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+            self::clearSpecialPagesCache($id);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
@@ -1309,7 +1374,6 @@ class Offer Extends \KC\Entity\Offer
        
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
@@ -1341,7 +1405,9 @@ class Offer Extends \KC\Entity\Offer
             $key = '6_topOffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            $key = 'shop_latestUpdates'  .$u['shopId'] . '_list';
+            $shophowtokey = '6_topOffersHowto'  . $u['shopId'] . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
+            $key = '4_shopLatestUpdates'  .$u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  . $u['shopId'] . '_list';
@@ -1349,7 +1415,7 @@ class Offer Extends \KC\Entity\Offer
 
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
-
+            self::clearSpecialPagesCache($id);
             $key = 'all_widget5_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'all_widget6_list';
@@ -1367,7 +1433,6 @@ class Offer Extends \KC\Entity\Offer
         //call cache function
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
@@ -1385,7 +1450,7 @@ class Offer Extends \KC\Entity\Offer
                 ->from('KC\Entity\Offer', 'o')
                 ->where('o.deleted='.$flag)
                 ->andWhere("o.title LIKE '$keyword%'")
-                ->andWhere('o.userGenerated = 0')
+                ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
                 ->orderBy('o.title', 'ASC')
                 ->setMaxResults(5);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -1463,8 +1528,9 @@ class Offer Extends \KC\Entity\Offer
         return $offerList;
     }
 
-    public static function getOfferDetail($offerId)
+    public static function getOfferDetail($offerId, $type = '')
     {
+        $shopParameters = $type != '' ? ',s.refUrl,s.permalink' : '';
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select(
@@ -1473,7 +1539,7 @@ class Offer Extends \KC\Entity\Offer
             page.id as pageId,tc.content as termsAndconditionContent,category.id as categoryId,img.name as imageName,img.path,news.title as newsTitle,
             news.url, news.content as newsContent, t.id as tilesId, t.path as offerTilesPath,t.name as offerTilesName,t.position,
              s.id as shopId, o.extendedFullDescription,o.discountvalueType, o.refOfferUrl, o.startDate, o.endDate, o.refURL,
-             o.exclusiveCode, o.maxlimit, o.maxcode, o.extendedUrl'
+             o.exclusiveCode, o.maxlimit, o.maxcode, o.extendedUrl'.$shopParameters
         )
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
@@ -1482,9 +1548,13 @@ class Offer Extends \KC\Entity\Offer
         ->leftJoin('p.offers', 'page')
         ->leftJoin('o.offertermandcondition', 'tc')
         ->leftJoin('o.categoryoffres', 'cat')
-        ->leftJoin('cat.offer', 'category')
-        ->leftJoin('o.logo', 'img')
-        ->leftJoin('s.offerNews', 'news')
+        ->leftJoin('cat.offer', 'category');
+        if ($type != '') {
+            $query = $offerDetails->leftJoin('s.logo img');
+        } else {
+            $query = $offerDetails->leftJoin('o.logo img');
+        }
+        $query = $query->leftJoin('s.offerNews', 'news')
         ->leftJoin('o.offerTiles', 't')
         ->addSelect("(SELECT count(cc.status) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status = 0) as used")
         ->addSelect("(SELECT count(ccc.status) FROM KC\Entity\CouponCode ccc WHERE ccc.offer = o.id and ccc.status = 1) as available")
@@ -1801,14 +1871,14 @@ class Offer Extends \KC\Entity\Offer
 
     public static function commongetpopularOffers($type, $limit, $shopId = 0, $userId = "")
     {
-
         $date = date('Y-m-d H:i:s');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select(
             's.id as shopId,s.name,s.refUrl, s.actualUrl, s.permaLink as permalink,terms.content,
             p.id as pageId,o.id,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,
             o.discount,o.couponCodeType,o.userGenerated,o.couponCode,o.refOfferUrl,o.refURL,
-            o.discountType,o.startDate as startdate,o.endDate, img.path as shopImagePath, img.name as shopImageName, fv.id as visitorId,ologo.name as offerLogoName, ologo.path as offerLogoPath,vot.id as voteId,vot.vote'
+            o.discountType,o.startDate as startdate,o.endDate, img.path as shopImagePath, img.name as shopImageName,
+            fv.id as visitorId,ologo.name as offerLogoName, ologo.path as offerLogoPath,vot.id as voteId,vot.vote'
         )
             ->from('KC\Entity\PopularCode', 'p')
             ->leftJoin('p.popularcode', 'o')
@@ -1831,8 +1901,7 @@ class Offer Extends \KC\Entity\Offer
             ->setParameter(1, 'CD')
             ->andWhere('o.discountType = ?1')
             ->setParameter(2, 'MEM')
-            ->andWhere('o.Visability != ?2')
-            ->andWhere('o.userGenerated=0');
+            ->andWhere('o.Visability != ?2');
         if ($shopId != '') {
             $query->andWhere('s.id ='.$shopId);
         }
@@ -2034,7 +2103,7 @@ class Offer Extends \KC\Entity\Offer
             ->select('n')
             ->from('KC\Entity\OfferNews', 'n')
             ->andWhere('n.shop = ' . $shopId)
-            ->orderBy('n.startdate', 'DESC')
+            ->orderBy('n.created_at', 'DESC')
             ->setMaxResults($limit);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
@@ -2140,9 +2209,7 @@ class Offer Extends \KC\Entity\Offer
                 ->andWhere('o.startDate <='."'".$nowDate."'");
         }
 
-        $query= $query->andWhere(
-            '(o.userGenerated=0 and o.approved = 0) or (o.userGenerated = 1 and o.approved = 1)'
-        )
+        $query= $query->andWhere('o.userGenerated=0')
         ->andWhere('s.permaLink='."'".$pLink."'")
         ->andWhere('s.deleted =0')
         ->setParameter(1, 'CD')
@@ -2261,7 +2328,6 @@ class Offer Extends \KC\Entity\Offer
     public static function getMemberonly()
     {
         $date = date('Y-m-d H:i:s');
-        $memOnly = "MEM";
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select(
@@ -2589,11 +2655,9 @@ class Offer Extends \KC\Entity\Offer
         $saveOffer = new \KC\Entity\Offer();
         $entityManagerUser  = \Zend_Registry::get('emLocale');
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
-                
-            if (isset($params['defaultoffercheckbox'])) {     
+            if (isset($params['defaultoffercheckbox'])) {
                 $saveOffer->Visability = 'DE';
                 if ($params['selctedshop']!='') {
-
                     if (intval($params['selctedshop']) > 0) {
                         $saveOffer->shopOffers = $entityManagerUser->find('KC\Entity\Shop', $params['selctedshop']);
                     } else {
@@ -2849,6 +2913,11 @@ class Offer Extends \KC\Entity\Offer
             }
             /***************** End Add news code ********************/
             $offer_id = $saveOffer->getId();
+            if (isset($params['codealertcheckbox']) && $params['codealertcheckbox'] == '1') {
+                $codeAlertShopId = isset($params['selctedshop']) && $params['selctedshop'] != '' ?
+                    $params['selctedshop'] : '';
+                \KC\Repository\CodeAlertQueue::saveCodeAlertQueue($codeAlertShopId, $offer_id);
+            }
             $authorId = self::getAuthorId($offer_id);
 
             $uid = $authorId[0]['authorId'];
@@ -2858,7 +2927,9 @@ class Offer Extends \KC\Entity\Offer
             $key = '6_topOffers'  . intval($params['selctedshop']) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            $key = 'shop_latestUpdates'  . intval($params['selctedshop']) . '_list';
+            $shophowtokey = '6_topOffersHowto'  . intval($params['selctedshop']) . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
+            $key = '4_shopLatestUpdates'  . intval($params['selctedshop']) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  . intval($params['selctedshop']) . '_list';
@@ -2882,6 +2953,7 @@ class Offer Extends \KC\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+            self::clearSpecialPagesCache($offer_id);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
@@ -2927,15 +2999,12 @@ class Offer Extends \KC\Entity\Offer
         $updateOffer->couponCodeType = $params['couponCodeType'];
 
         if (isset($params['couponCodeCheckbox'])) {
-
             $updateOffer->discountType = 'CD';
             $updateOffer->couponCode = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponCode']);
             $updateOffer->discount = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountamount']);
             $updateOffer->discountvalueType = \BackEnd_Helper_viewHelper::stripSlashesFromString(
                 isset($params['discountchk']) ? $params['discountchk'] : 0
             );
-            
-
         } elseif (isset($params['newsCheckbox'])) {
             $updateOffer->discountType = 'NW';
         } elseif (isset($params['saleCheckbox'])) {
@@ -2945,7 +3014,6 @@ class Offer Extends \KC\Entity\Offer
                     ->select('p.position')
                     ->from('KC\Entity\PopularCode', 'p')
                     ->where('p.popularcode = '.$params['offerId']);
-        
             $exist = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             if (!empty($exist)) {
                 KC\Repository\PopularCode::deletePopular($params['offerId'], $exist['position']);
@@ -3032,6 +3100,7 @@ class Offer Extends \KC\Entity\Offer
             // check if offer is extended
             $updateOffer->extendedOffer = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedoffercheckbox']);
             $updateOffer->extendedTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
+            $updateOffer->extendedoffertitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedTitle']);
             $updateOffer->extendedUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferRefurl']);
             $updateOffer->extendedMetaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString(
                 $params['extendedOfferMetadesc']
@@ -3255,13 +3324,13 @@ class Offer Extends \KC\Entity\Offer
             $key = '6_topOffers'  . intval($params['selctedshop']) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            $key = 'shop_latestUpdates'  . intval($params['selctedshop']) . '_list';
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $shophowtokey = '6_topOffersHowto'  . intval($params['selctedshop']) . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
+            $key = '4_shopLatestUpdates_'  . intval($params['selctedshop']) . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  .intval($params['selctedshop']) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-
 
             $key = 'extendedTopOffer_of_'.intval($params['selctedshop']);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -3279,7 +3348,7 @@ class Offer Extends \KC\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-
+            self::clearSpecialPagesCache($offerID);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
@@ -3312,5 +3381,33 @@ class Offer Extends \KC\Entity\Offer
         ->Where('o.extendedUrl = ?1');
         $rp = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $rp;
+    }
+
+    public static function getOfferDetailOnShop($id)
+    {
+        $nowDate = date("Y-m-d H:i");
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select(
+                'o.id,o.authorId,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
+                o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,
+                o.endDate,o.refOfferUrl,o.couponCodeType, o.extendedUrl,l.*,t.*,s.id,s.name,s.permalink as permalink,
+                s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path,
+                img.name,vot.id as voteId,vot.vote'
+            )
+            ->from('KC\Entity\Offer', 'o')
+            ->leftJoin('o.shopOffers', 's')
+            ->leftJoin('o.logo', 'l')
+            ->leftJoin('s.logo', 'img')
+            ->leftJoin('o.offertermandcondition', 'terms')
+            ->leftJoin('o.votes', 'vot')
+            ->leftJoin('o.offerTiles', 't')
+            ->where('o.deleted = 0')
+            ->andWhere('(o.userGenerated = 0 and o.approved = "0") or (o.userGenerated = 1 and o.approved = "1")')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('o.discountType != "NW"')
+            ->andWhere('o.id='.$id);
+        $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $offers;
     }
 }

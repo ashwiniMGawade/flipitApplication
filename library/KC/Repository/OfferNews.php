@@ -20,7 +20,7 @@ class OfferNews extends \KC\Entity\OfferNews
         $savenews->updated_at = new \DateTime('now');
         \Zend_Registry::get('emLocale')->persist($savenews);
         \Zend_Registry::get('emLocale')->flush();
-        $key = 'shop_latestUpdates'  . intval($savenews->shop->id) . '_list';
+        $key = '4_shopLatestUpdates'  . intval($savenews->shop->id) . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         return $savenews->id;
     }
@@ -55,7 +55,7 @@ class OfferNews extends \KC\Entity\OfferNews
            ->where("n.id=" . $id)
            ->getQuery()
            ->execute();
-        $key = 'shop_latestUpdates'  . intval($savenews->shop->id) . '_list';
+        $key = '4_shopLatestUpdates'  . intval($savenews->shop->id) . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
     }
 
@@ -91,7 +91,7 @@ class OfferNews extends \KC\Entity\OfferNews
             $data->updated_at = new \DateTime('now');
             \Zend_Registry::get('emLocale')->persist($data);
             \Zend_Registry::get('emLocale')->flush();
-            $key = 'shop_latestUpdates'  . intval($data->shop->id) . '_list';
+            $key = '4_shopLatestUpdates'  . intval($data->shop->id) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             return $data->id;
     }

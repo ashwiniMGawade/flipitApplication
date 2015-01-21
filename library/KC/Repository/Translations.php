@@ -38,7 +38,8 @@ class Translations Extends \KC\Entity\Translations
 
     public function saveTranslations($translations)
     {
-        $existingTranslation =  self::getExistingTranslation($translations);
+        $translationsAfterRemovingTags = BackEnd_Helper_viewHelper::removeScriptTag($translations);
+        $existingTranslation = self::getExistingTranslation($translationsAfterRemovingTags);
         if (!empty($existingTranslation[0]['id'])) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $queryBuilder->update('KC\Entity\Translations', 't')
@@ -46,7 +47,7 @@ class Translations Extends \KC\Entity\Translations
                     't.translation',
                     "'".mysqli_real_escape_string(
                         \FrontEnd_Helper_viewHelper::getDbConnectionDetails(),
-                        $translations[(string)\Zend_Registry::get('Zend_Locale')]
+                        $translationsAfterRemovingTags[(string)\Zend_Registry::get('Zend_Locale')]
                     )."'"
                 )
                 ->where('t.id = '.$existingTranslation[0]['id'])
@@ -54,8 +55,8 @@ class Translations Extends \KC\Entity\Translations
         } else {
             $entityManagerLocale  = \Zend_Registry::get('emLocale');
             $translation = new \KC\Entity\Translations();
-            $translation->translationKey = $translations['translationKey'];
-            $translation->translation = $translations[(string)\Zend_Registry::get('Zend_Locale')];
+            $translation->translationKey = $translationsAfterRemovingTags['translationKey'];
+            $translation->translation = $translationsAfterRemovingTags[(string)Zend_Registry::get('Zend_Locale')];
             $translation->deleted = 0;
             $translation->created_at = new \DateTime('now');
             $translation->updated_at = new \DateTime('now');

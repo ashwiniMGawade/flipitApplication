@@ -150,6 +150,11 @@ class Visitor
     private $changepasswordrequest;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $codealert;
+
+    /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Conversions", mappedBy="visitor")
      */
     private $conversions;

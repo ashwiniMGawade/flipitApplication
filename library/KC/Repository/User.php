@@ -187,7 +187,7 @@ class User extends \KC\Entity\User
         $addUser->editorText = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['editortext']);
         $addUser->popularKortingscode = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
 
-        $addUser->createdBy = isset(\Auth_StaffAdapter::getIdentity()->id) ? \Auth_StaffAdapter::getIdentity()->id : 0;
+        $addUser->createdBy = isset(\Auth_StaffAdapter::getIdentity()->id) ? \Auth_StaffAdapter::getIdentity()->id : '0';
         $fname = str_replace(' ', '-', $params['firstName']);
         $lname = str_replace(' ', '-', $params['lastName']);
         $addUser->slug = \BackEnd_Helper_viewHelper::stripSlashesFromString(strtolower($fname ."-". $lname));
@@ -211,6 +211,10 @@ class User extends \KC\Entity\User
 
         $entityManagerUser->persist($addUser);
         $entityManagerUser->flush();
+
+        if (!empty($params['content'])) {
+            self::saveEditorBallonText($params, $addUser->getId(), 'add');
+        }
 
         //save user website access
         if (isset($params['websites'])) {
@@ -379,6 +383,10 @@ class User extends \KC\Entity\User
         $entityManagerUser->persist($updateUser);
         $entityManagerUser->flush();
 
+        if (!empty($params['content'])) {
+            self::saveEditorBallonText($params, $updateUser->getId(), 'add');
+        }
+
         $fullName = $params['firstName'] . " " . $params['lastName'];
         // update session if profile is being updated
         if ($updateUser->getId() == \Auth_StaffAdapter::getIdentity()->id) {
@@ -416,8 +424,7 @@ class User extends \KC\Entity\User
                 $entityManagerLocale->flush();
             }
         }
-        //end code of enteresting category in database
-        //save favorite store in database
+        
         if (!empty($params['fevoriteStore'])) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->delete('KC\Entity\Adminfavoriteshp', 'i')
@@ -434,13 +441,9 @@ class User extends \KC\Entity\User
             }
         }
 
-        //call cache function
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
-        //die("test");
-        //$alluserkey ="all_". "users". $params['firstName']. $params['lastName'] ."_list";
-        //FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserkey);
-
+      
         $alluserIdkey ="user_". $updateUser->getId() ."_data";
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserIdkey);
 
@@ -452,7 +455,7 @@ class User extends \KC\Entity\User
 
         $favouriteShopkey ="user_". "favouriteShop". $updateUser->getId() ."_data";
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($favouriteShopkey);
-        //self::updateInDatabase($updateUser->getId(), $fullName, 0);//change name of the author etc
+        self::updateInDatabase($updateUser->getId(), $fullName, 0);
         return array(
           "ret" =>  $updateUser->getId(),
           "status" => self::SUCCESS,
@@ -1045,5 +1048,28 @@ class User extends \KC\Entity\User
         $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 1;');
         unset($databaseConnection);
         return true;
+    }
+
+
+    public static function saveEditorBallonText($params, $userId, $type)
+    {
+        $entityManagerUser  = \Zend_Registry::get('emUser');
+        if ($type == 'update') {
+            $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
+            $query = $queryBuilder->delete('KC\Entity\EditorBallonText', 'e')
+                ->where("e.userid = ".$userId)
+                ->getQuery()->execute();
+        }
+        foreach ($params['content'] as $key => $content) {
+            if (!empty($params['content'][$key])) {
+                $ballonText = new \KC\Entity\EditorBallonText();
+                $ballonText->userid = $userId;
+                $ballonText->ballontext = BackEnd_Helper_viewHelper::stripSlashesFromString($params['content'][$key]);
+                $ballonText->deleted = 0;
+                $ballonText->save();
+                $entityManagerUser->persist($ballonText);
+                $entityManagerUser->flush();
+            }
+        }
     }
 }

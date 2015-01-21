@@ -312,6 +312,17 @@ class Shop
     private $brandingcss;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $lightboxsecondtext;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $lightboxfirsttext;
+
+
+    /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="shop")
      * @ORM\JoinColumn(name="logoId", referencedColumnName="id", unique=true)
      */

@@ -4,6 +4,26 @@ namespace KC\Repository;
 class FavoriteShop extends \KC\Entity\FavoriteShop
 {
     ####################### refactored code ################
+    public static function getVisitorsCountByFavoriteShopId($shopId)
+    {
+        $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('p.visitorId, p.shopId')
+            ->from('\KC\Entity\FavoriteShop', 'p')
+            ->leftJoin("p.visitors", 'v')
+            ->leftJoin("p.shop", 's')
+            ->leftJoin("s.logo", 'l')
+            ->andWhere("p.shop = s.id")
+            ->andWhere("s.status = 1")
+            ->andWhere("s.deleted = 0")
+            ->andWhere("p.shop = ".$shopId)
+            ->andWhere("v.status = 1")
+            ->andWhere("v.codealert = 1")
+            ->orderBy("s.name", "ASC");
+        $shopVisitorInformation = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return !empty($shopVisitorInformation) ? count($shopVisitorInformation) : 0;
+    }
+
     public static function filterAlreadyFavouriteShops($popularShops)
     {
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -28,7 +48,7 @@ class FavoriteShop extends \KC\Entity\FavoriteShop
 
     public static function get_suggestionshops($userid, $flag)
     {
-        $lastdata=FavoriteShop::get_allshops($userid);
+        $lastdata = self::getShopsByVisitorId($userid);
         if (sizeof($lastdata) > 0) {
             for ($i=0; $i < sizeof($lastdata); $i++) {
                 $shopdata[$i]=$lastdata[$i]['shopId'];
@@ -77,7 +97,7 @@ class FavoriteShop extends \KC\Entity\FavoriteShop
         }
     }
 
-    public static function get_allshops($userid)
+    public static function getShopsByVisitorId($userid)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
@@ -120,7 +140,7 @@ class FavoriteShop extends \KC\Entity\FavoriteShop
         } else {
             $shopsuggestionvalues="";
         }
-        $lastdata=FavoriteShop::get_allshops($userid);
+        $lastdata = self::getShopsByVisitorId($userid);
         if (sizeof($lastdata)>0) {
             for ($i=0; $i < sizeof($lastdata); $i++) {
                 $shopdata[$i]=$lastdata[$i]['shopId'];
@@ -264,7 +284,6 @@ class FavoriteShop extends \KC\Entity\FavoriteShop
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('alreadyFavourite_'.$userid.'_shops');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('visitor_'.$userid.'_favouriteShopOffers');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_'.$userid.'_favouriteShops');
-
         return $shop;
     }
 }

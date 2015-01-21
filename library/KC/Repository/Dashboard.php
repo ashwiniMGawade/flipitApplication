@@ -157,6 +157,9 @@ class Dashboard extends \KC\Entity\Dashboard
         }
         $d = $n < 1000000 ? 1000 : 1000000;
         $f = round($n / $d, 1);
+        if ($n > 100000) {
+            return number_format($f) . ($d == 1000 ? '<sub>K</sub>' : 'M');
+        }
         return number_format($f, $f - intval($f) ? 1 : 0, $point, $sep) . ($d == 1000 ? '<sub>K</sub>' : 'M');
     }
 }

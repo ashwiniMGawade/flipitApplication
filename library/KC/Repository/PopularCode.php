@@ -264,7 +264,7 @@ class PopularCode extends \KC\Entity\PopularCode
         $date = date($format);
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-        ->select('o.title as title, o.id as id')
+        ->select('o.title as title, o.id as id, o.userGenerated')
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->where('o.deleted = 0')
@@ -385,6 +385,12 @@ class PopularCode extends \KC\Entity\PopularCode
         $flag = '0';
 
         if (sizeof($Offer) > 0) {
+            $queryBuilderOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $queryBuilderOffer->update('KC\Entity\Offer', 'o')
+            ->set('o.editorPicks', '1')
+            ->where('o.id = '.$id)
+            ->getQuery()->execute();
+
             //check offer exist or not
             $queryBuilderPopularCode = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilderPopularCode
@@ -439,7 +445,20 @@ class PopularCode extends \KC\Entity\PopularCode
     public static function deletePapularCode($id, $position)
     {
         if ($id) {
+            $queryBuilderPopularOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilderPopularOffer
+            ->select('pcode')
+            ->from('KC\Entity\PopularCode', 'pcode')
+            ->where('pcode.id=' . $id)
+            ->setMaxResults(1);
+            $offerDetail = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             
+            $queryBuilderOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $queryBuilderOffer->update('KC\Entity\Offer', 'o')
+            ->set('o.editorPicks', '0')
+            ->where('o.id = '.$offerDetail[0]['offerId'])
+            ->getQuery()->execute();
+
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->delete('KC\Entity\PopularCode', 's')
             ->where('s.id ='.$id)

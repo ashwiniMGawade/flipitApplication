@@ -8,16 +8,18 @@ class MoneySaving Extends \KC\Entity\MoneySaving
         $query = $queryBuilder
         ->select(
             'chap.id as chapterId, chap.content as chapterContent, av.id, sum(av.onload) as pop,
-            a.title, a.permalink, a.metadescription, a.content, at.path, at.name, ai.name, ai.path'
+            a.title, a.permalink, a.metadescription, a.content, at.path, at.name, ai.name, ai.path, afi.name, afi.path'
         )
         ->from('KC\Entity\ArticleViewCount', 'av')
         ->leftJoin('av.articles', 'a')
         ->leftJoin('a.thumbnail', 'at')
+        ->leftJoin('a.articlefeaturedimage', 'afi')
         ->leftJoin('a.articleImage', 'ai')
         ->leftJoin('a.articleChapter', 'chap')
         ->groupBy('av.articles')
         ->orderBy('pop', 'DESC')
-        ->where('a.deleted = 0');
+        ->where('a.deleted = 0')
+        ->andWhere('a.publish = 1');
         if (isset($userId)  && $userId!= "") {
             $query->andWhere('a.authorid ='.$userId.'');
         }
@@ -41,6 +43,7 @@ class MoneySaving Extends \KC\Entity\MoneySaving
             ->leftJoin('a.articleChapter', 'chap')
             ->Where('a.deleted = 0')
             ->andWhere('a.id !='.$articleId)
+            ->andWhere('a.publish = 1')
             ->orderBy('a.publishdate', 'DESC')
             ->setMaxResults($limit);
         $recentlyAddedArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -113,8 +116,8 @@ class MoneySaving Extends \KC\Entity\MoneySaving
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select(
-                'chap.id as chapterId, chap.content as chapterContent, a.id, a.title, a.permalink, a.content,
-                a.authorid, a.authorname, a.created_at, a.publishdate, ai.path as articleImagePath,
+                'chap.id as chapterId, chap.content as chapterContent, a.id, a.title, a.plusTitle, a.permalink, a.content,
+                a.authorid, a.authorname, a.plusTitle, a.created_at, a.publishdate, ai.path as articleImagePath,
                 ai.name as articleImageName, aai.path, aai.name, ac.categorytitlecolor'
             )
             ->from('KC\Entity\Articles', 'a')
@@ -125,6 +128,7 @@ class MoneySaving Extends \KC\Entity\MoneySaving
             ->leftJoin('a.articleChapter', 'chap')
             ->where('ac.id ='.$categoryId)
             ->andWhere('a.deleted = 0')
+            ->andWhere('a.publish = 1')
             ->setMaxResults($limit)
             ->orderBy('a.publishdate', 'DESC');
         $articles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -156,5 +160,28 @@ class MoneySaving Extends \KC\Entity\MoneySaving
         ->setMaxResults($limit);
         $shopMoneySavingGuideArticle = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopMoneySavingGuideArticle;
+    }
+
+    public static function getPopularArticlesAndCategory()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select(
+                'p, chap, a.id, a.title, a.plusTitle, a.permalink, a.content, a.authorid, 
+                a.authorname, a.created_at, a.publishdate, ai.path, ai.name,aai.path, aai.name,
+                ac.categorytitlecolor, ac.name'
+            )
+            ->from('\KC\Entity\PopularArticles', 'p')
+            ->leftJoin('p.articles', 'a')
+            ->leftJoin('a.thumbnail', 'ai')
+            ->leftJoin('a.articleImage', 'aai')
+            ->leftJoin('a.refArticleCategory', 'r')
+            ->leftjoin('a.category', 'ac')
+            ->leftJoin('a.articleChapter', 'chap')
+            ->andWhere('a.deleted = 0')
+            ->andWhere('a.publish = 1')
+            ->orderBy('p.position', 'ASC');
+        $popularArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $popularArticles;
     }
 }

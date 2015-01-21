@@ -34,6 +34,30 @@ class Shop extends \KC\Entity\Shop
         return $categories;
     }
 
+    public static function getPopularStoresForMemeberPortal($limit, $shopId = null)
+    {
+        $currentDate = date('Y-m-d 00:00:00');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->select('p.id, s.name, s.permaLink, img.path as imgpath, img.name as imgname')
+        ->from('KC\Entity\PopularShop', 'p')
+        ->addSelect(
+            "(SELECT COUNT(*) FROM KC\Entity\Offer active WHERE
+            (active.shopOffers = s.id AND active.endDate >= '$currentDate' 
+                AND active.deleted = 0
+            )
+            ) as activeCount"
+        )
+        ->leftJoin('p.popularshops', 's')
+        ->leftJoin('s.logo', 'img')
+        ->where('s.deleted = 0')
+        ->addWhere('s.status = 1')
+        ->orderBy('p.position', 'ASC')
+        ->setMaxResults($limit);
+        $popularStoreData = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $popularStoreData;
+    }
+
     public static function getSimilarShops($shopId, $numberOfShops = 12)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -240,7 +264,7 @@ class Shop extends \KC\Entity\Shop
             $query = $query->addSelect(
                 "(SELECT COUNT(active) FROM KC\Entity\Offer active WHERE
                 (active.shopOffers = s.id AND active.endDate >= '$currentDate' 
-                    AND active.deleted = 0
+                    AND active.deleted = 0 AND active.discountType = 'CD'
                 )
                 ) as activeCount"
             )
@@ -317,6 +341,45 @@ class Shop extends \KC\Entity\Shop
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return isset($shop[0]['name']) ? $shop[0]['name'] : '';
+    }
+
+    public static function getShopLightBoxText($shopId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $shop = $queryBuilder
+            ->select('s.lightboxfirsttext, s.lightboxsecondtext')
+            ->from('KC\Entity\Shop', 's')
+            ->where('s.id='.$shopId)
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $shop[0];
+
+    }
+
+    public static function getShopLogoByShopId($shopId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $shopsInformation = $queryBuilder
+            ->select('s.permaLink, img.path, img.name')
+            ->from("KC\Entity\Shop", "s")
+            ->leftJoin("s.logo", "img")
+            ->where('s.deleted = 0')
+            ->andWhere("s.id =".$shopId)
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return !empty($shopsInformation) ? $shopsInformation[0] : '';
+    }
+
+    public static function getShopInformation($shopId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $shop = $queryBuilder
+            ->select('s.permaLink,s.name')
+            ->from('KC\Entity\Shop', 's')
+            ->where('s.id='.$shopId)
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $shop;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
@@ -593,6 +656,9 @@ class Shop extends \KC\Entity\Shop
             !empty($shopDetail['signupOption']) ? $shopDetail['signupOption'] : '0'
         );
 
+        $shopInfo->lightboxfirsttext = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['lightboxfirsttext']);
+        $shopInfo->lightboxsecondtext = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['lightboxsecondtext']);
+
         if (\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['displayExtraProperties'])) {
             $shopInfo->ideal = \BackEnd_Helper_viewHelper::stripSlashesFromString(
                 !empty($shopDetail['ideal']) ? $shopDetail['ideal'] : 0
@@ -833,6 +899,23 @@ class Shop extends \KC\Entity\Shop
                 }
             }
 
+            if (!empty($shopDetail['reasontitle1']) || !empty($shopDetail['reasontitle2']) || !empty($shopDetail['reasontitle1'])) {
+                $shopReasons = array();
+                $shopReasons['reasontitle1'] = !empty($shopDetail['reasontitle1'])
+                    ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle1']) : '';
+                $shopReasons['reasonsubtitle1'] = !empty($shopDetail['reasonsubtitle1'])
+                    ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle1']) : '';
+                $shopReasons['reasontitle2'] = !empty($shopDetail['reasontitle2'])
+                    ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle2']) : '';
+                $shopReasons['reasonsubtitle2'] = !empty($shopDetail['reasonsubtitle2'])
+                    ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle2']) : '';
+                $shopReasons['reasontitle3'] = !empty($shopDetail['reasontitle3'])
+                    ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle3']) : '';
+                $shopReasons['reasonsubtitle3'] = !empty($shopDetail['reasonsubtitle3'])
+                    ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle3']) : '';
+                \KC\Repository\ShopReasons::saveReasons($shopReasons, $this->id);
+            }
+
             $key = 'shop_similar_shops';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
@@ -1020,11 +1103,6 @@ class Shop extends \KC\Entity\Shop
             \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 100, 50, $path);
             $path = ROOT_PATH . $uploadPath . "thum_medium_store_" . $newName;
             \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 200, 100, $path);
-        }
-
-        if ($file == "websitescreenshot") {
-            $path1 = ROOT_PATH . $uploadPath . "thum_large_" . $newName;
-            \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 450, 0, $path1);
         }
 
         $adapter->addFilter(
@@ -1256,32 +1334,32 @@ class Shop extends \KC\Entity\Shop
         ->where('s.id='.$shopId)
         ->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-        $network = Shop::getAffliateNetworkDetail($shopId);
+        $network = self::getAffliateNetworkDetail($shopId);
 
-        if ($checkRefUrl) {
+       if ($checkRefUrl) {
             # retur false if s shop is not associated with any network
-            if (! isset($network['affname'])) {
-                return false;
+            if (!isset($network['affliatenetwork'])) {
+                return false ;
             }
-            if (isset($data['deepLink']) && $data['deepLink']!=null) {
+            if (isset($data['deepLink']) && $data['deepLink']!= null) {
                 # deeplink is now commetted for the time being, so we always @return false ;
                 return false;
             } elseif (isset($data['refUrl']) && $data['refUrl']!=null) {
-                return true;
+                return true ;
             } else {
-                return true;
+                return true ;
             }
         }
         $subid = "" ;
-        if (isset($network['affname'])) {
+        if (isset($network['affliatenetwork'])) {
             if (!empty($network['subid'])) {
-                 $subid = "&". $network['subid'] ;
-                 $clientIP = \FrontEnd_Helper_viewHelper::getRealIpAddress();
-                 $ip = ip2long($clientIP);
-
-                 # get click detail and replcae A2ASUBID click subid
-                 $conversion = \KC\Repository\Conversions::getConversionId($data['id'], $ip, 'shop');
-                 $subid = str_replace('A2ASUBID', $conversion['subid'], $subid);
+                $subid = "&". $network['subid'] ;
+                $clientIP = \FrontEnd_Helper_viewHelper::getRealIpAddress();
+                $ip = ip2long($clientIP);
+                # get click detail and replcae A2ASUBID click subid
+                $conversion = \KC\Repository\Conversions::getConversionId($data['id'], $ip, 'shop');
+                $subid = str_replace('A2ASUBID', $conversion['subid'], $subid);
+                $subid = \FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
             }
         }
 
@@ -1304,7 +1382,7 @@ class Shop extends \KC\Entity\Shop
         $ip = ip2long($clientIP);
 
         # save conversion detail if an offer is associated with a network
-        if (Shop::getStoreLinks($id, true)) {
+        if (self::getStoreLinks($id, true)) {
             # check for previous cnversion of same ip
             $data = $queryBuilder->select("count(c.id) as exist, c.id")
                 ->from("KC\Entity\Conversions", "c")
@@ -1420,7 +1498,6 @@ class Shop extends \KC\Entity\Shop
 
     public static function changeStatus($params)
     {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $status = $params['status'] == 'offline' ? '0' : '1';
 
         if ($params['status'] == 'offline') {
@@ -1431,18 +1508,26 @@ class Shop extends \KC\Entity\Shop
             $date = null;
         }
 
+        $queryBuilderShop = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilderShop
+        ->select('s.offlineSicne, s.howToUse')
+        ->from('KC\Entity\Shop', 's')
+        ->where('s.id='.$params['id']);
+        $shopDetail = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->update('KC\Entity\Shop', 's')
             ->set('s.status', $queryBuilder->expr()->literal($status))
             ->set('s.offlineSicne', $queryBuilder->expr()->literal($date))
-            ->where('s.id = ?1')
             ->setParameter(1, $params['id'])
+            ->where('s.id = ?1')
             ->getQuery();
         $shop = $query->execute();
         $key = 'shop_similar_shops';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shopDetails_'.$params['id'].'_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        return $date;
+        return array('offlineSince'=>$shopDetail[0]['offlineSicne'], 'howToUse'=>$shopDetail[0]['howToUse']);
     }
 
     public static function getAmountShopsCreatedLastWeek()
