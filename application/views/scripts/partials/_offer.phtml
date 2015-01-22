@@ -196,6 +196,14 @@ foreach ($this->offers as $offer) {
                 .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage=');
         endif;
     endif;
+    if ($offer->shop['showcustomtext'] == 1
+        && $offerCounter == $offer->shop['customtextposition']) { ?>
+        <article class="block">
+            <div class="holder" style="">
+                <?php echo $offer->shop['customtext'];?>
+            </div>
+        </article>
+<?php }
 }
 if ($this->offersType!='extendedOffer') {
     if ($this->offersType == 'newestOffer'
