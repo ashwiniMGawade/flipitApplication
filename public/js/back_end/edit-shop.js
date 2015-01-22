@@ -134,6 +134,11 @@ function init()
 	if ($('#reasontitle5').val() == '') {
 		$('#reasons4').hide();
 	}
+
+    if ($('#showcustomtext').val() == '') {
+        $('#customText').hide();
+        $('#customtextposition').hide();
+    }
 	
 	word_count("#shopNotes", __("Short note about the shop length "),"#shopNotesLeft");
 	$('#shopNotes').keyup(function(){
