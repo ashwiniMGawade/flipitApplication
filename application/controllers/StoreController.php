@@ -113,6 +113,15 @@ class StoreController extends Zend_Controller_Action
                 ''
             );
 
+            $sixShopReasons = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                (string)'shop_sixReasons_'.$ShopList,
+                array(
+                    'function' => 'ShopReasons::getShopReasons',
+                    'parameters' => array($shopId)
+                ),
+                ''
+            );
+
             if (!count($shopInformation) >0) {
                 $localeUrl = HTTP_PATH_LOCALE;
                 $this->_helper->redirector->setCode(301);
@@ -143,6 +152,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->moneySavingGuideArticle = $moneySavingGuideArticle;
         $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->offers = $offers;
+        $this->view->sixShopReasons = $this->_helper->Store->changeIndexOfSixReasons($sixShopReasons);
 
         if ($this->view->currentStoreInformation[0]['affliateProgram']==0 && count($this->view->offers) <=0) {
             $offers = $this->_helper->Store->topStorePopularOffers($shopId, $offers);
@@ -206,8 +216,7 @@ class StoreController extends Zend_Controller_Action
                 ),
                 ''
             );
-        $contentManagerId = !empty($shopInformation[0]['contentManagerId']) ? $shopInformation[0]['contentManagerId'] : '';
-        $this->view->ballonEditorText = EditorBallonText::getEditorText($contentManagerId);
+        $this->view->ballonEditorText = EditorBallonText::getEditorText($shopId);
         $customHeader = isset($shopInformation[0]['customHeader']) ? $shopInformation[0]['customHeader'] : '';
         $this->viewHelperObject->getMetaTags(
             $this,

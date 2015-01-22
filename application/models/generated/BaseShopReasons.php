@@ -32,9 +32,13 @@ abstract class BaseShopReasons extends Doctrine_Record
     public function setUp()
     {
         parent::setUp();
-        $this->hasOne('shopid  as shopid', array(
-                'local' => 'shopid',
-                'foreign' => 'id'));
+        $this->hasOne(
+            'Shop  as shops',
+            array(
+              'local' => 'shopid',
+              'foreign' => 'id'
+            )
+        );
         $timestampable = new Doctrine_Template_Timestampable(
             array(
             'created' =>

@@ -894,6 +894,9 @@ class Shop extends BaseShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popularShops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
+        $shopList = $this->id.'_list';
+        $key = 'shop_sixReasons_'.$shopList;
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
         if(!empty($shopDetail['id'])) {
             $getcategory = Doctrine_Query::create()->select()->from('Shop')->where('id = '.$shopDetail['id'] )->fetchArray();
@@ -910,7 +913,26 @@ class Shop extends BaseShop
             
             $this->refShopRelatedshop->delete();
             $this->save();
-            if (!empty($shopDetail['reasontitle1']) || !empty($shopDetail['reasontitle2']) || !empty($shopDetail['reasontitle1'])) {
+
+            if (!empty($shopDetail['content'])) {
+                if (isset($shopDetail['id']) && $shopDetail['id'] != '') {
+                    $type = 'update';
+                    $shopId = $shopDetail['id'];
+                } else {
+                    $type = 'add';
+                    $shopId = $this->id;
+                }
+
+                self::saveEditorBallonText($shopDetail, $shopId, $type);
+            }
+           
+                if (!empty($shopDetail['reasontitle1'])
+                || !empty($shopDetail['reasontitle2'])
+                || !empty($shopDetail['reasontitle3'])
+                || !empty($shopDetail['reasontitle4'])
+                || !empty($shopDetail['reasontitle5'])
+                || !empty($shopDetail['reasontitle6'])
+                ) {
                 $shopReasons = array();
                 $shopReasons['reasontitle1'] = !empty($shopDetail['reasontitle1'])
                     ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle1']) : '';
@@ -924,6 +946,18 @@ class Shop extends BaseShop
                     ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle3']) : '';
                 $shopReasons['reasonsubtitle3'] = !empty($shopDetail['reasonsubtitle3'])
                     ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle3']) : '';
+                $shopReasons['reasontitle4'] = !empty($shopDetail['reasontitle4'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle4']) : '';
+                $shopReasons['reasonsubtitle4'] = !empty($shopDetail['reasonsubtitle4'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle4']) : '';
+                $shopReasons['reasontitle5'] = !empty($shopDetail['reasontitle4'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle5']) : '';
+                $shopReasons['reasonsubtitle5'] = !empty($shopDetail['reasonsubtitle5'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle5']) : '';
+                $shopReasons['reasontitle6'] = !empty($shopDetail['reasontitle6'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle6']) : '';
+                $shopReasons['reasonsubtitle6'] = !empty($shopDetail['reasonsubtitle6'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle6']) : '';
                 ShopReasons::saveReasons($shopReasons, $this->id);
             }
 
@@ -1999,6 +2033,26 @@ public static function getShopDetail($shopId)
         ->fetchArray(Doctrine::HYDRATE_SINGLE_SCALAR);
 
         return (!empty($brandingCss[0]['brandingcss'])) ? unserialize($brandingCss[0]['brandingcss']) : null;
+    }
+
+    public static function saveEditorBallonText($params, $shopId, $type)
+    {
+        if ($type == 'update') {
+            $delEditorText = Doctrine_Query::create()
+            ->delete("EditorBallonText e")
+            ->where("e.shopid = ".$shopId)
+            ->execute();
+        }
+        $contentInfo = array_map('trim', $params['content']);
+        foreach ($contentInfo as $key => $content) {
+            if (isset($content) && $content != '') {
+                $ballonText = new EditorBallonText();
+                $ballonText->shopid = $shopId;
+                $ballonText->ballontext = BackEnd_Helper_viewHelper::stripSlashesFromString($params['content'][$key]);
+                $ballonText->deleted = 0;
+                $ballonText->save();
+            }
+        }
     }
 
 }

@@ -124,6 +124,17 @@ if($this->shopEditor != null || $this->ballonEditorText != null):
         )
     );
 endif;
+
+$sixShopReasons = '';
+if (!empty($this->sixShopReasons)) {
+    $sixShopReasons = $this->partial(
+        $storeViewPartialPath.'_sixShopReasons.phtml', 
+        array(
+            'shopName' => $this->currentStoreInformation[0]['name'],
+            'reasons'=>$this->sixShopReasons
+        )
+    );
+}
 ?>
 <input type="hidden" name="currentShop" id="currentShop" 
 value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
@@ -141,6 +152,7 @@ endif;
     <?php 
     echo $noMoneyNocodeMessage;
     echo $offers;
+    echo $sixShopReasons;
     echo $similarOffersHeader;
     echo $similarOffers;
     echo $similarShopsAndSimilarCategoriesShops;

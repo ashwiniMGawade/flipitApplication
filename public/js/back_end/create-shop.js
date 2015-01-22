@@ -112,65 +112,90 @@ $(document).ready(init);
 
 function init()
 {
-    jQuery('#shopOverwriteTitle').NobleCount('#shopOverwriteTitleLeft',{
-        max_chars: 68,
-        prefixString : __("Shop overwrite title length ")
-    });
-    
-    jQuery('#shopMetaDescription').NobleCount('#metaTextLeft',{
-        max_chars: 150,
-        prefixString : __("Shop meta description length ")
-    });
-    jQuery('#reasonsubtitle1').NobleCount('#reasonsubtitle1count',{
-        max_chars: 512,
-        prefixString : __("Shop reason sub title1 length ")
-    });
-    jQuery('#reasonsubtitle2').NobleCount('#reasonsubtitle2count',{
-        max_chars: 512,
-        prefixString : __("Shop reason sub title2 length ")
-    });
-    jQuery('#reasonsubtitle3').NobleCount('#reasonsubtitle3count',{
-        max_chars: 512,
-        prefixString : __("Shop reason sub title3 length ")
-    });
-    jQuery('#pagemetaTitle').NobleCount('#pagemetaTitleLeft',{
-        max_chars: 68,
-        prefixString : __("Shop meta title length ")
-    });
-    
-    jQuery('#pagemetaDesc').NobleCount('#pagemetaDescLeft',{
-        max_chars: 150,
-        prefixString : __("Shop page meta description length ")
-    });
+	jQuery('#shopOverwriteTitle').NobleCount('#shopOverwriteTitleLeft',{
+		max_chars: 68,
+		prefixString : __("Shop overwrite title length ")
+	});
+	
+	jQuery('#shopMetaDescription').NobleCount('#metaTextLeft',{
+		max_chars: 150,
+		prefixString : __("Shop meta description length ")
+	});
+	jQuery('#reasonsubtitle1').NobleCount('#reasonsubtitle1count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
+	});
+	jQuery('#reasonsubtitle2').NobleCount('#reasonsubtitle2count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
+	});
+	jQuery('#reasonsubtitle3').NobleCount('#reasonsubtitle3count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
+	});
+	jQuery('#reasonsubtitle4').NobleCount('#reasonsubtitle4count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
+	});
+	jQuery('#reasonsubtitle5').NobleCount('#reasonsubtitle5count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
+	});
+	jQuery('#reasonsubtitle6').NobleCount('#reasonsubtitle6count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
+	});
+	jQuery('#pagemetaTitle').NobleCount('#pagemetaTitleLeft',{
+		max_chars: 68,
+		prefixString : __("Shop meta title length ")
+	});
+	
+	jQuery('#pagemetaDesc').NobleCount('#pagemetaDescLeft',{
+		max_chars: 150,
+		prefixString : __("Shop page meta description length ")
+	});
 
-    
-    $('#addreason').click(function(){
-        $('#reasons2').show();
-        $('#addreason').hide();
-        $('#addreason1').show();
-    });
-    
-    $('#addreason1').click(function(){
-        $('#reasons3').show();
-    });
-    $('#deletereason').click(function(){
-        $('#reasons2').hide();
-        $('#addreason1').hide();
-        $('#addreason').show();
-    });
-    $('#deletereason1').click(function(){
-        $('#reasons3').hide();
-    });
+	$('#addreason2').click(function() {
+		$('#addreason2').hide();
+	});
 
-    $('button#prefillData').click(function(){
-        updateTitleSubtitle();
-    });
-    
-    var options = {
-            'maxCharacterSize': '',
-            'displayFormat' : ''
-    };
-    $('#shopMetaDescription').textareaCount(options, function(data){
+	$('#addreason1').click(function(){
+		$('#reasons3').show();
+		$('#addreason1').hide();
+		$('#addreason2').show();
+		if ($('#reasons4').css('display') == 'block') {
+			$('#addreason2').hide();
+		}
+	});
+	
+	$('#addreason2').click(function(){
+		$('#reasons4').show();
+	});
+
+	$('#deletereason').click(function(){
+		$("#off").addClass("btn-primary").siblings().removeClass("btn-primary");
+		$('#buyReasons').hide();
+	});
+
+	$('#deletereason1').click(function(){
+		$('#reasons3').hide();
+		$('#addreason1').show();
+	});
+
+	$('#deletereason2').click(function(){
+		$('#reasons4').hide();
+		$('#addreason2').show();
+	});
+
+	$('button#prefillData').click(function(){
+		updateTitleSubtitle();
+	});
+	
+	var options = {
+			'maxCharacterSize': '',
+			'displayFormat' : ''
+	};
+	$('#shopMetaDescription').textareaCount(options, function(data){
 
         jQuery('#metaTextLeft').val(__("Shop meta description length ") + (data.input) + __(" characters"));
 
@@ -401,6 +426,43 @@ function addCategory(e,catgory){
          $('#editorName').val(name); 
      }
  }
+
+function getBallonTexthtml(el){
+		editCount = parseInt($(el).attr('rel'));
+		count = editCount != undefined ? editCount + 1 : count;
+		$.ajax({
+			url : HOST_PATH + "admin/shop/addballontext",
+			type : "post",
+			data : {'partialCounter' : count},
+			success : function(data) {
+				$("div#multidiv").append(data);
+				$(el).attr('rel',count);
+				count++ ;
+			}
+		});
+	}
+
+function removeballontexthtml(el) {
+	bootbox.confirm(__("Are you sure you want to delete this Ballon Text ?"),__('No'),__('Yes'),function(r){
+		if(!r){
+			return false;
+		}
+		else{
+			$.ajax({
+				url : HOST_PATH + "admin/shop/deleteballontext",
+				type : "post",
+				data : {'id' : $(el).attr('rel')},
+				success : function(data) {
+					var textNumber = $(el).attr('rel');
+					$(el).parents('div.multidivchild').remove();
+					if (textNumber != '') {
+						window.location.reload(true);
+					}
+				}
+			});
+		}
+	});
+}
  
  /**
   * set status of the deepLink/affiliate/howTouseStatus buttons
@@ -455,16 +517,15 @@ function addCategory(e,catgory){
   */
  
  function setOnOff(e, name ,status){
-     var btn = e.target  ? e.target :  e.srcElement ;
-     
-     switch(name)
-        {
-            case "deepLink" :
-                    
-                 $(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
-                 if(status=='on'){
-                     $('#deepLinkStatus').val(1); 
-                     $("#shopDeepLinkUrl").prop("disabled",false);
+	 var btn = e.target  ? e.target :  e.srcElement ;
+	 switch(name)
+		{
+			case "deepLink" :
+					
+				 $(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
+				 if(status=='on'){
+					 $('#deepLinkStatus').val(1); 
+					 $("#shopDeepLinkUrl").prop("disabled",false);
 
                  }else{
                      $('#deepLinkStatus').val(0); 
@@ -499,49 +560,49 @@ function addCategory(e,catgory){
                 $(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
                 $(btn).addClass("active").siblings().removeClass("active");
                 if(status=='always'){
-                     $('#freeDelivery').val(2);
-                     $('#div-cost').hide();
-                 } else if(status=='starting') {
-                     $('#freeDelivery').val(1);
-                     $('#div-cost').show();
-                     
-                 } else if(status=='none') {
-                     $('#freeDelivery').val(0);
-                     $('#div-cost').show();
-                 } else if(status=='nonebtn') {
-                     $('#freeDelivery').val(3);
-                     $('#div-cost').hide();
-                 }
-                
-            break;  
-            
-            case 'howtouse' :
-                 $(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
-                if(status=='on'){
-                    
-                    $('#howTouseStatus').val(1);
-                     $("select[name=shopHowToUsePageId]")
-                     .removeAttr('disabled');
-                     
-                }else{
-                    
-                    $('#howTouseStatus').val(0);
-                    $("select[name=shopHowToUsePageId]")
-                     .attr('disabled', 'disabled' );
-                }
-                
-            break;
-
-
-
-
-
-
-
-
-
-
-            case 'customText' :
+               	 	 $('#freeDelivery').val(2);
+               	 	 $('#div-cost').hide();
+				 } else if(status=='starting') {
+					 $('#freeDelivery').val(1);
+					 $('#div-cost').show();
+					 
+				 } else if(status=='none') {
+					 $('#freeDelivery').val(0);
+					 $('#div-cost').show();
+				 } else if(status=='nonebtn') {
+					 $('#freeDelivery').val(3);
+					 $('#div-cost').hide();
+				 }
+				
+			break;	
+			
+			case 'howtouse' :
+				 $(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
+				if(status=='on'){
+			    	
+			    	$('#howTouseStatus').val(1);
+			    	 $("select[name=shopHowToUsePageId]")
+			    	 .removeAttr('disabled');
+			    	 
+			    }else{
+			    	
+			    	$('#howTouseStatus').val(0);
+			    	$("select[name=shopHowToUsePageId]")
+			    	 .attr('disabled', 'disabled' );
+			    }
+				
+			break;
+			
+			case 'reasons' :
+				$(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
+				if(status=='on'){
+			    	$('#buyReasons').show();
+			    }else{
+			    	$('#buyReasons').hide();
+			    }
+				
+			break;
+      case 'customText' :
                 $(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
                 if (status=='on') {
                     $('#customText').show();
@@ -552,11 +613,21 @@ function addCategory(e,catgory){
                     $('#customtextposition').hide();
                     $('#showcustomtext').val(0);
                 }
-                
-            break;
-            
-            default:
-                
+
+			default:
+				
+				if(status == 'toggle-btn')
+				{
+					
+					 if($(btn).hasClass('btn-primary'))
+					 {
+						 
+						 $(btn).removeClass('btn-primary');
+						 $("input[ name="+ name +"]:hidden").val(0);
+					 }else{
+					 
+						 $(btn).addClass('btn-primary');
+						 $("input[ name="+ name +"]:hidden").val(1);
                 if(status == 'toggle-btn')
                 {
                     
@@ -582,10 +653,10 @@ function addCategory(e,catgory){
                 $("input[name="+ name + "]").val(val) ;
                 
             
-        }
-    
+          }
+      }
+   }
  }
- 
 
  
 /**
