@@ -351,6 +351,16 @@ class Shop extends BaseShop
         return $shop;
     }
 
+    public static function getShopIdByPermalink($permalink)
+    {
+        $shop = Doctrine_Query::create()
+            ->select('s.id')
+            ->from('Shop s')
+            ->where('s.permaLink='."'$permalink'")
+            ->fetchArray();
+        return isset($shop[0]) ? $shop[0]['id'] : '';
+    }
+
     public function getAllShopNames($keyword = '')
     {
         $query = Doctrine_Query::create()
