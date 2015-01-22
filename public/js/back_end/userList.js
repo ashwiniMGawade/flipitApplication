@@ -646,6 +646,7 @@ jQuery.fn.multiselect = function() {
 		});
 	});
 };
+
 /**
  * delete user from database by id id get from hidden field
  * @author kraj

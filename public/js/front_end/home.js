@@ -1,12 +1,12 @@
 var urlsRequested = [];
-$(document).ready(function(){
+$(document).ready(function() {
     $('.vouchers').hide();
     $('.vouchers:eq(0)').show();
     $('div.tab-content div:gt(0)').hide();
     removeActiveClass();
     $('#div_topOffers').addClass('active-li');
 });
-function showRelatedDiv(element){
+function showRelatedDiv(element) {
     var permalink = $(element).attr('id').split('_');
     var elementDataAttribute = $(element).attr('data');
     if ($.inArray(elementDataAttribute, urlsRequested) < 0) {
@@ -18,7 +18,7 @@ function showRelatedDiv(element){
     $('div#'+$(element).attr('id')).show();
     $('a#'+$(element).attr('id')).addClass('active-li');
 }
-function showTab(element){
+function showTab(element) {
     $('#services_'+element)
     .css({"display":"block","visibility":"visible"}).siblings()
     .css({"display":"none","visibility":"hidden"});
@@ -30,8 +30,7 @@ function removeActiveClass(){
     $('.best-items .categories-block ul li a').removeClass('active-li');
 }
 
-function getDetails(divId, permalink)
-{
+function getDetails(divId, permalink) {
     if(divId!=undefined && divId!='') {
         var ajaxRequestUrl = '';
         switch(divId){

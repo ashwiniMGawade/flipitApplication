@@ -109,17 +109,31 @@ $headerBlock = $frontShopHeaderHelper->getShopHeader(
     $offerTitle = 'storeDetail'
 );
 $shopEditor = '';
-if($this->shopEditor != null):
+if($this->shopEditor != null || $this->ballonEditorText != null):
     $shopEditor = $this->partial(
         $storeViewPartialPath.'_storeEditor.phtml',
         array(
-           'shopEditor' => $this->shopEditor,
+           'shopEditor' => array(
+                 $this->shopEditor,
+                 $this->ballonEditorText
+            ),
            'shop' => $this->currentStoreInformation[0],
            'howToUseGuidePermalink'=>$howToUseGuidePermalink,
            'actualUrl'=>$actualUrl
         )
     );
 endif;
+
+$sixShopReasons = '';
+if (!empty($this->sixShopReasons)) {
+    $sixShopReasons = $this->partial(
+        $storeViewPartialPath.'_sixShopReasons.phtml', 
+        array(
+            'shopName' => $this->currentStoreInformation[0]['name'],
+            'reasons'=>$this->sixShopReasons
+        )
+    );
+}
 ?>
 <input type="hidden" name="currentShop" id="currentShop" 
 value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
@@ -134,6 +148,7 @@ echo $this->esi($this->locale.'store/followbutton?shopid='.$this->currentStoreIn
     <?php 
     echo $noMoneyNocodeMessage;
     echo $offers;
+    echo $sixShopReasons;
     echo $similarOffersHeader;
     echo $similarOffers;
     echo $similarShopsAndSimilarCategoriesShops;

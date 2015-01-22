@@ -1,12 +1,13 @@
-$(document).ready(function(){
+$(document).ready(function() {
     validateSearch();
-$.ui.autocomplete.prototype._renderMenu = function( ul, items ) {
-   var currentSelectedItem = this;
-   $.each( items, function( index, item ) {
+    $.ui.autocomplete.prototype._renderMenu = function( ul, items ) {
+    var currentSelectedItem = this;
+    $.each( items, function( index, item ) {
         if (index < 8)
             {currentSelectedItem._renderItem( ul, item );}
-        });
+    });
 }
+
 $('body').click(function(event){
     var clickedId = event.target.id;
     if (clickedId == "searchFieldBrandHeader") {
@@ -14,17 +15,16 @@ $('body').click(function(event){
     }
 });
 
-
 $("input#searchFieldBrandHeader").autocomplete({
     minLength : 1,
     search: function(event, ui) {
         $('.ajax-autocomplete ul').empty();
     },
     source :  function( request, response ) {
-                var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
-                response( $.grep( shopsJSON, function( item ){
-                return matcher.test( item.label );
-              }) );
+        var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
+        response( $.grep( shopsJSON, function( item ){
+            return matcher.test( item.label );
+        }) );
     },
     select: function(event, ui ) {
         $('form').submit(function() {
@@ -34,7 +34,7 @@ $("input#searchFieldBrandHeader").autocomplete({
     focus: function( event, ui ) {
             $('li.wLi2').removeClass('select');
             $('a#ui-active-menuitem').parents('li').addClass('select');
-           },
+        },
     }).data( "autocomplete" )._renderItem = function( ul, item, url ) {
         url = item.value;
         return $("<li class='wLi2'></li>").data("item.autocomplete", item).append(

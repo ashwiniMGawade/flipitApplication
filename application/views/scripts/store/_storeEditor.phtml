@@ -1,14 +1,14 @@
 <?php
 $authorName = FrontEnd_Helper_AuthorPartialFunctions::
-    getAuthorName($this->shopEditor['firstName'], $this->shopEditor['lastName']);
+    getAuthorName($this->shopEditor[0]['firstName'], $this->shopEditor[0]['lastName']);
 
 $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/"
-                    . $this->shopEditor['slug'];
+                    . $this->shopEditor[0]['slug'];
 $shopHeader = $this->translate('All').' '.$this->shop['name'].' '.$this->translate('deals verified by');
 $shopEditorPath =
 	HTTP_PATH_CDN 
-	.ltrim($this->shopEditor['profileimage']['path'], "/")
-	.'thum_large_widget_' .$this->shopEditor['profileimage']['name'];
+	.ltrim($this->shopEditor[0]['profileimage']['path'], "/")
+	.'thum_large_widget_' .$this->shopEditor[0]['profileimage']['name'];
 $shopAbout = $this->translate('About').' '.$this->shop['name'];
 
 
@@ -27,22 +27,31 @@ $howToUse = $this->partial(
         <div class="deal">
             <div class="deal-holder">
                 <span class="text"><?php echo $shopHeader; ?>
-                    <a href="<?php echo $profileLink;?>">
-                        <span class="name"><?php echo $authorName; ?></span>
-                    </a>
+                    <span class="name"><?php echo $authorName; ?></span>
                 </span>
                 <div class="photo">
                 <?php
                     $editorText = FrontEnd_Helper_viewHelper::getEditorText(
                         $this->shop['name'],
-                        $this->shopEditor['editorText']
+                        $this->shopEditor[0]['editorText'],
+                        $this->shopEditor[1]
                     );
-                ?>
-                    <span id="text-box" class="text-box"><?php echo $editorText ; ?></span>
-                    <a href="<?php echo $profileLink;?>">
-                        <img alt="<?php echo $authorName; ?>" class=""
+                    $i = 0;
+                    if (is_array($editorText)) { ?>
+                         <?php foreach ($editorText as $text) { ?>
+                                <span class = "text-box text-box-ballon" id="text-box-<?php echo $i;?>" style="display:none;"><?php echo $text; ?></span>
+                        <?php 
+                        $i++;
+                        } ?>
+              <?php } else { ?>
+                        <span id="text-box" class="text-box">
+                            <?php echo $editorText;?>
+                        </span>
+              <?php }  ?>
+                    <span>
+                        <img title="<?php echo $authorName; ?>" alt="<?php echo $authorName; ?>" class=""
                         src="<?php echo $shopEditorPath; ?>" width="120" height="120"/>
-                    </a>    
+                    </span>    
                 </div>
             </div>
         </div>

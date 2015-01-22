@@ -1028,10 +1028,15 @@ EOD;
         return $shopSecondText;
     }
 
-    public static function getEditorText($shopName, $text)
+    public static function getEditorText($shopName, $text, $ballonText)
     {
         $editorText = self::__translate('Hello');
-        if (!empty($text)) {
+        if (!empty($ballonText)) {
+            $editorText = array();
+            foreach ($ballonText as $text) {
+                $editorText[] = str_replace('[shop]', $shopName, $text['ballontext']);
+            }
+        } else {
             $editorText = str_replace('[shop]', $shopName, $text);
         }
         return $editorText;
@@ -1041,5 +1046,15 @@ EOD;
     {
         $clientId = str_replace('GOOGLEANALYTICSTRACKINCID', $_COOKIE['_ga'], $subId);
         return $clientId;
+    }
+
+    public static function getCurrentDate()
+    {
+        $currentDate = new Zend_Date();
+        $currentMonth = $currentDate->get(Zend_Date::MONTH);
+        $currentYear = $currentDate->get(Zend_Date::YEAR);
+        $currentDay = $currentDate->get(Zend_Date::DAY);
+        $currentDateFormation = $currentYear.'-'.$currentMonth.'-'.$currentDay;
+        return $currentDateFormation;
     }
 }

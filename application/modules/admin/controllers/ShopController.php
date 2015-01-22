@@ -468,19 +468,24 @@ class Admin_ShopController extends Zend_Controller_Action
         $arr['status'] = '1';
         $category = new Category();
         $this->view->categoryList = $category->getCategoriesInformation();
-
+        $id = $this->getRequest()->getParam('id');
         $site_name = "";
-        if(isset($_COOKIE['site_name'])){
+        if (isset($_COOKIE['site_name'])) {
             $site_name =  $_COOKIE['site_name'];
         }
 
-                // display managers and account managers list
+        //display shop reasons
+        $shopReasons = new ShopReasons();
+        $this->view->shopReasons = $shopReasons->getShopReasons($id);
+        $this->view->ballonData = EditorBallonText::getEditorText($id);
+        // display managers and account managers list
         $users = new User();
         $this->view->MangersList = $users->getManagersLists($site_name);
 
         // display  page's list
         $pages = new Page();
         $this->view->DefaultPagesList = $pages->DefaultPagesList();
+
 
         // display affliate network's list
         $affiliate = new AffliateNetwork();
@@ -490,7 +495,7 @@ class Admin_ShopController extends Zend_Controller_Action
 
         $this->view->affiliateNetworkList = $affiliateNetworkList['aaData'];
 
-        $id = $this->getRequest()->getParam('id');
+        
         if( intval($id) > 0 ) {
                     $data = Doctrine_Query::create()
                     ->from('Shop s')
@@ -551,6 +556,21 @@ class Admin_ShopController extends Zend_Controller_Action
 
         }
     }
+
+    public function deleteshopreasonAction()
+    {
+        $firstFieldName = $this->getRequest()->getParam('firstFieldName');
+        $secondFieldName = $this->getRequest()->getParam('secondFieldName');
+        $thirdFieldName = $this->getRequest()->getParam('thirdFieldName');
+        $forthFieldName = $this->getRequest()->getParam('forthFieldName');
+        $shopId = $this->getRequest()->getParam('shopId');
+        ShopReasons::deleteReasons($firstFieldName, $secondFieldName, $thirdFieldName, $forthFieldName, $shopId);
+        $shopList = $shopId.'_list';
+        $key = 'shop_sixReasons_'.$shopList;
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        exit();
+    }
+
     /**
      * Export show list in excel
      * @author kraj
@@ -1646,5 +1666,24 @@ class Admin_ShopController extends Zend_Controller_Action
         } else {
             $this->_helper->json($ret['offlineSince']);
         }
+    }
+
+    public function addballontextAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        if ($this->getRequest()->getParam('partialCounter') > 0) {
+            $count = $this->getRequest()->getParam('partialCounter');
+            $this->view->partialCounter = $count;
+        }
+    }
+
+    public function deleteballontextAction()
+    {
+        $textId = $this->getRequest()->getParam('id');
+        if (!empty($textId)) {
+            $ballonText = EditorBallonText::deletetext($textId);
+            echo Zend_Json::encode($ballonText);
+        }
+        die;
     }
 }

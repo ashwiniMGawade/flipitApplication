@@ -10,6 +10,7 @@ $(document).ready(function(){
         }
     });
 });
+
 var validator =  null;
 function validateRegistration() {
     validator = $('form#registerForm')

@@ -273,6 +273,7 @@ class User extends BaseUser
             }
         }
         $this->save();
+
         //save interesting category in database
         if (isset($params['selectedCategoryies'])) {
             $connUser = BackEnd_Helper_viewHelper::addConnection();
@@ -496,6 +497,7 @@ class User extends BaseUser
             }
         }
         $this->save();
+
         $fullName = $params['firstName'] . " " . $params['lastName'];
         // update session if profile is being updated
         if ($this->id == Auth_StaffAdapter::getIdentity()->id) {
@@ -533,8 +535,6 @@ class User extends BaseUser
             BackEnd_Helper_viewHelper::closeConnection($connSite);
             $connUser = BackEnd_Helper_viewHelper::addConnection();
         }
-        //end code of enteresting category in database
-        //save favorite store in database
         if (!empty($params['fevoriteStore'])) {
             $connUser = BackEnd_Helper_viewHelper::addConnection();
             BackEnd_Helper_viewHelper::closeConnection($connUser);
@@ -550,26 +550,17 @@ class User extends BaseUser
             BackEnd_Helper_viewHelper::closeConnection($connSite);
             $connUser = BackEnd_Helper_viewHelper::addConnection();
         }
-
-        //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
-        //die("test");
-        //$alluserkey ="all_". "users". $params['firstName']. $params['lastName'] ."_list";
-        //FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserkey);
-
         $alluserIdkey ="user_".$this->id ."_data";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserIdkey);
-
         $key = 'user_'.$this->id.'_details';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
         $interestkey ="all_". "interesting".$this->id."_list";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($interestkey);
-
         $favouriteShopkey ="user_". "favouriteShop".$this->id ."_data";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($favouriteShopkey);
-        self::updateInDatabase($this->id, $fullName, 0);//change name of the author etc
+        self::updateInDatabase($this->id, $fullName, 0);
         return array(
           "ret" => $this->id ,
           "status" => self::SUCCESS,
@@ -1293,4 +1284,6 @@ class User extends BaseUser
         unset($databaseConnection);
         return true;
     }
+
+    
 }

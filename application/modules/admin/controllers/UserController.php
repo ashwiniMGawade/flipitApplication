@@ -618,8 +618,9 @@ class Admin_UserController extends Zend_Controller_Action
          $this->view->catArray = '';
          if(isset($catArray) && count($catArray)>0){
 
-             $this->view->catArray =  $catArray  ;
+            $this->view->catArray =  $catArray;
          }
+
          //pas value on phtml page
          $this->view->categoryList = $categoryList['aaData'] ;
          $this->view->favoritesShop = $favShop;

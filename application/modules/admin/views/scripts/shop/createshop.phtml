@@ -183,7 +183,222 @@ $howToIntroductionText = '';
                   
                 </div>
             </div>
-            
+            <br>
+            <div class="mainpage-content">
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left">
+                        <h3>
+                            <strong><?php echo $this->translate('Ballon Text'); ?></strong>
+                        </h3>
+                    </div>
+                    <div class="mainpage-content-right">&nbsp;</div>
+                </div>         
+                <div id="multidiv" >   
+                    <?php echo $this->partial('shop/addballontext.phtml',array('partialCounter'=>1));?>
+                </div>
+                <div class="mainpage-content-colorbox">
+                    <a href="javascript:;" style="float:right;margin-top: 7px;" onclick="getBallonTexthtml(this)" rel='1'>
+                        <strong><?php echo $this->translate('+ Add another Text'); ?></strong>
+                    </a>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+            <div class="mainpage-content">
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><strong><?php echo $this->translate("add reasons to buy"); ?></strong></div>
+                    <div class="mainpage-content-right">
+                        <div class="btn-group" data-toggle="buttons-checkbox">
+                            <button type="button" class="btn" onClick="setOnOff(event,'reasons','on');$('#buyReasons').removeClass('display-none');"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button id="off" type="button" class="btn btn-primary default" onClick="setOnOff(event,'reasons','off');$('#buyReasons').addClass('display-none')"><?php echo $this->translate('No'); ?></button>
+                          </div>
+                    </div>          
+                </div>
+            </div>
+
+            <div class="mainpage-content" id = "buyReasons" style = "display:none;">
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("6 Reasons to Choose Shop");?></strong></label>
+                    </div>
+                </div>
+                <br/>
+                <div id="reasons">
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <input id="reasontitle1" class="span3 ignore" style="margin-bottom: 0;" type="text" placeholder="<?php echo $this->translate('Shop Reason Title');?>" name="reasontitle1">
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">      
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Sub-Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <textarea id="reasonsubtitle1" class="input-xlarge mbot bbot ignore" name="reasonsubtitle1" rows="3" placeholder="<?php echo $this->translate('Shop Reason Sub Title');?>"></textarea>
+                                <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
+                                <span id="reasonsubtitle1count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
+                            </div>
+                        </div>
+                    </div>    
+
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <input id="reasontitle2" class="span3 ignore" style="margin-bottom: 0;" type="text" placeholder="<?php echo $this->translate('Shop Reason Title');?>" name="reasontitle2">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">  
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Sub-Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <textarea id="reasonsubtitle2" class="input-xlarge mbot bbot ignore" name="reasonsubtitle2" rows="3" placeholder="<?php echo $this->translate('Shop Reason Sub Title');?>"></textarea>
+                                <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
+                                <span id="reasonsubtitle2count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-right">
+                            <div class="coupon-sidebar-content-box-shop mb10">
+                                <button class="btn down" id="addreason1" href="#" type="button"><?php echo $this->translate('Add More Reason');?></button>
+                                <button class="btn" href="#" type="button" id="deletereason"><?php echo $this->translate('Delete Reasons');?></button>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+                <div id="reasons3" style= "display:none;">
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <input id="reasontitle3" class="span3 ignore" style="margin-bottom: 0;" type="text" placeholder="<?php echo $this->translate('Shop Reason Title');?>" name="reasontitle3">
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line"> 
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Sub-Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <textarea id="reasonsubtitle3" class="input-xlarge mbot bbot ignore" name="reasonsubtitle3" rows="3" placeholder="<?php echo $this->translate('Shop Reason Sub Title');?>"></textarea>
+                                <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
+                                <span id="reasonsubtitle3count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <input id="reasontitle4" class="span3 ignore" style="margin-bottom: 0;" type="text" placeholder="<?php echo $this->translate('Shop Reason Title');?>" name="reasontitle4">
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line"> 
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Sub-Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <textarea id="reasonsubtitle4" class="input-xlarge mbot bbot ignore" name="reasonsubtitle4" rows="3" placeholder="<?php echo $this->translate('Shop Reason Sub Title');?>"></textarea>
+                                <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
+                                <span id="reasonsubtitle4count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-right">
+                            <div class="coupon-sidebar-content-box-shop mb10">
+                                <button class="btn down" id="addreason2" href="#" type="button"><?php echo $this->translate('Add More Reason');?></button>
+                                <button class="btn" href="#" type="button" id="deletereason1"><?php echo $this->translate('Delete Reasons');?></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="reasons4" style= "display:none;">
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <input id="reasontitle5" class="span3 ignore" style="margin-bottom: 0;" type="text" placeholder="<?php echo $this->translate('Shop Reason Title');?>" name="reasontitle5">
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line"> 
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Sub-Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <textarea id="reasonsubtitle5" class="input-xlarge mbot bbot ignore" name="reasonsubtitle5" rows="3" placeholder="<?php echo $this->translate('Shop Reason Sub Title');?>"></textarea>
+                                <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
+                                <span id="reasonsubtitle5count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <input id="reasontitle6" class="span3 ignore" style="margin-bottom: 0;" type="text" placeholder="<?php echo $this->translate('Shop Reason Title');?>" name="reasontitle6">
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line"> 
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Sub-Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <textarea id="reasonsubtitle6" class="input-xlarge mbot bbot ignore" name="reasonsubtitle6" rows="3" placeholder="<?php echo $this->translate('Shop Reason Sub Title');?>"></textarea>
+                                <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
+                                <span id="reasonsubtitle6count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-right">
+                            <div class="coupon-sidebar-content-box-shop mb10">
+                                <button class="btn" href="#" type="button" onclick="deleteShopReason(,<?php echo $this->shopReasons[0]['shopid'];?>)" id="deletereason2"><?php echo $this->translate('Delete Reasons');?></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+
+            </div>
+
              <div class="mainpage-content">
             	<div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Similar Shops'); ?></strong></label></div>

@@ -119,7 +119,30 @@ function init()
 		max_chars: 150,
 		prefixString : __("Shop meta description length ")
 	});
-
+	jQuery('#reasonsubtitle1').NobleCount('#reasonsubtitle1count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
+	});
+	jQuery('#reasonsubtitle2').NobleCount('#reasonsubtitle2count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
+	});
+	jQuery('#reasonsubtitle3').NobleCount('#reasonsubtitle3count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
+	});
+	jQuery('#reasonsubtitle4').NobleCount('#reasonsubtitle4count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
+	});
+	jQuery('#reasonsubtitle5').NobleCount('#reasonsubtitle5count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
+	});
+	jQuery('#reasonsubtitle6').NobleCount('#reasonsubtitle6count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title length ")
+	});
 	jQuery('#pagemetaTitle').NobleCount('#pagemetaTitleLeft',{
 		max_chars: 68,
 		prefixString : __("Shop meta title length ")
@@ -130,8 +153,37 @@ function init()
 		prefixString : __("Shop page meta description length ")
 	});
 
+	$('#addreason2').click(function() {
+		$('#addreason2').hide();
+	});
 
- 
+	$('#addreason1').click(function(){
+		$('#reasons3').show();
+		$('#addreason1').hide();
+		$('#addreason2').show();
+		if ($('#reasons4').css('display') == 'block') {
+			$('#addreason2').hide();
+		}
+	});
+	
+	$('#addreason2').click(function(){
+		$('#reasons4').show();
+	});
+
+	$('#deletereason').click(function(){
+		$("#off").addClass("btn-primary").siblings().removeClass("btn-primary");
+		$('#buyReasons').hide();
+	});
+
+	$('#deletereason1').click(function(){
+		$('#reasons3').hide();
+		$('#addreason1').show();
+	});
+
+	$('#deletereason2').click(function(){
+		$('#reasons4').hide();
+		$('#addreason2').show();
+	});
 
 	$('button#prefillData').click(function(){
 		updateTitleSubtitle();
@@ -300,6 +352,7 @@ function init()
 	validateFormAddNewShop();
 }
 
+
 function word_count(field,msg,count) {
 
     var number = 0;
@@ -363,6 +416,43 @@ function addCategory(e,catgory){
 		 $('#editorName').val(name); 
 	 }
  }
+
+function getBallonTexthtml(el){
+		editCount = parseInt($(el).attr('rel'));
+		count = editCount != undefined ? editCount + 1 : count;
+		$.ajax({
+			url : HOST_PATH + "admin/shop/addballontext",
+			type : "post",
+			data : {'partialCounter' : count},
+			success : function(data) {
+				$("div#multidiv").append(data);
+				$(el).attr('rel',count);
+				count++ ;
+			}
+		});
+	}
+
+function removeballontexthtml(el) {
+	bootbox.confirm(__("Are you sure you want to delete this Ballon Text ?"),__('No'),__('Yes'),function(r){
+		if(!r){
+			return false;
+		}
+		else{
+			$.ajax({
+				url : HOST_PATH + "admin/shop/deleteballontext",
+				type : "post",
+				data : {'id' : $(el).attr('rel')},
+				success : function(data) {
+					var textNumber = $(el).attr('rel');
+					$(el).parents('div.multidivchild').remove();
+					if (textNumber != '') {
+						window.location.reload(true);
+					}
+				}
+			});
+		}
+	});
+}
  
  /**
   * set status of the deepLink/affiliate/howTouseStatus buttons
@@ -418,7 +508,6 @@ function addCategory(e,catgory){
  
  function setOnOff(e, name ,status){
 	 var btn = e.target  ? e.target :  e.srcElement ;
-	 
 	 switch(name)
 		{
 			case "deepLink" :
@@ -494,6 +583,17 @@ function addCategory(e,catgory){
 				
 			break;
 			
+			case 'reasons' :
+				$(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
+				if(status=='on'){
+			    	$('#buyReasons').show();
+			    }else{
+			    	$('#buyReasons').hide();
+			    }
+				
+			break;
+
+
 			default:
 				
 				if(status == 'toggle-btn')

@@ -178,6 +178,9 @@ abstract class BaseSignupmaxaccount extends Doctrine_Record
              'notnull' => true,
              'autoincrement' => false,
              ));
+        $this->hasColumn('newsletter_sent_time', 'timestamp', 20, array(
+                'type'   => 'timestamp'
+        ));
     }
 
     public function setUp()

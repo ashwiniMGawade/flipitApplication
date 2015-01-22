@@ -145,7 +145,23 @@ foreach ($this->offers as $offer) {
     } else {
             $style = 'style="display:block;"';
     }
+    if ($offer->editorPicks == 1) {
     ?>
+        <hr class="alt2">
+        <div class="recommended-outerDiv">
+            <div class="recommended-arrow"></div>
+            <div class="recommendedOffer">
+                <span>
+                    <img src="<?php echo HTTP_PATH.'public/images/rec-thumb.png';?>" class="recommended-thumb" alt="thumb">
+                    <?php echo $this->translate('Recommended by staff');?>
+                </span>
+                <?php
+                $explodeEditorName = explode(' ', $this->shop['contentManagerName']);
+                $editorName = !empty($explodeEditorName[0]) ? $explodeEditorName[0] : ''; 
+                echo ' - '.ucfirst($editorName).' '.$this->translate('recommended this code');?>
+            </div>
+        </div>
+    <?php } ?>    
         <div class="offer-box" id="websiteOfferLink<?php echo $offer->id ;?>" <?php echo $style;?>>
             <hr class="alt2">
             <div class="offer">
