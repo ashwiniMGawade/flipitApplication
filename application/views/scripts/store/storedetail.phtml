@@ -158,16 +158,14 @@ echo $this->esi($this->locale.'store/followbutton?shopid='.$this->currentStoreIn
         echo $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
             .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
     endif;
-    $shareCodeStatus = new Zend_Session_Namespace('shareCodeStatus');
-    if ($shareCodeStatus->shareCodeStatus):
+    
+    if ($this->shareCodeStatus):
         echo $this->esi($this->locale.'store/socialcodethanks');
-        Zend_Session::namespaceUnset('shareCodeStatus');
     else :
         echo $this->esi(
             $this->locale.'store/socialcode?shopPermalink='
             .$this->currentStoreInformation[0]['permaLink']
         );
-        Zend_Session::namespaceUnset('shareCodeStatus');
     endif;
     ?>
     </aside>
