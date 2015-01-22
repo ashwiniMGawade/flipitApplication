@@ -34,6 +34,29 @@ class FrontEnd_Helper_Mailer {
                 )
             );
         $directLoginAndUnsubscribeLinks = !empty($directlinks) ? $directlinks : '';
+        if (!empty($pathConstants)) {
+            if (!isset($pathConstants['exportScript'])) {
+                $email = Settings::getEmailSettings('sender_email_address');
+                $name = Settings::getEmailSettings('sender_name');
+                $fromEmail = !empty($email) ? $email : $fromEmail;
+                $fromName = !empty($name) ? $name :  $fromName;
+            }
+        }
+
+        $message = array(
+            'subject'    => $subject,
+            'from_email' => $fromEmail,
+            'from_name'  => $fromName,
+            'to'         => $to,
+            'inline_css' => true,
+            "recipient_metadata" => $recipientMetaData,
+            'merge_vars' => $directLoginAndUnsubscribeLinks
+        );
+
+        $emailHeader = array(
+            'name'    => 'header',
+            'content' => $headerText
+        );
 
         if (!empty($pathConstants)) {
             $siteUrl = $pathConstants['httpPathLocale'];
@@ -45,38 +68,33 @@ class FrontEnd_Helper_Mailer {
             $locale = LOCALE;
         }
 
-        $message = array(
-                        'subject'    => $subject,
-                        'from_email' => $fromEmail,
-                        'from_name'  => $fromName,
-                        'to'         => $to,
-                        'inline_css' => true,
-                        "recipient_metadata" => $recipientMetaData,
-                        'merge_vars' => $directLoginAndUnsubscribeLinks
-                    );
-
-        $emailHeader = array(
-                        'name'    => 'header',
-                        'content' => $headerText
-                        );
-
-        $basePath = new Zend_View();
-        $basePath->setBasePath(APPLICATION_PATH . '/views/');
         $footer = array(
-                        'name'    => 'footer',
-                        'content' =>  $basePath->partial(
-                            'emails/footer.phtml',
-                            array(
-                                'httpPathLocale' => $siteUrl,
-                                'httpPath' => $httpPath,
-                                'locale' => $locale
-                            )
-                        ),
-                        array(
-                            'siteUrl' => $siteUrl
-                        )
-                    );
-
+            'name'    => 'footer',
+            'content' =>  '',
+            array(
+                'siteUrl' => ''
+            )
+        );
+        
+        if (!isset($pathConstants['exportScript'])) {
+            $basePath = new Zend_View();
+            $basePath->setBasePath(APPLICATION_PATH . '/views/');
+            $footer = array(
+                'name'    => 'footer',
+                'content' =>  $basePath->partial(
+                    'emails/footer.phtml',
+                    array(
+                        'httpPathLocale' => $siteUrl,
+                        'httpPath' => $httpPath,
+                        'locale' => $locale
+                    )
+                ),
+                array(
+                    'siteUrl' => $siteUrl
+                )
+            );
+        }
+        
         $result = $this->mandrill->messages->sendTemplate('main', array($content, $footer, $emailHeader), $message);
     }
 }

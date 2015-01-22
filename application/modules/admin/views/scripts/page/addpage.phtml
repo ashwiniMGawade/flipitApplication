@@ -110,6 +110,19 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             <input type="hidden" name="showSitemapStatuscheck"  id="showSitemapStatuscheck" value="0">
                         </div>
                     </div>
+                    <div class="sidebar-content-box">
+                        <p><?php echo $this->translate('Show In Mobile Menu'); ?></p>
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button type="button" class="btn" id="showMobileMenuYes" onClick="showMobileMenuStatus('showMobileMenuYes')" >
+                                <?php echo $this->translate('Yes');?>
+                            </button>                     
+                            <button type="button" class="btn btn-primary borderradius4px"
+                                onClick="showMobileMenuStatus('showMobileMenuNo')" id="showMobileMenuNo">
+                                <?php echo $this->translate('No'); ?>
+                            </button>
+                            <input type="hidden" name="showMobileMenuStatuscheck"  id="showMobileMenuStatuscheck" value="0">
+                        </div>
+                    </div>
                     <?php } ?>
                   </div>
                   <div class="postbox " id="submitdiv">
@@ -178,7 +191,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                               </label>
                             </div>
                            <div class="mainpage-content-right control-group">
-                                <div>
+                                <div class="mainpage-content-right-inner-left-other">
                                     <input type="file" onchange="checkFileType(event)" 
                                     class="ignore"   name="logoFile" id="pageImage">
                                 </div>
@@ -208,7 +221,29 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                                 ?>
                                 </div>
                                 <div class="mainpage-content-right" id="imagerrorDiv" 
-                                style="float:left;margin:-9px 0 6px 218px; height : 20px; width : 511px;">
+                                style="float:left;margin:-9px 0 6px 218px; height : 20px; width : 100%;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label>
+                                    <strong><?php echo $this->translate('Home Page Image'); ?></strong>
+                                </label>
+                            </div>
+                            <div class="mainpage-content-right control-group">
+                                <div>
+                                    <input type="file" onchange="checkFileType(event)" 
+                                    class="ignore"   name="homepageFile" id="homepageImage">
+                                </div>
+                                <div>
+                                <?php 
+                                echo $this->translate('Image Size: 70px x 70px (*.jpg or *.png file only)'); 
+                                ?>
+                                </div>
+                                <div class="mainpage-content-right" id="imagerrorDiv" 
+                                style="float:left;margin:-9px 0 6px 218px; height : 20px; width : 100%;">
                                 </div>
                             </div>
                         </div>
@@ -217,8 +252,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta title'); ?></strong></label></div>
                             <div class="mainpage-content-right"><input type="text" name="pagemetaTitle" id="pagemetaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore"/>
-                            <input type="text" disabled="disabled" value="<?php echo $this->translate('Page meta title length 0 characters');?>" id="metaTextLeft" class="input-xlarge disabled btop word-count">
-                            <!--<span id="metaTextLeft" class="nobel" style="width:504px;"></span>-->
+                            <span id="metaTextLeft" class="input-xlarge disabled btop word-count nobel wordcount-width"></span>
                             
                             <!--<input type="text" class="span3" placeholder="<?php //echo $this->translate('Meta Title'); ?>" name="pagemetaTitle" maxlength="68" id="pagemetaTitle">-->
                             </div>
@@ -226,8 +260,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                       <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta Description'); ?></strong></label></div>
                             <div class="mainpage-content-right"><textarea class="input-xlarge mbot bbot ignore" id="pagemetaDesc" name="pagemetaDesc" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"></textarea>
-                            <input type="text" disabled="disabled" value="<?php echo $this->translate('Page meta description length 0 characters');?>" id="metaDescLeft" class="input-xlarge disabled btop word-count">
-                            <!--<span id="metaDescLeft" class="nobel" style="width:504px;"></span>-->
+                            <span id="metaDescLeft" class="input-xlarge disabled btop word-count nobel wordcount-width"></span>
                             
                             <!--<textarea class="input-xlarge mbot bbot ignore" name="pagemetaDesc" id="pagemetaDesc" placeholder="<?php //echo $this->translate('Meta Description'); ?>"  rows="3"></textarea>
                             <input type="text" class="input-xlarge disabled btop word-count"  id="metaTextLeft" value = "Characters Left: 160" placeholder="Word Count: 28" disabled="disabled">-->

@@ -130,7 +130,6 @@ class LoginController extends Zend_Controller_Action
     {
         Auth_VisitorAdapter::clearIdentity();
         setcookie('kc_unique_user_id', "", time() - (86400 * 3), '/');
-       
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         Zend_Session::namespaceUnset('favouriteShopId');
@@ -320,8 +319,6 @@ class LoginController extends Zend_Controller_Action
     {
         $username = base64_decode($this->getRequest()->getParam("email"));
         $password = $this->getRequest()->getParam("pwd");
-        
-
         $shopName = Shop::getShopName(base64_decode($this->getRequest()->getParam("shopid")));
         if ($type == 'codealert') {
             $message = $shopName.' '.FrontEnd_Helper_viewHelper::__translate('have been removed from your favorite shops');
@@ -344,8 +341,9 @@ class LoginController extends Zend_Controller_Action
                 ->where("email = '".$username."'")
                 ->execute();
         }
-		
+
 		$moduleKey = $this->getRequest()->getParam('lang', null);
+
         $data_adapter = new Auth_VisitorAdapter($username, $password);
         $auth = Zend_Auth::getInstance();
         $auth->setStorage(new Zend_Auth_Storage_Session('front_login'));
@@ -356,7 +354,6 @@ class LoginController extends Zend_Controller_Action
             $obj->updateLoginTime($userid);
             $this->_helper->Login->setUserCookies();
             $flash = $this->_helper->getHelper('FlashMessenger');
-            
             $flash->addMessage(array('success' => $message));
             $this->getResponse()->setHeader('X-Nocache', 'no-cache');
             $this->_helper->redirector(
@@ -366,7 +363,6 @@ class LoginController extends Zend_Controller_Action
             );
         }
     }
-
     // Returns the right top menu for the user by fetching the partial which checks if a user is logged in.
     public function usermenuAction()
     {

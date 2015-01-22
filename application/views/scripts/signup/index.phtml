@@ -8,12 +8,14 @@ foreach ($registerForm->getElements() as $formElement) {
 }
 if($this->messageSuccess!='' || $this->messageError!='') : ?>
     <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
+        <span class='glyphicon glyphicon-warning-sign'></span>
         <strong><?php echo $this->messageSuccess!='' ? $this->messageSuccess : $this->messageError;?></strong>
     </div>
     <?php 
 endif;
 ?>
-<section class="register-box">
+<section class="register-box pos-relative">
+<img src='<?php echo FrontEnd_Helper_viewHelper::getSinupImage();?>' title="SignUp Image"/>
     <form id="registerForm" name="registerForm" method="POST" action="">
         <fieldset>
             <div class="row">
@@ -58,26 +60,7 @@ endif;
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                            <?php echo $registerForm->dateOfBirth->renderLabel();?>
-                                <div class="row">
-                                    <div class="col-xs-4 first">
-                                    <?php echo $registerForm->dateOfBirthDay->renderViewHelper();?>
-                                    </div>
-                                    
-                                    <div class="col-xs-4 second">
-                                     <?php echo $registerForm->dateOfBirthMonth->renderViewHelper();?>
-                                    </div>
-                                    
-                                    <div class="col-xs-4 third">
-                                     <?php echo $registerForm->dateOfBirthYear->renderViewHelper();?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
+                    <div class="row">                      
                         <div class="col-sm-6">
                             <div class="form-group">
                             <?php 
@@ -87,17 +70,7 @@ endif;
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                            <?php 
-                            echo $registerForm->postCode->renderLabel()
-                            . $registerForm->postCode->renderViewHelper();
-                            ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group alt">
+                    <div class="form-group">
                          <?php echo $registerForm->shopId->renderViewHelper();?>
                          <?php 
                          echo $this->formSubmit(
@@ -105,6 +78,16 @@ endif;
                              FrontEnd_Helper_viewHelper::__form('form_Create account'),
                              array('class'=>'btn blue btn-lg btn-primary', 'id'=>'register')
                          ) ?>
+                    </div>
+                    <div class="form-group alt link-blue-buttom">
+                        <?php echo $this->translate('By creating an account, you accept our');?>
+                        <a class='link-blue' href="<?php echo HTTP_PATH_LOCALE; ?>info/<?php echo FrontEnd_Helper_viewHelper::__link('link_privacy-cookies'); ?>">
+                            <?php echo $this->translate('Privacy Policy');?>
+                        </a>
+                        <?php echo $this->translate('and our'); ?>
+                        <a class='link-blue' href="<?php echo HTTP_PATH_LOCALE; ?>info/<?php echo FrontEnd_Helper_viewHelper::__link('link_terms'); ?>">
+                            <?php echo $this->translate('Terms and Conditions');?>
+                        </a>
                     </div>
                 </div>
             </div>

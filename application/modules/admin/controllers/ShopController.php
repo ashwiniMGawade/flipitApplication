@@ -3,6 +3,11 @@
 class Admin_ShopController extends Zend_Controller_Action
 {
 
+    public $mandrillKey = '';
+    public $exportPassword = '';
+    public $mandrillSenderEmailAddress = '';
+    public $mandrillSenderName = '';
+  
     public function preDispatch()
     {
         $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
@@ -336,25 +341,32 @@ class Admin_ShopController extends Zend_Controller_Action
         $arr['status'] = '1';
         $category = new \KC\Repository\Category();
         $this->view->categoryList = $category->getCategoriesInformation();
-
+        $id = $this->getRequest()->getParam('id');
         $site_name = "";
         if (isset($_COOKIE['site_name'])) {
             $site_name =  $_COOKIE['site_name'];
         }
 
-                // display managers and account managers list
+
+        // display managers and account managers list
         $users = new \KC\Repository\User();
+
+        //display shop reasons
+        $shopReasons = new ShopReasons();
+        $this->view->shopReasons = $shopReasons->getShopReasons($id);
+
+        
         $this->view->MangersList = $users->getManagersLists($site_name);
 
         // display  page's list
         $pages = new \KC\Repository\Page();
         $this->view->DefaultPagesList = $pages->defaultPagesList();
 
+
         // display affliate network's list
         $affiliate = new \KC\Repository\AffliateNetwork();
         $arr['sortBy'] = 'name';
         $affiliateNetworkList =  $affiliate->getNetworkList($arr);
-
 
         $this->view->affiliateNetworkList = $affiliateNetworkList['aaData'];
 
@@ -371,6 +383,7 @@ class Admin_ShopController extends Zend_Controller_Action
                 ->leftJoin("s.shopPage", "pg")
                 ->leftJoin("s.affliatenetwork", "af")
                 ->leftJoin("s.logo", "logo")
+				->leftJoin("s.screenshot", "screenshot")
                 ->where("s.id = ". $id)
                 ->getQuery()
                 ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -412,6 +425,15 @@ class Admin_ShopController extends Zend_Controller_Action
 
 
         }
+    }
+
+    public function deleteshopreasonAction()
+    {
+        $firstFieldName = $this->getRequest()->getParam('firstFieldName');
+        $secondFieldName = $this->getRequest()->getParam('secondFieldName');
+        $shopId = $this->getRequest()->getParam('shopId');
+        ShopReasons::deleteReasons($firstFieldName, $secondFieldName, $shopId);
+        exit();
     }
 
     public function exportshoplistAction()
@@ -1374,20 +1396,30 @@ class Admin_ShopController extends Zend_Controller_Action
 
     public function globalExportXlxAction()
     {
-        # set fiel and its trnslattions
-        $file =  APPLICATION_PATH. '/../data/excels/globalShopList.xlsx' ;
-        $fileName =  $this->view->translate($file);
-
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-
-        # set reponse headers and body
-        $this->getResponse()
-        ->setHeader('Content-Disposition', 'attachment;filename=' . basename($fileName))
-        ->setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        ->setHeader('Cache-Control', 'max-age=0')
-        ->setBody(file_get_contents($fileName));
+        $globalExportParameters = $this->_getAllParams();
+        $checkPassword = GlobalExportPassword::getPasswordForExportDownloads('shopExport');
+        if (isset($globalExportParameters['password']) && $globalExportParameters['password'] == $checkPassword) {
+            # set fiel and its trnslattions
+            $file =  APPLICATION_PATH. '/../data/excels/globalShopList.xlsx' ;
+            $fileName =  $this->view->translate($file);
+            # set reponse headers and body
+            $this->getResponse()
+                ->setHeader('Content-Disposition', 'attachment;filename=' . basename($fileName))
+                ->setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                ->setHeader('Cache-Control', 'max-age=0')
+                ->setBody(file_get_contents($fileName));
+        }
     }
+
+    public function globalExportXlxPasswordAction()
+    {
+        $this->saveGlobalExportPassword();
+        $this->sendMailToSuperAdmin();
+        exit();
+    }
+
 
     public function shopstatusAction()
     {
@@ -1400,5 +1432,73 @@ class Admin_ShopController extends Zend_Controller_Action
         }
 
         $this->_helper->json($ret);
+	}
+	
+    protected function saveGlobalExportPassword()
+    {
+        GlobalExportPassword::savePasswordForExportDownloads('shopExport');
+        $this->exportPassword = GlobalExportPassword::getPasswordForExportDownloads('shopExport');
+    }
+
+    protected function sendMailToSuperAdmin()
+    {
+        $application = new Zend_Application(
+            APPLICATION_ENV,
+            APPLICATION_PATH . '/configs/application.ini'
+        );
+        $frontControlerObject = $application->getOption('resources');
+        $this->mandrillKey = $frontControlerObject['frontController']['params']['mandrillKey'];
+        $mailer  = new FrontEnd_Helper_Mailer(array('mandrillKey' => $this->mandrillKey));
+        $basePath = new Zend_View();
+        $basePath->setBasePath(APPLICATION_PATH . '/views/');
+        $content = array(
+            'name'    => 'content',
+            'content' => $basePath->partial(
+                'emails/exportScriptPassword.phtml',
+                array(
+                    'password' => $this->exportPassword
+                )
+            )
+        );
+        
+        $settings = Signupmaxaccount::getAllMaxAccounts();
+        $this->mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
+        $this->mandrillSenderName = $settings[0]['sendername'];
+        $mailer->send(
+            $this->mandrillSenderName,
+            $this->mandrillSenderEmailAddress,
+            'Arthur',
+            'export@imbull.com',
+            'Global Export password',
+            $content,
+            '',
+            '',
+            '',
+            '',
+            array(
+                'exportScript' => 'yes'
+            )
+        );
+    }
+
+    /**
+     * change shop status(online/ofline)
+     *
+     * @version 1.0
+     * @author blal
+     */
+    public function shopstatusAction()
+    {
+        $parameters = $this->_getAllParams();
+        self::updateVarnish($parameters['id']);
+        $ret = Shop::changeStatus($parameters);
+        $offlineDate = date("d-m-Y", strtotime($ret['offlineSince']));
+        if ($ret['offlineSince'] && $ret['howToUse'] == 1) {
+            $this->_helper->json(array('date' => $offlineDate, 'message'=> 1));
+        } else if ($ret['offlineSince'] && $ret['howToUse'] == '') {
+            $this->_helper->json(array('date'=>$offlineDate, 'message'=>0));
+        } else {
+            $this->_helper->json($ret['offlineSince']);
+        }
     }
 }

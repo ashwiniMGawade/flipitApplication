@@ -239,7 +239,18 @@ abstract class BaseOffer extends Doctrine_Record
         $this->hasColumn('shopExist', 'bolean', 20, array(
                 'type' => 'bolean',
         ));
-
+        $this->hasColumn('extendedoffertitle', 'string', 255, array(
+             'type' => 'string',
+             'length' => 255
+        ));
+        $this->hasColumn('offerUrl', 'string', 500, array(
+             'type' => 'string',
+             'length' => 500
+        ));
+        $this->hasColumn('nickname', 'string', 255, array(
+             'type' => 'string',
+             'length' => 255
+        ));
     }
 
     public function setUp()

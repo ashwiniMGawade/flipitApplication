@@ -8,17 +8,19 @@
                     $popularStoreImage =
                         PUBLIC_PATH_CDN
                         .ltrim($popularStore['shop']['logo']['imgpath'], '/')
-                        .'thum_big_'
+                        .'thum_medium_'
                         .$popularStore['shop']['logo']['imgname'];  
                     ?>
                     <div class="slide">
                         <a href="<?php echo HTTP_PATH_LOCALE.$popularStore['shop']['permaLink'];?>">
                             <img class="lazy" data-original="<?php echo $popularStoreImage; ?>"
-                            width ="150"
-                            alt="<?php echo $popularStore['shop']['name']; ?>">
+                            width ="100" height= "50"
+                            alt="<?php echo $popularStore['shop']['name']; ?>"
+                            title="<?php echo $popularStore['shop']['name']; ?>">
                             <noscript>
-                                <img src="<?php echo $popularStoreImage; ?>" width ="150"
-                                alt="<?php echo $popularStore['shop']['name']; ?>">
+                                <img src="<?php echo $popularStoreImage; ?>" width ="100" height = "50"
+                                alt="<?php echo $popularStore['shop']['name']; ?>"
+                                title="<?php echo $popularStore['shop']['name']; ?>">
                             </noscript>
                         </a>
                     </div>

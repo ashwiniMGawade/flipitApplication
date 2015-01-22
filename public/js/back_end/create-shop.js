@@ -110,8 +110,54 @@ $(document).ready(init);
 
 function init()
 {
-	$('#shopMetaDescription').NobleCount('#metaTextLeft',{
-		max_chars: ''
+	jQuery('#shopOverwriteTitle').NobleCount('#shopOverwriteTitleLeft',{
+		max_chars: 68,
+		prefixString : __("Shop overwrite title length ")
+	});
+	
+	jQuery('#shopMetaDescription').NobleCount('#metaTextLeft',{
+		max_chars: 150,
+		prefixString : __("Shop meta description length ")
+	});
+	jQuery('#reasonsubtitle1').NobleCount('#reasonsubtitle1count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title1 length ")
+	});
+	jQuery('#reasonsubtitle2').NobleCount('#reasonsubtitle2count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title2 length ")
+	});
+	jQuery('#reasonsubtitle3').NobleCount('#reasonsubtitle3count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title3 length ")
+	});
+	jQuery('#pagemetaTitle').NobleCount('#pagemetaTitleLeft',{
+		max_chars: 68,
+		prefixString : __("Shop meta title length ")
+	});
+	
+	jQuery('#pagemetaDesc').NobleCount('#pagemetaDescLeft',{
+		max_chars: 150,
+		prefixString : __("Shop page meta description length ")
+	});
+
+	
+ 	$('#addreason').click(function(){
+		$('#reasons2').show();
+		$('#addreason').hide();
+		$('#addreason1').show();
+	});
+	
+	$('#addreason1').click(function(){
+		$('#reasons3').show();
+	});
+	$('#deletereason').click(function(){
+		$('#reasons2').hide();
+		$('#addreason1').hide();
+		$('#addreason').show();
+	});
+	$('#deletereason1').click(function(){
+		$('#reasons3').hide();
 	});
 
 	$('button#prefillData').click(function(){
@@ -136,6 +182,18 @@ function init()
 
 	$('#shopSubTitle').textareaCount(options, function(data){
 		jQuery('#shopSubTitleLeft').val(__("Shop sub-title length ") + (data.input) + __(" characters"));
+	});
+	
+	$('#shopName').textareaCount(options, function(data){
+		jQuery('#shopNameLeft').text(__("Shop name length ") + (data.input) + __(" characters"));
+	});
+	
+	$('#pageTitle').textareaCount(options, function(data){
+		jQuery('#pageTitleLeft').text(__("Page title length ") + (data.input) + __(" characters"));
+	});
+	
+	$('#pageSubTitle').textareaCount(options, function(data){
+		jQuery('#pageSubTitleLeft').text(__("Page sub title length ") + (data.input) + __(" characters"));
 	});
 	
 
@@ -268,6 +326,7 @@ function init()
 	
 	validateFormAddNewShop();
 }
+
 
 function word_count(field,msg,count) {
 

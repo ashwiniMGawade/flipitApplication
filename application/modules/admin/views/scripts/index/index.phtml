@@ -22,19 +22,27 @@ $this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/dashboard.js" );
 		
 	<div class="admin-text mb40">
 		<div class='border-div'>
-		<div contenteditable="true" class='admin-text-content' id="admin-text-content"><?php echo $this->data['message']=='' ? '<span class="errorMsg">' . $this->translate('Click here and write a message for employees.'). '</span>' : $this->data['message'];?></div>
+			<div contenteditable="true" class='admin-text-content' id="admin-text-content">
+			<?php 
+			echo $this->data['message']=='' 
+				? '<span class="errorMsg">' . $this->translate('Click here and write a message for employees.'). '</span>' 
+				: $this->data['message'];?>
+			</div>
 		</div>
 	</div>
 	<div class='huidige-stores mb25 fl'>
-		<h3><?php echo $this->translate('Scores of the last 7 days'); ?><span>&nbsp;&nbsp;(<?php echo $this->translate('Last updated at'); ?>&nbsp;<?php echo strtotime($this->data['updated_at']->format('H:i M jS Y')); ?>)</span></h3>
+
+		<h3>
+			<?php echo $this->translate('Scores of the last 7 days'); ?>
+			<span>&nbsp;&nbsp;(<?php echo $this->translate('Last updated at'); ?>&nbsp;<?php echo date('H:i M jS Y',strtotime($this->data['updated_at'])); ?>)
+			</span>
+		</h3>
+
 		<div class="dashboard-content fl">
 			<div class="dashboard-heading">
 				<h4><?php echo $this->translate('No. of offers created'); ?></h4>
-
 				<h4><?php echo $this->translate('No. of shops created'); ?></h4>
-
 				<h4><?php echo $this->translate('No. of clickouts'); ?></h4>
-
 				<h4><?php echo $this->translate('No. of new subscribers'); ?></h4>
 			</div>
 			<div class="dashboard-boxes">
@@ -50,6 +58,7 @@ $this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/dashboard.js" );
 		         <div class="box-count">
 		         	<span class="grey-text"><?php echo KC\Repository\Dashboard::count_format($this->data['no_of_subscribers']);?></span>
 		         </div>	
+
 			</div>
 		</div>
 	</div>
@@ -57,7 +66,13 @@ $this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/dashboard.js" );
 	<div class="clear"></div>
 
 	<div class='huidige-stores mb25 fl'>
-		<h3><?php echo $this->translate('Totals scores within this locale'); ?><span>&nbsp;&nbsp;(<?php echo $this->translate('Last updated at'); ?>&nbsp;<?php echo strtotime($this->data['updated_at']->format('H:i M jS Y')); ?>)</span></h3>
+
+		<h3>
+			<?php echo $this->translate('Totals scores within this locale'); ?>
+			<span>&nbsp;&nbsp;(<?php echo $this->translate('Last updated at'); ?>&nbsp;<?php echo date('H:i M jS Y',strtotime($this->data['updated_at'])); ?>)
+			</span>
+		</h3>
+
 		<div class="dashboard-content fl">
 			<div class="dashboard-heading">
 				<h4><?php echo $this->translate('Total offers currently online'); ?></h4>

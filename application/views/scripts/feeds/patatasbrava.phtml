@@ -9,7 +9,7 @@
 <div id="wrapper">
     <header>
         <div class="head-main">
-            <img src="<?php echo PUBLIC_PATH ?>images/front_end/feeds/flipit.png" alt="">
+            <img src="<?php echo PUBLIC_PATH ?>images/front_end/feeds/flipit.png" alt="" title="flipit">
         <h1 class="header-title"><?php echo $this->translate('Los 20 mejores cupones de Flipit, el portal internacional de descuentos más grande de la web.'); ?>
         </h1>
     </div>
@@ -26,7 +26,7 @@ for ($couponCounter = 0; $couponCounter<count($topPopularCouponCode); $couponCou
     ?>
             <li>
                 <a href="<?php echo HTTP_PATH_LOCALE.$topPopularCouponCode[$couponCounter]['offer']['shop']['permaLink'];  ?>" class="coupon-image" target="_blank">
-                    <img  src="<?php  echo $couponImage; ?>" alt="<?php echo $topPopularCouponCode[$couponCounter]['offer']['shop']['name'];?>" width="224" height="99" >
+                    <img  src="<?php  echo $couponImage; ?>" alt="<?php echo $topPopularCouponCode[$couponCounter]['offer']['shop']['name'];?>" width="224" height="99" title="<?php echo $topPopularCouponCode[$couponCounter]['offer']['shop']['name'];?>">
                 </a>
                 <div class="coupon-content">
                     <h1 class="title">

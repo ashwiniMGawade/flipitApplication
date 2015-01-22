@@ -10,6 +10,7 @@ $(document).ready(function(){
         }
     });
 });
+
 var validator =  null;
 function validateRegistration() {
     validator = $('form#registerForm')
@@ -46,24 +47,6 @@ function validateRegistration() {
                 required: true,
                 minlength : 1,
                 maxlength :20
-            },
-            dateOfBirthDay: {
-                required: true,
-                digits : true,
-                range: [1, 31]
-            },
-            dateOfBirthMonth: {
-                required: true,
-                digits : true,
-                range: [1, 12]
-            },
-            dateOfBirthYear: {
-                required: true,
-                digits : true,
-                range: [1900, fullYear]
-            },
-            postCode : {
-                required: true
             }
         },
         messages : {
@@ -85,24 +68,6 @@ function validateRegistration() {
                   required: '',
                   minlength : '',
                   maxlength: ''
-              },
-              dateOfBirthDay: {
-                  required: '',
-                  digits :'',
-                  range :''
-              },
-              dateOfBirthMonth: {
-                  required: '',
-                  digits :'',
-                  range:''
-              },
-              dateOfBirthYear: {
-                  required: '',
-                  digits :'',
-                  range :''
-              },
-              postCode : {
-                  required: ''
               }
         },
         onfocusin : function(element) {

@@ -39,7 +39,17 @@ class Page extends BasePage
             ->fetchArray();
         return $specialListPages;
     }
-    
+    public static function getPageDetailsInError($page)
+    {
+        $currentDate = date('Y-m-d H:i:s');
+        $pageDetails = Doctrine_Query::create()->from('Page p')
+         ->where("p.permaLink='".$page."'")
+        ->leftJoin("p.widget w")
+        ->andWhere("p.publishDate <='".$currentDate."'")
+        ->andWhere('p.deleted=0')->fetchOne();
+        return $pageDetails;
+
+    }
 
     public static function getDefaultPageProperties($permalink)
     {
@@ -59,6 +69,18 @@ class Page extends BasePage
         ->from('Page p')
         ->where('p.permalink="'.$permalink.'"')
         ->andWhere('p.deleted=0')
+        ->fetchArray();
+        return $pageDetail;
+    }
+
+    public static function getSpecialPageDetailForMobileMenu()
+    {
+        $pageDetail = Doctrine_Query::create()
+        ->select('p.permalink, p.pagetitle')
+        ->from('Page p')
+        ->where('p.deleted = 0')
+        ->andWhere('p.showinmobilemenu = 1')
+        ->limit(2)
         ->fetchArray();
         return $pageDetail;
     }
@@ -100,6 +122,23 @@ class Page extends BasePage
             ->execute();
         return true;
     }
+
+    public static function getPageHomeImageByPermalink($permalink)
+    {
+        $pageHomeImage = Doctrine_Query::create()
+            ->select('p.id,homepageimage.*')
+            ->from('Page p')
+            ->leftJoin("p.homepageimage homepageimage")
+            ->where('p.permalink="'.$permalink.'"')
+            ->fetchOne();
+        $imagePath = '';
+        if (!empty($pageHomeImage->homepageimage)) {
+            $imagePath = PUBLIC_PATH_CDN.$pageHomeImage->homepageimage->path
+                .$pageHomeImage->homepageimage->name;
+        }
+        return $imagePath;
+    }
+
     ######################################################
     ############ END REFACTORED CODE #####################
     ######################################################
@@ -157,7 +196,7 @@ class Page extends BasePage
         BackEnd_Helper_viewHelper::closeConnection($conn2);
 
         $pageList = Doctrine_Query::create()
-            ->select('p.pageTitle,p.pageType,p.pageLock,p.created_at,p.contentManagerName,p.publish')
+            ->select('p.pageTitle,p.pageType,p.permaLink,p.created_at,p.contentManagerName,p.publish')
             ->from('Page p')
             ->where('p.deleted=0')
             ->andWhere("p.pagetitle LIKE ?", "$srhPage%");
@@ -170,7 +209,7 @@ class Page extends BasePage
       }
         $result =   DataTable_Helper::generateDataTableResponse($pageList,
                 $params,
-                array("__identifier" => 'p.pageTitle','p.pageTitle','p.pageType','p.pageLock','p.created_at','p.publish','p.contentManagerName'),
+                array("__identifier" => 'p.pageTitle','p.pageTitle','p.pageType','p.permaLink','p.created_at','p.publish','p.contentManagerName'),
                 array(),
                 array());
         return $result;
@@ -326,6 +365,22 @@ class Page extends BasePage
             }
         }
 
+
+        if (isset($_FILES['homepageFile']['name']) && $_FILES['homepageFile']['name'] != '') {
+            $result = self::uploadImage('homepageFile');
+            $this->pageHomeImageId = 0;
+            if ($result['status'] == '200') {
+                $ext = BackEnd_Helper_viewHelper::getImageExtension(
+                    $result['fileName']
+                );
+                $this->homepageimage->ext = $ext;
+                $this->homepageimage->path = $result['path'];
+                $this->homepageimage->name = $result['fileName'];
+            } else {
+                return false;
+            }
+        }
+
         if(isset($params['publishDate']) && $params['publishDate']!=''){
         $this->publishDate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh'])) ;
         }
@@ -340,8 +395,9 @@ class Page extends BasePage
             $this->pageLock = 1;
         }
         
-        isset($params['showSitemapStatuscheck']) ? $this->showsitemap = 1 : $this->showsitemap = 0;
-    
+        isset($params['showSitemapStatuscheck']) && $params['showSitemapStatuscheck'] == 1 ? $this->showsitemap = 1 : $this->showsitemap = 0;
+        isset($params['showMobileMenuStatuscheck']) && $params['showMobileMenuStatuscheck'] == 1 ? $this->showinmobilemenu = 1 : $this->showinmobilemenu = 0;
+
         if(trim($params['pageTemplate'])!=''){
         $this->pageAttributeId = $params['pageTemplate'];
         }
@@ -477,11 +533,12 @@ class Page extends BasePage
     public function getPageDetail($pageId)
     {
         $pageDetails = Doctrine_Query::create()
-        ->select('p.*,w.*,logo.*, pageheaderimage.*, artcatg.pageid,artcatg.categoryid')
+        ->select('p.*,w.*,logo.*, pageheaderimage.*, homepageimage.*, artcatg.pageid,artcatg.categoryid,')
         ->from('Page p')
         ->leftJoin('p.widget w')
         ->leftJoin("p.logo logo")
         ->leftJoin("p.pageheaderimage pageheaderimage")
+        ->leftJoin("p.homepageimage homepageimage")
         ->leftJoin("p.moneysaving artcatg")
         ->where('p.id='.$pageId.'')
         ->fetchArray();
@@ -537,7 +594,7 @@ class Page extends BasePage
             }
 
             $this->enableClickConstraint=0;
-            $this->numberOfClicks = '';
+            $this->numberOfClicks = 0;
 
             if(isset($params['clickCostraintchk'])){
                 $this->enableClickConstraint=1;
@@ -625,7 +682,17 @@ class Page extends BasePage
             }
         }
 
-
+        if (isset($_FILES['homepageFile']['name']) && $_FILES['homepageFile']['name'] != '') {
+            $result = self::uploadImage('homepageFile');
+            if ($result['status'] == '200') {
+                $ext = BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
+                $this->homepageimage->ext = $ext;
+                $this->homepageimage->path = $result['path'];
+                $this->homepageimage->name = $result['fileName'];
+            } else {
+                return false;
+            }
+        }
 
         if(isset($params['publishDate']) && $params['publishDate']!=''){
             $this->publishDate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh'])) ;
@@ -645,7 +712,7 @@ class Page extends BasePage
         }
         
         isset($params['showSitemapStatuscheck']) && $params['showSitemapStatuscheck'] == 1 ? $this->showsitemap = 1 : $this->showsitemap = 0;
-
+        isset($params['showMobileMenuStatuscheck']) && $params['showMobileMenuStatuscheck'] == 1 ? $this->showinmobilemenu = 1 : $this->showinmobilemenu = 0;
         if(trim($params['pageTemplate'])!=''){
             $this->pageAttributeId = $params['pageTemplate'];
         }else{

@@ -37,8 +37,16 @@ var searchedValue  = "";
 			
 		});
 		
+		jQuery('#articlemetaTitle').NobleCount('#metaTextLeft',{
+			max_chars: 68,
+			prefixString : __("Artical meta title length ")
+		});
 		
-      	
+		jQuery('#articlemetaDesc').NobleCount('#metaDescriptionleft',{
+			max_chars: 150,
+			prefixString : __("Artical meta description length ")
+		});
+	      	
 		manageWidgets();
 		$('#publishDate').datepicker({'autoclose':true,'format': 'dd-mm-yyyy'});
 		$('#publishTimehh').timepicker({
@@ -879,3 +887,14 @@ var searchedValue  = "";
 		});
 		
 	}
+
+function featuredImageToggle(e){
+    var btn = e.target  ? e.target :  e.srcElement ;
+    jQuery(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
+
+    if(btn.value=='yes'){
+        jQuery("input#featuredimagecheckbox").val(1);
+    }else{
+        jQuery("input#featuredimagecheckbox").val(0); 
+    }
+}

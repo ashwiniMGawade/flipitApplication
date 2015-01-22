@@ -1,29 +1,17 @@
 <?php 
-		echo $this->headTitle()->append('Edit Newsticker');
-		
-		$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/datepicker.css" );
-		
-		$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/back_end/bootstrap-combobox.css" );
-		
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.validate.js");
-		
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootstrap-typeahead.js");
-		
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
-		
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
-		
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-datepicker.js");
-		
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/date.js");
-		
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/newsticker.js");
-		
-		
-		$date = $this->editNews[0]['startdate'];
-		$dateForm =  $date->format('d-m-Y');
-		//echo $dateForm;
-		
+echo $this->headTitle()->append('Edit Newsticker');
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/datepicker.css" );
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/back_end/bootstrap-combobox.css" );
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootstrap-typeahead.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-datepicker.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/date.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/newsticker.js");
+$date = $this->editNews[0]['startdate']; 
+$dated =  strtotime($date) ; 
+$dateForm =  date('d-m-Y',$dated);
 
 ?>
 

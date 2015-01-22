@@ -37,8 +37,7 @@ class SearchController extends Zend_Controller_Action
             ''
         );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
-        
-		$searchedKeywords = strtolower(
+        $searchedKeywords = strtolower(
             FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialCharacterAndReplacedWithHyphen(
                 $this->getRequest()->getParam('searchField')
             )

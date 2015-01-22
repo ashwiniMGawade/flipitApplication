@@ -1,7 +1,15 @@
 <div class="block">
-    <h2 class = "popular-store-title"><?php echo $this->translate('Popular stores'); ?></h2>
-        <ul class="shops">
 <?php
+$currentControllerName = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
+if($currentControllerName!='store') {
+    ?>
+    <h2 class = "popular-store-title"><?php echo $this->translate('Popular stores'); ?></h2>
+    <?php
+}
+?>
+    <ul class="shops">
+<?php
+
 $popularStoreIncrementCheck = 1;
 
 foreach ($this->popularStores as $popularStore) :
@@ -22,10 +30,10 @@ foreach ($this->popularStores as $popularStore) :
     echo '<li>
         <a href="'.HTTP_PATH_LOCALE.$popularStore['popularshops']['permaLink'].'">
             <img src="' . $popularStoreImage . '"  
-            alt="' .$popularStore['popularshops']['name'] . '" width="92" height="47" />
+            alt="' .$popularStore['shop']['name'] . '" title="' .$popularStore['shop']['name'] . '" width="100" height="50" />
         </a>
     </li>';
 endforeach;
 ?>
-        </ul>
+    </ul>
 </div>

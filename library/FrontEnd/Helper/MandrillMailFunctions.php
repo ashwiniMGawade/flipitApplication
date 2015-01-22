@@ -5,13 +5,13 @@ class FrontEnd_Helper_MandrillMailFunctions {
     public function __construct() {
         $this->imageLogoForMail =
             "<a href=".HTTP_PATH_LOCALE.">
-                <img alt='flipit-welcome' src='".HTTP_PATH."public/images/flipit-welcome-mail.jpg'/>
+                <img alt='flipit-welcome' title='flipit-welcome' src='".HTTP_PATH."public/images/flipit-welcome-mail.jpg'/>
             </a>";
         $this->siteName = "Flipit.com";
         if (HTTP_HOST == "www.kortingscode.nl") {
             $this->imageLogoForMail = 
                 "<a href=".HTTP_PATH_LOCALE.">
-                    <img alt='HeaderMail' src='".HTTP_PATH."public/images/HeaderMail.gif'/>
+                    <img alt='HeaderMail' title='HeaderMail' src='".HTTP_PATH."public/images/HeaderMail.gif'/>
                 </a>";
             $this->siteName = "Kortingscode.nl";
         }
@@ -245,7 +245,7 @@ class FrontEnd_Helper_MandrillMailFunctions {
           $dataShopLogo = 
               HTTP_PATH_CDN.$offer['shop']['logo']['path'].'thum_medium_store_'. $offer['shop']['logo']['name'];
           $dataShopImage[$offerIndex]['name'] = 'shopLogo_'.($offerIndex+1);
-          $dataShopImage[$offerIndex]['content'] = "<a href='$permalinkEmail'><img src='$dataShopLogo'></a>";
+          $dataShopImage[$offerIndex]['content'] = "<a href='$permalinkEmail'><img src='$dataShopLogo' title='shop logo'></a>";
           $expiryDate = new Zend_Date($offer['endDate']);
           $expireDate[$offerIndex]['name'] = 'expDate_'.($offerIndex+1);
           $expireDate[$offerIndex]['content'] = 

@@ -124,6 +124,28 @@ class Shop extends BaseShop
         return $popularStoreData;
     }
 
+    public static function getPopularStoresForMemeberPortal($limit, $shopId = null)
+    {
+        $currentDate = date('Y-m-d 00:00:00');
+        $popularStoreData = Doctrine_Query::create()
+        ->select('p.id, s.name, s.permaLink, img.path as imgpath, img.name as imgname')
+        ->from('PopularShop p')
+        ->addSelect(
+            "(SELECT COUNT(*) FROM Offer active WHERE
+            (active.shopId = s.id AND active.endDate >= '$currentDate' 
+                AND active.deleted = 0
+            )
+            ) as activeCount"
+        )
+        ->leftJoin('p.shop s')
+        ->leftJoin('s.logo img')
+        ->where('s.deleted=0')
+        ->addWhere('s.status=1')
+        ->orderBy('p.position ASC')
+        ->limit($limit)->fetchArray();
+        return $popularStoreData;
+    }
+
     public static function getStoreDetails($shopId)
     {
         $storeDetail = Doctrine_Query::create()->select('s.*,img.*,scr.*,small.*,big.*')
@@ -231,7 +253,7 @@ class Shop extends BaseShop
             $storesByKeyword->addSelect(
                 "(SELECT COUNT(*) FROM Offer active WHERE
                 (active.shopId = s.id AND active.endDate >= '$currentDate' 
-                    AND active.deleted = 0
+                    AND active.deleted = 0 AND active.discounttype = 'CD'
                 )
                 ) as activeCount"
             )
@@ -273,6 +295,7 @@ class Shop extends BaseShop
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_'.$visitorId.'_favouriteShops');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('visitor_'.$visitorId.'_favouriteShopOffers');
             return array('shop' => $shopName->name, 'flag' => $addedStatus);
         }
         return;
@@ -294,8 +317,63 @@ class Shop extends BaseShop
         $shop = Doctrine_Query::create()->select('s.name')
             ->from('Shop s')
             ->where('s.id='.$shopId)->fetchArray();
-        return isset($shop[0]['name']) ? $shop[0]['name'] : '';  
+        return isset($shop[0]['name']) ? $shop[0]['name'] : '';
     }
+
+    public static function getShopLightBoxText($shopId)
+    {
+        $shop = Doctrine_Query::create()->select('s.lightboxfirsttext, s.lightboxsecondtext')
+            ->from('Shop s')
+            ->where('s.id='.$shopId)->fetchArray();
+        return $shop[0];
+
+    }
+
+    public static function getShopLogoByShopId($shopId)
+    {
+        $shopsInformation = Doctrine_Query::create()
+            ->select('s.permaLink, img.path, img.name')
+            ->from("Shop s")
+            ->leftJoin("s.logo img")
+            ->where('s.deleted=0')
+            ->andWhere("s.id", $shopId)
+            ->fetchArray();
+        return !empty($shopsInformation) ? $shopsInformation[0] : '';
+    }
+
+    public static function getShopInformation($shopId)
+    {
+        $shop = Doctrine_Query::create()
+            ->select('s.permaLink,s.name')
+            ->from('Shop s')
+            ->where('s.id='.$shopId)
+            ->fetchArray();
+        return $shop;
+    }
+
+    public static function getShopIdByPermalink($permalink)
+    {
+        $shop = Doctrine_Query::create()
+            ->select('s.id')
+            ->from('Shop s')
+            ->where('s.permaLink='."'$permalink'")
+            ->fetchArray();
+        return isset($shop[0]) ? $shop[0]['id'] : '';
+    }
+
+    public function getAllShopNames($keyword = '')
+    {
+        $query = Doctrine_Query::create()
+            ->select('s.name,s.permaLink,s.id')
+            ->from("Shop s")
+            ->where('s.deleted = ?', 0);
+        if ($keyword!='') {
+            $query->andWhere("s.status=1")
+            ->andWhere("s.name LIKE ?", "$keyword%");
+        }
+        return $allShops = $query->fetchArray();
+    }
+
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -312,26 +390,7 @@ class Shop extends BaseShop
         $this->save();
 
     }
-    /**
-     * getAllShopNames
-     *
-     * fetch all shop names
-     * @param string $keyword shop name for search
-     * @return array
-     * @author sp singh
-     */
-    public function getAllShopNames($keyword)
-    {
-        return   Doctrine_Query::create()
-                    ->select('s.name,s.permaLink,s.id')
-                    ->from("Shop s")
-                    ->where('s.deleted = ?', 0)
-                    ->andWhere("s.status=1")
-                    ->andWhere("s.name LIKE ?", "$keyword%")
-                    ->fetchArray();
-    }
-
-
+   
     /**
      * getshopList fetch all record from database table shop
      * also search according to keyword if present.
@@ -639,6 +698,8 @@ class Shop extends BaseShop
         $this->showSignupOption = BackEnd_Helper_viewHelper::stripSlashesFromString(
             !empty($shopDetail['signupOption']) ? $shopDetail['signupOption'] : '0');
 
+        $this->lightboxfirsttext = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['lightboxfirsttext']);
+        $this->lightboxsecondtext =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['lightboxsecondtext']);
 
         if( BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['displayExtraProperties']) ) {
             $this->ideal = BackEnd_Helper_viewHelper::stripSlashesFromString(
@@ -807,28 +868,6 @@ class Shop extends BaseShop
             }
         }
 
-        if (isset($_FILES['websitescreenshot']['name']) && $_FILES['websitescreenshot']['name'] != '') {
-
-            $uploadPath = UPLOAD_IMG_PATH . "screenshot/";
-            if (!file_exists($uploadPath))
-                mkdir($uploadPath, 0776, true);
-
-            $result = self::uploadImage('websitescreenshot',$uploadPath);
-
-            if ($result['status'] == '200') {
-
-                $ext = BackEnd_Helper_viewHelper::getImageExtension(
-                        $result['fileName']);
-                $this->screenshot->ext = $ext;
-                $this->screenshot->path = BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
-                $this->screenshot->name = BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
-
-            } else {
-
-                return false;
-            }
-
-        }
         //call cache function
         $key = 'shopDetails_'  . $this->id . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -860,18 +899,34 @@ class Shop extends BaseShop
             $getRouteLink = Doctrine_Query::create()->select()->from('RoutePermalink')->where("permalink = '".$getcategory[0]['permaLink']."'")->andWhere('type = "SHP"')->fetchArray();
             $howToguideRoute = Doctrine_Query::create()->select()->from('RoutePermalink')->where("permalink = 'how-to/".$getRouteLink[0]['permalink']."'")->andWhere('type = "SHP"')->fetchArray();
         }
+        // screenshot has been deleted from edit and add shop but we need set a default in database
+        $this->screenshotId = 0;
 
         try {
-
+            
             $this->refShopRelatedshop->delete();
             $this->save();
-
-        
+            if (!empty($shopDetail['reasontitle1']) || !empty($shopDetail['reasontitle2']) || !empty($shopDetail['reasontitle1'])) {
+                $shopReasons = array();
+                $shopReasons['reasontitle1'] = !empty($shopDetail['reasontitle1'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle1']) : '';
+                $shopReasons['reasonsubtitle1'] = !empty($shopDetail['reasonsubtitle1'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle1']) : '';
+                $shopReasons['reasontitle2'] = !empty($shopDetail['reasontitle2'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle2']) : '';
+                $shopReasons['reasonsubtitle2'] = !empty($shopDetail['reasonsubtitle2'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle2']) : '';
+                $shopReasons['reasontitle3'] = !empty($shopDetail['reasontitle3'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle3']) : '';
+                $shopReasons['reasonsubtitle3'] = !empty($shopDetail['reasonsubtitle3'])
+                    ? BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle3']) : '';
+                ShopReasons::saveReasons($shopReasons, $this->id);
+            }
 
             $key = 'shop_similar_shops';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            if(!empty($getRouteLink)){
+            if (!empty($getRouteLink)) {
 
                 $exactLink = 'store/storedetail/id/'.$this->id;
                 $howtoguide = 'store/howtoguide/shopid/'.$this->id;
@@ -1024,13 +1079,6 @@ class Shop extends BaseShop
 
             $path = ROOT_PATH . $uploadPath . "thum_medium_store_" . $newName;
             BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 200, 100, $path);
-
-        }
-        if ($file == "websitescreenshot") {
-
-            $path1 = ROOT_PATH . $uploadPath . "thum_large_" . $newName;
-            BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 450,0, $path1);
-            //die('Hello');
 
         }
         // apply filter to rename file name and set target
@@ -1432,6 +1480,7 @@ public static function getShopDetail($shopId)
                  $conversion = \KC\Repository\Conversions::getConversionId( $data['id'] , $ip , 'shop') ;
 
                  $subid = str_replace('A2ASUBID',$conversion['subid'] , $subid );
+                $subid = FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
             }
         }
 
@@ -1610,28 +1659,22 @@ public static function getShopDetail($shopId)
     public static function changeStatus($params)
     {
         $status = $params['status'] == 'offline' ? '0' : '1';
-
         $shop = Doctrine_Core::getTable("Shop")->find($params['id']);
-
-        if($params['status'] == 'offline') {
-            $date = date('Y-m-d H:i:s')  ;
-            $status = 0 ;
+        if ($params['status'] == 'offline') {
+            $date = date('Y-m-d H:i:s');
+            $status = 0;
         } else {
             $status = 1 ;
-            $date = NULL ;
+            $date = NULL;
         }
-
         $shop->status = $status;
         $shop->offlineSicne = $date;
         $shop->save();
-        
         $key = 'shop_similar_shops';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shopDetails_'.$params['id'].'_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        return $shop->offlineSicne;
-
-
+        return array('offlineSince'=>$shop->offlineSicne, 'howToUse'=>$shop->howToUse);
     }
 
 

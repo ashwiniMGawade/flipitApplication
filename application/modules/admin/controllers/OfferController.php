@@ -135,6 +135,15 @@ class Admin_OfferController extends Zend_Controller_Action
         die;
     }
 
+    public function favouriteshopdetailAction()
+    {
+        $params = $this->_getAllParams();
+        $favoriteShop = new FavoriteShop();
+        $getVisitorsCount = $favoriteShop->getVisitorsCountByFavoriteShopId($params['shopId']);
+        echo $getVisitorsCount;
+        die;
+    }
+
     public function saveofferAction()
     {
         $params = $this->_getAllParams();
@@ -1513,7 +1522,8 @@ class Admin_OfferController extends Zend_Controller_Action
     public function exportXlxAction()
     {
         # set fiel and its translattions
-        $file =  UPLOAD_EXCEL_PATH . 'offerList.xlsx' ;
+        $locale = LOCALE != "" ? "-".strtoupper(LOCALE) : "-NL";
+        $file =  UPLOAD_EXCEL_PATH . 'offerList'.$locale.'.xlsx' ;
         $fileName =  $this->view->translate($file);
 
         $this->_helper->layout()->disableLayout();

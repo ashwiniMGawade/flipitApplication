@@ -226,7 +226,7 @@ function setFormData(data){
 			}else{
 		    var image = data[0].logo.path+"/thum_"+data[0].logo.name;
 	        var imgSrc = HOST_PATH_PUBLIC + image;
-			$('span#offerLogoId').append( '<img src="'+imgSrc+'" id="uplodedOffer" alt="' +__('uploaded offer') +'">');
+			$('span#offerLogoId').append( '<img src="'+imgSrc+'" id="uplodedOffer" title="' +__('uploaded offer') +'" alt="' +__('uploaded offer') +'">');
 			}
 	        //$('#uplodedOffer').show().attr('src', imgSrc);
 			$("#uploadOfferOption").click();

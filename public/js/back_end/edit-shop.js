@@ -101,6 +101,25 @@ $(document).ready(init);
 
 function init()
 {
+	$('#addreason1').click(function() {
+		$('#addreason1').hide();
+	});
+
+	if ($('#reasons2').css('display') == 'block') {
+		$('#addreason1').hide();
+	}
+
+	if ($('#reasontitle2').val() == '') {
+		$('#reasons2').hide();
+	}
+
+	if ($('#reasonsubtitle2').val() != '') {
+		$('#addreason').hide();
+	}
+
+	if ($('#reasontitle3').val() == '') {
+		$('#reasons3').hide();
+	}
 	
 	word_count("#shopNotes", __("Short note about the shop length "),"#shopNotesLeft");
 	$('#shopNotes').keyup(function(){
@@ -115,6 +134,56 @@ function init()
 	});
 	
 	
+	jQuery('#shopOverwriteTitle').NobleCount('#shopOverwriteTitleLeft',{
+		max_chars: 68,
+		prefixString : __("Shop overwrite title length ")
+	});
+	
+	jQuery('#shopMetaDescription').NobleCount('#metaTextLeft',{
+		max_chars: 150,
+		prefixString : __("Shop meta description length ")
+	});
+
+	jQuery('#reasonsubtitle1').NobleCount('#reasonsubtitle1count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title1 length ")
+	});
+	jQuery('#reasonsubtitle2').NobleCount('#reasonsubtitle2count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title2 length ")
+	});
+	jQuery('#reasonsubtitle3').NobleCount('#reasonsubtitle3count',{
+		max_chars: 512,
+		prefixString : __("Shop reason sub title3 length ")
+	});
+
+	jQuery('#pagemetaTitle').NobleCount('#pagemetaTitleLeft',{
+		max_chars: 68,
+		prefixString : __("Shop meta title length ")
+	});
+	
+	jQuery('#pagemetaDesc').NobleCount('#pagemetaDescLeft',{
+		max_chars: 150,
+		prefixString : __("Shop page meta description length ")
+	});
+
+	$('#addreason').click(function(){
+		$('#reasons2').show();
+		$('#addreason').hide();
+		$('#addreason1').show();
+	});
+	
+	$('#addreason1').click(function(){
+		$('#reasons3').show();
+	});
+	$('#deletereason').click(function(){
+		$('#reasons2').hide();
+		$('#addreason1').hide();
+		$('#addreason').show();
+	});
+	$('#deletereason1').click(function(){
+		$('#reasons3').hide();
+	});
 	
 	$('button#prefillData').click(function(){
 		updateTitleSubtitle();
@@ -161,6 +230,18 @@ function init()
 	
 	$('#pagemetaTitle').textareaCount(options, function(data){
 		jQuery('#pagemetaTitleLeft').val(__("Shop meta title length ") + (data.input) + __(" characters"));
+	});
+
+	$('#shopName').textareaCount(options, function(data){
+		jQuery('#shopNameLeft').val(__("Shop name length ") + (data.input) + __(" characters"));
+	});
+	
+	$('#pageTitle').textareaCount(options, function(data){
+		jQuery('#pageTitleLeft').val(__("Page title length ") + (data.input) + __(" characters"));
+	});
+	
+	$('#pageSubTitle').textareaCount(options, function(data){
+		jQuery('#pageSubTitleLeft').val(__("Page sub title length ") + (data.input) + __(" characters"));
 	});
 
 	
@@ -961,6 +1042,23 @@ function moveToTrash(id){
 	});
 }
 
+function deleteShopReason(firstFieldName, secondFieldName, shopId) {
+	addOverLay();
+	$.ajax({
+		url : HOST_PATH + "admin/shop/deleteshopreason",
+		method : "post",
+		data : {
+			'firstFieldName' : firstFieldName,
+			'secondFieldName' : secondFieldName,
+			'shopId' : shopId
+		},
+		dataType : "json",
+		type : "post",
+		success : function(data) {
+			location.reload(true);
+		}
+	});
+}
 
 /**
  * when moveToTrash action in confirmed the ajax call to move the record according

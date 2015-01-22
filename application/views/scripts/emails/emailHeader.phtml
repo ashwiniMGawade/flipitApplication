@@ -12,8 +12,18 @@ $newsLetterlogo = FrontEnd_Helper_viewHelper::setEmailLogos(
     $this->publicPath,
     'email-header-best'
 );
-$logo = $this->mailType == 'welcome'
-    ? $welcomelogo : $newsLetterlogo;
+
+$codeAlertLogo = FrontEnd_Helper_viewHelper::setEmailLogos(
+    $locale,
+    $this->publicLocalePath,
+    $this->publicPath,
+    'code-alert'
+);
+if($this->mailType == 'codeAlert') {
+    $logo = $codeAlertLogo;
+} else {
+    $logo = $this->mailType == 'welcome' ? $welcomelogo : $newsLetterlogo;
+}
 ?>
 <tr>
     <td bgcolor="#0077cc">
@@ -25,7 +35,7 @@ $logo = $this->mailType == 'welcome'
             <tr>
                 <td width="205"></td>
                 <td width="431">
-                    <a href="<?php echo rtrim($this->httpPathLocale, '/'); ?>"><img src="<?php echo $logo; ?>" border="0" style="vertical-align:top;" alt="<?php echo $this->websiteName; ?>"></a>
+                    <a href="<?php echo rtrim($this->httpPathLocale, '/'); ?>"><img src="<?php echo $logo; ?>" border="0" style="vertical-align:top;" alt="<?php echo $this->websiteName; ?>" title="<?php echo $this->websiteName; ?>"></a>
                 </td>
             </tr>
             <tr><td colspan="2" height="20"></td></tr>

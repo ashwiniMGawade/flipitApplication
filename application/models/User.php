@@ -249,7 +249,7 @@ class User extends BaseUser
         $this->editorText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['editortext']);
         $this->popularKortingscode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
 
-        $this->createdBy = isset(Auth_StaffAdapter::getIdentity()->id) ? Auth_StaffAdapter::getIdentity()->id : '';
+        $this->createdBy = isset(Auth_StaffAdapter::getIdentity()->id) ? Auth_StaffAdapter::getIdentity()->id : '0';
         $fname = str_replace(' ', '-', $params['firstName']);
         $lname = str_replace(' ', '-', $params['lastName']);
         $this->slug = BackEnd_Helper_viewHelper::stripSlashesFromString(strtolower($fname ."-". $lname));
@@ -273,6 +273,11 @@ class User extends BaseUser
             }
         }
         $this->save();
+    
+        if (!empty($params['content'])) {
+            self::saveEditorBallonText($params, $this->id, 'add');
+        }
+
         //save interesting category in database
         if (isset($params['selectedCategoryies'])) {
             $connUser = BackEnd_Helper_viewHelper::addConnection();
@@ -496,6 +501,11 @@ class User extends BaseUser
             }
         }
         $this->save();
+
+        if (!empty($params['content'])) {
+            self::saveEditorBallonText($params, $this->id, 'update');
+        }
+
         $fullName = $params['firstName'] . " " . $params['lastName'];
         // update session if profile is being updated
         if ($this->id == Auth_StaffAdapter::getIdentity()->id) {
@@ -533,8 +543,6 @@ class User extends BaseUser
             BackEnd_Helper_viewHelper::closeConnection($connSite);
             $connUser = BackEnd_Helper_viewHelper::addConnection();
         }
-        //end code of enteresting category in database
-        //save favorite store in database
         if (!empty($params['fevoriteStore'])) {
             $connUser = BackEnd_Helper_viewHelper::addConnection();
             BackEnd_Helper_viewHelper::closeConnection($connUser);
@@ -550,26 +558,17 @@ class User extends BaseUser
             BackEnd_Helper_viewHelper::closeConnection($connSite);
             $connUser = BackEnd_Helper_viewHelper::addConnection();
         }
-
-        //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
-        //die("test");
-        //$alluserkey ="all_". "users". $params['firstName']. $params['lastName'] ."_list";
-        //FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserkey);
-
         $alluserIdkey ="user_".$this->id ."_data";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserIdkey);
-
         $key = 'user_'.$this->id.'_details';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
         $interestkey ="all_". "interesting".$this->id."_list";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($interestkey);
-
         $favouriteShopkey ="user_". "favouriteShop".$this->id ."_data";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($favouriteShopkey);
-        self::updateInDatabase($this->id, $fullName, 0);//change name of the author etc
+        self::updateInDatabase($this->id, $fullName, 0);
         return array(
           "ret" => $this->id ,
           "status" => self::SUCCESS,
@@ -1292,5 +1291,24 @@ class User extends BaseUser
         $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 1;');
         unset($databaseConnection);
         return true;
+    }
+
+    public static function saveEditorBallonText($params, $userId, $type)
+    {
+        if ($type == 'update') {
+            $delEditorText = Doctrine_Query::create()
+            ->delete("EditorBallonText e")
+            ->where("e.userid = ".$userId)
+            ->execute();
+        }
+        foreach ($params['content'] as $key => $content) {
+            if (!empty($params['content'][$key])) {
+                $ballonText = new EditorBallonText();
+                $ballonText->userid = $userId;
+                $ballonText->ballontext = BackEnd_Helper_viewHelper::stripSlashesFromString($params['content'][$key]);
+                $ballonText->deleted = 0;
+                $ballonText->save();
+            }
+        }
     }
 }

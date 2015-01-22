@@ -37,11 +37,10 @@ class PlusController extends Zend_Controller_Action
             getRequestedDataBySetGetCache(
                 (string)"all_categoriesArticles_list",
                 array('function' =>
-                '\KC\Repository\MoneySaving::getCategoryWiseArticles', 'parameters' => array()
+                '\KC\Repository\MoneySaving::getPopularArticlesAndCategory', 'parameters' => array()
                 ),
                 ''
             );
-
         $moneySavingPartialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
         $allArticlesWithAuthorDetails = $moneySavingPartialFunctions->addAuthorDetailsInArticles($categoryWiseArticles);
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
@@ -95,25 +94,6 @@ class PlusController extends Zend_Controller_Action
                 array('function' =>
                 'Articles::getArticleByPermalink', 'parameters' => array($permalink))
             );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         if (!empty($articleDetails)) {
             $currentArticleCategory = !empty($articleDetails[0]['relatedcategory'][0]['articlecategory'])
                                       ? $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'] : '';
@@ -142,10 +122,11 @@ class PlusController extends Zend_Controller_Action
                     'function' => '\KC\Repository\MoneySaving::getMostReadArticles', 'parameters' => array(3)));
             $this->view->articleDetails = $articleDetails[0];
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
-            $this->view->recentlyAddedArticles = \KC\Repository\MoneySaving::getRecentlyAddedArticles($articleDetails[0]['id'], 3);
-            
 
+            $this->view->recentlyAddedArticles = \KC\Repository\MoneySaving::getRecentlyAddedArticles($articleDetails[0]['id'], 3);
+       
 			$this->view->topPopularOffers = FrontEnd_Helper_viewHelper::
+
             getRequestedDataBySetGetCache("5_topOffers_list", array('function' =>
                 'Offer::getTopOffers', 'parameters' => array(5)));
             $this->view->userDetails = FrontEnd_Helper_viewHelper::

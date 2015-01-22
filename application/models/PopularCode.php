@@ -281,7 +281,7 @@ class PopularCode extends BasePopularCode
         $format = 'Y-m-j H:i:s';
         $date = date($format);
         $data = Doctrine_Query::create()
-        ->select('o.title as title,o.id as id')
+        ->select('o.title as title,o.id as id, o.userGenerated')
         ->from("Offer o")
         ->leftJoin('o.shop s')
         ->where('o.deleted=0')
@@ -418,15 +418,17 @@ class PopularCode extends BasePopularCode
      */
     public static function addOfferInList($id)
     {
-        //find offer by title
-        //$title=addslashes($title);
         $Offer = Doctrine_query::create()->from('Offer')
                 ->where('id=' . $id)->limit(1)
                 ->fetchArray();
         $flag = '0';
 
         if (sizeof($Offer) > 0) {
-
+            Doctrine_Query::create()->update('Offer')
+                ->set('editorpicks', '1')
+                ->where('id ='.$id)
+                ->execute();
+            
             //check offer exist or not
             $pc = Doctrine_Core::getTable('PopularCode')
                     ->findBy('offerId', $id);
@@ -482,6 +484,13 @@ class PopularCode extends BasePopularCode
     public static function deletePapularCode($id, $position)
     {
         if ($id) {
+            $offerDetail = Doctrine_query::create()->from('PopularCode')
+                ->where('id=' . $id)->limit(1)
+                ->fetchArray();
+            Doctrine_Query::create()->update('Offer')
+                ->set('editorpicks', '0')
+                ->where('id ='.$offerDetail[0]['offerId'])
+                ->execute();
             //delete popular code from list
             $pc = Doctrine_Query::create()->delete('PopularCode')
                     ->where('id=' . $id)->execute();

@@ -85,7 +85,8 @@ echo $this->headTitle()->append('Edit Shop');?>
                     <div class="mainpage-content-right">
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div class="mainpage-content-right-inner-left-other">
-                              <input value="<?php echo $this->data['name'] ; ?>" type="text" class="span3"  id="shopName" name="shopName"  placeholder=<?php echo $this->translate('Shop Name'); ?>>
+                              <input value="<?php echo $this->data['name'] ; ?>" type="text" class="span3"  id="shopName" name="shopName"  placeholder=<?php echo $this->translate('Shop Name'); ?> style="margin-bottom: 0;">
+                              <input type="text" id="shopNameLeft" class="input-xlarge  btop word-count" value="<?php echo $this->translate("Shop name length "). strlen($this->data['name']) . $this->translate(' characters');?>" placeholder="<?php echo $this->translate('0 characters');?>" disabled="disabled">
 </div>
                     </div>
                 </div>
@@ -104,7 +105,8 @@ echo $this->headTitle()->append('Edit Shop');?>
                     <div class="mainpage-content-right">
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div class="mainpage-content-right-inner-left-other">
-                        	<input value="<?php echo $this->data['overriteTitle'] ; ?>" type="text" class="span3 ignore" placeholder="<?php echo $this->translate('Overwrite Title'); ?>" name="shopOverwriteTitle">
+                        	<input value="<?php echo $this->data['overriteTitle'] ; ?>" type="text" class="span3 ignore" placeholder="<?php echo $this->translate('Overwrite Title'); ?>" name="shopOverwriteTitle" id="shopOverwriteTitle" style="margin-bottom: 0;">
+                            <span id="shopOverwriteTitleLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
                         </div>
                     </div>    
                 </div>
@@ -114,69 +116,11 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div class="mainpage-content-right-inner-left-other">
 	                        <textarea class="input-xlarge mbot bbot ignore" id="shopMetaDescription" name="shopMetaDescription" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"><?php echo $this->data['metaDescription']; ?></textarea>
-							<input type="text" disabled="disabled" value="<?php echo $this->translate('Shop meta description length ') . strlen($this->data['metaDescription']). $this->translate(' characters');?>" id="metaTextLeft" class="input-xlarge disabled btop word-count">
+                            <span id="metaTextLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
                         </div>
                     </div>
-                </div>
-                 <div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Allow user generated content'); ?></strong></label></div>
-                    <div class="mainpage-content-right">
-                    	<div data-toggle="buttons-checkbox" class="btn-group">
-                            <button onclick="usergenrated(event,'usergenrated','on')" class="btn <?php if($this->data['usergenratedcontent']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('On'); ?></button>                     
-                            <button style="border-radius:0 4px 4px 0" onclick="usergenrated(event,'usergenrated','off')" class="btn <?php if($this->data['usergenratedcontent']=='0'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Off'); ?></button>
-                            <input type="checkbox" id="usergenratedchk" <?php if($this->data['usergenratedcontent']=='1'){ echo 'checked'; }  ?>  name="usergenratedchk" style="display:none;"> 
-                      </div>
-                  </div>    
-                </div>
-                <div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display singup option");?></strong></label></div>
-                    <div class="mainpage-content-right">
-                    	<div data-toggle="buttons-checkbox" class="btn-group">
-                             <button type="button" class="btn <?php if($this->data['showSignupOption']=='1'){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'signupOption','on');"><?php echo $this->translate('Yes'); ?></button>                     
-                            <button type="button" class="btn <?php if($this->data['showSignupOption']=='0'){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'signupOption','off');"><?php echo $this->translate('No'); ?></button> 
-                          </div>
-                    </div>
-                </div>
-                <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Allow Discussions'); ?></strong></label></div>
-                <div class="mainpage-content-right">
-                   	<div data-toggle="buttons-checkbox" class="btn-group">
-                            <button onclick="discussionCheck(event,'on')" class="btn <?php if($this->data['discussions']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
-
-                            <button style="border-radius:0 4px 4px 0" onclick="discussionCheck(event,'off')" class="btn <?php if($this->data['discussions']=='0' || $this->data['discussions']==''){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('No'); ?></button>
-                            
-                            <input type="checkbox" id="discussions" <?php if($this->data['discussions']=='1'){ echo 'checked'; }  ?>  name="discussions" style="display:none;"> 
-                    </div>
-                </div>
-				<div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display similar shops");?></strong></label></div>
-                     <div class="mainpage-content-right">
-                     	<div data-toggle="buttons-checkbox" class="btn-group">
-							<button onClick="setOnOff(event,'similarShops','on');" class="btn <?php if($this->data['showSimliarShops']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
-                            <button onClick="setOnOff(event,'similarShops','off');" class="btn <?php if($this->data['showSimliarShops']=='0' || $this->data['showSimliarShops']==''){ echo 'btn-primary'; }  ?>" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
-                            <input type="hidden" value="<?php echo $this->data['showSimliarShops'] ? 1 : 0 ;?>" id="similarShops" name="similarShops" style="display:none;"> 
-                        </div>
-                     </div>
                 </div>
                 
-             	<div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display chains");?></strong></label></div>
-                    <div class="mainpage-content-right">
-                    	<div data-toggle="buttons-checkbox" class="btn-group">
-                            <button onClick="setOnOff(event,'showChains','on');" class="btn <?php if($this->data['showChains']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
-                            <button onClick="setOnOff(event,'showChains','off');" class="btn <?php if($this->data['showChains']=='0' || $this->data['showChains']==''){ echo 'btn-primary'; }  ?>" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
-                          </div>
-                    </div>
-                </div>
-                <div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php 
-                        echo $this->translate("Strict Confirmation");?></strong></label></div>
-                    <div class="mainpage-content-right">
-                        <div data-toggle="buttons-checkbox" class="btn-group">
-                            <button onClick="setOnOff(event,'strictConfirmation','on');" class="btn <?php if($this->data['strictConfirmation']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
-                            <button onClick="setOnOff(event,'strictConfirmation','off');" class="btn <?php if($this->data['strictConfirmation']=='0' || $this->data['strictConfirmation']==''){ echo 'btn-primary'; }  ?>" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
-                          </div>
-                    </div>
-                </div>
                 <div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Title'); ?></strong></label></div>
                     <div class="mainpage-content-right">
@@ -305,6 +249,113 @@ echo $this->headTitle()->append('Edit Shop');?>
                 </div>
             </div>
             
+            <div class="mainpage-content">
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("6 Reasons to Choose Shop");?></strong></label>
+                    </div>
+                </div>
+                <br/>
+                <div id="reasons">
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <input id="reasontitle1" class="span3 ignore" style="margin-bottom: 0;" type="text" value = "<?php echo $value =  !empty($this->shopReasons[0]['fieldvalue']) ? $this->shopReasons[0]['fieldvalue'] : '';?>" name="reasontitle1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">      
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Sub-Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <textarea id="reasonsubtitle1" class="input-xlarge mbot bbot ignore" name="reasonsubtitle1" rows="3"><?php echo $value =  !empty($this->shopReasons[1]['fieldvalue']) ? $this->shopReasons[1]['fieldvalue'] : '';?></textarea>
+                                <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
+                                <span id="reasonsubtitle1count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="mainpage-content-line"> 
+                        <div class="mainpage-content-right">
+                            <div class="coupon-sidebar-content-box-shop mb10">
+                                <button class="btn down" id="addreason" href="#" type="button"><?php echo $this->translate('Add More Reason');?></button>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+                <div id="reasons2">
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Title 2");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <input id="reasontitle2" class="span3 ignore" style="margin-bottom: 0;" type="text" value = "<?php echo $value = !empty($this->shopReasons[2]['fieldvalue']) ?  $this->shopReasons[2]['fieldvalue'] : '';?>" name="reasontitle2">
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">  
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Sub-Title 2");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <textarea id="reasonsubtitle2" class="input-xlarge mbot bbot ignore" name="reasonsubtitle2" rows="3" ><?php echo $value = !empty($this->shopReasons[3]['fieldvalue']) ? $this->shopReasons[3]['fieldvalue'] : '';?></textarea>
+                                <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
+                                <span id="reasonsubtitle2count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-right">
+                            <div class="coupon-sidebar-content-box-shop mb10">
+                                <button class="btn down" id="addreason1" href="#" type="button"><?php echo $this->translate('Add More Reason');?></button>
+                                <button class="btn" href="#" onclick="deleteShopReason('reasontitle2','reasonsubtitle2',<?php echo $shopId = !empty($this->shopReasons) ? $this->shopReasons[0]['shopid'] : '';?>)" type="button" id="deletereason"><?php echo $this->translate('Delete Reason 2');?></button>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+                <div id="reasons3">
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Title 3");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <input id="reasontitle3" class="span3 ignore" style="margin-bottom: 0;" type="text" value = "<?php echo $value = !empty($this->shopReasons[4]['fieldvalue']) ? $this->shopReasons[4]['fieldvalue'] : '';?>" name="reasontitle3">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line"> 
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Sub-Title 3");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <textarea id="reasonsubtitle3" class="input-xlarge mbot bbot ignore" name="reasonsubtitle3" rows="3" ><?php echo $value = !empty($this->shopReasons[5]['fieldvalue']) ? $this->shopReasons[5]['fieldvalue'] : '';?></textarea>
+                                <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
+                                <span id="reasonsubtitle3count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-right">
+                            <div class="coupon-sidebar-content-box-shop mb10">
+                                <button class="btn" href="#" onclick="deleteShopReason('reasontitle3','reasonsubtitle3', <?php echo $shopId = !empty($this->shopReasons) ? $this->shopReasons[0]['shopid'] : '';?>)" type="button" id="deletereason1"><?php echo $this->translate('Delete Reason 3');?></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+            </div>
             
                 <div class="mainpage-content">
             	<div class="mainpage-content-line">
@@ -348,6 +399,17 @@ echo $this->headTitle()->append('Edit Shop');?>
                         	
                         </div>
                     </div>    
+                </div>
+
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display similar shops");?></strong></label></div>
+                     <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onClick="setOnOff(event,'similarShops','on');" class="btn <?php if($this->data['showSimliarShops']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button onClick="setOnOff(event,'similarShops','off');" class="btn <?php if($this->data['showSimliarShops']=='0' || $this->data['showSimliarShops']==''){ echo 'btn-primary'; }  ?>" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
+                            <input type="hidden" value="<?php echo $this->data['showSimliarShops'] ? 1 : 0 ;?>" id="similarShops" name="similarShops" style="display:none;"> 
+                        </div>
+                     </div>
                 </div>
             </div>
             
@@ -490,40 +552,6 @@ echo $this->headTitle()->append('Edit Shop');?>
 						</div>
                     </div>
                 </div>
-                
-                   <div class="mainpage-content-line">
-                    <div class="mainpage-content-left">
-                        <label>
-                            <strong><?php echo $this->translate('Website Screenshot'); ?></strong>
-                        </label>
-                    </div>
-                    <div class="mainpage-content-right">
-                     <div class="mainpage-content-right-inner-right-other"></div>
-                      <?php       
-                        $shopPicture = '';
-                        if(
-                            isset($this->data['screenshot']['name'] ) && $this->data['screenshot']['name'] != ''
-                            ) {
-                            $shopPicture = 
-                                PUBLIC_PATH_CDN
-                                .$this->data['screenshot']['path'] . $this->data['screenshot']['name'];
-                        }	
-                      ?>
-                        <div class='browse-container'>
-                            <img class='image-container' 
-                            alt="<?php echo $this->translate('Shop screen shot'); ?>" src="<?php echo $shopPicture ; ?>">
-                    	</div>
-                      	<div class="mainpage-content-right-inner-left-other">
-                            <div>
-                        	<input  data-max-size="2097152" type="file" name="websitescreenshot" 
-                            onchange="checkFileType(event)" class="ignore" />
-                            </div>
-				        	<div id="logo_file_message" class="help-inline">
-                            <?php echo $this->translate('Image Size: min width 450px (*.jpg or *.png file only)'); ?>
-                            </span>
-                    	</div>
-                    </div>
-                </div>
             </div>
             <div class="mainpage-content">
             	<div class="mainpage-content-line mb10">
@@ -534,6 +562,57 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <textarea class="input-xlarge mbot bbot ignore word_count"   id="shopDescription" name="shopDescription" placeholder="<?php echo $this->translate('Small description about the shop.'); ?>" rows="3"><?php echo $this->data['shopText'] ; ?></textarea>
                         <input type="text" id='shopDescription_count' class="input-xlarge disabled btop word-count" disabled="disabled">
                         </div>
+                    </div>
+                </div>
+
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Allow user generated content'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onclick="usergenrated(event,'usergenrated','on')" class="btn <?php if($this->data['usergenratedcontent']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('On'); ?></button>                     
+                            <button style="border-radius:0 4px 4px 0" onclick="usergenrated(event,'usergenrated','off')" class="btn <?php if($this->data['usergenratedcontent']=='0'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Off'); ?></button>
+                            <input type="checkbox" id="usergenratedchk" <?php if($this->data['usergenratedcontent']=='1'){ echo 'checked'; }  ?>  name="usergenratedchk" style="display:none;"> 
+                      </div>
+                  </div>    
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display singup option");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                             <button type="button" class="btn <?php if($this->data['showSignupOption']=='1'){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'signupOption','on');"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button type="button" class="btn <?php if($this->data['showSignupOption']=='0'){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'signupOption','off');"><?php echo $this->translate('No'); ?></button> 
+                          </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Allow Discussions'); ?></strong></label></div>
+                <div class="mainpage-content-right">
+                    <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onclick="discussionCheck(event,'on')" class="btn <?php if($this->data['discussions']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+
+                            <button style="border-radius:0 4px 4px 0" onclick="discussionCheck(event,'off')" class="btn <?php if($this->data['discussions']=='0' || $this->data['discussions']==''){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('No'); ?></button>
+                            
+                            <input type="checkbox" id="discussions" <?php if($this->data['discussions']=='1'){ echo 'checked'; }  ?>  name="discussions" style="display:none;"> 
+                    </div>
+                </div>
+                
+                
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display chains");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onClick="setOnOff(event,'showChains','on');" class="btn <?php if($this->data['showChains']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button onClick="setOnOff(event,'showChains','off');" class="btn <?php if($this->data['showChains']=='0' || $this->data['showChains']==''){ echo 'btn-primary'; }  ?>" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
+                          </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php 
+                        echo $this->translate("Strict Confirmation");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onClick="setOnOff(event,'strictConfirmation','on');" class="btn <?php if($this->data['strictConfirmation']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button onClick="setOnOff(event,'strictConfirmation','off');" class="btn <?php if($this->data['strictConfirmation']=='0' || $this->data['strictConfirmation']==''){ echo 'btn-primary'; }  ?>" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
+                          </div>
                     </div>
                 </div>
             </div>
@@ -584,7 +663,35 @@ echo $this->headTitle()->append('Edit Shop');?>
                 </div>
  
 <!-- End New changes Extra Shop properties -->  
-                 
+            <div class="mainpage-content">
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('Light box first text'); ?></strong></label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" class="span3" value="<?php echo $this->data['lightboxfirsttext'] ; ?>"
+                            placeholder="<?php echo $this->translate('Light box first text'); ?>" 
+                            name="lightboxfirsttext">
+                        </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('Light box second text'); ?></strong></label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" class="span3" value="<?php echo $this->data['lightboxsecondtext'] ; ?>"
+                            placeholder="<?php echo $this->translate('Light box second text'); ?>"
+                            name="lightboxsecondtext">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="mainpage-content">
             	<div class="mainpage-content-line mb10">
                     <div class="mainpage-content-left"><strong><?php echo $this->translate("Add a 'How to use the code'"); ?></strong></div>
@@ -675,7 +782,8 @@ echo $this->headTitle()->append('Edit Shop');?>
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Page title'); ?></strong></label></div>
                     <div class="mainpage-content-right">
                     	<div class="mainpage-content-right-inner-left-other">
-                    		<input type="text" name="pageTitle" id="pageTitle" class="span3" placeholder="<?php echo $this->translate('Page title'); ?>" value="<?php echo $this->data['howtoTitle'] ; ?>">
+                    		<input type="text" name="pageTitle" id="pageTitle" class="span3" placeholder="<?php echo $this->translate('Page title'); ?>" value="<?php echo $this->data['howtoTitle'] ; ?>" style="margin-bottom: 0;">
+                            <input type="text" id="pageTitleLeft" class="input-xlarge  btop word-count" value="<?php echo $this->translate("Page title length "). strlen($this->data['howtoTitle']) . $this->translate(' characters');?>" placeholder="<?php echo $this->translate('0 characters');?>" disabled="disabled">
                     	</div>
                     </div>
                 </div>
@@ -684,7 +792,8 @@ echo $this->headTitle()->append('Edit Shop');?>
                      <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Page Subtitle'); ?></strong></label></div>
                      <div class="mainpage-content-right">
                      	<div class="mainpage-content-right-inner-left-other">
-                     		<input type="text" name="pageSubTitle" id="pageSubTitle" class="span3" placeholder="<?php echo $this->translate('Page Subtitle'); ?>" value="<?php echo $this->data['howtoSubtitle'] ; ?>">
+                     		<input type="text" name="pageSubTitle" id="pageSubTitle" class="span3" placeholder="<?php echo $this->translate('Page Subtitle'); ?>" value="<?php echo $this->data['howtoSubtitle'] ; ?>" style="margin-bottom: 0;">
+                        <input type="text" id="pageSubTitleLeft" class="input-xlarge  btop word-count" value="<?php echo $this->translate("Page sub title length "). strlen($this->data['howtoSubtitle']) . $this->translate(' characters');?>" placeholder="<?php echo $this->translate('0 characters');?>" disabled="disabled">
                      	</div>
                      </div>	
                 </div>
@@ -694,7 +803,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                      <div class="mainpage-content-right">
                      	<div class="mainpage-content-right-inner-left-other">
 		                     <input type="text" name="pagemetaTitle" id="pagemetaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore" value="<?php echo $this->data['howtoMetaTitle'] ; ?>"/>
-							 <input type="text" disabled="disabled" value="<?php echo $this->translate("Shop meta title length "). strlen($this->data['howtoMetaTitle']) . $this->translate(' characters');?>" id="pagemetaTitleLeft" class="input-xlarge disabled btop word-count">
+                             <span id="pagemetaTitleLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
 						</div>	 
 					 </div>
                 </div>
@@ -703,7 +812,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                      <div class="mainpage-content-right">
                      	<div class="mainpage-content-right-inner-left-other">
 		                     <textarea class="input-xlarge mbot bbot ignore" id="pagemetaDesc" name="pagemetaDesc" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"><?php echo $this->data['howtoMetaDescription'] ; ?></textarea>
-							 <input type="text" disabled="disabled" value="<?php echo $this->translate("Shop page meta description length "). strlen($this->data['howtoMetaDescription']) . $this->translate(' characters');?>" id="pagemetaDescLeft" class="input-xlarge disabled btop word-count">
+                             <span id="pagemetaDescLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
 						</div>	 
 					 </div>
                 </div>

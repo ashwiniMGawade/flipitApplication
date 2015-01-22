@@ -2,7 +2,7 @@
     <ul>
         <li>
             <strong class="title"><?php echo $this->translate('Discount suits'); ?></strong>
-            <?php echo FrontEnd_Helper_layoutContent::generateMobileMenu(); ?>
+            <?php echo FrontEnd_Helper_layoutContent::generateMobileMenu('mobile'); ?>
         </li>
         <li>
             <strong class="title"><?php echo $this->translate('Account') ;?></strong>
@@ -13,6 +13,10 @@
                 echo $this->render('partials/_user_nav.phtml');
             endif;
             ?>
+        </li>
+        <li>
+            <strong class="title"><?php echo $this->translate('Special Pages') ;?></strong>
+            <?php echo FrontEnd_Helper_layoutContent::generateSpecialPageMobileMenu(); ?>
         </li>
     </ul>
 </nav>

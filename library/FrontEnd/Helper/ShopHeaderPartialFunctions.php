@@ -40,13 +40,14 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
     ) {
         $shopImage = '<img class="radiusImg" 
             src="'. PUBLIC_PATH_CDN . $shop['logo']['path'] . "thum_big_" . $shop['logo']['name']. '" 
-            alt="'.$shop['name'].'" width="176" height="89" />';
+            alt="'.$shop['name'].'" width="176" height="89" title="'.$shop['name'].'" />';
         $shopImageContent = $affliateUrl != '#' ? '<a target="_blank" rel="nofollow" 
             class="text-blue-link store-header-link '.$affliateClass.'"  '.$affliateDisabled.'
             onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">'.$shopImage.'</a>' : $shopImage;
         $divContent =
             '<div class="header-block header-block-2">
                 <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;">
+                    <span class="glyphicon glyphicon-warning-sign"></span>
                     <strong></strong>
                 </div>
                 <div class="icon">
@@ -78,5 +79,17 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
             $divContent .='<h1>'.$offerTitle.'</h1>';
         }
         return $divContent;
+    }
+
+    public function getDisqusReplyCounter($shop)
+    {
+        $shopPermalink = $shop['permaLink'];
+        $disqusUrl = HTTP_PATH_LOCALE.$shopPermalink;
+        $anchorTag =
+            '<a href="javascript:void(0);" onClick="scrollToDisqus();" 
+                class="btn text-blue-link fl store-header-link  pop btn btn-sm btn-default" 
+                rel="nofollow"><span class="disqus-comment-count" data-disqus-url="'.$disqusUrl.'"> </span>
+            </a>';
+        return $anchorTag;
     }
 }

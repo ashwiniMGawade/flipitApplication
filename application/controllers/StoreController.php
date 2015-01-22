@@ -42,8 +42,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($shopPermalink);
         $shopRecordsLimit = 10;
         $shopParams = $this->_getAllParams();
-
-		if (isset($shopParams['popup']) && $shopParams['popup'] != '') {
+        if (isset($shopParams['popup']) && $shopParams['popup'] != '') {
             $offerVisiblity = Offer::getOfferVisiblity($shopParams['popup']);
             $shopInfo = Shop::getShopInformation($this->getRequest()->getParam('id'));
             if (!Auth_VisitorAdapter::hasIdentity() && $offerVisiblity == 1) {
@@ -146,7 +145,8 @@ class StoreController extends Zend_Controller_Action
             $explodedPermalink = explode("/", $shopPermalink);
             $shopPermalink = $explodedPermalink[1];
         }
-		$shopPermalink =  explode("?", $shopPermalink);
+
+        $shopPermalink =  explode("?", $shopPermalink);
         if (isset($shopPermalink[0])) {
             $shopPermalink = $shopPermalink[0];
         }
@@ -199,7 +199,7 @@ class StoreController extends Zend_Controller_Action
                 ),
                 ''
             );
-		$contentManagerId = !empty($shopInformation[0]['contentManagerId']) ? $shopInformation[0]['contentManagerId'] : '';
+        $contentManagerId = !empty($shopInformation[0]['contentManagerId']) ? $shopInformation[0]['contentManagerId'] : '';
         $this->view->ballonEditorText = EditorBallonText::getEditorText($contentManagerId);
         $customHeader = isset($shopInformation[0]['customHeader']) ? $shopInformation[0]['customHeader'] : '';
         $this->viewHelperObject->getMetaTags(
@@ -426,12 +426,14 @@ class StoreController extends Zend_Controller_Action
         $this->view->permalink = $this->getRequest()->getParam('permalink');
     }
 
-	public function socialcodeAction()
+    public function socialcodeAction()
     {
         $this->_helper->layout()->disableLayout();
         $shopPermalink = $this->getRequest()->getParam('shopPermalink');
+        $shopId = base64_encode(Shop::getShopIdByPermalink($shopPermalink));
         $socialcodeForm = new Application_Form_SocialCode();
         $socialcodeForm->getElement('shopPermalink')->setValue($shopPermalink);
+        $socialcodeForm->getElement('shopId')->setValue($shopId);
         $this->view->zendForm = $socialcodeForm;
         if ($this->getRequest()->isPost()) {
             if ($socialcodeForm->isValid($this->getRequest()->getPost())) {
@@ -443,6 +445,8 @@ class StoreController extends Zend_Controller_Action
                 exit();
             } else {
                 $socialcodeForm->highlightErrorElements();
+                $socialcode = $socialcodeForm->getValues();
+                $this->_redirect(HTTP_PATH_LOCALE. $socialcode['shopPermalink']);
             }
         }
     }

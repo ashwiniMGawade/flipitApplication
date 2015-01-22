@@ -42,7 +42,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
             $offerType,
             $imageName,
             FrontEnd_Helper_viewHelper::__form($headerText),
-            36,
+            70,
             $offerType,
             '',
             $offerType=='topOffers' ? '' : 'newOffer'
@@ -148,21 +148,46 @@ class FrontEnd_Helper_HomePagePartialFunctions
 
     public function getImageOrSpanTag($listType, $imageName, $imageSize, $imageDescription)
     {
-        $imageTagOrSpan = '';
-        if ($listType =='special') {
-            $imageTagOrSpan =
-                '<span class="discount-label">'
-                    . FrontEnd_Helper_viewHelper::__translate($listType)
-                . '</span>' ;
-        } else if ($listType =='savingGuide') {
-            $cssClassForPlusImage =  LOCALE=='' ? "kc_menu_image_home" : 'flipit-menu_image_home';
-            $imageTagOrSpan ='<span class="' . $cssClassForPlusImage . '" ></span>';
+        if ($listType == 'categories') {
+            $imageTagOrSpan = self::getLeftPanelImage($imageName, $imageSize, $imageDescription);
         } else {
-            $imageTagOrSpan =
-            '<img src="'.$imageName.'" width="'.$imageSize.'" height="'.$imageSize.'" 
-            alt="'. $imageDescription.'">';
+            if ($listType =='special') {
+                $pageLeftImage = Page::getPageHomeImageByPermalink($imageDescription);
+                if (empty( $pageLeftImage)) {
+                    $imageTagOrSpan =
+                    '<span class="discount-label">'
+                        . FrontEnd_Helper_viewHelper::__translate($listType)
+                    . '</span>';
+                } else {
+                    $imageTagOrSpan = self::getLeftPanelImage($pageLeftImage, $imageSize, $imageDescription);
+                }
+            } else if ($listType =='savingGuide') {
+                $pageLeftImage = Page::getPageHomeImageByPermalink(FrontEnd_Helper_viewHelper::__link('link_plus'));
+                if (empty($pageLeftImage)) {
+                    $cssClassForPlusImage =  LOCALE=='' ? "kc_menu_image_home" : 'flipit-menu_image_home';
+                    $imageTagOrSpan ='<span class="' . $cssClassForPlusImage . '" ></span>';
+                } else {
+                    $imageTagOrSpan = self::getLeftPanelImage($pageLeftImage, $imageSize, $imageDescription);
+                }
+            } else if ($listType =='topOffers') {
+                $pageLeftImage = Page::getPageHomeImageByPermalink(FrontEnd_Helper_viewHelper::__link('link_top-20'));
+                $pageLeftImage = !empty($pageLeftImage) ? $pageLeftImage : HTTP_PATH ."public/images/img-08.png";
+                $imageTagOrSpan = self::getLeftPanelImage($pageLeftImage, $imageSize, $imageDescription);
+            } else if ($listType =='newOffers') {
+                $pageLeftImage = Page::getPageHomeImageByPermalink(FrontEnd_Helper_viewHelper::__link('link_nieuw'));
+                $pageLeftImage = !empty($pageLeftImage) ? $pageLeftImage : HTTP_PATH ."public/images/img-09.png";
+                $imageTagOrSpan = self::getLeftPanelImage($pageLeftImage, $imageSize, $imageDescription);
+            }
         }
         return $imageTagOrSpan;
+    }
+
+    public function getLeftPanelImage($imageName, $imageSize, $imageDescription)
+    {
+        $leftImage =
+        '<img src="'.$imageName.'" width="'.$imageSize.'" height="'.$imageSize.'" 
+        alt="'. $imageDescription.'" title="'. $imageDescription.'">';
+        return $leftImage;
     }
 
     public function getHomePageRightColumnOffersList()
@@ -314,7 +339,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
         <li>
             <a href="'.HTTP_PATH_LOCALE.$shopPermalink.'">
                 <div class="logo-box '.$dynamicDivId.'">
-                    <img '.$imageDimensions.' alt="' . $shopName .'" src="' . $shopImage .'">
+                    <img '.$imageDimensions.' alt="' . $shopName .'" src="' . $shopImage .'" title="' . $shopName .'">
                 </div>
                 <div class="box">
                     <h3>
@@ -366,19 +391,19 @@ class FrontEnd_Helper_HomePagePartialFunctions
                 <a href="'. $link.'" class="all">'.$textButtomLink.'</a><ul>';
         $moneySavingGuidestHtml = '';
         foreach ($savingGuides as $savingGuide) {
-            $savingImage = !empty($savingGuide['thumbnail'])
-                ? PUBLIC_PATH_CDN.ltrim($savingGuide['thumbnail']['path'], "/"). $savingGuide['thumbnail']['name']
+            $savingImage = !empty($savingGuide['articles']['thumbnail'])
+                ? PUBLIC_PATH_CDN.ltrim($savingGuide['articles']['thumbnail']['path'], "/"). $savingGuide['articles']['thumbnail']['name']
                 : '';
-            $savingPermalink = FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$savingGuide['permalink'];
+            $savingPermalink = FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$savingGuide['articles']['permalink'];
 
-            $savingTitle = mb_strlen($savingGuide['title'], 'UTF-8') > 50
-                ? mb_substr($savingGuide['title'], 0, 50, 'UTF-8') . "..."
-                : $savingGuide['title'];
+            $savingTitle = mb_strlen($savingGuide['articles']['title'], 'UTF-8') > 50
+                ? mb_substr($savingGuide['articles']['title'], 0, 50, 'UTF-8') . "..."
+                : $savingGuide['articles']['title'];
                 
             $allowedTags = '';
             $guideDescription = strip_tags(
-                isset($savingGuide['chapters'][0]['content'])
-                ? $savingGuide['chapters'][0]['content'] : '',
+                isset($savingGuide['articles']['chapters'][0]['content'])
+                ? $savingGuide['articles']['chapters'][0]['content'] : '',
                 $allowedTags
             );
             $savingContent = mb_strlen($guideDescription, 'UTF-8') > 85

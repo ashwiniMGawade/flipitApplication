@@ -11,13 +11,16 @@ echo $this->shopName!= ''
 <?php
 echo $this->shopName!= '' 
     ? $this->translate('Ask us anything about'). ' '. $headerName.' '. $this->translate('and their discounts') 
-    : $this->translate('Ask us anything about'). ' '. $this->translate('discounts');
+    : $this->translate('Ask us anything about discounts');
 ?>
     </strong>
 </header>
 <section id="disqus_thread" class="section section-comments" style="display: none;"></section>
 <script type="text/javascript">
-    var disqus_shortname = '<?php echo $this->translate('disqus_shortname');?>';
+    var disqus_shortname = '<?php echo FrontEnd_Helper_viewHelper::__form("form_disqus_shortname");?>';
+    <?php if (isset($this->discussionUrl) && $this->discussionUrl != '') { ?>
+        var disqus_url = '<?php echo HTTP_PATH_LOCALE.$this->discussionUrl; ?>';
+    <?php } ?>
 </script>
 <?php
 $this->minifyHeadScript()->appendFile("/public/js/front_end/disqusComments.js");
@@ -39,3 +42,4 @@ $this->minifyHeadScript()->appendFile("/public/js/front_end/disqusComments.js");
         ?>
     </section>
 </div>
+

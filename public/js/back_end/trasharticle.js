@@ -244,7 +244,6 @@ function deleteParmanent(id)
 {
 	bootbox.confirm(__("Are you sure you want to permanently delete this article?"),__('No'),__('Yes'),function(r){
 		if(!r){
-			
 			return false;
 		}
 		else{
@@ -270,14 +269,10 @@ function deleteArticles(id) {
 		dataType : "json",
 		type : "post",
 		success : function(data) {
-			
 			if (data != null) {
-				
-				window.location.href = "article";
-				
+				window.location.href = "trasharticle";
 			} else {
-				
-				window.location.href = "article";
+				window.location.href = "trasharticle";
 			}
 		}
 	});

@@ -3463,3 +3463,30 @@ div.mainpage-content-right-inner div.browse-container img.image-container {
 div#error-message {
 	color: #B94A48;
 }
+
+.wordcount-width{
+	width: 99% !important;
+}
+
+.offer-wordcount-width{
+	width: 99% !important;
+}
+
+.shop-wordcount-width{
+	width: 99% !important;
+}
+
+#globalExportForm .export-submit-btn{
+    margin-top: 6px;
+    padding: 4px 20px;
+}
+.export-password-success{
+	float: left;
+    margin-left: 22px;
+    padding-bottom: 20px;
+    color: red;
+}
+#poststuff .alert-custom-wrapper{
+	padding: 0 10px;
+	text-indent: 0;
+}

@@ -160,7 +160,7 @@ EOD;
         }
         $canocalUrl = $permalink;
         preg_match("/[^\/]+$/", $permalink, $permalinkMatches);
-        if (intval($permalinkMatches[0]) > 0 && intval($permalinkMatches[0]) < 4) :
+        if (intval($permalinkMatches[0]) > 0 && intval($permalinkMatches[0]) < 10) :
             if (intval($permalinkMatches[0]) > intval($pageCount)) :
                 $permalink = explode('/'.$permalinkMatches[0], $permalink);
                 $permalink = $permalink[0];
@@ -179,7 +179,7 @@ EOD;
                 header('location:'. HTTP_PATH.$permalink[0]);
             }
             $permalink = $permalink[0];
-        elseif (intval($permalinkMatches[0]) > 3) :
+        elseif (intval($permalinkMatches[0]) > 10) :
             throw new Exception('Error occured');
         else:
             $permalink = $permalink;
@@ -188,7 +188,7 @@ EOD;
         $view = \Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view;
         $view->headLink(array('rel' => 'canonical', 'href' => HTTP_PATH . strtolower($canocalUrl)));
         if ($pageCount > 1) :
-            if ($currentPage <= 2) :
+            if ($currentPage < 9) :
                 if ($currentPage == 1) :
                     $permalinkAfterQueryString = explode('?', $permalink);
                     $permalink = $permalinkAfterQueryString[0];
@@ -209,7 +209,7 @@ EOD;
 
             echo '<ul class="pagination">';
             foreach ($pagesInRange as $pageNumber):
-                if ($pageNumber < 4):
+                if ($pageNumber < 10):
                     $pageNumberAfterSlash = '';
                     if ($pageNumber > 1) :
                         $pageNumberAfterSlash = "/".$pageNumber;
@@ -227,7 +227,7 @@ EOD;
                         </a>
                     </li>
                     <?php
-                elseif (isset($nextPage) && $pageNumber < 4) : ?>
+                elseif (isset($nextPage) && $pageNumber < 10) : ?>
                     <li class="next">
                         <a href="<?php echo HTTP_PATH . $permalink . $pageNumberAfterSlash ?>">&gt;</a>
                     </li>
@@ -539,7 +539,7 @@ EOD;
                 $shopData = \KC\Repository\Offer::getAllOfferOnShop($shopId);
                 break;
             case 'topsixoffers':
-                $shopData = \KC\Repository\Offer::getAllOfferOnShop($shopId, $limit);
+                $shopData = \KC\Repository\Offer::getAllOfferOnShop($shopId, $limit, false, false, true);
                 break;
             case 'popular':
                 $shopData = \KC\Repository\Offer::commongetpopularOffers($type, $limit, $shopId, $userId);
@@ -762,7 +762,8 @@ EOD;
         $mandrillUsersList,
         $footerContent,
         $pathConstants = '',
-        $emailHeaderText = ''
+        $emailHeaderText = '',
+        $codeAlert = ''
     ) {
         $basePath = new \Zend_View();
         $basePath->setBasePath(APPLICATION_PATH . '/views/');
@@ -774,7 +775,9 @@ EOD;
                     'topVouchercodes' => $topVouchercodes,
                     'categoryVouchers' => $categoryVouchers,
                     'categoryInformation' => $categoryInformation,
-                    'pathConstants' => $pathConstants
+                    'pathConstants' => $pathConstants,
+                    'codeAlert' => $codeAlert,
+                    'mandrillNewsletterSubject' => $mandrillNewsletterSubject
                 )
             )
         );
@@ -881,7 +884,8 @@ EOD;
                 ? '' : $secondUrlParameter;
             $pagePermalink = $explodedPagePermalink[0].$secondUrlParameter;
         }
-        return  $pagePermalink;
+        $splitPermalinkFromQueryString = explode('?', $pagePermalink);
+        return  $splitPermalinkFromQueryString[0];
     }
 
     public static function redirectAddToFavouriteShop()
@@ -954,7 +958,7 @@ EOD;
 
     public static function getPermalinkAfterRemovingSpecialChracter($permalink)
     {
-        $cacheKey = preg_replace("/[\/\&_~,`@!(){}:*+^%#$?#.=-]/", "", $permalink);
+        $cacheKey = preg_replace("/[\/\&_~,`@!(){}:'*+^%#$?#.=-]/", "", $permalink);
         return $cacheKey;
     }
 
@@ -970,5 +974,114 @@ EOD;
             $sortedNames[] = $val;
         }
         return  $sortedNames;
+    }
+	
+    public static function getPermalinkAfterRemovingSpecialCharacterAndReplacedWithHyphen($keyword)
+    {
+        $keyword = preg_replace("/[\/\&_~,`@!(){}:'*+^%#$?#.=-]/", "-", $keyword);
+        return $keyword;
+    }
+
+    public static function getSinupImage()
+    {
+        $documentRoot = dirname(dirname(dirname(dirname(__FILE__))));
+        if (file_exists($documentRoot.'/public/'. LOCALE .'/images/front_end/gratis.png')) {
+            $getSinupImage = PUBLIC_PATH.'images/front_end/gratis.png';
+        } else {
+            $getSinupImage = '/public/images/front_end/gratis.png';
+        }
+        return $getSinupImage;
+    }
+
+    public static function accountTabPanel($firstname = '')
+    {
+        $brandsClass = zend_Controller_Front::getInstance()->getRequest()->getActionName() == 'yourbrands' ? 'active' : '';
+        $offersClass = zend_Controller_Front::getInstance()->getRequest()->getActionName() == 'youroffers' ? 'active' : '';
+        $profileClass = zend_Controller_Front::getInstance()->getRequest()->getActionName() == 'profile' ? 'active' : '';
+
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        if(LOCALE == ''):
+            $websiteName = 'http://'.$httpScheme.'.kortingscode.nl';
+        else :
+            $websiteName = 'http://'.$httpScheme.'.flipit.com/'.LOCALE;
+        endif;
+
+        $tabContent = '<div class="title">
+            <a href="'.$websiteName.'" class="btn blue btn-primary">'.self::__translate('shop verder met korting').'</a>
+            <div class="title-frame">
+                <h1>'.self::__translate('Hey').' '.$firstname.', '.self::__translate('hoe is het met je?').'</h1>
+                '.self::__translate('Je vindt hier een overzicht van je persoonlijke gegevens, pas ze aan waar nodig! Beheer').' 
+                <a href="'.HTTP_PATH_LOCALE . self::__link('link_mijn-favorieten').'">'.self::__translate('hier').'</a> '
+                .self::__translate('je favoriete webwinkels en bekijk').' <br>'.self::__translate('op').' <a href="'.HTTP_PATH_LOCALE
+                . self::__link('link_mijn-favorieten') . "/"
+                . self::__link('link_memberonlycodes').'">'
+                .self::__translate('deze pagina').'</a>
+                 '.self::__translate('je favoriete codes en al onze member acties.').'
+            </div>
+        </div>
+        <div class="sub-buttons">
+            <div class="sub-holder">
+                <a href="'.HTTP_PATH_LOCALE
+                . self::__link('link_mijn-favorieten') . "/"
+                . self::__link('link_memberonlycodes').'" class="offers '.$offersClass.'">'
+                . self::__translate('Recommended Offers').'</a>
+                <a href="'.HTTP_PATH_LOCALE . self::__link('link_mijn-favorieten').'" 
+                    class="brands '.$brandsClass.'">'. self::__translate('Favourite Brands').'</a>
+                <a href="'.HTTP_PATH_LOCALE
+                    . self::__link('link_inschrijven') . "/"
+                    . self::__link('link_profiel').'" class="settings '.$profileClass.'">'
+                    . self::__translate('Settings').'</a>
+            </div>
+        </div>';
+
+        return $tabContent;
+    }
+
+    public static function getLightBoxFirstTextText($shopName, $lightBoxFirstText)
+    {
+        $shopFirstText = $shopName . " " . self::__translate('your favorite shop!');
+        if (!empty($shopLightBoxText)) {
+            $shopFirstText = str_replace('[shop]', $shopName, $lightBoxFirstText);
+        }
+        return $shopFirstText;
+    }
+
+    public static function getLightBoxSecondTextText($shopName, $lightBoxSecondText)
+    {
+        $shopSecondText = self::__translate('Stay up to date and receive code alerts from'). " " . $shopName;
+        if (!empty($lightBoxSecondText)) {
+            $shopSecondText = str_replace('[shop]', $shopName, $lightBoxSecondText);
+        }
+        return $shopSecondText;
+    }
+
+    public static function getEditorText($shopName, $text, $ballonText)
+    {
+        $editorText = self::__translate('Hello');
+        if (!empty($ballonText)) {
+            $editorText = array();
+            foreach ($ballonText as $text) {
+                $editorText[] = str_replace('[shop]', $shopName, $text['ballontext']);
+            }
+        } else {
+            $editorText = str_replace('[shop]', $shopName, $text);
+        }
+        return $editorText;
+    }
+
+    public static function setClientIdForTracking($subId = '')
+    {
+        $clientId = str_replace('GOOGLEANALYTICSTRACKINCID', $_COOKIE['_ga'], $subId);
+        return $clientId;
+    }
+
+    public static function getCurrentDate()
+    {
+        $currentDate = new Zend_Date();
+        $currentMonth = $currentDate->get(Zend_Date::MONTH);
+        $currentYear = $currentDate->get(Zend_Date::YEAR);
+        $currentDay = $currentDate->get(Zend_Date::DAY);
+        $currentDateFormation = $currentYear.'-'.$currentMonth.'-'.$currentDay;
+        return $currentDateFormation;
     }
 }

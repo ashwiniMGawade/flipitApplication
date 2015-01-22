@@ -23,10 +23,10 @@ if(LOCALE == ''):
     $websiteName = 'http://'.$httpScheme.'.kortingscode.nl';
 else :
     $logoCssClass = 'logo flipit';
-    $logoPath = HTTP_PATH.'public/images/flipit-logo.png';
+    $logoPath = HTTP_PATH.'public/images/flipit-logo-'.LOCALE.'.png';
     $logoAlt = "flipit.com";
     $websiteName = 'http://'.$httpScheme.'.flipit.com/'.LOCALE;
-endif
+endif;
 ?>
 <header id="header">
     <div class="top-panel">
@@ -48,7 +48,7 @@ endif
         <div class="container">
             <strong>
                 <a href="<?php echo $websiteName;?>">
-                    <img alt="<?php echo $logoAlt; ?>" class="<?php echo $logoCssClass;?>" src="<?php echo $logoPath;?>"/>
+                    <img alt="<?php echo $logoAlt; ?>" class="<?php echo $logoCssClass;?>" src="<?php echo $logoPath;?>" title="<?php echo $logoAlt; ?>"/>
                 </a>
             </strong>
             <a href="<?php echo $websiteName;?>" class="menu-opener"><span class="glyphicon glyphicon-search"></span></a>

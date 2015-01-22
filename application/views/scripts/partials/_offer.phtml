@@ -2,9 +2,18 @@
 <script type="text/javascript">
     var domainName = "<?php echo HTTP_PATH; ?>";
 </script>
-<section class="section">
+<?php
+$class = "section";
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='Favourite' 
+    && zend_Controller_Front::getInstance()->getRequest()->getActionName()=='sharesocialcode') {
+    $class = "";
+}
+?>
+<section class="<?php echo $class; ?>">
 <?php
 $offerCounter = '';
+$visitorInformation = '';
+
 foreach ($this->offers as $offer) {
     $offerCounter++;
     $offer = (object) $offer;
@@ -19,9 +28,31 @@ foreach ($this->offers as $offer) {
     if (isset($offer->couponCodeType) && $offer->couponCodeType == 'UN') {
          $couponCode = '';
     }
+
+    $defaultText = '';
+    $offerHolderClass = "offer-holder";
+    if ($offer->exclusiveCode == '1') {
+        $offerClass = "orange-block";
+    } else if ($offer->userGenerated == '1') {
+        $offerClass = "";
+        $offerHolderClass = "";
+        $urlToShow = 'javascript:void(0);';
+        if ($offer->approved == '1') {
+            $offerClass = "social-block"; 
+            $offerHolderClass = "offer-holder";
+            $urlToShow = $offerPartial->getUrlToShow($offer);
+        }
+        $site = LOCALE == '' ? "Kortingscode" : "Flipit";
+        $defaultText = FrontEnd_Helper_viewHelper::__translate('This code is not verified by').' '.$site.' ';
+    } else {
+        $offerClass = "active";
+    }
+
+    $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
+
     ?>
-    <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
-        <div class="holder offer-holder" id="<?php echo $offer->id; ?>">
+    <article class="block <?php echo $offerClass; ?>">
+        <div class="holder <?php echo $offerHolderClass; ?>" id="<?php echo $offer->id; ?>">
     <?php 
     echo $offerPartial->getCommonRedirectUrlForOffer(
         $offer,
@@ -33,28 +64,47 @@ foreach ($this->offers as $offer) {
     ?>
             <div class="box">
                 <div class="text">
-                    <p> <?php echo $offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires)?></p>
+                    <p> <?php
+                        $membersOnly = isset($offer->Visability) && $offer->Visability == 'MEM'
+                            ? '<span class="members-only-image"></span><span class="members-only">'.$this->translate("Members Only").'</span>'
+                            : '';
+                        echo $membersOnly.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires);
+                        ?>
+                    </p>
                     <?php 
-                    echo $offerPartial->getCommonRedirectUrlForOffer(
-                        $offer,
-                        $urlToShow,
-                        $offerBounceRate,
-                        $offerTitle,
-                        'offerTitle'
-                    );
+                    if ($offer->Visability == 'MEM') {
+                        echo $this->esi($esiLocale.'signup/signupmembersonlytitle?shopId='.$offer->shop['id']
+                            .'&signupFormWidgetType=widgetWithinOffers&offerId='.$offer->id.'&shopLogoOrDefaultImage=');
+                    } else {
+                        echo $offerPartial->getCommonRedirectUrlForOffer(
+                            $offer,
+                            $urlToShow,
+                            $offerBounceRate,
+                            $offerTitle,
+                            'offerTitle'
+                        ); 
+                    }
                     ?>
                 </div>
                 <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
     <?php
-    $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shopOffers['permaLink'];
-    echo $offerPartial->getCommonRedirectUrlForOffer(
-        $offer,
-        $urlToShow,
-        $offerBounceRate,
-        $permalink,
-        'mainOfferClickoutButton'
-    );
-    echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink);
+
+    $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shop['permalink'];
+
+    if ($offer->Visability == 'MEM') {
+        echo $this->esi($esiLocale.'signup/signupwidgetcodes?shopId='.$offer->shop['id']
+            .'&signupFormWidgetType=widgetWithinOffers&offerId='.$offer->id.'&shopLogoOrDefaultImage=');
+    } else {
+        echo $offerPartial->getCommonRedirectUrlForOffer(
+            $offer,
+            $urlToShow,
+            $offerBounceRate,
+            $permalink,
+            'mainOfferClickoutButton'
+        );
+        echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink); 
+    }
+
     ?>
                 </div>
                 <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
@@ -63,7 +113,6 @@ foreach ($this->offers as $offer) {
                     </span>
                     <strong class="code-value"><?php echo $couponCode;?></strong>
                 </div>
-    
                 <ul class="view-list">
     <?php 
     if (isset($offer->extendedOffer) && $offer->extendedOffer =='1') {
@@ -76,7 +125,6 @@ foreach ($this->offers as $offer) {
         if ($termsAndConditions != '') {
             echo $offerPartial->getTermAndConditionsLink($offer, $termsAndConditions);
         }
-        
         echo $offerPartial->getExtendedOfferLink($offer);
         if($this->offersType!='simple'):
             echo $offerPartial->getViewAllCodeLink(
@@ -88,9 +136,19 @@ foreach ($this->offers as $offer) {
     } else {
         echo $offerPartial->getViewAllCodeLink($offer->shopOffers['name'], $offer->shopOffers['permaLink'], '');
     }
+    if ($offer->userGenerated == 1 && ($offer->approved == '1' || $offer->approved == '0')) : ?>
+        <li id="fr">
+            <?php echo $this->translate('Code shared by').' '.$offer->nickname;?>
+        </li>
+        <?php endif;
     ?>
                 </ul>
             </div>
+            <?php 
+            if ($offer->userGenerated == 0) {
+                //echo $offerPartial->getVerifiedText();
+            }
+            ?>
         </div>
     <?php
     if ($this->offersType!='extendedOffer') {
@@ -98,7 +156,22 @@ foreach ($this->offers as $offer) {
     } else {
             $style = 'style="display:block;"';
     }
+    if ($offer->editorPicks == 1) {
     ?>
+        <hr class="alt2">
+        <div class="recommended-outerDiv">
+            <div class="recommended-arrow"></div>
+            <div class="recommendedOffer">
+                <span>
+                    <img src="<?php echo HTTP_PATH.'public/images/rec-thumb.png';?>" class="recommended-thumb" alt="thumb" title="thumb">
+                    <?php echo $this->translate('Recommended by staff');?>
+                </span>
+                <?php
+                $authorName = !empty($offer->authorName) ? $offer->authorName : ''; 
+                echo ' - '.$authorName.' '.$this->translate('Recommended this code');?>
+            </div>
+        </div>
+    <?php } ?>    
         <div class="offer-box" id="websiteOfferLink<?php echo $offer->id ;?>" <?php echo $style;?>>
             <hr class="alt2">
             <div class="offer">
@@ -112,24 +185,22 @@ foreach ($this->offers as $offer) {
         </div>
         <?php if ($termsAndConditions != '') : ?>
         <div  class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
-            <h2><?php echo $this->translate('Terms &amp; Conditions');?></h2>
+            <h2><?php echo $this->translate('Terms &amp; Conditions'). " (". $defaultText.")";?></h2>
             <ol class="num-list">
             <?php echo $termsAndConditions;?>
             </ol>
         </div>
         <?php endif; ?>
+       
     </article>
     <?php
     $shopLogoOrDefaultImage = $offerPartial->getShopLogoForSignUp($this->shopOffers);
-
     if($offerCounter == 1) :
         if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage'
             || $this->offersType=='offerWithPagenation' || $this->offersType=='newestOffer'):
             $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-            $sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormLarge');
-            $sidebarWidgetNamespace->zendFormLarge = serialize($this->zendForm);
-            $this->esi($this->locale.'signup/signupwidgetlarge?shopId='.$this->currentStoreInformation[0]['id']
-                .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage='.$shopLogoOrDefaultImage);
+            echo $this->esi($this->locale.'signup/signupwidgetlarge?shopId='.$this->currentStoreInformation[0]['id']
+                .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage=');
         endif;
     endif;
 }

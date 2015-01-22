@@ -606,15 +606,32 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function edituserAction()
     {
-        $id = intval($this->getRequest()->getParam('id'));
-        $this->view->qstring = $_SERVER['QUERY_STRING'];
-        $this->view->countriesLocales = FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames();
-        //get category list from category table
-        $categoryList =  KC\Repository\Category::getCategoryList() ;
-        //get favorites store of currect user(admin)
-        $favShop  = KC\Repository\User::getUserFavouriteStores($id);
-        //get unterestng category of currecnt user(admin)
-        $intCat = KC\Repository\User::getUserInterestingCat($id);
+
+     $id = intval($this->getRequest()->getParam('id'));
+     $this->view->qstring = $_SERVER['QUERY_STRING'];
+     $this->view->countriesLocales = FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames();
+	 $categoryList =  KC\Repository\Category::getCategoryList() ;
+	 //get favorites store of currect user(admin)
+	 $favShop  = KC\Repository\User::getUserFavouriteStores($id);
+	 //get unterestng category of currecnt user(admin)
+	 $intCat = KC\Repository\User::getUserInterestingCat($id);
+
+     $catArray  = array();//array generate on key based
+     foreach ($intCat as $categories){
+
+             $catArray[] = $categories['categoryId'];
+         }
+         $this->view->catArray = '';
+         if(isset($catArray) && count($catArray)>0){
+
+            $this->view->catArray =  $catArray;
+         }
+
+        $this->view->ballonData = EditorBallonText::getEditorText($id);
+
+         //pas value on phtml page
+         $this->view->categoryList = $categoryList['aaData'] ;
+         $this->view->favoritesShop = $favShop;
 
         $catArray  = array();//array generate on key based
         foreach ($intCat as $categories) {
@@ -969,4 +986,38 @@ class Admin_UserController extends Zend_Controller_Action
         $varnishObj->addUrl( rtrim( HTTP_PATH_FRONTEND. $userPage  , '/'  ));
     }
 
+    public function checkexportpasswordAction()
+    {
+        $globalExportPassword =  new GlobalExportPassword();
+        $globalExportPasswordCount = $globalExportPassword->checkPasswordForExport(
+            $this->_getParam('password'),
+            'shopExport'
+        );
+
+        if ($globalExportPasswordCount > 0) {
+            echo Zend_Json::encode(true);
+        } else {
+            echo Zend_Json::encode(false);
+        }
+        die();
+    }
+
+    public function addballontextAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        if ($this->getRequest()->getParam('partialCounter') > 0) {
+            $count = $this->getRequest()->getParam('partialCounter');
+            $this->view->partialCounter = $count;
+        }
+    }
+
+    public function deleteballontextAction()
+    {
+        $textId = $this->getRequest()->getParam('id');
+        if (!empty($textId)) {
+            $ballonText = EditorBallonText::deletetext($textId);
+            echo Zend_Json::encode($ballonText);
+        }
+        die;
+    }
 }

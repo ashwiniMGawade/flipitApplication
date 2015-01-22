@@ -1,28 +1,15 @@
 <?php 
-		echo $this->headTitle()->append('Create Newsticker');
-		
-		$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/datepicker.css" );
-		
-		$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/back_end/bootstrap-combobox.css" );
-		
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.validate.js");
-		
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootstrap-typeahead.js");
-		
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
-		
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
-		
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-datepicker.js");
-		
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/date.js");
-		
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/newsticker.js");
-		
-		
-
+echo $this->headTitle()->append('Create Newsticker');
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/datepicker.css" );
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/back_end/bootstrap-combobox.css" );
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootstrap-typeahead.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-datepicker.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/date.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/newsticker.js");
 ?>
-
 <div class="wrap columns-2">
         <div class='wrap columns-2'>
 		<?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
@@ -50,20 +37,22 @@
                     	<div class="mainpage-content-right-inner-right-other"></div>
                     	<div class="mainpage-content-right-inner-left-other" style="padding-bottom: 10px; margin-left: -42px;">
                           <select style="display: none; width : 250px;" name="whichshop" class="combobox" id="whichshop">
-							  <option value=""></option>
 								<?php 
-								for($i=0;$i<count($this->shopList);$i++){
-		     						if(trim($this->shopList[$i]['shopName'])!='')
+
+								for ($i=0;$i<count($this->shopList);$i++) {
+		     						if(trim($this->shopList[$i]['name'])!='')
 		     						{
-		     						  $shopname = substr($this->shopList[$i]['shopName'],0,70);
-		     					?>
+		     						  $shopname = substr($this->shopList[$i]['name'],0,70);
+		     						?>
+
 		     						<option value="<?php echo $this->shopList[$i]['id']; ?>"><?php echo $shopname; ?></option>
-								<?php     
+									<?php     
 		      						}
-		 						} 
+		 						}
 								?>
 							</select>
-	                       <input type="hidden" name="selctedshop" id="selctedshop" value=""> 
+	                       <input type="hidden" name="selctedshop" id="selctedshop"
+	                       value="<?php echo $this->shopList[0]['id'] ?>"> 
                         </div>
                     </div>
                 </div>

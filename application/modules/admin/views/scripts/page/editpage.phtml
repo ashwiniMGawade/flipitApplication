@@ -191,6 +191,25 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                                 name="showSitemapStatuscheck"  id="showSitemapStatuscheck" value="<?php echo $this->pageDetail['showsitemap']; ?>">
                          </div>
                     </div>
+
+                    <div class="sidebar-content-box">
+                        <p><?php echo $this->translate('Show In Mobile Menu'); ?></p>
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button  type="button" 
+                                class="btn <?php if ($this->pageDetail['showinmobilemenu']=='1') {?> btn-primary <?php }?>" 
+                                id="showMobileMenuYes" onClick="showMobileMenuStatus('showMobileMenuYes')">
+                                <?php echo $this->translate('Yes');?>
+                            </button>                     
+                            <button type="button"
+                                class="btn borderradius4px <?php if ($this->pageDetail['showinmobilemenu']!='1') {?>btn-primary <?php }?>"
+                                onClick="showMobileMenuStatus('showMobileMenuNo')" id="showMobileMenuNo">
+                                <?php echo $this->translate('No'); ?>
+                            </button>
+                            <input type="hidden"<?php if ($this->pageDetail['showinmobilemenu']=='1') {?> checked="checked" <?php }?> 
+                                name="showMobileMenuStatuscheck"  id="showMobileMenuStatuscheck" value="<?php echo $this->pageDetail['showinmobilemenu']; ?>">
+                         </div>
+                    </div>
+
                     <?php } ?>
                   </div>
                   <div class="postbox " id="submitdiv">
@@ -360,16 +379,60 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             </div> 
                         </div>
 
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label><strong><?php echo $this->translate('Home Page Image'); ?></strong></label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <?php 
+                                $homepageimage = '';
+                                if($this->pageDetail['homepageimage']) {
+                                    if(
+                                        isset($this->pageDetail['homepageimage']['name']) 
+                                        && $this->pageDetail['homepageimage']['name']!=''
+                                    ) {
+                                    $homepageimage = PUBLIC_PATH_CDN.$this->pageDetail['homepageimage']['path']
+                                    .$this->pageDetail['homepageimage']['name'];
+                                }
+                                ?>
+                                <div class='browse-container'>    
+                                    <img class='image-container'  src="<?php echo $homepageimage;?>"  
+                                    alt="homepageImage" align="top">
+                                    <a  class="red" 
+                                    onclick="deleteImage(<?php echo $this->pageDetail['homepageimage']['id']; ?>,
+                                    <?php echo $this->pageDetail['id']; ?>)" 
+                                    href="javascript:void(0);" id="deleteButton">
+                                    <strong><?php echo $this->translate('DELETE');?></strong>
+                                    </a>
+                                </div>
+                                <?php }?>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <div>
+                                        <input type="file" 
+                                        onchange="checkFileType(event)" class="ignore" 
+                                        name="homepageFile" id="homepageImage">
+                                    </div>
+                                    <div>
+                                    <?php echo $this->translate('Image Size: 70px x 70px (*.jpg or *.png file only)'); ?>
+                                    </div>
+                                    <div class="mainpage-content-right" id="imagerrorDiv" 
+                                    style="float:left;margin:-9px 0 6px 0; height : 20px; width : 511px;">
+                                    </div> 
+                                </div>
+                            </div> 
+                        </div>
+
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta title'); ?></strong></label></div>
                             <div class="mainpage-content-right"><input type="text" name="pagemetaTitle" id="pagemetaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore" value="<?php echo $this->pageDetail['metaTitle']; ?>"/>
-                            <!--<span id="metaTextLeft" class="nobel" style="width:504px;"></span>-->
+                            <span id="metaTextLeft" class="input-xlarge disabled btop word-count nobel wordcount-width"></span>
                             <!--<input type="text" class="span3" placeholder="<?php //echo $this->translate('Meta Title'); ?>" maxlength="68" value="<?php //echo $this->pageDetail['metaTitle']; ?>" name="pagemetaTitle" id="pagemetaTitle"></div>-->
                             </div>
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta Description'); ?></strong></label></div>
                             <div class="mainpage-content-right"><textarea class="input-xlarge mbot bbot ignore" id="pagemetaDesc" name="pagemetaDesc" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"><?php echo $this->pageDetail['metaDescription']; ?></textarea>
-                            <!--<span id="metaDescLeft" class="nobel" style="width:504px;"></span>-->
+                            <span id="metaDescLeft" class="input-xlarge disabled btop word-count nobel wordcount-width"></span>
                             <!--<textarea class="input-xlarge mbot bbot ignore" name="pagemetaDesc" id="pagemetaDesc" placeholder="<?php //echo $this->translate('Meta Description'); ?>"  maxlength="150" rows="3"><?php //echo $this->pageDetail['metaDescription']; ?></textarea>
                             <input type="text" class="input-xlarge disabled btop word-count"  id="metaTextLeft" value = "Characters Left: 160" placeholder="Word Count: 28" disabled="disabled">-->
                             </div>

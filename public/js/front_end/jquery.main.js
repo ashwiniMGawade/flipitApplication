@@ -150,6 +150,7 @@ function initSameHeight() {
 		flexible: true,
 		multiLine: true
 	});
+
 }
 /*
  * Window Height CSS rules

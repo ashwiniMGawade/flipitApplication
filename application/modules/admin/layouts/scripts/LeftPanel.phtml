@@ -9,7 +9,7 @@
 <div class="logo"><a href="<?php echo HTTP_PATH?>admin/index"><img src="<?php echo PUBLIC_PATH;?>images/back_end/logo.png" border="0" width="210" height="112" /></a></div>
 <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Content');?></h2></div>
 	<ul id="adminmenu" role="navigation">
-	    <li <?php if($controller == 'offer') { ?> class="imbull-has-submenu imbull-has-current-submenu imbull-menu-open menu-top menu-icon-offer menu-top-first" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu imbull-menu-open menu-top menu-icon-offer menu-top-first" <?php }?> id="menu-posts">
+	    <li <?php if($controller == 'offer'|| $controller=='usergeneratedoffer') { ?> class="imbull-has-submenu imbull-has-current-submenu imbull-menu-open menu-top menu-icon-offer menu-top-first" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu imbull-menu-open menu-top menu-icon-offer menu-top-first" <?php }?> id="menu-posts">
 
 	        <div class="imbull-menu-image"><a href="<?php echo HTTP_PATH?>admin/offer"><br></a></div>
 	        <div class=""><div></div></div>
@@ -26,6 +26,20 @@
 
 	               		<a href="<?php echo HTTP_PATH ;?>admin/offer/addoffer" class="<?php echo $offerColorClass;?>" tabindex="1"><?php echo $this->translate('Create Offers');?> </a>
 	               	</li>
+                    <li>
+                        <?php 
+                        if($controller == 'usergeneratedoffer') 
+                        {
+                            $offerColorClass = "new-blue"; 
+                        } else { 
+                            $offerColorClass = "new-gray"; 
+                        }
+                        ?>
+                        <a href="<?php echo HTTP_PATH ;?>admin/usergeneratedoffer" 
+                         class="<?php echo $offerColorClass;?>" tabindex="1">
+                        <?php echo $this->translate('Social Codes');?>
+                        </a>
+                    </li>
 	           </ul>
 	          </div>
 	        </div>
@@ -234,19 +248,32 @@
 	    <a <?php if($controller == 'email' && $action == 'email-settings'){ echo 'style=color:#0088CC';} ?> href="<?php echo HTTP_PATH;?>admin/email/email-settings" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" ><?php echo $this->translate('Email Settings');?></a>
 	 	</li>
 
-        <li <?php if($controller == 'email' && $action == 'code-alert') { ?> 
-        	class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" 
-        	<?php } else { ?> 
-        	class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" 
-        	<?php }?> id="menu-links">
-      		<div class="imbull-menu-image"><a href="<?php echo HTTP_PATH;?>admin/email/codealert"><br></a></div>
-	    	<div class=""><div></div></div>
-	    	<a <?php if($controller == 'email' && $action == 'code-alert'){ echo 'style=color:#0088CC';} ?> 
-	    		href="<?php echo HTTP_PATH;?>admin/email/code-alert" 
-	    		class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" >
-	    		<?php echo $this->translate('Code alert');?>
-	    	</a>
-	 	</li>
+        <li <?php if($controller == 'email') { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" <?php }?> id="menu-posts">
+            <div class="imbull-menu-image">
+                <a href="<?php echo HTTP_PATH?>admin/email/code-alert"><br></a>
+            </div>
+            <div class=""><div></div></div>
+            <a href="<?php echo HTTP_PATH?>admin/email/code-alert" class="imbull-has-submenu imbull-has-current-submenu imbull-menu-open menu-top menu-icon-lightbox" tabindex="1"><?php echo $this->translate('Code alert');?>
+            <span <?php if($controller=='email') { ?>class="arrow-down" <?php }else {?> class="arrow-up" <?php }?>></span>
+            </a>
+            <div class="imbull-submenu">
+                <div class="imbull-submenu-wrap">
+                    <div class="imbull-submenu-head"><?php echo $this->translate('Code alert');?> </div>
+                    <ul>
+                        <?php if($controller == 'email' && $action == 'code-alert-settings') { $userColorClass = "new-blue"; }else { 
+                        $userColorClass = "new-gray"; } ?>
+                        <li>
+                            <a href="<?php echo HTTP_PATH?>admin/email/code-alert-settings" class="<?php echo $userColorClass; ?>" tabindex="1"><?php echo $this->translate('Code alert settings');?> </a>
+                        </li>
+                        <?php if($controller == 'email' && $action == 'code-alert-log-list') { $userColorClass = "new-blue"; }else { 
+                        $userColorClass = "new-gray"; } ?>
+                        <li>
+                            <a href="<?php echo HTTP_PATH?>admin/email/code-alert-log-list" class="<?php echo $userColorClass; ?>" tabindex="1"><?php echo $this->translate('Code alert log');?> </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </li>
         <?php } ?>
 
     </ul>
@@ -290,15 +317,6 @@
 		      </li>
          	<?php endif;  ?>
 
-  <?php #make available only for admin and super admin user
-		if($sessionNamespace->settings['rights']['system manager']['rights'] == '1' ) :	?>
-      <li <?php if($controller == 'usergeneratedoffer') {  ?> class="imbull-has-submenu  menu-top menu-icon-offer imbull-has-current-submenu current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-offer" <?php }?> id="menu-links">
-
-        <div class="imbull-menu-image"><a href="<?php echo HTTP_PATH;?>admin/usergeneratedoffer"><br></a></div>
-        <div class=""><div></div></div>
-        <a href="<?php echo HTTP_PATH;?>admin/usergeneratedoffer" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" ><?php echo $this->translate('User Generated Offers');?></a>
-     </li>
-<?php endif;?>
 	<li <?php if($controller == 'popularcode') {  ?> class="imbull-has-submenu  menu-top menu-icon-popular imbull-has-current-submenu current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-popular" <?php }?> id="menu-links">
 
 	        <div class="imbull-menu-image"><a href="<?php echo HTTP_PATH;?>admin/popularcode"><br></a></div>
@@ -306,6 +324,53 @@
 	        <a href="<?php echo HTTP_PATH;?>admin/popularcode" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" ><?php echo $this->translate('Popular Codes');?></a>
       </li>
 
+        <li 
+            <?php 
+            if($controller == 'populararticles') { 
+                ?> 
+                class="imbull-has-submenu  menu-top menu-icon-popular imbull-has-current-submenu current" 
+                <?php 
+            } else { 
+                ?> 
+                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-popular" 
+                <?php 
+            }
+            ?> id="menu-links">
+            <div class="imbull-menu-image">
+                <a href="<?php echo HTTP_PATH;?>admin/populararticles"><br></a>
+            </div>
+            <div class="">
+                <div></div>
+            </div>
+            <a href="<?php echo HTTP_PATH;?>admin/populararticles"
+                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile">
+                <?php echo $this->translate('Popular Articles');?>
+            </a>
+        </li>
+
+        <li 
+            <?php 
+            if($controller == 'specialpagesoffers') { 
+                ?> 
+                class="imbull-has-submenu  menu-top menu-icon-popular imbull-has-current-submenu current" 
+                <?php 
+            } else { 
+                ?> 
+                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-popular" 
+                <?php 
+            }
+            ?> id="menu-links">
+            <div class="imbull-menu-image">
+                <a href="<?php echo HTTP_PATH;?>admin/specialpagesoffers"><br></a>
+            </div>
+            <div class="">
+                <div></div>
+            </div>
+            <a href="<?php echo HTTP_PATH;?>admin/specialpagesoffers"
+                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile">
+                <?php echo $this->translate('Special Pages Offers');?>
+            </a>
+        </li>
 
 	      <li <?php if($controller == 'searchbar') {?>  class="imbull-has-submenu menu-top menu-icon-searchbar imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-searchbar imbull-menu-open imbull-not-current-submenu" <?php }?> id="menu-links">
 

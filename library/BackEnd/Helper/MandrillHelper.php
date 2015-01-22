@@ -28,7 +28,7 @@ class BackEnd_Helper_MandrillHelper
                 $passwordKey,
                 $currentObject
             );
-        } elseif (isset($linkType) && $linkType == 'frontend') {
+        } elseif ((isset($linkType) && $linkType == 'frontend')) {
             self::setMandrillMergeVars(
                 $visitorDirectLoginInformation,
                 $visitorInformation,
@@ -37,8 +37,14 @@ class BackEnd_Helper_MandrillHelper
                 $currentObject
             );
         } else {
+            $visitorId = isset($currentObject->visitorId) && $currentObject->visitorId != ''
+                ? $currentObject->visitorId: '';
+            $unsubscribeLink = isset($currentObject->visitorId) && $currentObject->visitorId != ''
+                ? 'directcodealertunsubscribe': 'directloginunsubscribe';
+            $shopId = isset($currentObject->shopId) && $currentObject->shopId != ''
+                ? '/'.base64_encode($currentObject->shopId): '';
             $visitors = new Visitor();
-            $visitors = $visitors->getVisitorsToSendNewsletter();
+            $visitors = $visitors->getVisitorsToSendNewsletter($visitorId);
             if ($linkType == 'scheduleNewsletterSender') {
                 $frontendPath = $currentObject->_linkPath;
                 $currentMandrillKey = $mandrillKey;
@@ -77,8 +83,8 @@ class BackEnd_Helper_MandrillHelper
                 $visitorDirectLoginInformation[$visitorKey]['vars'][1]['content'] =
                     $frontendPath
                     . FrontEnd_Helper_viewHelper::__link("link_login")
-                    . "/" ."directloginunsubscribe"
-                    . "/" . base64_encode($visitorValue['email']) ."/". $visitorValue['password'];
+                    . "/" .$unsubscribeLink
+                    . "/" . base64_encode($visitorValue['email']) ."/". $visitorValue['password'].$shopId;
                 
                 $visitorInformation[$visitorKey]['email'] = $visitorValue['email'];
                 $visitorInformation[$visitorKey]['name'] =

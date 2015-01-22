@@ -170,9 +170,7 @@ class Transl8_Controller_Plugin_Transl8 extends Zend_Controller_Plugin_Abstract
     font-weight:bold;
     font-size:1.1em;
 }
-.transl8-link-container {
-    display:none;
-}
+
 </style>
 CSS;
         return $css;

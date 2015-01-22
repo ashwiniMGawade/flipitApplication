@@ -8,7 +8,30 @@ var flagT = 1;
 var tile_id ='';
 
 function init(){
-	
+    jQuery('#code-alert-queue').click(function(){
+        ___addOverLay()
+        var offerId = jQuery('#offerId').val();
+        var shopId = jQuery('#selctedshop').val();
+        jQuery.ajax({
+            type : "POST",
+            url: HOST_PATH + "admin/email/codealertqueue",
+            dataType: 'json',
+            method : "post",
+            data: { shopId: shopId, offerId: offerId},
+            success: function(dataSet)
+            { 
+                if(dataSet == 1) {
+                    bootbox.alert(__("Code alert successfully added to the queue."));
+                } else if(dataSet == 2){
+                	bootbox.alert(__("Code alert addition to queue failed. Shop has not been favorited by any visitor yet."));
+                } else {
+                    bootbox.alert(__("Code alert Queue for this offer already exist."));
+                }
+                ___removeOverLay();
+                return false;
+            } 
+        });
+    });
 
 	
 	
@@ -110,6 +133,9 @@ function init(){
       	
       	jQuery('#extendedOfferTitle').textareaCount(options, function(data){
 			jQuery('#metaTitleLeft').val(__("Extended offer meta title length ") + (data.input) + __(" Characters"));
+		});
+		jQuery('#extendedTitle').textareaCount(options, function(data){
+			jQuery('#extendedTitleLeft').val(__("Extended title length ") + (data.input) + __(" Characters"));
 		});
     	jQuery('#extendedOfferMetadesc').textareaCount(options, function(data){
 			jQuery('#metaDescLeft').val(__("Extended offer meta description length ") + (data.input) + __(" Characters"));
@@ -501,16 +527,31 @@ function setFormData(data){
 			// alert(parseInt(data[0].extendedTitle.length));
 			 jQuery('#extendedOfferTitle').val(data[0].extendedTitle);
 			 jQuery('#metaTitleLeft').val(__("Extended offer meta title length ") + parseInt(data[0].extendedTitle.length) + __(" characters"));
+			jQuery('#extendedOfferTitle').NobleCount('#metaTitleLeft',{
+				max_chars: 68,
+				prefixString : __("Extended offer meta title length ")
+			});
+	//jQuery('#metaTitleLeft').val((data.input) + __(" characters"));
+			//jQuery('span#metaTitleLeft').text(68-parseInt(data[0].extendedTitle.length) + __(' characters remaining'));
+		 }
+
+		if(data[0].extendedTitle != null && data[0].extendedTitle != ''){
+			// alert(parseInt(data[0].extendedTitle.length));
+			 jQuery('#extendedTitle').val(data[0].extendedoffertitle);
+			 jQuery('#extendedTitleLeft').val(__("Extended title length ") + parseInt(data[0].extendedTitle.length) + __(" characters"));
 			 //jQuery('#metaTitleLeft').val((data.input) + __(" characters"));
 			//jQuery('span#metaTitleLeft').text(68-parseInt(data[0].extendedTitle.length) + __(' characters remaining'));
 		 }
 		 if(data[0].extendedMetaDescription != null && data[0].extendedMetaDescription != ''){
 			 jQuery('#extendedOfferMetadesc').val(data[0].extendedMetaDescription);
 			 jQuery('#metaDescLeft').val(__("Extended offer meta description length ") + parseInt(data[0].extendedMetaDescription.length) + __(" characters"));
-			// jQuery('span#metaDescLeft').text(150-parseInt(data[0].extendedMetaDescription.length) + __(' characters remaining'));
+			jQuery('#extendedOfferMetadesc').NobleCount('#metaDescLeft',{
+				max_chars: 150,
+				prefixString : __("Extended offer meta description length ")
+			});
+	// jQuery('span#metaDescLeft').text(150-parseInt(data[0].extendedMetaDescription.length) + __(' characters remaining'));
 
 		 }
-		 
 		
 		 jQuery('[name=extendedOfferRefurl]').val(data[0].extendedUrl);
 		 
@@ -563,7 +604,7 @@ function setFormData(data){
 		    if(data[0].imageName){
 			var image = data[0].path+"/thum_"+data[0].imageName;
 	        var imgSrc = PUBLIC_PATH_LOCALE + image;
-			jQuery('span#offerLogoId').append('<img src="'+imgSrc+'" id="uplodedOffer" alt="uploaded offer">');
+			jQuery('span#offerLogoId').append('<img src="'+imgSrc+'" id="uplodedOffer" alt="uploaded offer" title="uploaded offer">');
 	        //jQuery('#uplodedOffer').show().attr('src', imgSrc);
 			jQuery("#uploadOfferOption").click();
 		  }
@@ -652,6 +693,9 @@ function setFormData(data){
 	}else if(data[0].editorPicks){
 	    jQuery('#editorpicbtn').addClass('btn-primary'); 
 	    jQuery('input#editorpickcheckbox').attr('checked', 'checked') ;
+	} else if (data[0].userGenerated) {
+        jQuery('#socialcodebtn').addClass('btn-primary'); 
+        jQuery('input#socialcodecheckbox').attr('checked', 'checked');
 	 } else {
 		 jQuery('#nonebtn').addClass('btn-primary'); 
 		 jQuery('input#nonecheckbox').attr('checked', 'checked') ;
@@ -678,7 +722,17 @@ function setFormData(data){
 	//getAllTiles();
 	
 	selectOfferImage(tile_id);
-	
+	var fvshopId = jQuery('#selctedshop').val();
+	jQuery("#code-alert-visitors-count").text('Updating...');
+	jQuery.ajax({
+		url : HOST_PATH + "admin/offer/favouriteshopdetail/shopId/" + fvshopId,
+			dataType : "json",
+			success : function(data) {
+			jQuery("#code-alert-visitors-count").text(data);
+			},
+			error: function(message) {
+	        }
+	});
 }
 
 function newschangelinkStatus(el)
@@ -827,6 +881,16 @@ function getShopDetail(value){
 		        }
 
 		 });
+		jQuery("#code-alert-visitors-count").text('Updating...');
+		jQuery.ajax({
+			url : HOST_PATH + "admin/offer/favouriteshopdetail/shopId/" + value,
+				dataType : "json",
+				success : function(data) {
+				jQuery("#code-alert-visitors-count").text(data);
+				},
+				error: function(message) {
+		        }
+		});
 	} else{
 		jQuery("#updateOfferBtn").removeClass("disabled").removeAttr('disabled','disabled');
 		jQuery(".strict-confirmation-alert").hide();
@@ -880,7 +944,7 @@ function selectDiscountType(dIv){
 		    jQuery("#datesdiv").show();
 		    
 		    jQuery("#attachpagesDiv").show();
-		    
+		    jQuery('#extra-options').show();
 	    	jQuery('#offerrefurlPR').val('');
 	    	jQuery('#uploadoffer').val('');
 	    	jQuery("input#couponCodeCheckbox").attr('checked' , 'checked');   // check coupon code checkbox if  discount type coupon code
@@ -939,8 +1003,8 @@ function selectDiscountType(dIv){
 		     jQuery("#offertitledetail").show();
 		     jQuery("#datesdiv").show();
 		     
-		     jQuery("#attachpagesDiv").hide();
-		     
+		    jQuery("#attachpagesDiv").show();
+		    jQuery('#extra-options').hide();
 	        jQuery('#offerrefurl').val('');
 	        jQuery('#uploadoffer').val('');
 	        jQuery("input#saleCheckbox").attr('checked' , 'checked');   // check coupon code checkbox if  discount type sale 
@@ -973,7 +1037,8 @@ function selectDiscountType(dIv){
 		    jQuery("#visibiliyDiv").show();
 		    jQuery("#offertitledetail").show();
 		    jQuery("#datesdiv").show();
-		    jQuery("#attachpagesDiv").hide();
+		    jQuery("#attachpagesDiv").show();
+		    jQuery('#extra-options').hide();
 		    jQuery("input#printableCheckbox").attr('checked' , 'checked');   // check print checkbox if  discount type prinable
 		    jQuery("input#newsCheckbox").removeAttr('checked') ;          // uncheck news div checkbox if discount type coupon code
 	        jQuery("input#saleCheckbox").removeAttr('checked') ;          // uncheck sale checkbox if discount type prinable
@@ -1076,15 +1141,22 @@ function exclusiveeditorpick(e){
 			jQuery("input#exclusivecheckbox").attr('checked' , 'checked') ;
 			jQuery("input#editorpickcheckbox").removeAttr('checked') ;
 			jQuery("input#nonecheckbox").removeAttr('checked') ;
+			jQuery("input#socialcodecheckbox").removeAttr('checked');
 	     }else if(btn.value=='editorpic'){
 	    	jQuery("input#editorpickcheckbox").attr('checked' , 'checked') ;
 	    	jQuery("input#exclusivecheckbox").removeAttr('checked') ;
 	    	jQuery("input#nonecheckbox").removeAttr('checked') ;
-		     
+	    	jQuery("input#socialcodecheckbox").removeAttr('checked');
+		} else if (btn.value=='socialcode') {
+            jQuery("input#socialcodecheckbox").attr('checked' , 'checked');
+            jQuery("input#exclusivecheckbox").removeAttr('checked');
+            jQuery("input#nonecheckbox").removeAttr('checked');
+            jQuery("input#editorpickcheckbox").removeAttr('checked');
 	     }else {
 		    jQuery("input#nonecheckbox").attr('checked' , 'checked') ;
 		   	jQuery("input#exclusivecheckbox").removeAttr('checked') ;
 		   	jQuery("input#editorpickcheckbox").removeAttr('checked') ;
+		   	jQuery("input#socialcodecheckbox").removeAttr('checked');
 			     
 		 }
   } 

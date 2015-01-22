@@ -175,6 +175,14 @@ function getArticles(iSearchText,iStart,iSortCol,iSortDir) {
 						},
 						{
 							"fnRender" : function(obj) {
+								tag = "<p class='word-wrap-without-margin-page'><a href='javascript:void(0);'>"+ucfirst(obj.aData.permalink)+"</a></p>";
+								return tag;
+							 },
+							"bSearchable" : true,
+							"bSortable" : true
+						},
+						{
+							"fnRender" : function(obj) {
 								var tag = '';
 								if(obj.aData.publish==true){
 									tag='Yes';

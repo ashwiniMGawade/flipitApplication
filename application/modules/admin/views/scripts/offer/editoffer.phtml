@@ -47,6 +47,11 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 			?>
 			<button type="button" onClick="window.open('<?php echo HTTP_PATH_FRONTEND ; ?>/<?php echo $this->offerShoLogo[0]['shop']['permaLink'] ;?>','_blank')"  href="_blank" class="btn btn-primary ml10"><?php echo $this->translate('Open store page'); ?></button>
 			<?php endif;	?>
+            <button type="button" id="code-alert-queue" href="_blank" class="btn btn-primary ml10">
+                <?php echo $this->translate('Create code alert'); ?>
+            </button>
+            <input type="hidden" name="code-alert-string" id="code-alert-string" 
+                value="<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>">
 		</h1>
       <input type="hidden" name='offerImageSelect' id='offerImageSelect' value='' />
       <input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />
@@ -136,7 +141,15 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 					</div>
 				</div>
 			</div>
-
+			<div class="mainpage-content">
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><strong><?php echo $this->translate('Code Alert visitors count'); ?></strong></div>
+                      <div class="mainpage-content-right">
+                      <div class="mainpage-content-right-inner-right-other"></div>
+	                        <span id="code-alert-visitors-count">&nbsp;</span>
+                    </div>
+                </div>
+            </div>
 			<div class="mainpage-content aboutShopNoteDiv" id="aboutShopDiv">
 				<div class="mainpage-content-line mb10" id="aboutShopNoteDiv">
 					<div class="mainpage-content-left"><strong><?php echo $this->translate('Note from this shop:'); ?></strong></div>
@@ -529,15 +542,21 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 				</div>
 			</div>
 			<?php endif;?>
-			<div class="mainpage-content-line mb10">
+			<div class="mainpage-content-line mb10" id="extra-options">
 				<div class="mainpage-content-left"> <label><strong><?php echo $this->translate('Extra options'); ?></strong></label></div>
 				<div class="mainpage-content-right">
 					<div data-toggle="buttons-checkbox" class="btn-group ">
 						<input type="checkbox" name="exclusivecheckbox" id="exclusivecheckbox" value="1" style="display: none;" />
 						<input type="checkbox" name="editorpickcheckbox" id="editorpickcheckbox" value="2" style="display: none;" />
 						<input type="checkbox" name="nonecheckbox" id="nonecheckbox" value="0" style="display: none;" />
+						<input type="checkbox" name="socialcodecheckbox" id="socialcodecheckbox" 
+                            value="3" style="display: none;" />
 						<button type="button" class="btn" id="exclusivebtn" style="border-radius: 4px 0 0 4px;" value="exclusive" onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('Exclusive Code'); ?></button>
-						<button type="button" class="btn" id="editorpicbtn" value = "editorpic" onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('Editors-pick'); ?></button>
+						<button type="button" class="btn" id="editorpicbtn" value = "editorpic" onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('Recommended'); ?></button>
+						<button type="button" class="btn" id="socialcodebtn" 
+                            value = "socialcode" onCLick="exclusiveeditorpick(event)">
+                            <?php echo $this->translate('Social Code'); ?>
+                        </button>
 						<button type="button" style="border-radius: 0 4px 4px 0;" class="btn" id="nonebtn" value="none" onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('None'); ?></button>
 					</div>
 				</div>
@@ -556,12 +575,22 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 		</div>
 		<div class="mainpage-content" id="extendedoffer-container" style="display:none;">
 			<div class="mainpage-content-line">
+				<div class="mainpage-content-left"> <label><strong><?php echo $this->translate('Extended Title'); ?></strong></label></div>
+				<div class="mainpage-content-right">
+					<div class="mainpage-content-right-inner-right-other"></div>
+					<div class="mainpage-content-right-inner-left-other">
+					<input type="text" name="extendedTitle" id="extendedTitle" placeholder="<?php echo $this->translate('This account is important, etc');?>" class="input-xlarge mbot bbot ignore span3"/>
+					<input type="text" disabled="disabled" value="<?php echo $this->translate('Extended offer Title length 0 characters');?>" id="extendedTitleLeft" class="input-xlarge disabled btop word-count">
+					</div>
+				</div>
+			</div>
+			<div class="mainpage-content-line">
 				<div class="mainpage-content-left"> <label><strong><?php echo $this->translate('Meta Title'); ?></strong></label></div>
 				<div class="mainpage-content-right">
 					<div class="mainpage-content-right-inner-right-other"></div>
 					<div class="mainpage-content-right-inner-left-other">
 					<input type="text" name="extendedOfferTitle" id="extendedOfferTitle" placeholder="<?php echo $this->translate('This account is important, etc');?>" class="input-xlarge mbot bbot ignore span3"/>
-					<input type="text" disabled="disabled" value="<?php echo $this->translate('Extended offer meta title length 0 characters');?>" id="metaTitleLeft" class="input-xlarge disabled btop word-count">
+					<span id="metaTitleLeft" class="disabled btop word-count nobel offer-wordcount-width"></span>
 					</div>
 				</div>
 			</div>
@@ -570,7 +599,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 				<div class="mainpage-content-right">
 					<div class="mainpage-content-right-inner-right-other"></div>
 					<div class="mainpage-content-right-inner-left-other"><textarea class="input-xlarge mbot bbot ignore" id="extendedOfferMetadesc" name="extendedOfferMetadesc" placeholder="Een Center Parcs actiecode of kortingscode is zo gevonden op Actiecode.nl. Wij hebben codes en korting beschikbaar voor lente zomer, herfst & winter." rows="3"></textarea>
-					<input type="text" disabled="disabled" value="<?php echo $this->translate('Extended offer meta description length 0 characters');?>" id="metaDescLeft" class="input-xlarge disabled btop word-count">
+					<span id="metaDescLeft" class="disabled btop word-count nobel offer-wordcount-width"></span>
 				</div>
 				</div>
 			</div>

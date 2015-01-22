@@ -31,9 +31,9 @@ else:
 endif;
 
 $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
-
+$extendedTitle = !empty($offer->extendedoffertitle) ? $offer->extendedoffertitle : $offer->title;
 $frontShopHeaderHelper = new FrontEnd_Helper_ShopHeaderPartialFunctions();
-echo $headerBlock = $frontShopHeaderHelper->getShopHeader($offer->shop, $expiredMessage, $offer->title);
+echo $headerBlock = $frontShopHeaderHelper->getShopHeader($offer->shop, $expiredMessage, $extendedTitle);
 ?>
 </div></div>
 <div class="row">
@@ -99,9 +99,7 @@ if ($expiredMessage == '') {
     );
     if ($this->currentStoreInformation[0]['showSignupOption']) :
         $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-        $sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormSidebar');
-        $sidebarWidgetNamespace->zendFormSidebar = serialize($this->sidebarWidgetForm);
-        $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
+        echo $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
             .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
     endif;
     ?>

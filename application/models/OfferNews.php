@@ -24,7 +24,7 @@ class OfferNews extends BaseOfferNews
             $savenews->save();
 
             //call cache
-            $key = 'shop_latestUpdates'  . intval($savenews->shopId) . '_list';
+            $key = '4_shopLatestUpdates'.$savenews->shopId.'_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             return $savenews->id ;
     }
@@ -65,11 +65,9 @@ class OfferNews extends BaseOfferNews
                ->from('OfferNews n')
                ->where("n.id=" . $id)
                ->execute();
-
         //call cache
-        $key = 'shop_latestUpdates'  . intval($savenews->shopId) . '_list';
+        $key = '4_shopLatestUpdates'.$id.'_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
     }
 
     /**
@@ -110,7 +108,7 @@ class OfferNews extends BaseOfferNews
             $data->save();
 
             //call cache
-            $key = 'shop_latestUpdates'  . intval($data->shopId) . '_list';
+            $key = '4_shopLatestUpdates'.$params['id'].'_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             return $savenews->id ;
     }
@@ -139,5 +137,16 @@ class OfferNews extends BaseOfferNews
             $urlsArray[] = $data['shop']['permaLink'] ;
         }
         return $urlsArray ;
+    }
+
+    public static function getnewstickerListForExport()
+    {
+        $newstickerList = Doctrine_Query::create()
+            ->select('n.id as id,n.shopId,n.title as title,n.startdate,s.name,n.linkstatus, n.url, n.content')
+            ->from("OfferNews n")
+            ->leftJoin("n.shop s")
+            ->where("n.deleted = 0")
+            ->orderBy("n.title ASC")->fetchArray();
+        return $newstickerList;
     }
 }

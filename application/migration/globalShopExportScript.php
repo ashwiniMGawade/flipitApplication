@@ -6,11 +6,20 @@ class GlobalShopExport
     protected $shopsData = array();
     protected $row = 4;
     protected $column = 4;
+    public $mandrillKey = '';
+
     public function __construct()
     {
         require_once 'ConstantForMigration.php';
         require_once('CommonMigrationFunctions.php');
         CommonMigrationFunctions::setTimeAndMemoryLimit();
+        $application = new Zend_Application(
+            APPLICATION_ENV,
+            APPLICATION_PATH . '/configs/application.ini'
+        );
+        require_once(LIBRARY_PATH.'/FrontEnd/Helper/Mailer.php');
+        $frontControlerObject = $application->getOption('resources');
+        $this->mandrillKey = $frontControlerObject['frontController']['params']['mandrillKey'];
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
         $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
         $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
@@ -29,6 +38,7 @@ class GlobalShopExport
                 echo "\n\n";
             }
         }
+
         $this->exportShopsInExcel();
         $manager->closeConnection($doctrineImbullDbConnection);
     }
