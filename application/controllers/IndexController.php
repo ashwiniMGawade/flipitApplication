@@ -15,7 +15,7 @@ class IndexController extends Zend_Controller_Action
         } else {
             $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
         }
-        $this->view->banner = Signupmaxaccount::getHomepageImages();
+        $this->view->banner = KC\Repository\Signupmaxaccount::getHomepageImages();
         $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
 
