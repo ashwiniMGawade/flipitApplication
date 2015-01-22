@@ -38,7 +38,14 @@ class StoreController extends Zend_Controller_Action
 
     public function storedetailAction()
     {
-        $shopPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $url = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $explodeUrl = explode('?', $url);
+        $shopPermalink = $explodeUrl[0];
+        $this->view->shareCodeStatus = false;
+        if (isset($explodeUrl[1])) {
+            $this->view->shareCodeStatus = true;
+        }
+
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($shopPermalink);
         $shopRecordsLimit = 10;
         $shopParams = $this->_getAllParams();
@@ -435,9 +442,7 @@ class StoreController extends Zend_Controller_Action
             if ($socialcodeForm->isValid($this->getRequest()->getPost())) {
                 $socialcode = $socialcodeForm->getValues();
                 UserGeneratedOffer::addOffer($socialcode);
-                $shareCodeStatus = new Zend_Session_Namespace('shareCodeStatus');
-                $shareCodeStatus->shareCodeStatus = true;
-                $this->_redirect(HTTP_PATH_LOCALE. $socialcode['shopPermalink']);
+                $this->_redirect(HTTP_PATH_LOCALE. $socialcode['shopPermalink'].'?name=thanksMessage');
                 exit();
             } else {
                 $socialcodeForm->highlightErrorElements();
