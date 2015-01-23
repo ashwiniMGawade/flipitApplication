@@ -2043,16 +2043,17 @@ public static function getShopDetail($shopId)
             ->where("e.shopid = ".$shopId)
             ->execute();
         }
-        $contentInfo = array_map('trim', $params['content']);
+        $contentInfo = array_map('trim', $params['ballontextcontent']);
         foreach ($contentInfo as $key => $content) {
             if (isset($content) && $content != '') {
                 $ballonText = new EditorBallonText();
                 $ballonText->shopid = $shopId;
-                $ballonText->ballontext = BackEnd_Helper_viewHelper::stripSlashesFromString($params['content'][$key]);
+                $ballonText->ballontext = BackEnd_Helper_viewHelper::stripSlashesFromString($params['ballontextcontent'][$key]);
                 $ballonText->deleted = 0;
                 $ballonText->save();
             }
         }
+        return true;
     }
 
 }
