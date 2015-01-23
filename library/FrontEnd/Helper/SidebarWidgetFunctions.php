@@ -123,7 +123,7 @@ EOD;
     
     public function popularShopWidget()
     {
-        $popularStores = self::getStoreForFrontEnd('popular', 10);
+        $popularStores = self::getStoreForFrontEnd('popular', 20);
         $popularStoresContent = '<div class="block"><div class="intro">
                    <h4>'.$this->__translate('Populaire Winkels').'</h4>
                    <span>'
