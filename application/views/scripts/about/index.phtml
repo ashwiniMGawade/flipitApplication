@@ -23,7 +23,6 @@ if (!empty($this->authorsWithPagination)) {
     <aside class="col-md-4 col-sm-4" id="sidebar">
     <?php 
     $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
-    echo $frontendSidebarHelper->popularCategoryWidget();
     echo $frontendSidebarHelper->popularShopWidget();
     echo $frontendSidebarHelper->socialMediaWidget();
     $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
