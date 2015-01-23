@@ -728,8 +728,13 @@ class Shop extends BaseShop
             $this->discussions = '1';
         }
 
-        $this->customtextposition = $shopDetail['customtextposition'];
-        $this->showcustomtext = $shopDetail['showcustomtext'];
+        if ($shopDetail['customtextposition'] != '') {
+            $this->customtextposition = $shopDetail['customtextposition'];
+        }
+        $this->showcustomtext = 0;
+        if ($shopDetail['showcustomtext'] != '') {
+            $this->showcustomtext = $shopDetail['showcustomtext'];
+        }
         $this->usergenratedcontent = '0';
 
         if(isset($shopDetail['usergenratedchk'])){
