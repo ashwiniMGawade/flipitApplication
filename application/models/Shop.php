@@ -2061,4 +2061,24 @@ public static function getShopDetail($shopId)
         return true;
     }
 
+    public static function getTotalNumberOfMoneyShops()
+    {
+        $data = Doctrine_Query::create()
+        ->select("count(*) as moneyShops")
+        ->from('Shop s')
+        ->where('s.deleted = 0')
+        ->andWhere("s.status = '1'")
+        ->andWhere("s.affliateProgram = 1")
+        ->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
+        return $data;
+    }
+
+    public static function moneyShopRatio()
+    {
+        $totalNumberOfShops = self::getTotalAmountOfShops();
+        $numberOfMoneyShops = self::getTotalNumberOfMoneyShops();
+        $shopRatio = ($numberOfMoneyShops['moneyShops'] / $totalNumberOfShops['amountshops']) * 100;
+        return round($shopRatio, 2);
+    }
+
 }

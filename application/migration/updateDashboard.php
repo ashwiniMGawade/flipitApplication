@@ -145,6 +145,7 @@ class updateDashboard
         $totNoOfshopsCodeOnlineThisWeek = $dashboard->totalAmountOfShopsCodeOnlineThisWeek();
         $totNoOfshopsCodeOnlineLastWeek = $dashboard->totalAmountOfShopsCodeOnlineLastWeek();
         $totNoOfSubscribers = $dashboard->totalAmountOfSubscribers();
+        
 
         $p1 = $noOfOffers['amountOffers'];
         $p2 = $noOfShops['amountshops'];
@@ -156,9 +157,10 @@ class updateDashboard
         $p8 = $totNoOfshopsCodeOnlineThisWeek['amountshops'];
         $p9 = $totNoOfshopsCodeOnlineLastWeek['amountshops'];
         $p10 = $totNoOfSubscribers['amountsubs'];
+        echo $moneyShopRatio = $dashboard->getMoneyShopRatio();die;
         //Update dashboard table with current data
 
-        $dashboard->updateDashboard($p1, $p2, $p3, $p4, $p5, $p6, $p7, $p8, $p9, $p10);
+        $dashboard->updateDashboard($p1, $p2, $p3, $p4, $p5, $p6, $p7, $p8, $p9, $p10, $moneyShopRatio);
 
         $manager->closeConnection($DMC);
         echo "\n";

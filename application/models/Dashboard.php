@@ -153,6 +153,11 @@ class Dashboard extends BaseDashboard
 
     }
 
+    public static function getMoneyShopRatio()
+    {
+        return Shop::moneyShopRatio();
+    }
+
 
     /**
      * to get a particular dasbboard value by its name
@@ -187,10 +192,14 @@ class Dashboard extends BaseDashboard
      * @version 1.0
      */
 
-    public static function updateDashboard($noOfOffers, $noOfShops, $noOfClickouts, $noOfSubscribers, $totNoOfOffers, $totNoOfShops, $totNoOfshopsCodeOnline, $totNoOfshopsCodeOnlineThisWeek, $totNoOfshopsCodeOnlineLastWeek, $totNoOfSubscribers)
+    public static function updateDashboard($noOfOffers, $noOfShops, $noOfClickouts,
+        $noOfSubscribers, $totNoOfOffers, $totNoOfShops, $totNoOfshopsCodeOnline,
+        $totNoOfshopsCodeOnlineThisWeek, $totNoOfshopsCodeOnlineLastWeek,
+        $totNoOfSubscribers, $moneyShopRatio
+    )
     {
         $checkData = Doctrine_Query::CREATE()->from('Dashboard')->fetchArray();
-        if(empty($checkData)){
+        if (empty($checkData)) {
             $dashboardAdd = new Dashboard();
             $dashboardAdd->id = 1;
             $dashboardAdd->no_of_offers = $noOfOffers;
@@ -204,23 +213,24 @@ class Dashboard extends BaseDashboard
             $dashboardAdd->total_no_of_shops_online_code_thisweek = $totNoOfshopsCodeOnlineThisWeek;
             $dashboardAdd->total_no_members = $totNoOfSubscribers;
             $dashboardAdd->updated_at = date('Y-m-d H:i:s');
+            $dashboardAdd->money_shop_ratio = $moneyShopRatio;
             $dashboardAdd->save();
 
         } else {
             $dashboardUpdate = Doctrine_Query::create()
-                            ->update('Dashboard')
-                            ->set('no_of_offers', $noOfOffers)
-                            ->set('no_of_shops', $noOfShops)
-                            ->set('no_of_clickouts', $noOfClickouts)
-                            ->set('no_of_subscribers', $noOfSubscribers)
-                            ->set('total_no_of_offers', $totNoOfOffers)
-                            ->set('total_no_of_shops', $totNoOfShops)
-                            ->set('total_no_of_shops_online_code', $totNoOfshopsCodeOnline)
-                            ->set('total_no_of_shops_online_code_lastweek', $totNoOfshopsCodeOnlineLastWeek)
-                            ->set('total_no_of_shops_online_code_thisweek', $totNoOfshopsCodeOnlineThisWeek)
-                            ->set('total_no_members', $totNoOfSubscribers)
-                            ->set('updated_at',"'" . date('Y-m-d H:i:s') ."'
-                                    ")
+            ->update('Dashboard')
+            ->set('no_of_offers', $noOfOffers)
+            ->set('no_of_shops', $noOfShops)
+            ->set('no_of_clickouts', $noOfClickouts)
+            ->set('no_of_subscribers', $noOfSubscribers)
+            ->set('total_no_of_offers', $totNoOfOffers)
+            ->set('total_no_of_shops', $totNoOfShops)
+            ->set('total_no_of_shops_online_code', $totNoOfshopsCodeOnline)
+            ->set('total_no_of_shops_online_code_lastweek', $totNoOfshopsCodeOnlineLastWeek)
+            ->set('total_no_of_shops_online_code_thisweek', $totNoOfshopsCodeOnlineThisWeek)
+            ->set('total_no_members', $totNoOfSubscribers)
+            ->set('updated_at', "'" . date('Y-m-d H:i:s') ."'")
+            ->set('money_shop_ratio', $moneyShopRatio)
             ->execute();
 
         }
