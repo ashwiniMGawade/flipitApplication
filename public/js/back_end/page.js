@@ -177,20 +177,6 @@ function pageList(iSearchText,iStart,iSortCol,iSortDir,iType) {
 					"bSearchable" : true,
 					"bSortable" : true
 				},
-				{
-					"fnRender" : function(obj) {
-						var tag = '';
-						if(obj.aData.publish==true){
-						tag='Yes';
-						}
-						else{
-						tag = 'No';
-						}
-						return "<a href='javascript:void(0);'>" + tag + "</a>";
-					 },
-					"bSearchable" : true,
-					"bSortable" : true
-				},
 				
 				{
 				"fnRender" : function(obj) {
