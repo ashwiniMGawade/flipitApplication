@@ -437,7 +437,6 @@ class StoreController extends Zend_Controller_Action
 
     public function socialcodeAction()
     {
-        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         $this->_helper->layout()->disableLayout();
         $shopPermalink = $this->getRequest()->getParam('shopPermalink');
         $shopId = base64_encode(Shop::getShopIdByPermalink($shopPermalink));
