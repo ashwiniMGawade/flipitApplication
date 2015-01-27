@@ -76,7 +76,7 @@ class Admin_WidgetController extends Zend_Controller_Action
     public function widgetlistAction()
     {
         $params = $this->_getAllParams();
-        $data = Widget :: getWidgetList($params);
+        $data = Widget::getWidgetList($params);
         echo Zend_Json::encode ($data);
         die ();
 
