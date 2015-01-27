@@ -42,6 +42,10 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         foreach ($sixShopReasons as $reason) {
             $sixShopReasonWithIndex[$reason['fieldname']] = $reason['fieldvalue'];
         }
-        return  array_chunk($sixShopReasonWithIndex, 2);
+        if (!empty( $sixShopReasonWithIndex)) 
+        {
+            $sixShopReasonWithIndex = array_chunk($sixShopReasonWithIndex, 2);
+        }
+        return  $sixShopReasonWithIndex;
     }
 }

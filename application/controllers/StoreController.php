@@ -41,6 +41,12 @@ class StoreController extends Zend_Controller_Action
         $url = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $explodeUrl = explode('?', $url);
         $shopPermalink = $explodeUrl[0];
+
+        if (LOCALE != '') {
+            $explodedPermalink = explode("/", $shopPermalink);
+            $shopPermalink = $explodedPermalink[1];
+        }
+        
         $this->view->shareCodeStatus = false;
         if (isset($explodeUrl[1])) {
             $this->view->shareCodeStatus = true;
@@ -167,6 +173,7 @@ class StoreController extends Zend_Controller_Action
         if (isset($shopPermalink[0])) {
             $shopPermalink = $shopPermalink[0];
         }
+        
         $this->view->storePageUrl = $shopPermalink;
 
         $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopInformation[0]['permaLink']);
