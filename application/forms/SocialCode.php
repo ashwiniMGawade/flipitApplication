@@ -34,7 +34,7 @@ class Application_Form_SocialCode extends Application_Form_Base
         $expireDate->setAttrib('class', 'form-control');
         $expireDate->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_expireddate'));
         $expireDate->addValidator('date', true, array('dd-mm-yyyy'));
-        
+
         $offerDetails = new Zend_Form_Element_Textarea('offerDetails');
         $offerDetails->setRequired(true);
         $offerDetails->setAttrib('class', 'form-control');
