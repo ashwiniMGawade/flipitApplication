@@ -8,9 +8,11 @@ class Application_Form_SocialCode extends Application_Form_Base
     public function init()
     {
         $nickname = new Zend_Form_Element_Text('nickname');
+        $validator = new Zend_Validate_Alpha(array('allowWhiteSpace' => true));
         $nickname->setRequired(true);
         $nickname->setAttrib('class', 'form-control');
         $nickname->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_nickname'));
+        $nickname->addValidator($validator);
 
         $title = new Zend_Form_Element_Text('title');
         $title->setRequired(true);
@@ -31,6 +33,7 @@ class Application_Form_SocialCode extends Application_Form_Base
         $expireDate->setRequired(true);
         $expireDate->setAttrib('class', 'form-control');
         $expireDate->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_expireddate'));
+        $expireDate->addValidator('date', true, array('dd-mm-yyyy'));
 
         $offerDetails = new Zend_Form_Element_Textarea('offerDetails');
         $offerDetails->setRequired(true);
