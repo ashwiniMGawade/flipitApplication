@@ -51,7 +51,8 @@ class StoreController extends Zend_Controller_Action
         if (isset($explodeUrl[1])) {
             $this->view->shareCodeStatus = true;
         }
-
+        
+        $this->view->storePageUrl = $shopPermalink;
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($shopPermalink);
         $shopRecordsLimit = 10;
         $shopParams = $this->_getAllParams();
@@ -164,17 +165,6 @@ class StoreController extends Zend_Controller_Action
             $offers = $this->_helper->Store->topStorePopularOffers($shopId, $offers);
             $this->view->topPopularOffers = $offers;
         }
-
-        if (LOCALE != '') {
-            $explodedPermalink = explode("/", $shopPermalink);
-            $shopPermalink = $explodedPermalink[1];
-        }
-        $shopPermalink =  explode("?", $shopPermalink);
-        if (isset($shopPermalink[0])) {
-            $shopPermalink = $shopPermalink[0];
-        }
-        
-        $this->view->storePageUrl = $shopPermalink;
 
         $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopInformation[0]['permaLink']);
         if ($this->view->currentStoreInformation[0]['discussions'] == 1) {
@@ -447,6 +437,7 @@ class StoreController extends Zend_Controller_Action
 
     public function socialcodeAction()
     {
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         $this->_helper->layout()->disableLayout();
         $shopPermalink = $this->getRequest()->getParam('shopPermalink');
         $shopId = base64_encode(Shop::getShopIdByPermalink($shopPermalink));
