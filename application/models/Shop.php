@@ -2078,7 +2078,7 @@ public static function getShopDetail($shopId)
         $totalNumberOfShops = self::getTotalAmountOfShops();
         $numberOfMoneyShops = self::getTotalNumberOfMoneyShops();
         $shopRatio = ($numberOfMoneyShops['moneyShops'] / $totalNumberOfShops['amountshops']) * 100;
-        return round($shopRatio, 2);
+        return round($shopRatio);
     }
 
 }

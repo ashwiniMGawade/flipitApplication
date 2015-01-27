@@ -12,7 +12,6 @@ class updateDashboard
     protected $_hostName = '';
     protected $_trans = null;
 
-
     public function __construct()
     {
     ini_set('memory_limit', '-1');
@@ -157,7 +156,7 @@ class updateDashboard
         $p8 = $totNoOfshopsCodeOnlineThisWeek['amountshops'];
         $p9 = $totNoOfshopsCodeOnlineLastWeek['amountshops'];
         $p10 = $totNoOfSubscribers['amountsubs'];
-        echo $moneyShopRatio = $dashboard->getMoneyShopRatio();die;
+        $moneyShopRatio = $dashboard->getMoneyShopRatio();
         //Update dashboard table with current data
 
         $dashboard->updateDashboard($p1, $p2, $p3, $p4, $p5, $p6, $p7, $p8, $p9, $p10, $moneyShopRatio);

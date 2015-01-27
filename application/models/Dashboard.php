@@ -148,7 +148,7 @@ class Dashboard extends BaseDashboard
 
     public static function getDashboardToDisplay()
     {
-        $getData = Doctrine_Query::create()->from('Dashboard')->fetchOne(null,Doctrine::HYDRATE_ARRAY);
+        $getData = Doctrine_Query::create()->from('Dashboard')->fetchOne(null, Doctrine::HYDRATE_ARRAY);
         return $getData;
 
     }
@@ -171,7 +171,7 @@ class Dashboard extends BaseDashboard
     {
 
         try {
-            $data = Doctrine_Query::create()->select($name)->from('Dashboard')->fetchOne(null,Doctrine::HYDRATE_ARRAY);
+            $data = Doctrine_Query::create()->select($name)->from('Dashboard')->fetchOne(null, Doctrine::HYDRATE_ARRAY);
             return $data[$name];
 
         } catch (Exception $e) {
@@ -237,7 +237,7 @@ class Dashboard extends BaseDashboard
 
     }
 
-    public static function count_format($n, $point='.', $sep=',')
+    public static function count_format($n, $point = '.', $sep = ',')
     {
         if ($n < 0) {
             return 0;
