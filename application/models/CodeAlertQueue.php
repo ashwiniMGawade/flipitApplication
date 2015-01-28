@@ -63,6 +63,7 @@ class CodeAlertQueue extends BaseCodeAlertQueue
         $codeAlertOfferIds = Doctrine_Query::create()
             ->select('c.offerId,c.shopId')
             ->from('CodeAlertQueue c')
+            ->where('c.deleted = 0')
             ->fetchArray();
         $offers =  array();
         $codeAlertOffers = array();
