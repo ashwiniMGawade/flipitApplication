@@ -180,13 +180,6 @@ endif;
     
     if ($this->shareCodeStatus=='name=thanksmessage'):
         echo $this->esi($this->locale.'store/socialcodethanks');
-        ?>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('html, body').animate({scrollTop: ($('#sidebar div.block').offset().top + 150)}, 'slow');
-            });
-        </script>
-        <?php
     else :
         echo $this->esi(
             $this->locale.'store/socialcode?shopPermalink='
