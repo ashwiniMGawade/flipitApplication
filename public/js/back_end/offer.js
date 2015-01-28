@@ -79,6 +79,11 @@ function init(){
         },
 	});
 
+    $('.select2-search-choice-close').click(function(e){
+    	$(e).parents('div.fl').children('input').val('');
+    	//var name = $('div.fl abbr.select2-search-choice-close').parents('div.fl').children('input').attr('name');
+        searchByShop();
+    });
 
 	$("#searchCoupon").select2({
 		placeholder: __("Search Coupon Code"),
