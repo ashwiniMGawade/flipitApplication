@@ -79,12 +79,6 @@ function init(){
         },
 	});
 
-    $('.select2-search-choice-close').click(function(e){
-    	$(e).parents('div.fl').children('input').val('');
-    	//var name = $('div.fl abbr.select2-search-choice-close').parents('div.fl').children('input').attr('name');
-        searchByShop();
-    });
-
 	$("#searchCoupon").select2({
 		placeholder: __("Search Coupon Code"),
 		minimumInputLength: 1,
@@ -113,7 +107,10 @@ function init(){
         },
 	});
 
-
+	$('.select2-search-choice-close').click(function(e){
+    	$(this).parents('div.resetSearch').children('input').val('');
+        searchByShop();
+    });
 	
 	//autocomplete for offer 
 	//if press enter key the call search offer function
