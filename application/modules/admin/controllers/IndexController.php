@@ -16,7 +16,7 @@ class Admin_IndexController extends Zend_Controller_Action
     }
     public function init()
     {
-       BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
 
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages();
@@ -28,8 +28,6 @@ class Admin_IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-
-
         $data = Dashboard::getDashboardToDisplay();
         $this->view->data = $data;
 
@@ -64,20 +62,20 @@ class Admin_IndexController extends Zend_Controller_Action
         $text = BackEnd_Helper_viewHelper::stripSlashesFromString($this->getRequest()->getParam('content'));
         $textCond = trim($text);
         $checkDataExist = Doctrine_Query::create()->from('Dashboard')->fetchArray();
-        if(count($checkDataExist) == 0){
+        if (count($checkDataExist) == 0) {
             $saveMessage = new Dashboard();
             $saveMessage->id = 1;
             $saveMessage->message = trim($text);
             $saveMessage->save();
 
 
-        }else{
-            $updateMessage = Doctrine_Query::create()->update('Dashboard')->set("message","'".trim($text)."'")->execute();
+        } else {
+            $updateMessage = Doctrine_Query::create()->update('Dashboard')->set("message", "'".trim($text)."'")->execute();
 
         }
-        if($textCond=='' || $textCond == null){
+        if ($textCond=='' || $textCond == null) {
             echo $this->view->translate('Click here and write a message for employees.');
-        }else{
+        } else {
 
             echo '1';
         }
@@ -103,6 +101,4 @@ class Admin_IndexController extends Zend_Controller_Action
     {
 
     }
-
-
 }

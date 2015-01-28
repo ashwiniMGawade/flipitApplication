@@ -79,6 +79,10 @@ abstract class BaseDashboard extends Doctrine_Record
                 'type' => 'integer',
                 'length' => '11',
         ));
+        $this->hasColumn('money_shop_ratio', 'integer', 11, array(
+                'type' => 'integer',
+                'length' => '11',
+        ));
     }
 
     public function setUp()
