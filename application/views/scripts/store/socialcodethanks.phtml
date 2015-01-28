@@ -1,3 +1,9 @@
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('html, body').animate({scrollTop: ($('#socialCodeDiv').offset().top)}, 'slow');
+    });
+</script>
 <div id='socialCodeDiv' class="widget">
     <h3><?php echo $this->translate('Social Code');?></h3>
     <strong class="sub-title"><?php echo $this->translate('Thank you for sharing your offer!');?></strong>
