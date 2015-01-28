@@ -47,9 +47,9 @@ class StoreController extends Zend_Controller_Action
             $shopPermalink = $explodedPermalink[1];
         }
         
-        $this->view->shareCodeStatus = false;
+        $this->view->shareCodeStatus = '';
         if (isset($explodeUrl[1])) {
-            $this->view->shareCodeStatus = true;
+            $this->view->shareCodeStatus = $explodeUrl[1];
         }
         
         $this->view->storePageUrl = $shopPermalink;
