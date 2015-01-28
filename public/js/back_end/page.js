@@ -1,5 +1,36 @@
 $(document).ready(function() {
 	 
+	 $("#SearchPage").select2({
+        placeholder: __("Search Page"),
+        minimumInputLength: 1,
+        ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+            url: HOST_PATH + "admin/page/searchtopfivepage",
+            dataType: 'json',
+            data: function(term, page) {
+                return {
+                 	keyword: term
+                };
+            },
+            type: 'post',
+            results: function (data, page) { // parse the results into the format expected by Select2.
+            // since we are using custom formatting functions we do not need to alter remote JSON data
+            return {results: data};
+            }
+        },
+        formatResult: function(data) {
+            return data; 
+        },
+        formatSelection: function(data) { 
+            $("#SearchPage").val(data);
+            return data; 
+        },
+    });
+    $('.select2-search-choice-close').click(function(){
+    	$('input#SearchPage').val('');
+    	var type =  $('#pagetype').val()=='' ? undefined : $('#pagetype').val();
+        pageList(undefined,0,0,'asc' ,type);
+    });
+
 	//cat to load page list 
 	var iStart = $.bbq.getState( 'iStart' , true ) || 0;
 	var iSortCol = $.bbq.getState( 'iSortCol' , true ) || 0;
@@ -27,34 +58,6 @@ $(document).ready(function() {
 			  }
 	});
 	
-	
-	//Auto complete for search offer text box
-	$("#SearchPage").autocomplete({
-        minLength: 1,
-        source: function( request, response){
-        	
-        	$.ajax({
-        		url : HOST_PATH + "admin/page/searchtopfivepage/keyword/" + $('#SearchPage').val(),
-     			method : "post",
-     			dataType : "json",
-     			type : "post",
-     			success : function(data) {
-     				
-     				if (data != null) {
-     					
-     					//pass arrau of the respone in respone onject of the autocomplete
-     					response(data);
-     				} 
-     			},
-     			error: function(message) {
-     				
-     	            // pass an empty array to close the menu if it was initially opened
-     	            response([]);
-     	        }
-   		 });
-        },
-        select: function( event, ui ) {}
-    }); 
 	$(window).bind( 'hashchange', function(e) {
 		if(hashValue != location.hash && click == false){
 			pageListTbl.fnCustomRedraw();
