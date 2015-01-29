@@ -314,14 +314,14 @@ class Admin_EmailController extends Zend_Controller_Action
 
     public function codeAlertSettingsAction()
     {
-        $codeAlertSettings = CodeAlertSettings::getCodeAlertSettings();
+        $codeAlertSettings = KC\Repository\CodeAlertSettings::getCodeAlertSettings();
         $this->view->codeAlertSettings = $codeAlertSettings;
         $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
         $this->getFlashMessage();
 
         if ($this->getRequest()->isPost()) {
             $codeAlertParameters = $this->getRequest()->getParams();
-            CodeAlertSettings::saveCodeAlertSettings(
+            KC\Repository\CodeAlertSettings::saveCodeAlertSettings(
                 $codeAlertParameters['emailSubject'],
                 $codeAlertParameters['emailHeader']
             );
@@ -335,26 +335,26 @@ class Admin_EmailController extends Zend_Controller_Action
         $codeAlertQueueParameters = $this->getRequest()->getParams();
         $codeAlertQueueShopId = $codeAlertQueueParameters['shopId'];
         $codeAlertQueueOfferId = $codeAlertQueueParameters['offerId'];
-        $codeAlertQueue = CodeAlertQueue::saveCodeAlertQueue($codeAlertQueueShopId, $codeAlertQueueOfferId);
+        $codeAlertQueue = KC\Repository\CodeAlertQueue::saveCodeAlertQueue($codeAlertQueueShopId, $codeAlertQueueOfferId);
         echo $codeAlertQueue;
         die;
     }
     
     public function savecodealertsettingsAction()
     {
-        CodeAlertSettings::saveCodeAlertSettings($this->getRequest()->getParams());
+        KC\Repository\CodeAlertSettings::saveCodeAlertSettings($this->getRequest()->getParams());
         die;
     }
     
     public function savecodealertemailsubjectAction()
     {
-        CodeAlertSettings::saveCodeAlertEmailSubject($this->getRequest()->getParams());
+        KC\Repository\CodeAlertSettings::saveCodeAlertEmailSubject($this->getRequest()->getParams());
         die;
     }
 
     public function savecodealertemailheaderAction()
     {
-        CodeAlertSettings::saveCodeAlertEmailHeader($this->getRequest()->getParams());
+        KC\Repository\CodeAlertSettings::saveCodeAlertEmailHeader($this->getRequest()->getParams());
         die;
     }
 
@@ -365,21 +365,21 @@ class Admin_EmailController extends Zend_Controller_Action
             echo $this->_helper->json('This page does not exist');
         }
 
-        $visitors = CodeAlertQueue::getRecepientsCount();
+        $visitors = KC\Repository\CodeAlertQueue::getRecepientsCount();
         echo $this->_helper->json(array('recepients' => $visitors), true);
     }
     
     public function codealertlistAction()
     {
         $params = $this->_getAllParams();
-        $codeAlertQueue = CodeAlertQueue::getCodeAlertList($params);
-        echo Zend_Json::encode($codeAlertQueue);
+        $codeAlertQueue = KC\Repository\CodeAlertQueue::getCodeAlertList($params);
+        echo \Zend_Json::encode($codeAlertQueue);
         die();
     }
 
     public function movecodealerttotrashAction()
     {
-        $codeAlert = CodeAlertQueue::moveCodeAlertToTrash($this->_getParam('id'));
+        $codeAlert = KC\Repository\CodeAlertQueue::moveCodeAlertToTrash($this->_getParam('id'));
         if (intval($codeAlert) > 0) {
             $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate('Code alert has been moved to trash');
@@ -388,7 +388,7 @@ class Admin_EmailController extends Zend_Controller_Action
             $message = $this->view->translate('Problem in your data.');
             $flash->addMessage(array('error' => $message));
         }
-        echo Zend_Json::encode($codeAlert);
+        echo \Zend_Json::encode($codeAlert);
         die();
     }
 
@@ -410,8 +410,8 @@ class Admin_EmailController extends Zend_Controller_Action
     public function codealertsentlistAction()
     {
         $params = $this->_getAllParams();
-        $codeAlertQueue = CodeAlertQueue::getCodeAlertList($params, true);
-        echo Zend_Json::encode($codeAlertQueue);
+        $codeAlertQueue = KC\Repository\CodeAlertQueue::getCodeAlertList($params, true);
+        echo \Zend_Json::encode($codeAlertQueue);
         die();
     }
 }

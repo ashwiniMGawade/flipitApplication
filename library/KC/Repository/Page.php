@@ -32,7 +32,7 @@ class Page Extends \KC\Entity\Page
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
-        ->select('p.permalink, p.pagetitle')
+        ->select('p.permalink, p.pageTitle')
         ->from('KC\Entity\Page', 'p')
         ->where('p.deleted = 0')
         ->andWhere('p.showinmobilemenu = 1')
@@ -106,7 +106,7 @@ class Page Extends \KC\Entity\Page
     public static function getPageDetailFromPermalink($permalink)
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('page.content, page.pagetitle')
+        $query = $entityManagerUser->select('page.content, page.pageTitle')
             ->from('KC\Entity\Page', 'page')
             ->setParameter(1, $entityManagerUser->expr()->literal($permalink))
             ->where('page.permalink = ?1')
@@ -251,16 +251,16 @@ class Page Extends \KC\Entity\Page
             ? $params["searchText"] : '';
 
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('page.pagetitle, page.created_at, page.updated_at, page.contentManagerName')
+        $query = $entityManagerUser->select('page.pageTitle, page.created_at, page.updated_at, page.contentManagerName')
             ->from('KC\Entity\Page', 'page')
             ->setParameter(1, 1)
             ->where('page.deleted = ?1')
             ->setParameter(2, $srhPage.'%')
-            ->andWhere($entityManagerUser->expr()->like('page.pagetitle , ?2'));
+            ->andWhere($entityManagerUser->expr()->like('page.pageTitle , ?2'));
         $result =  DataTable_Helper::generateDataTableResponse(
             $pageList,
             $params,
-            array("__identifier" => 'page.pagetitle','page.created_at','page.updated_at','page.contentManagerName'),
+            array("__identifier" => 'page.pageTitle','page.created_at','page.updated_at','page.contentManagerName'),
             array(),
             array()
         );
@@ -469,7 +469,7 @@ class Page Extends \KC\Entity\Page
     public static function getPageDetailFromSlug($slug)
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('page.content, page.pagetitle')
+        $query = $entityManagerUser->select('page.content, page.pageTitle')
             ->from('KC\Entity\Page', 'page')
             ->setParameter(1, $slug)
             ->where('page.slug = ?1')
@@ -511,7 +511,7 @@ class Page Extends \KC\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select(
-            'page.id, page.permalink, page.pagetitle,
+            'page.id, page.permalink, page.pageTitle,
             page.metatitle, page.metadescription'
         )
             ->from('KC\Entity\Page', 'page')
@@ -544,7 +544,7 @@ class Page Extends \KC\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select(
-            'page.id, page.permalink, page.pagetitle, page.pagetype, page.metadescription, logo.path, logo.name'
+            'page.id, page.permalink, page.pageTitle, page.pagetype, page.metadescription, logo.path, logo.name'
         )
             ->from('KC\Entity\Page', 'page')
             ->leftJoin('page.logo logo')
@@ -570,7 +570,7 @@ class Page Extends \KC\Entity\Page
             ->andWhere('page.deleted = ?2')
             ->setParameter(3, 1)
             ->andWhere('page.showsitemap = ?3')
-            ->orderBy('page.pagetitle', 'ASC');
+            ->orderBy('page.pageTitle', 'ASC');
         $pageIdsAndPermalinks = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageIdsAndPermalinks;
     }

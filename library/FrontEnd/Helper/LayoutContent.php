@@ -4,13 +4,13 @@ class FrontEnd_Helper_LayoutContent
     public static function loadFlipitHomePage($flipitUrl)
     {
         $htmlPath = '';
-        $flipit = new Zend_View();
+        $flipit = new \Zend_View();
         $flipit->setBasePath(APPLICATION_PATH . '/modules/flipit/views');
-        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        $httpScheme = \FrontEnd_Helper_viewHelper::getServerNameScheme();
         if($flipitUrl == 'http://'.$httpScheme.'.flipit.com'
             || $flipitUrl == 'flipit.com'
             || $flipitUrl =='http://flipit.com') :
-            zend_Controller_Front::getInstance()->getRequest()
+            \zend_Controller_Front::getInstance()->getRequest()
             ->getControllerName() == 'index'
             ? $htmlPath = 'index/index.phtml'
             : $htmlPath = 'error/error.phtml';
@@ -46,18 +46,18 @@ class FrontEnd_Helper_LayoutContent
     {
         $robots = '';
         if(isset($page) && $page != ''
-                && zend_Controller_Front::getInstance()
+                && \zend_Controller_Front::getInstance()
                 ->getRequest()->getControllerName() == 'search'):
                 $robots = 'noindex, follow';
-        elseif (strtolower(zend_Controller_Front::getInstance()->getRequest()->getControllerName()) == 'login'
+        elseif (strtolower(\zend_Controller_Front::getInstance()->getRequest()->getControllerName()) == 'login'
                         && strtolower(
-                            zend_Controller_Front::getInstance()
+                            \zend_Controller_Front::getInstance()
                             ->getRequest()->getActionName() == 'forgotpassword'
                         )
                 ):
                 $robots = 'noindex, follow';
         else:
-            if(Zend_Controller_Front::getInstance()->getRequest()->getParam('page', null) > 1):
+            if(\Zend_Controller_Front::getInstance()->getRequest()->getParam('page', null) > 1):
                 $robots = 'noindex, follow';
             else:
                 if($robotOfDummyPages) :
@@ -109,7 +109,7 @@ class FrontEnd_Helper_LayoutContent
         $facebookDescription,
         $facebookLocale
     ) {
-        $fb = new Zend_View();
+        $fb = new \Zend_View();
         $fb->setScriptPath(APPLICATION_PATH . '/layouts/scripts/');
         $fb->assign('facebookTitle', $facebookTitle);
         $fb->assign('facebookShareUrl', $facebookShareUrl);
@@ -122,7 +122,7 @@ class FrontEnd_Helper_LayoutContent
     
     public static function loadTwitterMeta($twitterDescription, $twitterSite)
     {
-        $twitter = new Zend_View();
+        $twitter = new \Zend_View();
         $twitter->setScriptPath(APPLICATION_PATH . '/layouts/scripts/');
         $twitter->assign('twitterDescription', $twitterDescription);
         $fb->assign('twitterSite', $twitterSite);
@@ -152,8 +152,8 @@ class FrontEnd_Helper_LayoutContent
     {
         $divShow = false;
         if (
-            zend_Controller_Front::getInstance()->getRequest()->getControllerName()!= 'index'
-            && zend_Controller_Front::getInstance()->getRequest()->getControllerName()!= 'plus'
+            \zend_Controller_Front::getInstance()->getRequest()->getControllerName()!= 'index'
+            && \zend_Controller_Front::getInstance()->getRequest()->getControllerName()!= 'plus'
         ) {
             $divShow = true;
         }
@@ -167,7 +167,7 @@ class FrontEnd_Helper_LayoutContent
      
     public static function getUlOfMainMenu($navigation = '')
     {
-        $mainMenu = KC\Repository\Menu::getFirstLevelMenu();
+        $mainMenu = \KC\Repository\Menu::getFirstLevelMenu();
         $classForFlipIt = LOCALE=='' ? "kc-menu" : 'flipit-menu';
         $ulOfMainMenu =
         '<ul>';
@@ -198,7 +198,7 @@ class FrontEnd_Helper_LayoutContent
     }
     public static function generateSpecialPageMobileMenu()
     {
-        $specialPages = Page::getSpecialPageDetailForMobileMenu();
+        $specialPages = \KC\Repository\Page::getSpecialPageDetailForMobileMenu();
         $ulOfSpecialPageMenu = '<ul>';
         foreach ($specialPages as $specialPage) {
             $ulOfSpecialPageMenu.=
@@ -212,13 +212,13 @@ class FrontEnd_Helper_LayoutContent
     }
     public static function getMostPopularCouponOnEarth()
     {
-        $splashInformation = FrontEnd_Helper_viewHelper::getSplashInformation();
+        $splashInformation = \FrontEnd_Helper_viewHelper::getSplashInformation();
         if (!empty($splashInformation)) {
             $locale = $splashInformation[0]['locale'];
-            $connectionWithSiteDatabase = BackEnd_Helper_DatabaseManager::addConnection($locale);
+            $connectionWithSiteDatabase = \BackEnd_Helper_DatabaseManager::addConnection($locale);
             $offer = new \KC\Repository\Offer($connectionWithSiteDatabase['connName']);
             $mostPopularCoupon = $offer->getSplashPagePopularCoupon($splashInformation[0]['offerId']);
-            BackEnd_Helper_DatabaseManager::closeConnection($connectionWithSiteDatabase['adapter']);
+            \BackEnd_Helper_DatabaseManager::closeConnection($connectionWithSiteDatabase['adapter']);
             return array('locale' => $locale,'mostPopularCoupon' => $mostPopularCoupon);
         } else {
             return array('locale' => '','mostPopularCoupon' => '');
