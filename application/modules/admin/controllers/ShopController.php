@@ -503,17 +503,15 @@ class Admin_ShopController extends Zend_Controller_Action
                     ->leftJoin("s.howtousesmallimage sl")
                     ->leftJoin("s.howtousebigimage bl")
                     ->leftJoin("s.howtochapter chapter")
-                    ->leftJoin("s.relatedshops sp")
                     ->leftJoin("s.page pg")
                     ->leftJoin("s.logo logo")
                     ->leftJoin("s.screenshot screenshot")
                     ->where("s.id = ?" , $id)
                     ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
 
-            //var_dump($data) ;
+            $this->view->relatedShops = Shop::getRelatedShop($id);
 
             $this->view->data = $data ;
-
 
             $existingCategories  = $data['category'] ;
             $catArray  = array();
@@ -521,7 +519,7 @@ class Admin_ShopController extends Zend_Controller_Action
                 $catArray[] = $categories['id'];
             }
             $this->view->catArray = '';
-            if(isset($catArray) && count($catArray)>0){
+            if (isset($catArray) && count($catArray)>0) {
                 $this->view->catArray =  $catArray  ;
             }
         } else {
