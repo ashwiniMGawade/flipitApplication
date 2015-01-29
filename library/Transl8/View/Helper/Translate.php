@@ -53,7 +53,7 @@ class Transl8_View_Helper_Translate extends Zend_View_Helper_Abstract
 	{
         $translate      = $this->_getTranslator();
 
-        $translation    = $translate->translate($message);
+        $translation    = html_entity_decode($translate->translate($message));
 
         // Replace placeholder(s) with associated values
         if (is_string($param)) {
@@ -71,7 +71,7 @@ class Transl8_View_Helper_Translate extends Zend_View_Helper_Abstract
                 
             // Add necessary HTML around translated value
             $translation = '<span class="transl8-text">'
-                         . html_entity_decode($translation)
+                         . $translation
                          . '<span class="transl8-link-container">'
                          . '<a class="transl8-link" href="#' . urlencode($message) . '" title="'. $message . '">Translate</a>'
                          . '</span>'
