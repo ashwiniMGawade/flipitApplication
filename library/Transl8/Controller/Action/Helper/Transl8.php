@@ -102,8 +102,9 @@ class Transl8_Controller_Action_Helper_Transl8
     protected function _getTranslatedValue($locale, $translationKey)
     {
         $translator = $this->_getTranslator();
-        if( $translator->isTranslated($translationKey, false, $locale)) {
-            return $translator->translate($translationKey,$locale);
+        if ($translator->isTranslated($translationKey, false, $locale)) {
+            $tranlstionString =  html_entity_decode($translator->translate($translationKey, $locale));
+            return $tranlstionString;
         }
         return null;
     }
