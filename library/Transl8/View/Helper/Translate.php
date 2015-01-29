@@ -68,10 +68,10 @@ class Transl8_View_Helper_Translate extends Zend_View_Helper_Abstract
 
             // Remove key from global list of translation
             Transl8_Translate_Adapter_Csv::eliminateTranslatableValue($message);
-
+                
             // Add necessary HTML around translated value
             $translation = '<span class="transl8-text">'
-                         . $translation
+                         . html_entity_decode($translation)
                          . '<span class="transl8-link-container">'
                          . '<a class="transl8-link" href="#' . urlencode($message) . '" title="'. $message . '">Translate</a>'
                          . '</span>'
