@@ -92,7 +92,7 @@ class Widget extends BaseWidget
  */
     public static function getWidgetList($params)
     {
-        $srh = @$params["SearchText"] != 'undefined' ? @$params["SearchText"] : '';
+        $srh = @$params["searchText"] != 'undefined' ? @$params["searchText"] : '';
         //$srh = isset($params["searchText"]) ? $params["searchText"] : '';
         $data = Doctrine_Query::create ()
         ->select ('w.*')

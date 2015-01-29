@@ -3,9 +3,10 @@
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.dataTables.min.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/dataTableComman.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
 $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
-//$this->headScript()->appendFile(PUBLIC_PATH . "/js/ext-lang-de-min.js?1209478552");
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/select2.css" );
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/trashShop.js");
 ?>
 <?php echo $this->headTitle()->append('Trashed Shops List');?>
@@ -37,9 +38,13 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/trashShop.js");
          <form class="well form-search searchbarbox" name="searchform" id="searchform">
               <div class="mainpage-content-searchbart">
                     <div class="mainpage-content-right-searchbar">
-                    <button id="search-btn" type="button" class="btn btn-primary"><?php echo $this->translate('Search'); ?></button></div>
+	                    <button id="search-btn" type="button" class="btn btn-primary">
+	                    <?php echo $this->translate('Search'); ?>
+	                    </button>
+                    </div>
                     <div class="mainpage-content-right-inner-left-searchbar">
-                    <input type="text" style="" class="span3" placeholder="Search shop..." name="searchShop" id="searchShop"></div>                        
+                    	<input type='hidden' id="searchShop" name="searchShop" style="width:99%;"/>
+                    </div>                        
               </div>
             </form>
             

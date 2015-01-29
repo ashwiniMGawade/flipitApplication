@@ -43,9 +43,9 @@ $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
           	<p class="text-right"><a href='<?php echo HTTP_PATH ?>admin/offer/export-xlx'><?php echo $this->translate('Export List')?></a></p>
             <div class="mainpage-content-colorbox">
                 <form class="form-search" id="searchform">
-                	<div class="fl">
+                	<div class="resetSearch fl">
                         <input type='hidden' id="searchOffer" name="searchOffer" style="width:300px;"/>
-					</div>
+					        </div>
                     <div class="fl ml15">
                         <select id='couponType' name='couponType'>
                         	<option value=''>All</option>
@@ -58,10 +58,10 @@ $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
                     <div class="mainpage-content-searchbart">
                         <div class="mainpage-content-right-searchbar-offer">
                         <button type='button' onClick='searchByShop();' id='searchShopeButton' value='searchShopeButton' class="btn btn-primary"><?php echo $this->translate('Search');?></button></div>
-                        <div class="mainpage-content-right-inner-left-searchbar-other">
+                        <div class="resetSearch mainpage-content-right-inner-left-searchbar-other">
                         	<input type="hidden" class="span3" id="searchShop" name="searchShop" style="width:35%;float:left;">
                         </div>
-                        <div class="mainpage-content-right-inner-left-searchbar-other">
+                        <div class="resetSearch mainpage-content-right-inner-left-searchbar-other">
                           <input type="hidden" class="span3" id="searchCoupon" name="searchCoupon" style="width:35%;float:left;">
                         </div>
                     </div>
