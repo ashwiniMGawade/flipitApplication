@@ -41,8 +41,7 @@ class Translations extends BaseTranslations
 
     public function saveTranslations($translations)
     {
-        $translationsAfterRemovingTags = BackEnd_Helper_viewHelper::removeScriptTag($translations);
-        $existingTranslation =  self::getExistingTranslation($translationsAfterRemovingTags);
+        $existingTranslation =  self::getExistingTranslation($translations);
         if (!empty($existingTranslation[0]['id'])) {
             $translationQuery = Doctrine_Query::create()
                 ->update('translations')
@@ -50,15 +49,15 @@ class Translations extends BaseTranslations
                     'translation',
                     "'".mysqli_real_escape_string(
                         FrontEnd_Helper_viewHelper::getDbConnectionDetails(),
-                        $translationsAfterRemovingTags[(string)Zend_Registry::get('Zend_Locale')]
+                        htmlentities($translations[(string)Zend_Registry::get('Zend_Locale')])
                     )."'"
                 )
                 ->where('id = '.$existingTranslation[0]['id'])
                 ->execute();
         } else {
             $translation = $this;
-            $translation->translationKey = $translationsAfterRemovingTags['translationKey'];
-            $translation->translation = $translationsAfterRemovingTags[(string)Zend_Registry::get('Zend_Locale')];
+            $translation->translationKey = $translations['translationKey'];
+            $translation->translation = htmlentities($translations[(string)Zend_Registry::get('Zend_Locale')]);
             $translation->save();
         }
     }
