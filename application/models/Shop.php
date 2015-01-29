@@ -415,7 +415,7 @@ class Shop extends BaseShop
         ->andWhere("s.name LIKE ?", "%$srh%");
         $result =   DataTable_Helper::generateDataTableResponse($shopList,
                     $params,
-                    array("__identifier" => 's.id,s.updated_at', 's.id','s.name','s.permaLink','s.affliateProgram','s.created_at','affname','s.discussions','s.showSignupOption','s.status','s.offlineSicne'),
+                    array("__identifier" => 's.id,s.updated_at', 's.id','s.name','s.permaLink','s.affliateProgram','s.created_at', 's.totalviewcount','affname','s.discussions','s.showSignupOption','s.status','s.offlineSicne'),
                     array(),
                     array());
     return $result;
