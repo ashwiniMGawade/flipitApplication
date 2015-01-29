@@ -65,7 +65,7 @@ class Category extends \KC\Entity\Category
             ->addSelect(
                 "(
                     SELECT  count(roc) FROM KC\Entity\RefOfferCategory roc LEFT JOIN roc.offers off LEFT JOIN off.shopOffers s  WHERE  
-                    off.deleted = 0 and s.deleted = 0 and roc.offers = p.category and off.endDate >'"
+                    off.deleted = 0 and s.deleted = 0 and roc.categories = p.category and off.endDate >'"
                 .$currentDateAndTime."' and off.discountType='CD' and off.Visability!='MEM') as countOff"
             )
             ->addSelect(
@@ -365,8 +365,8 @@ class Category extends \KC\Entity\Category
             ->from("KC\Entity\Category", "c")
             ->addSelect(
                 "(
-                    SELECT count(roc) FROM KC\Entity\RefOfferCategory roc LEFT JOIN roc.category off LEFT JOIN off.shopOffers s  
-                        WHERE  off.deleted = 0 and s.deleted = 0 and roc.offer = c.id and off.endDate >
+                    SELECT count(roc) FROM KC\Entity\RefOfferCategory roc LEFT JOIN roc.offers off LEFT JOIN off.shopOffers s  
+                        WHERE  off.deleted = 0 and s.deleted = 0 and roc.categories = c.id and off.endDate >
                 '".$currentDateAndTime."' and off.discountType='CD' and off.Visability!='MEM'
                 ) 
             as totalCoupons"
@@ -462,8 +462,8 @@ class Category extends \KC\Entity\Category
             ->from("KC\Entity\Category", "c")
             ->addSelect(
                 "(
-                    SELECT count(roc) FROM KC\Entity\RefOfferCategory roc LEFT JOIN roc.category off LEFT JOIN off.shopOffers s  
-                        WHERE  off.deleted = 0 and s.deleted = 0 and roc.offer = c.id and off.endDate >
+                    SELECT count(roc) FROM KC\Entity\RefOfferCategory roc LEFT JOIN roc.offers off LEFT JOIN off.shopOffers s  
+                        WHERE  off.deleted = 0 and s.deleted = 0 and roc.categories = c.id and off.endDate >
                 '".$currentDateAndTime."' and off.discountType='CD' and off.Visability!='MEM'
                 ) 
             as totalCoupons"

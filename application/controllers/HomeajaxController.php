@@ -6,7 +6,7 @@ class HomeajaxController extends Zend_Controller_Action
     {
         $categoryId = $this->getRequest()->getParam('categoryid');
         $categoryPermalink = $this->getRequest()->getParam('permalink');
-        $topCategoriesOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $topCategoriesOffers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             "all_hometocategoryoffers". $categoryId ."_list",
             array(
                 'function' => 'KC\Repository\Category::getCategoryVoucherCodes',
@@ -17,30 +17,30 @@ class HomeajaxController extends Zend_Controller_Action
             ? $this->_helper->Index->removeDuplicateCode($topCategoriesOffers, 'homePage')
             :  $topCategoriesOffers;
         
-        $homePagePartials = new FrontEnd_Helper_HomePagePartialFunctions();
+        $homePagePartials = new \FrontEnd_Helper_HomePagePartialFunctions();
         $rightDivWithContent = $homePagePartials->getRightDivByAjax(
             $offers,
             $categoryPermalink,
-            FrontEnd_Helper_viewHelper::__form('form_All') . " " . $categoryPermalink. " "
-            . FrontEnd_Helper_viewHelper::__form('form_Code'),
-            HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/'. $categoryPermalink
+            \FrontEnd_Helper_viewHelper::__form('form_All') . " " . $categoryPermalink. " "
+            . \FrontEnd_Helper_viewHelper::__form('form_Code'),
+            HTTP_PATH_LOCALE. \FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/'. $categoryPermalink
         );
-        echo Zend_Json::encode($rightDivWithContent);
+        echo \Zend_Json::encode($rightDivWithContent);
         die;
     }
 
     public function getnewestoffersAction()
     {
-        $newOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $newOffers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             "all_homenewoffer_list",
             array('function' => 'KC\Repository\Offer::getNewestOffers', 'parameters' => array('newest', 10, '', '', 'homePage'))
         );
-        $homePagePartials = new FrontEnd_Helper_HomePagePartialFunctions();
+        $homePagePartials = new \FrontEnd_Helper_HomePagePartialFunctions();
         $rightDivWithContent = $homePagePartials->getRightDivByAjax(
             $newOffers,
             'newOffers',
-            FrontEnd_Helper_viewHelper::__form('form_All New Codes'),
-            HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_nieuw')
+            \FrontEnd_Helper_viewHelper::__form('form_All New Codes'),
+            HTTP_PATH_LOCALE.\FrontEnd_Helper_viewHelper::__link('link_nieuw')
         );
         echo Zend_Json::encode($rightDivWithContent);
         die;
@@ -48,18 +48,18 @@ class HomeajaxController extends Zend_Controller_Action
 
     public function getmoneysavingguidesAction()
     {
-        $moneySavingGuidesList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $moneySavingGuidesList = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             "all_homemanisaving_list",
             array('function' => 'KC\Repository\Articles::getAllArticles', 'parameters' => array(10))
         );
-        $homePagePartials = new FrontEnd_Helper_HomePagePartialFunctions();
+        $homePagePartials = new \FrontEnd_Helper_HomePagePartialFunctions();
         $guidesHtml = $homePagePartials->getMoneySavingGuidesRightForAjax(
             $moneySavingGuidesList,
             'moneysaving',
-            FrontEnd_Helper_viewHelper::__form('form_All Saving Guides'),
-            HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_plus')
+            \FrontEnd_Helper_viewHelper::__form('form_All Saving Guides'),
+            HTTP_PATH_LOCALE.\FrontEnd_Helper_viewHelper::__link('link_plus')
         );
-        echo Zend_Json::encode($guidesHtml);
+        echo \Zend_Json::encode($guidesHtml);
         die;
     }
 }

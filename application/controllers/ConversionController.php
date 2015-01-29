@@ -14,7 +14,7 @@ class ConversionController extends Zend_Controller_Action
 
         $websiteName = $this->view->translate('www.kortingscode.nl');
         $googleAnalysticsId = $this->view->translate('UA-17691171-1');
-        $currentUrl = Zend_Controller_Front::getInstance()->getRequest()->getRequestUri();
+        $currentUrl = \Zend_Controller_Front::getInstance()->getRequest()->getRequestUri();
         $urltoWrite =  trim(HTTP_PATH, '/') . $currentUrl ;
         $logDirectoryPath = APPLICATION_PATH . "/../logs/";
 
@@ -22,7 +22,7 @@ class ConversionController extends Zend_Controller_Action
             mkdir($logDirectoryPath, 776, true);
         }
 
-        $conversionDetails = FrontEnd_Helper_viewHelper::
+        $conversionDetails = \FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 'all_conversion_details',
                 array(
@@ -41,7 +41,7 @@ class ConversionController extends Zend_Controller_Action
             $networkName; Incoming; $urltoWrite
 EOD;
 
-            FrontEnd_Helper_viewHelper::writeLog($log, $fileName) ;
+            \FrontEnd_Helper_viewHelper::writeLog($log, $fileName) ;
             \KC\Repository\Conversions::updateConverted($subId);
             $orderId = $this->getRequest()->getParam("orderid", false);
             $total = $this->getRequest()->getParam("total", false);
@@ -139,15 +139,15 @@ EOD;
             $trLog = <<<EOD
             $networkName; Outgoing-transactionUrl; $transactionUrl
 EOD;
-            FrontEnd_Helper_viewHelper::writeLog($trLog, $fileName);
+            \FrontEnd_Helper_viewHelper::writeLog($trLog, $fileName);
             $itemLog = <<<EOD
            $networkName; Outgoing-itemUrl; $itemUrl
 EOD;
-            FrontEnd_Helper_viewHelper::writeLog($itemLog, $fileName);
+            \FrontEnd_Helper_viewHelper::writeLog($itemLog, $fileName);
             $urLog = <<<EOD
             $networkName; Outgoing-urchinUrl; $urchinUrl
 EOD;
-            FrontEnd_Helper_viewHelper::writeLog($urLog, $fileName);
+            \FrontEnd_Helper_viewHelper::writeLog($urLog, $fileName);
             $handle = fopen($transactionUrl, "r");
             $trancsaction = fgets($handle);
             $handle2 = fopen($itemUrl, "r");
@@ -163,7 +163,7 @@ EOD;
             $log = <<<EOD
             Invalid url; Incoming; $urltoWrite
 EOD;
-            FrontEnd_Helper_viewHelper::writeLog($log, $fileName);
+            \FrontEnd_Helper_viewHelper::writeLog($log, $fileName);
             $this->_helper->redirector->setCode(301);
             $this->_redirect(HTTP_PATH_LOCALE);
         }
