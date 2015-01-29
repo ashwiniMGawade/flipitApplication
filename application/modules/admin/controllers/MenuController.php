@@ -11,7 +11,7 @@ class Admin_MenuController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $params = $this->_getAllParams();
         if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
@@ -207,7 +207,7 @@ class Admin_MenuController extends Zend_Controller_Action
             $mainmenu = \KC\Repository\mainmenu::insertOne($params);
             echo Zend_Json::encode($mainmenu);
         } else {
-            $mainmenu = mainmenu::insertNode($params);
+            $mainmenu = \KC\Repository\mainmenu::insertNode($params);
             echo Zend_Json::encode($mainmenu);
         }
         die();

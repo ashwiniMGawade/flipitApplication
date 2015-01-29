@@ -23,14 +23,14 @@ class Admin_OfferController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $params = $this->_getAllParams();
-        if (!Auth_StaffAdapter::hasIdentity()) {
+        if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()
                 ->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
@@ -56,7 +56,7 @@ class Admin_OfferController extends Zend_Controller_Action
     public function permanentdeleteAction()
     {
         $id = $this->getRequest()->getParam('id');
-        $deletePermanent = Offer::permanentDeleteOffer($id);
+        $deletePermanent = \KC\Repository\Offer::permanentDeleteOffer($id);
         die;
     }
     public function addofferAction()
@@ -109,11 +109,11 @@ class Admin_OfferController extends Zend_Controller_Action
         $offerUpdate = $offer->updateOffer($params);
         $flash = $this->_helper->getHelper('FlashMessenger');
 
-        if($offerUpdate['result']){
+        if ($offerUpdate['result']) {
             //self::updateVarnish($params['offerId']);
             $message = $this->view->translate('Offer has been updated successfully.');
             $flash->addMessage(array('success' => $message ));
-        }else{
+        } else {
             $message = $this->view->translate('Error: Your file size exceeded 2MB');
             $flash->addMessage(array('error' => $message ));
         }
@@ -138,7 +138,7 @@ class Admin_OfferController extends Zend_Controller_Action
     public function favouriteshopdetailAction()
     {
         $params = $this->_getAllParams();
-        $favoriteShop = new FavoriteShop();
+        $favoriteShop = new \KC\Repository\FavoriteShop();
         $getVisitorsCount = $favoriteShop->getVisitorsCountByFavoriteShopId($params['shopId']);
         echo $getVisitorsCount;
         die;
@@ -151,26 +151,26 @@ class Admin_OfferController extends Zend_Controller_Action
         $offer = $offerObj->saveOffer($params);
 
         $flash = $this->_helper->getHelper('FlashMessenger');
-        if($offer['result']){
+        if ($offer['result']) {
 
             $type = isset($offer['errType']) ?  $offer['errType'] : "" ;
 
             # return appropriate message to user
             switch ($type) {
-                case 'shop' :
+                case 'shop':
 
                     $message = $this->view->translate('Please select a shop');
                     $flash->addMessage(array('error' => $message ));
 
-                break ;
-                default :
+                break;
+                default:
 
                     self::updateVarnish($offer['ofer_id']);
 
 
                     $message = $this->view->translate('Offer has been added successfully.');
 
-                    if(filter_var($params['saveAndAddnew'], FILTER_VALIDATE_BOOLEAN)) {
+                    if (filter_var($params['saveAndAddnew'], FILTER_VALIDATE_BOOLEAN)) {
                         $message = $this->view->translate('Offer has been added successfully and add new offer again');
                     }
 
@@ -178,12 +178,12 @@ class Admin_OfferController extends Zend_Controller_Action
 
             }
 
-        }else{
+        } else {
             $message = $this->view->translate('Error: Your file size exceeded 2MB');
             $flash->addMessage(array('error' => $message ));
         }
 
-        if(filter_var($params['saveAndAddnew'], FILTER_VALIDATE_BOOLEAN)) {
+        if (filter_var($params['saveAndAddnew'], FILTER_VALIDATE_BOOLEAN)) {
             $this->_redirect(HTTP_PATH.'admin/offer/addoffer');
 
         } else {
@@ -204,7 +204,7 @@ class Admin_OfferController extends Zend_Controller_Action
             self::updateVarnish($id);
 
             //cal to moveToTrash function from offer model class
-            $trash = Offer::moveToTrash($id);
+            $trash = \KC\Repository\Offer::moveToTrash($id);
 
             if (intval($trash) > 0) {
 
@@ -323,7 +323,7 @@ class Admin_OfferController extends Zend_Controller_Action
 
                 $id =  $d['id'];
                 //array fro remove duplicate search text
-                if(isset($removeDup[$id])) {
+                if (isset($removeDup[$id])) {
                     $removeDup[$id] = $id;
 
                 } else {
@@ -355,9 +355,9 @@ class Admin_OfferController extends Zend_Controller_Action
      */
     public function exportofferlistAction()
     {
-        set_time_limit ( 10000 );
-        ini_set('max_execution_time',115200);
-        ini_set("memory_limit","1024M");
+        set_time_limit(10000);
+        ini_set('max_execution_time', 115200);
+        ini_set("memory_limit", "1024M");
 
         // get all shop from database
         $data = Offer::exportofferList();
@@ -707,7 +707,7 @@ class Admin_OfferController extends Zend_Controller_Action
         self::updateVarnish($id);
 
         //cal to restoreOffer function from offer model class
-        $restore = Offer::restoreOffer($id);
+        $restore = \KC\Repository\Offer::restoreOffer($id);
 
         if (intval($restore) > 0) {
 
@@ -743,7 +743,7 @@ class Admin_OfferController extends Zend_Controller_Action
 
         $params = $this->_getAllParams();
 
-        if(isset($params['secret']) && @base64_decode($params['secret']) == "kortingscodeoffernews" && isset($params['secret']) && @$params['jcode'] == "passwordmd5") {
+        if (isset($params['secret']) && @base64_decode($params['secret']) == "kortingscodeoffernews" && isset($params['secret']) && @$params['jcode'] == "passwordmd5") {
 
             $morenews = '<div class="clear line"></div><div class="mainpage-content-right-inner-left"><label><strong>Title</strong></label></div>
                               <div class="mainpage-content-right-inner-right-other"></div>
@@ -841,9 +841,9 @@ class Admin_OfferController extends Zend_Controller_Action
     public function addoffertileAction()
     {
         $params = $this->_getAllParams();
-        $imgext = BackEnd_Helper_viewHelper::getImageExtension(@$params['hidimage']);
+        $imgext = \BackEnd_Helper_viewHelper::getImageExtension(@$params['hidimage']);
         //if(isset($params['position']) && $params['position']!=""){
-            $offerTile = OfferTiles::addOfferTile($params,$imgext);
+            $offerTile = \KC\Repository\OfferTiles::addOfferTile($params,$imgext);
             $newArr= array();
             $newArr['imagename'] = $params['hidimage'];
             $newArr['imagepath'] = PUBLIC_PATH_LOCALE."images/upload/offertiles/thum_small_".$params['hidimage'];
@@ -865,7 +865,7 @@ class Admin_OfferController extends Zend_Controller_Action
                     $temp['type'] = $_FILES['tileupload']['type'][0];
                     $temp['path'] = $_FILES['tileupload']['tmp_name'][0];
 
-                    $fileName = Offer::uploadTiles($_FILES['tileupload']['name'][0]);
+                    $fileName = \KC\Repository\Offer::uploadTiles($_FILES['tileupload']['name'][0]);
 
                     $temp['name'] = $fileName;
 
@@ -880,21 +880,21 @@ class Admin_OfferController extends Zend_Controller_Action
         //echo "hello"; die;
         $params = $this->_getAllParams();
         //print_r($params); die;
-        $menu = OfferTiles::deleteMenuRecord($params);
+        $menu = \KC\Repository\OfferTiles::deleteMenuRecord($params);
         echo Zend_Json::encode($menu);
         die();
     }
     public function getilebyidAction()
     {
         $id  = $this->getRequest()->getParam('id');
-        $offerTiles = OfferTiles::getOfferTilesList($id);
+        $offerTiles = \KC\Repository\OfferTiles::getOfferTilesList($id);
         echo Zend_Json::encode($offerTiles);
         die();
 
     }
     public function getalltilesAction()
     {
-        $Tiles = OfferTiles::getAllTiles();
+        $Tiles = \KC\Repository\OfferTiles::getAllTiles();
         echo Zend_Json::encode($Tiles);
         die;
         //return $Tiles;
@@ -927,8 +927,8 @@ class Admin_OfferController extends Zend_Controller_Action
         $siteimage_array =  array(); // Array for all site image names
 
         // Get all the images from the folder and store in an array-$image_array
-        while($file = readdir($handle)){
-            if($file !== '.' && $file !== '..'){
+        while ($file = readdir($handle)){
+            if ($file !== '.' && $file !== '..'){
 
                 $image_array[] = $file;
 
@@ -972,7 +972,7 @@ class Admin_OfferController extends Zend_Controller_Action
             $delTime = $data[$cell->getRow()]['H'];
 
             //find by name if exist in database
-            if(!empty($name)){
+            if (!empty($name)) {
 
                 $shopList = Doctrine_Core::getTable('Shop')->findOneBy('name', $name);
 
@@ -1028,7 +1028,7 @@ class Admin_OfferController extends Zend_Controller_Action
                             BackEnd_Helper_viewHelper :: resizeImageFromFolder($originalpath, 84, 42, $thumbpath, $ext);
 
                             $thumbpath = $pathToUpload . "thum_medium_store_" . $newName;
-                            BackEnd_Helper_viewHelper::resizeImageFromFolder($originalpath, 200, 100, $thumbpath, $ext);
+                            \BackEnd_Helper_viewHelper::resizeImageFromFolder($originalpath, 200, 100, $thumbpath, $ext);
 
                             $thumbpath = $pathToUpload . "thum_medium_" . $newName;
                             BackEnd_Helper_viewHelper :: resizeImageFromFolder($originalpath, 100, 50, $thumbpath, $ext);
@@ -1056,7 +1056,7 @@ class Admin_OfferController extends Zend_Controller_Action
                         $sitefile = $siteimage_array[$keySite];
                         $sitenewName = time() . "_" . $sitefile;
 
-                        $siteExt = BackEnd_Helper_viewHelper :: getImageExtension($sitefile);
+                        $siteExt = \BackEnd_Helper_viewHelper::getImageExtension($sitefile);
                         $originalpath = $rootSitePath.$sitefile;
 
                         if($siteExt=='jpg' || $siteExt == 'png' || $siteExt =='JPEG'|| $siteExt =='PNG' || $siteExt =='gif'){
@@ -1095,12 +1095,12 @@ class Admin_OfferController extends Zend_Controller_Action
         // Add urls to refresh in Varnish
         $varnishObj = new Varnish();
         $varnishObj->addUrl(HTTP_PATH_FRONTEND);
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_nieuw'));
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_top-20'));
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_nieuw'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-20'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_categorieen'));
         $varnishObj->addUrl("http://www.flipit.com");
         # make markplaatfeed url's get refreashed only in case of kortingscode
-        if(LOCALE == '')
+        if (LOCALE == '')
         {
             $varnishObj->addUrl(  HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
             $varnishObj->addUrl(  HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed' );
@@ -1108,7 +1108,7 @@ class Admin_OfferController extends Zend_Controller_Action
         }
 
         # get all the urls related to an offer
-        $varnishUrls = Offer::getAllUrls( $id );
+        $varnishUrls = \KC\Repository\Offer::getAllUrls( $id );
 
         # check $varnishUrls has atleast one url
         if(isset($varnishUrls) && count($varnishUrls) > 0) {
@@ -1137,7 +1137,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $url = strtolower($url);
         $rp = Doctrine_Query::create()->select()->from("RoutePermalink")->where("permalink = '".urlencode($url)."'")->fetchArray();
 
-        if($isEdit) {
+        if ($isEdit) {
             $exactLink = "store/storedetail/id/".$this->getRequest()->getParam("id") ;
 
             if(@$rp[0]['permalink'] == $url ) {
@@ -1216,7 +1216,7 @@ class Admin_OfferController extends Zend_Controller_Action
             set_time_limit ( 10000 );
             ini_set('max_execution_time',115200);
             ini_set("memory_limit","1024M");
-            $data =  CouponCode::exportCodeList($id);
+            $data =  \KC\Repository\CouponCode::exportCodeList($id);
 
 
             //create object of phpExcel
@@ -1295,7 +1295,7 @@ class Admin_OfferController extends Zend_Controller_Action
 
         } else {
 
-            $this->_helper->redirector( 'index', 'offer', 'admin' ) ;
+            $this->_helper->redirector('index', 'offer', 'admin');
         }
 
 
@@ -1313,12 +1313,12 @@ class Admin_OfferController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(true);
 
         # set memory limit to avoid memory allocation error
-        ini_set('max_execution_time',115200);
+        ini_set('max_execution_time', 115200);
 
 
         $errorFlag = true ;
         # check request is post
-        if($this->getRequest ()->isPost ()){
+        if ($this->getRequest ()->isPost ()) {
 
             # validate filename
             if (isset($_FILES['importCodes']['name']) && @$_FILES['importCodes']['name'] != '') {
@@ -1327,7 +1327,7 @@ class Admin_OfferController extends Zend_Controller_Action
 
 
                         # upload file to excel upload folder
-                        $RouteRedirectObj = new RouteRedirect();
+                        $RouteRedirectObj = new \KC\Repository\RouteRedirect();
                         $result = @$RouteRedirectObj->uploadExcel($_FILES['importCodes']['name']);
 
 
@@ -1467,11 +1467,11 @@ class Admin_OfferController extends Zend_Controller_Action
                             ->andWhereNotIn("code",$codesArray)
                             ->execute();
 
-                            Offer::updateCache($offerId);
+                            \KC\Repository\Offer::updateCache($offerId);
 
                             self::updateVarnish($offerId);
 
-                            $codesDetail = CouponCode::returnCodesDetail($offerId);
+                            $codesDetail = \KC\Repository\CouponCode::returnCodesDetail($offerId);
                             $codesDetail['status'] = '200' ;
                             $codesDetail['message'] = $this->view->translate ('Codes have been imported successfully');
 

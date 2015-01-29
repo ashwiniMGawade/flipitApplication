@@ -11,16 +11,16 @@ class Admin_CategoryController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection (); // connection
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection (); // connection
                                                              // generate with second
                                                              // database
         $params = $this->_getAllParams ();
-        if (! Auth_StaffAdapter::hasIdentity ()) {
+        if (! \Auth_StaffAdapter::hasIdentity ()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect ( '/admin/auth/index' );
         }
-        BackEnd_Helper_viewHelper::closeConnection ( $conn2 );
+        \BackEnd_Helper_viewHelper::closeConnection ( $conn2 );
         $this->view->controllerName = $this->getRequest ()->getParam ( 'controller' );
         $this->view->action = $this->getRequest ()->getParam ( 'action' );
 
@@ -121,7 +121,7 @@ class Admin_CategoryController extends Zend_Controller_Action
      */
     public function editcategoryAction()
     {
-        $u = Auth_StaffAdapter::getIdentity();
+        $u = \Auth_StaffAdapter::getIdentity();
         $this->view->role = $u->users->id;
         $id = $this->getRequest()->getParam ( 'id' );
         $this->view->qstring = $_SERVER['QUERY_STRING'];
@@ -342,7 +342,7 @@ class Admin_CategoryController extends Zend_Controller_Action
         # Add urls to refresh in Varnish
         $varnishObj = new \KC\Repository\Varnish();
 
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_categorieen'));
         # get all the urls related to this category
         $varnishUrls = \KC\Repository\Category::getAllUrls($id); 
 

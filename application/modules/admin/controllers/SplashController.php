@@ -5,7 +5,7 @@ class Admin_SplashController extends Zend_Controller_Action
 
     public function preDispatch()
     {
-        $databaseConnection = BackEnd_Helper_viewHelper::addConnection();
+        $databaseConnection = \BackEnd_Helper_viewHelper::addConnection();
 
         if (!\Auth_StaffAdapter::hasIdentity()) {
             $pageReferer = new \Zend_Session_Namespace('referer');

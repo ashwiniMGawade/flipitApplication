@@ -11,14 +11,14 @@ class Admin_RedirectController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $params = $this->_getAllParams();
-        if (!Auth_StaffAdapter::hasIdentity()) {
+        if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
 
@@ -45,7 +45,7 @@ class Admin_RedirectController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams();
         if($this->getRequest ()->isPost ()){
-            $keyword = RouteRedirect::addRedirect($params);
+            $keyword = \KC\Repository\RouteRedirect::addRedirect($params);
             $flash = $this->_helper->getHelper ( 'FlashMessenger' );
             $message = $this->view->translate ( 'Redirect has been created successfully' );
             $flash->addMessage ( array ('success' => $message ));
@@ -65,7 +65,7 @@ class Admin_RedirectController extends Zend_Controller_Action
          $params = $this->_getAllParams();
         // cal to function in ExcludedKeyword model class
          $keywordList =  KC\Repository\RouteRedirect::getRedirect($params);
-         echo Zend_Json::encode ( $keywordList );
+         echo Zend_Json::encode($keywordList);
          die ;
     }
 
@@ -79,19 +79,19 @@ class Admin_RedirectController extends Zend_Controller_Action
    {
         $id = $this->getRequest ()->getParam ('id');
         $this->view->qstring = $_SERVER['QUERY_STRING'];
-        if($id>0){
+        if ($id>0) {
         // get keyword to edit on id basis
-            $searchbar = RouteRedirect::getRedirectForEdit($id);
+            $searchbar = \KC\Repository\RouteRedirect::getRedirectForEdit($id);
             $this->view->editRedirect = $searchbar;
 
          }
-        if ($this->getRequest ()->isPost ()){
-            $params = $this->getRequest ()->getParams ();
+        if ($this->getRequest ()->isPost ()) {
+            $params = $this->getRequest ()->getParams();
             // cal to update keyword function
-            $searchbar = RouteRedirect::updateRedirect($params );
-            $flash = $this->_helper->getHelper ( 'FlashMessenger' );
-            $message = $this->view->translate ( 'Redirect has been updated successfully' );
-            $flash->addMessage ( array ('success' => $message ) );
+            $searchbar = \KC\Repository\RouteRedirect::updateRedirect($params);
+            $flash = $this->_helper->getHelper('FlashMessenger');
+            $message = $this->view->translate('Redirect has been updated successfully');
+            $flash->addMessage(array('success' => $message));
             $this->_redirect(HTTP_PATH.'admin/redirect#'.$params['qString']);
         }
     }
@@ -105,7 +105,7 @@ class Admin_RedirectController extends Zend_Controller_Action
     public function deleteredirectAction()
     {
         $id = $this->getRequest()->getParam('id');
-        RouteRedirect::deleteRedirect($id);
+        \KC\Repository\RouteRedirect::deleteRedirect($id);
         $flash = $this->_helper->getHelper ( 'FlashMessenger' );
         $message = $this->view->translate ('Redirect has been deleted successfully' );
         $flash->addMessage ( array ('success' => $message ) );
@@ -123,7 +123,7 @@ class Admin_RedirectController extends Zend_Controller_Action
     {
         ini_set('max_execution_time',115200);
         //call to get all keywords function from database
-        $data = RouteRedirect::exportRedirectList ();
+        $data = \KC\Repository\RouteRedirect::exportRedirectList ();
 
         //create object of phpExcel
         $objPHPExcel = new PHPExcel();
@@ -195,13 +195,13 @@ class Admin_RedirectController extends Zend_Controller_Action
     {
         ini_set('max_execution_time',115200);
         $params = $this->_getAllParams();
-        if($this->getRequest ()->isPost ()){
+        if ($this->getRequest ()->isPost ()) {
 
             if (isset($_FILES['excelFile']['name']) && @$_FILES['excelFile']['name'] != '') {
                 $RouteRedirectObj = new RouteRedirect();
                 $result = @$RouteRedirectObj->uploadExcel($_FILES['excelFile']['name']);
 
-                if($result['status'] == 200){
+                if ($result['status'] == 200) {
 
                     //Doctrine_Query::create()->delete('RouteRedirect')->execute();
                     //die();
@@ -226,10 +226,10 @@ class Admin_RedirectController extends Zend_Controller_Action
                         $orignalURL =  $data[$cell->getRow()]['A'];
                         $redirectUrl =  $data[$cell->getRow()]['B'];
                         //find by name if exist in database
-                        if(!empty($orignalURL)){
+                        if (!empty($orignalURL)) {
                             $redirect = Doctrine_Core::getTable('RouteRedirect')->findOneBy('orignalurl', $orignalURL);
-                            if(!empty($redirect)){
-                            }else{
+                            if (!empty($redirect)){
+                            } else {
 
                                 $redirect  =new RouteRedirect();
 

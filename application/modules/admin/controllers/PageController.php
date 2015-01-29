@@ -9,14 +9,14 @@ class Admin_PageController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $params = $this->_getAllParams();
-        if (!Auth_StaffAdapter::hasIdentity()) {
+        if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()
                 ->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
@@ -170,10 +170,10 @@ class Admin_PageController extends Zend_Controller_Action
     public function trashlistAction()
     {
         $params = $this->_getAllParams();
-        $pageObj = new Page();
+        $pageObj = new \KC\Repository\Page();
         // cal to function in network model class
         $pageList =  $pageObj->gettrashedPages($params);
-        echo Zend_Json::encode ( $pageList );
+        echo Zend_Json::encode($pageList);
         die ;
     }
 
@@ -224,7 +224,7 @@ class Admin_PageController extends Zend_Controller_Action
         $srh = $this->getRequest()->getParam('keyword');
         $flag = $this->getRequest()->getParam('flag');
         //cal to searchToFiveShop function from offer model class
-        $data = Page::searchToFivePage($srh, $flag);
+        $data = \KC\Repository\Page::searchToFivePage($srh, $flag);
         $ar = array();
         $removeDup = array();
         if (sizeof($data) > 0) {
@@ -232,7 +232,7 @@ class Admin_PageController extends Zend_Controller_Action
 
                     $id =  $d['page']['id'];
                     //array fro remove duplicate search text
-                    if(isset($removeDup[$id])) {
+                    if (isset($removeDup[$id])) {
                         $removeDup[$id] = $id;
 
                     } else {
@@ -260,7 +260,7 @@ class Admin_PageController extends Zend_Controller_Action
     public function exportpagelistAction()
     {
         // get all shop from database
-        $data = Page::exportpagelist();
+        $data = \KC\Repository\Page::exportpagelist();
         //echo "<pre>";
         //print_r($data);
         // create object of phpExcel
@@ -384,7 +384,7 @@ class Admin_PageController extends Zend_Controller_Action
      */
     public function trashAction()
     {
-        $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
+        $role =  \Zend_Auth::getInstance()->getIdentity()->roleId;
         if($role=='1' || $role=='2') {
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages();
@@ -430,7 +430,7 @@ class Admin_PageController extends Zend_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         //cal to restoreOffer function from offer model class
-        $restore = Page::restorePage($id);
+        $restore = \KC\Repository\Page::restorePage($id);
 
         if (intval($restore) > 0) {
 
@@ -490,7 +490,7 @@ class Admin_PageController extends Zend_Controller_Action
         $srh = $params['keyword'];
         $flag = isset($params['flag']) ? $params['flag'] : '0';
 
-        $data = KC\Repository\Page::searchToFivePage( $srh,$flag);
+        $data = KC\Repository\Page::searchToFivePage($srh, $flag);
 
         $ar = array ();
         if (sizeof ( $data ) > 0) {

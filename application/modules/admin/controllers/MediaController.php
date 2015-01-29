@@ -4,16 +4,16 @@ class Admin_MediaController extends Zend_Controller_Action
 {
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $params = $this->_getAllParams();
 
-        if (!Auth_StaffAdapter::hasIdentity()) {
+        if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
 
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
         # redirect of a user don't have any permission for this controller
@@ -42,7 +42,7 @@ class Admin_MediaController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams();
         $mediaList = \KC\Repository\Media::getmediaList($params);
-        $request = DataTable_Helper::createSearchRequest($params, array());
+        $request = \DataTable_Helper::createSearchRequest($params, array());
         $builder  = new NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
             ->setQueryBuilder($mediaList)
@@ -53,7 +53,7 @@ class Admin_MediaController extends Zend_Controller_Action
             ->add('text', 'm.authorName')
             ->add('text', 'm.fileurl');
         $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $result = DataTable_Helper::getResponse($data, $request);
+        $result = \DataTable_Helper::getResponse($data, $request);
         echo Zend_Json::encode($result);
         die();
     }

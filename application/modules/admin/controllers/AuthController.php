@@ -9,7 +9,7 @@ class Admin_AuthController extends Zend_Controller_Action
      */
     public function init()
     {
-        BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
 
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages();
@@ -41,7 +41,7 @@ class Admin_AuthController extends Zend_Controller_Action
             case "index":
 
                 //if user is authenticated
-                if (Auth_StaffAdapter::hasIdentity()) {
+                if (\Auth_StaffAdapter::hasIdentity()) {
                      $this->_redirect('/admin/index');
                 }
 
@@ -88,19 +88,19 @@ class Admin_AuthController extends Zend_Controller_Action
                     'gc_maxlifetime'  => 10));*/
 
             //set authentication if user valid
-            $data_adapter = new Auth_StaffAdapter($username, $password);
+            $data_adapter = new \Auth_StaffAdapter($username, $password);
             $auth = Zend_Auth::getInstance();
 
 
             $result = $auth->authenticate($data_adapter);
-            if (Auth_StaffAdapter::hasIdentity()) {
+            if (\Auth_StaffAdapter::hasIdentity()) {
                 
                 //create object of user class
                 $timeSeconds = 28800;
                
-                $Obj = \Zend_Registry::get('emUser')->find('KC\Entity\User', Auth_StaffAdapter::getIdentity()->id);
+                $Obj = Zend_Registry::get('emUser')->find('KC\Entity\User', \Auth_StaffAdapter::getIdentity()->id);
 
-                $Obj->updateLoginTime(Auth_StaffAdapter::getIdentity()->id);
+                $Obj->updateLoginTime(\Auth_StaffAdapter::getIdentity()->id);
                 $user = new Zend_Session_Namespace('user');
                 $user->user_data = $Obj;
                 $user->setExpirationSeconds($timeSeconds);
@@ -117,7 +117,7 @@ class Admin_AuthController extends Zend_Controller_Action
                 if ($adminPasswordAge) {
 
                     # check passowrd is older than two months or not
-                    $date = new DateTime(Auth_StaffAdapter::getIdentity()->passwordChangeTime->format('Y-m-d H:i:s'));
+                    $date = new DateTime(\Auth_StaffAdapter::getIdentity()->passwordChangeTime->format('Y-m-d H:i:s'));
                     $date->modify($adminPasswordAge);
 
                     $newPasswordChagetime = strtotime($date->format('Y-m-d H:i:s'));
@@ -199,11 +199,11 @@ class Admin_AuthController extends Zend_Controller_Action
                 Zend_Session::namespaceUnset('msg');
                 $email = $params["email"];
                 //check user by email from database
-                $result = Auth_StaffAdapter::forgotPassword($email);
+                $result = \Auth_StaffAdapter::forgotPassword($email);
                 if ($result == true) {
 
                     //generate new password
-                    $newPwd = Auth_StaffAdapter::genRandomString(10);
+                    $newPwd = \Auth_StaffAdapter::genRandomString(10);
                     $setPass = Doctrine_Core::getTable('User')
                     ->findOneBy("id", $result['id']);
                     $setPass->password = $newPwd;
@@ -219,10 +219,10 @@ class Admin_AuthController extends Zend_Controller_Action
                     //render view
                     $bodyText = $html->render('template.phtml');
                     $recipents = array("to" => $this->getRequest()->getParam("email"));
-                    $subject = FrontEnd_Helper_viewHelper::__email("email_Forgot password");
+                    $subject = \FrontEnd_Helper_viewHelper::__email("email_Forgot password");
                     $body = $bodyText;
                     //send a mail to user password update notification
-                    $sendEmail = BackEnd_Helper_viewHelper::SendMail($recipents,$subject, $body);
+                    $sendEmail = \BackEnd_Helper_viewHelper::SendMail($recipents,$subject, $body);
                     $url  =  HTTP_PATH . 'admin/auth/pwdresetsuccessfully';
                     $this->_redirect($url);
 
@@ -245,7 +245,7 @@ class Admin_AuthController extends Zend_Controller_Action
     {
        
         //clear identity of the user
-        Auth_StaffAdapter::clearIdentity();
+        \Auth_StaffAdapter::clearIdentity();
         //unset the session
         Zend_Session::namespaceUnset('settings');
         Zend_Session::namespaceUnset('user');
@@ -280,7 +280,7 @@ class Admin_AuthController extends Zend_Controller_Action
         if($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
 
-            $id = Auth_StaffAdapter::getIdentity();
+            $id = \Auth_StaffAdapter::getIdentity();
 
             # call used password update function
             $user = Doctrine_Core::getTable ( 'User' )->find ( $id["id"] );

@@ -27,14 +27,14 @@ class Admin_ArticleController extends Zend_Controller_Action
     public function preDispatch()
     {
         //echo "<pre>"; print_r($_SERVER); die;
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $params = $this->_getAllParams();
-        if (!Auth_StaffAdapter::hasIdentity()) {
+        if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
 
@@ -61,13 +61,10 @@ class Admin_ArticleController extends Zend_Controller_Action
 
     public function gettrashlistAction()
     {
-        $getList = new Articles();
+        $getList = new \KC\Repository\Articles();
         $list = $getList->getTrashedList($this->getRequest()->getParams());
-
         echo Zend_Json::encode($list);
         die;
-
-
     }
 
     public function createarticleAction()
@@ -101,10 +98,10 @@ class Admin_ArticleController extends Zend_Controller_Action
 
             if ($result) {
 
-                $popularArticles = PopularArticles::getPopularArticles();
-                $changedArticlesDataForSorting = PopularArticles::changeArticlesDataForSorting($popularArticles);
-                PopularArticles::updateArticles($changedArticlesDataForSorting);
-                PopularArticles::savePopularArticle($result['articleId'], 1);
+                $popularArticles = \KC\Repository\PopularArticles::getPopularArticles();
+                $changedArticlesDataForSorting = \KC\Repository\PopularArticles::changeArticlesDataForSorting($popularArticles);
+                \KC\Repository\PopularArticles::updateArticles($changedArticlesDataForSorting);
+                \KC\Repository\PopularArticles::savePopularArticle($result['articleId'], 1);
 
                 # update only when article is being published immedately or some time later
                 if (! $result['isDraft']) {
@@ -243,7 +240,7 @@ class Admin_ArticleController extends Zend_Controller_Action
         $flag = $this->getRequest()->getParam('flag');
         //cal to searchToFiveShop function from offer model class
 
-        $data = Articles::searchKeyword($srh, $flag);
+        $data = \KC\Repository\Articles::searchKeyword($srh, $flag);
 
         $ar = array();
         $removeDup = array();
@@ -490,7 +487,7 @@ class Admin_ArticleController extends Zend_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         //cal to deleteOffer function from offer model class
-        $deletePermanent = Articles::deleteArticles($id);
+        $deletePermanent = \KC\Repository\Articles::deleteArticles($id);
         $flash = $this->_helper->getHelper('FlashMessenger');
         if (intval($deletePermanent) > 0) {
             $message = $this->view
@@ -514,7 +511,7 @@ class Admin_ArticleController extends Zend_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         //cal to restoreOffer function from offer model class
-        $restore = Articles::restoreArticles($id);
+        $restore = \KC\Repository\Articles::restoreArticles($id);
 
         if (intval($restore) > 0) {
 
@@ -603,7 +600,7 @@ class Admin_ArticleController extends Zend_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         if ($id > 0) {
-            $articles = Articles::deletechapters($id);
+            $articles = \KC\Repository\Articles::deletechapters($id);
         }
         echo Zend_Json::encode($articles);
         die;

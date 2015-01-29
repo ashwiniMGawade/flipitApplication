@@ -10,14 +10,14 @@ class Admin_ShopController extends Zend_Controller_Action
   
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $params = $this->_getAllParams();
-        if (!Auth_StaffAdapter::hasIdentity()) {
+        if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
 
@@ -32,7 +32,7 @@ class Admin_ShopController extends Zend_Controller_Action
     public function indexAction()
     {
         // set logged in role
-        $u = Auth_StaffAdapter::getIdentity();
+        $u = \Auth_StaffAdapter::getIdentity();
         $this->view->role = $u->users->id;
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages();
@@ -157,7 +157,7 @@ class Admin_ShopController extends Zend_Controller_Action
     {
 
         $uploadPath = "images/upload/shop/";
-        $adapter = new Zend_File_Transfer_Adapter_Http();
+        $adapter = new \Zend_File_Transfer_Adapter_Http();
         $user_path = ROOT_PATH . $uploadPath;
         $img = $this->getRequest()->getParam('imageName');
         $fileEl = $this->getRequest()->getParam('browsedEl');
@@ -187,10 +187,10 @@ class Admin_ShopController extends Zend_Controller_Action
                 */
                 $path = ROOT_PATH . $uploadPath . "thum_" . $orgName;
 
-                BackEnd_Helper_viewHelper::resizeImage($_FILES[ $fileEl ], $orgName,
+                \BackEnd_Helper_viewHelper::resizeImage($_FILES[ $fileEl ], $orgName,
                     200, 150, $path);
                 $path = ROOT_PATH . $uploadPath . "thum_large" . $orgName;
-                BackEnd_Helper_viewHelper::resizeImage($_FILES[ $fileEl ], $orgName,
+                \BackEnd_Helper_viewHelper::resizeImage($_FILES[ $fileEl ], $orgName,
                         132, 95, $path);
                     break ;
                 case 'small_logo_file' :
@@ -200,7 +200,7 @@ class Admin_ShopController extends Zend_Controller_Action
             }
 
             $adapter->addFilter(
-                    new Zend_Filter_File_Rename(
+                    new \Zend_Filter_File_Rename(
                             array('target' => $fname,
                                     'overwrite' => true)), null, $file);
 
@@ -332,7 +332,7 @@ class Admin_ShopController extends Zend_Controller_Action
     {
 
         // set logged in role
-        $u = Auth_StaffAdapter::getIdentity();
+        $u = \Auth_StaffAdapter::getIdentity();
         $this->view->role = $u->users->id;
         $this->view->qstring = $_SERVER['QUERY_STRING'];
         /* get Category List*/
@@ -352,7 +352,7 @@ class Admin_ShopController extends Zend_Controller_Action
         $users = new \KC\Repository\User();
 
         //display shop reasons
-        $shopReasons = new ShopReasons();
+        $shopReasons = new \KC\Repository\ShopReasons();
         $this->view->shopReasons = $shopReasons->getShopReasons($id);
 
         
@@ -383,7 +383,7 @@ class Admin_ShopController extends Zend_Controller_Action
                 ->leftJoin("s.shopPage", "pg")
                 ->leftJoin("s.affliatenetwork", "af")
                 ->leftJoin("s.logo", "logo")
-				->leftJoin("s.screenshot", "screenshot")
+                ->leftJoin("s.screenshot", "screenshot")
                 ->where("s.id = ". $id)
                 ->getQuery()
                 ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -432,7 +432,7 @@ class Admin_ShopController extends Zend_Controller_Action
         $firstFieldName = $this->getRequest()->getParam('firstFieldName');
         $secondFieldName = $this->getRequest()->getParam('secondFieldName');
         $shopId = $this->getRequest()->getParam('shopId');
-        ShopReasons::deleteReasons($firstFieldName, $secondFieldName, $shopId);
+        \KC\Repository\ShopReasons::deleteReasons($firstFieldName, $secondFieldName, $shopId);
         exit();
     }
 
@@ -606,7 +606,7 @@ class Admin_ShopController extends Zend_Controller_Action
 
             } else {
 
-                $title = FrontEnd_Helper_viewHelper::replaceStringVariable($shop['title']);
+                $title = \FrontEnd_Helper_viewHelper::replaceStringVariable($shop['title']);
             }
 
             $subTitle = '';
@@ -619,7 +619,7 @@ class Admin_ShopController extends Zend_Controller_Action
 
             } else {
 
-                $subTitle = FrontEnd_Helper_viewHelper::replaceStringVariable($shop['subTitle']);
+                $subTitle = \FrontEnd_Helper_viewHelper::replaceStringVariable($shop['subTitle']);
             }
 
             $notes = '';
@@ -1020,36 +1020,36 @@ class Admin_ShopController extends Zend_Controller_Action
                                         $data[$cell->getRow()][$cell->getColumn()] = $cell->getCalculatedValue();
                                     }
 
-                                    $name =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['A']);
-                                    $permalink =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['B']);
+                                    $name =  \BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['A']);
+                                    $permalink =  \BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['B']);
 
-                                    $overwriteTitle =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['C']);
-                                    $metaDescription =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['D']);
+                                    $overwriteTitle =  \BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['C']);
+                                    $metaDescription =  \BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['D']);
 
                                     $allowUserGeneratedContent =  strtolower($data[$cell->getRow()]['E']);
 
                                     $allowDiscussions =  strtolower($data[$cell->getRow()]['F']);
-                                    $title =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['G']);
-                                    $subTitle  =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['H']);
+                                    $title =  \BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['G']);
+                                    $subTitle  =  \BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['H']);
 
-                                    $notes  =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['I']);
+                                    $notes  =  \BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['I']);
                                     $accountManager  =  $data[$cell->getRow()]['J'];
-                                    $editor =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['K']);
-                                    $category =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['L']);
+                                    $editor =  \BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['K']);
+                                    $category =  \BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['L']);
 
-                                    $similarShops =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['M']);
+                                    $similarShops =  \BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['M']);
 
-                                    $affiliateNetwork =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['N']);
+                                    $affiliateNetwork =  \BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['N']);
                                     $deeplinkingCode  =  strtolower($data[$cell->getRow()]['O']);
-                                    $refURL = BackEnd_Helper_viewHelper::stripSlashesFromString( $data[$cell->getRow()]['P']);
+                                    $refURL = \BackEnd_Helper_viewHelper::stripSlashesFromString( $data[$cell->getRow()]['P']);
 
-                                    $actualURL =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['Q']);
+                                    $actualURL =  \BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['Q']);
                                     $moneyShop =  $data[$cell->getRow()]['R'];
 
-                                    $logo =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['S']);
-                                    $websiteScreen =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['T']);
+                                    $logo =  \BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['S']);
+                                    $websiteScreen =  \BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['T']);
 
-                                    $shop_text = BackEnd_Helper_viewHelper::stripSlashesFromString( $data[$cell->getRow()]['U']);
+                                    $shop_text = \BackEnd_Helper_viewHelper::stripSlashesFromString( $data[$cell->getRow()]['U']);
                                     ///$extraOptions =  strtolower($data[$cell->getRow()]['V']);
                                     //$views =  $data[$cell->getRow()]['W'];
                                     //$howToUseTheCode =  strtolower($data[$cell->getRow()]['X']);
@@ -1067,8 +1067,8 @@ class Admin_ShopController extends Zend_Controller_Action
                                             # ADD SHOPS DATA IN DATABASE IF SHOP NOT EXIST IN DATABASE
                                             if(strtolower($name)!='shop name(must be filled)'){
 
-                                                $shopList = new Shop();
-                                                $shopList->name = BackEnd_Helper_viewHelper::stripSlashesFromString($name);
+                                                $shopList = new \KC\Repository\Shop();
+                                                $shopList->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($name);
                                                 $shopList->status = false;
                                             }
                                     }
@@ -1077,17 +1077,17 @@ class Admin_ShopController extends Zend_Controller_Action
                                         # common data for shop edit or new
                                         if($permalink!='None' && $permalink!=''){
 
-                                            $shopList->permaLink = BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
+                                            $shopList->permaLink = \BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
                                         }
 
                                         if($overwriteTitle!='None' && $overwriteTitle!=''){
 
-                                            $shopList->overriteTitle = FrontEnd_Helper_viewHelper::replaceStringVariable(BackEnd_Helper_viewHelper::stripSlashesFromString($overwriteTitle));
+                                            $shopList->overriteTitle = \FrontEnd_Helper_viewHelper::replaceStringVariable(BackEnd_Helper_viewHelper::stripSlashesFromString($overwriteTitle));
                                         }
 
                                         if($metaDescription!='None' && $metaDescription!=''){
 
-                                            $shopList->metaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($metaDescription);
+                                            $shopList->metaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($metaDescription);
                                         }
 
                                         if($allowUserGeneratedContent!='None' && $allowUserGeneratedContent!=''){
@@ -1117,17 +1117,17 @@ class Admin_ShopController extends Zend_Controller_Action
 
                                         if($title!='None' && $title!=''){
 
-                                            $shopList->title = BackEnd_Helper_viewHelper::stripSlashesFromString($title);
+                                            $shopList->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($title);
                                         }
 
                                         if($subTitle!='None' && $subTitle!=''){
 
-                                            $shopList->subTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($subTitle);
+                                            $shopList->subTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($subTitle);
                                         }
 
                                         if($notes!='None' && $notes!=''){
 
-                                            $shopList->notes = BackEnd_Helper_viewHelper::stripSlashesFromString($notes);
+                                            $shopList->notes = \BackEnd_Helper_viewHelper::stripSlashesFromString($notes);
                                         }
 
                                         if($accountManager!='None' && $accountManager!=''){
@@ -1194,12 +1194,12 @@ class Admin_ShopController extends Zend_Controller_Action
 
                                         if($refURL!='None' && $refURL!=''){
 
-                                            $shopList->refUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($refURL);
+                                            $shopList->refUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($refURL);
                                         }
 
                                         if($actualURL!='None' && $actualURL!=''){
 
-                                            $shopList->actualUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($actualURL);
+                                            $shopList->actualUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($actualURL);
                                         }
 
                                         if($moneyShop!='None' && $moneyShop!=''){
@@ -1226,7 +1226,7 @@ class Admin_ShopController extends Zend_Controller_Action
 
                                         if($shop_text!='None' && $shop_text != ""){
 
-                                            $shopList->shopText = BackEnd_Helper_viewHelper::stripSlashesFromString($shop_text);
+                                            $shopList->shopText = \BackEnd_Helper_viewHelper::stripSlashesFromString($shop_text);
 
                                         }
 
@@ -1234,7 +1234,7 @@ class Admin_ShopController extends Zend_Controller_Action
 
                                         if($key>=0){
 
-                                                $file = BackEnd_Helper_viewHelper::stripSlashesFromString($image_array[$key]);
+                                                $file = \BackEnd_Helper_viewHelper::stripSlashesFromString($image_array[$key]);
                                                 $newName = time() . "_" . $file;
 
                                                 $ext = BackEnd_Helper_viewHelper :: getImageExtension($file);
@@ -1249,7 +1249,7 @@ class Admin_ShopController extends Zend_Controller_Action
                                                 BackEnd_Helper_viewHelper :: resizeImageFromFolder($originalpath, 84, 42, $thumbpath, $ext);
 
                                                 $thumbpath = $pathToUpload . "thum_medium_store_" . $newName;
-                                                BackEnd_Helper_viewHelper::resizeImageFromFolder($originalpath, 200, 100, $thumbpath, $ext);
+                                                \BackEnd_Helper_viewHelper::resizeImageFromFolder($originalpath, 200, 100, $thumbpath, $ext);
 
                                                 $thumbpath = $pathToUpload . "thum_medium_" . $newName;
                                                 BackEnd_Helper_viewHelper :: resizeImageFromFolder($originalpath, 100, 50, $thumbpath, $ext);
@@ -1274,10 +1274,10 @@ class Admin_ShopController extends Zend_Controller_Action
 
                                             if($keySite >=0){
 
-                                                $sitefile = BackEnd_Helper_viewHelper::stripSlashesFromString($siteimage_array[$keySite]);
+                                                $sitefile = \BackEnd_Helper_viewHelper::stripSlashesFromString($siteimage_array[$keySite]);
                                                 $sitenewName = time() . "_" . $sitefile;
 
-                                                $siteExt = BackEnd_Helper_viewHelper :: getImageExtension($sitefile);
+                                                $siteExt = \BackEnd_Helper_viewHelper::getImageExtension($sitefile);
                                                 $originalpath = $rootSitePath.$sitefile;
 
                                                 if($siteExt=='jpg' || $siteExt=='JPG' || $siteExt == 'png' || $siteExt =='PNG' || $siteExt =='jpeg' || $siteExt =='JPEG' || $siteExt =='gif' || $siteExt =='GIF'){
@@ -1297,14 +1297,14 @@ class Admin_ShopController extends Zend_Controller_Action
 
                                         $pr  = Doctrine_Core::getTable('RoutePermalink')->findOneBy('permalink', $permalink);
                                         if($pr) {
-                                            $pr->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
+                                            $pr->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
                                             $pr->type = 'SHP';
                                             $pr->exactlink = 'store/storedetail/id/'.$shopList->id;
 
                                         }else{
 
-                                            $pr = new RoutePermalink();
-                                            $pr->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
+                                            $pr = new \KC\Repository\RoutePermalink();
+                                            $pr->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
                                             $pr->type = 'SHP';
                                             $pr->exactlink = 'store/storedetail/id/'.$shopList->id;
 
@@ -1320,7 +1320,7 @@ class Admin_ShopController extends Zend_Controller_Action
                                             foreach ($splitShops as $key=>$shopName){
                                                 $shop = Doctrine_Core::getTable('Shop')->findOneBy('name', $shopName);
                                                 if($shop){
-                                                    $relateshopObj = new refShopRelatedshop();
+                                                    $relateshopObj = new \KC\Repository\refShopRelatedshop();
                                                     $relateshopObj->shopId = $shopList->id;
                                                     $relateshopObj->relatedshopId = $shop->id;
                                                     $relateshopObj->position = $i;
@@ -1399,7 +1399,7 @@ class Admin_ShopController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $globalExportParameters = $this->_getAllParams();
-        $checkPassword = GlobalExportPassword::getPasswordForExportDownloads('shopExport');
+        $checkPassword = \KC\Repository\GlobalExportPassword::getPasswordForExportDownloads('shopExport');
         if (isset($globalExportParameters['password']) && $globalExportParameters['password'] == $checkPassword) {
             # set fiel and its trnslattions
             $file =  APPLICATION_PATH. '/../data/excels/globalShopList.xlsx' ;
@@ -1436,20 +1436,20 @@ class Admin_ShopController extends Zend_Controller_Action
 	
     protected function saveGlobalExportPassword()
     {
-        GlobalExportPassword::savePasswordForExportDownloads('shopExport');
-        $this->exportPassword = GlobalExportPassword::getPasswordForExportDownloads('shopExport');
+        \KC\Repository\GlobalExportPassword::savePasswordForExportDownloads('shopExport');
+        $this->exportPassword = \KC\Repository\GlobalExportPassword::getPasswordForExportDownloads('shopExport');
     }
 
     protected function sendMailToSuperAdmin()
     {
-        $application = new Zend_Application(
+        $application = new \Zend_Application(
             APPLICATION_ENV,
             APPLICATION_PATH . '/configs/application.ini'
         );
         $frontControlerObject = $application->getOption('resources');
         $this->mandrillKey = $frontControlerObject['frontController']['params']['mandrillKey'];
-        $mailer  = new FrontEnd_Helper_Mailer(array('mandrillKey' => $this->mandrillKey));
-        $basePath = new Zend_View();
+        $mailer  = new \FrontEnd_Helper_Mailer(array('mandrillKey' => $this->mandrillKey));
+        $basePath = new \Zend_View();
         $basePath->setBasePath(APPLICATION_PATH . '/views/');
         $content = array(
             'name'    => 'content',
@@ -1461,7 +1461,7 @@ class Admin_ShopController extends Zend_Controller_Action
             )
         );
         
-        $settings = Signupmaxaccount::getAllMaxAccounts();
+        $settings = \KC\Repository\Signupmaxaccount::getAllMaxAccounts();
         $this->mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
         $this->mandrillSenderName = $settings[0]['sendername'];
         $mailer->send(
@@ -1491,7 +1491,7 @@ class Admin_ShopController extends Zend_Controller_Action
     {
         $parameters = $this->_getAllParams();
         self::updateVarnish($parameters['id']);
-        $ret = Shop::changeStatus($parameters);
+        $ret = \KC\Repository\Shop::changeStatus($parameters);
         $offlineDate = date("d-m-Y", strtotime($ret['offlineSince']));
         if ($ret['offlineSince'] && $ret['howToUse'] == 1) {
             $this->_helper->json(array('date' => $offlineDate, 'message'=> 1));

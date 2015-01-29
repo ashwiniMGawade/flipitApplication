@@ -10,14 +10,14 @@ class Admin_AffiliateController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection (); // connection
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection (); // connection
         $params = $this->_getAllParams ();
-        if (! Auth_StaffAdapter::hasIdentity ()) {
+        if (!\Auth_StaffAdapter::hasIdentity ()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect ( '/admin/auth/index' );
         }
-        BackEnd_Helper_viewHelper::closeConnection ( $conn2 );
+        \BackEnd_Helper_viewHelper::closeConnection ( $conn2 );
         $this->view->controllerName = $this->getRequest ()->getParam ( 'controller' );
         $this->view->action = $this->getRequest ()->getParam ( 'action' );
 
@@ -135,7 +135,7 @@ class Admin_AffiliateController extends Zend_Controller_Action
     */
    public function editaffiliateAction()
    {
-    $u = Auth_StaffAdapter::getIdentity();
+    $u = \Auth_StaffAdapter::getIdentity();
     $this->view->role = $u->users->id;
     $id = $this->getRequest ()->getParam ( 'id' );
 
@@ -190,10 +190,8 @@ class Admin_AffiliateController extends Zend_Controller_Action
    */
    public function replacenetworkAction()
    {
-   $params = $this->_getAllParams ();
-   $network = \KC\Repository\AffliateNetwork::replaceNetwork($params);
-   die;
-
+       $params = $this->_getAllParams ();
+       $network = \KC\Repository\AffliateNetwork::replaceNetwork($params);
+       die;
    }
-
 }

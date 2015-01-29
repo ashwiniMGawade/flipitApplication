@@ -137,12 +137,12 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             if ($isScheduled) {
                 if (\KC\Repository\Signupmaxaccount::saveScheduledNewsletter($this->getRequest())) {
                     //set cache for news letter
-                    FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                    \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                         'newsletter_emailHeader_emailFooter',
-                        array('function' => 'Signupmaxaccount::getEmailHeaderFooter', 'parameters' => array()),
+                        array('function' => '\KC\Repository\Signupmaxaccount::getEmailHeaderFooter', 'parameters' => array()),
                         ''
-                    );                
-                    $topCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                    );
+                    $topCategories = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                         'newsletter_top_categories',
                         array(
                             'function' => 'FrontEnd_Helper_viewHelper::gethomeSections',
@@ -150,17 +150,17 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                         ''
                     );
                     $topCategories = array_slice($topCategories, 0, 1);
-                    FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                    \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                         'newsletter_top_offers',
                         array(
-                            'function' => 'Offer::getTopOffers',
+                            'function' => '\KC\Repository\Offer::getTopOffers',
                             'parameters' => array(10)),
                         ''
                     );
-                    FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                    \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                         'newsletter_category_vouchercodes',
                         array(
-                            'function' => 'Category::getCategoryVoucherCodes',
+                            'function' => '\KC\Repository\Category::getCategoryVoucherCodes',
                             'parameters' => array($topCategories[0]['categoryId'])),
                         ''
                     );
@@ -188,7 +188,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             $topVouchercodes = \KC\Repository\Offer::getTopOffers(10);
             $categoryflag =  \FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularCategories_list');
             if ($categoryflag) {
-                $topCategories = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);
+                $topCategories = array_slice(\FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);
                 \FrontEnd_Helper_viewHelper::setInCache('10_popularCategories_list', $topCategories);
             } else {
                 $topCategories = \FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
@@ -340,7 +340,6 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         if ($this->_settings['content']['rights'] != '1') {
             $this->getResponse()->setHttpResponseCode(404);
             echo $this->_helper->json('This page does not exist');
-
         }
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
@@ -357,7 +356,6 @@ class Admin_AccountsettingController extends Zend_Controller_Action
     {
         if ($this->_request->isPost()) {
             $flash = $this->_helper->getHelper('FlashMessenger');
-
             if (\KC\Repository\Signupmaxaccount::updateNewsletterSchedulingStatus()) {
                 $flash->addMessage(
                     array(
@@ -365,7 +363,6 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                     )
                 );
             }
-
             $this->_helper->redirector('emailcontent', 'accountsetting', null);
         }
     }

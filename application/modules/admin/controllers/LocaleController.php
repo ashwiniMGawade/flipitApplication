@@ -6,15 +6,15 @@ class Admin_LocaleController extends Zend_Controller_Action
 
     public function preDispatch()
     {
-        $connectionInformation = BackEnd_Helper_viewHelper::addConnection();
+        $connectionInformation = \BackEnd_Helper_viewHelper::addConnection();
 
-        if (!Auth_StaffAdapter::hasIdentity()) {
+        if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
 
-        BackEnd_Helper_viewHelper::closeConnection($connectionInformation);
+        \BackEnd_Helper_viewHelper::closeConnection($connectionInformation);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
         $sessionNamespace = new Zend_Session_Namespace();

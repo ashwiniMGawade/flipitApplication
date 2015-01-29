@@ -29,14 +29,14 @@ class Admin_RefreshvarnishController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection (); // connection
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection (); // connection
         $params = $this->_getAllParams ();
-        if (! Auth_StaffAdapter::hasIdentity ()) {
+        if (! \Auth_StaffAdapter::hasIdentity ()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect ( '/admin/auth/index' );
         }
-        BackEnd_Helper_viewHelper::closeConnection ( $conn2 );
+        \BackEnd_Helper_viewHelper::closeConnection ( $conn2 );
         $this->view->controllerName = $this->getRequest ()->getParam ( 'controller' );
         $this->view->action = $this->getRequest ()->getParam ( 'action' );
 
@@ -50,17 +50,17 @@ class Admin_RefreshvarnishController extends Zend_Controller_Action
 
 
         #translating sitemaps names
-        $sitemaps = FrontEnd_Helper_viewHelper::__link('link_sitemap');
-        $plus = FrontEnd_Helper_viewHelper::__link('link_plus');
-        $main = FrontEnd_Helper_viewHelper::__link('link_main');
-        $shops = FrontEnd_Helper_viewHelper::__link('link_shops');
+        $sitemaps = \FrontEnd_Helper_viewHelper::__link('link_sitemap');
+        $plus = \FrontEnd_Helper_viewHelper::__link('link_plus');
+        $main = \FrontEnd_Helper_viewHelper::__link('link_main');
+        $shops = \FrontEnd_Helper_viewHelper::__link('link_shops');
 
         $sitemap_shops = $sitemaps.'_'.$shops.'.xml';
         $sitemap_plus = $sitemaps.'_'.$plus.'.xml';
         $sitemap_main = $sitemaps.'_'.$main.'.xml';
 
 
-        $varnishObj = new Varnish();
+        $varnishObj = new \KC\Repository\Varnish();
 
         $shopFile =  realpath(ROOT_PATH.'sitemaps/'.$sitemap_shops) ;
 
