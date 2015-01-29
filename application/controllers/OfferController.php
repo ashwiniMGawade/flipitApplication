@@ -15,19 +15,19 @@ class OfferController extends Zend_Controller_Action
         } else {
             $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
         }
-        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
+        $this->viewHelperObject = new \FrontEnd_Helper_viewHelper();
     }
 
     public function top20Action()
     {
         $pageName = 'top-20';
-        $pagePermalink = FrontEnd_Helper_viewHelper::getPagePermalink();
+        $pagePermalink = \FrontEnd_Helper_viewHelper::getPagePermalink();
 
-		$pagePermalink = explode('?', $pagePermalink);
+        $pagePermalink = explode('?', $pagePermalink);
         $pagePermalink = isset($pagePermalink[0]) ? $pagePermalink[0] : '';
         $pageDetails = \KC\Repository\Page::getPageDetailsFromUrl($pagePermalink);
 
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
+        $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
 
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'page_header'.$pageDetails->id.'_image',
@@ -42,11 +42,11 @@ class OfferController extends Zend_Controller_Action
             isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
             isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
             isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
-            FrontEnd_Helper_viewHelper::__link($pageName),
+            \FrontEnd_Helper_viewHelper::__link($pageName),
             FACEBOOK_IMAGE,
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
-        $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $offers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'20_topOffers_list',
             (array)array('function' => '\KC\Repository\Offer::getTopOffers', 'parameters' => array(20)
             ),
@@ -61,62 +61,62 @@ class OfferController extends Zend_Controller_Action
         $this->view->popularStores = $popularStores;
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->top20PopularOffers = $offers;
-        $signUpFormLarge = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
-        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+        $signUpFormLarge = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
+        $signUpFormSidebarWidget = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'formSignupSidebarWidget',
             'SignUp '
         );
-        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormLarge, $signUpFormSidebarWidget);
+        \FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormLarge, $signUpFormSidebarWidget);
         $this->view->form = $signUpFormLarge;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
     }
 
     public function extendedofferAction()
     {
-        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $permalink = ltrim(\Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $parameters = $this->_getAllParams();
         $extendedUrl = $parameters['permalink'];
 
-        $couponDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'extended_'.FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($extendedUrl).'_couponDetails',
+        $couponDetails = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            'extended_'.\FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($extendedUrl).'_couponDetails',
             array('function' => 'Offer::getCouponDetails', 'parameters' => array($extendedUrl))
         );
         $shopList = $couponDetails[0]['shop']['id'].'_list';
         $allShopDetailKey = 'offerDetails_'.$shopList;
-        $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $shopInformation = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)$allShopDetailKey,
-            (array)array('function' => 'Shop::getStoreDetails', 'parameters' => array($couponDetails[0]['shop']['id']))
+            (array)array('function' => '\KC\Repository\Shop::getStoreDetails', 'parameters' => array($couponDetails[0]['shop']['id']))
         );
         $shopImage =
             PUBLIC_PATH_CDN
             .$couponDetails[0]['shop']['logo']['path'].'thum_medium_store_'
             . $couponDetails[0]['shop']['logo']['name'];
         $allLatestUpdatesInStoreKey = 'shop_latestUpdates'.$shopList;
-        $latestShopUpdates = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $latestShopUpdates = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)$allLatestUpdatesInStoreKey,
             (array)array(
-                'function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode',
+                'function' => '\FrontEnd_Helper_viewHelper::getShopCouponCode',
                 'parameters' => array('latestupdates', 4, $couponDetails[0]['shop']['id'])
             )
         );
 
         if (count($couponDetails)== 0) {
-            throw new Zend_Controller_Action_Exception('', 404);
+            throw new \Zend_Controller_Action_Exception('', 404);
         }
 
-        $topOfferFromStore = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $topOfferFromStore = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'extendedTopOffer_of_'.$couponDetails[0]['shopId'],
-            array('function' => 'Offer::getrelatedOffers',
+            array('function' => '\KC\Repository\Offer::getrelatedOffers',
                 'parameters' => array($couponDetails[0]['shopId']))
         );
 
-        $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+        $frontendSidebarHelper = new \FrontEnd_Helper_SidebarWidgetFunctions();
         $this->view->popularStoresList = $frontendSidebarHelper->PopularShopWidget();
         $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->topOfferFromStore = $topOfferFromStore;
         $this->view->couponDetails = $couponDetails;
         $this->view->currentStoreInformation = $shopInformation;
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
+        $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($permalink);
 
         $customHeader = '';
         $this->viewHelperObject->getMetaTags(
@@ -124,19 +124,19 @@ class OfferController extends Zend_Controller_Action
             $couponDetails[0]['title'],
             trim($couponDetails[0]['extendedTitle']),
             trim($couponDetails[0]['extendedMetaDescription']),
-            FrontEnd_Helper_viewHelper::__link('link_deals') .'/'. $couponDetails[0]['extendedUrl'],
+            \FrontEnd_Helper_viewHelper::__link('link_deals') .'/'. $couponDetails[0]['extendedUrl'],
             FACEBOOK_IMAGE,
             $customHeader
         );
-        $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+        $signUpFormForStorePage = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'largeSignupForm',
             'SignUp'
         );
-        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+        $signUpFormSidebarWidget = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'formSignupSidebarWidget',
             'SignUp '
         );
-        FrontEnd_Helper_SignUpPartialFunction::validateZendForm(
+        \FrontEnd_Helper_SignUpPartialFunction::validateZendForm(
             $this,
             $signUpFormForStorePage,
             $signUpFormSidebarWidget
@@ -158,9 +158,9 @@ class OfferController extends Zend_Controller_Action
         } else {
             $this->view->offerImagePath = '';
         }
-        $offerDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $offerDetails = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'offer_'.$offerParameters['id'].'_details',
-            array('function' => 'Offer::getOfferInfo', 'parameters' => array($offerParameters['id']))
+            array('function' => '\KC\Repository\Offer::getOfferInfo', 'parameters' => array($offerParameters['id']))
         );
         $this->view->offerdetail = $offerDetails;
         $this->view->vote = $offerParameters['vote'];
@@ -177,7 +177,7 @@ class OfferController extends Zend_Controller_Action
             ''
         );
         if ($offerDetails[0]['couponCodeType']  == 'UN') {
-            $getOfferUniqueCode = CouponCode::returnAvailableCoupon($offerDetails[0]['id']);
+            $getOfferUniqueCode = \KC\Repository\CouponCode::returnAvailableCoupon($offerDetails[0]['id']);
             if ($getOfferUniqueCode) {
                 $this->view->couponCode = $getOfferUniqueCode['code'];
             }
@@ -189,17 +189,17 @@ class OfferController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $pageDetails = KC\Repository\Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
+        $pageDetails = KC\Repository\Page::getPageDetailsFromUrl(\FrontEnd_Helper_viewHelper::getPagePermalink());
         $params = $this->_getAllParams();
-        $cacheKeyForNewOffers =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newOffer_list');
+        $cacheKeyForNewOffers =  \FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newOffer_list');
         if ($cacheKeyForNewOffers) {
             $offers = KC\Repository\Offer::getCommonNewestOffers('newest', 40, $this->view->shopId);
-            FrontEnd_Helper_viewHelper::setInCache('all_newOffer_list', $offers);
+            \FrontEnd_Helper_viewHelper::setInCache('all_newOffer_list', $offers);
         } else {
-            $offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newOffer_list');
+            $offers = \FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newOffer_list');
         }
         $pageDetails = $pageDetails[0];
-        $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $this->view->pageHeaderImage = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'page_header'.$pageDetails->id.'_image',
             array(
                 'function' => '\KC\Repository\Logo::getPageLogo',
@@ -207,7 +207,7 @@ class OfferController extends Zend_Controller_Action
             ),
             ''
         );
-		$this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
+        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->actionName = $this->getRequest()->getActionName();
         $this->view->top20PopularOffers = $offers;
@@ -216,7 +216,7 @@ class OfferController extends Zend_Controller_Action
             isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
             isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
             isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
-            FrontEnd_Helper_viewHelper::__link('link_nieuw'),
+            \FrontEnd_Helper_viewHelper::__link('link_nieuw'),
             FACEBOOK_IMAGE,
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
@@ -229,17 +229,17 @@ class OfferController extends Zend_Controller_Action
         $this->view->controllerName = $params['controller'];
         $this->view->offersType = 'newestOffer';
         $this->view->shopName = 'top20';
-        $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination($offers, $this->_getAllParams(), 20, 9);
+        $offersWithPagination = \FrontEnd_Helper_viewHelper::renderPagination($offers, $this->_getAllParams(), 20, 9);
         $this->view->offersWithPagination = $offersWithPagination;
-        $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+        $signUpFormForStorePage = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'largeSignupForm',
             'SignUp'
         );
-        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+        $signUpFormSidebarWidget = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'formSignupSidebarWidget',
             'SignUp '
         );
-        FrontEnd_Helper_SignUpPartialFunction::validateZendForm(
+        \FrontEnd_Helper_SignUpPartialFunction::validateZendForm(
             $this,
             $signUpFormForStorePage,
             $signUpFormSidebarWidget
@@ -250,7 +250,7 @@ class OfferController extends Zend_Controller_Action
 
     public static function getOfferUniqueCode($offerParameters)
     {
-        $getOfferUniqueCode = CouponCode::returnAvailableCoupon($offerParameters['id']);
+        $getOfferUniqueCode = \KC\Repository\CouponCode::returnAvailableCoupon($offerParameters['id']);
         return $getOfferUniqueCode;
     }
 
@@ -267,7 +267,7 @@ class OfferController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $offerParameters = $this->_getAllParams();
         $getOfferUniqueCode = self::getOfferUniqueCode($offerParameters);
-        CouponCode::updateCodeStatus($offerParameters['id'], $getOfferUniqueCode['code']);
+        \KC\Repository\CouponCode::updateCodeStatus($offerParameters['id'], $getOfferUniqueCode['code']);
         exit();
     }
 }

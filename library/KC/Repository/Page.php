@@ -45,10 +45,10 @@ class Page Extends \KC\Entity\Page
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
-            ->select('p.id,homepageimage')
+            ->select('p.id')
             ->from('KC\Entity\Page', 'p')
-            ->leftJoin("p.homepageimage", "homepageimage")
-            ->where('p.permalink="'.$permalink.'"');
+            ->leftJoin("p.pageHeaderImageId", "homepageimage")
+            ->where('p.permalink ='."'".$permalink."'");
         $pageHomeImage = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $imagePath = '';
         if (!empty($pageHomeImage->homepageimage)) {
