@@ -166,11 +166,10 @@ function getWidgetList(iSearchText,iStart,iSortCol,iSortDir){
 	               {
 					"fnRender" : function(obj) {
 						var tag = "";
-						tag ="<p editId='" + obj.aData.id + "' class='editId word-wrap-without-margin-widget'><a href='javascript:void(0);'>" + ucfirst(obj.aData.title)+ "</a></p>";
+						tag ="<p editId='' class='editId word-wrap-without-margin-widget'>" + ucfirst(obj.aData.title)+ "</p>";
 						return tag;
 						 
 					},
-					"bSearchable" : true,
 					"bSortable" : true
 	               },
 	               {
