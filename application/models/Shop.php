@@ -401,26 +401,31 @@ class Shop extends BaseShop
      * @author mkaur updated by kraj
      * @version 1.0
      */
- public static  function getshopList($params)
- {
-    $srh =  $params["searchText"]=='undefined' ? '' : $params["searchText"];
-    $flag = @$params['flag'] ;
+    public static function getshopList($params)
+    {
+        $srh = $params["searchText"]=='undefined' ? '' : $params["searchText"];
+        $flag = $params['flag'];
 
-    $shopList = Doctrine_Query::create()
-        ->select('s.*,a.name as affname')
-        //->select('a.name as affname,s.id,s.updated_at,s.id,s.name,s.affliateProgram,s.accountManagerName,s.created_at,affname,s.status,s.offlineSicne,s.updated_at')
-        ->from("Shop s")
-        ->leftJoin('s.affliatenetwork a')
-        ->where('s.deleted = ?' , $flag )
-        ->andWhere("s.name LIKE ?", "%$srh%");
-        $result =   DataTable_Helper::generateDataTableResponse($shopList,
-                    $params,
-                    array("__identifier" => 's.id,s.updated_at', 's.id','s.name','s.permaLink','s.affliateProgram','s.created_at', 's.totalviewcount','affname','s.discussions','s.showSignupOption','s.status','s.offlineSicne'),
-                    array(),
-                    array());
-    return $result;
+        $shopList = Doctrine_Query::create()
+            ->select('s.*,a.name as affname')
+            ->from("Shop s")
+            ->leftJoin('s.affliatenetwork a')
+            ->where('s.deleted = ?', $flag)
+            ->andWhere("s.name LIKE ?", "%$srh%");
 
- }
+        $result = DataTable_Helper::generateDataTableResponse(
+            $shopList,
+            $params,
+            array(
+                "__identifier" => 's.id,s.updated_at', 's.id','s.name','s.permaLink','s.affliateProgram',
+                's.created_at', 's.lastSevenDayClickouts', 's.shopAndOfferClickouts','affname','s.discussions',
+                's.showSignupOption','s.status','s.offlineSicne'
+            ),
+            array(),
+            array()
+        );
+        return $result;
+    }
     /**
      * move record in trash.
      * @param $id
@@ -1275,6 +1280,49 @@ public static function getShopDetail($shopId)
     }
 
  }
+
+    public static function updateTotalShopOfferViewCount()
+    {
+        $clickoutCounts = Doctrine_Query::create()
+        ->select('s.totalViewcount as shopViewCount, o.totalViewcount as offerViewCount')
+        ->from('Shop s')
+        ->leftJoin('s.offer o')
+        ->fetchArray();
+        foreach ($clickoutCounts as $clickoutCount) {
+            $totalClickouts = $clickoutCount['shopViewCount'] + $clickoutCount['offerViewCount'];
+            Doctrine_Query::create()
+                ->update('Shop s')
+                ->set('s.shopAndOfferClickouts', $totalClickouts)
+                ->where('s.id = ?', $clickoutCount['id'])
+                ->execute();
+        }
+        return true;
+    }
+
+    public static function getAllShopsId()
+    {
+        $allShopsIds = Doctrine_Query::create()
+            ->select('s.id')
+            ->from("Shop s")
+            ->where('s.deleted = 0')
+            ->andWhere("s.status = 1")
+            ->fetchArray();
+        return $allShopsIds;
+    }
+
+    public static function updateLastSevenDaysOfferShopViewCount()
+    {
+        $allShopsIds = self::getAllShopsId();
+        foreach ($allShopsIds as $shopId) {
+            $lastSevenDayClickouts = ShopViewCount::getAmountClickoutOfShop($shopId['id']);
+            Doctrine_Query::create()
+                ->update('Shop s')
+                ->set('s.lastSevendayClickouts', $lastSevenDayClickouts)
+                ->where('s.id = ?', $shopId['id'])
+                ->execute();
+        }
+        return true;
+    }
 
  /**
   * get first character of the store name
