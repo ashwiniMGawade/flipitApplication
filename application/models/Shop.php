@@ -41,16 +41,41 @@ class Shop extends BaseShop
 
     public static function getSimilarShops($shopId, $numberOfShops = 12)
     {
+        $similarShops = self::getSimilarShopsByShopId($shopId, $numberOfShops);
+        if (count($similarShops) <= $numberOfShops) {
+            $similarShopsBySimilarCategories = self::getSimilarShopsBySimilarCategories($shopId, $numberOfShops);
+            $similarShops = self::removeDuplicateShops($similarShops, $similarShopsBySimilarCategories, $numberOfShops);
+        }
+        return $similarShops;
+    }
+
+    public static function getSimilarShopsByShopId($shopId, $numberOfShops = 12)
+    {
+        $similarShops = Shop::getRelatedShop($shopId);
+        return self::setDataAsPerView($similarShops, $numberOfShops);
+    }
+
+    protected static function setDataAsPerView($similarShops, $numberOfShops)
+    {
+        $similarShopsWithoutDuplicate = array();
+        if (!empty($similarShops['refShopRelatedshop'])) {
+            foreach ($similarShops['refShopRelatedshop'] as $similarShop) {
+                if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
+                    $similarShopsWithoutDuplicate[$similarShop['relatedshops']['id']] = $similarShop['relatedshops'];
+                }
+            }
+        }
+        return $similarShopsWithoutDuplicate;
+    }
+
+    public static function getSimilarShopsBySimilarCategories($shopId, $numberOfShops)
+    {
         $relatedShops = Doctrine_Query::create()->from('Shop s')
             ->select(
-                "s.name, s.permaLink, img.path, img.name, logo.path, logo.name, rs.name, rs.permaLink,
+                "s.name, s.permaLink, img.path, img.name, logo.path, logo.name,
                 c.id,ss.name, ss.permaLink"
             )
             ->where("s.id = ".$shopId)
-            ->leftJoin("s.relatedshops rs")
-            ->andWhere("rs.status = 1")
-            ->andWhere("rs.deleted = 0")
-            ->leftJoin("rs.logo as logo")
             ->leftJoin('s.category c')
             ->andWhere("c.status = 1")
             ->andWhere("c.deleted = 0")
@@ -59,30 +84,21 @@ class Shop extends BaseShop
             ->andWhere("ss.deleted = 0")
             ->leftJoin('ss.logo img')
             ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
-        return self::removeDuplicateShops($relatedShops, $numberOfShops);
+        return $relatedShops;
     }
 
-    protected static function removeDuplicateShops($relatedShops, $numberOfShops)
-    {
-        $similarShopsWithoutDuplicate = array();
-        foreach ($relatedShops[0]['relatedshops'] as $relatedShop) {
-            if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
-                $similarShopsWithoutDuplicate[$relatedShop['id']] = $relatedShop;
-            }
-        }
 
-        if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
-            // push shops related to same category which are not yet added
-            foreach ($relatedShops[0]['category'] as $category) {
-                foreach ($category['shop'] as $relatedCategoryShop) {
-                    if (count($similarShopsWithoutDuplicate) <= $numberOfShops &&
-                            !in_array($relatedCategoryShop['id'], $similarShopsWithoutDuplicate)) {
-                        $similarShopsWithoutDuplicate[$relatedCategoryShop['id']] = $relatedCategoryShop;
-                    }
+    protected static function removeDuplicateShops($similarShops, $similarShopsBySimilarCategories, $numberOfShops)
+    {
+        foreach ($similarShopsBySimilarCategories[0]['category'] as $category) {
+            foreach ($category['shop'] as $relatedCategoryShop) {
+                if (count($similarShops) <= $numberOfShops &&
+                        !in_array($relatedCategoryShop['id'], $similarShops)) {
+                    $similarShops[$relatedCategoryShop['id']] = $relatedCategoryShop;
                 }
             }
         }
-        return $similarShopsWithoutDuplicate;
+        return $similarShops;
     }
 
     public static function getPopularStores($limit, $shopId = null)
@@ -374,6 +390,19 @@ class Shop extends BaseShop
         return $allShops = $query->fetchArray();
     }
 
+    public static function getRelatedShop($id)
+    {
+        $relatedShops = Doctrine_Query::create()
+            ->select('s.id, rf.id, rl.permaLink, rl.id, rl.name, logo.path, logo.name')
+            ->from('Shop s')
+            ->leftJoin("s.refShopRelatedshop as rf")
+            ->leftJoin("rf.relatedshops rl")
+            ->leftJoin("rl.logo as logo")
+            ->where("s.id = ?", $id)
+            ->orderBy('rf.position')
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return $relatedShops;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################

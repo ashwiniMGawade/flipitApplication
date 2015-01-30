@@ -476,19 +476,25 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <div class="mainpage-content-right-inner-left-other-shop">
                  
                  
-                 <div style="overflow-y:scroll;height:169px;width:160px !important;" class="sidebar-content-box-left">
-                         
-                         <ul id="similarshopListul-li" style='margin : 0px;'>
-                          
-                          <?php for($r=0;$r<count($this->data['relatedshops']);$r++){ 
-                          $className = 'grid-line2';
-							if ($r % 2 == 0) {
-								$className = 'grid-line1';
-							}
-						?> 
-                          <li class="<?php echo $className; ?>" value="<?php echo $this->data['relatedshops'][$r]['id']; ?>"><?php echo $this->data['relatedshops'][$r]['name']; ?></li>
-                          <?php }?>                          
-                         </ul> 
+                <div style="overflow-y:scroll;height:169px;width:160px !important;" class="sidebar-content-box-left">
+                    <ul id="similarshopListul-li" style='margin : 0px;'>
+                    <?php 
+                    if (!empty($this->relatedShops['refShopRelatedshop'])) {
+                        for($r=0;$r < count ($this->relatedShops['refShopRelatedshop']);$r++) { 
+                            $className = 'grid-line2';
+                            if ($r % 2 == 0) {
+                                $className = 'grid-line1';
+                            }
+                            ?> 
+                            <li class="<?php echo $className; ?>" 
+                                value="<?php echo $this->relatedShops['refShopRelatedshop'][$r]['relatedshops']['id']; ?>">
+                                <?php echo $this->relatedShops['refShopRelatedshop'][$r]['relatedshops']['name']; ?>
+                            </li>
+                            <?php 
+                        }
+                    }
+                    ?>                          
+                    </ul> 
                 </div>      
                  <input type="hidden" name="selectedShop" id="selectedShop" value="" />
                  <input type="hidden" name="similarstoreord" id="similarstoreord" value="" />
