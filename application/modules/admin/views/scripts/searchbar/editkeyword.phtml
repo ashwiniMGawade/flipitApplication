@@ -88,10 +88,8 @@
                         //print_r($this->editKeyword[0]['shops']);
                          $ids ='';
                          $j = 0;
-                         foreach ($this->editKeyword[0]['shops'] as $k)
-                         {
                          	
-                         	foreach ($k['shopsofKeyword'] as $s)
+                         	foreach ($this->editKeyword[0] as $s)
                          	{
                          		
                          		//print(count($this->editKeyword[0]['shops']));
@@ -99,7 +97,7 @@
                          		 $li .= '<a href="javascript:void(0);" onClick=deleteShop(' . $s['sid'] .') ><img src="'.IMG_PATH.'kc-search-cross.png"/></a>'. '&nbsp;'.$s['name'].'</li>';
                          		 echo $li;
                          		 $j++;
-                         		if($j==count($this->editKeyword[0]['shops']))
+                         		if($j==count($this->editKeyword[0]['sid']))
                          		 {
                          		 	$ids.=$s['sid'];
                          		 //	echo 'true';
@@ -110,7 +108,6 @@
                          		 //	echo "false";
                          		}
                          	}
-						 }
 						 $a = rtrim(str_replace(","," ",$ids));
 						 $gIds =  str_replace(" ",",",$a);
 						 

@@ -122,7 +122,7 @@ class ErrorController extends Zend_Controller_Action
             echo $this->view->exception = $errors->exception;
         }
 
-        $largeSignUpForm = F\rontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
+        $largeSignUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget =
             \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         \FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
