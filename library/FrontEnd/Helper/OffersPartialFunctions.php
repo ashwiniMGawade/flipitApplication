@@ -274,30 +274,12 @@ class FrontEnd_Helper_OffersPartialFunctions
                 '<div class="'.$class.'">
                 '.$offerAnchorTagContent.' </div>';
         } else {
-<<<<<<< HEAD
-            if ($currentOffer->discountType == "CD") {
-                $onClick = $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
-                $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id),
-                ga('send', 'event', 'aff', '$offerBounceRate'),
-                OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')";
-                $offerLink =
-                    '<a id="'.$currentOffer->id.'" class="'.$class.'" 
-                    href="'.$urlToShow.'" vote="0" rel="nofollow" 
-                    target="_self" onClick="'.$onClick.'">
-                '.$offerAnchorTagContent.' </a>';
-            } else if ($currentOffer->discountType == "SL") {
-                if ($class == "btn blue btn-primary") {
-                    $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
-                }
-                $onClick = "viewCounter('onclick', 'offer', $currentOffer->id),
-                ga('send', 'event', 'aff', '$offerBounceRate')";
-=======
+
             $visitorInformation = '';
             if (!empty(Auth_VisitorAdapter::getIdentity()->id)) {
                 $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
             }
             if (empty($visitorInformation) && isset($currentOffer->Visability) && $currentOffer->Visability == 'MEM') {
->>>>>>> develop
                 $offerLink =
                     '<span class="'.$class.'">
                 '.$offerAnchorText.' </span>';
@@ -341,7 +323,6 @@ class FrontEnd_Helper_OffersPartialFunctions
                         alt = "'.$urlToShow.'" target="_blank" onclick = "'.$onClick.'" rel="nofollow">
                         '.$offerAnchorText .'</a>';
                 }
-<<<<<<< HEAD
                 $onClick =
                     self::getUserIsLoggedInOrNot() == "true"
                     ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')"
@@ -350,8 +331,6 @@ class FrontEnd_Helper_OffersPartialFunctions
                     '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
                     alt = "'.$urlToShow.'" target="_blank" onclick = "'.$onClick.'" rel="nofollow">
                     '.$offerAnchorTagContent .'</a>';
-=======
->>>>>>> develop
             }
         }
         return $headOpen. $offerLink . $headClose;
