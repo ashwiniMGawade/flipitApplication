@@ -403,18 +403,18 @@ class Shop extends BaseShop
      */
     public static function getshopList($params)
     {
-        $srh = $params["searchText"]=='undefined' ? '' : $params["searchText"];
+        $shopName = $params["searchText"]=='undefined' ? '' : $params["searchText"];
         $flag = $params['flag'];
 
-        $shopList = Doctrine_Query::create()
+        $shopsListQuery = Doctrine_Query::create()
             ->select('s.*,a.name as affname')
             ->from("Shop s")
             ->leftJoin('s.affliatenetwork a')
             ->where('s.deleted = ?', $flag)
-            ->andWhere("s.name LIKE ?", "%$srh%");
+            ->andWhere("s.name LIKE ?", "%$shopName%");
 
-        $result = DataTable_Helper::generateDataTableResponse(
-            $shopList,
+        $shopsList = DataTable_Helper::generateDataTableResponse(
+            $shopsListQuery,
             $params,
             array(
                 "__identifier" => 's.id,s.updated_at', 's.id','s.name','s.permaLink','s.affliateProgram',
@@ -424,7 +424,7 @@ class Shop extends BaseShop
             array(),
             array()
         );
-        return $result;
+        return $shopsList;
     }
     /**
      * move record in trash.
@@ -1283,16 +1283,16 @@ public static function getShopDetail($shopId)
 
     public static function updateTotalShopOfferViewCount()
     {
-        $clickoutCounts = Doctrine_Query::create()
+        $shopClickoutCounts = Doctrine_Query::create()
         ->select('s.totalViewcount as shopViewCount, o.totalViewcount as offerViewCount')
         ->from('Shop s')
         ->leftJoin('s.offer o')
         ->fetchArray();
-        foreach ($clickoutCounts as $clickoutCount) {
-            $totalClickouts = $clickoutCount['shopViewCount'] + $clickoutCount['offerViewCount'];
+        foreach ($shopClickoutCounts as $clickoutCount) {
+            $totalShopsAndOffersClickouts = $clickoutCount['shopViewCount'] + $clickoutCount['offerViewCount'];
             Doctrine_Query::create()
                 ->update('Shop s')
-                ->set('s.shopAndOfferClickouts', $totalClickouts)
+                ->set('s.shopAndOfferClickouts', $totalShopsAndOffersClickouts)
                 ->where('s.id = ?', $clickoutCount['id'])
                 ->execute();
         }
@@ -1314,10 +1314,10 @@ public static function getShopDetail($shopId)
     {
         $allShopsIds = self::getAllShopsId();
         foreach ($allShopsIds as $shopId) {
-            $lastSevenDayClickouts = ShopViewCount::getAmountClickoutOfShop($shopId['id']);
+            $$lastSevenDayShopClickouts = ShopViewCount::getAmountClickoutOfShop($shopId['id']);
             Doctrine_Query::create()
                 ->update('Shop s')
-                ->set('s.lastSevendayClickouts', $lastSevenDayClickouts)
+                ->set('s.lastSevendayClickouts', $$lastSevenDayShopClickouts)
                 ->where('s.id = ?', $shopId['id'])
                 ->execute();
         }
