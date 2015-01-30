@@ -359,6 +359,13 @@ abstract class BaseShop extends Doctrine_Record
         $this->hasColumn('customtextposition', 'integer', 20, array(
                 'type' => 'integer',
         ));
+        $this->hasColumn('lastSevendayClickouts', 'integer', 20, array(
+                'type' => 'integer',
+        ));
+        $this->hasColumn('shopAndOfferClickouts', 'integer', 20, array(
+                'type' => 'integer',
+        ));
+
     }
 
     public function setUp()

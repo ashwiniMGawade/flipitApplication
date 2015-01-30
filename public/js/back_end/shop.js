@@ -174,7 +174,29 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
                             },
                             "bSearchable" : true,
                             "bSortable" : true
-                        },{
+                        },
+                        {
+                            "fnRender" : function(obj) {
+                                var tag = '';
+                                if (obj.aData.lastSevendayClickouts==null || obj.aData.lastSevendayClickouts=='' || obj.aData.lastSevendayClickouts==undefined) {
+                                    tag = '';
+                                } else {
+                                    tag = "<a href='javascript:void(0);'>" + obj.aData.lastSevendayClickouts + "</a>";
+                                }
+                                return tag;
+                             },
+                            "bSearchable" : true,
+                            "bSortable" : true
+                        },
+                        {
+                            "fnRender" : function(obj) {
+                                var tag = "<a href='javascript:void(0);'>" + obj.aData.shopAndOfferClickouts + "</a>";
+                                return tag;
+                             },
+                            "bSearchable" : true,
+                            "bSortable" : true
+                        },
+                        {
                             "fnRender" : function(obj) {
 
                                 var tag = '';
