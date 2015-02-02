@@ -132,15 +132,20 @@ class FrontEnd_Helper_LayoutContent
 
     public static function homePageBanner($homePageBanner)
     {
+
         $homePageBannerHtml = '';
         if (!empty($homePageBanner)) {
-            $homePageWidgetBannerPath = PUBLIC_PATH_CDN. trim($homePageBanner['homepagebanner_path'] . $homePageBanner['homepagebanner_name']);
+            $homePageWidgetBannerPath = PUBLIC_PATH_CDN. trim(
+                $homePageBanner[0]['homepagebanner_path']
+                . $homePageBanner[0]['homepagebanner_name']
+            );
             $homePageBannerHtml =
                 '<div class="block-image">
                     <div class="image-holder">
                         <div class="image-frame">
-                            <img class="position-cover" src="' . $homePageWidgetBannerPath .'" alt="' . $homePageBanner['homepage_widget_banner_name'] .'"
-                            title="' . $homePageBanner['homepage_widget_banner_name'] .'">
+                            <img class="position-cover" src="' . $homePageWidgetBannerPath .'" alt="'
+                            . $homePageBanner[0]['homepage_widget_banner_name'] .'"
+                            title="' . $homePageBanner[0]['homepage_widget_banner_name'] .'">
                         </div>
                     </div>
                 </div>';

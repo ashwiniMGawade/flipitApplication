@@ -18,13 +18,13 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
         )
         ->from('KC\Entity\SpecialPagesOffers', 'op')
         ->leftJoin('op.offers', 'o')
-        ->leftJoin('o.termandcondition', 'terms')
+        ->leftJoin('o.offertermandcondition', 'terms')
         ->andWhere(
             "(couponCodeType = 'UN' AND (SELECT count(id) FROM KC\Entity\CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0)
             or couponCodeType = 'GN'"
         )
-        ->leftJoin('o.shop', 's')
-        ->leftJoin('o.vote', 'vot')
+        ->leftJoin('o.shopOffers', 's')
+        ->leftJoin('o.votes', 'vot')
         ->leftJoin('s.logo', 'l')
         ->leftJoin('s.favoriteshops', 'fv')
         ->where('op.pageId = '.$pageId)
