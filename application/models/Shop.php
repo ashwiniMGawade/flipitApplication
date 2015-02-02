@@ -219,7 +219,7 @@ class Shop extends BaseShop
     public static function getAllPopularStores($limit)
     {
         $popularStores = Doctrine_Query::create()
-        ->select('p.id,s.name,s.permaLink,img.path as imgpath, img.name as imgname')
+        ->select('p.id,s.name,s.permaLink, s.deepLink, s.refUrl, s.actualUrl, img.path as imgpath, img.name as imgname')
         ->from('PopularShop p')
         ->leftJoin('p.shop s')
         ->leftJoin('s.logo img')

@@ -230,9 +230,9 @@ function getWidgetList(iSearchText,iStart,iSortCol,iSortDir){
 								state[ 'eId' ] = eId ;
 								$.bbq.pushState( state );
 								click = true;
-								window.location.href = HOST_PATH + "admin/widget/editwidget/id/" + eId+ "?iStart="+
-								obj._iDisplayStart+"&iSortCol="+obj.aaSorting[0][0]+"&iSortDir="+
-								obj.aaSorting[0][1]+"&iSearchText="+iSearchText+"&eId="+eId
+								//window.location.href = HOST_PATH + "admin/widget/editwidget/id/" + eId+ "?iStart="+
+								//obj._iDisplayStart+"&iSortCol="+obj.aaSorting[0][0]+"&iSortDir="+
+								//obj.aaSorting[0][1]+"&iSearchText="+iSearchText+"&eId="+eId
 							}
 						});
 						

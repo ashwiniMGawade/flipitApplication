@@ -1,17 +1,10 @@
 <?php
 echo $this->shopEditor;
-$frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
-echo 
-	$frontendSidebarHelper->socialMediaWidget(
-		$this->currentStoreInformation['affliateProgram'] =='' ? 
-		$this->currentStoreInformation['actualUrl'] 
-		: $this->currentStoreInformation['affliateProgram']
-	);
-
 if (!empty($this->latestShopUpdates)):?>
     <?php echo $this->partial('store/_latestNews.phtml', array('latestShopUpdates' => $this->latestShopUpdates));
 endif;
-
+$frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+echo $frontendSidebarHelper->popularCategoryWidget();
 if ($this->shopChain):
     ?>
         <article class="block">
