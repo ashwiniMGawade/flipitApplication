@@ -173,15 +173,18 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
                             "bSortable" : true
                         },{
                             "fnRender" : function(obj) {
-                                var tag = '';
-                                var dat = obj.aData.created_at;
-                                tag = dat.split("-");
-                                tag2 = tag[2];
-                                var da = tag2.split(" ");
-                                var date = "<a href='javascript:void(0);'>"+da[0]+'-'+tag[1]+'-'+tag[0]+"</a>";
-                                return date;
-                                 //return (da[0]+'-'+tag[1]+'-'+tag[0]);
-                                 
+
+                            var date = "";
+                            if(obj.aData.created_at !=null && obj.aData.created_at !='undefined' ) {
+                                var splitdate = obj.aData.created_at.date.split(" ");
+                                if (obj.aData.created_at.date != null && splitdate[0] != '1970-01-01') {
+                                    
+                                        var date = obj.aData.created_at.date;
+                            
+                                
+                                }
+                            }   
+                            return "<a href='javascript:void(0)'>" + date + "</a>";
                             },
                             "bSearchable" : true,
                             "bSortable" : true
@@ -260,13 +263,14 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
                                     tag='';
                                 }
                                 else{
-                                    tag = obj.aData.offlineSicne;   
-                                    
-                                    tag = tag.split("-");
-                                    tag2 = tag[2];
-                                    var da = tag2.split(" ");
-                                    tag  = "<a href='javascript:void(0);'>"+da[0]+'-'+tag[1]+'-'+tag[0]+"</a>";
-                                    //tag =  (da[0]+'-'+tag[1]+'-'+tag[0]);
+
+                                    var tag = "";
+                                    if(obj.aData.offlineSicne !=null && obj.aData.offlineSicne !='undefined' ) {
+                                        var splitdate = obj.aData.offlineSicne.date.split(" ");
+                                        if (obj.aData.offlineSicne.date != null && splitdate[0] != '1970-01-01') {
+                                            var date = obj.aData.offlineSicne.date;  
+                                        }
+                                    }
                                 }
                                 return tag;
                             },

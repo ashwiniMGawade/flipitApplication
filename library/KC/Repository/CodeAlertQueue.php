@@ -97,7 +97,7 @@ class CodeAlertQueue Extends \KC\Entity\CodeAlertQueue
         $query = $queryBuilder
         ->select('c')
         ->from("KC\Entity\CodeAlertQueue", "c")
-        ->where("c.offerId LIKE ?", "$searchText%")
+        ->where("c.offerId LIKE '$searchText%'")
         ->orderBy("c.id", "DESC");
         $deletedStatus = isset($sentCodes) && $sentCodes != '' ? 1 : 0;
         $query =  $query->andWhere('c.deleted = '.$deletedStatus);

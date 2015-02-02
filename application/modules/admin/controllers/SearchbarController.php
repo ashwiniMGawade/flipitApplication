@@ -82,6 +82,7 @@ class Admin_SearchbarController extends Zend_Controller_Action
         if($id>0){
         // get keyword to edit on id basis
             $searchbar = \KC\Repository\ExcludedKeyword::getKeywordForEdit($id);
+            echo "<pre>";print_r($searchbar);die;
             $this->view->editKeyword = $searchbar;
 
          }

@@ -69,14 +69,14 @@ class ExcludedKeyword extends \KC\Entity\ExcludedKeyword
     public static function getKeywordForEdit($id)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $getdata = $queryBuilder
-            ->select("k,es.id as keywordid,s.id as sid , s.name as name")
+        $query = $queryBuilder
+            ->select("k.id, k.keyword, k.url, k.action, k.created_at, k.updated_at, es.id as keywordid,s.id as sid , s.name as name")
             ->from("KC\Entity\ExcludedKeyword", "k")
             ->leftJoin('k.keywords', 'es')
             ->leftJoin('es.keywords', 's')
             ->where("k.id =".$id)
-            ->getQuery()
-            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            ->setmaxResults(1);
+        $getdata = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $getdata;
     }
 
