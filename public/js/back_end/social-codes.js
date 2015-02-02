@@ -548,6 +548,7 @@ function setFormData(data) {
         jQuery('a#selectImg_' + data[0].tiles.id).show();
     }
     selectOfferImage(tile_id);
+    getShopDetail(jQuery("#selctedshop").val());
 }
 
 function newschangelinkStatus(el)
