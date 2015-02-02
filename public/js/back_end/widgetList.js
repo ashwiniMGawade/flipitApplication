@@ -166,11 +166,10 @@ function getWidgetList(iSearchText,iStart,iSortCol,iSortDir){
 	               {
 					"fnRender" : function(obj) {
 						var tag = "";
-						tag ="<p editId='" + obj.aData.id + "' class='editId word-wrap-without-margin-widget'><a href='javascript:void(0);'>" + ucfirst(obj.aData.title)+ "</a></p>";
+						tag ="<p editId='' class='editId word-wrap-without-margin-widget'>" + ucfirst(obj.aData.title)+ "</p>";
 						return tag;
 						 
 					},
-					"bSearchable" : true,
 					"bSortable" : true
 	               },
 	               {
@@ -231,9 +230,9 @@ function getWidgetList(iSearchText,iStart,iSortCol,iSortDir){
 								state[ 'eId' ] = eId ;
 								$.bbq.pushState( state );
 								click = true;
-								window.location.href = HOST_PATH + "admin/widget/editwidget/id/" + eId+ "?iStart="+
-								obj._iDisplayStart+"&iSortCol="+obj.aaSorting[0][0]+"&iSortDir="+
-								obj.aaSorting[0][1]+"&iSearchText="+iSearchText+"&eId="+eId
+								//window.location.href = HOST_PATH + "admin/widget/editwidget/id/" + eId+ "?iStart="+
+								//obj._iDisplayStart+"&iSortCol="+obj.aaSorting[0][0]+"&iSortDir="+
+								//obj.aaSorting[0][1]+"&iSearchText="+iSearchText+"&eId="+eId
 							}
 						});
 						
