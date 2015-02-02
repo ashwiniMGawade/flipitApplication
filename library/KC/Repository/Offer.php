@@ -1339,7 +1339,7 @@ class Offer Extends \KC\Entity\Offer
                     ->getQuery();
             $query->execute();
             $query = $queryBuilder->delete('KC\Entity\TermAndCondition', 't')
-                    ->where("t.termandcondition=" . $id)
+                    ->where("t.offertermandcondition=" . $id)
                     ->getQuery();
             $query->execute();
             $query = $queryBuilder->delete('KC\Entity\PopularCode', 'pc')
@@ -3221,7 +3221,7 @@ class Offer Extends \KC\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->delete('KC\Entity\TermAndCondition', 'tc')
             ->setParameter(1, $params['offerId'])
-            ->where('tc.termandcondition = ?1')
+            ->where('tc.offertermandcondition = ?1')
             ->getQuery();
         $query->execute();
 
