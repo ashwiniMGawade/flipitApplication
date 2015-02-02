@@ -25,7 +25,7 @@ class CodeAlertSettings Extends \KC\Entity\CodeAlertSettings
             ->update('KC\Entity\CodeAlertSettings', 'cs')
             ->set('cs.email_subject', "'".$codeAlertEmailSubject."'")
             ->set('cs.email_header', "'".$codeAlertEmailHeader."'")
-            ->where('id = 1')
+            ->where('cs.id = 1')
             ->getQuery()
             ->execute();
 

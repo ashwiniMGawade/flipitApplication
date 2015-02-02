@@ -284,7 +284,7 @@ class Page Extends \KC\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select(
-            'p, w.title as widgetTtitle, w.id as widgetId, logo, pageHeaderImage,pa'
+            'p, w.title as widgetTtitle, w.id as widgetId, logo, pageHeaderImage, homepageimage, pa'
         )
             ->from('KC\Entity\Page', 'p')
             ->leftJoin('p.logo', 'logo')

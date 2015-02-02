@@ -9,9 +9,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-datepicker.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/date.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/newsticker.js");
-$date = $this->editNews[0]['startdate']; 
-$dated =  strtotime($date) ; 
-$dateForm =  date('d-m-Y',$dated);
+$date = $this->editNews[0]['startdate'];
+$dateForm =  $date->format('Y-m-d') ; 
 
 ?>
 
