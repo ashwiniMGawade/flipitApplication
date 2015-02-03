@@ -51,8 +51,8 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
     }
     public static function getEmailAddress()
     {
-        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('signupmaxaccount.emailperlocale')
+        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerLocale->select('signupmaxaccount.emailperlocale')
             ->from('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->setParameter(1, 1)
             ->where('signupmaxaccount.id = ?1');
@@ -61,10 +61,11 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
     }
     public static function alterSignupMaxAccountTable()
     {
-        $databaseConnection = Doctrine_Manager::getInstance()->getCurrentConnection()->getDbh();
-        $databaseConnection->query('ALTER TABLE `signupmaxaccount` DROP `locale`');
-        $databaseConnection->query('ALTER TABLE `signupmaxaccount` DROP `timezone`');
-        unset($databaseConnection);
+        $entityManagerLocale  = \Zend_Registry::get('emLocale');
+        $signupmaxaccount = new KC\Entity\Signupmaxaccount();
+        $fields = $signupmaxaccount->findOneBy(array('field' => 'locale', 'field' => 'timezone'));
+        $entityManagerLocale->remove($fields);
+        $entityManagerLocale->flush();
     }
     #################################################################
     #################### END REFACTOR CODE ##########################
@@ -193,7 +194,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
             ->where('signupmaxaccount.id = ?1');
         $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (empty($getRecord)) {
-            $data = new Signupmaxaccount();
+            $data = new KC\Entity\Signupmaxaccount();
             $data->id = 1;
             $data->status = '';
             \Zend_Registry::get('emLocale')->persist($data);
@@ -280,7 +281,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
             ->where('signupmaxaccount.id = ?1');
         $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (empty($getRecord)) {
-            $data = new Signupmaxaccount();
+            $data = new KC\Entity\Signupmaxaccount();
             $data->id = 1;
             $data->status = '';
             \Zend_Registry::get('emLocale')->persist($data);
@@ -316,7 +317,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
         ->where('p.id = ?1');
         $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (empty($getRecord)) {
-            $data = new Signupmaxaccount();
+            $data = new KC\Entity\Signupmaxaccount();
             $data->id = 1;
             $data->email_header = $value;
             \Zend_Registry::get('emLocale')->persist($data);
@@ -339,7 +340,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
         ->where('p.id = ?1');
         $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (empty($getRecord)) {
-            $data = new Signupmaxaccount();
+            $data = new KC\Entity\Signupmaxaccount();
             $data->id = 1;
             $data->email_footer = $value ;
             \Zend_Registry::get('emLocale')->persist($data);
@@ -371,7 +372,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
         ->where('p.id = ?1');
         $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (empty($getRecord)) {
-            $data = new Signupmaxaccount();
+            $data = new KC\Entity\Signupmaxaccount();
             $data->id = 1;
             $data->emailperlocale = $email ;
             \Zend_Registry::get('emLocale')->persist($data);
@@ -397,7 +398,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
                     ->where('s.id = ?1');
                 $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                 if (empty($getRecord)) {
-                    $data = new Signupmaxaccount();
+                    $data = new Kc\Entity\Signupmaxaccount();
                     $data->id = 1;
                     $data->status = '';
                     \Zend_Registry::get('emLocale')->persist($data);
@@ -424,7 +425,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
-                    ->set('signupmaxaccount.homepagebanner_name', '?', 'null')
+                    ->set('signupmaxaccount.homepagebanner_name', '')
                     ->setParameter(1, 1)
                     ->where('signupmaxaccount.id = ?1')
                     ->getQuery();
@@ -443,7 +444,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
                     ->where('s.id = ?1');
                 $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                 if (empty($getRecord)) {
-                    $data = new Signupmaxaccount();
+                    $data = new KC\Entity\Signupmaxaccount();
                     $data->id = 1;
                     $data->status = '';
                     \Zend_Registry::get('emLocale')->persist($data);
@@ -484,7 +485,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
         if (!file_exists($uploadPath)) {
             mkdir($uploadPath, 0776, TRUE);
         }
-        $adapter = new Zend_File_Transfer_Adapter_Http();
+        $adapter = new \Zend_File_Transfer_Adapter_Http();
         $rootPath = ROOT_PATH . $uploadPath;
         $files = $adapter->getFileInfo($file);
         if (!file_exists($rootPath)) {
@@ -496,7 +497,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
         $newName = time() . "_" . $name;
         $cp = $rootPath . $newName;
         $adapter->addFilter(
-            new Zend_Filter_File_Rename(
+            new \Zend_Filter_File_Rename(
                 array('target' => $cp,
                     'overwrite' => true
                 )
@@ -520,7 +521,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
         $date = new DateTime();
         $date->modify("+1 days");
         $date = $date->format('Y-m-d H:i:s');
-        $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
+        $currentDate = \FrontEnd_Helper_viewHelper::getCurrentDate();
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->set('signupmaxaccount.newletter_scheduled_time', '?', $date)
@@ -539,7 +540,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
         $timezone = $request->getParam("timezone", false);
         $scheduledDate = explode('-', $scheduledDate);
         $scheduledDate = $scheduledDate[1].'-'.$scheduledDate[0].'-'.$scheduledDate[2];
-        $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
+        $currentDate = \FrontEnd_Helper_viewHelper::getCurrentDate();
         $timestamp = date('Y-m-d', strtotime($scheduledDate)).' '.date('H:i:s', strtotime($scheduledTime));
         try {
             $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -549,7 +550,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
                     ->where('s.id = ?1');
             $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             if (empty($getRecord)) {
-                    $signupmaxaccount = new Signupmaxaccount();
+                    $signupmaxaccount = new KC\Entity\Signupmaxaccount();
                     $signupmaxaccount->id = 1;
                     $signupmaxaccount->newletter_is_scheduled = $this->getRequest()->getParam("isScheduled", false);
                     $signupmaxaccount->newletter_scheduled_time = $timestamp ;

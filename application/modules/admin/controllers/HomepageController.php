@@ -313,7 +313,7 @@ class Admin_HomepageController extends Zend_Controller_Action
     }
 
     public function savepopularshopspositionAction()
-    {
+    { 
         \KC\Repository\PopularShop::savePopularShopsPosition($this->getRequest()->getParam('shopid'));
         $popularShop = \KC\Repository\PopularShop::getPopularShop();
         echo \Zend_Json::encode($popularShop);

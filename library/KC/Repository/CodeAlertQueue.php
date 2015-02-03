@@ -103,41 +103,46 @@ class CodeAlertQueue Extends \KC\Entity\CodeAlertQueue
         $query =  $query->andWhere('c.deleted = '.$deletedStatus);
         $codeAlertOfferIds = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $codeAlertOffersId = array();
-        foreach ($codeAlertOfferIds as $codeAlertOfferId) {
-            $shop = \KC\Repository\FavoriteShop::getShopsById($codeAlertOfferId['shopId']);
-            if (!empty($shop)) {
-                $codeAlertOffersId[] = $codeAlertOfferId['offerId'];
+
+        if (!empty($codeAlertOfferIds)) {
+            foreach ($codeAlertOfferIds as $codeAlertOfferId) {
+                $shop = \KC\Repository\FavoriteShop::getShopsById($codeAlertOfferId['shopId']);
+                if (!empty($shop)) {
+                    $codeAlertOffersId[] = $codeAlertOfferId['offerId'];
+                }
             }
         }
-        $offerIds = implode(',', $codeAlertOffersId);
-        $offerDetails = array();
-        if (!empty($offerIds)) {
-            $queryBuilderOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $offerDetails = $queryBuilderOffer
-                ->select('o.id,o.title,s.name')
-                ->from("KC\Entity\Offer", "o")
-                ->leftJoin('o.shopOffers', 's')
-                ->leftJoin('s.affliatenetwork', 'a')
-                ->leftJoin('o.offers', 'p')
-                ->leftJoin('o.offertermandcondition', 'tc')
-                ->leftJoin('o.categoryoffres', 'cat')
-                ->leftJoin('o.logo', 'img')
-                ->leftJoin('s.offerNews', 'news')
-                ->leftJoin('o.offerTiles', 't')
-                ->addSelect(
-                    "(SELECT count(fs.id) FROM KC\Entity\FavoriteShop fs LEFT JOIN fs.visitor vs 
-                    WHERE fs.shop = s.id AND vs.id = fs.visitor AND vs.codealert = 1) as visitors"
-                )
-                ->addSelect("(SELECT cq.id FROM KC\Entity\CodeAlertQueue cq WHERE cq.offerId = o.id) as codeAlertId")
-                ->andWhere("o.id IN($offerIds)")
-                ->andWhere("o.userGenerated = '0'");
+
+        if (!empty($codeAlertOffersId)) {
+            $offerIds = implode(',', $codeAlertOffersId);
+            $offerDetails = array();
+        } else {
+            $offerIds = '';
         }
 
+        $queryBuilderOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $offerDetails = $queryBuilderOffer
+            ->select('o.id,o.title,s.name')
+            ->from("KC\Entity\Offer", "o")
+            ->leftJoin('o.shopOffers', 's')
+            ->leftJoin('s.affliatenetwork', 'a')
+            ->leftJoin('o.offers', 'p')
+            ->leftJoin('o.offertermandcondition', 'tc')
+            ->leftJoin('o.categoryoffres', 'cat')
+            ->leftJoin('o.logo', 'img')
+            ->leftJoin('o.offerTiles', 't')
+            ->addSelect(
+                "(SELECT count(fs.id) FROM KC\Entity\FavoriteShop fs LEFT JOIN fs.visitor vs 
+                WHERE fs.shop = s.id AND vs.id = fs.visitor AND vs.codealert = 1) as visitors"
+            )
+            ->addSelect("(SELECT cq.id FROM KC\Entity\CodeAlertQueue cq WHERE cq.offerId = o.id) as codeAlertId")
+            ->andWhere("o.id IN($offerIds)")
+            ->andWhere("o.userGenerated = '0'");
+            
         $request  = \DataTable_Helper::createSearchRequest(
             $codeAlertParameters,
             array('o.id', 's.name','o.title','visitors','codeAlertId')
         );
-
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
         ->setQueryBuilder($offerDetails)

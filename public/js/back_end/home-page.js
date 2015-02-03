@@ -1881,7 +1881,7 @@ function moveUpSaving() {
 					var li = '';
 					for(var i in json)
 						{
-						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].articleId + "' id='" + json[i].id + "' >" + json[i].title + "</li>";
+						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "'reloffer='" + json[i].moneysaving.id + "' id='" + json[i].id + "' >" + json[i].moneysaving.title + "</li>";
 						}
 					//append li in ul( list of popular code
 					$('ul#mostArticles').append(li);
@@ -1972,7 +1972,7 @@ function moveDownSaving() {
 					var li = '';
 					for(var i in json) {
 
-						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].articleId + "' id='" + json[i].id + "' >" + json[i].title + "</li>";
+						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].moneysaving.id + "' id='" + json[i].id + "' >" + json[i].moneysaving.title + "</li>";
 
 						}
 					$('ul#mostArticles').append(li);
@@ -2041,7 +2041,7 @@ function deletesavingmoney() {
 					if(json!=''){
 					for(var i in json)
 						{
-						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].articleId + "' id='" + json[i].id + "' >" + json[i].title + "</li>";
+						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].moneysaving.id + "' id='" + json[i].id + "' >" + json[i].moneysaving.title + "</li>";
 
 						}
 					$('ul#mostArticles').append(li);

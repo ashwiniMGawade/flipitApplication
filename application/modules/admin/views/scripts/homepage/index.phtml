@@ -344,7 +344,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 			<div class="mainpage-content-right-inner-right-other">
 				<span class="message help-inline success margin-bottom-tenpx"></span>
 			</div>
-			<?php if($this->locale['0']['homepagebanner_name'] == 'null')
+			<?php if($this->locale['0']['homepagebanner_name'] == 'null' || $this->locale['0']['homepagebanner_name'] == '')
 			{ ?>
 			<input type="file"  id="homepageBanner" class="span3 margin-bottom-tenpx" name="homepageBanner" >
 			<?php } else { ?>
