@@ -28,7 +28,7 @@ function validateAddSocialCode() {
             },
             offerUrl: {
                 required: true,
-                regex  :/((http|https):\/\/)([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
+                regex  :/([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
             },
             code: {
                 required: true
