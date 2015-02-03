@@ -16,8 +16,8 @@ class AddTableIpAddresses extends Doctrine_Migration_Base
                     'length'   => 255
                 ),
                 'ipaddress' => array(
-                    'type'   => 'integer',
-                    'length' => 11
+                    'type'   => 'string',
+                    'length' => 255
 
                 ),
                 'deleted' => array(

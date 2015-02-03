@@ -188,7 +188,7 @@
     <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Administration');?></h2></div>
     <ul id="adminmenu" role="navigation">
 
-	      <?php if($sessionNamespace->settings['rights']['administration']['rights'] == '1' ){?>
+	      <?php if($sessionNamespace->settings['rights']['administration']['rights'] == '1' ) {?>
 
 		     <li <?php if($controller == 'user') { ?> class="imbull-has-submenu menu-top menu-icon-user imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-user imbull-menu-open imbull-not-current-submenu" <?php }?> id="menu-posts">
 
@@ -206,6 +206,59 @@
 		            	<?php if($controller == 'user' && $action == 'adduser') { $userColorClass = "new-blue"; }else { $userColorClass = "new-gray"; } ?>
 		               <li>
 		               		<a href="<?php echo HTTP_PATH?>admin/user/adduser" class="<?php echo $userColorClass; ?>" tabindex="1"><?php echo $this->translate('Create user');?> </a>
+		               	</li>
+		           </ul>
+		          </div>
+		        </div>
+		      </li>
+
+		      <li 
+		      	<?php 
+		      	if ($controller == 'ipaddresses') { ?> 
+		      		class="imbull-has-submenu menu-top menu-icon-user imbull-menu-open imbull-has-current-submenu" 
+		      		<?php 
+		      	} else { 
+		      		?> 
+		      		class="imbull-has-submenu menu-top menu-icon-user imbull-menu-open imbull-not-current-submenu" 
+		      		<?php 
+		      	} ?> 
+		      	id="menu-posts">
+
+		        <div class="imbull-menu-image">
+		        	<a href="<?php echo HTTP_PATH?>admin/ipaddresses"><br></a>
+		        </div>
+		        <div class="">
+		        	<div></div>
+		        </div>
+		        <a href="<?php echo HTTP_PATH?>admin/ipaddresses" 
+		        	class="imbull-has-submenu imbull-has-current-submenu imbull-menu-open menu-top menu-icon-user" 
+		        	tabindex="1">
+		        	<?php echo $this->translate('IP addresses');?>
+		        	<span <?php 
+		        		if($controller=='ipaddresses') { 
+		        			?>class="arrow-down" <?php 
+		        		} else {
+		        			?> class="arrow-up" <?php 
+		        		}?>>
+		        	</span>
+		        </a>
+
+		        <div class="imbull-submenu">
+		          <div class="imbull-submenu-wrap">
+		            <div class="imbull-submenu-head"><?php echo $this->translate('Users');?> </div>
+		            <ul>
+		            	<?php 
+		            	if($controller == 'ipaddresses' && $action == 'addipaddress') { 
+		            		$userColorClass = "new-blue"; 
+		            		} else { 
+		            			$userColorClass = "new-gray"; 
+		            		} 
+		            	?>
+		                <li>
+		               		<a href="<?php echo HTTP_PATH?>admin/ipaddresses/addipaddress" 
+		               		class="<?php echo $userColorClass; ?>" tabindex="1">
+		               		<?php echo $this->translate('Create IP addresses');?>
+		               		</a>
 		               	</li>
 		           </ul>
 		          </div>
