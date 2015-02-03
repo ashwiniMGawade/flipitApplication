@@ -14,7 +14,7 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
             o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
             o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,
             o.updated_at as lastUpdate,s.name,s.refUrl,
-            s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote,terms.content'
+            s.actualUrl,s.permaLink as permalink,s.views,l,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote,terms.content'
         )
         ->from('KC\Entity\SpecialPagesOffers', 'op')
         ->leftJoin('op.offers', 'o')
@@ -27,7 +27,7 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
         ->leftJoin('o.votes', 'vot')
         ->leftJoin('s.logo', 'l')
         ->leftJoin('s.favoriteshops', 'fv')
-        ->where('op.pageId = '.$pageId)
+        ->where('op.pages = '.$pageId)
         ->andWhere('o.enddate >'.$queryBuilder->expr()->literal($currentDate))
         ->andWhere('o.startdate <='.$queryBuilder->expr()->literal($currentDate))
         ->andWhere('o.deleted = 0')
@@ -36,6 +36,7 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
         ->andWhere('o.Visability!='.$queryBuilder->expr()->literal("MEM"))
         ->orderBy('op.position');
         $specialPageOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        die('Hello Special');
         return self::removeDuplicateOffers($specialPageOffers);
     }
 

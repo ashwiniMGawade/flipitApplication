@@ -5,11 +5,10 @@ class Zend_Controller_Action_Helper_Index extends Zend_Controller_Action_Helper_
     {
         $specialOfferslist = '';
         foreach ($specialListPages as $specialListPage) {
-            foreach ($specialListPage[0]['page'] as $page) {
-                $specialOfferslistIndex = $page['permaLink'] . ',' . $page['pageTitle'];
-                $specialOfferslist[$specialOfferslistIndex] = self::removeDuplicateCode(\KC\Repository\Offer::getSpecialPageOffers($page));
-             
-   
+            foreach ($specialListPage as $page) {
+                $specialOfferslistIndex = $page['page']['permalink'] . ',' . $page['page']['pageTitle'];
+                $specialOfferslist[$specialOfferslistIndex] = 
+                    self::removeDuplicateCode(\KC\Repository\Offer::getSpecialPageOffers($page['page']));
             }
         }
         return $specialOfferslist;
