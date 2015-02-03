@@ -286,4 +286,24 @@ class FavoriteShop extends \KC\Entity\FavoriteShop
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_'.$userid.'_favouriteShops');
         return $shop;
     }
+
+    public static function getShopsById($shopId)
+    {
+        $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('p')
+            ->from("\KC\Entity\FavoriteShop", "p")
+            ->leftJoin('p.visitor', 'v')
+            ->leftJoin('p.shop', 's')
+            ->leftJoin('s.logo', 'l')
+            ->andWhere("p.shop = s.id")
+            ->andWhere("s.status = 1")
+            ->andWhere("s.deleted= 0")
+            ->andWhere("p.shop =" .$shopId)
+            ->andWhere("v.status = 1")
+            ->andWhere("v.codealert = 1")
+            ->orderBy("s.name", "ASC");
+        $shopVisitorInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $shopVisitorInformation;
+    }
 }
