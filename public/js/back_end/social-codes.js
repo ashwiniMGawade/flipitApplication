@@ -1003,7 +1003,7 @@ function validateFormAddNewOffer() {
                     else 
                         return false ;
                 } ,
-                regex  :/((http|https):\/\/)([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
+                regex  :/([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
                     
             },
             offerrefurlPR : {
