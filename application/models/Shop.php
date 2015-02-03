@@ -953,7 +953,7 @@ class Shop extends BaseShop
             $this->refShopRelatedshop->delete();
             $this->save();
 
-            if (!empty($shopDetail['content'])) {
+            if (!empty($shopDetail['ballontextcontent'])) {
                 if (isset($shopDetail['id']) && $shopDetail['id'] != '') {
                     $type = 'update';
                     $shopId = $shopDetail['id'];
