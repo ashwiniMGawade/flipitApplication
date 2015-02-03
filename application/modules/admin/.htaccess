@@ -1,0 +1,3 @@
+order allow,deny
+allow from 178.18.91.234
+deny from all 

@@ -27,26 +27,53 @@ class Ipaddresses extends BaseIpaddresses
         $ipaddress->name = $params['name'];
         $ipaddress->ipaddress = $params['ipaddress'];
         $ipaddress->save();
+        self::updateAdminIpAddress();
         return true;
     }
 
-    public function deleteIpaddress($id)
+    public static function deleteIpaddress($id)
     {
         $query = Doctrine_Query::create()->delete()
             ->from('Ipaddresses e')
             ->where("e.id=" . $id)
             ->execute();
+        self::updateAdminIpAddress();
         return true;
     }
 
     public static function getIpaddressForEdit($id)
     {
-
         $ipaddress = Doctrine_Query::create()
             ->select("k.*")
             ->from("Ipaddresses as k")
             ->where("k.id =".$id)
             ->fetchArray();
         return $ipaddress;
+    }
+
+    public static function getIpAdressList()
+    {
+        $ipaddressList = Doctrine_Query::create()
+            ->select("ipaddress")
+            ->from("Ipaddresses")
+            ->fetchArray();
+        return $ipaddressList;
+    }
+
+    public static function updateAdminIpAddress()
+    {
+        $htaccessFilePath = "../modules/admin/.htaccess";
+        $allowedIpsList = self::getIpAdressList();
+        $content = "order allow,deny";
+        $content .="</br>";
+        foreach ($allowedIpsList as $allowedIpList) {
+            $content .= 'Allow from '.$allowedIpList['ipaddress'];
+            $content .="</br>";
+        }
+        $content .= "deny from all";
+        $offerHandle = fopen($htaccessFilePath, 'w');
+        fwrite($offerHandle, $content);
+        fclose($offerHandle);
+        return true;
     }
 }
