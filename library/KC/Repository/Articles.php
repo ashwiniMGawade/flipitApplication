@@ -106,7 +106,7 @@ class Articles extends \KC\Entity\Articles
             ->from('KC\Entity\Articles', 'a')
             ->where('a.publish = 1')
             ->andWhere('a.deleted= 0')
-            ->andWhere('a.publishdate <="'.$currentDateTime.'"');
+            ->andWhere($queryBuilder->expr()->lte("a.publishdate", $queryBuilder->expr()->literal($currentDateTime)));
         $articlesList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $articlesList;
     }

@@ -15,13 +15,13 @@ class PopularArticles Extends \KC\Entity\PopularArticles
         $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select('p.id, a.title, p.position')
-            ->from('KC\Entity\PopularArticles', 'p')
-            ->leftJoin('p.articles', 'a')
-            ->where('a.publish = "1"')
+            ->select("p.id, a.title, p.position")
+            ->from("KC\Entity\PopularArticles", "p")
+            ->leftJoin("p.articles", "a")
+            ->where("a.publish = 1")
             ->andWhere("a.deleted= 0")
-            ->andWhere('a.publishdate <="'.$currentDateTime.'"')
-            ->orderBy('p.position', 'ASC');
+            ->andWhere($queryBuilder->expr()->lte("a.publishdate", $queryBuilder->expr()->literal($currentDateTime)))
+            ->orderBy("p.position", "ASC");
         $popularArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $popularArticles;
     }
@@ -75,7 +75,7 @@ class PopularArticles Extends \KC\Entity\PopularArticles
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
         $popularArticle = new \KC\Entity\PopularArticles();
-        $popularArticle->articleId = $articleId;
+        $popularArticle->articleId = $entityManagerLocale->find('KC\Entity\Articles', $articleId);
         $popularArticle->position = $position;
         $entityManagerLocale->persist($popularArticle);
         $entityManagerLocale->flush();
