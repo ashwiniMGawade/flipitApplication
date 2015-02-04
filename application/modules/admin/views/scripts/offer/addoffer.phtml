@@ -131,35 +131,46 @@
 								?>
 							</select>
 							<input type="hidden" name="selctedshop" id="selctedshop" value="">
+							<div class="mainpage-content-colorbox">
+				            	<button id='addOfferBtn' onclick="jQuery('#saveAndAddnewId').val(false);" type="submit" class="btn btn-large btn-primary fl mr15"><?php echo $this->translate('ADD OFFER'); ?></button>
+				            	<button id="saveAndAddnew" onclick="jQuery('#saveAndAddnewId').val(true);" class="btn btn-large btn-primary fl" type="submit"><?php echo $this->translate('Save and Add New Offer');?></button>
+				            	<input type="hidden" id="saveAndAddnewId" name="saveAndAddnew" value="false" />
+				                <a href="<?php echo HTTP_PATH; ?>admin/offer" class="fl m10"><strong class="ml10"><?php echo $this->translate('CANCEL'); ?></strong></a>
+            				</div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Title'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" id="addofferTitle"  name="addofferTitle" placeholder="This account is important, etc" class="span3 mbot bbot">
+                            <input type="text" disabled="disabled" value="<?php echo $this->translate('Offer title length 0 characters');?>" id="metaTextLeft" class="input-xlarge disabled btop word-count">
                         </div>
                     </div>
-                </div>
             </div>
-            <div class="mainpage-content">
-                <div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><strong><?php echo $this->translate('Code Alert visitors count'); ?></strong></div>
-                      <div class="mainpage-content-right">
-                      <div class="mainpage-content-right-inner-right-other"></div>
-	                        <span id="code-alert-visitors-count">&nbsp;</span>
-                    </div>
-                </div>
-            </div>
-            <div class="mainpage-content aboutShopNoteDiv" id="aboutShopDiv">
-                <div class="mainpage-content-line mb10" id="aboutShopNoteDiv">
-                    <div class="mainpage-content-left fonct-clomn"><strong><?php echo $this->translate('Note from this shop:'); ?></strong></div>
-                    <div class="mainpage-content-right mainpage-content" id="shopNotes">&nbsp;</div>
-                </div>
-                <div class="mainpage-content-line mb10" id="aboutNertworkDiv">
-                    <div class="mainpage-content-left"><strong><?php echo $this->translate('Network'); ?></strong></div>
-                    <div class="mainpage-content-right mainpage-content" id="shopNetwork">&nbsp;</div>
-                     <input type="hidden" name="strictConfirmation" id="strictConfirmation" value="0" />
 
-                </div>
-            </div>
-        </span>
 
-        <div class="mainpage-content" id="offertypeDiv">
-                <div class="mainpage-content-line mb10">
+            <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Terms and Conditions'); ?></strong></label></div>
+            </div>
+
+            <div class="mainpage-content-line" id="termsAndCondition">
+                <div class="mainpage-content-right">
+                    <div class="mainpage-content-right-inner-right-other"></div>
+                    <div class="mainpage-content-right-inner-left-other">
+                        <textarea id="termsAndcondition" class="input-xlarge mbot bbot ignore word_count" name="termsAndcondition" placeholder="<?php echo $this->translate('Terms & Conditions')?>"></textarea>
+					</div>
+               </div>
+                      <br class="clear"/>
+            </div>
+
+                            <div class="mainpage-content-line mb10">
                     <div class="mainpage-content-left"><strong><?php echo $this->translate('Type of Discount'); ?></strong></div>
                     <div class="mainpage-content-right">
                        <div data-toggle="buttons-checkbox" class="btn-group mb20">
@@ -373,18 +384,36 @@
 	       			</span>
 	            </div>
             </div>
-
-            <div class="mainpage-content" id="offertitledetail">
-                <div class="mainpage-content-line">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Title'); ?></strong></label></div>
-                    <div class="mainpage-content-right">
-                        <div class="mainpage-content-right-inner-right-other"></div>
-                        <div class="mainpage-content-right-inner-left-other">
-                            <input type="text" id="addofferTitle"  name="addofferTitle" placeholder="This account is important, etc" class="span3 mbot bbot">
-                            <input type="text" disabled="disabled" value="<?php echo $this->translate('Offer title length 0 characters');?>" id="metaTextLeft" class="input-xlarge disabled btop word-count">
-                        </div>
+            
+            <div class="mainpage-content">
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><strong><?php echo $this->translate('Code Alert visitors count'); ?></strong></div>
+                      <div class="mainpage-content-right">
+                      <div class="mainpage-content-right-inner-right-other"></div>
+	                        <span id="code-alert-visitors-count">&nbsp;</span>
                     </div>
                 </div>
+            </div>
+            <div class="mainpage-content aboutShopNoteDiv" id="aboutShopDiv">
+                <div class="mainpage-content-line mb10" id="aboutShopNoteDiv">
+                    <div class="mainpage-content-left fonct-clomn"><strong><?php echo $this->translate('Note from this shop:'); ?></strong></div>
+                    <div class="mainpage-content-right mainpage-content" id="shopNotes">&nbsp;</div>
+                </div>
+                <div class="mainpage-content-line mb10" id="aboutNertworkDiv">
+                    <div class="mainpage-content-left"><strong><?php echo $this->translate('Network'); ?></strong></div>
+                    <div class="mainpage-content-right mainpage-content" id="shopNetwork">&nbsp;</div>
+                     <input type="hidden" name="strictConfirmation" id="strictConfirmation" value="0" />
+
+                </div>
+            </div>
+
+
+        </span>
+
+        <div class="mainpage-content" id="offertypeDiv">
+
+
+            <div class="mainpage-content" id="offertitledetail">
 
                 <div class="mainpage-content-line mb10">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Deeplinking is'); ?></strong></label></div>
@@ -408,19 +437,6 @@
 
                 </div>
 
-                <div class="mainpage-content-line">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Terms and Conditions'); ?></strong></label></div>
-                </div>
-
-                <div class="mainpage-content-line" id="termsAndCondition">
-	                <div class="mainpage-content-right">
-                        <div class="mainpage-content-right-inner-right-other"></div>
-                        <div class="mainpage-content-right-inner-left-other">
-                            <textarea id="termsAndcondition" class="input-xlarge mbot bbot ignore word_count" name="termsAndcondition" placeholder="<?php echo $this->translate('Terms & Conditions')?>"></textarea>
-						</div>
-	               </div>
-                          <br class="clear"/>
-	            </div>
             </div>
 
             <div class="mainpage-content" id="datesdiv">
@@ -581,12 +597,7 @@
      			            			Before you place this coupon be sure you got confirmation from Tom, Arthur or Jochem.'); ?>
      			            		</p>
             </div>
-			<div class="mainpage-content-colorbox">
-            	<button id='addOfferBtn' onclick="jQuery('#saveAndAddnewId').val(false);" type="submit" class="btn btn-large btn-primary fl mr15"><?php echo $this->translate('ADD OFFER'); ?></button>
-            	<button id="saveAndAddnew" onclick="jQuery('#saveAndAddnewId').val(true);" class="btn btn-large btn-primary fl" type="submit"><?php echo $this->translate('Save and Add New Offer');?></button>
-            	<input type="hidden" id="saveAndAddnewId" name="saveAndAddnew" value="false" />
-                <a href="<?php echo HTTP_PATH; ?>admin/offer" class="fl m10"><strong class="ml10"><?php echo $this->translate('CANCEL'); ?></strong></a>
-            </div>
+
        </form>
   <!-- /poststuff -->
 </div>

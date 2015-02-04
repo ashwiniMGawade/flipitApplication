@@ -566,13 +566,14 @@ label, #your-profile label + a {
 .mainpage-content-colorbox{
 	border-radius: 3px 3px 3px 3px;
 	box-shadow: 0 1px 0 #FFFFFF inset;
-	padding:7px 10px 4px;
+	/*padding:7px 10px 4px;*/
 	border:1px solid #eeeeee;
-	margin:0 0 15px 0;
+	/*margin:0 0 15px 0;*/
 	background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#fafafa));
 	background: -moz-linear-gradient(top,  #ffffff,  #fafafa);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#fafafa');
 	height:38px;
+	float:right;
 }
 .mainpage-content-colorbox .red{
 	color:#c43d3a;
