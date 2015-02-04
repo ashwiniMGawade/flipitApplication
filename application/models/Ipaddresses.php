@@ -27,7 +27,7 @@ class Ipaddresses extends BaseIpaddresses
         $ipaddress->name = $params['name'];
         $ipaddress->ipaddress = $params['ipaddress'];
         $ipaddress->save();
-        self::updateAdminIpAddress();
+        self::updateAdminIpAddressInHtaccess();
         return true;
     }
 
@@ -37,7 +37,7 @@ class Ipaddresses extends BaseIpaddresses
             ->from('Ipaddresses e')
             ->where("e.id=" . $id)
             ->execute();
-        self::updateAdminIpAddress();
+        self::updateAdminIpAddressInHtaccess();
         return true;
     }
 
@@ -60,20 +60,19 @@ class Ipaddresses extends BaseIpaddresses
         return $ipaddressList;
     }
 
-    public static function updateAdminIpAddress()
+    public static function updateAdminIpAddressInHtaccess()
     {
-        $htaccessFilePath = "../modules/admin/.htaccess";
+        $htaccessFilePath = ".htaccess";
         $allowedIpsList = self::getIpAdressList();
         $content = "order allow,deny";
-        $content .="</br>";
+        $content .="\n";
         foreach ($allowedIpsList as $allowedIpList) {
-            $content .= 'Allow from '.$allowedIpList['ipaddress'];
-            $content .="</br>";
+            $content .= 'Allow from '.$allowedIpList['ipaddress']."\n";
         }
         $content .= "deny from all";
-        $offerHandle = fopen($htaccessFilePath, 'w');
-        fwrite($offerHandle, $content);
-        fclose($offerHandle);
+        $ipAddressHandle = fopen($htaccessFilePath, 'w');
+        fwrite($ipAddressHandle, $content);
+        fclose($ipAddressHandle);
         return true;
     }
 }
