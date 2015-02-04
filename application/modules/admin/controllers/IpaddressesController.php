@@ -40,7 +40,7 @@ class Admin_IpaddressesController extends Zend_Controller_Action
         if ($this->getRequest()->isPost()) {
             $keyword = Ipaddresses::addIpaddress($params);
             $flash = $this->_helper->getHelper('FlashMessenger');
-            $message = $this->view->translate('IP address has been created successfully');
+            $message = $this->view->translate('IP address has been added successfully');
             $flash->addMessage(array('success' => $message));
             $this->_redirect(HTTP_PATH . 'admin/ipaddresses');
         }
@@ -59,7 +59,7 @@ class Admin_IpaddressesController extends Zend_Controller_Action
             $searchbar = Ipaddresses::addIpaddress($params);
             $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate('IP address has been updated successfully');
-            $flash->addMessage(array ('success' => $message));
+            $flash->addMessage(array('success' => $message));
             $this->_redirect(HTTP_PATH.'admin/ipaddresses#'.$params['qString']);
         }
     }
@@ -71,6 +71,6 @@ class Admin_IpaddressesController extends Zend_Controller_Action
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $this->view->translate('IP address has been deleted successfully');
         $flash->addMessage(array('success' => $message));
-        die();
+        exit();
     }
 }

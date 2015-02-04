@@ -5,7 +5,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js")
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/ipaddresses.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
-$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css");
 ?>
 <div class="wrap columns-2">
     <h1><?php echo $this->translate('Add IP Address'); ?>
@@ -23,7 +23,7 @@ $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custo
                                 <label><strong><?php echo $this->translate('IP address holder name'); ?></strong></label>
                             </div>
                             <div class="mainpage-content-right">
-                                <div class="mainpage-content-right-inner-right-other" style="width:250px;"></div>
+                                <div class="mainpage-content-right-inner-right-other wt-250"></div>
                                 <div class="mainpage-content-right-inner-left-other">
                                     <input type="text" class="span3" 
                                     placeholder="<?php echo $this->translate('Holder Name'); ?>"  
@@ -31,13 +31,12 @@ $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custo
                                 </div>
                             </div>
                         </div>
-                                
                         <div class="mainpage-content-line mt10">
                             <div class="mainpage-content-left">
                                 <label><strong><?php echo $this->translate('IP Address'); ?></strong></label>
                             </div>
                             <div class="mainpage-content-right">
-                                <div class="mainpage-content-right-inner-right-other" style="width:250px;"></div>
+                                <div class="mainpage-content-right-inner-right-other wt-250"></div>
                                 <div class="mainpage-content-right-inner-left-other">
                                     <input type="text" placeholder="<?php echo $this->translate('IP Address'); ?>"  
                                     name="ipaddress" id="ipaddress" >
@@ -51,7 +50,7 @@ $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custo
         </div>
         <div class="mainpage-content-colorbox">
             <button type="submit" id="createIpaddress" class="btn btn-large btn-primary fl">
-                <?php echo $this->translate('CREATE'); ?>
+                <?php echo $this->translate('ADD'); ?>
             </button>
             <a href="javascript:void(0);" 
                 onclick="window.location.href='<?php echo HTTP_PATH ;?>admin/ipaddresses'" class="fl m10">

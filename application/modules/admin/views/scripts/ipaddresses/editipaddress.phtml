@@ -1,12 +1,11 @@
 <?php 
- $this->headTitle()->append($this->translate('Edit IP address'));
- $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
- $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
- $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
- $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "/css/jquery-ui-1.8.16.custom.css" );
- $this->headScript()->appendFile  ( PUBLIC_PATH . "/js/back_end/ipaddresses.js");
+$this->headTitle()->append($this->translate('Edit IP address'));
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+$this->headLink ()->appendStylesheet(PUBLIC_PATH . "/css/jquery-ui-1.8.16.custom.css");
+$this->headScript()->appendFile( PUBLIC_PATH . "/js/back_end/ipaddresses.js");
 ?>
-
 <div class="wrap columns-2">
    <h1><?php echo $this->translate('Edit IP address'); ?>
         <button class="btn ml10" type="button" 
@@ -20,14 +19,14 @@
               <div id="post-body">
               <div>
                <div class="mainpage-content">
-               <div class="mainpage-content-line">
-                    <div class="mainpage-content-left">
-                        <label><strong>
-                            <?php echo $this->translate('Ip address holder name'); ?>
-                        </strong></label>
-                    </div>
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label><strong>
+                                <?php echo $this->translate('IP address holder name'); ?>
+                            </strong></label>
+                        </div>
                         <div class="mainpage-content-right">
-                            <div class="mainpage-content-right-inner-right-other" style="width:250px;"></div>
+                            <div class="mainpage-content-right-inner-right-other wt-250"></div>
                             <div class="mainpage-content-right-inner-left-other">
                                 <input type="text" class="span3" 
                                     placeholder="<?php echo $this->translate('Holder Name'); ?>"  
@@ -36,13 +35,12 @@
                             </div>
                           </div>
                         </div>
-                       
                         <div class="mainpage-content-line mt10">
                             <div class="mainpage-content-left"><label><strong>
                                 <?php echo $this->translate('Ip address'); ?></strong></label>
                             </div>
                             <div class="mainpage-content-right">
-                                <div class="mainpage-content-right-inner-right-other" style="width:250px;"></div>
+                                <div class="mainpage-content-right-inner-right-other wt-250"></div>
                                 <div class="mainpage-content-right-inner-left-other">
                                 <input type="text" 
                                     placeholder="<?php echo $this->translate('Ip address'); ?>"  

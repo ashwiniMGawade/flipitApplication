@@ -3,18 +3,18 @@ class Ipaddresses extends BaseIpaddresses
 {
     public static function getAllIpaddresses($params)
     {
-        $ipaddresses = Doctrine_Query::create()
+        $ipAddresses = Doctrine_Query::create()
             ->select('e.name,e.ipaddress,e.created_at')
             ->from("Ipaddresses as e")
             ->orderBy("e.created_at DESC");
-        $ipaddressesList = DataTable_Helper::generateDataTableResponse(
-            $ipaddresses,
+        $ipAddressesList = DataTable_Helper::generateDataTableResponse(
+            $ipAddresses,
             $params,
             array("__identifier" => 'e.id','e.id','name','ipaddress','created_at'),
             array(),
             array()
         );
-        return $ipaddressesList;
+        return $ipAddressesList;
     }
 
     public static function addIpaddress($params)
@@ -33,7 +33,7 @@ class Ipaddresses extends BaseIpaddresses
 
     public static function deleteIpaddress($id)
     {
-        $query = Doctrine_Query::create()->delete()
+        Doctrine_Query::create()->delete()
             ->from('Ipaddresses e')
             ->where("e.id=" . $id)
             ->execute();
@@ -43,35 +43,35 @@ class Ipaddresses extends BaseIpaddresses
 
     public static function getIpaddressForEdit($id)
     {
-        $ipaddress = Doctrine_Query::create()
-            ->select("k.*")
-            ->from("Ipaddresses as k")
-            ->where("k.id =".$id)
+        $ipAddress = Doctrine_Query::create()
+            ->select("ips.*")
+            ->from("Ipaddresses as ips")
+            ->where("ips.id =".$id)
             ->fetchArray();
-        return $ipaddress;
+        return $ipAddress;
     }
 
     public static function getIpAdressList()
     {
-        $ipaddressList = Doctrine_Query::create()
+        $ipAddressesList  = Doctrine_Query::create()
             ->select("ipaddress")
             ->from("Ipaddresses")
             ->fetchArray();
-        return $ipaddressList;
+        return $ipAddressesList;
     }
 
     public static function updateAdminIpAddressInHtaccess()
     {
         $htaccessFilePath = APPLICATION_PATH."/modules/admin/.htaccess";
         $allowedIpsList = self::getIpAdressList();
-        $content = "order allow,deny";
-        $content .="\n";
+        $htaccessContent = "order allow,deny";
+        $htaccessContent .="\n";
         foreach ($allowedIpsList as $allowedIpList) {
-            $content .= 'Allow from '.$allowedIpList['ipaddress']."\n";
+            $htaccessContent .= 'Allow from '.$allowedIpList['ipaddress']."\n";
         }
-        $content .= "deny from all";
+        $htaccessContent .= "deny from all";
         $ipAddressHandle = fopen($htaccessFilePath, 'w');
-        fwrite($ipAddressHandle, $content);
+        fwrite($ipAddressHandle, $htaccessContent);
         fclose($ipAddressHandle);
         return true;
     }
