@@ -69,7 +69,7 @@ class Page Extends \KC\Entity\Page
             ->andWhere('page.publish = ?2')
             ->setParameter(3, 0)
             ->andWhere('page.pageLock = ?3');
-        $pageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $pageDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageDetails;
     }
 

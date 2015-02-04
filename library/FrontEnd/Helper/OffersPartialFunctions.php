@@ -288,7 +288,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $onClick = $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
                     $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id),
                     ga('send', 'event', 'aff', '$offerBounceRate'),
-                    OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')";
+                    OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')";
                     if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
                         $offerLink ='<span class="'.$class.'">'.$offerAnchorText.' </span>';
                     } else {

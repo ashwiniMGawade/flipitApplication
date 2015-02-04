@@ -25,7 +25,7 @@ class OfferController extends Zend_Controller_Action
 
         $pagePermalink = explode('?', $pagePermalink);
         $pagePermalink = isset($pagePermalink[0]) ? $pagePermalink[0] : '';
-        $pageDetails = \KC\Repository\Page::getPageDetailsFromUrl($pagePermalink);
+        $pageDetails = (object)\KC\Repository\Page::getPageDetailsFromUrl($pagePermalink);
 
         $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
 

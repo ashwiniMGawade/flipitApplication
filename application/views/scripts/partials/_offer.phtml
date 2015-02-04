@@ -73,7 +73,7 @@ foreach ($this->offers as $offer) {
                     </p>
                     <?php 
                     if ($offer->Visability == 'MEM') {
-                        echo $this->esi($esiLocale.'signup/signupmembersonlytitle?shopId='.$offer->shop['id']
+                        echo $this->esi($esiLocale.'signup/signupmembersonlytitle?shopId='.$offer->shopOffers['id']
                             .'&signupFormWidgetType=widgetWithinOffers&offerId='.$offer->id.'&shopLogoOrDefaultImage=');
                     } else {
                         echo $offerPartial->getCommonRedirectUrlForOffer(
@@ -89,10 +89,10 @@ foreach ($this->offers as $offer) {
                 <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
     <?php
 
-    $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shop['permalink'];
+    $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shopOffers['permaLink'];
 
     if ($offer->Visability == 'MEM') {
-        echo $this->esi($esiLocale.'signup/signupwidgetcodes?shopId='.$offer->shop['id']
+        echo $this->esi($esiLocale.'signup/signupwidgetcodes?shopId='.$offer->shopOffers['id']
             .'&signupFormWidgetType=widgetWithinOffers&offerId='.$offer->id.'&shopLogoOrDefaultImage=');
     } else {
         echo $offerPartial->getCommonRedirectUrlForOffer(
