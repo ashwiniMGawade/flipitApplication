@@ -62,7 +62,7 @@ class Ipaddresses extends BaseIpaddresses
 
     public static function updateAdminIpAddressInHtaccess()
     {
-        $htaccessFilePath = ".htaccess";
+        $htaccessFilePath = APPLICATION_PATH."/modules/admin/.htaccess";
         $allowedIpsList = self::getIpAdressList();
         $content = "order allow,deny";
         $content .="\n";
