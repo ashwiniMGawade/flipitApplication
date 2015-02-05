@@ -574,6 +574,18 @@ label, #your-profile label + a {
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#fafafa');
 	height:38px;
 }
+
+.mainpage-content-buttons{
+	border-radius: 3px 3px 3px 3px;
+	box-shadow: 0 1px 0 #FFFFFF inset;
+	border:1px solid #eeeeee;
+	background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#fafafa));
+	background: -moz-linear-gradient(top,  #ffffff,  #fafafa);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#fafafa');
+	height:38px;
+	float:right;
+}
+
 .mainpage-content-colorbox .red{
 	color:#c43d3a;
 }
