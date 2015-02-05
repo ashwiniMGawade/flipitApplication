@@ -69,7 +69,7 @@ class Page Extends \KC\Entity\Page
             ->andWhere('page.publish = ?2')
             ->setParameter(3, 0)
             ->andWhere('page.pageLock = ?3');
-        $pageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $pageDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageDetails;
     }
 
@@ -79,10 +79,8 @@ class Page Extends \KC\Entity\Page
         $query = $entityManagerUser->select('page, img')
             ->from('KC\Entity\Page', 'page')
             ->leftJoin('page.logo', 'img')
-            ->setParameter(1, 'offer')
-            ->where('page.pagetype = ?1')
-            ->setParameter(2, 0)
-            ->andWhere('page.deleted = ?2');
+            ->where('page INSTANCE OF KC\Entity\OfferListPage')
+            ->andWhere('page.deleted = 0');
         $specialListPages = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $specialListPages;
     }

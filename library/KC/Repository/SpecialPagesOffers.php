@@ -10,17 +10,17 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
         $currentDate = date("Y-m-d H:i");
         $query = $queryBuilder
         ->select(
-            'op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,
+            'op,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,
             o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
-            o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,
+            o.editorPicks,o.discount,o.discountvalueType,o.startDate as startdate,o.extendedOffer,o.extendedUrl,
             o.updated_at as lastUpdate,s.name,s.refUrl,
-            s.actualUrl,s.permaLink as permalink,s.views,l,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote,terms.content'
+            s.actualUrl,s.permaLink as permalink,s.views,l,fv,terms.content'
         )
         ->from('KC\Entity\SpecialPagesOffers', 'op')
         ->leftJoin('op.offers', 'o')
         ->leftJoin('o.offertermandcondition', 'terms')
         ->andWhere(
-            "(couponCodeType = 'UN' AND (SELECT count(id) FROM KC\Entity\CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0)
+            "(o.couponCodeType = 'UN' AND (SELECT count(id) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and o.status=1)  > 0)
             or couponCodeType = 'GN'"
         )
         ->leftJoin('o.shopOffers', 's')
@@ -28,15 +28,14 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
         ->leftJoin('s.logo', 'l')
         ->leftJoin('s.favoriteshops', 'fv')
         ->where('op.pages = '.$pageId)
-        ->andWhere('o.enddate >'.$queryBuilder->expr()->literal($currentDate))
-        ->andWhere('o.startdate <='.$queryBuilder->expr()->literal($currentDate))
+        ->andWhere('o.endDate >'.$queryBuilder->expr()->literal($currentDate))
+        ->andWhere('o.startDate <='.$queryBuilder->expr()->literal($currentDate))
         ->andWhere('o.deleted = 0')
         ->andWhere('s.deleted = 0')
         ->andWhere('s.status = 1')
         ->andWhere('o.Visability!='.$queryBuilder->expr()->literal("MEM"))
         ->orderBy('op.position');
         $specialPageOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        die('Hello Special');
         return self::removeDuplicateOffers($specialPageOffers);
     }
 

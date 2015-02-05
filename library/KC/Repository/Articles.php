@@ -64,7 +64,7 @@ class Articles extends \KC\Entity\Articles
     {
         $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('a, stores, related, category, chapter, artimg, thumb')
+        $query = $queryBuilder->select('p, a, stores, related, category, chapter, artimg, thumb')
             ->from('KC\Entity\PopularArticles', 'p')
             ->leftJoin('p.articles', 'a')
             ->leftJoin('a.storearticles', 'stores')
@@ -73,13 +73,11 @@ class Articles extends \KC\Entity\Articles
             ->leftJoin('a.articleChapter', 'chapter')
             ->leftJoin('a.articleImage', 'artimg')
             ->leftJoin('a.thumbnail', 'thumb')
-            ->setParameter(1, '1')
-            ->where('a.publish = ?1')
-            ->setParameter(2, '0')
-            ->andWhere('a.deleted = ?2')
-            ->setParameter(3, $currentDateTime)
-            ->andWhere('a.publishdate <= ?3')
-            ->orderBy('p.position', 'ASC');
+            ->where('a.publish = 1')
+            ->andWhere('a.deleted = 0')
+            ->andWhere('a.publishdate <='. $queryBuilder->expr()->literal($currentDateTime))
+            ->orderBy('p.position', 'ASC')
+            ->setMaxResults($limit);
             $allArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $allArticles;
     }
@@ -108,7 +106,7 @@ class Articles extends \KC\Entity\Articles
             ->from('KC\Entity\Articles', 'a')
             ->where('a.publish = 1')
             ->andWhere('a.deleted= 0')
-            ->andWhere('a.publishdate <="'.$currentDateTime.'"');
+            ->andWhere($queryBuilder->expr()->lte("a.publishdate", $queryBuilder->expr()->literal($currentDateTime)));
         $articlesList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $articlesList;
     }
