@@ -324,7 +324,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 		<div class="mainpage-content-right-inner"></div>
 		<div class="mainpage-content-right-inner">
 			<div class='browse-container'>            
-				<?php  if($this->locale['0']['homepagebanner_name'] != 'null') { ?>
+				<?php if($this->locale['0']['homepagebanner_name'] != 'null' || $this->locale['0']['homepagebanner_name'] != '' ) { ?>
 				<img class='image-container' 
 				src="<?php echo PUBLIC_PATH_CDN. $this->locale['0']['homepagebanner_path'] .
 				$this->locale['0']['homepagebanner_name'] ?>">

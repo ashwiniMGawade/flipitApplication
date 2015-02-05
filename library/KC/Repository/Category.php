@@ -26,7 +26,7 @@ class Category extends \KC\Entity\Category
         ->andWhere("o.discountType=" . $queryBuilder->expr()->literal('CD'))
         ->andWhere(
             "(o.couponCodeType = 'UN' AND (
-            SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status=1)  > 0
+            SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id AND cc.status=1)  > 0
             ) or o.couponCodeType = 'GN'"
         )
         ->andWhere("s.deleted = 0")

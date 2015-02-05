@@ -398,21 +398,21 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
                     ->where('s.id = ?1');
                 $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                 if (empty($getRecord)) {
-                    $data = new Kc\Entity\Signupmaxaccount();
+                    $data = new KC\Entity\Signupmaxaccount();
                     $data->id = 1;
                     $data->status = '';
                     \Zend_Registry::get('emLocale')->persist($data);
                     \Zend_Registry::get('emLocale')->flush();
                 } else {
-                    $fileName = $getRecord['homepagebanner_name'];
-                    $filePath = $getRecord['homepagebanner_path'];
+                    $fileName = $getRecord[0]['homepagebanner_name'];
+                    $filePath = $getRecord[0]['homepagebanner_path'];
                     # delete previous header image
                     @unlink(ROOT_PATH. $filePath . $fileName);
                     @unlink(ROOT_PATH. $filePath . $result['cmsFilename_prefix'] . $fileName);
                 }
                 $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
-                    ->set('signupmaxaccount.homepagebanner_name', '?', $result['fileName'])
-                    ->set('signupmaxaccount.homepagebanner_path', '?', $result['path'])
+                    ->set('signupmaxaccount.homepagebanner_name', "'". $result['fileName'] . "'")
+                    ->set('signupmaxaccount.homepagebanner_path', "'". $result['path'] . "'")
                     ->setParameter(1, 1)
                     ->where('signupmaxaccount.id = ?1')
                     ->getQuery();
@@ -559,12 +559,13 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
                     \Zend_Registry::get('emLocale')->flush();
                 return true;
             } else {
-                $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
-                    ->set('signupmaxaccount.newletter_scheduled_time', '?', $timestamp)
-                    ->set('signupmaxaccount.newletter_is_scheduled', '?', $request->getParam("isScheduled", false))
-                    ->set('signupmaxaccount.newletter_status', '?', 0)
-                    ->set('newsletter_sent_time', '?', $currentDate)
-                    ->where('signupmaxaccount.id = 1')
+                $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                $query = $queryBuilder->update('KC\Entity\Signupmaxaccount', 's')
+                    ->set('s.newletter_scheduled_time', $queryBuilder->expr()->literal($timestamp))
+                    ->set('s.newletter_is_scheduled', $request->getParam("isScheduled", false))
+                    ->set('s.newletter_status', 0)
+                    ->set('s.newsletter_sent_time', $queryBuilder->expr()->literal($currentDate))
+                    ->where('s.id = 1')
                     ->getQuery();
                 $query->execute();
                 return true;

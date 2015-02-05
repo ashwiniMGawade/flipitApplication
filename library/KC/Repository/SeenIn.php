@@ -47,40 +47,38 @@ class SeenIn Extends \KC\Entity\SeenIn
                 $seenIn =  \Zend_Registry::get('emLocale')->find('KC\Entity\SeenIn', $retVal);
             } else {
                 # new object
-                $seenIn = new KC\Entity\SeenIn();
-            }
-            $seenIn->altText = @$params['alt-'. $i] ?  $params['alt-'. $i] : null;
-            if (isset($_FILES['image-'.$i])) {
-                $result = self::uploadImage('image-'.$i);
-                if ($result['status'] == '200') {
-                    $viewHelper = new \BackEnd_Helper_viewHelper();
-                    $ext = $viewHelper->getImageExtension($result['fileName']);
-                    $seenInImage  = new KC\Entity\Logo();
-                    $seenInImage->ext = @$ext;
-                    $seenInImage->path = @$result['path'];
-                    $seenInImage->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString(
-                        $result['fileName']
-                    );
-                    $seenInImage->deleted = 0;
-                    $seenInImage->created_at = new \DateTime('now');
-                    $seenInImage->updated_at = new \DateTime('now');
-                    $entityManagerLocale->persist($seenInImage);
-                    $entityManagerLocale->flush();
-                    $seenIn->logo =  $seenInImage->id;
+                $seenIn = new \KC\Entity\SeenIn();
+                $seenIn->altText = @$params['alt-'. $i] ?  $params['alt-'. $i] : null;
+                if (isset($_FILES['image-'.$i])) {
+                    $result = self::uploadImage('image-'.$i);
+                    if ($result['status'] == '200') {
+                        $viewHelper = new \BackEnd_Helper_viewHelper();
+                        $ext = $viewHelper->getImageExtension($result['fileName']);
+                        $seenInImage  = new \KC\Entity\Logo();
+                        $seenInImage->ext = @$ext;
+                        $seenInImage->path = @$result['path'];
+                        $seenInImage->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString(
+                            $result['fileName']
+                        );
+                        $seenInImage->deleted = 0;
+                        $seenInImage->created_at = new \DateTime('now');
+                        $seenInImage->updated_at = new \DateTime('now');
+                        $entityManagerLocale->persist($seenInImage);
+                        $entityManagerLocale->flush();
+                        $seenIn->logo =  $seenInImage->getId();
+                    }
                 }
+                $seenIn->status =  0;
+                $seenIn->created_at = new \DateTime('now');
+                $seenIn->updated_at = new \DateTime('now');
+                $entityManagerLocale->persist($seenIn);
+                $entityManagerLocale->flush();
             }
-            $seenIn->status =  0;
-            $seenIn->created_at = new \DateTime('now');
-            $seenIn->updated_at = new \DateTime('now');
-            $entityManagerLocale->persist($seenIn);
-            $entityManagerLocale->flush();
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeSeenIn_list');
             if (!$retVal) {
                 self::newSeenInSetting($seenIn->id, "SEENIN_". $i);
             }
-            $seenIn->free(true) ;
         }
-
     }
 
     public static function checkSeenInContent1($name)

@@ -314,9 +314,9 @@ class Offer Extends \KC\Entity\Offer
             ->andWhere('o.Visability != ?5')
             ->orderBy('o.startDate', 'DESC');
         if ($type == 'UserGeneratedOffers') {
-            $newestCouponCodes->andWhere('o.userGenerated=1 and o.approved="0"');
+            $query->andWhere('o.userGenerated=1 and o.approved="0"');
         } else {
-            $newestCouponCodes->andWhere('o.userGenerated=0');
+            $query->andWhere('o.userGenerated=0');
         }
         if ($shopId!='') {
             $query->setParameter(6, $shopId);
