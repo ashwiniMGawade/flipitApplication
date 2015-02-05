@@ -161,7 +161,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                         'newsletter_category_vouchercodes',
                         array(
                             'function' => '\KC\Repository\Category::getCategoryVoucherCodes',
-                            'parameters' => array($topCategories[0]['categoryId'])),
+                            'parameters' => array($topCategories[0][0]['category']['id'])),
                         ''
                     );
                     $flash->addMessage(

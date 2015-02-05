@@ -46,4 +46,14 @@ class SpecialPagesOffers
      * @ORM\JoinColumn(name="pageId", referencedColumnName="id")
      */
     private $pages;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

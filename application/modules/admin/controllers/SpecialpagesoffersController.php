@@ -19,12 +19,14 @@ class Admin_SpecialpagesoffersController extends Zend_Controller_Action
     {
         $pageId = $this->getRequest()->getParam('pageId');
         $specialListPages = \KC\Repository\Page::getSpecialListPages();
+
         if (isset($pageId)) {
             $pageId = $this->getRequest()->getParam('pageId');
         } else {
             $pageId = $specialListPages[0]['id'];
         }
         $specialPageOffers = \KC\Repository\SpecialPagesOffers::getSpecialPageOfferById($pageId);
+
         $offerIds = array();
         foreach ($specialPageOffers as $pOffer) {
             $offerIds[] = $pOffer['offerId'];

@@ -55,9 +55,10 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select('p.id, p.pageId, p.offerId, o.title, p.position')
+            ->select('p.id, o.title, p.position, o.id as offerId, page.id as pageId')
             ->from('KC\Entity\SpecialPagesOffers', 'p')
             ->leftJoin('p.offers', 'o')
+            ->leftJoin('p.pages', 'page')
             ->where('p.pages ='.$pageId)
             ->orderBy('p.position');
         $specialPageOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -70,7 +71,7 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
         $query = $queryBuilder
             ->select('o')
             ->from('KC\Entity\Offer', 'o')
-            ->where('id=' . $offerId)
+            ->where('o.id=' . $offerId)
             ->setMaxResults(1);
         $offer = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $result = '0';
@@ -79,9 +80,8 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
                     ->select('sl')
                     ->from('KC\Entity\SpecialPagesOffers', 'sl')
                     ->where('sl.offers=' . $offerId)
-                    ->andWhere('sl.pages=' .$pageId)
-                    ->setMaxResults(1);
-                $specialPageOffer = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+                    ->andWhere('sl.pages=' .$pageId);
+                $specialPageOffer = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             if (!empty($specialPageOffer)) {
                 $result = '2';
             } else {
@@ -89,26 +89,31 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
                 $query = $queryBuilder
                     ->select('p.position')
                     ->from('KC\Entity\SpecialPagesOffers', 'p')
-                    ->where('pages=' .$pageId)
+                    ->where('p.pages=' .$pageId)
                     ->orderBy('p.position', 'DESC')
                     ->setMaxResults(1);
-                $maxPosition = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+                $maxPosition = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                 if (!empty($maxPosition)) {
                     $newPosition = $maxPosition[0]['position'];
                 } else {
                     $newPosition =  0 ;
                 }
-                $specialPageOffer = new KC\Repository\SpecialPagesOffers();
-                $specialPageOffer->offers = $offerId;
-                $specialPageOffer->pages = $pageId;
+                $entityManagerLocale  = \Zend_Registry::get('emLocale');
+                $specialPageOffer = new \KC\Entity\SpecialPagesOffers();
+                $specialPageOffer->offers = $entityManagerLocale->find('KC\Entity\Offer', $offerId);
+                $specialPageOffer->pages = $entityManagerLocale->find('KC\Entity\Page', $pageId);
                 $specialPageOffer->position = (intval($newPosition) + 1);
-                $specialPageOffer->save();
+                $specialPageOffer->deleted = 0;
+                $specialPageOffer->created_at = new \DateTime('now');
+                $specialPageOffer->updated_at = new \DateTime('now');
+                $entityManagerLocale->persist($specialPageOffer);
+                $entityManagerLocale->flush();
                 $result  = array(
                     'id'=>$specialPageOffer->id,
                     'type'=>'MN',
                     'offerId'=>$offerId,
                     'position'=>(intval($newPosition) + 1),
-                    'title'=>$offer[0]['title']
+                    'title'=>$offer['title']
                 );
             }
         }
@@ -170,11 +175,16 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
             $offerIds = explode(',', $offerIds);
             $i = 1;
             foreach ($offerIds as $offerId) {
-                $specialPageOffer = new KC\Entity\SpecialPagesOffers();
-                $specialPageOffer->offers = $offerId;
-                $specialPageOffer->pages = $pageId;
+                $entityManagerLocale  = \Zend_Registry::get('emLocale');
+                $specialPageOffer = new \KC\Entity\SpecialPagesOffers();
+                $specialPageOffer->offers = $entityManagerLocale->find('KC\Entity\Offer', $offerId);
+                $specialPageOffer->pages = $entityManagerLocale->find('KC\Entity\Page', $pageId);
                 $specialPageOffer->position = $i;
-                $specialPageOffer->save();
+                $specialPageOffer->deleted = 0;
+                $specialPageOffer->created_at = new \DateTime('now');
+                $specialPageOffer->updated_at = new \DateTime('now');
+                $entityManagerLocale->persist($specialPageOffer);
+                $entityManagerLocale->flush();
                 $i++;
             }
         }
@@ -184,9 +194,9 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
     public static function clearCacheOfSpecialPagesOffers($id)
     {
         $key = 'error_specialPage'.$id.'_offers';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPagesHome_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_count');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPagesHome_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_count');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
     }
 }

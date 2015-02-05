@@ -40,7 +40,7 @@ class SpecialList extends \KC\Entity\SpecialList
         $query = $queryBuilder->select('p.pageTitle as title')
             ->from('KC\Entity\Page', 'p')
             ->where('p.deleted = 0')
-            ->andWhere("p.pageType = 'offer'")
+            ->andWhere("p INSTANCE OF KC\Entity\OfferListPage")
             ->setParameter(1, $keyword."%")
             ->andWhere($queryBuilder->expr()->like('p.pageTitle', '?1'))
             ->setParameter(2, $codevalues)
@@ -68,22 +68,20 @@ class SpecialList extends \KC\Entity\SpecialList
         $title = addslashes($title);
         $query = $queryBuilder->select('p')
             ->from('KC\Entity\Page', 'p')
-            ->setParameter(1, $title)
-            ->add('where', $queryBuilder->expr()->literal('p.pageTitle', '?1'))
+            ->where('p.pageTitle ='."'".$title."'")
             ->setMaxResults(1);
         $page = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $flag = '2';
-
         if (sizeof($page) > 0) {
             $pc = $entityManager->getRepository('KC\Entity\SpecialList')
-                ->findBy(array('specialpageId' => $page[0]['id']));
+                ->findBy(array('page' => $page[0]['id']));
 
             if (sizeof($pc) > 0) {
             } else {
                 $flag = '1';
-                $query = $queryBuilder->select('p.position')
-                    ->from('KC\Entity\SpecialList', 'p')
-                    ->orderBy('p.position', 'DESC')
+                $query = $queryBuilder->select('sp.position')
+                    ->from('KC\Entity\SpecialList', 'sp')
+                    ->orderBy('sp.position', 'DESC')
                     ->setMaxResults(1);
                 $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                 if (sizeof($data) > 0) {
@@ -91,11 +89,14 @@ class SpecialList extends \KC\Entity\SpecialList
                 } else {
                     $NewPos = 1;
                 }
-                $pc = new KC\Entity\SpecialList();
+                $pc = new \KC\Entity\SpecialList();
                 $pc->type = 'MN';
                 $pc->status = '1';
-                $pc->specialpageId = $page[0]['id'];
+                $pc->page = $entityManager->find('KC\Entity\Page', $page[0]['id']);
                 $pc->position = (intval($NewPos) + 1);
+                $pc->deleted = 0;
+                $pc->created_at = new \DateTime('now');
+                $pc->updated_at = new \DateTime('now');
                 $entityManagerLocale = \Zend_Registry::get('emLocale');
                 $entityManagerLocale->persist($pc);
                 $entityManagerLocale->flush();
@@ -133,19 +134,26 @@ class SpecialList extends \KC\Entity\SpecialList
     public static function moveUpSpecial($id, $position)
     {
         $pos = (intval($position) - 1);
-        $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $repo = $entityManagerLocale->getRepository('KC\Entity\SpecialList');
-        $PrevPc = $repo->findOneBy(array('position' =>  $pos));
-
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('p')
+            ->from('KC\Entity\SpecialList', 'p')
+            ->where('p.position ='.$pos);
+            
+        $PrevPc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (!empty($PrevPc)) {
-            $changePrevPc = $entityManagerLocale->getRepository('KC\Entity\SpecialList')->find($PrevPc->id);
-            $changePrevPc->position = $position;
-            \Zend_Registry::get('emLocale')->persist($changePrevPc);
-            \Zend_Registry::get('emLocale')->flush();
-            $pc = $entityManagerLocale->getRepository('KC\Entity\SpecialList')->find($id);
-            $pc->position = $pos;
-            \Zend_Registry::get('emLocale')->persist($pc);
-            \Zend_Registry::get('emLocale')->flush();
+            $queryBuilderUpdate = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilderUpdate
+                ->update('KC\Entity\SpecialList', 'sp')
+                ->set('sp.position', $position)
+                ->where('sp.id = '.$PrevPc[0]['id'])
+                ->getQuery()->execute();
+           
+            $queryBuilderNewposition = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilderNewposition
+                ->update('KC\Entity\SpecialList', 'spl')
+                ->set('spl.position', $pos)
+                ->where('spl.id = '.$id)
+                ->getQuery()->execute();
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPagesHome_list');
             return true;
         }
@@ -155,19 +163,25 @@ class SpecialList extends \KC\Entity\SpecialList
     public static function moveDownSpecial($id, $position)
     {
         $pos = (intval($position) + 1);
-        $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $repo = $entityManagerLocale->getRepository('KC\Entity\SpecialList');
-        $PrevPc = $repo->findOneBy(array('position' =>  $pos));
-
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('p')
+            ->from('KC\Entity\SpecialList', 'p')
+            ->where('p.position ='.$pos);
+        $PrevPc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (!empty($PrevPc)) {
-            $changePrevPc = $entityManagerLocale->getRepository('KC\Entity\SpecialList')->find($PrevPc->id);
-            $changePrevPc->position = $position;
-            \Zend_Registry::get('emLocale')->persist($changePrevPc);
-            \Zend_Registry::get('emLocale')->flush();
-            $pc = $entityManagerLocale->getRepository('KC\Entity\SpecialList')->find($id);
-            $pc->position = $pos;
-            \Zend_Registry::get('emLocale')->persist($pc);
-            \Zend_Registry::get('emLocale')->flush();
+            $queryBuilderUpdate = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilderUpdate
+                ->update('KC\Entity\SpecialList', 'sp')
+                ->set('sp.position', $position)
+                ->where('sp.id = '.$PrevPc[0]['id'])
+                ->getQuery()->execute();
+           
+            $queryBuilderNewposition = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilderNewposition
+                ->update('KC\Entity\SpecialList', 'spl')
+                ->set('spl.position', $pos)
+                ->where('spl.id = '.$id)
+                ->getQuery()->execute();
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPagesHome_list');
             return true;
         }

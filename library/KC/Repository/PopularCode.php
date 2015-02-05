@@ -276,9 +276,11 @@ class PopularCode extends \KC\Entity\PopularCode
         ->andWhere('o.discountType = ?4')
         ->setParameter(5, 'MEM')
         ->andWhere('o.Visability != ?5')
-        ->andWhere('o.userGenerated = 0')
-        ->setParameter(1, $listOfPopularCode)
-        ->andWhere($queryBuilder->expr()->notIn('o.id', '?1'));
+        ->andWhere('o.userGenerated = 0');
+        if (!empty($listOfPopularCode)) {
+            $query = $query->setParameter(1, $listOfPopularCode)
+                    ->andWhere($queryBuilder->expr()->notIn('o.id', '?1'));
+        }
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }
