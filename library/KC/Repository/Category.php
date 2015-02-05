@@ -90,15 +90,12 @@ class Category extends \KC\Entity\Category
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $categoryDetails = $queryBuilder
-        ->select(
-            "c.*,i.name,i.path, categoryfeaturedimage.name, categoryfeaturedimage.path, categoryheaderimage.name,
-            categoryheaderimage.path"
-        )
+        ->select("c, i, categoryfeaturedimage, categoryheaderimage")
         ->from('KC\Entity\Category', 'c')
         ->LeftJoin("c.categoryicon", "i")
-        ->LeftJoin("c.categoryfeaturedimage", "categoryfeaturedimage")
-        ->LeftJoin("c.categoryheaderimage", "categoryheaderimage")
-        ->where("permalink = ?", $permalink)
+        ->LeftJoin("c.categoryFeaturedImage", "categoryfeaturedimage")
+        ->LeftJoin("c.categoryHeaderImage", "categoryheaderimage")
+        ->where("c.permaLink =". $queryBuilder->expr()->literal($permalink))
         ->andWhere('c.deleted=0')
         ->andWhere('c.status= 1')
         ->getQuery()
@@ -361,7 +358,9 @@ class Category extends \KC\Entity\Category
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDateAndTime = date('Y-m-d 00:00:00');
-        $categoriesInformation = $queryBuilder->select("c.name as categoryName,c.id,i.path,i.name,c.permaLink,c.featured_category")
+        $query = $queryBuilder->select(
+            "c, i, categoryfeaturedimage"
+        )
             ->from("KC\Entity\Category", "c")
             ->addSelect(
                 "(
@@ -375,9 +374,9 @@ class Category extends \KC\Entity\Category
             ->LeftJoin("c.categoryFeaturedImage", "categoryfeaturedimage")
             ->where("c.deleted=0")
             ->andWhere("c.status= 1")
-            ->orderBy("c.featured_category", "DESC")
-            ->getQuery()
-            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            ->orderBy("c.featured_category", "DESC");
+            
+        $categoriesInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         //echo "<pre>";print_r($categoriesInformation);die;
         return $categoriesInformation;
     }
