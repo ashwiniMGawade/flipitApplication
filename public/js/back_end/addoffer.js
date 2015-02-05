@@ -257,11 +257,13 @@ function init(){
 	jQuery('button#optionsOnbtn').click(function(){
       jQuery("#optionsOnbtn").addClass("btn-primary").siblings().removeClass("btn-primary");
       jQuery('#offerOption').show();
+      jQuery('#offerButtons').hide();
   	});
 
   	jQuery('button#optionsoffbtn').click(function(){
       jQuery("#optionsoffbtn").addClass("btn-primary").siblings().removeClass("btn-primary");
       jQuery('#offerOption').hide();
+      jQuery('#offerButtons').show();
   	});
 }
 

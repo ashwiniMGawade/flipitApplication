@@ -131,7 +131,7 @@
 								?>
 							</select>
 							<input type="hidden" name="selctedshop" id="selctedshop" value="">
-							<div class="mainpage-content-colorbox">
+							<div class="mainpage-content-buttons" id="offerButtons">
 				            	<button id='addOfferBtn' onclick="jQuery('#saveAndAddnewId').val(false);" type="submit" class="btn btn-large btn-primary fl mr15"><?php echo $this->translate('ADD OFFER'); ?></button>
 				            	<button id="saveAndAddnew" onclick="jQuery('#saveAndAddnewId').val(true);" class="btn btn-large btn-primary fl" type="submit"><?php echo $this->translate('Save and Add New Offer');?></button>
 				            	<input type="hidden" id="saveAndAddnewId" name="saveAndAddnew" value="false" />
@@ -152,6 +152,7 @@
                         <input type="text" id="addofferTitle"  name="addofferTitle" placeholder="This account is important, etc" class="span3 mbot bbot">
                         <input type="text" disabled="disabled" value="<?php echo $this->translate('Offer title length 0 characters');?>" id="metaTextLeft" class="input-xlarge disabled btop word-count">
                     </div>
+                </div>
 
                     <div class="mainpage-content" id="datesdiv" style ="width:373px;">
 	            		<div class="mainpage-content-line">
@@ -188,6 +189,7 @@
 		                    </div>
 		                </div>
         			</div>
+
 		        	<div class="mainpage-content aboutShopNoteDiv" style="width:373px;" id="aboutShopDiv">
 		            	
 			            <div class="mainpage-content-line mb10">
@@ -208,7 +210,6 @@
 
 		                </div>
 		            </div>
-                </div>
             </div>
 
 
@@ -461,7 +462,7 @@
 		                  </div>
             <div class="mainpage-content" id="offertitledetail">
 
-                <div class="mainpage-content-line mb10">
+
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Deeplinking is'); ?></strong></label></div>
                     <div class="mainpage-content-right">
                     	<div data-toggle="buttons-checkbox" class="btn-group ">
@@ -470,7 +471,7 @@
   						<input type="checkbox" name="deepLinkStatus" value="1" id="deepLinkStatus" style="display:none;">
                        </div>
                     </div>
-                 </div>
+
 
                 <div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Ref URL'); ?></strong></label></div>
@@ -609,7 +610,15 @@
      			            			Before you place this coupon be sure you got confirmation from Tom, Arthur or Jochem.'); ?>
      			            		</p>
             </div>
+
+        	<div class="mainpage-content-colorbox" id="offerEndButtons">
+            	<button id='addOfferBtn' onclick="jQuery('#saveAndAddnewId').val(false);" type="submit" class="btn btn-large btn-primary fl mr15"><?php echo $this->translate('ADD OFFER'); ?></button>
+            	<button id="saveAndAddnew" onclick="jQuery('#saveAndAddnewId').val(true);" class="btn btn-large btn-primary fl" type="submit"><?php echo $this->translate('Save and Add New Offer');?></button>
+            	<input type="hidden" id="saveAndAddnewId" name="saveAndAddnew" value="false" />
+                <a href="<?php echo HTTP_PATH; ?>admin/offer" class="fl m10"><strong class="ml10"><?php echo $this->translate('CANCEL'); ?></strong></a>
+            </div>
         </div>
+
        </form>
   <!-- /poststuff -->
 </div>
