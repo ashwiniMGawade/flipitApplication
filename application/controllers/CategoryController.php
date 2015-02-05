@@ -48,7 +48,7 @@ class CategoryController extends Zend_Controller_Action
             $offersWithPagination = \FrontEnd_Helper_viewHelper::renderPagination(
                 $categoryVoucherCodes,
                 $this->_getAllParams(),
-               20,
+                20,
                 9
             );
             $this->view->offersWithPagination = $offersWithPagination;
@@ -82,7 +82,7 @@ class CategoryController extends Zend_Controller_Action
         $categoryPermalink = explode('?', $categoryPermalink);
         $categoryPermalink = isset($categoryPermalink[0]) ? $categoryPermalink[0] : '';
         $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink);
-        $pageDetails = \KC\Repository\Page::getPageDetailsFromUrl($categoryPermalink);
+        $pageDetails = (object)\KC\Repository\Page::getPageDetailsFromUrl($categoryPermalink);
         $this->viewHelperObject->getMetaTags(
             $this,
             isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
@@ -107,7 +107,8 @@ class CategoryController extends Zend_Controller_Action
                 )
             );
         $specialPages = $this->_helper->Category->getSpecialPageWithOffersCount($specialPagesList);
-        $this->view->categoriesWithSpecialPagesList = array_merge($allCategories, $specialPages);
+        $categories = $this->_helper->Category->getCategories($allCategories);
+        $this->view->categoriesWithSpecialPagesList = array_merge($categories, $specialPages);
         $this->view->pageCssClass = 'all-categories-alt-page';
     }
 }

@@ -247,7 +247,7 @@ class StoreController extends Zend_Controller_Action
     {
         $permalink = \FrontEnd_Helper_viewHelper::getPagePermalink();
         $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $pageDetails = KC\Repository\Page::getPageDetailsFromUrl(\FrontEnd_Helper_viewHelper::getPagePermalink());
+        $pageDetails = (object)KC\Repository\Page::getPageDetailsFromUrl(\FrontEnd_Helper_viewHelper::getPagePermalink());
         
         
         $this->view->pageHeaderImage = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
