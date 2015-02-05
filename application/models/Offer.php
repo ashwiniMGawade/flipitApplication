@@ -22,6 +22,48 @@ class Offer extends BaseOffer
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
     
+    public static function getOffersForNewsletter($offerIds)
+    {
+        $offers = Doctrine_Query::create()
+            ->select(
+                's.id,s.name,
+                s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,
+                s.actualUrl,terms.content,
+                o.id,o.Visability,o.userGenerated,o.title,o.authorId,
+                o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,o.authorName,
+                o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.extendedUrl,
+                o.discountType,o.startdate,o.endDate,o.nickname,o.approved,
+                img.id, img.path, img.name'
+            )
+            ->from('Offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('s.logo img')
+            ->leftJoin('o.termandcondition terms')
+            ->andWhereIn("o.id", $offerIds)
+            ->fetchArray();
+          $changedOrderOffers = self::changeOrder($offers);
+          $changedOrderOffersSameAsTopOffers = self::getOfferWithOrder($changedOrderOffers, $offerIds);
+        return $changedOrderOffersSameAsTopOffers;
+    }
+
+    public static function changeOrder($offers)
+    {
+        $changeOrder = '';
+        foreach ($offers as $offer) {
+            $changeOrder[$offer['id']] = $offer;
+        }
+        return $changeOrder;
+    }
+
+    public static function getOfferWithOrder($offers, $offerIds)
+    {
+        $offersWithOrder = '';
+        foreach ($offerIds as $id) {
+            $offersWithOrder[] = $offers[$id];
+        }
+        return $offersWithOrder;
+    }
+
     public static function getExpiredOffers($type, $limit, $shopId = 0)
     {
         $expiredDate = date("Y-m-d H:i");

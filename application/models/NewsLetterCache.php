@@ -2,55 +2,56 @@
 class NewsLetterCache extends BaseNewsLetterCache
 {
 
-    public static function saveData()
+    public static function saveNewLetterCacheContent()
     {
+        self::truncateNewletterCacheTable();
         $newLetterHeaderAndFooter = Signupmaxaccount::getEmailHeaderFooter();
-        $newLetterHeaderAndFooter['email_header'];
+        self::saveValueInDatebase('email_header', $newLetterHeaderAndFooter['email_header']);
+        self::saveValueInDatebase('email_footer', $newLetterHeaderAndFooter['email_footer']);
         $topCategories = FrontEnd_Helper_viewHelper::gethomeSections('category', 1);
-        $topVouchercodes = Offer::getTopOffers(10);
-        $topCategoryOffers = Category::getCategoryVoucherCodes($topCategories[0]['categoryId'], 3);
-
-        echo "<pre>";
-        $last_names = array_column($topVouchercodes, 'id');
-        print_r($last_names);
-        print_r($categoryVouchers);
-        die;
+        self::saveValueInDatebase('top_category_id', $topCategories[0]['categoryId']);
+        $topOfferIds = implode(',', self::getOfferIds(Offer::getTopOffers(10)));
+        self::saveValueInDatebase('top_offers_ids', $topOfferIds);
+        $topCategoryOffersIds = implode(',', self::getOfferIds(
+            Category::getCategoryVoucherCodes($topCategories[0]['categoryId'], 3)
+        ));
+        self::saveValueInDatebase('top_category_offers_ids', $topCategoryOffersIds);
+        return true;
     }
 
-    public static function getNewsLetterCache($newsLetterCacheName)
+    public static function truncateNewletterCacheTable()
     {
-        $newsLetterCache = Doctrine_Query::create()->select('newsLetCac.name,newsLetCac.value')
-        ->from("NewsLetterCache newsLetCac")
-        ->andWhere("newsLetCac.name LIKE ?", "$newsLetterCacheName%")
-        ->fetchArray();
-        return $newsLetterCache ;
+        $databaseConnection = Doctrine_Manager::getInstance()->getCurrentConnection()->getDbh();
+        $databaseConnection->query('SET FOREIGN_KEY_CHECKS=0');
+        $databaseConnection->query('TRUNCATE TABLE news_letter_cache');
+        $databaseConnection->query('SET FOREIGN_KEY_CHECKS=1');
+        unset($databaseConnection);
     }
 
-    public static function getAllSettings()
+    public static function getOfferIds($offers)
     {
-        $getAll = Doctrine_Core::getTable("NewsLetterCache")
-            ->findAll(Doctrine::HYDRATE_ARRAY);
-        $data = array();
-        foreach ($getAll as $val) {
-            $data[$val['name']] = $val['value'];
+        $offersIds = '';
+        foreach ($offers as $offer) {
+            $offersIds[] = $offer['id'];
         }
-        return $data ;
+        return $offersIds;
     }
 
-    public static function setNewsLetterCache($name, $value)
+    public static function getAllNewsLetterCacheContent()
     {
-        $Q = Doctrine_Query::create()
-            ->update('NewsLetterCache')
-            ->set("value", $value)
-            ->where('name = ?', $name);
-        $Q->execute();
+        $getAllNewsLetterCache = Doctrine_Core::getTable("NewsLetterCache")->findAll(Doctrine::HYDRATE_ARRAY);
+        $allNewsLetterCacheContent = array();
+        foreach ($getAllNewsLetterCache as $newsLetterCacheColumnValue) {
+            $allNewsLetterCacheContent[$newsLetterCacheColumnValue['name']] = $newsLetterCacheColumnValue['value'];
+        }
+        return $allNewsLetterCacheContent;
     }
 
-    public static function saveValueInDatebase($fieldName, $fieldValue)
+    public static function saveValueInDatebase($newsLetterCacheColumnName, $newsLetterCacheColumnValue)
     {
         $newsLetterCache = new NewsLetterCache();
-        $newsLetterCache->name = $fieldName;
-        $newsLetterCache->value = $fieldValue;
+        $newsLetterCache->name = $newsLetterCacheColumnName;
+        $newsLetterCache->value = $newsLetterCacheColumnValue;
         $newsLetterCache->status = false;
         $newsLetterCache->save();
         return true;
