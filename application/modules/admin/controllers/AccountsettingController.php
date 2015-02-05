@@ -136,7 +136,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
             if ($isScheduled) {
                 if (Signupmaxaccount::saveScheduledNewsletter($this->getRequest())) {
-                    NewsLetterCache::saveNewLetterCacheContent();
+                    NewsLetterCache::saveNewsLetterCacheContent();
                     $flash->addMessage(
                         array(
                             'success' => $this->view->translate('Newsletter has been successfully scheduled')
@@ -227,6 +227,51 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
     public function emailcontentAction()
     {
+        //NewsLetterCache::saveNewLetterCacheContent();
+        $newsLetterCache = NewsLetterCache::getAllNewsLetterCacheContent();
+
+        if (Category::categoryExistOrNot($newsLetterCache['top_category_id'])) {
+            $topCategory = Category::getCategoryInformationForNewsLetter($newsLetterCache['top_category_id']);
+        } else {
+            $topCategory = FrontEnd_Helper_viewHelper::gethomeSections('category', 1);
+        }
+
+        $topCategories = FrontEnd_Helper_viewHelper::gethomeSections('category', 1);
+        $topCategory = Category::getCategoryInformationForNewsLetter($newsLetterCache['top_category_id']);
+            
+        $topOffersIds = explode(',', $newsLetterCache['top_offers_ids']);
+        $offersExist = true;
+        foreach ($topOffersIds as $topOffersId) {
+            if (!Offer::offerExistOrNot($topOffersId)) {
+                $offersExist = false;
+            }
+        }
+        if ($offersExist) {
+            $topVouchercodes = Offer::getOffersForNewsletter($topOffersIds);
+        } else {
+            echo 'Offers are not exist in cache.. getting top 10 offers'."\n";
+            $topVouchercodes = Offer::getTopOffers(10);
+        }
+
+        $categoryOffersIds =  explode(',', $newsLetterCache['top_category_offers_ids']);
+        $categoryOffersExist = true;
+        foreach ($categoryOffersIds as $categoryOffersId) {
+            if (!Offer::offerExistOrNot($categoryOffersId)) {
+                $categoryOffersExist = false;
+            }
+        }
+        if ($categoryOffersExist) {
+            $categoryVouchers = Offer::getOffersForNewsletter($categoryOffersIds);
+        } else {
+            echo 'Category Offers are not exist in cache getting recent categrory offers'."\n";
+            $categoryVouchers = Category::getCategoryVoucherCodes($newsLetterCache['top_category_id'], 3);
+        }
+
+        echo "<pre>";
+        print_r($topVouchercodes);
+        echo ">>>>>>>>>>>>>>>>>" ."<br>";
+        print_r($categoryVouchers);
+        die;
         $data = Signupmaxaccount::getAllMaxAccounts();
 
         $this->view->data = $data;

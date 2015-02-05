@@ -21,6 +21,12 @@ class Offer extends BaseOffer
         }
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
+
+    public static function offerExistOrNot($offerId)
+    {
+        $offers = Doctrine_Core::getTable('Offer')->find($offerId);
+        return $offers;
+    }
     
     public static function getOffersForNewsletter($offerIds)
     {

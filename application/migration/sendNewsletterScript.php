@@ -195,16 +195,19 @@ class SendNewsletter
 
         $newsLetterCache = NewsLetterCache::getAllNewsLetterCacheContent();
         if (!empty($newsLetterCache)) {
-            echo 'Newsletter from cache'."\n";
-            $topCategory = Category::getCategoryInformationForNewsLetter($newsLetterCache['top_category_id']);
-            $topVouchercodes = Offer::getOffersForNewsletter(explode(',', $newsLetterCache['top_offers_ids']));
-            $categoryVouchers = Offer::getOffersForNewsletter(explode(',', $newsLetterCache['top_category_offers_ids']));
+            echo 'Building newsletter from cache'."\n";
+            $topCategory = NewsLetterCache::getCategoryByCheck($newsLetterCache['top_category_id']);
+            $topVouchercodes = NewsLetterCache::getTopOfferByCheck($newsLetterCache['top_offers_ids']);
+            $categoryVouchers = NewsLetterCache::getTopCategoryOfferByCheck(
+                $newsLetterCache['top_category_offers_ids'],
+                $topCategory['id']
+            );
             $emailHeader = $newsLetterCache['email_header'];
             $emailFooter = $newsLetterCache['email_footer'];
             $categoryName = $topCategory[0]['name'];
             $categoryPermalink = $topCategory[0]['permaLink'];
         } else {
-            echo 'Newsletter not from cache'."\n";
+            echo 'Building newsletter not from cache'."\n";
             $topCategory = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);
             $topVouchercodes = Offer::getTopOffers(10);
             $categoryVouchers = array_slice(Category::getCategoryVoucherCodes($topCategory[0]['categoryId']), 0, 3);

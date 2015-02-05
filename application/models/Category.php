@@ -15,6 +15,11 @@ class Category extends BaseCategory
     #####################################################
     ############# REFACORED CODE ########################
     #####################################################
+    public static function categoryExistOrNot($categoryId)
+    {
+        $category = Doctrine_Core::getTable('Category')->find($categoryId);
+        return $category;
+    }
     public static function getCategoryInformationForNewsLetter($id)
     {
         $category = Doctrine_Query::create()

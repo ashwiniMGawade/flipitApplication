@@ -2,9 +2,9 @@
 class NewsLetterCache extends BaseNewsLetterCache
 {
 
-    public static function saveNewLetterCacheContent()
+    public static function saveNewsLetterCacheContent()
     {
-        self::truncateNewletterCacheTable();
+        self::truncateNewsletterCacheTable();
         $newLetterHeaderAndFooter = Signupmaxaccount::getEmailHeaderFooter();
         self::saveValueInDatebase('email_header', $newLetterHeaderAndFooter['email_header']);
         self::saveValueInDatebase('email_footer', $newLetterHeaderAndFooter['email_footer']);
@@ -19,7 +19,7 @@ class NewsLetterCache extends BaseNewsLetterCache
         return true;
     }
 
-    public static function truncateNewletterCacheTable()
+    public static function truncateNewsletterCacheTable()
     {
         $databaseConnection = Doctrine_Manager::getInstance()->getCurrentConnection()->getDbh();
         $databaseConnection->query('SET FOREIGN_KEY_CHECKS=0');
@@ -28,7 +28,7 @@ class NewsLetterCache extends BaseNewsLetterCache
         unset($databaseConnection);
     }
 
-    public static function getOfferIds($offers)
+    protected static function getOfferIds($offers)
     {
         $offersIds = '';
         foreach ($offers as $offer) {
@@ -47,7 +47,7 @@ class NewsLetterCache extends BaseNewsLetterCache
         return $allNewsLetterCacheContent;
     }
 
-    public static function saveValueInDatebase($newsLetterCacheColumnName, $newsLetterCacheColumnValue)
+    protected static function saveValueInDatebase($newsLetterCacheColumnName, $newsLetterCacheColumnValue)
     {
         $newsLetterCache = new NewsLetterCache();
         $newsLetterCache->name = $newsLetterCacheColumnName;
@@ -55,5 +55,50 @@ class NewsLetterCache extends BaseNewsLetterCache
         $newsLetterCache->status = false;
         $newsLetterCache->save();
         return true;
+    }
+
+    public static function getCategoryByCheck($categoryId)
+    {
+        if (Category::categoryExistOrNot($categoryId)) {
+            $topCategory = Category::getCategoryInformationForNewsLetter($categoryId);
+        } else {
+            $topCategoryId = FrontEnd_Helper_viewHelper::gethomeSections('category', 1);
+            $topCategory = Category::getCategoryInformationForNewsLetter($topCategoryId[0]['categoryId']);
+        }
+        return $topCategory;
+    }
+
+    public static function getTopOfferByCheck($topOffers)
+    {
+        $topOffersIds = explode(',', $topOffers);
+        $offersExist = true;
+        foreach ($topOffersIds as $topOffersId) {
+            if (!Offer::offerExistOrNot($topOffersId)) {
+                $offersExist = false;
+            }
+        }
+        if ($offersExist) {
+            $topVouchercodes = Offer::getOffersForNewsletter($topOffersIds);
+        } else {
+            $topVouchercodes = Offer::getTopOffers(10);
+        }
+        return $topVouchercodes;
+    }
+
+    public static function getTopCategoryOfferByCheck($topCategoryOffersIds, $topCategoryId)
+    {
+        $categoryOffersIds =  explode(',', $topCategoryOffersIds);
+        $categoryOffersExist = true;
+        foreach ($categoryOffersIds as $categoryOffersId) {
+            if (!Offer::offerExistOrNot($categoryOffersId)) {
+                $categoryOffersExist = false;
+            }
+        }
+        if ($categoryOffersExist) {
+            $categoryVouchers = Offer::getOffersForNewsletter($categoryOffersIds);
+        } else {
+            $categoryVouchers = Category::getCategoryVoucherCodes($topCategoryId, 3);
+        }
+        return $categoryVouchers;
     }
 }
