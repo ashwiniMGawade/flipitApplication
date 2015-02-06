@@ -156,13 +156,14 @@ class Articles extends \KC\Entity\Articles
             ->where('art.deleted ='. $flag)
             ->andWhere($queryBuilder->expr()->like('art.title', $queryBuilder->expr()->literal($srh.'%')));
 
-        $request  = \DataTable_Helper::createSearchRequest($params, array('title', 'publishdate', 'publish', 'authorname'));
+        $request  = \DataTable_Helper::createSearchRequest($params, array('title', 'publishdate', 'permalink', 'publish', 'authorname'));
 
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
             ->setQueryBuilder($qb)
             ->add('text', 'art.title')
             ->add('number', 'art.publishdate')
+            ->add('text', 'art.permalink')
             ->add('text', 'art.publish')
             ->add('text', 'art.authorname');
         $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
@@ -207,7 +208,6 @@ class Articles extends \KC\Entity\Articles
             ->leftJoin('a.articleChapter', 'chapter')
             ->leftJoin('a.articleImage', 'artimg')
             ->leftJoin('a.thumbnail', 'thum')
-            ->leftJoin('a.articlefeaturedimage')
             ->leftJoin('stores.articleshops', 'shops')
             ->where('a.id ='. $params['id'])
             ->andWhere('a.deleted = 0');
