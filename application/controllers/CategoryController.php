@@ -107,7 +107,7 @@ class CategoryController extends Zend_Controller_Action
                 )
             );
         $specialPages = $this->_helper->Category->getSpecialPageWithOffersCount($specialPagesList);
-        $categories = $this->_helper->Category->getCategories($allCategories);
+        $categories = FrontEnd_Helper_viewHelper::getCategories($allCategories);
         $this->view->categoriesWithSpecialPagesList = array_merge($categories, $specialPages);
         $this->view->pageCssClass = 'all-categories-alt-page';
     }

@@ -1084,4 +1084,14 @@ EOD;
         $currentDateFormation = $currentYear.'-'.$currentMonth.'-'.$currentDay;
         return $currentDateFormation;
     }
+
+    public static function getCategories($categories)
+    {
+        $categoryRemoveIndex = '';
+        foreach ($categories as $category) {
+            $category[0]['totalCoupons']  = $category['totalCoupons'];
+            $categoryRemoveIndex[] = $category[0];
+        }
+        return $categoryRemoveIndex;
+    }
 }

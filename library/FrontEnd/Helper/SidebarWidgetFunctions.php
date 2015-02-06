@@ -81,7 +81,7 @@ EOD;
     
     public function popularCategoryWidget()
     {
-        $allCategories = Category::getAllCategories();
+        $allCategories = FrontEnd_Helper_viewHelper::getCategories(KC\Repository\Category::getAllCategories());
         $allCategories = array_slice($allCategories, 0, 10, true);
         $categoriesSidebarWidget =
         '<div class="block">
