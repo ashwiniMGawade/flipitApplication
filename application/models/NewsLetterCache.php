@@ -8,12 +8,12 @@ class NewsLetterCache extends BaseNewsLetterCache
         $newLetterHeaderAndFooter = Signupmaxaccount::getEmailHeaderFooter();
         self::saveValueInDatebase('email_header', $newLetterHeaderAndFooter['email_header']);
         self::saveValueInDatebase('email_footer', $newLetterHeaderAndFooter['email_footer']);
-        $topCategories = FrontEnd_Helper_viewHelper::gethomeSections('category', 1);
-        self::saveValueInDatebase('top_category_id', $topCategories[0]['categoryId']);
+        $topCategory = FrontEnd_Helper_viewHelper::gethomeSections('category', 1);
+        self::saveValueInDatebase('top_category_id', $topCategory[0]['categoryId']);
         $topOfferIds = implode(',', self::getOfferIds(Offer::getTopOffers(10)));
         self::saveValueInDatebase('top_offers_ids', $topOfferIds);
         $topCategoryOffersIds = implode(',', self::getOfferIds(
-            Category::getCategoryVoucherCodes($topCategories[0]['categoryId'], 3)
+            Category::getCategoryVoucherCodes($topCategory[0]['categoryId'], 3)
         ));
         self::saveValueInDatebase('top_category_offers_ids', $topCategoryOffersIds);
         return true;
@@ -57,7 +57,7 @@ class NewsLetterCache extends BaseNewsLetterCache
         return true;
     }
 
-    public static function getCategoryByCheck($categoryId)
+    public static function getCategoryByFallBack($categoryId)
     {
         if (Category::categoryExistOrNot($categoryId)) {
             $topCategory = Category::getCategoryInformationForNewsLetter($categoryId);
@@ -68,7 +68,7 @@ class NewsLetterCache extends BaseNewsLetterCache
         return $topCategory;
     }
 
-    public static function getTopOfferByCheck($topOffers)
+    public static function getTopOffersByFallBack($topOffers)
     {
         $topOffersIds = explode(',', $topOffers);
         $offersExist = true;
@@ -85,7 +85,7 @@ class NewsLetterCache extends BaseNewsLetterCache
         return $topVouchercodes;
     }
 
-    public static function getTopCategoryOfferByCheck($topCategoryOffersIds, $topCategoryId)
+    public static function getTopCategoryOffersByFallBack($topCategoryOffersIds, $topCategoryId)
     {
         $categoryOffersIds =  explode(',', $topCategoryOffersIds);
         $categoryOffersExist = true;
@@ -100,5 +100,25 @@ class NewsLetterCache extends BaseNewsLetterCache
             $categoryVouchers = Category::getCategoryVoucherCodes($topCategoryId, 3);
         }
         return $categoryVouchers;
+    }
+
+    public static function getEmailHeaderByFallBack($newsLetterCacheHeader, $settingHeader)
+    {
+        if (!empty($newsLetterCacheHeader)) {
+            $emailHeader = $newsLetterCacheHeader;
+        } else {
+            $emailHeader = $settingHeader;
+        }
+        return $emailHeader;
+    }
+
+    public static function getEmailFooterByFallBack($newsLetterCacheFooter, $settingFooter)
+    {
+        if (!empty($newsLetterCacheFooter)) {
+            $emailFooter = $newsLetterCacheFooter;
+        } else {
+            $emailFooter = $settingFooter;
+        }
+        return $emailFooter;
     }
 }

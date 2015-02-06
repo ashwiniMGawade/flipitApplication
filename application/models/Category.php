@@ -23,7 +23,7 @@ class Category extends BaseCategory
     public static function getCategoryInformationForNewsLetter($id)
     {
         $category = Doctrine_Query::create()
-            ->select("c.name, c.permalink")
+            ->select("c.id, c.name, c.permalink")
             ->from('Category c')
             ->where("c.id = " . $id)
             ->fetchArray();

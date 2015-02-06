@@ -196,14 +196,21 @@ class SendNewsletter
         $newsLetterCache = NewsLetterCache::getAllNewsLetterCacheContent();
         if (!empty($newsLetterCache)) {
             echo 'Building newsletter from cache'."\n";
-            $topCategory = NewsLetterCache::getCategoryByCheck($newsLetterCache['top_category_id']);
-            $topVouchercodes = NewsLetterCache::getTopOfferByCheck($newsLetterCache['top_offers_ids']);
-            $categoryVouchers = NewsLetterCache::getTopCategoryOfferByCheck(
+            $newsLetterCache = NewsLetterCache::getAllNewsLetterCacheContent();
+            $topCategory = NewsLetterCache::getCategoryByFallBack($newsLetterCache['top_category_id']);
+            $topVouchercodes = NewsLetterCache::getTopOffersByFallBack($newsLetterCache['top_offers_ids']);
+            $categoryVouchers = NewsLetterCache::getTopCategoryOffersByFallBack(
                 $newsLetterCache['top_category_offers_ids'],
-                $topCategory['id']
+                $topCategory[0]['id']
             );
-            $emailHeader = $newsLetterCache['email_header'];
-            $emailFooter = $newsLetterCache['email_footer'];
+            $emailHeader = NewsLetterCache::getEmailHeaderByFallBack(
+                $newsLetterCache['email_header'],
+                $settings[0]['email_header']
+            );
+            $emailFooter = NewsLetterCache::getEmailFooterByFallBack(
+                $newsLetterCache['email_footer'],
+                $settings[0]['email_footer']
+            );
             $categoryName = $topCategory[0]['name'];
             $categoryPermalink = $topCategory[0]['permaLink'];
         } else {
