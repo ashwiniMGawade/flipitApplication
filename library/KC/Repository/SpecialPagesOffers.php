@@ -20,8 +20,8 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
         ->leftJoin('op.offers', 'o')
         ->leftJoin('o.offertermandcondition', 'terms')
         ->andWhere(
-            "(o.couponCodeType = 'UN' AND (SELECT count(id) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and o.status=1)  > 0)
-            or couponCodeType = 'GN'"
+            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and o.status=1)  > 0)
+            or o.couponCodeType = 'GN'"
         )
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('o.votes', 'vot')

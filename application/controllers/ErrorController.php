@@ -21,6 +21,8 @@ class ErrorController extends Zend_Controller_Action
                 $pagePermalink = $this->_helper->Error->getPageParmalink(ltrim($this->_request->getPathInfo(), '/'));
                 $pageNumber = $this->_helper->Error->getPageNumbering($pagePermalink);
                 $pageDetails = $this->getPageDetails($pagePermalink, $pageNumber);
+                $pageDetails = $pageDetails[0];
+                
                 if (isset($pageDetails['pageType']) && $pageDetails['pageType']=='default') {
                     if ($pageNumber > 0) {
                         $pageNumber = 10;
@@ -31,9 +33,9 @@ class ErrorController extends Zend_Controller_Action
                     \FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
                 }
                 if ($pageDetails) {
-                    if ($pageDetails['pageAttributeId'] == 2) {
+                    if ($pageDetails['page']['id'] == 2) {
                         $this->view->pageCssClass = 'faq-page';
-                    } else if (isset($pageDetails['pageAttributeId']) && $pageDetails['pageAttributeId'] == 1) {
+                    } else if (isset($pageDetails['page']['id']) && $pageDetails['page']['id'] == 1) {
                         $flashMessage = $this->_helper->getHelper('FlashMessenger');
                         $message = $flashMessage->getMessages();
                         $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] :'';
@@ -53,7 +55,7 @@ class ErrorController extends Zend_Controller_Action
                     }
                     $specialPageOffers = \FrontEnd_Helper_viewHelper::
                         getRequestedDataBySetGetCache(
-                            'error_specialPage'.$pageDetails->id.'_offers',
+                            'error_specialPage'.$pageDetails['id'].'_offers',
                             array(
                                 'function' => '\KC\Repository\Offer::getSpecialPageOffers', 'parameters' => array($pageDetails)
                             ),
