@@ -49,7 +49,7 @@ class PopularArticles Extends \KC\Entity\PopularArticles
     {
         $changedPopularArticles = array();
         foreach ($popularArticles as $article) {
-            $changedPopularArticles[] = $article['articles']['id'];
+            $changedPopularArticles[] = $article['id'];
         }
         return $changedPopularArticles;
     }
@@ -88,8 +88,9 @@ class PopularArticles Extends \KC\Entity\PopularArticles
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
             ->update('KC\Entity\PopularArticles', 'p')
-            ->set('p.position', 'position + 1')
-            ->where('p.articles=' .$id);
+            ->set('p.position', $id)
+            ->where('p.articles=' .$id)
+            ->getQuery();
             $query->execute();
         }
     }

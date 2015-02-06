@@ -66,7 +66,7 @@ class ImageArticleCategoryIcon extends \KC\Entity\ImageArticleCategoryIcon imple
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'ext', 'path', 'name', 'deleted', 'created_at', 'updated_at', 'articlecategory');
+        return array('__isInitialized__', 'id', 'ext', 'path', 'name', 'deleted', 'created_at', 'updated_at', 'menu', 'mainmenu', 'articlecategory');
     }
 
     public function __clone()

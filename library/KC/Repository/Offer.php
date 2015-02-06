@@ -917,13 +917,16 @@ class Offer Extends \KC\Entity\Offer
             $getOffersQuery->andWhere('o.Visability =?3');
         }
         if ($searchOffer != '') {
-            $getOffersQuery->andWhere("o.title LIKE '%$searchOffer%'");
+            $getOffersQuery->setParameter(11, '%'.$searchOffer.'%');
+            $getOffersQuery->andWhere($entityManagerUser->expr()->like('o.title, ?11'));
         }
         if ($searchShop!='') {
-            $getOffersQuery->andWhere("s.name LIKE '%$searchShop%'");
+            $getOffersQuery->setParameter(12, '%'.$searchShop.'%');
+            $getOffersQuery->andWhere($entityManagerUser->expr()->like('s.name, ?12'));
         }
         if ($searchCoupon!='') {
-            $getOffersQuery->andWhere("o.couponCode LIKE '%$searchCoupon%'");
+            $getOffersQuery->setParameter(13, '%'.$searchCoupon.'%');
+            $getOffersQuery->andWhere($entityManagerUser->expr()->like('o.couponCode, ?13'));
         }
         if ($searchCouponType!='') {
             if ($searchCouponType != 'EX') {
@@ -951,7 +954,7 @@ class Offer Extends \KC\Entity\Offer
             ->add('number', 'o.endDate')
             ->add('number', 'o.totalViewcount')
             ->add('text', 'o.authorName');
-           
+
         $offersList = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
         $offersList = \DataTable_Helper::getResponse($offersList, $request);
         return $offersList;

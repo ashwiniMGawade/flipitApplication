@@ -37,7 +37,7 @@ class Articlecategory extends \KC\Entity\Articlecategory
             ->from('\KC\Entity\Articlecategory', 'ac')
              ->leftJoin("ac.articles", "a")
             ->where("ac.id=". $id);
-        $getRouteLink = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $getRouteLink = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         $urlsArray = array();
         if (isset($artcileData['permalink'])) {

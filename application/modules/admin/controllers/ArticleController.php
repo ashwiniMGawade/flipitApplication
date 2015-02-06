@@ -52,7 +52,6 @@ class Admin_ArticleController extends Zend_Controller_Action
     {
         $getList = new KC\Repository\Articles();
         $list = $getList->getArticleList($this->getRequest()->getParams());
-
         echo Zend_Json::encode($list);
         die;
 
