@@ -364,7 +364,7 @@ class Category extends \KC\Entity\Category
             ->from("KC\Entity\Category", "c")
             ->addSelect(
                 "(
-                    SELECT count(roc) FROM KC\Entity\RefOfferCategory roc LEFT JOIN roc.offers off LEFT JOIN off.shopOffers s  
+                    SELECT count(roc.id) FROM KC\Entity\RefOfferCategory roc LEFT JOIN roc.offers off LEFT JOIN off.shopOffers s  
                         WHERE  off.deleted = 0 and s.deleted = 0 and roc.categories = c.id and off.endDate >
                 '".$currentDateAndTime."' and off.discountType='CD' and off.Visability!='MEM'
                 ) 
@@ -377,7 +377,6 @@ class Category extends \KC\Entity\Category
             ->orderBy("c.featured_category", "DESC");
             
         $categoriesInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        //echo "<pre>";print_r($categoriesInformation);die;
         return $categoriesInformation;
     }
 

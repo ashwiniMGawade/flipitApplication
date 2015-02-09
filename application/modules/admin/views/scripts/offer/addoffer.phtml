@@ -229,32 +229,29 @@
 			                	<div id='error-message' class="error-message category-error mainpage-content-right-inner-right-other"></div>
 			                     <div class="categories" style="position:relative;" name="category">
 
-					              <?php   for($i = 0;  $i < count($this->catList) ; $i++ ){ ?>
+					              <?php for($i = 0;  $i < count($this->catList) ; $i++ ) { ?>
 
 					              	<div class="square-btn-offer">
-					              	<input type="checkbox" value="<?php echo $this->catList[$i]['id']; ?>" class="" name="selectedcategories[]" id="category-<?php echo $this->catList[$i]['id']; ?>" />
+					              	<input type="checkbox" value="<?php echo $this->catList[$i][0]['id']; ?>" class="" name="selectedcategories[]" id="category-<?php echo $this->catList[$i][0]['id']; ?>" />
 
-					             <?php if(trim($this->catList[$i]['name'])!=''){
+					             <?php if(trim($this->catList[$i][0]['name'])!=''){
 
 					             	$categoryIconPath = '';
 
-
-					             	$icons = $this->catList[$i];
-
 					             	# check an icon is available of not
-					             	if(file_exists(ROOT_PATH.$icons['path']."thum_medium_".$icons['name'])){
-					             		$categoryIconPath = PUBLIC_PATH_LOCALE.$icons['path']."thum_medium_".$icons['name'];
+					             	if(file_exists(ROOT_PATH.$this->catList[$i][0]['categoryicon']['path']."thum_medium_".$this->catList[$i][0]['categoryicon']['name'])){
+					             		$categoryIconPath = PUBLIC_PATH_LOCALE.$this->catList[$i][0]['categoryicon']['path']."thum_medium_".$this->catList[$i][0]['categoryicon']['name'];
 					             	}else {
 					             		$categoryIconPath = HTTP_PATH ."public/images/NoImage/NoImage50x50.jpg";
 					             	}
 				             	?>
 
-						        	<button type="button" name="selectCategory" title="<?php echo $this->catList[$i]['name'];?>" class="btn square-btn" id="categoryBtn-<?php echo $this->catList[$i]['id'];?>" onClick="addCategory('<?php echo $this->catList[$i]['id']; ?>')">
-						        		<img alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
+						        	<button type="button" name="selectCategory" title="<?php echo $this->catList[$i][0]['name'];?>" class="btn square-btn" id="categoryBtn-<?php echo $this->catList[$i][0]['id'];?>" onClick="addCategory('<?php echo $this->catList[$i][0]['id']; ?>')">
+						        		<img alt="<?php echo $this->catList[$i][0]['name'];?>" src="<?php echo $categoryIconPath ;?>">
 				  					 </button>
 				  					 <div class="clear"></div>
 							        	 <span class="image-description-text">
-			            					 <?php echo strlen($this->catList[$i]['categoryName']) < 20 ? $this->catList[$i]['categoryName'] : substr($this->catList[$i]['categoryName'],0,20).'..'; ?>
+			            					 <?php echo strlen($this->catList[$i][0]['name']) < 20 ? $this->catList[$i][0]['name'] : substr($this->catList[$i][0]['name'],0,20).'..'; ?>
 					  					 </span>
 
 					  				</div>
