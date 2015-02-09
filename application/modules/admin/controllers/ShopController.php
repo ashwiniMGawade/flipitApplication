@@ -1423,15 +1423,19 @@ class Admin_ShopController extends Zend_Controller_Action
 
     public function shopstatusAction()
     {
-        $params = $this->_getAllParams();
-        self::updateVarnish($params['id']);
-        $ret = \KC\Repository\Shop::changeStatus($params);
-
-        if ($ret) {
-            $this->_helper->json(date("d-m-Y", strtotime($ret)));
+        $parameters = $this->_getAllParams();
+        self::updateVarnish($parameters['id']);
+        $ret = \KC\Repository\Shop::changeStatus($parameters);
+        echo "<pre>";print_r($ret);
+        echo $offlineDate = $ret['offlineSince']->format('d-m-Y');die;
+        if ($ret['offlineSince'] && $ret['howToUse'] == 1) {
+            $this->_helper->json(array('date' => $offlineDate, 'message'=> 1));
+        } else if ($ret['offlineSince'] && $ret['howToUse'] == '') {
+            $this->_helper->json(array('date'=>$offlineDate, 'message'=>0));
+        } else {
+            echo $ret['offlineSince'];die;
+            $this->_helper->json($ret['offlineSince']);
         }
-
-        $this->_helper->json($ret);
 	}
 	
     protected function saveGlobalExportPassword()
