@@ -1557,11 +1557,11 @@ class Offer Extends \KC\Entity\Offer
         ->leftJoin('p.offers', 'page')
         ->leftJoin('o.offertermandcondition', 'tc')
         ->leftJoin('o.categoryoffres', 'cat')
-        ->leftJoin('cat.offer', 'category');
+        ->leftJoin('cat.offers', 'category');
         if ($type != '') {
-            $query = $offerDetails->leftJoin('s.logo img');
+            $query = $query->leftJoin('s.logo', 'img');
         } else {
-            $query = $offerDetails->leftJoin('o.logo img');
+            $query = $query->leftJoin('o.logo', 'img');
         }
         $query = $query->leftJoin('s.offerNews', 'news')
         ->leftJoin('o.offerTiles', 't')

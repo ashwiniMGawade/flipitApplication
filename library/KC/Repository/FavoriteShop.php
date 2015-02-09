@@ -8,9 +8,9 @@ class FavoriteShop extends \KC\Entity\FavoriteShop
     {
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select('p.visitorId, p.shopId')
+            ->select('v.id as visitorId, s.id as shopId')
             ->from('\KC\Entity\FavoriteShop', 'p')
-            ->leftJoin("p.visitors", 'v')
+            ->leftJoin("p.visitor", 'v')
             ->leftJoin("p.shop", 's')
             ->leftJoin("s.logo", 'l')
             ->andWhere("p.shop = s.id")
@@ -20,7 +20,7 @@ class FavoriteShop extends \KC\Entity\FavoriteShop
             ->andWhere("v.status = 1")
             ->andWhere("v.codealert = 1")
             ->orderBy("s.name", "ASC");
-        $shopVisitorInformation = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $shopVisitorInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return !empty($shopVisitorInformation) ? count($shopVisitorInformation) : 0;
     }
 
