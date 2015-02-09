@@ -139,7 +139,8 @@ class FrontEnd_Helper_LayoutContent
                 '<div class="block-image">
                     <div class="image-holder">
                         <div class="image-frame">
-                            <img class="position-cover" src="' . $homePageWidgetBannerPath .'" alt="' . $homePageBanner['homepage_widget_banner_name'] .'">
+                            <img class="position-cover" src="' . $homePageWidgetBannerPath .'" alt="' . $homePageBanner['homepage_widget_banner_name'] .'"
+                            title="' . $homePageBanner['homepage_widget_banner_name'] .'">
                         </div>
                     </div>
                 </div>';

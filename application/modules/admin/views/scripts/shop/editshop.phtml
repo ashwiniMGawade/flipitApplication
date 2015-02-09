@@ -802,10 +802,50 @@ echo $this->headTitle()->append('Edit Shop');?>
                     </div>
                 </div>
             </div>
-
+            <div class="mainpage-content">
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php
+                         echo $this->translate("Show Shop Custom Text");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                             <button type="button"
+                             class="btn <?php if($this->data['showcustomtext']=='1'){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'customText','on');"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button type="button"
+                            class="btn <?php if($this->data['showcustomtext']=='0' || $this->data['showcustomtext']==''){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'customText','off');"><?php echo $this->translate('No'); ?></button>
+                            <input type="hidden" value="<?php echo $this->data['showcustomtext'] ; ?>" id="showcustomtext" name="showcustomtext" style="display:none;"> 
+                          </div>
+                    </div>
+                </div>
+                <div id="customText" class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Shop Custom text'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                        <textarea rows="3" id="shopCustomText" name="shopCustomText"
+                        class="input-xlarge mbot bbot ignore word_count"><?php echo $value = !empty($this->data['customtext']) ? $this->data['customtext'] : '';?></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div id="customtextposition" class="mainpage-content-line">
+                    <div class="mainpage-content-left">
+                        <label>
+                            <strong><?php echo $this->translate('Custom text Under Offer number'); ?></strong>
+                        </label>
+                    </div>
+                    <div class="mainpage-content-right" >
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" class="span3" 
+                            placeholder="<?php echo $this->translate('Custom text Under Offer number'); ?>" 
+                            name="customtextposition"  value="<?php echo $value = !empty($this->data['customtextposition']) ? $this->data['customtextposition'] : '';?>">
+                        </div>
+                    </div>
+                </div>
+            </div> 
             <div class="mainpage-content">
             	<div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><strong><?php echo $this->translate("Add a 'How to use the code'"); ?></strong></div>
+                    <div class="mainpage-content-left">
+                        <strong><?php echo $this->translate("Add a 'How to use the code'"); ?></strong></div>
                     <div class="mainpage-content-right">
                     	<div class="btn-group" data-toggle="buttons-checkbox">
                             

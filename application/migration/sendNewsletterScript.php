@@ -192,17 +192,44 @@ class SendNewsletter
         $this->_linkPath = $this->_hostName . '/' .$this->_localePath;
         $this->_publicPath = $this->_hostName . '/public/' . $this->_localePath;
         $this->_rootPath = PUBLIC_PATH . $this->_localePath;
-        $topCategories = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);
-        $topVouchercodes = Offer::getTopOffers(10);
-        $categoryVouchers = array_slice(Category::getCategoryVoucherCodes($topCategories[0]['categoryId']), 0, 3);
+
+        $newsLetterCache = NewsLetterCache::getAllNewsLetterCacheContent();
+        if (!empty($newsLetterCache)) {
+            echo 'Building newsletter from cache'."\n";
+            $newsLetterCache = NewsLetterCache::getAllNewsLetterCacheContent();
+            $topCategory = NewsLetterCache::getCategoryByFallBack($newsLetterCache['top_category_id']);
+            $topVouchercodes = NewsLetterCache::getTopOffersByFallBack($newsLetterCache['top_offers_ids']);
+            $categoryVouchers = NewsLetterCache::getTopCategoryOffersByFallBack(
+                $newsLetterCache['top_category_offers_ids'],
+                $topCategory[0]['id']
+            );
+            $emailHeader = NewsLetterCache::getEmailHeaderByFallBack(
+                $newsLetterCache['email_header'],
+                $settings[0]['email_header']
+            );
+            $emailFooter = NewsLetterCache::getEmailFooterByFallBack(
+                $newsLetterCache['email_footer'],
+                $settings[0]['email_footer']
+            );
+            $categoryName = $topCategory[0]['name'];
+            $categoryPermalink = $topCategory[0]['permaLink'];
+        } else {
+            echo 'Building newsletter not from cache'."\n";
+            $topCategory = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);
+            $topVouchercodes = Offer::getTopOffers(10);
+            $categoryVouchers = array_slice(Category::getCategoryVoucherCodes($topCategory[0]['categoryId']), 0, 3);
+            $emailHeader = $settings[0]['email_header'];
+            $emailFooter = $settings[0]['email_footer'];
+            $categoryName = $topCategory[0]['category']['name'];
+            $categoryPermalink = $topCategory[0]['category']['permaLink'];
+        }
+ 
         BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'scheduleNewsletterSender', '', $this->_mandrillKey);
         $mandrill = new Mandrill_Init($this->_mandrillKey);
         $mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
         $mandrillNewsletterSubject = $settings[0]['emailsubject'];
         $mandrillSenderName = $settings[0]['sendername'];
-        $categoryName = $topCategories[0]['category']['name'];
-        $categoryPermalink = $topCategories[0]['category']['permaLink'];
-        $newsletterHeader = Signupmaxaccount::getEmailHeaderFooter();
+        //$newsletterHeader = Signupmaxaccount::getEmailHeaderFooter();
         try {
             FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
                 $topVouchercodes,
@@ -214,7 +241,7 @@ class SendNewsletter
                 $this->_recipientMetaData,
                 $this->_loginLinkAndData,
                 $this->_to,
-                $settings[0]['email_footer'],
+                $emailFooter,
                 array(
                     'httpPath' => $this->_hostName,
                     'locale' => $this->_locale,
@@ -222,9 +249,10 @@ class SendNewsletter
                     'publicPathCdn' => $this->_public_cdn_path,
                     'mandrillKey' => $this->_mandrillKey
                 ),
-                $newsletterHeader['email_header']
+                $emailHeader
             );
             Signupmaxaccount::updateNewsletterSchedulingStatus();
+            NewsLetterCache::truncateNewletterCacheTable();
             $message = 'Newsletter has been sent successfully';
         } catch (Mandrill_Error $e) {
             $message ='There is some problem in your data';

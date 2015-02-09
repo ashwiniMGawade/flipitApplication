@@ -63,7 +63,7 @@ if (
                 <p>                    
                     <?php if(!empty($session->data[$item]['img'])): ?>   
                         <p>
-                            <img src="<?php echo PUBLIC_PATH.$session->data[$item]['img'] ?>">
+                            <img src="<?php echo PUBLIC_PATH.$session->data[$item]['img'] ?>" title="image">
                             <input type="checkbox" name="delete[]" value="<?php echo $item; ?>"> Delete?
                         </p>
                     <?php endif; ?>      
@@ -74,7 +74,7 @@ if (
                     <input type="file" name="<?php echo $item; ?>" accept="image/x-png, image/gif, image/jpeg, image/jpg" />  
                     <?php if(!empty($session->data[$item]['img'])): ?>
                         <p>
-                            <img src="<?php echo PUBLIC_PATH.$session->data[$item]['img'] ?>">
+                            <img src="<?php echo PUBLIC_PATH.$session->data[$item]['img'] ?>" title="image">
                             <input type="checkbox" name="delete[]" value="<?php echo $item; ?>"> Delete?
                         </p>
                     <?php endif; ?>         

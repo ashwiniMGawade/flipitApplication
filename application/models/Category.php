@@ -15,6 +15,20 @@ class Category extends BaseCategory
     #####################################################
     ############# REFACORED CODE ########################
     #####################################################
+    public static function categoryExistOrNot($categoryId)
+    {
+        $category = Doctrine_Core::getTable('Category')->find($categoryId);
+        return $category;
+    }
+    public static function getCategoryInformationForNewsLetter($id)
+    {
+        $category = Doctrine_Query::create()
+            ->select("c.id, c.name, c.permalink")
+            ->from('Category c')
+            ->where("c.id = " . $id)
+            ->fetchArray();
+        return $category;
+    }
 
     public static function getCategoryVoucherCodes($categoryId, $numberOfOffers = 0, $pageName = '')
     {

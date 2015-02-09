@@ -21,7 +21,55 @@ class Offer extends BaseOffer
         }
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
+
+    public static function offerExistOrNot($offerId)
+    {
+        $offers = Doctrine_Core::getTable('Offer')->find($offerId);
+        return $offers;
+    }
     
+    public static function getOffersForNewsletter($offerIds)
+    {
+        $offers = Doctrine_Query::create()
+            ->select(
+                's.id,s.name,
+                s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,
+                s.actualUrl,terms.content,
+                o.id,o.Visability,o.userGenerated,o.title,o.authorId,
+                o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,o.authorName,
+                o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.extendedUrl,
+                o.discountType,o.startdate,o.endDate,o.nickname,o.approved,
+                img.id, img.path, img.name'
+            )
+            ->from('Offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('s.logo img')
+            ->leftJoin('o.termandcondition terms')
+            ->andWhereIn("o.id", $offerIds)
+            ->fetchArray();
+          $changedOrderOffers = self::changeOrder($offers);
+          $changedOrderOffersSameAsTopOffers = self::getOfferWithOrder($changedOrderOffers, $offerIds);
+        return $changedOrderOffersSameAsTopOffers;
+    }
+
+    public static function changeOrder($offers)
+    {
+        $changeOrder = '';
+        foreach ($offers as $offer) {
+            $changeOrder[$offer['id']] = $offer;
+        }
+        return $changeOrder;
+    }
+
+    public static function getOfferWithOrder($offers, $offerIds)
+    {
+        $offersWithOrder = '';
+        foreach ($offerIds as $id) {
+            $offersWithOrder[] = $offers[$id];
+        }
+        return $offersWithOrder;
+    }
+
     public static function getExpiredOffers($type, $limit, $shopId = 0)
     {
         $expiredDate = date("Y-m-d H:i");
@@ -401,7 +449,7 @@ class Offer extends BaseOffer
         $specialPageOffers = Doctrine_Query::create()
         ->select(
             'op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,
-            o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
+            o.discountType,o.userGenerated,o.approved,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
             o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,
             o.updated_at as lastUpdate,s.name,s.refUrl,
             s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path,
@@ -454,9 +502,9 @@ class Offer extends BaseOffer
     {
         $offersConstraintsQuery = Doctrine_Query::create()
         ->select(
-            'o.title,o.couponCodeType,o.discountType,o.totalViewcount as clicks,o.startDate,o.endDate,o.refURL,
+            'o.title, o.userGenerated, o.approved, o.couponCodeType,o.discountType,o.totalViewcount as clicks,o.startDate,o.endDate,o.refURL,
             o.refOfferUrl,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,
-            o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,
+            o.updated_at as lastUpdate, o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,
             fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name,o.authorName'
         )
         ->from('Offer o')
@@ -1027,8 +1075,8 @@ class Offer extends BaseOffer
             'o.id,o.authorId,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
             o.editorPicks,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,o.authorName,
             o.endDate,o.refOfferUrl,o.couponCodeType, o.approved, o.userGenerated, o.nickname,o.extendedUrl,
-            l.*,t.*,s.id,s.name,s.permalink as permalink,
-            s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path,
+            l.*,t.*,s.id,s.name,s.permalink as permalink, s.refUrl,s.customtext, s.showcustomtext, s.customtextposition,
+            s.usergenratedcontent,s.deepLink,s.deepLinkStatus, s.actualUrl, terms.content,img.id, img.path,
             img.name,vot.id,vot.vote'
         )
         ->from('Offer o')

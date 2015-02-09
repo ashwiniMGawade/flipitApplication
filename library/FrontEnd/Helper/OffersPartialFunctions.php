@@ -189,10 +189,12 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         $imageTagForOffer = '';
         if ($shopCodeHolder) {
-            $imageTag ='<img width="130" height="68" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"/>';
+            $imageTag ='<img width="130" height="68" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'" 
+            title="'.$altAttributeText.'"/>';
             $imageTagForOffer = '<div class="center"><div class="code-holder">' . $imageTag . '</div></div>';
         } else {
-            $imageTagForOffer ='<img class="small-code" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"/>';
+            $imageTagForOffer ='<img class="small-code" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"
+            title="'.$altAttributeText.'"/>';
         }
         return $imageTagForOffer;
     }
@@ -230,7 +232,8 @@ class FrontEnd_Helper_OffersPartialFunctions
         $imgTagWithImage = '';
         if ($shop!=null) {
             $shopLogoImage = PUBLIC_PATH_CDN.ltrim($shop['logo']['path'], "/").'thum_medium_'. $shop['logo']['name'];
-            $imgTagWithImage = '<img alt="' . $shop['permaLink']. '" src="'. $shopLogoImage .'">';
+            $imgTagWithImage = '<img alt="' . $shop['permaLink']. '" src="'. $shopLogoImage .'" 
+            title="' . $shop['permaLink']. '">';
         } else {
             $imgTagWithImage = '<div class="ico-mail"></div>';
         }
@@ -483,8 +486,18 @@ class FrontEnd_Helper_OffersPartialFunctions
         } else {
             $siteImage =
                 '<img class="logo-img" 
-                src="'.HTTP_PATH.'public/images/logo-3.png" width="109" height="49" alt="Flipit">';
+                src="'.HTTP_PATH.'public/images/logo-3.png" width="109" height="49" alt="Flipit" title="Flipit">';
         }
         return $siteImage;
+    }
+
+    public static function getVerifiedText()
+    {
+        $verifiedText = "
+            <div class='verified-text'>
+                <strong>" . FrontEnd_Helper_viewHelper::__translate('Verified') . "</strong>
+                <span class='glyphicon glyphicon-ok'></span>
+            </div>";
+        return $verifiedText;
     }
 }

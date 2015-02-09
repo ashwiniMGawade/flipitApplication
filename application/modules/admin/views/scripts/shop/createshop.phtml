@@ -649,7 +649,50 @@ $howToIntroductionText = '';
                     </div>
                 </div>
             </div>
-
+            <div class="mainpage-content">
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php
+                         echo $this->translate("Show Shop Custom Text");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                             <button type="button" class="btn" onClick="setOnOff(event,'customText','on');">
+                             <?php echo $this->translate('Yes'); ?></button>                     
+                            <button type="button" class="btn btn-primary default" onClick="setOnOff(event,'customText','off');"><?php echo $this->translate('No'); ?></button>
+                            <input type="hidden" value="0" id="showcustomtext" name="showcustomtext" style="display:none;"> 
+                          </div>
+                    </div>
+                </div>
+                <div id="customText" class="mainpage-content-line mb10" style="display:none;">
+                    <div class="mainpage-content-left">
+                        <label>
+                            <strong><?php echo $this->translate('Shop Custom text'); ?></strong>
+                        </label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                        <textarea rows="3" id="shopCustomText" name="shopCustomText"
+                        placeholder="<?php echo $this->translate('Custom description about the shop')?>"
+                        class="input-xlarge mbot bbot ignore word_count"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div id="customtextposition" class="mainpage-content-line" style="display:none;">
+                    <div class="mainpage-content-left">
+                        <label>
+                            <strong><?php echo $this->translate('Custom text Under Offer number'); ?></strong>
+                        </label>
+                    </div>
+                    <div class="mainpage-content-right" >
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" class="span3" 
+                            placeholder="<?php echo $this->translate('Custom text Under Offer number'); ?>" 
+                            name="customtextposition" value="0">
+                        </div>
+                    </div>
+                </div>
+            </div>    
 
             <div class="mainpage-content">
             	<div class="mainpage-content-line mb10">

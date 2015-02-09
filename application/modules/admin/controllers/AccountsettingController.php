@@ -136,6 +136,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
             if ($isScheduled) {
                 if (Signupmaxaccount::saveScheduledNewsletter($this->getRequest())) {
+                    NewsLetterCache::saveNewsLetterCacheContent();
                     $flash->addMessage(
                         array(
                             'success' => $this->view->translate('Newsletter has been successfully scheduled')

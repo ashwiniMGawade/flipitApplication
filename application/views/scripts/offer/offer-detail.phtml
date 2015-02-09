@@ -15,7 +15,7 @@ if ($this->offerImagePath == '') {
        )
     );
 } else {
-    $lightboxContent = '<img src = "'.$this->offerImagePath.'" alt = "Printable Coupon">';
+    $lightboxContent = '<img src = "'.$this->offerImagePath.'" alt = "Printable Coupon" title="Printable Coupon">';
 }
 ?>
 <section id="code-lightbox">
@@ -24,7 +24,7 @@ if ($this->offerImagePath == '') {
         <header class="head">
             <div class="icon">
                 <img src="<?php echo $this->facebookImage; ?>" 
-                width="176" height="89" alt='<?php echo $offer->shop['name'];?>'>
+                width="176" height="89" alt='<?php echo $offer->shop['name'];?>' title='<?php echo $offer->shop['name'];?>'>
             </div>
             <div class="box">
                 <div class="text">

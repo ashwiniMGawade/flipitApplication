@@ -138,6 +138,11 @@ foreach ($this->offers as $offer) {
     ?>
                 </ul>
             </div>
+            <?php 
+            if ($offer->userGenerated == 0) {
+                //echo $offerPartial->getVerifiedText();
+            }
+            ?>
         </div>
     <?php
     if ($this->offersType!='extendedOffer') {
@@ -152,7 +157,7 @@ foreach ($this->offers as $offer) {
             <div class="recommended-arrow"></div>
             <div class="recommendedOffer">
                 <span>
-                    <img src="<?php echo HTTP_PATH.'public/images/rec-thumb.png';?>" class="recommended-thumb" alt="thumb">
+                    <img src="<?php echo HTTP_PATH.'public/images/rec-thumb.png';?>" class="recommended-thumb" alt="thumb" title="thumb">
                     <?php echo $this->translate('Recommended by staff');?>
                 </span>
                 <?php
@@ -192,6 +197,16 @@ foreach ($this->offers as $offer) {
                 .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage=');
         endif;
     endif;
+    if ($this->offersType=='simple') {
+        if ($offer->shop['showcustomtext'] == 1
+            && $offerCounter == $offer->shop['customtextposition']) { ?>
+            <article class="block">
+                <div class="holder" style="">
+                    <?php echo $offer->shop['customtext'];?>
+                </div>
+            </article>
+<?php   }
+    }
 }
 if ($this->offersType!='extendedOffer') {
     if ($this->offersType == 'newestOffer'

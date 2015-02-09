@@ -724,7 +724,7 @@ function checkDuplicateKeyword()
 	   
 		var li = '<li class="vistor-keyword-item" type="'+ $('input#newKeyword').val() +'">';
 		li+= $('input#newKeyword').val() + inputEl +  '<a herf="javascript:void(0);"  onClick="deleteKeyword(this)">';
-		li+='<img src="' + path + '"/></a>&nbsp;</li>';
+		li+='<img src="' + path + '" title="Keyword"/></a>&nbsp;</li>';
 		$('ul#visitorKeyword-list').append(li);
 		
 		$('input#newKeyword').val('');

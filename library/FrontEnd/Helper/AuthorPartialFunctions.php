@@ -13,7 +13,7 @@ class FrontEnd_Helper_AuthorPartialFunctions
                 $shopLogos.=
                 '<li>
                     <a href="'. $linkToShopDetails.'">
-                        <img src="'.$shopImage.'" width="90" height="45" alt="'.$shop['name'].'">
+                        <img src="'.$shopImage.'" width="90" height="45" alt="'.$shop['name'].'" title="'.$shop['name'].'">
                     </a>
                 </li>';
             endif;
@@ -44,7 +44,7 @@ class FrontEnd_Helper_AuthorPartialFunctions
         '<li>
             <a href="'.$socialMediaLinkUrl.'" target="_blank">
                 <img src="' .HTTP_PATH ."public/images/front_end/"
-                . $socialMediaLinkImage .'" width="16" height="16" />' .$socialMediaLinkName
+                . $socialMediaLinkImage .'" width="16" height="16" title="Social Media Image" />' .$socialMediaLinkName
             .'</a>
         </li>';
     }
