@@ -177,15 +177,6 @@ endif;
         echo $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
             .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
     endif;
-    
-    if ($this->shareCodeStatus=='name=thanksmessage'):
-        echo $this->esi($this->locale.'store/socialcodethanks');
-    else :
-        echo $this->esi(
-            $this->locale.'store/socialcode?shopPermalink='
-            .$this->currentStoreInformation[0]['permaLink']
-        );
-    endif;
     ?>
     </aside>
 </div>
