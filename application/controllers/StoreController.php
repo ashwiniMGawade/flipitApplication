@@ -437,25 +437,7 @@ class StoreController extends Zend_Controller_Action
 
     public function socialcodeAction()
     {
-        $this->_helper->layout()->disableLayout();
-        $shopPermalink = $this->getRequest()->getParam('shopPermalink');
-        $shopId = base64_encode(Shop::getShopIdByPermalink($shopPermalink));
-        $socialcodeForm = new Application_Form_SocialCode();
-        $socialcodeForm->getElement('shopPermalink')->setValue($shopPermalink);
-        $socialcodeForm->getElement('shopId')->setValue($shopId);
-        $this->view->zendForm = $socialcodeForm;
-        if ($this->getRequest()->isPost()) {
-            if ($socialcodeForm->isValid($this->getRequest()->getPost())) {
-                $socialcode = $socialcodeForm->getValues();
-                UserGeneratedOffer::addOffer($socialcode);
-                $this->_redirect(HTTP_PATH_LOCALE. $socialcode['shopPermalink'].'?name=thanksMessage');
-                exit();
-            } else {
-                $socialcodeForm->highlightErrorElements();
-                $socialcode = $socialcodeForm->getValues();
-                $this->_redirect(HTTP_PATH_LOCALE. $socialcode['shopPermalink']);
-            }
-        }
+        $this->_redirect('/');
     }
 
     public function socialcodethanksAction()
