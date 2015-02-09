@@ -112,12 +112,12 @@ EOD;
             ->leftJoin('p.pagewidget', 'w')
             ->leftJoin('w.widget', 'refpage')
             ->where("p.permalink=".$queryBuilder->expr()->literal("$page"))
-            ->andWhere('w.status = 1')
-            ->andWhere('w.deleted = 0');
+            ->andWhere('w.stauts = 1')
+            ->andWhere('p.deleted = 0');
         $pageWidgets = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $sidebarWidgets = '';
         if (count($pageWidgets) > 0) {
-            for ($i=0; $i<count($pageWidgets[0]['widget']); $i++) {
+            for ($i=0; $i<count($pageWidgets[0]['pagewidget']); $i++) {
             }
         }
         return $sidebarWidgets;

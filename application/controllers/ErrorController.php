@@ -83,10 +83,10 @@ class ErrorController extends Zend_Controller_Action
                     $this->view->pageHeaderImage =
                     \FrontEnd_Helper_viewHelper::
                         getRequestedDataBySetGetCache(
-                            'page_header'.$pageDetails->id.'_image',
+                            'page_header'.$pageDetails['id'].'_image',
                             array(
                                 'function' => '\KC\Repository\Logo::getPageLogo',
-                                'parameters' => array($pageDetails['pageHeaderImageId'])
+                                'parameters' => array($pageDetails['pageHeaderImageId']['id'])
                             ),
                             ''
                         );

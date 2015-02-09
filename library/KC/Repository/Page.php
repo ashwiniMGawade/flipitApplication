@@ -8,10 +8,11 @@ class Page Extends \KC\Entity\Page
     {
         $currentDate = date('Y-m-d 00:00:00');
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerLocale->select('page, attr, pagewidget')
+        $query = $entityManagerLocale->select('page, attr, pagewidget, himg')
             ->from('KC\Entity\Page', 'page')
             ->leftJoin('page.pagewidget', 'pagewidget')
             ->leftJoin('page.page', 'attr')
+            ->leftJoin('page.pageHeaderImageId', 'himg')
             ->where('page.permalink = ' . $entityManagerLocale->expr()->literal($permalink))
             ->andWhere('page.publishDate <=' . $entityManagerLocale->expr()->literal($currentDate))
             ->andWhere('page.deleted = 0');

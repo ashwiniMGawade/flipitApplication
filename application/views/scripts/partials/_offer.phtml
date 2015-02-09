@@ -19,7 +19,7 @@ foreach ($this->offers as $offer) {
     $offer = (object) $offer;
     $offerBounceRate = "/out/offer/".$offer->id;
     $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
-    $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($offer->endDate);
+    $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires((array)$offer->endDate);
     $urlToShow = $offerPartial->getUrlToShow($offer);
     $offerTitle = FrontEnd_Helper_viewHelper::replaceStringVariable($offer->title);
     $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);

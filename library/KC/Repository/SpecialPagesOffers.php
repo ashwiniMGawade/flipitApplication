@@ -9,13 +9,7 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDate = date("Y-m-d H:i");
         $query = $queryBuilder
-        ->select(
-            'op,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,
-            o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
-            o.editorPicks,o.discount,o.discountvalueType,o.startDate as startdate,o.extendedOffer,o.extendedUrl,
-            o.updated_at as lastUpdate,s.name,s.refUrl,
-            s.actualUrl,s.permaLink as permalink,s.views,l,fv,terms.content'
-        )
+        ->select('op, o, terms, s, vot, l, fv')
         ->from('KC\Entity\SpecialPagesOffers', 'op')
         ->leftJoin('op.offers', 'o')
         ->leftJoin('o.offertermandcondition', 'terms')
