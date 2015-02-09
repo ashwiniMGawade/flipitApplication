@@ -907,32 +907,36 @@ class Offer Extends \KC\Entity\Offer
         $getOffersQuery = $entityManagerUser
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
-            ->setParameter(1, $deletedStatus)
-            ->where('o.deleted = ?1')
-            ->setParameter(2, 0)
-            ->andWhere('o.userGenerated = ?2')
-            ->andWhere('o.approved = "0"');
+            ->where($entityManagerUser->expr()->eq('o.deleted', $entityManagerUser->expr()->literal($deletedStatus)))
+            ->andWhere($entityManagerUser->expr()->eq('o.userGenerated', $entityManagerUser->expr()->literal('0')))
+            ->andWhere($entityManagerUser->expr()->eq('o.approved', $entityManagerUser->expr()->literal('0')));
         if ($userRole=='4') {
-            $getOffersQuery->setParameter(3, 'DE');
-            $getOffersQuery->andWhere('o.Visability =?3');
+            $getOffersQuery->andWhere(
+                $entityManagerUser->expr()->like('o.Visability', $entityManagerUser->expr()->literal('DE'))
+            );
         }
         if ($searchOffer != '') {
-            $getOffersQuery->setParameter(11, '%'.$searchOffer.'%');
-            $getOffersQuery->andWhere($entityManagerUser->expr()->like('o.title, ?11'));
+            $getOffersQuery->andWhere(
+                $entityManagerUser->expr()->like('o.title', $entityManagerUser->expr()->literal('%'.$searchOffer.'%'))
+            );
         }
         if ($searchShop!='') {
-            $getOffersQuery->setParameter(12, '%'.$searchShop.'%');
-            $getOffersQuery->andWhere($entityManagerUser->expr()->like('s.name, ?12'));
+            $getOffersQuery->andWhere(
+                $entityManagerUser->expr()->like('s.name', $entityManagerUser->expr()->literal('%'.$searchShop.'%'))
+            );
         }
         if ($searchCoupon!='') {
-            $getOffersQuery->setParameter(13, '%'.$searchCoupon.'%');
-            $getOffersQuery->andWhere($entityManagerUser->expr()->like('o.couponCode, ?13'));
+            $getOffersQuery->andWhere(
+                $entityManagerUser->expr()->like('o.couponCode', $entityManagerUser->expr()->literal('%'.$searchCoupon.'%'))
+            );
         }
         if ($searchCouponType!='') {
             if ($searchCouponType != 'EX') {
-                $getOffersQuery->andWhere("o.discountType='".$searchCouponType."'");
+                $getOffersQuery->andWhere(
+                    $entityManagerUser->expr()->eq('o.discountType', $entityManagerUser->expr()->literal($searchCouponType))
+                );
             } else {
-                $getOffersQuery->andWhere("o.extendedOffer = 1");
+                $getOffersQuery->andWhere($entityManagerUser->expr()->eq('o.extendedOffer', 1));
             }
         }
 
