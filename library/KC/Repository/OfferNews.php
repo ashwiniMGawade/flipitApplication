@@ -112,4 +112,17 @@ class OfferNews extends \KC\Entity\OfferNews
         }
         return $urlsArray ;
     }
+
+    public static function getnewstickerListForExport()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query  = $queryBuilder
+            ->select('n.id as id,n.shopId,n.title as title,n.startdate,s.name,n.linkstatus, n.url, n.content')
+            ->from("KC\Entity\OfferNews", "n")
+            ->leftJoin("n.shop", "s")
+            ->where("n.deleted = 0")
+            ->orderBy("n.title", "ASC");
+        $newstickerList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $newstickerList;
+    }
 }
