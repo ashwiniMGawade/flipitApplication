@@ -105,14 +105,16 @@ EOD;
 
     public function getSidebarWidget($array = array(), $page = '')
     {
-        $pageWidgets = Doctrine_Query::create()
-            ->select('p.id,p.slug,w.*,refpage.position')->from('Page p')
-            ->leftJoin('p.widget w')
-            ->leftJoin('w.refPageWidget refpage')
-            ->where("p.permalink="."'$page'")
-            ->andWhere('w.status=1')
-            ->andWhere('w.deleted=0')
-            ->fetchArray();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('p, w, refpage')
+            ->from('KC\Entity\Page', 'p')
+            ->leftJoin('p.pagewidget', 'w')
+            ->leftJoin('w.widget', 'refpage')
+            ->where("p.permalink=".$queryBuilder->expr()->literal("$page"))
+            ->andWhere('w.status = 1')
+            ->andWhere('w.deleted = 0');
+        $pageWidgets = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $sidebarWidgets = '';
         if (count($pageWidgets) > 0) {
             for ($i=0; $i<count($pageWidgets[0]['widget']); $i++) {
