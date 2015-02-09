@@ -1,0 +1,28 @@
+ <section class="section six-reasons">
+    <header class="heading-box">
+        <h2>
+            <?php echo $this->translate('6 reasons to Kiesen for') . " " .
+            $this->shopName. " " . $this->translate('coupon code');
+            ?>
+        </h2>
+    </header>
+    <article class="block">
+        <div class="row">
+            <?php
+             foreach($this->reasons  as $reason) {
+                ?>
+                <div class="col-md-6">
+                    <div class='six-reason-image'>
+                    </div>
+                    <div class='six-reason-text'>
+                        <strong><?php echo $reason[0];?></strong>
+                        <p><?php echo $reason[1];?></p>
+                    </div>
+                    </ul>
+                </div>
+                <?php
+            }
+            ?>
+        </div>
+    </article>
+</section>

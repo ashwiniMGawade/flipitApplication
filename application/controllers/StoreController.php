@@ -38,8 +38,22 @@ class StoreController extends Zend_Controller_Action
 
     public function storedetailAction()
     {
-        $shopPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($shopPermalink);
+        $url = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $explodeUrl = explode('?', $url);
+        $shopPermalink = $explodeUrl[0];
+
+        if (LOCALE != '') {
+            $explodedPermalink = explode("/", $shopPermalink);
+            $shopPermalink = $explodedPermalink[1];
+        }
+        
+        $this->view->shareCodeStatus = '';
+        if (isset($explodeUrl[1])) {
+            $this->view->shareCodeStatus = $explodeUrl[1];
+        }
+        
+        $this->view->storePageUrl = $shopPermalink;
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($shopPermalink);
         $shopRecordsLimit = 10;
         $shopParams = $this->_getAllParams();
         if (isset($shopParams['popup']) && $shopParams['popup'] != '') {
@@ -105,6 +119,15 @@ class StoreController extends Zend_Controller_Action
                 ''
             );
 
+            $sixShopReasons = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                (string)'shop_sixReasons_'.$ShopList,
+                array(
+                    'function' => 'ShopReasons::getShopReasons',
+                    'parameters' => array($shopId)
+                ),
+                ''
+            );
+
             if (!count($shopInformation) >0) {
                 $localeUrl = HTTP_PATH_LOCALE;
                 $this->_helper->redirector->setCode(301);
@@ -135,23 +158,14 @@ class StoreController extends Zend_Controller_Action
         $this->view->moneySavingGuideArticle = $moneySavingGuideArticle;
         $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->offers = $offers;
-      
+        $this->view->sixShopReasons = $this->_helper->Store->changeIndexOfSixReasons($sixShopReasons);
+
         if ($this->view->currentStoreInformation[0]['affliateProgram']==0 && count($this->view->offers) <=0) {
             $offers = $this->_helper->Store->topStorePopularOffers($shopId, $offers);
             $this->view->topPopularOffers = $offers;
         }
 
-        if (LOCALE != '') {
-            $explodedPermalink = explode("/", $shopPermalink);
-            $shopPermalink = $explodedPermalink[1];
-        }
-
-        $shopPermalink =  explode("?", $shopPermalink);
-        if (isset($shopPermalink[0])) {
-            $shopPermalink = $shopPermalink[0];
-        }
-        $this->view->storePageUrl = $shopPermalink;
-        $cacheKey = \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopInformation[0]['permaLink']);
+        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopInformation[0]['permaLink']);
         if ($this->view->currentStoreInformation[0]['discussions'] == 1) {
             $this->view->discussionComments =
                 \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
@@ -199,8 +213,8 @@ class StoreController extends Zend_Controller_Action
                 ),
                 ''
             );
-        $contentManagerId = !empty($shopInformation[0]['contentManagerId']) ? $shopInformation[0]['contentManagerId'] : '';
-        $this->view->ballonEditorText = KC\Repository\EditorBallonText::getEditorText($contentManagerId);
+
+        $this->view->ballonEditorText = EditorBallonText::getEditorText($shopId);
         $customHeader = isset($shopInformation[0]['customHeader']) ? $shopInformation[0]['customHeader'] : '';
         $this->viewHelperObject->getMetaTags(
             $this,
@@ -439,9 +453,7 @@ class StoreController extends Zend_Controller_Action
             if ($socialcodeForm->isValid($this->getRequest()->getPost())) {
                 $socialcode = $socialcodeForm->getValues();
                 KC\Repository\UserGeneratedOffer::addOffer($socialcode);
-                $shareCodeStatus = new \Zend_Session_Namespace('shareCodeStatus');
-                $shareCodeStatus->shareCodeStatus = true;
-                $this->_redirect(HTTP_PATH_LOCALE. $socialcode['shopPermalink']);
+                $this->_redirect(HTTP_PATH_LOCALE. $socialcode['shopPermalink'].'?name=thanksMessage');
                 exit();
             } else {
                 $socialcodeForm->highlightErrorElements();

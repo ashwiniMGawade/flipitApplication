@@ -1,6 +1,4 @@
 <?php
-//Doctrine_Manager::getInstance()->bindComponent('EditorBallonText', 'doctrine');
-
 abstract class BaseEditorBallonText extends Doctrine_Record
 {
     public function setTableDefinition()
@@ -28,7 +26,7 @@ abstract class BaseEditorBallonText extends Doctrine_Record
             'length' => '255',
             )
         );
-        $this->hasColumn('userid', 'integer', 11, array(
+        $this->hasColumn('shopid', 'integer', 11, array(
                 'type' => 'integer',
                 'length' => '11',
         ));
@@ -41,8 +39,8 @@ abstract class BaseEditorBallonText extends Doctrine_Record
     public function setUp()
     {
         parent::setUp();
-        $this->hasOne('userid  as userid', array(
-                'local' => 'userid',
+        $this->hasOne('shopid  as shopid', array(
+                'local' => 'shopid',
                 'foreign' => 'id'));
 
         $timestampable = new Doctrine_Template_Timestampable(array(

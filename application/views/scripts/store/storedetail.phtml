@@ -124,6 +124,17 @@ if($this->shopEditor != null || $this->ballonEditorText != null):
         )
     );
 endif;
+
+$sixShopReasons = '';
+if (!empty($this->sixShopReasons)) {
+    $sixShopReasons = $this->partial(
+        $storeViewPartialPath.'_sixShopReasons.phtml', 
+        array(
+            'shopName' => $this->currentStoreInformation[0]['name'],
+            'reasons'=>$this->sixShopReasons
+        )
+    );
+}
 ?>
 <input type="hidden" name="currentShop" id="currentShop" 
 value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
@@ -139,6 +150,7 @@ echo !empty($disqusReplyCounter) ? $disqusReplyCounter : '';
     <?php 
     echo $noMoneyNocodeMessage;
     echo $offers;
+    echo $sixShopReasons;
     echo $similarOffersHeader;
     echo $similarOffers;
     echo $similarShopsAndSimilarCategoriesShops;
@@ -163,16 +175,14 @@ echo !empty($disqusReplyCounter) ? $disqusReplyCounter : '';
         echo $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
             .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
     endif;
-    $shareCodeStatus = new Zend_Session_Namespace('shareCodeStatus');
-    if ($shareCodeStatus->shareCodeStatus):
+    
+    if ($this->shareCodeStatus=='name=thanksmessage'):
         echo $this->esi($this->locale.'store/socialcodethanks');
-        Zend_Session::namespaceUnset('shareCodeStatus');
     else :
         echo $this->esi(
             $this->locale.'store/socialcode?shopPermalink='
             .$this->currentStoreInformation[0]['permaLink']
         );
-        Zend_Session::namespaceUnset('shareCodeStatus');
     endif;
     ?>
     </aside>

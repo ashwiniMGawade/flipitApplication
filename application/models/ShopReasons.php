@@ -9,7 +9,7 @@ class ShopReasons extends BaseShopReasons
             ->execute();
         foreach ($reasons as $key => $reason) {
             $ShopReasons  = new ShopReasons();
-            if ($key != '') {
+            if ($reason != '') {
                 $ShopReasons->fieldname = $key;
                 $ShopReasons->fieldvalue =  $reason;
                 $ShopReasons->shopid =  $shopId;
@@ -20,7 +20,7 @@ class ShopReasons extends BaseShopReasons
         return true;
     }
 
-    public function getShopReasons($shopId)
+    public static function getShopReasons($shopId)
     {
         $shopReasons = Doctrine_Query::create()
             ->select('*')
@@ -30,7 +30,7 @@ class ShopReasons extends BaseShopReasons
         return $shopReasons;
     }
 
-    public static function deleteReasons($firstFieldName, $secondFieldName, $shopId)
+    public static function deleteReasons($firstFieldName, $secondFieldName, $thirdFieldName, $forthFieldName, $shopId)
     {
         Doctrine_Query::create()
         ->delete('shopreasons s')
@@ -41,6 +41,18 @@ class ShopReasons extends BaseShopReasons
         Doctrine_Query::create()
         ->delete('shopreasons s')
         ->where('s.fieldname ="'.$secondFieldName.'"')
+        ->andWhere('s.shopid = '.$shopId)
+        ->execute();
+
+        Doctrine_Query::create()
+        ->delete('shopreasons s')
+        ->where('s.fieldname ="'.$thirdFieldName.'"')
+        ->andWhere('s.shopid = '.$shopId)
+        ->execute();
+
+        Doctrine_Query::create()
+        ->delete('shopreasons s')
+        ->where('s.fieldname ="'.$forthFieldName.'"')
         ->andWhere('s.shopid = '.$shopId)
         ->execute();
 

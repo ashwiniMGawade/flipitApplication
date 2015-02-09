@@ -352,10 +352,11 @@ class Admin_ShopController extends Zend_Controller_Action
         $users = new \KC\Repository\User();
 
         //display shop reasons
-        $shopReasons = new ShopReasons();
+        $shopReasons = new \KC\RepositoryShopReasons();
         $this->view->shopReasons = $shopReasons->getShopReasons($id);
-
-        
+        $this->view->ballonData = \KC\RepositoryEditorBallonText::getEditorText($id);
+        // display managers and account managers list
+        $users = new \KC\RepositoryUser();
         $this->view->MangersList = $users->getManagersLists($site_name);
 
         // display  page's list
@@ -431,8 +432,13 @@ class Admin_ShopController extends Zend_Controller_Action
     {
         $firstFieldName = $this->getRequest()->getParam('firstFieldName');
         $secondFieldName = $this->getRequest()->getParam('secondFieldName');
+        $thirdFieldName = $this->getRequest()->getParam('thirdFieldName');
+        $forthFieldName = $this->getRequest()->getParam('forthFieldName');
         $shopId = $this->getRequest()->getParam('shopId');
-        ShopReasons::deleteReasons($firstFieldName, $secondFieldName, $shopId);
+        ShopReasons::deleteReasons($firstFieldName, $secondFieldName, $thirdFieldName, $forthFieldName, $shopId);
+        $shopList = $shopId.'_list';
+        $key = 'shop_sixReasons_'.$shopList;
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         exit();
     }
 
@@ -1419,24 +1425,6 @@ class Admin_ShopController extends Zend_Controller_Action
         $this->sendMailToSuperAdmin();
         exit();
     }
-
-
-    public function shopstatusAction()
-    {
-        $parameters = $this->_getAllParams();
-        self::updateVarnish($parameters['id']);
-        $ret = \KC\Repository\Shop::changeStatus($parameters);
-        echo "<pre>";print_r($ret);
-        echo $offlineDate = $ret['offlineSince']->format('d-m-Y');die;
-        if ($ret['offlineSince'] && $ret['howToUse'] == 1) {
-            $this->_helper->json(array('date' => $offlineDate, 'message'=> 1));
-        } else if ($ret['offlineSince'] && $ret['howToUse'] == '') {
-            $this->_helper->json(array('date'=>$offlineDate, 'message'=>0));
-        } else {
-            echo $ret['offlineSince'];die;
-            $this->_helper->json($ret['offlineSince']);
-        }
-	}
 	
     protected function saveGlobalExportPassword()
     {
@@ -1484,5 +1472,38 @@ class Admin_ShopController extends Zend_Controller_Action
             )
         );
     }
+    
+    public function shopstatusAction ()
+    {
+        $parameters = $this->_getAllParams();
+        self::updateVarnish($parameters['id']);
+        $ret = \KC\Repository\Shop::changeStatus($parameters);
+        $offlineDate = date("d-m-Y", strtotime($ret['offlineSince']));
+        if ($ret['offlineSince'] && $ret['howToUse'] == 1) {
+            $this->_helper->json(array('date' => $offlineDate, 'message'=> 1));
+        } else if ($ret['offlineSince'] && $ret['howToUse'] == '') {
+            $this->_helper->json(array('date'=>$offlineDate, 'message'=>0));
+        } else {
+            $this->_helper->json($ret['offlineSince']);
+        }
+    }
 
+    public function addballontextAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        if ($this->getRequest()->getParam('partialCounter') > 0) {
+            $count = $this->getRequest()->getParam('partialCounter');
+            $this->view->partialCounter = $count;
+        }
+    }
+
+    public function deleteballontextAction()
+    {
+        $textId = $this->getRequest()->getParam('id');
+        if (!empty($textId)) {
+            $ballonText = \KC\Repository\EditorBallonText::deletetext($textId);
+            echo Zend_Json::encode($ballonText);
+        }
+        die;
+    }
 }

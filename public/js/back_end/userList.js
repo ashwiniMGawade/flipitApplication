@@ -647,43 +647,6 @@ jQuery.fn.multiselect = function() {
 	});
 };
 
-function getBallonTexthtml(el){
-		editCount = parseInt($(el).attr('rel'));
-		count = editCount != undefined ? editCount + 1 : count;
-		$.ajax({
-			url : HOST_PATH + "admin/user/addballontext",
-			type : "post",
-			data : {'partialCounter' : count},
-			success : function(data) {
-				$("div#multidiv").append(data);
-				$(el).attr('rel',count);
-				count++ ;
-			}
-		});
-	}
-
-function removeballontexthtml(el) {
-	bootbox.confirm(__("Are you sure you want to delete this Ballon Text ?"),__('No'),__('Yes'),function(r){
-		if(!r){
-			return false;
-		}
-		else{
-			$.ajax({
-				url : HOST_PATH + "admin/user/deleteballontext",
-				type : "post",
-				data : {'id' : $(el).attr('rel')},
-				success : function(data) {
-					var textNumber = $(el).attr('rel');
-					$(el).parents('div.multidivchild').remove();
-					if (textNumber != '') {
-						window.location.reload(true);
-					}
-				}
-			});
-		}
-	});
-}
-
 /**
  * delete user from database by id id get from hidden field
  * @author kraj

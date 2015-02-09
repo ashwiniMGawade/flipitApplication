@@ -1182,7 +1182,7 @@ div.box a.remove-fovourite.blue{
     	line-height: 18px;
     	padding: 10px 10px 10px 75px;
     	span{
-    		color: blue;
+    		color: #1379c9;
     		font-weight: bold;
     	}
 	}
@@ -2271,6 +2271,13 @@ hr.alt2{
 			margin:0 0 10px;
 		}
 		p{margin:0 0 20px;}
+		.deal-holder{
+			.photo {
+				.text-box {
+					p{margin: 0px;}
+				}
+			}
+		}
 	}
 	.add-info{
 		padding:0;
@@ -2393,15 +2400,18 @@ hr.alt2{
 			margin:0 0 5px;
 			.name{
 				color: #878a8d;
+				margin-left: 24px;
 			}
 		}
 	}
 	.name{
 		display:block;
 		font:30px/32px 'Cookie', cursive;
+		text-align:left;
 	}
 }
 .photo{
+	float: left;
 	display:inline-block;
 	vertical-align:top;
 	position:relative;
@@ -2412,6 +2422,7 @@ hr.alt2{
 		.border-radius(50%);
 		border:3px solid @white-color;
 		box-shadow: 0 -5px 5px rgba(0,0,0,0.2);
+		text-align: center;
 	}
 	.text-box {
 		position:absolute;
@@ -2419,16 +2430,16 @@ hr.alt2{
 		top:6px;
 		z-index:1;
 		font-size:12px;
-		line-height:12px;
+		line-height:15px;
 		background: @white-color;
 		background:rgba(255,255,255,0.9);
 		.border-radius(2px);
 		border: 1px solid #ddd;
 		padding:9px;
-		width:92px;
-		text-transform:uppercase;
+		width:180px;
 		box-shadow:0 1px 5px rgba(0,0,0,0.1);
-		border-radius: 10px;
+		border-radius: 5px;
+		text-align:left;
 	}
 	.text-box:before { 
 		position: absolute;
@@ -3574,7 +3585,8 @@ span.pop{
 	}
 	.photo{
 		.text-box{
-			left:100%;
+			left:110%;
+			width: 140px;
 		}
 	}
 	#footer{
@@ -4930,6 +4942,11 @@ span.pop{
 			}
 		}
 	}
+	.six-reasons{
+		.heading-box{
+			padding-left: 25px;
+		}
+	}
 }
 @media only screen and (max-width: 767px){
 	.select-box{
@@ -4951,5 +4968,47 @@ span.pop{
 ul.ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all.wd1 {
 	li.wLi2.ui-menu-item.select {
 		background-color: #ffecca;
+	}
+}
+.six-reasons{
+	.row {
+		.six-reason-image{
+			background:url(../../images/sprite.png) no-repeat -25px 0px;
+			width: 41px;
+			height: 35px;
+			display: block;
+			float: left;
+		}
+		.col-md-6{
+			padding-bottom: 20px;
+		}
+		.six-reason-text{
+			padding-left: 50px;
+			strong{
+				color: #33383e;
+				font-weight: bold;
+				font-size: 12px;
+				line-height: 15px;
+				margin: 0px;
+			}
+			p{
+				margin: 0 0 9.5px;
+				font-size: 12px;
+				line-height: 15px;
+				color: #878a8d;
+			}
+		}
+	}
+	.block{
+		border: none;
+		padding-left: 25px;
+	}
+	.heading-box{
+		h2{
+			padding-top: 24px;
+			padding-bottom: 24px;
+			margin: 0px;
+		}
+		margin: 0px;
 	}
 }

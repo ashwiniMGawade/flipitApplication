@@ -53,7 +53,7 @@ class Transl8_View_Helper_Translate extends Zend_View_Helper_Abstract
 	{
         $translate      = $this->_getTranslator();
 
-        $translation    = $translate->translate($message);
+        $translation    = html_entity_decode($translate->translate($message));
 
         // Replace placeholder(s) with associated values
         if (is_string($param)) {
@@ -68,7 +68,7 @@ class Transl8_View_Helper_Translate extends Zend_View_Helper_Abstract
 
             // Remove key from global list of translation
             Transl8_Translate_Adapter_Csv::eliminateTranslatableValue($message);
-
+                
             // Add necessary HTML around translated value
             $translation = '<span class="transl8-text">'
                          . $translation
