@@ -325,7 +325,6 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
 								var date = "";
 								
 								if(obj.aData.startDate !=null && obj.aData.startDate !='undefined' ) {
-									console.log(obj.aData.startDate.date);
 								var splitdate = obj.aData.startDate.date.split(" ");
 								if(obj.aData.startDate.date != null && splitdate[0] != '1970-01-01') {
 									

@@ -1456,8 +1456,10 @@ class Offer Extends \KC\Entity\Offer
         $query = $queryBuilder->select('o.title as title, o.id')
                 ->from('KC\Entity\Offer', 'o')
                 ->where('o.deleted='.$flag)
-                ->andWhere("o.title LIKE '$keyword%'")
-                ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
+                ->andWhere(
+                    $queryBuilder->expr()->like('o.title', $queryBuilder->expr()->literal($keyword.'%'))
+                )
+                ->andWhere('o.userGenerated = 0')
                 ->orderBy('o.title', 'ASC')
                 ->setMaxResults(5);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
