@@ -17,7 +17,7 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
      */
     public function authenticate()
     {
-
+        
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u, r')
             ->from('\KC\Entity\User', 'u')
