@@ -29,7 +29,7 @@ class SignupController extends Zend_Controller_Action
     public function checkuserAction()
     {
         $visitorInformation = intval(
-            Visitor::checkDuplicateUser(
+            \KC\Repository\Visitor::checkDuplicateUser(
                 $this->_getParam('emailAddress'),
                 $this->_getParam('id')
             )
@@ -40,7 +40,7 @@ class SignupController extends Zend_Controller_Action
     }
 
     public function indexAction()
-    { 
+    {
         $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical(
             \FrontEnd_Helper_viewHelper::getPagePermalink()
         );

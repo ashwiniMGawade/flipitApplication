@@ -11,11 +11,16 @@ class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface {
         $this->password = FrontEnd_Helper_viewHelper::sanitize($password);
     }
 
-    public function authenticate() {
-        $visitor = Doctrine_Query::create()->from("Visitor u")
+    public function authenticate()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('u')
+            ->from("Visitor", "u")
             ->where("u.email="."'".$this->email."'")
             ->andWhere('u.active = 1')
-            ->andWhere("u.deleted = 0")->fetchOne();
+            ->andWhere("u.deleted = 0");
+        $visitor =  $query->getQuery()->getSingleResult();
         if ($visitor) {
             if ($visitor->validatePassword($this->password)) {
                 return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $visitor);
