@@ -42,10 +42,33 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         foreach ($sixShopReasons as $reason) {
             $sixShopReasonWithIndex[$reason['fieldname']] = $reason['fieldvalue'];
         }
-        if (!empty( $sixShopReasonWithIndex)) 
-        {
+        if (!empty($sixShopReasonWithIndex)) {
             $sixShopReasonWithIndex = array_chunk($sixShopReasonWithIndex, 2);
         }
         return  $sixShopReasonWithIndex;
+    }
+
+    public static function getActualPermalink($fullPermalink, $peramType)
+    {
+        $splitPermalink = explode('-', $fullPermalink);
+        switch ($peramType)
+        {
+            case 'permalink':
+                $urlString = $splitPermalink[0].'-'.$splitPermalink[1];
+                break;
+
+            case 'firstCharacter':
+                $urlString = $splitPermalink[2];
+                break;
+
+            case 'lastCharacter':
+                $urlString = $splitPermalink[3];
+                break;
+
+            default:
+                $urlString = $splitPermalink;
+                break;
+        }
+        return $urlString;
     }
 }

@@ -258,9 +258,14 @@ class StoreController extends Zend_Controller_Action
 
     public function indexAction()
     {
+
         $permalink = FrontEnd_Helper_viewHelper::getPagePermalink();
+        $startCharacter = $this->_helper->Store->getActualPermalink($permalink, 'firstCharacter');
+        $endCharacter = $this->_helper->Store->getActualPermalink($permalink, 'lastCharacter');
+        $startAndEndCharacter = $startCharacter. "-". $endCharacter;
+        $permalink = $this->_helper->Store->getActualPermalink($permalink, 'permalink');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
+        $pageDetails = Page::getPageDetailsFromUrl($permalink);
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'page_header'.$pageDetails->id.'_image',
             array(
@@ -270,11 +275,17 @@ class StoreController extends Zend_Controller_Action
         );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->controllerName = $this->getRequest()->getParam('controller');
+
+        $allShopCacheKey = 'all_shops'. FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter(
+            $startAndEndCharacter
+        ).'_list';
+        
         $allStoresList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_shops_list',
-            array('function' => 'Shop::getallStoresForFrontEnd', 'parameters' => array('all', null)),
+            $allShopCacheKey,
+            array('function' => 'Shop::getAllStoresForFrontEnd', 'parameters' => array($startCharacter, $endCharacter)),
             true
         );
+
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             '10_popularShops_list',
             array('function' => 'Shop::getAllPopularStores', 'parameters' => array(10)),
@@ -304,7 +315,7 @@ class StoreController extends Zend_Controller_Action
             '',
             $signUpFormSidebarWidget
         );
-        
+        $this->view->selectedAlphabet = $startAndEndCharacter;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->storesInformation = $allStoresList;
         $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;

@@ -20,15 +20,22 @@ if ($this->storesInformation != '' && $this->storesInformation != null) :
         array('storesInformation' => $this->storesInformation)
     );
 endif;
+
+$allStorePagination = $this->partial(
+    $storeViewPath.'_all-stores-pagination.phtml',
+    array('selectedAlphabet' => $this->selectedAlphabet)
+);
+
 ?>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
         <div class="content-holder">            
-<?php 
-echo $this->storeSearchByAlphabet;
-echo $popularStores;
-echo $storesInformation;
-?>
+    <?php 
+    echo $this->storeSearchByAlphabet;
+    echo $popularStores;
+    echo $storesInformation;
+    echo $allStorePagination;
+    ?>
         </div>
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4 col-sm-4">
