@@ -75,8 +75,11 @@ class PopularArticles Extends \KC\Entity\PopularArticles
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
         $popularArticle = new \KC\Entity\PopularArticles();
-        $popularArticle->articleId = $entityManagerLocale->find('KC\Entity\Articles', $articleId);
+        $popularArticle->articles = $entityManagerLocale->find('KC\Entity\Articles', $articleId);
         $popularArticle->position = $position;
+        $popularArticle->deleted = 0;
+        $popularArticle->created_at = new \DateTime('now');
+        $popularArticle->updated_at = new \DateTime('now');
         $entityManagerLocale->persist($popularArticle);
         $entityManagerLocale->flush();
         return;
