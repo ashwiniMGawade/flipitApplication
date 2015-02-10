@@ -10,22 +10,28 @@ class Visitor extends \KC\Entity\Visitor
     #############################################################
     public static function checkDuplicateUser($email, $visitorId = null)
     {
+
         $emailAddress = \FrontEnd_Helper_viewHelper::sanitize($email);
         $visitorId = \FrontEnd_Helper_viewHelper::sanitize($visitorId);
         if ($visitorId!=null) {
             $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->select('v')
+            $query = $queryBuilder
+                ->select('v')
                 ->from('\KC\Entity\Visitor', 'v')
                 ->where('v.id ='. $visitorId);
-            $visitorInformation = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $visitorInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         } else {
             $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->select('v')
-                ->from('\KC\Entity\Visitor', 'v')
+            $query = $queryBuilder
+                ->select('v')
+                ->from('KC\Entity\Visitor', 'v')
                 ->where('v.email ='. $queryBuilder->expr()->literal($emailAddress));
-            $visitorInformation = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $visitorInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
-        return count($visitorInformation);
+        echo "<pre>";
+        print_r($visitorInformation);
+        die;
+        return !empty($visitorInformation) ? 0 : '';
     }
 
     public static function getFavoriteShopsForUser($visitorId, $shopId)
