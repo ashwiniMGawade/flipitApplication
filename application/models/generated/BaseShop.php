@@ -365,6 +365,9 @@ abstract class BaseShop extends Doctrine_Record
         $this->hasColumn('shopAndOfferClickouts', 'integer', 20, array(
                 'type' => 'integer',
         ));
+        $this->hasColumn('shopsViewedIds', 'string', 100, array(
+                'type' => 'string',
+        ));
 
     }
 
