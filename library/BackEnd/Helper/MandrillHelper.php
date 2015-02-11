@@ -147,7 +147,7 @@ class BackEnd_Helper_MandrillHelper
         if($currentOffer->discountType == "CD"):
             $offerDates .= $stringAdded;
             $offerDates .= ': ';
-            $offerDates .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
+            $offerDates .= ucwords($startDate->get(Zend_Date::DATE_LONG));
             $offerDates .= ', ';
 
             if (
@@ -172,7 +172,7 @@ class BackEnd_Helper_MandrillHelper
             } else {
                     $endDate = new Zend_Date(strtotime($currentOffer->endDate));
                     $offerDates .= FrontEnd_Helper_viewHelper::__email('email_expires on:').' ';
-                    $offerDates .= ucwords($endDate->get(Zend_Date::DATE_MEDIUM));
+                    $offerDates .= ucwords($endDate->get(Zend_Date::DATE_LONG));
             } elseif (
                 $currentOffer->discountType == "PR"
                 || $currentOffer->discountType == "SL"
@@ -180,7 +180,7 @@ class BackEnd_Helper_MandrillHelper
             ):
                 $offerDates .= $stringAdded;
                 $offerDates .= ': ';
-                $offerDates .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
+                $offerDates .= ucwords($startDate->get(Zend_Date::DATE_LONG));
         endif;
         return $offerDates;
     }
