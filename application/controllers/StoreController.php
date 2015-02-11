@@ -291,11 +291,7 @@ class StoreController extends Zend_Controller_Action
             array('function' => 'Shop::getAllPopularStores', 'parameters' => array(10)),
             true
         );
-        $storeSearchByAlphabet = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_searchPanel_list',
-            array('function' => 'FrontEnd_Helper_viewHelper::alphabetList', 'parameters' => array()),
-            true
-        );
+
         $this->viewHelperObject->getMetaTags(
             $this,
             isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
@@ -318,7 +314,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->selectedAlphabet = $startAndEndCharacter;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->storesInformation = $allStoresList;
-        $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;
+       
         $this->view->popularStores = $popularStores;
         $this->view->pageCssClass = 'all-stores-page';
     }

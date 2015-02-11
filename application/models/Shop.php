@@ -181,8 +181,8 @@ class Shop extends BaseShop
     public static function getAllStoresForFrontEnd($startCharacter, $endCharacter)
     {
         $likeString = $startCharacter.  "-" . $endCharacter;
-        if ($endCharacter=='09') {
-            $likeString = $startCharacter.  "-z 0-9";
+        if ($startCharacter=='09') {
+            $likeString = "a-e 0-9";
         }
         $currentDateAndTime = date('Y-m-d 00:00:00');
         $storeInformation = Doctrine_Query::create()
