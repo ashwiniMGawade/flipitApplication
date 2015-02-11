@@ -111,8 +111,7 @@ class Offer Extends \KC\Entity\Offer
             $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $entityManagerUser
             ->select(
-                'o, s, terms, c, img.id as imageId, img.path, img.name, fv.shopId, fv.visitorId, 
-                fv.id as favoriteId, vot.id as voteId,vot.vote'
+                'o, s, fv, terms, vot, c, img'
             )
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
@@ -1110,7 +1109,7 @@ class Offer Extends \KC\Entity\Offer
                 ->andWhere('o.startDate <='."'".$nowDate."'");
         }
         
-        $query->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
+        $query->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
         ->andWhere('s.id ='. $id)
         ->andWhere('s.deleted = 0')
         ->andWhere('o.discountType !='.$entityManagerUser->expr()->literal('NW'))
@@ -1927,7 +1926,7 @@ class Offer Extends \KC\Entity\Offer
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $newData = array();
         foreach ($data as $res) {
-            $newData[] = $res['offer'];
+            $newData[] = $res['shopOffers'];
         }
         return $newData;
     }

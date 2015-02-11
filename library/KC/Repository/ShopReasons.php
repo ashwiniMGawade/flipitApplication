@@ -25,7 +25,7 @@ class ShopReasons Extends \KC\Entity\ShopReasons
         return true;
     }
 
-    public function getShopReasons($shopId)
+    public static function getShopReasons($shopId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder

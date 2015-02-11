@@ -122,7 +122,7 @@ class StoreController extends Zend_Controller_Action
             $sixShopReasons = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)'shop_sixReasons_'.$ShopList,
                 array(
-                    'function' => 'ShopReasons::getShopReasons',
+                    'function' => 'KC\Repository\ShopReasons::getShopReasons',
                     'parameters' => array($shopId)
                 ),
                 ''
