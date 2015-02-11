@@ -134,9 +134,11 @@ class CodeAlertQueue Extends \KC\Entity\CodeAlertQueue
                 "(SELECT count(fs.id) FROM KC\Entity\FavoriteShop fs LEFT JOIN fs.visitor vs 
                 WHERE fs.shop = s.id AND vs.id = fs.visitor AND vs.codealert = 1) as visitors"
             )
-            ->addSelect("(SELECT cq.id FROM KC\Entity\CodeAlertQueue cq WHERE cq.offerId = o.id) as codeAlertId")
-            ->andWhere("o.id IN($offerIds)")
-            ->andWhere("o.userGenerated = '0'");
+            ->addSelect("(SELECT cq.id FROM KC\Entity\CodeAlertQueue cq WHERE cq.offerId = o.id) as codeAlertId");
+        if (!empty($offerIds)) {
+            $offerDetails->andWhere($queryBuilderOffer->expr()->in('o.id', $offerIds));
+        }
+        $offerDetails = $offerDetails->andWhere("o.userGenerated = 0");
             
         $request  = \DataTable_Helper::createSearchRequest(
             $codeAlertParameters,
@@ -147,8 +149,7 @@ class CodeAlertQueue Extends \KC\Entity\CodeAlertQueue
         ->setQueryBuilder($offerDetails)
         ->add('text', 's.name')
         ->add('text', 'o.title')
-        ->add('number', 'visitors')
-        ->add('number', 'codeAlertId');
+      ;
         $codeAlertList = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
         $codeAlertList = \DataTable_Helper::getResponse($codeAlertList, $request);
         return $codeAlertList;

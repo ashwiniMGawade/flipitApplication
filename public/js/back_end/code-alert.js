@@ -57,7 +57,7 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
                     var tag = "";
                     tag ="<p editId='" + obj.aData.id + 
                     "' class='editId word-wrap-without-margin-widget store-offer'><a href='/admin/offer/editoffer/id/"+
-                    obj.aData.id +"'>"+obj.aData.shop.name + " - "+obj.aData.title+"</a></p>";
+                    obj.aData.id +"'>"+obj.aData.shopOffers.name + " - "+obj.aData.title+"</a></p>";
                     return tag;
                 },
                 "bSearchable" : true,
