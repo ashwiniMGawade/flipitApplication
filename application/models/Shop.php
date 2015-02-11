@@ -420,22 +420,31 @@ class Shop extends BaseShop
             ->fetchArray();
         $similarShopIds = '';
         foreach ($shopIds as $shopId) {
-            $similarViewedShopIds[] = self::getSimilarShops($shopId['id'], 4);
-            if (count($similarViewedShopIds)>0) {
-                $commaSepratedShopIds = '';
-                $similarShopsIds = '';
-                foreach ($similarViewedShopIds[0] as $similarShopId) {
-                    $similarShopsIds[]=$similarShopId['id'];
-                }
-                $commaSepratedShopIds = implode(',', $similarShopsIds);
-                Doctrine_Query::create()
-                ->update('Shop s')
-                ->set('s.shopsViewedIds', "'$commaSepratedShopIds'")
-                ->where('s.id ='.$shopId['id'])
-                ->execute();
-            }
+            $topFiveSimilarShopsViewed = '';
+            $commaSepratedShopIds = '';
+            $topFiveSimilarShopsViewed = self::getSimilarShopsForAlsoViewedWidget($shopId['id']);
+            $commaSepratedShopIds = implode(',', $topFiveSimilarShopsViewed);
+            Doctrine_Query::create()
+            ->update('Shop s')
+            ->set('s.shopsViewedIds', "'$commaSepratedShopIds'")
+            ->where('s.id ='.$shopId['id'])
+            ->execute();
         }
         return true;
+    }
+
+    public static function getSimilarShopsForAlsoViewedWidget($shopId)
+    {
+        $similarShopsBySimilarCategories[] = self::getSimilarShopsBySimilarCategories($shopId, 5);
+        foreach ($similarShopsBySimilarCategories[0][0]['category'] as $category) {
+            foreach ($category['shop'] as $relatedCategoryShop) {
+                if ($relatedCategoryShop['id'] != $shopId) {
+                    $similarShops[$relatedCategoryShop['id']] = $relatedCategoryShop['id'];
+                }
+            }
+        }
+        $topFiveSimilarShopsViewed = array_slice($similarShops, 0, 5);
+        return $topFiveSimilarShopsViewed;
     }
 
     public static function getshopsAlsoViewed($shopId)

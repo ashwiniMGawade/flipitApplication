@@ -157,11 +157,12 @@ EOD;
     
     public static function getShopsByFallback($storeIds)
     {
-        $flag = false;
         foreach ($storeIds as $storeId) {
             $storeExists = Shop::getShopData($storeId);
             if ($storeExists) {
                 $flag = true;
+            } else {
+                $flag = false;
                 return $flag;
             }
         }
@@ -170,43 +171,47 @@ EOD;
     public function shopsAlsoViewedWidget($shopId, $shopName)
     {
         $shopsAlsoViewed = Shop::getshopsAlsoViewed($shopId);
-        $similarStoresViewedContent =
-            '<div class="block">
-                <div class="intro">
-                    <h4>'.$this->__translate('Other people who have viewed '.$shopName.' also viewed').'</h4>
-                </div>
-            <ul class="tags">';
-        for ($i=0; $i<count($shopsAlsoViewed[0]['shopsViewedIds']); $i++) {
-            $class ='';
-            if ($i%2==0) {
-                $class = 'class="none"';
-            }
-            $storeIds = explode(',', $shopsAlsoViewed[0]['shopsViewedIds']);
-            $storePresent = self::getShopsByFallback($storeIds);
-            if ($storePresent) {
-                foreach ($storeIds as $storeId) {
-                    $storeDetails = Shop::getShopInformation($storeId);
-                    $similarStoresViewedContent .=
-                        '<li '.$class.'>
-                            <a title='.$storeDetails[0]['name'].' 
-                            href='.$storeDetails[0]['permaLink'].'>'.ucfirst(self::substring($storeDetails[0]['name'], 200))
-                            .'</a>
-                        </li>';
+        if ($shopsAlsoViewed[0]['shopsViewedIds'] != '') {
+            $similarStoresViewedContent =
+                '<div class="block">
+                    <div class="intro">
+                        <h4>'.$this->__translate('Other people who have viewed '.$shopName.' also viewed').'</h4>
+                    </div>
+                <ul class="tags">';
+            for ($i=0; $i<count($shopsAlsoViewed[0]['shopsViewedIds']); $i++) {
+                $class ='';
+                if ($i%2==0) {
+                    $class = 'class="none"';
                 }
-            } else {
-                $similarShops = Shop::getSimilarShops($shopId, 4);
-                foreach ($similarShops[0] as $similarShopId) {
-                    $storeDetails = Shop::getShopInformation($similarShopId['id']);
-                    $similarStoresViewedContent .=
-                        '<li '.$class.'>
-                            <a title='.$storeDetails[0]['name'].' 
-                            href='.$storeDetails[0]['permaLink'].'>'.ucfirst(self::substring($storeDetails[0]['name'], 200))
-                            .'</a>
-                        </li>';
+                $storeIds = explode(',', $shopsAlsoViewed[0]['shopsViewedIds']);
+                $storePresent = self::getShopsByFallback($storeIds);
+                if ($storePresent) {
+                    foreach ($storeIds as $storeId) {
+                        $storeDetails = Shop::getShopInformation($storeId);
+                        $similarStoresViewedContent .=
+                            '<li '.$class.'>
+                                <a title='.$storeDetails[0]['name'].' 
+                                href='.$storeDetails[0]['permaLink'].'>'.ucfirst(self::substring($storeDetails[0]['name'], 200))
+                                .'</a>
+                            </li>';
+                    }
+                } else {
+                    $topFiveSimilarShopsViewed = Shop::getSimilarShopsForAlsoViewedWidget($shopId, 5);
+                    foreach ($topFiveSimilarShopsViewed as $similarShopId) {
+                        $storeDetails = Shop::getShopInformation($similarShopId);
+                        $similarStoresViewedContent .=
+                            '<li '.$class.'>
+                                <a title='.$storeDetails[0]['name'].' 
+                                href='.$storeDetails[0]['permaLink'].'>'.ucfirst(self::substring($storeDetails[0]['name'], 200))
+                                .'</a>
+                            </li>';
+                    }
                 }
             }
+            $similarStoresViewedContent .='</ul></div>';
+        } else {
+            $similarStoresViewedContent = '';
         }
-        $similarStoresViewedContent .='</ul></div>';
         return $similarStoresViewedContent;
     }
 }
