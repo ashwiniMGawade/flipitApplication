@@ -234,6 +234,7 @@ class Page Extends \KC\Entity\Page
         $builder
             ->setQueryBuilder($query)
             ->add('text', 'page.pageTitle')
+            ->add('text', 'page.permalink')
             ->add('number', 'page.pageLock')
             ->add('number', 'page.created_at')
             ->add('number', 'page.publish')

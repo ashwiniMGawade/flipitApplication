@@ -122,7 +122,6 @@ class CodeAlertQueue Extends \KC\Entity\CodeAlertQueue
 
         $queryBuilderOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $offerDetails = $queryBuilderOffer
-            ->select('o.id,o.title,s.name')
             ->from("KC\Entity\Offer", "o")
             ->leftJoin('o.shopOffers', 's')
             ->leftJoin('s.affliatenetwork', 'a')

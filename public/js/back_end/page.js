@@ -157,7 +157,7 @@ function pageList(iSearchText,iStart,iSortCol,iSortDir,iType) {
 			
 				{
 					"fnRender" : function(obj) {
-						tag = "<p class='word-wrap-without-margin-page'><a href='javascript:void(0);'>"+ucfirst(obj.aData.permaLink)+"</a></p>";
+						tag = "<p class='word-wrap-without-margin-page'><a href='javascript:void(0);'>"+ucfirst(obj.aData.permalink)+"</a></p>";
 						return tag;
 					 },
 					"bSearchable" : true,
