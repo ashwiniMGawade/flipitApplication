@@ -15,7 +15,7 @@ class PopularArticles Extends \KC\Entity\PopularArticles
         $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select("p.id, a.title, p.position")
+            ->select("p.id, a.id as articleId, a.title, p.position")
             ->from("KC\Entity\PopularArticles", "p")
             ->leftJoin("p.articles", "a")
             ->where("a.publish = 1")
@@ -49,7 +49,7 @@ class PopularArticles Extends \KC\Entity\PopularArticles
     {
         $changedPopularArticles = array();
         foreach ($popularArticles as $article) {
-            $changedPopularArticles[] = $article['id'];
+            $changedPopularArticles[] = $article['articleId'];
         }
         return $changedPopularArticles;
     }
