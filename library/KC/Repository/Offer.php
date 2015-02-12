@@ -1881,13 +1881,7 @@ class Offer Extends \KC\Entity\Offer
     {
         $date = date('Y-m-d H:i:s');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select(
-            's.id as shopId,s.name,s.refUrl, s.actualUrl, s.permaLink as permalink,terms.content,
-            p.id as pageId,o.id,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,
-            o.discount,o.couponCodeType,o.userGenerated,o.couponCode,o.refOfferUrl,o.refURL,
-            o.discountType,o.startDate as startdate,o.endDate, img.path as shopImagePath, img.name as shopImageName,
-            fv.id as visitorId,ologo.name as offerLogoName, ologo.path as offerLogoPath,vot.id as voteId,vot.vote'
-        )
+        $query = $queryBuilder->select('p, o, s, vot, img, fv, terms')
             ->from('KC\Entity\PopularCode', 'p')
             ->leftJoin('p.popularcode', 'o')
             ->leftJoin('o.shopOffers', 's')
@@ -1925,8 +1919,9 @@ class Offer Extends \KC\Entity\Offer
         $query = $query->orderBy('p.position', 'ASC');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $newData = array();
+
         foreach ($data as $res) {
-            $newData[] = $res['shopOffers'];
+            $newData[] = $res['popularcode']['shopOffers'];
         }
         return $newData;
     }

@@ -214,7 +214,7 @@ class StoreController extends Zend_Controller_Action
                 ''
             );
 
-        $this->view->ballonEditorText = EditorBallonText::getEditorText($shopId);
+        $this->view->ballonEditorText = KC\Repository\EditorBallonText::getEditorText($shopId);
         $customHeader = isset($shopInformation[0]['customHeader']) ? $shopInformation[0]['customHeader'] : '';
         $this->viewHelperObject->getMetaTags(
             $this,
