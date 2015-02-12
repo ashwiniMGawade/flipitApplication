@@ -1,7 +1,6 @@
 <?php
-/**
+/*
  * Script for Generating similar shops viewed widget for all locales
- *
  */
 class GenerateSimilarShopsViewed
 {
@@ -13,7 +12,6 @@ class GenerateSimilarShopsViewed
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
         $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
         $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
-        $imbull = $connections['imbull'];
         echo CommonMigrationFunctions::showProgressMessage(
             'generate similar shops viewed from databases of all locales'
         );
@@ -41,7 +39,7 @@ class GenerateSimilarShopsViewed
         Shop::updateSimilarShopsViewedIds();
         $manager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(
-            "$key - Shops also viewed has been created successfully!!!"
+            "$key - shops also viewed has been created successfully!!!"
         );
     }
 }

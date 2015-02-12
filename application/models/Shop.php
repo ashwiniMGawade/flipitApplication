@@ -26,8 +26,8 @@ class Shop extends BaseShop
 
     public static function getShopData($id)
     {
-        $shopData = Doctrine_Core::getTable("Shop")->find($id);
-        return $shopData;
+        $shopDataExistOrNot = Doctrine_Core::getTable("Shop")->find($id);
+        return $shopDataExistOrNot;
     }
 
     public static function returnShopCategories($shopId)
@@ -410,7 +410,7 @@ class Shop extends BaseShop
         return $relatedShops;
     }
 
-    public static function updateSimilarShopsViewedIds()
+    public static function getAllActiveShopDetails ()
     {
         $shopIds = Doctrine_Query::create()
             ->select('s.id')
@@ -418,17 +418,19 @@ class Shop extends BaseShop
             ->where('s.deleted = 0')
             ->andWhere('s.status = 1')
             ->fetchArray();
+        return $shopIds;
+    }
+
+    public static function updateSimilarShopsViewedIds()
+    {
+        $shopIds = self::getAllActiveShopDetails();
         $similarShopIds = '';
         foreach ($shopIds as $shopId) {
             $topFiveSimilarShopsViewed = '';
             $commaSepratedShopIds = '';
             $topFiveSimilarShopsViewed = self::getSimilarShopsForAlsoViewedWidget($shopId['id']);
             $commaSepratedShopIds = implode(',', $topFiveSimilarShopsViewed);
-            Doctrine_Query::create()
-            ->update('Shop s')
-            ->set('s.shopsViewedIds', "'$commaSepratedShopIds'")
-            ->where('s.id ='.$shopId['id'])
-            ->execute();
+            self::updateShopViewedIds($commaSepratedShopIds, $shopId['id']);
         }
         return true;
     }
@@ -436,10 +438,12 @@ class Shop extends BaseShop
     public static function getSimilarShopsForAlsoViewedWidget($shopId)
     {
         $similarShopsBySimilarCategories[] = self::getSimilarShopsBySimilarCategories($shopId, 5);
-        foreach ($similarShopsBySimilarCategories[0][0]['category'] as $category) {
-            foreach ($category['shop'] as $relatedCategoryShop) {
-                if ($relatedCategoryShop['id'] != $shopId) {
-                    $similarShops[$relatedCategoryShop['id']] = $relatedCategoryShop['id'];
+        if (isset($similarShopsBySimilarCategories[0][0]['category'])) {
+            foreach ($similarShopsBySimilarCategories[0][0]['category'] as $category) {
+                foreach ($category['shop'] as $relatedCategoryShop) {
+                    if ($relatedCategoryShop['id'] != $shopId) {
+                        $similarShops[$relatedCategoryShop['id']] = $relatedCategoryShop['id'];
+                    }
                 }
             }
         }
@@ -447,7 +451,16 @@ class Shop extends BaseShop
         return $topFiveSimilarShopsViewed;
     }
 
-    public static function getshopsAlsoViewed($shopId)
+    public static function updateShopViewedIds($commaSepratedShopIds, $shopId)
+    {
+        Doctrine_Query::create()
+            ->update('Shop s')
+            ->set('s.shopsViewedIds', "'$commaSepratedShopIds'")
+            ->where('s.id ='.$shopId)
+            ->execute();
+    }
+
+    public static function getShopsAlsoViewed($shopId)
     {
         $shopAlsoViewedIds = Doctrine_Query::create()
             ->select('s.shopsViewedIds')

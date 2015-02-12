@@ -160,52 +160,30 @@ EOD;
         foreach ($storeIds as $storeId) {
             $storeExists = Shop::getShopData($storeId);
             if ($storeExists) {
-                $flag = true;
+                $cacheStatus = true;
             } else {
-                $flag = false;
-                return $flag;
+                $cacheStatus = false;
+                return $cacheStatus;
             }
         }
-        return $flag;
+        return $cacheStatus;
     }
+
     public function shopsAlsoViewedWidget($shopId, $shopName)
     {
-        $shopsAlsoViewed = Shop::getshopsAlsoViewed($shopId);
+        $shopsAlsoViewed = Shop::getShopsAlsoViewed($shopId);
         if ($shopsAlsoViewed[0]['shopsViewedIds'] != '') {
-            $similarStoresViewedContent =
-                '<div class="block">
-                    <div class="intro">
-                        <h4>'.$this->__translate('Other people who have viewed '.$shopName.' also viewed').'</h4>
-                    </div>
-                <ul class="tags">';
-            for ($i=0; $i<count($shopsAlsoViewed[0]['shopsViewedIds']); $i++) {
-                $class ='';
-                if ($i%2==0) {
-                    $class = 'class="none"';
+            $similarStoresViewedContent = self::getSimilarStoresViewedDivContent($shopName);
+            $storeIds = explode(',', $shopsAlsoViewed[0]['shopsViewedIds']);
+            $storePresent = self::getShopsByFallback($storeIds);
+            if ($storePresent) {
+                foreach ($storeIds as $storeId) {
+                    $similarStoresViewedContent .= self::addLiOfSimilarStoresViewedContent($storeId);
                 }
-                $storeIds = explode(',', $shopsAlsoViewed[0]['shopsViewedIds']);
-                $storePresent = self::getShopsByFallback($storeIds);
-                if ($storePresent) {
-                    foreach ($storeIds as $storeId) {
-                        $storeDetails = Shop::getShopInformation($storeId);
-                        $similarStoresViewedContent .=
-                            '<li '.$class.'>
-                                <a title='.$storeDetails[0]['name'].' 
-                                href='.$storeDetails[0]['permaLink'].'>'.ucfirst(self::substring($storeDetails[0]['name'], 200))
-                                .'</a>
-                            </li>';
-                    }
-                } else {
-                    $topFiveSimilarShopsViewed = Shop::getSimilarShopsForAlsoViewedWidget($shopId, 5);
-                    foreach ($topFiveSimilarShopsViewed as $similarShopId) {
-                        $storeDetails = Shop::getShopInformation($similarShopId);
-                        $similarStoresViewedContent .=
-                            '<li '.$class.'>
-                                <a title='.$storeDetails[0]['name'].' 
-                                href='.$storeDetails[0]['permaLink'].'>'.ucfirst(self::substring($storeDetails[0]['name'], 200))
-                                .'</a>
-                            </li>';
-                    }
+            } else {
+                $topFiveSimilarShopsViewed = Shop::getSimilarShopsForAlsoViewedWidget($shopId, 5);
+                foreach ($topFiveSimilarShopsViewed as $similarShopId) {
+                    $similarStoresViewedContent .= self::addLiOfSimilarStoresViewedContent($similarShopId);
                 }
             }
             $similarStoresViewedContent .='</ul></div>';
@@ -213,5 +191,29 @@ EOD;
             $similarStoresViewedContent = '';
         }
         return $similarStoresViewedContent;
+    }
+
+    public static function addLiOfSimilarStoresViewedContent($shopId)
+    {
+        $storeDetails = Shop::getShopInformation($shopId);
+        $similarStoresViewedContent =
+            '<li>
+                <a title='.$storeDetails[0]['name'].' 
+                href='.$storeDetails[0]['permaLink'].'>'.ucfirst(self::substring($storeDetails[0]['name'], 200))
+                .'</a>
+            </li>';
+        return $similarStoresViewedContent;
+    }
+
+    public function getSimilarStoresViewedDivContent($shopName)
+    {
+        return $similarStoresViewedContent =
+        '<div class="block">
+            <div class="intro">
+                <h4>'.$this->__translate('Other people who have viewed')
+                .' '.FrontEnd_Helper_viewHelper::replaceStringVariable($shopName)
+                .' '.$this->__translate('also viewed').'</h4>
+            </div>
+        <ul class="tags">';
     }
 }
