@@ -18,15 +18,14 @@ class Robot Extends \KC\Entity\Robot
         $robotFileContentExistsOrNot = self::getRobotTextFileInformation($robotWebsiteId);
         $entityManagerUser = \Zend_Registry::get('emUser')->createQueryBuilder();
         if (!empty($robotFileContentExistsOrNot)) {
-            echo $query = $entityManagerUser
-            ->update('KC\Entity\Robot', 'r')
-            ->set('r.content', "'".mysqli_real_escape_string(
+            $robot =  \Zend_Registry::get('emUser')->find('KC\Entity\Robot', $robotWebsiteId);
+            $robot->content = mysqli_real_escape_string(
                 \FrontEnd_Helper_viewHelper::getDbConnectionDetails(),
                 $robotsTextFileContent
-            )."'")
-            ->where('r.id ='.$robotWebsiteId)
-            ->getQuery();
-            $query->execute();
+            );
+            $robot->updated_at = new \DateTime('now');
+            \Zend_Registry::get('emUser')->persist($robot);
+            \Zend_Registry::get('emUser')->flush();
         } else {
             $robot = new KC\Entity\Robot();
             $robot->website = $robotWebsiteId == 1 ? 'Flipit' : 'Kortingscode';

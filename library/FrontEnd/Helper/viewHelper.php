@@ -716,7 +716,7 @@ EOD;
         );
 
         // bootstrap doctrine
-        $application->getBootstrap()->bootstrap('doctrine');
+        //$application->getBootstrap()->bootstrap('doctrine');
         $doctrineConnections = $application->getBootstrap()->getOptions('doctrine');
         foreach ($doctrineConnections['doctrine'] as $connection) {
             $dbConnection = $connection;
