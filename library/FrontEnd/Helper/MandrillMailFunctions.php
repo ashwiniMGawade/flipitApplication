@@ -249,7 +249,7 @@ class FrontEnd_Helper_MandrillMailFunctions {
           $expiryDate = new Zend_Date($offer['endDate']);
           $expireDate[$offerIndex]['name'] = 'expDate_'.($offerIndex+1);
           $expireDate[$offerIndex]['content'] = 
-              FrontEnd_Helper_viewHelper::__email('email_expires on:') ." " . $expiryDate->get(Zend_Date::DATE_MEDIUM);
+              FrontEnd_Helper_viewHelper::__email('email_expires on:') ." " . $expiryDate->get(Zend_Date::DATE_LONG);
           $shopPermalink[$offerIndex]['name'] = 'shopPermalink_'.($offerIndex+1);
           $shopPermalink[$offerIndex]['content'] = $permalinkEmail;
        }
