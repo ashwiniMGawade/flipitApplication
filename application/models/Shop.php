@@ -180,9 +180,9 @@ class Shop extends BaseShop
 
     public static function getAllStoresForFrontEnd($startCharacter, $endCharacter)
     {
-        $likeString = $startCharacter.  "-" . $endCharacter;
+        $charactersString = $startCharacter.  "-" . $endCharacter;
         if ($startCharacter=='09') {
-            $likeString = "a-e 0-9";
+            $charactersString = "a-e 0-9";
         }
         $currentDateAndTime = date('Y-m-d 00:00:00');
         $storeInformation = Doctrine_Query::create()
@@ -197,7 +197,7 @@ class Shop extends BaseShop
         ->leftJoin('s.logo img')
         ->where('s.deleted=0')
         ->addWhere('s.status=1')
-        ->andWhere("s.name REGEXP ?", "^[" . $likeString ."]")
+        ->andWhere("s.name REGEXP ?", "^[" . $charactersString ."]")
         ->orderBy('s.name')
         ->fetchArray();
 

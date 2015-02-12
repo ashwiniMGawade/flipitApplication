@@ -38,14 +38,14 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
 
     public static function changeIndexOfSixReasons($sixShopReasons)
     {
-        $sixShopReasonWithIndex = '';
+        $sixShopReasonsWithIndex = '';
         foreach ($sixShopReasons as $reason) {
-            $sixShopReasonWithIndex[$reason['fieldname']] = $reason['fieldvalue'];
+            $sixShopReasonsWithIndex[$reason['fieldname']] = $reason['fieldvalue'];
         }
-        if (!empty($sixShopReasonWithIndex)) {
-            $sixShopReasonWithIndex = array_chunk($sixShopReasonWithIndex, 2);
+        if (!empty($sixShopReasonsWithIndex)) {
+            $sixShopReasonsWithIndex = array_chunk($sixShopReasonsWithIndex, 2);
         }
-        return  $sixShopReasonWithIndex;
+        return  $sixShopReasonsWithIndex;
     }
 
     public static function getActualPermalink($fullPermalink, $peramType)
