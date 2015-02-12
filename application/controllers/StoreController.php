@@ -379,7 +379,7 @@ class StoreController extends Zend_Controller_Action
         $customHeader = '';
         $this->viewHelperObject->getMetaTags(
             $this,
-            $howToGuides[0]['howtoTitle'],
+            str_replace('[shop]', $shopInformation[0]['name'], $howToGuides[0]['howtoTitle']),
             '',
             trim($howToGuides[0]['howtoMetaDescription']),
             $howToGuides[0]['permaLink'],
