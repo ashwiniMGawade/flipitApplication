@@ -28,7 +28,7 @@ class Media extends BaseMedia
                 // take precedence over the following max_file_size setting:
                 'max_file_size' => '2097152',//null
                 'min_file_size' => 1,//1
-                'accept_file_types' => '([^\s]+(\.(?i)(jpg|png|gif))$)',
+                'accept_file_types' => '([^\s]+(\.(?i)(jpg|png|gif|pdf))$)',
                 // The maximum number of files for the upload directory:
                 'max_number_of_files' => null,
                 // Image resolution restrictions:
