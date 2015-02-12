@@ -210,9 +210,9 @@ EOD;
         return $similarStoresViewedContent =
         '<div class="block">
             <div class="intro">
-                <h4>'.$this->__translate('Other people who have viewed')
-                .' '.FrontEnd_Helper_viewHelper::replaceStringVariable($shopName)
-                .' '.$this->__translate('also viewed').'</h4>
+                <h4>'.
+                str_replace('[shop]', $shopName, $this->__translate('Other people who have viewed [shop] also viewed'))
+                .'</h4>
             </div>
         <ul class="tags">';
     }
