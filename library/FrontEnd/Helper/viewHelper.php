@@ -1057,4 +1057,21 @@ EOD;
         $currentDateFormation = $currentYear.'-'.$currentMonth.'-'.$currentDay;
         return $currentDateFormation;
     }
+    public static function getTwoReasons($reasons)
+    {
+        foreach ($reasons as $reason) {
+            $twoReasons ='
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="col-md-2 six-reason-image">
+                    </div>
+                    <div class="col-md-10">
+                        <strong>'. $reason[0] . '</strong>
+                        <p>'. $reason[1]. '</p>
+                    </div>
+                </div>
+            </div>';
+        }
+        return $twoReasons;
+    }
 }
