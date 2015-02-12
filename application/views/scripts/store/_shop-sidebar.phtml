@@ -16,3 +16,7 @@ endif;
 if(isset($this->popularStoresList)):
     echo $this->popularStoresList;
 endif;
+$shopsAlsoViewed = $frontendSidebarHelper->shopsAlsoViewedWidget($this->shop['id'], $this->shop['name']);
+if (!empty($shopsAlsoViewed)) {
+	echo $shopsAlsoViewed;
+}	

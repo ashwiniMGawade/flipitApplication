@@ -24,6 +24,12 @@ class Shop extends BaseShop
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
 
+    public static function getShopData($id)
+    {
+        $shopDataExistOrNot = Doctrine_Core::getTable("Shop")->find($id);
+        return $shopDataExistOrNot;
+    }
+
     public static function returnShopCategories($shopId)
     {
         $categoryData = Doctrine_Query::create()
@@ -86,7 +92,6 @@ class Shop extends BaseShop
             ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
         return $relatedShops;
     }
-
 
     protected static function removeDuplicateShops($similarShops, $similarShopsBySimilarCategories, $numberOfShops)
     {
@@ -255,7 +260,7 @@ class Shop extends BaseShop
         return $shopsInformation;
     }
 
-    public static function getStoresForSearchByKeyword($searchedKeyword, $limit, $fromPage='')
+    public static function getStoresForSearchByKeyword($searchedKeyword, $limit, $fromPage = '')
     {
         $currentDate = date('Y-m-d 00:00:00');
         $storesByKeyword = Doctrine_Query::create()
@@ -317,7 +322,8 @@ class Shop extends BaseShop
         return;
     }
 
-    public static function getActiveOffersCount($shopId) {
+    public static function getActiveOffersCount($shopId)
+    {
         $currentDate = date('Y-m-d 00:00:00');
         $acitveOfferCount = Doctrine_Query::create()->select('count(o.id) as activeCount')
             ->from('Shop s')
@@ -402,6 +408,66 @@ class Shop extends BaseShop
             ->orderBy('rf.position')
             ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
         return $relatedShops;
+    }
+
+    public static function getAllActiveShopDetails ()
+    {
+        $shopIds = Doctrine_Query::create()
+            ->select('s.id')
+            ->from("Shop s")
+            ->where('s.deleted = 0')
+            ->andWhere('s.status = 1')
+            ->fetchArray();
+        return $shopIds;
+    }
+
+    public static function updateSimilarShopsViewedIds()
+    {
+        $shopIds = self::getAllActiveShopDetails();
+        $similarShopIds = '';
+        foreach ($shopIds as $shopId) {
+            $topFiveSimilarShopsViewed = '';
+            $commaSepratedShopIds = '';
+            $topFiveSimilarShopsViewed = self::getSimilarShopsForAlsoViewedWidget($shopId['id']);
+            $commaSepratedShopIds = implode(',', $topFiveSimilarShopsViewed);
+            self::updateShopViewedIds($commaSepratedShopIds, $shopId['id']);
+        }
+        return true;
+    }
+
+    public static function getSimilarShopsForAlsoViewedWidget($shopId)
+    {
+        $similarShopsBySimilarCategories[] = self::getSimilarShopsBySimilarCategories($shopId, 5);
+        if (isset($similarShopsBySimilarCategories[0][0]['category'])) {
+            foreach ($similarShopsBySimilarCategories[0][0]['category'] as $category) {
+                foreach ($category['shop'] as $relatedCategoryShop) {
+                    if ($relatedCategoryShop['id'] != $shopId) {
+                        $similarShops[$relatedCategoryShop['id']] = $relatedCategoryShop['id'];
+                    }
+                }
+            }
+        }
+        $topFiveSimilarShopsViewed = array_slice($similarShops, 0, 5);
+        return $topFiveSimilarShopsViewed;
+    }
+
+    public static function updateShopViewedIds($commaSepratedShopIds, $shopId)
+    {
+        Doctrine_Query::create()
+            ->update('Shop s')
+            ->set('s.shopsViewedIds', "'$commaSepratedShopIds'")
+            ->where('s.id ='.$shopId)
+            ->execute();
+    }
+
+    public static function getShopsAlsoViewed($shopId)
+    {
+        $shopAlsoViewedIds = Doctrine_Query::create()
+            ->select('s.shopsViewedIds')
+            ->from("Shop s")
+            ->where('s.id ='.$shopId)
+            ->fetchArray();
+        return $shopAlsoViewedIds;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
@@ -1351,7 +1417,7 @@ public static function getShopDetail($shopId)
             $$lastSevenDayShopClickouts = ShopViewCount::getAmountClickoutOfShop($shopId['id']);
             Doctrine_Query::create()
                 ->update('Shop s')
-                ->set('s.lastSevendayClickouts', $$lastSevenDayShopClickouts)
+                ->set('s.lastSevendayClickouts', $lastSevenDayShopClickouts)
                 ->where('s.id = ?', $shopId['id'])
                 ->execute();
         }
