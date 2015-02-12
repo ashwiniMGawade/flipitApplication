@@ -150,6 +150,11 @@ function initSameHeight() {
 		flexible: true,
 		multiLine: true
 	});
+	jQuery('.author-page .six-reasons').sameHeight({
+		elements: '.block .row .col-md-6',
+		flexible: true,
+		multiLine: true
+	});
 
 }
 /*
