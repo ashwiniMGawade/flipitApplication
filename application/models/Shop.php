@@ -803,6 +803,7 @@ class Shop extends BaseShop
         $this->overriteTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopOverwriteTitle']);
         $this->shopText = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopDescription']);
         $this->customtext = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomText']);
+        $this->moretextforshop = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['moretextforshop']);
         $shopViewCount = isset($shopDetail['shopViewCount']) ? $shopDetail['shopViewCount'] : '0';
         $this->views = BackEnd_Helper_viewHelper::stripSlashesFromString($shopViewCount);
 

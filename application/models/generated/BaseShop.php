@@ -368,7 +368,9 @@ abstract class BaseShop extends Doctrine_Record
         $this->hasColumn('shopsViewedIds', 'string', 100, array(
                 'type' => 'string',
         ));
-
+        $this->hasColumn('moretextforshop', 'blob', null, array(
+             'type' => 'blob',
+        ));
     }
 
     public function setUp()
