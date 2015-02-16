@@ -34,4 +34,18 @@ class CodeAlertVisitors
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
     private $visitorId;
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
+    
+    public function getId()
+    {
+        return $this->id;
+    }
 }

@@ -12,7 +12,7 @@ class CodeAlertQueue Extends \KC\Entity\CodeAlertQueue
                 $query = $queryBuilder
                 ->select('c')
                 ->from("KC\Entity\CodeAlertQueue", 'c')
-                ->where('c.offerId = '.$offerId)
+                ->where($queryBuilder->expr()->eq('c.offerId', $queryBuilder->expr()->literal($offerId)))
                 ->andWhere('c.deleted = 0');
                 $codeAlertInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -21,6 +21,9 @@ class CodeAlertQueue Extends \KC\Entity\CodeAlertQueue
                     $codeAlertQueue = new \KC\Entity\CodeAlertQueue();
                     $codeAlertQueue->offerId = $offerId;
                     $codeAlertQueue->shopId = $shopId;
+                    $codeAlertQueue->deleted = 0;
+                    $codeAlertQueue->created_at = new \DateTime('now');
+                    $codeAlertQueue->updated_at = new \DateTime('now');
                     $entityManagerLocale->persist($codeAlertQueue);
                     $entityManagerLocale->flush();
                     $codeAlertQueueValue = 1;
@@ -97,7 +100,7 @@ class CodeAlertQueue Extends \KC\Entity\CodeAlertQueue
         $query = $queryBuilder
         ->select('c')
         ->from("KC\Entity\CodeAlertQueue", "c")
-        ->where("c.offerId LIKE '$searchText%'")
+        ->where($queryBuilder->expr()->like('c.offerId', $queryBuilder->expr()->literal($searchText.'%')))
         ->orderBy("c.id", "DESC");
         $deletedStatus = isset($sentCodes) && $sentCodes != '' ? 1 : 0;
         $query =  $query->andWhere('c.deleted = '.$deletedStatus);
@@ -123,33 +126,27 @@ class CodeAlertQueue Extends \KC\Entity\CodeAlertQueue
         $queryBuilderOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $offerDetails = $queryBuilderOffer
             ->from("KC\Entity\Offer", "o")
-            ->leftJoin('o.shopOffers', 's')
-            ->leftJoin('s.affliatenetwork', 'a')
-            ->leftJoin('o.offers', 'p')
-            ->leftJoin('o.offertermandcondition', 'tc')
-            ->leftJoin('o.categoryoffres', 'cat')
-            ->leftJoin('o.logo', 'img')
-            ->leftJoin('o.offerTiles', 't')
+             ->leftJoin('o.shopOffers', 's')
             ->addSelect(
                 "(SELECT count(fs.id) FROM KC\Entity\FavoriteShop fs LEFT JOIN fs.visitor vs 
                 WHERE fs.shop = s.id AND vs.id = fs.visitor AND vs.codealert = 1) as visitors"
             )
-            ->addSelect("(SELECT cq.id FROM KC\Entity\CodeAlertQueue cq WHERE cq.offerId = o.id) as codeAlertId");
+            ->addSelect("(SELECT cq.id FROM KC\Entity\CodeAlertQueue cq WHERE cq.offerId = o.id) as codeAlertId")
+            ->where("o.userGenerated = 0");
         if (!empty($offerIds)) {
             $offerDetails->andWhere($queryBuilderOffer->expr()->in('o.id', $offerIds));
         }
-        $offerDetails = $offerDetails->andWhere("o.userGenerated = 0");
-            
         $request  = \DataTable_Helper::createSearchRequest(
             $codeAlertParameters,
-            array('o.id', 's.name','o.title','visitors','codeAlertId')
+            array()
         );
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
         ->setQueryBuilder($offerDetails)
+        ->add('number', 'o.id')
         ->add('text', 's.name')
-        ->add('text', 'o.title')
-      ;
+        ->add('text', 'o.title');
+
         $codeAlertList = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
         $codeAlertList = \DataTable_Helper::getResponse($codeAlertList, $request);
         return $codeAlertList;

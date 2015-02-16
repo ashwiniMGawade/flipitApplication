@@ -68,16 +68,17 @@ class Admin_IndexController extends Zend_Controller_Action
         $checkDataExist = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (count($checkDataExist) == 0) {
             $entityManagerLocale  = \Zend_Registry::get('emLocale');
-            $saveMessage = new KC\Repository\Dashboard();
+            $saveMessage = new \KC\Repository\Dashboard();
             $saveMessage->id = 1;
             $saveMessage->message = trim($text);
             $entityManagerLocale->persist($saveMessage);
             $entityManagerLocale->flush();
         } else {
-            $queryBuilderUpdateMessage = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $queryBuilderUpdateMessage ->update('KC\Entity\Dashboard', 'db')
-            ->set('db.message', "'".trim($text)."'")
-            ->getQuery()->execute();
+            $entityManagerLocale  = \Zend_Registry::get('emLocale');
+            $saveMessage = $entityManagerLocale->find('KC\Entity\Dashboard', 1);
+            $saveMessage->message = trim($text);
+            \Zend_Registry::get('emLocale')->persist($saveMessage);
+            \Zend_Registry::get('emLocale')->flush();
         }
         if ($textCond=='' || $textCond == null) {
             echo $this->view->translate('Click here and write a message for employees.');

@@ -348,7 +348,6 @@ class Admin_EmailController extends Zend_Controller_Action
     
     public function savecodealertemailsubjectAction()
     {
-        KC\Repository\CodeAlertSettings::saveCodeAlertEmailSubject($this->getRequest()->getParams());
         die;
     }
 

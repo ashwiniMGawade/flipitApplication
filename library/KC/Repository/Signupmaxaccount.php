@@ -226,8 +226,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
               '.$localeTimezoneValues
           )
           ->from('KC\Entity\Signupmaxaccount', 'p')
-          ->setParameter(1, 1)
-          ->where('p.id = ?1');
+          ->where('p.id = 1');
         $allMaxAccounts = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $allMaxAccounts;
     }

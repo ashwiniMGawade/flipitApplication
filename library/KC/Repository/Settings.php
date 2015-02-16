@@ -33,8 +33,7 @@ class Settings Extends \KC\Entity\Settings
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s.value')
             ->from('KC\Entity\Settings', 's')
-            ->setParameter(1, $queryBuilder->expr()->literal($sendersFieldName))
-            ->where('s.name = ?1');
+            ->where($queryBuilder->expr()->eq('s.name', $queryBuilder->expr()->literal($sendersFieldName)));
         $emailSettings = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return !empty($emailSettings) ? $emailSettings[0]['value'] : '';
     }
@@ -46,8 +45,7 @@ class Settings Extends \KC\Entity\Settings
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->update('KC\Entity\Settings', 's')
                 ->set("s.value", $queryBuilder->expr()->literal($sendersValue))
-                ->setParameter(1, $queryBuilder->expr()->literal($sendersFieldName))
-                ->where('s.name = ?1')
+                ->where($queryBuilder->expr()->eq('s.name', $queryBuilder->expr()->literal($sendersFieldName)))
                 ->getQuery();
             $query->execute();
         } else {
