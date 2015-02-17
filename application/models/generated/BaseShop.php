@@ -369,7 +369,7 @@ abstract class BaseShop extends Doctrine_Record
                 'type' => 'string',
         ));
         $this->hasColumn('howtoSubSubTitle', 'string', 255, array(
-            'type' => 'string',
+            'type' => 'string'
         ));
 
     }

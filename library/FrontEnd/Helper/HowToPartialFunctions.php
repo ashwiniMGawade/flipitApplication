@@ -1,12 +1,12 @@
 <?php
 class FrontEnd_Helper_HowToPartialFunctions
 {
-    public static function getHowSubSubTitleWithFallBack($shopName, $howToGuides)
+    public static function getHowToSubSubTitleWithFallBack($shopName, $howToGuides)
     {
-        $howSubSubTitle = str_replace('[shop]', $shopName, $howToGuides[0]['howtoSubSubTitle']);
-        if (empty($howSubSubTitle)) {
-            $howSubSubTitle = str_replace('[shop]', $shopName, $howToGuides[0]['howtoTitle']);
+        $howToSubSubTitle = str_replace('[shop]', $shopName, $howToGuides[0]['howtoSubSubTitle']);
+        if (empty($howToSubSubTitle)) {
+            $howToSubSubTitle = str_replace('[shop]', $shopName, $howToGuides[0]['howtoTitle']);
         }
-        return $howSubSubTitle;
+        return $howToSubSubTitle;
     }
 }
