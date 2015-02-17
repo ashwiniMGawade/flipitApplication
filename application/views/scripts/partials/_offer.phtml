@@ -169,9 +169,9 @@ foreach ($this->offers as $offer) {
                     <?php echo $this->translate('Recommended by staff');?>
                 </span>
                 <?php
-                $explodeEditorName = explode(' ', $this->shop['contentManagerName']);
-                $editorName = !empty($explodeEditorName[0]) ? $explodeEditorName[0] : ''; 
-                echo ' - '.ucfirst($editorName).' '.$this->translate('recommended this code');?>
+                $contentManagerName = !empty($this->shop['contentManagerName']) ? $this->shop['contentManagerName'] : $offer->shop['contentManagerName'];
+                $contentManagerFirstName = $offerPartial->getContentManagerName($contentManagerName);
+                echo ' - '.ucfirst($contentManagerFirstName).' '.$this->translate('recommended this code');?>
             </div>
         </div>
     <?php } ?>    

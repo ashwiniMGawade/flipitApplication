@@ -500,4 +500,11 @@ class FrontEnd_Helper_OffersPartialFunctions
             </div>";
         return $verifiedText;
     }
+
+    public function getContentManagerName($contentManagerName)
+    {
+        $explodeContentManagerName = explode(' ', $contentManagerName);
+        $contentManagerName = !empty($explodeContentManagerName[0]) ? $explodeContentManagerName[0] : '';
+        return $contentManagerName;
+    }
 }
