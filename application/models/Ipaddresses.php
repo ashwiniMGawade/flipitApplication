@@ -24,8 +24,8 @@ class Ipaddresses extends BaseIpaddresses
         } else {
             $ipaddress = new Ipaddresses();
         }
-        $ipaddress->name = $params['name'];
-        $ipaddress->ipaddress = $params['ipaddress'];
+        $ipaddress->name = FrontEnd_Helper_viewHelper::sanitize($params['name']);
+        $ipaddress->ipaddress = FrontEnd_Helper_viewHelper::sanitize($params['ipaddress']);
         $ipaddress->save();
         self::updateAdminIpAddressInHtaccess();
         return true;
