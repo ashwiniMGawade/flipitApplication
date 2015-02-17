@@ -106,6 +106,7 @@ class Category extends \KC\Entity\Category
    
     public static function saveCategories($categoryParameter)
     {
+        $entityManagerLoacle  = \Zend_Registry::get('emLocale');
         $category = new \KC\Entity\Category();
         self::getCategoryParameters($categoryParameter, $category);
         $category->status = '1';
@@ -118,17 +119,17 @@ class Category extends \KC\Entity\Category
             setCategoryImage($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
         $categoryHeaderImageId = self::
             setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
-        $category->categoryicon = \Zend_Registry::get('emLocale')->find('KC\Entity\ImageCategoryIcon', $categoryIconId);
-        $category->categoryFeaturedImage = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\ImageCategoryIcon')->find($categoryFeaturedImageId);
-        $category->categoryHeaderImage = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\ImageCategoryIcon')->find($categoryHeaderImageId);
+        $category->categoryicon =  $entityManagerLoacle->find('KC\Entity\ImageCategoryIcon', $categoryIconId);
+        $category->categoryFeaturedImage =  $entityManagerLoacle->find('KC\Entity\ImageCategoryIcon', $categoryFeaturedImageId);
+        $category->categoryHeaderImage = $entityManagerLoacle->find('KC\Entity\ImageCategoryIcon', $categoryHeaderImageId);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
         $permalinkWithoutSpecilaChracter = str_replace("-", "", $categoryParameter["permaLink"]);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_data');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_voucherCodes');
         try {
-            \Zend_Registry::get('emLocale')->persist($category);
-            \Zend_Registry::get('emLocale')->flush();
+            $entityManagerLoacle->persist($category);
+            $entityManagerLoacle->flush();
             self::updateFeaturedCategory($category->id);
             self::categoryRoutePermalinkSave($categoryParameter, $category);
             return array($category->id);
@@ -530,9 +531,15 @@ class Category extends \KC\Entity\Category
             ->where('c.id='. $params['id'])
             ->getQuery()
             ->execute();
+        $queryBuilderselect = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilderselect
+        ->select('c.permaLink')
+        ->from("KC\Entity\Category", "c")
+        ->where('c.id='.$params['id']);
+        $categoriesPermalink = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
-        $permalinkWithoutSpecilaChracter = str_replace("-", "", $params["permaLink"]);
+        $permalinkWithoutSpecilaChracter = str_replace("-", "", $categoriesPermalink[0]["permaLink"]);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_data');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_voucherCodes');
 
