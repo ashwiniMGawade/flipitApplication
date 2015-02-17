@@ -371,7 +371,9 @@ abstract class BaseShop extends Doctrine_Record
         $this->hasColumn('howtoSubSubTitle', 'string', 255, array(
             'type' => 'string'
         ));
-
+        $this->hasColumn('moretextforshop', 'blob', null, array(
+             'type' => 'blob'
+        ));
     }
 
     public function setUp()

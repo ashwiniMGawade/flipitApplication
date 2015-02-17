@@ -363,6 +363,7 @@ function init()
             height : "300"
         }
     );
+    CKEDITOR.replace('moretextforshop', {customConfig : 'config.js', toolbar : 'BasicToolbar', height : "300"});
     validateFormAddNewShop();
         
     

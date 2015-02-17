@@ -135,6 +135,13 @@ if (!empty($this->sixShopReasons)) {
         )
     );
 }
+$moreTextForShop = '';
+if (!empty($this->currentStoreInformation[0]['moretextforshop'])) {
+    $moreTextForShop = $this->partial(
+        $storeViewPartialPath.'_moreTextForShop.phtml', 
+        array('moreTextForShop' => $this->currentStoreInformation[0]['moretextforshop'])
+    );
+}
 ?>
 <input type="hidden" name="currentShop" id="currentShop" 
 value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
@@ -155,6 +162,7 @@ endif;
     echo $sixShopReasons;
     echo $similarOffersHeader;
     echo $similarOffers;
+    echo $moreTextForShop;
     echo $similarShopsAndSimilarCategoriesShops;
     echo $discussion;
     echo $moneySavingGuide;
