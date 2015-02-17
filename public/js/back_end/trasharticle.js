@@ -1,6 +1,37 @@
 $(document).ready(init);
 function init(){
 	
+	$("#SearchArticle").select2({
+        placeholder: __("Search Article"),
+        minimumInputLength: 1,
+        ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+            url: HOST_PATH + "admin/article/searchtopfivearticle",
+            dataType: 'json',
+            data: function(term, page) {
+                return {
+                 keyword: term,
+                 flag: 1
+                };
+            },
+            type: 'post',
+            results: function (data, page) { // parse the results into the format expected by Select2.
+            // since we are using custom formatting functions we do not need to alter remote JSON data
+            return {results: data};
+            }
+        },
+        formatResult: function(data) {
+            return data; 
+        },
+        formatSelection: function(data) { 
+            $("#SearchArticle").val(data);
+            return data; 
+        },
+    });
+    $('.select2-search-choice-close').click(function(){
+        $('input#SearchArticle').val('');
+        getArticles(undefined,0,0,'asc');
+    });
+
 	var iSearchText = $.bbq.getState( 'iSearchText' , true ) || undefined;
 	var iStart = $.bbq.getState( 'iStart' , true ) || 0;
 	var iSortCol = $.bbq.getState( 'iSortCol' , true ) || 0;
@@ -8,31 +39,6 @@ function init(){
 	
 	getArticles(iSearchText,iStart,iSortCol,iSortDir);
 
-	
-	
-	//bind with keypress of search box
-	$("input#SearchArticle").keypress(function(e){
-		
-			// if the key pressed is the enter key
-			  if (e.which == 13)
-			  {
-				  
-				  var searchArticle = $("#SearchArticle").val();
-		        	if(searchArticle =='' || searchArticle == null)
-		        	{
-		        		searchArticle = undefined;
-		        	}
-		        	
-		        	getArticles(searchArticle,0,0,'asc');
-		        	
-		        	return false; 
-		        	
-			  }
-			  
-	});
-	
-	
-	
 	$("button#searchButton").click(function(){
 		
 		var searchArticle = $("#SearchArticle").val();
@@ -45,34 +51,6 @@ function init(){
 		
 	});
 	
-	
-	//Auto complete for search offer text box
-	$("#SearchArticle").autocomplete({
-        minLength: 1,
-        source: function( request, response){
-        	
-        	$.ajax({
-        		url : HOST_PATH + "admin/article/searchtopfivearticle/keyword/" + $('#SearchArticle').val()+"/flag/1",
-     			method : "post",
-     			dataType : "json",
-     			type : "post",
-     			success : function(data) {
-     				
-     				if (data != null) {
-     					
-     					//pass arrau of the respone in respone onject of the autocomplete
-     					response(data);
-     				} 
-     			},
-     			error: function(message) {
-     				
-     	            // pass an empty array to close the menu if it was initially opened
-     	            response([]);
-     	        }
-   		 });
-        },
-        select: function( event, ui ) {}
-    }); 
 	$(window).bind( 'hashchange', function(e) {
 		if(hashValue != location.hash){
 			offerListTable.fnCustomRedraw();

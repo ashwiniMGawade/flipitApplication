@@ -51,10 +51,26 @@
 				&:hover,
 				&:focus{
 					color:@text-color;
-				}
-			}
-		}
-	}
+                    span{
+                        color:@text-color;
+                    }
+                }
+                span{
+                    font-size: 10px;
+                    vertical-align: top;
+                    color: #878a8d;
+                }
+            }
+        }
+        .active-search-alphabet {
+            a{
+                color:@text-color;
+                span{
+                    color:@text-color;
+                }
+            }
+        }
+    }
 
 	.shop-name{
 		margin:0 -20px 0 0;
@@ -99,13 +115,15 @@
 			}
 		}
 		.alphabet{
-			text-align:left;
 			li{
 				border-left:none;
 				border-right:1px solid @page-header-border-color;
 				padding:0 5px 0 6px;
 				&:first-child{
 					padding-left:0;
+				}
+				&:last-child{
+					border:none;
 				}
 			}
 		}
@@ -127,7 +145,6 @@
 			padding:35px 30px 34px;
 			li{
 				border:none;
-				width:50px;
 				margin:0 10px 10px 0;
 				padding:0;
 				text-align:center;

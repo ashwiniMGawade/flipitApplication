@@ -1201,6 +1201,9 @@ div.box a.remove-fovourite.blue{
 	}
 	.recommended-outerDiv{
 		position: relative;
+		&:hover{
+			background:white;
+		}
 	}
 	.verified-text{
 		border-left: 1px dashed #ddd;
@@ -1253,6 +1256,9 @@ div.box a.remove-fovourite.blue{
 	}
 	
 }
+.similarShoptext{
+	margin: 5px 0 0;
+}
 .shops{
 	padding:0;
 	margin:-5px -4.4% -3.8% -5px;
@@ -1261,7 +1267,7 @@ div.box a.remove-fovourite.blue{
 	overflow:hidden;
 	li{
 		float:left;
-		margin:0 3.2% 3.8% 0;
+		margin:0 6.2% 3.8% 0;
 		img{
 			vertical-align:top;
 			.border-radius;
@@ -2400,18 +2406,18 @@ hr.alt2{
 			margin:0 0 5px;
 			.name{
 				color: #878a8d;
-				margin-left: 24px;
+				/*margin-left: 24px;*/
 			}
 		}
 	}
 	.name{
 		display:block;
 		font:30px/32px 'Cookie', cursive;
-		text-align:left;
+		/*text-align:left;*/
 	}
 }
 .photo{
-	float: left;
+	/*float: left;*/
 	display:inline-block;
 	vertical-align:top;
 	position:relative;
@@ -4983,19 +4989,18 @@ ul.ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all.wd1 {
 			padding-bottom: 20px;
 		}
 		.six-reason-text{
-			padding-left: 50px;
 			strong{
-				color: #33383e;
+				color: rgb(51, 56, 62);
+				font-size: 15px;
+				line-height: 18px;
 				font-weight: bold;
-				font-size: 12px;
-				line-height: 15px;
-				margin: 0px;
+				margin: 0px 0px 2px;
 			}
 			p{
-				margin: 0 0 9.5px;
-				font-size: 12px;
-				line-height: 15px;
 				color: #878a8d;
+				padding: 8px 0 0;
+				font-size: 13px;
+				line-height: 18px;
 			}
 		}
 	}
@@ -5012,3 +5017,10 @@ ul.ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all.wd1 {
 		margin: 0px;
 	}
 }
+@media only screen and (max-width: 479px){
+	.similarShoptext{
+		margin: 5px 0 0;
+		min-height: 30px;
+	}
+}
+

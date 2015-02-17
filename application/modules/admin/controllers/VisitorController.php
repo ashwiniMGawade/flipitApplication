@@ -297,12 +297,11 @@ class Admin_VisitorController extends Zend_Controller_Action
     public function exportXlxAction()
     {
         # set fiel and its trnslattions
-        $file =  UPLOAD_EXCEL_PATH . 'visitorList.csv' ;
-        $fileName =  $this->view->translate($file);
-
+        $locale = LOCALE == '' ? "-NL" : "-".strtoupper(LOCALE);
+        $visitorFile = UPLOAD_EXCEL_PATH . "visitorList".$locale.".csv";
+        $fileName =  $this->view->translate($visitorFile);
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-
         # set reponse headers and body
         $this->getResponse()
         ->setHeader('Content-Disposition', 'attachment;filename=' . basename($fileName))

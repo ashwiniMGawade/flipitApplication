@@ -133,37 +133,9 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         if ($this->_request->isPost()) {
             $flash = $this->_helper->getHelper('FlashMessenger');
             $isScheduled = $this->getRequest()->getParam("isScheduled", false);
-
             if ($isScheduled) {
                 if (\KC\Repository\Signupmaxaccount::saveScheduledNewsletter($this->getRequest())) {
-                    //set cache for news letter
-                    \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                        'newsletter_emailHeader_emailFooter',
-                        array('function' => '\KC\Repository\Signupmaxaccount::getEmailHeaderFooter', 'parameters' => array()),
-                        ''
-                    );
-                    $topCategories = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                        'newsletter_top_categories',
-                        array(
-                            'function' => 'FrontEnd_Helper_viewHelper::gethomeSections',
-                            'parameters' => array('category', 10)),
-                        ''
-                    );
-                    $topCategories = array_slice($topCategories, 0, 1);
-                    \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                        'newsletter_top_offers',
-                        array(
-                            'function' => '\KC\Repository\Offer::getTopOffers',
-                            'parameters' => array(10)),
-                        ''
-                    );
-                    \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                        'newsletter_category_vouchercodes',
-                        array(
-                            'function' => '\KC\Repository\Category::getCategoryVoucherCodes',
-                            'parameters' => array($topCategories[0][0]['category']['id'])),
-                        ''
-                    );
+                    \KC\Repository\NewsLetterCache::saveNewsLetterCacheContent();
                     $flash->addMessage(
                         array(
                             'success' => $this->view->translate('Newsletter has been successfully scheduled')
@@ -176,7 +148,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                         )
                     );
                 }
-                
+
                 $this->_helper->redirector('emailcontent', 'accountsetting', null);
             }
 

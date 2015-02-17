@@ -9,7 +9,36 @@ $(document).ready(init);
  */
 
 function init() {
-	
+
+	$("#searchWidget").select2({
+        placeholder: __("Search widget"),
+        minimumInputLength: 1,
+        ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+            url: HOST_PATH + "admin/widget/searchkey",
+            dataType: 'json',
+            data: function(term, page) {
+                return {
+                 	keyword: term
+                };
+            },
+            type: 'post',
+            results: function (data, page) { // parse the results into the format expected by Select2.
+            // since we are using custom formatting functions we do not need to alter remote JSON data
+            return {results: data};
+            }
+        },
+        formatResult: function(data) {
+            return data; 
+        },
+        formatSelection: function(data) { 
+            $("#searchWidget").val(data);
+            return data; 
+        },
+    });
+    $('.select2-search-choice-close').click(function(){
+    	$('input#searchWidget').val('');
+        getWidgetList(undefined,0,1,'asc');
+    });
 	
 	var iSearchText = $.bbq.getState( 'iSearchText' , true ) || undefined;
 	var iStart = $.bbq.getState( 'iStart' , true ) || 0;
@@ -25,57 +54,22 @@ function init() {
 		
 		return false;
 	});
-	
-	
-	
-	//bind with keypress of search box
+
 	$("input#searchWidget").keypress(function(e)
-		{
-			// if the key pressed is the enter key
-			  if (e.which == 13)
-			  {
-				  getWidgetList($(this).val(),0,1,'asc');
-			      
-			  }
+	{
+		// if the key pressed is the enter key
+		  if (e.which == 13)
+		  {
+			  getWidgetList($(this).val(),0,1,'asc');
+		      
+		  }
 	});
-	
+
 	$(window).bind( 'hashchange', function(e) {
 		if(hashValue != location.hash && click == false){
 			widgetListtable.fnCustomRedraw();
 		}
 	});
-	
-	/**
-	 * Autocomplete towards search
-	 * @author mkaur
-	 */
-	$("input#searchWidget").autocomplete({
-        minLength: 1,
-        source: function( request, response)
-        {
-        	$.ajax({
-        		url : HOST_PATH + "admin/widget/searchkey/keyword/" + $('#searchWidget').val(),
-     			method : "post",
-     			dataType : "json",
-     			type : "post",
-     			success : function(data) {
-     				if (data != null) {
-     					//pass arrau of the respone in respone onject of the autocomplete
-     					response(data);
-     					//$('#widgetListdiv tr:gt(0)').remove();
-     				} 
-     			},
-     			error: function(message) {
-     	            // pass an empty array to close the menu if it was initially opened
-     	            response([]);
-     	        }
-
-     		 });
-        },
-        select: function( event, ui ) {
-        }
-    });
-
 }
 
 
@@ -172,11 +166,10 @@ function getWidgetList(iSearchText,iStart,iSortCol,iSortDir){
 	               {
 					"fnRender" : function(obj) {
 						var tag = "";
-						tag ="<p editId='" + obj.aData.id + "' class='editId word-wrap-without-margin-widget'><a href='javascript:void(0);'>" + ucfirst(obj.aData.title)+ "</a></p>";
+						tag ="<p editId='' class='editId word-wrap-without-margin-widget'>" + ucfirst(obj.aData.title)+ "</p>";
 						return tag;
 						 
 					},
-					"bSearchable" : true,
 					"bSortable" : true
 	               },
 	               {
@@ -237,9 +230,9 @@ function getWidgetList(iSearchText,iStart,iSortCol,iSortDir){
 								state[ 'eId' ] = eId ;
 								$.bbq.pushState( state );
 								click = true;
-								window.location.href = HOST_PATH + "admin/widget/editwidget/id/" + eId+ "?iStart="+
-								obj._iDisplayStart+"&iSortCol="+obj.aaSorting[0][0]+"&iSortDir="+
-								obj.aaSorting[0][1]+"&iSearchText="+iSearchText+"&eId="+eId
+								//window.location.href = HOST_PATH + "admin/widget/editwidget/id/" + eId+ "?iStart="+
+								//obj._iDisplayStart+"&iSortCol="+obj.aaSorting[0][0]+"&iSortDir="+
+								//obj.aaSorting[0][1]+"&iSearchText="+iSearchText+"&eId="+eId
 							}
 						});
 						

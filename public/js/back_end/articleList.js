@@ -1,4 +1,36 @@
 $(document).ready(function(){
+
+	$("#searchArticles").select2({
+        placeholder: __("Search Article"),
+        minimumInputLength: 1,
+        ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+            url: HOST_PATH + "admin/article/searchkeyArticles",
+            dataType: 'json',
+            data: function(term, page) {
+                return {
+                 keyword: term,
+                 flag: 0
+                };
+            },
+            type: 'post',
+            results: function (data, page) { // parse the results into the format expected by Select2.
+            // since we are using custom formatting functions we do not need to alter remote JSON data
+            return {results: data};
+            }
+        },
+        formatResult: function(data) {
+            return data; 
+        },
+        formatSelection: function(data) { 
+            $("#searchArticles").val(data);
+            return data; 
+        },
+    });
+    $('.select2-search-choice-close').click(function(){
+    	$('input#searchArticles').val('');
+        getArticles(undefined,0,0,'asc');
+    });
+
 	var iSearchText = $.bbq.getState( 'iSearchText' , true ) || undefined;
 	var iStart = $.bbq.getState( 'iStart' , true ) || 0;
 	var iSortCol = $.bbq.getState( 'iSortCol' , true ) || 0;
@@ -7,51 +39,13 @@ $(document).ready(function(){
 	$("ul.ui-autocomplete").css('float','right');
 	
 	$('#searchByArticle').click(searchByArticle);
-	$("input#searchArticles").autocomplete({
-        minLength: 1,
-        source: function( request, response)
-        {
-        	var searchAr = $('#searchArticles').val()=='' ? undefined : $('#searchArticles').val();
-        	$.ajax({
-        		url : HOST_PATH + "admin/article/searchkeyArticles/keyword/" + $('#searchArticles').val() + '/flag/0',
-     			method : "post",
-     			dataType : "json",
-     			type : "post",
-     			success : function(data) {
-     				if (data[0] != null) {
-     					//pass arrau of the respone in respone onject of the autocomplete
-     					response(data);
-     				} 
-     			},
-     			error: function(message) {
-     	            // pass an empty array to close the menu if it was initially opened
-     	            response([]);
-     	        }
-
-     		 });
-        	//$("ul.ui-autocomplete").addClass('searchbarbox');
-        },
-        select: function( event, ui ) {
-        	//$("ul.ui-autocomplete").addClass('searchbarbox');
-        }
-    });
+	
 	$(window).bind( 'hashchange', function(e) {
 		if(hashValue != location.hash && click == false){
 			shopListTable.fnCustomRedraw();
 		}
 	});
 	
-	$("input#searchArticles").keyup(function(e){
-		
-		 if (e.which == 13 || e.keyCode == 13) {
-			 
-			 
-			 $('#searchByArticle').click();	
-	            return false;
-	        }
-	        return true;
-		
-	});
 });
 
 /**

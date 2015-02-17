@@ -103,7 +103,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         if($currentOffer->discountType == "CD"):
             $offerDates .= $stringAdded;
             $offerDates .= ': ';
-            $offerDates .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
+            $offerDates .= ucwords($startDate->get(Zend_Date::DATE_LONG));
             $offerDates .= ', ';
 
             if (
@@ -123,13 +123,12 @@ class FrontEnd_Helper_OffersPartialFunctions
                 $offerDates .= $daysTillOfferExpires;
                 $offerDates .= '&nbsp;';
                 $offerDates .= FrontEnd_Helper_viewHelper::__translate('day left!');
-            } elseif ($daysTillOfferExpires == 0) {
+        } elseif ($daysTillOfferExpires == 0) {
                 $offerDates .= FrontEnd_Helper_viewHelper::__translate('Expires today');
             } else {
-                $endDate = (array)$currentOffer->endDate;
-                $endDate = new Zend_Date(date('Y-m-d', strtotime($endDate['date'])));
+                $endDate = new Zend_Date(strtotime($currentOffer->endDate));
                 $offerDates .= FrontEnd_Helper_viewHelper::__translate('Expires on').': ';
-                $offerDates .= ucwords($endDate->get(Zend_Date::DATE_MEDIUM));
+                $offerDates .= ucwords($endDate->get(Zend_Date::DATE_LONG));
             } elseif (
                 $currentOffer->discountType == "PR"
                 || $currentOffer->discountType == "SL"
@@ -137,7 +136,7 @@ class FrontEnd_Helper_OffersPartialFunctions
             ):
             $offerDates .= $stringAdded;
             $offerDates .= ': ';
-            $offerDates .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
+            $offerDates .= ucwords($startDate->get(Zend_Date::DATE_LONG));
         endif;
         return $offerDates;
     }
@@ -508,5 +507,12 @@ class FrontEnd_Helper_OffersPartialFunctions
                 <span class='glyphicon glyphicon-ok'></span>
             </div>";
         return $verifiedText;
+    }
+
+    public function getContentManagerName($contentManagerName)
+    {
+        $explodeContentManagerName = explode(' ', $contentManagerName);
+        $contentManagerName = !empty($explodeContentManagerName[0]) ? $explodeContentManagerName[0] : '';
+        return $contentManagerName;
     }
 }

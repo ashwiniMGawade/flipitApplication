@@ -188,7 +188,7 @@
     <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Administration');?></h2></div>
     <ul id="adminmenu" role="navigation">
 
-	      <?php if($sessionNamespace->settings['rights']['administration']['rights'] == '1' ){?>
+	      <?php if($sessionNamespace->settings['rights']['administration']['rights'] == '1' ) {?>
 
 		     <li <?php if($controller == 'user') { ?> class="imbull-has-submenu menu-top menu-icon-user imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-user imbull-menu-open imbull-not-current-submenu" <?php }?> id="menu-posts">
 
@@ -211,9 +211,45 @@
 		          </div>
 		        </div>
 		      </li>
-	      <?php } ?>
+            <?php
+            $classHasCurrent = $controller == 'ipaddresses' 
+                ? 'imbull-has-current-submenu' 
+                : 'imbull-not-current-submenu';
+            $userColorClass = $controller == 'ipaddresses' && $action == 'addipaddress' ? "new-blue":"new-gray";              
+            ?>     
+            <li class="imbull-has-submenu menu-top menu-icon-user imbull-menu-open <?php echo $classHasCurrent;?>"
+                id="menu-posts">
+                <div class="imbull-menu-image">
+                    <a href="<?php echo HTTP_PATH?>admin/ipaddresses"><br></a>
+                </div>
+                <div class="">
+                    <div></div>
+                </div>
+                <a href="<?php echo HTTP_PATH?>admin/ipaddresses" 
+                    class="imbull-has-submenu imbull-has-current-submenu imbull-menu-open menu-top menu-icon-user" 
+                    tabindex="1">
+                    <?php echo $this->translate('IP addresses');?>
+                    <span class="<?php echo $controller=='ipaddresses' ? 'arrow-down' : 'arrow-up';?>"></span>
+                </a>
+                <div class="imbull-submenu">
+                  <div class="imbull-submenu-wrap">
+                    <div class="imbull-submenu-head"><?php echo $this->translate('Users');?> </div>
+                    <ul>
+                        <li>
+                           <a href="<?php echo HTTP_PATH?>admin/ipaddresses/addipaddress" 
+                           class="<?php echo $userColorClass; ?>" tabindex="1">
+                           <?php echo $this->translate('Create IP addresses');?>
+                           </a>
+                           </li>
+                   </ul>
+                  </div>
+                </div>
+              </li>
+            <?php 
+            } 
+            ?>
 
-	      <li  <?php if($controller == 'user' && $action == 'profile') {?>class="imbull-has-submenu  menu-top menu-icon-profile imbull-has-current-submenu current"<?php } else { ?>class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" <?php }?>id="menu-links">
+          <li  <?php if($controller == 'user' && $action == 'profile') {?>class="imbull-has-submenu  menu-top menu-icon-profile imbull-has-current-submenu current"<?php } else { ?>class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" <?php }?>id="menu-links">
 
 	        <div class="imbull-menu-image"><a href="<?php echo HTTP_PATH;?>admin/user/profile"><br></a></div>
 	        <div class=""><div></div></div>

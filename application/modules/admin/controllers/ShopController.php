@@ -370,7 +370,6 @@ class Admin_ShopController extends Zend_Controller_Action
         $affiliateNetworkList =  $affiliate->getNetworkList($arr);
 
         $this->view->affiliateNetworkList = $affiliateNetworkList['aaData'];
-
         $id = $this->getRequest()->getParam('id');
         if (intval($id) > 0) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -396,6 +395,7 @@ class Admin_ShopController extends Zend_Controller_Action
             }
             $this->view->catArray = '';
             if (isset($catArray) && count($catArray) >0) {
+
                 $this->view->catArray =  $catArray  ;
             }
         } else {
@@ -928,7 +928,11 @@ class Admin_ShopController extends Zend_Controller_Action
         $varnishObj->addUrl(HTTP_PATH_FRONTEND);
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_nieuw'));
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_top-20'));
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_alle-winkels'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_alle-winkels-09-e'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_alle-winkels-f-j'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_alle-winkels-k-o'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_alle-winkels-p-t'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_alle-winkels-u-z'));
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen'));
         # make markplaatfeed url's get refreashed only in case of kortingscode
         if (LOCALE == '') {

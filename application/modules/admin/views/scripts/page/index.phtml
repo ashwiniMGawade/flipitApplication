@@ -2,8 +2,10 @@
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.dataTables.min.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/dataTableComman.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
 $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/select2.css" );
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/page.js");
 ?>
 <?php echo $this->headTitle()->append('Pages List');?>
@@ -47,7 +49,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/page.js");
                     	<button id='searchButton' type='button' class="btn btn-primary" ><?php echo $this->translate('Search'); ?></button>
                     </div>
                     <div class="mainpage-content-right-inner-left-searchbar">
-                    	<input type="text" placeholder="search" class="span3" id="SearchPage" name="SearchPage">
+                      <input type='hidden' id="SearchPage" name="SearchPage" style="width:99%;"/>
                     </div>                        
                 </div>
             </form>	
@@ -59,7 +61,6 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/page.js");
                     <th><?php echo $this->translate('Type');?></th>
                     <th><?php echo $this->translate('Permalink');?></th>
                     <th><?php echo $this->translate('Created');?></th>
-                    <th><?php echo $this->translate('Published');?></th>
                     <th><?php echo $this->translate('Author');?></th>
                     <th><?php echo $this->translate('Delete');?></th>
                   </tr>

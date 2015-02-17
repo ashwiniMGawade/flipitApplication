@@ -43,11 +43,11 @@ abstract class BaserefShopRelatedshop extends Doctrine_Record
     public function setUp()
     {
         parent::setUp();
-     $this->hasOne('shop', array(
+     $this->hasOne('shop as shops', array(
              'local' => 'shopId',
              'foreign' => 'id'));
 
-     $this->hasOne('shop', array(
+     $this->hasOne('shop as relatedshops', array(
              'local' => 'relatedshopId',
              'foreign' => 'id'));
 

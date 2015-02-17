@@ -79,9 +79,9 @@ class VisitorExport
                 v.currentlogin,
                 v.active,
                 v.created_at,
-                (SELECT GROUP_CONCAT(visitor_keyword.keyword)
+                (SELECT visitor_keyword.keyword
                         FROM visitor_keyword
-                        WHERE visitor_keyword.visitorId = v.id) AS keywords,
+                        WHERE visitor_keyword.visitorId = v.id ORDER BY visitor_keyword.keyword DESC LIMIT 1) AS keywords,
 
                 (SELECT GROUP_CONCAT(shop.name)
                         FROM favorite_shop

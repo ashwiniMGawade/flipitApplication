@@ -708,7 +708,7 @@ class BackEnd_Helper_viewHelper
             $dataShopImage[$key]['name'] = 'shopLogo_'.($key+1);
             $dataShopImage[$key]['content'] = "<a href='$permalinkEmail'><img src='$img'></a>";
             //set $expDate array with the expiry date of offer
-            $expiryDate = new Zend_Date($value['offer']['endDate']);
+            $expiryDate = new \Zend_Date($value['offer']['endDate']);
             $expDate[$key]['name'] = 'expDate_'.($key+1);
             $expDate[$key]['content'] = FrontEnd_Helper_viewHelper::__link('link_Verloopt op:') ." " . $expiryDate->get(Zend_Date::DATE_MEDIUM);
             //set $shopPermalink array with the permalink of shop
@@ -736,5 +736,4 @@ class BackEnd_Helper_viewHelper
         $newCounterValue = $sendCounter + 1;
         \KC\Repository\Emails::updateDateCounter($newCounterValue, $id);
     }
-
 }

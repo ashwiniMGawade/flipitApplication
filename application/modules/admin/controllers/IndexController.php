@@ -16,7 +16,7 @@ class Admin_IndexController extends Zend_Controller_Action
     }
     public function init()
     {
-        \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages();
         $this->view->messageSuccess = isset($message[0]['success']) ?

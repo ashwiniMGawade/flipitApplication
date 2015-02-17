@@ -9,16 +9,21 @@
     <article class="block">
         <div class="row">
             <?php
-             foreach($this->reasons  as $reason) {
+            for ($i=0; $i < count($this->reasons); $i++) {
+                if ($i%2==0 && $i!=0) {
+                    ?>
+                    </div>
+                    <div class="row">
+                    <?php
+                }
                 ?>
                 <div class="col-md-6">
-                    <div class='six-reason-image'>
+                    <div class='col-md-2 six-reason-image'>
                     </div>
-                    <div class='six-reason-text'>
-                        <strong><?php echo $reason[0];?></strong>
-                        <p><?php echo $reason[1];?></p>
+                    <div class='col-md-10 six-reason-text'>
+                        <strong><?php echo $this->reasons[$i][0];?></strong>
+                        <p><?php echo $this->reasons[$i][1];?></p>
                     </div>
-                    </ul>
                 </div>
                 <?php
             }
