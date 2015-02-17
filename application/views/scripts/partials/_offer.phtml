@@ -50,7 +50,7 @@ foreach ($this->offers as $offer) {
 
     $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
     if ($this->offersType=='simple') {
-        if ($offer->shop['showcustomtext'] == 1) { ?>
+        if ($offer->shop['showcustomtext'] == 1 && $offerCounter == 1 ) { ?>
             <article class="block">
                 <div class="holder" style="">
                     <?php echo $offer->shop['customtext'];?>
