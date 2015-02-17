@@ -49,7 +49,15 @@ foreach ($this->offers as $offer) {
     }
 
     $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
-
+    if ($this->offersType=='simple') {
+        if ($offer->shop['showcustomtext'] == 1) { ?>
+            <article class="block">
+                <div class="holder" style="">
+                    <?php echo $offer->shop['customtext'];?>
+                </div>
+            </article>
+    <?php   }
+    }
     ?>
     <article class="block <?php echo $offerClass; ?>">
         <div class="holder <?php echo $offerHolderClass; ?>" id="<?php echo $offer->id; ?>">
@@ -198,16 +206,6 @@ foreach ($this->offers as $offer) {
                 .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage=');
         endif;
     endif;
-    if ($this->offersType=='simple') {
-        if ($offer->shop['showcustomtext'] == 1
-            && $offerCounter == $offer->shop['customtextposition']) { ?>
-            <article class="block">
-                <div class="holder" style="">
-                    <?php echo $offer->shop['customtext'];?>
-                </div>
-            </article>
-<?php   }
-    }
 }
 if ($this->offersType!='extendedOffer') {
     if ($this->offersType == 'newestOffer'
