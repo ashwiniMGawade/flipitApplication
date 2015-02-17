@@ -369,7 +369,7 @@ abstract class BaseShop extends Doctrine_Record
                 'type' => 'string',
         ));
         $this->hasColumn('moretextforshop', 'blob', null, array(
-             'type' => 'blob',
+             'type' => 'blob'
         ));
     }
 
