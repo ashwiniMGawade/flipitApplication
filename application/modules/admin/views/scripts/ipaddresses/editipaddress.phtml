@@ -5,6 +5,12 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.j
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
 $this->headLink()->appendStylesheet(PUBLIC_PATH . "/css/jquery-ui-1.8.16.custom.css");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/ipaddresses.js");
+
+$ipaddressForm = $this->form;
+foreach ($ipaddressForm->getElements() as $formElement) :
+    $formElement->getDecorator('label')->setOption('tag', null);
+endforeach;
+
 ?>
 <div class="wrap columns-2">
    <h1><?php echo $this->translate('Edit IP address'); ?>
@@ -13,8 +19,10 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/ipaddresses.js");
           <?php echo $this->translate('Cancel'); ?>
         </button></h1>
         <form method="POST" enctype=multipart/form-data name="editIpaddressesForm" id="editIpaddressesForm">
-        <input type="hidden" value="<?php echo $this->editIpaddress[0]['id'];?>" name='id' id='id' />
-        <input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />
+            <?php
+            echo $ipaddressForm->id->renderViewHelper();
+            echo $ipaddressForm->qString->renderViewHelper();
+            ?>
             <div id="poststuff" class="metabox-holder has-right-sidebar">
               <div id="post-body">
               <div>
@@ -28,10 +36,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/ipaddresses.js");
                         <div class="mainpage-content-right">
                             <div class="mainpage-content-right-inner-right-other wt-250"></div>
                             <div class="mainpage-content-right-inner-left-other">
-                                <input type="text" class="span3" 
-                                    placeholder="<?php echo $this->translate('Holder Name'); ?>"  
-                                    name="name" id="name" 
-                                    value="<?php echo $this->editIpaddress[0]['name']?>">
+                                <?php echo $ipaddressForm->name->renderViewHelper();?>
                             </div>
                           </div>
                         </div>
@@ -42,10 +47,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/ipaddresses.js");
                             <div class="mainpage-content-right">
                                 <div class="mainpage-content-right-inner-right-other wt-250"></div>
                                 <div class="mainpage-content-right-inner-left-other">
-                                <input type="text" 
-                                    placeholder="<?php echo $this->translate('Ip address'); ?>"  
-                                    name="ipaddress" id="ipaddress" 
-                                    value="<?php echo $this->editIpaddress[0]['ipaddress']?>">
+                                <?php echo $ipaddressForm->ipaddress->renderViewHelper();?>
                                 </div>
                             </div>
                         </div>
@@ -55,9 +57,12 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/ipaddresses.js");
             <br class="clear">
         </div>    
         <div class="mainpage-content-colorbox">
-           <button type="submit" id="editKeyword" 
-                class="btn btn-large btn-primary fl"><?php echo $this->translate('SAVE CHANGES'); ?>
-            </button>
+            <?php
+            echo $this->formSubmit(
+                'submit',
+                FrontEnd_Helper_viewHelper::__form('form_SAVE CHANGES'),
+                array('class'=>'btn btn-large btn-primary fl', 'id'=>'editKeyword')
+            ) ?>
             <a href="javascript:void(0);" 
                onclick="window.location.href='<?php echo HTTP_PATH ;?>admin/ipaddresses<?php echo '#'.$this->qstring; ?>'" class="fl m10" >
                <strong><?php echo $this->translate('CANCEL'); ?></strong>

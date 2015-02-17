@@ -10,16 +10,18 @@ class Application_Form_IpAddress extends Application_Form_Base
         $name = new Zend_Form_Element_Text('name');
         $validator = new Zend_Validate_Alpha(array('allowWhiteSpace' => true));
         $name->setRequired(true);
-        $name->setAttrib('class', 'form-control');
         $name->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_name'));
         $name->addValidator($validator);
 
         $ipaddress = new Zend_Form_Element_Text('ipaddress');
-        $validator = new Zend_Validate_Alpha(array('allowWhiteSpace' => true));
         $ipaddress->setRequired(true);
-        $ipaddress->setAttrib('class', 'form-control');
+        $validator = new Zend_Validate_Ip();
+        $ipaddress->addValidator($validator);
         $ipaddress->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_ipaddress'));
         $ipaddress->addValidator($validator);
-        $this->addElements(array($name, $ipaddress));
+
+        $editId =  new Zend_Form_Element_Hidden('id');
+        $qString =  new Zend_Form_Element_Hidden('qString');
+        $this->addElements(array($name, $ipaddress, $editId, $qString));
     }
 }

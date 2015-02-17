@@ -41,30 +41,46 @@ class Admin_IpaddressesController extends Zend_Controller_Action
     public function addipaddressAction()
     {
         $params = $this->_getAllParams();
+        $ipAddressForm = new Application_Form_IpAddress();
+        $this->view->form = $ipAddressForm;
         if ($this->getRequest()->isPost()) {
-            $keyword = Ipaddresses::addIpaddress($params);
-            $flash = $this->_helper->getHelper('FlashMessenger');
-            $message = $this->view->translate('IP address has been added successfully');
-            $flash->addMessage(array('success' => $message));
-            $this->_redirect(HTTP_PATH . 'admin/ipaddresses');
+            if ($ipAddressForm->isValid($this->getRequest()->getPost())) {
+                $keyword = Ipaddresses::addIpaddress($params);
+                $flash = $this->_helper->getHelper('FlashMessenger');
+                $message = $this->view->translate('IP address has been added successfully');
+                $flash->addMessage(array('success' => $message));
+                $this->_redirect(HTTP_PATH . 'admin/ipaddresses');
+            } else {
+                $ipAddressForm->highlightErrorElements();
+            }
         }
+
     }
 
     public function editipaddressAction()
     {
         $ipAddressId = $this->getRequest()->getParam('id');
-        $this->view->qstring = $_SERVER['QUERY_STRING'];
+        $qstring = $_SERVER['QUERY_STRING'];
+        $ipAddressForm = new Application_Form_IpAddress();
+        $ipAddressForm->getElement('id')->setValue($ipAddressId);
+        $ipAddressForm->getElement('qString')->setValue($qstring);
+        $this->view->form = $ipAddressForm;
         if ($ipAddressId > 0) {
-            $searchbar = Ipaddresses::getIpaddressForEdit($ipAddressId);
-            $this->view->editIpaddress = $searchbar;
+            $ipAddressForEdit = Ipaddresses::getIpaddressForEdit($ipAddressId);
+            $ipAddressForm->getElement('name')->setValue($ipAddressForEdit[0]['name']);
+            $ipAddressForm->getElement('ipaddress')->setValue($ipAddressForEdit[0]['ipaddress']);
         }
         if ($this->getRequest()->isPost()) {
-            $params = $this->getRequest()->getParams();
-            $searchbar = Ipaddresses::addIpaddress($params);
-            $flash = $this->_helper->getHelper('FlashMessenger');
-            $message = $this->view->translate('IP address has been updated successfully');
-            $flash->addMessage(array('success' => $message));
-            $this->_redirect(HTTP_PATH.'admin/ipaddresses#'.$params['qString']);
+            if ($ipAddressForm->isValid($this->getRequest()->getPost())) {
+                $params = $this->getRequest()->getParams();
+                $ipAddressForEdit = Ipaddresses::addIpaddress($params);
+                $flash = $this->_helper->getHelper('FlashMessenger');
+                $message = $this->view->translate('IP address has been updated successfully');
+                $flash->addMessage(array('success' => $message));
+                $this->_redirect(HTTP_PATH.'admin/ipaddresses#'.$params['qString']);
+            } else {
+                $ipAddressForm->highlightErrorElements();
+            }
         }
     }
 
