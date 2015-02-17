@@ -252,7 +252,7 @@ class SendNewsletter
                 $emailHeader
             );
             Signupmaxaccount::updateNewsletterSchedulingStatus();
-            NewsLetterCache::truncateNewletterCacheTable();
+            NewsLetterCache::truncateNewsletterCacheTable();
             $message = 'Newsletter has been sent successfully';
         } catch (Mandrill_Error $e) {
             $message ='There is some problem in your data';
