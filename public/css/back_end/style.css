@@ -582,8 +582,7 @@ label, #your-profile label + a {
 	background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#fafafa));
 	background: -moz-linear-gradient(top,  #ffffff,  #fafafa);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#fafafa');
-	height:38px;
-	float:right;
+	height:44px;
 }
 
 .mainpage-content-colorbox .red{
