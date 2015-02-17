@@ -808,6 +808,9 @@ class Shop extends BaseShop
 
         $this->howtoTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageTitle']);
         $this->howtoSubtitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubTitle']);
+        $this->howtoSubSubTitle = FrontEnd_Helper_viewHelper::sanitize(
+            BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubSubTitle'])
+        );
         $this->howtoMetaTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaTitle']);
         $this->howtoMetaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaDesc']);
         $this->customHeader = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomHeader']);

@@ -375,11 +375,13 @@ class StoreController extends Zend_Controller_Action
         $this->view->popularStoresList = $frontEndViewHelper->PopularShopWidget();
         $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->howToGuides=$howToGuides;
-
+        
+        $shopName = isset($shopInformation[0]['name']) ? $shopInformation[0]['name'] : '';
+        $howToGuides = isset($howToGuides[0]['howtoTitle']) ? $howToGuides[0]['howtoTitle'] : '';
         $customHeader = '';
         $this->viewHelperObject->getMetaTags(
             $this,
-            $howToGuides[0]['howtoTitle'],
+            str_replace('[shop]', $shopName, $howToGuides),
             '',
             trim($howToGuides[0]['howtoMetaDescription']),
             $howToGuides[0]['permaLink'],

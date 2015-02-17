@@ -33,6 +33,7 @@ var validRules = {
     selecteditors :  __("Editor looks great"),
     pageTitle : __("Page title looks great"), 
     pageSubTitle : __("Page subtitle looks great"),
+    pageSubSubTitle : __("Page sub subtitle looks great"),
     pagemetaTitle : __("Page meta title looks great"),
     pagemetaDesc :  __("Page description looks great"),
     smallLogoFile : __("Main image lightbox! ok"),
@@ -72,6 +73,7 @@ var focusRules = {
     selecteditors :  __("Select an editor"),
     pageTitle : __("Enter page title"), 
     pageSubTitle : __("Enter page subtitle"),
+    pageSubSubTitle : __("Enter page sub subtitle"),
     pagemetaTitle : __("Enter page meta title"),
     pagemetaDesc :  __("Enter page description"),
     smallLogoFile : __("Upload main image lightbox"),
@@ -223,6 +225,9 @@ function init()
         jQuery('#pageSubTitleLeft').text(__("Page sub title length ") + (data.input) + __(" characters"));
     });
     
+    $('#pageSubSubTitle').textareaCount(options, function(data){
+        jQuery('#pageSubSubTitleLeft').text(__("Page sub sub title length ") + (data.input) + __(" characters"));
+    });
 
     $('#pagemetaTitle').textareaCount(options, function(data){
         jQuery('#pagemetaTitleLeft').val(__("Shop meta title length ") + (data.input) + __(" characters"));
@@ -777,6 +782,16 @@ function validateFormAddNewShop(){
                             return false;
                         }
                     },
+                    pageSubSubTitle :{
+                        required : function(el)
+                        {
+                            if($("#howTouseStatus").val() == 1) 
+                            {
+                                return true ;
+                            }
+                            return false;
+                        }
+                    },
                     pagemetaTitle :{
                         required : function(el)
                         {
@@ -868,6 +883,9 @@ function validateFormAddNewShop(){
                     pageSubTitle : {
                         
                         required : __("Please enter page subtitle")
+                    },
+                    pageSubSubTitle : {
+                        required : __("Please enter page sub subtitle")
                     },
                     pagemetaTitle : {
                         

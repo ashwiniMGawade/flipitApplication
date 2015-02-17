@@ -368,6 +368,9 @@ abstract class BaseShop extends Doctrine_Record
         $this->hasColumn('shopsViewedIds', 'string', 100, array(
                 'type' => 'string',
         ));
+        $this->hasColumn('howtoSubSubTitle', 'string', 255, array(
+            'type' => 'string'
+        ));
 
     }
 

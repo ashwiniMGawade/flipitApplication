@@ -954,6 +954,23 @@ echo $this->headTitle()->append('Edit Shop');?>
                      	</div>
                      </div>	
                 </div>
+
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('Page Sub Subtitle'); ?></strong></label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" name="pageSubSubTitle" id="pageSubSubTitle" 
+                            class="span3" placeholder="<?php echo $this->translate('Page Sub Subtitle'); ?>" 
+                            value="<?php echo $this->data['howtoSubSubTitle'] ; ?>" style="margin-bottom: 0;">
+                            <input type="text" id="pageSubSubTitleLeft" class="input-xlarge  btop word-count" 
+                            value="<?php echo $this->translate("Page Sub sub title length ")
+                            . strlen($this->data['howtoSubSubTitle']) . $this->translate(' characters');?>" 
+                            placeholder="<?php echo $this->translate('0 characters');?>" disabled="disabled">
+                        </div>
+                    </div> 
+                </div>
                         
                 <div class="mainpage-content-line">
                    	 <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta title'); ?></strong></label></div>

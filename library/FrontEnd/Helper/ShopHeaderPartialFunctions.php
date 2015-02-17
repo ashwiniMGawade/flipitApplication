@@ -55,10 +55,17 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
                 </div>
             <div class="box">';
 
-        if ($expiredMessage !='storeDetail') {
-            $shop['subTitle'] = $this->__translate('Expired').' '.$shop['name'].' '.$this->__translate('copuon code');
-        } else {
+        if ($expiredMessage =='storeDetail') {
             $shop['subTitle'] = $shop['subTitle'];
+        } else if ($expiredMessage =='storeHowTo') {
+            if (!empty($shop['howtoTitle'])) {
+                $shop['title'] = str_replace('[shop]', $shop['name'], $shop['howtoTitle']);
+            }
+            if (!empty($shop['howtoSubtitle'])) {
+                $shop['subTitle'] = str_replace('[shop]', $shop['name'], $shop['howtoSubtitle']);
+            }
+        } else {
+            $shop['subTitle'] = $this->__translate('Expired').' '.$shop['name'].' '.$this->__translate('copuon code');
         }
 
         if ($expiredMessage !='') {
