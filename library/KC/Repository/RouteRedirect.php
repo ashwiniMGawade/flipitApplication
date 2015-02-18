@@ -30,9 +30,10 @@ class RouteRedirect extends \KC\Entity\RouteRedirect
 
     public static function addRedirect($params)
     {
-        $routeRedirect = new RouteRedirect();
+        $routeRedirect = new \KC\Entity\RouteRedirect();
         $routeRedirect->orignalurl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['orignalurl']);
         $routeRedirect->redirectto = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['redirectto']);
+        $routeRedirect->deleted = 0;
         $routeRedirect->created_at = new \DateTime('now');
         $routeRedirect->updated_at = new \DateTime('now');
         $entityManagerLocale = \Zend_Registry::get('emLocale');
@@ -74,6 +75,7 @@ class RouteRedirect extends \KC\Entity\RouteRedirect
         $routeRedirect =  $entityManagerLocale->find('KC\Entity\RouteRedirect', $params['id']);
         $routeRedirect->orignalurl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['orignalurl']);
         $routeRedirect->redirectto = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['redirectto']);
+        $routeRedirect->updated_at = new \DateTime('now');
         $entityManagerLocale->persist($routeRedirect);
         $entityManagerLocale->flush();
         return true;

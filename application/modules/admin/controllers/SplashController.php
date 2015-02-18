@@ -59,10 +59,7 @@ class Admin_SplashController extends Zend_Controller_Action
                 $this->splashObject->deleteSplashoffer();
             }
 
-            $this->splashObject->id = 1;
-            $this->splashObject->offerId = $offerId;
-            $this->splashObject->locale = $locale;
-            $this->splashObject->save();
+            $this->splashObject->saveSplashOffer($offerId, $locale);
             $varnishObject = new \KC\Repository\Varnish();
             $varnishObject->addUrl("http://www.flipit.com");
             $this->setFlashMessage('Offer has been added successfully');
