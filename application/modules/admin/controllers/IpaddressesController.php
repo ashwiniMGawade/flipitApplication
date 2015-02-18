@@ -45,7 +45,7 @@ class Admin_IpaddressesController extends Zend_Controller_Action
         $this->view->form = $ipAddressForm;
         if ($this->getRequest()->isPost()) {
             if ($ipAddressForm->isValid($this->getRequest()->getPost())) {
-                $keyword = Ipaddresses::addIpaddress($params);
+                $savedIpAddress = Ipaddresses::addIpaddress($params);
                 $flash = $this->_helper->getHelper('FlashMessenger');
                 $message = $this->view->translate('IP address has been added successfully');
                 $flash->addMessage(array('success' => $message));

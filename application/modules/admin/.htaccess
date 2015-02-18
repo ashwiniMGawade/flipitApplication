@@ -1,4 +1,12 @@
-RewriteEngine On
-RewriteCond %{REQUEST_URI} admin
-RewriteCond %{REMOTE_ADDR} !^111\.222\.333\.44$
-RewriteRule . - [R=404,L]
+order deny,allow
+deny from all
+Allow from 123.232.323.23
+Allow from 323.343.434.343
+Allow from 123.33.344.233
+Allow from 323.343.434.343
+Allow from 323.343.434.343
+Allow from 323.343.434.343
+Allow from 323.343.434.343
+Allow from 121.323.232.232
+Allow from 34.23.42.45
+Allow from 121.241.123.42
