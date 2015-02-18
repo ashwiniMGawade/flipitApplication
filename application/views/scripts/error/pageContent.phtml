@@ -56,7 +56,6 @@ if ($this->pageMode == true) {
             $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
             echo $this->esi($this->locale.'signup/signupwidget?shopId='
                 .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
-            echo $frontendSidebarHelper->popularCategoryWidget();
             echo $frontendSidebarHelper->popularShopWidget();
              ?>  
         </aside> 
