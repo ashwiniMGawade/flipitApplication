@@ -20,7 +20,7 @@ class EditorBallontext Extends \KC\Entity\EditorBallontext
             $query = $entityManagerLocale
                 ->select('ebt.ballontext')
                 ->from('KC\Entity\EditorBallontext', 'ebt')
-                ->where('e.shopid ='.$shopId);
+                ->where('ebt.shopId ='.$shopId);
             $editorTextInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             return $editorTextInformation;
         } else {

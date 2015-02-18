@@ -352,11 +352,11 @@ class Admin_ShopController extends Zend_Controller_Action
         $users = new \KC\Repository\User();
 
         //display shop reasons
-        $shopReasons = new \KC\RepositoryShopReasons();
+        $shopReasons = new \KC\Repository\ShopReasons();
         $this->view->shopReasons = $shopReasons->getShopReasons($id);
-        $this->view->ballonData = \KC\RepositoryEditorBallonText::getEditorText($id);
+        $this->view->ballonData = \KC\Repository\EditorBallonText::getEditorText($id);
         // display managers and account managers list
-        $users = new \KC\RepositoryUser();
+        $users = new \KC\Repository\User();
         $this->view->MangersList = $users->getManagersLists($site_name);
 
         // display  page's list
@@ -383,7 +383,6 @@ class Admin_ShopController extends Zend_Controller_Action
                 ->leftJoin("s.shopPage", "pg")
                 ->leftJoin("s.affliatenetwork", "af")
                 ->leftJoin("s.logo", "logo")
-				->leftJoin("s.screenshot", "screenshot")
                 ->where("s.id = ". $id)
                 ->getQuery()
                 ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -397,6 +396,7 @@ class Admin_ShopController extends Zend_Controller_Action
             if (isset($catArray) && count($catArray) >0) {
 
                 $this->view->catArray =  $catArray  ;
+              
             }
         } else {
             $this->_helper->redirector('createshop', 'shop', 'admin');

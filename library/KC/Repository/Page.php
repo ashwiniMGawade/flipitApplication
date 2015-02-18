@@ -169,8 +169,7 @@ class Page Extends \KC\Entity\Page
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page.id, page.pageTitle as pagetitle')
             ->from('KC\Entity\Page', 'page')
-            ->setParameter(1, 'default')
-            ->where('page.pageType = ?1')
+            ->where('page INSTANCE OF KC\Entity\OfferListPage')
             ->setParameter(2, 0)
             ->andWhere('page.deleted = ?2')
             ->setParameter(3, 1)

@@ -211,16 +211,16 @@ echo $this->headTitle()->append('Edit Shop');?>
               					$checked = '' ;
               				}
               				?>
-				<input type="checkbox" <?php echo $checked ;?> value="<?php echo $this->categoryList[$i]['id']; ?>" class="" name="selectedCategoryies[]" id="category-<?php echo $this->categoryList[$i]['id']; ?>" />
+				<input type="checkbox" <?php echo $checked ;?> value="<?php echo $this->categoryList[$i][0]['id']; ?>" class="" name="selectedCategoryies[]" id="category-<?php echo $this->categoryList[$i][0]['id']; ?>" />
 				 <?php
 							
 	                       
-	                           if(trim($this->categoryList[$i]['categoryName'])!=''){ 
+	                           if(trim($this->categoryList[$i][0]['name'])!=''){ 
 	                           	
 	                           	$categoryIconPath = '';
 	                           	 
 	                           	 
-	                           	$icons = $this->categoryList[$i];
+	                           	$icons = $this->categoryList[$i][0]['categoryicon'];
 	                           	 
 
 	                           	# check an icon is available of not
@@ -232,12 +232,12 @@ echo $this->headTitle()->append('Edit Shop');?>
 	                           	
 	                           	
 	                      	?>
-	                      	<button type="button" title="<?php echo $this->categoryList[$i]['categoryName'];?>" class="btn square-btn <?php echo  @in_array( $this->categoryList[$i]['id'] , $this->catArray )  ? "btn-primary" : "" ?>" id="categoryBtn-<?php echo $this->categoryList[$i]['id'];?>" onClick="addCategory(event,'<?php echo $this->categoryList[$i]['id']; ?>')">
-	                      		<img onclick="$('#categoryBtn-<?php echo $this->categoryList[$i]['id'];?>').click();" alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
+	                      	<button type="button" title="<?php echo $this->categoryList[$i][0]['name'];?>" class="btn square-btn <?php echo  @in_array( $this->categoryList[$i][0]['id'] , $this->catArray )  ? "btn-primary" : "" ?>" id="categoryBtn-<?php echo $this->categoryList[$i][0]['id'];?>" onClick="addCategory(event,'<?php echo $this->categoryList[$i][0]['id']; ?>')">
+	                      		<img onclick="$('#categoryBtn-<?php echo $this->categoryList[$i][0]['id'];?>').click();" alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
 	                      	</button>
                       		<div class="clear"></div>
 				        	<span class="image-description-text">	  			   
-									<?php echo strlen($this->categoryList[$i]['categoryName']) < 20 ? $this->categoryList[$i]['categoryName'] : substr($this->categoryList[$i]['categoryName'],0,20).'..'; ?>			    
+									<?php echo strlen($this->categoryList[$i][0]['name']) < 20 ? $this->categoryList[$i][0]['name'] : substr($this->categoryList[$i][0]['name'],0,20).'..'; ?>			    
 		  					</span>
 	                      	<?php } ?>
 	                              	</div>
