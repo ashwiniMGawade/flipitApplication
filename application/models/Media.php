@@ -15,7 +15,6 @@ class Media extends BaseMedia
     public function con()
     {
         //echo dirname($_SERVER['SCRIPT_FILENAME']).'/upload/media';die;
-
         $options = array(
                 'script_url' => $this->getFullUrl().'/',
                 'upload_dir' => ROOT_PATH .'images/upload/media/',
@@ -26,7 +25,7 @@ class Media extends BaseMedia
                 'delete_type' => 'DELETE',
                 // The php.ini settings upload_max_filesize and post_max_size
                 // take precedence over the following max_file_size setting:
-                'max_file_size' => '2097152',//null
+                'max_file_size' => '10485760',//null
                 'min_file_size' => 1,//1
                 'accept_file_types' => '([^\s]+(\.(?i)(jpg|png|gif|pdf))$)',
                 // The maximum number of files for the upload directory:
