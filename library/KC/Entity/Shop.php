@@ -433,6 +433,46 @@ class Shop
      * @ORM\OneToMany(targetEntity="KC\Entity\FavoriteShop", mappedBy="shop")
      */
     private $favoriteshops;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $moretextforshop;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $howtoSubSubTitle;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $shopsViewedIds;
+
+    /**
+     * @ORM\Column(type="integer", length=20, nullable=true)
+     */
+    private $shopAndOfferClickouts;
+
+    /**
+     * @ORM\Column(type="integer", length=20, nullable=true)
+     */
+    private $lastSevendayClickouts;
+
+    /**
+     * @ORM\Column(type="integer", length=20, nullable=true)
+     */
+    private $customtextposition;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $showcustomtext;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $customtext;
  
 
     public function __get($property)

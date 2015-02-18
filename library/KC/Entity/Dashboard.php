@@ -84,6 +84,10 @@ class Dashboard
      * @ORM\Column(type="integer", length=11, nullable=false)
      */
     private $total_no_of_shops_online_code_thisweek;
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=true)
+     */
+    private $money_shop_ratio;
 
     public function __get($property)
     {
