@@ -1453,7 +1453,7 @@ public static function getShopDetail($shopId)
     {
         $allShopsIds = self::getAllShopsId();
         foreach ($allShopsIds as $shopId) {
-            $$lastSevenDayShopClickouts = ShopViewCount::getAmountClickoutOfShop($shopId['id']);
+            $lastSevenDayShopClickouts = ShopViewCount::getAmountClickoutOfShop($shopId['id']);
             Doctrine_Query::create()
                 ->update('Shop s')
                 ->set('s.lastSevendayClickouts', $lastSevenDayShopClickouts)
