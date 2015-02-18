@@ -840,7 +840,7 @@ function validateFormAddNewShop(){
                         required : true
                     },
                     customtextposition : {
-                        regex : /^([0-9]|10)$/
+                        regex : /^([1-9]|10)$/
                     }
                 },
                 // error messages
