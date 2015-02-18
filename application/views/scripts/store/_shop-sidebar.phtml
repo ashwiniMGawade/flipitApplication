@@ -4,7 +4,6 @@ if (!empty($this->latestShopUpdates)):?>
     <?php echo $this->partial('store/_latestNews.phtml', array('latestShopUpdates' => $this->latestShopUpdates));
 endif;
 $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
-echo $frontendSidebarHelper->popularCategoryWidget();
 if ($this->shopChain):
     ?>
         <article class="block">

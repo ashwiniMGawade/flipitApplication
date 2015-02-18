@@ -582,8 +582,7 @@ label, #your-profile label + a {
 	background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#fafafa));
 	background: -moz-linear-gradient(top,  #ffffff,  #fafafa);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#fafafa');
-	height:38px;
-	float:right;
+	height:44px;
 }
 
 .mainpage-content-colorbox .red{
@@ -1342,7 +1341,9 @@ div.mainpage-content-right-inner-right-full.error input,
 div.mainpage-content-right-inner-left-other.error select,
 div.mainpage-content-right-inner-left-other.error span.cke_skin_BootstrapCK-Skin,
 div.sidebar-content-box.error select,
-div.as_seen-content.error input[type=file]
+div.as_seen-content.error input[type=file],
+input#name.input-error,
+input#ipaddress.input-error
 {
 	border-color: #B94A48;
 	color: #B94A48;
@@ -1358,7 +1359,9 @@ div.mainpage-content-right-inner-left-other.success select,
 div.mainpage-content-right.success textarea,
 div.mainpage-content-right-inner-left-other.success span.cke_skin_BootstrapCK-Skin,
 div.sidebar-content-box.success select,
-div.as_seen-content.success input[type=file]
+div.as_seen-content.success input[type=file],
+input#name.input-success,
+input#ipaddress.input-success
 {
 		border-color: #468847;
 		color: #468847;
