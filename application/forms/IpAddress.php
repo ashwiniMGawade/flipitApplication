@@ -1,5 +1,5 @@
 <?php
-class Application_Form_IpAddress extends Application_Form_Base
+class Application_Form_IpAddress extends Application_Form_AdminBase
 {
     public function __construct()
     {
