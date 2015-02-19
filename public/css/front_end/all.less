@@ -200,6 +200,14 @@ body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
 	.logo{
 		margin:25px 0;
 	}
+	.holder1{
+		position:relative;
+		&:after{
+			display:block;
+			clear:both;
+			content:"";
+		}
+	}
 }
 .menu-opener{
 	display:none;
@@ -328,6 +336,11 @@ img.logo.kortingscode{
 				border-right:1px solid #2e2e2d;
 				margin:0 0 0 1px;
 				float:left;
+				&:hover{
+					.drop-box{
+						display:block;
+					}
+				}
 				> a{
 					display:block;
 					padding:39px 23px 42px 25px;
@@ -362,6 +375,89 @@ img.logo.kortingscode{
 		    			.plus-menu(-200px);
 	    			}
 			    }
+			}
+			.drop-box{
+				display:none;
+				position:absolute;
+				left:0;
+				top:100%;
+				width:100%;
+				background:@white-color;
+				border-radius:0 0 3px 3px;
+				box-shadow:0 3px 6px 0 rgba(78,78,78,0.2);
+				z-index:99;
+				padding:0 0 27px;
+				.inner-box{
+					overflow:hidden;
+					width:100%;
+					padding:28px 0 15px;
+					margin:0 0 23px;
+					border-bottom:1px solid #eaeaea;
+					.info-area{
+						float:left;
+						width:25%;
+						list-style:none;
+						padding:0 5% 0 2.3%;
+						margin:0;
+						font:15px/18px Arial, sans-serif;
+						position:relative;
+						text-transform:none;
+						box-shadow:none;
+						border:none;
+						&:first-child{
+							&:after{ display:none;}
+						}
+						&:after{
+							position:absolute;
+							left:-2px;
+							top:0;
+							width:1px;
+							height:90%;
+							content:"";
+							background:#eaeaea;
+						}
+						>li{
+							float:none;
+							padding:0 0 0 20px!important;
+							margin:0 0 12px!important;
+							position:relative;
+							box-shadow:none;
+							border:none;
+							&:after{
+								position:absolute;
+								left:0;
+								top:1px;
+								width:9px;
+								height:15px;
+								content:"";
+								background:url(../../images/arrow-img.png) no-repeat 0 0;
+							}
+							>a{
+								display:block;
+								padding:0 !important;
+								color: #1279c9;
+								&:hover{ 
+									color: #363535;
+									text-decoration: underline;
+									background:none;
+								}
+							}
+						}
+					}
+				}
+				.btn{
+					float: right;
+					font-size: 15px;
+					line-height: 18px;
+					font-weight: normal;
+					margin: 0 39px 0 0;
+					padding:0 0 0 13px;
+					text-transform: none;
+					white-space: inherit;
+					color:@text-color;
+					background:url(../../images/arrow-img.png) no-repeat 0 1px;
+					&:hover{ text-decoration: underline; }
+				}
 			}
 		}
 	}
