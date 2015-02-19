@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="ip_addresses")
  */
-class ip_addresses
+class ipAddresses
 {
     /**
      * @ORM\Id
@@ -39,4 +39,15 @@ class ip_addresses
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $deleted;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
+    
 }

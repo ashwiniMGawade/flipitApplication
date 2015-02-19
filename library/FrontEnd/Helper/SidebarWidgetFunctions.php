@@ -125,7 +125,7 @@ EOD;
     
     public function popularShopWidget()
     {
-        $popularStores = Shop::getAllPopularStores(20);
+        $popularStores = \KC\Repository\Shop::getAllPopularStores(20);
         $popularStoresContent = '<div class="block"><div class="intro">
                    <h4>'.$this->__translate('Populaire Winkels').'</h4>
                    <span>'
@@ -160,7 +160,7 @@ EOD;
     public static function getShopsByFallback($storeIds)
     {
         foreach ($storeIds as $storeId) {
-            $storeExists = Shop::getShopData($storeId);
+            $storeExists =  \KC\Repository\Shop::getShopData($storeId);
             if ($storeExists) {
                 $cacheStatus = true;
             } else {
@@ -173,7 +173,7 @@ EOD;
 
     public function shopsAlsoViewedWidget($shopId, $shopName)
     {
-        $shopsAlsoViewed = Shop::getShopsAlsoViewed($shopId);
+        $shopsAlsoViewed =  \KC\Repository\Shop::getShopsAlsoViewed($shopId);
         if ($shopsAlsoViewed[0]['shopsViewedIds'] != '') {
             $similarStoresViewedContent = self::getSimilarStoresViewedDivContent($shopName);
             $storeIds = explode(',', $shopsAlsoViewed[0]['shopsViewedIds']);
@@ -183,7 +183,7 @@ EOD;
                     $similarStoresViewedContent .= self::addLiOfSimilarStoresViewedContent($storeId);
                 }
             } else {
-                $topFiveSimilarShopsViewed = Shop::getSimilarShopsForAlsoViewedWidget($shopId, 5);
+                $topFiveSimilarShopsViewed =  \KC\Repository\Shop::getSimilarShopsForAlsoViewedWidget($shopId, 5);
                 foreach ($topFiveSimilarShopsViewed as $similarShopId) {
                     $similarStoresViewedContent .= self::addLiOfSimilarStoresViewedContent($similarShopId);
                 }
