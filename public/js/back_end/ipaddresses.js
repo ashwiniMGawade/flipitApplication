@@ -169,11 +169,8 @@ function getIpaddressesList(iStart,iSortCol,iSortDir) {
             "fnRender" : function(obj) {
                 var tag = '';
                 if(obj.aData.created_at!=undefined && obj.aData.created_at!=''){
-                    var dat = obj.aData.created_at;
-                    tag = dat.split("-");
-                    tag2 = tag[2];
-                    var da = tag2.split(" ");
-                    return "<a href='javascript:void(0)'>" +  (da[0]+'-'+tag[1]+'-'+tag[0]) + "</a>";
+                    var dat = obj.aData.created_at.date;
+                    return "<a href='javascript:void(0)'>" +  dat + "</a>";
                 }
                 return "<a href='javascript:void(0)'></a>";
             },

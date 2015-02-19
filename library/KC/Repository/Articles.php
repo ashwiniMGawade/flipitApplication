@@ -34,7 +34,7 @@ class Articles extends \KC\Entity\Articles
             ->where('o.deleted = ?1')
             ->orderBy('p.position', 'ASC')
             ->setMaxResults($limit);
-        echo $moneySavingArticles = $query->getQuery()->getSQL(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $moneySavingArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $moneySavingArticles;
     }
 

@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="news_letter_cache")
  */
-class news_letter_cache
+class newsLetterCache
 {
     /**
      * @ORM\Id
@@ -44,4 +44,15 @@ class news_letter_cache
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $deleted;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
+    
 }

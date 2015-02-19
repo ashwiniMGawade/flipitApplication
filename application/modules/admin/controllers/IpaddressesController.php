@@ -33,7 +33,7 @@ class Admin_IpaddressesController extends Zend_Controller_Action
     public function getipaddresesAction()
     {
         $params = $this->_getAllParams();
-        $Ipaddresses = Ipaddresses::getAllIpaddresses($params);
+        $Ipaddresses = \KC\Repository\IpAddresses::getAllIpaddresses($params);
         echo Zend_Json::encode($Ipaddresses);
         die();
     }
@@ -45,7 +45,7 @@ class Admin_IpaddressesController extends Zend_Controller_Action
         $this->view->form = $ipAddressForm;
         if ($this->getRequest()->isPost()) {
             if ($ipAddressForm->isValid($this->getRequest()->getPost())) {
-                $savedIpAddress = Ipaddresses::addIpaddress($params);
+                $savedIpAddress = KC\Repository\IpAddresses::addIpaddress($params);
                 $flash = $this->_helper->getHelper('FlashMessenger');
                 $message = $this->view->translate('IP address has been added successfully');
                 $flash->addMessage(array('success' => $message));
@@ -66,14 +66,14 @@ class Admin_IpaddressesController extends Zend_Controller_Action
         $ipAddressForm->getElement('qString')->setValue($qstring);
         $this->view->form = $ipAddressForm;
         if ($ipAddressId > 0) {
-            $ipAddressForEdit = Ipaddresses::getIpaddressForEdit($ipAddressId);
+            $ipAddressForEdit = \KC\Repository\IpAddresses::getIpaddressForEdit($ipAddressId);
             $ipAddressForm->getElement('name')->setValue($ipAddressForEdit[0]['name']);
             $ipAddressForm->getElement('ipaddress')->setValue($ipAddressForEdit[0]['ipaddress']);
         }
         if ($this->getRequest()->isPost()) {
             if ($ipAddressForm->isValid($this->getRequest()->getPost())) {
                 $params = $this->getRequest()->getParams();
-                $ipAddressForEdit = Ipaddresses::addIpaddress($params);
+                $ipAddressForEdit = \KC\Repository\IpAddresses::addIpaddress($params);
                 $flash = $this->_helper->getHelper('FlashMessenger');
                 $message = $this->view->translate('IP address has been updated successfully');
                 $flash->addMessage(array('success' => $message));
@@ -87,7 +87,7 @@ class Admin_IpaddressesController extends Zend_Controller_Action
     public function deleteipaddressAction()
     {
         $ipAddressId = $this->getRequest()->getParam('id');
-        Ipaddresses::deleteIpaddress($ipAddressId);
+        \KC\Repository\IpAddresses::deleteIpaddress($ipAddressId);
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $this->view->translate('IP address has been deleted successfully');
         $flash->addMessage(array('success' => $message));
