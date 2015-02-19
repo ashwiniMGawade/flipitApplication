@@ -72,18 +72,55 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 		     					<option value="<?php echo $this->shopList[$i]['id']; ?>"><?php echo $shopname; ?></option>
 								<?php
 								}
-							}?>
-							</select>
-							<input type="hidden" name="selctedshop" id="selctedshop" value="">
-						</div>
-					</div>		
-							
-
-						</div>
-					</div>
+								}?>
+								</select>
+								<input type="hidden" name="selctedshop" id="selctedshop" value="">
+							</div>
+						</div>		
+						<div class="row-fluid mb10"></div>		
+						<div class="span8">
+	                        <div data-toggle="buttons-checkbox" class="btn-group mb20">
+	                            <input type="checkbox" id="couponCodeCheckbox" name="couponCodeCheckbox" checked="checked" value="coupon" style="display:none;">
+	                            <input type="checkbox" id="newsCheckbox" name="newsCheckbox" value="news" style="display:none;">
+	                            <input type="checkbox" id="saleCheckbox" name="saleCheckbox" value="sale" style="display:none;">
+	                            <input type="checkbox" id="printableCheckbox" name="printableCheckbox" value="printable" style="display:none;">
+	                            <button type="button" class="btn btn-primary" style="border-radius: 4px 0 0 4px;" id="couponCode" onClick="selectDiscountType('couponCode')"><?php echo $this->translate('Coupon'); ?></button>
+	                            <button type="button" class="btn" id="sale" onClick="selectDiscountType('sale')"><?php echo $this->translate('Sale'); ?></button>
+	                            <button type="button" class="btn" id="printable" onClick="selectDiscountType('printable')"><?php echo $this->translate('Printable'); ?></button>
+	                        </div>           
+	                    </div>
+                    </div>
 				</div>
+				<div class="span6">
+	                <div class="mainpage-content">
+	                    <div class="row-fluid mb10" id="aboutShopNoteDiv">
+	                        <div class="span4">
+	                            <strong><?php echo $this->translate('Note from this shop:'); ?></strong>
+	                        </div>
+	                        <div class="span8">
+	                            <div class="" id="shopNotes">&nbsp;</div>
+	                        </div>
+	                    </div>
+	                    <div class="row-fluid mb10">
+	                        <div class="span4">
+	                            <strong><?php echo $this->translate('Code Alert visitors count'); ?></strong>
+	                        </div>
+	                        <div class="span8">
+	                            <span id="code-alert-visitors-count">&nbsp;</span>
+	                        </div>
+	                    </div>
+	                    <div class="row-fluid mb10" id="aboutNertworkDiv">
+	                        <div class="span4">
+	                            <strong><?php echo $this->translate('Network'); ?></strong>
+	                        </div>
+	                        <div class="span8">
+	                            <div id="shopNetwork">&nbsp;</div>
+	                            <input type="hidden" name="strictConfirmation" id="strictConfirmation" value="0" />
+	                        </div>
+	                    </div>
+	                </div>
+            	</div>
 			</div>
-
 					<div id="visibiliyDiv">
 			<div class="row-fluid mb10">
 				<div class="span2"><strong><?php echo $this->translate('Visibility'); ?></strong></div>
