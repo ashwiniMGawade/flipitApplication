@@ -30,7 +30,7 @@ class SendNewsletter
             );
         defined('LIBRARY_PATH')
             || define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
-        defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
+        defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine1');
         defined('APPLICATION_ENV')
         || define(
             'APPLICATION_ENV',
@@ -53,7 +53,7 @@ class SendNewsletter
         );
 
         require_once(LIBRARY_PATH.'/PHPExcel/PHPExcel.php');
-        require_once(LIBRARY_PATH.'/BackEnd/Helper/viewHelper.php');
+        require_once(LIBRARY_PATH.'/BackEnd/Helper/viewHelper-v1.php');
         require_once (LIBRARY_PATH . '/Zend/Application.php');
         require_once(DOCTRINE_PATH . '/Doctrine.php');
         $application = new Zend_Application(
