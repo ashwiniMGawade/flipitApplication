@@ -98,7 +98,7 @@ function init(){
 				////extraPlugins : 'wordcount',
 				customConfig : 'config.js' ,  
 				toolbar :  'BasicToolbar'  ,
-				height : "300"
+				height : "80"
 	});
 	
 	

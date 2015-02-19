@@ -72,7 +72,7 @@ function init(){
 				////extraPlugins : 'wordcount',
 				customConfig : 'config.js' ,  
 				toolbar :  'BasicToolbar'  ,
-				height : "300"
+				height : "80"
 	});
 	
 	jQuery('#extendedOfferTitle').NobleCount('#metaTitleLeft',{
@@ -450,17 +450,10 @@ function getShopDetail(value){
 			dataType : "json",
 			success : function(data) {
 				if (data != null) {
-
-
 					if(data[0].notes != '' && data[0].notes != null){
-
 						jQuery('#aboutShopNoteDiv').show();
-						jQuery('#shopNotes').html(data[0].notes).addClass('alert-error');;
-					} else {
-						jQuery('#shopNotes').html('&nbsp;')
-											  .removeClass('alert-error');
-					}
-
+						jQuery('#shopNotes').html(data[0].notes).addClass('alert');
+					} 
 					if(data[0].affname != '' && data[0].affname != null){
 						jQuery('#aboutNertworkDiv').show();
 						jQuery('#shopNetwork').html(data[0].affname);
@@ -912,7 +905,7 @@ function validateFormAddNewOffer(){
 				ignore: [],
 				errorPlacement : function(error, element) {
 					
-						element.parent("div").prev("div")
+						element.parent("div").next("div")
 								.html(error);
 				},
   				// validation rules
@@ -1085,7 +1078,7 @@ function validateFormAddNewOffer(){
 					        			
 					        			jQuery('#extendedOfferRefurl').val(res.url);
 					        			
-					        			jQuery("input[name=extendedOfferRefurl]").parent('div').prev("div").removeClass('focus')
+					        			jQuery("input[name=extendedOfferRefurl]").parent('div').next("div").removeClass('focus')
 					        		.removeClass('error').addClass('success');
 					        		} 
 					        		else

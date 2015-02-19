@@ -35,7 +35,6 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 </script>
 <?php echo $this->headTitle()->append('Edit Offer');?>
 <div class="wrap columns-2 edit-offer-main-cont">
-
 	<form action="<?php echo HTTP_PATH; ?>admin/offer/updateoffer" name="addOffer" id="addOffer" method="POST" enctype="multipart/form-data" autocomplete="off">
 		<input type="hidden" name='couponCodeType' id='couponCodeType' value='' />
 		<h1><?php echo $this->translate('Edit Offer');?>
@@ -53,79 +52,17 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
             <input type="hidden" name="code-alert-string" id="code-alert-string" 
                 value="<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>">
 		</h1>
-      <input type="hidden" name='offerImageSelect' id='offerImageSelect' value='' />
-      <input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />
-
-     	<div class="mainpage-content" id="visibiliyDiv">
-			<div class="mainpage-content-line mb10">
-				<div class="mainpage-content-left"><strong><?php echo $this->translate('Visibility'); ?></strong></div>
-				<div class="mainpage-content-right">
-					<div data-toggle="buttons-checkbox" class="btn-group">
-						<button type="button" class="btn btn-primary"  id="default" onClick="selectOfferType('default')"><?php echo $this->translate('Default'); ?></button>
-						<input type="checkbox" checked="checked" class="display-none" name="defaultoffercheckbox" id="defaultoffercheckbox" value="defaultoffercheckbox">
-        				<button type="button" class="btn" style="border-radius: 0 4px 4px 0;" id="memberOnly" onClick="selectOfferType('memberOnly')"><?php echo $this->translate('Members Only'); ?></button>
-				   	 	<input type="checkbox" name="memberonlycheckbox" class="display-none" id="memberonlycheckbox" value="defaultoffercheckbox">
-                  </div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Code added by bhart for Members only starts here-->
-
-             <div class="mainpage-content" id="membersOnlyDiv" style="display:none;">
-                <div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><strong><?php echo $this->translate('From which shop?'); ?></strong></div>
-                      <div class="mainpage-content-right">
-                    	<div class="btn-group" data-toggle="buttons-checkbox" >
-	                         <button type="button" id="existingShop" name="existingShop" class="btn btn-primary"><?php echo $this->translate('Existing Shop'); ?></button>
-	                          <input type="checkbox" checked="checked" class="display-none" name="existingShopCheckbox" id="existingShopCheckbox" value="existingShopCheckbox">
-	                          <button type="button" id="notExistingShop" name="notExistingShop" class="btn" style="border-radius: 0 4px 4px 0;"><?php echo $this->translate('Not Existing Shop'); ?></button>
-	                          <input type="checkbox" checked="checked" class="display-none" name="notExistingShopCheckbox" id="notExistingShopCheckbox" value="notExistingShopCheckbox">
-	                           <input type="hidden" name="fromWhichShop" value="1" id="fromWhichShop">
-	  				    </div>
-                    </div>
-                </div>
-            </div>
-           <div class="mainpage-content" id="notExistShop" style="display:none;">
-              <div class="mainpage-content-line">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Shop Name'); ?></strong></label></div>
-                       <div class="mainpage-content-right">
-                          <div class="mainpage-content-right-inner-right-other"></div>
-                             <div class="mainpage-content-right-inner-left-other">
-                              <input type="text" class="span3"  id="newShop" name="newShop" placeholder=<?php echo $this->translate('Shop Name');?>>
-                           </div>
-                    </div>
-               </div>
-
-               <div class="mainpage-content-line">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Shop Logo'); ?></strong></label></div>
-                    <div class="mainpage-content-right">
-	                     <div class="mainpage-content-right-inner-right-other"></div>
-	                     <?php
-	                        $shopPicture = PUBLIC_PATH.'images/NoImage/catLogo_95_95.jpg';
-						    if( file_exists(ROOT_PATH.$shopLogo[0]['shop']['logo']['path'].'thum_large_'.$shopLogo[0]['shop']['logo']['name'])) {
-
-		                      $shopPicture = PUBLIC_PATH_LOCALE.$shopLogo[0]['shop']['logo']['path'].'thum_large_'.$shopLogo[0]['shop']['logo']['name'] ;
-		                     }
-		                  ?>
-	                     <img alt="<?php echo $this->translate('Shop logo'); ?>" src="<?php echo $shopPicture ; ?>" />
-	                     <div style="margin-right: 0px;" class="mainpage-content-right-inner-left-other">
-	                      	<input  data-max-size="2097152" type="file" name="logoFile" id="logoFile" class="ignore" />
-					       	<span id="logo_file_message" class="help-inline" style="display: inline-block; padding-bottom: 5px; margin-left: 10px;"><?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB, Ratio 2:01)'); ?></span>
-	                    </div>
-                    </div>
-                </div>
-         </div>
-
-        <!-- Code end by bhart for Members only-->
-		<span id="shopDetailDiv">
-			<div class="mainpage-content" id="shopDiv">
-				<div class="mainpage-content-line">
-					<div class="mainpage-content-left"><strong><?php echo $this->translate('For which shop?'); ?></strong></div>
-					<div class="mainpage-content-right">
-						<div class="mainpage-content-right-inner-right-other"></div>
-						<div class="mainpage-content-right-inner-left-other"  style=' padding-bottom: 10px;'>
-							<select onchange="getShopDetail(this.value);"  style="display: none; width : 250px;" class="combobox" name="whichshop" id="whichshop">
+      	<input type="hidden" name='offerImageSelect' id='offerImageSelect' value='' />
+      	<input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />
+			<div class="row-fluid">
+				<div class="span6">
+					<div class="mainpage-content" id="shopDiv">
+						<div class="row-fluid">
+							<div class="span4">
+								<strong><?php echo $this->translate('Name of Store'); ?></strong>
+							</div>
+							<div class="span8">
+								<select onchange="getShopDetail(this.value);"  style="display: none; width : 250px;" class="combobox" name="whichshop" id="whichshop">
 								<option value=""></option>
 								<?php
 								for($i = 0; $i < count ( $this->shopList ); $i ++) {
@@ -136,19 +73,81 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 								<?php
 								}
 							}?>
-							</select> <input type="hidden" name="selctedshop" id="selctedshop" value="">
-							<div class="mainpage-content-buttons" id="offerButtons">
-								<button id="updateOfferBtn" type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('EDIT OFFER'); ?></button>
-								<a href="<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>" class="fl m10"><strong class="ml10"><?php echo $this->translate('CANCEL'); ?></strong></a>
-								<a id="deleteButton" href="javascript:void(0);" onclick="deleteOffer(event);" class="fl red mt10"><strong><?php echo $this->translate('DELETE'); ?></strong></a>
-							</div>
-							<input type="hidden" name="offerId" id="offerId" value="<?php echo $this->offerId; ?>">
+							</select>
+							<input type="hidden" name="selctedshop" id="selctedshop" value="">
+						</div>
+					</div>		
+							
 
 						</div>
 					</div>
 				</div>
 			</div>
 
+					<div id="visibiliyDiv">
+			<div class="row-fluid mb10">
+				<div class="span2"><strong><?php echo $this->translate('Visibility'); ?></strong></div>
+				<div class="span10">
+					<div data-toggle="buttons-checkbox" class="btn-group">
+						<button type="button" class="btn btn-primary"  id="default" onClick="selectOfferType('default')"><?php echo $this->translate('Default'); ?></button>
+						<input type="checkbox" checked="checked" class="display-none" name="defaultoffercheckbox" id="defaultoffercheckbox" value="defaultoffercheckbox">
+        				<button type="button" class="btn" style="border-radius: 0 4px 4px 0;" id="memberOnly" onClick="selectOfferType('memberOnly')"><?php echo $this->translate('Members Only'); ?></button>
+				   	 	<input type="checkbox" name="memberonlycheckbox" class="display-none" id="memberonlycheckbox" value="defaultoffercheckbox">
+                  </div>
+				</div>
+			</div>
+		</div>
+		<div id="membersOnlyDiv" style="display:none;">
+            <div class="row-fluid mb10">
+                <div class="span2">
+                	<strong><?php echo $this->translate('From which shop?'); ?></strong>
+                </div>
+                <div class="span10">
+                	<div class="btn-group" data-toggle="buttons-checkbox" >
+                         <button type="button" id="existingShop" name="existingShop" class="btn btn-primary"><?php echo $this->translate('Existing Shop'); ?></button>
+                          <input type="checkbox" checked="checked" class="display-none" name="existingShopCheckbox" id="existingShopCheckbox" value="existingShopCheckbox">
+                          <button type="button" id="notExistingShop" name="notExistingShop" class="btn" style="border-radius: 0 4px 4px 0;"><?php echo $this->translate('Not Existing Shop'); ?></button>
+                          <input type="checkbox" checked="checked" class="display-none" name="notExistingShopCheckbox" id="notExistingShopCheckbox" value="notExistingShopCheckbox">
+                           <input type="hidden" name="fromWhichShop" value="1" id="fromWhichShop">
+  				    </div>
+                </div>
+            </div>
+       	</div>
+        <div id="notExistShop" style="display:none;">
+            <div class="row-fluid">
+                <div class="span2">
+                	<label><strong><?php echo $this->translate('Shop Name'); ?></strong></label>
+                </div>
+                <div class="span10">
+                    <div class="mainpage-content-right-inner-right-other"></div>
+                	<div class="mainpage-content-right-inner-left-other">
+                   		<input type="text" class="span3"  id="newShop" name="newShop" placeholder=<?php echo $this->translate('Shop Name');?>>
+                  	</div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span2">
+                	<label><strong><?php echo $this->translate('Shop Logo'); ?></strong></label>
+                </div>
+                <div class="span10">
+                    <div class="mainpage-content-right-inner-right-other"></div>
+                     <?php
+                        $shopPicture = PUBLIC_PATH.'images/NoImage/catLogo_95_95.jpg';
+					    if( file_exists(ROOT_PATH.$shopLogo[0]['shop']['logo']['path'].'thum_large_'.$shopLogo[0]['shop']['logo']['name'])) {
+
+	                      $shopPicture = PUBLIC_PATH_LOCALE.$shopLogo[0]['shop']['logo']['path'].'thum_large_'.$shopLogo[0]['shop']['logo']['name'] ;
+	                     }
+	                  ?>
+                     <img alt="<?php echo $this->translate('Shop logo'); ?>" src="<?php echo $shopPicture ; ?>" />
+                     <div style="margin-right: 0px;" class="mainpage-content-right-inner-left-other">
+                      	<input  data-max-size="2097152" type="file" name="logoFile" id="logoFile" class="ignore" />
+				       	<span id="logo_file_message" class="help-inline" style="display: inline-block; padding-bottom: 5px; margin-left: 10px;"><?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB, Ratio 2:01)'); ?></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+			
 			<div class="mainpage-content-line">
 				<div class="mainpage-content-left">
 					<label><strong><?php echo $this->translate('Title'); ?></strong></label>
