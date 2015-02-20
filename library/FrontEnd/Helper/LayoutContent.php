@@ -184,12 +184,52 @@ class FrontEnd_Helper_LayoutContent
             '<li class="' . $cssClassForLastLi .'" id="'. $menu["name"] .'">
                 <a id="'. $menu["name"] . '" name="'. $menu["name"] . '" 
                     class="" href="'. HTTP_PATH_LOCALE  . $menu['url'] . '">' . ucfirst($menu["name"])
-                . '</a>
-            </li>';
+                . '</a>';
+            if (strpos($menu['url'], '09-e')) {
+                $ulOfMainMenu.=self::generateTopShopsDropdown();
+            }
+            $ulOfMainMenu.='</li>';
         }
         $ulOfMainMenu .=
         '</ul>';
         return $ulOfMainMenu;
+    }
+
+    public static function generateTopShopsDropdown()
+    {
+        $topShops = self::getTopShopForDropdown();
+        $topShopsDropdown =
+        '<div class="drop-box">
+            <div class="inner-box">
+                <ul class="info-area">';
+        $i = 1;
+        foreach ($topShops as $topShop) {
+            if ($i == 5 || $i == 9 || $i==13) {
+                $topShopsDropdown .='</ul><ul class="info-area">';
+            }
+            $topShopsDropdown .='<li><a href="'. HTTP_PATH_LOCALE. $topShop['shop']['permaLink']. '">'. $topShop['shop']['name'] . '</a></li>';
+            $i++;
+        }
+        $topShopsDropdown.=
+            '</ul></div>
+            <a class="btn" 
+                href="'. HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_alle-winkels-09-e').'">'
+                .FrontEnd_Helper_viewHelper::__translate('View all shops'). '</a>
+        </div>';
+        return $topShopsDropdown;
+    }
+
+    public static function getTopShopForDropdown()
+    {
+        $topShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            "all_popularShops_list",
+            array(
+                'function' => 'FrontEnd_Helper_viewHelper::getStoreForFrontEnd',
+                'parameters' => array("popular", 24)
+            ),
+            ''
+        );
+        return array_slice($topShops, 0, 15);
     }
 
     public static function generateMobileMenu($navigation)
