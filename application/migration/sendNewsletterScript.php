@@ -169,14 +169,17 @@ class SendNewsletter
                     if ($currentTime->isLater($sentTime)) {
                         echo "\nSending newletter...\n" ;
                         $this->mandrilHandler($key, $settings);
+                    } else {
+                        echo "\n";
+                        print "$key - Newsletter scheduled date is greater than Current Date.";
                     }
                 } else {
                     echo "\n";
                     print "$key - Already sent";
                 }
             } else {
-                    echo "\n";
-                    print "$key - Newsletter has already been sent for the same day.";
+                echo "\n";
+                print "$key - Newsletter has already been sent for the same day.";
             }
         } catch (Exception $e) {
             echo "\n";
@@ -196,7 +199,6 @@ class SendNewsletter
         $newsLetterCache = NewsLetterCache::getAllNewsLetterCacheContent();
         if (!empty($newsLetterCache)) {
             echo 'Building newsletter from cache'."\n";
-            $newsLetterCache = NewsLetterCache::getAllNewsLetterCacheContent();
             $topCategory = NewsLetterCache::getCategoryByFallBack($newsLetterCache['top_category_id']);
             $topVouchercodes = NewsLetterCache::getTopOffersByFallBack($newsLetterCache['top_offers_ids']);
             $categoryVouchers = NewsLetterCache::getTopCategoryOffersByFallBack(
@@ -229,7 +231,6 @@ class SendNewsletter
         $mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
         $mandrillNewsletterSubject = $settings[0]['emailsubject'];
         $mandrillSenderName = $settings[0]['sendername'];
-        //$newsletterHeader = Signupmaxaccount::getEmailHeaderFooter();
         try {
             FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
                 $topVouchercodes,
