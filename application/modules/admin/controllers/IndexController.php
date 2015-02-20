@@ -5,14 +5,23 @@ class Admin_IndexController extends Zend_Controller_Action
 
     public function preDispatch()
     {
-
-        if (!Auth_StaffAdapter::hasIdentity()) {
-            $referer = new Zend_Session_Namespace('referer');
-            $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-            $this->_redirect('/admin/auth/index');
-
+        if (self::checkIpAddressInDatabase()) {
+            if (!Auth_StaffAdapter::hasIdentity()) {
+                $referer = new Zend_Session_Namespace('referer');
+                $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+                $this->_redirect('/admin/auth/index');
+            }
+        } else {
+           $this->_redirect(HTTP_PATH);
         }
 
+    }
+
+    public static function checkIpAddressInDatabase()
+    {
+        $clientIp = $_SERVER['REMOTE_ADDR'];
+        $existance = Ipaddresses::checkIpEnrty($clientIp);
+        return $existance;
     }
     public function init()
     {

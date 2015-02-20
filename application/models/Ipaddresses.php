@@ -17,6 +17,16 @@ class Ipaddresses extends BaseIpaddresses
         return $ipAddressesList;
     }
 
+    public static function checkIpEnrty($clientIp)
+    {
+        $ipAddress = Doctrine_Query::create()
+            ->select('ipaddress')
+            ->from("Ipaddresses")
+            ->where("ipaddress = '".$clientIp."'")
+            ->fetchOne();
+        return $ipAddress;
+    }
+
     public static function addIpaddress($params)
     {
         if (isset($params['id'])) {
