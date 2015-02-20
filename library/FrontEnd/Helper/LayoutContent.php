@@ -214,7 +214,7 @@ class FrontEnd_Helper_LayoutContent
             '</ul></div>
             <a class="btn" 
                 href="'. HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_alle-winkels-09-e').'">'
-                .FrontEnd_Helper_viewHelper::__translate('Vie all shops'). '</a>
+                .FrontEnd_Helper_viewHelper::__translate('View all shops'). '</a>
         </div>';
         return $topShopsDropdown;
     }
