@@ -1,4 +1,5 @@
 <?php
+
 defined('APPLICATION_PATH')
     || define(
         'APPLICATION_PATH',
@@ -35,6 +36,10 @@ set_include_path(
         array(realpath(DOCTRINE_PATH), get_include_path())
     )
 );
+$request = $_SERVER['REQUEST_URI'];
+if (preg_match('/admin/', $request, $matches)) {
+    require_once APPLICATION_PATH.'/services/Ipaddress/Ipaddress.php';
+}
 /** Zend_Application */
 require_once 'Zend/Application.php';
 require_once 'PHPExcel/PHPExcel.php';
@@ -42,3 +47,4 @@ require_once 'PHPExcel/PHPExcel.php';
 // Create application, bootstrap, and run
 $application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
 $application->bootstrap()->run();
+

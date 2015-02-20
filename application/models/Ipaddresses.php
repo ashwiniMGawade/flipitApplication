@@ -17,16 +17,6 @@ class Ipaddresses extends BaseIpaddresses
         return $ipAddressesList;
     }
 
-    public static function checkIpEnrty($clientIp)
-    {
-        $ipAddress = Doctrine_Query::create()
-            ->select('ipaddress')
-            ->from("Ipaddresses")
-            ->where("ipaddress = '".$clientIp."'")
-            ->fetchOne();
-        return $ipAddress;
-    }
-
     public static function addIpaddress($params)
     {
         if (isset($params['id'])) {
@@ -74,13 +64,12 @@ class Ipaddresses extends BaseIpaddresses
     {
         $htaccessFilePath = APPLICATION_PATH."/modules/admin/.htaccess";
         $allowedIpsList = self::getIpAdressList();
-        $htaccessContent = "order deny,allow";
-        $htaccessContent .="\n";
-        $htaccessContent .= "deny from all";
+        $htaccessContent = "order allow,deny";
         $htaccessContent .="\n";
         foreach ($allowedIpsList as $allowedIpList) {
             $htaccessContent .= 'Allow from '.$allowedIpList['ipaddress']."\n";
         }
+        $htaccessContent .= "deny from all";
         $ipAddressHandle = fopen($htaccessFilePath, 'w');
         fwrite($ipAddressHandle, $htaccessContent);
         fclose($ipAddressHandle);
