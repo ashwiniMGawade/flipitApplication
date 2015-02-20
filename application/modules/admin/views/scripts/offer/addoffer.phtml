@@ -208,7 +208,7 @@ $secret = base64_encode($code);
                     <div data-date-format="dd-mm-yyyy" data-date="<?php echo $twoMonthsLater;?>" id="dp4" 
                         class="input-append date">
                         <input readonly="readonly"  type="text" value="<?php echo $twoMonthsLater; ?>" 
-                            placeholder="Sunday, April 1" name="offerEndDate" id="offerEndDate" 
+                            placeholder="<?php echo $this->translate('Sunday, April 1');?>" name="offerEndDate" id="offerEndDate" 
                             class="span2 ignore2 date-time-cusor-style">
                         <span class="add-on"><i class="icon-th"></i></span>
                     </div>
@@ -362,7 +362,7 @@ $secret = base64_encode($code);
                         <div class="mainpage-content-right-inner-left-other" id="offerrefurlDiv" 
                             style="display:none;">
                             <input type="text" class="span3" name="offerrefurlPR" id = "offerrefurlPR" 
-                            placeholder="Ref url" />
+                            placeholder="<?php echo $this->translate('Ref url');?>" />
                         </div>
                         <!-- offer tiles code starts here -->
                         <div id="offertilesimg" class='mainpage-content-right-inner-left-other'>
@@ -500,7 +500,7 @@ $secret = base64_encode($code);
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-left-other">
                                 <input type="text" class="span3"  id="newShop" name="newShop" 
-                                placeholder=<?php echo $this->translate('Shop Name');?>>
+                                placeholder="<?php echo $this->translate('Shop Name');?>">
                             </div>
                         </div>
                     </div>
@@ -544,7 +544,7 @@ $secret = base64_encode($code);
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-left-other">
                                 <input type="text" id="offerRefUrl" disabled="disabled" 
-                                name = "offerRefUrl"  placeholder="Ref. Url" class="span3">
+                                name = "offerRefUrl"  placeholder="<?php echo $this->translate('Ref. Url');?>" class="span3">
                             </div>
                         </div>
                     </div>
