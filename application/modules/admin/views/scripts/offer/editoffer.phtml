@@ -1,50 +1,50 @@
 <?php
-		$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/datepicker.css" );
-		$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/timepicker.css" );
-        $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "js/back_end/openwysiwyg_v1.4.7/styles/wysiwyg.css" );
-		$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/back_end/bootstrap-combobox.css" );
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.ui.widget.js");
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.iframe-transport.js");
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.fileupload.js");
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.validate.js");
-		$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/bootstrap-typeahead.js" );
-		$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/select2.min.js" );
-		$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/date.js" );
-		$this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
-		$this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-timepicker.js" );
-		$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/bootbox.min.js" );
-		$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/jquery.textareaCounter.plugin.js" );
-		$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
-		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
-		$this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
-		$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/editoffer.js" );
-
-		$date = date ( "Y-m-d" ); // current date
-		$today = time ();
-		$twoMonthsLater = date('t-m-Y');
-		//$twoMonthsLater = strtotime ( "+2 months", $today );
-		$role = Zend_Auth::getInstance ()->getIdentity ()->roleId;
-
-		$code = "kortingscodeoffernews";
-		$secret = base64_encode($code);
-
-		$shopLogo = $this->offerShoLogo;
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/datepicker.css" );
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/timepicker.css" );
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "js/back_end/openwysiwyg_v1.4.7/styles/wysiwyg.css" );
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/back_end/bootstrap-combobox.css" );
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.ui.widget.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.iframe-transport.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.fileupload.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.validate.js");
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/bootstrap-typeahead.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/select2.min.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/date.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-timepicker.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/bootbox.min.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/jquery.textareaCounter.plugin.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
+$this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/editoffer.js" );
+$date = date ( "Y-m-d" ); 
+$today = time ();
+$twoMonthsLater = date('t-m-Y');
+$role = Zend_Auth::getInstance ()->getIdentity ()->roleId;
+$code = "kortingscodeoffernews";
+$secret = base64_encode($code);
+$shopLogo = $this->offerShoLogo;
 ?>
 <script type="text/javascript">
 var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" ;
 </script>
 <?php echo $this->headTitle()->append('Edit Offer');?>
 <div class="wrap columns-2 edit-offer-main-cont">
-	<form action="<?php echo HTTP_PATH; ?>admin/offer/updateoffer" name="addOffer" id="addOffer" method="POST" enctype="multipart/form-data" autocomplete="off">
+	<form action="<?php echo HTTP_PATH; ?>admin/offer/updateoffer" name="addOffer" id="addOffer" method="POST"
+	enctype="multipart/form-data" autocomplete="off">
 		<input type="hidden" name='couponCodeType' id='couponCodeType' value='' />
 		<h1><?php echo $this->translate('Edit Offer');?>
-			<button type="button" onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>'" href="#" class="btn ml10"><?php echo $this->translate('Cancel'); ?></button>
+			<button type="button" 
+			onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>'"
+			href="#" class="btn ml10"><?php echo $this->translate('Cancel'); ?>
+			</button>
 			<?php
-
-				# display button only when a shop is associated to that particluar offer
 				if(isset($this->offerShoLogo[0]['shop']['permaLink'])) :
 			?>
-			<button type="button" onClick="window.open('<?php echo HTTP_PATH_FRONTEND ; ?>/<?php echo $this->offerShoLogo[0]['shop']['permaLink'] ;?>','_blank')"  href="_blank" class="btn btn-primary ml10"><?php echo $this->translate('Open store page'); ?></button>
+			<button type="button"
+			onClick="window.open('<?php echo HTTP_PATH_FRONTEND ; ?>/<?php echo $this->offerShoLogo[0]['shop']['permaLink'] ;?>','_blank')"
+			href="_blank" class="btn btn-primary ml10"><?php echo $this->translate('Open store page'); ?></button>
 			<?php endif;	?>
             <button type="button" id="code-alert-queue" href="_blank" class="btn btn-primary ml10">
                 <?php echo $this->translate('Create code alert'); ?>
@@ -62,7 +62,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 								<strong><?php echo $this->translate('Name of Store'); ?></strong>
 							</div>
 							<div class="span8">
-								<select onchange="getShopDetail(this.value);"  style="display: none; width : 250px;" class="combobox" name="whichshop" id="whichshop">
+								<select onchange="getShopDetail(this.value);"  style="display: none; width : 250px;"
+								class="combobox" name="whichshop" id="whichshop">
 								<option value=""></option>
 								<?php
 								for($i = 0; $i < count ( $this->shopList ); $i ++) {
@@ -84,13 +85,22 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 	                        </div>	
 							<div class="span8">
 		                        <div data-toggle="buttons-checkbox" class="btn-group mb20">
-		                            <input type="checkbox" id="couponCodeCheckbox" name="couponCodeCheckbox" checked="checked" value="coupon" style="display:none;">
-		                            <input type="checkbox" id="newsCheckbox" name="newsCheckbox" value="news" style="display:none;">
-		                            <input type="checkbox" id="saleCheckbox" name="saleCheckbox" value="sale" style="display:none;">
-		                            <input type="checkbox" id="printableCheckbox" name="printableCheckbox" value="printable" style="display:none;">
-		                            <button type="button" class="btn btn-primary" style="border-radius: 4px 0 0 4px;" id="couponCode" onClick="selectDiscountType('couponCode')"><?php echo $this->translate('Coupon'); ?></button>
-		                            <button type="button" class="btn" id="sale" onClick="selectDiscountType('sale')"><?php echo $this->translate('Sale'); ?></button>
-		                            <button type="button" class="btn" id="printable" onClick="selectDiscountType('printable')"><?php echo $this->translate('Printable'); ?></button>
+		                            <input type="checkbox" id="couponCodeCheckbox" name="couponCodeCheckbox"
+		                            checked="checked" value="coupon" style="display:none;">
+		                            <input type="checkbox" id="newsCheckbox" name="newsCheckbox" value="news"
+		                            style="display:none;">
+		                            <input type="checkbox" id="saleCheckbox" name="saleCheckbox" value="sale"
+		                            style="display:none;">
+		                            <input type="checkbox" id="printableCheckbox" name="printableCheckbox"
+		                            value="printable" style="display:none;">
+		                            <button type="button" class="btn btn-primary" style="border-radius: 4px 0 0 4px;"
+		                            id="couponCode" onClick="selectDiscountType('couponCode')">
+		                            <?php echo $this->translate('Coupon'); ?></button>
+		                            <button type="button" class="btn" id="sale" onClick="selectDiscountType('sale')">
+		                            <?php echo $this->translate('Sale'); ?></button>
+		                            <button type="button" class="btn" id="printable"
+		                            onClick="selectDiscountType('printable')">
+		                            <?php echo $this->translate('Printable'); ?></button>
 		                        </div>           
 	                    	</div>
                     	</div>
@@ -135,8 +145,11 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 					<div class="span8">
 						<div class="mainpage-content-right-inner-right-other"></div>
 						<div class="mainpage-content-right-inner-left-other">
-							<input type="text" id="addofferTitle" name="addofferTitle" placeholder="This account is important, etc" class="span3 mbot bbot">
-							<input type="text" disabled="" value="<?php echo $this->translate('Offer title length 0 characters');?>" id="metaTextLeft" class="input-xlarge disabled btop word-count">
+							<input type="text" id="addofferTitle" name="addofferTitle"
+							placeholder="<?php echo $this->translate('This account is important, etc');?>" class="span3 mbot bbot">
+							<input type="text" disabled=""
+							value="<?php echo $this->translate('Offer title length 0 characters');?>" id="metaTextLeft"
+							class="input-xlarge disabled btop word-count">
 						</div>
 					</div>
 					<div class="span2"></div>
@@ -146,7 +159,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 	                    <label><strong><?php echo $this->translate('Coupon code'); ?></strong></label>
 	                </div>
 	                <div class="span8">
-	                    <input type="text" name="couponCode" id="couponCodeTxt" placeholder="<?php echo $this->translate('centerparks'); ?>" class="span10">
+	                    <input type="text" name="couponCode" id="couponCodeTxt"
+	                    placeholder="<?php echo $this->translate('centerparks'); ?>" class="span10">
 	                </div>
 	                <div class="span2"></div>
             	</div>
@@ -155,14 +169,18 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                     <label><strong><?php echo $this->translate('Start Date'); ?></strong></label>
                 </div>
                 <div class="span2">
-                    <div data-date-format="dd-mm-yyyy" data-date="<?php echo date('d-m-Y');?>" id="dp3" class="input-append date">
-                        <input readonly="readonly" type="text"  value="<?php echo date('d-m-Y');?>"  placeholder="Sunday, April 1" class="span2 ignore2 date-time-cusor-style" id="offerStartDate" name="offerStartDate">
+                    <div data-date-format="dd-mm-yyyy" data-date="<?php echo date('d-m-Y');?>" id="dp3"
+                    class="input-append date">
+                        <input readonly="readonly" type="text"  value="<?php echo date('d-m-Y');?>"
+                        placeholder="<?php echo $this->translate('Sunday, April 1');?>" class="span2 ignore2 date-time-cusor-style" id="offerStartDate"
+                        name="offerStartDate">
                         <span class="add-on"><i class="icon-th"></i></span>
                     </div>
                 </div>
                 <div class="span2">    
                     <div class="input-append bootstrap-timepicker-component" style="display: inline-block;">
-                        <input readonly="readonly" type="text" id="offerstartTime" name="offerstartTime" class="input-small timepicker-default ignore2 date-time-cusor-style">
+                        <input readonly="readonly" type="text" id="offerstartTime" name="offerstartTime"
+                        class="input-small timepicker-default ignore2 date-time-cusor-style">
                         <span class="add-on">
                             <i class="icon-time" style="background-position: -47px -24px;"></i>
                         </span>
@@ -174,14 +192,18 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                     <label><strong><?php echo $this->translate('End Date'); ?></strong></label>
                 </div>
                 <div class="span2">
-                    <div data-date-format="dd-mm-yyyy" data-date="<?php echo $twoMonthsLater;?>" id="dp4" class="input-append date">
-                        <input readonly="readonly"  type="text" value="<?php echo $twoMonthsLater; ?>" placeholder="Sunday, April 1" name="offerEndDate" id="offerEndDate" class="span2 ignore2 date-time-cusor-style">
+                    <div data-date-format="dd-mm-yyyy" data-date="<?php echo $twoMonthsLater;?>" id="dp4"
+                    class="input-append date">
+                        <input readonly="readonly"  type="text" value="<?php echo $twoMonthsLater; ?>"
+                        placeholder="<?php echo $this->translate('Sunday, April 1');?>" name="offerEndDate" id="offerEndDate"
+                        class="span2 ignore2 date-time-cusor-style">
                         <span class="add-on"><i class="icon-th"></i></span>
                     </div>
                 </div>
                 <div class="span2">   
                     <div class="input-append bootstrap-timepicker-component" style="display: inline-block;">
-                        <input readonly="readonly" type="text" name="offerendTime" id="offerendTime" class="input-small timepicker-default ignore2 date-time-cusor-style">
+                        <input readonly="readonly" type="text" name="offerendTime" id="offerendTime"
+                        class="input-small timepicker-default ignore2 date-time-cusor-style">
                         <span class="add-on">
                             <i class="icon-time" style="background-position: -47px -24px;"></i>
                         </span>
@@ -193,7 +215,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                     <strong><?php echo $this->translate('Terms and Conditions'); ?></strong></label>
                 </div>
 				<div class="span10">
-					<textarea id="termsAndcondition" class="input-xlarge mbot bbot ignore word_count" name="termsAndcondition" placeholder="<?php echo $this->translate('Terms &amp; Conditions')?>"></textarea>
+					<textarea id="termsAndcondition" class="input-xlarge mbot bbot ignore word_count"
+					name="termsAndcondition" placeholder="<?php echo $this->translate('Terms &amp; Conditions')?>"></textarea>
 				</div>
 			</div>
 			<div class="row-fluid">
@@ -205,8 +228,10 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                     <div class="span2"></div>
                     <div class="span10">
 						<div data-toggle="buttons-checkbox" class="btn-group mb20">
-							<button type="button" class="btn btn-primary" id="general" onClick="couponType('general')"><?php echo $this->translate('General'); ?></button>
-							<button type="button" class="btn" id="unique" onClick="couponType('unique')"><?php echo $this->translate('Unique'); ?></button>
+							<button type="button" class="btn btn-primary" id="general"
+							onClick="couponType('general')"><?php echo $this->translate('General'); ?></button>
+							<button type="button" class="btn" id="unique" onClick="couponType('unique')">
+							<?php echo $this->translate('Unique'); ?></button>
 						</div>
 					</div>
 				</div>
@@ -226,7 +251,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 					                <span><?php echo $this->translate('Select File')?></span>
 									<input class="importCodes ignore" id="codeUpload" type="file" name="importCodes" >
 					            </span>
-								<button id="import-codes-btn" type="button" class="btn btn-primary hide"><?php echo $this->translate('Import Codes');?></button>
+								<button id="import-codes-btn" type="button" class="btn btn-primary hide">
+								<?php echo $this->translate('Import Codes');?></button>
 							</div>
 							<div class="progress-file-detail hide">
 								<div>
@@ -242,9 +268,12 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 	         						<strong><?php echo $this->translate('Statistics')?></strong>
          						</p>
 	         					<div style="margin-left: 20px;">
-		         					<p class="statistic-data avail"><?php echo $this->translate('Available codes'); ?>&nbsp;&nbsp;<strong></strong></p>
-		         					<p class='statistic-data used'><?php echo $this->translate('Used codes'); ?>&nbsp;&nbsp;<strong></strong></p>
-		         					<p class='statistic-data total'><?php echo $this->translate('Total  codes'); ?>&nbsp;&nbsp;<strong></strong></p>
+		         					<p class="statistic-data avail">
+		         					<?php echo $this->translate('Available codes'); ?>&nbsp;&nbsp;<strong></strong></p>
+		         					<p class='statistic-data used'>
+		         					<?php echo $this->translate('Used codes'); ?>&nbsp;&nbsp;<strong></strong></p>
+		         					<p class='statistic-data total'>
+		         					<?php echo $this->translate('Total  codes'); ?>&nbsp;&nbsp;<strong></strong></p>
 		         				</div>
          					</div>
 							<div>
@@ -253,7 +282,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
          						</p>
 								<div class="statistic-data text-left" style="margin-left: 20px;">
 										<p class="statistic-data">
-											<a href="<?php echo HTTP_PATH ?>admin/offer/exportcodelist/id/<?php echo $this->offerId; ?>"><?php echo $this->translate('Export Codes');?></a>
+											<a 
+											href="<?php echo HTTP_PATH ?>admin/offer/exportcodelist/id/<?php echo $this->offerId; ?>"><?php echo $this->translate('Export Codes');?></a>
 										</p>
 										<p class="statistic-data">
 											<a href="<?php echo HTTP_PATH ?>admin/offer/empty-xlx"><?php echo $this->translate('Empty Excel File');?></a>
@@ -296,7 +326,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 				      			endif;
 						    ?>
 						    	<li id='before'>
-						          	<a href="_#myModal" data-toggle="modal" onclick="hideDeleteButton();"><img src="<?php echo PUBLIC_PATH;?>/images/back_end/plus.png"></a>
+						          	<a href="_#myModal" data-toggle="modal" onclick="hideDeleteButton();">
+						          	<img src="<?php echo PUBLIC_PATH;?>/images/back_end/plus.png"></a>
 					          		<div>
 					          			<a href="javascript:void(0);"></a>
 					          			<a href="javascript:void(0);" style="display: none;"></a>
@@ -315,7 +346,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 		                <div>
 		                	<div class="category-error"></div>
 				       		<div id="offertilesimg" class='mainpage-content-right-inner-left-other'>
-				       			<input style='display:none' type="checkbox" name="saleTiles[]" id='saleTiles'  class="tiles" />
+				       			<input style='display:none' type="checkbox" name="saleTiles[]" id='saleTiles'
+				       			class="tiles" />
 				      			<ul class='imgTiles' id='imgLiForTiles'>
 						      	<?php
 				      			if(count($this->tiles['sale'])) :
@@ -341,7 +373,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 				      				endforeach;
 				      			endif;?>
 							      	<li id='before'>
-							          	<a href="_#myModal" onClick="hideDeleteButton();"  data-toggle="modal"><img src="<?php echo PUBLIC_PATH;?>/images/back_end/plus.png"></a>
+							          	<a href="_#myModal" onClick="hideDeleteButton();"  data-toggle="modal">
+							          	<img src="<?php echo PUBLIC_PATH;?>/images/back_end/plus.png"></a>
 						          		<div>
 						          			<a href="javascript:void(0);"></a>
 						          			<a href="javascript:void(0);" style="display: none;"></a>
@@ -359,19 +392,28 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                     <div class="span10"> 
 						<div class="clear line"></div>
 						<div data-toggle="buttons-checkbox" class="btn-group mb20">
-							<button type="button" class="btn btn-primary" id="uploadOfferOption" onClick="printOption('uploadOfferOption')"><?php echo $this->translate('Upload Offer (pdf or jpg)'); ?></button>
-							<button type="button" class="btn" id="userefurlOption" onClick="printOption('userefurlOption')"><?php echo $this->translate('Use Ref URL / URL'); ?></button>
+							<button type="button" class="btn btn-primary" id="uploadOfferOption"
+							onClick="printOption('uploadOfferOption')">
+							<?php echo $this->translate('Upload Offer (pdf or jpg)'); ?></button>
+							<button type="button" class="btn" id="userefurlOption"
+							onClick="printOption('userefurlOption')">
+							<?php echo $this->translate('Use Ref URL / URL'); ?></button>
 						</div>
-						<input type="checkbox" value="uploadoffer" id="uploadoffercheck" name="uploadoffercheck" style="display: none;" checked="checked">
+						<input type="checkbox" value="uploadoffer" id="uploadoffercheck" name="uploadoffercheck"
+						style="display: none;" checked="checked">
 						<div class="mainpage-content-right-inner-right-other uploadOfferMessage"></div>
 						<span id="offerLogoId"> </span>
 						<div class="mainpage-content-right-inner-left-other" id="uploadofferDiv">
-							<input type="file" class="ignore" name="uploadoffer" id="uploadoffer" onchange="checkFileType(event)" /><span><?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB)')?></span>
+							<input type="file" class="ignore" name="uploadoffer" id="uploadoffer"
+							onchange="checkFileType(event)" /><span>
+							<?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB)')?></span>
 						</div>
-						<input type="checkbox" value="offerrefurl" id="offerrefurlcheck" name="offerrefurlcheck" style="display: none;">
+						<input type="checkbox" value="offerrefurl" id="offerrefurlcheck" name="offerrefurlcheck"
+						style="display: none;">
 						<div class="mainpage-content-right-inner-right-other offerrefurlMessage"></div>
 						<div class="mainpage-content-right-inner-left-other" id="offerrefurlDiv" style="display: none;">
-							<input type="text" class="span3" name="offerrefurlPR" id="offerrefurlPR" placeholder="Ref url" />
+							<input type="text" class="span3" name="offerrefurlPR" id="offerrefurlPR" 
+							placeholder="<?php echo $this->translate('Ref url');?>" />
 						</div>
 				       <div id="offertilesimg" class='mainpage-content-right-inner-left-other'>
 				      		<ul class='imgTiles' id='imgLiForTiles'>
@@ -400,7 +442,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 				      			endif;
 					      		?>
 						     	<li id='before'>
-						          	<a href="_#myModal" onClick="hideDeleteButton();"  data-toggle="modal"><img src="<?php echo PUBLIC_PATH;?>/images/back_end/plus.png"></a>
+						          	<a href="_#myModal" onClick="hideDeleteButton();"  data-toggle="modal">
+						          	<img src="<?php echo PUBLIC_PATH;?>/images/back_end/plus.png"></a>
 					          		<div>
 					          			<a href="javascript:void(0);"></a>
 					          			<a href="javascript:void(0);" style="display: none;"></a>
@@ -416,9 +459,12 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 		<div class="mainpage-content mainpage-content-buttons" id="offerButtons">
 			<div class="row-fluid">
                 <div class="span12">
-					<button id="updateOfferBtn" type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('EDIT OFFER'); ?></button>
-					<a href="<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>" class="fl m10"><strong class="ml10"><?php echo $this->translate('CANCEL'); ?></strong></a>
-					<a id="deleteButton" href="javascript:void(0);" onclick="deleteOffer(event);" class="fl red mt10"><strong><?php echo $this->translate('DELETE'); ?></strong></a>
+					<button id="updateOfferBtn" type="submit" class="btn btn-large btn-primary fl">
+					<?php echo $this->translate('EDIT OFFER'); ?></button>
+					<a href="<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>" class="fl m10">
+					<strong class="ml10"><?php echo $this->translate('CANCEL'); ?></strong></a>
+					<a id="deleteButton" href="javascript:void(0);" onclick="deleteOffer(event);" class="fl red mt10">
+					<strong><?php echo $this->translate('DELETE'); ?></strong></a>
 					<input type="hidden" name="offerId" id="offerId" value="<?php echo $this->offerId; ?>">
 				</div>
 			</div>		
@@ -431,7 +477,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
             <div class="span10">
                 <div data-toggle="buttons-checkbox" class="btn-group ">
                 <button type="button" id="optionsOnbtn" class="btn"><?php echo $this->translate('On'); ?></button>
-                <button type="button" id="optionsoffbtn" class="btn mr10 btn-primary" style="border-radius: 0 4px 4px 0;"><?php echo $this->translate('Off'); ?></button>
+                <button type="button" id="optionsoffbtn" class="btn mr10 btn-primary"
+                style="border-radius: 0 4px 4px 0;"><?php echo $this->translate('Off'); ?></button>
                </div>
             </div>
         </div>
@@ -448,10 +495,15 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 					</div>
 					<div class="span10">
 						<div data-toggle="buttons-checkbox" class="btn-group">
-							<button type="button" class="btn btn-primary"  id="default" onClick="selectOfferType('default')"><?php echo $this->translate('Default'); ?></button>
-							<input type="checkbox" checked="checked" class="display-none" name="defaultoffercheckbox" id="defaultoffercheckbox" value="defaultoffercheckbox">
-	        				<button type="button" class="btn" style="border-radius: 0 4px 4px 0;" id="memberOnly" onClick="selectOfferType('memberOnly')"><?php echo $this->translate('Members Only'); ?></button>
-					   	 	<input type="checkbox" name="memberonlycheckbox" class="display-none" id="memberonlycheckbox" value="defaultoffercheckbox">
+							<button type="button" class="btn btn-primary"  id="default"
+							onClick="selectOfferType('default')"><?php echo $this->translate('Default'); ?></button>
+							<input type="checkbox" checked="checked" class="display-none" name="defaultoffercheckbox"
+							id="defaultoffercheckbox" value="defaultoffercheckbox">
+	        				<button type="button" class="btn" style="border-radius: 0 4px 4px 0;" id="memberOnly"
+	        				onClick="selectOfferType('memberOnly')"><?php echo $this->translate('Members Only'); ?>
+	        				</button>
+					   	 	<input type="checkbox" name="memberonlycheckbox" class="display-none"
+					   	 	id="memberonlycheckbox" value="defaultoffercheckbox">
 	                  </div>
 					</div>
 				</div>
@@ -462,10 +514,16 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 		                </div>
                 		<div class="span10">
 		                	<div class="btn-group" data-toggle="buttons-checkbox" >
-		                         <button type="button" id="existingShop" name="existingShop" class="btn btn-primary"><?php echo $this->translate('Existing Shop'); ?></button>
-		                          <input type="checkbox" checked="checked" class="display-none" name="existingShopCheckbox" id="existingShopCheckbox" value="existingShopCheckbox">
-		                          <button type="button" id="notExistingShop" name="notExistingShop" class="btn" style="border-radius: 0 4px 4px 0;"><?php echo $this->translate('Not Existing Shop'); ?></button>
-		                          <input type="checkbox" checked="checked" class="display-none" name="notExistingShopCheckbox" id="notExistingShopCheckbox" value="notExistingShopCheckbox">
+		                         <button type="button" id="existingShop" name="existingShop"
+		                         class="btn btn-primary"><?php echo $this->translate('Existing Shop'); ?></button>
+		                          <input type="checkbox" checked="checked" class="display-none"
+		                          name="existingShopCheckbox" id="existingShopCheckbox" value="existingShopCheckbox">
+		                          <button type="button" id="notExistingShop" name="notExistingShop"
+		                          class="btn" style="border-radius: 0 4px 4px 0;">
+		                          <?php echo $this->translate('Not Existing Shop'); ?></button>
+		                          <input type="checkbox" checked="checked" class="display-none"
+		                          name="notExistingShopCheckbox" id="notExistingShopCheckbox"
+		                          value="notExistingShopCheckbox">
 		                           <input type="hidden" name="fromWhichShop" value="1" id="fromWhichShop">
 		  				    </div>
                 		</div>
@@ -479,7 +537,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 		                <div class="span10">
 		                    <div class="mainpage-content-right-inner-right-other"></div>
 		                	<div class="mainpage-content-right-inner-left-other">
-		                   		<input type="text" class="span3"  id="newShop" name="newShop" placeholder=<?php echo $this->translate('Shop Name');?>>
+		                   		<input type="text" class="span3"  id="newShop" name="newShop"
+		                   		placeholder="<?php echo $this->translate('Shop Name');?>">
 		                  	</div>
 		                </div>
             		</div>
@@ -498,8 +557,11 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 			                  ?>
 		                     <img alt="<?php echo $this->translate('Shop logo'); ?>" src="<?php echo $shopPicture ; ?>" />
 		                     <div style="margin-right: 0px;" class="mainpage-content-right-inner-left-other">
-		                      	<input  data-max-size="2097152" type="file" name="logoFile" id="logoFile" class="ignore" />
-						       	<span id="logo_file_message" class="help-inline" style="display: inline-block; padding-bottom: 5px; margin-left: 10px;"><?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB, Ratio 2:01)'); ?></span>
+		                      	<input  data-max-size="2097152" type="file" name="logoFile" id="logoFile"
+		                      	class="ignore" />
+						       	<span id="logo_file_message" class="help-inline"
+						       	style="display: inline-block; padding-bottom: 5px; margin-left: 10px;">
+						       <?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB, Ratio 2:01)'); ?></span>
 		                    </div>
 		                </div>
             		</div>
@@ -511,9 +573,12 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 						</div>
 						<div class="span10">
 							<div data-toggle="buttons-checkbox" class="btn-group ">
-								<button type="button" id="deepLinkOnbtn" class="btn"><?php echo $this->translate('On'); ?></button>
-								<button type="button" id="deepLinkoofbtn" class="btn mr10 btn-primary" style="border-radius: 0 4px 4px 0;"><?php echo $this->translate('Off'); ?></button>
-								<input type="checkbox" name="deepLinkStatus" value="1" id="deepLinkStatus" style="display: none;">
+								<button type="button" id="deepLinkOnbtn" class="btn">
+								<?php echo $this->translate('On'); ?></button>
+								<button type="button" id="deepLinkoofbtn" class="btn mr10 btn-primary"
+								style="border-radius: 0 4px 4px 0;"><?php echo $this->translate('Off'); ?></button>
+								<input type="checkbox" name="deepLinkStatus" value="1" id="deepLinkStatus"
+								style="display: none;">
 							</div>
 						</div>
 					</div>
@@ -524,7 +589,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                         <div class="span10">
 							<div class="mainpage-content-right-inner-right-other"></div>
 							<div class="mainpage-content-right-inner-left-other">
-								<input type="text" id="offerRefUrl" disabled="disabled" name="offerRefUrl" placeholder="Ref. Url" class="span3">
+								<input type="text" id="offerRefUrl" disabled="disabled" name="offerRefUrl"
+								placeholder="<?php echo $this->translate('Ref. Url');?>" class="span3">
 							</div>
 						</div>
 					</div>
@@ -536,7 +602,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 	              		<div class="categories" style="position:relative;" name="category">
 	                   <?php for($i = 0; $i < count ( $this->catList ); $i ++) {?>
 							<div class="square-btn-offer">
-			              		<input type="checkbox" value="<?php echo $this->catList[$i]['id']; ?>" class="" name="selectedcategories[]" id="category-<?php echo $this->catList[$i]['id']; ?>" />
+			              		<input type="checkbox" value="<?php echo $this->catList[$i]['id']; ?>" class=""
+			              		name="selectedcategories[]" id="category-<?php echo $this->catList[$i]['id']; ?>" />
 				             	<?php if (trim($this->catList[$i]['name'])!='') {
 				             	$categoryIconPath = '';
 				             	$icons = $this->catList[$i];
@@ -546,12 +613,15 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 				             		$categoryIconPath = HTTP_PATH ."public/images/NoImage/NoImage50x50.jpg";
 				             	}
 			             	?>
-				        	<button type="button" name="selectCategory" title="<?php echo $this->catList[$i]['name'];?>" class="btn square-btn" id="categoryBtn-<?php echo $this->catList[$i]['id'];?>" onClick="addCategory('<?php echo $this->catList[$i]['id']; ?>')">
+				        	<button type="button" name="selectCategory" title="<?php echo $this->catList[$i]['name'];?>"
+				        	 class="btn square-btn" id="categoryBtn-<?php echo $this->catList[$i]['id'];?>"
+				        	 onClick="addCategory('<?php echo $this->catList[$i]['id']; ?>')">
 				        		<img alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
 		  					 </button>
 		  					 <div class="clear"></div>
 					        	 <span class="image-description-text">
-	            					 <?php echo strlen($this->catList[$i]['name']) < 20 ? $this->catList[$i]['name'] : substr($this->catList[$i]['name'],0,20).'..'; ?>
+	            					 <?php echo strlen($this->catList[$i]['name']) < 20 ? $this->catList[$i]['name'] : 
+	            					 substr($this->catList[$i]['name'],0,20).'..'; ?>
 			  					 </span>
 			  				</div>
 							<?php }
@@ -571,7 +641,9 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 	                        <div class="web-address-list multiselect">
 	                            <ul><?php for($i=0;$i<count($this->pages);$i++){?>
 	                                <li class="list_1" style ="font-weight:normal;">
-	                                    <input type="checkbox" id="attachedPage-<?php echo $this->pages[$i]['id']; ?>" value="<?php echo $this->pages[$i]['id']; ?>" name="attachedpages[]" style="display: none;" /> &nbsp;<?php echo $this->pages[$i]['pageTitle']; ?>
+	                                    <input type="checkbox" id="attachedPage-<?php echo $this->pages[$i]['id']; ?>"
+	                                    value="<?php echo $this->pages[$i]['id']; ?>" name="attachedpages[]"
+	                                    style="display: none;" /> &nbsp;<?php echo $this->pages[$i]['pageTitle']; ?>
 	                                </li>
 	                            <?php }?>
 	                            </ul>
@@ -586,18 +658,25 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                     </div>
                     <div class="span10">
                     	<div data-toggle="buttons-checkbox" class="btn-group ">
-							<input type="checkbox" name="exclusivecheckbox" id="exclusivecheckbox" value="1" style="display: none;" />
-							<input type="checkbox" name="editorpickcheckbox" id="editorpickcheckbox" value="2" style="display: none;" />
-							<input type="checkbox" name="nonecheckbox" id="nonecheckbox" value="0" style="display: none;" />
+							<input type="checkbox" name="exclusivecheckbox" id="exclusivecheckbox"
+							value="1" style="display: none;" />
+							<input type="checkbox" name="editorpickcheckbox" id="editorpickcheckbox"
+							value="2" style="display: none;" />
+							<input type="checkbox" name="nonecheckbox" id="nonecheckbox" value="0"
+							style="display: none;" />
 							<input type="checkbox" name="socialcodecheckbox" id="socialcodecheckbox" 
 	                            value="3" style="display: none;" />
-							<button type="button" class="btn" id="exclusivebtn" style="border-radius: 4px 0 0 4px;" value="exclusive" onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('Exclusive Code'); ?></button>
-							<button type="button" class="btn" id="editorpicbtn" value = "editorpic" onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('Recommended'); ?></button>
+							<button type="button" class="btn" id="exclusivebtn"
+							style="border-radius: 4px 0 0 4px;" value="exclusive"
+							onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('Exclusive Code'); ?></button>
+							<button type="button" class="btn" id="editorpicbtn" value = "editorpic"
+							onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('Recommended'); ?></button>
 							<button type="button" class="btn" id="socialcodebtn" 
 	                            value = "socialcode" onCLick="exclusiveeditorpick(event)">
 	                            <?php echo $this->translate('Social Code'); ?>
 	                        </button>
-							<button type="button" style="border-radius: 0 4px 4px 0;" class="btn" id="nonebtn" value="none" onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('None'); ?></button>
+							<button type="button" style="border-radius: 0 4px 4px 0;" class="btn" id="nonebtn"
+							value="none" onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('None'); ?></button>
 						</div>
 					</div>
 				</div>
@@ -607,9 +686,13 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                     </div>
                     <div class="span10">
                         <div data-toggle="buttons-checkbox" class="btn-group ">
-                            <button type="button" class="btn" value="yes" id="extendedYes" onClick="extenOffer(event);"><?php echo $this->translate('Yes'); ?></button>
-                            <button type="button" class="btn btn-primary" id="extendedNo" style="border-radius: 0 4px 4px 0;"  value="no" onClick="extenOffer(event);"><?php echo $this->translate('No'); ?></button>
-                            <input type="checkbox" value="1" name="extendedoffercheckbox" id="extendedoffercheckbox" style="display:none;">
+                            <button type="button" class="btn" value="yes" id="extendedYes"
+                            onClick="extenOffer(event);"><?php echo $this->translate('Yes'); ?></button>
+                            <button type="button" class="btn btn-primary" id="extendedNo"
+                            style="border-radius: 0 4px 4px 0;"  value="no" onClick="extenOffer(event);">
+                            <?php echo $this->translate('No'); ?></button>
+                            <input type="checkbox" value="1" name="extendedoffercheckbox" id="extendedoffercheckbox"
+                            style="display:none;">
                        </div>
                     </div>
                 </div>
@@ -621,8 +704,12 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 						<div class="span10">
 							<div class="mainpage-content-right-inner-right-other"></div>
 							<div class="mainpage-content-right-inner-left-other">
-								<input type="text" name="extendedTitle" id="extendedTitle" placeholder="<?php echo $this->translate('This account is important, etc');?>" class="input-xlarge mbot bbot ignore span3"/>
-								<input type="text" disabled="disabled" value="<?php echo $this->translate('Extended offer Title length 0 characters');?>" id="extendedTitleLeft" class="input-xlarge disabled btop word-count">
+								<input type="text" name="extendedTitle" id="extendedTitle"
+								placeholder="<?php echo $this->translate('This account is important, etc');?>"
+								class="input-xlarge mbot bbot ignore span3"/>
+								<input type="text" disabled="disabled"
+								value="<?php echo $this->translate('Extended offer Title length 0 characters');?>"
+								id="extendedTitleLeft" class="input-xlarge disabled btop word-count">
 							</div>
 						</div>
 					</div>
@@ -633,8 +720,11 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 						<div class="span10">
 							<div class="mainpage-content-right-inner-right-other"></div>
 							<div class="mainpage-content-right-inner-left-other">
-								<input type="text" name="extendedOfferTitle" id="extendedOfferTitle" placeholder="<?php echo $this->translate('This account is important, etc');?>" class="input-xlarge mbot bbot ignore span3"/>
-								<span id="metaTitleLeft" class="disabled btop word-count nobel offer-wordcount-width"></span>
+								<input type="text" name="extendedOfferTitle" id="extendedOfferTitle"
+								placeholder="<?php echo $this->translate('This account is important, etc');?>"
+								class="input-xlarge mbot bbot ignore span3"/>
+								<span id="metaTitleLeft" class="disabled btop word-count nobel offer-wordcount-width">
+								</span>
 							</div>
 						</div>
 					</div>
@@ -645,7 +735,9 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 						<div class="span10">
 							<div class="mainpage-content-right-inner-right-other"></div>
 							<div class="mainpage-content-right-inner-left-other">
-								<textarea class="input-xlarge mbot bbot ignore" id="extendedOfferMetadesc" name="extendedOfferMetadesc" placeholder="Een Center Parcs actiecode of kortingscode is zo gevonden op Actiecode.nl. Wij hebben codes en korting beschikbaar voor lente zomer, herfst & winter." rows="3"></textarea>
+								<textarea class="input-xlarge mbot bbot ignore" id="extendedOfferMetadesc"
+								name="extendedOfferMetadesc"
+								placeholder="<?php echo $this->translate('Een Center Parcs actiecode of kortingscode is zo gevonden op Actiecode.nl. Wij hebben codes en korting beschikbaar voor lente zomer, herfst & winter.');?>" rows="3"></textarea>
 								<span id="metaDescLeft" class="disabled btop word-count nobel offer-wordcount-width"></span>
 							</div>
 						</div>
@@ -659,7 +751,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 							<div class="mainpage-content-right-inner-left-other">
 								<input type="text" name="extendedOfferRefurl" <?php echo ($this->role == '3' || $this->role == '4') ? "disabled=disabled" : "" ;  ?> id="extendedOfferRefurl" placeholder="<?php echo $this->translate('permalink'); ?>" class="span3 ignore">
 								<?php if($this->role == '3' || $this->role == '4'):?>
-										<input value="<?php echo $this->data['permaLink'] ; ?>" type="hidden" name="extendedOfferRefurl" id="extendedOfferRefurl" />
+										<input value="<?php echo $this->data['permaLink'] ; ?>" type="hidden"
+										name="extendedOfferRefurl" id="extendedOfferRefurl" />
 								<?php endif;?>
 							</div>
 						</div>
@@ -681,16 +774,19 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 						<div class="mainpage-content alert-error strict-confirmation-alert hide">
  							<input id="enableSaveButtons" type="checkbox">
  							<p><?php
-			        			echo $this->translate('This Shop has STRICT CONFIRMATION Enabled,   			            			Before you place this coupon be sure you got confirmation from Tom, Arthur or Jochem.'); ?>
+			        			echo $this->translate('This Shop has STRICT CONFIRMATION Enabled, Before you place this coupon be sure you got confirmation from Tom, Arthur or Jochem.'); ?>
 			        		</p>
         				</div>
 					</div>
 				</div>
 			</div>
 			<div class="mainpage-content-colorbox" id="offerEndButtons">
-				<button id="updateOfferBtn" type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('EDIT OFFER'); ?></button>
-				<a href="<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>" class="fl m10"><strong class="ml10"><?php echo $this->translate('CANCEL'); ?></strong></a>
-				<a id="deleteButton" href="javascript:void(0);" onclick="deleteOffer(event);" class="fl red mt10"><strong><?php echo $this->translate('DELETE'); ?></strong></a>
+				<button id="updateOfferBtn" type="submit" class="btn btn-large btn-primary fl">
+				<?php echo $this->translate('EDIT OFFER'); ?></button>
+				<a href="<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>"
+				class="fl m10"><strong class="ml10"><?php echo $this->translate('CANCEL'); ?></strong></a>
+				<a id="deleteButton" href="javascript:void(0);" onclick="deleteOffer(event);"
+				class="fl red mt10"><strong><?php echo $this->translate('DELETE'); ?></strong></a>
 			</div>
 		</div>	
 	</form>
