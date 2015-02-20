@@ -87,7 +87,7 @@ $secret = base64_encode($code);
                         </div>
                     </div>
                     <div class="row-fluid mb10"></div>
-                    <div class="row-fluid mb10">
+                    <div class="row-fluid mb10" id="offertypeDiv">
                         <div class="span4">
                             <strong><?php echo $this->translate('Type of Discount'); ?></strong>
                         </div>
@@ -164,8 +164,8 @@ $secret = base64_encode($code);
                 </div>
                 <div class="span2"></div>
             </div>
-            <div class="row-fluid">
-                <div class="span2">
+            <div class="row-fluid general-code-cont">
+                <div class="span2" id="ccode">
                     <label><strong><?php echo $this->translate('Coupon code'); ?></strong></label>
                 </div>
                 <div class="span8">
@@ -241,7 +241,7 @@ $secret = base64_encode($code);
                     <div class="span2"></div>
                     <div class="span10">
                         <div class="category-error"></div>
-                        <div class="categories" style="position:relative;" name="tiles">
+                        <div class="categories" style="position:relative;" id="offertilesimg" name="tiles">
                             <input style='display:none' type="checkbox" 
                             name="selectedTiles[]" id='selectedTiles'  class="tiles" />
                             <ul class='imgTiles' id='imgLiForTiles'>
@@ -447,7 +447,7 @@ $secret = base64_encode($code);
             <div class="span2"></div>
         </div> 
         <div id="offerOption" style = "display:none;">                  
-            <div class="mainpage-content" id="offertypeDiv">
+            <div class="mainpage-content">
                 <div class="row-fluid" id="visibiliyDiv">
                     <div class="span2 mb10">
                         <label><strong><?php echo $this->translate('Visibility'); ?></strong></label>
@@ -781,3 +781,53 @@ $secret = base64_encode($code);
         </div>
     </form>
 </div>
+<div class="modal display-none popup-width" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="wrap columns-2">
+        <form name="menuForm" id="menuForm" enctype="multipart/form-data">
+            <input type="hidden" name="offerId" id="offerId" value="">
+            <div class="m-item-popup-hdr"><?php echo $this->translate('Menu item');?></div>
+                <div id="poststuff" class="metabox-holder has-right-sidebar">
+                    <div id="post-body">
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Label');?></strong></label></div>
+                            <div class="mainpage-content-right-inner-right-other display-none"></div>
+                            <div class="mainpage-content-right">
+                                <input type="text" placeholder="Label.." class="span3" name="label" id="label">
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Icon');?></strong></label></div>
+                            <div class="mainpage-content-right-inner-right-other display-none"></div>
+                            <div class="mainpage-content-right">
+                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                    <input type="file" id="tileUpload" name="tileupload[]"/>
+                                </div>
+                                <span id="imageName"></span>
+                             </div>
+                         </div>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Sort');?></strong></label></div>
+                             <div class="mainpage-content-right-inner-right-other display-none"></div>
+                                <div class="mainpage-content-right">
+                                <input type="text" name="position" id="position" placeholder="1" class="span3">
+                            </div>
+                        </div>
+                     </div>
+                     <br class="clear">
+                    </div>
+
+                    <div class="m-item-popup-btm">
+                        <input type="hidden" name='forDelete' id='forDelete' value='' />
+                        <input type="hidden" id="hidimage" name="hidimage" value="">
+                        <input type="hidden" id="hidimagepath" name="hidimagepath" value="">
+                        <input type="hidden" id="hidimageext" name="hidimageext" value="">
+                        <input type="hidden" id="hidtype" name="hidtype" value="">
+                        <button id="submitButton" class="btn btn-large btn-primary fl" type="submit"><?php echo $this->translate('SAVE CHANGES');?></button>
+                        <button class="btn ml10 m5" data-dismiss="modal"><?php echo $this->translate('Cancel');?></button>
+                        <button style='display: none' id='deleteImage' class="btn ml10 m5 red" data-dismiss="modal"><?php echo $this->translate('Delete');?></button>
+                    </div>
+                    <!-- /poststuff -->
+               </form>
+          </div>
+    </div>

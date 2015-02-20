@@ -940,7 +940,8 @@ function selectDiscountType(dIv){
 	    		
 		    jQuery("input[name=couponCode]").parent("div").removeClass("error success focus")
 			    .prev("div").html("");
-		    	
+		    jQuery('.general-code-cont').show();
+		 	jQuery('#ccode').html(' <label><strong>Coupon code</strong></label>');
 	    	jQuery('#couponDiv').show();
 	    	jQuery('#printDiv').hide();
 	    	jQuery('span#saleDiv').hide();//code add by blal
@@ -1001,6 +1002,7 @@ function selectDiscountType(dIv){
 	        
 	        
 	      case 'sale':
+	      	jQuery('.general-code-cont').hide();
 	        jQuery('#couponDiv').hide();
 	        jQuery('#printDiv').hide();
 	        jQuery('span#saleDiv').show();//code add by blal
@@ -1035,7 +1037,7 @@ function selectDiscountType(dIv){
 	    		
 		    jQuery("#offerrefurlPR").parent("div").removeClass("error success focus");
 			   
-		    	
+		    jQuery('.general-code-cont').hide();	
 		    jQuery('#couponDiv').hide();
 		    jQuery('span#saleDiv').hide();//code add by blal
 		    jQuery('#printDiv').show();
@@ -2077,13 +2079,13 @@ function submitForm(){
 									var Id = parseInt(jQuery('input#forDelete').val());
 									switch(divVal){
 									case 'sale':
-										jQuery('div#offertypeDiv span#saleDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
+										jQuery('span#saleDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
 										break;
 									case 'printable':
-										jQuery('div#offertypeDiv span#printDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
+										jQuery('span#printDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
 										break;
 									case 'couponCode':
-										jQuery('div#offertypeDiv span#couponDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
+										jQuery('span#couponDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
 										break;
 									default:
 										break;
@@ -2093,13 +2095,13 @@ function submitForm(){
 							//FOR NEW IMAGE
 							switch(divVal){
 							case 'sale':
-								jQuery('div#offertypeDiv span#saleDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
+								jQuery('span#saleDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
 								break;
 							case 'printable':
-								jQuery('div#offertypeDiv span#printDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
+								jQuery('span#printDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
 								break;
 							case 'couponCode':
-								jQuery('div#offertypeDiv span#couponDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
+								jQuery('span#couponDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
 								break;
 							default:
 								break;
