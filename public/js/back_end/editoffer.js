@@ -398,7 +398,6 @@ function getDeeplinkForShop(param){
 
 function getOfferDetail(){
 	
-	
 	 jQuery.ajax({
 			url : HOST_PATH + "admin/offer/offerdetail/offerId/" + jQuery('#offerId').val(),
 				dataType : "json",
@@ -741,6 +740,7 @@ function setFormData(data){
 			error: function(message) {
 	        }
 	});
+	jQuery('#ccode').html(' <label><strong>Coupon code</strong></label>');
 }
 
 function newschangelinkStatus(el)
@@ -1257,7 +1257,7 @@ function validateFormAddNewOffer(){
 				ignore: [],
 				errorPlacement : function(error, element) {
 					
-						element.parent("div").prev("div")
+						element.parent("div").next("div")
 								.html(error);
 				},
 				// validation rules
@@ -2411,23 +2411,15 @@ jQuery(function () {
 
 function couponType(type)
 {
-	
 	jQuery("#" + type).addClass("btn-primary").siblings().removeClass("btn-primary");
-	
 	if(type == 'unique')
 	{
 		jQuery("div.general-code-cont").hide();
 		jQuery("div.unique-code-cont").show();
-		
-		jQuery("input#couponCodeType").val('UN');		
+		jQuery("input#couponCodeType").val('UN');
 	} else {
-		
 		jQuery("input#couponCodeType").val('GN');
 		jQuery("div.unique-code-cont").hide();
 		jQuery("div.general-code-cont").show();
-		
-		
-		jQuery("input#couponCodeType").val();
-		
 	}
 }

@@ -360,7 +360,8 @@
                     <a href="<?php echo HTTP_PATH; ?>admin/offer" class="fl m10"><strong class="ml10"><?php echo $this->translate('CANCEL'); ?></strong></a>
                 </div>
             </div>
-        </div>                                 
+        </div>
+
         <div class="row-fluid">
             <div class="span2">
                 <label><strong><?php echo $this->translate('Show Hidden Options'); ?></strong></label>
@@ -459,19 +460,12 @@
                     <div class="span10">
                         <div id='error-message' class="error-message category-error mainpage-content-right-inner-right-other"></div>
                          <div class="categories" style="position:relative;" name="category">
-
                           <?php   for($i = 0;  $i < count($this->catList) ; $i++ ){ ?>
-
                             <div class="square-btn-offer">
                             <input type="checkbox" value="<?php echo $this->catList[$i]['id']; ?>" class="" name="selectedcategories[]" id="category-<?php echo $this->catList[$i]['id']; ?>" />
-
                          <?php if(trim($this->catList[$i]['name'])!=''){
-
                             $categoryIconPath = '';
-
-
                             $icons = $this->catList[$i];
-
                             # check an icon is available of not
                             if(file_exists(ROOT_PATH.$icons['categoryicon']['path']."thum_medium_".$icons['categoryicon']['name'])){
                                 $categoryIconPath = PUBLIC_PATH_LOCALE.$icons['categoryicon']['path']."thum_medium_".$icons['categoryicon']['name'];
@@ -479,7 +473,6 @@
                                 $categoryIconPath = HTTP_PATH ."public/images/NoImage/NoImage50x50.jpg";
                             }
                         ?>
-
                             <button type="button" name="selectCategory" title="<?php echo $this->catList[$i]['name'];?>" class="btn square-btn" id="categoryBtn-<?php echo $this->catList[$i]['id'];?>" onClick="addCategory('<?php echo $this->catList[$i]['id']; ?>')">
                                 <img alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
                              </button>
