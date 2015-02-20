@@ -204,7 +204,7 @@ class FrontEnd_Helper_LayoutContent
                 <ul class="info-area">';
         $i = 1;
         foreach ($topShops as $topShop) {
-            if ($i == 9 || $i == 17 || $i==25) {
+            if ($i == 5 || $i == 9 || $i==13) {
                 $topShopsDropdown .='</ul><ul class="info-area">';
             }
             $topShopsDropdown .='<li><a href="'. HTTP_PATH_LOCALE. $topShop['shop']['permaLink']. '">'. $topShop['shop']['name'] . '</a></li>';
@@ -222,14 +222,14 @@ class FrontEnd_Helper_LayoutContent
     public static function getTopShopForDropdown()
     {
         $topShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            "all_30popularShops_list",
+            "all_popularShops_list",
             array(
                 'function' => 'FrontEnd_Helper_viewHelper::getStoreForFrontEnd',
-                'parameters' => array("popular", 30)
+                'parameters' => array("popular", 24)
             ),
             ''
         );
-        return $topShops;
+        return array_slice($topShops, 0, 15);
     }
 
     public static function generateMobileMenu($navigation)
