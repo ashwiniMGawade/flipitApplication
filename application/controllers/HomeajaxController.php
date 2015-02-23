@@ -35,6 +35,7 @@ class HomeajaxController extends Zend_Controller_Action
             "all_homenewoffer_list",
             array('function' => 'KC\Repository\Offer::getNewestOffers', 'parameters' => array('newest', 10, '', '', 'homePage'))
         );
+ 
         $homePagePartials = new \FrontEnd_Helper_HomePagePartialFunctions();
         $rightDivWithContent = $homePagePartials->getRightDivByAjax(
             $newOffers,

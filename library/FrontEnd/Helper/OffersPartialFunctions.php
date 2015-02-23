@@ -50,6 +50,7 @@ class FrontEnd_Helper_OffersPartialFunctions
 
     public function getDaysTillOfferExpires($endDate)
     {
+        $endDate = (array) $endDate;
         $currentDate = date('Y-m-d');
         $offerEndDate = date('Y-m-d', strtotime($endDate['date']));
         $timeStampStart = strtotime($offerEndDate);
@@ -126,7 +127,8 @@ class FrontEnd_Helper_OffersPartialFunctions
         } elseif ($daysTillOfferExpires == 0) {
                 $offerDates .= FrontEnd_Helper_viewHelper::__translate('Expires today');
             } else {
-                $endDate = new Zend_Date(strtotime($currentOffer->endDate));
+                $endDate = (array)$currentOffer->endDate;
+                $endDate = new Zend_Date(strtotime($endDate['date']));
                 $offerDates .= FrontEnd_Helper_viewHelper::__translate('Expires on').': ';
                 $offerDates .= ucwords($endDate->get(Zend_Date::DATE_LONG));
             } elseif (

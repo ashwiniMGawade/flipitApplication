@@ -56,8 +56,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
         foreach ($categories as $category) {
             $categoryImage =
                 PUBLIC_PATH_CDN
-                .$category[0]['category']['categoryicon']['path']
-                . $category[0]['category']['categoryicon']['name'];
+                .$category[0]['category'][0]['categoryicon']['path']
+                . $category[0]['category'][0]['categoryicon']['name'];
             $categoriesOffers =
                 $category['totalOffers'] . ' '
                 . \FrontEnd_Helper_viewHelper::__form('form_Offers'). ' ' . $category['countOff']
@@ -277,8 +277,12 @@ class FrontEnd_Helper_HomePagePartialFunctions
 
     public function getRightColumnOffersHtmlForAllOffersTypes($offer)
     {
-        $shopImage =
-            PUBLIC_PATH_CDN.ltrim($offer['shopOffers']['logo']['path'], "/") .'thum_medium_'. $offer['shopOffers']['logo']['name'];
+        $shopImage = '';
+        if (!empty($offer['shopOffers']['logo'])) {
+            $shopImage =
+                PUBLIC_PATH_CDN.ltrim($offer['shopOffers']['logo']['path'], "/")
+                .'thum_medium_'. $offer['shopOffers']['logo']['name'];
+        }
         $shopPermalink = $offer['shopOffers']['permaLink'];
         $shopName = $offer['shopOffers']['name'];
         $offerTitle = mb_strlen($offer['title'], 'UTF-8') > 160

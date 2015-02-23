@@ -265,12 +265,14 @@ class StoreController extends Zend_Controller_Action
         $startingAndEndingCharacter = $startingCharacter. "-". $endingCharacter;
         $permalink = $this->_helper->Store->getActualPermalink($permalink, 'permalink');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $pageDetails = Page::getPageDetailsFromUrl($permalink);
+        $pageDetails = KC\Repository\Page::getPageDetailsFromUrl($permalink);
+        $pageHeaderImageId = $pageDetails['pageHeaderImageId'];
+        $pageDetails = (object) $pageDetails[0];
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'page_header'.$pageDetails->id.'_image',
             array(
                 'function' => 'KC\Repository\Logo::getPageLogo',
-                'parameters' => array($pageDetails->pageHeaderImageId)
+                'parameters' => array($pageHeaderImageId)
             )
         );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
@@ -282,7 +284,7 @@ class StoreController extends Zend_Controller_Action
         
         $allStoresList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             $allShopsCacheKey,
-            array('function' => 'Shop::getAllStoresForFrontEnd', 'parameters' => array($startingCharacter, $endingCharacter)),
+            array('function' => '\KC\Repository\Shop::getAllStoresForFrontEnd', 'parameters' => array($startingCharacter, $endingCharacter)),
             true
         );
 
