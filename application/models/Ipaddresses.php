@@ -27,7 +27,6 @@ class Ipaddresses extends BaseIpaddresses
         $ipaddress->name = FrontEnd_Helper_viewHelper::sanitize($params['name']);
         $ipaddress->ipaddress = FrontEnd_Helper_viewHelper::sanitize($params['ipaddress']);
         $ipaddress->save();
-        self::updateAdminIpAddressInHtaccess();
         return true;
     }
 
@@ -37,7 +36,6 @@ class Ipaddresses extends BaseIpaddresses
             ->from('Ipaddresses e')
             ->where("e.id=" . $id)
             ->execute();
-        self::updateAdminIpAddressInHtaccess();
         return true;
     }
 
@@ -58,21 +56,5 @@ class Ipaddresses extends BaseIpaddresses
             ->from("Ipaddresses")
             ->fetchArray();
         return $ipAddressesList;
-    }
-
-    public static function updateAdminIpAddressInHtaccess()
-    {
-        $htaccessFilePath = APPLICATION_PATH."/modules/admin/.htaccess";
-        $allowedIpsList = self::getIpAdressList();
-        $htaccessContent = "order allow,deny";
-        $htaccessContent .="\n";
-        foreach ($allowedIpsList as $allowedIpList) {
-            $htaccessContent .= 'Allow from '.$allowedIpList['ipaddress']."\n";
-        }
-        $htaccessContent .= "deny from all";
-        $ipAddressHandle = fopen($htaccessFilePath, 'w');
-        fwrite($ipAddressHandle, $htaccessContent);
-        fclose($ipAddressHandle);
-        return true;
     }
 }
