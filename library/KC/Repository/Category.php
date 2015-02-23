@@ -7,6 +7,28 @@ class Category extends \KC\Entity\Category
     ############# REFACORED CODE ########################
     #####################################################
 
+    public static function categoryExistOrNot($categoryId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('c')
+            ->from('KC\Entity\Category', 'c')
+            ->setParameter(1, $categoryId)
+            ->where('c.id = ?1');
+        $category = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $category;
+    }
+
+    public static function getCategoryInformationForNewsLetter($id)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+             ->select("c.id, c.name, c.permalink")
+            ->from('KC\Entity\Category', 'c')
+            ->where("c.id = " . $id);
+        $category = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $category;
+    }
+
     public static function getCategoryVoucherCodes($categoryId, $numberOfOffers = 0, $pageName = '')
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();

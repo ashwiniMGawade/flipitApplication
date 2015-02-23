@@ -12,6 +12,60 @@ class Offer Extends \KC\Entity\Offer
         }
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
+
+    public static function offerExistOrNot($offerId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('o')
+            ->from('KC\Entity\Offer', 'o')
+            ->setParameter(1, $offerId)
+            ->where('o.id = ?1');
+        $offers = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $offers;
+    }
+
+    public static function getOffersForNewsletter($offerIds)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select(
+                's.id,s.name,
+                s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,
+                s.actualUrl,terms.content,
+                o.id,o.Visability,o.userGenerated,o.title,o.authorId,
+                o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,o.authorName,
+                o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.extendedUrl,
+                o.discountType,o.startdate,o.endDate,o.nickname,o.approved,
+                img.id, img.path, img.name'
+            )
+            ->from('KC\Entity\Offer', 'o')
+            ->leftJoin('o.shopOffers', 's')
+            ->leftJoin('s.logo', 'img')
+            ->leftJoin('o.offertermandcondition', 'terms')
+            ->andWhere($queryBuilder->expr()->in('o.id', $offerIds));
+        $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $changedOrderOffers = self::changeOrder($offers);
+        $changedOrderOffersSameAsTopOffers = self::getOfferWithOrder($changedOrderOffers, $offerIds);
+        return $changedOrderOffersSameAsTopOffers;
+    }
+
+    public static function changeOrder($offers)
+    {
+        $changeOrder = '';
+        foreach ($offers as $offer) {
+            $changeOrder[$offer['id']] = $offer;
+        }
+        return $changeOrder;
+    }
+
+    public static function getOfferWithOrder($offers, $offerIds)
+    {
+        $offersWithOrder = '';
+        foreach ($offerIds as $id) {
+            $offersWithOrder[] = $offers[$id];
+        }
+        return $offersWithOrder;
+    }
     
     public static function getExpiredOffers($type, $limit, $shopId = 0)
     {
