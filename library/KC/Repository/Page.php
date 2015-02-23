@@ -224,7 +224,7 @@ class Page Extends \KC\Entity\Page
 
         $request  = \DataTable_Helper::createSearchRequest(
             $params,
-            array('page.pageTitle','page.pageType','page.pageLock','page.created_at',
+            array('page.pageTitle','page.pageType','page.created_at',
                 'page.publish','page.contentManagerName'
             )
         );
@@ -234,7 +234,6 @@ class Page Extends \KC\Entity\Page
             ->setQueryBuilder($query)
             ->add('text', 'page.pageTitle')
             ->add('text', 'page.permalink')
-            ->add('number', 'page.pageLock')
             ->add('number', 'page.created_at')
             ->add('number', 'page.publish')
             ->add('text', 'page.contentManagerName');

@@ -75,6 +75,11 @@ class Dashboard extends \KC\Entity\Dashboard
 
     }
 
+    public static function getMoneyShopRatio()
+    {
+        return Shop::moneyShopRatio();
+    }
+
     public static function getDashboardValueToDispaly($name)
     {
         try {
@@ -103,7 +108,8 @@ class Dashboard extends \KC\Entity\Dashboard
         $totNoOfshopsCodeOnline,
         $totNoOfshopsCodeOnlineThisWeek,
         $totNoOfshopsCodeOnlineLastWeek,
-        $totNoOfSubscribers
+        $totNoOfSubscribers,
+        $moneyShopRatio
     ) {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('d')
@@ -123,7 +129,7 @@ class Dashboard extends \KC\Entity\Dashboard
             $dashboardAdd->total_no_of_shops_online_code_thisweek = $totNoOfshopsCodeOnlineThisWeek;
             $dashboardAdd->total_no_members = $totNoOfSubscribers;
             $dashboardAdd->updated_at = date('Y-m-d H:i:s');
-            
+            $dashboardAdd->money_shop_ratio = $moneyShopRatio;
             $entityManagerLocale = \Zend_Registry::get('emLocale');
             $entityManagerLocale->persist($dashboardAdd);
             $entityManagerLocale->flush();
@@ -142,6 +148,7 @@ class Dashboard extends \KC\Entity\Dashboard
                 ->set('total_no_of_shops_online_code_thisweek', $totNoOfshopsCodeOnlineThisWeek)
                 ->set('total_no_members', $totNoOfSubscribers)
                 ->set('updated_at', "'" . date('Y-m-d H:i:s') ."'")
+                ->set('money_shop_ratio', $moneyShopRatio)
                 ->getQuery();
             $query->execute();
         }

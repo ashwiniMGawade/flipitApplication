@@ -16,6 +16,17 @@ class Shop extends \KC\Entity\Shop
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
 
+    public static function getShopData($id)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('s')
+            ->from('KC\Entity\Shop', 's')
+            ->setParameter(1, $id)
+            ->where('s.id = ?1');
+        $shopDataExistOrNot = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $shopDataExistOrNot;
+    }
+
     public static function returnShopCategories($shopId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -58,58 +69,67 @@ class Shop extends \KC\Entity\Shop
         return $popularStoreData;
     }
 
-    public static function getSimilarShops($shopId, $numberOfShops = 12)
+     public static function getSimilarShops($shopId, $numberOfShops = 12)
     {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select(
-            's.name, s.permaLink, img.path, img.name, logo.path, logo.name, rs.name, rs.permaLink,
-            c.id,ss.name, ss.permaLink'
-        )
-            ->from('KC\Entity\Shop', 's')
-            ->setParameter(1, $shopId)
-            ->where('s.id = ?1')
-            ->leftJoin("s.relatedshops", "rs")
-            ->setParameter(2, '1')
-            ->andWhere("rs.status = ?2")
-            ->setParameter(3, '0')
-            ->andWhere("rs.deleted = ?3")
-            ->leftJoin("rs.logo", "logo")
-            ->leftJoin('s.categoryshops', 'c')
-            ->setParameter(4, '1')
-            ->andWhere("c.status = ?4")
-            ->setParameter(5, '0')
-            ->andWhere("c.deleted = ?5")
-            ->leftJoin('c.shop', 'ss')
-            ->setParameter(6, '1')
-            ->andWhere("ss.status = ?6")
-            ->setParameter(7, '0')
-            ->andWhere("ss.deleted = ?7")
-            ->leftJoin('ss.logo', 'img');
-        $relatedShops = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return self::removeDuplicateShops($relatedShops, $numberOfShops);
+        $similarShops = self::getSimilarShopsByShopId($shopId, $numberOfShops);
+        if (count($similarShops) <= $numberOfShops) {
+            $similarShopsBySimilarCategories = self::getSimilarShopsBySimilarCategories($shopId, $numberOfShops);
+            $similarShops = self::removeDuplicateShops($similarShops, $similarShopsBySimilarCategories, $numberOfShops);
+        }
+        return $similarShops;
     }
 
-    protected static function removeDuplicateShops($relatedShops, $numberOfShops)
+    public static function getSimilarShopsByShopId($shopId, $numberOfShops = 12)
+    {
+        $similarShops = self::getRelatedShop($shopId);
+        return self::setDataAsPerView($similarShops, $numberOfShops);
+    }
+
+    protected static function setDataAsPerView($similarShops, $numberOfShops)
     {
         $similarShopsWithoutDuplicate = array();
-        foreach ($relatedShops[0]['relatedshops'] as $relatedShop) {
-            if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
-                $similarShopsWithoutDuplicate[$relatedShop['id']] = $relatedShop;
-            }
-        }
-
-        if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
-            // push shops related to same category which are not yet added
-            foreach ($relatedShops[0]['category'] as $category) {
-                foreach ($category['shop'] as $relatedCategoryShop) {
-                    if (count($similarShopsWithoutDuplicate) <= $numberOfShops &&
-                            !in_array($relatedCategoryShop['id'], $similarShopsWithoutDuplicate)) {
-                        $similarShopsWithoutDuplicate[$relatedCategoryShop['id']] = $relatedCategoryShop;
-                    }
+        if (!empty($similarShops['refShopRelatedshop'])) {
+            foreach ($similarShops['refShopRelatedshop'] as $similarShop) {
+                if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
+                    $similarShopsWithoutDuplicate[$similarShop['relatedshops']['id']] = $similarShop['relatedshops'];
                 }
             }
         }
         return $similarShopsWithoutDuplicate;
+    }
+
+    public static function getSimilarShopsBySimilarCategories($shopId, $numberOfShops)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select(
+                "s.name, s.permaLink, img.path, img.name, logo.path, logo.name,
+                c.id,ss.name, ss.permaLink"
+            )
+            ->from('KC\Entity\Shop', 's')
+            ->where("s.id = ".$shopId)
+            ->leftJoin('s.categoryshops', 'c')
+            ->andWhere("c.status = 1")
+            ->andWhere("c.deleted = 0")
+            ->leftJoin('c.shop', 'ss')
+            ->andWhere("ss.status = 1")
+            ->andWhere("ss.deleted = 0")
+            ->leftJoin('ss.logo', 'img');
+        $relatedShops = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $relatedShops;
+    }
+
+    protected static function removeDuplicateShops($similarShops, $similarShopsBySimilarCategories, $numberOfShops)
+    {
+        foreach ($similarShopsBySimilarCategories[0]['category'] as $category) {
+            foreach ($category['shop'] as $relatedCategoryShop) {
+                if (count($similarShops) <= $numberOfShops &&
+                        !in_array($relatedCategoryShop['id'], $similarShops)) {
+                    $similarShops[$relatedCategoryShop['id']] = $relatedCategoryShop;
+                }
+            }
+        }
+        return $similarShops;
     }
 
     public static function getPopularStores($limit, $shopId = null)
@@ -168,6 +188,10 @@ class Shop extends \KC\Entity\Shop
 
     public static function getallStoresForFrontEnd()
     {
+        $charactersString = $startCharacter.  "-" . $endCharacter;
+        if ($startCharacter=='09') {
+            $charactersString = "a-e 0-9";
+        }
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDateAndTime = date('Y-m-d 00:00:00');
         $query = $queryBuilder->select('o.id,s.id, s.name, s.permaLink')
@@ -183,6 +207,7 @@ class Shop extends \KC\Entity\Shop
         ->where('s.deleted= ?1')
         ->setParameter(2, '1')
         ->andWhere('s.status= ?2')
+        ->andWhere("s.name REGEXP ?", "^[" . $charactersString ."]")
         ->orderBy('s.name');
         $storeInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
  
@@ -381,6 +406,95 @@ class Shop extends \KC\Entity\Shop
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shop;
     }
+
+    public static function getShopIdByPermalink($permalink)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $shop = $queryBuilder
+            ->select('s.id')
+            ->from("KC\Entity\Shop", "s")
+            ->where('s.permaLink='."'$permalink'")
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return isset($shop[0]) ? $shop[0]['id'] : '';
+    }
+
+    public static function getRelatedShop($id)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $relatedShops = $queryBuilder
+            ->select('s.id, rf.id, rl.permaLink, rl.id, rl.name, logo.path, logo.name')
+            ->from("KC\Entity\Shop", "s")
+            ->leftJoin("s.relatedshops", "rf")
+            ->leftJoin("s.logo", "logo")
+            ->where("s.id =".$id)
+            ->orderBy("rf.position", "ASC")
+            ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $relatedShops;
+    }
+
+    public static function getAllActiveShopDetails ()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $shopIds = $queryBuilder
+            ->select('s.id')
+            ->from("KC\Entity\Shop", "s")
+            ->where('s.deleted = 0')
+            ->andWhere('s.status = 1')
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $shopIds;
+    }
+
+    public static function updateSimilarShopsViewedIds()
+    {
+        $shopIds = self::getAllActiveShopDetails();
+        $similarShopIds = '';
+        foreach ($shopIds as $shopId) {
+            $topFiveSimilarShopsViewed = '';
+            $commaSepratedShopIds = '';
+            $topFiveSimilarShopsViewed = self::getSimilarShopsForAlsoViewedWidget($shopId['id']);
+            $commaSepratedShopIds = implode(',', $topFiveSimilarShopsViewed);
+            self::updateShopViewedIds($commaSepratedShopIds, $shopId['id']);
+        }
+        return true;
+    }
+
+    public static function getSimilarShopsForAlsoViewedWidget($shopId)
+    {
+        $similarShopsBySimilarCategories[] = self::getSimilarShopsBySimilarCategories($shopId, 5);
+        if (isset($similarShopsBySimilarCategories[0][0]['category'])) {
+            foreach ($similarShopsBySimilarCategories[0][0]['category'] as $category) {
+                foreach ($category['shop'] as $relatedCategoryShop) {
+                    if ($relatedCategoryShop['id'] != $shopId) {
+                        $similarShops[$relatedCategoryShop['id']] = $relatedCategoryShop['id'];
+                    }
+                }
+            }
+        }
+        $topFiveSimilarShopsViewed = array_slice($similarShops, 0, 5);
+        return $topFiveSimilarShopsViewed;
+    }
+
+    public static function updateShopViewedIds($commaSepratedShopIds, $shopId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $queryBuilder->update('KC\Entity\Shop', 's')
+        ->set('s.shopsViewedIds', "'$commaSepratedShopIds'")
+        ->where('s.id ='.$shopId)
+        ->getQuery()->execute();
+    }
+
+    public static function getShopsAlsoViewed($shopId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $shopAlsoViewedIds = $queryBuilder
+            ->select('s.shopsViewedIds')
+            ->from("KC\Entity\Shop", "s")
+            ->where('s.id ='.$shopId)
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $shopAlsoViewedIds;
+    }
+
+
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -633,10 +747,15 @@ class Shop extends \KC\Entity\Shop
         $shopInfo->subTitle =\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopSubTitle']);
         $shopInfo->overriteTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopOverwriteTitle']);
         $shopInfo->shopText = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopDescription']);
+        $this->customtext = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomText']);
+        $this->moretextforshop = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['moretextforshop']);
         $shopViewCount = isset($shopDetail['shopViewCount']) ? $shopDetail['shopViewCount'] : '0';
         $shopInfo->views = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopViewCount);
         $shopInfo->howtoTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageTitle']);
         $shopInfo->howtoSubtitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubTitle']);
+        $this->howtoSubSubTitle = FrontEnd_Helper_viewHelper::sanitize(
+            BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubSubTitle'])
+        );
         $shopInfo->howtoMetaTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaTitle']);
         $shopInfo->howtoMetaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaDesc']);
         $shopInfo->customHeader = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomHeader']);
@@ -690,6 +809,15 @@ class Shop extends \KC\Entity\Shop
             $shopInfo->discussions = '1';
         }
 
+        if ($shopDetail['customtextposition'] != '') {
+            $this->customtextposition = $shopDetail['customtextposition'];
+        }
+
+        $this->showcustomtext = 0;
+        if ($shopDetail['showcustomtext'] != '') {
+            $this->showcustomtext = $shopDetail['showcustomtext'];
+        }
+
         $shopInfo->usergenratedcontent = '0';
 
         if (isset($shopDetail['usergenratedchk'])) {
@@ -717,11 +845,6 @@ class Shop extends \KC\Entity\Shop
             $shopInfo->status = 1 ;
         }
 
-        $shopInfo->discussions = '0';
-
-        if (isset($shopDetail['discussions'])) {
-            $shopInfo->discussions = '1';
-        }
 
         $selectAccountManagers = isset($shopDetail['selectaccountmanagers']) ? $shopDetail['selectaccountmanagers'] : '0';
         $shopInfo->accoutManagerId = \BackEnd_Helper_viewHelper::stripSlashesFromString($selectAccountManagers);
@@ -899,7 +1022,25 @@ class Shop extends \KC\Entity\Shop
                 }
             }
 
-            if (!empty($shopDetail['reasontitle1']) || !empty($shopDetail['reasontitle2']) || !empty($shopDetail['reasontitle1'])) {
+            if (!empty($shopDetail['ballontextcontent'])) {
+                if (isset($shopDetail['id']) && $shopDetail['id'] != '') {
+                    $type = 'update';
+                    $shopId = $shopDetail['id'];
+                } else {
+                    $type = 'add';
+                    $shopId = $this->id;
+                }
+
+                self::saveEditorBallonText($shopDetail, $shopId, $type);
+            }
+
+            if (!empty($shopDetail['reasontitle1'])
+                || !empty($shopDetail['reasontitle2'])
+                || !empty($shopDetail['reasontitle3'])
+                || !empty($shopDetail['reasontitle4'])
+                || !empty($shopDetail['reasontitle5'])
+                || !empty($shopDetail['reasontitle6'])
+                ) {
                 $shopReasons = array();
                 $shopReasons['reasontitle1'] = !empty($shopDetail['reasontitle1'])
                     ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle1']) : '';
@@ -913,6 +1054,18 @@ class Shop extends \KC\Entity\Shop
                     ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle3']) : '';
                 $shopReasons['reasonsubtitle3'] = !empty($shopDetail['reasonsubtitle3'])
                     ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle3']) : '';
+                $shopReasons['reasontitle4'] = !empty($shopDetail['reasontitle4'])
+                    ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle4']) : '';
+                $shopReasons['reasonsubtitle4'] = !empty($shopDetail['reasonsubtitle4'])
+                    ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle4']) : '';
+                $shopReasons['reasontitle5'] = !empty($shopDetail['reasontitle4'])
+                    ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle5']) : '';
+                $shopReasons['reasonsubtitle5'] = !empty($shopDetail['reasonsubtitle5'])
+                    ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle5']) : '';
+                $shopReasons['reasontitle6'] = !empty($shopDetail['reasontitle6'])
+                    ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle6']) : '';
+                $shopReasons['reasonsubtitle6'] = !empty($shopDetail['reasonsubtitle6'])
+                    ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle6']) : '';
                 \KC\Repository\ShopReasons::saveReasons($shopReasons, $this->id);
             }
 
@@ -1720,5 +1873,49 @@ class Shop extends \KC\Entity\Shop
             ->where('s.id='.$shopID);
         $brandingCss = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return (!empty($brandingCss[0]['brandingcss'])) ? unserialize($brandingCss[0]['brandingcss']) : null;
+    }
+
+    public static function saveEditorBallonText($params, $shopId, $type)
+    {
+        if ($type == 'update') {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder
+            ->delete("KC\Entity\EditorBallonText", "e")
+            ->where("e.shopid = ".$shopId)
+            ->execute();
+        }
+        $contentInfo = array_map('trim', $params['ballontextcontent']);
+        foreach ($contentInfo as $key => $content) {
+            if (isset($content) && $content != '') {
+                $entityManagerLocale  = \Zend_Registry::get('emLocale');
+                $ballonText = new \KC\Entity\EditorBallonText();
+                $ballonText->shopid = $shopId;
+                $ballonText->ballontext = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['ballontextcontent'][$key]);
+                $ballonText->deleted = 0;
+                $entityManagerLocale->persist($ballonText);
+                $entityManagerLocale->flush();
+            }
+        }
+        return true;
+    }
+
+    public static function getTotalNumberOfMoneyShops()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select("count(s.id) as moneyShops")
+        ->from('KC\Entity\Shop', 's')
+        ->where('s.deleted = 0')
+        ->andWhere("s.status = '1'")
+        ->andWhere("s.affliateProgram = 1");
+        $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
+    }
+
+    public static function moneyShopRatio()
+    {
+        $totalNumberOfShops = self::getTotalAmountOfShops();
+        $numberOfMoneyShops = self::getTotalNumberOfMoneyShops();
+        $shopRatio = ($numberOfMoneyShops['moneyShops'] / $totalNumberOfShops['amountshops']) * 100;
+        return round($shopRatio);
     }
 }
