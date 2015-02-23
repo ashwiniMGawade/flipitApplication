@@ -98,7 +98,7 @@ function init(){
 				////extraPlugins : 'wordcount',
 				customConfig : 'config.js' ,  
 				toolbar :  'BasicToolbar'  ,
-				height : "300"
+				height : "80"
 	});
 	
 	
@@ -397,7 +397,6 @@ function getDeeplinkForShop(param){
 
 
 function getOfferDetail(){
-	
 	
 	 jQuery.ajax({
 			url : HOST_PATH + "admin/offer/offerdetail/offerId/" + jQuery('#offerId').val(),
@@ -744,6 +743,7 @@ function setFormData(data){
 			error: function(message) {
 	        }
 	});
+	jQuery('#ccode').html(' <label><strong>Coupon code</strong></label>');
 }
 
 function newschangelinkStatus(el)
@@ -943,7 +943,8 @@ function selectDiscountType(dIv){
 	    		
 		    jQuery("input[name=couponCode]").parent("div").removeClass("error success focus")
 			    .prev("div").html("");
-		    	
+		    jQuery('.general-code-cont').show();
+		 	jQuery('#ccode').html(' <label><strong>Coupon code</strong></label>');
 	    	jQuery('#couponDiv').show();
 	    	jQuery('#printDiv').hide();
 	    	jQuery('span#saleDiv').hide();//code add by blal
@@ -1004,6 +1005,7 @@ function selectDiscountType(dIv){
 	        
 	        
 	      case 'sale':
+	      	jQuery('.general-code-cont').hide();
 	        jQuery('#couponDiv').hide();
 	        jQuery('#printDiv').hide();
 	        jQuery('span#saleDiv').show();//code add by blal
@@ -1038,7 +1040,7 @@ function selectDiscountType(dIv){
 	    		
 		    jQuery("#offerrefurlPR").parent("div").removeClass("error success focus");
 			   
-		    	
+		    jQuery('.general-code-cont').hide();	
 		    jQuery('#couponDiv').hide();
 		    jQuery('span#saleDiv').hide();//code add by blal
 		    jQuery('#printDiv').show();
@@ -1260,7 +1262,7 @@ function validateFormAddNewOffer(){
 				ignore: [],
 				errorPlacement : function(error, element) {
 					
-						element.parent("div").prev("div")
+						element.parent("div").next("div")
 								.html(error);
 				},
 				// validation rules
@@ -2080,13 +2082,13 @@ function submitForm(){
 									var Id = parseInt(jQuery('input#forDelete').val());
 									switch(divVal){
 									case 'sale':
-										jQuery('div#offertypeDiv span#saleDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
+										jQuery('span#saleDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
 										break;
 									case 'printable':
-										jQuery('div#offertypeDiv span#printDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
+										jQuery('span#printDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
 										break;
 									case 'couponCode':
-										jQuery('div#offertypeDiv span#couponDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
+										jQuery('span#couponDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
 										break;
 									default:
 										break;
@@ -2096,13 +2098,13 @@ function submitForm(){
 							//FOR NEW IMAGE
 							switch(divVal){
 							case 'sale':
-								jQuery('div#offertypeDiv span#saleDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
+								jQuery('span#saleDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
 								break;
 							case 'printable':
-								jQuery('div#offertypeDiv span#printDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
+								jQuery('span#printDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
 								break;
 							case 'couponCode':
-								jQuery('div#offertypeDiv span#couponDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
+								jQuery('span#couponDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
 								break;
 							default:
 								break;
@@ -2414,23 +2416,15 @@ jQuery(function () {
 
 function couponType(type)
 {
-	
 	jQuery("#" + type).addClass("btn-primary").siblings().removeClass("btn-primary");
-	
 	if(type == 'unique')
 	{
 		jQuery("div.general-code-cont").hide();
 		jQuery("div.unique-code-cont").show();
-		
-		jQuery("input#couponCodeType").val('UN');		
+		jQuery("input#couponCodeType").val('UN');
 	} else {
-		
 		jQuery("input#couponCodeType").val('GN');
 		jQuery("div.unique-code-cont").hide();
 		jQuery("div.general-code-cont").show();
-		
-		
-		jQuery("input#couponCodeType").val();
-		
 	}
 }

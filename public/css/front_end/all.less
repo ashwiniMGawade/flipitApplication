@@ -126,13 +126,12 @@ body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
 	background:#252423;
 	box-shadow: -15px 0 10px -10px rgba(0,0,0,.5) inset;
 	ul {
-		padding: 0px 0px 0px 5px;
+		padding: 0px;
 		margin:0;
 		list-style:none;
 		ul {
 			font-size:13px;
 			line-height:14px;
-			padding:14px 0px 14px;
 			a {
 				display:block;
 				padding:8px 11px 9px;
@@ -170,7 +169,7 @@ body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
 		font-size:14px;
 		line-height:15px;
 		font-weight:normal;
-		padding:14px 0px 14px;
+		padding:8px 9px 10px;
 		background:#252423;
 		box-shadow: -15px 0 10px -10px rgba(0,0,0,.5) inset;
 	}
@@ -182,6 +181,7 @@ body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
 	height: 14px;
 	text-indent:-9999px;
 	overflow:hidden;
+	z-index: 9999;
 }
 .navigation{
 	&:after {.after}
@@ -200,9 +200,17 @@ body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
 	.logo{
 		margin:25px 0;
 	}
+	.holder1{
+		position:relative;
+		&:after{
+			display:block;
+			clear:both;
+			content:"";
+		}
+	}
 }
 .menu-opener{
-	display:none;
+	display:none!important;
 	position:absolute;
 	top:50%;
 	right:15px;
@@ -328,6 +336,11 @@ img.logo.kortingscode{
 				border-right:1px solid #2e2e2d;
 				margin:0 0 0 1px;
 				float:left;
+				&:hover{
+					.drop-box{
+						display:block;
+					}
+				}
 				> a{
 					display:block;
 					padding:39px 23px 42px 25px;
@@ -362,6 +375,89 @@ img.logo.kortingscode{
 		    			.plus-menu(-200px);
 	    			}
 			    }
+			}
+			.drop-box{
+				display:none;
+				position:absolute;
+				left:0;
+				top:100%;
+				width:100%;
+				background:@white-color;
+				border-radius:0 0 3px 3px;
+				box-shadow:0 3px 6px 0 rgba(78,78,78,0.2);
+				z-index:99;
+				padding:0 0 27px;
+				.inner-box{
+					overflow:hidden;
+					width:100%;
+					padding:28px 0 15px;
+					margin:0 0 23px;
+					border-bottom:1px solid #eaeaea;
+					.info-area{
+						float:left;
+						width:25%;
+						list-style:none;
+						padding:0 5% 0 2.3%;
+						margin:0;
+						font:15px/18px Arial, sans-serif;
+						position:relative;
+						text-transform:none;
+						box-shadow:none;
+						border:none;
+						&:first-child{
+							&:after{ display:none;}
+						}
+						&:after{
+							position:absolute;
+							left:-2px;
+							top:0;
+							width:1px;
+							height:90%;
+							content:"";
+							background:#eaeaea;
+						}
+						>li{
+							float:none;
+							padding:0 0 0 20px!important;
+							margin:0 0 12px!important;
+							position:relative;
+							box-shadow:none;
+							border:none;
+							&:after{
+								position:absolute;
+								left:0;
+								top:1px;
+								width:9px;
+								height:15px;
+								content:"";
+								background:url(../../images/arrow-img.png) no-repeat 0 0;
+							}
+							>a{
+								display:block;
+								padding:0 !important;
+								color: #1279c9;
+								&:hover{ 
+									color: #363535;
+									text-decoration: underline;
+									background:none;
+								}
+							}
+						}
+					}
+				}
+				.btn{
+					float: right;
+					font-size: 15px;
+					line-height: 18px;
+					font-weight: normal;
+					margin: 0 39px 0 0;
+					padding:0 0 0 13px;
+					text-transform: none;
+					white-space: inherit;
+					color:@text-color;
+					background:url(../../images/arrow-img.png) no-repeat 0 1px;
+					&:hover{ text-decoration: underline; }
+				}
 			}
 		}
 	}
@@ -4923,6 +5019,16 @@ span.pop{
 			}
 		}
 	}
+	.nav-bar{
+		#nav{
+			.info-area{
+				padding:0 2.3%;
+				>li{
+					padding:0 0 0 15px!important;
+				}
+			}
+		} 
+	} 
 }
 @media only screen and (max-width: 991px){
 	.select-box{
@@ -4951,6 +5057,20 @@ span.pop{
 			padding-left: 25px;
 		}
 	}
+	.nav-bar{
+		#nav{
+			.info-area{
+				padding:0 1.5%;
+				font-size:13px;
+				line-height:16px;
+				>li{
+					&:after{
+						top:-1px;
+					}
+				}
+			}
+		} 
+	}
 }
 @media only screen and (max-width: 767px){
 	.select-box{
@@ -4966,6 +5086,26 @@ span.pop{
 		.socialCodeRow{
 			margin:0 auto;
 			width:100%;
+		}
+	}
+	.nav-mobile {
+		ul {
+			ul{
+				.btn{
+					float:none;
+					text-align:left;
+					font-size:11px;
+					line-height:14px;
+					border-radius:0;
+				}
+			}
+		}
+		.info-area{
+			>li{
+				a{
+					padding:8px 11px 9px 20px;
+				}
+			}
 		}
 	}
 }

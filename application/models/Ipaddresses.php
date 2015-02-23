@@ -64,13 +64,12 @@ class Ipaddresses extends BaseIpaddresses
     {
         $htaccessFilePath = APPLICATION_PATH."/modules/admin/.htaccess";
         $allowedIpsList = self::getIpAdressList();
-        $htaccessContent = "order deny,allow";
-        $htaccessContent .="\n";
-        $htaccessContent .= "deny from all";
+        $htaccessContent = "order allow,deny";
         $htaccessContent .="\n";
         foreach ($allowedIpsList as $allowedIpList) {
             $htaccessContent .= 'Allow from '.$allowedIpList['ipaddress']."\n";
         }
+        $htaccessContent .= "deny from all";
         $ipAddressHandle = fopen($htaccessFilePath, 'w');
         fwrite($ipAddressHandle, $htaccessContent);
         fclose($ipAddressHandle);

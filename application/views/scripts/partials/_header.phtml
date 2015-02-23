@@ -44,42 +44,45 @@ endif;
     </div>
     <div class="navigation">
         <div class="container">
-            <strong>
-                <a href="<?php echo $websiteName;?>">
-                    <img 
-                    alt="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo alt');?>"
-                    class="<?php echo $logoCssClass;?>" src="<?php echo $logoPath;?>"
-                    title="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo title');?>"/>
-                </a>
-            </strong>
-            <a href="<?php echo $websiteName;?>" class="menu-opener"><span class="glyphicon glyphicon-search"></span></a>
-            <div class="nav-bar">
-            <?php 
-            $sessionNamespace = new Zend_Session_Namespace('ErrorPage');
-            $currentControllerName = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
-            if($currentControllerName != 'index' && $sessionNamespace->ErrorPage == false) {
-                ?>
-                <div class="search-box">
-                    <a href="javascript:void(0);" class="opener"><span class="glyphicon glyphicon-search"></span></a>
-                <?php
-                $localePartialPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/scripts/partials/';
-                $basePartialViewPath = new Zend_View();
-                $basePartialViewPath->setScriptPath(APPLICATION_PATH . '/views/scripts/partials/');
-                $localePartialViewPath = new Zend_View();
-                $localePartialViewPath->setScriptPath($localePartialPath);
-                $loadFile = '_headerSearch.phtml';
-                if (file_exists($localePartialPath . $loadFile)) :
-                    echo $localePartialViewPath->render($loadFile);
-                else:
-                    echo $basePartialViewPath->render($loadFile);
-                endif;
+            <div class="holder1">
+                <strong>
+                    <a href="<?php echo $websiteName;?>">
+                        <img 
+                        alt="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo alt');?>"
+                        class="<?php echo $logoCssClass;?>" src="<?php echo $logoPath;?>"
+                        title="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo title');?>"/>
+                    </a>
+                </strong>
+                <a href="<?php echo $websiteName;?>" class="menu-opener"><span class="glyphicon glyphicon-search"></span></a>
+                <div class="nav-bar">
+                <?php 
+                $sessionNamespace = new Zend_Session_Namespace('ErrorPage');
+                $currentControllerName = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
+                if($currentControllerName != 'index' && $sessionNamespace->ErrorPage == false)
+                {
+                    ?>
+                    <div class="search-box">
+                        <a href="javascript:void(0);" class="opener"><span class="glyphicon glyphicon-search"></span></a>
+                    <?php
+                    $localePartialPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/scripts/partials/';
+                    $basePartialViewPath = new Zend_View();
+                    $basePartialViewPath->setScriptPath(APPLICATION_PATH . '/views/scripts/partials/');
+                    $localePartialViewPath = new Zend_View();
+                    $localePartialViewPath->setScriptPath($localePartialPath);
+                    $loadFile = '_headerSearch.phtml';
+                    if (file_exists($localePartialPath . $loadFile)) :
+                        echo $localePartialViewPath->render($loadFile);
+                    else:
+                        echo $basePartialViewPath->render($loadFile);
+                    endif;
+                    ?>
+                    </div>
+                    <?php 
+                }
+                $sessionNamespace->ErrorPage = '';
+                echo FrontEnd_Helper_layoutContent::generateMainMenu();
                 ?>
                 </div>
-                <?php 
-            }
-            $sessionNamespace->ErrorPage = '';
-            echo FrontEnd_Helper_layoutContent::generateMainMenu();
-            ?>
             </div>
         </div>
     </div>
