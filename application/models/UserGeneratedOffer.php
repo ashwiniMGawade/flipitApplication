@@ -110,6 +110,7 @@ class UserGeneratedOffer extends BaseOffer
 
     public static function addOffer($parameters)
     {
+        
         $offer  = new UserGeneratedOffer();
         $offer->nickname = FrontEnd_Helper_viewHelper::sanitize($parameters['nickname']);
         $offer->title = FrontEnd_Helper_viewHelper::sanitize($parameters['title']);

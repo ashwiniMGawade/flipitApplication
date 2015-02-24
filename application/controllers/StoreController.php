@@ -445,6 +445,7 @@ class StoreController extends Zend_Controller_Action
 
     public function socialcodeAction()
     {
+        
         $this->_helper->layout()->disableLayout();
         $baseViewPath = new Zend_View();
         $baseViewPath->setBasePath(APPLICATION_PATH . '/views/');

@@ -1,6 +1,7 @@
 $(document).ready(function(){
     loadSocialCodeForm();
 });
+
 function loadSocialCodeForm() {
     $.ajax({
         url : HOST_PATH_LOCALE + 'store/socialcode',
