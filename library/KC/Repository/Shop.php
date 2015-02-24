@@ -747,14 +747,14 @@ class Shop extends \KC\Entity\Shop
         $shopInfo->subTitle =\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopSubTitle']);
         $shopInfo->overriteTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopOverwriteTitle']);
         $shopInfo->shopText = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopDescription']);
-        $this->customtext = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomText']);
-        $this->moretextforshop = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['moretextforshop']);
+        $this->customtext = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomText']);
+        $this->moretextforshop = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['moretextforshop']);
         $shopViewCount = isset($shopDetail['shopViewCount']) ? $shopDetail['shopViewCount'] : '0';
         $shopInfo->views = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopViewCount);
         $shopInfo->howtoTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageTitle']);
         $shopInfo->howtoSubtitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubTitle']);
-        $this->howtoSubSubTitle = FrontEnd_Helper_viewHelper::sanitize(
-            BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubSubTitle'])
+        $this->howtoSubSubTitle = \FrontEnd_Helper_viewHelper::sanitize(
+            \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubSubTitle'])
         );
         $shopInfo->howtoMetaTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaTitle']);
         $shopInfo->howtoMetaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaDesc']);
@@ -1652,7 +1652,6 @@ class Shop extends \KC\Entity\Shop
     public static function changeStatus($params)
     {
         $status = $params['status'] == 'offline' ? '0' : '1';
-
         if ($params['status'] == 'offline') {
             $date = date('Y-m-d H:i:s');
             $status = 0 ;

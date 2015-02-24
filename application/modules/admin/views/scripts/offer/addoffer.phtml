@@ -21,7 +21,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/addoffer.js");
 $date = date("Y-m-d");
 $today = time();
 $twoMonthsLater = date('t-m-Y');
-$role =  Zend_Auth::getInstance()->getIdentity()->roleId;
+$role =  Zend_Auth::getInstance()->getIdentity()->users->id;
 $code = "kortingscodeoffernews";
 $secret = base64_encode($code);
 ?>
@@ -554,14 +554,14 @@ $secret = base64_encode($code);
                     <div class="span10">
                         <div id='error-message' class="error-message category-error mainpage-content-right-inner-right-other"></div>
                          <div class="categories" style="position:relative;" name="category">
-                          <?php   for($i = 0;  $i < count($this->catList) ; $i++ ){ ?>
+                          <?php for($i = 0;  $i < count($this->catList) ; $i++ ){ ?>
                             <div class="square-btn-offer">
-                            <input type="checkbox" value="<?php echo $this->catList[$i]['id']; ?>" 
+                            <input type="checkbox" value="<?php echo $this->catList[$i][0]['id']; ?>" 
                             class="" name="selectedcategories[]" 
-                            id="category-<?php echo $this->catList[$i]['id']; ?>" />
-                            <?php if (trim($this->catList[$i]['name'])!='') {
+                            id="category-<?php echo $this->catList[$i][0]['id']; ?>" />
+                            <?php if (trim($this->catList[$i][0]['name'])!='') {
                             $categoryIconPath = '';
-                            $icons = $this->catList[$i];
+                            $icons = $this->catList[$i][0];
                             # check an icon is available of not
                             if(file_exists(ROOT_PATH.$icons['categoryicon']['path']."thum_medium_".$icons['categoryicon']['name'])) {
                                 $categoryIconPath = PUBLIC_PATH_LOCALE.$icons['categoryicon']['path']."thum_medium_".$icons['categoryicon']['name'];
@@ -570,14 +570,14 @@ $secret = base64_encode($code);
                             }
                             ?>
                             <button type="button" name="selectCategory" 
-                                title="<?php echo $this->catList[$i]['name'];?>" class="btn square-btn" 
-                                id="categoryBtn-<?php echo $this->catList[$i]['id'];?>" 
-                                onClick="addCategory('<?php echo $this->catList[$i]['id']; ?>')">
+                                title="<?php echo $this->catList[$i][0]['name'];?>" class="btn square-btn" 
+                                id="categoryBtn-<?php echo $this->catList[$i][0]['id'];?>" 
+                                onClick="addCategory('<?php echo $this->catList[$i][0]['id']; ?>')">
                                 <img alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
                              </button>
                              <div class="clear"></div>
                                  <span class="image-description-text">
-                                     <?php echo strlen($this->catList[$i]['name']) < 20 ? $this->catList[$i]['name'] : substr($this->catList[$i]['name'],0,20).'..'; ?>
+                                     <?php echo strlen($this->catList[$i][0]['name']) < 20 ? $this->catList[$i][0]['name'] : substr($this->catList[$i][0]['name'],0,20).'..'; ?>
                                  </span>
 
                             </div>

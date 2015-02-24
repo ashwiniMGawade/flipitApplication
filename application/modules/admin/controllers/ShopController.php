@@ -1482,7 +1482,7 @@ class Admin_ShopController extends Zend_Controller_Action
         $parameters = $this->_getAllParams();
         self::updateVarnish($parameters['id']);
         $ret = \KC\Repository\Shop::changeStatus($parameters);
-        $offlineDate = date("d-m-Y", strtotime($ret['offlineSince']));
+        $offlineDate = $ret['offlineSince']->format('y-m-h');
         if ($ret['offlineSince'] && $ret['howToUse'] == 1) {
             $this->_helper->json(array('date' => $offlineDate, 'message'=> 1));
         } else if ($ret['offlineSince'] && $ret['howToUse'] == '') {
