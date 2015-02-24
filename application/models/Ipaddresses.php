@@ -20,7 +20,8 @@ class Ipaddresses extends BaseIpaddresses
     public static function addIpaddress($params)
     {
         if (isset($params['id'])) {
-            $ipaddress = Doctrine_Core::getTable('Ipaddresses')->find($params['id']);
+            $ipaddress =
+                Doctrine_Core::getTable('Ipaddresses')->find(FrontEnd_Helper_viewHelper::sanitize($params['id']));
         } else {
             $ipaddress = new Ipaddresses();
         }
@@ -34,7 +35,7 @@ class Ipaddresses extends BaseIpaddresses
     {
         Doctrine_Query::create()->delete()
             ->from('Ipaddresses e')
-            ->where("e.id=" . $id)
+            ->where("e.id=" . FrontEnd_Helper_viewHelper::sanitize($id))
             ->execute();
         return true;
     }
@@ -44,7 +45,7 @@ class Ipaddresses extends BaseIpaddresses
         $ipAddress = Doctrine_Query::create()
             ->select("ips.*")
             ->from("Ipaddresses as ips")
-            ->where("ips.id =".$id)
+            ->where("ips.id =". FrontEnd_Helper_viewHelper::sanitize($id))
             ->fetchArray();
         return $ipAddress;
     }
