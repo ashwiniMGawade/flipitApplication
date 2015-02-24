@@ -103,15 +103,13 @@ class Shop extends \KC\Entity\Shop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select(
-                "s.name, s.permaLink, img.path, img.name, logo.path, logo.name,
+                "s.name, s.permaLink, img.path, img.name,
                 c.id,ss.name, ss.permaLink"
             )
             ->from('KC\Entity\Shop', 's')
             ->where("s.id = ".$shopId)
             ->leftJoin('s.categoryshops', 'c')
-            ->andWhere("c.status = 1")
-            ->andWhere("c.deleted = 0")
-            ->leftJoin('c.shop', 'ss')
+            ->leftJoin('c.category', 'ss')
             ->andWhere("ss.status = 1")
             ->andWhere("ss.deleted = 0")
             ->leftJoin('ss.logo', 'img');
@@ -414,6 +412,7 @@ class Shop extends \KC\Entity\Shop
             ->select('s.id')
             ->from("KC\Entity\Shop", "s")
             ->where('s.permaLink='."'$permalink'")
+            ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return isset($shop[0]) ? $shop[0]['id'] : '';
     }
@@ -422,13 +421,15 @@ class Shop extends \KC\Entity\Shop
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $relatedShops = $queryBuilder
-            ->select('s.id, rf.id, rl.permaLink, rl.id, rl.name, logo.path, logo.name')
+            ->select('s.id, rf.id as rid, rl.permaLink, rl.id as rld, rl.name')
             ->from("KC\Entity\Shop", "s")
             ->leftJoin("s.relatedshops", "rf")
+            ->leftJoin("rf.shop", "rl")
             ->leftJoin("s.logo", "logo")
             ->where("s.id =".$id)
             ->orderBy("rf.position", "ASC")
-            ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $relatedShops;
     }
 
@@ -440,6 +441,7 @@ class Shop extends \KC\Entity\Shop
             ->from("KC\Entity\Shop", "s")
             ->where('s.deleted = 0')
             ->andWhere('s.status = 1')
+            ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopIds;
     }
@@ -490,6 +492,7 @@ class Shop extends \KC\Entity\Shop
             ->select('s.shopsViewedIds')
             ->from("KC\Entity\Shop", "s")
             ->where('s.id ='.$shopId)
+            ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopAlsoViewedIds;
     }
