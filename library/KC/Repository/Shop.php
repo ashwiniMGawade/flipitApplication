@@ -69,12 +69,12 @@ class Shop extends \KC\Entity\Shop
         return $popularStoreData;
     }
 
-     public static function getSimilarShops($shopId, $numberOfShops = 12)
+    public static function getSimilarShops($shopId, $numberOfShops = 12)
     {
         $similarShops = self::getSimilarShopsByShopId($shopId, $numberOfShops);
         if (count($similarShops) <= $numberOfShops) {
-            $similarShopsBySimilarCategories = self::getSimilarShopsBySimilarCategories($shopId, $numberOfShops);
-            $similarShops = self::removeDuplicateShops($similarShops, $similarShopsBySimilarCategories, $numberOfShops);
+            $topCategoryShops = self::getSimilarShopsBySimilarCategories($shopId, $numberOfShops);
+            $similarShops = self::removeDuplicateShops($similarShops, $topCategoryShops, $numberOfShops);
         }
         return $similarShops;
     }
@@ -102,29 +102,39 @@ class Shop extends \KC\Entity\Shop
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select(
-                "s.name, s.permaLink, img.path, img.name,
-                c.id,ss.name, ss.permaLink"
-            )
+            ->select("cc.id as categoryId, cc.name as categoryName, cc.permaLink as categoryPermalink")
             ->from('KC\Entity\Shop', 's')
             ->where("s.id = ".$shopId)
             ->leftJoin('s.categoryshops', 'c')
-            ->leftJoin('c.category', 'ss')
-            ->andWhere("ss.status = 1")
-            ->andWhere("ss.deleted = 0")
-            ->leftJoin('ss.logo', 'img');
-        $relatedShops = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $relatedShops;
+            ->leftJoin('c.shop', 'cc');
+        $similarShopsBySimilarCategories = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $topCategoryShops = self::getTopCategorySimilarShops($similarShopsBySimilarCategories);
+        return $topCategoryShops;
     }
 
-    protected static function removeDuplicateShops($similarShops, $similarShopsBySimilarCategories, $numberOfShops)
+    public static function getTopCategorySimilarShops($similarShopsBySimilarCategories)
     {
-        foreach ($similarShopsBySimilarCategories[0]['category'] as $category) {
-            foreach ($category['shop'] as $relatedCategoryShop) {
-                if (count($similarShops) <= $numberOfShops &&
-                        !in_array($relatedCategoryShop['id'], $similarShops)) {
-                    $similarShops[$relatedCategoryShop['id']] = $relatedCategoryShop;
-                }
+        $topCategory = array_slice($similarShopsBySimilarCategories, 0, 1);
+        $topCategoryId = $topCategory[0]['categoryId'];
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select("rsc, s")
+            ->from('KC\Entity\RefShopCategory', 'rsc')
+            ->leftJoin('rsc.shop', 'c')
+            ->leftJoin('rsc.category', 's')
+            ->where('c.id ='.$topCategoryId)
+            ->andWhere('s.status = 1')
+            ->andWhere('s.deleted = 0');
+        $relatedCategoryShops = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $relatedCategoryShops;
+    }
+
+    protected static function removeDuplicateShops($similarShops, $topCategoryShops, $numberOfShops)
+    {
+        foreach ($topCategoryShops as $relatedCategoryShop) {
+            if (count($similarShops) <= $numberOfShops &&
+                    !in_array($relatedCategoryShop['shopId'], $similarShops)) {
+                $similarShops[$relatedCategoryShop['shopId']] = $relatedCategoryShop;
             }
         }
         return $similarShops;

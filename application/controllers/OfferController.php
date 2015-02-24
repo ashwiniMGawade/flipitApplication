@@ -199,14 +199,16 @@ class OfferController extends Zend_Controller_Action
             $offers = \FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newOffer_list');
         }
         $pageDetails = $pageDetails[0];
-        $this->view->pageHeaderImage = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'page_header'.$pageDetails->id.'_image',
-            array(
-                'function' => '\KC\Repository\Logo::getPageLogo',
-                'parameters' => array($pageDetails->pageHeaderImageId)
-            ),
-            ''
-        );
+        if (!empty($pageDetails->pageHeaderImageId)) {
+            $this->view->pageHeaderImage = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                'page_header'.$pageDetails->id.'_image',
+                array(
+                    'function' => '\KC\Repository\Logo::getPageLogo',
+                    'parameters' => array($pageDetails->pageHeaderImageId)
+                ),
+                ''
+            );
+        }    
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->actionName = $this->getRequest()->getActionName();
