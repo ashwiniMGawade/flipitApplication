@@ -1,8 +1,116 @@
-<?php
-echo $this->minifyHeadLink()->prependStylesheet("/public/css/jquery-ui.min.css");
-if (APPLICATION_ENV == 'development') {
-    echo $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/addsocialcode.js");
+<script type="text/javascript">
+    $(document).ready(function(){
+    $('input#shopId').val($('input#currentShop').val())
+    validateAddSocialCode();
+    $("#sharecode").submit(function(){
+        if ($("form#socialcodeForm").valid()) {
+            saveSocialCode();
+            alert('Hello Social code');
+        } else {
+            return false;
+        }
+    });
+});
+function saveSocialCode(id) {
+    $.ajax({
+        url : HOST_PATH_LOCALE + 'store/socialcode',
+        method : "post",
+        data: $('form#socialcodeForm').serialize(),       
+        dataType : "json",
+            type : "post",
+            success : function(data) {
+            if (data != null) {
+                $('aside#sidebar .widget').remove();
+                $('aside#sidebar').append(data);
+            } else {
+                alert(__("Problem in your data"));
+            }
+        }
+    });
 }
+var validator =  null;
+function validateAddSocialCode() {
+    validator = $('form#socialcodeForm')
+    .validate({
+        errorClass: 'input-error',
+        validClass: 'input-success',
+        rules: {
+            nickname: {
+                required: true
+            },
+            title: {
+                required: true
+            },
+            offerUrl: {
+                required: true,
+                regex  :/([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
+            },
+            code: {
+                required: true
+            },
+            expireDate: {
+                required: true
+            },
+            offerDetails: {
+                required: true
+            }
+        },
+        messages : {
+            nickname : {
+                required: ''
+              },
+            title: {
+                required:''
+            },
+            offerUrl: {
+                required:'',
+                regex : ''
+            },
+            code: {
+                  required: ''
+              },
+            expireDate: {
+                required: '',
+                date : ''
+            },
+            offerDetails: {
+                required: ''
+            }
+        },
+        onfocusin : function(element) {
+            if($(element).valid() == 0){
+                $(element).removeClass('input-error').removeClass('input-success');
+                $(element).next('label').hide();
+            } else {
+                $(element).removeClass('input-error').addClass('input-success');
+                $(element).next('label').hide();
+            }
+        },
+        onfocusout :function(element) {
+            if($(element).valid() == 0){
+                $(element).removeClass('input-success').addClass('input-error');
+                $(element).next('label').hide();
+            } else {
+                $(element).removeClass('input-error').addClass('input-success');
+                $(element).next('label').hide();
+            }
+         },
+        highlight : function(element, errorClass, validClass) {
+            $(element).addClass(errorClass).removeClass(validClass);
+            $(element).next('label').hide();
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass(errorClass);
+            $(element).next('label').hide();
+        },
+        success: function(element, errorClass, validClass) {
+            $(element).removeClass(errorClass).addClass(validClass);
+            $(element).next('label').hide();
+        }
+    });
+}
+</script>
+<?php
 $socialcodeForm = $this->zendForm;
 foreach ($socialcodeForm->getElements() as $formElement) {
     $formElement->getDecorator('label')->setOption('tag', null);
@@ -10,7 +118,7 @@ foreach ($socialcodeForm->getElements() as $formElement) {
 ?>
 <div class="widget">
     <form id="socialcodeForm" class="widget-form" name="socialcodeForm" method="POST" 
-        action="<?php echo HTTP_PATH_LOCALE?>store/socialcode">
+        action="">
         <h3><?php echo $this->translate('Social Code');?></h3>
         <p><?php echo $this->translate('Share a code with our users');?></p>
         <?php echo $socialcodeForm->nickname->renderViewHelper();?>

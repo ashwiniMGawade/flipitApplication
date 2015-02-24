@@ -111,22 +111,24 @@ class UserGeneratedOffer extends BaseOffer
     public static function addOffer($parameters)
     {
         $offer  = new UserGeneratedOffer();
-        $offer->nickname = $parameters['nickname'];
-        $offer->title = $parameters['title'];
-        $offer->offerUrl = $parameters['offerUrl'];
-        $offer->couponCode = BackEnd_Helper_viewHelper::stripSlashesFromString($parameters['code']);
+        $offer->nickname = FrontEnd_Helper_viewHelper::sanitize($parameters['nickname']);
+        $offer->title = FrontEnd_Helper_viewHelper::sanitize($parameters['title']);
+        $offer->offerUrl = FrontEnd_Helper_viewHelper::sanitize($parameters['offerUrl']);
+        $offer->couponCode = FrontEnd_Helper_viewHelper::sanitize($parameters['code']);
         $offer->startDate =  date('Y-m-d H:i:s');
-        $offer->endDate = date('Y-m-d', strtotime($parameters['expireDate']));
+        $offer->endDate = date('Y-m-d', strtotime(FrontEnd_Helper_viewHelper::sanitize($parameters['expireDate'])));
         $offer->termandcondition[]->content = BackEnd_Helper_viewHelper::stripSlashesFromString(
-            $parameters['offerDetails']
+            FrontEnd_Helper_viewHelper::sanitize($parameters['offerDetails'])
         );
-        $offer->shopId = base64_decode($parameters['shopId']);
+        
+        $offer->shopId = FrontEnd_Helper_viewHelper::sanitize(base64_decode($parameters['shopId']));
         $offer->userGenerated = true;
 
         if (Auth_VisitorAdapter::hasIdentity()) {
-            $offer->authorId = Auth_VisitorAdapter::getIdentity()->id;
-            $offer->authorName = Auth_VisitorAdapter::getIdentity()->firstName. " "
-                . Auth_VisitorAdapter::getIdentity()->lastName;
+            $offer->authorId = FrontEnd_Helper_viewHelper::sanitize(Auth_VisitorAdapter::getIdentity()->id);
+            $offer->authorName =
+                FrontEnd_Helper_viewHelper::sanitize(Auth_VisitorAdapter::getIdentity()->firstName). " "
+                . FrontEnd_Helper_viewHelper::sanitize(Auth_VisitorAdapter::getIdentity()->lastName);
         }
 
         $offer->Visability = 'DE';
