@@ -203,6 +203,7 @@ class FrontEnd_Helper_LayoutContent
     public static function generateTopShopsDropdown()
     {
         $topShops = self::getTopShopForDropdown();
+       
         $topShopsDropdown =
         '<div class="drop-box">
             <div class="inner-box">
@@ -212,7 +213,7 @@ class FrontEnd_Helper_LayoutContent
             if ($i == 5 || $i == 9 || $i==13) {
                 $topShopsDropdown .='</ul><ul class="info-area">';
             }
-            $topShopsDropdown .='<li><a href="'. HTTP_PATH_LOCALE. $topShop['shop']['permaLink']. '">'. $topShop['shop']['name'] . '</a></li>';
+            $topShopsDropdown .='<li><a href="'. HTTP_PATH_LOCALE. $topShop['popularshops']['permaLink']. '">'. $topShop['popularshops']['name'] . '</a></li>';
             $i++;
         }
         $topShopsDropdown.=
