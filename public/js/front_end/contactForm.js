@@ -4,7 +4,6 @@ $(document).ready(function(){
     var number2 = Math.floor((Math.random() * 10) + 1);
     $("#number1").val(number1);
     $("#number2").val(number2);
-
  });
 function ltrim(src){
     if (src.indexOf('/') === 0){
@@ -12,8 +11,7 @@ function ltrim(src){
       }
     return src;
 }
-$('#submit').click( function() {
-    $('#contactform').attr('action', '');
+$('#submit').click( function(e) {
     $.ajax({
         url : HOST_PATH_LOCALE + 'contact/getcontactformdetails',
         type: 'post',
@@ -54,8 +52,7 @@ function validateRegistration() {
               required: true
             },
             captcha: {
-              required: true,
-              captcha: true
+              required: true
             }
         },
         messages : {
