@@ -43,7 +43,7 @@ class User extends \KC\Entity\User
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u, w.id, pi.name, pi.path')
-            ->addSelect('DATE_DIFF(NOW(), u.created_at) as sinceDays')
+            ->addSelect('DATE_DIFF(CURRENT_DATE(), u.created_at) as sinceDays')
             ->from('\KC\Entity\User', 'u')
             ->leftJoin("u.profileimage", "pi")
             ->leftJoin('u.refUserWebsite', 'rf')
