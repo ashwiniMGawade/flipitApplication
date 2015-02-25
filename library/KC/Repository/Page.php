@@ -62,7 +62,7 @@ class Page Extends \KC\Entity\Page
     public static function getPageDetailsByPermalink($permalink)
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('page, img.id, img.path, img.name, himg.id as pageHeaderImageId')
+        $query = $entityManagerUser->select('page, img, himg')
             ->from('KC\Entity\Page', 'page')
             ->leftJoin('page.logo', 'img')
             ->leftJoin('page.pageHeaderImageId', 'himg')

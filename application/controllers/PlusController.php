@@ -22,6 +22,7 @@ class PlusController extends Zend_Controller_Action
     {
         $articlesOverviewPagePermalink  = \FrontEnd_Helper_viewHelper::getPagePermalink();
         $pageDetails = \KC\Repository\Page::getPageDetailsFromUrl($articlesOverviewPagePermalink);
+        $pageDetails = (object) $pageDetails;
 
         $mostReadArticles = \FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
@@ -41,6 +42,7 @@ class PlusController extends Zend_Controller_Action
                 ),
                 ''
             );
+
         $moneySavingPartialFunctions = new \FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
         $allArticlesWithAuthorDetails = $moneySavingPartialFunctions->addAuthorDetailsInArticles($categoryWiseArticles);
         $popularStores = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
@@ -65,7 +67,7 @@ class PlusController extends Zend_Controller_Action
             'page_header'.$pageDetails->id.'_image',
             array(
                 'function' => '\KC\Repository\Logo::getPageLogo',
-                'parameters' => array($pageDetails->pageHeaderImageId)
+                'parameters' => array($pageDetails->pageHeaderImageId['id'])
             ),
             ''
         );

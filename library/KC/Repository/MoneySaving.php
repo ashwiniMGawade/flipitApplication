@@ -8,12 +8,12 @@ class MoneySaving Extends \KC\Entity\MoneySaving
         $query = $queryBuilder
         ->select(
             'chap.id as chapterId, chap.content as chapterContent, av.id, sum(av.onload) as pop,
-            a.title, a.permalink, a.metadescription, a.content, at.path, at.name, ai.name, ai.path, afi.name, afi.path'
+            a.title, a.permalink, a.metadescription, a.content, a.featuredImageStatus, a.created_at, at.path as thumbnailpath, at.name as thumbnailname, ai.name, ai.path, afi.name as featuredimagename, afi.path as featuredimagepath'
         )
         ->from('KC\Entity\ArticleViewCount', 'av')
         ->leftJoin('av.articles', 'a')
         ->leftJoin('a.thumbnail', 'at')
-        ->leftJoin('a.articlefeaturedimage', 'afi')
+        ->leftJoin('a.featuredImage', 'afi')
         ->leftJoin('a.articleImage', 'ai')
         ->leftJoin('a.articleChapter', 'chap')
         ->groupBy('av.articles')

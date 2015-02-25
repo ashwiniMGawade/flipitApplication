@@ -89,11 +89,6 @@ class Articles
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
     private $featuredImageStatus;
-
-    /**
-     * @ORM\Column(type="integer", length=8, nullable=true)
-     */
-    private $featuredImage;
     
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\ArticleChapter", mappedBy="article")
@@ -114,7 +109,11 @@ class Articles
      * @ORM\OneToMany(targetEntity="KC\Entity\RefArticleStore", mappedBy="relatedstores")
      */
     private $storearticles;
-
+    /**
+     * @ORM\ManyToOne(targetEntity="KC\Entity\ImageArticleFeaturedImage", inversedBy="articles")
+     * @ORM\JoinColumn(name="featuredImage", referencedColumnName="id")
+     */
+    private $featuredImage;
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ImageArticlesIcon", inversedBy="articles")
      * @ORM\JoinColumn(name="thumbnailid", referencedColumnName="id")
