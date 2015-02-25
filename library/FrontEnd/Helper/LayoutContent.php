@@ -229,7 +229,7 @@ class FrontEnd_Helper_LayoutContent
             ),
             ''
         );
-        return array_slice($topShops, 0, 15);
+        return array_slice($topShops, 0, 16);
     }
 
     public static function generateMobileMenu($navigation)
