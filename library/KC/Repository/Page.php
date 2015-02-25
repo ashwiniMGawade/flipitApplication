@@ -67,10 +67,9 @@ class Page Extends \KC\Entity\Page
             ->leftJoin('page.logo', 'img')
             ->leftJoin('page.pageHeaderImageId', 'himg')
             ->where('page.permalink ='."'".$permalink."'")
-            ->setParameter(2, 1)
-            ->andWhere('page.publish = ?2')
-            ->setParameter(3, 0)
-            ->andWhere('page.pageLock = ?3');
+            ->andWhere('page.publish = 1')
+            ->andWhere('page.pageLock = 0')
+            ->andWhere('page.deleted = 0');
         $pageDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageDetails;
     }

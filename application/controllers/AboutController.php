@@ -21,11 +21,13 @@ class AboutController extends Zend_Controller_Action
     public function indexAction()
     {
         $pageDetails = \KC\Repository\Page::getPageDetailsFromUrl(\FrontEnd_Helper_viewHelper::getPagePermalink());
+        $pageHeaderImageId = $pageDetails['pageHeaderImageId'];
+        $pageDetails = (object) $pageDetails[0];
         $this->view->pageHeaderImage = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'page_header'.$pageDetails->id.'_image',
             array(
                 'function' => '\KC\Repository\Logo::getPageLogo',
-                'parameters' => array($pageDetails->pageHeaderImageId)
+                'parameters' => array($pageHeaderImageId)
             )
         );
         $this->viewHelperObject->getMetaTags(

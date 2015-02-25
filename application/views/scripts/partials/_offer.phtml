@@ -205,7 +205,7 @@ foreach ($this->offers as $offer) {
         endif;
     endif;
     if ($this->offersType=='simple') {
-        if ($offer->shop['showcustomtext'] == 1
+        if ($offer->shopOffers['showcustomtext'] == 1
             && $offerCounter == $offer->shopOffers['customtextposition']) { ?>
             <article class="block">
                 <div class="holder" style="">
