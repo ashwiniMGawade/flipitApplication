@@ -1,14 +1,13 @@
 <script type="text/javascript">
     $(document).ready(function(){
     $('input#shopId').val($('input#currentShop').val())
-    validateAddSocialCode();
-    $("#sharecode").submit(function(){
-        if ($("form#socialcodeForm").valid()) {
+    //validateAddSocialCode();
+    $("#sharecode").click(function(){
+        //if ($("form#socialcodeForm").valid()) {
             saveSocialCode();
-            alert('Hello Social code');
-        } else {
+        //} else {
             return false;
-        }
+        //}
     });
 });
     

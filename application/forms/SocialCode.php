@@ -11,6 +11,8 @@ class Application_Form_SocialCode extends Application_Form_Base
         $nickname->setRequired(true);
         $nickname->setAttrib('class', 'form-control');
         $nickname->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_nickname'));
+        $validator = new Zend_Validate_Alpha(array('allowWhiteSpace' => true));
+        $nickname->addValidator($validator);
 
         $title = new Zend_Form_Element_Text('title');
         $title->setRequired(true);
