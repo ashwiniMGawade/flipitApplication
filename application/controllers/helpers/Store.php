@@ -54,15 +54,22 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         switch ($peramType)
         {
             case 'permalink':
-                $urlString = $splitPermalink[0].'-'.$splitPermalink[1];
+                    $countOfValues = $splitPermalink;
+                    if (array_key_exists((count($countOfValues) - 2), $splitPermalink)) {
+                        unset($splitPermalink[(count($countOfValues) - 2)]);
+                    }  
+                    if (array_key_exists((count($countOfValues) - 1), $splitPermalink)) {
+                        unset($splitPermalink[(count($countOfValues) - 1)]);
+                    }
+                    $urlString = implode("-", $splitPermalink);
                 break;
 
             case 'firstCharacter':
-                $urlString = $splitPermalink[2];
+                $urlString = $splitPermalink[(count($splitPermalink) - 2)];
                 break;
 
             case 'lastCharacter':
-                $urlString = $splitPermalink[3];
+                $urlString = $splitPermalink[(count($splitPermalink) - 1)];
                 break;
 
             default:
