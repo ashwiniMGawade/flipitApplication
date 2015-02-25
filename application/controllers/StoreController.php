@@ -259,11 +259,11 @@ class StoreController extends Zend_Controller_Action
     public function indexAction()
     {
         $permalink = FrontEnd_Helper_viewHelper::getPagePermalink();
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
         $startingCharacter = $this->_helper->Store->getActualPermalink($permalink, 'firstCharacter');
         $endingCharacter = $this->_helper->Store->getActualPermalink($permalink, 'lastCharacter');
         $startingAndEndingCharacter = $startingCharacter. "-". $endingCharacter;
         $permalink = $this->_helper->Store->getActualPermalink($permalink, 'permalink');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
         $pageDetails = Page::getPageDetailsFromUrl($permalink);
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'page_header'.$pageDetails->id.'_image',
