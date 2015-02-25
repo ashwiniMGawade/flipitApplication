@@ -1,17 +1,17 @@
 <?php
 $auhtorProfileImage =
     HTTP_PATH_CDN
-    .ltrim($this->authorDetails['profileimage']['path'], "/")
-    ."thum_large_widget_". $this->authorDetails['profileimage']['name'];
+    .ltrim($this->authorDetails['path'], "/")
+    ."thum_large_widget_". $this->authorDetails['name'];
 $partialFunctions = new FrontEnd_Helper_AuthorPartialFunctions();
-$authorName = $partialFunctions->getAuthorName($this->authorDetails['firstName'], $this->authorDetails['lastName']);
+$authorName = $partialFunctions->getAuthorName($this->authorDetails[0]['firstName'], $this->authorDetails[0]['lastName']);
 $authorFavouriteShops = '';
 if (!empty($this->authorFavouriteShops)):
 $authorFavouriteShops = $this->partial(
     'partials/_authorFavouriteShops.phtml',
     array(
        "authorFavouriteShops"=>$this->authorFavouriteShops,
-       "authorFirstName"=>$this->authorDetails['firstName']
+       "authorFirstName"=>$this->authorDetails[0]['firstName']
     )
 );
 endif;
@@ -29,21 +29,21 @@ endif;
             </h1>
             <ul class="author-details">
                <?php 
-               echo $partialFunctions->getAuthorCountryFlagWithCountryName($this->authorDetails['countryLocale']);
-               echo $partialFunctions->authorSocialMediaLinks($this->authorDetails);?>
+               echo $partialFunctions->getAuthorCountryFlagWithCountryName($this->authorDetails[0]['countryLocale']);
+               echo $partialFunctions->authorSocialMediaLinks($this->authorDetails[0]);?>
             </ul>
         </div>
     </header>
     <div class="text-block">
         <p>
-        <?php echo $this->authorDetails['mainText'];?>
+        <?php echo $this->authorDetails[0]['mainText'];?>
         </p>
     </div>
     <div class="box-statistics">
         <div class="col">
             <span><?php echo $this->translate('Coupons placed');?></span>
             <span class="add">
-                <strong class="quantity"><?php echo $this->authorDetails['popularKortingscode'];?></strong>
+                <strong class="quantity"><?php echo $this->authorDetails[0]['popularKortingscode'];?></strong>
                 <span><?php echo $this->translate('Popular codes');?></span>
             </span>
         </div>

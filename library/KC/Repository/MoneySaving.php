@@ -23,7 +23,7 @@ class MoneySaving Extends \KC\Entity\MoneySaving
         if (isset($userId)  && $userId!= "") {
             $query->andWhere('a.authorid ='.$userId.'');
         }
-        $mostReadArticles = $query->setMaxResults($limit);
+        $query->setMaxResults($limit);
         $mostReadArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $mostReadArticles;
     }

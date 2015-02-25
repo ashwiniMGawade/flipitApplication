@@ -73,7 +73,7 @@ class AboutController extends Zend_Controller_Action
             array('function' => '\KC\Repository\User::getUserIdBySlugName', 'parameters' => array($authorSlugName)),
             0
         );
-        $authorDetails = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $authorDetailsForView = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'user_'.$authorId .'_data',
             array(
                 'function' => '\KC\Repository\User::getUserProfileDetails',
@@ -81,11 +81,11 @@ class AboutController extends Zend_Controller_Action
             ),
             0
         );
-        if (empty($authorDetails)) {
+        if (empty($authorDetailsForView)) {
             throw new \Zend_Controller_Action_Exception('', 404);
         }
 
-        $authorDetails = $authorDetails[0];
+        $authorDetails = $authorDetailsForView[0];
         $authorFavouriteShops = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'user_'. 'favouriteShop'.$authorId .'_data',
             array('function' => '\KC\Repository\User::getUserFavouriteStores', 'parameters' => array($authorId)),
@@ -120,7 +120,7 @@ class AboutController extends Zend_Controller_Action
                 ),
                 ''
             );
-        $this->view->authorDetails = $authorDetails;
+        $this->view->authorDetails = $authorDetailsForView;
         $this->view->authorFavouriteShops = $authorFavouriteShops;
         $this->view->authorMostReadArticles = $authorMostReadArticles;
 
