@@ -29,19 +29,12 @@ class ContactController extends Zend_Controller_Action
         $message = FrontEnd_Helper_viewHelper::sanitize($parameters['message']);
         $captcha = isset($parameters['g-recaptcha-response']) ? $parameters['g-recaptcha-response'] : '';
         if (empty($captcha)) {
-            $successMessage = "Your message has been sent.";
+            $errorMessage = "There is Issue in Captcha";
             $flashMessage = $this->_helper->getHelper('FlashMessenger');
-            $flashMessage->addMessage(array('success' => $successMessage));
+            $flashMessage->addMessage(array('success' => $errorMessage));
             $urlToRedirect = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('info').'/'.
                 FrontEnd_Helper_viewHelper::__link('contact');
             $this->_redirect($urlToRedirect);
-        }
-        $response = file_get_contents(
-            "https://www.google.com/recaptcha/api/siteverify?secret='6Lc8uwETAAAAALBmmgFTy-XIS3uRdpkVZyI_9aLf'&response=".$captcha."&remoteip=".$_SERVER['REMOTE_ADDR']);
-        $jsonDecodedResponse = json_decode($response);
-        if ($jsonDecodedResponse->success==false) {
-            header('Location:'.HTTP_PATH_LOCALE.'info/contact');
-            exit;
         } else {
             self::sendMailThroughMandril($visitorName, $visitorEmail, $subject, $message);
         }
@@ -49,7 +42,7 @@ class ContactController extends Zend_Controller_Action
     }
 
     public function sendMailThroughMandril($visitorName, $visitorEmail, $subject, $message)
-    {
+    {die('ss');
         $adminEmail = Signupmaxaccount::getEmailAddress();
         if (!empty($visitorEmail)) {
             $mailer  = new FrontEnd_Helper_Mailer();
@@ -83,10 +76,5 @@ class ContactController extends Zend_Controller_Action
         $urlToRedirect = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_info').'/'.
             FrontEnd_Helper_viewHelper::__link('link_contact');
         $this->_redirect($urlToRedirect);
-    }
-
-    public function setFlashMessage ()
-    {
-        
     }
 }
