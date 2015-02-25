@@ -195,11 +195,15 @@ class Shop extends \KC\Entity\Shop
         return $allStoresDetail;
     }
 
-    public static function getallStoresForFrontEnd()
+    public static function getallStoresForFrontEnd($startCharacter, $endCharacter)
     {
-        $charactersString = $startCharacter.  "-" . $endCharacter;
-        if ($startCharacter=='09') {
-            $charactersString = "a-e 0-9";
+        $endingCharacter = $endCharacter;
+        $nextCharacter = ++$endingCharacter;
+        if (strlen($nextCharacter) > 1) {
+            $nextCharacter = $nextCharacter[0];
+            if ($endCharacter=='z') {
+                $nextCharacter = $endCharacter;
+            }
         }
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDateAndTime = date('Y-m-d 00:00:00');
@@ -212,12 +216,17 @@ class Shop extends \KC\Entity\Shop
         ->addSelect("(SELECT COUNT(p.id) FROM KC\Entity\PopularCode p WHERE p.popularcode = o.id ) as popularCount")
         ->leftJoin('s.offer', 'o')
         ->leftJoin('s.logo', 'img')
-        ->setParameter(1, '0')
-        ->where('s.deleted= ?1')
-        ->setParameter(2, '1')
-        ->andWhere('s.status= ?2')
-        ->andWhere("s.name REGEXP ?", "^[" . $charactersString ."]")
-        ->orderBy('s.name');
+        ->where('s.deleted= 0')
+        ->andWhere('s.status= 1')
+        ->andWhere(
+            $queryBuilder->expr()->between(
+                "s.name",
+                $queryBuilder->expr()->literal($startCharacter),
+                $queryBuilder->expr()->literal($nextCharacter)
+            )
+        );
+        
+        $query->orderBy('s.name');
         $storeInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
  
         $storesForFrontend =array();

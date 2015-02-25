@@ -35,15 +35,15 @@ class User extends \KC\Entity\User
             ->from('\KC\Entity\User', 'u')
             ->setParameter(1, $slug)
             ->where('u.slug = ?1');
-        $userDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $userDetails;
+        $userDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return !empty($userDetails) ? $userDetails['id'] : '';
     }
 
     public static function getUserProfileDetails($userId, $websiteName)
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u, w.id, pi.name, pi.path')
-            ->addSelect('DATE_DIFF(NOW(), u.created_at) as sinceDays')
+            ->addSelect('DATE_DIFF(CURRENT_DATE(), u.created_at) as sinceDays')
             ->from('\KC\Entity\User', 'u')
             ->leftJoin("u.profileimage", "pi")
             ->leftJoin('u.refUserWebsite', 'rf')
@@ -56,7 +56,7 @@ class User extends \KC\Entity\User
             ->andWhere('u.deleted = ?3')
             ->setParameter(4, $websiteName)
             ->andWhere('w.url = ?4');
-        $userDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $userDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $userDetails;
     }
 

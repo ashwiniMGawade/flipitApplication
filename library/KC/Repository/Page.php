@@ -62,15 +62,14 @@ class Page Extends \KC\Entity\Page
     public static function getPageDetailsByPermalink($permalink)
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('page, img.id, img.path, img.name, himg.id as pageHeaderImageId')
+        $query = $entityManagerUser->select('page, img, himg')
             ->from('KC\Entity\Page', 'page')
             ->leftJoin('page.logo', 'img')
             ->leftJoin('page.pageHeaderImageId', 'himg')
             ->where('page.permalink ='."'".$permalink."'")
-            ->setParameter(2, 1)
-            ->andWhere('page.publish = ?2')
-            ->setParameter(3, 0)
-            ->andWhere('page.pageLock = ?3');
+            ->andWhere('page.publish = 1')
+            ->andWhere('page.pageLock = 0')
+            ->andWhere('page.deleted = 0');
         $pageDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageDetails;
     }

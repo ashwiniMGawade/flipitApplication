@@ -10,8 +10,8 @@ foreach ($this->authorMostReadArticles as $authorMostReadArticle) {
     	? $authorMostReadArticle->articles 
     	: (array) $authorMostReadArticle;
     $articleImage =
-        !empty($authorMostReadArticle['thumbnail']) 
-        ? PUBLIC_PATH_CDN.$authorMostReadArticle['thumbnail']['path']. $authorMostReadArticle['thumbnail']['name'] 
+        !empty($authorMostReadArticle['thumbnailpath']) 
+        ? PUBLIC_PATH_CDN.$authorMostReadArticle['thumbnailpath']. $authorMostReadArticle['thumbnailname']
         : '';
     $articleContent = 
     	!empty($authorMostReadArticle['content']) 

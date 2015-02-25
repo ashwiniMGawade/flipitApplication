@@ -10,29 +10,28 @@ $mostReadArticles = $this->mostReadArticles;
                 $carouselIndicators = '';
                 foreach ($mostReadArticles as $mostReadArticle) {
                     if (
-                        !empty($mostReadArticle['articles']['articlefeaturedimage'])
-                        && $mostReadArticle['articles']['featuredImageStatus'] == 1
+                        !empty($mostReadArticle['featuredimagename'])
+                        && $mostReadArticle['featuredImageStatus'] == 1
                     ) {
                         $mostReadArticleImage = 
-                            !empty($mostReadArticle['articles']['articlefeaturedimage'])
+                            !empty($mostReadArticle['featuredimagename'])
                             ? PUBLIC_PATH_CDN
-                            .$mostReadArticle['articles']['articlefeaturedimage']['path'] 
-                            .$mostReadArticle['articles']['articlefeaturedimage']['name']
+                            .$mostReadArticle['featuredimagepath'] 
+                            .$mostReadArticle['featuredimagename']
                             : '';
                     } else {
                         $mostReadArticleImage = 
-                            !empty($mostReadArticle['articles']['thumbnail'])
+                            !empty($mostReadArticle['thumbnailname '])
                             ? PUBLIC_PATH_CDN
-                            .$mostReadArticle['articles']['thumbnail']['path'] 
-                            .$mostReadArticle['articles']['thumbnail']['name']
+                            .$mostReadArticle['thumbnailpath'] 
+                            .$mostReadArticle['thumbnailname']
                             : '';
                     }
 
-                    $mostReadArticleTitle = mb_strlen($mostReadArticle['articles']['title']) > 50 ? 
-                                            mb_substr($mostReadArticle['articles']['title'], 0,50)
-                                            .'..' : $mostReadArticle['articles']['title'];
-                    $articleUpdatedAtDate = new Zend_Date($mostReadArticle['articles']['created_at']);
-                    $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG); 
+                    $mostReadArticleTitle = mb_strlen($mostReadArticle['title']) > 50 ? 
+                                            mb_substr($mostReadArticle['title'], 0,50)
+                                            .'..' : $mostReadArticle['title'];
+                    $articleUpdatedAtDate = $mostReadArticle['created_at']; 
                     $activeClass = '';
                     if($carouselCounter == 0) {
                         $activeClass = 'active';
@@ -49,11 +48,11 @@ $mostReadArticles = $this->mostReadArticles;
                             <div class="text-frame">
                                 <h2>
                                     <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink()
-                                    .'/'.$mostReadArticle['articles']['permalink'];?>">
+                                    .'/'.$mostReadArticle['permalink'];?>">
                                         <?php echo $mostReadArticleTitle;?>
                                     </a>
                                 </h2>
-                                <em class="date"><?php echo $articleUpdatedAtDate;?></em>
+                                <em class="date"><?php echo $articleUpdatedAtDate->date;?></em>
                             </div>
                         </div>
                     </div>
