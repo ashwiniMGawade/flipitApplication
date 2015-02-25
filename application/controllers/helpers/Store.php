@@ -50,23 +50,30 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
 
     public static function getActualPermalink($fullPermalink, $peramType)
     {
-        $splitPermalink = explode('-', $fullPermalink);
+        $splittedPermalink = explode('-', $fullPermalink);
         switch ($peramType)
         {
             case 'permalink':
-                $urlString = $splitPermalink[0].'-'.$splitPermalink[1];
+                    $countOfPermalinkStringValues = $splittedPermalink;
+                    if (array_key_exists(count($countOfPermalinkStringValues) - 2, $splittedPermalink)) {
+                        unset($splittedPermalink[count($countOfPermalinkStringValues) - 2]);
+                    }  
+                    if (array_key_exists(count($countOfPermalinkStringValues) - 1, $splittedPermalink)) {
+                        unset($splittedPermalink[count($countOfPermalinkStringValues) - 1]);
+                    }
+                    $urlString = implode("-", $splittedPermalink);
                 break;
 
             case 'firstCharacter':
-                $urlString = $splitPermalink[2];
+                $urlString = $splittedPermalink[count($splittedPermalink) - 2];
                 break;
 
             case 'lastCharacter':
-                $urlString = $splitPermalink[3];
+                $urlString = $splittedPermalink[count($splittedPermalink) - 1];
                 break;
 
             default:
-                $urlString = $splitPermalink;
+                $urlString = $splittedPermalink;
                 break;
         }
         return $urlString;
