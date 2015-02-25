@@ -32,8 +32,8 @@ class ContactController extends Zend_Controller_Action
             $errorMessage = "There is Issue in Captcha";
             $flashMessage = $this->_helper->getHelper('FlashMessenger');
             $flashMessage->addMessage(array('success' => $errorMessage));
-            $urlToRedirect = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('info').'/'.
-                FrontEnd_Helper_viewHelper::__link('contact');
+            $urlToRedirect = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_info').'/'.
+                FrontEnd_Helper_viewHelper::__link('link_contact');
             $this->_redirect($urlToRedirect);
         } else {
             self::sendMailThroughMandril($visitorName, $visitorEmail, $subject, $message);
@@ -42,7 +42,7 @@ class ContactController extends Zend_Controller_Action
     }
 
     public function sendMailThroughMandril($visitorName, $visitorEmail, $subject, $message)
-    {die('ss');
+    {
         $adminEmail = Signupmaxaccount::getEmailAddress();
         if (!empty($visitorEmail)) {
             $mailer  = new FrontEnd_Helper_Mailer();
