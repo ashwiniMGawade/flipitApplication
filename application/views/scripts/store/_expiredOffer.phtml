@@ -23,7 +23,7 @@ foreach ($this->expiredOffers as $offer) :
                     <?php echo $expiredOffersPartialClass->getOfferCouponCode($offer->couponCode)?>
                 </div>
             </div>
-            <span class="date"><?php echo $expiredOffersPartialClass->getExpiredOnDate($offer->endDate->format('Y-d-m'));?></span>
+            <span class="date"><?php echo "<pre>";print_r($offer);die; echo $expiredOffersPartialClass->getExpiredOnDate($offer->endDate->format('Y-d-m'));?></span>
         </span>
     </div>
     <?php 
