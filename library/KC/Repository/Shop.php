@@ -118,10 +118,11 @@ class Shop extends \KC\Entity\Shop
         $topCategoryId = $topCategory[0]['categoryId'];
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select("rsc, s")
+            ->select("rsc, s, img")
             ->from('KC\Entity\RefShopCategory', 'rsc')
             ->leftJoin('rsc.shop', 'c')
             ->leftJoin('rsc.category', 's')
+            ->leftJoin('s.logo', 'img')
             ->where('c.id ='.$topCategoryId)
             ->andWhere('s.status = 1')
             ->andWhere('s.deleted = 0');

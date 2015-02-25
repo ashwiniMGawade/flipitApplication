@@ -197,7 +197,7 @@ EOD;
 
     public static function addLiOfSimilarStoresViewedContent($shopId)
     {
-        $storeDetails = Shop::getShopInformation($shopId);
+        $storeDetails = \KC\Repository\Shop::getShopInformation($shopId);
         $similarStoresViewedContent =
             '<li>
                 <a title='.$storeDetails[0]['name'].' 
