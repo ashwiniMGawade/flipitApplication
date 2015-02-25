@@ -29,8 +29,12 @@ class ContactController extends Zend_Controller_Action
         $message = FrontEnd_Helper_viewHelper::sanitize($parameters['message']);
         $captcha = isset($parameters['g-recaptcha-response']) ? $parameters['g-recaptcha-response'] : '';
         if (empty($captcha)) {
-            header('Location:'.HTTP_PATH_LOCALE.'info/contact');
-            exit;
+            $successMessage = "Your message has been sent.";
+            $flashMessage = $this->_helper->getHelper('FlashMessenger');
+            $flashMessage->addMessage(array('success' => $successMessage));
+            $urlToRedirect = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('info').'/'.
+                FrontEnd_Helper_viewHelper::__link('contact');
+            $this->_redirect($urlToRedirect);
         }
         $response = file_get_contents(
             "https://www.google.com/recaptcha/api/siteverify?secret='6Lc8uwETAAAAALBmmgFTy-XIS3uRdpkVZyI_9aLf'&response=".$captcha."&remoteip=".$_SERVER['REMOTE_ADDR']);
@@ -79,5 +83,10 @@ class ContactController extends Zend_Controller_Action
         $urlToRedirect = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_info').'/'.
             FrontEnd_Helper_viewHelper::__link('link_contact');
         $this->_redirect($urlToRedirect);
+    }
+
+    public function setFlashMessage ()
+    {
+        
     }
 }
