@@ -76,27 +76,30 @@ class OfferController extends Zend_Controller_Action
         $permalink = ltrim(\Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $parameters = $this->_getAllParams();
         $extendedUrl = $parameters['permalink'];
-
         $couponDetails = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'extended_'.\FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($extendedUrl).'_couponDetails',
-            array('function' => 'Offer::getCouponDetails', 'parameters' => array($extendedUrl))
+            array('function' => '\KC\Repository\Offer::getCouponDetails', 'parameters' => array($extendedUrl))
         );
-        $shopList = $couponDetails[0]['shop']['id'].'_list';
+        $shopList = $couponDetails[0]['shopOffers']['id'].'_list';
         $allShopDetailKey = 'offerDetails_'.$shopList;
         $shopInformation = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)$allShopDetailKey,
-            (array)array('function' => '\KC\Repository\Shop::getStoreDetails', 'parameters' => array($couponDetails[0]['shop']['id']))
+            (array)array(
+                'function' => '\KC\Repository\Shop::getStoreDetails',
+                'parameters' => array($couponDetails[0]['shopOffers']['id'])
+            )
         );
+
         $shopImage =
             PUBLIC_PATH_CDN
-            .$couponDetails[0]['shop']['logo']['path'].'thum_medium_store_'
-            . $couponDetails[0]['shop']['logo']['name'];
+            .$couponDetails[0]['shopOffers']['logo']['path'].'thum_medium_store_'
+            . $couponDetails[0]['shopOffers']['logo']['name'];
         $allLatestUpdatesInStoreKey = 'shop_latestUpdates'.$shopList;
         $latestShopUpdates = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)$allLatestUpdatesInStoreKey,
             (array)array(
                 'function' => '\FrontEnd_Helper_viewHelper::getShopCouponCode',
-                'parameters' => array('latestupdates', 4, $couponDetails[0]['shop']['id'])
+                'parameters' => array('latestupdates', 4, $couponDetails[0]['shopOffers']['id'])
             )
         );
 
@@ -105,9 +108,9 @@ class OfferController extends Zend_Controller_Action
         }
 
         $topOfferFromStore = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'extendedTopOffer_of_'.$couponDetails[0]['shopId'],
+            'extendedTopOffer_of_'.$couponDetails[0]['shopOffers']['id'],
             array('function' => '\KC\Repository\Offer::getrelatedOffers',
-                'parameters' => array($couponDetails[0]['shopId']))
+                'parameters' => array($couponDetails[0]['shopOffers']['id']))
         );
 
         $frontendSidebarHelper = new \FrontEnd_Helper_SidebarWidgetFunctions();
@@ -117,7 +120,6 @@ class OfferController extends Zend_Controller_Action
         $this->view->couponDetails = $couponDetails;
         $this->view->currentStoreInformation = $shopInformation;
         $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($permalink);
-
         $customHeader = '';
         $this->viewHelperObject->getMetaTags(
             $this,

@@ -1269,14 +1269,13 @@ class Offer Extends \KC\Entity\Offer
         $currentDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
-            ->select('t,o,s,s.permaLink as permalink,tc,img.name,img.path,ws.name,ws.path,ologo')
+            ->select('t,o,s,s.permaLink as permalink,tc,img.name,img.path,ologo')
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->leftJoin('o.logo', 'ologo')
             ->leftJoin('o.offertermandcondition', 'tc')
             ->leftJoin('o.offerTiles', 't')
             ->leftJoin('s.logo', 'img')
-            ->leftJoin('s.screnshot', 'ws')
             ->where('o.shopOffers = '.$shopId)
             ->andWhere('o.endDate <='."'".$currentDate."'")
             ->andWhere('o.startDate <='."'".$currentDate."'")
@@ -1891,18 +1890,13 @@ class Offer Extends \KC\Entity\Offer
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-        ->select(
-            't.name, t.path, o.id, o.title, o.couponCode, s.actualUrl,s.name,s.id as shopId,s.discussions,s.permaLink as permalink,
-            s.title,s.subTitle,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,
-            s.affliateProgram,tc.content,img.name,img.path,ws.name,ws.path,ologo.name, ologo.path'
-        )
+        ->select('tc, o, s, ologo, t, img')
            ->from('KC\Entity\Offer', 'o')
            ->leftJoin('o.shopOffers', 's')
            ->leftJoin('o.logo', 'ologo')
            ->leftJoin('o.offerTiles', 't')
            ->leftJoin('o.offertermandcondition', 'tc')
            ->leftJoin('s.logo', 'img')
-           ->leftJoin('s.screnshot', 'ws')
            ->Where("o.extendedUrl = '".$extendedUrl."'")
            ->andWhere('o.extendedOffer = 1')
            ->andWhere('s.status = 1');

@@ -7,7 +7,7 @@ class OutController extends Zend_Controller_Action
         \FrontEnd_Helper_viewHelper::viewCounter('offer', 'onclick', $offerId);
         \FrontEnd_Helper_viewHelper::viewCounter('offer', 'onload', $offerId);
         \KC\Repository\Offer::addConversion($offerId);
-        $redirectUrl  = Offer::getCloakLink($offerId, false);
+        $redirectUrl  = \KC\Repository\Offer::getCloakLink($offerId, false);
         $this->_helper->redirector->setCode(301);
         $this->_redirect($redirectUrl);
     }
