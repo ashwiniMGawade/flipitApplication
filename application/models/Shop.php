@@ -24,6 +24,12 @@ class Shop extends BaseShop
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
 
+    public static function getShopData($id)
+    {
+        $shopDataExistOrNot = Doctrine_Core::getTable("Shop")->find($id);
+        return $shopDataExistOrNot;
+    }
+
     public static function returnShopCategories($shopId)
     {
         $categoryData = Doctrine_Query::create()
@@ -41,16 +47,41 @@ class Shop extends BaseShop
 
     public static function getSimilarShops($shopId, $numberOfShops = 12)
     {
+        $similarShops = self::getSimilarShopsByShopId($shopId, $numberOfShops);
+        if (count($similarShops) <= $numberOfShops) {
+            $similarShopsBySimilarCategories = self::getSimilarShopsBySimilarCategories($shopId, $numberOfShops);
+            $similarShops = self::removeDuplicateShops($similarShops, $similarShopsBySimilarCategories, $numberOfShops);
+        }
+        return $similarShops;
+    }
+
+    public static function getSimilarShopsByShopId($shopId, $numberOfShops = 12)
+    {
+        $similarShops = Shop::getRelatedShop($shopId);
+        return self::setDataAsPerView($similarShops, $numberOfShops);
+    }
+
+    protected static function setDataAsPerView($similarShops, $numberOfShops)
+    {
+        $similarShopsWithoutDuplicate = array();
+        if (!empty($similarShops['refShopRelatedshop'])) {
+            foreach ($similarShops['refShopRelatedshop'] as $similarShop) {
+                if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
+                    $similarShopsWithoutDuplicate[$similarShop['relatedshops']['id']] = $similarShop['relatedshops'];
+                }
+            }
+        }
+        return $similarShopsWithoutDuplicate;
+    }
+
+    public static function getSimilarShopsBySimilarCategories($shopId, $numberOfShops)
+    {
         $relatedShops = Doctrine_Query::create()->from('Shop s')
             ->select(
-                "s.name, s.permaLink, img.path, img.name, logo.path, logo.name, rs.name, rs.permaLink,
+                "s.name, s.permaLink, img.path, img.name, logo.path, logo.name,
                 c.id,ss.name, ss.permaLink"
             )
             ->where("s.id = ".$shopId)
-            ->leftJoin("s.relatedshops rs")
-            ->andWhere("rs.status = 1")
-            ->andWhere("rs.deleted = 0")
-            ->leftJoin("rs.logo as logo")
             ->leftJoin('s.category c')
             ->andWhere("c.status = 1")
             ->andWhere("c.deleted = 0")
@@ -59,30 +90,20 @@ class Shop extends BaseShop
             ->andWhere("ss.deleted = 0")
             ->leftJoin('ss.logo img')
             ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
-        return self::removeDuplicateShops($relatedShops, $numberOfShops);
+        return $relatedShops;
     }
 
-    protected static function removeDuplicateShops($relatedShops, $numberOfShops)
+    protected static function removeDuplicateShops($similarShops, $similarShopsBySimilarCategories, $numberOfShops)
     {
-        $similarShopsWithoutDuplicate = array();
-        foreach ($relatedShops[0]['relatedshops'] as $relatedShop) {
-            if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
-                $similarShopsWithoutDuplicate[$relatedShop['id']] = $relatedShop;
-            }
-        }
-
-        if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
-            // push shops related to same category which are not yet added
-            foreach ($relatedShops[0]['category'] as $category) {
-                foreach ($category['shop'] as $relatedCategoryShop) {
-                    if (count($similarShopsWithoutDuplicate) <= $numberOfShops &&
-                            !in_array($relatedCategoryShop['id'], $similarShopsWithoutDuplicate)) {
-                        $similarShopsWithoutDuplicate[$relatedCategoryShop['id']] = $relatedCategoryShop;
-                    }
+        foreach ($similarShopsBySimilarCategories[0]['category'] as $category) {
+            foreach ($category['shop'] as $relatedCategoryShop) {
+                if (count($similarShops) <= $numberOfShops &&
+                        !in_array($relatedCategoryShop['id'], $similarShops)) {
+                    $similarShops[$relatedCategoryShop['id']] = $relatedCategoryShop;
                 }
             }
         }
-        return $similarShopsWithoutDuplicate;
+        return $similarShops;
     }
 
     public static function getPopularStores($limit, $shopId = null)
@@ -162,8 +183,12 @@ class Shop extends BaseShop
         return $allStoresDetail;
     }
 
-    public static function getallStoresForFrontEnd()
+    public static function getAllStoresForFrontEnd($startCharacter, $endCharacter)
     {
+        $charactersString = $startCharacter.  "-" . $endCharacter;
+        if ($startCharacter=='09') {
+            $charactersString = "a-e 0-9";
+        }
         $currentDateAndTime = date('Y-m-d 00:00:00');
         $storeInformation = Doctrine_Query::create()
         ->select('o.id,s.id, s.name, s.permaLink as permalink')
@@ -177,7 +202,9 @@ class Shop extends BaseShop
         ->leftJoin('s.logo img')
         ->where('s.deleted=0')
         ->addWhere('s.status=1')
-        ->orderBy('s.name')->fetchArray();
+        ->andWhere("s.name REGEXP ?", "^[" . $charactersString ."]")
+        ->orderBy('s.name')
+        ->fetchArray();
 
         $storesForFrontend =array();
         foreach ($storeInformation as $store) {
@@ -203,7 +230,7 @@ class Shop extends BaseShop
     public static function getAllPopularStores($limit)
     {
         $popularStores = Doctrine_Query::create()
-        ->select('p.id,s.name,s.permaLink,img.path as imgpath, img.name as imgname')
+        ->select('p.id,s.name,s.permaLink, s.deepLink, s.refUrl, s.actualUrl, img.path as imgpath, img.name as imgname')
         ->from('PopularShop p')
         ->leftJoin('p.shop s')
         ->leftJoin('s.logo img')
@@ -239,7 +266,7 @@ class Shop extends BaseShop
         return $shopsInformation;
     }
 
-    public static function getStoresForSearchByKeyword($searchedKeyword, $limit, $fromPage='')
+    public static function getStoresForSearchByKeyword($searchedKeyword, $limit, $fromPage = '')
     {
         $currentDate = date('Y-m-d 00:00:00');
         $storesByKeyword = Doctrine_Query::create()
@@ -301,7 +328,8 @@ class Shop extends BaseShop
         return;
     }
 
-    public static function getActiveOffersCount($shopId) {
+    public static function getActiveOffersCount($shopId)
+    {
         $currentDate = date('Y-m-d 00:00:00');
         $acitveOfferCount = Doctrine_Query::create()->select('count(o.id) as activeCount')
             ->from('Shop s')
@@ -374,6 +402,79 @@ class Shop extends BaseShop
         return $allShops = $query->fetchArray();
     }
 
+    public static function getRelatedShop($id)
+    {
+        $relatedShops = Doctrine_Query::create()
+            ->select('s.id, rf.id, rl.permaLink, rl.id, rl.name, logo.path, logo.name')
+            ->from('Shop s')
+            ->leftJoin("s.refShopRelatedshop as rf")
+            ->leftJoin("rf.relatedshops rl")
+            ->leftJoin("rl.logo as logo")
+            ->where("s.id = ?", $id)
+            ->orderBy('rf.position')
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return $relatedShops;
+    }
+
+    public static function getAllActiveShopDetails ()
+    {
+        $shopIds = Doctrine_Query::create()
+            ->select('s.id')
+            ->from("Shop s")
+            ->where('s.deleted = 0')
+            ->andWhere('s.status = 1')
+            ->fetchArray();
+        return $shopIds;
+    }
+
+    public static function updateSimilarShopsViewedIds()
+    {
+        $shopIds = self::getAllActiveShopDetails();
+        $similarShopIds = '';
+        foreach ($shopIds as $shopId) {
+            $topFiveSimilarShopsViewed = '';
+            $commaSepratedShopIds = '';
+            $topFiveSimilarShopsViewed = self::getSimilarShopsForAlsoViewedWidget($shopId['id']);
+            $commaSepratedShopIds = implode(',', $topFiveSimilarShopsViewed);
+            self::updateShopViewedIds($commaSepratedShopIds, $shopId['id']);
+        }
+        return true;
+    }
+
+    public static function getSimilarShopsForAlsoViewedWidget($shopId)
+    {
+        $similarShopsBySimilarCategories[] = self::getSimilarShopsBySimilarCategories($shopId, 5);
+        if (isset($similarShopsBySimilarCategories[0][0]['category'])) {
+            foreach ($similarShopsBySimilarCategories[0][0]['category'] as $category) {
+                foreach ($category['shop'] as $relatedCategoryShop) {
+                    if ($relatedCategoryShop['id'] != $shopId) {
+                        $similarShops[$relatedCategoryShop['id']] = $relatedCategoryShop['id'];
+                    }
+                }
+            }
+        }
+        $topFiveSimilarShopsViewed = array_slice($similarShops, 0, 5);
+        return $topFiveSimilarShopsViewed;
+    }
+
+    public static function updateShopViewedIds($commaSepratedShopIds, $shopId)
+    {
+        Doctrine_Query::create()
+            ->update('Shop s')
+            ->set('s.shopsViewedIds', "'$commaSepratedShopIds'")
+            ->where('s.id ='.$shopId)
+            ->execute();
+    }
+
+    public static function getShopsAlsoViewed($shopId)
+    {
+        $shopAlsoViewedIds = Doctrine_Query::create()
+            ->select('s.shopsViewedIds')
+            ->from("Shop s")
+            ->where('s.id ='.$shopId)
+            ->fetchArray();
+        return $shopAlsoViewedIds;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -401,26 +502,31 @@ class Shop extends BaseShop
      * @author mkaur updated by kraj
      * @version 1.0
      */
- public static  function getshopList($params)
- {
-    $srh =  $params["searchText"]=='undefined' ? '' : $params["searchText"];
-    $flag = @$params['flag'] ;
+    public static function getshopList($params)
+    {
+        $shopName = $params["searchText"]=='undefined' ? '' : $params["searchText"];
+        $flag = $params['flag'];
 
-    $shopList = Doctrine_Query::create()
-        ->select('s.*,a.name as affname')
-        //->select('a.name as affname,s.id,s.updated_at,s.id,s.name,s.affliateProgram,s.accountManagerName,s.created_at,affname,s.status,s.offlineSicne,s.updated_at')
-        ->from("Shop s")
-        ->leftJoin('s.affliatenetwork a')
-        ->where('s.deleted = ?' , $flag )
-        ->andWhere("s.name LIKE ?", "%$srh%");
-        $result =   DataTable_Helper::generateDataTableResponse($shopList,
-                    $params,
-                    array("__identifier" => 's.id,s.updated_at', 's.id','s.name','s.permaLink','s.affliateProgram','s.created_at','affname','s.discussions','s.showSignupOption','s.status','s.offlineSicne'),
-                    array(),
-                    array());
-    return $result;
+        $shopsListQuery = Doctrine_Query::create()
+            ->select('s.*,a.name as affname')
+            ->from("Shop s")
+            ->leftJoin('s.affliatenetwork a')
+            ->where('s.deleted = ?', $flag)
+            ->andWhere("s.name LIKE ?", "%$shopName%");
 
- }
+        $shopsList = DataTable_Helper::generateDataTableResponse(
+            $shopsListQuery,
+            $params,
+            array(
+                "__identifier" => 's.id,s.updated_at', 's.id','s.name','s.permaLink','s.affliateProgram',
+                's.created_at', 's.lastSevenDayClickouts', 's.shopAndOfferClickouts','affname','s.discussions',
+                's.showSignupOption','s.status','s.offlineSicne'
+            ),
+            array(),
+            array()
+        );
+        return $shopsList;
+    }
     /**
      * move record in trash.
      * @param $id
@@ -443,6 +549,13 @@ class Shop extends BaseShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
+
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsae_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsfj_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsko_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopspt_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsu09_list');
+
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
@@ -527,6 +640,13 @@ class Shop extends BaseShop
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
+
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsae_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsfj_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsko_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopspt_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsu09_list');
+
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_storesHeader_image');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
@@ -559,6 +679,11 @@ class Shop extends BaseShop
         $key = 'store_'.$cacheKey.'_howToGuide';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsae_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsfj_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsko_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopspt_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsu09_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
@@ -589,6 +714,11 @@ class Shop extends BaseShop
         }
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsae_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsfj_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsko_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopspt_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsu09_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
@@ -673,11 +803,15 @@ class Shop extends BaseShop
         $this->overriteTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopOverwriteTitle']);
         $this->shopText = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopDescription']);
         $this->customtext = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomText']);
+        $this->moretextforshop = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['moretextforshop']);
         $shopViewCount = isset($shopDetail['shopViewCount']) ? $shopDetail['shopViewCount'] : '0';
         $this->views = BackEnd_Helper_viewHelper::stripSlashesFromString($shopViewCount);
 
         $this->howtoTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageTitle']);
         $this->howtoSubtitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubTitle']);
+        $this->howtoSubSubTitle = FrontEnd_Helper_viewHelper::sanitize(
+            BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubSubTitle'])
+        );
         $this->howtoMetaTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaTitle']);
         $this->howtoMetaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaDesc']);
         $this->customHeader = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomHeader']);
@@ -891,6 +1025,11 @@ class Shop extends BaseShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsae_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsfj_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsko_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopspt_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsu09_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
@@ -1280,6 +1419,49 @@ public static function getShopDetail($shopId)
     }
 
  }
+
+    public static function updateTotalShopOfferViewCount()
+    {
+        $shopClickoutCounts = Doctrine_Query::create()
+        ->select('s.totalViewcount as shopViewCount, o.totalViewcount as offerViewCount')
+        ->from('Shop s')
+        ->leftJoin('s.offer o')
+        ->fetchArray();
+        foreach ($shopClickoutCounts as $clickoutCount) {
+            $totalShopsAndOffersClickouts = $clickoutCount['shopViewCount'] + $clickoutCount['offerViewCount'];
+            Doctrine_Query::create()
+                ->update('Shop s')
+                ->set('s.shopAndOfferClickouts', $totalShopsAndOffersClickouts)
+                ->where('s.id = ?', $clickoutCount['id'])
+                ->execute();
+        }
+        return true;
+    }
+
+    public static function getAllShopsId()
+    {
+        $allShopsIds = Doctrine_Query::create()
+            ->select('s.id')
+            ->from("Shop s")
+            ->where('s.deleted = 0')
+            ->andWhere("s.status = 1")
+            ->fetchArray();
+        return $allShopsIds;
+    }
+
+    public static function updateLastSevenDaysOfferShopViewCount()
+    {
+        $allShopsIds = self::getAllShopsId();
+        foreach ($allShopsIds as $shopId) {
+            $lastSevenDayShopClickouts = ShopViewCount::getAmountClickoutOfShop($shopId['id']);
+            Doctrine_Query::create()
+                ->update('Shop s')
+                ->set('s.lastSevendayClickouts', $lastSevenDayShopClickouts)
+                ->where('s.id = ?', $shopId['id'])
+                ->execute();
+        }
+        return true;
+    }
 
  /**
   * get first character of the store name
@@ -1734,6 +1916,11 @@ public static function getShopDetail($shopId)
 
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsae_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsfj_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsko_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopspt_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsu09_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
@@ -2059,6 +2246,26 @@ public static function getShopDetail($shopId)
             }
         }
         return true;
+    }
+
+    public static function getTotalNumberOfMoneyShops()
+    {
+        $data = Doctrine_Query::create()
+        ->select("count(*) as moneyShops")
+        ->from('Shop s')
+        ->where('s.deleted = 0')
+        ->andWhere("s.status = '1'")
+        ->andWhere("s.affliateProgram = 1")
+        ->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
+        return $data;
+    }
+
+    public static function moneyShopRatio()
+    {
+        $totalNumberOfShops = self::getTotalAmountOfShops();
+        $numberOfMoneyShops = self::getTotalNumberOfMoneyShops();
+        $shopRatio = ($numberOfMoneyShops['moneyShops'] / $totalNumberOfShops['amountshops']) * 100;
+        return round($shopRatio);
     }
 
 }

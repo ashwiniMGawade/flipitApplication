@@ -340,6 +340,9 @@ function init()
         jQuery('#pageSubTitleLeft').val(__("Page sub title length ") + (data.input) + __(" characters"));
     });
 
+    $('#pageSubSubTitle').textareaCount(options, function(data){
+        jQuery('#pageSubSubTitleLeft').val(__("Page Sub sub title length ") + (data.input) + __(" characters"));
+    });
     
     $('#pagemetaDesc').textareaCount(options, function(data){
         jQuery('#pagemetaDescLeft').val(__("Shop page meta description length ") + (data.input) + __(" characters"));
@@ -360,6 +363,7 @@ function init()
             height : "300"
         }
     );
+    CKEDITOR.replace('moretextforshop', {customConfig : 'config.js', toolbar : 'BasicToolbar', height : "300"});
     validateFormAddNewShop();
         
     

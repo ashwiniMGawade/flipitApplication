@@ -5,9 +5,10 @@
 	$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.dataTables.min.js");
 	$this->headScript()->appendFile(PUBLIC_PATH . "/js/dataTableComman.js");
 	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+	$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
 	$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
 	$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
-	
+	$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/select2.css" );
 	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/widgetList.js");
 	
 	?>
@@ -38,7 +39,8 @@
               <div class="mainpage-content-searchbart">
                     <div class="mainpage-content-right-searchbar"><button id="searchButton" class="btn btn-primary" type="button"><?php echo $this->translate('Search');?></button></div>
                     <div class="mainpage-content-right-inner-left-searchbar">
-                    <input type="text" placeholder="Search widget..." name="searchWidget" id="searchWidget" class="span3"></div>                        
+                    	<input type='hidden' id="searchWidget" name="searchWidget" style="width:99%;"/>
+                    </div>                        
                 </div>
             </form>
             

@@ -38,14 +38,37 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
 
     public static function changeIndexOfSixReasons($sixShopReasons)
     {
-        $sixShopReasonWithIndex = '';
+        $sixShopReasonsWithIndex = '';
         foreach ($sixShopReasons as $reason) {
-            $sixShopReasonWithIndex[$reason['fieldname']] = $reason['fieldvalue'];
+            $sixShopReasonsWithIndex[$reason['fieldname']] = $reason['fieldvalue'];
         }
-        if (!empty( $sixShopReasonWithIndex)) 
+        if (!empty($sixShopReasonsWithIndex)) {
+            $sixShopReasonsWithIndex = array_chunk($sixShopReasonsWithIndex, 2);
+        }
+        return  $sixShopReasonsWithIndex;
+    }
+
+    public static function getActualPermalink($fullPermalink, $peramType)
+    {
+        $splitPermalink = explode('-', $fullPermalink);
+        switch ($peramType)
         {
-            $sixShopReasonWithIndex = array_chunk($sixShopReasonWithIndex, 2);
+            case 'permalink':
+                $urlString = $splitPermalink[0].'-'.$splitPermalink[1];
+                break;
+
+            case 'firstCharacter':
+                $urlString = $splitPermalink[2];
+                break;
+
+            case 'lastCharacter':
+                $urlString = $splitPermalink[3];
+                break;
+
+            default:
+                $urlString = $splitPermalink;
+                break;
         }
-        return  $sixShopReasonWithIndex;
+        return $urlString;
     }
 }

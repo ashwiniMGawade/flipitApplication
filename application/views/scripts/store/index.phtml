@@ -20,15 +20,21 @@ if ($this->storesInformation != '' && $this->storesInformation != null) :
         array('storesInformation' => $this->storesInformation)
     );
 endif;
+
+$allSearchAlphabetPanel = $this->partial(
+    $storeViewPath.'_all-stores-searchalphabet.phtml',
+    array('selectedAlphabet' => $this->selectedAlphabet)
+);
+
 ?>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
         <div class="content-holder">            
-<?php 
-echo $this->storeSearchByAlphabet;
-echo $popularStores;
-echo $storesInformation;
-?>
+        <?php 
+        echo  preg_replace('~>\\s+<~m', '><', $allSearchAlphabetPanel);
+        echo $popularStores;
+        echo $storesInformation;
+        ?>
         </div>
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4 col-sm-4">

@@ -476,19 +476,25 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <div class="mainpage-content-right-inner-left-other-shop">
                  
                  
-                 <div style="overflow-y:scroll;height:169px;width:160px !important;" class="sidebar-content-box-left">
-                         
-                         <ul id="similarshopListul-li" style='margin : 0px;'>
-                          
-                          <?php for($r=0;$r<count($this->data['relatedshops']);$r++){ 
-                          $className = 'grid-line2';
-							if ($r % 2 == 0) {
-								$className = 'grid-line1';
-							}
-						?> 
-                          <li class="<?php echo $className; ?>" value="<?php echo $this->data['relatedshops'][$r]['id']; ?>"><?php echo $this->data['relatedshops'][$r]['name']; ?></li>
-                          <?php }?>                          
-                         </ul> 
+                <div style="overflow-y:scroll;height:169px;width:160px !important;" class="sidebar-content-box-left">
+                    <ul id="similarshopListul-li" style='margin : 0px;'>
+                    <?php 
+                    if (!empty($this->relatedShops['refShopRelatedshop'])) {
+                        for($r=0;$r < count ($this->relatedShops['refShopRelatedshop']);$r++) { 
+                            $className = 'grid-line2';
+                            if ($r % 2 == 0) {
+                                $className = 'grid-line1';
+                            }
+                            ?> 
+                            <li class="<?php echo $className; ?>" 
+                                value="<?php echo $this->relatedShops['refShopRelatedshop'][$r]['relatedshops']['id']; ?>">
+                                <?php echo $this->relatedShops['refShopRelatedshop'][$r]['relatedshops']['name']; ?>
+                            </li>
+                            <?php 
+                        }
+                    }
+                    ?>                          
+                    </ul> 
                 </div>      
                  <input type="hidden" name="selectedShop" id="selectedShop" value="" />
                  <input type="hidden" name="similarstoreord" id="similarstoreord" value="" />
@@ -841,6 +847,23 @@ echo $this->headTitle()->append('Edit Shop');?>
                         </div>
                     </div>
                 </div>
+                <div id="moreTextForShop" class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('More text for shop'); ?></strong></label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                        <textarea rows="3" id="moretextforshop" name="moretextforshop"
+                        class="input-xlarge mbot bbot ignore word_count">
+                        <?php 
+                        echo $value = !empty($this->data['moretextforshop']) 
+                        ? $this->data['moretextforshop'] 
+                        : '';?>
+                        </textarea>
+                        </div>
+                    </div>
+                </div>
             </div> 
             <div class="mainpage-content">
             	<div class="mainpage-content-line mb10">
@@ -947,6 +970,23 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <input type="text" id="pageSubTitleLeft" class="input-xlarge  btop word-count" value="<?php echo $this->translate("Page sub title length "). strlen($this->data['howtoSubtitle']) . $this->translate(' characters');?>" placeholder="<?php echo $this->translate('0 characters');?>" disabled="disabled">
                      	</div>
                      </div>	
+                </div>
+
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('Page Sub Subtitle'); ?></strong></label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" name="pageSubSubTitle" id="pageSubSubTitle" 
+                            class="span3" placeholder="<?php echo $this->translate('Page Sub Subtitle'); ?>" 
+                            value="<?php echo $this->data['howtoSubSubTitle'] ; ?>" style="margin-bottom: 0;">
+                            <input type="text" id="pageSubSubTitleLeft" class="input-xlarge  btop word-count" 
+                            value="<?php echo $this->translate("Page Sub sub title length ")
+                            . strlen($this->data['howtoSubSubTitle']) . $this->translate(' characters');?>" 
+                            placeholder="<?php echo $this->translate('0 characters');?>" disabled="disabled">
+                        </div>
+                    </div> 
                 </div>
                         
                 <div class="mainpage-content-line">

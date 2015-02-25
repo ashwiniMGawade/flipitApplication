@@ -62,10 +62,8 @@ if( isset($topOffer->exclusiveCode) && $topOffer->exclusiveCode == 1) {
                                                         font:14px/17px Arial, Helvetica, sans-serif; 
                                                         color:#363636;">
                                                         <span style="float: left;"><?php echo $topOffer->shop['name']; ?></span>
-                                                        <span style="line-height:0; margin-right: 5px; margin-left: 5px; float: left;">
-                                                            <img src="<?php echo $exclusiveImage; ?>" 
-                                                                vspace="0" hspace="0" 
-                                                                width="14" height="17" alt="Exclusive Image" title="Exclusive Image">
+                                                        <span style="margin-right: 5px; margin-left: 5px; float: left; font:14px/17px Arial, Helvetica, sans-serif; color: #e89438;">
+                                                        <?php echo FrontEnd_Helper_viewHelper::__email('email_Exclusive'); ?>
                                                         </span>
                                                         <span 
                                                             style="font:bold 12px/17px Arial, Helvetica, sans-serif; 

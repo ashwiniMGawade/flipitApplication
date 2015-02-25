@@ -503,17 +503,15 @@ class Admin_ShopController extends Zend_Controller_Action
                     ->leftJoin("s.howtousesmallimage sl")
                     ->leftJoin("s.howtousebigimage bl")
                     ->leftJoin("s.howtochapter chapter")
-                    ->leftJoin("s.relatedshops sp")
                     ->leftJoin("s.page pg")
                     ->leftJoin("s.logo logo")
                     ->leftJoin("s.screenshot screenshot")
                     ->where("s.id = ?" , $id)
                     ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
 
-            //var_dump($data) ;
+            $this->view->relatedShops = Shop::getRelatedShop($id);
 
             $this->view->data = $data ;
-
 
             $existingCategories  = $data['category'] ;
             $catArray  = array();
@@ -521,7 +519,7 @@ class Admin_ShopController extends Zend_Controller_Action
                 $catArray[] = $categories['id'];
             }
             $this->view->catArray = '';
-            if(isset($catArray) && count($catArray)>0){
+            if (isset($catArray) && count($catArray)>0) {
                 $this->view->catArray =  $catArray  ;
             }
         } else {
@@ -1068,7 +1066,11 @@ class Admin_ShopController extends Zend_Controller_Action
         $varnishObj->addUrl(HTTP_PATH_FRONTEND);
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_nieuw'));
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_top-20'));
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_alle-winkels'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_alle-winkels-09-e'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_alle-winkels-f-j'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_alle-winkels-k-o'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_alle-winkels-p-t'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_alle-winkels-u-z'));
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen'));
         # make markplaatfeed url's get refreashed only in case of kortingscode
         if (LOCALE == '')

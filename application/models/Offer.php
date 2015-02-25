@@ -310,7 +310,7 @@ class Offer extends BaseOffer
             o.editorPicks,o.couponCode,o.extendedOffer,o.totalViewcount,o.authorName,
             o.startDate,o.endDate,o.refOfferUrl,o.userGenerated,o.nickname, o.approved,
             o.extendedUrl,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,
-            s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name'
+            s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name, s.contentManagerName'
         )
         ->from('PopularCode p')
         ->leftJoin('p.offer o')
@@ -349,8 +349,8 @@ class Offer extends BaseOffer
             ->select(
                 's.id,s.name,
                 s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,
-                s.actualUrl,terms.content,
-                o.id,o.Visability,o.userGenerated,o.title,o.authorId,
+                s.actualUrl,terms.content, s.contentManagerName,
+                o.id,o.Visability,o.title,o.authorId,
                 o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,o.authorName,
                 o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.extendedUrl,
                 o.discountType,o.startdate,o.endDate,o.nickname,o.approved,
@@ -1128,9 +1128,9 @@ class Offer extends BaseOffer
         $currentDateTime = date('Y-m-d H:i');
         $newestOffers = Doctrine_Query::create()
                 ->select(
-                    's.id,s.name, s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,
+                    's.id,s.name, s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.contentManagerName,
                     s.usergenratedcontent,s.refUrl,s.actualUrl,terms.content,o.id,o.extendedoffer,o.extendedurl,
-                    o.editorpicks,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.authorName,
+                    o.editorpicks,o.Visability, o.userGenerated, o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.authorName,
                     o.discount,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,
                     o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote'
                 )

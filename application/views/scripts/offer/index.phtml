@@ -26,7 +26,7 @@ $newestOffers = $this->partial(
         echo $this->esi($this->locale.'signup/signupwidget?shopId='
             .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
         $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
-        echo $frontendSidebarHelper->socialMediaWidget(strtolower($this->actionName));
+        echo $frontendSidebarHelper->popularShopWidget();
         ?>
     </aside>
 </div>

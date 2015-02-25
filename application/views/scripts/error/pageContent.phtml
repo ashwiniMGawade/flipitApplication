@@ -52,10 +52,11 @@ if ($this->pageMode == true) {
             <?php echo $pageContent; ?>
         </div>
         <aside class="col-md-4 col-sm-4" id="sidebar"> 
-            <?php echo $this->widget . $frontendSidebarHelper->socialMediaWidget();
+            <?php 
             $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
             echo $this->esi($this->locale.'signup/signupwidget?shopId='
                 .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
+            echo $frontendSidebarHelper->popularShopWidget();
              ?>  
         </aside> 
     </div>

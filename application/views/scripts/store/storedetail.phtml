@@ -135,6 +135,13 @@ if (!empty($this->sixShopReasons)) {
         )
     );
 }
+$moreTextForShop = '';
+if (!empty($this->currentStoreInformation[0]['moretextforshop'])) {
+    $moreTextForShop = $this->partial(
+        $storeViewPartialPath.'_moreTextForShop.phtml', 
+        array('moreTextForShop' => $this->currentStoreInformation[0]['moretextforshop'])
+    );
+}
 ?>
 <input type="hidden" name="currentShop" id="currentShop" 
 value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
@@ -148,20 +155,7 @@ endif;
 ?>
 </div></div>
 <div class="row"> 
-    <div id="content" class="col-md-8 col-sm-8">
-    <?php 
-    echo $noMoneyNocodeMessage;
-    echo $offers;
-    echo $sixShopReasons;
-    echo $similarOffersHeader;
-    echo $similarOffers;
-    echo $similarShopsAndSimilarCategoriesShops;
-    echo $discussion;
-    echo $moneySavingGuide;
-    echo $expiredOffers;
-    ?>
-    </div>
-    <aside id="sidebar" class="col-md-4 col-sm-4">
+  <aside id="sidebar" class="col-md-4 col-sm-4">
     <?php
     echo $this->partial(
         $storeViewPartialPath. '_shop-sidebar.phtml',
@@ -179,4 +173,19 @@ endif;
     endif;
     ?>
     </aside>
+    <div id="content" class="col-md-8 col-sm-8">
+    <?php 
+    echo $noMoneyNocodeMessage;
+    echo $offers;
+    echo $sixShopReasons;
+    echo $similarOffersHeader;
+    echo $similarOffers;
+    echo $moreTextForShop;
+    echo $similarShopsAndSimilarCategoriesShops;
+    echo $discussion;
+    echo $moneySavingGuide;
+    echo $expiredOffers;
+    ?>
+    </div>
+  
 </div>

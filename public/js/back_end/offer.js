@@ -79,7 +79,6 @@ function init(){
         },
 	});
 
-
 	$("#searchCoupon").select2({
 		placeholder: __("Search Coupon Code"),
 		minimumInputLength: 1,
@@ -108,7 +107,10 @@ function init(){
         },
 	});
 
-
+	$('.select2-search-choice-close').click(function(e){
+    	$(this).parents('div.resetSearch').children('input').val('');
+        searchByShop();
+    });
 	
 	//autocomplete for offer 
 	//if press enter key the call search offer function

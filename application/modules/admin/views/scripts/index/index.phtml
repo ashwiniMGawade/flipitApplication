@@ -75,12 +75,10 @@ $this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/dashboard.js" );
 		<div class="dashboard-content fl">
 			<div class="dashboard-heading">
 				<h4><?php echo $this->translate('Total offers currently online'); ?></h4>
-
 				<h4><?php echo $this->translate('Total number of online shops'); ?></h4>
-
 				<h4><?php echo $this->translate('Total number of shops with atleast 1 code online'); ?></h4>
-
 				<h4><?php echo $this->translate('Total number of members'); ?></h4>
+				<h4><?php echo $this->translate('Money Shop Ratio'); ?></h4>
 			</div>
 			<div class="dashboard-boxes">
 		        <div class="box-count">
@@ -106,7 +104,11 @@ $this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/dashboard.js" );
 		        <div class="box-count">
 		         	<span class="grey-text"><?php echo Dashboard::count_format($this->data['total_no_members']);?>
 		         	</span>
-		        </div>	
+		        </div>
+		        <div class="box-count">
+		         	<span class="grey-text"><?php echo Dashboard::count_format($this->data['money_shop_ratio']).'<sup>%</sup>';?>
+		         	</span>
+		        </div>
 			</div>
 		</div>
 	</div>

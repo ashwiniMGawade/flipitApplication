@@ -20,7 +20,41 @@ $(document).ready(init);
  * @author spsingh updated by karj
  */
 function init(){
-    
+    $("#searchShop").select2({
+        placeholder: __("Search shop"),
+        minimumInputLength: 1,
+        ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+            url: HOST_PATH + "admin/offer/searchtopfiveshop",
+            dataType: 'json',
+            data: function(term, page) {
+                return {
+                 keyword: term,
+                 flag: 0
+                };
+            },
+            type: 'post',
+            results: function (data, page) { // parse the results into the format expected by Select2.
+            // since we are using custom formatting functions we do not need to alter remote JSON data
+            return {results: data};
+            }
+        },
+        formatResult: function(data) {
+            return data; 
+        },
+        formatSelection: function(data) { 
+            $("#searchShop").val(data);
+            return data; 
+        },
+    });
+    $('.select2-search-choice-close').click(function(){
+        $('input#searchShop').val('');
+        getShops($(this).val(),0,1,'asc');
+    });
+    $("input#searchShop").keypress(function(e) {
+        if (e.which == 13) {
+           getShops($(this).val(),0,1,'asc');
+        }
+    });
     // display shop list 
     var iSearchText = $.bbq.getState( 'iSearchText' , true ) || undefined;
     var iStart = $.bbq.getState( 'iStart' , true ) || 0;
@@ -33,52 +67,7 @@ function init(){
     $('form#searchform').submit(function() {
         return false;
     });
-    //bind with keypress of search box
-    $("input#searchShop").keypress(function(e){
-        
-                    // if the key pressed is the enter key
-                    if (e.which == 13)
-                    {
-                      getShops($(this).val(),0,1,'asc');
-                    }
-            });
-    
-    $('.th_shop_start').css( 'width', '95px' ) ;
-    /**
-     * Autocomplete towards search
-     * @author mkaur
-     */
-    $("input#searchShop").autocomplete({
-        minLength: 1,
-        source: function( request, response) {
-            
-            var searchShop =  $('#searchShop').val()=='' ? undefined : $('#searchShop').val();
-            $.ajax({
-                /*url : HOST_PATH + "admin/shop/searchkey/keyword/" + searchShop  + '/flag/0',
-                method : "post",
-                dataType : "json",
-                type : "post",*/
-                url : HOST_PATH + "admin/shop/searchkey",
-                method : "post",
-                dataType : "json",
-                type : "post",
-                data:{keyword:searchShop,flag:0},
-                success : function(data) {
-                    if (data != null) {
-                        //pass arrau of the respone in respone onject of the autocomplete
-                        response(data);
-                    } 
-                },
-                error: function(message) {
-                    // pass an empty array to close the menu if it was initially opened
-                    response([]);
-                }
 
-             });
-        },
-        select: function( event, ui ) {
-        }
-    });
     $(window).bind( 'hashchange', function(e) {
         if(hashValue != location.hash && click == false){
             shopListTable.fnCustomRedraw();
@@ -185,7 +174,29 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
                             },
                             "bSearchable" : true,
                             "bSortable" : true
-                        },{
+                        },
+                        {
+                            "fnRender" : function(obj) {
+                                var tag = '';
+                                if (obj.aData.lastSevendayClickouts==null || obj.aData.lastSevendayClickouts=='' || obj.aData.lastSevendayClickouts==undefined) {
+                                    tag = '';
+                                } else {
+                                    tag = "<a href='javascript:void(0);'>" + obj.aData.lastSevendayClickouts + "</a>";
+                                }
+                                return tag;
+                             },
+                            "bSearchable" : true,
+                            "bSortable" : true
+                        },
+                        {
+                            "fnRender" : function(obj) {
+                                var tag = "<a href='javascript:void(0);'>" + obj.aData.shopAndOfferClickouts + "</a>";
+                                return tag;
+                             },
+                            "bSearchable" : true,
+                            "bSortable" : true
+                        },
+                        {
                             "fnRender" : function(obj) {
 
                                 var tag = '';

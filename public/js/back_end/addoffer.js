@@ -72,7 +72,7 @@ function init(){
 				////extraPlugins : 'wordcount',
 				customConfig : 'config.js' ,  
 				toolbar :  'BasicToolbar'  ,
-				height : "300"
+				height : "80"
 	});
 	
 	jQuery('#extendedOfferTitle').NobleCount('#metaTitleLeft',{
@@ -253,8 +253,18 @@ function init(){
 	jQuery('button#prefillData').click(function(){
 		setDefaultTitle(this);
 	});
-	
 
+	jQuery('button#optionsOnbtn').click(function(){
+      jQuery("#optionsOnbtn").addClass("btn-primary").siblings().removeClass("btn-primary");
+      jQuery('#offerOption').show();
+      jQuery('#offerButtons').hide();
+  	});
+
+  	jQuery('button#optionsoffbtn').click(function(){
+      jQuery("#optionsoffbtn").addClass("btn-primary").siblings().removeClass("btn-primary");
+      jQuery('#offerOption').hide();
+      jQuery('#offerButtons').show();
+  	});
 }
 
 function setDefaultTitle(el) {
@@ -440,17 +450,10 @@ function getShopDetail(value){
 			dataType : "json",
 			success : function(data) {
 				if (data != null) {
-
-
 					if(data[0].notes != '' && data[0].notes != null){
-
 						jQuery('#aboutShopNoteDiv').show();
-						jQuery('#shopNotes').html(data[0].notes).addClass('alert-error');;
-					} else {
-						jQuery('#shopNotes').html('&nbsp;')
-											  .removeClass('alert-error');
-					}
-
+						jQuery('#shopNotes').html(data[0].notes).addClass('alert');
+					} 
 					if(data[0].affname != '' && data[0].affname != null){
 						jQuery('#aboutNertworkDiv').show();
 						jQuery('#shopNetwork').html(data[0].affname);
@@ -589,7 +592,8 @@ function selectDiscountType(dIv){
 	      case 'couponCode':
 	    	jQuery("input[name=couponCode]").parent("div").removeClass("error success focus")
 		    .prev("div").html("");
-		    	
+		    jQuery('.general-code-cont').show();
+		    jQuery('#ccode').html(' <label><strong>Coupon code</strong></label>');	
 	    	jQuery('#couponDiv').show();
 	    	jQuery('#printDiv').hide();
 	    	jQuery('span#saleDiv').hide();//code add by blal
@@ -653,6 +657,7 @@ function selectDiscountType(dIv){
 	        
 	        
 	      case 'sale':
+	      	jQuery('.general-code-cont').hide();
 	        jQuery('#couponDiv').hide();
 	        jQuery('#printDiv').hide();
 	        jQuery('#saleDiv').show();//code add by blal
@@ -680,7 +685,7 @@ function selectDiscountType(dIv){
 			
 	        break;
 	      case 'printable':
-	    	  
+	    	jQuery('.general-code-cont').hide(); 
 	    	jQuery("div.uploadOfferMessage,div.offerrefurlMessage").html("");	
 	    	jQuery("#offerrefurlPR").parent("div").removeClass("error success focus");
 		    jQuery('#couponDiv').hide();
@@ -902,7 +907,7 @@ function validateFormAddNewOffer(){
 				ignore: [],
 				errorPlacement : function(error, element) {
 					
-						element.parent("div").prev("div")
+						element.parent("div").next("div")
 								.html(error);
 				},
   				// validation rules
@@ -1075,7 +1080,7 @@ function validateFormAddNewOffer(){
 					        			
 					        			jQuery('#extendedOfferRefurl').val(res.url);
 					        			
-					        			jQuery("input[name=extendedOfferRefurl]").parent('div').prev("div").removeClass('focus')
+					        			jQuery("input[name=extendedOfferRefurl]").parent('div').next("div").removeClass('focus')
 					        		.removeClass('error').addClass('success');
 					        		} 
 					        		else
@@ -1697,11 +1702,12 @@ function submitForm(){
 				type : "post",
 					success : function(data) {
 					if (data != null) {
-						//alert(data.label);
+						//alert(data.imagepath);
 						jQuery('#myModal').modal('hide');
 						jQuery('input#label').val('');
 						jQuery('input#position').val('');
 						var li = jQuery('<li id="' + data.imgId + '" ><a id="' + data.imgId + '" onClick="selectOfferImage(' +  data.imgId + ')"; href="javascript:void(0)"><img class="liimg" src="' + data.imagepath + '" title="' + data.label + '" id="offertileimg"/></a><div  id="divShow_' + data.imgId + '" style="display:block" class="hideShow"><a onclick="setValueInHidden(' +  data.imgId + ')" href="_#myModal" data-toggle="modal"><img src="'+ HOST_PATH + 'public/images/back_end/edit-icon-txt.png"></a><a class="unselect" id="selectImg_' + data.imgId + '" style="display:none" href="javascript:void(0);"><img src="'+HOST_PATH+'public/images/back_end/tick.png"></a></div></li>');
+						console.log(li);
 						//FOR  EDIT IMAGE
 						var divVal = jQuery('div#offertypeDiv div.btn-group').children('button.btn-primary').attr('id');
 						if(parseInt(jQuery('input#forDelete').val()) > 0) {
@@ -1709,13 +1715,13 @@ function submitForm(){
 									var Id = parseInt(jQuery('input#forDelete').val());
 									switch(divVal){
 									case 'sale':
-										jQuery('div#offertypeDiv span#saleDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
+										jQuery('span#saleDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
 										break;
 									case 'printable':
-										jQuery('div#offertypeDiv span#printDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
+										jQuery('span#printDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
 										break;
 									case 'couponCode':
-										jQuery('div#offertypeDiv span#couponDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
+										jQuery('span#couponDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#'+ Id).replaceWith(li);
 										break;
 									default:
 										break;
@@ -1725,13 +1731,13 @@ function submitForm(){
 							//FOR NEW IMAGE
 							switch(divVal){
 							case 'sale':
-								jQuery('div#offertypeDiv span#saleDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
+								jQuery('span#saleDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
 								break;
 							case 'printable':
-								jQuery('div#offertypeDiv span#printDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
+								jQuery('span#printDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
 								break;
 							case 'couponCode':
-								jQuery('div#offertypeDiv span#couponDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
+								jQuery('span#couponDiv div#offertilesimg').children('ul#imgLiForTiles').children('li#before').before(li);
 								break;
 							default:
 								break;
@@ -1810,7 +1816,6 @@ function setValueInHidden(id) {
 	jQuery('#deleteImage').click(deleteImage);
 }
 function hideDeleteButton() {
-	
 	jQuery('#deleteImage').hide();
 	jQuery('input#forDelete').val('');
 	jQuery('input#label').val('');

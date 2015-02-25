@@ -259,8 +259,12 @@ class StoreController extends Zend_Controller_Action
     public function indexAction()
     {
         $permalink = FrontEnd_Helper_viewHelper::getPagePermalink();
+        $startingCharacter = $this->_helper->Store->getActualPermalink($permalink, 'firstCharacter');
+        $endingCharacter = $this->_helper->Store->getActualPermalink($permalink, 'lastCharacter');
+        $startingAndEndingCharacter = $startingCharacter. "-". $endingCharacter;
+        $permalink = $this->_helper->Store->getActualPermalink($permalink, 'permalink');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
+        $pageDetails = Page::getPageDetailsFromUrl($permalink);
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'page_header'.$pageDetails->id.'_image',
             array(
@@ -270,21 +274,23 @@ class StoreController extends Zend_Controller_Action
         );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->controllerName = $this->getRequest()->getParam('controller');
+
+        $allShopsCacheKey = 'all_shops'. FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter(
+            $startingAndEndingCharacter
+        ).'_list';
+        
         $allStoresList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_shops_list',
-            array('function' => 'Shop::getallStoresForFrontEnd', 'parameters' => array('all', null)),
+            $allShopsCacheKey,
+            array('function' => 'Shop::getAllStoresForFrontEnd', 'parameters' => array($startingCharacter, $endingCharacter)),
             true
         );
+
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             '10_popularShops_list',
             array('function' => 'Shop::getAllPopularStores', 'parameters' => array(10)),
             true
         );
-        $storeSearchByAlphabet = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_searchPanel_list',
-            array('function' => 'FrontEnd_Helper_viewHelper::alphabetList', 'parameters' => array()),
-            true
-        );
+
         $this->viewHelperObject->getMetaTags(
             $this,
             isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
@@ -304,10 +310,10 @@ class StoreController extends Zend_Controller_Action
             '',
             $signUpFormSidebarWidget
         );
-        
+        $this->view->selectedAlphabet = $startingAndEndingCharacter;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->storesInformation = $allStoresList;
-        $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;
+       
         $this->view->popularStores = $popularStores;
         $this->view->pageCssClass = 'all-stores-page';
     }
@@ -369,11 +375,13 @@ class StoreController extends Zend_Controller_Action
         $this->view->popularStoresList = $frontEndViewHelper->PopularShopWidget();
         $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->howToGuides=$howToGuides;
-
+        
+        $shopName = isset($shopInformation[0]['name']) ? $shopInformation[0]['name'] : '';
+        $howToGuides = isset($howToGuides[0]['howtoTitle']) ? $howToGuides[0]['howtoTitle'] : '';
         $customHeader = '';
         $this->viewHelperObject->getMetaTags(
             $this,
-            $howToGuides[0]['howtoTitle'],
+            str_replace('[shop]', $shopName, $howToGuides),
             '',
             trim($howToGuides[0]['howtoMetaDescription']),
             $howToGuides[0]['permaLink'],
