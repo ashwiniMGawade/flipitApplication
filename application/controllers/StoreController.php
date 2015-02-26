@@ -335,11 +335,11 @@ class StoreController extends Zend_Controller_Action
             throw new \Zend_Controller_Action_Exception('', 404);
         }
 
-        $ShopList = $howToGuides[0]['id'].'_list';
+        $ShopList = $howToGuides[0][0]['id'].'_list';
         $allShopDetailKey = 'shopDetails_'.$ShopList;
         $shopInformation = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             $allShopDetailKey,
-            array('function' => 'KC\Repository\Shop::getStoreDetails', 'parameters' => array($howToGuides[0]['id']))
+            array('function' => 'KC\Repository\Shop::getStoreDetails', 'parameters' => array($howToGuides[0][0]['id']))
         );
 
         if ($shopInformation[0]['showChains']) {
@@ -360,14 +360,14 @@ class StoreController extends Zend_Controller_Action
             array('function' => '\FrontEnd_Helper_viewHelper::getShopCouponCode', 'parameters' => array(
                 'latestupdates',
                 4,
-                $howToGuides[0]['id'])
+                $howToGuides[0][0]['id'])
             )
         );
         $allOffersInStoreKey = '6_topOffersHowto'.$ShopList;
         $offers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             $allOffersInStoreKey,
             array('function' => '\FrontEnd_Helper_viewHelper::commonfrontendGetCode',
-                'parameters' => array('topSixOffers', 6, $howToGuides[0]['id'], 0)
+                'parameters' => array('topSixOffers', 6, $howToGuides[0][0]['id'], 0)
             )
         );
         $offers = array_chunk($offers, 3);
@@ -377,16 +377,15 @@ class StoreController extends Zend_Controller_Action
         $this->view->popularStoresList = $frontEndViewHelper->PopularShopWidget();
         $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->howToGuides=$howToGuides;
-        
         $shopName = isset($shopInformation[0]['name']) ? $shopInformation[0]['name'] : '';
-        $howToGuides = isset($howToGuides[0]['howtoTitle']) ? $howToGuides[0]['howtoTitle'] : '';
+        $howToGuides = isset($howToGuides[0][0]['howtoTitle']) ? $howToGuides[0][0]['howtoTitle'] : '';
         $customHeader = '';
         $this->viewHelperObject->getMetaTags(
             $this,
             str_replace('[shop]', $shopName, $howToGuides),
             '',
-            trim($howToGuides[0]['howtoMetaDescription']),
-            $howToGuides[0]['permaLink'],
+            trim(isset($howToGuides[0][0]['howtoMetaDescription']) ? $howToGuides[0][0]['howtoMetaDescription'] : ''),
+            isset($howToGuides[0][0]['permaLink']) ? $howToGuides[0][0]['permaLink'] : '',
             FACEBOOK_IMAGE,
             $customHeader
         );

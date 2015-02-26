@@ -1183,7 +1183,7 @@ class Offer Extends \KC\Entity\Offer
         }
 
         if ($visibility) {
-            $offers = $offers->andWhere('o.Visability != "MEM"');
+            $query = $query->andWhere('o.Visability !='.$entityManagerUser->expr()->literal('MEM'));
         }
 
         if ($limit) {
