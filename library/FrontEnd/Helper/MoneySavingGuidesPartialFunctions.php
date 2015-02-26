@@ -7,8 +7,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
         foreach ($categoryWiseAllArticles as $article) {
             $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/"
                     . $article['authorDetails']['slug'];
-            $articleUpdatedAtDate = new Zend_Date($article['articles']['publishdate']);
-            $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
+            $articleUpdatedAtDate = $article['articles']['publishdate']->format('Y-m-d');
             $authorName = FrontEnd_Helper_AuthorPartialFunctions::getAuthorName(
                 $article['authorDetails']['firstName'],
                 $article['authorDetails']['lastName']
@@ -72,7 +71,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
     {
         foreach ($categoryWiseArticles as $key => $categoryWiseArticle) {
             $categoryWiseArticles[$key]['authorDetails'] =
-                User::getUserDetails($categoryWiseArticle['articles']['authorid']);
+                KC\Repository\User::getUserDetails($categoryWiseArticle['articles']['authorid']);
             $articleCategoryType = !empty($categoryWiseArticle['articles']['articlecategory'])
                 ? $categoryWiseArticle['articles']['articlecategory'][0]['name'] : '';
             $categoryWiseArticles[$key]['artcileCategoryType'] = $articleCategoryType;

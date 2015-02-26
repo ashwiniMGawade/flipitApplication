@@ -21,7 +21,7 @@ $mostReadArticles = $this->mostReadArticles;
                             : '';
                     } else {
                         $mostReadArticleImage = 
-                            !empty($mostReadArticle['thumbnailname '])
+                            !empty($mostReadArticle['thumbnailname'])
                             ? PUBLIC_PATH_CDN
                             .$mostReadArticle['thumbnailpath'] 
                             .$mostReadArticle['thumbnailname']
@@ -52,7 +52,7 @@ $mostReadArticles = $this->mostReadArticles;
                                         <?php echo $mostReadArticleTitle;?>
                                     </a>
                                 </h2>
-                                <em class="date"><?php echo $articleUpdatedAtDate->date;?></em>
+                                <em class="date"><?php echo $articleUpdatedAtDate->format('Y-m-d');?></em>
                             </div>
                         </div>
                     </div>

@@ -81,15 +81,13 @@ class User extends \KC\Entity\User
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select(
-            'u.id, u.firstName,u.lastName,u.addtosearch,
-            u.mainText, u.editorText, u.slug,
-            u.google, pi.name, pi.path'
+            'u, pi'
         )
             ->from('\KC\Entity\User', 'u')
             ->leftJoin("u.profileimage", "pi")
             ->setParameter(1, $userId)
             ->where('u.id = ?1');
-        $userDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $userDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $userDetails;
     }
 

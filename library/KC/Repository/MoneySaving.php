@@ -34,7 +34,7 @@ class MoneySaving Extends \KC\Entity\MoneySaving
         $query = $queryBuilder
             ->select(
                 'DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname, a.updated_at,
-                a.created_at, a.publishdate, ai.path, ai.name,aai.path, aai.name, ac.name, ac.categorytitlecolor'
+                a.created_at, a.publishdate, ai.path as thumbnailpath, ai.name as thumbnailname,aai.path as articleimagepath, aai.name as articleimagename, ac.name, ac.categorytitlecolor'
             )
             ->from('KC\Entity\Articles', 'a')
             ->leftJoin('a.thumbnail', 'ai')
@@ -167,9 +167,8 @@ class MoneySaving Extends \KC\Entity\MoneySaving
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select(
-                'p, chap, a.id, a.title, a.plusTitle, a.permalink, a.content, a.authorid, 
-                a.authorname, a.created_at, a.publishdate, ai.path, ai.name,aai.path, aai.name,
-                ac.categorytitlecolor, ac.name'
+                'p, chap, a, ai,aai,
+                ac'
             )
             ->from('\KC\Entity\PopularArticles', 'p')
             ->leftJoin('p.articles', 'a')
