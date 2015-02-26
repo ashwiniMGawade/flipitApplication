@@ -1025,7 +1025,7 @@ class Offer extends BaseOffer
                  $clientProperAddress = ip2long($clientIP);
                  # get click detail and replcae A2ASUBID click subid
                  $conversion = Conversions::getConversionId($shopData['id'], $clientProperAddress, 'offer');
-                 $subid = str_replace('A2ASUBID', $conversion['subid'], $subid);
+                 $subid = str_replace('A2ASUBID', $conversion['id'], $subid);
                 $subid = FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
             }
         }
