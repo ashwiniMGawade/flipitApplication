@@ -20,7 +20,7 @@ if (!isset($_COOKIE['registered_user'])) {
         if ($shopId!=0) {
             $shop = \KC\Repository\Shop::getShopLogoByShopId($shopId);
             if($shop!='') {
-                $shopLogoImage = PUBLIC_PATH_CDN.ltrim($shop['logo']['path'], "/").'thum_medium_'. $shop['logo']['name'];
+                $shopLogoImage = PUBLIC_PATH_CDN.ltrim($shop['path'], "/").'thum_medium_'. $shop['name'];
                 $shopLogoOrDefaultImage = '<img alt="' . $shop['permaLink']. '" src="'. $shopLogoImage .'" title="' . $shop['permaLink']. '">';
             }
         }

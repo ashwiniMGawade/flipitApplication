@@ -1128,11 +1128,10 @@ class Offer Extends \KC\Entity\Offer
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
-            ->select(
-                'o,s.name,s.notes,s.accountManagerName,s.deepLink,s.refUrl,s.actualUrl,
-                s.permaLink,a.name as affname,a.id as affiliateNetworkId,p.id as pageId,tc.content,cat.id,img.path,
-                img.name'
-            )
+        ->select(
+            'o,s,a.name as affname,a.id as affiliateNetworkId,p.id as pageId,tc.content,cat.id as categoryId,
+            img.path as shopImagePath, img.name as shopImageName'
+        )
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('s.affliatenetwork', 'a')
@@ -1142,7 +1141,7 @@ class Offer Extends \KC\Entity\Offer
         ->leftJoin('s.logo', 'img')
         ->setParameter(1, $offerId)
         ->where('o.id = ?1');
-        $OfferDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $OfferDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $OfferDetails;
     }
 

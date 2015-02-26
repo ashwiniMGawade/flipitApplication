@@ -1,5 +1,5 @@
 <?php
-$offer = (object) $this->offerdetail[0];
+$offer = (object) $this->offerdetail[0][0];
 $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
 $termsAndConditions =  $offerPartial->getOfferTermsAndCondition($offer);
 $daysTillOfferExpires =  $offerPartial->getDaysTillOfferExpires($offer->endDate);
@@ -24,7 +24,7 @@ if ($this->offerImagePath == '') {
         <header class="head">
             <div class="icon">
                 <img src="<?php echo $this->facebookImage; ?>" 
-                width="176" height="89" alt='<?php echo $offer->shop['name'];?>' title='<?php echo $offer->shop['name'];?>'>
+                width="176" height="89" alt='<?php echo $offer->shopOffers['name'];?>' title='<?php echo $offer->shopOffers['name'];?>'>
             </div>
             <div class="box">
                 <div class="text">
