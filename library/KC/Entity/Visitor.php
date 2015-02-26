@@ -55,11 +55,6 @@ class Visitor
     private $status;
 
     /**
-     * @ORM\Column(type="integer", length=8, nullable=true)
-     */
-    private $imageId;
-
-    /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
     private $gender;
@@ -150,9 +145,9 @@ class Visitor
     private $changepasswordrequest;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $codealert;
+    private $code_alert_send_date;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Conversions", mappedBy="visitor")

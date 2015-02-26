@@ -28,10 +28,7 @@ class Visitor extends \KC\Entity\Visitor
                 ->where('v.email ='. $queryBuilder->expr()->literal($emailAddress));
             $visitorInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
-        echo "<pre>";
-        print_r($visitorInformation);
-        die;
-        return !empty($visitorInformation) ? 0 : '';
+        return empty($visitorInformation) ? 0 : 1;
     }
 
     public static function getFavoriteShopsForUser($visitorId, $shopId)
@@ -76,21 +73,24 @@ class Visitor extends \KC\Entity\Visitor
             $visitorId = \Auth_VisitorAdapter::getIdentity()->id;
             $visitor = \Zend_Registry::get('emLocale')->find("\KC\Entity\Visitor", $visitorId);
             $visitor->weeklyNewsLetter = $visitorInformation['weeklyNewsLetter'];
-            $visitor->codealert = $visitorInformation['codealert'];
+            $visitor->codeAlert = $visitorInformation['codealert'];
         } else {
             $visitor = new \KC\Entity\Visitor();
             $visitor->weeklyNewsLetter = '1';
-            $visitor->codealert = '1';
-            $visitor->currentLogIn = '0000-00-00';
-            $visitor->lastLogIn = '0000-00-00';
-            $visitor->active_codeid = '';
-
-            $visitor->deleted = 0;
+            $visitor->codeAlert = '1';
+            $visitor->travelNewsLetter = '0';
+            $visitor->fashionNewsLetter =  '0';
+            $visitor->currentLogIn = new \DateTime('now');
+            $visitor->lastLogIn = new \DateTime('now');
+            $visitor->status = '1';
+            $visitor->deleted = '0';
             $visitor->created_at = new \DateTime('now');
             $visitor->updated_at = new \DateTime('now');
-
+            $visitor->active_codeid =  'test';
+            $visitor->active =  '1';
+            $visitor->changepasswordrequest =  '1';
             $visitor->email = \FrontEnd_Helper_viewHelper::sanitize($visitorInformation['emailAddress']);
-            if (\KC\Entity\Signupmaxaccount::getemailConfirmationStatus()) {
+            if (\KC\Repository\Signupmaxaccount::getemailConfirmationStatus()) {
                 $visitor->active = false;
             } else {
                 $visitor->active = true;

@@ -34,7 +34,7 @@ class SignupController extends Zend_Controller_Action
                 $this->_getParam('id')
             )
         );
-        $visitorStatus = $visitorInformation == 0 ? false : true;
+        $visitorStatus = $visitorInformation == 1 ? false : true;
         echo \Zend_Json::encode($visitorStatus);
         exit;
     }
