@@ -143,7 +143,9 @@ abstract class BaseVisitor extends Doctrine_Record
                 'default' => 1,
                 'type' => 'boolean',
         ));
-
+        $this->hasColumn('code_alert_send_date', 'timestamp', null, array(
+                'type' => 'timestamp',
+             ));
       /*  $this->hasColumn('locale', 'string', 5, array(
                 'length' => '5',
                 'type' => 'string',
