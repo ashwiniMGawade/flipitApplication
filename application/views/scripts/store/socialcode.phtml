@@ -35,15 +35,8 @@ function validateAddSocialCode() {
         errorClass: 'input-error',
         validClass: 'input-success',
         rules: {
-            nickname: {
+            shops: {
                 required: true
-            },
-            title: {
-                required: true
-            },
-            offerUrl: {
-                required: true,
-                regex  :/([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
             },
             code: {
                 required: true
@@ -56,19 +49,12 @@ function validateAddSocialCode() {
             }
         },
         messages : {
-            nickname : {
+            shops : {
                 required: ''
-              },
-            title: {
-                required:''
-            },
-            offerUrl: {
-                required:'',
-                regex : ''
             },
             code: {
-                  required: ''
-              },
+                required: ''
+            },
             expireDate: {
                 required: '',
                 date : ''
@@ -121,17 +107,12 @@ foreach ($socialcodeForm->getElements() as $formElement) {
         action="">
         <h3><?php echo $this->translate('Social Code');?></h3>
         <p><?php echo $this->translate('Share a code with our users');?></p>
-        <?php echo $socialcodeForm->nickname->renderViewHelper();?>
-        <?php echo $socialcodeForm->title->renderViewHelper();?>
-        <?php echo $socialcodeForm->offerUrl->renderViewHelper();?>
-        <div class="input-block">
-            <?php echo $socialcodeForm->code->renderViewHelper();?>
-            <?php echo $socialcodeForm->expireDate->renderViewHelper();?>
-        </div>
         <?php 
+        echo $socialcodeForm->shops->renderViewHelper();
+        echo $socialcodeForm->code->renderViewHelper();
         echo $socialcodeForm->offerDetails->renderViewHelper();
+        echo $socialcodeForm->expireDate->renderViewHelper();
         echo $socialcodeForm->shopId->renderViewHelper();
-        echo $socialcodeForm->shopPermalink->renderViewHelper();
         echo $this->formSubmit(
             'sharecode',
             FrontEnd_Helper_viewHelper::__form('form_share vouchercode'),

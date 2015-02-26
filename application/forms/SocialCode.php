@@ -7,52 +7,36 @@ class Application_Form_SocialCode extends Application_Form_Base
     }
     public function init()
     {
-        $nickname = new Zend_Form_Element_Text('nickname');
-        $nickname->setRequired(true);
-        $nickname->setAttrib('class', 'form-control');
-        $nickname->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_nickname'));
-        $validator = new Zend_Validate_Alpha(array('allowWhiteSpace' => true));
-        $nickname->addValidator($validator);
-
-        $title = new Zend_Form_Element_Text('title');
-        $title->setRequired(true);
-        $title->setAttrib('class', 'form-control');
-        $title->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_Offer Title'));
-
-        $offerUrl = new Zend_Form_Element_Text('offerUrl');
-        $offerUrl->setRequired(true);
-        $offerUrl->setAttrib('class', 'form-control');
-        $offerUrl->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_Offer URL'));
-        $validator = new Zend_Validate_Regex("%^(www\.)([a-z0-9-].?)+(:[0-9]+)?(/.*)?$%i");
-        $offerUrl->addValidator($validator);
-
+        $shops = new Zend_Form_Element_Text('shops');
+        $shops->setRequired(true);
+        $shops->setAttrib('class', 'form-control');
+        $shops->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_shops'));
+       
         $code = new Zend_Form_Element_Text('code');
         $code->setRequired(true);
         $code->setAttrib('class', 'form-control');
         $code->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_Coupon code'));
-
-        $expireDate = new Zend_Form_Element_Text('expireDate');
-        $expireDate->setRequired(true);
-        $expireDate->setAttrib('class', 'form-control');
-        $expireDate->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_expireddate'));
-
-        $offerDetails = new Zend_Form_Element_Textarea('offerDetails');
+        
+        $offerDetails = new Zend_Form_Element_Text('offerDetails');
         $offerDetails->setRequired(true);
         $offerDetails->setAttrib('class', 'form-control');
         $offerDetails->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_Offer Details'));
 
+        $expireDate = new Zend_Form_Element_Text('expireDate');
+        $expireDate->setAttrib('class', 'form-control');
+        $expireDate->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_expireddate'));
+        //$validator = new Zend_Validate_Date(array('format' => 'd-m-Y'));
+        //$expireDate->addValidator($validator);
+        $expireDate->addValidator(new Application_Form_DateGreaterThanToday());
+
         $shopIdHiddenField =  new Zend_Form_Element_Hidden('shopId');
-        $shopPermalinkHiddenField =  new Zend_Form_Element_Hidden('shopPermalink');
 
         $this->addElements(array(
-            $nickname,
-            $title,
-            $offerUrl,
+            $shops,
             $code,
-            $expireDate,
             $offerDetails,
-            $shopIdHiddenField,
-            $shopPermalinkHiddenField
+            $expireDate,
+            $shopIdHiddenField
         ));
     }
 }
