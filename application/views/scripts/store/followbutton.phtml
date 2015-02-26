@@ -12,7 +12,6 @@ if (\KC\Repository\Visitor::getFavoriteShopsForUser($visitorId, $this->shopId)==
         <span class = "follow-text">'.FrontEnd_Helper_viewHelper::__translate("FOLLOW").'</span>';
     $aTagClasses = 'pop btn btn-sm btn-default follow-button';
 endif;
-
 $clickEvent = '';
 if ($visitorId==0) {
     $redirectUrl = 'javascript:void(0)';
