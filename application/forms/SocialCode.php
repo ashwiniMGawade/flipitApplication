@@ -23,6 +23,8 @@ class Application_Form_SocialCode extends Application_Form_Base
         $offerUrl->setRequired(true);
         $offerUrl->setAttrib('class', 'form-control');
         $offerUrl->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_Offer URL'));
+        $validator = new Zend_Validate_Regex("%^(www\.)([a-z0-9-].?)+(:[0-9]+)?(/.*)?$%i");
+        $offerUrl->addValidator($validator);
 
         $code = new Zend_Form_Element_Text('code');
         $code->setRequired(true);
