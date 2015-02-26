@@ -1704,7 +1704,7 @@ public static function getShopDetail($shopId)
                  # get click detail and replcae A2ASUBID click subid
                  $conversion = Conversions::getConversionId( $data['id'] , $ip , 'shop') ;
 
-                 $subid = str_replace('A2ASUBID',$conversion['subid'] , $subid );
+                 $subid = str_replace('A2ASUBID',$conversion['id'] , $subid );
                 $subid = FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
             }
         }
