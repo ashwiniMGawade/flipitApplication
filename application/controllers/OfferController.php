@@ -167,24 +167,24 @@ class OfferController extends Zend_Controller_Action
         $this->view->offerdetail = $offerDetails;
         $this->view->vote = $offerParameters['vote'];
         $this->view->votepercentage = 0;
-        $shopImage = PUBLIC_PATH_CDN.$offerDetails[0]['shop']['logo']['path'].'thum_medium_store_'.
-        $offerDetails[0]['shop']['logo']['name'];
+        $shopImage = PUBLIC_PATH_CDN.$offerDetails[0]['shopImagePath'].'thum_medium_store_'.
+        $offerDetails[0]['shopImageName'];
         $this->viewHelperObject->getMetaTags(
             $this,
-            $offerDetails[0]['title'],
+            $offerDetails[0][0]['title'],
             '',
             '',
-            $offerDetails[0]['shop']['permaLink'],
+            $offerDetails[0][0]['shopOffers']['permaLink'],
             $shopImage,
             ''
         );
-        if ($offerDetails[0]['couponCodeType']  == 'UN') {
-            $getOfferUniqueCode = \KC\Repository\CouponCode::returnAvailableCoupon($offerDetails[0]['id']);
+        if ($offerDetails[0][0]['couponCodeType']  == 'UN') {
+            $getOfferUniqueCode = \KC\Repository\CouponCode::returnAvailableCoupon($offerDetails[0][0]['id']);
             if ($getOfferUniqueCode) {
                 $this->view->couponCode = $getOfferUniqueCode['code'];
             }
         } else {
-            $this->view->couponCode = $offerDetails[0]['couponCode'];
+            $this->view->couponCode = $offerDetails[0][0]['couponCode'];
         }
 
     }

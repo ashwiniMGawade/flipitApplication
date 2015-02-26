@@ -37,10 +37,10 @@ class Visitor extends \KC\Entity\Visitor
         if ($shopId!=0) {
             $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->select("fv.id")
-                ->from("\KC\Entity\FavoriteShop fv")
+                ->from("\KC\Entity\FavoriteShop", "fv")
                 ->where('fv.visitor='.$visitorId)
                 ->andWhere('fv.shop='.$shopId);
-            $favoriteShops = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $favoriteShops = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             if (!empty($favoriteShops)) {
                 $favouriteShopsStatus = true;
             }

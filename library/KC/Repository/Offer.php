@@ -1070,14 +1070,15 @@ class Offer Extends \KC\Entity\Offer
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
             ->select(
-                's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl as shoprefUrl, s.actualUrl, o.refOfferUrl,
-                o.refURL as refUrl, s.id as shopId'
+                's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl as shoprefUrl, s.actualUrl,
+                o.refOfferUrl, o.refURL as refUrl, s.id as shopId'
             )
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->setParameter(1, $offerId)
         ->where('o.id = ?1');
         $shopData = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
         $network = \KC\Repository\Shop::getAffliateNetworkDetail($shopData['shopId']);
         if ($checkRefUrl) {
             # retur false if s shop is not associated with any network
@@ -1085,10 +1086,9 @@ class Offer Extends \KC\Entity\Offer
                 return false;
             }
 
-            if ($shopData['refURL'] != "") {
+            if ($shopData['refUrl'] != "") {
                 return true ;
-
-            } else if ($shopData['shop']['refUrl'] != "") {
+            } else if ($shopData['shoprefUrl'] != "") {
                 return true;
             } else {
                 return true;
@@ -1106,19 +1106,17 @@ class Offer Extends \KC\Entity\Offer
                 $subid = \FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
             }
         }
-        if ($shopData['refURL'] != "") {
-            $url = $shopData['refURL'];
+        if ($shopData['refUrl'] != "") {
+            $url = $shopData['refUrl'];
             $url .= $subid;
 
-        } else if ($shopData['shop']['refUrl'] != "") {
-
-            $url = $shopData['shop']['refUrl'];
+        } else if ($shopData['shoprefUrl'] != "") {
+            $url = $shopData['shoprefUrl'];
             $url .=  $subid;
-
-        } else if ($shopData['shop']['actualUrl'] != "") {
-            $url = $shopData['shop']['actualUrl'];
+        } else if ($shopData['actualUrl'] != "") {
+            $url = $shopData['actualUrl'];
         } else {
-            $urll = $shopData['shop']['permalink'];
+            $urll = $shopData['permalink'];
             $url = HTTP_PATH_LOCALE.$urll;
         }
         return $url;
@@ -1128,11 +1126,10 @@ class Offer Extends \KC\Entity\Offer
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
-            ->select(
-                'o,s.name,s.notes,s.accountManagerName,s.deepLink,s.refUrl,s.actualUrl,
-                s.permaLink,a.name as affname,a.id as affiliateNetworkId,p.id as pageId,tc.content,cat.id,img.path,
-                img.name'
-            )
+        ->select(
+            'o,s,a.name as affname,a.id as affiliateNetworkId,p.id as pageId,tc.content,cat.id as categoryId,
+            img.path as shopImagePath, img.name as shopImageName'
+        )
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('s.affliatenetwork', 'a')
@@ -1142,7 +1139,7 @@ class Offer Extends \KC\Entity\Offer
         ->leftJoin('s.logo', 'img')
         ->setParameter(1, $offerId)
         ->where('o.id = ?1');
-        $OfferDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $OfferDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $OfferDetails;
     }
 
@@ -1183,7 +1180,7 @@ class Offer Extends \KC\Entity\Offer
         }
 
         if ($visibility) {
-            $offers = $offers->andWhere('o.Visability != "MEM"');
+            $query = $query->andWhere('o.Visability !='.$entityManagerUser->expr()->literal('MEM'));
         }
 
         if ($limit) {

@@ -22,7 +22,8 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         /*echo "<pre>";
-        print_r(KC\Repository\SpecialList::getSpecialPages());
+        $test = KC\Repository\Offer::getOfferInfo('45336');
+        print_r($test[0]['shopImageName']);
         die;*/
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
