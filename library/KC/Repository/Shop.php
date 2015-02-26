@@ -1505,7 +1505,8 @@ class Shop extends \KC\Entity\Shop
     public static function getStoreLinks($shopId, $checkRefUrl = false)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $data = $queryBuilder->select('s.id, s.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl')
+        $data = $queryBuilder
+        ->select('s.id, s.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl')
         ->from('KC\Entity\Shop', 's')
         ->where('s.id='.$shopId)
         ->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
