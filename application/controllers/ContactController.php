@@ -23,11 +23,22 @@ class ContactController extends Zend_Controller_Action
     public function getcontactformdetailsAction()
     {
         $parameters = $this->_getAllParams();
-        $visitorName = $parameters['name'];
+        $visitorName = FrontEnd_Helper_viewHelper::sanitize($parameters['name']);
         $visitorEmail = FrontEnd_Helper_viewHelper::sanitize($parameters['email']);
-        $subject = $parameters['subject'];
-        $message = $parameters['message'];
-        self::sendMailThroughMandril($visitorName, $visitorEmail, $subject, $message);
+        $subject = FrontEnd_Helper_viewHelper::sanitize($parameters['subject']);
+        $message = FrontEnd_Helper_viewHelper::sanitize($parameters['message']);
+        $captcha = isset($parameters['g-recaptcha-response']) ? $parameters['g-recaptcha-response'] : '';
+        if (empty($captcha)) {
+            $errorMessage = "There is Issue in Captcha";
+            $flashMessage = $this->_helper->getHelper('FlashMessenger');
+            $flashMessage->addMessage(array('success' => $errorMessage));
+            $urlToRedirect = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_info').'/'.
+                FrontEnd_Helper_viewHelper::__link('link_contact');
+            $this->_redirect($urlToRedirect);
+        } else {
+            self::sendMailThroughMandril($visitorName, $visitorEmail, $subject, $message);
+        }
+        
     }
 
     public function sendMailThroughMandril($visitorName, $visitorEmail, $subject, $message)
