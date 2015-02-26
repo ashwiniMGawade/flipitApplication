@@ -54,7 +54,7 @@ class CodeAlertQueue extends BaseCodeAlertQueue
 
     public static function moveCodeAlertToTrash($codeAlertId)
     {
-        Doctrine_Query::create()->delete()->from('CodeAlertQueue c')->where("c.id=".$codeAlertId)->execute();
+        Doctrine_Query::create()->delete()->from('CodeAlertQueue c')->where("c.offerId=".$codeAlertId)->execute();
         return true;
     }
 
@@ -117,7 +117,6 @@ class CodeAlertQueue extends BaseCodeAlertQueue
                     "(SELECT count(fs.id) FROM FavoriteShop fs LEFT JOIN fs.visitors vs 
                     WHERE fs.shopId = s.id AND vs.id = fs.visitorId AND vs.codealert = 1) as visitors"
                 )
-                ->addSelect("(SELECT cq.id FROM CodeAlertQueue cq WHERE cq.offerId = o.id) as codeAlertId")
                 ->andWhere("o.id IN($offerIds)")
                 ->andWhere("o.userGenerated = '0'");
         }
@@ -125,7 +124,7 @@ class CodeAlertQueue extends BaseCodeAlertQueue
             $offerDetails,
             $codeAlertParameters,
             array(
-                "__identifier" => 'o.id', 's.name','o.title','visitors','codeAlertId'
+                "__identifier" => 'o.id', 's.name','o.title','visitors'
             ),
             array(),
             array()
