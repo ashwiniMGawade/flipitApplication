@@ -605,33 +605,6 @@ class Signupmaxaccount extends BaseSignupmaxaccount
         }
     }
 
-    protected static function validateIfNewsLetterCanBeScheduled()
-    {
-        $newsletterSentDate = self::getNewsletterSentTime();
-        $newsletterSentDummyDate = $newsletterSentDate[0]['newsletter_sent_time'];
-        if (empty($newsletterSentDummyDate) || $newsletterSentDummyDate == '0000-00-00 00:00:00') {
-            $newsletterSentDummyDate = '2000:00:00 00:00:00';
-        }
-        $previousNewsletterScheduledDate = date('d-m-Y', strtotime($newsletterSentDummyDate. "+1 days"));
-        return $previousNewsletterScheduledDate;
-    }
-
-    protected static function getNewsletterSentTime()
-    {
-        $newsletterSentTime = Doctrine_Query::create()
-            ->select('p.newsletter_sent_time')
-            ->from('Signupmaxaccount p')
-            ->where('p.id = 1')
-            ->fetchArray();
-        return $newsletterSentTime;
-    }
-
-    protected static function getFormattedScheduleDate($scheduledDate)
-    {
-        $explodedScheduledDate = explode('-', $scheduledDate);
-        $formattedScheduledDate = $explodedScheduledDate[1].'-'.$explodedScheduledDate[0].'-'.$explodedScheduledDate[2];
-        return $formattedScheduledDate;
-    }
 
     public static function saveScheduledNewsletter($request)
     {
@@ -671,6 +644,34 @@ class Signupmaxaccount extends BaseSignupmaxaccount
         return $returnValue;
     }
 
+    protected static function validateIfNewsLetterCanBeScheduled()
+    {
+        $newsletterSentDate = self::getNewsletterSentTime();
+        $newsletterSentDummyDate = $newsletterSentDate[0]['newsletter_sent_time'];
+        if (empty($newsletterSentDummyDate) || $newsletterSentDummyDate == '0000-00-00 00:00:00') {
+            $newsletterSentDummyDate = '2000:00:00 00:00:00';
+        }
+        $previousNewsletterScheduledDate = date('d-m-Y', strtotime($newsletterSentDummyDate. "+1 days"));
+        return $previousNewsletterScheduledDate;
+    }
+
+    protected static function getNewsletterSentTime()
+    {
+        $newsletterSentTime = Doctrine_Query::create()
+            ->select('p.newsletter_sent_time')
+            ->from('Signupmaxaccount p')
+            ->where('p.id = 1')
+            ->fetchArray();
+        return $newsletterSentTime;
+    }
+
+    protected static function getFormattedScheduleDate($scheduledDate)
+    {
+        $explodedScheduledDate = explode('-', $scheduledDate);
+        $formattedScheduledDate = $explodedScheduledDate[1].'-'.$explodedScheduledDate[0].'-'.$explodedScheduledDate[2];
+        return $formattedScheduledDate;
+    }
+    
     protected static function saveNewsletterScheduled($newsLetterScheduledDateTime)
     {
         $signupMaxAccount = new Signupmaxaccount();
