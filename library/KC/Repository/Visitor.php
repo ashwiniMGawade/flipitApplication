@@ -210,7 +210,7 @@ class Visitor extends \KC\Entity\Visitor
     {
         $visitorLoginStatus = false;
         $visitorDetails = self::getUserDetails($visitorId);
-        $dataAdapter = new \Auth_VisitorAdapter($visitorDetails[0]["email"], $visitorDetails[0]["password"]);
+        $dataAdapter = new \Auth_VisitorAdapter($visitorDetails["email"], $visitorDetails["password"]);
         $visitorZendAuth = \Zend_Auth::getInstance();
         $visitorZendAuth->setStorage(new Zend_Auth_Storage_Session('front_login'));
         $visitorZendAuth->authenticate($dataAdapter);
