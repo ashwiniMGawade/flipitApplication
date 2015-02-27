@@ -61,10 +61,10 @@ class SendNewsletter
             $localeSettings = LocaleSettings::getLocaleSettings();
             $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
             $scheduledTime =  date('Y-m-d', strtotime($newsLetterSetings[0]['newletter_scheduled_time']));
-            $sentTime = date('Y-m-d', strtotime($newsLetterSetings[0]['newsletter_sent_time']));
+            $newsletterSentTime = date('Y-m-d', strtotime($newsLetterSetings[0]['newsletter_sent_time']));
             if ($newsLetterSetings[0]['newletter_is_scheduled'] == 1
                     && $scheduledTime <= $currentDate
-                    && $sentTime <= $currentDate) {
+                    && $newsletterSentTime <= $currentDate) {
                 $customLocale= !empty($localeSettings[0]['locale']) ? $localeSettings[0]['locale'] : 'nl_NL';
                 $this->_trans = new Zend_Translate(array(
                         'adapter' => 'gettext',
