@@ -212,10 +212,10 @@ class Visitor extends \KC\Entity\Visitor
         $visitorDetails = self::getUserDetails($visitorId);
         $dataAdapter = new \Auth_VisitorAdapter($visitorDetails["email"], $visitorDetails["password"]);
         $visitorZendAuth = \Zend_Auth::getInstance();
-        $visitorZendAuth->setStorage(new Zend_Auth_Storage_Session('front_login'));
+        $visitorZendAuth->setStorage(new \Zend_Auth_Storage_Session('front_login'));
         $visitorZendAuth->authenticate($dataAdapter);
-        if (Auth_VisitorAdapter::hasIdentity()) {
-            $visitorId = Auth_VisitorAdapter::getIdentity()->id;
+        if (\Auth_VisitorAdapter::hasIdentity()) {
+            $visitorId = \Auth_VisitorAdapter::getIdentity()->id;
             self::updateLoginTime($visitorId);
             setcookie('kc_unique_user_id', $visitorId, time() + (86400 * 3), '/');
             $visitorLoginStatus = true;
