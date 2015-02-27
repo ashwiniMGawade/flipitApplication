@@ -5,11 +5,10 @@ class Application_Form_DateGreaterThanToday extends Zend_Validate_Abstract
     protected $_messageTemplates = array(
         self::DATE_INVALID => "'%value%' is not greater than or equal today"
     );
-
     public function isValid($value)
     {
-        echo $this->_setValue($value);
-        echo $today = date('Y-m-d'); die;
+        $value =  strtotime($value);
+        $today = strtotime(date('d-m-Y'));
         // expecting $value to be YYYY-MM-DD
         if ($value < $today) {
             $this->_error(self::DATE_INVALID);

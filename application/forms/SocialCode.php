@@ -25,8 +25,8 @@ class Application_Form_SocialCode extends Application_Form_Base
         $expireDate = new Zend_Form_Element_Text('expireDate');
         $expireDate->setAttrib('class', 'form-control');
         $expireDate->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_expireddate'));
-        //$validator = new Zend_Validate_Date(array('format' => 'd-m-Y'));
-        //$expireDate->addValidator($validator);
+        $validator = new Zend_Validate_Date(array('format' => 'd-m-Y'));
+        $expireDate->addValidator($validator);
         $expireDate->addValidator(new Application_Form_DateGreaterThanToday());
 
         $shopIdHiddenField =  new Zend_Form_Element_Hidden('shopId');
