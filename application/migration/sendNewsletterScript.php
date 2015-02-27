@@ -101,13 +101,13 @@ class SendNewsletter
                 Zend_Registry::set('Zend_Locale', $customLocale);
                 $localeTimezone = $localeSettings[0]['timezone'];
                 echo "\n" ;
-                $sentTime = new Zend_Date($newsLetterSetings[0]['newletter_scheduled_time']);
-                $sentTime->get('YYYY-MM-dd HH:mm:ss');
-                $currentTime = new Zend_Date();
-                $currentTime->setTimezone($localeTimezone);
+                $newsletterScheduledDateTime = new Zend_Date($newsLetterSetings[0]['newletter_scheduled_time']);
+                $newsletterScheduledDateTime->get('YYYY-MM-dd HH:mm:ss');
+                $currentDateTime = new Zend_Date();
+                $currentDateTime->setTimezone($localeTimezone);
                 echo "\n" ;
-                $currentTime->get('YYYY-MM-dd HH:mm:ss');
-                if ($currentTime->isLater($sentTime)) {
+                $currentDateTime->get('YYYY-MM-dd HH:mm:ss');
+                if ($currentDateTime->isLater($newsletterScheduledDateTime)) {
                     echo "\nSending newletter...\n" ;
                     $this->mandrilHandler($key, $newsLetterSetings);
                 } else {
