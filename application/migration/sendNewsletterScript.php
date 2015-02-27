@@ -11,7 +11,6 @@ class SendNewsletter
     public $_linkPath = null;
     public $_publicPath = null;
     public $_public_cdn_path = null;
-    public $_http_path_cdn = null;
     public $_recipientMetaData  = array();
     public $_loginLinkAndData = array();
     public $_to = array();
@@ -51,23 +50,10 @@ class SendNewsletter
     protected function send($dsn, $key)
     {
         if ($key == 'en') {
-            $this->_localePath = '';
-            $this->_hostName = "http://www.kortingscode.nl";
-            $this->_logo = $this->_hostName ."/public/images/HeaderMail.gif" ;
-            $suffix = "" ;
-            $this->_locale = '';
-            $this->_siteName = "Kortingscode.nl";
-            $this->_public_cdn_path = "http://img.kortingscode.nl/public/";
+            self::setVariablesForKortingscodeSite();
         } else {
-            $this->_localePath = $key . "/";
-            $this->_hostName = "http://www.flipit.com";
-            $suffix = "_" . strtoupper($key) ;
-            $this->_locale = $key;
-            $this->_siteName = "Flipit.com";
-            $this->_logo =  $this->_hostName ."/public/images/flipit-welcome-mail.jpg";
-            $this->_public_cdn_path = "http://img.flipit.com/public/" . strtolower($this->_localePath);
+            self::setVariablesForLocales($key);
         }
-
         $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
         $manager = CommonMigrationFunctions::loadDoctrineModels();
         try {
@@ -139,6 +125,29 @@ class SendNewsletter
         $manager->closeConnection($doctrineSiteDbConnection);
     }
 
+    protected function setVariablesForLocales($key)
+    {
+        $this->_localePath = $key . "/";
+        $this->_hostName = "http://www.flipit.com";
+        $suffix = "_" . strtoupper($key) ;
+        $this->_locale = $key;
+        $this->_siteName = "Flipit.com";
+        $this->_logo =  $this->_hostName ."/public/images/flipit-welcome-mail.jpg";
+        $this->_public_cdn_path = "http://img.flipit.com/public/" . strtolower($this->_localePath);
+        return true;
+    }
+
+    protected function setVariablesForKortingscodeSite()
+    {
+        $this->_localePath = '';
+        $this->_hostName = "http://www.kortingscode.nl";
+        $this->_logo = $this->_hostName ."/public/images/HeaderMail.gif" ;
+        $suffix = "" ;
+        $this->_locale = '';
+        $this->_siteName = "Kortingscode.nl";
+        $this->_public_cdn_path = "http://img.kortingscode.nl/public/";
+        return true;
+    }
 
     protected function mandrilHandler($key, $newsLetterSetings)
     {
