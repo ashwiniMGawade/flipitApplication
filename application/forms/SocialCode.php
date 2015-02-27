@@ -30,7 +30,7 @@ class Application_Form_SocialCode extends Application_Form_Base
         $expireDate->addValidator(new Application_Form_DateGreaterThanToday());
 
         $shopIdHiddenField =  new Zend_Form_Element_Hidden('shopId');
-
+        
         $this->addElements(array(
             $shops,
             $code,

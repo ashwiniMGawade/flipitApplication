@@ -1,16 +1,12 @@
 <script type="text/javascript">
     $(document).ready(function(){
     $('input#shopId').val($('input#currentShop').val())
-    //validateAddSocialCode();
     $("#sharecode").click(function(){
-        //if ($("form#socialcodeForm").valid()) {
-            saveSocialCode();
-        //} else {
-            return false;
-        //}
+        saveSocialCode();
+        return false;
     });
 });
-    
+
 function saveSocialCode() {
     $.ajax({
         url : HOST_PATH_LOCALE + 'store/socialcode',
@@ -25,73 +21,6 @@ function saveSocialCode() {
             } else {
                 alert(__("Problem in your data"));
             }
-        }
-    });
-}
-var validator =  null;
-function validateAddSocialCode() {
-    validator = $('form#socialcodeForm')
-    .validate({
-        errorClass: 'input-error',
-        validClass: 'input-success',
-        rules: {
-            shops: {
-                required: true
-            },
-            code: {
-                required: true
-            },
-            expireDate: {
-                required: true
-            },
-            offerDetails: {
-                required: true
-            }
-        },
-        messages : {
-            shops : {
-                required: ''
-            },
-            code: {
-                required: ''
-            },
-            expireDate: {
-                required: '',
-                date : ''
-            },
-            offerDetails: {
-                required: ''
-            }
-        },
-        onfocusin : function(element) {
-            if($(element).valid() == 0){
-                $(element).removeClass('input-error').removeClass('input-success');
-                $(element).next('label').hide();
-            } else {
-                $(element).removeClass('input-error').addClass('input-success');
-                $(element).next('label').hide();
-            }
-        },
-        onfocusout :function(element) {
-            if($(element).valid() == 0){
-                $(element).removeClass('input-success').addClass('input-error');
-                $(element).next('label').hide();
-            } else {
-                $(element).removeClass('input-error').addClass('input-success');
-                $(element).next('label').hide();
-            }
-         },
-        highlight : function(element, errorClass, validClass) {
-            $(element).addClass(errorClass).removeClass(validClass);
-            $(element).next('label').hide();
-        },
-        unhighlight: function(element, errorClass, validClass) {
-            $(element).removeClass(errorClass);
-            $(element).next('label').hide();
-        },
-        success: function(element, errorClass, validClass) {
-            $(element).removeClass(errorClass).addClass(validClass);
-            $(element).next('label').hide();
         }
     });
 }
