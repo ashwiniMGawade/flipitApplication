@@ -607,14 +607,12 @@ class Signupmaxaccount extends BaseSignupmaxaccount
 
     protected static function validateIfNewsLetterCanBeScheduled()
     {
-        $newsletterScheduledDate = self::getNewsletterSentTime();
-        $previousNewsletterScheduledDate = date(
-            'd-m-Y',
-            strtotime($newsletterScheduledDate[0]['newsletter_sent_time']. "+1 days")
-        );
-        $previousNewsletterScheduledDate = $previousNewsletterScheduledDate == '31-12-1969'
-            ? '2000:00:00 00:00:00'
-            : $previousNewsletterScheduledDate;
+        $newsletterSentDate = self::getNewsletterSentTime();
+        $newsletterSentDummyDate = $newsletterSentDate[0]['newsletter_sent_time'];
+        if (empty($newsletterSentDummyDate) || $newsletterSentDummyDate == '0000-00-00 00:00:00') {
+            $newsletterSentDummyDate = '2000:00:00 00:00:00';
+        }
+        $previousNewsletterScheduledDate = date('d-m-Y', strtotime($newsletterSentDummyDate. "+1 days"));
         return $previousNewsletterScheduledDate;
     }
 

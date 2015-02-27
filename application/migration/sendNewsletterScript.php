@@ -15,6 +15,7 @@ class SendNewsletter
     public $_to = array();
     public $_mandrillKey = "";
     public $_template = "" ;
+    public $_suffix = '';
 
     public function __construct()
     {
@@ -70,28 +71,28 @@ class SendNewsletter
                 $this->_trans->addTranslation(
                     array(
                         'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
-                        'language/frontend_php' . $suffix . '.mo',
+                        'language/frontend_php' .$this->_suffix. '.mo',
                         'locale' => $customLocale,
                     )
                 );
                 $this->_trans->addTranslation(
                     array(
                         'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
-                        'language/email' . $suffix . '.mo',
+                        'language/email' .$this->_suffix. '.mo',
                         'locale' => $customLocale
                     )
                 );
                 $this->_trans->addTranslation(
                     array(
                         'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
-                        'language/form' . $suffix . '.mo',
+                        'language/form' .$this->_suffix. '.mo',
                         'locale' => $customLocale
                     )
                 );
                 $this->_trans->addTranslation(
                     array(
                         'content'   => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
-                        'language/po_links' . $suffix . '.mo',
+                        'language/po_links' .$this->_suffix. '.mo',
                         'locale'    => $customLocale
                     )
                 );
@@ -127,7 +128,7 @@ class SendNewsletter
     {
         $this->_localePath = $key . "/";
         $this->_hostName = "http://www.flipit.com";
-        $suffix = "_" . strtoupper($key) ;
+        $this->_suffix= "_" . strtoupper($key) ;
         $this->_locale = $key;
         $this->_siteName = "Flipit.com";
         $this->_logo =  $this->_hostName ."/public/images/flipit-welcome-mail.jpg";
@@ -140,7 +141,7 @@ class SendNewsletter
         $this->_localePath = '';
         $this->_hostName = "http://www.kortingscode.nl";
         $this->_logo = $this->_hostName ."/public/images/HeaderMail.gif" ;
-        $suffix = "" ;
+        $this->_suffix= "" ;
         $this->_locale = '';
         $this->_siteName = "Kortingscode.nl";
         $this->_public_cdn_path = "http://img.kortingscode.nl/public/";
