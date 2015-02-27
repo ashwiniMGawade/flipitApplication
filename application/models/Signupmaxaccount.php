@@ -609,13 +609,12 @@ class Signupmaxaccount extends BaseSignupmaxaccount
     public static function saveScheduledNewsletter($request)
     {
         $previousNewsletterScheduledDate = self::validateIfNewsLetterCanBeScheduled();
-        $scheduledDate = date($request->getParam("sendDate"));
-        $scheduledDate = self::getFormattedScheduleDate($scheduledDate);
+        $scheduledDate = self::getFormattedScheduleDate(date($request->getParam("sendDate")));
         $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
         $formattedCurrentDate = date('m-d-Y', strtotime($currentDate));
         $formattedScheduleDate = date('m-d-Y', strtotime($scheduledDate));
         if ($formattedScheduleDate >= $formattedCurrentDate) {
-            if ($scheduledDate > $previousNewsletterScheduledDate) {
+            if ($formattedScheduleDate >= $previousNewsletterScheduledDate) {
                 $scheduledTime = $request->getParam("sendTime", false);
                 $newsLetterScheduledDateTime = date(
                     'Y-m-d',
@@ -647,11 +646,13 @@ class Signupmaxaccount extends BaseSignupmaxaccount
     protected static function validateIfNewsLetterCanBeScheduled()
     {
         $newsletterSentDate = self::getNewsletterSentTime();
-        $newsletterSentDummyDate = $newsletterSentDate[0]['newsletter_sent_time'];
-        if (empty($newsletterSentDummyDate) || $newsletterSentDummyDate == '0000-00-00 00:00:00') {
-            $newsletterSentDummyDate = '2000:00:00 00:00:00';
+        $newsletterSentDatabaseDate = $newsletterSentDate[0]['newsletter_sent_time'];
+        if (empty($newsletterSentDatabaseDate) || $newsletterSentDatabaseDate == '0000-00-00 00:00:00') {
+            $newsletterSentDatabaseDate = date('Y-m-d', strtotime('2000-01-01'));
+        } else {
+            $newsletterSentDatabaseDate = $newsletterSentDatabaseDate;
         }
-        $previousNewsletterScheduledDate = date('d-m-Y', strtotime($newsletterSentDummyDate. "+1 days"));
+        $previousNewsletterScheduledDate = date('m-d-Y', strtotime($newsletterSentDatabaseDate. "+1 days"));
         return $previousNewsletterScheduledDate;
     }
 
@@ -671,7 +672,7 @@ class Signupmaxaccount extends BaseSignupmaxaccount
         $formattedScheduledDate = $explodedScheduledDate[1].'-'.$explodedScheduledDate[0].'-'.$explodedScheduledDate[2];
         return $formattedScheduledDate;
     }
-    
+
     protected static function saveNewsletterScheduled($newsLetterScheduledDateTime)
     {
         $signupMaxAccount = new Signupmaxaccount();
@@ -699,7 +700,6 @@ class Signupmaxaccount extends BaseSignupmaxaccount
             ->update('Signupmaxaccount')
             ->set('newletter_scheduled_time', '?', '')
             ->set('newletter_is_scheduled', '?', 0)
-            ->set('newsletter_sent_time', '?', '')
             ->where('id = 1')
             ->execute();
         return true;

@@ -61,61 +61,66 @@ class SendNewsletter
             $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
             $scheduledTime =  date('Y-m-d', strtotime($newsLetterSetings[0]['newletter_scheduled_time']));
             $newsletterSentTime = date('Y-m-d', strtotime($newsLetterSetings[0]['newsletter_sent_time']));
-            if ($newsLetterSetings[0]['newletter_is_scheduled'] == 1
-                    && $scheduledTime <= $currentDate
-                    && $newsletterSentTime <= $currentDate) {
-                $customLocale= !empty($localeSettings[0]['locale']) ? $localeSettings[0]['locale'] : 'nl_NL';
-                $this->_trans = new Zend_Translate(array(
-                        'adapter' => 'gettext',
-                        'disableNotices' => true));
-                $this->_trans->addTranslation(
-                    array(
-                        'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
-                        'language/frontend_php' .$this->_suffix. '.mo',
-                        'locale' => $customLocale,
-                    )
-                );
-                $this->_trans->addTranslation(
-                    array(
-                        'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
-                        'language/email' .$this->_suffix. '.mo',
-                        'locale' => $customLocale
-                    )
-                );
-                $this->_trans->addTranslation(
-                    array(
-                        'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
-                        'language/form' .$this->_suffix. '.mo',
-                        'locale' => $customLocale
-                    )
-                );
-                $this->_trans->addTranslation(
-                    array(
-                        'content'   => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
-                        'language/po_links' .$this->_suffix. '.mo',
-                        'locale'    => $customLocale
-                    )
-                );
-                Zend_Registry::set('Zend_Translate', $this->_trans);
-                Zend_Registry::set('Zend_Locale', $customLocale);
-                $localeTimezone = $localeSettings[0]['timezone'];
-                echo "\n" ;
-                $newsletterScheduledDateTime = new Zend_Date($newsLetterSetings[0]['newletter_scheduled_time']);
-                $newsletterScheduledDateTime->get('YYYY-MM-dd HH:mm:ss');
-                $currentDateTime = new Zend_Date();
-                $currentDateTime->setTimezone($localeTimezone);
-                echo "\n" ;
-                $currentDateTime->get('YYYY-MM-dd HH:mm:ss');
-                if ($currentDateTime->isLater($newsletterScheduledDateTime)) {
-                    echo "\nSending newletter...\n" ;
-                    $this->mandrilHandler($key, $newsLetterSetings);
+            if ($newsLetterSetings[0]['newletter_is_scheduled'] == 1) {
+                if ($newsLetterSetings[0]['newletter_is_scheduled'] == 1
+                        && $scheduledTime <= $currentDate
+                        && $newsletterSentTime < $currentDate) {
+                    $customLocale= !empty($localeSettings[0]['locale']) ? $localeSettings[0]['locale'] : 'nl_NL';
+                    $this->_trans = new Zend_Translate(array(
+                            'adapter' => 'gettext',
+                            'disableNotices' => true));
+                    $this->_trans->addTranslation(
+                        array(
+                            'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
+                            'language/frontend_php' .$this->_suffix. '.mo',
+                            'locale' => $customLocale,
+                        )
+                    );
+                    $this->_trans->addTranslation(
+                        array(
+                            'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
+                            'language/email' .$this->_suffix. '.mo',
+                            'locale' => $customLocale
+                        )
+                    );
+                    $this->_trans->addTranslation(
+                        array(
+                            'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
+                            'language/form' .$this->_suffix. '.mo',
+                            'locale' => $customLocale
+                        )
+                    );
+                    $this->_trans->addTranslation(
+                        array(
+                            'content'   => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
+                            'language/po_links' .$this->_suffix. '.mo',
+                            'locale'    => $customLocale
+                        )
+                    );
+                    Zend_Registry::set('Zend_Translate', $this->_trans);
+                    Zend_Registry::set('Zend_Locale', $customLocale);
+                    $localeTimezone = $localeSettings[0]['timezone'];
+                    echo "\n" ;
+                    $newsletterScheduledDateTime = new Zend_Date($newsLetterSetings[0]['newletter_scheduled_time']);
+                    $newsletterScheduledDateTime->get('YYYY-MM-dd HH:mm:ss');
+                    $currentDateTime = new Zend_Date();
+                    $currentDateTime->setTimezone($localeTimezone);
+                    echo "\n" ;
+                    $currentDateTime->get('YYYY-MM-dd HH:mm:ss');
+                    if ($currentDateTime->isLater($newsletterScheduledDateTime)) {
+                        echo "\nSending newletter...\n" ;
+                        $this->mandrilHandler($key, $newsLetterSetings);
+                    } else {
+                        echo "\n";
+                        print "$key - Newsletter scheduled date is greater than Current Date.";
+                    }
                 } else {
                     echo "\n";
-                    print "$key - Newsletter scheduled date is greater than Current Date.";
+                    print "$key - Newsletter has already been sent for the same day.";
                 }
             } else {
                 echo "\n";
-                print "$key - Newsletter has already been sent for the same day.";
+                print "$key - Newsletter has not been scheduled.";
             }
         } catch (Exception $e) {
             echo "\n";

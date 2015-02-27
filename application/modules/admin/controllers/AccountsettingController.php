@@ -155,7 +155,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                     case '3':
                         $flashMessage->addMessage(
                             array(
-                                'error' => $this->view->translate('You cannot schedule for previous day.')
+                                'error' => $this->view->translate('You cannot schedule a newsletter in the past.')
                             )
                         );
                         break;
