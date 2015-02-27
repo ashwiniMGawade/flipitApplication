@@ -9,14 +9,12 @@ class SendNewsletter
     public $_siteName = null;
     public $_logo = null;
     public $_linkPath = null;
-    public $_publicPath = null;
     public $_public_cdn_path = null;
     public $_recipientMetaData  = array();
     public $_loginLinkAndData = array();
     public $_to = array();
     public $_mandrillKey = "";
     public $_template = "" ;
-    public $_rootPath = "" ;
 
     public function __construct()
     {
@@ -30,13 +28,13 @@ class SendNewsletter
         $frontControlerObject = $application->getOption('resources');
         $this->_mandrillKey = $frontControlerObject['frontController']['params']['mandrillKey'];
         $this->_template = $frontControlerObject['frontController']['params']['newsletterTemplate'];
-        $connections = CommonMigrationFunctions::getAllConnectionStrings();
+        $dbConnections = CommonMigrationFunctions::getAllConnectionStrings();
         $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
-        $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
-        foreach ($connections as $key => $connection) {
+        $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($dbConnections);
+        foreach ($dbConnections as $key => $dbConnection) {
             if ($key != 'imbull') {
                 try {
-                    $this->send($connection ['dsn'], $key);
+                    $this->send($dbConnection ['dsn'], $key);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     echo "\n\n";
@@ -152,8 +150,6 @@ class SendNewsletter
     protected function mandrilHandler($key, $newsLetterSetings)
     {
         $this->_linkPath = $this->_hostName . '/' .$this->_localePath;
-        $this->_publicPath = $this->_hostName . '/public/' . $this->_localePath;
-        $this->_rootPath = PUBLIC_PATH . $this->_localePath;
         $newsLetterCache = NewsLetterCache::getAllNewsLetterCacheContent();
         if (!empty($newsLetterCache)) {
             echo 'Building newsletter from cache'."\n";

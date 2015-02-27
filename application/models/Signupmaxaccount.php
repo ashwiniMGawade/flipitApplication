@@ -605,19 +605,9 @@ class Signupmaxaccount extends BaseSignupmaxaccount
         }
     }
 
-    protected static function getNewsletterScheduledTime()
-    {
-        $scheduledTime = Doctrine_Query::create()
-            ->select('p.newsletter_sent_time')
-            ->from('Signupmaxaccount p')
-            ->where('p.id = 1')
-            ->fetchArray();
-        return $scheduledTime;
-    }
-
     protected static function validateIfNewsLetterCanBeScheduled()
     {
-        $newsletterScheduledDate = self::getNewsletterScheduledTime();
+        $newsletterScheduledDate = self::getNewsletterSentTime();
         $previousNewsletterScheduledDate = date(
             'd-m-Y',
             strtotime($newsletterScheduledDate[0]['newsletter_sent_time']. "+1 days")
@@ -626,6 +616,16 @@ class Signupmaxaccount extends BaseSignupmaxaccount
             ? '2000:00:00 00:00:00'
             : $previousNewsletterScheduledDate;
         return $previousNewsletterScheduledDate;
+    }
+
+    protected static function getNewsletterSentTime()
+    {
+        $newsletterSentTime = Doctrine_Query::create()
+            ->select('p.newsletter_sent_time')
+            ->from('Signupmaxaccount p')
+            ->where('p.id = 1')
+            ->fetchArray();
+        return $newsletterSentTime;
     }
 
     protected static function getFormattedScheduleDate($scheduledDate)
