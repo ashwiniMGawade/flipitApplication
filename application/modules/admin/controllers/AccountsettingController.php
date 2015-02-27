@@ -135,17 +135,24 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             $isScheduled = $this->getRequest()->getParam("isScheduled", false);
 
             if ($isScheduled) {
-                if (Signupmaxaccount::saveScheduledNewsletter($this->getRequest())) {
+                $functionReturnValue = Signupmaxaccount::saveScheduledNewsletter($this->getRequest());
+                if ($functionReturnValue == 1) {
                     NewsLetterCache::saveNewsLetterCacheContent();
                     $flash->addMessage(
                         array(
                             'success' => $this->view->translate('Newsletter has been successfully scheduled')
                         )
                     );
-                } else {
+                } else if ($functionReturnValue == 2) {
                     $flash->addMessage(
                         array(
-                            'error' => $this->view->translate('There is some problem in your data')
+                            'error' => $this->view->translate('You have already scheduled the Newsletter for the same day.')
+                        )
+                    );
+                } else if ($functionReturnValue == 3) {
+                    $flash->addMessage(
+                        array(
+                            'error' => $this->view->translate('You cannot schedule for previous day.')
                         )
                     );
                 }
@@ -245,7 +252,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         switch ($this->getRequest()->getParam('name')){
             case 'senderEmail':
                 $senderEmail = Doctrine_Query::create()->update('Signupmaxaccount')
-                                ->set('emailperlocale','"'.	$val .'"')->execute();
+                                ->set('emailperlocale','"'. $val .'"')->execute();
             break;
             case 'senderName':
                 $senderEmail = Doctrine_Query::create()->update('Signupmaxaccount')
@@ -333,7 +340,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         if ($this->_request->isPost()) {
             $flash = $this->_helper->getHelper('FlashMessenger');
 
-            if (Signupmaxaccount::updateNewsletterSchedulingStatus()) {
+            if (Signupmaxaccount::disableNewsletterSchedulingStatus()) {
                 $flash->addMessage(array('success' => $this->view->translate('Newsletter schedule has been successfully disabled')));
             }
 

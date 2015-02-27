@@ -228,7 +228,7 @@ class Signupmaxaccount extends BaseSignupmaxaccount
             'p.id,p.no_of_acc,p.max_account,p.status,p.email_confirmation,p.email_header,p.email_footer,
             p.emailperlocale,p.sendername,p.emailsubject,p.testemail,p.showTestimonial,p.testimonial1,
             p.testimonial2,p.testimonial3,p.homepagebanner_path,p.homepagebanner_name,p.homepage_widget_banner_path,
-            p.homepage_widget_banner_name,p.newletter_is_scheduled,p.newletter_status,p.newsletter_sent_time,p.newletter_scheduled_time,
+            p.homepage_widget_banner_name,p.newletter_is_scheduled,p.newsletter_sent_time,p.newletter_scheduled_time,
             '.$localeTimezoneValues
         )
         ->from('Signupmaxaccount p')
@@ -603,66 +603,96 @@ class Signupmaxaccount extends BaseSignupmaxaccount
             return array("status" => "-1",
                     "msg" => "Please upload the valid file");
         }
+    }
 
+    public static function getNewsletterScheduledTime()
+    {
+        $scheduledTime = Doctrine_Query::create()
+        ->select('p.newsletter_sent_time')
+        ->from('Signupmaxaccount p')
+        ->where('p.id = 1')
+        ->fetchArray();
+        return $scheduledTime;
+    }
+
+    protected static function validateIfNewsLetterCanBeScheduled()
+    {
+        $newsletterScheduledDate = self::getNewsletterScheduledTime();
+        $previousNewsletterScheduledDate = date(
+            'd-m-Y',
+            strtotime($newsletterScheduledDate[0]['newsletter_sent_time']. "+1 days")
+        );
+        $previousNewsletterScheduledDate = $previousNewsletterScheduledDate == '31-12-1969'
+            ? '2000:00:00 00:00:00'
+            : $previousNewsletterScheduledDate;
+        return $previousNewsletterScheduledDate;
     }
 
     public static function saveScheduledNewsletter($request)
     {
-        $scheduledDate = $request->getParam("sendDate", false);
-        $scheduledTime = $request->getParam("sendTime", false);
-        $timezone = $request->getParam("timezone", false);
+        $previousNewsletterScheduledDate = self::validateIfNewsLetterCanBeScheduled();
+        $scheduledDate = date($request->getParam("sendDate"));
         $scheduledDate = explode('-', $scheduledDate);
         $scheduledDate = $scheduledDate[1].'-'.$scheduledDate[0].'-'.$scheduledDate[2];
         $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
-        $timestamp = date('Y-m-d', strtotime($scheduledDate)).' '.date('H:i:s', strtotime($scheduledTime));
-        try {
-            $getRecord = Doctrine_Query::create()->select()->from("Signupmaxaccount")->where('id = 1')->fetchArray();
-            if (empty($getRecord)) {
-                    $signupmaxaccount = new Signupmaxaccount();
-                    $signupmaxaccount->id = 1;
-                    $signupmaxaccount->newletter_is_scheduled = $this->getRequest()->getParam("isScheduled", false);
-                    $signupmaxaccount->newletter_scheduled_time = $timestamp ;
-                    $signupmaxaccount->newletter_status = 0 ;
-                    $signupmaxaccount->save();
-                return true;
+        $formattedCurrentDate = date('m-d-Y', strtotime($currentDate));
+        $adminScheduleDate = date('m-d-Y', strtotime($scheduledDate));
+        if ($adminScheduleDate >= $formattedCurrentDate) {
+            if ($scheduledDate > $previousNewsletterScheduledDate) {
+                $scheduledTime = $request->getParam("sendTime", false);
+                $timezone = $request->getParam("timezone", false);
+                $timestamp = date('Y-m-d', strtotime($scheduledDate)).' '.date('H:i:s', strtotime($scheduledTime));
+                try {
+                    $getRecord = Doctrine_Query::create()
+                    ->select()->from("Signupmaxaccount")->where('id = 1')->fetchArray();
+                    if (empty($getRecord)) {
+                            $signupmaxaccount = new Signupmaxaccount();
+                            $signupmaxaccount->id = 1;
+                            $signupmaxaccount->newletter_is_scheduled = 1;
+                            $signupmaxaccount->newletter_scheduled_time = $timestamp;
+                            $signupmaxaccount->save();
+                        return 1;
+                    } else {
+                       
+                        $q = Doctrine_Query::create()
+                            ->update('Signupmaxaccount')
+                            ->set('newletter_scheduled_time', '?', $timestamp)
+                            ->set('newletter_is_scheduled', '?', 1)
+                            ->where('id=1')
+                            ->execute();
+                        return 1;
+                    }
+                } catch (Exception $e) {
+                    return false;
+                }
             } else {
-                $q = Doctrine_Query::create()
-                    ->update('Signupmaxaccount')
-                    ->set('newletter_scheduled_time', '?', $timestamp)
-                    ->set('newletter_is_scheduled', '?', $request->getParam("isScheduled", false))
-                    ->set('newletter_status', '?', 0)
-                    ->set('newsletter_sent_time', '?', $currentDate)
-                    ->where('id=1')
-                    ->execute();
-                return true;
+                return 2;
             }
-        } catch (Exception $e) {
-            return false;
+        } else {
+            return 3;
         }
     }
 
-    /**
-     * updateNewsletterSchedulingStatus
-     *
-     * this will update newsletter status to sent
-     *
-     */
+    public static function disableNewsletterSchedulingStatus()
+    {
+        Doctrine_Query::create()
+        ->update('Signupmaxaccount')
+        ->set('newletter_scheduled_time', '?', '')
+        ->set('newletter_is_scheduled', '?', 0)
+        ->set('newsletter_sent_time', '?', '0000-00-00 00:00:00')
+        ->where('id = 1')
+        ->execute();
+    }
 
     public static function updateNewsletterSchedulingStatus()
     {
-
-        # create past date
-        $date = new DateTime();
-        $date->modify("+1 days");
-        $date = $date->format('Y-m-d H:i:s');
         $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
         $q = Doctrine_Query::create()
-            ->update('Signupmaxaccount')
-            ->set('newletter_scheduled_time', '?', $date)
-            ->set('newletter_is_scheduled', '?', 0)
-            ->set('newletter_status', '?', 1)
-            ->set('newsletter_sent_time', '?', $currentDate)
-            ->where('id = 1')
-            ->execute();
+        ->update('Signupmaxaccount')
+        ->set('newletter_scheduled_time', '?', '')
+        ->set('newletter_is_scheduled', '?', 0)
+        ->set('newsletter_sent_time', '?', $currentDate)
+        ->where('id = 1')
+        ->execute();
     }
 }

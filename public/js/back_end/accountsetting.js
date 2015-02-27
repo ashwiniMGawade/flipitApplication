@@ -564,11 +564,11 @@ function scheduleNewsletter(el)
 function unScheduleNewsletter(el)
 {
 	$(el).addClass('btn-primary').siblings('button').removeClass('btn-primary active') ;
-
 	$("input[type=hidden]#isScheduled").val(0);
 	$("div#timestamp-feild-container").hide();
 	$("a#sendNewsletter-btn").text(__('Send Newsletter'));
 	$("#disableNewsletter-btn").hide();
+	disableNewsLetterSchedule();
 }
 
 
@@ -578,7 +578,6 @@ function disableNewsLetterSchedule(e)
 		if(!r){
 			return false;
 		} else {
-			e.preventDefault();
 			var newForm = jQuery('<form>', {
 		        'action': HOST_PATH + "admin/accountsetting/disablemandrillnewsletter",
 		        'target': '_top',
