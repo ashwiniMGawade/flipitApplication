@@ -31,7 +31,9 @@ $mostReadArticles = $this->mostReadArticles;
                     $mostReadArticleTitle = mb_strlen($mostReadArticle['title']) > 50 ? 
                                             mb_substr($mostReadArticle['title'], 0,50)
                                             .'..' : $mostReadArticle['title'];
-                    $articleUpdatedAtDate = $mostReadArticle['created_at']; 
+                    $articleUpdatedAtDate = $mostReadArticle['created_at'];
+                    $articleUpdatedAtDate = new Zend_Date($articleUpdatedAtDate->date);
+                    $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
                     $activeClass = '';
                     if($carouselCounter == 0) {
                         $activeClass = 'active';
@@ -52,7 +54,7 @@ $mostReadArticles = $this->mostReadArticles;
                                         <?php echo $mostReadArticleTitle;?>
                                     </a>
                                 </h2>
-                                <em class="date"><?php echo $articleUpdatedAtDate->format('Y-m-d');?></em>
+                                <em class="date"><?php echo $articleUpdatedAtDate;?></em>
                             </div>
                         </div>
                     </div>

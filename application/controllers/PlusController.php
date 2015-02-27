@@ -119,17 +119,14 @@ class PlusController extends Zend_Controller_Action
                     \FrontEnd_Helper_viewHelper::generateCononical(
                         $this->getRequest()->getControllerName() .'/'. $permalink
                     );
-            $this->view->mostReadArticles = \FrontEnd_Helper_viewHelper::
-                getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array(
-                    'function' => '\KC\Repository\MoneySaving::getMostReadArticles', 'parameters' => array(3)));
+          
             $this->view->articleDetails = $articleDetails[0];
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
 
             $this->view->recentlyAddedArticles = \KC\Repository\MoneySaving::getRecentlyAddedArticles($articleDetails[0]['id'], 3);
        
-			$this->view->topPopularOffers = \FrontEnd_Helper_viewHelper::
-
-            getRequestedDataBySetGetCache("5_topOffers_list", array('function' =>
+            $this->view->topPopularOffers =
+                \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("5_topOffers_list", array('function' =>
                 '\KC\Repository\Offer::getTopOffers', 'parameters' => array(5)));
             $this->view->userDetails = \FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache('user_'.$articleDetails[0]['authorid'].'_details', array('function' =>

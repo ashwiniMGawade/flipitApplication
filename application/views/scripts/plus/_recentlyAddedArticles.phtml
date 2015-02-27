@@ -1,5 +1,5 @@
 <section class="news-block">
-    <?php 
+    <?php
         if(!empty($this->recentlyAddedArticles)) {
             foreach($this->recentlyAddedArticles as $recentlyAddedArticle) :
                 $userInformationObject = new KC\Repository\User();
@@ -26,7 +26,7 @@
                     <div class="image" id = "recentlyadded">
                         <span class="category" style = "background :#<?php echo $categoryTitleBackgroundColor;?>;">
                             <?php 
-                                echo !empty($recentlyAddedArticle['articlecategory'])
+                                echo !empty($recentlyAddedArticle['name'])
                                     ? $recentlyAddedArticle['name']
                                     : '';
                             ?>
