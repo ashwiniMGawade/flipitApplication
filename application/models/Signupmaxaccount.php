@@ -605,7 +605,7 @@ class Signupmaxaccount extends BaseSignupmaxaccount
         }
     }
 
-    public static function getNewsletterScheduledTime()
+    protected static function getNewsletterScheduledTime()
     {
         $scheduledTime = Doctrine_Query::create()
             ->select('p.newsletter_sent_time')
@@ -628,7 +628,7 @@ class Signupmaxaccount extends BaseSignupmaxaccount
         return $previousNewsletterScheduledDate;
     }
 
-    public static function getFormattedScheduleDate($scheduledDate)
+    protected static function getFormattedScheduleDate($scheduledDate)
     {
         $explodedScheduledDate = explode('-', $scheduledDate);
         $formattedScheduledDate = $explodedScheduledDate[1].'-'.$explodedScheduledDate[0].'-'.$explodedScheduledDate[2];
@@ -655,7 +655,7 @@ class Signupmaxaccount extends BaseSignupmaxaccount
                 );
                 try {
                     $getNewsletterDetail = Doctrine_Query::create()
-                    ->select()->from("Signupmaxaccount")->where('id = 1')->fetchArray();
+                        ->select()->from("Signupmaxaccount")->where('id = 1')->fetchArray();
                     if (empty($getNewsletterDetail)) {
                         $returnValue = self::saveNewsletterScheduled($newsLetterScheduledDateTime);
                     } else {
@@ -673,7 +673,7 @@ class Signupmaxaccount extends BaseSignupmaxaccount
         return $returnValue;
     }
 
-    public static function saveNewsletterScheduled($newsLetterScheduledDateTime)
+    protected static function saveNewsletterScheduled($newsLetterScheduledDateTime)
     {
         $signupMaxAccount = new Signupmaxaccount();
         $signupMaxAccount->id = 1;
@@ -683,7 +683,7 @@ class Signupmaxaccount extends BaseSignupmaxaccount
         return 1;
     }
 
-    public static function updateNewsletterScheduled($newsLetterScheduledDateTime)
+    protected static function updateNewsletterScheduled($newsLetterScheduledDateTime)
     {
         Doctrine_Query::create()
             ->update('Signupmaxaccount')
