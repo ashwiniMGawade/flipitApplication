@@ -5,4 +5,9 @@ class RemoveColumnNewletterStatus extends Doctrine_Migration_Base
     {
         $this->removeColumn('signupmaxaccount', 'newletter_status');
     }
+
+    public function down()
+    {
+        $this->removeColumn('signupmaxaccount', 'newletter_status');
+    }
 }
