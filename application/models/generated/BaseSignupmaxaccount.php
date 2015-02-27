@@ -149,13 +149,6 @@ abstract class BaseSignupmaxaccount extends Doctrine_Record
                 'length' => 1,
                 'comment' => '1-scheduled ,0-manual'
         ));
-        $this->hasColumn('newletter_status', 'boolean', 20, array(
-                'type' => 'boolean',
-                'notnull' => false ,
-                'default' => 0,
-                'length' => 1,
-                'comment' => '1-sent ,0-unsent, this is only used in case of scheduled newsletters'
-        ));
         $this->hasColumn('newletter_scheduled_time', 'timestamp', 20, array(
                 'default' => date("Y-m-d H:i:s"),
                 'type'   => 'timestamp',
