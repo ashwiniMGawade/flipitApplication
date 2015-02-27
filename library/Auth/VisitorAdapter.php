@@ -16,13 +16,14 @@ class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('u')
-            ->from("Visitor", "u")
+            ->from("\KC\Entity\Visitor", "u")
             ->where("u.email="."'".$this->email."'")
             ->andWhere('u.active = 1')
             ->andWhere("u.deleted = 0");
-        $visitor =  $query->getQuery()->getSingleResult();
+        $visitor =  (object) $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if ($visitor) {
-            if ($visitor->validatePassword($this->password)) {
+            $v = new \KC\Entity\Visitor();
+            if ($v->validatePassword($this->password, $visitor->password)) {
                 return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $visitor);
             } else {
                 return new Zend_Auth_Result(Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, $visitor, array("Invalid Credentials"));
@@ -32,11 +33,12 @@ class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface {
         }
     }
 
-    public static function hasIdentity() {
+    public static function hasIdentity()
+    {
         $visitoSession = new Zend_Auth_Storage_Session('front_login');
         if ($visitoSession->read()) {
             $visitor = $visitoSession->read();
-            $visitorDetails = Doctrine_Core::getTable("Visitor")->find($visitor->id);
+            $visitorDetails = \Zend_Registry::get('emLocale')->find('\KC\Entity\Visitor', $visitor->id);
             if ($visitorDetails) {
                 return true;
             }
@@ -44,22 +46,25 @@ class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface {
         return false;
     }
 
-    public static function getIdentity() {
+    public static function getIdentity()
+    {
         $visitoSession = new Zend_Auth_Storage_Session('front_login');
         if ($visitoSession->read()) {
             $visitor = $visitoSession->read();
-            $visitorDetails = Doctrine_Core::getTable("Visitor")->find($visitor->id);
+            $visitorDetails = \Zend_Registry::get('emLocale')->find('\KC\Entity\Visitor', $visitor->id);
             return $visitorDetails;
         }
         return false;
     }
 
-    public static function clearIdentity() {
+    public static function clearIdentity()
+    {
         $visitoSession= new Zend_Auth_Storage_Session('front_login');
         return $visitoSession->clear();
     }
 
-    public static function forgotPassword($visitorEmail) {
+    public static function forgotPassword($visitorEmail)
+    {
         $visitorDetails = Doctrine_Core::getTable('Visitor')->findOneByemail(FrontEnd_Helper_viewHelper::sanitize($visitorEmail));
         $visitor = false;
         if ($visitorDetails) {

@@ -59,7 +59,7 @@ class Visitor extends \KC\Entity\Visitor
             $visitor->currentLogIn = new \DateTime('now');
         }
         $visitor->lastLogIn = $visitor->currentLogIn;
-        $visitor->currentLogIn = date('Y-m-d H:i:s');
+        $visitor->currentLogIn = new \DateTime('now');
         $visitor->active = 1;
         $visitor->active_codeid = '';
         $entityManagerLocale->persist($visitor);
