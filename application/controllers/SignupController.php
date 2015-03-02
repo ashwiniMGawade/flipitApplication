@@ -159,7 +159,7 @@ class SignupController extends Zend_Controller_Action
                 if (isset($shopId) && $shopId!='') {
                     $shopName = \KC\Repository\Shop::getShopName(base64_decode($shopId));
 
-					$membersNamespace = new \Zend_Session_Namespace('membersOnly');
+          $membersNamespace = new \Zend_Session_Namespace('membersOnly');
 
                     if (isset($membersNamespace->membersOnly) && $membersNamespace->membersOnly == '1') {
                         $shopInfo = \KC\Repository\Shop::getShopInformation(base64_decode($shopId));
@@ -229,7 +229,7 @@ class SignupController extends Zend_Controller_Action
             $this->_redirect('/');
         }
         $visitorDetails = \KC\Repository\Visitor::getUserDetails(\Auth_VisitorAdapter::getIdentity()->id);
-        $visitorDetailsForForm = $visitorDetails[0];
+        $visitorDetailsForForm = $visitorDetails;
         $profileForm = new \Application_Form_Profile();
         $this->view->form = $profileForm;
         if ($this->getRequest()->isPost()) {
@@ -241,9 +241,7 @@ class SignupController extends Zend_Controller_Action
             }
         } else {
             $dateOfBirth = array_reverse(explode('-', $visitorDetailsForForm['dateOfBirth']));
-
-			$dateOfBirthDay = isset($dateOfBirth[0]) && $dateOfBirth[0] != '' ? $dateOfBirth[0] : '';
-
+            $dateOfBirthDay = isset($dateOfBirth[0]) && $dateOfBirth[0] != '' ? $dateOfBirth[0] : '';
             $dateOfBirthMonth = isset($dateOfBirth[1]) && $dateOfBirth[1] != '' ? $dateOfBirth[1] : '';
             $dateOfBirthYear = isset($dateOfBirth[2]) && $dateOfBirth[2] != '' ? $dateOfBirth[2] : '';
             $profileForm->getElement('firstName')->setValue($visitorDetailsForForm['firstName']);
@@ -259,7 +257,7 @@ class SignupController extends Zend_Controller_Action
             $profileForm->getElement('dateOfBirthYear')->setValue(isset($dateOfBirth[2]) && $dateOfBirth[2]=='0000' ? '' : $dateOfBirthYear);
             $profileForm->getElement('postCode')->setValue($visitorDetailsForForm['postalCode']);
             $profileForm->getElement('weeklyNewsLetter')->setValue($visitorDetailsForForm['weeklyNewsLetter']);
-            $profileForm->getElement('codealert')->setValue($visitorDetailsForForm['codealert']);
+            $profileForm->getElement('codealert')->setValue($visitorDetailsForForm['codeAlert']);
         }
         $this->view->pageCssClass = 'profile-page';
         $this->view->firstName = $visitorDetailsForForm['firstName'];
@@ -303,7 +301,7 @@ class SignupController extends Zend_Controller_Action
         );
         $this->_helper->layout->disableLayout();
         $params = $this->getRequest()->getParams();
-		$visitorShopId = new \Zend_Session_Namespace('shopId');
+    $visitorShopId = new \Zend_Session_Namespace('shopId');
         $visitorShopId->shopId = $params['shopId'];
         if ($visitorInformation > 0) {
             $message = \FrontEnd_Helper_viewHelper::__translate(
