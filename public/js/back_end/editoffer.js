@@ -1258,7 +1258,8 @@ function validateFormAddNewOffer(){
 				errorElement : 'span',
 				ignore: [],
 				errorPlacement : function(error, element) {
-					/*	element.parent("div").next("div")
+					
+						/*element.parent("div").next("div")
 								.html(error);*/
 				},
 				// validation rules
