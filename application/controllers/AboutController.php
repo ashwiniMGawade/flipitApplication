@@ -22,12 +22,12 @@ class AboutController extends Zend_Controller_Action
     {
         $pageDetails = \KC\Repository\Page::getPageDetailsFromUrl(\FrontEnd_Helper_viewHelper::getPagePermalink());
         $pageHeaderImageId = $pageDetails['pageHeaderImageId'];
-        $pageDetails = (object) $pageDetails[0];
+        $pageDetails = (object) $pageDetails;
         $this->view->pageHeaderImage = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'page_header'.$pageDetails->id.'_image',
             array(
                 'function' => '\KC\Repository\Logo::getPageLogo',
-                'parameters' => array($pageHeaderImageId)
+                'parameters' => array($pageHeaderImageId['id'])
             )
         );
         $this->viewHelperObject->getMetaTags(
