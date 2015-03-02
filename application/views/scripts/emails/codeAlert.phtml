@@ -63,11 +63,8 @@ if( isset($topOffer->exclusiveCode) && $topOffer->exclusiveCode == 1) {
                                                         color:#363636;">
                                                         <span style="float: left;"><?php echo $topOffer->shop['name']; ?></span>
                                                         <span style="margin-right: 5px; margin-left: 5px; float: left; font:14px/17px Arial, Helvetica, sans-serif; color: #e89438;">
-                                                        <?php echo FrontEnd_Helper_viewHelper::__email('email_Exclusive'); ?>
+                                                        <?php echo $exclusiveCode; ?>
                                                         </span>
-                                                        <span 
-                                                            style="font:bold 12px/17px Arial, Helvetica, sans-serif; 
-                                                                color:#e89438; float: left;"><?php echo $exclusiveCode; ?></span>
                                                     </td>  
                                                 </tr>
                                             </tbody></table>
