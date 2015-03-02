@@ -465,7 +465,8 @@ class Offer Extends \KC\Entity\Offer
         ->andWhere('s.status = 1')
         ->andWhere('o.Visability !='.$entityManagerUser->expr()->literal('MEM'))
         ->orderBy('o.exclusiveCode', 'DESC')
-        ->addOrderBy('o.startDate', 'DESC');
+        ->addOrderBy('o.startDate', 'DESC')
+        ->setMaxResults(1);
         $specialPageOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $specialPageOffers;
     }

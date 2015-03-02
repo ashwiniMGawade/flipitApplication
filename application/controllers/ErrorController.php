@@ -53,14 +53,17 @@ class ErrorController extends Zend_Controller_Action
                     if ($pageDetails['customHeader']) {
                         $this->view->layout()->customHeader = "\n" . $pageDetails['customHeader'];
                     }
+
                     $specialPageOffers = \FrontEnd_Helper_viewHelper::
                         getRequestedDataBySetGetCache(
                             'error_specialPage'.$pageDetails['id'].'_offers',
                             array(
-                                'function' => '\KC\Repository\Offer::getSpecialPageOffers', 'parameters' => array($pageDetails)
+                                'function' => '\KC\Repository\Offer::getSpecialPageOffers',
+                                'parameters' => array($pageDetails)
                             ),
                             ''
                         );
+
                     $paginationNumber['page'] = $pageNumber;
                     $specialOffersPaginator = \FrontEnd_Helper_viewHelper::renderPagination(
                         $specialPageOffers,
