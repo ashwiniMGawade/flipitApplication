@@ -5,11 +5,11 @@ class Application_Form_DateGreaterThanToday extends Zend_Validate_Abstract
     protected $_messageTemplates = array(
         self::DATE_INVALID => ""
     );
-    public function isValid($dateImputByUser)
+    public function isValid($dateInputByUser)
     {
-        $dateImputByUser =  strtotime($dateImputByUser);
+        $dateInputByUser =  strtotime($dateInputByUser);
         $currentDate = strtotime(date('d-m-Y'));
-        if ($dateImputByUser < $currentDate) {
+        if ($dateInputByUser < $currentDate) {
             $this->_error(self::DATE_INVALID);
             return false;
         }
