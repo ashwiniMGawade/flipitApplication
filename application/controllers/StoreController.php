@@ -448,10 +448,10 @@ class StoreController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
         $baseViewPath = new Zend_View();
         $baseViewPath->setBasePath(APPLICATION_PATH . '/views/');
-        $socialcodeForm = new Application_Form_SocialCode();
+        $socialCodeForm = new Application_Form_SocialCode();
         if ($this->getRequest()->isPost()) {
-            if ($socialcodeForm->isValid($this->getRequest()->getPost())) {
-                $socialcodeParameters = $socialcodeForm->getValues();
+            if ($socialCodeForm->isValid($this->getRequest()->getPost())) {
+                $socialcodeParameters = $socialCodeForm->getValues();
                 try {
                     UserGeneratedOffer::addOffer($socialcodeParameters);
                     echo Zend_Json::encode($baseViewPath->render('store/socialcodethanks.phtml'));
@@ -461,10 +461,10 @@ class StoreController extends Zend_Controller_Action
                     exit();
                 }
             } else {
-                $socialcodeForm->highlightErrorElements();
+                $socialCodeForm->highlightErrorElements();
             }
         }
-        $baseViewPath->assign('zendForm', $socialcodeForm);
+        $baseViewPath->assign('zendForm', $socialCodeForm);
         echo Zend_Json::encode($baseViewPath->render('store/socialcode.phtml'));
         exit();
     }

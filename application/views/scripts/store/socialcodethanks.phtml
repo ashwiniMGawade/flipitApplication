@@ -1,12 +1,19 @@
+<?php
+$websiteName = FrontEnd_Helper_viewHelper::getWebsiteName(LOCALE);
+?>
 <div id='socialCodeDiv' class="widget">
     <h3><?php echo $this->translate('Social Code');?></h3>
     <strong class="sub-title"><?php echo $this->translate('Thank you for sharing your offer!');?></strong>
     <div class="sub-text">
         <p>
-        <?php echo $this->translate('Thanks for sharing your coupon with the Flipit Community! Our team will check the details and publish the code');?>
+        <?php 
+            echo $this->translate('Thanks for sharing your coupon with the')
+            . " " . $websiteName . " " 
+            .$this->translate('Community! Our team will check the details and publish the code');
+        ?>
         </p>
     </div>
     <a href="javascript:void(0)" onclick="loadSocialCodeForm()">
-        <?php echo $this->translate('Share coupon codes for other shops');?>
+    <?php echo $this->translate('Share coupon codes for other shops');?>
     </a>
 </div>

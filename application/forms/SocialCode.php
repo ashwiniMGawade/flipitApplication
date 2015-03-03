@@ -11,23 +11,32 @@ class Application_Form_SocialCode extends Application_Form_Base
         $shops->setRequired(true);
         $shops->setAttrib('class', 'form-control');
         $shops->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_shops'));
+        $shops->addFilter('StringTrim');
+        $shops->addFilter('StripTags');
        
         $code = new Zend_Form_Element_Text('code');
         $code->setRequired(true);
         $code->setAttrib('class', 'form-control');
         $code->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_Coupon code'));
+        $code->addValidator(new Zend_Validate_Alnum());
+        $code->addFilter('StringTrim');
+        $code->addFilter('StripTags');
         
         $offerDetails = new Zend_Form_Element_Text('offerDetails');
         $offerDetails->setRequired(true);
         $offerDetails->setAttrib('class', 'form-control');
         $offerDetails->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_Offer Details'));
+        $offerDetails->addFilter('StringTrim');
+        $offerDetails->addFilter('StripTags');
 
         $expireDate = new Zend_Form_Element_Text('expireDate');
         $expireDate->setAttrib('class', 'form-control');
-        $expireDate->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_expireddate'));
+        $expireDate->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_24-12-2015(optional)'));
         $validator = new Zend_Validate_Date(array('format' => 'd-m-Y'));
         $expireDate->addValidator($validator);
         $expireDate->addValidator(new Application_Form_DateGreaterThanToday());
+        $expireDate->addFilter('StringTrim');
+        $expireDate->addFilter('StripTags');
 
         $shopIdHiddenField =  new Zend_Form_Element_Hidden('shopId');
         

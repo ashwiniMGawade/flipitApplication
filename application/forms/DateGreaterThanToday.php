@@ -3,14 +3,13 @@ class Application_Form_DateGreaterThanToday extends Zend_Validate_Abstract
 {
     const DATE_INVALID = 'dateInvalid';
     protected $_messageTemplates = array(
-        self::DATE_INVALID => "'%value%' is not greater than or equal today"
+        self::DATE_INVALID => ""
     );
-    public function isValid($value)
+    public function isValid($dateImputByUser)
     {
-        $value =  strtotime($value);
-        $today = strtotime(date('d-m-Y'));
-        // expecting $value to be YYYY-MM-DD
-        if ($value < $today) {
+        $dateImputByUser =  strtotime($dateImputByUser);
+        $currentDate = strtotime(date('d-m-Y'));
+        if ($dateImputByUser < $currentDate) {
             $this->_error(self::DATE_INVALID);
             return false;
         }
