@@ -8,7 +8,7 @@ $(document).ready(function(){
 
 function saveSocialCode() {
     $.ajax({
-        url : HOST_PATH_LOCALE + 'store/socialcode',
+        url : HOST_PATH_LOCALE + 'store/social-code',
         method : "post",
         data: $('form#socialCodeForm').serialize(),       
         dataType : "json",

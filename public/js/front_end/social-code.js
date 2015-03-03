@@ -4,7 +4,7 @@ $(document).ready(function(){
 
 function loadSocialCodeForm() {
     $.ajax({
-        url : HOST_PATH_LOCALE + 'store/socialcode',
+        url : HOST_PATH_LOCALE + 'store/social-code',
         type: 'get',
         dataType: 'json',
         success: function(data) {

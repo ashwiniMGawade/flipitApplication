@@ -443,7 +443,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->permalink = $this->getRequest()->getParam('permalink');
     }
 
-    public function socialcodeAction()
+    public function socialCodeAction()
     {
         $this->_helper->layout()->disableLayout();
         $baseViewPath = new Zend_View();
