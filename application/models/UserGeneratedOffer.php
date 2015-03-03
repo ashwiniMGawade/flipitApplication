@@ -108,29 +108,23 @@ class UserGeneratedOffer extends BaseOffer
         return $offer;
     }
 
-    public static function addOffer($parameters)
+    public static function addOffer($socialParameters)
     {
         $offer  = new UserGeneratedOffer();
-        $offer->nickname = FrontEnd_Helper_viewHelper::sanitize($parameters['nickname']);
-        $offer->title = FrontEnd_Helper_viewHelper::sanitize($parameters['title']);
-        $offer->offerUrl = FrontEnd_Helper_viewHelper::sanitize($parameters['offerUrl']);
-        $offer->couponCode = FrontEnd_Helper_viewHelper::sanitize($parameters['code']);
-        $offer->startDate =  date('Y-m-d H:i:s');
-        $offer->endDate = date('Y-m-d', strtotime(FrontEnd_Helper_viewHelper::sanitize($parameters['expireDate'])));
+        $offer->shopId = FrontEnd_Helper_viewHelper::sanitize(base64_decode($socialParameters['shopId']));
+        $offer->couponCode = FrontEnd_Helper_viewHelper::sanitize($socialParameters['code']);
         $offer->termandcondition[]->content = BackEnd_Helper_viewHelper::stripSlashesFromString(
-            FrontEnd_Helper_viewHelper::sanitize($parameters['offerDetails'])
+            FrontEnd_Helper_viewHelper::sanitize($socialParameters['offerDetails'])
         );
-        
-        $offer->shopId = FrontEnd_Helper_viewHelper::sanitize(base64_decode($parameters['shopId']));
+        $offer->endDate = date('Y-m-d', strtotime(FrontEnd_Helper_viewHelper::sanitize($socialParameters['expireDate'])));
+        $offer->startDate =  date('Y-m-d H:i:s');
         $offer->userGenerated = true;
-
         if (Auth_VisitorAdapter::hasIdentity()) {
             $offer->authorId = FrontEnd_Helper_viewHelper::sanitize(Auth_VisitorAdapter::getIdentity()->id);
             $offer->authorName =
                 FrontEnd_Helper_viewHelper::sanitize(Auth_VisitorAdapter::getIdentity()->firstName). " "
                 . FrontEnd_Helper_viewHelper::sanitize(Auth_VisitorAdapter::getIdentity()->lastName);
         }
-
         $offer->Visability = 'DE';
         $offer->discountType = 'CD';
         $offer->extendedoffertitle = '';

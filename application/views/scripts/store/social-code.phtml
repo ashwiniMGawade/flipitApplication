@@ -1,5 +1,5 @@
 <?php
-echo $this->minifyHeadScript()->appendFile(HTTP_PATH. "public/js/front_end/add-social-code.js");
+echo $this->minifyHeadScript()->appendFile(HTTP_PATH. "public/js/front_end/addsocialcode.js");
 $socialCodeForm = $this->zendForm;
 foreach ($socialCodeForm->getElements() as $formElement) {
     $formElement->getDecorator('label')->setOption('tag', null);

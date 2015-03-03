@@ -443,30 +443,29 @@ class StoreController extends Zend_Controller_Action
         $this->view->permalink = $this->getRequest()->getParam('permalink');
     }
 
-    public function socialcodeAction()
+    public function socialCodeAction()
     {
         $this->_helper->layout()->disableLayout();
         $baseViewPath = new Zend_View();
         $baseViewPath->setBasePath(APPLICATION_PATH . '/views/');
-        $socialcodeForm = new Application_Form_SocialCode();
+        $socialCodeForm = new Application_Form_SocialCode();
         if ($this->getRequest()->isPost()) {
-            if ($socialcodeForm->isValid($this->getRequest()->getPost())) {
-                $socialcode = $socialcodeForm->getValues();
-                UserGeneratedOffer::addOffer($socialcode);
-                echo Zend_Json::encode($baseViewPath->render('store/socialcodethanks.phtml'));
-                die;
+            if ($socialCodeForm->isValid($this->getRequest()->getPost())) {
+                $socialCodeParameters = $socialCodeForm->getValues();
+                try {
+                    UserGeneratedOffer::addOffer($socialCodeParameters);
+                    echo Zend_Json::encode($baseViewPath->render('store/socialcodethanks.phtml'));
+                    exit();
+                } catch (Exception $e) {
+                    echo Zend_Json::encode($baseViewPath->render('store/socialcode.phtml'));
+                    exit();
+                }
             } else {
-                $socialcodeForm->highlightErrorElements();
-                $socialcode = $socialcodeForm->getValues();
+                $socialCodeForm->highlightErrorElements();
             }
         }
-        $baseViewPath->assign('zendForm', $socialcodeForm);
+        $baseViewPath->assign('zendForm', $socialCodeForm);
         echo Zend_Json::encode($baseViewPath->render('store/socialcode.phtml'));
-        die;
-    }
-
-    public function socialcodethanksAction()
-    {
-        $this->_helper->layout()->disableLayout();
+        exit();
     }
 }
