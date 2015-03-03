@@ -451,9 +451,9 @@ class StoreController extends Zend_Controller_Action
         $socialCodeForm = new Application_Form_SocialCode();
         if ($this->getRequest()->isPost()) {
             if ($socialCodeForm->isValid($this->getRequest()->getPost())) {
-                $socialcodeParameters = $socialCodeForm->getValues();
+                $socialCodeParameters = $socialCodeForm->getValues();
                 try {
-                    UserGeneratedOffer::addOffer($socialcodeParameters);
+                    UserGeneratedOffer::addOffer($socialCodeParameters);
                     echo Zend_Json::encode($baseViewPath->render('store/socialcodethanks.phtml'));
                     exit();
                 } catch (Exception $e) {
