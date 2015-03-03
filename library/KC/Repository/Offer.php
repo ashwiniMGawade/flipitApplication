@@ -1399,7 +1399,7 @@ class Offer Extends \KC\Entity\Offer
                     ->getQuery();
             $query->execute();
             $query = $queryBuilder->delete('KC\Entity\TermAndCondition', 't')
-                    ->where("t.offertermandcondition=" . $id)
+                    ->where("t.termandcondition=" . $id)
                     ->getQuery();
             $query->execute();
             $query = $queryBuilder->delete('KC\Entity\PopularCode', 'pc')
@@ -2457,7 +2457,7 @@ class Offer Extends \KC\Entity\Offer
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select('l.name,l.path,s.permaLink, s.id as shopId')
+            ->select('s.name,l.name as logoName, l.path,s.permaLink, s.id as shopId')
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->leftJoin('s.logo', 'l')
@@ -3144,9 +3144,6 @@ class Offer Extends \KC\Entity\Offer
             $updateOffer->endDate = new \DateTime($endDate);
         }
 
-
-        
-
         if (isset($params['extendedoffercheckbox'])) {
 
             // check if offer is extended
@@ -3182,7 +3179,7 @@ class Offer Extends \KC\Entity\Offer
             $updateOffer->maxlimit='1';
             $updateOffer->maxcode=$params['maxoffertxt'];
         }
-
+        
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('o')
@@ -3267,13 +3264,14 @@ class Offer Extends \KC\Entity\Offer
         $updateOffer->userGenerated = 0;
         $updateOffer->approved = 0;
         $updateOffer->offline = 0;
+
         $entityManagerLocale->persist($updateOffer);
         $entityManagerLocale->flush();     // New code Ends
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->delete('KC\Entity\TermAndCondition', 'tc')
             ->setParameter(1, $params['offerId'])
-            ->where('tc.offertermandcondition = ?1')
+            ->where('tc.termandcondition = ?1')
             ->getQuery();
         $query->execute();
 
@@ -3377,9 +3375,9 @@ class Offer Extends \KC\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $shophowtokey = '6_topOffersHowto'  . intval($params['selctedshop']) . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
+            //FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = '4_shopLatestUpdates_'  . intval($params['selctedshop']) . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  .intval($params['selctedshop']) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
