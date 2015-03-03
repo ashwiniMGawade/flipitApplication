@@ -28,7 +28,7 @@ class Application_Form_SocialCode extends Application_Form_Base
         $offerDetails->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_Offer Details'));
         $offerDetails->addFilter('StringTrim');
         $offerDetails->addFilter('StripTags');
-        $offerDetails->addValidator('regex', false, array('/^\d*[a-zA-Z ][a-zA-Z0-9 ]*$/'));
+        $offerDetails->addValidator('regex', false, array('/^(?![0-9]*$)[a-zA-Z0-9 ]+$/'));
 
         $expireDate = new Zend_Form_Element_Text('expireDate');
         $expireDate->setAttrib('class', 'form-control');
