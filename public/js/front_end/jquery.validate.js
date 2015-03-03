@@ -1251,5 +1251,9 @@ $.extend($.validator.methods , {
 jQuery.validator.addMethod('selectcheck', function (value) {
     return (value != '0');
 }, "required");
-
+jQuery.validator.addMethod("dateFormat",
+    function(value, element) {
+        return value.match(/^dd?-dd?-dd$/);
+    }, ''
+);
 })(jQuery);
