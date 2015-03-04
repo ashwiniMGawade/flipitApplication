@@ -1596,12 +1596,17 @@ class Offer Extends \KC\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select(
-            'o.title,o.id,o.Visability,o.shopExist,o.discountType, o.couponCode, o.extendedOffer, o.couponCodeType,s.name as shopName,
-            s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,o.extendedTitle,o.extendedMetaDescription,
-            page.id as pageId,tc.content as termsAndconditionContent,category.id as categoryId,img.name as imageName,img.path,news.title as newsTitle,
-            news.url, news.content as newsContent, t.id as tilesId, t.path as offerTilesPath,t.name as offerTilesName,t.position,
-             s.id as shopId, o.extendedFullDescription,o.discountvalueType, o.refOfferUrl, o.startDate, o.endDate, o.refURL,
-             o.exclusiveCode, o.maxlimit, o.maxcode, o.extendedUrl'.$shopParameters
+            'o.title,o.id,o.Visability,o.shopExist,o.discountType, o.couponCode, o.extendedOffer, o.couponCodeType,
+            s.name as shopName,
+            s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,o.extendedTitle,
+            o.extendedMetaDescription,
+            page.id as pageId,tc.content as termsAndconditionContent,category.id as categoryId,img.name as imageName,
+            img.path,news.title as newsTitle,
+            news.url, news.content as newsContent, o.tilesId as tilesId, t.path as offerTilesPath,t.name as offerTilesName,
+            t.position,
+            s.id as shopId, o.extendedFullDescription,o.discountvalueType, o.refOfferUrl, o.startDate, o.endDate,
+            o.refURL,
+            o.exclusiveCode, o.maxlimit, o.maxcode, o.extendedUrl'.$shopParameters
         )
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')

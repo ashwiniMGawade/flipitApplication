@@ -96,6 +96,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $pageObj = new KC\Repository\Page();
         $this->view->pages = $pageObj->getPagesOffer();
         $allTiles = $this->getalltiles2Action();
+        //echo "<pre>";print_r($allTiles);die;
         $this->view->tiles = $allTiles;
 
     }
