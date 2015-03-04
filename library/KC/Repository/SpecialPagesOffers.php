@@ -27,7 +27,7 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
         ->andWhere('o.deleted = 0')
         ->andWhere('s.deleted = 0')
         ->andWhere('s.status = 1')
-        ->andWhere('o.Visability!='.$queryBuilder->expr()->literal("MEM"))
+        ->andWhere($queryBuilder->expr()->neq('o.Visability', $queryBuilder->expr()->literal("MEM")))
         ->orderBy('op.position');
         $specialPageOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return self::removeDuplicateOffers($specialPageOffers);

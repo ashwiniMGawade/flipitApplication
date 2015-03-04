@@ -38,7 +38,7 @@ class Translations Extends \KC\Entity\Translations
 
     public function saveTranslations($translations)
     {
-        $translationsAfterRemovingTags = BackEnd_Helper_viewHelper::removeScriptTag($translations);
+        $translationsAfterRemovingTags = \BackEnd_Helper_viewHelper::removeScriptTag($translations);
         $existingTranslation = self::getExistingTranslation($translationsAfterRemovingTags);
         if (!empty($existingTranslation[0]['id'])) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();

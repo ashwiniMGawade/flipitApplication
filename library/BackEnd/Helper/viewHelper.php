@@ -627,7 +627,7 @@ class BackEnd_Helper_viewHelper
     {
         if (is_array($input)) {
             foreach ($input as $var => $val) {
-                $output[$var] = self::sanitize($val);
+                $output[$var] = FrontEnd_Helper_viewHelper::sanitize($val);
             }
         } else {
             if (get_magic_quotes_gpc()) {

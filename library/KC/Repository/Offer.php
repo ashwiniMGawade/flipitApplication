@@ -426,6 +426,7 @@ class Offer Extends \KC\Entity\Offer
         $pageRelatedOffers = self::getSpecialOffersByPage($specialPage['id'], $currentDate);
         $constraintsRelatedOffers = self::getOffersByPageConstraints($specialPage, $currentDate);
         $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
+
         $pageRelatedOffersAndPageConstraintsOffers = array_merge(
             \KC\Repository\SpecialPagesOffers::getSpecialPageOffersByPageIdForFrontEnd($specialPage['id']),
             $pageRelatedOffersAndPageConstraintsOffers
@@ -463,7 +464,7 @@ class Offer Extends \KC\Entity\Offer
         ->andWhere('o.deleted = 0')
         ->andWhere('s.deleted = 0')
         ->andWhere('s.status = 1')
-        ->andWhere('o.Visability !='.$entityManagerUser->expr()->literal('MEM'))
+        ->andWhere($entityManagerUser->expr()->neq('o.Visability', $entityManagerUser->expr()->literal("MEM")))
         ->orderBy('o.exclusiveCode', 'DESC')
         ->addOrderBy('o.startDate', 'DESC');
         $specialPageOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -492,11 +493,7 @@ class Offer Extends \KC\Entity\Offer
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $offersConstraintsQuery = $entityManagerUser->select(
-            'o.title, o.couponCodeType, o.discountType, o.totalViewcount as clicks ,o.startDate as startdate,
-            o.endDate as enddate, o.refURL as refUrl, o.refOfferUrl,o.authorId,o.authorName,o.Visability as visability,
-            o.couponCode, o.exclusiveCode, o.editorPicks,o.discount, o.discountvalueType, s.name as shopName, s.refUrl,
-            s.actualUrl,s.permaLink as permalink,s.views,l.name,l.path,fv.id as visitorId, vot.id as voteId, vot.vote,
-            ologo.path, ologo.name,o.authorName'
+            'o, s,l,fv, vot, ologo'
         )
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.logo', 'ologo')
@@ -511,18 +508,12 @@ class Offer Extends \KC\Entity\Offer
         ->setParameter(1, $entityManagerUser->expr()->literal($currentDate))
         ->where($entityManagerUser->expr()->gt('o.endDate', '?1'))
         ->andWhere($entityManagerUser->expr()->lte('o.startDate', '?1'))
-        ->setParameter(2, 0)
-        ->andWhere('o.deleted = ?2')
-        ->setParameter(3, 0)
-        ->andWhere('s.deleted = ?3')
-        ->setParameter(4, 0)
-        ->andWhere('o.userGenerated = ?4')
-        ->setParameter(5, 'MEM')
-        ->andWhere('o.Visability != ?5')
-        ->setParameter(6, 'SL')
-        ->andWhere('o.discountType != ?6')
-        ->setParameter(7, 'PA')
-        ->andWhere('o.discountType != ?7')
+        ->andWhere('o.deleted = 0')
+        ->andWhere('s.deleted = 0')
+        ->andWhere('o.userGenerated = 0')
+        ->andWhere($entityManagerUser->expr()->neq('o.Visability', $entityManagerUser->expr()->literal("MEM")))
+        ->andWhere($entityManagerUser->expr()->neq('o.discountType', $entityManagerUser->expr()->literal("SL")))
+        ->andWhere($entityManagerUser->expr()->neq('o.discountType', $entityManagerUser->expr()->literal("PA")))
         ->orderBy('o.exclusiveCode', 'DESC')
         ->addOrderBy('o.startDate', 'DESC');
         $offersConstraintsQuery = self::implementOffersConstraints($offersConstraintsQuery, $specialPage);
