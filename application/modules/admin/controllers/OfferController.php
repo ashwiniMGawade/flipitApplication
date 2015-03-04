@@ -90,12 +90,13 @@ class Admin_OfferController extends Zend_Controller_Action
         $this->view->offerShoLogo = $shop;
         // end code
         $this->view->shopList = \KC\Repository\Shop::getOfferShopList();
-
+        //echo "<pre>";print_r($this->view->shopList);die;
         $this->view->catList = \KC\Repository\Category::getCategoriesInformation();
         //echo "<pre>";print_r($this->view->catList);die;
         $pageObj = new KC\Repository\Page();
         $this->view->pages = $pageObj->getPagesOffer();
         $allTiles = $this->getalltiles2Action();
+        //echo "<pre>";print_r($allTiles);die;
         $this->view->tiles = $allTiles;
 
     }

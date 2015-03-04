@@ -1327,7 +1327,7 @@ class Shop extends \KC\Entity\Shop
     public static function getOfferShopList()
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $shopList = $queryBuilder->select('s.name as shopName,l.id as logoId,l.name,l.path, s.id')
+        $shopList = $queryBuilder->select('s.name,l.id as logoId,l.name as logoName,l.path, s.id')
             ->from('KC\Entity\Shop', 's')
             ->leftJoin("s.logo", "l")
             ->where('s.deleted=0')

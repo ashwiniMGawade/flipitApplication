@@ -1367,7 +1367,7 @@ class Offer Extends \KC\Entity\Offer
                     ->getQuery();
             $query->execute();
             $query = $queryBuilder->delete('KC\Entity\TermAndCondition', 't')
-                    ->where("t.offertermandcondition=" . $id)
+                    ->where("t.termandcondition=" . $id)
                     ->getQuery();
             $query->execute();
             $query = $queryBuilder->delete('KC\Entity\PopularCode', 'pc')
@@ -1564,12 +1564,17 @@ class Offer Extends \KC\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select(
-            'o.title,o.id,o.Visability,o.shopExist,o.discountType, o.couponCode, o.extendedOffer, o.couponCodeType,s.name as shopName,
-            s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,o.extendedTitle,o.extendedMetaDescription,
-            page.id as pageId,tc.content as termsAndconditionContent,category.id as categoryId,img.name as imageName,img.path,news.title as newsTitle,
-            news.url, news.content as newsContent, t.id as tilesId, t.path as offerTilesPath,t.name as offerTilesName,t.position,
-             s.id as shopId, o.extendedFullDescription,o.discountvalueType, o.refOfferUrl, o.startDate, o.endDate, o.refURL,
-             o.exclusiveCode, o.maxlimit, o.maxcode, o.extendedUrl'.$shopParameters
+            'o.title,o.id,o.Visability,o.shopExist,o.discountType, o.couponCode, o.extendedOffer, o.couponCodeType,
+            s.name as shopName,
+            s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,o.extendedTitle,
+            o.extendedMetaDescription,
+            page.id as pageId,tc.content as termsAndconditionContent,category.id as categoryId,img.name as imageName,
+            img.path,news.title as newsTitle,
+            news.url, news.content as newsContent, o.tilesId as tilesId, t.path as offerTilesPath,t.name as offerTilesName,
+            t.position,
+            s.id as shopId, o.extendedFullDescription,o.discountvalueType, o.refOfferUrl, o.startDate, o.endDate,
+            o.refURL,
+            o.exclusiveCode, o.maxlimit, o.maxcode, o.extendedUrl'.$shopParameters
         )
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
@@ -2425,7 +2430,7 @@ class Offer Extends \KC\Entity\Offer
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select('l.name,l.path,s.permaLink, s.id as shopId')
+            ->select('s.name,l.name as logoName, l.path,s.permaLink, s.id as shopId')
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->leftJoin('s.logo', 'l')
@@ -3112,9 +3117,6 @@ class Offer Extends \KC\Entity\Offer
             $updateOffer->endDate = new \DateTime($endDate);
         }
 
-
-        
-
         if (isset($params['extendedoffercheckbox'])) {
 
             // check if offer is extended
@@ -3150,7 +3152,7 @@ class Offer Extends \KC\Entity\Offer
             $updateOffer->maxlimit='1';
             $updateOffer->maxcode=$params['maxoffertxt'];
         }
-
+        
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('o')
@@ -3235,13 +3237,14 @@ class Offer Extends \KC\Entity\Offer
         $updateOffer->userGenerated = 0;
         $updateOffer->approved = 0;
         $updateOffer->offline = 0;
+
         $entityManagerLocale->persist($updateOffer);
         $entityManagerLocale->flush();     // New code Ends
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->delete('KC\Entity\TermAndCondition', 'tc')
             ->setParameter(1, $params['offerId'])
-            ->where('tc.offertermandcondition = ?1')
+            ->where('tc.termandcondition = ?1')
             ->getQuery();
         $query->execute();
 
@@ -3345,9 +3348,9 @@ class Offer Extends \KC\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $shophowtokey = '6_topOffersHowto'  . intval($params['selctedshop']) . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
+            //FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = '4_shopLatestUpdates_'  . intval($params['selctedshop']) . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  .intval($params['selctedshop']) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
