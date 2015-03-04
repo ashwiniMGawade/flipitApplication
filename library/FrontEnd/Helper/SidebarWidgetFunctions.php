@@ -199,7 +199,7 @@ EOD;
         $similarStoresViewedContent =
             '<li>
                 <a title='.$storeDetails[0]['name'].' 
-                href='.$storeDetails[0]['permaLink'].'>'.ucfirst(self::substring($storeDetails[0]['name'], 200))
+                href='.HTTP_PATH_LOCALE.$storeDetails[0]['permaLink'].'>'.ucfirst(self::substring($storeDetails[0]['name'], 200))
                 .'</a>
             </li>';
         return $similarStoresViewedContent;

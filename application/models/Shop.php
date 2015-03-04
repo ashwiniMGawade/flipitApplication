@@ -445,6 +445,7 @@ class Shop extends BaseShop
 
     public static function getSimilarShopsForAlsoViewedWidget($shopId)
     {
+        $similarShops = array();
         $similarShopsBySimilarCategories[] = self::getSimilarShopsBySimilarCategories($shopId, 5);
         if (isset($similarShopsBySimilarCategories[0][0]['category'])) {
             foreach ($similarShopsBySimilarCategories[0][0]['category'] as $category) {
