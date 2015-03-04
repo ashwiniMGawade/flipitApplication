@@ -411,6 +411,8 @@ class Shop extends BaseShop
             ->leftJoin("rf.relatedshops rl")
             ->leftJoin("rl.logo as logo")
             ->where("s.id = ?", $id)
+            ->andWhere('rl.status = 1')
+            ->andWhere('rl.deleted = 0')
             ->orderBy('rf.position')
             ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
         return $relatedShops;
