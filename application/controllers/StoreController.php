@@ -452,8 +452,7 @@ class StoreController extends Zend_Controller_Action
 
         $shopId = $this->getRequest()->getParam('id');
         if (isset($shopId)) {
-            $shopId = base64_decode(FrontEnd_Helper_viewHelper::sanitize($shopId));
-            $shopInformation = Shop::getShopInformation($shopId);
+            $shopInformation = Shop::getShopInformation(base64_decode(FrontEnd_Helper_viewHelper::sanitize($shopId)));
             if (!empty($shopInformation)) {
                 $socialCodeForm->getElement('shopPermalink')->setValue($shopInformation[0]['permaLink']);
                 $socialCodeForm->getElement('shops')->setValue($shopInformation[0]['name']);
