@@ -309,7 +309,7 @@ class Offer extends BaseOffer
             o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
             o.editorPicks,o.couponCode,o.extendedOffer,o.totalViewcount,o.authorName,
             o.startDate,o.endDate,o.refOfferUrl,o.userGenerated,o.nickname, o.approved,
-            o.extendedUrl,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,
+            o.extendedUrl, o.updated_at as lastUpdate, s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,
             s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name, s.contentManagerName'
         )
         ->from('PopularCode p')
@@ -353,7 +353,7 @@ class Offer extends BaseOffer
                 o.id,o.Visability,o.title,o.authorId,
                 o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,o.authorName,
                 o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.extendedUrl,
-                o.discountType,o.startdate,o.endDate,o.nickname,o.approved,
+                o.discountType,o.startdate,o.endDate, o.updated_at as lastUpdate, o.nickname,o.approved,
                 img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote'
             )
             ->from('Offer o')
