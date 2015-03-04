@@ -10,11 +10,11 @@ class ExcludedKeyword extends \KC\Entity\ExcludedKeyword
     {
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $excludedKeywords = $queryBuilder
-            ->select("k,es.id as keywordid,s.id as sid , s.name as name")
+            ->select("k,es,s")
             ->from("KC\Entity\ExcludedKeyword", "k")
             ->leftJoin('k.keywords', 'es')
             ->leftJoin('es.keywords', 's')
-            ->where("k.keyword = ". $keywordForSearch)
+            ->where($queryBuilder->expr()->eq('k.keyword', $queryBuilder->expr()->literal($keywordForSearch)))
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $excludedKeywords;

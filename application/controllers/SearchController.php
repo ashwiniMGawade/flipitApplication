@@ -28,11 +28,12 @@ class SearchController extends Zend_Controller_Action
 
         $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
         $pageDetails = \KC\Repository\Page::getPageDetailsFromUrl(\FrontEnd_Helper_viewHelper::__link('link_zoeken'));
+        $pageDetails = (object) $pageDetails;
         $this->view->pageHeaderImage = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'page_header'.$pageDetails->id.'_image',
             array(
                 'function' => '\KC\Repository\Logo::getPageLogo',
-                'parameters' => array($pageDetails->pageHeaderImageId)
+                'parameters' => array($pageDetails->pageHeaderImageId['id'])
             ),
             ''
         );

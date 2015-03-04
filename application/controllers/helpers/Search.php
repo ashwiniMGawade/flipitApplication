@@ -5,7 +5,6 @@ class Zend_Controller_Action_Helper_Search extends Zend_Controller_Action_Helper
     {
         $excludedKeywords = \KC\Repository\ExcludedKeyword::getExcludedKeywords($searchedKeywords);
         $shopIds = '';
-
         if (!empty($excludedKeywords[0])) :
             if($excludedKeywords[0]['action'] == 0):
                 header('location: '.$excludedKeywords[0]['url']);
@@ -21,8 +20,8 @@ class Zend_Controller_Action_Helper_Search extends Zend_Controller_Action_Helper
     public static function getShopIdsByExcludedKeywords($excludedKeywords)
     {
         $shopIds = array();
-        foreach ($excludedKeywords['shops'] as $shops) :
-            $shopIds[] = $shops['shopsofKeyword'][0]['id'];
+        foreach ($excludedKeywords['keywords'] as $shops) :
+            $shopIds[] = $shops['keywords']['id'];
         endforeach;
         return $shopIds;
     }
@@ -30,11 +29,13 @@ class Zend_Controller_Action_Helper_Search extends Zend_Controller_Action_Helper
     public static function getshopsByExcludedShopIds($shopIds)
     {
         $shopsForSearchPage = array();
-        $shopsByShopIds = \KC\Repository\Shop::getShopsByShopIds($shopIds);
+        if (!empty($shopIds)) {
+            $shopsByShopIds = \KC\Repository\Shop::getShopsByShopIds($shopIds);
 
-        foreach ($shopsByShopIds as $shopsByShopId) :
-            $shopsForSearchPage[$shopsByShopId['id']] = $shopsByShopId;
-        endforeach;
+            foreach ($shopsByShopIds as $shopsByShopId) :
+                $shopsForSearchPage[$shopsByShopId['id']] = $shopsByShopId;
+            endforeach;
+        }
 
         return $shopsForSearchPage;
     }

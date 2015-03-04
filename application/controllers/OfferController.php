@@ -33,7 +33,7 @@ class OfferController extends Zend_Controller_Action
             'page_header'.$pageDetails->id.'_image',
             array(
                 'function' => '\KC\Repository\Logo::getPageLogo',
-                'parameters' => array($pageDetails->pageHeaderImageId)
+                'parameters' => array($pageDetails->pageHeaderImageId['id'])
             )
         );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
@@ -200,13 +200,13 @@ class OfferController extends Zend_Controller_Action
         } else {
             $offers = \FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newOffer_list');
         }
-        $pageDetails = $pageDetails[0];
+        $pageDetails = (object) $pageDetails;
         if (!empty($pageDetails->pageHeaderImageId)) {
             $this->view->pageHeaderImage = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 'page_header'.$pageDetails->id.'_image',
                 array(
                     'function' => '\KC\Repository\Logo::getPageLogo',
-                    'parameters' => array($pageDetails->pageHeaderImageId)
+                    'parameters' => array($pageDetails->pageHeaderImageId['id'])
                 ),
                 ''
             );

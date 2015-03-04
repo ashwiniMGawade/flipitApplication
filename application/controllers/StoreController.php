@@ -266,13 +266,12 @@ class StoreController extends Zend_Controller_Action
         $permalink = $this->_helper->Store->getActualPermalink($permalink, 'permalink');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
         $pageDetails = KC\Repository\Page::getPageDetailsFromUrl($permalink);
-        $pageHeaderImageId = $pageDetails['pageHeaderImageId'];
-        $pageDetails = (object) $pageDetails[0];
+        $pageDetails = (object) $pageDetails;
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'page_header'.$pageDetails->id.'_image',
             array(
                 'function' => 'KC\Repository\Logo::getPageLogo',
-                'parameters' => array($pageHeaderImageId)
+                'parameters' => array($pageDetails->pageHeaderImageId['id'])
             )
         );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';

@@ -282,14 +282,17 @@ class Shop extends \KC\Entity\Shop
 
     public static function getShopsByShopIds($shopIds)
     {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('s.id, s.name,s.permaLink, img.path as imgpath, img.name as imgname')
-            ->from('KC\Entity\Shop', 's')
-            ->leftJoin('s.logo', 'img')
-            ->where('s.deleted=0')
-            ->andWhere($queryBuilder->expr()->in('s.id', $shopIds))
-            ->orderBy("s.name");
-        $shopsInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $shopsInformation = '';
+        if (!empty($shopIds)) {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder->select('s.id, s.name,s.permaLink, img.path as imgpath, img.name as imgname')
+                ->from('KC\Entity\Shop', 's')
+                ->leftJoin('s.logo', 'img')
+                ->where('s.deleted=0')
+                ->andWhere($queryBuilder->expr()->in('s.id', $shopIds))
+                ->orderBy("s.name", "ASC");
+            $shopsInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        }
         return $shopsInformation;
     }
 
@@ -297,7 +300,7 @@ class Shop extends \KC\Entity\Shop
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDate = date('Y-m-d 00:00:00');
-        $query = $queryBuilder->select('s.id,s.name,s.permaLink, img.path as imgpath, img.name as imgname')
+        $query = $queryBuilder->select('s, img')
             ->from('KC\Entity\Shop', 's')
             ->leftJoin('s.logo', 'img')
             ->where('s.deleted=0')

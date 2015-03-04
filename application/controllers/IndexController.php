@@ -28,7 +28,7 @@ class IndexController extends Zend_Controller_Action
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();
-        $pageDetails = KC\Repository\Page::getPageDetailsFromUrl($this->getRequest()->getActionName());
+        $pageDetails = (object) KC\Repository\Page::getPageDetailsFromUrl($this->getRequest()->getActionName());
         $this->view->pageTitle = ucfirst(isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '');
         $this->viewHelperObject->getMetaTags(
             $this,

@@ -852,7 +852,7 @@ class Offer Extends \KC\Entity\Offer
             $searchKeyword = $searchParameters['searchField'];
         endif;
 
-        $currentDate = new \DateTime();
+        $currentDate = date("Y-m-d H:i");
         $searchedOffersByIds = self::getOffersByShopIds($shopIds, $currentDate);
         $offersBySearchedKeywords = self::getOffersBySearchedKeywords($searchKeyword, $currentDate);
         $mergedOffersBySearchedKeywords = array_merge($searchedOffersByIds, $offersBySearchedKeywords);
@@ -868,14 +868,7 @@ class Offer Extends \KC\Entity\Offer
             $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $entityManagerUser
             ->select(
-                's.id as shopId,s.name as shopName,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.refURL,
-                o.discountType,o.id,o.title,o.extendedUrl,o.Visability as visability,
-                o.discountvalueType as discountValueType,
-                o.couponCode as couponcode , o.refOfferUrl as refofferurl,
-                o.startDate as startdate ,o.endDate as enddate, o.exclusiveCode as exclusivecode,
-                o.editorPicks as editorpicks, o.extendedOffer as extendedoffer,o.discount, o.authorId,
-                o.authorName, o.userGenerated, o.approved, o.nickname, fv.id as visitorId,img.path,
-                img.name'
+                's,terms,o,fv,img'
             )
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
@@ -883,22 +876,15 @@ class Offer Extends \KC\Entity\Offer
             ->leftJoin('s.visitors', 'fv')
             ->leftJoin('o.offertermandcondition', 'terms')
             ->leftJoin('o.offerTiles', 't')
-            ->setParameter(1, 0)
-            ->where('o.deleted = ?1')
-            ->setParameter(2, 0)
-            ->andWhere('o.userGenerated = ?2')
-            ->setParameter(3, 0)
-            ->andWhere('o.offline = ?3')
-            ->setParameter(4, 0)
-            ->andWhere('s.deleted = ?4')
+            ->where('o.deleted = 0')
+            ->andWhere('o.userGenerated = 0')
+            ->andWhere('o.offline = 0')
+            ->andWhere('s.deleted = 0')
             ->andWhere('o.endDate >'."'".$currentDate."'")
             ->andWhere('o.startDate <='."'".$currentDate."'")
-            ->setParameter(6, 'CD')
-            ->andWhere('o.discountType = ?6')
-            ->setParameter(7, 'MEM')
-            ->andWhere('o.Visability != ?7')
-            ->setParameter(8, $shopIds)
-            ->andWhere($entityManagerUser->expr()->in('s.id', '?8'))
+            ->andWhere($entityManagerUser->expr()->eq('o.discountType', $entityManagerUser->expr()->literal('CD')))
+            ->andWhere($entityManagerUser->expr()->neq('o.Visability', $entityManagerUser->expr()->literal('MEM')))
+            ->andWhere($entityManagerUser->expr()->in('s.id', $shopIds))
             ->orderBy('s.name', 'ASC');
             $shopOffersByShopIds = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         endif;
@@ -910,13 +896,7 @@ class Offer Extends \KC\Entity\Offer
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
             ->select(
-                's.id as shopId,s.name as shopName,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,
-                o.id,o.title,o.refURL,o.discountType,o.extendedUrl,o.Visability as visability,
-                o.discountvalueType as discountValueType, o.couponCode as couponcode, 
-                o.refOfferUrl as refofferurl, o.startDate as startdate, o.endDate as enddate,
-                o.exclusiveCode as exclusivecode, o.editorPicks as editorpicks,o.extendedOffer as extendedoffer,
-                o.discount,o.authorId, o.authorName,o.userGenerated, o.approved,
-                img.path,img.name,fv.id as visitorId,t.name, t.position, t.path, t.ext'
+                's,terms,o,img,fv,t'
             )
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
@@ -924,30 +904,18 @@ class Offer Extends \KC\Entity\Offer
             ->leftJoin('s.visitors', 'fv')
             ->leftJoin('o.offertermandcondition', 'terms')
             ->leftJoin('o.offerTiles', 't')
-            ->setParameter(1, 0)
-            ->where('o.deleted = ?1')
-            ->setParameter(2, 0)
-            ->andWhere('o.offline = ?2')
-            ->setParameter(3, 0)
-            ->andWhere('s.deleted = ?3')
+            ->where('o.deleted = 0')
+            ->andWhere('o.offline = 0')
+            ->andWhere('s.deleted = 0')
             ->andWhere('o.endDate >'."'".$currentDate."'")
             ->andWhere('o.startDate <='."'".$currentDate."'")
-            ->setParameter(5, 'CD')
-            ->andWhere('o.discountType = ?5')
-            ->setParameter(6, 'MEM')
-            ->andWhere('o.Visability != ?6')
-            ->andWhere(
-                "s.name LIKE '%".mysqli_real_escape_string(
-                    \FrontEnd_Helper_viewHelper::getDbConnectionDetails(),
-                    $searchKeyword
-                )."%' or o.title LIKE '%".mysqli_real_escape_string(
-                    \FrontEnd_Helper_viewHelper::getDbConnectionDetails(),
-                    $searchKeyword
-                )."%'",
-                $searchKeyword,
-                $searchKeyword
-            )
-            ->orderBy('s.name', 'ASC');
+            ->andWhere($entityManagerUser->expr()->eq('o.discountType', $entityManagerUser->expr()->literal('CD')))
+            ->andWhere($entityManagerUser->expr()->neq('o.Visability', $entityManagerUser->expr()->literal('MEM')))
+            ->andWhere($entityManagerUser->expr()->orX(
+                $entityManagerUser->expr()->like("s.name", $entityManagerUser->expr()->literal("%".mysqli_real_escape_string(\FrontEnd_Helper_viewHelper::getDbConnectionDetails(), $searchKeyword)."%")),
+                $entityManagerUser->expr()->like("o.title", $entityManagerUser->expr()->literal("%".mysqli_real_escape_string(\FrontEnd_Helper_viewHelper::getDbConnectionDetails(), $searchKeyword)."%"))
+            ))
+            ->orderBy('s.name');
         $shopOffersBySearchedKeywords = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopOffersBySearchedKeywords;
     }

@@ -6,7 +6,7 @@
         <?php
         foreach ($this->popularStores as $popularStore)
         { 
-            $popularStore = $popularStore['popularshops']
+            $popularStore = isset($popularStore['popularshops'])
                 ?  $popularStore['popularshops'] 
                 :  $popularStore;
             $popularStoreImage =
