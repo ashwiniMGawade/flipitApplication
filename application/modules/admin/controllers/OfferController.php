@@ -8,6 +8,7 @@ class Admin_OfferController extends Zend_Controller_Action
     public function getofferAction()
     {
         $parameters = $this->_getAllParams();
+        //echo "<pre>";print_r($parameters);die;
         $offerList = \KC\Repository\Offer::getOfferList($parameters);
         echo \Zend_Json::encode($offerList);
         die();
