@@ -111,7 +111,9 @@ class UserGeneratedOffer extends BaseOffer
     public static function addOffer($socialParameters)
     {
         $offer  = new UserGeneratedOffer();
-        $offer->shopId = FrontEnd_Helper_viewHelper::sanitize(base64_decode($socialParameters['shopId']));
+        $offer->shopId = Shop::getShopIdByPermalink(
+            FrontEnd_Helper_viewHelper::sanitize($socialParameters['shopPermalink'])
+        );
         $offer->couponCode = FrontEnd_Helper_viewHelper::sanitize($socialParameters['code']);
         $offer->termandcondition[]->content = BackEnd_Helper_viewHelper::stripSlashesFromString(
             FrontEnd_Helper_viewHelper::sanitize($socialParameters['offerDetails'])

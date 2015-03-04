@@ -1256,4 +1256,19 @@ jQuery.validator.addMethod("dateFormat",
         return value.match(/^dd?-dd?-dd$/);
     }, ''
 );
+var validateDate = function(inputValue) {
+    var splitedDate = inputValue.split('-');
+	var formatedDate = splitedDate[1] + '/' + splitedDate[0] + '/' + splitedDate[2];
+	var userInputDate = new Date(formatedDate);
+	var currentDate = new Date();
+    if(userInputDate < currentDate) {
+        return false;
+    } else {
+    	return true;
+    }
+};
+jQuery.validator.addMethod("checkTodayDate", function(value, element) {
+    return validateDate(value);
+}, "");
+
 })(jQuery);

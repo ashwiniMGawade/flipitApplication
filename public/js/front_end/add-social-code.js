@@ -1,14 +1,57 @@
-$(document).ready(function(){
+$(document).ready(function() {
     validateAddSocialCode();
-    $('input#shopId').val($('input#currentShop').val())
-    $("#shareCode").click(function(){
+    $("#shareCode").click(function() {
         if ($("form#socialCodeForm").valid()) {
             saveSocialCode();
+            return false;
         } else {
             return false;
         }
     });
+    $('body').click(function(event) {
+        var clickedId = event.target.id;
+        if (clickedId == "searchShops") {
+            return false;
+        }
+    });
+
+    $("input#searchShops").autocomplete({
+        minLength : 1,
+        search: function(event, ui) {
+            $('.ajax-autocomplete ul').empty();
+        },
+        select: function(event, ui ) {
+            $('input#shopPermalink').val(ui.item.permalink);
+        },
+        source :  function( request, response ) {
+            var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
+            response( $.grep( shopsJSON, function( item ) {
+                return matcher.test( item.label );
+            }));
+        },
+        focus: function( event, ui ) {
+            $('li.wLi2').removeClass('select');
+            $('a#ui-active-menuitem').parents('li').addClass('select');
+        },
+    }).data( "autocomplete" )._renderItem = function( ul, item, url ) {
+        url = item.permalink;
+        return $("<li class='wLi2'></li>").data("item.autocomplete", item).append(
+            $('<a href="" onClick="setInHidden(\'' + url + '\')"></a>').html((__highlight(item.label,$("input#searchShops").val()))))
+        .appendTo(ul);
+    };  
+    $("input#searchShops").keypress(function(event) {
+        $('ul.ui-autocomplete').addClass('wd1');
+    });
 });
+
+function __highlight(s, t) {
+    var matcher = new RegExp("(" + $.ui.autocomplete.escapeRegex(t) + ")", "ig");
+    return s.replace(matcher, '<span>$1</span>');
+}
+
+function setInHidden(url) {
+    $('input#shopPermalink').val(url);
+}
 
 function saveSocialCode() {
     $.ajax({
@@ -43,6 +86,7 @@ function validateAddSocialCode() {
             },
             expireDate: {
                 required: true,
+                checkTodayDate: true,
                 regex: /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(|-|)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(|-|)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(|-|)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/
             },
             offerDetails: {
@@ -60,6 +104,7 @@ function validateAddSocialCode() {
             },
             expireDate: {
                 required: '',
+                checkTodayDate: '',
                 regex : ''
             },
             offerDetails: {
