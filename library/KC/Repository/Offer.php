@@ -3052,7 +3052,7 @@ class Offer Extends \KC\Entity\Offer
             $updateOffer->tilesId =  $params['offerImageSelect'] ;
 
         }
-        $updateOffer->approved  = 0;
+        $updateOffer->approved  = true;
         $updateOffer->couponCodeType = $params['couponCodeType'];
 
         if (isset($params['couponCodeCheckbox'])) {
