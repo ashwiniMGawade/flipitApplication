@@ -20,7 +20,6 @@ foreach ($socialCodeForm->getElements() as $formElement) {
         echo $socialCodeForm->code->renderViewHelper();
         echo $socialCodeForm->offerDetails->renderViewHelper();
         echo $socialCodeForm->expireDate->renderViewHelper();
-        echo $socialCodeForm->shopPermalink->renderViewHelper();
         echo $this->formSubmit(
             'shareCode',
             FrontEnd_Helper_viewHelper::__form('form_share vouchercode'),

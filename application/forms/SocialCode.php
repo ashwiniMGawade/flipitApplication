@@ -39,15 +39,11 @@ class Application_Form_SocialCode extends Application_Form_Base
         $expireDate->addValidator(new Application_Form_DateGreaterThanToday());
         $expireDate->addFilter('StringTrim');
         $expireDate->addFilter('StripTags');
-
-        $shopPermalinkHiddenField =  new Zend_Form_Element_Hidden('shopPermalink');
-        
         $this->addElements(array(
             $shops,
             $code,
             $offerDetails,
-            $expireDate,
-            $shopPermalinkHiddenField
+            $expireDate
         ));
     }
 }

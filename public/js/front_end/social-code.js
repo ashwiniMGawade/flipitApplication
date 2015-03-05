@@ -4,10 +4,9 @@ $(document).ready(function(){
 
 function loadSocialCodeForm() {
     $.ajax({
-        url : HOST_PATH_LOCALE + 'socialcode/social-code',
+        url : HOST_PATH_LOCALE + 'socialcode/social-code/id/' + $('input#currentShop').val(),
         type: 'get',
         dataType: 'json',
-        data:{id: $('input#currentShop').val()},
         success: function(data) {
             if (data != null) {
                 appendSocialCodeForm(data);
@@ -22,15 +21,8 @@ function appendSocialCodeForm(data) {
 }
 
 $(document).ajaxStop(function() {
+    var validator =  null;
     validateAddSocialCode();
-    $("#shareCode").click(function() {
-        if ($("form#socialCodeForm").valid()) {
-            saveSocialCode();
-            return false;
-        } else {
-            return false;
-        }
-    });
     $('body').click(function(event) {
         var clickedId = event.target.id;
         if (clickedId == "searchShops") {
@@ -42,9 +34,6 @@ $(document).ajaxStop(function() {
             minLength : 1,
             search: function(event, ui) {
                 $('.ajax-autocomplete ul').empty();
-            },
-            select: function(event, ui) {
-                $('input#shopPermalink').val(ui.item.permalink);
             },
             source :  function(request, response) {
                 var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex(request.term), "i");
@@ -59,7 +48,7 @@ $(document).ajaxStop(function() {
         }).data("autocomplete")._renderItem = function(ul, item, url) {
             url = item.permalink;
             return $("<li class='wLi2'></li>").data("item.autocomplete", item).append(
-                $('<a href="javascript:void(0);" onClick="setInHidden(\'' + url + '\')"></a>').html((__highlight(
+                $('<a href="javascript:void(0);"></a>').html((__highlight(
                     item.label,
                     $("input#searchShops").val()
                 ))))
@@ -74,10 +63,6 @@ $(document).ajaxStop(function() {
 function __highlight(s, t) {
     var matcher = new RegExp("(" + $.ui.autocomplete.escapeRegex(t) + ")", "ig");
     return s.replace(matcher, '<span>$1</span>');
-}
-
-function setInHidden(url) {
-    $('input#shopPermalink').val(url);
 }
 
 function saveSocialCode() {
@@ -109,12 +94,11 @@ function validateAddSocialCode() {
                     type : "post",
                     beforeSend : function(xhr) {},
                     complete : function(data) {
-                    if (data.responseText == 'false') {
-                        $("input#searchShops").addClass('input-error').removeClass('input-success');
-                    } else {
-                        $("input#searchShops").addClass('input-success').removeClass('input-error');
-                        $("input#shopPermalink").val(data.responseText);
-                    }
+                        if (data.responseText == 'true') {
+                            $("input#searchShops").addClass('input-success').removeClass('input-error');
+                        } else {
+                            $("input#searchShops").addClass('input-error').removeClass('input-success');
+                        }
                 }}
             },
             code: {
@@ -179,6 +163,14 @@ function validateAddSocialCode() {
         success: function(element, errorClass, validClass) {
             $(element).removeClass(errorClass).addClass(validClass);
             $(element).next('label').hide();
+        },
+        submitHandler: function(form) {
+            if ($("form#socialCodeForm").valid()) {
+                saveSocialCode();
+                return false;
+            } else {
+                return false;
+            }
         }
     });
 }
