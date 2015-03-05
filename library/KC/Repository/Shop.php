@@ -1338,10 +1338,15 @@ class Shop extends \KC\Entity\Shop
     public static function getShopDetail($shopId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $shopDetail = $queryBuilder->select('s.notes,s.accountManagerName,s.deepLink,s.deepLinkStatus,s.strictConfirmation,a.name as affname,cat.id as categoryId')
+        $shopDetail = $queryBuilder
+            ->select(
+                's.notes,s.accountManagerName,s.deepLink,s.deepLinkStatus,s.strictConfirmation,a.name as affname,
+                cat.id as categoryId'
+            )
             ->from('KC\Entity\Shop', 's')
             ->leftJoin('s.affliatenetwork', 'a')
-            ->leftJoin('s.categoryshops', 'cat')
+            ->leftJoin('s.categoryshops', 'c')
+            ->leftJoin('c.shop', 'cat')
             ->where('s.deleted=0')
             ->andWhere("s.id =$shopId")
             ->getQuery()
