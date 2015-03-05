@@ -734,7 +734,7 @@ class Admin_OfferController extends Zend_Controller_Action
             $id = $this->getRequest()->getParam('offerId');
             $offerObj = new KC\Repository\Offer();
             $offerDetail = $offerObj->getOfferDetail($id);
-            //echo "<pre>";print_r($offerDetail);die;
+            echo "<pre>";print_r($offerDetail);die;
             echo Zend_Json::encode($offerDetail);
             die;
     }

@@ -3052,7 +3052,6 @@ class Offer Extends \KC\Entity\Offer
             $updateOffer->tilesId =  $params['offerImageSelect'] ;
 
         }
-        $updateOffer->approved  = true;
         $updateOffer->couponCodeType = $params['couponCodeType'];
 
         if (isset($params['couponCodeCheckbox'])) {
@@ -3071,7 +3070,7 @@ class Offer Extends \KC\Entity\Offer
                     ->select('p.position')
                     ->from('KC\Entity\PopularCode', 'p')
                     ->where('p.popularcode = '.$params['offerId']);
-            $exist = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $exist = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             if (!empty($exist)) {
                 KC\Repository\PopularCode::deletePopular($params['offerId'], $exist['position']);
             }
@@ -3086,7 +3085,7 @@ class Offer Extends \KC\Entity\Offer
                     ->from('KC\Entity\PopularCode', 'p')
                     ->where('p.popularcode = '.$params['offerId']);
         
-            $exist = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $exist = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
             if ($exist) {
                 KC\Repository\PopularCode::deletePopular($params['offerId'], $exist['position']);
