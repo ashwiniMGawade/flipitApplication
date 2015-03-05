@@ -1,5 +1,4 @@
 <?php
-echo $this->minifyHeadScript()->appendFile(HTTP_PATH. "public/js/front_end/addsocialcode.js");
 $socialCodeForm = $this->zendForm;
 foreach ($socialCodeForm->getElements() as $formElement) {
     $formElement->getDecorator('label')->setOption('tag', null);
@@ -9,12 +8,19 @@ foreach ($socialCodeForm->getElements() as $formElement) {
     <form id="socialCodeForm" class="widget-form" name="socialCodeForm" method="POST" action="">
         <h3><?php echo $this->translate('Social Code');?></h3>
         <p><?php echo $this->translate('Share a code with our users');?></p>
-        <?php 
+        <?php
+        if ($this->errorMessege) {
+            ?>
+            <label class='errorMessage'>
+                <?php echo FrontEnd_Helper_viewHelper::__translate('Problem in your data');?>
+            </label>
+            <?php
+        }
         echo $socialCodeForm->shops->renderViewHelper();
         echo $socialCodeForm->code->renderViewHelper();
         echo $socialCodeForm->offerDetails->renderViewHelper();
         echo $socialCodeForm->expireDate->renderViewHelper();
-        echo $socialCodeForm->shopId->renderViewHelper();
+        echo $socialCodeForm->shopPermalink->renderViewHelper();
         echo $this->formSubmit(
             'shareCode',
             FrontEnd_Helper_viewHelper::__form('form_share vouchercode'),
@@ -23,8 +29,6 @@ foreach ($socialCodeForm->getElements() as $formElement) {
         $shareCodeLink = HTTP_PATH_LOCALE
             . FrontEnd_Helper_viewHelper::__link('link_sharesocialcode');
         ?>
-        <a href="<?php echo $shareCodeLink; ?>">
-        <?php echo $this->translate('Share coupon codes for other shops');?>
-        </a>
+        <div class='clear-both'></div>
     </form>
 </div>
