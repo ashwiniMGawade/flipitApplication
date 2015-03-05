@@ -24,6 +24,15 @@ class Shop extends BaseShop
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
 
+    public static function checkShop($shopName)
+    {
+        $shop = Doctrine_Query::create()->select('s.permaLink')
+            ->from('Shop s')
+            ->where("s.name='".$shopName."'")
+            ->fetchArray();
+        return isset($shop[0]['permaLink']) ? $shop[0]['permaLink'] : '';
+    }
+
     public static function getShopData($id)
     {
         $shopDataExistOrNot = Doctrine_Core::getTable("Shop")->find($id);

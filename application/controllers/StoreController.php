@@ -442,40 +442,4 @@ class StoreController extends Zend_Controller_Action
         $this->view->shopId = $this->getRequest()->getParam('shopid');
         $this->view->permalink = $this->getRequest()->getParam('permalink');
     }
-
-    public function socialCodeAction()
-    {
-        $this->_helper->layout()->disableLayout();
-        $baseViewPath = new Zend_View();
-        $baseViewPath->setBasePath(APPLICATION_PATH . '/views/');
-        $socialCodeForm = new Application_Form_SocialCode();
-        $shopId = $this->getRequest()->getParam('id');
-        if (isset($shopId)) {
-            $shopInformation = Shop::getShopInformation(base64_decode(FrontEnd_Helper_viewHelper::sanitize($shopId)));
-            if (!empty($shopInformation)) {
-                $socialCodeForm->getElement('shopPermalink')->setValue($shopInformation[0]['permaLink']);
-                $socialCodeForm->getElement('shops')->setValue($shopInformation[0]['name']);
-            }
-        }
-        if ($this->getRequest()->isPost()) {
-            if ($socialCodeForm->isValid($this->getRequest()->getPost())) {
-                $socialCodeParameters = $socialCodeForm->getValues();
-                try {
-                    UserGeneratedOffer::addOffer($socialCodeParameters);
-                    echo Zend_Json::encode($baseViewPath->render('store/socialcodethanks.phtml'));
-                    exit();
-                } catch (Exception $e) {
-                    $baseViewPath->assign('errorMessage', true);
-                    $baseViewPath->assign('zendForm', $socialCodeForm);
-                    echo Zend_Json::encode($baseViewPath->render('store/social-code.phtml'));
-                    exit();
-                }
-            } else {
-                $socialCodeForm->highlightErrorElements();
-            }
-        }
-        $baseViewPath->assign('zendForm', $socialCodeForm);
-        echo Zend_Json::encode($baseViewPath->render('store/social-code.phtml'));
-        exit();
-    }
 }

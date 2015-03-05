@@ -4,9 +4,10 @@ $(document).ready(function(){
 
 function loadSocialCodeForm() {
     $.ajax({
-        url : HOST_PATH_LOCALE + 'store/social-code/id/' + $('input#currentShop').val(),
+        url : HOST_PATH_LOCALE + 'socialcode/social-code',
         type: 'get',
         dataType: 'json',
+        data:{id: $('input#currentShop').val()},
         success: function(data) {
             if (data != null) {
                 appendSocialCodeForm(data);
@@ -81,7 +82,7 @@ function setInHidden(url) {
 
 function saveSocialCode() {
     $.ajax({
-        url : HOST_PATH_LOCALE + 'store/social-code',
+        url : HOST_PATH_LOCALE + 'socialcode/social-code',
         method : "post",
         data: $('form#socialCodeForm').serialize(),       
         dataType : "json",
@@ -101,7 +102,20 @@ function validateAddSocialCode() {
         validClass: 'input-success',
         rules: {
             shops: {
-                required: true
+                required: true,
+                remote: {
+                    url : HOST_PATH_LOCALE
+                    + "socialcode/check-store",
+                    type : "post",
+                    beforeSend : function(xhr) {},
+                    complete : function(data) {
+                    if (data.responseText == 'false') {
+                        $("input#searchShops").addClass('input-error').removeClass('input-success');
+                    } else {
+                        $("input#searchShops").addClass('input-success').removeClass('input-error');
+                        $("input#shopPermalink").val(data.responseText);
+                    }
+                }}
             },
             code: {
                 required: true,
@@ -119,7 +133,8 @@ function validateAddSocialCode() {
         },
         messages : {
             shops : {
-                required: ''
+                required: '',
+                remote:''
             },
             code: {
                 required: '',
