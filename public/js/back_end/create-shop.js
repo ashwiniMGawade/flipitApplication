@@ -619,7 +619,7 @@ function removeballontexthtml(el) {
                     $('#customtextposition').hide();
                     $('#showcustomtext').val(0);
                 }
-
+      break;
 			default:
 				
 				if(status == 'toggle-btn')
