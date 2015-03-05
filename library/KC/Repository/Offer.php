@@ -437,7 +437,6 @@ class Offer Extends \KC\Entity\Offer
 
     public static function getSpecialOffersByPage($pageId, $currentDate)
     {
-        $pageId = 8;
         $specialPageOffers = self::getOffersByPageId($pageId, $currentDate);
         return self::removeDuplicateOffers($specialPageOffers);
     }

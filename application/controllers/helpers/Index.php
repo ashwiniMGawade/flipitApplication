@@ -3,12 +3,14 @@ class Zend_Controller_Action_Helper_Index extends Zend_Controller_Action_Helper_
 {
     public static function getSpecialListPagesOffers($specialListPages)
     {
-        $specialOfferslist = '';
+        $specialOfferslist = array();
         foreach ($specialListPages as $specialListPage) {
             foreach ($specialListPage as $page) {
-                $specialOfferslistIndex = $page['page']['permalink'] . ',' . $page['page']['pageTitle'];
-                $specialOfferslist[$specialOfferslistIndex] =
-                    self::removeDuplicateCode(\KC\Repository\Offer::getSpecialPageOffers($page['page']));
+                if (!empty($page['page'])) {
+                    $specialOfferslistIndex = $page['page']['permalink'] . ',' . $page['page']['pageTitle'];
+                    $specialOfferslist[$specialOfferslistIndex] =
+                        self::removeDuplicateCode(\KC\Repository\Offer::getSpecialPageOffers($page['page']));
+                }
             }
         }
         return $specialOfferslist;

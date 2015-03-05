@@ -571,6 +571,8 @@ class Shop extends \KC\Entity\Shop
             ->add('text', 's.discussions')
             ->add('text', 's.showSignupOption')
             ->add('text', 's.status')
+            ->add('number', 's.lastSevendayClickouts')
+            ->add('number', 's.shopAndOfferClickouts')
             ->add('text', 's.offlineSicne');
         $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
         $result = \DataTable_Helper::getResponse($data, $request);
@@ -753,11 +755,12 @@ class Shop extends \KC\Entity\Shop
             $shopInfo = \Zend_Registry::get('emLocale')
                 ->getRepository('KC\Entity\Shop')
                 ->find($shopDetail['id']);
+            $shopInfo->created_at = $shopInfo->created_at;
         } else {
             $shopInfo = new \Kc\Entity\Shop();
+            $shopInfo->created_at = new \DateTime('now');
         }
         $shopInfo->deleted = 0;
-        $shopInfo->created_at = new \DateTime('now');
         $shopInfo->updated_at = new \DateTime('now');
         $shopInfo->addtosearch = 0;
         $shopInfo->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopName']);
@@ -1054,7 +1057,7 @@ class Shop extends \KC\Entity\Shop
                     $shopId = $shopDetail['id'];
                 } else {
                     $type = 'add';
-                    $shopId = $this->id;
+                    $shopId = $shopInfo->id;
                 }
 
                 self::saveEditorBallonText($shopDetail, $shopId, $type);
@@ -1092,7 +1095,7 @@ class Shop extends \KC\Entity\Shop
                     ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle6']) : '';
                 $shopReasons['reasonsubtitle6'] = !empty($shopDetail['reasonsubtitle6'])
                     ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle6']) : '';
-                \KC\Repository\ShopReasons::saveReasons($shopReasons, $this->id);
+                \KC\Repository\ShopReasons::saveReasons($shopReasons, $shopInfo->id);
             }
 
             $key = 'shop_similar_shops';
@@ -1907,7 +1910,8 @@ class Shop extends \KC\Entity\Shop
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
             ->delete("KC\Entity\EditorBallonText", "e")
-            ->where("e.shopid = ".$shopId)
+            ->where("e.shop = ".$shopId)
+            ->getQuery()
             ->execute();
         }
         $contentInfo = array_map('trim', $params['ballontextcontent']);
@@ -1915,7 +1919,7 @@ class Shop extends \KC\Entity\Shop
             if (isset($content) && $content != '') {
                 $entityManagerLocale  = \Zend_Registry::get('emLocale');
                 $ballonText = new \KC\Entity\EditorBallonText();
-                $ballonText->shopid = $shopId;
+                $ballonText->shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $shopId);
                 $ballonText->ballontext = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['ballontextcontent'][$key]);
                 $ballonText->deleted = 0;
                 $entityManagerLocale->persist($ballonText);

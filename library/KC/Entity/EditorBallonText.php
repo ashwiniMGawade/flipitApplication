@@ -16,11 +16,6 @@ class EditorBallonText
     private $id;
 
     /**
-     * @ORM\Column(type="integer", length=11, nullable=true)
-     */
-    private $shopId;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $ballontext;
@@ -39,6 +34,12 @@ class EditorBallonText
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updated_at;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="ballontext")
+     * @ORM\JoinColumn(name="shopid", referencedColumnName="id")
+     */
+    private $shop;
 
     public function __get($property)
     {
