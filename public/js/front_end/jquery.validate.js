@@ -1257,9 +1257,9 @@ jQuery.validator.addMethod("dateFormat",
     }, ''
 );
 var validateDate = function(inputValue) {
-    var splitedDate = inputValue.split('-');
-	var formatedDate = splitedDate[1] + '/' + splitedDate[0] + '/' + splitedDate[2];
-	var userInputDate = new Date(formatedDate);
+    var splittedDate = inputValue.split('-');
+	var formattedDate = splittedDate[1] + '/' + splittedDate[0] + '/' + splittedDate[2];
+	var userInputDate = new Date(formattedDate);
 	var currentDate = new Date();
     if(userInputDate < currentDate) {
         return false;

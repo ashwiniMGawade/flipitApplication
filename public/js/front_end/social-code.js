@@ -8,11 +8,18 @@ function loadSocialCodeForm() {
         type: 'get',
         dataType: 'json',
         success: function(data) {
-            $('aside#sidebar .widget').remove();
-            $('aside#sidebar').append(data);
+            if (data != null) {
+                appendSocialCodeForm(data);
+            }
         }
     });
 }
+
+function appendSocialCodeForm(data) {
+    $('aside#sidebar .widget').remove();
+    $('aside#sidebar').append(data);
+}
+
 $(document).ajaxStop(function() {
     validateAddSocialCode();
     $("#shareCode").click(function() {
@@ -29,29 +36,29 @@ $(document).ajaxStop(function() {
             return false;
         }
     });
-    if ($( "input#searchShops" ).length) {
+    if ($("input#searchShops").length) {
         $("input#searchShops").autocomplete({
             minLength : 1,
             search: function(event, ui) {
                 $('.ajax-autocomplete ul').empty();
             },
-            select: function(event, ui ) {
+            select: function(event, ui) {
                 $('input#shopPermalink').val(ui.item.permalink);
             },
-            source :  function( request, response ) {
-                var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
-                response( $.grep( shopsJSON, function( item ) {
-                    return matcher.test( item.label );
+            source :  function(request, response) {
+                var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex(request.term), "i");
+                response($.grep(shopsJSON, function(item) {
+                    return matcher.test(item.label);
                 }));
             },
-            focus: function( event, ui ) {
+            focus: function(event, ui) {
                 $('li.wLi2').removeClass('select');
                 $('a#ui-active-menuitem').parents('li').addClass('select');
             },
-        }).data( "autocomplete" )._renderItem = function( ul, item, url ) {
+        }).data("autocomplete")._renderItem = function(ul, item, url) {
             url = item.permalink;
             return $("<li class='wLi2'></li>").data("item.autocomplete", item).append(
-                $('<a href="" onClick="setInHidden(\'' + url + '\')"></a>').html((__highlight(
+                $('<a href="javascript:void(0);" onClick="setInHidden(\'' + url + '\')"></a>').html((__highlight(
                     item.label,
                     $("input#searchShops").val()
                 ))))
@@ -81,8 +88,7 @@ function saveSocialCode() {
             type : "post",
             success : function(data) {
             if (data != null) {
-                $('aside#sidebar .widget').remove();
-                $('aside#sidebar').append(data);
+                appendSocialCodeForm(data);
             }
         }
     });
@@ -130,7 +136,7 @@ function validateAddSocialCode() {
             }
         },
         onfocusin : function(element) {
-            if($(element).valid() == 0){
+            if($(element).valid() == 0) {
                 $(element).removeClass('input-error').removeClass('input-success');
                 $(element).next('label').hide();
             } else {
@@ -139,7 +145,7 @@ function validateAddSocialCode() {
             }
         },
         onfocusout :function(element) {
-            if($(element).valid() == 0){
+            if($(element).valid() == 0) {
                 $(element).removeClass('input-success').addClass('input-error');
                 $(element).next('label').hide();
             } else {
