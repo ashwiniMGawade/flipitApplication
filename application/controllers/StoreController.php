@@ -467,6 +467,8 @@ class StoreController extends Zend_Controller_Action
                     echo Zend_Json::encode($baseViewPath->render('store/socialcodethanks.phtml'));
                     exit();
                 } catch (Exception $e) {
+                    $baseViewPath->assign('errorMessege', true);
+                    $baseViewPath->assign('zendForm', $socialCodeForm);
                     echo Zend_Json::encode($baseViewPath->render('store/socialcode.phtml'));
                     exit();
                 }

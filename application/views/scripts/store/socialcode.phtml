@@ -1,5 +1,4 @@
 <?php
-echo $this->minifyHeadScript()->appendFile(HTTP_PATH. "public/js/front_end/add-social-code.js");
 $socialCodeForm = $this->zendForm;
 foreach ($socialCodeForm->getElements() as $formElement) {
     $formElement->getDecorator('label')->setOption('tag', null);
@@ -9,7 +8,14 @@ foreach ($socialCodeForm->getElements() as $formElement) {
     <form id="socialCodeForm" class="widget-form" name="socialCodeForm" method="POST" action="">
         <h3><?php echo $this->translate('Social Code');?></h3>
         <p><?php echo $this->translate('Share a code with our users');?></p>
-        <?php 
+        <?php
+        if ($this->errorMessege) {
+            ?>
+            <label class='error-message'>
+                <?php echo FrontEnd_Helper_viewHelper::__translate('Problem in your data');?>
+            </label>
+            <?php
+        }
         echo $socialCodeForm->shops->renderViewHelper();
         echo $socialCodeForm->code->renderViewHelper();
         echo $socialCodeForm->offerDetails->renderViewHelper();
