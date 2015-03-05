@@ -615,11 +615,11 @@ class Admin_UserController extends Zend_Controller_Action
 	 $favShop  = KC\Repository\User::getUserFavouriteStores($id);
 	 //get unterestng category of currecnt user(admin)
 	 $intCat = KC\Repository\User::getUserInterestingCat($id);
-
+     //echo "<pre>";print_r($intCat);die;
      $catArray  = array();//array generate on key based
      foreach ($intCat as $categories){
 
-             $catArray[] = $categories['categoryId'];
+             $catArray[] = $categories['id'];
          }
          $this->view->catArray = '';
          if(isset($catArray) && count($catArray)>0){
