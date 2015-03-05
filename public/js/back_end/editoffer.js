@@ -1262,8 +1262,8 @@ function validateFormAddNewOffer(){
 				ignore: [],
 				errorPlacement : function(error, element) {
 					
-						element.parent("div").next("div")
-								.html(error);
+						/*element.parent("div").next("div")
+								.html(error);*/
 				},
 				// validation rules
 				rules : {
@@ -2121,7 +2121,7 @@ function submitForm(){
 
 function selectOfferImage(id)
 {
-	jQuery('a.unselect').hide();
+	//jQuery('a.unselect').hide();
 	jQuery('a#selectImg_'+id).show();
 	jQuery('input#offerImageSelect').val(id);
 	//jQuery("input.tiles").removeAttr('checked').valid();

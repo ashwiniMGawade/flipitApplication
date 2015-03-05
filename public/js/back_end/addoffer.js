@@ -1522,8 +1522,8 @@ function validateMenu(){
 			ignore: ".ignore, :hidden",
 			//afterReset  : resetBorders,
 			errorPlacement : function(error, element) {
-				element.parent("div").prev("div")
-						.html(error);
+				/*element.parent("div").prev("div")
+						.html(error);*/
 			},
 		rules : {
 			label : {

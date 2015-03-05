@@ -8,6 +8,7 @@ class Admin_OfferController extends Zend_Controller_Action
     public function getofferAction()
     {
         $parameters = $this->_getAllParams();
+        //echo "<pre>";print_r($parameters);die;
         $offerList = \KC\Repository\Offer::getOfferList($parameters);
         echo \Zend_Json::encode($offerList);
         die();
@@ -131,6 +132,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $params = $this->_getAllParams();
         $shopObj = new \KC\Repository\Shop();
         $Getshopdetails = $shopObj->getShopDetail($params['shopId']);
+        //echo "<pre>";print_r($Getshopdetails);die;
         $details = Zend_Json::encode($Getshopdetails);
 
         echo $details;
@@ -1095,7 +1097,7 @@ class Admin_OfferController extends Zend_Controller_Action
     public function updateVarnish($id)
     {
         // Add urls to refresh in Varnish
-        $varnishObj = new Varnish();
+        $varnishObj = new \KC\Repository\Varnish();
         $varnishObj->addUrl(HTTP_PATH_FRONTEND);
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_nieuw'));
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-20'));

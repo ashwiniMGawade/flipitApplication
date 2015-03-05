@@ -1093,7 +1093,8 @@ class Offer Extends \KC\Entity\Offer
         ->leftJoin('s.affliatenetwork', 'a')
         ->leftJoin('o.offers', 'p')
         ->leftJoin('o.offertermandcondition', 'tc')
-        ->leftJoin('o.categoryoffres', 'cat')
+        ->leftJoin('o.categoryoffres', 'c')
+        ->leftJoin('c.categories', 'cat')
         ->leftJoin('s.logo', 'img')
         ->setParameter(1, $offerId)
         ->where('o.id = ?1');
@@ -1573,7 +1574,7 @@ class Offer Extends \KC\Entity\Offer
         ->leftJoin('p.offers', 'page')
         ->leftJoin('o.offertermandcondition', 'tc')
         ->leftJoin('o.categoryoffres', 'cat')
-        ->leftJoin('cat.offers', 'category');
+        ->leftJoin('cat.categories', 'category');
         if ($type != '') {
             $query = $query->leftJoin('s.logo', 'img');
         } else {
@@ -2457,7 +2458,8 @@ class Offer Extends \KC\Entity\Offer
         $query = $queryBuilder
             ->select(
                 "o.id, o.title, o.extendedOffer,o.authorId , o.extendedUrl,
-                s.permaLink as shopPermalink, s.howToUse ,s.contentManagerId , sp.permaLink as shopPagePermalink, p.permaLink as categoryPermalink, page.permaLink as pagePermalink"
+                s.permaLink as shopPermalink, s.howToUse ,s.contentManagerId , sp.permaLink as shopPagePermalink,
+                p.permaLink as categoryPermalink, page.permaLink as pagePermalink"
             )
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
@@ -2465,7 +2467,7 @@ class Offer Extends \KC\Entity\Offer
             ->leftJoin('o.offers', 'refPage')
             ->leftJoin('refPage.offers', 'page')
             ->leftJoin('s.shopPage', 'sp')
-            ->leftJoin('c.offer', 'p')
+            ->leftJoin('c.offers', 'p')
             ->where("o.id=".$id);
         $offer = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $urlsArray = array();
@@ -3010,7 +3012,6 @@ class Offer Extends \KC\Entity\Offer
             $updateOffer->tilesId =  $params['offerImageSelect'] ;
 
         }
-
         $updateOffer->couponCodeType = $params['couponCodeType'];
 
         if (isset($params['couponCodeCheckbox'])) {
@@ -3029,7 +3030,7 @@ class Offer Extends \KC\Entity\Offer
                     ->select('p.position')
                     ->from('KC\Entity\PopularCode', 'p')
                     ->where('p.popularcode = '.$params['offerId']);
-            $exist = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $exist = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             if (!empty($exist)) {
                 KC\Repository\PopularCode::deletePopular($params['offerId'], $exist['position']);
             }
@@ -3044,7 +3045,7 @@ class Offer Extends \KC\Entity\Offer
                     ->from('KC\Entity\PopularCode', 'p')
                     ->where('p.popularcode = '.$params['offerId']);
         
-            $exist = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $exist = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
             if ($exist) {
                 KC\Repository\PopularCode::deletePopular($params['offerId'], $exist['position']);
