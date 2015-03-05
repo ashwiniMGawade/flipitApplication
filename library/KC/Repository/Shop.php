@@ -776,13 +776,13 @@ class Shop extends \KC\Entity\Shop
         $shopInfo->subTitle =\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopSubTitle']);
         $shopInfo->overriteTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopOverwriteTitle']);
         $shopInfo->shopText = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopDescription']);
-        $this->customtext = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomText']);
-        $this->moretextforshop = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['moretextforshop']);
+        $shopInfo->customtext = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomText']);
+        $shopInfo->moretextforshop = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['moretextforshop']);
         $shopViewCount = isset($shopDetail['shopViewCount']) ? $shopDetail['shopViewCount'] : '0';
         $shopInfo->views = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopViewCount);
         $shopInfo->howtoTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageTitle']);
         $shopInfo->howtoSubtitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubTitle']);
-        $this->howtoSubSubTitle = \FrontEnd_Helper_viewHelper::sanitize(
+        $shopInfo->howtoSubSubTitle = \FrontEnd_Helper_viewHelper::sanitize(
             \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubSubTitle'])
         );
         $shopInfo->howtoMetaTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaTitle']);
@@ -839,12 +839,12 @@ class Shop extends \KC\Entity\Shop
         }
 
         if ($shopDetail['customtextposition'] != '') {
-            $this->customtextposition = $shopDetail['customtextposition'];
+            $shopInfo->customtextposition = $shopDetail['customtextposition'];
         }
 
-        $this->showcustomtext = 0;
+        $shopInfo->showcustomtext = 0;
         if ($shopDetail['showcustomtext'] != '') {
-            $this->showcustomtext = $shopDetail['showcustomtext'];
+            $shopInfo->showcustomtext = $shopDetail['showcustomtext'];
         }
 
         $shopInfo->usergenratedcontent = '0';
@@ -884,9 +884,13 @@ class Shop extends \KC\Entity\Shop
         $shopInfo->affliateNetworkId = null;
 
         if ($shopDetail['shopAffiliateNetwork'] != 0) {
-            $shopInfo->affliateNetworkId = \BackEnd_Helper_viewHelper::stripSlashesFromString(
-                $shopDetail['shopAffiliateNetwork']
-            );
+            $shopInfo->affliatenetwork = \Zend_Registry::get('emLocale')
+                ->getRepository('KC\Entity\AffliateNetwork')
+                ->find(
+                    \BackEnd_Helper_viewHelper::stripSlashesFromString(
+                        $shopDetail['shopAffiliateNetwork']
+                    )
+                );
         }
 
         $shopInfo->howToUse = $shopDetail['howTouseStatus'];

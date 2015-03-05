@@ -467,7 +467,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                 </div>  
             </div>
 
-
+ <?php echo "<pre>"; print_r($this->data); die; ?>
                 <div class="mainpage-content">
             	<div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Similar Shops'); ?></strong></label></div>
@@ -476,17 +476,17 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <div class="mainpage-content-right-inner-left-other-shop">
                 <div style="overflow-y:scroll;height:169px;width:160px !important;" class="sidebar-content-box-left">
                     <ul id="similarshopListul-li" style='margin : 0px;'>
-                    <?php 
-                    if (!empty($this->relatedShops['refShopRelatedshop'])) {
-                        for($r=0;$r < count ($this->relatedShops['refShopRelatedshop']);$r++) { 
+                    <?php echo "<pre>"; print_r($this->data); die;
+                    if (!empty($this->relatedShops['relatedshops'])) {
+                        for($r=0;$r < count ($this->relatedShops['relatedshops']);$r++) { 
                             $className = 'grid-line2';
                             if ($r % 2 == 0) {
                                 $className = 'grid-line1';
                             }
                             ?> 
                             <li class="<?php echo $className; ?>" 
-                                value="<?php echo $this->relatedShops['refShopRelatedshop'][$r]['relatedshops']['id']; ?>">
-                                <?php echo $this->relatedShops['refShopRelatedshop'][$r]['relatedshops']['name']; ?>
+                                value="<?php echo $this->relatedShops['relatedshops'][$r]['id']; ?>">
+                                <?php echo $this->relatedShops['relatedshops'][$r]['name']; ?>
                             </li>
                             <?php 
                         }
@@ -530,7 +530,6 @@ echo $this->headTitle()->append('Edit Shop');?>
             
             
             <div class="mainpage-content">
-            	
                 <div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Affiliate network'); ?></strong></label></div>
                     <div class="mainpage-content-right">

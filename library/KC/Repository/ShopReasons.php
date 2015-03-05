@@ -7,7 +7,7 @@ class ShopReasons Extends \KC\Entity\ShopReasons
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->delete('KC\Entity\ShopReasons', 's')
-            ->where('s.shop ='.$shopId)
+            ->where('s.shopid ='.$shopId)
             ->getQuery();
         $query->execute();
         foreach ($reasons as $key => $reason) {
@@ -16,7 +16,7 @@ class ShopReasons Extends \KC\Entity\ShopReasons
             if ($key != '') {
                 $ShopReasons->fieldname = $key;
                 $ShopReasons->fieldvalue =  $reason;
-                $ShopReasons->shop =  \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $shopId);
+                $ShopReasons->shopid =  $shopId;
                 $ShopReasons->deleted =  0;
                 $entityManagerLocale->persist($ShopReasons);
                 $entityManagerLocale->flush();
@@ -31,7 +31,7 @@ class ShopReasons Extends \KC\Entity\ShopReasons
         $query = $queryBuilder
             ->select('s')
             ->from('KC\Entity\ShopReasons', 's')
-            ->where('s.shop = '.$shopId);
+            ->where('s.shopid = '.$shopId);
         $shopReasons = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopReasons;
     }
@@ -42,7 +42,7 @@ class ShopReasons Extends \KC\Entity\ShopReasons
         $query = $queryBuilder
             ->delete('KC\Entity\ShopReasons', 's')
             ->where('s.fieldname ="'.$firstFieldName.'"')
-            ->andWhere('s.shop = '.$shopId)
+            ->andWhere('s.shopid = '.$shopId)
             ->getQuery();
         $query->execute();
         
@@ -50,7 +50,7 @@ class ShopReasons Extends \KC\Entity\ShopReasons
         $query = $queryBuilderSecond
             ->delete('KC\Entity\ShopReasons', 's')
             ->where('s.fieldname ="'.$secondFieldName.'"')
-            ->andWhere('s.shop = '.$shopId)
+            ->andWhere('s.shopid = '.$shopId)
             ->getQuery();
         $query->execute();
         

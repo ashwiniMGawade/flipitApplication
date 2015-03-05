@@ -16,6 +16,11 @@ class ShopReasons
     private $id;
 
     /**
+     * @ORM\Column(type="integer", length=11, nullable=true)
+     */
+    private $shopid;
+
+    /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $fieldname;
@@ -39,12 +44,6 @@ class ShopReasons
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updated_at;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="shopreasons")
-     * @ORM\JoinColumn(name="shopid", referencedColumnName="id")
-     */
-    private $shop;
     public function __get($property)
     {
         return $this->$property;
@@ -54,4 +53,5 @@ class ShopReasons
     {
         $this->$property = $value;
     }
+
 }

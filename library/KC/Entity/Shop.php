@@ -389,11 +389,6 @@ class Shop
     private $ballontext;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\ShopReasons", mappedBy="shop")
-     */
-    private $shopreasons;
-
-    /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Signupfavoriteshop", mappedBy="signupfavoriteshop")
      */
     private $shop;
