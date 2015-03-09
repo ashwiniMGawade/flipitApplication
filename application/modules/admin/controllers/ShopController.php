@@ -373,22 +373,20 @@ class Admin_ShopController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         if (intval($id) > 0) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $data = $queryBuilder->select('s, c, sl, bl, chapter, sp, pg, logo, af,sps')
+            $data = $queryBuilder->select('s, c, sl, bl, chapter, sp, pg, logo, af')
                 ->from('KC\Entity\Shop', 's')
                 ->leftJoin("s.categoryshops", "c")
                 ->leftJoin("s.howtousesmallimage", "sl")
                 ->leftJoin("s.howtousebigimage", "bl")
                 ->leftJoin("s.howtochapter", "chapter")
                 ->leftJoin("s.relatedshops", "sp")
-                ->leftJoin("sp.shop", "sps")
                 ->leftJoin("s.shopPage", "pg")
                 ->leftJoin("s.affliatenetwork", "af")
                 ->leftJoin("s.logo", "logo")
                 ->where("s.id = ". $id)
                 ->getQuery()
                 ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-                $test = KC\Repository\Shop::getSimilarShops($id);
-         echo "<pre>";       print_r($test); die;
+            $this->view->relatedShopName = KC\Repository\Shop::getRelatedShops($data['relatedshops']);
             $this->view->data = $data ;
             $existingCategories  = $data['categoryshops'] ;
             $catArray  = array();

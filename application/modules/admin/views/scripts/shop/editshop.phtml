@@ -198,11 +198,11 @@ echo $this->headTitle()->append('Edit Shop');?>
                     <div class="mainpage-content-right">
                       <div class="category-error"></div>
                       <div class="categories" style="position:relative;">
-              <?php   
+              <?php 
               for($i = 0;  $i < count($this->categoryList) ; $i++){ ?>
               	<div class="square-btn-offer">
               <?php 
-              			if( @in_array( $this->categoryList[$i]['id'] , $this->catArray ) )
+              			if( @in_array( $this->categoryList[$i][0]['id'] , $this->catArray ) )
               				{
               					$checked = 'checked="checked"' ;
               				
@@ -467,7 +467,6 @@ echo $this->headTitle()->append('Edit Shop');?>
                 </div>  
             </div>
 
- <?php echo "<pre>"; print_r($this->data); die; ?>
                 <div class="mainpage-content">
             	<div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Similar Shops'); ?></strong></label></div>
@@ -476,17 +475,18 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <div class="mainpage-content-right-inner-left-other-shop">
                 <div style="overflow-y:scroll;height:169px;width:160px !important;" class="sidebar-content-box-left">
                     <ul id="similarshopListul-li" style='margin : 0px;'>
-                    <?php echo "<pre>"; print_r($this->data); die;
-                    if (!empty($this->relatedShops['relatedshops'])) {
-                        for($r=0;$r < count ($this->relatedShops['relatedshops']);$r++) { 
+                    <?php
+                    if (!empty($this->data['relatedshops'])) {
+                        for($r=0;$r < count ($this->data['relatedshops']);$r++) { 
                             $className = 'grid-line2';
                             if ($r % 2 == 0) {
                                 $className = 'grid-line1';
                             }
                             ?> 
                             <li class="<?php echo $className; ?>" 
-                                value="<?php echo $this->relatedShops['relatedshops'][$r]['id']; ?>">
-                                <?php echo $this->relatedShops['relatedshops'][$r]['name']; ?>
+                                value="<?php echo $this->data['relatedshops'][$r]['relatedshopId']; ?>">
+                                <?php echo !empty($this->relatedShopName[$r]) ?
+                                    $this->relatedShopName[$r][0]['name'] : ''; ?>
                             </li>
                             <?php 
                         }

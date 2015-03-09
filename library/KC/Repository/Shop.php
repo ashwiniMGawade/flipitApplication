@@ -1166,14 +1166,14 @@ class Shop extends \KC\Entity\Shop
             if (isset($shopDetail['similarstoreord'])) {
                 $similarstoreordArray = explode(',', $shopDetail['similarstoreord']);
                 $i = 1;
+                if (!empty($shopDetail['id'])) {
+                    $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                    $query = $queryBuilder->delete('KC\Entity\RefShopRelatedshop', 'rsrs')
+                        ->where("rsrs.shop=" . $shopDetail['id'])
+                        ->getQuery()->execute();
+                }
                 foreach ($similarstoreordArray as $shop) {
                     if ($shop!='') {
-                        if (!empty($shopDetail['id'])) {
-                            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                            $query = $queryBuilder->delete('KC\Entity\RefShopRelatedshop', 'rsrs')
-                                ->where("rsrs.shop=" . $shopDetail['id'])
-                                ->getQuery()->execute();
-                        }
                         $relateshopObj = new \KC\Entity\RefShopRelatedshop();
                         $relateshopObj->shop = \Zend_Registry::get('emLocale')
                             ->getRepository('KC\Entity\Shop')
@@ -1956,5 +1956,20 @@ class Shop extends \KC\Entity\Shop
         $numberOfMoneyShops = self::getTotalNumberOfMoneyShops();
         $shopRatio = ($numberOfMoneyShops['moneyShops'] / $totalNumberOfShops['amountshops']) * 100;
         return round($shopRatio);
+    }
+
+    public static function getRelatedShops($relatedShopsInfo)
+    {
+        $relatedShopName = array();
+        if (!empty($relatedShopsInfo)) {
+            foreach ($relatedShopsInfo as $relatedShop) {
+                $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                $query = $queryBuilder->select("s.name")
+                    ->from('KC\Entity\Shop', 's')
+                    ->where('s.id = '.$relatedShop['relatedshopId']);
+                $relatedShopName[] = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            }
+        }
+        return $relatedShopName;
     }
 }

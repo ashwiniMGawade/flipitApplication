@@ -201,13 +201,12 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
                         },
                         {
                             "fnRender" : function(obj) {
-
                                 var tag = '';
-                                if(obj.aData.affname==null || obj.aData.affname=='' || obj.aData.affname==undefined){
+                                if(obj.aData.affliatenetwork==null || obj.aData.affliatenetwork.name=='' || obj.aData.affliatenetwork.name==undefined){
                                     tag = '';
                             }
                             else{
-                                tag = "<p class='word-wrap-without-margin'><a href='javascript:void(0);'>"+obj.aData.affname+"</a></p>";
+                                tag = "<p class='word-wrap-without-margin'><a href='javascript:void(0);'>"+obj.aData.affliatenetwork.name+"</a></p>";
                             }
                                 
                             return tag;
