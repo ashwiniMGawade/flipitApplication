@@ -12,7 +12,7 @@ foreach ($socialCodeForm->getElements() as $formElement) {
         if ($this->errorMessege) {
             ?>
             <label class='errorMessage'>
-                <?php echo FrontEnd_Helper_viewHelper::__translate('Problem in your data');?>
+                <?php echo $this->translate('Problem in your data');?>
             </label>
             <?php
         }

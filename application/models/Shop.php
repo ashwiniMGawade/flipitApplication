@@ -26,11 +26,11 @@ class Shop extends BaseShop
 
     public static function checkShop($shopName)
     {
-        $shop = Doctrine_Query::create()->select('s.id')
+        $shopExist = Doctrine_Query::create()->select('s.id')
             ->from('Shop s')
             ->where("s.name='".$shopName."'")
             ->fetchArray();
-        return isset($shop[0]['id']) ? $shop[0]['id'] : '';
+        return isset($shopExist[0]['id']) ? $shopExist[0]['id'] : '';
     }
 
     public static function getShopData($id)
@@ -380,12 +380,12 @@ class Shop extends BaseShop
 
     public static function getShopInformation($shopId)
     {
-        $shop = Doctrine_Query::create()
+        $shopDetail = Doctrine_Query::create()
             ->select('s.permaLink,s.name')
             ->from('Shop s')
             ->where('s.id='.$shopId)
             ->fetchArray();
-        return $shop;
+        return $shopDetail;
     }
 
     public static function getShopIdByPermalink($permalink)

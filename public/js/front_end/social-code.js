@@ -71,8 +71,8 @@ function saveSocialCode() {
         method : "post",
         data: $('form#socialCodeForm').serialize(),       
         dataType : "json",
-            type : "post",
-            success : function(data) {
+        type : "post",
+        success : function(data) {
             if (data != null) {
                 appendSocialCodeForm(data);
             }

@@ -56,11 +56,8 @@ class SocialcodeController extends Zend_Controller_Action
     public function checkStoreAction()
     {
         $this->_helper->layout()->disableLayout();
-        $shop = Shop::checkShop(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('shops')));
-        $shopStatus = false;
-        if ($shop!='') {
-            $shopStatus = true;
-        }
+        $shopId = Shop::checkShop(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('shops')));
+        $shopStatus = $shopId!='' ? true : false;
         echo Zend_Json::encode($shopStatus);
         die;
     }
