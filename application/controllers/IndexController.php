@@ -20,9 +20,7 @@ class IndexController extends Zend_Controller_Action
     }
 
     public function indexAction()
-    {   $test = '<img src="javascript:evil();" onload="evil();" />';
-        echo $tt = FrontEnd_Helper_viewHelper::sanitize($test);die;
-        //echo "<pre>";print_r($tt);die;
+    {
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();
