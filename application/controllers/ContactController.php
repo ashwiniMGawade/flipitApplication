@@ -29,7 +29,7 @@ class ContactController extends Zend_Controller_Action
         $message = FrontEnd_Helper_viewHelper::sanitize($parameters['message']);
         $captcha = isset($parameters['g-recaptcha-response']) ? $parameters['g-recaptcha-response'] : '';
         if (empty($captcha)) {
-            $errorMessage = "There is Issue in Captcha";
+            $errorMessage = FrontEnd_Helper_viewHelper::__translate("There is Issue in Captcha");
             $flashMessage = $this->_helper->getHelper('FlashMessenger');
             $flashMessage->addMessage(array('success' => $errorMessage));
             $urlToRedirect = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_info').'/'.

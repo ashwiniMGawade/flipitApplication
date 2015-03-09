@@ -34,15 +34,23 @@ class SocialcodeController extends Zend_Controller_Action
         if ($this->getRequest()->isPost()) {
             if ($socialCodeForm->isValid($this->getRequest()->getPost())) {
                 $socialCodeParameters = $socialCodeForm->getValues();
-                try {
-                    UserGeneratedOffer::addOffer($socialCodeParameters);
-                    echo Zend_Json::encode($baseViewPath->render('socialcode/socialcodethanks.phtml'));
-                    exit();
-                } catch (Exception $e) {
-                    $baseViewPath->assign('errorMessage', true);
-                    $baseViewPath->assign('zendForm', $socialCodeForm);
-                    echo Zend_Json::encode($baseViewPath->render('socialcode/social-code.phtml'));
-                    exit();
+                $captchaResponse = $this->getRequest()->getParam('g-recaptcha-response');
+                $captchaString = isset($captchaResponse) ? $captchaResponse : '';
+                if ($captchaString !='') {
+                    try {
+                        UserGeneratedOffer::addOffer($socialCodeParameters);
+                        echo Zend_Json::encode($baseViewPath->render('socialcode/socialcodethanks.phtml'));
+                        exit();
+                    } catch (Exception $e) {
+                        $baseViewPath->assign('errorMessage', true);
+                        $baseViewPath->assign('zendForm', $socialCodeForm);
+                        echo Zend_Json::encode($baseViewPath->render('socialcode/social-code.phtml'));
+                        exit();
+                    }
+                } else {
+                    $captchaErrorMessage = new Zend_Session_Namespace('captchaErrorMessage');
+                    $captchaErrorMessage->captchaErrorMessage =
+                        FrontEnd_Helper_viewHelper::__translate('There is Issue in Captcha');
                 }
             } else {
                 $socialCodeForm->highlightErrorElements();
