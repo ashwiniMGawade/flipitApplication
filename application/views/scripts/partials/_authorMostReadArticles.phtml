@@ -16,7 +16,7 @@ foreach ($this->authorMostReadArticles as $authorMostReadArticle) {
     $articleContent = 
     	!empty($authorMostReadArticle['content']) 
     	? $authorMostReadArticle['content'] 
-    	: !empty($authorMostReadArticle['chapters']) ? $authorMostReadArticle['chapters'][0]['content'] : '';
+    	: !empty($authorMostReadArticle['articleChapter']) ? $authorMostReadArticle['articleChapter'][0]['content'] : '';
     if(mb_strlen($articleContent, 'UTF-8') > 200):
         $articleContent = mb_substr($articleContent, 0, 200, 'UTF-8').'...';
     endif;
