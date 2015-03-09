@@ -30,10 +30,12 @@ foreach ($this->offers as $offer) {
     }
 
     $defaultText = '';
+    $offerClass = "active";
     $offerHolderClass = "offer-holder";
     if ($offer->exclusiveCode == '1') {
         $offerClass = "orange-block";
-    } else if ($offer->userGenerated == '1') {
+    }
+    if ($offer->userGenerated == '1') {
         $offerClass = "";
         $offerHolderClass = "";
         $urlToShow = 'javascript:void(0);';
@@ -44,8 +46,6 @@ foreach ($this->offers as $offer) {
         }
         $site = LOCALE == '' ? "Kortingscode" : "Flipit";
         $defaultText = FrontEnd_Helper_viewHelper::__translate('This code is not verified by').' '.$site.' ';
-    } else {
-        $offerClass = "active";
     }
 
     $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
@@ -129,7 +129,7 @@ foreach ($this->offers as $offer) {
     } else {
         echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], '');
     }
-    if ($offer->userGenerated == 1 && ($offer->approved == '1' || $offer->approved == '0')) : ?>
+    if ($offer->userGenerated == 1 && ($offer->approved == '1' || $offer->approved == '0') && $offer->nickname !='') : ?>
         <li id="fr">
             <?php echo $this->translate('Code shared by').' '.$offer->nickname;?>
         </li>

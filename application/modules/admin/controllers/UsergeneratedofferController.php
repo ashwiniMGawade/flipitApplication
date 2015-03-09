@@ -113,7 +113,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
         $this->view->offerId = $params['id'];
         $this->view->qstring = $_SERVER['QUERY_STRING'];
         $shop = Offer::getOfferShopDetail($params['id']);
-        $this->view->offerShoLogo = $shop;
+        $this->view->offerShopLogo = $shop;
         $this->view->shopList = Shop::getOfferShopList();
         $this->view->catList= Category::getCategoriesInformation();
         $page = new Page();
