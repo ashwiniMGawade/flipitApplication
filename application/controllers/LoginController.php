@@ -105,10 +105,9 @@ class LoginController extends Zend_Controller_Action
                 self::addFlashMessage($message, $redirectUrl, 'success');
             } else {
                 if (\Auth_VisitorAdapter::hasIdentity()) {
-                    print_r(Auth_VisitorAdapter::getIdentity()->firstName);
-                    die('not Clear');
+              
                 } else {
-                    die('Clear');
+          
                 }
                 $this->_redirect($redirectUrl);
             }

@@ -23,8 +23,7 @@ class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface {
             ->andWhere("u.deleted = 0");
         $visitor =  (object) $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if ($visitor) {
-            $v = new \KC\Entity\Visitor();
-            if ($v->validatePassword($this->password, $visitor->password)) {
+            if ($this->validatePassword($this->password, $visitor->password)) {
                 return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $visitor);
             } else {
                 return new Zend_Auth_Result(Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, $visitor, array("Invalid Credentials"));
@@ -53,6 +52,7 @@ class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface {
         if ($visitoSession->read()) {
             $visitor = $visitoSession->read();
             $visitorDetails = Zend_Registry::get('emLocale')->find('\KC\Entity\Visitor', $visitor->id);
+         //   print_r($visitorDetails);
             return $visitorDetails;
         }
         return false;
@@ -72,6 +72,14 @@ class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface {
             $visitor = array('id' => $visitorDetails['id'], 'username' => $visitorDetails['firstName']);
         }
         return $visitor;
+    }
+
+    public function validatePassword($passwordToBeVerified, $dbPassword)
+    {
+        if ($dbPassword == $passwordToBeVerified) {
+            return true;
+        }
+        return false;
     }
     #############################################################
     ############# END REFACTORED CODE ###########################

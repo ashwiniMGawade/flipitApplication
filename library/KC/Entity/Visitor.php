@@ -194,22 +194,4 @@ class Visitor
     {
         $this->$property = $value;
     }
-
-    public function validatePassword($passwordToBeVerified, $dbPassword)
-    {
-        $req = \Zend_Controller_Front::getInstance()->getRequest();
-        $lang  = $req->getParam('lang', false);
-
-        # set propertry to current lcoale during login in case of flipit
-        if ($lang) {
-            $this->currentLocale = $lang ;
-        }
-        
-        if ($dbPassword == $passwordToBeVerified) {
-
-            return true;
-        }
-        return false;
-
-    }
 }
