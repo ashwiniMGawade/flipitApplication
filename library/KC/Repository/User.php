@@ -460,63 +460,51 @@ class User extends \KC\Entity\User
           "message" => "Record has been updated successfully"
         );
     }
-    // not migrated now
+
     public function updateInDatabase($id, $fullName, $flag)
     {
         $entityManagerUser  = \Zend_Registry::get('emUser');
-        $entityManagerLocale  =\Zend_Registry::get('emLocale');
-        $application = new \Zend_Application(
-            APPLICATION_ENV,
-            APPLICATION_PATH . '/configs/application.ini'
-        );
+        $application = new \Zend_Application(APPLICATION_ENV,
+                APPLICATION_PATH . '/configs/application.ini');
 
         $connections = $application->getOption('doctrine');
-        foreach ($connections as $key => $connection) {
+
+        foreach ( $connections as $key => $connection ) {
 
             // check database is being must be site
             if ($key != 'imbull' && isset($connection ['dsn'])) {
 
                 # create a run tiem connection to all site to update editor data
                 $connObj = \BackEnd_Helper_DatabaseManager::addConnection($key);
-                $conn = $connObj['adapter'];
+                $conn = '';
+                $entityManagerLocale  =\Zend_Registry::get('emLocale');
 
+                if($flag==0){
+                    $entityManagerLocale->createQueryBuilder()->update('KC\Entity\Offer', 'o')
+                        ->set('o.authorName', "'$fullName'")
+                        ->where('o.authorId ='.$id)
+                        ->getQuery()->execute();
 
-                if ($flag==0) {
+                    $entityManagerLocale->createQueryBuilder()->update('KC\Entity\Page', 'p')
+                        ->set('p.contentManagerName', "'$fullName'")
+                        ->where('p.contentManagerId ='.$id)
+                        ->getQuery()->execute();
 
-                    $repo = $entityManagerLocale->getRepository('KC\Entity\Offer');
-                    $offer = $repo->findBy(array('authorId' =>  $id));
-                    $offer->authorName = "'$fullName'";
-                    $offer->remove($offer);
-                    $entityManagerLocale->flush();
+                    $entityManagerLocale->createQueryBuilder()->update('KC\Entity\Articles', 'a')
+                        ->set('a.authorname', "'$fullName'")
+                        ->where('a.authorid ='.$id)
+                        ->getQuery()->execute();
 
-                    $repo = $entityManagerLocale->getRepository('KC\Entity\Page');
-                    $page = $repo->findBy(array('contentManagerId' =>  $id));
-                    $page->contentManagerName = "'$fullName'";
-                    $page->remove($page);
-                    $entityManagerLocale->flush();
+                    $entityManagerLocale->createQueryBuilder()->update('KC\Entity\Shop', 's')
+                        ->set('s.accountManagerName', "'$fullName'")
+                        ->where('s.accoutManagerId ='.$id)
+                        ->getQuery()->execute();
 
-                    $repo = $entityManagerLocale->getRepository('KC\Entity\Articles');
-                    $articles = $repo->findBy(array('authorid' =>  $id));
-                    $articles->authorname = "'$fullName'";
-                    $articles->remove($articles);
-                    $entityManagerLocale->flush();
-
-                    $repo = $entityManagerLocale->getRepository('KC\Entity\Shop');
-                    $shop = $repo->findBy(array('accoutManagerId' =>  $id));
-                    $shop->accountManagerName = "'$fullName'";
-                    $shop->remove($shop);
-                    $entityManagerLocale->flush();
-
-
-                    $repo = $entityManagerLocale->getRepository('KC\Entity\Shop');
-                    $shop = $repo->findBy(array('contentManagerId' =>  $id));
-                    $shop->contentManagerName = "'$fullName'";
-                    $shop->remove($shop);
-                    $entityManagerLocale->flush();
-
-                } else if ($flag==1) {
-
-
+                    $entityManagerLocale->createQueryBuilder()->update('KC\Entity\Shop', 'sh')
+                        ->set('sh.contentManagerName', "'$fullName'")
+                        ->where('sh.contentManagerId ='.$id)
+                        ->getQuery()->execute();
+                } else if($flag==1){
                     //update offer
                     $queryBuilder  = $entityManagerLocale->createQueryBuilder();
                     $query = $queryBuilder->select('o.id')
@@ -533,20 +521,20 @@ class User extends \KC\Entity\User
                                 $ids[] = $arr['id'];
                             endforeach;
                         endif;
-                        $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-                        $query= $queryBuilder->update('\KC\Entity\Offer')
-                            ->set('authorName', "'$fullName'")
-                            ->set('authorName', "'$fullName'")
-                            ->set('authorId', 0)
-                            ->where($entityManagerUser->expr()->in('id', $ids));
+                        $offerQueryBuilder  = $entityManagerLocale->createQueryBuilder();
+                        $query= $offerQueryBuilder->update('\KC\Entity\Offer', 'of')
+                            ->set('of.authorName', "'$fullName'")
+                            ->set('of.authorName', "'$fullName'")
+                            ->set('of.authorId', 0)
+                            ->where($entityManagerUser->expr()->in('of.id', $ids));
                         $query->getQuery()->execute();
                     }
 
                     //update page
-                    $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-                    $query = $queryBuilder->select('p.id')
-                        ->from('\KC\Entity\Page', 'p')
-                        ->where('p.contentManagerId=' . $id);
+                    $pageQueryBuilder  = $entityManagerLocale->createQueryBuilder();
+                    $query = $pageQueryBuilder->select('pg.id')
+                        ->from('\KC\Entity\Page', 'pg')
+                        ->where('pg.contentManagerId=' . $id);
                     $page = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                     # check if there is atleast one page exists in the array
                     if (count($page) > 0) {
@@ -557,19 +545,19 @@ class User extends \KC\Entity\User
                             endforeach;
                         endif;
 
-                        $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-                        $query= $queryBuilder->update('\KC\Entity\Page')
-                            ->set('contentManagerName', "'$fullName'")
-                            ->set('contentManagerId', 0)
-                            ->where($entityManagerUser->expr()->in('id', $ids));
+                        $pagesQueryBuilder  = $entityManagerLocale->createQueryBuilder();
+                        $query= $pagesQueryBuilder->update('\KC\Entity\Page', 'page')
+                            ->set('page.contentManagerName', "'$fullName'")
+                            ->set('page.contentManagerId', 0)
+                            ->where($entityManagerUser->expr()->in('page.id', $ids));
                         $query->getQuery()->execute();
                     }
 
                     //update articles
-                    $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-                    $query = $queryBuilder->select('a.id')
-                        ->from('\KC\Entity\Articles', 'a')
-                        ->where('a.authorid=' . $id);
+                    $articleQueryBuilder = $entityManagerLocale->createQueryBuilder();
+                    $query = $articleQueryBuilder->select('art.id')
+                        ->from('\KC\Entity\Articles', 'art')
+                        ->where('art.authorid=' . $id);
                     $art = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
                     # check if there is atleast one page exists in the array
@@ -581,19 +569,19 @@ class User extends \KC\Entity\User
                             endforeach;
                         endif;
 
-                        $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-                        $query= $queryBuilder->update('\KC\Entity\Articles')
-                            ->set('authorname', "'$fullName'")
-                            ->set('authorid', 0)
-                            ->where($entityManagerUser->expr()->in('id', $ids));
+                        $articlesQueryBuilder  = $entityManagerLocale->createQueryBuilder();
+                        $query= $articlesQueryBuilder->update('\KC\Entity\Articles', 'article')
+                            ->set('article.authorname', "'$fullName'")
+                            ->set('article.authorid', 0)
+                            ->where($entityManagerUser->expr()->in('article.id', $ids));
                         $query->getQuery()->execute();
                     }
 
                     //update shops
-                    $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-                    $query = $queryBuilder->select('a.id, a.name')
-                        ->from('\KC\Entity\Shop', 'a')
-                        ->where('a.contentManagerId=' . $id);
+                    $shopsQueryBuilder  = $entityManagerLocale->createQueryBuilder();
+                    $query = $shopsQueryBuilder->select('shop.id, shop.name')
+                        ->from('\KC\Entity\Shop', 'shop')
+                        ->where('shop.contentManagerId=' . $id);
                     $shops = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                     # check if there is atleast one shop exists in the array
                     if (count($shops) > 0) {
@@ -604,15 +592,15 @@ class User extends \KC\Entity\User
                             endforeach;
                         endif;
 
-                        $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-                        $query= $queryBuilder->update('\KC\Entity\Shop')
-                            ->set('contentManagerName', "'$fullName'")
-                            ->set('contentManagerId', 0)
-                            ->where($entityManagerUser->expr()->in('id', $ids));
+                        $shopQueryBuilder  = $entityManagerLocale->createQueryBuilder();
+                        $query= $shopQueryBuilder->update('\KC\Entity\Shop', 'shp')
+                            ->set('shp.contentManagerName', "'$fullName'")
+                            ->set('shp.contentManagerId', 0)
+                            ->where($entityManagerUser->expr()->in('shp.id', $ids));
                         $query->getQuery()->execute();
                     }
                 }
-                $connObj = \BackEnd_Helper_DatabaseManager::closeConnection($connObj['adapter']);
+                $connObj = \BackEnd_Helper_DatabaseManager::closeConnection();
             }
         }
     }

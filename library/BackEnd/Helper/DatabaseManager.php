@@ -38,11 +38,9 @@ class BackEnd_Helper_DatabaseManager
      * Close databse connection
      * 
      */
-    public static function closeConnection($conn)
+    public static function closeConnection($conn = '')
     {
-        if ($conn) {
-            $manager = \Zend_Registry::get('emLocale');
-            $manager->closeConnection($conn);
-        }
+        $manager = \Zend_Registry::get('emLocale');
+        $manager->getConnection()->close();
     }
 }
