@@ -442,30 +442,4 @@ class StoreController extends Zend_Controller_Action
         $this->view->shopId = $this->getRequest()->getParam('shopid');
         $this->view->permalink = $this->getRequest()->getParam('permalink');
     }
-
-    public function socialCodeAction()
-    {
-        $this->_helper->layout()->disableLayout();
-        $baseViewPath = new Zend_View();
-        $baseViewPath->setBasePath(APPLICATION_PATH . '/views/');
-        $socialCodeForm = new Application_Form_SocialCode();
-        if ($this->getRequest()->isPost()) {
-            if ($socialCodeForm->isValid($this->getRequest()->getPost())) {
-                $socialCodeParameters = $socialCodeForm->getValues();
-                try {
-                    UserGeneratedOffer::addOffer($socialCodeParameters);
-                    echo Zend_Json::encode($baseViewPath->render('store/socialcodethanks.phtml'));
-                    exit();
-                } catch (Exception $e) {
-                    echo Zend_Json::encode($baseViewPath->render('store/socialcode.phtml'));
-                    exit();
-                }
-            } else {
-                $socialCodeForm->highlightErrorElements();
-            }
-        }
-        $baseViewPath->assign('zendForm', $socialCodeForm);
-        echo Zend_Json::encode($baseViewPath->render('store/socialcode.phtml'));
-        exit();
-    }
 }

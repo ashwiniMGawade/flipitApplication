@@ -13,6 +13,7 @@ class Application_Form_SocialCode extends Application_Form_Base
         $shops->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_shops'));
         $shops->addFilter('StringTrim');
         $shops->addFilter('StripTags');
+        $shops->setAttrib('id', 'searchShops');
        
         $code = new Zend_Form_Element_Text('code');
         $code->setRequired(true);
@@ -38,15 +39,11 @@ class Application_Form_SocialCode extends Application_Form_Base
         $expireDate->addValidator(new Application_Form_DateGreaterThanToday());
         $expireDate->addFilter('StringTrim');
         $expireDate->addFilter('StripTags');
-
-        $shopIdHiddenField =  new Zend_Form_Element_Hidden('shopId');
-        
         $this->addElements(array(
             $shops,
             $code,
             $offerDetails,
-            $expireDate,
-            $shopIdHiddenField
+            $expireDate
         ));
     }
 }
