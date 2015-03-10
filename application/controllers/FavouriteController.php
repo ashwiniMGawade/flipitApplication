@@ -48,7 +48,7 @@ class FavouriteController extends Zend_Controller_Action
             } else {
                 $stores = $this->_helper->Favourite->getPopularStores();
             }
-
+            
             $favouriteShops = $this->_helper->Favourite->getFavoritesStores();
             $this->view->popularShops = $this->_helper->Favourite->filterAlreadyFavouriteShops($stores, $favouriteShops);
             $this->view->favouriteShops = $favouriteShops;

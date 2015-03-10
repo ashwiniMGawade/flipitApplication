@@ -50,7 +50,7 @@ class Shop extends \KC\Entity\Shop
         $currentDate = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-        ->select('p.id, s.name, s.permaLink, img.path as imgpath, img.name as imgname')
+        ->select('s.id, s.name, s.permaLink, img.path as imgpath, img.name as imgname')
         ->from('KC\Entity\PopularShop', 'p')
         ->addSelect(
             "(SELECT COUNT(active.id) FROM KC\Entity\Offer active WHERE

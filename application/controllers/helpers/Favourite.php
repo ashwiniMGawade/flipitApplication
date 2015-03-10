@@ -79,7 +79,7 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
                 'imgpath'=>$store['imgpath'],
                 'imgname'=>$store['imgname'],
                 'name'=>$store['name'],
-                'permaLink'=>$store['shops'][0]['permaLink'],
+                'permaLink'=>$store['permaLink'],
                 'activeCount'=>$store['activeCount']
             );
         }
