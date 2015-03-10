@@ -300,15 +300,18 @@ class Shop extends \KC\Entity\Shop
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDate = date('Y-m-d 00:00:00');
-        $query = $queryBuilder->select('s, img')
+        $query = $queryBuilder->select(
+            "s.name as name,s.permaLink,s.id as id,
+            l.path as imgpath, l.name as imgname"
+        )
             ->from('KC\Entity\Shop', 's')
-            ->leftJoin('s.logo', 'img')
+            ->leftJoin('s.logo', 'l')
             ->where('s.deleted=0')
             ->andWhere('s.status=1')
             ->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal("%". $searchedKeyword."%")));
         if ($fromPage!='') {
             $query = $query->addSelect(
-                "(SELECT COUNT(active) FROM KC\Entity\Offer active WHERE
+                "(SELECT COUNT(active.id) FROM KC\Entity\Offer active WHERE
                 (active.shopOffers = s.id AND active.endDate >= '$currentDate' 
                     AND active.deleted = 0 AND active.discountType = 'CD'
                 )
