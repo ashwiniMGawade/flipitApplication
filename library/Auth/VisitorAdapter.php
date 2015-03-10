@@ -1,11 +1,8 @@
 <?php
 class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface {
-    #############################################################
-    ############# REFACTORED CODE ###############################
-    #############################################################
+
     protected $email = "";
     protected $password = "";
-
     public function __construct($email, $password, $loginMode = null)
     {
         $this->email = FrontEnd_Helper_viewHelper::sanitize($email);
@@ -81,13 +78,6 @@ class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface {
         }
         return false;
     }
-    #############################################################
-    ############# END REFACTORED CODE ###########################
-    #############################################################
-    /**
-     * generate new password for user
-     * @param $length string        
-     */
     public static function generateRandomString($length)
     {
         $characters = "0123456789abcdefghijklmnopqrstuvwxyz";
@@ -97,34 +87,4 @@ class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface {
         }
         return $string;
     }
-    
-    public function checkToken($token)
-    {
-        $Obj = Doctrine_Core::getTable('VisitorSession')->findOneBy('sessionid', $token);
-        $q = Doctrine_Query::create()
-                ->select()->from('Visitor u')
-                ->leftJoin('u.usersession us')
-                ->Where('us.sessionId = "' . $token . '"')
-                ->fetchArray();
-        if (count($q)) {
-            if (!Auth_StaffAdapter::hasIdentity()) {
-                $data_adapter = new Auth_StaffAdapter($q ['0']['email'], $q['0']['password'], 1);
-                $auth = Zend_Auth::getInstance();
-                $result = $auth->authenticate($data_adapter);
-                if (Auth_StaffAdapter::hasIdentity()) {
-                    $Obj = new Visitor();
-                    $Obj->updateLoginTime(Auth_StaffAdapter::getIdentity()->id);
-                    $Obj = Doctrine_Core::getTable('Visitor')->findOneBy('id', Auth_StaffAdapter::getIdentity()->id);
-                    
-                    $user = new Zend_Session_Namespace('Visitor');
-                    $user->user_data = $Obj;
-                    $sessionNamespace = new Zend_Session_Namespace();
-                    $sessionNamespace->settings = $Obj->permissions;
-                }
-            }
-        } else {
-            header('Location:' . PARENT_PATH . 'admin/auth');
-        }
-    }
 }
-?>
