@@ -20,8 +20,7 @@ class BootstrapDoctrineConnectionFunctions
         // set the proxy dir and set some options
         $config->setProxyDir(APPLICATION_PATH . '/../library/KC/Entity/Proxy');
         $config->setAutoGenerateProxyClasses(true);
-        $config->setProxyNamespace('KC\Entity\Proxy');
-
+        $config->setProxyNamespace('Proxy');
 
         // db connection parameters for user(imbull) database
         $emUser = EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);

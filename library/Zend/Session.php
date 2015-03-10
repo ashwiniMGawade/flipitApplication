@@ -492,7 +492,8 @@ class Zend_Session extends Zend_Session_Abstract
                 session_write_close();
                 if (self::$_throwStartupExceptions) {
                     restore_error_handler();
-                    //throw new Zend_Session_Exception(__CLASS__ . '::' . __FUNCTION__ . '() - ' . Zend_Session_Exception::$sessionStartError);
+                    echo Zend_Session_Exception::$sessionStartError ; die;
+                    throw new Zend_Session_Exception(__CLASS__ . '::' . __FUNCTION__ . '() - ' . Zend_Session_Exception::$sessionStartError);
                 }
             }
         }

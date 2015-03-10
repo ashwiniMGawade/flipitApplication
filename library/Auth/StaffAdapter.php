@@ -10,11 +10,7 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
         $this->password = \FrontEnd_Helper_viewHelper::sanitize($password);
     }
     
-    
-    /**
-     * (non-PHPdoc)
-     * @see Zend_Auth_Adapter_Interface::authenticate()
-     */
+
     public function authenticate()
     {
         
@@ -34,27 +30,12 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
             
             } else {
                 return new Zend_Auth_Result(Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, $user, array("Invalid Credentials" ));
-                // throw new Zend_Auth_Adapter_Exception("Invalid Credentials",
-                // Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID );
             }
         } else {
             return new Zend_Auth_Result(Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, null, array("User Does Not Exist" ));
-            // throw new Zend_Auth_Adapter_Exception("User Does Not Exist",
-            // Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND );
         }
     }
     
-    /**
-     * 
-     */
-    /**function __destruct() {
-        // TODO - Insert your code here
-    }
-    /**
-     * Check Identity of the user in zend auth
-     * 
-     * @return boolean
-     */
     public static function hasIdentity()
     {
         if (Zend_Auth::getInstance()->hasIdentity()) {
@@ -66,16 +47,11 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
         }
         return false;
     }
-    /**
-     * Get Identity of the user in zend auth
-     * $retunr object $member
-     */
+ 
     public static function getIdentity()
     {
         if (Zend_Auth::getInstance()->hasIdentity()) {
             $u = Zend_Auth::getInstance()->getIdentity();
-            //$member = \Zend_Registry::get('emUser')->find('\KC\Entity\User', $u->id);
-
             $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
             $query = $queryBuilder->select('u, r')
                 ->from('KC\Entity\User', 'u')
@@ -87,17 +63,12 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
         }
         return false;
     }
-    /**
-     * clear the Identity fron the zend auth
-     */
+    
     public static function clearIdentity()
     {
         return Zend_Auth::getInstance()->clearIdentity();
     }
-    /**
-     * forget password check by email from the database
-     * @param $eMail string         
-     */
+    
     public function forgotPassword($eMail)
     {
         $entityManagerUser = \Zend_Registry::get('emUser');
@@ -110,10 +81,7 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
         
         }
     }
-    /**
-     * generate new password for user
-     * @param $length string        
-     */
+  
     public function genRandomString($length)
     {
         $characters = "0123456789abcdefghijklmnopqrstuvwxyz";
