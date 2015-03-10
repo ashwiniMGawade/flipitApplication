@@ -104,12 +104,15 @@ class Visitor extends \KC\Entity\Visitor
         $visitor->lastName = \FrontEnd_Helper_viewHelper::sanitize($visitorInformation['lastName']);
         $visitor->gender = \FrontEnd_Helper_viewHelper::sanitize($visitorInformation['gender'] == 'M' ? 0 : 1);
         if ($profileUpdate != '') {
-            $visitor->dateOfBirth =
-                (
-                    $visitorInformation['dateOfBirthYear'].'-'
-                    .$visitorInformation['dateOfBirthMonth'].'-'
-                    .$visitorInformation['dateOfBirthDay']
-                );
+            $datetime = new \DateTime(
+                $visitorInformation['dateOfBirthYear']
+                .'-'
+                .$visitorInformation['dateOfBirthMonth']
+                .'-'
+                .$visitorInformation['dateOfBirthDay']
+            );
+            $visitor->dateOfBirth = $datetime;
+            $visitor->updated_at = new \DateTime('now');
             $visitor->postalCode =
                 \FrontEnd_Helper_viewHelper::sanitize(
                     isset($visitorInformation['postCode']) ? $visitorInformation['postCode'] : ''
@@ -290,9 +293,11 @@ class Visitor extends \KC\Entity\Visitor
     public static function favouriteShopsOffersTraverse($favouriteShopsOffers)
     {
         $traversedOffers = array();
-        foreach ($favouriteShopsOffers as $key => $value) {
-            $traversedOffers = $value;
-            $traversedOffers[$key]['activeCount'] = $value['activeCount'];
+        foreach ($favouriteShopsOffers as $key => $favouriteShopsOffer) {
+            if (isset($favouriteShopsOffer[0])) {
+                $traversedOffers[$key] = $favouriteShopsOffer[0];
+                $traversedOffers[$key]['activeCount'] = $favouriteShopsOffer['activeCount'];
+            }
         }
         return $traversedOffers;
     }
