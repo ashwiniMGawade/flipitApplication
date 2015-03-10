@@ -240,7 +240,7 @@ class SignupController extends Zend_Controller_Action
                 $profileForm->highlightErrorElements();
             }
         } else {
-            $dateOfBirth = array_reverse(explode('-', $visitorDetailsForForm['dateOfBirth']));
+            $dateOfBirth = array_reverse(explode('-', $visitorDetailsForForm['dateOfBirth']->format('Y-m-d')));
             $dateOfBirthDay = isset($dateOfBirth[0]) && $dateOfBirth[0] != '' ? $dateOfBirth[0] : '';
             $dateOfBirthMonth = isset($dateOfBirth[1]) && $dateOfBirth[1] != '' ? $dateOfBirth[1] : '';
             $dateOfBirthYear = isset($dateOfBirth[2]) && $dateOfBirth[2] != '' ? $dateOfBirth[2] : '';

@@ -101,15 +101,15 @@ class FavoriteShop extends \KC\Entity\FavoriteShop
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-        $query = $queryBuilder->select('p.id, p.visitorId, p.shopId, p.created_at, s.name,s.id, l.path,l.name as image,v.id')
+        $query = $queryBuilder->select('p, s.name, s.id as shopId, l.path,l.name as imageName,v.id as visitorId')
         ->from("\KC\Entity\FavoriteShop", "p")
-        ->leftJoin('p.visitors', 'v')
+        ->leftJoin('p.visitor', 'v')
         ->leftJoin('p.shop', 's')
         ->leftJoin('s.logo", "l')
         ->andWhere("p.shop = s.id")
         ->andWhere("s.status= 1")
         ->andWhere("s.deleted= 0")
-        ->andWhere("p.visitorId= $userid")
+        ->andWhere("p.visitor= $userid")
         ->orderBy("s.name", "ASC");
         $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;

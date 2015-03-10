@@ -13,6 +13,7 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
             );
         }
         $mergedTopOffersAndFavouriteShopsOffers = array_merge($favoriteShopsOffers, $topOffers);
+        unset($mergedTopOffersAndFavouriteShopsOffers['activeCount']);
         return self::removeDuplicateOffers($mergedTopOffersAndFavouriteShopsOffers);
     }
 
@@ -20,8 +21,8 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
     {
         $offers = '';
         foreach ($mergedTopOffersAndFavouriteShopsOffers as $mergedTopOffersAndFavouriteShopsOffer) {
-            if (!isset($offers[$mergedTopOffersAndFavouriteShopsOffer['shop']['id']])) {
-                $offers[$mergedTopOffersAndFavouriteShopsOffer['shop']['id']] = $mergedTopOffersAndFavouriteShopsOffer;
+            if (!isset($offers[$mergedTopOffersAndFavouriteShopsOffer['shopOffers']['id']])) {
+                $offers[$mergedTopOffersAndFavouriteShopsOffer['shopOffers']['id']] = $mergedTopOffersAndFavouriteShopsOffer;
             }
         }
         return $offers;
@@ -31,12 +32,12 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
     {
         $changeStoresPositions = '';
         foreach ($stores as $store) {
-            $changeStoresPositions[$store['shop']['id']] =  array(
-                'id' => $store['shop']['id'],
+            $changeStoresPositions[$store['id']] =  array(
+                'id' => $store['id'],
                 'imgpath'=>$store['imgpath'],
                 'imgname'=>$store['imgname'],
-                'name'=>$store['shop']['name'],
-                'permaLink'=>$store['shop']['permaLink'],
+                'name'=>$store['name'],
+                'permaLink'=>$store['permaLink'],
                 'activeCount'=>$store['activeCount']
             );
         }
@@ -48,14 +49,13 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             "25_popularshop_list",
             array(
-                'function' => 'Shop::getPopularStoresForMemeberPortal',
+                'function' => '\KC\Repository\Shop::getPopularStoresForMemeberPortal',
                 'parameters' => array(25)
             )
         );
         $stores = self::changeStoresPositions($popularStores);
         return $stores;
-	}
-
+    }
 
     public static function getFavoritesStores()
     {
@@ -63,7 +63,7 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
             getRequestedDataBySetGetCache(
                 'all_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShops',
                 array(
-                    'function' => 'Visitor::getFavoriteShops',
+                    'function' => '\KC\Repository\Visitor::getFavoriteShops',
                     'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
                 )
             );
@@ -79,65 +79,7 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
                 'imgpath'=>$store['imgpath'],
                 'imgname'=>$store['imgname'],
                 'name'=>$store['name'],
-                'permaLink'=>$store['shops'][0]['permaLink'],
-                'activeCount'=>$store['activeCount']
-            );
-        }
-        return $changeStoresPositions;
-    }
-
-    
-
-    public static function filterAlreadyFavouriteShops($popularShops, $favouriteShops)
-    {
-        $removeAlreayAddedFavouriteShops = array();
-        foreach ($popularShops as $popularShop) {
-            if (!self::inarrayr($popularShop['id'], $favouriteShops)) {
-                $removeAlreayAddedFavouriteShops[] = $popularShop;
-            }
-        }
-        return $removeAlreayAddedFavouriteShops;
-    }
-
-    public static function inarrayr($needle, $haystack, $strict = false)
-    {
-        if (!empty($haystack)) {
-            foreach ($haystack as $item) {
-                if (($strict ? $item === $needle : $item == $needle)
-                    || (is_array($item)
-                    && self::inarrayr($needle, $item, $strict))
-                ) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-
-    public static function getFavoritesStores()
-    {
-        $favouriteShops = FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache(
-                'all_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShops',
-                array(
-                    'function' => 'Visitor::getFavoriteShops',
-                    'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
-                )
-            );
-        return self::changePostionOfFavortieStores($favouriteShops);
-    }
-
-    public static function changePostionOfFavortieStores($favouriteShops)
-    {
-        $changeStoresPositions = '';
-        foreach ($favouriteShops as $store) {
-            $changeStoresPositions[$store['id']] =  array(
-                'id' => $store['id'],
-                'imgpath'=>$store['imgpath'],
-                'imgname'=>$store['imgname'],
-                'name'=>$store['name'],
-                'permaLink'=>$store['shops'][0]['permaLink'],
+                'permaLink'=>$store['permaLink'],
                 'activeCount'=>$store['activeCount']
             );
         }

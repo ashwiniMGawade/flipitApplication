@@ -50,10 +50,10 @@ class Shop extends \KC\Entity\Shop
         $currentDate = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-        ->select('p.id, s.name, s.permaLink, img.path as imgpath, img.name as imgname')
+        ->select('s.id, s.name, s.permaLink, img.path as imgpath, img.name as imgname')
         ->from('KC\Entity\PopularShop', 'p')
         ->addSelect(
-            "(SELECT COUNT(*) FROM KC\Entity\Offer active WHERE
+            "(SELECT COUNT(active.id) FROM KC\Entity\Offer active WHERE
             (active.shopOffers = s.id AND active.endDate >= '$currentDate' 
                 AND active.deleted = 0
             )
@@ -62,7 +62,7 @@ class Shop extends \KC\Entity\Shop
         ->leftJoin('p.popularshops', 's')
         ->leftJoin('s.logo', 'img')
         ->where('s.deleted = 0')
-        ->addWhere('s.status = 1')
+        ->andWhere('s.status = 1')
         ->orderBy('p.position', 'ASC')
         ->setMaxResults($limit);
         $popularStoreData = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -300,15 +300,18 @@ class Shop extends \KC\Entity\Shop
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDate = date('Y-m-d 00:00:00');
-        $query = $queryBuilder->select('s, img')
+        $query = $queryBuilder->select(
+            "s.name as name,s.permaLink,s.id as id,
+            l.path as imgpath, l.name as imgname"
+        )
             ->from('KC\Entity\Shop', 's')
-            ->leftJoin('s.logo', 'img')
+            ->leftJoin('s.logo', 'l')
             ->where('s.deleted=0')
             ->andWhere('s.status=1')
             ->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal("%". $searchedKeyword."%")));
         if ($fromPage!='') {
             $query = $query->addSelect(
-                "(SELECT COUNT(active) FROM KC\Entity\Offer active WHERE
+                "(SELECT COUNT(active.id) FROM KC\Entity\Offer active WHERE
                 (active.shopOffers = s.id AND active.endDate >= '$currentDate' 
                     AND active.deleted = 0 AND active.discountType = 'CD'
                 )
@@ -320,7 +323,7 @@ class Shop extends \KC\Entity\Shop
         $stores = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $stores;
     }
-    // favourite shop model to be checked
+
     public static function shopAddInFavourite($visitorId, $shopId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -328,36 +331,43 @@ class Shop extends \KC\Entity\Shop
         if ($shopId!='') {
             $favouriteShops  = $queryBuilder->select('s')
                 ->from('KC\Entity\FavoriteShop', 's')
-                ->where('s.visitorId='.$visitorId)
-                ->andWhere('s.shopId='.$shopId)
+                ->where('s.visitor ='.$visitorId)
+                ->andWhere('s.shop ='.$shopId)
                 ->getQuery()
-                ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+                ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
             if ($favouriteShops) {
-                Doctrine_Query::create()->delete()
-                    ->from('FavoriteShop fs')
-                    ->where("fs.shopId=" . $shopId)
-                    ->andWhere('fs.visitorId='.$visitorId)
+                $queryBuilder->delete('KC\Entity\FavoriteShop', 'fs')
+                    ->where("fs.shop =" . $shopId)
+                    ->andWhere('fs.visitor ='.$visitorId)
+                    ->getQuery()
                     ->execute();
                 $addedStatus = 1;
+                $favouriteShops = new \KC\Entity\FavoriteShop();
             } else {
-                $favouriteShops = new FavoriteShop();
+                $favouriteShops = new \KC\Entity\FavoriteShop();
             }
-            $favouriteShops->visitorId = $visitorId;
-            $favouriteShops->shopId = $shopId;
-            $favouriteShops->save();
-            $shopName = Doctrine_Core::getTable("Shop")->findOneBy('id', $shopId);
+            $favouriteShops->visitor = \Zend_Registry::get('emLocale')->find('KC\Entity\Visitor', $visitorId);
+            $favouriteShops->shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $shopId);
+            $favouriteShops->deleted = 0;
+            $favouriteShops->created_at = new \DateTime('now');
+            $favouriteShops->updated_at = new \DateTime('now');
+            \Zend_Registry::get('emLocale')->persist($favouriteShops);
+            \Zend_Registry::get('emLocale')->flush();
+            $shopName = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $shopId);
             $cacheKeyShopDetails = 'shopDetails_'  . $shopId . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);
             $cacheKeyOfferDetails = 'offerDetails_'  . $shopId . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_'.$visitorId.'_favouriteShops');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_'.$visitorId.'_favouriteShops');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('visitor_'.$visitorId.'_favouriteShopOffers');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('visitor_'.$visitorId.'_details');
             return array('shop' => $shopName->name, 'flag' => $addedStatus);
         }
         return;
