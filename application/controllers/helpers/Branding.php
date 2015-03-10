@@ -66,7 +66,7 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
         }
 
         if (empty($_POST['preview'])) {
-            $shop =  Doctrine_Core::getTable("Shop")->find($_POST['shop_id']);
+            $shop =  \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $_POST['shop_id']);
             if (empty($_POST['reset'])) {
                 $shop->brandingcss =  serialize($session->data);
                 $redirectUrl = self::stop();
@@ -74,7 +74,8 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
                 $shop->brandingcss  = null;
                 $session->data = $this->defaultStyles();
             }
-            $shop->save();
+            \Zend_Registry::get('emLocale')->persist($shop);
+            \Zend_Registry::get('emLocale')->flush();
         }
         return $redirectUrl;
     }
