@@ -104,11 +104,6 @@ class LoginController extends Zend_Controller_Action
                 $redirectUrl = HTTP_PATH_LOCALE. $shopPermalink;
                 self::addFlashMessage($message, $redirectUrl, 'success');
             } else {
-                if (\Auth_VisitorAdapter::hasIdentity()) {
-              
-                } else {
-          
-                }
                 $this->_redirect($redirectUrl);
             }
 
