@@ -56,6 +56,9 @@ if (APPLICATION_ENV == 'development') {
 } else {
     $headScript = $this->minifyHeadScript();
 }
+if (zend_Controller_Front::getInstance()->getRequest()->getActionName() == 'storedetail') {
+    $headScript->appendFile("/public/js/front_end/social-code.js");
+}
 echo $headScript;
 ?>
 </footer>
