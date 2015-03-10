@@ -77,6 +77,7 @@ class FavouriteController extends Zend_Controller_Action
                     'parameters' => array()
                 )
             );
+            
             $offers = $this->_helper->Favourite->getOffers($favoriteShopsOffers);
             $userDetails = \FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(

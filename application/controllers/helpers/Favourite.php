@@ -13,6 +13,7 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
             );
         }
         $mergedTopOffersAndFavouriteShopsOffers = array_merge($favoriteShopsOffers, $topOffers);
+        unset($mergedTopOffersAndFavouriteShopsOffers['activeCount']);
         return self::removeDuplicateOffers($mergedTopOffersAndFavouriteShopsOffers);
     }
 
@@ -20,8 +21,8 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
     {
         $offers = '';
         foreach ($mergedTopOffersAndFavouriteShopsOffers as $mergedTopOffersAndFavouriteShopsOffer) {
-            if (!isset($offers[$mergedTopOffersAndFavouriteShopsOffer['shop']['id']])) {
-                $offers[$mergedTopOffersAndFavouriteShopsOffer['shop']['id']] = $mergedTopOffersAndFavouriteShopsOffer;
+            if (!isset($offers[$mergedTopOffersAndFavouriteShopsOffer['shopOffers']['id']])) {
+                $offers[$mergedTopOffersAndFavouriteShopsOffer['shopOffers']['id']] = $mergedTopOffersAndFavouriteShopsOffer;
             }
         }
         return $offers;

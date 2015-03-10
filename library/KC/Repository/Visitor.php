@@ -170,7 +170,7 @@ class Visitor extends \KC\Entity\Visitor
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('v.firstName')
-            ->from("\KC\Entity\Visitor", "v")
+            ->from('KC\Entity\Visitor', 'v')
             ->where('v.id='.$visitorId);
         $userDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $userDetails;
@@ -261,9 +261,7 @@ class Visitor extends \KC\Entity\Visitor
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select(
-            'fv.id as fvid,fv.visitorId as visitorId,s.name as name,
-            s.permalink as permaLink,o.id, o.userGenerated, 
-            o.title,l.path,l.name,l.id'
+            'fv,s,o,l,v'
         )
         ->addSelect(
             "(SELECT COUNT(active) FROM \KC\Entity\Offer active WHERE
@@ -272,18 +270,30 @@ class Visitor extends \KC\Entity\Visitor
         ->from('\KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('s.favoriteshops', 'fv')
+        ->leftJoin('fv.visitor', 'v')
         ->leftJoin('s.logo', 'l')
-        ->where('fv.visitorId='. \Auth_VisitorAdapter::getIdentity()->id)
+        ->where('fv.visitor='. \Auth_VisitorAdapter::getIdentity()->id)
         ->andWhere('s.deleted=0')
         ->andWhere('o.deleted=0')
-        ->andWhere('o.endDate > "'.$currentDate.'"')
-        ->andWhere('o.startDate <= "'.$currentDate.'"')
-        ->andWhere('o.discountType="CD"')
-        ->andWhere('o.Visability!="MEM"')
+        ->andWhere($queryBuilder->expr()->gt('o.endDate', $queryBuilder->expr()->literal($currentDate)))
+        ->andWhere($queryBuilder->expr()->lte('o.startDate', $queryBuilder->expr()->literal($currentDate)))
+        ->andWhere($queryBuilder->expr()->eq('o.discountType', $queryBuilder->expr()->literal('CD')))
+        ->andWhere($queryBuilder->expr()->neq('o.Visability', $queryBuilder->expr()->literal('MEM')))
         ->andWhere('o.userGenerated=0')
         ->setMaxResults($limit);
-        $favouriteShopsOffers = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $favouriteShopsOffers;
+        $favouriteShopsOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $traversedOffers = self::favouriteShopsOffersTraverse($favouriteShopsOffers);
+        return $traversedOffers;
+    }
+
+    public static function favouriteShopsOffersTraverse($favouriteShopsOffers)
+    {
+        $traversedOffers = array();
+        foreach ($favouriteShopsOffers as $key => $value) {
+            $traversedOffers = $value;
+            $traversedOffers[$key]['activeCount'] = $value['activeCount'];
+        }
+        return $traversedOffers;
     }
     #############################################################
     ######### END REFACTRED CODE ################################
