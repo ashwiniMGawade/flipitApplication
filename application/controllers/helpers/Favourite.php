@@ -32,12 +32,12 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
     {
         $changeStoresPositions = '';
         foreach ($stores as $store) {
-            $changeStoresPositions[$store['shop']['id']] =  array(
-                'id' => $store['shop']['id'],
+            $changeStoresPositions[$store['id']] =  array(
+                'id' => $store['id'],
                 'imgpath'=>$store['imgpath'],
                 'imgname'=>$store['imgname'],
-                'name'=>$store['shop']['name'],
-                'permaLink'=>$store['shop']['permaLink'],
+                'name'=>$store['name'],
+                'permaLink'=>$store['permaLink'],
                 'activeCount'=>$store['activeCount']
             );
         }
@@ -49,13 +49,13 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             "25_popularshop_list",
             array(
-                'function' => 'Shop::getPopularStoresForMemeberPortal',
+                'function' => '\KC\Repository\Shop::getPopularStoresForMemeberPortal',
                 'parameters' => array(25)
             )
         );
         $stores = self::changeStoresPositions($popularStores);
         return $stores;
-	}
+    }
 
     public static function getFavoritesStores()
     {
@@ -63,7 +63,7 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
             getRequestedDataBySetGetCache(
                 'all_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShops',
                 array(
-                    'function' => 'Visitor::getFavoriteShops',
+                    'function' => '\KC\Repository\Visitor::getFavoriteShops',
                     'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
                 )
             );

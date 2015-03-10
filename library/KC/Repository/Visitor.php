@@ -243,19 +243,18 @@ class Visitor extends \KC\Entity\Visitor
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select(
-            "fv.id as id,s.name as name,s.permaLink,s.id as id,
+            "s.name as name,s.permaLink,s.id as id,
             l.path as imgpath, l.name as imgname"
         )
         ->addSelect(
-            "(SELECT COUNT(active) FROM \KC\Entity\Offer active WHERE
+            "(SELECT COUNT(active.id) FROM \KC\Entity\Offer active WHERE
             (active.shopOffers = s.id AND active.endDate >= '$currentDate' AND active.deleted=0)) as activeCount"
         )
         ->from("\KC\Entity\FavoriteShop", "fv")
         ->leftJoin("fv.shop", "s")
         ->leftJoin('s.logo', 'l')
-        ->where('fv.visitorId='.$visitorId);
-
-        $favouriteShops = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        ->where('fv.visitor='.$visitorId);
+        $favouriteShops = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $favouriteShops;
     }
     

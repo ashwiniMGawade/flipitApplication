@@ -40,6 +40,7 @@ class FavouriteController extends Zend_Controller_Action
                         25,
                         'favourite'
                     );
+                    $stores = array_slice($stores, 0, 1);
                 } else {
                     $searchBrandForm->highlightErrorElements();
                     $stores = $this->_helper->Favourite->getPopularStores();
@@ -49,11 +50,8 @@ class FavouriteController extends Zend_Controller_Action
             }
 
             $favouriteShops = $this->_helper->Favourite->getFavoritesStores();
-           
             $this->view->popularShops = $this->_helper->Favourite->filterAlreadyFavouriteShops($stores, $favouriteShops);
-       
             $this->view->favouriteShops = $favouriteShops;
- 
             $userDetails = \FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 'visitor_'.\Auth_VisitorAdapter::getIdentity()->id.'_details',
@@ -62,6 +60,7 @@ class FavouriteController extends Zend_Controller_Action
                     'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
                 )
             );
+
             $this->view->userDetails = isset($userDetails[0]) ? $userDetails[0] : '';
             $this->view->pageCssClass = 'profile-page';
         } else {
