@@ -53,7 +53,7 @@ class Shop extends \KC\Entity\Shop
         ->select('p.id, s.name, s.permaLink, img.path as imgpath, img.name as imgname')
         ->from('KC\Entity\PopularShop', 'p')
         ->addSelect(
-            "(SELECT COUNT(*) FROM KC\Entity\Offer active WHERE
+            "(SELECT COUNT(active.id) FROM KC\Entity\Offer active WHERE
             (active.shopOffers = s.id AND active.endDate >= '$currentDate' 
                 AND active.deleted = 0
             )
@@ -62,7 +62,7 @@ class Shop extends \KC\Entity\Shop
         ->leftJoin('p.popularshops', 's')
         ->leftJoin('s.logo', 'img')
         ->where('s.deleted = 0')
-        ->addWhere('s.status = 1')
+        ->andWhere('s.status = 1')
         ->orderBy('p.position', 'ASC')
         ->setMaxResults($limit);
         $popularStoreData = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

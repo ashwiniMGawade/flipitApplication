@@ -49,11 +49,8 @@ class FavouriteController extends Zend_Controller_Action
             }
 
             $favouriteShops = $this->_helper->Favourite->getFavoritesStores();
-           
             $this->view->popularShops = $this->_helper->Favourite->filterAlreadyFavouriteShops($stores, $favouriteShops);
-       
             $this->view->favouriteShops = $favouriteShops;
- 
             $userDetails = \FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 'visitor_'.\Auth_VisitorAdapter::getIdentity()->id.'_details',
