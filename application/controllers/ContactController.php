@@ -44,8 +44,8 @@ class ContactController extends Zend_Controller_Action
                 $errorMessage = FrontEnd_Helper_viewHelper::__translate("There is Issue in Captcha");
                 $flashMessage = $this->_helper->getHelper('FlashMessenger');
                 $flashMessage->addMessage(array('success' => $errorMessage));
-                $urlToRedirect = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('info').'/'.
-                    FrontEnd_Helper_viewHelper::__link('contact');
+                $urlToRedirect = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_info').'/'.
+                    FrontEnd_Helper_viewHelper::__link('link_contact');
                 $this->_redirect($urlToRedirect);
             }
         }
