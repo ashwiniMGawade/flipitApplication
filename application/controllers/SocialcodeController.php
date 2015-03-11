@@ -58,7 +58,7 @@ class SocialcodeController extends Zend_Controller_Action
                 } else {
                     $captchaErrorMessage = new Zend_Session_Namespace('captchaErrorMessage');
                     $captchaErrorMessage->captchaErrorMessage =
-                        FrontEnd_Helper_viewHelper::__translate('There is Issue in Captcha');
+                        FrontEnd_Helper_viewHelper::__translate('Please prove you are not an robot');
                 }
             } else {
                 $socialCodeForm->highlightErrorElements();
