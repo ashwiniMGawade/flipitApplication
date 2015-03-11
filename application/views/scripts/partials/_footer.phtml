@@ -51,7 +51,7 @@ endif;
     <?php echo $footer[0]['bottomFooter'];?>
     </div>
 <?php
-if (APPLICATION_ENV != 'development') {
+if (APPLICATION_ENV == 'development') {
     $headScript =  $this->HeadScript();
 } else {
     $headScript = $this->minifyHeadScript();
