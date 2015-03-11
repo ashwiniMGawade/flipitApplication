@@ -331,6 +331,7 @@ class Admin_HomepageController extends Zend_Controller_Action
         $key = 'all_widget6_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShopsForDropdown_list');
         die();
     }
 
@@ -357,6 +358,7 @@ class Admin_HomepageController extends Zend_Controller_Action
         $key = 'all_widget6_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShopsForDropdown_list');
         die();
     }
 
@@ -393,6 +395,7 @@ class Admin_HomepageController extends Zend_Controller_Action
         $key = 'all_widget6_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShopsForDropdown_list');
         die();
     }
     /**
@@ -420,6 +423,7 @@ class Admin_HomepageController extends Zend_Controller_Action
         $key = 'all_widget6_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShopsForDropdown_list');
         die();
     }
 

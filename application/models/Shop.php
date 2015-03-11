@@ -154,6 +154,20 @@ class Shop extends BaseShop
         return $popularStoreData;
     }
 
+    public static function getPopularStoresForDropDown($limit)
+    {
+        $popularStoreData = Doctrine_Query::create()
+        ->select('p.id, s.name, s.permaLink')
+        ->from('PopularShop p')
+        ->leftJoin('p.shop s')
+        ->where('s.deleted=0')
+        ->addWhere('s.status=1')
+        ->orderBy('p.position ASC')
+        ->limit($limit);
+        $popularStoreData = $popularStoreData->fetchArray();
+        return $popularStoreData;
+    }
+
     public static function getPopularStoresForMemeberPortal($limit, $shopId = null)
     {
         $currentDate = date('Y-m-d 00:00:00');
