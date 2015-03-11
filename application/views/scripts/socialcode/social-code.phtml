@@ -32,8 +32,9 @@ foreach ($socialCodeForm->getElements() as $formElement) {
         echo $socialCodeForm->code->renderViewHelper();
         echo $socialCodeForm->offerDetails->renderViewHelper();
         echo $socialCodeForm->expireDate->renderViewHelper();
+        $siteKey = FrontEnd_Helper_viewHelper::getCaptchaKey('captchaSiteKey');
         ?>
-        <div class="g-recaptcha" data-sitekey="6Lc8uwETAAAAALBmmgFTy-XIS3uRdpkVZyI_9aLf">&nbsp;</div>
+        <div class="g-recaptcha" data-sitekey="<?php echo $siteKey;?>">&nbsp;</div>
         <?php
         echo $this->formSubmit(
             'shareCode',
