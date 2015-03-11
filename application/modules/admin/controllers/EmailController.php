@@ -140,44 +140,40 @@ class Admin_EmailController extends Zend_Controller_Action
             //add the flash mesage that the newsletter has been sent
             $flash = $this->_helper->getHelper('FlashMessenger');
 
-            $isScheduled = $this->getRequest()->getParam("isScheduled" , false);
+            $isScheduled = $this->getRequest()->getParam("isScheduled", false);
 
-            if($isScheduled) {
-                if(Signupmaxaccount::saveScheduledNewsletter( $this->getRequest())) {
+            if ($isScheduled) {
+                if (Signupmaxaccount::saveScheduledNewsletter($this->getRequest())) {
                     $flash->addMessage(array('success' => $this->view->translate('Newsletter has been successfully scheduled')));
                 } else {
                     $flash->addMessage(array('error' => $this->view->translate('There is some problem in your data') ));
                 }
 
-                $this->_helper->redirector('emailcontent' , 'accountsetting' , null ) ;
+                $this->_helper->redirector('emailcontent', 'accountsetting', null);
             }
 
-            # update current scheduled status to sent
-            Signupmaxaccount::updateNewsletterSchedulingStatus();
-
-            if(LOCALE == '') {
-                $imgLogoMail = "<a href=". rtrim(HTTP_PATH_FRONTEND , '/') ."><img src='".HTTP_PATH."public/images/HeaderMail.gif'/></a>";
+            if (LOCALE == '') {
+                $imgLogoMail =
+                "<a href=".rtrim(HTTP_PATH_FRONTEND, '/').">
+                    <img src='".HTTP_PATH."public/images/HeaderMail.gif'/>
+                </a>";
                 $siteName = "Kortingscode.nl";
-            } else  {
-                $imgLogoMail = "<a href=". rtrim(HTTP_PATH_FRONTEND , '/') ."><img src='".HTTP_PATH."public/images/flipit-welcome-mail.jpg'/></a>";
+            } else {
+                $imgLogoMail = "<a href=". rtrim(HTTP_PATH_FRONTEND, '/') .">
+                        <img src='".HTTP_PATH."public/images/flipit-welcome-mail.jpg'/>
+                </a>";
                 $siteName = "Flipit.com";
             }
-
-            set_time_limit ( 10000 );
-            ini_set('max_execution_time',115200);
-            ini_set("memory_limit","1024M");
-
-            //get offers from top ten popular shops and top one cateory as in homepage
-
+            FrontEnd_Helper_viewHelper::exceedMemoryLimitAndExcutionTime();
             $voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularShops_list');
 
             //key not exist in cache
 
-            if($voucherflag){
+            if ($voucherflag) {
 
                 # get 10 popular vouchercodes for news letter
                 $topVouchercodes = FrontEnd_Helper_viewHelper::gethomeSections("popular", 10) ;
-                $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes,10);
+                $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes, 10);
 
             } else {
                 $topVouchercodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularShops_list');
@@ -187,9 +183,9 @@ class Admin_EmailController extends Zend_Controller_Action
 
             //key not exist in cache
 
-            if($categoryflag){
+            if ($categoryflag) {
 
-                $topCategories = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10),0,1);
+                $topCategories = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);
 
                 FrontEnd_Helper_viewHelper::setInCache('10_popularCategories_list', $topCategories);
 
@@ -254,21 +250,28 @@ class Admin_EmailController extends Zend_Controller_Action
                             );
 
             //merge all the arrays into single array
-            $data = array_merge($voucherCodesData['dataShopName'],
-                    $voucherCodesData['dataOfferName'],
-                    $voucherCodesData['dataShopImage'],
-                    $voucherCodesData['expDate'],
-                    $this->headerMail, $this->dataShopNameCat,
-                    $this->dataOfferNameCat, $this->dataShopImageCat,
-                    $this->expDateCat, $this->category
+            $data = array_merge(
+                $voucherCodesData['dataShopName'],
+                $voucherCodesData['dataOfferName'],
+                $voucherCodesData['dataShopImage'],
+                $voucherCodesData['expDate'],
+                $this->headerMail,
+                $this->dataShopNameCat,
+                $this->dataOfferNameCat,
+                $this->dataShopImageCat,
+                $this->expDateCat,
+                $this->category
             );
 
             //merge the permalinks array and static content array into single array
-            $dataPermalink = array_merge($voucherCodesData['shopPermalink'], $this->shopPermalinkCat,
-                                         $this->staticContent);
+            $dataPermalink = array_merge(
+                $voucherCodesData['shopPermalink'],
+                $this->shopPermalinkCat,
+                $this->staticContent
+            );
 
             //initialize mandrill with the template name and other necessary options
-            $mandrill = new Mandrill_Init( $this->getInvokeArg('mandrillKey'));
+            $mandrill = new Mandrill_Init($this->getInvokeArg('mandrillKey'));
             $template_name = $this->getInvokeArg('newsletterTemplate');
             $template_content = $data;
 
@@ -301,10 +304,10 @@ class Admin_EmailController extends Zend_Controller_Action
             $flash->addMessage(array('success' => $message));
 
             //redirect to account setting controller after mail sent
-            $this->_helper->redirector('emailcontent' , 'accountsetting' , null ) ;
+            $this->_helper->redirector('emailcontent', 'accountsetting', null);
         } else {
 
-            $this->_helper->redirector('index' , 'index' , null ) ;
+            $this->_helper->redirector('index', 'index', null);
         }
         die;
 
