@@ -185,6 +185,7 @@ endif;
         echo $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
             .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
     endif;
+    echo $this->partial('socialcode/social-code.phtml', array('zendForm' => $this->zendForm));
     ?>
     </aside>
 </div>

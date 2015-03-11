@@ -1,6 +1,3 @@
-$(document).ready(function() {
-    loadSocialCodeForm();
-})
 function loadSocialCodeForm() {
     $.ajax({
         url : HOST_PATH_LOCALE + 'socialcode/social-code/id/' + $('input#currentShop').val(),
@@ -19,7 +16,7 @@ function appendSocialCodeForm(data) {
     $('aside#sidebar').append(data);
 }
 
-$(document).ajaxStop(function() {
+$(document).ready(function() {
     var validator =  null;
     validateAddSocialCode();
     $('body').click(function(event) {

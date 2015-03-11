@@ -252,6 +252,9 @@ class StoreController extends Zend_Controller_Action
             $signUpFormSidebarWidget
         );
         $this->view->form = $signUpFormForStorePage;
+        $socialCodeForm = new Application_Form_SocialCode();
+        $socialCodeForm->getElement('shops')->setValue($shopInformation[0]['name']);
+        $this->view->zendForm = $socialCodeForm;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->pageCssClass = 'author-page';
     }
