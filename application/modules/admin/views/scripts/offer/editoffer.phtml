@@ -24,7 +24,7 @@ $twoMonthsLater = date('t-m-Y');
 $role = Zend_Auth::getInstance ()->getIdentity ()->roleId;
 $code = "kortingscodeoffernews";
 $secret = base64_encode($code);
-$shopLogo = $this->offerShoLogo;
+$shopLogo = $this->offerShopLogo;
 ?>
 <script type="text/javascript">
 var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" ;
@@ -40,10 +40,10 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 			href="#" class="btn ml10"><?php echo $this->translate('Cancel'); ?>
 			</button>
 			<?php
-				if(isset($this->offerShoLogo[0]['shop']['permaLink'])) :
+				if(isset($this->offerShopLogo[0]['shop']['permaLink'])) :
 			?>
 			<button type="button"
-			onClick="window.open('<?php echo HTTP_PATH_FRONTEND ; ?>/<?php echo $this->offerShoLogo[0]['shop']['permaLink'] ;?>','_blank')"
+			onClick="window.open('<?php echo HTTP_PATH_FRONTEND ; ?>/<?php echo $this->offerShopLogo[0]['shop']['permaLink'] ;?>','_blank')"
 			href="_blank" class="btn btn-primary ml10"><?php echo $this->translate('Open store page'); ?></button>
 			<?php endif;	?>
             <button type="button" id="code-alert-queue" href="_blank" class="btn btn-primary ml10">
@@ -54,6 +54,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 		</h1>
       	<input type="hidden" name='offerImageSelect' id='offerImageSelect' value='' />
       	<input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />
+      	<input type="hidden" name='approveSocialCode' id='approveSocialCode' value='' />
 			<div class="row-fluid">
 				<div class="span6">
 					<div class="mainpage-content" id="shopDiv">
@@ -465,6 +466,12 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 					<strong class="ml10"><?php echo $this->translate('CANCEL'); ?></strong></a>
 					<a id="deleteButton" href="javascript:void(0);" onclick="deleteOffer(event);" class="fl red mt10">
 					<strong><?php echo $this->translate('DELETE'); ?></strong></a>
+					<?php if ($this->offerController == 1) {?>
+					 	<button id="updateOfferBtn" type="submit" onCLick='setApprovedStatus();' 
+	                	class="btn btn-large btn-primary fl ml20">
+	                	<?php echo $this->translate('ADD'); ?>
+            			</button>
+            		<?php } ?>	
 					<input type="hidden" name="offerId" id="offerId" value="<?php echo $this->offerId; ?>">
 				</div>
 			</div>		
@@ -600,7 +607,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 	                <div class="span10">		
 						<div id='error-message' class="error-message category-error mainpage-content-right-inner-right-other"></div>
 	              		<div class="categories" style="position:relative;" name="category">
-	                   <?php for($i = 0; $i < count ( $this->catList ); $i ++) {?>
+	                   <?php for($i = 0; $i < count ($this->catList ); $i ++) {?>
 							<div class="square-btn-offer">
 			              		<input type="checkbox" value="<?php echo $this->catList[$i]['id']; ?>" class=""
 			              		name="selectedcategories[]" id="category-<?php echo $this->catList[$i]['id']; ?>" />
@@ -787,6 +794,12 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 				class="fl m10"><strong class="ml10"><?php echo $this->translate('CANCEL'); ?></strong></a>
 				<a id="deleteButton" href="javascript:void(0);" onclick="deleteOffer(event);"
 				class="fl red mt10"><strong><?php echo $this->translate('DELETE'); ?></strong></a>
+				<?php if ($this->offerController == 1) {?>
+					 	<button id="updateOfferBtn" type="submit" onCLick='setApprovedStatus();' 
+	                	class="btn btn-large btn-primary fl ml20">
+	                	<?php echo $this->translate('ADD'); ?>
+            			</button>
+            	<?php } ?>
 			</div>
 		</div>	
 	</form>

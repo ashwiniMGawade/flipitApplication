@@ -371,6 +371,10 @@ function gethtmlAddmorenews(param){
 				   
 }
 
+function setApprovedStatus(){
+    jQuery('input#approveSocialCode').val(1);
+}
+
 function getDeeplinkForShop(param){
 	
 		 
@@ -661,9 +665,13 @@ function setFormData(data){
 		  jQuery("#sale").click();
 		  
 	 }
-	
-	 jQuery('#addofferTitle').val(data[0].title);
-	 jQuery('#metaTextLeft').val(__("Offer title length ") + parseInt(data[0].title.length) + __(" characters"));
+
+	/*if (data[0].title != 'undefined' || data[0].title != 'null') {
+		console.log(data[0].title);
+	 	jQuery('#addofferTitle').val(data[0].title);
+	 	jQuery('#metaTextLeft').val(__("Offer title length ") + parseInt(data[0].title.length) + __(" characters"));
+	}*/
+
 	 jQuery('#offerRefUrl').val(data[0].refURL);
 	 if(data[0].refURL){
 		 jQuery('#deepLinkOnbtn').click(); 
@@ -741,6 +749,7 @@ function setFormData(data){
 	        }
 	});
 	jQuery('#ccode').html(' <label><strong>Coupon code</strong></label>');
+	getShopDetail(jQuery("#selctedshop").val());
 }
 
 function newschangelinkStatus(el)

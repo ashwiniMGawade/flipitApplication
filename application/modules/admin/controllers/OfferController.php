@@ -83,7 +83,10 @@ class Admin_OfferController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams();
         $this->view->offerId = $params['id'];
-
+        $checkUserGeneratedOffer = Offer::checkUserGeneratedOffer($params['id']);
+        if ($checkUserGeneratedOffer) {
+            $this->view->offerController = 1;
+        }
         $this->view->qstring = $_SERVER['QUERY_STRING'];
 
         $offerId = $params['id'];
@@ -91,7 +94,7 @@ class Admin_OfferController extends Zend_Controller_Action
         // new code added by bhart
         $shopImageOfOffer = new Offer();
         $shop = $shopImageOfOffer::getOfferShopDetail($offerId);
-        $this->view->offerShoLogo = $shop;
+        $this->view->offerShopLogo = $shop;
         // end code
 
         $shopObj = new Shop();
@@ -99,7 +102,7 @@ class Admin_OfferController extends Zend_Controller_Action
 
         $catObj = new Category();
         $this->view->catList=$catObj->getCategoriesInformation();
-
+        
         $pageObj = new Page();
         $this->view->pages = $pageObj->getPagesOffer();
 
@@ -113,25 +116,26 @@ class Admin_OfferController extends Zend_Controller_Action
     public function updateofferAction()
     {
         $params = $this->_getAllParams();
-
+        if ($params['approveSocialCode'] == 1) {
+            UserGeneratedOffer::saveApprovedStatus($params['offerId'], $params['approveSocialCode']);
+        }
         $offer = Doctrine_Core::getTable("Offer")->find($params['offerId']);
-
         $offerUpdate = $offer->updateOffer($params);
         $flash = $this->_helper->getHelper('FlashMessenger');
-
-        if($offerUpdate['result']){
-
+        if ($offerUpdate['result']) {
             self::updateVarnish($params['offerId']);
             $message = $this->view->translate('Offer has been updated successfully.');
             $flash->addMessage(array('success' => $message ));
-        }else{
+        } else {
             $message = $this->view->translate('Error: Your file size exceeded 2MB');
             $flash->addMessage(array('error' => $message ));
         }
-
-        $this->_redirect(HTTP_PATH.'admin/offer#'.$params['qString']);
+        if ($params['approveSocialCode'] == 1) {
+            $this->_redirect(HTTP_PATH.'admin/usergeneratedoffer#'.$params['qString']);
+        } else {
+            $this->_redirect(HTTP_PATH.'admin/offer#'.$params['qString']);
+        }
         die;
-        //echo "Edit shop is under progress";
     }
 
 
