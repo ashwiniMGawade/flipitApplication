@@ -56,13 +56,13 @@ class SendNewsletter
         $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
         $manager = CommonMigrationFunctions::loadDoctrineModels();
         try {
-            $newsLetterSetings = Signupmaxaccount::getAllMaxAccounts();
+            $newsLetterSettings = Signupmaxaccount::getAllMaxAccounts();
             $localeSettings = LocaleSettings::getLocaleSettings();
             $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
-            $scheduledTime =  date('Y-m-d', strtotime($newsLetterSetings[0]['newletter_scheduled_time']));
-            $newsletterSentTime = date('Y-m-d', strtotime($newsLetterSetings[0]['newsletter_sent_time']));
-            if ($newsLetterSetings[0]['newletter_is_scheduled'] == 1) {
-                if ($newsLetterSetings[0]['newletter_is_scheduled'] == 1
+            $scheduledTime =  date('Y-m-d', strtotime($newsLetterSettings[0]['newletter_scheduled_time']));
+            $newsletterSentTime = date('Y-m-d', strtotime($newsLetterSettings[0]['newsletter_sent_time']));
+            if ($newsLetterSettings[0]['newletter_is_scheduled'] == 1) {
+                if ($newsLetterSettings[0]['newletter_is_scheduled'] == 1
                         && $scheduledTime <= $currentDate
                         && $newsletterSentTime < $currentDate) {
                     $customLocale= !empty($localeSettings[0]['locale']) ? $localeSettings[0]['locale'] : 'nl_NL';
@@ -101,7 +101,7 @@ class SendNewsletter
                     Zend_Registry::set('Zend_Locale', $customLocale);
                     $localeTimezone = $localeSettings[0]['timezone'];
                     echo "\n" ;
-                    $newsletterScheduledDateTime = new Zend_Date($newsLetterSetings[0]['newletter_scheduled_time']);
+                    $newsletterScheduledDateTime = new Zend_Date($newsLetterSettings[0]['newletter_scheduled_time']);
                     $newsletterScheduledDateTime->get('YYYY-MM-dd HH:mm:ss');
                     $currentDateTime = new Zend_Date();
                     $currentDateTime->setTimezone($localeTimezone);
@@ -109,7 +109,7 @@ class SendNewsletter
                     $currentDateTime->get('YYYY-MM-dd HH:mm:ss');
                     if ($currentDateTime->isLater($newsletterScheduledDateTime)) {
                         echo "\nSending newletter...\n" ;
-                        $this->mandrilHandler($key, $newsLetterSetings);
+                        $this->mandrilHandler($key, $newsLetterSettings);
                     } else {
                         echo "\n";
                         print "$key - Newsletter scheduled date is greater than Current Date.";
