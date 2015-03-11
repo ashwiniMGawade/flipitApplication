@@ -1089,4 +1089,15 @@ EOD;
         ini_set("memory_limit", "1024M");
         return true;
     }
+
+    public static function getCaptchaKey($keyName)
+    {
+        $application = new Zend_Application(
+            APPLICATION_ENV,
+            APPLICATION_PATH . '/configs/application.ini'
+        );
+        $frontControllerObject = $application->getOption('resources');
+        $captchaKey = $frontControllerObject['frontController']['params'][$keyName];
+        return  $captchaKey;
+    }
 }
