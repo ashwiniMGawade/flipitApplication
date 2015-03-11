@@ -10,17 +10,6 @@ foreach ($socialCodeForm->getElements() as $formElement) {
         <h3><?php echo $this->translate('Social Code');?></h3>
         <p><?php echo $this->translate('Share a code with our users');?></p>
         <?php
-        $captchaErrorMessage = new Zend_Session_Namespace('captchaErrorMessage');
-        if (isset($captchaErrorMessage->captchaErrorMessage)) {
-            ?>
-            <label class='error-message'>
-            <?php
-            echo $captchaErrorMessage->captchaErrorMessage;
-            $captchaErrorMessage->captchaErrorMessage = '';
-            ?>
-            </label>
-            <?php
-        }
         if ($this->errorMessege) {
             ?>
             <label class='error-message'>
@@ -33,6 +22,17 @@ foreach ($socialCodeForm->getElements() as $formElement) {
         echo $socialCodeForm->offerDetails->renderViewHelper();
         echo $socialCodeForm->expireDate->renderViewHelper();
         $siteKey = FrontEnd_Helper_viewHelper::getCaptchaKey('captchaSiteKey');
+        $captchaErrorMessage = new Zend_Session_Namespace('captchaErrorMessage');
+        if (isset($captchaErrorMessage->captchaErrorMessage)) {
+            ?>
+            <label class='error-message'>
+            <?php
+            echo $captchaErrorMessage->captchaErrorMessage;
+            $captchaErrorMessage->captchaErrorMessage = '';
+            ?>
+            </label>
+            <?php
+        }
         ?>
         <div class="g-recaptcha" data-sitekey="<?php echo $siteKey;?>">&nbsp;</div>
         <?php

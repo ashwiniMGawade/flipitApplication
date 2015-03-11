@@ -51,13 +51,10 @@ endif;
     <?php echo $footer[0]['bottomFooter'];?>
     </div>
 <?php
-if (APPLICATION_ENV == 'development') {
+if (APPLICATION_ENV != 'development') {
     $headScript =  $this->HeadScript();
 } else {
     $headScript = $this->minifyHeadScript();
-}
-if (zend_Controller_Front::getInstance()->getRequest()->getActionName() == 'storedetail') {
-    $headScript->appendFile("/public/js/front_end/social-code.js");
 }
 echo $headScript;
 ?>

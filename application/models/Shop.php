@@ -28,7 +28,7 @@ class Shop extends BaseShop
     {
         $shopExist = Doctrine_Query::create()->select('s.id')
             ->from('Shop s')
-            ->where("s.name='".$shopName."'")
+            ->where("s.name='".mysql_real_escape_string($shopName)."'")
             ->fetchArray();
         return isset($shopExist[0]['id']) ? $shopExist[0]['id'] : '';
     }
