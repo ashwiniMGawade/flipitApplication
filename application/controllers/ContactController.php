@@ -22,23 +22,33 @@ class ContactController extends Zend_Controller_Action
 
     public function getcontactformdetailsAction()
     {
-        $parameters = $this->_getAllParams();
-        $visitorName = FrontEnd_Helper_viewHelper::sanitize($parameters['name']);
-        $visitorEmail = FrontEnd_Helper_viewHelper::sanitize($parameters['email']);
-        $subject = FrontEnd_Helper_viewHelper::sanitize($parameters['subject']);
-        $message = FrontEnd_Helper_viewHelper::sanitize($parameters['message']);
-        $captcha = isset($parameters['g-recaptcha-response']) ? $parameters['g-recaptcha-response'] : '';
-        if (empty($captcha)) {
-            $errorMessage = FrontEnd_Helper_viewHelper::__translate("There is Issue in Captcha");
-            $flashMessage = $this->_helper->getHelper('FlashMessenger');
-            $flashMessage->addMessage(array('success' => $errorMessage));
-            $urlToRedirect = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_info').'/'.
-                FrontEnd_Helper_viewHelper::__link('link_contact');
-            $this->_redirect($urlToRedirect);
-        } else {
-            self::sendMailThroughMandril($visitorName, $visitorEmail, $subject, $message);
+        require_once LIBRARY_PATH. "/recaptchalib.php";
+        if ($this->getRequest()->isPost()) {
+            $parameters = $this->_getAllParams();
+            $visitorName = FrontEnd_Helper_viewHelper::sanitize($parameters['name']);
+            $visitorEmail = FrontEnd_Helper_viewHelper::sanitize($parameters['email']);
+            $subject = FrontEnd_Helper_viewHelper::sanitize($parameters['subject']);
+            $message = FrontEnd_Helper_viewHelper::sanitize($parameters['message']);
+            $captchaResponse = $parameters['g-recaptcha-response'];
+            $reCaptcha = new ReCaptcha(FrontEnd_Helper_viewHelper::getCaptchaKey('captchaSecretKey'));
+            $response = null;
+            if ($captchaResponse) {
+                $response = $reCaptcha->verifyResponse(
+                    $_SERVER["REMOTE_ADDR"],
+                    $captchaResponse
+                );
+            }
+            if ($response != null && $response->success) {
+                self::sendMailThroughMandril($visitorName, $visitorEmail, $subject, $message);
+            } else {
+                $errorMessage = FrontEnd_Helper_viewHelper::__translate("There is Issue in Captcha");
+                $flashMessage = $this->_helper->getHelper('FlashMessenger');
+                $flashMessage->addMessage(array('success' => $errorMessage));
+                $urlToRedirect = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('info').'/'.
+                    FrontEnd_Helper_viewHelper::__link('contact');
+                $this->_redirect($urlToRedirect);
+            }
         }
-        
     }
 
     public function sendMailThroughMandril($visitorName, $visitorEmail, $subject, $message)

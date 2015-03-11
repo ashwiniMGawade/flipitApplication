@@ -20,6 +20,7 @@ class SocialcodeController extends Zend_Controller_Action
 
     public function socialCodeAction()
     {
+        require_once LIBRARY_PATH. "/recaptchalib.php";
         $this->_helper->layout()->disableLayout();
         $baseViewPath = new Zend_View();
         $baseViewPath->setBasePath(APPLICATION_PATH . '/views/');
@@ -35,8 +36,15 @@ class SocialcodeController extends Zend_Controller_Action
             if ($socialCodeForm->isValid($this->getRequest()->getPost())) {
                 $socialCodeParameters = $socialCodeForm->getValues();
                 $captchaResponse = $this->getRequest()->getParam('g-recaptcha-response');
-                $captchaString = isset($captchaResponse) ? $captchaResponse : '';
-                if ($captchaString !='') {
+                $reCaptcha = new ReCaptcha(FrontEnd_Helper_viewHelper::getCaptchaKey('captchaSecretKey'));
+                $response = null;
+                if ($captchaResponse) {
+                    $response = $reCaptcha->verifyResponse(
+                        $_SERVER["REMOTE_ADDR"],
+                        $captchaResponse
+                    );
+                }
+                if ($response != null && $response->success) {
                     try {
                         UserGeneratedOffer::addOffer($socialCodeParameters);
                         echo Zend_Json::encode($baseViewPath->render('socialcode/socialcodethanks.phtml'));
@@ -60,7 +68,7 @@ class SocialcodeController extends Zend_Controller_Action
         echo Zend_Json::encode($baseViewPath->render('socialcode/social-code.phtml'));
         exit();
     }
-    
+
     public function checkStoreAction()
     {
         $this->_helper->layout()->disableLayout();
