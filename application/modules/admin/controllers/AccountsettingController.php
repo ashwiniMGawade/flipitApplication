@@ -165,7 +165,6 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                 $this->_helper->redirector('emailcontent', 'accountsetting', null);
             }
 
-            Signupmaxaccount::updateNewsletterSchedulingStatus();
             FrontEnd_Helper_viewHelper::exceedMemoryLimitAndExcutionTime();
             $topVouchercodes = Offer::getTopOffers(10);
             $categoryflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularCategories_list');
@@ -247,30 +246,40 @@ class Admin_AccountsettingController extends Zend_Controller_Action
     public function saveemailcontentAction()
     {
         # sanitize data
-        $val = mysql_escape_string(
-                            BackEnd_Helper_viewHelper::stripSlashesFromString(
-                                        $this->getRequest()->getParam('val'))) ;
+        $val = mysqli_real_escape_string(
+            FrontEnd_Helper_viewHelper::getDbConnectionDetails(),
+            BackEnd_Helper_viewHelper::stripSlashesFromString(
+                $this->getRequest()->getParam('val')
+            )
+        );
 
-        switch ($this->getRequest()->getParam('name')){
+        switch ($this->getRequest()->getParam('name'))
+        {
             case 'senderEmail':
-                $senderEmail = Doctrine_Query::create()->update('Signupmaxaccount')
-                                ->set('emailperlocale','"'. $val .'"')->execute();
-            break;
+                $senderEmail = Doctrine_Query::create()
+                                ->update('Signupmaxaccount')
+                                ->set('emailperlocale', '"'. $val .'"')
+                                ->execute();
+                break;
             case 'senderName':
-                $senderEmail = Doctrine_Query::create()->update('Signupmaxaccount')
-                            ->set('sendername','"'. $val .'"')->execute();
-            break;
+                $senderEmail = Doctrine_Query::create()
+                                ->update('Signupmaxaccount')
+                                ->set('sendername', '"'. $val .'"')
+                                ->execute();
+                break;
             case 'emailSubject':
-                $senderEmail = Doctrine_Query::create()->update('Signupmaxaccount')
-                         ->set('emailsubject','"'. $val .'"')->execute();
-            break;
+                $senderEmail = Doctrine_Query::create()
+                                ->update('Signupmaxaccount')
+                                ->set('emailsubject', '"'. $val .'"')
+                                ->execute();
+                break;
             case 'testEmail':
-                $senderEmail = Doctrine_Query::create()->update('Signupmaxaccount')
-                          ->set('testemail','"'.$val.'"')->execute();
-            break;
-
+                $senderEmail = Doctrine_Query::create()
+                                ->update('Signupmaxaccount')
+                                ->set('testemail', '"'.$val.'"')
+                                ->execute();
+                break;
         }
-
         die;
     }
 
