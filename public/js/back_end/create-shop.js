@@ -619,22 +619,10 @@ function removeballontexthtml(el) {
                     $('#customtextposition').hide();
                     $('#showcustomtext').val(0);
                 }
-
+      break;
 			default:
 				
 				if(status == 'toggle-btn')
-				{
-					
-					 if($(btn).hasClass('btn-primary'))
-					 {
-						 
-						 $(btn).removeClass('btn-primary');
-						 $("input[ name="+ name +"]:hidden").val(0);
-					 }else{
-					 
-						 $(btn).addClass('btn-primary');
-						 $("input[ name="+ name +"]:hidden").val(1);
-                if(status == 'toggle-btn')
                 {
                     
                      if($(btn).hasClass('btn-primary'))
@@ -659,9 +647,7 @@ function removeballontexthtml(el) {
                 $("input[name="+ name + "]").val(val) ;
                 
             
-          }
-      }
-   }
+        }
  }
 
  

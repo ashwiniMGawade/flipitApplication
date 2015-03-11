@@ -1251,5 +1251,24 @@ $.extend($.validator.methods , {
 jQuery.validator.addMethod('selectcheck', function (value) {
     return (value != '0');
 }, "required");
+jQuery.validator.addMethod("dateFormat",
+    function(value, element) {
+        return value.match(/^dd?-dd?-dd$/);
+    }, ''
+);
+var validateDate = function(inputValue) {
+    var splittedDate = inputValue.split('-');
+	var formattedDate = splittedDate[1] + '/' + splittedDate[0] + '/' + splittedDate[2];
+	var userInputDate = new Date(formattedDate);
+	var currentDate = new Date();
+    if(userInputDate < currentDate) {
+        return false;
+    } else {
+    	return true;
+    }
+};
+jQuery.validator.addMethod("checkTodayDate", function(value, element) {
+    return validateDate(value);
+}, "");
 
 })(jQuery);

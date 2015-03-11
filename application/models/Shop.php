@@ -24,6 +24,15 @@ class Shop extends BaseShop
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
 
+    public static function checkShop($shopName)
+    {
+        $shopExist = Doctrine_Query::create()->select('s.id')
+            ->from('Shop s')
+            ->where("s.name='".$shopName."'")
+            ->fetchArray();
+        return isset($shopExist[0]['id']) ? $shopExist[0]['id'] : '';
+    }
+
     public static function getShopData($id)
     {
         $shopDataExistOrNot = Doctrine_Core::getTable("Shop")->find($id);
@@ -141,6 +150,20 @@ class Shop extends BaseShop
             $popularStoreData = $popularStoreData->limit($limit);
         }
 
+        $popularStoreData = $popularStoreData->fetchArray();
+        return $popularStoreData;
+    }
+
+    public static function getPopularStoresForDropDown($limit)
+    {
+        $popularStoreData = Doctrine_Query::create()
+        ->select('p.id, s.name, s.permaLink')
+        ->from('PopularShop p')
+        ->leftJoin('p.shop s')
+        ->where('s.deleted=0')
+        ->addWhere('s.status=1')
+        ->orderBy('p.position ASC')
+        ->limit($limit);
         $popularStoreData = $popularStoreData->fetchArray();
         return $popularStoreData;
     }
@@ -371,12 +394,12 @@ class Shop extends BaseShop
 
     public static function getShopInformation($shopId)
     {
-        $shop = Doctrine_Query::create()
+        $shopDetail = Doctrine_Query::create()
             ->select('s.permaLink,s.name')
             ->from('Shop s')
             ->where('s.id='.$shopId)
             ->fetchArray();
-        return $shop;
+        return $shopDetail;
     }
 
     public static function getShopIdByPermalink($permalink)

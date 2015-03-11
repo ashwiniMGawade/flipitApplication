@@ -442,14 +442,4 @@ class StoreController extends Zend_Controller_Action
         $this->view->shopId = $this->getRequest()->getParam('shopid');
         $this->view->permalink = $this->getRequest()->getParam('permalink');
     }
-
-    public function socialcodeAction()
-    {
-        $this->_redirect('/');
-    }
-
-    public function socialcodethanksAction()
-    {
-        $this->_helper->layout()->disableLayout();
-    }
 }

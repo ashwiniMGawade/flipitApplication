@@ -222,14 +222,14 @@ class FrontEnd_Helper_LayoutContent
     public static function getTopShopForDropdown()
     {
         $topShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            "all_popularShops_list",
+            "all_popularShopsForDropdown_list",
             array(
-                'function' => 'FrontEnd_Helper_viewHelper::getStoreForFrontEnd',
-                'parameters' => array("popular", 24)
+                'function' => 'Shop::getPopularStoresForDropDown',
+                'parameters' => array(16)
             ),
             ''
         );
-        return array_slice($topShops, 0, 16);
+        return $topShops;
     }
 
     public static function generateMobileMenu($navigation)

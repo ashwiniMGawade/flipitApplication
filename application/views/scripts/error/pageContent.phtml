@@ -1,7 +1,8 @@
 <?php
  if ($this->pageCssClass == 'contact-page') {
-    $this->minifyHeadScript()->appendFile("/public/js/front_end/contactForm.js");
-}
+    $this->minifyHeadScript()->appendFile("/public/js/front_end/contactForm.js");?>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+<?php }
 if (isset($this->successMessage) && $this->successMessage!='') : ?>
     <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
         <span class='glyphicon glyphicon-warning-sign'></span>

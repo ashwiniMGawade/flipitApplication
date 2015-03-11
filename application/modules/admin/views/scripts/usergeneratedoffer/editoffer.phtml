@@ -25,7 +25,7 @@ $twoMonthsLater = date('t-m-Y');
 $role = Zend_Auth::getInstance()->getIdentity()->roleId;
 $code = "kortingscodeoffernews";
 $secret = base64_encode($code);
-$shopLogo = $this->offerShoLogo;
+$shopLogo = $this->offerShopLogo;
 ?>
 <script type="text/javascript">
 var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/"; ?>";
@@ -41,10 +41,10 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/"; ?>";
                 href="#"    class="btn ml10"><?php echo $this->translate('Cancel'); ?>
             </button>
             <?php
-            if(isset($this->offerShoLogo[0]['shop']['permaLink'])) :
+            if(isset($this->offerShopLogo[0]['shop']['permaLink'])) :
                 ?>
                 <button type="button" 
-                    onClick="window.open('<?php echo HTTP_PATH_FRONTEND; ?>/<?php echo $this->offerShoLogo[0]['shop']['permaLink'];?>','_blank')" href="_blank" class="btn btn-primary ml10">
+                    onClick="window.open('<?php echo HTTP_PATH_FRONTEND; ?>/<?php echo $this->offerShopLogo[0]['shop']['permaLink'];?>','_blank')" href="_blank" class="btn btn-primary ml10">
                 <?php echo $this->translate('Open store page'); ?>
                 </button>
             <?php endif;    ?>
