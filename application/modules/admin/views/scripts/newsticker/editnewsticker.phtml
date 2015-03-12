@@ -30,11 +30,11 @@ $dateForm =  $date->format('Y-m-d') ;
                     	<div class="mainpage-content-right-inner-left-other" style="padding-bottom: 10px; margin-left: -42px;">
                           <select style="display: none; width : 250px;" name="whichshop" class="combobox" id="whichshop">
 							  <option value=""></option>
-								<?php 
+								<?php
 								for($i=0;$i<count($this->shopList);$i++){
-		     						if(trim($this->shopList[$i]['shopName'])!='')
+		     						if(trim($this->shopList[$i]['name'])!='')
 		     						{
-		     						  $shopname = substr($this->shopList[$i]['shopName'],0,70);
+		     						  $shopname = substr($this->shopList[$i]['name'],0,70);
 
 		     						  if($this->shopList[$i]['id'] == $this->editNews[0]['shop']['id']){
 		     						  	$selected = "selected";

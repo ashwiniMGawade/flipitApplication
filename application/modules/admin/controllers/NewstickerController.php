@@ -210,7 +210,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
 
     public function exportxlxAction()
     {
-        $newstickerList = OfferNews::getnewstickerListForExport();
+        $newstickerList =  \KC\Repository\OfferNews::getnewstickerListForExport();
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->setActiveSheetIndex(0);
         $objPHPExcel->getActiveSheet()->setCellValue('A1', $this->view->translate('Title'));

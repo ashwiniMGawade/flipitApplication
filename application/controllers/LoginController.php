@@ -145,13 +145,13 @@ class LoginController extends Zend_Controller_Action
         $this->view->form = $forgotPasswordForm;
         if ($this->getRequest()->isPost()) {
             if ($forgotPasswordForm->isValid($this->getRequest()->getPost())) {
-                $visitorDetails = Doctrine_Core::getTable('Visitor')->findOneByemail(
+                $visitorDetails = \KC\Repository\Visitor::getVisitorDetailsByEmail(
                     FrontEnd_Helper_viewHelper::sanitize($forgotPasswordForm->getValue('emailAddress'))
                 );
                 $fromEmail = \KC\Repository\Signupmaxaccount::getEmailAddress();
                 if ($visitorDetails!= false) {
                     \KC\Repository\Visitor::updatePasswordRequest($visitorDetails['id'], 0);
-                    $mailer  = new F\rontEnd_Helper_Mailer();
+                    $mailer  = new \FrontEnd_Helper_Mailer();
                     $content = array(
                                     'name'    => 'content',
                                     'content' => $this->view->partial(
@@ -204,7 +204,7 @@ class LoginController extends Zend_Controller_Action
     {
         $this->view->headTitle(\FrontEnd_Helper_viewHelper::__form('form_Members Only'));
         $visitorId = \FrontEnd_Helper_viewHelper::sanitize((base64_decode($this->_request->getParam("forgotid"))));
-        $visitor = \KC\Repository\Visitor::getVisitorDetails($visitorId);
+        $visitor = \KC\Repository\Visitor::getUserDetails($visitorId);
         $resetPasswordForm = new \Application_Form_ResetPassword();
         $this->view->form = $resetPasswordForm;
         if ($visitor['changepasswordrequest']) {
@@ -234,7 +234,7 @@ class LoginController extends Zend_Controller_Action
         $updatedPassword = \KC\Repository\Visitor::updateVisitorPassword($visitorId, $newPassword);
         if ($updatedPassword) {
             if (!\Auth_VisitorAdapter::hasIdentity()) {
-                Visitor::updatePasswordRequest($visitorId, 1);
+                \KC\Repository\Visitor::updatePasswordRequest($visitorId, 1);
                 $redirectLink = HTTP_PATH_LOCALE . \FrontEnd_Helper_viewHelper::__link('link_login');
             } else {
                 \KC\Repository\Visitor::updatePasswordRequest($visitorId, 1);

@@ -117,7 +117,7 @@ class OfferNews extends \KC\Entity\OfferNews
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query  = $queryBuilder
-            ->select('n.id as id,n.shopId,n.title as title,n.startdate,s.name,n.linkstatus, n.url, n.content')
+            ->select('n.id as id, n.title as title, n.startdate, s.name, s.id as shopId, n.linkstatus, n.url, n.content')
             ->from("KC\Entity\OfferNews", "n")
             ->leftJoin("n.shop", "s")
             ->where("n.deleted = 0")
