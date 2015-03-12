@@ -145,13 +145,13 @@ class LoginController extends Zend_Controller_Action
         $this->view->form = $forgotPasswordForm;
         if ($this->getRequest()->isPost()) {
             if ($forgotPasswordForm->isValid($this->getRequest()->getPost())) {
-                $visitorDetails = Doctrine_Core::getTable('Visitor')->findOneByemail(
+                $visitorDetails = \KC\Repository\Visitor::getVisitorDetailsByEmail(
                     FrontEnd_Helper_viewHelper::sanitize($forgotPasswordForm->getValue('emailAddress'))
                 );
                 $fromEmail = \KC\Repository\Signupmaxaccount::getEmailAddress();
                 if ($visitorDetails!= false) {
                     \KC\Repository\Visitor::updatePasswordRequest($visitorDetails['id'], 0);
-                    $mailer  = new F\rontEnd_Helper_Mailer();
+                    $mailer  = new \FrontEnd_Helper_Mailer();
                     $content = array(
                                     'name'    => 'content',
                                     'content' => $this->view->partial(
