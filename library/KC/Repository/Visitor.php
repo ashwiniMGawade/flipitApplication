@@ -141,7 +141,7 @@ class Visitor extends \KC\Entity\Visitor
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $visitor  = $entityManagerLocale->find('\KC\Entity\Visitor', \FrontEnd_Helper_viewHelper::sanitize($visitorId));
         if ($visitor) {
-            $visitor->password = FrontEnd_Helper_viewHelper::sanitize(md5($password));
+            $visitor->password = \FrontEnd_Helper_viewHelper::sanitize(md5($password));
             $entityManagerLocale->persist($visitor);
             $entityManagerLocale->flush();
             return true;
@@ -432,7 +432,7 @@ class Visitor extends \KC\Entity\Visitor
             (isset($params['confirmNewPassword']) && $params['confirmNewPassword'] != '')
         ) {
             if ($params['newPassword'] == $params['confirmNewPassword']) {
-                $visitor->password = FrontEnd_Helper_viewHelper::sanitize(md5($params['newPassword']));
+                $visitor->password = \FrontEnd_Helper_viewHelper::sanitize(md5($params['newPassword']));
             }
         }
 
@@ -746,7 +746,7 @@ class Visitor extends \KC\Entity\Visitor
                 $queryBuilder  = $entityManagerLocale->createQueryBuilder();
                 $query = $queryBuilder->update('\KC\Entity\Visitor', 'v')
                     ->set('v.code_alert_send_date', "'".  date('Y-m-d 00:00:00') ."'")
-                    ->where('v.id='. FrontEnd_Helper_viewHelper::sanitize($visitorIdValue));
+                    ->where('v.id='. \FrontEnd_Helper_viewHelper::sanitize($visitorIdValue));
                 $query->getQuery()->execute();
             }
         }
@@ -758,7 +758,7 @@ class Visitor extends \KC\Entity\Visitor
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v.code_alert_send_date')
             ->from('\KC\Entity\Visitor', 'v')
-            ->where('v.id='. FrontEnd_Helper_viewHelper::sanitize($visitorId));
+            ->where('v.id='. \FrontEnd_Helper_viewHelper::sanitize($visitorId));
         $codeAlertSendDate = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return !empty($codeAlertSendDate) ?  $codeAlertSendDate[0]['code_alert_send_date'] : 0;
     }
