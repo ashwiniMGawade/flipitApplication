@@ -155,9 +155,16 @@ class Articles extends \KC\Entity\Articles
             ->from('KC\Entity\Articles', 'art')
             ->where('art.deleted ='. $flag)
             ->andWhere($queryBuilder->expr()->like('art.title', $queryBuilder->expr()->literal($srh.'%')));
-
-        $request  = \DataTable_Helper::createSearchRequest($params, array('title', 'publishdate', 'permalink', 'publish', 'authorname'));
-
+        $request  = \DataTable_Helper::createSearchRequest(
+            $params,
+            array(
+                'title',
+                'publishdate',
+                'permalink',
+                'publish',
+                'authorname'
+            )
+        );
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
             ->setQueryBuilder($qb)
@@ -182,7 +189,16 @@ class Articles extends \KC\Entity\Articles
             ->where('art.deleted ='. $flag)
             ->andWhere($queryBuilder->expr()->like('art.title', $queryBuilder->expr()->literal($srh.'%')));
 
-        $request  = \DataTable_Helper::createSearchRequest($params, array('id', 'title', 'created_at', 'publish', 'authorname'));
+        $request  = \DataTable_Helper::createSearchRequest(
+            $params,
+            array(
+                'id',
+                'title',
+                'created_at',
+                'publish',
+                'authorname'
+            )
+        );
 
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
@@ -248,20 +264,14 @@ class Articles extends \KC\Entity\Articles
         $storeIds = explode(',', $params['selectedRelatedStores']);
         $relatedIds = explode(',', $params['selectedRelatedCategory']);
         $data = new \KC\Entity\Articles();
-        //echo "<pre>"; print_r($params); die();
-
-        //default column
         $data->deleted = 0;
         $data->created_at = new \DateTime('now');
         $data->updated_at = new \DateTime('now');
-
         $data->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['articleTitle']);
         $data->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['articlepermalink']);
         $data->metatitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['articlemetaTitle']);
         $data->metadescription = \BackEnd_Helper_viewHelper::stripSlashesFromString(trim($params['articlemetaDesc']));
-        //this column deleted from html
-        //$data->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageDesc']);
-        $data->authorid = $params['authorList']; //Auth_StaffAdapter::getIdentity()->id;
+        $data->authorid = $params['authorList']; 
         $data->authorname = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['authorNameHidden']);
 
         if (isset($_FILES['articleImage']['name']) && $_FILES['articleImage']['name'] != '') {
@@ -330,7 +340,10 @@ class Articles extends \KC\Entity\Articles
                 $articleFeaturedImage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($articleFeaturedImage);
                 $entityManagerLocale->flush();
-                $data->articlefeaturedimage = $entityManagerLocale->find('\KC\Entity\ArticlesFeaturedImage', $articleFeaturedImage->id);
+                $data->articlefeaturedimage = $entityManagerLocale->find(
+                    '\KC\Entity\ArticlesFeaturedImage',
+                    $articleFeaturedImage->id
+                );
             } else {
                 return false;
             }
@@ -345,39 +358,28 @@ class Articles extends \KC\Entity\Articles
         if (isset($params['plusTitle']) && $params['plusTitle'] != '') {
             $data->plusTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['plusTitle']);
         }
-    /*  $ext = BackEnd_Helper_viewHelper::getImageExtension(@$result['fileName']);
-        $data->articleImage->ext = $ext;*/
 
         if (isset($params['savePagebtn']) && $params['savePagebtn'] == 'draft') {
             $data->publish = self::ArticleStatusDraft;
             $publishDate = date('Y-m-d');
             $data->publishdate = new \DateTime($publishdate);
-        } else if($params['savePagebtn'] == 'publish' && date('Y-m-d',strtotime($params['publishDate']))  > date('Y-m-d')){
-            
+        } else if ($params['savePagebtn'] == 'publish' && date('Y-m-d', strtotime($params['publishDate'])) > date('Y-m-d')) {
             $data->publish = self::ArticleStatusPublished;
-            $publishdate = date('Y-m-d',strtotime($params['publishDate']));
+            $publishdate = date('Y-m-d', strtotime($params['publishDate']));
             $data->publishdate = new \DateTime($publishdate);
             $isDraft  = false ;
-
         } else {
-            
             $data->publish = self::ArticleStatusPublished;
-            $publishdate = date('Y-m-d',strtotime($params['publishDate']));
+            $publishdate = date('Y-m-d', strtotime($params['publishDate']));
             $data->publishdate = new \DateTime($publishdate);
             $isDraft  = false ;
 
         }
 
-        try{
-
+        try {
             $entityManagerLocale->persist($data);
             $entityManagerLocale->flush();
             $articleId = $data->__get('id');
-            /* $route = new RoutePermalink();
-            $route->permalink =  $params['articlepermalink'];
-            $route->type = 'ART';
-            $route->exactlink = 'plus/guidedetail/id/'.$data->id;
-            $route->save(); */
 
             if (!empty($params['title']) && !empty($params['content'])) {
                 foreach ($params['title'] as $key => $title) {
@@ -396,7 +398,6 @@ class Articles extends \KC\Entity\Articles
 
             if ($storeIds[0] != "") {
                 foreach ($storeIds as $storeid) {
-
                     $relatedstores = new \KC\Entity\RefArticleStore();
                     $relatedstores->relatedstores = $entityManagerLocale->find('\KC\Entity\Articles', $articleId);
                     $relatedstores->articleshops = $entityManagerLocale->find('\KC\Entity\Shop', $articleId);
@@ -412,26 +413,18 @@ class Articles extends \KC\Entity\Articles
 
             if ($relatedIds[0] != "") {
                 foreach ($relatedIds as $relatedid) {
-
                     $relatedcategories = new \KC\Entity\RefArticleCategory();
                     $relatedcategories->articles = $entityManagerLocale->find('\KC\Entity\Articles', $articleId);
-                    $relatedcategories->articlecategory = $entityManagerLocale->find('\KC\Entity\Articlecategory', $relatedid);
+                    $relatedcategories->articlecategory = $entityManagerLocale->find(
+                        '\KC\Entity\Articlecategory',
+                        $relatedid
+                    );
                     $relatedcategories->created_at = new \DateTime('now');
                     $relatedcategories->updated_at = new \DateTime('now');
                     $entityManagerLocale->persist($relatedcategories);
                     $entityManagerLocale->flush();
                 }
             }
-            // code not needed please delete after migration doctrine2
-
-            /*$pageIds = self::findPageIds($data->id);
-            $artArr = array();
-            for ($i=0; $i < count($pageIds); $i++) {
-                $artArr[] = $pageIds[$i]['pageid'];
-            }
-            $page_ids = array_unique($artArr);
-            */
-             //call cache function
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
@@ -443,7 +436,6 @@ class Articles extends \KC\Entity\Articles
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
             return array('articleId' => $articleId , 'isDraft' => $isDraft ) ;
         } catch(Exception $e) {
-
             return false;
         }
     }
@@ -453,14 +445,11 @@ class Articles extends \KC\Entity\Articles
     {
         $storeIds = explode(',', $params['selectedRelatedStores']);
         $relatedIds = explode(',', $params['selectedRelatedCategory']);
-        //echo "<pre>"; print_r($params); die;
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $data = $entityManagerLocale->find('\KC\Entity\Articles', $params['id']);
-        //echo "<pre>"; print_r($data->__get('permalink')); die;
         $data->deleted = $data->__get('deleted');
         $data->created_at = $data->__get('updated_at');
         $data->updated_at = new \DateTime('now');
-
         $data->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['articleTitle']);
         $data->permalink =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['articlepermalink']);
         $data->metatitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['articlemetaTitle']);
@@ -528,7 +517,10 @@ class Articles extends \KC\Entity\Articles
                 $articleFeaturedImage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($articleFeaturedImage);
                 $entityManagerLocale->flush();
-                $data->articlefeaturedimage = $entityManagerLocale->find('\KC\Entity\ArticlesFeaturedImage', $articleFeaturedImage->id);
+                $data->articlefeaturedimage = $entityManagerLocale->find(
+                    '\KC\Entity\ArticlesFeaturedImage',
+                    $articleFeaturedImage->id
+                );
             } else {
                 return false;
             }
@@ -545,24 +537,6 @@ class Articles extends \KC\Entity\Articles
         }
 
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
-
-       //code not needed please delete after doctrine2 migration 
-
-        /*
-        $catIds = self::findCategoryId($params['id']);
-        $catArr = array();
-        for ($i=0; $i<count($catIds); $i++) {
-            $catArr[] = $catIds[$i]['relatedcategoryid'];
-        }
-
-        
-        $pageIds = self::findPageIds($params['id']);
-        $artArr = array();
-        for ($i=0; $i<count($pageIds); $i++) {
-            $artArr[] = $pageIds[$i]['pageid'];
-        }
-        $page_ids = array_unique($artArr);
-        */
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
@@ -572,10 +546,6 @@ class Articles extends \KC\Entity\Articles
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
-        /*
-        $ext = BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-        $data->articleImage->ext = $ext;*/
-
         if (isset($params['savePagebtn']) && $params['savePagebtn'] == 'draft') {
             $data->publish = self::ArticleStatusDraft;
             $publishDate =
@@ -584,13 +554,13 @@ class Articles extends \KC\Entity\Articles
                 strtotime($params['publishDate'])
             );
             $data->publishdate = new \DateTime($publishDate);
-        } else if($params['savePagebtn'] == 'publish' && date('Y-m-d',strtotime($params['publishDate'])) > date('Y-m-d')){
+        } else if ($params['savePagebtn'] == 'publish' && date('Y-m-d', strtotime($params['publishDate'])) > date('Y-m-d')) {
             $data->publish = self::ArticleStatusPublished;
-            $publishdate = date('Y-m-d',strtotime($params['publishDate']));
+            $publishdate = date('Y-m-d', strtotime($params['publishDate']));
             $data->publishdate = new \DateTime($publishdate);
         } else {
             $data->publish = self::ArticleStatusPublished;
-            $publishdate = date('Y-m-d',strtotime($params['publishDate']));
+            $publishdate = date('Y-m-d', strtotime($params['publishDate']));
             $data->publishdate = new \DateTime($publishdate);
         }
 
@@ -609,13 +579,11 @@ class Articles extends \KC\Entity\Articles
                 ->where('r.permalink ='.$queryBuilder->expr()->literal($getcategory[0]['permalink']))
                 ->andWhere('r.type ='. $queryBuilder->expr()->literal("ART"));
             $getRouteLink = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            //$updateRouteLink = Doctrine_Core::getTable('RoutePermalink')->findOneBy('permalink', $getcategory[0]['permaLink'] );
         } else {
             $updateRouteLink = new KC\Entity\RoutePermalink();
         }
-
-        try {
-
+        try
+        {
             $entityManagerLocale->persist($data);
             $entityManagerLocale->flush();
 
@@ -652,7 +620,10 @@ class Articles extends \KC\Entity\Articles
                 foreach ($relatedIds as $relatedid) {
                     $relatedcategories = new \KC\Entity\RefArticleCategory();
                     $relatedcategories->articles = $entityManagerLocale->find('\KC\Entity\Articles', $params['id']);
-                    $relatedcategories->articlecategory = $entityManagerLocale->find('\KC\Entity\Articlecategory', $relatedid);
+                    $relatedcategories->articlecategory = $entityManagerLocale->find(
+                        '\KC\Entity\Articlecategory',
+                        $relatedid
+                    );
                     $relatedcategories->created_at = new \DateTime('now');
                     $relatedcategories->updated_at = new \DateTime('now');
                     $entityManagerLocale->persist($relatedcategories);
@@ -683,71 +654,37 @@ class Articles extends \KC\Entity\Articles
             return false;
         }
     }
-    /**
-     * upload image
-     * @param $_FILES[index]  $file
-     */
     public static function uploadImage($file)
     {
         if (!file_exists(UPLOAD_IMG_PATH)) {
             mkdir(UPLOAD_IMG_PATH);
         }
-
-        // generate upload path for images related to shop
         $uploadPath = UPLOAD_IMG_PATH . "article/";
         $adapter = new \Zend_File_Transfer_Adapter_Http();
-
-        // generate real path for upload path
         $rootPath = ROOT_PATH . $uploadPath;
-
-        // get upload file info
         $files = $adapter->getFileInfo($file);
-
-        // check upload directory exists, if no then create upload directory
         if (!file_exists($rootPath)) {
             mkdir($rootPath, 776, true);
         }
-
-        // set destination path and apply validations
         $adapter->setDestination($rootPath);
         $adapter->addValidator('Extension', false, array('jpg,jpeg,png', true));
         $adapter->addValidator('Size', false, array('min' => 20, 'max' => '2MB'));
-        // get file name
         $name = $adapter->getFileName($file, false);
-
-        // rename file name to by prefixing current unix timestamp
         $newName = time() . "_" . $name;
-
-        // generates complete path of image
         $cp = $rootPath . $newName;
-
-
         $path = ROOT_PATH . $uploadPath . "thum_" . $newName;
-
         \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 132, 95, $path);
-
         $path = ROOT_PATH . $uploadPath . "thum_article_" . $newName;
         \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 64, 32, $path);
-
-
         $path = ROOT_PATH . $uploadPath . "thum_article_samll_" . $newName;
         \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 0, 46, $path);
-
         $path = ROOT_PATH . $uploadPath . "thum_article_medium_" . $newName;
         \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 0, 60, $path);
-
-
         $path = ROOT_PATH . $uploadPath . "thum_article_big_" . $newName;
         \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 960, 340, $path);
-
-
         $path = ROOT_PATH . $uploadPath . "thum_article_all_" . $newName;
         \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 110, 0, $path);
 
-
-        /**
-         *   generating thumnails for upload logo if file in shop logo
-         */
         if ($file == "logoFile") {
             $path = ROOT_PATH . $uploadPath . "thum_large_" . $newName;
             \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 200, 150, $path);
@@ -772,13 +709,11 @@ class Articles extends \KC\Entity\Articles
             );
 
         } else {
-
             return array(
                 "status" => "-1",
                 "msg" => "Please upload the valid file"
             );
         }
-
     }
 
     public static function searchKeyword($keyword, $flag)
@@ -839,37 +774,22 @@ class Articles extends \KC\Entity\Articles
             ->where('a.id=' . $id);
         $query->getQuery()->execute();
 
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
         $pageIds = self::findPageIds($id);
-
-        //not needed code we will remove that if doctrine2 migrated
-        /*$artArr = array();
-        for ($i=0; $i < count($pageIds); $i++) {
-            $artArr[] = $pageIds[$i]['pageid'];
-        }*/
         $page_ids = array_unique($artArr);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
-
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
         $catIds = self::findCategoryId($id);
-
-        //not needed code we will remove that if doctrine2 migrated
-
-        /*$catArr = array();
-        for ($i = 0; $i < count($catIds); $i++) {
-            $catArr[] = $catIds[$i]['relatedcategoryid'];
-        }*/
         return 1;
     }
    
     public static function restoreArticles($id)
     {
         if ($id) {
-            //update status of record by id(deleted=0)
             $entityManagerLocale = \Zend_Registry::get('emLocale');
             $queryBuilder = $entityManagerLocale->createQueryBuilder();
             $query = $queryBuilder->select('s.id, s.permaLink')
@@ -896,50 +816,6 @@ class Articles extends \KC\Entity\Articles
         } else {
             $id = null;
         }
-        //call cache function
-
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
-
-        $pageIds = self::findPageIds($id);
-        //not needed code we will remove that if doctrine2 migrated
-        /*$artArr = array();
-        for ($i=0; $i<count($pageIds); $i++) {
-            $artArr[] = $pageIds[$i]['pageid'];
-        }*/
-        $page_ids = array_unique($pageIds);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
-
-
-        $catIds = self::findCategoryId($id);
-        //not needed code we will remove that if doctrine2 migrated
-        /*$catArr = array();
-        for ($i=0; $i < count($catIds); $i++) {
-            $catArr[] = $catIds[$i]['relatedcategoryid'];
-        }*/
-
-        return $id;
-    }
-
-
-    public static function moveToTrash($id)
-    {
-        if ($id) {
-            //find record by id
-            $entityManagerLocale = \Zend_Registry::get('emLocale');
-            $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-            $query= $queryBuilder->delete('\KC\Entity\Articles', 'a')
-                ->where('a.id=' . $id);
-            $query->getQuery()->execute();
-        } else {
-
-            $id = null;
-        }
-        //call cache function
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
         $pageIds = self::findPageIds($id);
         $page_ids = array_unique($pageIds);
@@ -953,7 +829,31 @@ class Articles extends \KC\Entity\Articles
         return $id;
     }
 
-    /*********************************************Front fuction for displaying articles********************************************/
+
+    public static function moveToTrash($id)
+    {
+        if ($id) {
+            $entityManagerLocale = \Zend_Registry::get('emLocale');
+            $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+            $query= $queryBuilder->delete('\KC\Entity\Articles', 'a')
+                ->where('a.id=' . $id);
+            $query->getQuery()->execute();
+        } else {
+            $id = null;
+        }
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
+        $pageIds = self::findPageIds($id);
+        $page_ids = array_unique($pageIds);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
+        $catIds = self::findCategoryId($id);
+        return $id;
+    }
+
     public static function searchArticles($keyword, $flag, $limit)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
@@ -1016,41 +916,25 @@ class Articles extends \KC\Entity\Articles
             ->leftJoin('a.category', 'c')
             ->where('a.id ='. $id);
         $article = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
-        # redactie permalink
         $redactie =  User::returnEditorUrl($article['authorid']);
-
         $urlsArray = array();
-
         $cetgoriesPage = 'pluscat' .'/' ;
-
-        # check for article permalink
         if (isset($article['permalink'])) {
             $urlsArray[] = \FrontEnd_Helper_viewHelper::__link('link_plus') . '/'. $article['permalink'];
         }
-
-        # check if an editor  has permalink then add it into array
         if (isset($redactie['permalink']) && strlen($redactie['permalink']) > 0) {
             $urlsArray[] = $redactie['permalink'] ;
         }
-
-        # check an article has one or more categories
         if (isset($article['category']) && count($article['category']) > 0) {
-
-            # traverse through all catgories
             foreach ($article['category'] as $value) {
-                # check if a category has permalink then add it into array
                 if (isset($value['permalink']) && strlen($value['permalink']) > 0) {
                     $urlsArray[] = $cetgoriesPage . $value['permalink'] ;
                 }
             }
         }
 
-        # check for related shops
         if (isset($article['storearticles']) && count($article['storearticles']) > 0) {
-            # traverse through all shops
             foreach ($article['storearticles'] as $value) {
-                # check if a shops has permalink then add it into array
                 if (isset($value['articleshops']['permaLink']) && strlen($value['articleshops']['permaLink']) > 0) {
                     $urlsArray[] = $value['articleshops']['permaLink'] ;
                 }
