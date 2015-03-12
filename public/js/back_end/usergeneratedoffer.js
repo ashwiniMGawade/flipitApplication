@@ -98,6 +98,11 @@ function init(){
         },
     });
 
+    $('.select2-search-choice-close').click(function(e){
+        $(this).parents('div.resetSearch').children('input').val('');
+        searchByShop();
+    });
+
     $("input#searchOffer").keypress(function(e) {
         if (e.which == 13) {            
             searchByShop();
@@ -227,16 +232,19 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
         },
         {
             "fnRender" : function(obj) {                
-                var ed = "";
+                var endDate = "";
                 if (obj.aData.endDate != null) {
                     var tag = '';
                     var dat = obj.aData.endDate;
                     tag = dat.split("-");
                     tag2 = tag[2];
                     var da = tag2.split(" ");
-                    ed = (da[0]+'-'+tag[1]+'-'+tag[0]);
+                    endDate = (da[0]+'-'+tag[1]+'-'+tag[0]);
+                    if (endDate == '01-01-1970') {
+                        endDate = '';
+                    }
                 }
-                return "<a href='javascript:void(0)'>" + ed + "</a>";                 
+                return "<a href='javascript:void(0)'>" + endDate + "</a>";                 
             },
             "bSearchable" : true,
             "bSortable" : true            
@@ -263,7 +271,7 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
             state[ 'iOfferText' ] = txtOffer;
             state[ 'iShopText' ] = txtShop;
             state[ 'iType' ] = type;            
-            $("#offerListTable").find('tr').find('td:lt(9)').click(function () {
+            $("#offerListTable").find('tr').find('td:lt(3)').click(function () {
                 var eId = $(this).parent('tr').find('p').attr('editid');
                 state[ 'eId' ] = eId ;
                 $.bbq.pushState( state );

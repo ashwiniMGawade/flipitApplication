@@ -25,6 +25,7 @@ $role = Zend_Auth::getInstance ()->getIdentity ()->roleId;
 $code = "kortingscodeoffernews";
 $secret = base64_encode($code);
 $shopLogo = $this->offerShopLogo;
+
 ?>
 <script type="text/javascript">
 var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" ;
@@ -43,7 +44,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 				if(isset($this->offerShopLogo[0]['shop']['permaLink'])) :
 			?>
 			<button type="button"
-			onClick="window.open('<?php echo HTTP_PATH_FRONTEND ; ?>/<?php echo $this->offerShopLogo[0]['shop']['permaLink'] ;?>','_blank')"
+			onClick="window.open('<?php echo HTTP_PATH_FRONTEND ; ?><?php echo $this->offerShopLogo[0]['shop']['permaLink'] ;?>','_blank')"
 			href="_blank" class="btn btn-primary ml10"><?php echo $this->translate('Open store page'); ?></button>
 			<?php endif;	?>
             <button type="button" id="code-alert-queue" href="_blank" class="btn btn-primary ml10">
@@ -462,7 +463,11 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                 <div class="span12">
 					<button id="updateOfferBtn" type="submit" class="btn btn-large btn-primary fl">
 					<?php echo $this->translate('EDIT OFFER'); ?></button>
+					<?php if ($this->offerController == 1) {?>
+					<a href="<?php echo HTTP_PATH; ?>admin/usergeneratedoffer<?php echo '#'.$this->qstring; ?>" class="fl m10">
+					<?php } else { ?>
 					<a href="<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>" class="fl m10">
+					<?php } ?>
 					<strong class="ml10"><?php echo $this->translate('CANCEL'); ?></strong></a>
 					<a id="deleteButton" href="javascript:void(0);" onclick="deleteOffer(event);" class="fl red mt10">
 					<strong><?php echo $this->translate('DELETE'); ?></strong></a>
@@ -790,7 +795,11 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 			<div class="mainpage-content-colorbox" id="offerEndButtons">
 				<button id="updateOfferBtn" type="submit" class="btn btn-large btn-primary fl">
 				<?php echo $this->translate('EDIT OFFER'); ?></button>
-				<a href="<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>"
+				<?php if ($this->offerController == 1) {?>
+					<a href="<?php echo HTTP_PATH; ?>admin/usergeneratedoffer<?php echo '#'.$this->qstring; ?>" class="fl m10">
+				<?php } else { ?>
+					<a href="<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>" class="fl m10">
+				<?php } ?>
 				class="fl m10"><strong class="ml10"><?php echo $this->translate('CANCEL'); ?></strong></a>
 				<a id="deleteButton" href="javascript:void(0);" onclick="deleteOffer(event);"
 				class="fl red mt10"><strong><?php echo $this->translate('DELETE'); ?></strong></a>
