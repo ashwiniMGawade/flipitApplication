@@ -371,8 +371,7 @@ class Page Extends \KC\Entity\Page
                     ->getQuery();
                 $query->execute();
             }
-
-            
+           
             $query = $queryBuilder->select('page')
                 ->from('KC\Entity\Page', 'page')
                 ->setParameter(1, $id)
@@ -748,7 +747,6 @@ class Page Extends \KC\Entity\Page
                 return false;
             }
         }
-
 
         if (isset($_FILES['homepageFile']['name']) && $_FILES['homepageFile']['name'] != '') {
             $result = self::uploadImage('homepageFile');
