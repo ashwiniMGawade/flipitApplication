@@ -28,14 +28,14 @@
 	               	</li>
                     <li>
                         <?php 
-                        if($controller == 'usergeneratedoffer') 
+                        if($controller == 'usergeneratedoffer')
                         {
                             $offerColorClass = "new-blue"; 
                         } else { 
                             $offerColorClass = "new-gray"; 
                         }
                         ?>
-                        <a href="<?php echo HTTP_PATH ;?>admin/usergeneratedoffer" 
+                        <a id="socialCode" href="<?php echo HTTP_PATH ;?>admin/usergeneratedoffer" 
                          class="<?php echo $offerColorClass;?>" tabindex="1">
                         <?php echo $this->translate('Social Codes');?>
                         </a>

@@ -110,6 +110,10 @@ function init(){
 	jQuery('#extendedOfferMetadesc').NobleCount('#metaDescLeft',{
 		max_chars: 150
 	});*/
+
+	if (jQuery('#socialCodeSelection').val() == 1) {
+		jQuery('#socialCode').addClass('new-blue');
+	}
 	
 	jQuery('.word_count').each(function() {
         var input = '#' + this.id;
@@ -666,11 +670,11 @@ function setFormData(data){
 		  
 	 }
 
-	/*if (data[0].title != 'undefined' || data[0].title != 'null') {
+	if (data[0].title != undefined || data[0].title != null) {
 		console.log(data[0].title);
 	 	jQuery('#addofferTitle').val(data[0].title);
 	 	jQuery('#metaTextLeft').val(__("Offer title length ") + parseInt(data[0].title.length) + __(" characters"));
-	}*/
+	}
 
 	 jQuery('#offerRefUrl').val(data[0].refURL);
 	 if(data[0].refURL){
