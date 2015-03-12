@@ -35,7 +35,9 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 	<form action="<?php echo HTTP_PATH; ?>admin/offer/updateoffer" name="addOffer" id="addOffer" method="POST"
 	enctype="multipart/form-data" autocomplete="off">
 		<input type="hidden" name='couponCodeType' id='couponCodeType' value='' />
-		<h1><?php echo $this->translate('Edit Offer');?>
+		<h1>
+		<?php echo $editText = $this->offerController != 1 ? $this->translate('Edit Offer') : $this->translate('Edit Social Code');
+		?>
 			<button type="button" 
 			onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>'"
 			href="#" class="btn ml10"><?php echo $this->translate('Cancel'); ?>
@@ -466,7 +468,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                 <div class="span12">
 					<button id="updateOfferBtn" type="submit" class="btn btn-large btn-primary fl">
 						<?php
-						echo $editText = $this->offerController == 1 ? $this->translate('EDIT Social Code')
+						echo $editText = $this->offerController == 1 ? $this->translate('EDIT SOCIAL CODE')
 							: $this->translate('EDIT OFFER');
 						?>
 					</button>
@@ -802,7 +804,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 			<div class="mainpage-content-colorbox" id="offerEndButtons">
 				<button id="updateOfferBtn" type="submit" class="btn btn-large btn-primary fl">
 				<?php
-					echo $editText = $this->offerController == 1 ? $this->translate('EDIT Social Code')
+					echo $editText = $this->offerController == 1 ? $this->translate('EDIT SOCIAL CODE')
 						: $this->translate('EDIT OFFER');
 					?>
 				</button>
