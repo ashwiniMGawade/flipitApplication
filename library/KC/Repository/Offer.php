@@ -287,10 +287,6 @@ class Offer Extends \KC\Entity\Offer
         foreach ($topCouponCodes as $value) {
             $topOffers[] = $value['popularcode'];
         }
-
-       /* echo "<pre>";
-        print_r($topOffers);
-        die;*/
         return $topOffers;
     }
 
@@ -306,15 +302,12 @@ class Offer Extends \KC\Entity\Offer
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('s.logo', 'img')
         ->leftJoin('o.offertermandcondition', 'terms')
-
         ->where('o.deleted = 0')
         ->andWhere(
             "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
             cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
         )
-    
         ->andWhere('s.deleted = 0')
-     
         ->andWhere('o.offline = 0');
 
         if (!empty($shopCategories)) {
@@ -1039,7 +1032,6 @@ class Offer Extends \KC\Entity\Offer
 
         $network = \KC\Repository\Shop::getAffliateNetworkDetail($shopData['shopId']);
         if ($checkRefUrl) {
-            # retur false if s shop is not associated with any network
             if (! isset($network['affliatenetwork'])) {
                 return false;
             }
@@ -1058,7 +1050,6 @@ class Offer Extends \KC\Entity\Offer
                  $subid = "&". $network['subid'];
                  $clientIP = \FrontEnd_Helper_viewHelper::getRealIpAddress();
                  $clientProperAddress = ip2long($clientIP);
-                 # get click detail and replcae A2ASUBID click subid
                  $conversion = \KC\Repository\Conversions::getConversionId($shopData['id'], $clientProperAddress, 'offer');
                  $subid = str_replace('A2ASUBID', $conversion['subid'], $subid);
                 $subid = \FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
@@ -1306,7 +1297,6 @@ class Offer Extends \KC\Entity\Offer
     public static function deleteOffer($id)
     {
         if ($id) {
-          
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
             ->select('s.id as shopId, o.extendedUrl')
@@ -1323,9 +1313,9 @@ class Offer Extends \KC\Entity\Offer
             $key = '6_topOffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $shophowtokey = '6_topOffersHowto'  . $u['shopId'] . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = '4_shopLatestUpdates'  .$u['shopId'] . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_expiredOffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'extendedTopOffer_of_'.$u['shopId'];
@@ -1406,7 +1396,6 @@ class Offer Extends \KC\Entity\Offer
     public static function restoreOffer($id)
     {
         if ($id) {
-
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
             ->select('s.id as shopId')
@@ -1449,7 +1438,6 @@ class Offer Extends \KC\Entity\Offer
         } else {
             $id = null;
         }
-        //call cache function
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
@@ -1596,7 +1584,6 @@ class Offer Extends \KC\Entity\Offer
         $adapter = new \Zend_File_Transfer_Adapter_Http();
         $user_path = ROOT_PATH . $uploadPath;
         $img = $imgName;
-
         
         if ($img) {
             unlink($user_path . $img);
@@ -1613,12 +1600,10 @@ class Offer Extends \KC\Entity\Offer
 
         foreach ($files as $file => $info) {
             if ($file=='uploadoffer' && $info['name']!='') {
-
                 $name = $adapter->getFileName($file, false);
                 $name = $adapter->getFileName($file);
                 $orgName = time() . "_" . $info['name'];
                 $fname = $user_path . $orgName;
-                //call function resize image
                 $path = ROOT_PATH . $uploadPath . "thum_" . $orgName;
                 \BackEnd_Helper_viewHelper::resizeImage(
                     $_FILES["uploadoffer"],
@@ -1627,7 +1612,6 @@ class Offer Extends \KC\Entity\Offer
                     90,
                     $path
                 );
-                //call function resize image
                 $path = ROOT_PATH . $uploadPath . "thum_large" . $orgName;
                 \BackEnd_Helper_viewHelper::resizeImage(
                     $_FILES["uploadoffer"],
@@ -1666,7 +1650,6 @@ class Offer Extends \KC\Entity\Offer
         $adapter = new \Zend_File_Transfer_Adapter_Http();
         $user_path = ROOT_PATH . $uploadPath;
         $img = $imgName;
-        //unlink image file from folder if exist
         if ($img) {
             unlink($user_path . $img);
             unlink($user_path . "thum_" . $img);
@@ -1685,19 +1668,16 @@ class Offer Extends \KC\Entity\Offer
             $name = $adapter->getFileName($file);
             $orgName = time() . "_" . $info['name'];
             $fname = $user_path . $orgName;
-            //call function resize image
             $path = ROOT_PATH . $uploadPath . "thum_" . $orgName;
-
-            BackEnd_Helper_viewHelper::resizeImageForAjax(
+            \BackEnd_Helper_viewHelper::resizeImageForAjax(
                 $_FILES["tileupload"],
                 $orgName,
                 126,
                 90,
                 $path
             );
-            //call function resize image
             $path = ROOT_PATH . $uploadPath . "thum_large" . $orgName;
-            BackEnd_Helper_viewHelper::resizeImageForAjax(
+            \BackEnd_Helper_viewHelper::resizeImageForAjax(
                 $_FILES["tileupload"],
                 $orgName,
                 132,
@@ -1706,7 +1686,7 @@ class Offer Extends \KC\Entity\Offer
             );
 
             $path = ROOT_PATH . $uploadPath . "thum_small_" . $orgName;
-            $thum_small = BackEnd_Helper_viewHelper::resizeImageForAjax(
+            $thum_small = \BackEnd_Helper_viewHelper::resizeImageForAjax(
                 $_FILES["tileupload"],
                 $orgName,
                 80,
@@ -1715,7 +1695,7 @@ class Offer Extends \KC\Entity\Offer
             );
 
             $path = ROOT_PATH . $uploadPath . "thum_large_" . $orgName;
-            $thum_small = BackEnd_Helper_viewHelper::resizeImageForAjax(
+            $thum_small = \BackEnd_Helper_viewHelper::resizeImageForAjax(
                 $_FILES["tileupload"],
                 $orgName,
                 127,
@@ -1724,7 +1704,7 @@ class Offer Extends \KC\Entity\Offer
             );
 
             $adapter->addFilter(
-                new Zend_Filter_File_Rename(
+                new \Zend_Filter_File_Rename(
                     array(
                             'target' => $fname,
                             'overwrite' => true
@@ -1755,38 +1735,24 @@ class Offer Extends \KC\Entity\Offer
         $rootPath = ROOT_PATH.$uploadPath;
         $files = $adapter->getFileInfo($file);
 
-        // check upload directory exists, if no then create upload directory
         if (!file_exists($rootPath)) {
             mkdir($rootPath, 0776, true);
         }
 
-        // set destination path and apply validations
         $adapter->setDestination($rootPath);
         $adapter->addValidator('Extension', false, 'jpg,png');
         $adapter->addValidator('Size', false, array('max' => '2MB'));
-        // get file name
         $name = $adapter->getFileName($file, false);
-        // rename file name to by prefixing current unix timestamp
         $newName = time() . "_" . $name;
-        // generates complete path of image
         $cp = $rootPath . $newName;
-        /**
-         *   generating thumnails for image
-         */
-
         $path = ROOT_PATH . $uploadPath . "thum_" . $newName;
         \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 135, 95, $path);
-
         $path = $uploadPath . "thum_medium_" . $newName;
         \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 50, 50, $path);
-
         $path = $uploadPath . "thum_large_" . $newName;
         \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 95, 95, $path);
-
         $path = $uploadPath . "thum_small_" . $newName;
         \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 24, 24, $path);
-
-        // apply filter to rename file name and set target
         $adapter
         ->addFilter(
             new \Zend_Filter_File_Rename(
@@ -1798,10 +1764,7 @@ class Offer Extends \KC\Entity\Offer
             null,
             $file
         );
-
-        // recieve file for upload
         $adapter->receive($file);
-        // check is file is valid then
         if ($adapter->isValid($file) == 1) {
             $data = $newName;
             return $data;
@@ -2239,11 +2202,9 @@ class Offer Extends \KC\Entity\Offer
         ->addOrderBy('o.startDate', 'DESC')
         ->addOrderBy('o.popularityCount', 'DESC')
         ->addOrderBy('o.title', 'ASC');
-        // check need to get execlusive offers or not
         if ($getExclusiveOnly) {
             $query = $query->andWhere('o.exclusiveCode = 1');
         }
-        // check $limit if passed or not
         if ($limit) {
             $query = $query->setMaxResults($limit);
         }
@@ -2290,22 +2251,14 @@ class Offer Extends \KC\Entity\Offer
             );
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         foreach ($data as $value) {
-
-            # update only when there ar new click out in view_count table
             if ($value['clicks']) {
-
                     \KC\Repository\ViewCount::processViewCount($value['id']);
                     $newtotal = intval($value['clicks']) + intval($value['totalViewcount']) ;
-
                     $dStart = date("y-m-d h:i:s");
                     $dEnd  = $value['startDate'];
                     $dDiff = $dEnd->diff($dStart);
-
                     $diff = (int) $dDiff->days ;
-
                     $popularity = round($newtotal / ($diff > 0 ? $diff : 1 ), 4);
-
-                    # update popularity and otal click counts
                     $query = $queryBuilder
                         ->update('KC\Entity\Offer', 'o')
                         ->set('o.totalViewcount', $newtotal)
@@ -2401,7 +2354,6 @@ class Offer Extends \KC\Entity\Offer
         ->setParameter(1, 'positive')
         ->andWhere('v.vote = ?1');
         $positiveVotes = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
         $query = $queryBuilder
         ->select('count(v.id) as cnt')
         ->from('KC\Entity\Votes', 'v')
@@ -2471,45 +2423,29 @@ class Offer Extends \KC\Entity\Offer
             ->where("o.id=".$id);
         $offer = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $urlsArray = array();
-
-        # check for related shop permalink
         if (isset($offer['shop'])) {
             $urlsArray[] = $offer[0]['shopPermaLink'];
-
-            # check if a shop has editor or not
             if (isset($offer[0]['contentManagerId'])) {
-
-                # redactie permalink
                 $redactie =  \KC\Repository\User::returnEditorUrl($offer[0]['contentManagerId']);
-
-                # check if an editor  has permalink then add it into array
                 if (isset($redactie['permalink']) && strlen($redactie['permalink']) > 0) {
                     $urlsArray[] = $redactie['permalink'] ;
                 }
             }
-
         }
-
-        # check for extende offer page
         if (isset($offer[0]['extendedOffer'])) {
-            # check for extende offer url
             if ($offer[0]['extendedUrl'] && strlen($offer[0]['extendedUrl']) > 0) {
                 $urlsArray[] = \FrontEnd_Helper_viewHelper::__link('link_deals') .'/'. $offer[0]['extendedUrl'];
             }
         }
 
-        # check for shop permalink
         if ($offer[0]['howToUse']) {
-            # check for extende offer url
             if (isset($offer[0]['shopPermaLink'])  && strlen($offer[0]['shopPermaLink']) > 0) {
                 $urlsArray[] = \FrontEnd_Helper_viewHelper::__link('link_how-to') .'/'. $offer[0]['shopPermaLink'];
             }
         }
 
         $cetgoriesPage = \FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
-        # traverse through all catgories
         foreach ($offer as $value) {
-            # check if a category has permalink then add it into array
             if (isset($value['categoryPermalink']) && strlen($value['categoryPermalink']) > 0) {
                 $urlsArray[] = $cetgoriesPage . $value['categoryPermalink'];
                 $urlsArray[] = $cetgoriesPage . $value['categoryPermalink'] .'/2';
@@ -2517,10 +2453,7 @@ class Offer Extends \KC\Entity\Offer
             }
         }
 
-        # check an offerr has one or more pages
-            # traverse through all pages
         foreach ($offer as $value) {
-            # check if a page has permalink then add it into array
             if (isset($value['pagePermalink']) && strlen($value['pagePermalink']) > 0) {
                 $urlsArray[] = $value['pagePermalink'] ;
             }
@@ -2532,7 +2465,6 @@ class Offer Extends \KC\Entity\Offer
     {
         $format = 'Y-m-j H:i:s';
         $date = date($format);
-        // - 7 days from today
         $past7Days = date($format, strtotime('-7 day' . $date));
         $nowDate = $date;
 
@@ -2809,11 +2741,9 @@ class Offer Extends \KC\Entity\Offer
 
             if (intval($params['selctedshop']) > 0) {
                 $saveOffer->shopOffers = $entityManagerUser->find('KC\Entity\Shop', $params['selctedshop']);
-
             } else {
                 return array('result' => true , 'errType' => 'shop' );
             }
-
         }
 
         if (isset($params['fromWhichShop']) && $params['fromWhichShop']== 0) {
@@ -2863,12 +2793,9 @@ class Offer Extends \KC\Entity\Offer
             $saveOffer->shopOffers = $entityManagerUser->find('KC\Entity\Shop', $saveNewShop->__get('id'));
 
         }
-        try {
-                   
+        try {    
                 $entityManagerUser->persist($saveOffer);
                 $entityManagerUser->flush();
-    
-            
             if (isset($params['couponCodeCheckbox'])) {
                 if (isset($params['selectedcategories'])) {
                     foreach ($params['selectedcategories'] as $categories) {
@@ -2905,8 +2832,6 @@ class Offer Extends \KC\Entity\Offer
                 $entityManagerUser->persist($offerTerms);
                 $entityManagerUser->flush();
             }
-
-            /***************** Start Add news code ********************/
             $lId = $saveOffer->getId();
             if (isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news") {
                 $newstitleloop = @$params['newsTitle'];
@@ -2928,7 +2853,6 @@ class Offer Extends \KC\Entity\Offer
                     $entityManagerUser->flush();
                 }
             }
-            /***************** End Add news code ********************/
             $offer_id = $saveOffer->getId();
             if (isset($params['codealertcheckbox']) && $params['codealertcheckbox'] == '1') {
                 $codeAlertShopId = isset($params['selctedshop']) && $params['selctedshop'] != '' ?
@@ -3005,10 +2929,7 @@ class Offer Extends \KC\Entity\Offer
         } else {
             $updateOffer->shopOffers =  $entityManagerLocale->find('KC\Entity\Shop', $params['selctedshop']);
         }
-        // check the discountype
-
         if (intval($params['offerImageSelect']) > 0) {
-
             $updateOffer->tilesId =  $params['offerImageSelect'] ;
 
         }
@@ -3017,7 +2938,7 @@ class Offer Extends \KC\Entity\Offer
         if (isset($params['couponCodeCheckbox'])) {
             $updateOffer->discountType = 'CD';
             $updateOffer->couponCode = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponCode']);
-            $updateOffer->discount = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountamount']);
+            $updateOffer->discount = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountamount']);
             $updateOffer->discountvalueType = \BackEnd_Helper_viewHelper::stripSlashesFromString(
                 isset($params['discountchk']) ? $params['discountchk'] : 0
             );
@@ -3037,23 +2958,17 @@ class Offer Extends \KC\Entity\Offer
 
         } else {
             $updateOffer->discountType = 'PA';
-
-            //find if the offers exist in popular codes
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                     ->select('p.position')
                     ->from('KC\Entity\PopularCode', 'p')
                     ->where('p.popularcode = '.$params['offerId']);
-        
             $exist = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
             if ($exist) {
                 KC\Repository\PopularCode::deletePopular($params['offerId'], $exist['position']);
             }
 
-            //check printable document
             if (isset($_FILES['uploadoffer']['name']) && $_FILES['uploadoffer']['name'] != '') {
-
                 $updateOffer->refOfferUrl = '';
                 $fileName = self::uploadFile($_FILES['uploadoffer']['name']);
                 $ext =  \BackEnd_Helper_viewHelper::stripSlashesFromString(
@@ -3065,7 +2980,6 @@ class Offer Extends \KC\Entity\Offer
                     return false;
                 }
                 if (@$matches[1]) {
-
                     $offerImage  = new \KC\Entity\Image();
                     $offerImage->ext = $ext;
                     $offerImage->path ='images/upload/offer/';
@@ -3078,21 +2992,17 @@ class Offer Extends \KC\Entity\Offer
                     $entityManagerLocale->flush();
                     $saveOffer->offerlogoid =  $offerImage->getId();
                 }
-
             } else {
                 $updateOffer->refOfferUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerrefurlPR']);
             }
         }
-
         $updateOffer->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['addofferTitle']);
-
         if (isset($params['deepLinkStatus'])) {
             $updateOffer->refURL =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerRefUrl']);
         } else {
             $updateOffer->refURL =  '';
         }
         
-
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
             $startDate = date('Y-m-d', strtotime($params['offerStartDate']))
             .' '.date(
@@ -3109,8 +3019,6 @@ class Offer Extends \KC\Entity\Offer
         }
 
         if (isset($params['extendedoffercheckbox'])) {
-
-            // check if offer is extended
             $updateOffer->extendedOffer = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedoffercheckbox']);
             $updateOffer->extendedTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
             $updateOffer->extendedoffertitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedTitle']);
@@ -3120,7 +3028,6 @@ class Offer Extends \KC\Entity\Offer
             );
             $updateOffer->extendedFullDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponInfo']);
         } else {
-
             $updateOffer->extendedOffer = 0;
             $updateOffer->extendedTitle = '';
             $updateOffer->extendedUrl = '';
@@ -3215,7 +3122,6 @@ class Offer Extends \KC\Entity\Offer
             } else {
                 return false;
             }
-
             $saveNewShop->logoId = $shopImage->getId();
             $entityManagerLocale->persist($saveNewShop);
             $entityManagerLocale->flush();
@@ -3291,13 +3197,8 @@ class Offer Extends \KC\Entity\Offer
             }
         }
 
-
         try {
-                
-                $lId = $params['offerId'];
-
-            /*****************Add more news of offer******************/
-
+            $lId = $params['offerId'];
             $offerId = @$params['offerId'];
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->delete('KC\Entity\OfferNews', 'n')
@@ -3307,17 +3208,13 @@ class Offer Extends \KC\Entity\Offer
             if (isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news") {
                 $newsloop = @$params['newsTitle'];
                 for ($n=0; $n<count($newsloop); $n++) {
-
                     $savenews = new \KC\Entity\OfferNews();
                     $savenews->shop = @$entityManagerLocale->find('KC\Entity\Shop', $params['selctedshop']);
                     $savenews->offerId = @$offerId;
-
                     $savenews->title = @$newsloop[$n] != "" ?
                              \BackEnd_Helper_viewHelper::stripSlashesFromString($newsloop[$n]) : "";
-
                     $savenews->url = @$params['newsrefUrl'][$n] != "" ?
                                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['newsrefUrl'][$n]) : "";
-
                     $savenews->content = @$params['newsDescription'][$n] != "" ?
                         \BackEnd_Helper_viewHelper::stripSlashesFromString($params['newsDescription'][$n]) : "";
                     $savenews->linkstatus = @$params['newsdeepLinkStatus'][$n];
@@ -3325,8 +3222,6 @@ class Offer Extends \KC\Entity\Offer
                     $entityManagerLocale->flush();
                 }
             }
-
-            /***********End update more news of offer shop*************/
 
             $offerID = $params['offerId'];
             $authorId = self::getAuthorId($offerID);
@@ -3366,19 +3261,14 @@ class Offer Extends \KC\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-
-        
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');      
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
-
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
-
             $key = 'all_widget5_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'all_widget6_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
             return array('result' => true);
         } catch (Exception $e) {
             return false;
