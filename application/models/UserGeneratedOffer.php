@@ -16,8 +16,7 @@ class UserGeneratedOffer extends BaseOffer
         $deletedStatus      = $parameters['flag'];
         $getOffersQuery = Doctrine_Query::create()
             ->select(
-                'o.id,o.id,o.title, s.name,s.accountManagerName as acName,o.totalViewcount as clicks,
-                o.discountType,o.Visability,o.extendedOffer,o.startDate,o.endDate,authorName,o.refURL,o.couponcode'
+                'o.id, s.name, o.startDate,o.endDate, o.couponcode'
             )
             ->from("UserGeneratedOffer o")
             ->leftJoin('o.shop s')
@@ -27,23 +26,16 @@ class UserGeneratedOffer extends BaseOffer
         if ($userRole=='4') {
             $getOffersQuery->andWhere("o.Visability='DE'");
         }
-        if ($searchOffer != '') {
-            $getOffersQuery->andWhere("o.title LIKE ?", "%".$searchOffer."%");
-        }
         if ($searchShop!='') {
             $getOffersQuery->andWhere("s.name LIKE ?", "%".$searchShop."%");
         }
         if ($searchCoupon!='') {
             $getOffersQuery->andWhere("o.couponcode LIKE ?", "%".$searchCoupon."%");
         }
-        if ($searchCouponType!='') {
-            $getOffersQuery->andWhere("o.discountType='".$searchCouponType."'");
-        }
         $offersList = DataTable_Helper::generateDataTableResponse(
             $getOffersQuery,
             $parameters,
-            array("__identifier" => 'o.id','o.title','s.name','o.discountType','o.refURL','o.couponcode','o.startDate',
-                'o.endDate', 'clicks','authorName'),
+            array("__identifier" => 'o.id','s.name','o.couponcode','o.startDate', 'o.endDate'),
             array(),
             array()
         );
