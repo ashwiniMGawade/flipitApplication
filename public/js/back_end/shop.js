@@ -278,7 +278,7 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
                                     if(obj.aData.offlineSicne !=null && obj.aData.offlineSicne !='undefined' ) {
                                         var splitdate = obj.aData.offlineSicne.date.split(" ");
                                         if (obj.aData.offlineSicne.date != null && splitdate[0] != '1970-01-01') {
-                                            var date = obj.aData.offlineSicne.date;  
+                                            var tag = obj.aData.offlineSicne.date;  
                                         }
                                     }
                                 }

@@ -620,87 +620,98 @@ class Shop extends \KC\Entity\Shop
     {
         if ($id) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\Shop', 's')
+            $shopInfo = $queryBuilder->select('shp')
+                ->from('KC\Entity\Shop', 'shp')
+                ->where("shp.id=" . $id)
+                ->getQuery()
+                ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $shopInfo = (object) $shopInfo;
+            if ($shopInfo->deleted == 1) {
+                $refShopCategoryQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                $query = $refShopCategoryQueryBuilder->delete('KC\Entity\refShopCategory', 'r')
+                    ->where("r.category=" . $id)
+                    ->getQuery()->execute();
+
+                $PopularShopQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                $query = $PopularShopQueryBuilder->delete('KC\Entity\PopularShop', 'p')
+                    ->where("p.popularshops=" . $id)
+                    ->getQuery()->execute();
+
+                $RefArticleStoreQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                $query = $RefArticleStoreQueryBuilder->delete('KC\Entity\RefArticleStore', 'rp')
+                    ->where("rp.articleshops=" . $id)
+                    ->getQuery()->execute();
+
+                $OfferQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                $offer = $OfferQueryBuilder->select('o')
+                    ->from('KC\Entity\Offer', 'o')
+                    ->where("o.shopOffers=" . $id)
+                    ->getQuery()
+                    ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+                foreach ($offer as $off) {
+                    \KC\Repository\Offer::deleteOffer($off['id']);
+                }
+
+                $OfferNewsQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                $query = $OfferNewsQueryBuilder->delete('KC\Entity\OfferNews', 'ofn')
+                    ->where("ofn.shop=" . $id)
+                    ->getQuery()->execute();
+
+                $RoutePermalinkQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                $query = $RoutePermalinkQueryBuilder->delete('KC\Entity\RoutePermalink', 'route')
+                    ->where($queryBuilder->expr()->eq("route.permalink", $queryBuilder->expr()->literal($shopInfo->permaLink)))
+                    ->getQuery()->execute();
+               
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $id);
+                //call cache function
+                $key = 'shop_similar_shops';
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+                $cacheKey = \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopInfo->permaLink);
+                $key = 'store_'.$cacheKey.'_howToGuide';
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_storesHeader_image');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popularShops_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
+
+                # update chain if shop is associated with chain
+                if ($shopInfo->chainItemId) {
+                    $RoutePermalinkQueryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
+                    $query = $RoutePermalinkQueryBuilder->delete('KC\Entity\chainItem', 'st')
+                        ->where("ct.chainItem=" . $shopInfo->chainId)
+                        ->where("ct.shopId=" . $shopInfo->id)
+                        ->getQuery()->execute();
+                }
+                
+                //call cache function
+                $key = 'shop_similar_shops';
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+                $cacheKey = \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopInfo->permaLink);
+                $key = 'store_'.$cacheKey.'_howToGuide';
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popularShops_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
+            }
+
+            $shopQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $shopQueryBuilder->delete('KC\Entity\Shop', 's')
                 ->where("s.id=" . $id)
                 ->getQuery()->execute();
             return true;
         }
-        return false ;
-    }
-
-    public function preDelete($event)
-    {
-        $id = $this->id;
-        # check if shop is deleted permanently
-        if ($this->deleted == 1) {
-            $dela = Doctrine_Query::create()->delete()
-             ->from('refShopCategory r')->where('r.shopid=' . $id)
-            ->execute();
-
-            $delb = Doctrine_Query::create()->delete()->from('PopularShop p')
-            ->where('p.shopId=' . $id)->execute();
-            $del2 = Doctrine_Query::create()->delete()->from('RefArticleStore p')
-            ->where('p.storeid=' . $id)->execute();
-            $offer  = Doctrine_Query::create()->select('o.id')->from('Offer o')->where('o.shopId='.$id)->fetchArray();
-            
-            foreach ($offer as $off) {
-                Offer::deleteOffer($off['id']);
-            }
-
-            $del2 = Doctrine_Query::create()->delete()->from('OfferNews p')
-            ->where('p.shopId=' . $id)->execute();
-            $del2 = Doctrine_Query::create()->delete()->from('RefArticleStore p')
-            ->where('p.storeid=' . $id)->execute();
-            $del = Doctrine_Query::create()->delete()->from('Shop s')
-            ->where("s.id=" . $id)->execute();
-            $delPermalink = Doctrine_Query::create()->delete()->from('RoutePermalink p')
-            ->where("permalink=". "'.$this->permaLink.'")->execute();
-            $delPermalink = Doctrine_Query::create()->delete()->from('RoutePermalink p')
-            ->where("permalink=". "'$this->permaLink'")->execute();
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $id);
-            //call cache function
-            $key = 'shop_similar_shops';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($this->permaLink);
-            $key = 'store_'.$cacheKey.'_howToGuide';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_storesHeader_image');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popularShops_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
-
-            # update chain if shop is associated with chain
-            if ($this->chainItemId) {
-                $chainItem = Doctrine_Core::getTable("ChainItem") ->findBySql(
-                        'shopId = ? AND chainId = ?',
-                        array($this->id,$this->chainId),
-                        Doctrine::HYDRATE_RECORD)->getData();
-
-                $itemId = $chainItem[0]->id;
-                $chainItem[0]->deleteChainItem($itemId);
-            }
-        }
-        //call cache function
-        $key = 'shop_similar_shops';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($this->permaLink);
-        $key = 'store_'.$cacheKey.'_howToGuide';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popularShops_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
-        return $id;
-
+        return false;
     }
 
     public static function restoreShop($id)
@@ -1219,8 +1230,7 @@ class Shop extends \KC\Entity\Shop
                     }
                 }
             }
-            return $shopInfo->id;
-            //to be refactored when chain item model is done
+
             if (!empty($shopDetail['id'])) {
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
@@ -1236,17 +1246,18 @@ class Shop extends \KC\Entity\Shop
                 $cacheKeyOfferDetails = 'offerDetails_'  . $shopInfo->id . '_list';
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $shopInfo->id);
-                   /* if($shopInfo->chainItemId) {
-                        $chainItem = Doctrine_Core::getTable("ChainItem") ->findBySql(
-                                            'shopId = ? AND id = ?',
-                                            array($shopInfo->id,$shopInfo->chainItemId),
-                                            Doctrine::HYDRATE_RECORD)->getData();
-                        # verify a valid chain item exists
-                        if(isset($chainItem[0])) {
-                             $chainItem[0]->update($data,$shopInfo->toArray(false));
-                        }
-                    }*/
+                if ($shopInfo->chainItemId) {
+                    $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
+                    $query = $queryBuilder->update('KC\Entity\chainItem', 'st')
+                        ->set('ct.shopName', $queryBuilder->expr()->literal($shopInfo->name))
+                        ->set('ct.permalink', $queryBuilder->expr()->literal($shopInfo->permaLink))
+                        ->set('ct.status', $queryBuilder->expr()->literal($shopInfo->status))
+                        ->where("ct.id=" . $shopInfo->chainItemId)
+                        ->where("ct.shopId=" . $shopInfo->id)
+                        ->getQuery()->execute();
+                }
             }
+        return $shopInfo->id;
         } catch (Exception $e) {
             return false;
         }
@@ -1702,7 +1713,7 @@ class Shop extends \KC\Entity\Shop
     {
         $status = $params['status'] == 'offline' ? '0' : '1';
         if ($params['status'] == 'offline') {
-            $date = date('Y-m-d H:i:s');
+            $date = new \DateTime('now');
             $status = 0 ;
         } else {
             $status = 1 ;
@@ -1716,14 +1727,12 @@ class Shop extends \KC\Entity\Shop
         ->where('s.id='.$params['id']);
         $shopDetail = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->update('KC\Entity\Shop', 's')
-            ->set('s.status', $queryBuilder->expr()->literal($status))
-            ->set('s.offlineSicne', $queryBuilder->expr()->literal($date))
-            ->setParameter(1, $params['id'])
-            ->where('s.id = ?1')
-            ->getQuery();
-        $shop = $query->execute();
+        $entityManagerLocale  = \Zend_Registry::get('emLocale');
+        $shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $params['id']);
+        $shop->status = $status;
+        $shop->offlineSicne = $date;
+        $entityManagerLocale->persist($shop);
+        $entityManagerLocale->flush();
         $key = 'shop_similar_shops';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shopDetails_'.$params['id'].'_list';

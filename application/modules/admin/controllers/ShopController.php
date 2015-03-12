@@ -1483,13 +1483,13 @@ class Admin_ShopController extends Zend_Controller_Action
         $parameters = $this->_getAllParams();
         self::updateVarnish($parameters['id']);
         $ret = \KC\Repository\Shop::changeStatus($parameters);
-        $offlineDate = $ret['offlineSince']->format('y-m-h');
+        $offlineDate = $ret['offlineSince']->format('y-m-d');
         if ($ret['offlineSince'] && $ret['howToUse'] == 1) {
             $this->_helper->json(array('date' => $offlineDate, 'message'=> 1));
         } else if ($ret['offlineSince'] && $ret['howToUse'] == '') {
             $this->_helper->json(array('date'=>$offlineDate, 'message'=>0));
         } else {
-            $this->_helper->json($ret['offlineSince']);
+            $this->_helper->json($ret['offlineSince']->format('y-m-d'));
         }
     }
 
