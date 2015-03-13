@@ -1719,7 +1719,6 @@ class Shop extends \KC\Entity\Shop
             $status = 1 ;
             $date = null;
         }
-
         $queryBuilderShop = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilderShop
         ->select('s.offlineSicne, s.howToUse')
@@ -1737,7 +1736,7 @@ class Shop extends \KC\Entity\Shop
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shopDetails_'.$params['id'].'_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        return array('offlineSince'=>$shopDetail[0]['offlineSicne'], 'howToUse'=>$shopDetail[0]['howToUse']);
+        return array('offlineSince'=>$shop->offlineSicne, 'howToUse'=>$shopDetail[0]['howToUse']);
     }
 
     public static function getAmountShopsCreatedLastWeek()

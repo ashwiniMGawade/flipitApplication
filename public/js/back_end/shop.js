@@ -437,8 +437,8 @@ function changeStatus(id,obj,status){
         data : "id="+id+"&status="+status,
         success: function(ret)
         {
-            if(ret)
-            {   
+            if(ret && ret.date !== undefined)
+            {
                 $(obj).parents('td').next('td').html( "<a href='javascript:void(0);'>"+ ret.date +"</a>");
             }else {
                 $(obj).parents('td').next('td').html( "");
