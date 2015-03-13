@@ -44,8 +44,7 @@ foreach ($this->offers as $offer) {
             $offerHolderClass = "offer-holder";
             $urlToShow = $offerPartial->getUrlToShow($offer);
         }
-        $site = LOCALE == '' ? "Kortingscode" : "Flipit";
-        $defaultText = FrontEnd_Helper_viewHelper::__translate('This code is not verified by').' '.$site.' ';
+        $defaultText = FrontEnd_Helper_viewHelper::__translate('This code is not verified');
     }
 
     $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
@@ -129,11 +128,6 @@ foreach ($this->offers as $offer) {
     } else {
         echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], '');
     }
-    if ($offer->userGenerated == 1 && ($offer->approved == '1' || $offer->approved == '0') && $offer->nickname !='') : ?>
-        <li id="fr">
-            <?php echo $this->translate('Code shared by').' '.$offer->nickname;?>
-        </li>
-        <?php endif;
     ?>
                 </ul>
             </div>
@@ -180,7 +174,7 @@ foreach ($this->offers as $offer) {
         <?php if ($termsAndConditions != '') : ?>
         <div  class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
             <h2><?php echo $this->translate('Terms &amp; Conditions');
-            if (!empty($defaultText)) { echo '(' .$defaultText. ')';}?></h2>
+            if (!empty($defaultText)) { echo ' ' .$defaultText; }?></h2>
             <ol class="num-list">
             <?php echo $termsAndConditions;?>
             </ol>
