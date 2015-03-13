@@ -31,24 +31,6 @@ $howToUse = $this->partial(
                 </span>
 
                 <div class="photo">
-                <?php /*
-                    $editorText = FrontEnd_Helper_viewHelper::getEditorText(
-                        $this->shop['name'],
-                        $this->shopEditor[0]['editorText'],
-                        $this->shopEditor[1]
-                    );
-                    $i = 0;
-                    if (is_array($editorText)) { ?>
-                         <?php foreach ($editorText as $text) { ?>
-                                <span class = "text-box text-box-ballon" id="text-box-<?php echo $i;?>" style="display:none;"><?php echo $text; ?></span>
-                        <?php 
-                        $i++;
-                        } ?>
-              <?php } else { ?>
-                        <span id="text-box" class="text-box">
-                            <?php echo $editorText;?>
-                        </span>
-              <?php }  */?>
                     <span>
                         <img title="<?php echo $authorName; ?>" alt="<?php echo $authorName; ?>" class=""
                         src="<?php echo $shopEditorPath; ?>" width="120" height="120"/>
