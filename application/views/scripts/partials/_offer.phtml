@@ -128,11 +128,6 @@ foreach ($this->offers as $offer) {
     } else {
         echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], '');
     }
-    if ($offer->userGenerated == 1 && ($offer->approved == '1' || $offer->approved == '0') && $offer->nickname !='') : ?>
-        <li id="fr">
-            <?php echo $this->translate('Code shared by').' '.$offer->nickname;?>
-        </li>
-        <?php endif;
     ?>
                 </ul>
             </div>
