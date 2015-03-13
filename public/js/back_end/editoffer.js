@@ -753,7 +753,10 @@ function setFormData(data){
 	        }
 	});
 	jQuery('#ccode').html(' <label><strong>Coupon code</strong></label>');
-	getShopDetail(jQuery("#selctedshop").val());
+	if (jQuery('#socialCodeSelection').val() == 1) {
+		getShopDetail(jQuery("#selctedshop").val());
+	}
+	
 }
 
 function newschangelinkStatus(el)
