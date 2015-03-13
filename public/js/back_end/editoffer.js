@@ -671,7 +671,6 @@ function setFormData(data){
 	 }
 
 	if (data[0].title != undefined || data[0].title != null) {
-		console.log(data[0].title);
 	 	jQuery('#addofferTitle').val(data[0].title);
 	 	jQuery('#metaTextLeft').val(__("Offer title length ") + parseInt(data[0].title.length) + __(" characters"));
 	}

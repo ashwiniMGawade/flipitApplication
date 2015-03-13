@@ -1,27 +1,27 @@
 <?php
-$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/datepicker.css" );
-$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/timepicker.css" );
-$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "js/back_end/openwysiwyg_v1.4.7/styles/wysiwyg.css" );
-$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/back_end/bootstrap-combobox.css" );
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/datepicker.css");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/timepicker.css");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "js/back_end/openwysiwyg_v1.4.7/styles/wysiwyg.css");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/back_end/bootstrap-combobox.css");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.ui.widget.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.iframe-transport.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.fileupload.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.validate.js");
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/bootstrap-typeahead.js" );
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/select2.min.js" );
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/date.js" );
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-timepicker.js" );
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/bootbox.min.js" );
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/jquery.textareaCounter.plugin.js" );
-$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootstrap-typeahead.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/date.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-datepicker.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-timepicker.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.textareaCounter.plugin.js" );
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.NobleCount.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
-$this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/editoffer.js" );
-$date = date ( "Y-m-d" ); 
-$today = time ();
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/editoffer.js");
+$date = date("Y-m-d"); 
+$today = time();
 $twoMonthsLater = date('t-m-Y');
-$role = Zend_Auth::getInstance ()->getIdentity ()->roleId;
+$role = Zend_Auth::getInstance()->getIdentity()->roleId;
 $code = "kortingscodeoffernews";
 $secret = base64_encode($code);
 $shopLogo = $this->offerShopLogo;
@@ -289,13 +289,13 @@ echo $this->headTitle()->append($browserTitle);?>
                                     <strong><?php echo $this->translate('Export/sample')?></strong>
                                 </p>
                                 <div class="statistic-data text-left" style="margin-left: 20px;">
-                                        <p class="statistic-data">
-                                            <a 
-                                            href="<?php echo HTTP_PATH ?>admin/offer/exportcodelist/id/<?php echo $this->offerId; ?>"><?php echo $this->translate('Export Codes');?></a>
-                                        </p>
-                                        <p class="statistic-data">
-                                            <a href="<?php echo HTTP_PATH ?>admin/offer/empty-xlx"><?php echo $this->translate('Empty Excel File');?></a>
-                                        </p>
+                                    <p class="statistic-data">
+                                        <a 
+                                        href="<?php echo HTTP_PATH ?>admin/offer/exportcodelist/id/<?php echo $this->offerId; ?>"><?php echo $this->translate('Export Codes');?></a>
+                                    </p>
+                                    <p class="statistic-data">
+                                        <a href="<?php echo HTTP_PATH ?>admin/offer/empty-xlx"><?php echo $this->translate('Empty Excel File');?></a>
+                                    </p>
                                 </div>
                             </div>
                             <div class="clear line"></div>

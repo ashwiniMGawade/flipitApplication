@@ -35,7 +35,10 @@ class Offer extends BaseOffer
             ->from('Offer o')
             ->where('o.id ='.$offerId)
             ->fetchArray();
-        return $userGenerated = isset($offerDetail[0]['approved']) == 0 ? true : false;
+        if (isset($offerDetail[0]['approved'])) {
+            $userGenerated = $offerDetail[0]['approved'] == 0 ? true : false;
+        }
+        return $userGenerated;
     }
     
     public static function getOffersForNewsletter($offerIds)
