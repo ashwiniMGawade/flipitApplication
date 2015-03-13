@@ -30,7 +30,9 @@ $shopLogo = $this->offerShopLogo;
 <script type="text/javascript">
 var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" ;
 </script>
-<?php echo $this->headTitle()->append('Edit Offer');?>
+<?php 
+$browserTitle = $this->offerController == 1 ? 'Edit Social Code' : 'Edit Offer';
+echo $this->headTitle()->append($browserTitle);?>
 <div class="wrap columns-2 edit-offer-main-cont">
 	<form action="<?php echo HTTP_PATH; ?>admin/offer/updateoffer" name="addOffer" id="addOffer" method="POST"
 	enctype="multipart/form-data" autocomplete="off">
