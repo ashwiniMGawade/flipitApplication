@@ -107,11 +107,11 @@ class Admin_OfferController extends Zend_Controller_Action
     public function updateofferAction()
     {
         $parameters = $this->_getAllParams();
+        $offer = Doctrine_Core::getTable("Offer")->find($parameters['offerId']);
+        $offerUpdate = $offer->updateOffer($parameters);
         if ($parameters['approveSocialCode'] == 1) {
             UserGeneratedOffer::saveApprovedStatus($parameters['offerId'], $parameters['approveSocialCode']);
         }
-        $offer = Doctrine_Core::getTable("Offer")->find($parameters['offerId']);
-        $offerUpdate = $offer->updateOffer($parameters);
         $flashMessage = $this->_helper->getHelper('FlashMessenger');
         if ($offerUpdate['result']) {
             self::updateVarnish($parameters['offerId']);

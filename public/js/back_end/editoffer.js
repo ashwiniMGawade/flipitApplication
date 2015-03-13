@@ -1314,6 +1314,9 @@ function validateFormAddNewOffer(){
 				    		  return false; 
 				    	  }
 				    },
+				    offerImageSelect:{
+				    	required:true
+				    },
 				    'saleTiles[]':{ 
 				    	  required: function(el)
 				    	  {
@@ -1489,6 +1492,9 @@ function validateFormAddNewOffer(){
 				    'selectedTiles[]': { 
 				    	  required: __("Please select a offer image") 
 				    },
+				    offerImageSelect:{
+				    	required : __("Please Select Offer Tile")
+				    },
 					selctedshop : {
 						required : __("Please Select Shop")
 					},
@@ -1571,7 +1577,7 @@ function validateFormAddNewOffer(){
 										.prev('div')).removeClass(validClass) ;
 						
 						if(element.name == 'selectedTiles[]' || element.name == 'saleTiles[]')
-						{
+						{alert('sss');
 							jQuery(window).scrollTop(400) ;
 						}
 						

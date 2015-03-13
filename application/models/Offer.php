@@ -1848,7 +1848,6 @@ class Offer extends BaseOffer
 
     public function updateOffer($params)
     {
-        //echo "<pre>"; print_r($params); die;
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
                 // check the offer type
             if (isset($params['defaultoffercheckbox'])) {      //offer type is default
