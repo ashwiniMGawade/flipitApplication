@@ -752,9 +752,9 @@ function setFormData(data){
 	        }
 	});
 	jQuery('#ccode').html(' <label><strong>Coupon code</strong></label>');
-	if (jQuery('#socialCodeSelection').val() == 1) {
-		getShopDetail(jQuery("#selctedshop").val());
-	}
+    if (jQuery('#socialCodeSelection').val() == 1) {
+        getShopDetail(jQuery("#selctedshop").val());
+    }
 	
 }
 
@@ -1574,10 +1574,10 @@ function validateFormAddNewOffer(){
 								.addClass(errorClass);
 
 						jQuery('span.help-inline', jQuery(element).parent('div')
-										.prev('div')).removeClass(validClass) ;
+						.prev('div')).removeClass(validClass);
 						
 						if(element.name == 'selectedTiles[]' || element.name == 'saleTiles[]')
-						{alert('sss');
+						{
 							jQuery(window).scrollTop(400) ;
 						}
 						

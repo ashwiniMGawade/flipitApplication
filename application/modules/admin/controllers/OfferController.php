@@ -69,7 +69,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $pageObj = new Page();
         $this->view->pages = $pageObj->getPagesOffer();
 
-        $allTiles = $this->getalltiles2Action();
+        $allTiles = $this->getAllTilesForOfferAction();
         $this->view->tiles = $allTiles;
 
         $flash = $this->_helper->getHelper('FlashMessenger');
@@ -93,13 +93,13 @@ class Admin_OfferController extends Zend_Controller_Action
         $shopImageOfOffer = new Offer();
         $shop = $shopImageOfOffer::getOfferShopDetail($offerId);
         $this->view->offerShopLogo = $shop;
-        $shopObj = new Shop();
-        $this->view->shopList = $shopObj->getOfferShopList();
+        $shopObject = new Shop();
+        $this->view->shopList = $shopObject->getOfferShopList();
         $categoryObject = new Category();
         $this->view->categoryList = $categoryObject->getCategoriesInformation();
         $pageObject = new Page();
         $this->view->pages = $pageObject->getPagesOffer();
-        $allTiles = $this->getalltiles2Action();
+        $allTiles = $this->getAllTilesForOfferAction();
         $this->view->tiles = $allTiles;
     }
 
@@ -108,12 +108,12 @@ class Admin_OfferController extends Zend_Controller_Action
     {
         $parameters = $this->_getAllParams();
         $offer = Doctrine_Core::getTable("Offer")->find($parameters['offerId']);
-        $offerUpdate = $offer->updateOffer($parameters);
+        $offerUpdated = $offer->updateOffer($parameters);
         if ($parameters['approveSocialCode'] == 1) {
             UserGeneratedOffer::saveApprovedStatus($parameters['offerId'], $parameters['approveSocialCode']);
         }
         $flashMessage = $this->_helper->getHelper('FlashMessenger');
-        if ($offerUpdate['result']) {
+        if ($offerUpdated['result']) {
             self::updateVarnish($parameters['offerId']);
             $message = $this->view->translate('Offer has been updated successfully.');
             $flashMessage->addMessage(array('success' => $message ));
@@ -908,7 +908,7 @@ class Admin_OfferController extends Zend_Controller_Action
         //return $Tiles;
     }
 
-    public function getalltiles2Action()
+    public function getAllTilesForOfferAction()
     {
         $Tiles = OfferTiles::getAllTiles();
         //echo Zend_Json::encode($Tiles);

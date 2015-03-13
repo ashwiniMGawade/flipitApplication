@@ -18,12 +18,10 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.NobleCount.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/editoffer.js");
-$date = date("Y-m-d"); 
-$today = time();
+$date = date("Y-m-d");
 $twoMonthsLater = date('t-m-Y');
 $role = Zend_Auth::getInstance()->getIdentity()->roleId;
 $code = "kortingscodeoffernews";
-$secret = base64_encode($code);
 $shopLogo = $this->offerShopLogo;
 ?>
 <script type="text/javascript">
@@ -37,7 +35,8 @@ echo $this->headTitle()->append($browserTitle);?>
     enctype="multipart/form-data" autocomplete="off">
         <input type="hidden" name='couponCodeType' id='couponCodeType' value='' />
         <h1>
-        <?php echo $editText = $this->offerController != 1 ? $this->translate('Edit Offer') : $this->translate('Edit Social Code');
+        <?php echo $editText = $this->offerController != 1 ? $this->translate('Edit Offer')
+        : $this->translate('Edit Social Code');
         ?>
             <button type="button" 
             onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>'"
@@ -72,16 +71,16 @@ echo $this->headTitle()->append($browserTitle);?>
                             <div class="span8">
                                 <select onchange="getShopDetail(this.value);"  style="display: none; width : 250px;"
                                 class="combobox" name="whichshop" id="whichshop">
-                                <option value=""></option>
-                                <?php
-                                for($i = 0; $i < count ( $this->shopList ); $i ++) {
-                                if (trim ( $this->shopList [$i] ['name'] ) != '') {
-                                $shopname = substr ( $this->shopList [$i] ['name'], 0, 70 );?>
-
-                                <option value="<?php echo $this->shopList[$i]['id']; ?>"><?php echo $shopname; ?></option>
-                                <?php
-                                }
-                                }?>
+                                    <option value=""></option>
+                                    <?php
+                                    for($i = 0; $i < count($this->shopList); $i ++) {
+                                    if (trim ($this->shopList[$i]['name']) != '') {
+                                    $shopname = substr($this->shopList[$i]['name'], 0, 70);?>
+                                    <option value="<?php echo $this->shopList[$i]['id']; ?>"><?php echo $shopname; ?>
+                                    </option>
+                                    <?php
+                                    }
+                                    }?>
                                 </select>
                                 <input type="hidden" name="selctedshop" id="selctedshop" value="">
                             </div>
@@ -180,7 +179,8 @@ echo $this->headTitle()->append($browserTitle);?>
                     <div data-date-format="dd-mm-yyyy" data-date="<?php echo date('d-m-Y');?>" id="dp3"
                     class="input-append date">
                         <input readonly="readonly" type="text"  value="<?php echo date('d-m-Y');?>"
-                        placeholder="<?php echo $this->translate('Sunday, April 1');?>" class="span2 ignore2 date-time-cusor-style" id="offerStartDate"
+                        placeholder="<?php echo $this->translate('Sunday, April 1');?>"
+                        class="span2 ignore2 date-time-cusor-style" id="offerStartDate"
                         name="offerStartDate">
                         <span class="add-on"><i class="icon-th"></i></span>
                     </div>
@@ -203,7 +203,8 @@ echo $this->headTitle()->append($browserTitle);?>
                     <div data-date-format="dd-mm-yyyy" data-date="<?php echo $twoMonthsLater;?>" id="dp4"
                     class="input-append date">
                         <input readonly="readonly"  type="text" value="<?php echo $twoMonthsLater; ?>"
-                        placeholder="<?php echo $this->translate('Sunday, April 1');?>" name="offerEndDate" id="offerEndDate"
+                        placeholder="<?php echo $this->translate('Sunday, April 1');?>" name="offerEndDate"
+                        id="offerEndDate"
                         class="span2 ignore2 date-time-cusor-style">
                         <span class="add-on"><i class="icon-th"></i></span>
                     </div>
@@ -264,8 +265,11 @@ echo $this->headTitle()->append($browserTitle);?>
                             </div>
                             <div class="progress-file-detail hide">
                                 <div>
-                                    <img src="<?php echo PUBLIC_PATH; ?>images/back_end/ajax-loader-tran.gif" alt="uploadig" />
-                                    <span id="imported-filename">Filename</span>
+                                    <img src="<?php echo PUBLIC_PATH; ?>images/back_end/ajax-loader-tran.gif"
+                                    alt="uploadig" />
+                                    <span id="imported-filename">
+                                        <?php echo $this->translate('Filename');?>
+                                    </span>
                                 </div>
                                 <div id="progress" class="progress progress-success progress-striped">
                                     <div class="bar"></div>
@@ -290,11 +294,14 @@ echo $this->headTitle()->append($browserTitle);?>
                                 </p>
                                 <div class="statistic-data text-left" style="margin-left: 20px;">
                                     <p class="statistic-data">
-                                        <a 
-                                        href="<?php echo HTTP_PATH ?>admin/offer/exportcodelist/id/<?php echo $this->offerId; ?>"><?php echo $this->translate('Export Codes');?></a>
+                                        <a href="<?php echo HTTP_PATH ?>admin/offer/exportcodelist/id/<?php echo $this->offerId; ?>">
+                                            <?php echo $this->translate('Export Codes');?>
+                                        </a>
                                     </p>
                                     <p class="statistic-data">
-                                        <a href="<?php echo HTTP_PATH ?>admin/offer/empty-xlx"><?php echo $this->translate('Empty Excel File');?></a>
+                                        <a href="<?php echo HTTP_PATH ?>admin/offer/empty-xlx">
+                                            <?php echo $this->translate('Empty Excel File');?>
+                                        </a>
                                     </p>
                                 </div>
                             </div>
@@ -310,22 +317,26 @@ echo $this->headTitle()->append($browserTitle);?>
                             <input type="checkbox" name="selectedTiles[]" id='selectedTiles'  class="tiles" />
                             <ul class='imgTiles' id='imgLiForTiles'>
                             <?php
-                                if(count(@$this->tiles['couponCode'])) :
-                                    foreach(@$this->tiles['couponCode'] as $tiles):
-                                        if(file_exists(ROOT_PATH . $tiles['path'] . 'thum_small_' . $tiles['name'])) :
+                                if (count($this->tiles['couponCode'])) :
+                                    foreach (@$this->tiles['couponCode'] as $tiles):
+                                        if (file_exists(ROOT_PATH . $tiles['path'] . 'thum_small_' . $tiles['name'])) :
                                             $imgTilesCode = PUBLIC_PATH_LOCALE . $tiles['path'] . 'thum_small_' . $tiles['name'];
                                         else :
                                             $imgTilesCode = PUBLIC_PATH.'images/NoImage/NoImage_95x80.png';
                                         endif;
                                         echo '<li id="'.$tiles['id'].'">'.
-                                                '<a href="javascript:void(0)" onclick="selectOfferImage('.$tiles['id'].')" id="'.$tiles['id'].'">'.
-                                                    '<img id="offertileimg" title="kortingsbon" src="'.$imgTilesCode.'" class="liimg">'.
+                                                '<a href="javascript:void(0)"
+                                                onclick="selectOfferImage('.$tiles['id'].')" id="'.$tiles['id'].'">'.
+                                                    '<img id="offertileimg" title="kortingsbon"
+                                                    src="'.$imgTilesCode.'" class="liimg">'.
                                                 '</a>'.
-                                                '<div class="hideShow" style="display:block" id="divShow_'.$tiles['id'].'">'.
+                                                '<div class="hideShow" style="display:block"
+                                                id="divShow_'.$tiles['id'].'">'.
                                                     '<a data-toggle="modal" href="_#myModal" onclick="setValueInHidden('.$tiles['id'].')">'.
                                                         '<img src="'.PUBLIC_PATH.'/images/back_end/edit-icon-txt.png">'.
                                                     '</a>'.
-                                                    '<a href="javascript:void(0);" style="display:none" id="selectImg_'.$tiles['id'].'" class="unselect">'.
+                                                    '<a href="javascript:void(0);" style="display:none"
+                                                    id="selectImg_'.$tiles['id'].'" class="unselect">'.
                                                         '<img src="'.PUBLIC_PATH.'/images/back_end/tick.png">'.
                                                     '</a>'.
                                                 '</div>'.
@@ -474,7 +485,8 @@ echo $this->headTitle()->append($browserTitle);?>
                         ?>
                     </button>
                     <?php if ($this->offerController == 1) {?>
-                    <a href="<?php echo HTTP_PATH; ?>admin/usergeneratedoffer<?php echo '#'.$this->qstring; ?>" class="fl m10">
+                    <a href="<?php echo HTTP_PATH; ?>admin/usergeneratedoffer<?php echo '#'.$this->qstring; ?>"
+                    class="fl m10">
                     <?php } else { ?>
                     <a href="<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>" class="fl m10">
                     <?php } ?>
@@ -690,7 +702,8 @@ echo $this->headTitle()->append($browserTitle);?>
                                 value="3" style="display: none;" />
                             <button type="button" class="btn" id="exclusivebtn"
                             style="border-radius: 4px 0 0 4px;" value="exclusive"
-                            onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('Exclusive Code'); ?></button>
+                            onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('Exclusive Code'); ?>
+                            </button>
                             <button type="button" class="btn" id="editorpicbtn" value = "editorpic"
                             onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('Recommended'); ?></button>
                             <button type="button" class="btn" id="socialcodebtn" 
@@ -698,7 +711,8 @@ echo $this->headTitle()->append($browserTitle);?>
                                 <?php echo $this->translate('Social Code'); ?>
                             </button>
                             <button type="button" style="border-radius: 0 4px 4px 0;" class="btn" id="nonebtn"
-                            value="none" onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('None'); ?></button>
+                            value="none" onCLick="exclusiveeditorpick(event)"><?php echo $this->translate('None'); ?>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -760,7 +774,9 @@ echo $this->headTitle()->append($browserTitle);?>
                                 <textarea class="input-xlarge mbot bbot ignore" id="extendedOfferMetadesc"
                                 name="extendedOfferMetadesc"
                                 placeholder="<?php echo $this->translate('Een Center Parcs actiecode of kortingscode is zo gevonden op Actiecode.nl. Wij hebben codes en korting beschikbaar voor lente zomer, herfst & winter.');?>" rows="3"></textarea>
-                                <span id="metaDescLeft" class="disabled btop word-count nobel offer-wordcount-width"></span>
+                                <span id="metaDescLeft" class="disabled btop word-count nobel offer-wordcount-width">
+                                    
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -771,7 +787,10 @@ echo $this->headTitle()->append($browserTitle);?>
                         <div class="span10">
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-left-other">
-                                <input type="text" name="extendedOfferRefurl" <?php echo ($this->role == '3' || $this->role == '4') ? "disabled=disabled" : "" ;  ?> id="extendedOfferRefurl" placeholder="<?php echo $this->translate('permalink'); ?>" class="span3 ignore">
+                                <input type="text" name="extendedOfferRefurl"
+                                <?php echo ($this->role == '3' || $this->role == '4') ? "disabled=disabled" : "" ;  ?>
+                                id="extendedOfferRefurl" placeholder="<?php echo $this->translate('permalink'); ?>"
+                                class="span3 ignore">
                                 <?php if($this->role == '3' || $this->role == '4'):?>
                                         <input value="<?php echo $this->data['permaLink'] ; ?>" type="hidden"
                                         name="extendedOfferRefurl" id="extendedOfferRefurl" />
@@ -810,7 +829,8 @@ echo $this->headTitle()->append($browserTitle);?>
                     ?>
                 </button>
                 <?php if ($this->offerController == 1) {?>
-                <a href="<?php echo HTTP_PATH; ?>admin/usergeneratedoffer<?php echo '#'.$this->qstring; ?>" class="fl m10">
+                <a href="<?php echo HTTP_PATH; ?>admin/usergeneratedoffer<?php echo '#'.$this->qstring; ?>"
+                class="fl m10">
                 <?php } else { ?>
                     <a href="<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>" class="fl m10">
                 <?php } ?>
@@ -827,7 +847,8 @@ echo $this->headTitle()->append($browserTitle);?>
         </div>  
     </form>
 </div>
-<div class="modal display-none popup-width" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal display-none popup-width" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+aria-hidden="true">
    <div class="wrap columns-2">
      <form name="menuForm" id="menuForm" enctype="multipart/form-data">
      <input type="hidden" name="offerId" id="offerId" value="">
@@ -835,19 +856,19 @@ echo $this->headTitle()->append($browserTitle);?>
         <div id="poststuff" class="metabox-holder has-right-sidebar">
           <div id="post-body">
                     <div class="mainpage-content-line">
-                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Label');?></strong></label></div>
+                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Label');?>
+                        </strong></label></div>
                          <div class="mainpage-content-right-inner-right-other display-none"></div>
                         <div class="mainpage-content-right">
-                            <input type="text" placeholder="Label.." class="span3" name="label" id="label" value="<?php echo $this->offerTiles[0]['label']?>">
+                            <input type="text" placeholder="Label.." class="span3" name="label" id="label"
+                            value="<?php echo $this->offerTiles[0]['label']?>">
                         </div>
                     </div>
                    <div class="mainpage-content-line">
-                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Icon');?></strong></label></div>
+                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Icon');?>
+                        </strong></label></div>
                          <div class="mainpage-content-right-inner-right-other display-none"></div>
                             <div class="mainpage-content-right">
-                          <!--  <input type="file" name="menuIcon" id="menuIcon" value="<?php // echo $this->translate('Upload');?>"><!-- class="btn mb10"/button -->
-
-
                         <div class="fileupload fileupload-new" data-provides="fileupload">
                     <span class="btn btn-file"><input type="file" id="tileUpload" name="tileupload[]"/></span>
                     <span class="fileupload-preview"></span>
@@ -860,10 +881,12 @@ echo $this->headTitle()->append($browserTitle);?>
                     </div>
 
                     <div class="mainpage-content-line">
-                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Sort');?></strong></label></div>
+                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Sort');?>
+                        </strong></label></div>
                          <div class="mainpage-content-right-inner-right-other display-none"></div>
                             <div class="mainpage-content-right">
-                            <input type="text" name="position" id="position" placeholder="1" class="span3" value="<?php echo $this->offerTiles['pos']?>">
+                            <input type="text" name="position" id="position" placeholder="1" class="span3"
+                            value="<?php echo $this->offerTiles['pos']?>">
                         </div>
                     </div>
 
@@ -877,7 +900,8 @@ echo $this->headTitle()->append($browserTitle);?>
            <input type="hidden" id="hidimagepath" name="hidimagepath" value="">
            <input type="hidden" id="hidimageext" name="hidimageext" value="">
            <input type="hidden" id="hidtype" name="hidtype" value="">
-           <button id="submitButton" class="btn btn-large btn-primary fl" type="submit"><?php echo $this->translate('SAVE CHANGES');?></button>
+           <button id="submitButton" class="btn btn-large btn-primary fl" type="submit">
+           <?php echo $this->translate('SAVE CHANGES');?></button>
            <button class="btn ml10 m5" data-dismiss="modal"><?php echo $this->translate('Cancel');?></button>
            <?php if ($role == 1) { ?>                        
            <button style='display: none'
@@ -886,7 +910,6 @@ echo $this->headTitle()->append($browserTitle);?>
             </button>
           <?php  } ?>
         </div>
-  <!-- /poststuff -->
    </form>
    </div>
 </div>
