@@ -30,11 +30,9 @@ class RoutePermalink extends BaseRoutePermalink
     {
         $permalink= trim($permalink, '/');
         $pageDetails = Doctrine_Query::create()
-        ->select('p.*')
+        ->select('p.id')
         ->from('Page p')
         ->where("permalink = ?", $permalink)
-        ->orderBy('id DESC')
-        ->limit(1)
         ->fetchArray();
         return $pageDetails;
     }
