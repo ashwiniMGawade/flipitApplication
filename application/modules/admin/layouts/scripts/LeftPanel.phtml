@@ -28,12 +28,7 @@
 	               	</li>
                     <li>
                         <?php 
-                        if($controller == 'usergeneratedoffer')
-                        {
-                            $offerColorClass = "new-blue"; 
-                        } else { 
-                            $offerColorClass = "new-gray"; 
-                        }
+                        	$offerColorClass = $controller == 'usergeneratedoffer' ? "new-blue" : "new-gray";
                         ?>
                         <a id="socialCode" href="<?php echo HTTP_PATH ;?>admin/usergeneratedoffer" 
                          class="<?php echo $offerColorClass;?>" tabindex="1">

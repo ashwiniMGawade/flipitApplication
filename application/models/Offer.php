@@ -31,11 +31,11 @@ class Offer extends BaseOffer
     public static function checkUserGeneratedOffer($offerId)
     {
         $offerDetail = Doctrine_Query::create()
-        ->select('o.approved')
-        ->from('Offer o')
-        ->where('o.id ='.$offerId)
-        ->fetchArray();
-        return $userGenerated = $offerDetail[0]['approved'] == 0 ? true : false;
+            ->select('o.approved')
+            ->from('Offer o')
+            ->where('o.id ='.$offerId)
+            ->fetchArray();
+        return $userGenerated = isset($offerDetail[0]['approved']) == 0 ? true : false;
     }
     
     public static function getOffersForNewsletter($offerIds)

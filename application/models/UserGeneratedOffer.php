@@ -8,24 +8,16 @@ class UserGeneratedOffer extends BaseOffer
 {
     public static function getOffersList($parameters)
     {
-        $userRole           = Auth_StaffAdapter::getIdentity()->roleId;
-        $searchOffer        = $parameters["offerText"]!='undefined' ? $parameters["offerText"] : '';
         $searchShop         = $parameters["shopText"]!='undefined' ? $parameters["shopText"] : '';
         $searchCoupon       = @$parameters["shopCoupon"]!='undefined' ? @$parameters["shopCoupon"] : '';
-        $searchCouponType   = $parameters["couponType"]!='undefined' ? $parameters["couponType"] : '';
         $deletedStatus      = $parameters['flag'];
         $getOffersQuery = Doctrine_Query::create()
-            ->select(
-                'o.id, s.name, o.startDate,o.endDate, o.couponcode'
-            )
+            ->select('o.id, s.name, o.startDate, o.endDate, o.couponcode')
             ->from("UserGeneratedOffer o")
             ->leftJoin('o.shop s')
             ->where('o.deleted='.$deletedStatus)
             ->andWhere("o.userGenerated = 1")
             ->andWhere("o.approved = '0'");
-        if ($userRole=='4') {
-            $getOffersQuery->andWhere("o.Visability='DE'");
-        }
         if ($searchShop!='') {
             $getOffersQuery->andWhere("s.name LIKE ?", "%".$searchShop."%");
         }

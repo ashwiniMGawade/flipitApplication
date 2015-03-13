@@ -111,9 +111,9 @@ function init(){
 		max_chars: 150
 	});*/
 
-	if (jQuery('#socialCodeSelection').val() == 1) {
-		jQuery('#socialCode').addClass('new-blue');
-	}
+    if (jQuery('#socialCodeSelection').val() == 1) {
+        jQuery('#socialCode').addClass('new-blue');
+    }
 	
 	jQuery('.word_count').each(function() {
         var input = '#' + this.id;
