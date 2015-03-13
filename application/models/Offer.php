@@ -27,6 +27,19 @@ class Offer extends BaseOffer
         $offers = Doctrine_Core::getTable('Offer')->find($offerId);
         return $offers;
     }
+
+    public static function checkUserGeneratedOffer($offerId)
+    {
+        $offerDetail = Doctrine_Query::create()
+            ->select('o.approved')
+            ->from('Offer o')
+            ->where('o.id ='.$offerId)
+            ->fetchArray();
+        if (isset($offerDetail[0]['approved'])) {
+            $userGenerated = $offerDetail[0]['approved'] == 0 ? true : false;
+        }
+        return $userGenerated;
+    }
     
     public static function getOffersForNewsletter($offerIds)
     {
@@ -1835,7 +1848,6 @@ class Offer extends BaseOffer
 
     public function updateOffer($params)
     {
-        //echo "<pre>"; print_r($params); die;
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
                 // check the offer type
             if (isset($params['defaultoffercheckbox'])) {      //offer type is default
