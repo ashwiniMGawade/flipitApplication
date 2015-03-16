@@ -189,7 +189,7 @@ class StoreController extends Zend_Controller_Action
             ),
             ''
         );
-        
+
         if ($shopInformation[0]['affliateProgram'] != 0) {
             $similarShopsAndSimilarCategoriesOffers = array_slice($similarShopsAndSimilarCategoriesOffers, 3);
         }
@@ -381,6 +381,9 @@ class StoreController extends Zend_Controller_Action
         $shopName = isset($shopInformation[0]['name']) ? $shopInformation[0]['name'] : '';
         $howToGuides = isset($howToGuides[0]['howtoTitle']) ? $howToGuides[0]['howtoTitle'] : '';
         $customHeader = '';
+        $howToGuideUrlForMetaTags = isset($howToGuides[0]['permaLink'])
+            ? $howToGuides[0]['permaLink']
+            : $howToGuidePermalink;
         $this->viewHelperObject->getMetaTags(
             $this,
             str_replace('[shop]', $shopName, $howToGuides),
