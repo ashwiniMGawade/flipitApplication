@@ -129,7 +129,7 @@ class StoreController extends Zend_Controller_Action
                 ''
             );
 
-            if (!count($shopInformation) >0) {
+            if (!count($shopInformation) > 0) {
                 $localeUrl = HTTP_PATH_LOCALE;
                 $this->_helper->redirector->setCode(301);
                 $this->_redirect($localeUrl);
@@ -197,10 +197,7 @@ class StoreController extends Zend_Controller_Action
                 $similarShopsAndSimilarCategoriesOffers
             );
         }
-
-        $this->view->countPopularOffers = count(
-            FrontEnd_Helper_viewHelper::commonfrontendGetCode('popular', $shopRecordsLimit, $currentShopId)
-        );
+        
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->storeImage = $shopImage;
         $this->view->shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
