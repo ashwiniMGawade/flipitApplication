@@ -414,6 +414,8 @@ class Offer extends BaseOffer
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $shophowtokey = '6_topOffersHowto'  . $shopId . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
+        $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allMoneySavingGuideLists');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allOfferList');
@@ -1257,7 +1259,8 @@ class Offer extends BaseOffer
             $key = 'shop_expiredOffers'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-
+            $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
@@ -1313,15 +1316,12 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = '4_shopLatestUpdates'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
             $key = 'shop_expiredOffers'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-
-
             $key = 'extendedTopOffer_of_'.$u->shopId;
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             if (!empty($u->extendedurl)) {
                 $key = 'extended_'.
                     FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($u->extendedurl).
@@ -1426,14 +1426,10 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = '4_shopLatestUpdates'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
             $key = 'shop_expiredOffers'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-
-
-    
-
+            $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
             self::clearSpecialPagesCache($id);
@@ -1763,19 +1759,14 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = '4_shopLatestUpdates'  . intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
             $key = 'shop_expiredOffers'  . intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-        
-
-              
             $key = 'offer_'.$this->id.'_details';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
             $key = 'extendedTopOffer_of_'.intval($params['selctedshop']);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $key = 'shop_similarShopsAndSimilarCategoriesOffers'. intval($params['selctedshop'])  . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'extended_'.
                 FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['extendedOfferRefurl']).
                 '_couponDetails';
@@ -2081,20 +2072,17 @@ class Offer extends BaseOffer
             $popularcodekey ="all_". "popularcode".$uid ."_list";
             $newcodekey ="all_". "newestcode".$uid ."_list";
             //call cache function
-
             $key = '6_topOffers'  . intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $shophowtokey = '6_topOffersHowto'  . intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = '4_shopLatestUpdates_'  . intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
             $key = 'shop_expiredOffers'  .intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-
-
             $key = 'extendedTopOffer_of_'.intval($params['selctedshop']);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'shop_similarShopsAndSimilarCategoriesOffers'. intval($params['selctedshop'])  . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'extended_'.
                 FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['extendedOfferRefurl']).
@@ -2103,24 +2091,17 @@ class Offer extends BaseOffer
 
             $key = 'offer_'.$offerID.'_details';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
-            
             self::clearSpecialPagesCache($offerID);
-            
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-
-        
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
-
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
 

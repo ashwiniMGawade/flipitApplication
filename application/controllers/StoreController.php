@@ -179,17 +179,20 @@ class StoreController extends Zend_Controller_Action
                 );
         }
         $this->view->expiredOffers = $expiredOffers;
-        if ($shopInformation[0]['affliateProgram'] == 0) {
-            $numberOfSimilarOffers = 10;
-        } else {
-            $numberOfSimilarOffers = 3;
-        }
 
-        $similarShopsAndSimilarCategoriesOffers = FrontEnd_Helper_viewHelper::getShopCouponCode(
-            'similarStoresAndSimilarCategoriesOffers',
-            $numberOfSimilarOffers,
-            $shopId
+        $similarShopsAndSimilarCategoriesOffersKey = 'shop_similarShopsAndSimilarCategoriesOffers'.$ShopList;
+        $similarShopsAndSimilarCategoriesOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            (string)$similarShopsAndSimilarCategoriesOffersKey,
+            array(
+                'function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode',
+                'parameters' => array("similarStoresAndSimilarCategoriesOffers", 10, $shopId)
+            ),
+            ''
         );
+
+        if ($shopInformation[0]['affliateProgram'] != 0) {
+            $similarShopsAndSimilarCategoriesOffers = array_slice($similarShopsAndSimilarCategoriesOffers, 3);
+        }
 
         $this->view->similarShopsAndSimilarCategoriesOffers = '';
         if (!empty($similarShopsAndSimilarCategoriesOffers)) {
@@ -197,7 +200,7 @@ class StoreController extends Zend_Controller_Action
                 $similarShopsAndSimilarCategoriesOffers
             );
         }
-        
+
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->storeImage = $shopImage;
         $this->view->shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
