@@ -693,6 +693,16 @@ EOD;
         return $variable;
     }
 
+    public static function replaceStringVariableForOfferTitle($variable)
+    {
+        $variable = str_replace(
+            array('[month]', '[year]', '[day]'),
+            array(CURRENT_MONTH, CURRENT_YEAR, CURRENT_DAY),
+            $variable
+        );
+        return $variable;
+    }
+
     public static function sanitize($string, $stripTags = true)
     {
         require_once(LIBRARY_PATH.'/HTMLPurifier/HTMLPurifier.auto.php');
