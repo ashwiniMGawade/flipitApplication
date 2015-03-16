@@ -134,17 +134,14 @@ class Offer extends BaseOffer
                     o.discountType, o.couponCode,  o.refofferurl, o.startdate, o.userGenerated, o.nickname, o.approved,
                     o.enddate, o.exclusiveCode, o.authorName,
                     o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid,
-                    o.offerlogoid, o.couponCodeType, o.approved,o.discountvalueType,img.id, img.path,
-                    img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote'
+                    o.offerlogoid, o.couponCodeType, o.approved,o.discountvalueType,img.id, img.path, img.name'
                 )
                 ->from('Offer o')
                 ->addSelect(
                     "(SELECT count(id) FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes"
                 )
                 ->leftJoin('o.shop s')
-                ->leftJoin('s.favoriteshops fv')
                 ->leftJoin('o.termandcondition terms')
-                ->leftJoin('o.vote vot')
                 ->leftJoin('s.refShopCategory c')
                 ->leftJoin('s.logo img')
                 ->where('o.deleted = 0')
@@ -192,15 +189,12 @@ class Offer extends BaseOffer
                 o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType,
                 o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,
                 o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid,
-                o.discountvalueType,o.userGenerated, o.approved, o.nickname,img.id, img.path, img.name,fv.shopId,fv.visitorId,
-                fv.id,vot.id,vot.vote, o.authorName'
+                o.discountvalueType,o.userGenerated, o.approved, o.nickname,img.id, img.path, img.name, o.authorName'
             )
             ->from('Offer o')
             ->addSelect("(SELECT count(id) FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
             ->leftJoin('o.shop s')
-            ->leftJoin('s.favoriteshops fv')
             ->leftJoin('o.termandcondition terms')
-            ->leftJoin('o.vote vot')
             ->leftJoin('o.refOfferCategory c')
             ->leftJoin('s.logo img')
             ->where('o.deleted = 0')
