@@ -210,6 +210,18 @@ class Shop extends BaseShop
         return $allStoresDetail;
     }
 
+    public static function getStoreDetailsForStorePage($shopId)
+    {
+        $storeDetail = Doctrine_Query::create()->select('s.*,img.*')
+            ->from('Shop s')
+            ->leftJoin('s.logo img')
+            ->where('s.id='.$shopId)
+            ->andWhere('s.deleted=0')
+            ->andWhere('s.status=1');
+        $allStoresDetail = $storeDetail->fetchArray(array(), Doctrine_Core::HYDRATE_ARRAY);
+        return $allStoresDetail;
+    }
+
     public static function getAllStoresForFrontEnd($startCharacter, $endCharacter)
     {
         $charactersString = $startCharacter.  "-" . $endCharacter;

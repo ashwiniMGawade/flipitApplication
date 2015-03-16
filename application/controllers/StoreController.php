@@ -80,7 +80,7 @@ class StoreController extends Zend_Controller_Action
             $allShopDetailKey = 'shopDetails_'.$ShopList;
             $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allShopDetailKey,
-                array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId)
+                array('function' => 'Shop::getStoreDetailsForStorePage', 'parameters' => array($shopId)
                 ),
                 ''
             );
@@ -88,8 +88,8 @@ class StoreController extends Zend_Controller_Action
             $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allOffersInStoreKey,
                 array(
-                    'function' => 'FrontEnd_Helper_viewHelper::commonfrontendGetCode',
-                    'parameters' => array("all", 10, $shopId, 0)
+                    'function' => 'Offer::getAllOfferOnShop',
+                    'parameters' => array($shopId)
                 ),
                 ''
             );
