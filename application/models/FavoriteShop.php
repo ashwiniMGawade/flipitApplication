@@ -140,7 +140,6 @@ class FavoriteShop extends BaseFavoriteShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('visitor_'.$userid.'_favouriteShopOffers');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('shop_popularShopForWidget_list');
         return $shop->toArray();
 
         //call cache function
@@ -212,7 +211,6 @@ class FavoriteShop extends BaseFavoriteShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('alreadyFavourite_'.$userid.'_shops');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('visitor_'.$userid.'_favouriteShopOffers');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_'.$userid.'_favouriteShops');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('shop_popularShopForWidget_list');
         return $shop->toArray();
     }
 
