@@ -3,7 +3,7 @@ class FrontEnd_Helper_viewHelper
 {
     public static function writeLog($message, $logfile = '')
     {
-        $requestTime = Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_TIME');
+        /*$requestTime = Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_TIME');
         $remoteAddress = Zend_Controller_Front::getInstance()->getRequest()->getServer('REMOTE_ADDR');
         if ($logfile == '') {
             $logDir = APPLICATION_PATH . "../logs/";
@@ -33,7 +33,7 @@ EOD;
             }
         } else {
             return array('status' => false, 'message' => 'Unable to open log '.$logfile.'!');
-        }
+        }*/
     }
 
     public static function getShopCouponCode($type, $limit, $shopId = 0)
