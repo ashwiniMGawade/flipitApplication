@@ -80,7 +80,7 @@ class StoreController extends Zend_Controller_Action
             $allShopDetailKey = 'shopDetails_'.$ShopList;
             $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allShopDetailKey,
-                array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId)
+                array('function' => 'Shop::getStoreDetailsForStorePage', 'parameters' => array($shopId)
                 ),
                 ''
             );
@@ -88,8 +88,8 @@ class StoreController extends Zend_Controller_Action
             $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allOffersInStoreKey,
                 array(
-                    'function' => 'FrontEnd_Helper_viewHelper::commonfrontendGetCode',
-                    'parameters' => array("all", 10, $shopId, 0)
+                    'function' => 'Offer::getAllOfferOnShop',
+                    'parameters' => array($shopId)
                 ),
                 ''
             );
@@ -129,7 +129,7 @@ class StoreController extends Zend_Controller_Action
                 ''
             );
 
-            if (!count($shopInformation) >0) {
+            if (!count($shopInformation) > 0) {
                 $localeUrl = HTTP_PATH_LOCALE;
                 $this->_helper->redirector->setCode(301);
                 $this->_redirect($localeUrl);
@@ -179,17 +179,20 @@ class StoreController extends Zend_Controller_Action
                 );
         }
         $this->view->expiredOffers = $expiredOffers;
-        if ($shopInformation[0]['affliateProgram'] == 0) {
-            $numberOfSimilarOffers = 10;
-        } else {
-            $numberOfSimilarOffers = 3;
-        }
 
-        $similarShopsAndSimilarCategoriesOffers = FrontEnd_Helper_viewHelper::getShopCouponCode(
-            'similarStoresAndSimilarCategoriesOffers',
-            $numberOfSimilarOffers,
-            $shopId
+        $similarShopsAndSimilarCategoriesOffersKey = 'shop_similarShopsAndSimilarCategoriesOffers'.$ShopList;
+        $similarShopsAndSimilarCategoriesOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            (string)$similarShopsAndSimilarCategoriesOffersKey,
+            array(
+                'function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode',
+                'parameters' => array("similarStoresAndSimilarCategoriesOffers", 10, $shopId)
+            ),
+            ''
         );
+
+        if ($shopInformation[0]['affliateProgram'] != 0) {
+            $similarShopsAndSimilarCategoriesOffers = array_slice($similarShopsAndSimilarCategoriesOffers, 3);
+        }
 
         $this->view->similarShopsAndSimilarCategoriesOffers = '';
         if (!empty($similarShopsAndSimilarCategoriesOffers)) {
@@ -198,9 +201,6 @@ class StoreController extends Zend_Controller_Action
             );
         }
 
-        $this->view->countPopularOffers = count(
-            FrontEnd_Helper_viewHelper::commonfrontendGetCode('popular', $shopRecordsLimit, $currentShopId)
-        );
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->storeImage = $shopImage;
         $this->view->shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
@@ -213,14 +213,13 @@ class StoreController extends Zend_Controller_Action
                 ),
                 ''
             );
-        $this->view->ballonEditorText = EditorBallonText::getEditorText($shopId);
         $customHeader = isset($shopInformation[0]['customHeader']) ? $shopInformation[0]['customHeader'] : '';
         $this->viewHelperObject->getMetaTags(
             $this,
             $shopInformation[0]['overriteTitle'],
             '',
             trim($shopInformation[0]['metaDescription']),
-            $shopInformation[0]['permaLink'],
+            $shopPermalink,
             $shopImage,
             $customHeader
         );
@@ -382,6 +381,9 @@ class StoreController extends Zend_Controller_Action
         $shopName = isset($shopInformation[0]['name']) ? $shopInformation[0]['name'] : '';
         $howToGuides = isset($howToGuides[0]['howtoTitle']) ? $howToGuides[0]['howtoTitle'] : '';
         $customHeader = '';
+        $howToGuideUrlForMetaTags = isset($howToGuides[0]['permaLink'])
+            ? $howToGuides[0]['permaLink']
+            : $howToGuidePermalink;
         $this->viewHelperObject->getMetaTags(
             $this,
             str_replace('[shop]', $shopName, $howToGuides),
