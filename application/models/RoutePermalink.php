@@ -20,21 +20,19 @@ class RoutePermalink extends BaseRoutePermalink
     {
         $permalink= trim($permalink, '/');
         $data = Doctrine_Query::create()
-                        ->select()
-                        ->from('RoutePermalink')
-                        ->where("permalink = ?", $permalink)
-                        ->fetchArray();
+            ->select('r.permalink, r.exactlink')
+            ->from('RoutePermalink r')
+            ->where("r.permalink = ?", $permalink)
+            ->fetchArray();
         return $data;
     }
     public static function getPageProperties($permalink)
     {
         $permalink= trim($permalink, '/');
         $pageDetails = Doctrine_Query::create()
-        ->select('p.*')
+        ->select('p.id')
         ->from('Page p')
         ->where("permalink = ?", $permalink)
-        ->orderBy('id DESC')
-        ->limit(1)
         ->fetchArray();
         return $pageDetails;
     }
