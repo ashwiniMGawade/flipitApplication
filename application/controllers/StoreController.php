@@ -219,7 +219,7 @@ class StoreController extends Zend_Controller_Action
             $shopInformation[0]['overriteTitle'],
             '',
             trim($shopInformation[0]['metaDescription']),
-            $shopInformation[0]['permaLink'],
+            $shopPermalink,
             $shopImage,
             $customHeader
         );
