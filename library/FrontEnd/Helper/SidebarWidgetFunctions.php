@@ -123,7 +123,13 @@ EOD;
     
     public function popularShopWidget()
     {
-        $popularStores = Shop::getAllPopularStores(20);
+        $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            (string)'shop_popularShopForWidget_list',
+            array(
+                'function' => 'Shop::getAllPopularStoresForSidebarWidget',
+                'parameters' => array(20)
+            )
+        );
         $popularStoresContent = '<div class="block"><div class="intro">
                    <h4>'.$this->__translate('Populaire Winkels').'</h4>
                    <span>'

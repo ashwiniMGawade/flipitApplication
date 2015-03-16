@@ -21,7 +21,7 @@ foreach ($this->offers as $offer) {
     $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
     $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($offer->endDate);
     $urlToShow = $offerPartial->getUrlToShow($offer);
-    $offerTitle = FrontEnd_Helper_viewHelper::replaceStringVariable($offer->title);
+    $offerTitle = FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offer->title);
     $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
     $userLoggedInOrNot = $offerPartial->getUserIsLoggedInOrNot();
     $couponCode = $offer->couponCode;

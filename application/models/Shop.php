@@ -210,6 +210,18 @@ class Shop extends BaseShop
         return $allStoresDetail;
     }
 
+    public static function getStoreDetailsForStorePage($shopId)
+    {
+        $storeDetail = Doctrine_Query::create()->select('s.*,img.*')
+            ->from('Shop s')
+            ->leftJoin('s.logo img')
+            ->where('s.id='.$shopId)
+            ->andWhere('s.deleted=0')
+            ->andWhere('s.status=1');
+        $allStoresDetail = $storeDetail->fetchArray(array(), Doctrine_Core::HYDRATE_ARRAY);
+        return $allStoresDetail;
+    }
+
     public static function getAllStoresForFrontEnd($startCharacter, $endCharacter)
     {
         $charactersString = $startCharacter.  "-" . $endCharacter;
@@ -261,6 +273,19 @@ class Shop extends BaseShop
         ->from('PopularShop p')
         ->leftJoin('p.shop s')
         ->leftJoin('s.logo img')
+        ->where('s.deleted=0')
+        ->addWhere('s.status=1')
+        ->orderBy('p.position ASC')
+        ->limit($limit)->fetchArray();
+        return $popularStores;
+    }
+
+    public static function getAllPopularStoresForSidebarWidget($limit)
+    {
+        $popularStores = Doctrine_Query::create()
+        ->select('p.id,s.name,s.permaLink, s.deepLink, s.refUrl, s.actualUrl')
+        ->from('PopularShop p')
+        ->leftJoin('p.shop s')
         ->where('s.deleted=0')
         ->addWhere('s.status=1')
         ->orderBy('p.position ASC')
@@ -350,6 +375,8 @@ class Shop extends BaseShop
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_'.$visitorId.'_favouriteShops');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('visitor_'.$visitorId.'_favouriteShopOffers');
+            $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             return array('shop' => $shopName->name, 'flag' => $addedStatus);
         }
         return;
@@ -661,7 +688,8 @@ class Shop extends BaseShop
             ->where("permalink=". "'$this->permaLink'")->execute();
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $id);
-
+            $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $id . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             //call cache function
             $key = 'shop_similar_shops';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -1039,6 +1067,8 @@ class Shop extends BaseShop
         }
 
         //call cache function
+        $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $this->id . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
         $key = '6_topOffers'  . $this->id . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -1929,6 +1959,8 @@ public static function getShopDetail($shopId)
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shopDetails_'.$params['id'].'_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $params['id'] . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         return array('offlineSince'=>$shop->offlineSicne, 'howToUse'=>$shop->howToUse);
     }
 
@@ -1959,17 +1991,13 @@ public static function getShopDetail($shopId)
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
-
-
+        $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $this->id . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shopDetails_'. $this->id.'_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $cacheKeyOfferDetails = 'offerDetails_'  . $this->id . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails); 
-
-
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $this->id);
-
-
         try {
 
             $data = $this->getLastModified();
