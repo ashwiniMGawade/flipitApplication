@@ -38,12 +38,17 @@ class Conversions extends BaseConversions
 
     public static function getConversionInformationById($id)
     {
-        return  Doctrine_Query::create()->select('c.id,o.title as offerTitle,s.name as shopName,cat.name as categoryName')
-            ->from("Conversions c")
-            ->leftJoin("c.offer o")
-            ->leftJoin("o.shop s")
-            ->leftJoin('o.category cat')
-            ->where('c.id = '. $id)
-            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        $conversionInfo = array();
+        
+        if (is_numeric($id)) {
+            $conversionInfo = Doctrine_Query::create()->select('c.id,o.title as offerTitle,s.name as shopName,cat.name as categoryName')
+                ->from("Conversions c")
+                ->leftJoin("c.offer o")
+                ->leftJoin("o.shop s")
+                ->leftJoin('o.category cat')
+                ->where('c.id = '. $id)
+                ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        }
+        return $conversionInfo;
     }
 }
