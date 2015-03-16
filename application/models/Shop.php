@@ -280,6 +280,19 @@ class Shop extends BaseShop
         return $popularStores;
     }
 
+    public static function getAllPopularStoresForSidebarWidget($limit)
+    {
+        $popularStores = Doctrine_Query::create()
+        ->select('p.id,s.name,s.permaLink, s.deepLink, s.refUrl, s.actualUrl')
+        ->from('PopularShop p')
+        ->leftJoin('p.shop s')
+        ->where('s.deleted=0')
+        ->addWhere('s.status=1')
+        ->orderBy('p.position ASC')
+        ->limit($limit)->fetchArray();
+        return $popularStores;
+    }
+
     public static function getshopDetails($permalink)
     {
         $shopDetails = Doctrine_Query::create()

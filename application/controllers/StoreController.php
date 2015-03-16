@@ -189,7 +189,7 @@ class StoreController extends Zend_Controller_Action
             ),
             ''
         );
-
+        
         if ($shopInformation[0]['affliateProgram'] != 0) {
             $similarShopsAndSimilarCategoriesOffers = array_slice($similarShopsAndSimilarCategoriesOffers, 3);
         }

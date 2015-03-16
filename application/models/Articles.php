@@ -387,6 +387,7 @@ class Articles extends BaseArticles
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$permalinkWithoutSpecilaChracter.'_details');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('shop_popularShopForWidget_list');
             return array('articleId' => $articleId , 'isDraft' => $isDraft ) ;
         }catch(Exception $e){
 
@@ -491,6 +492,7 @@ class Articles extends BaseArticles
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('shop_popularShopForWidget_list');
         $permalinkWithoutSpecilaChracter = str_replace("-", "", $params['articlepermalink']);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$permalinkWithoutSpecilaChracter.'_details');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
@@ -759,7 +761,7 @@ class Articles extends BaseArticles
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
-
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('shop_popularShopForWidget_list');
             $catIds = self::findCategoryId($id);
             $catArr = array();
             for($i=0;$i<count($catIds);$i++){
@@ -814,8 +816,7 @@ class Articles extends BaseArticles
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
-
-
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('shop_popularShopForWidget_list');
             $catIds = self::findCategoryId($id);
             $catArr = array();
             for($i=0;$i<count($catIds);$i++){
@@ -858,7 +859,7 @@ class Articles extends BaseArticles
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
-
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('shop_popularShopForWidget_list');
         $catIds = self::findCategoryId($id);
         $catArr = array();
         for ($i=0; $i<count($catIds); $i++) {
