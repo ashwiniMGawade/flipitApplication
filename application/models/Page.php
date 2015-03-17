@@ -73,18 +73,6 @@ class Page extends BasePage
         return $pageDetail;
     }
 
-    public static function getSpecialPageDetailForMobileMenu()
-    {
-        $pageDetail = Doctrine_Query::create()
-        ->select('p.permalink, p.pagetitle')
-        ->from('Page p')
-        ->where('p.deleted = 0')
-        ->andWhere('p.showinmobilemenu = 1')
-        ->limit(2)
-        ->fetchArray();
-        return $pageDetail;
-    }
-
     public static function updatePageAttributeId()
     {
         for ($i = 1; $i <= 3; $i++) {
