@@ -42,8 +42,6 @@ $allSearchAlphabetPanel = $this->partial(
 $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
 echo $this->esi($this->locale.'signup/signupwidget?shopId='
     .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
-$frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
-echo $frontendSidebarHelper->socialMediaWidget();
 ?>
     </aside>
 </div>
