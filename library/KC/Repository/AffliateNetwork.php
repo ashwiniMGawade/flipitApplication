@@ -90,6 +90,7 @@ class AffliateNetwork extends \KC\Entity\AffliateNetwork
             $data->subId = \BackEnd_Helper_viewHelper::stripSlashesFromString($params["subId"]);
         }
 
+        $data->updated_at = new \DateTime('now');
         \Zend_Registry::get('emLocale')->persist($data);
         \Zend_Registry::get('emLocale')->flush();
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_affilatenetwork_page');

@@ -254,6 +254,7 @@ class Category extends \KC\Entity\Category
                 setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
             $category->categoryHeaderImage = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\ImageCategoryIcon')->find($categoryHeaderImageId);
         }
+        $category->updated_at = new \DateTime('now');
         $categoryInfo = self::getCategoryById($categoryParameter['id']);
 
         if (!empty($categoryInfo[0]['permaLink'])) {

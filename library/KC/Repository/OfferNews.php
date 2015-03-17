@@ -87,7 +87,7 @@ class OfferNews extends \KC\Entity\OfferNews
             $data->linkstatus =  @$params['newsdeepLinkStatus'];
             $data->startdate = new \DateTime($params['newsStartDate']);
             $data->deleted = '0';
-            $data->created_at = new \DateTime('now');
+            $data->created_at = $data->created_at;
             $data->updated_at = new \DateTime('now');
             \Zend_Registry::get('emLocale')->persist($data);
             \Zend_Registry::get('emLocale')->flush();
