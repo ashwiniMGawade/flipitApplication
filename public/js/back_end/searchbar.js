@@ -665,24 +665,16 @@ function regenerateObj(id)
 	var pr = $("#selectedShopForSearchbar").val().split(',');
 	var j = pr.length-1;
 	var newValOfPr = '';
-	for(var i in pr) {
-		
-		 if(pr[i]==id){
-			 
+	for (var i in pr) {
+		 if (pr[i] == id) { 
 		 } else {
-			if(i==j){
-				 
-				 newValOfPr += pr[i];
-				 
-			 } else {
-				 
-				 newValOfPr += pr[i] + ",";
-			 }
-			 
-		 }
-		
-	 }
+			if (i == j) { 
+				newValOfPr += pr[i];
+			} else {
+				newValOfPr += pr[i] + ",";
+			} 
+		 }	
+	}
 	$("#selectedShopForSearchbar").val(newValOfPr);
-	
 }
 

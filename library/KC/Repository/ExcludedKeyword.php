@@ -70,18 +70,21 @@ class ExcludedKeyword extends \KC\Entity\ExcludedKeyword
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select("k.id, k.keyword, k.url, k.action, k.created_at, k.updated_at, es.id as keywordid,s.id as sid , s.name as name")
+            ->select(
+                "k.id, k.keyword, k.url, k.action, k.created_at, k.updated_at,
+                es.id as keywordid,s.id as sid , s.name as name"
+            )
             ->from("KC\Entity\ExcludedKeyword", "k")
             ->leftJoin('k.keywords', 'es')
             ->leftJoin('es.keywords', 's')
-            ->where("k.id =".$id)
-            ->setmaxResults(1);
+            ->where("k.id =".$id);
         $getdata = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $getdata;
     }
 
     public static function updateKeyword($params)
     {
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
         $data = \Zend_Registry::get('emLocale')->find('\KC\Entity\ExcludedKeyword', $params['id']);
         $data->keyword = \BackEnd_Helper_viewHelper::stripSlashesFromString($params["keyword"]);
         $data->action = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['actionType']);
@@ -89,6 +92,7 @@ class ExcludedKeyword extends \KC\Entity\ExcludedKeyword
         if (isset($params['redirectTo']) && $params['redirectTo']!="") {
             $data->url = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['redirectTo']);
         }
+
         $data->created_at = $data->created_at;
         $data->updated_at = new \DateTime('now');
         $entityManagerLocale->persist($data);
@@ -102,14 +106,17 @@ class ExcludedKeyword extends \KC\Entity\ExcludedKeyword
                 ->getQuery()
                 ->execute();
             foreach ($splitedVal as $sp) {
-                $relKeyWords =  new \KC\Entity\RefExcludedkeywordShop();
-                $relKeyWords->shops = $entityManagerLocale->find('\KC\Entity\ExcludedKeyword', $data->id);
-                $relKeyWords->keywords = $entityManagerLocale->find('\KC\Entity\Shop', $sp);
-                $relKeyWords->keywordname = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['keyword']);
-                $relKeyWords->created_at = new \DateTime('now');
-                $relKeyWords->updated_at = new \DateTime('now');
-                \Zend_Registry::get('emLocale')->persist($relKeyWords);
-                \Zend_Registry::get('emLocale')->flush();
+                if ($sp != '') {
+                    $relKeyWords =  new \KC\Entity\RefExcludedkeywordShop();
+                    $relKeyWords->shops = $entityManagerLocale->find('\KC\Entity\ExcludedKeyword', $data->id);
+                    $relKeyWords->keywords = $entityManagerLocale->find('\KC\Entity\Shop', $sp);
+                    $relKeyWords->keywordname = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['keyword']);
+                    $relKeyWords->created_at = new \DateTime('now');
+                    $relKeyWords->updated_at = new \DateTime('now');
+                    $relKeyWords->deleted = 0;
+                    \Zend_Registry::get('emLocale')->persist($relKeyWords);
+                    \Zend_Registry::get('emLocale')->flush();
+                }
             }
         } else {
             $queryBuilder
@@ -160,13 +167,14 @@ class ExcludedKeyword extends \KC\Entity\ExcludedKeyword
 
     public static function checkStoreExistOrNot($id)
     {
-        $Shop = \Zend_Registry::get('emLocale')->find('\KC\Entity\Shop', $id);
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $Shop = $queryBuilder->select('s.id')
+                ->from("KC\Entity\Shop", "s")
+                ->where('s.id ='.$id);
         $flag = 0;
-
-        if (!empty($Shop) && isset($shop->id)) {
+        if (!empty($Shop)) {
             $flag = $id;
         }
-
         return $flag;
     }
 
