@@ -23,7 +23,7 @@ class BootstrapDoctrineConnectionFunctions {
             $doctrineOptions[strtolower($localSiteDbConnection)]['dsn'],
             'doctrine_site'
         );
-        BootstrapConstantsFunctions::constantsForLocaleSetting();
+        BootstrapConstantsFunctions::constantsForLocaleAndTimezoneSetting();
         $localeValue = explode('_', COUNTRY_LOCALE);
         if (LOCALE == '') {
             date_default_timezone_set('Europe/Amsterdam');
