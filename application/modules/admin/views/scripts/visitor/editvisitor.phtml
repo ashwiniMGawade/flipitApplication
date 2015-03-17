@@ -176,7 +176,7 @@ $gender = $this->userDetail['gender'];
                         <div class="mainpage-content-left"><label><strong>Code alert</strong></label></div>
                         <div class="mainpage-content-right">
                              <div data-toggle="buttons-checkbox" class="btn-group">
-                                <?php if($this->userDetail['codealert']==1){?>
+                                <?php if($this->userDetail['codeAlert']==1){?>
                                         <button type="button" class="btn btn-primary" onClick="setOnOff(event,'code','on')"><?php echo $this->translate('On'); ?></button>                     
 			                            <button type="button" class="btn  default" onClick="setOnOff(event,'code','off')"><?php echo $this->translate('Off'); ?></button>
                             	<?php } else { ?>
@@ -285,7 +285,7 @@ $gender = $this->userDetail['gender'];
            <input  type="hidden" name="weekly" id="weekly" value="<?php echo $this->userDetail['weeklyNewsLetter']?>"/>
              <input type="hidden" name="fashion" id="fashion" value="<?php echo $this->userDetail['fashionNewsLetter'];?>"/>
               <input type="hidden" name="travel" id="travel" value="<?php echo $this->userDetail['travelNewsLetter'];?>"/>
-              <input type="hidden" name="code" id="code" value="<?php echo $this->userDetail['codealert'] ;?>"/>
+              <input type="hidden" name="code" id="code" value="<?php echo $this->userDetail['codeAlert'] ;?>"/>
             <div class="mainpage-content-colorbox">
             	<button type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('EDIT PROFILE'); ?></button>
                 <a href="<?php echo HTTP_PATH; ?>admin/visitor"  class="fl m10"><strong><?php echo $this->translate('CANCEL'); ?></strong></a>
