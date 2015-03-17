@@ -19,7 +19,7 @@ class Page extends BasePage
             ->select('p.*, img.id, img.path, img.name')
             ->from('Page p')
             ->leftJoin('p.logo img')
-            ->where("p.permaLink='".$permalink."'")
+            ->where("p.permaLink='".FrontEnd_Helper_viewHelper::sanitize($permalink)."'")
             ->andWhere('p.publish=1')
             ->andWhere('p.pagelock=0')
             ->andWhere('p.deleted=0')
@@ -43,7 +43,7 @@ class Page extends BasePage
     {
         $currentDate = date('Y-m-d H:i:s');
         $pageDetails = Doctrine_Query::create()->from('Page p')
-         ->where("p.permaLink='".$page."'")
+         ->where("p.permaLink='".FrontEnd_Helper_viewHelper::sanitize($page)."'")
         ->leftJoin("p.widget w")
         ->andWhere("p.publishDate <='".$currentDate."'")
         ->andWhere('p.deleted=0')->fetchOne();
@@ -56,7 +56,7 @@ class Page extends BasePage
         $pageProperties = Doctrine_Query::create()
             ->select('p.*')
             ->from('Page p')
-            ->where("permaLink = '". $permalink ."'")
+            ->where("permaLink = '". FrontEnd_Helper_viewHelper::sanitize($permalink) ."'")
             ->andWhere('p.deleted=0')
             ->fetchArray();
         return $pageProperties;
@@ -67,7 +67,7 @@ class Page extends BasePage
         $pageDetail = Doctrine_Query::create()
         ->select('p.content, p.pagetitle')
         ->from('Page p')
-        ->where('p.permalink="'.$permalink.'"')
+        ->where('p.permalink="'.FrontEnd_Helper_viewHelper::sanitize($permalink).'"')
         ->andWhere('p.deleted=0')
         ->fetchArray();
         return $pageDetail;
