@@ -56,7 +56,7 @@ class Page extends BasePage
         $pageProperties = Doctrine_Query::create()
             ->select('p.*')
             ->from('Page p')
-            ->where("permaLink = '". $permalink ."'")
+            ->where("permaLink = '". FrontEnd_Helper_viewHelper::sanitize($permalink) ."'")
             ->andWhere('p.deleted=0')
             ->fetchArray();
         return $pageProperties;
@@ -67,7 +67,7 @@ class Page extends BasePage
         $pageDetail = Doctrine_Query::create()
         ->select('p.content, p.pagetitle')
         ->from('Page p')
-        ->where('p.permalink="'.$permalink.'"')
+        ->where('p.permalink="'.FrontEnd_Helper_viewHelper::sanitize($permalink).'"')
         ->andWhere('p.deleted=0')
         ->fetchArray();
         return $pageDetail;

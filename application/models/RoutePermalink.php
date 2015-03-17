@@ -32,16 +32,18 @@ class RoutePermalink extends BaseRoutePermalink
         $pageDetails = Doctrine_Query::create()
         ->select('p.id')
         ->from('Page p')
-        ->where("permalink = ?", $permalink)
+        ->where("permalink = ?", FrontEnd_Helper_viewHelper::sanitize($permalink))
         ->fetchArray();
         return $pageDetails;
     }
     public static function getPermalinks($exactLink)
     {
-        $q = Doctrine_Query::create()
+        $permalinks = Doctrine_Query::create()
         ->select('rp.permalink')->from('RoutePermalink rp')
-        ->where("rp.exactlink='?'" , $exactLink )->andWhere('deleted = 0')->fetchArray();
-        return $q;
+        ->where("rp.exactlink='?'", FrontEnd_Helper_viewHelper::sanitize($exactLink))
+        ->andWhere('deleted = 0')
+        ->fetchArray();
+        return $permalinks;
     }
 
     public static function getDefaultPageProperties($slug)
