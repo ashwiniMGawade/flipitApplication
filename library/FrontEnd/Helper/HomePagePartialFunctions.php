@@ -336,9 +336,6 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $rightColumnContent = '
         <li>
             <a href="'.HTTP_PATH_LOCALE.$shopPermalink.'">
-                <div class="logo-box '.$dynamicDivId.'">
-                    <img '.$imageDimensions.' alt="' . $shopName .'" src="' . $shopImage .'" title="' . $shopName .'">
-                </div>
                 <div class="box">
                     <h3>
                        <span>'. $shopName .'</span>'.$offerExclusiveText.'

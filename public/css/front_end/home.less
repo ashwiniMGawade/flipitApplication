@@ -416,14 +416,6 @@
 			li{
 				&:after{.after;}
 			}
-			li:first-child{
-				a{
-					border-color:@white-color;
-					&:hover{
-						border-color:@orange-color;
-					}
-				}
-			}
 			a{
 				float:left;
 				width:100%;
@@ -443,24 +435,7 @@
 					height: 15px;
 					margin:-8px 0 0;
 				}
-				&:hover{
-					text-decoration:none;
-					background:#fefdfb;
-					border-color:@orange-color;
-					z-index:2;
-					&:before{
-						background-position:-256px -350px;
-					}
-					&:after{
-						content:'';
-						position:absolute;
-						background:@orange-color;
-						width:100%;
-						height:1px;
-						bottom:-1px;
-						left:0;
-					}
-				}
+
 			}
 			.logo-box{
 				float:left;
