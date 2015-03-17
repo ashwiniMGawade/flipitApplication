@@ -204,7 +204,7 @@ class FrontEnd_Helper_LayoutContent
                 <ul class="info-area">';
         $i = 1;
         foreach ($topShops as $topShop) {
-            if ($i == 5 || $i == 9 || $i==13) {
+            if ($i == 7 || $i == 13 || $i== 19 || $i == 25) {
                 $topShopsDropdown .='</ul><ul class="info-area">';
             }
             $topShopsDropdown .='<li><a href="'. HTTP_PATH_LOCALE. $topShop['shop']['permaLink']. '">'. $topShop['shop']['name'] . '</a></li>';
@@ -225,7 +225,7 @@ class FrontEnd_Helper_LayoutContent
             "all_popularShopsForDropdown_list",
             array(
                 'function' => 'Shop::getPopularStoresForDropDown',
-                'parameters' => array(16)
+                'parameters' => array(30)
             ),
             ''
         );
