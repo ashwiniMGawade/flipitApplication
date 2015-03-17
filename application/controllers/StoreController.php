@@ -376,7 +376,7 @@ class StoreController extends Zend_Controller_Action
         $frontEndViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
         $this->view->popularStoresList = $frontEndViewHelper->PopularShopWidget();
         $this->view->latestShopUpdates = $latestShopUpdates;
-        $this->view->howToGuides=$howToGuides;
+        $this->view->howToGuides = $howToGuides;
         
         $shopName = isset($shopInformation[0]['name']) ? $shopInformation[0]['name'] : '';
         $howToGuides = isset($howToGuides[0]['howtoTitle']) ? $howToGuides[0]['howtoTitle'] : '';
@@ -389,7 +389,7 @@ class StoreController extends Zend_Controller_Action
             str_replace('[shop]', $shopName, $howToGuides),
             '',
             trim($howToGuides[0]['howtoMetaDescription']),
-            $howToGuides[0]['permaLink'],
+            $howToGuideUrlForMetaTags,
             FACEBOOK_IMAGE,
             $customHeader
         );
