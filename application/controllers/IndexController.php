@@ -80,7 +80,7 @@ class IndexController extends Zend_Controller_Action
                 "all_popularShops_list",
                 array(
                     'function' => 'FrontEnd_Helper_viewHelper::getStoreForFrontEnd',
-                    'parameters' => array("popular", 24)
+                    'parameters' => array("popular", 48)
                 ),
                 ''
             );
