@@ -6,8 +6,9 @@ class BootstrapConstantsFunctions
     {
         $localeSettings = LocaleSettings::getLocaleSettings();
         $locale = !empty($localeSettings[0]['locale']) ? $localeSettings[0]['locale'] : 'nl_NL';
+        $timezone = !empty($localeSettings[0]['timezone']) ? $localeSettings[0]['timezone'] : 'Europe/Amsterdam';
         defined('COUNTRY_LOCALE') || define('COUNTRY_LOCALE', $locale);
-        defined('LOCALE_TIMEZONE') || define('LOCALE_TIMEZONE', $localeSettings[0]['timezone']);
+        defined('LOCALE_TIMEZONE') || define('LOCALE_TIMEZONE', $timezone);
     }
 
     public static function constantsForSettingRequestHeaders()
