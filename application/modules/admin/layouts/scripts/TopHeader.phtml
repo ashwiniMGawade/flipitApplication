@@ -8,11 +8,12 @@
 	   <select class="fl-ie" onchange="localeSettingCMS(this);">
 	     <?php 
 	    	for($w=0;$w<count($sessionNamespace->settings['webaccess']);$w++){
-	       	$siteName = $sessionNamespace->settings['webaccess'][$w]['websitename'];
+	       		$siteName = $sessionNamespace->settings['webaccess'][$w]['websitename'];
+	       	if ($siteName != '') {	
 	     ?>
 	     	<option value="<?php echo $siteName;?>" <?php echo isset($_COOKIE['site_name']) && $siteName == $_COOKIE['site_name'] ? 'selected=selected' : ''; ?>><?php echo $siteName; ?></option>
 	    
-	  <?php }?>
+	  <?php } }?>
 	  </select>
 	</form>
 <?php
