@@ -158,6 +158,21 @@ class Shop extends BaseShop
         return $popularStoreData;
     }
 
+    public static function getPopularStoresForHomePage($limit)
+    {
+        $popularStores = Doctrine_Query::create()
+            ->select('p.id,s.name,s.permaLink, img.path as imgpath, img.name as imgname')
+            ->from('PopularShop p')
+            ->leftJoin('p.shop s')
+            ->leftJoin('s.logo img')
+            ->where('s.deleted=0')
+            ->addWhere('s.status=1')
+            ->orderBy('p.position ASC')
+            ->limit($limit)
+            ->fetchArray();
+        return $popularStores;
+    }
+
     public static function getPopularStoresForDropDown($limit)
     {
         $popularStoreData = Doctrine_Query::create()

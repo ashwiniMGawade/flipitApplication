@@ -79,7 +79,7 @@ class IndexController extends Zend_Controller_Action
             $this->view->topStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_popularShops_list",
                 array(
-                    'function' => 'FrontEnd_Helper_viewHelper::getStoreForFrontEnd',
+                    'function' => 'Shop::getPopularStoresForHomePage',
                     'parameters' => array("popular", 48)
                 ),
                 ''
