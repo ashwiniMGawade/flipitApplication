@@ -23,7 +23,7 @@ class RouteRedirect extends BaseRouteRedirect
         $data = Doctrine_Query::create()
             ->select('r.redirectto')
             ->from('RouteRedirect r')
-            ->where("r.orignalurl = ?", $orignalurl)
+            ->where("r.orignalurl = ?", FrontEnd_Helper_viewHelper::sanitize($orignalurl))
             ->fetchArray();
         return $data;
     }

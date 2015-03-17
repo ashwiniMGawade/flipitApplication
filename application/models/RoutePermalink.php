@@ -22,7 +22,7 @@ class RoutePermalink extends BaseRoutePermalink
         $data = Doctrine_Query::create()
             ->select('r.permalink, r.exactlink')
             ->from('RoutePermalink r')
-            ->where("r.permalink = ?", $permalink)
+            ->where("r.permalink = ?", FrontEnd_Helper_viewHelper::sanitize($permalink))
             ->fetchArray();
         return $data;
     }
