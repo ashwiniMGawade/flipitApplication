@@ -48,36 +48,6 @@ EOD;
         }
         return false;
     }
-
-    public function socialMediaWidget($socialMediaUrl = '', $type = null)
-    {
-        $socialMediaTitle = "<h4>".$this->__translate('Follow us')."</h4>";
-        $facebookPageLink = 'https://www.facebook.com/kortingsbonnen';
-        $twitterPageLink = 'https://twitter.com/codekorting';
-        $googlePlusPageLink = 'https://plus.google.com/+KortingscodeNl';
-
-        if (LOCALE != '') {
-            $facebookPageLink = 'https://www.facebook.com/flipitcom';
-            $twitterPageLink = 'https://twitter.com/Flipit';
-            $googlePlusPageLink = 'https://plus.google.com/104667362431888724932/about';
-        }
-
-        $socialMedia = "
-            <article class='block'>
-                <div class='social-networks'>
-                    <div class='intro'>".$socialMediaTitle."</div>
-                    <ul class='share-list'>
-                        <li><a class='facebook' href='".$facebookPageLink."' target='_blank' rel='nofollow'></a></li>
-                        <li><a class='twitter' href='".$twitterPageLink."' target='_blank' rel='nofollow'></a></li>
-                        <li><a class='google' href='".$googlePlusPageLink."' target='_blank' rel='nofollow'></a></li>
-                        <li class='share-text'>"
-                        .$this->__translate('Follow us for the latest vaucher codes, plus a daily digest of our biggest offers')
-                        ."</li>
-                    </ul>
-                </div>
-            </article>";
-        return $socialMedia;
-    }
     
     public function popularCategoryWidget()
     {
