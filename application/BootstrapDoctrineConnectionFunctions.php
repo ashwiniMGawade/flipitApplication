@@ -23,12 +23,12 @@ class BootstrapDoctrineConnectionFunctions {
             $doctrineOptions[strtolower($localSiteDbConnection)]['dsn'],
             'doctrine_site'
         );
-         $locale = LocaleSettings::getLocaleSettings();
-        $localeValue = explode('_', $locale[0]['locale']);
+        BootstrapConstantsFunctions::constantsForLocaleAndTimezoneSetting();
+        $localeValue = explode('_', COUNTRY_LOCALE);
         if (LOCALE == '') {
             date_default_timezone_set('Europe/Amsterdam');
         } else if (strtolower($localeValue[1]) == LOCALE) {
-            date_default_timezone_set($locale[0]['timezone']);
+            date_default_timezone_set(LOCALE_TIMEZONE);
         }
         return $imbullDbConnection;
     }
