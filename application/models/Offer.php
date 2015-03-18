@@ -458,7 +458,8 @@ class Offer extends BaseOffer
         $specialPageOffers = Doctrine_Query::create()
         ->select(
             'op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,
-            o.discountType,o.userGenerated,o.approved,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
+            o.discountType,o.userGenerated,o.approved,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,
+            o.couponCode,o.exclusiveCode,
             o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,
             o.updated_at as lastUpdate,s.name,s.refUrl,
             s.actualUrl,s.permaLink as permalink,s.views,l.*,terms.content'
