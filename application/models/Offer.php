@@ -3124,7 +3124,8 @@ class Offer extends BaseOffer
         $memOnly = "MEM";
         $data = Doctrine_Query::create()->select(
             'o.title,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
-            o.editorPicks,o.discount,o.discountvalueType,s.name,s.views,l.*')
+            o.editorPicks,o.discount,o.discountvalueType,s.name,s.views,l.*'
+        )
         ->from("Offer o")
         ->leftJoin('o.shop s')
         ->leftJoin('s.logo l')
