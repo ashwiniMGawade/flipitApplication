@@ -2531,25 +2531,27 @@ class Offer extends BaseOffer
 
         $date = date('Y-m-d H:i:s');
         $data = Doctrine_Query::create()
-                ->select('s.id,s.name,s.refUrl, s.actualUrl, s.permaLink as permalink,
-                    terms.content,p.id,o.id,o.Visability,o.title,o.authorId,
-                    o.discountvalueType,o.exclusiveCode,o.discount,o.couponCodeType,
-                    o.couponCode,o.refOfferUrl,o.refURL, o.discountType,
-                    o.startdate,o.endDate,img.id, img.path, img.name')
-                ->from('PopularCode p')
-                ->leftJoin('p.offer o')
-                ->leftJoin('o.shop s')
-                ->leftJoin('s.logo img')
-                ->leftJoin('o.termandcondition terms')
-                ->where('o.deleted = 0')
-                ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode c WHERE c.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
-                ->andWhere('o.userGenerated=0')
-                ->andWhere('o.enddate > "'.$date.'"')
-                ->andWhere('o.startdate <= "'.$date.'"')
-                ->andWhere('s.deleted = 0')
-                ->andWhere('s.status = 1')
-                ->andWhere('o.discounttype="CD"')
-                ->andWhere('o.Visability!="MEM"');
+            ->select(
+                's.id,s.name,s.refUrl, s.actualUrl, s.permaLink as permalink,
+                terms.content,p.id,o.id,o.Visability,o.title,o.authorId,
+                o.discountvalueType,o.exclusiveCode,o.discount,o.couponCodeType,
+                o.couponCode,o.refOfferUrl,o.refURL, o.discountType,
+                o.startdate,o.endDate,img.id, img.path, img.name'
+            )
+            ->from('PopularCode p')
+            ->leftJoin('p.offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('s.logo img')
+            ->leftJoin('o.termandcondition terms')
+            ->where('o.deleted = 0')
+            ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode c WHERE c.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
+            ->andWhere('o.userGenerated=0')
+            ->andWhere('o.enddate > "'.$date.'"')
+            ->andWhere('o.startdate <= "'.$date.'"')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('s.status = 1')
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere('o.Visability!="MEM"');
 
         if ($shopId!='') {
             $data->andWhere('s.id = '.$shopId.'');
