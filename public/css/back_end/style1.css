@@ -348,3 +348,6 @@ a, #adminmenu a, #the-comment-list p.comment-author strong a, #media-upload a.de
 .mg-left{
     margin-left: -24px;
 }
+.text-red{
+    color: red;
+}
