@@ -2427,10 +2427,12 @@ class Offer extends BaseOffer
         $suggestion = array();
         $date = date('Y-m-d H:i:s');
         $data = Doctrine_Query::create()
-            ->select('p.id,o.enddate,o.title,s.refUrl,s.actualUrl,s.permaLink as permalink,
+            ->select(
+                'p.id,o.enddate,o.title,s.refUrl,s.actualUrl,s.permaLink as permalink,
                 o.Visability,o.extendedUrl,o.shopid,o.offerlogoid,o.couponcode,o.exclusivecode,
                 o.discount,o.discountvalueType,s.name,s.logoid,l.path,l.name,p.type,p.position,
-                p.offerId')
+                p.offerId'
+            )
             ->from('PopularCode p')
             ->leftJoin('p.offer o')
             ->leftJoin('o.shop s')
