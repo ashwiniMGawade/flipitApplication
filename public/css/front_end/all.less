@@ -338,7 +338,8 @@ img.logo.kortingscode{
 				float:left;
 				&:hover{
 					.drop-box{
-						display:block;
+						opacity: 1;
+						visibility:visible;
 					}
 				}
 				> a{
@@ -377,7 +378,13 @@ img.logo.kortingscode{
 			    }
 			}
 			.drop-box{
-				display:none;
+                opacity: 0;
+                visibility: hidden;
+				-webkit-transition: opacity 0.5s ease-in-out;
+			    -moz-transition: opacity 0.5s ease-in-out;
+			    -o-transition: opacity 0.5s ease-in-out;
+			    -ms-transition: opacity 0.5s ease-in-out;
+			    transition: opacity 0.5s ease-in-out;
 				position:absolute;
 				left:0;
 				top:100%;
