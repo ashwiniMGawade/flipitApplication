@@ -384,11 +384,14 @@ class StoreController extends Zend_Controller_Action
         $howToGuideUrlForMetaTags = isset($howToGuides[0]['permaLink'])
             ? $howToGuides[0]['permaLink']
             : $howToGuidePermalink;
+        $howToGuideMetaDescription = isset($howToGuides[0]['howtoMetaDescription'])
+            ? $howToGuides[0]['howtoMetaDescription']
+            : '';
         $this->viewHelperObject->getMetaTags(
             $this,
             str_replace('[shop]', $shopName, $howToGuides),
             '',
-            trim($howToGuides[0]['howtoMetaDescription']),
+            trim($howToGuideMetaDescription),
             $howToGuideUrlForMetaTags,
             FACEBOOK_IMAGE,
             $customHeader
