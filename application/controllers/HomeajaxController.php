@@ -10,7 +10,7 @@ class HomeajaxController extends Zend_Controller_Action
             "all_hometocategoryoffers". $categoryId ."_list",
             array(
                 'function' => 'Category::getCategoryVoucherCodes',
-                'parameters' => array($categoryId, 0, 'homePage')
+                'parameters' => array($categoryId, 50, 'homePage')
             )
         );
         $offers = count($topCategoriesOffers) > 10
