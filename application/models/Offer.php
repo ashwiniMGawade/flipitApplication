@@ -461,21 +461,17 @@ class Offer extends BaseOffer
             o.discountType,o.userGenerated,o.approved,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
             o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,
             o.updated_at as lastUpdate,s.name,s.refUrl,
-            s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path,
-            ologo.name,terms.content'
+            s.actualUrl,s.permaLink as permalink,s.views,l.*,terms.content'
         )
         ->from('refOfferPage op')
         ->leftJoin('op.Offer o')
-        ->leftJoin('o.logo ologo')
         ->leftJoin('o.termandcondition terms')
         ->andWhere(
             "(couponCodeType = 'UN' AND (SELECT count(id) FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0)
             or couponCodeType = 'GN'"
         )
         ->leftJoin('o.shop s')
-        ->leftJoin('o.vote vot')
         ->leftJoin('s.logo l')
-        ->leftJoin('s.favoriteshops fv')
         ->where('op.pageId = '.$pageId)
         ->andWhere('o.enddate > "'.$currentDate.'"')
         ->andWhere('o.startdate <= "'.$currentDate.'"')
@@ -511,21 +507,19 @@ class Offer extends BaseOffer
     {
         $offersConstraintsQuery = Doctrine_Query::create()
         ->select(
-            'o.title, o.userGenerated, o.approved, o.couponCodeType,o.discountType,o.totalViewcount as clicks,o.startDate,o.endDate,o.refURL,
+            'o.title, o.userGenerated, o.approved, o.couponCodeType,o.discountType,o.totalViewcount as clicks,
+            o.startDate,o.endDate,o.refURL,
             o.refOfferUrl,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,
-            o.updated_at as lastUpdate, o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,
-            fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name,o.authorName'
+            o.updated_at as lastUpdate, o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,
+            s.permaLink as permalink,s.views,l.*, o.authorName'
         )
         ->from('Offer o')
-        ->leftJoin('o.logo ologo')
         ->andWhere(
             "(couponCodeType = 'UN' AND (SELECT count(id) FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0)
             or couponCodeType = 'GN'"
         )
         ->leftJoin('o.shop s')
-        ->leftJoin('o.vote vot')
         ->leftJoin('s.logo l')
-        ->leftJoin('s.favoriteshops fv')
         ->andWhere('o.deleted =0')
         ->andWhere('o.userGenerated=0')
         ->andWhere('s.deleted =0')
