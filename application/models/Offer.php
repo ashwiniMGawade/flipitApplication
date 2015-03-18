@@ -2954,22 +2954,22 @@ class Offer extends BaseOffer
     {
         $date = date('Y-m-d H:i:s');
         $popularOffers = Doctrine_Query::create()
-                        ->select('po.*,o.*,terms.*,s.id,s.name,img.name,img.path,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote')
-                        ->from("PopularVouchercodes po")
-                        ->leftJoin('po.offer o')
-                        ->leftJoin('o.shop s')
-                        ->leftJoin('o.termandcondition terms')
-                        ->leftJoin('o.vote vot')
-                        ->leftJoin('s.logo img')
-                        ->leftJoin('s.favoriteshops fv')
-                        ->Where('s.id='.$shopId)
-                        ->andWhere('o.deleted =0')
-                        ->andWhere('o.enddate > "'.$date.'"')
-                        ->andWhere('o.startdate <= "'.$date.'"')
-                        ->andWhere('s.deleted =0')
-                        ->orderBy('po.vaoucherofferid DESC')
-                        ->limit($limit)
-                        ->fetchArray();
+            ->select(
+                'po.*,o.*,terms.*,s.id,s.name,img.name,img.path'
+            )
+            ->from("PopularVouchercodes po")
+            ->leftJoin('po.offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('o.termandcondition terms')
+            ->leftJoin('s.logo img')
+            ->Where('s.id='.$shopId)
+            ->andWhere('o.deleted =0')
+            ->andWhere('o.enddate > "'.$date.'"')
+            ->andWhere('o.startdate <= "'.$date.'"')
+            ->andWhere('s.deleted =0')
+            ->orderBy('po.vaoucherofferid DESC')
+            ->limit($limit)
+            ->fetchArray();
 
         return $popularOffers;
     }
@@ -3030,13 +3030,11 @@ class Offer extends BaseOffer
     {
         $date = date('Y-m-d H:i:s');
         $popularOffers = Doctrine_Query::create()
-        ->select('po.*,o.*,terms.*,s.*,img.name,img.path,vot.id,vot.vote')
+        ->select('po.*,o.*,terms.*,s.*,img.name,img.path')
         ->from("PopularVouchercodes po")
         ->leftJoin('po.offer o')
         ->leftJoin('o.shop s')
-        ->leftJoin('o.vote vot')
         ->leftJoin('s.logo img')
-        ->leftJoin('s.favoriteshops fv')
         ->where('s.id=?o.shopid')
         ->andWhere('o.exclusivecode<>0')
         ->andWhere('o.enddate > "'.$date.'"')
