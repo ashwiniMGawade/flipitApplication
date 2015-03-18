@@ -231,9 +231,9 @@ class Admin_NewstickerController extends Zend_Controller_Action
             if ($newsticker['url']!= null && $newsticker['url']!='') {
                 $tickerUrl = $newsticker['url'];
             }
-            $startDate = date('d-m-Y', strtotime($newsticker['startdate']));
+            $startDate = $newsticker['startdate']->format('d-m-Y');
             $objPHPExcel->getActiveSheet()->setCellValue('A' . $column, $newsticker['title']);
-            $objPHPExcel->getActiveSheet()->setCellValue('B' . $column, $newsticker['shop']['name']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $column, $newsticker['name']);
             $objPHPExcel->getActiveSheet()->setCellValue('C' . $column, $startDate);
             $objPHPExcel->getActiveSheet()->setCellValue('D' . $column, $newstickerStatus);
             $objPHPExcel->getActiveSheet()->setCellValue('E' . $column, $tickerUrl);

@@ -275,17 +275,17 @@ class Admin_CategoryController extends Zend_Controller_Action
 
             // condition apply on offer
             $name = '';
-            if ($category ['name'] == '' || $category ['name'] == 'undefined' || $category ['name'] == null || $category ['name'] == '0') {
+            if ($category[0]['name'] == '' || $category[0]['name'] == 'undefined' || $category[0]['name'] == null || $category[0]['name'] == '0') {
 
                 $name = '';
 
             } else {
 
-                $name = $category ['name'];
+                $name = $category[0]['name'];
             }
 
             $status = '';
-            if ($category ['status'] == true) {
+            if ($category[0]['status'] == true) {
 
                 $status = $this->view->translate ( 'Yes' );
 
