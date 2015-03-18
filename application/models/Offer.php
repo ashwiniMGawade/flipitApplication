@@ -361,14 +361,11 @@ class Offer extends BaseOffer
                 o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,o.authorName,
                 o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.extendedUrl,
                 o.discountType,o.startdate,o.endDate, o.updated_at as lastUpdate, o.nickname,o.approved,
-                img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote'
+                img.id, img.path, img.name'
             )
             ->from('Offer o')
             ->leftJoin('o.shop s')
-            ->leftJoin('o.logo ologo')
-            ->leftJoin('o.vote vot')
             ->leftJoin('s.logo img')
-            ->leftJoin('s.favoriteshops fv')
             ->leftJoin('o.termandcondition terms')
             ->where('o.deleted = 0')
             ->andWhere(
