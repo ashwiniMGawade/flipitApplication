@@ -364,14 +364,11 @@ class Offer extends BaseOffer
                 o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,o.authorName,
                 o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.extendedUrl,
                 o.discountType,o.startdate,o.endDate, o.updated_at as lastUpdate, o.nickname,o.approved,
-                img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote'
+                img.id, img.path, img.name'
             )
             ->from('Offer o')
             ->leftJoin('o.shop s')
-            ->leftJoin('o.logo ologo')
-            ->leftJoin('o.vote vot')
             ->leftJoin('s.logo img')
-            ->leftJoin('s.favoriteshops fv')
             ->leftJoin('o.termandcondition terms')
             ->where('o.deleted = 0')
             ->andWhere(
@@ -461,24 +458,21 @@ class Offer extends BaseOffer
         $specialPageOffers = Doctrine_Query::create()
         ->select(
             'op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,
-            o.discountType,o.userGenerated,o.approved,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
+            o.discountType,o.userGenerated,o.approved,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,
+            o.couponCode,o.exclusiveCode,
             o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,
             o.updated_at as lastUpdate,s.name,s.refUrl,
-            s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path,
-            ologo.name,terms.content'
+            s.actualUrl,s.permaLink as permalink,s.views,l.*,terms.content'
         )
         ->from('refOfferPage op')
         ->leftJoin('op.Offer o')
-        ->leftJoin('o.logo ologo')
         ->leftJoin('o.termandcondition terms')
         ->andWhere(
             "(couponCodeType = 'UN' AND (SELECT count(id) FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0)
             or couponCodeType = 'GN'"
         )
         ->leftJoin('o.shop s')
-        ->leftJoin('o.vote vot')
         ->leftJoin('s.logo l')
-        ->leftJoin('s.favoriteshops fv')
         ->where('op.pageId = '.$pageId)
         ->andWhere('o.enddate > "'.$currentDate.'"')
         ->andWhere('o.startdate <= "'.$currentDate.'"')
@@ -514,21 +508,19 @@ class Offer extends BaseOffer
     {
         $offersConstraintsQuery = Doctrine_Query::create()
         ->select(
-            'o.title, o.userGenerated, o.approved, o.couponCodeType,o.discountType,o.totalViewcount as clicks,o.startDate,o.endDate,o.refURL,
+            'o.title, o.userGenerated, o.approved, o.couponCodeType,o.discountType,o.totalViewcount as clicks,
+            o.startDate,o.endDate,o.refURL,
             o.refOfferUrl,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,
-            o.updated_at as lastUpdate, o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,
-            fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name,o.authorName'
+            o.updated_at as lastUpdate, o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,
+            s.permaLink as permalink,s.views,l.*, o.authorName'
         )
         ->from('Offer o')
-        ->leftJoin('o.logo ologo')
         ->andWhere(
             "(couponCodeType = 'UN' AND (SELECT count(id) FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0)
             or couponCodeType = 'GN'"
         )
         ->leftJoin('o.shop s')
-        ->leftJoin('o.vote vot')
         ->leftJoin('s.logo l')
-        ->leftJoin('s.favoriteshops fv')
         ->andWhere('o.deleted =0')
         ->andWhere('o.userGenerated=0')
         ->andWhere('s.deleted =0')
@@ -854,12 +846,11 @@ class Offer extends BaseOffer
                 's.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.refURL,o.discountType,
                 o.id,o.title,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, o.refofferurl, o.startdate,
                 o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount, o.authorId, o.authorName,
-                o.shopid, o.offerlogoid, o.userGenerated, o.approved, o.nickname, img.id, img.path, img.name,fv.shopId,fv.visitorId,o.couponCodeType'
+                o.shopid, o.offerlogoid, o.userGenerated, o.approved, o.nickname, img.id, img.path, img.name,o.couponCodeType'
             )
             ->from('Offer o')
             ->leftJoin('o.shop s')
             ->leftJoin('s.logo img')
-            ->leftJoin('s.favoriteshops fv')
             ->leftJoin('o.termandcondition terms')
             ->leftJoin('o.tiles t')
             ->where('o.deleted = 0')
@@ -887,12 +878,11 @@ class Offer extends BaseOffer
                     o.id,o.title,o.refURL,o.discountType,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, 
                     o.refofferurl, o.startdate,o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount,
                     o.authorId, o.authorName, o.shopid,o.offerlogoid,o.couponCodeType,img.id, img.path,
-                    img.name,fv.shopId,fv.visitorId,t.*'
+                    img.name,t.*'
                 )
                 ->from('Offer o')
                 ->leftJoin('o.shop s')
                 ->leftJoin('s.logo img')
-                ->leftJoin('s.favoriteshops fv')
                 ->leftJoin('o.termandcondition terms')
                  ->leftJoin('o.tiles t')
                 ->where('o.deleted = 0')
@@ -1144,14 +1134,11 @@ class Offer extends BaseOffer
                     s.usergenratedcontent,s.refUrl,s.actualUrl,terms.content,o.id,o.extendedoffer,o.extendedurl,
                     o.editorpicks,o.Visability, o.userGenerated, o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.authorName,
                     o.discount,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,
-                    o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote'
+                    o.startdate,o.endDate,img.id, img.path, img.name'
                 )
                 ->from('Offer o')
                 ->leftJoin('o.shop s')
-                ->leftJoin('o.logo ologo')
-                ->leftJoin('o.vote vot')
                 ->leftJoin('s.logo img')
-                ->leftJoin('s.favoriteshops fv')
                 ->leftJoin('o.termandcondition terms')
                 ->where('o.deleted = 0')
                 ->andWhere(
@@ -2443,22 +2430,25 @@ class Offer extends BaseOffer
         $suggestion = array();
         $date = date('Y-m-d H:i:s');
         $data = Doctrine_Query::create()
-                                ->select('p.id,o.enddate,o.title,s.refUrl,s.actualUrl,s.permaLink as permalink,o.Visability,o.extendedUrl,o.shopid,o.offerlogoid,o.couponcode,o.exclusivecode,o.discount,o.discountvalueType,s.name,s.logoid,l.path,l.name,p.type,p.position,p.offerId,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
-                                ->from('PopularCode p')
-                                ->leftJoin('p.offer o')
-                                ->leftJoin('o.shop s')
-                                ->leftJoin('o.vote vot')
-                                ->leftJoin('s.favoriteshops fv')
-                                ->leftJoin('s.logo l')
-                                ->where('o.deleted =0')
-                                ->andWhere('o.userGenerated=0')
-                                ->andWhere('s.deleted = 0')
-                                ->andWhere('o.offline = 0')
-                                ->andWhere('o.startdate <= "'.$date.'"')
-                                ->andWhere('o.enddate > "'.$date.'"')
-                                ->andWhere('o.discounttype="CD"')
-                                ->andWhere('o.Visability != "MEM"')
-                                ->orderBy('p.position ASC')->limit(4)->fetchArray();
+            ->select(
+                'p.id,o.enddate,o.title,s.refUrl,s.actualUrl,s.permaLink as permalink,
+                o.Visability,o.extendedUrl,o.shopid,o.offerlogoid,o.couponcode,o.exclusivecode,
+                o.discount,o.discountvalueType,s.name,s.logoid,l.path,l.name,p.type,p.position,
+                p.offerId'
+            )
+            ->from('PopularCode p')
+            ->leftJoin('p.offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('s.logo l')
+            ->where('o.deleted =0')
+            ->andWhere('o.userGenerated=0')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('o.offline = 0')
+            ->andWhere('o.startdate <= "'.$date.'"')
+            ->andWhere('o.enddate > "'.$date.'"')
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere('o.Visability != "MEM"')
+            ->orderBy('p.position ASC')->limit(4)->fetchArray();
         foreach ($data as $d):
             $suggestion[] = $d['offer'];
         endforeach;
@@ -2544,24 +2534,27 @@ class Offer extends BaseOffer
 
         $date = date('Y-m-d H:i:s');
         $data = Doctrine_Query::create()
-                ->select('s.id,s.name,s.refUrl, s.actualUrl, s.permaLink as permalink,terms.content,p.id,o.id,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.couponCodeType,o.couponCode,o.refOfferUrl,o.refURL, o.discountType,o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
-                ->from('PopularCode p')
-                ->leftJoin('p.offer o')
-                ->leftJoin('o.logo ologo')
-                ->leftJoin('o.shop s')
-                ->leftJoin('o.vote vot')
-                ->leftJoin('s.logo img')
-                ->leftJoin('s.favoriteshops fv')
-                ->leftJoin('o.termandcondition terms')
-                ->where('o.deleted = 0')
-                ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode c WHERE c.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
-                ->andWhere('o.userGenerated=0')
-                ->andWhere('o.enddate > "'.$date.'"')
-                ->andWhere('o.startdate <= "'.$date.'"')
-                ->andWhere('s.deleted = 0')
-                ->andWhere('s.status = 1')
-                ->andWhere('o.discounttype="CD"')
-                ->andWhere('o.Visability!="MEM"');
+            ->select(
+                's.id,s.name,s.refUrl, s.actualUrl, s.permaLink as permalink,
+                terms.content,p.id,o.id,o.Visability,o.title,o.authorId,
+                o.discountvalueType,o.exclusiveCode,o.discount,o.couponCodeType,
+                o.couponCode,o.refOfferUrl,o.refURL, o.discountType,
+                o.startdate,o.endDate,img.id, img.path, img.name'
+            )
+            ->from('PopularCode p')
+            ->leftJoin('p.offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('s.logo img')
+            ->leftJoin('o.termandcondition terms')
+            ->where('o.deleted = 0')
+            ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode c WHERE c.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
+            ->andWhere('o.userGenerated=0')
+            ->andWhere('o.enddate > "'.$date.'"')
+            ->andWhere('o.startdate <= "'.$date.'"')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('s.status = 1')
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere('o.Visability!="MEM"');
 
         if ($shopId!='') {
             $data->andWhere('s.id = '.$shopId.'');
@@ -2592,28 +2585,31 @@ class Offer extends BaseOffer
     {
         $date = date('Y-m-d H:i:s');
         $data = Doctrine_Query::create()
-                    ->select('s.id,s.name,s.usergenratedcontent, s.permaLink as permalink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,o.id,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
-                    ->from('Offer o')
-                    ->leftJoin('o.shop s')
-                    ->leftJoin('o.logo ologo')
-                    ->leftJoin('o.vote vot')
-                    ->leftJoin('s.logo img')
-                    ->leftJoin('s.favoriteshops fv')
-                    ->leftJoin('o.termandcondition terms')
-                    ->where('o.deleted = 0')
-                    ->andWhere('s.deleted = 0')
-                    ->andWhere('o.Visability = "MEM"')
-                    ->andWhere('o.enddate > "'.$date.'"')
-                    ->andWhere('o.startdate <= "'.$date.'"')
-                    ->andWhere('o.discountType != "NW"')
-                    ->andWhere('o.discounttype="CD"')
-                    ->andWhere('o.userGenerated=0')
-                    //->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
-                    ->orderBy('o.id DESC');
-                     $data = $data->limit($limit)
-                    //->getSqlQuery();
-                    //die;
-                    ->fetchArray();
+            ->select(
+                's.id,s.name,s.usergenratedcontent, s.permaLink as permalink,
+                s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,
+                o.id,o.Visability,o.title,o.authorId,o.discountvalueType,
+                o.exclusiveCode,o.discount,o.couponCode,o.couponCodeType,o.refOfferUrl,
+                o.refUrl,o.discountType,o.endDate,img.id, img.path, img.name'
+            )
+            ->from('Offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('s.logo img')
+            ->leftJoin('o.termandcondition terms')
+            ->where('o.deleted = 0')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('o.Visability = "MEM"')
+            ->andWhere('o.enddate > "'.$date.'"')
+            ->andWhere('o.startdate <= "'.$date.'"')
+            ->andWhere('o.discountType != "NW"')
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere('o.userGenerated=0')
+            //->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
+            ->orderBy('o.id DESC');
+             $data = $data->limit($limit)
+            //->getSqlQuery();
+            //die;
+            ->fetchArray();
 
         return $data;
 
@@ -2641,10 +2637,7 @@ class Offer extends BaseOffer
             ->select('terms.content as terms,img.name as shopImageName,img.path as shopImagePath,o.id,o.title,s.permaLink as permalink,o.updated_at as lastUpdate')
             ->from('Offer o')
             ->leftJoin('o.shop s')
-            ->leftJoin('o.logo ologo')
-            ->leftJoin('o.vote vot')
             ->leftJoin('s.logo img')
-            ->leftJoin('s.favoriteshops fv')
             ->leftJoin('o.termandcondition terms')
             ->where('o.deleted = 0')
             ->andWhere('s.deleted = 0')
@@ -2673,11 +2666,8 @@ class Offer extends BaseOffer
             ->select('terms.content as terms,o.id,o.title,s.permaLink as permalink,p.id,o.updated_at as lastUpdate,img.name as shopImageName,img.path as shopImagePath')
             ->from('PopularCode p')
             ->leftJoin('p.offer o')
-            ->leftJoin('o.logo ologo')
             ->leftJoin('o.shop s')
-            ->leftJoin('o.vote vot')
             ->leftJoin('s.logo img')
-            ->leftJoin('s.favoriteshops fv')
             ->leftJoin('o.termandcondition terms')
             ->where('o.deleted = 0')
             ->andWhere('o.enddate > "'.$currentDate.'"')
@@ -2740,12 +2730,17 @@ class Offer extends BaseOffer
             }
             $shopvalues=implode(",", $shopdata);
             $data = Doctrine_Query::create()
-                ->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
+                ->select(
+                    's.id,s.permalink as permalink,s.name,s.deepLink,s.deepLinkStatus,s.refUrl,
+                    s.actualUrl,terms.content,o.id,o.title, o.Visability, o.couponCode, 
+                    o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,
+                    o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, 
+                    o.offerlogoid, o.userGenerated, o.approved,o.discountvalueType,img.id, img.path, 
+                    img.name'
+                )
                 ->from('Offer o')
                 ->leftJoin('o.shop s')
-                ->leftJoin('s.favoriteshops fv')
                 ->leftJoin('o.termandcondition terms')
-                ->leftJoin('o.vote vot')
                 ->leftJoin('s.logo img')
                 ->where("o.shopId IN ($shopvalues)")
                 ->andWhere('o.deleted = 0')
@@ -2862,7 +2857,7 @@ class Offer extends BaseOffer
                 o.totalViewcount,o.startDate,o.endDate,o.refOfferUrl,
                 o.extendedUrl,l.*,t.*,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,
                 s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path,
-                img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote'
+                img.name'
             )
             ->from('PopularCode p')
             ->leftJoin('p.offer o')
@@ -2870,9 +2865,7 @@ class Offer extends BaseOffer
             ->leftJoin('s.refShopCategory sc')
             ->leftJoin('o.logo l')
             ->leftJoin('s.logo img')
-            ->leftJoin('s.favoriteshops fv')
             ->leftJoin('o.termandcondition terms')
-            ->leftJoin('o.vote vot')
             ->leftJoin('o.tiles t')
             ->where('o.deleted =0')
             ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
@@ -2911,8 +2904,7 @@ class Offer extends BaseOffer
 
         ->select(
             'l.*,t.*,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,
-            s.refUrl,s.actualUrl,terms.content,o.*,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,
-            vot.vote'
+            s.refUrl,s.actualUrl,terms.content,o.*,img.id, img.path, img.name'
         )
         ->from('Offer o')
 
@@ -2920,9 +2912,7 @@ class Offer extends BaseOffer
         ->leftJoin('o.shop s')
         ->leftJoin('o.logo l')
         ->leftJoin('s.logo img')
-        ->leftJoin('s.favoriteshops fv')
         ->leftJoin('o.termandcondition terms')
-        ->leftJoin('o.vote vot')
         ->leftJoin('o.tiles t')
         ->where('o.deleted = 0');
 
@@ -2973,22 +2963,22 @@ class Offer extends BaseOffer
     {
         $date = date('Y-m-d H:i:s');
         $popularOffers = Doctrine_Query::create()
-                        ->select('po.*,o.*,terms.*,s.id,s.name,img.name,img.path,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote')
-                        ->from("PopularVouchercodes po")
-                        ->leftJoin('po.offer o')
-                        ->leftJoin('o.shop s')
-                        ->leftJoin('o.termandcondition terms')
-                        ->leftJoin('o.vote vot')
-                        ->leftJoin('s.logo img')
-                        ->leftJoin('s.favoriteshops fv')
-                        ->Where('s.id='.$shopId)
-                        ->andWhere('o.deleted =0')
-                        ->andWhere('o.enddate > "'.$date.'"')
-                        ->andWhere('o.startdate <= "'.$date.'"')
-                        ->andWhere('s.deleted =0')
-                        ->orderBy('po.vaoucherofferid DESC')
-                        ->limit($limit)
-                        ->fetchArray();
+            ->select(
+                'po.*,o.*,terms.*,s.id,s.name,img.name,img.path'
+            )
+            ->from("PopularVouchercodes po")
+            ->leftJoin('po.offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('o.termandcondition terms')
+            ->leftJoin('s.logo img')
+            ->Where('s.id='.$shopId)
+            ->andWhere('o.deleted =0')
+            ->andWhere('o.enddate > "'.$date.'"')
+            ->andWhere('o.startdate <= "'.$date.'"')
+            ->andWhere('s.deleted =0')
+            ->orderBy('po.vaoucherofferid DESC')
+            ->limit($limit)
+            ->fetchArray();
 
         return $popularOffers;
     }
@@ -3049,13 +3039,11 @@ class Offer extends BaseOffer
     {
         $date = date('Y-m-d H:i:s');
         $popularOffers = Doctrine_Query::create()
-        ->select('po.*,o.*,terms.*,s.*,img.name,img.path,vot.id,vot.vote')
+        ->select('po.*,o.*,terms.*,s.*,img.name,img.path')
         ->from("PopularVouchercodes po")
         ->leftJoin('po.offer o')
         ->leftJoin('o.shop s')
-        ->leftJoin('o.vote vot')
         ->leftJoin('s.logo img')
-        ->leftJoin('s.favoriteshops fv')
         ->where('s.id=?o.shopid')
         ->andWhere('o.exclusivecode<>0')
         ->andWhere('o.enddate > "'.$date.'"')
@@ -3139,12 +3127,13 @@ class Offer extends BaseOffer
     {
         $date = date('Y-m-d H:i:s');
         $memOnly = "MEM";
-        $data = Doctrine_Query::create()->select('o.title,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,s.name,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote')
+        $data = Doctrine_Query::create()->select(
+            'o.title,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
+            o.editorPicks,o.discount,o.discountvalueType,s.name,s.views,l.*'
+        )
         ->from("Offer o")
         ->leftJoin('o.shop s')
-        ->leftJoin('o.vote vot')
         ->leftJoin('s.logo l')
-        ->leftJoin('s.favoriteshops fv')
         ->where('o.Visability='."'$memOnly'")
         ->andWhere('o.deleted =0')
         ->andWhere('s.deleted =0')

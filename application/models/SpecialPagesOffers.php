@@ -14,25 +14,21 @@ class SpecialPagesOffers extends BaseSpecialPagesOffers
         $currentDate = date("Y-m-d H:i");
         $specialPageOffers = Doctrine_Query::create()
         ->select(
-            'op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,
+            'op.pageId,op.offerId, o.userGenerated, o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,
             o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
             o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,
             o.updated_at as lastUpdate,s.name,s.refUrl,
-            s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path,
-            ologo.name,terms.content'
+            s.actualUrl,s.permaLink as permalink,s.views,l.*,terms.content'
         )
         ->from('SpecialPagesOffers op')
         ->leftJoin('op.offers o')
-        ->leftJoin('o.logo ologo')
         ->leftJoin('o.termandcondition terms')
         ->andWhere(
             "(couponCodeType = 'UN' AND (SELECT count(id) FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0)
             or couponCodeType = 'GN'"
         )
         ->leftJoin('o.shop s')
-        ->leftJoin('o.vote vot')
         ->leftJoin('s.logo l')
-        ->leftJoin('s.favoriteshops fv')
         ->where('op.pageId = '.$pageId)
         ->andWhere('o.enddate > "'.$currentDate.'"')
         ->andWhere('o.startdate <= "'.$currentDate.'"')
