@@ -160,7 +160,7 @@ class Shop extends BaseShop
 
     public static function getPopularStoresForHomePage($limit)
     {
-        $popularStores = Doctrine_Query::create()
+        $popularStoresForHomePage = Doctrine_Query::create()
             ->select('p.id,s.name,s.permaLink, img.path as imgpath, img.name as imgname')
             ->from('PopularShop p')
             ->leftJoin('p.shop s')
@@ -170,7 +170,7 @@ class Shop extends BaseShop
             ->orderBy('p.position ASC')
             ->limit($limit)
             ->fetchArray();
-        return $popularStores;
+        return $popularStoresForHomePage;
     }
 
     public static function getPopularStoresForDropDown($limit)

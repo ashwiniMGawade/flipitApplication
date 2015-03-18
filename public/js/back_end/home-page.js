@@ -675,9 +675,9 @@ function moveUp() {
 * @version 1.0
 */
 function addNewShop() {
-    var flag =  '#addNewShop';
-    addSelectedClassOnButton(flag);
-    if($('ul#mostPopularCode li').length > 48) {
+    var addNewShopDivId =  '#addNewShop';
+    addSelectedClassOnButton(addNewShopDivId);
+    if ($('ul#mostPopularCode li').length > 48) {
         bootbox.alert(__('Popular Store list can have maximum 48 records, please delete one if you want to add more popular Store'));
 	} else {
 
