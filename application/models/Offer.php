@@ -2582,29 +2582,31 @@ class Offer extends BaseOffer
     {
         $date = date('Y-m-d H:i:s');
         $data = Doctrine_Query::create()
-                    ->select('s.id,s.name,s.usergenratedcontent, s.permaLink as permalink,
-                        s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,
-                        o.id,o.Visability,o.title,o.authorId,o.discountvalueType,
-                        o.exclusiveCode,o.discount,o.couponCode,o.couponCodeType,o.refOfferUrl,
-                        o.refUrl,o.discountType,o.endDate,img.id, img.path, img.name')
-                    ->from('Offer o')
-                    ->leftJoin('o.shop s')
-                    ->leftJoin('s.logo img')
-                    ->leftJoin('o.termandcondition terms')
-                    ->where('o.deleted = 0')
-                    ->andWhere('s.deleted = 0')
-                    ->andWhere('o.Visability = "MEM"')
-                    ->andWhere('o.enddate > "'.$date.'"')
-                    ->andWhere('o.startdate <= "'.$date.'"')
-                    ->andWhere('o.discountType != "NW"')
-                    ->andWhere('o.discounttype="CD"')
-                    ->andWhere('o.userGenerated=0')
-                    //->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
-                    ->orderBy('o.id DESC');
-                     $data = $data->limit($limit)
-                    //->getSqlQuery();
-                    //die;
-                    ->fetchArray();
+            ->select(
+                's.id,s.name,s.usergenratedcontent, s.permaLink as permalink,
+                s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,
+                o.id,o.Visability,o.title,o.authorId,o.discountvalueType,
+                o.exclusiveCode,o.discount,o.couponCode,o.couponCodeType,o.refOfferUrl,
+                o.refUrl,o.discountType,o.endDate,img.id, img.path, img.name'
+            )
+            ->from('Offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('s.logo img')
+            ->leftJoin('o.termandcondition terms')
+            ->where('o.deleted = 0')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('o.Visability = "MEM"')
+            ->andWhere('o.enddate > "'.$date.'"')
+            ->andWhere('o.startdate <= "'.$date.'"')
+            ->andWhere('o.discountType != "NW"')
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere('o.userGenerated=0')
+            //->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
+            ->orderBy('o.id DESC');
+             $data = $data->limit($limit)
+            //->getSqlQuery();
+            //die;
+            ->fetchArray();
 
         return $data;
 
