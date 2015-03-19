@@ -85,7 +85,7 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface {
 	 * forget password check by email from the database
 	 * @param $eMail string       	
 	 */
-	public function forgotPassword($eMail) {
+	public static function forgotPassword($eMail) {
 		$result = Doctrine_Core::getTable ( 'User' )->findOneByemail ( $eMail );
 		if ($result) {
 			
@@ -99,7 +99,7 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface {
 	 * generate new password for user
 	 * @param $length string       	
 	 */
-	public function genRandomString($length) {
+	public static function genRandomString($length) {
 		$characters = "0123456789abcdefghijklmnopqrstuvwxyz";
 		$string = "";
 		for($p = 0; $p < $length; $p ++) {
