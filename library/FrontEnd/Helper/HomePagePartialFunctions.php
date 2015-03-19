@@ -255,7 +255,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
     {
         $topOfferRightHtml = '';
         foreach ($this->homePageData['topOffers'] as $topOffer) {
-            $topOfferRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($topOffer);
+            $topOfferRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($topOffer, 'topOffers');
         }
         return $topOfferRightHtml;
     }
@@ -273,7 +273,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
 
     }
 
-    public function getRightColumnOffersHtmlForAllOffersTypes($offer)
+    public function getRightColumnOffersHtmlForAllOffersTypes($offer, $leftPanelSelection = '')
     {
         $shopImage =
             PUBLIC_PATH_CDN.ltrim($offer['shop']['logo']['path'], "/") .'thum_medium_'. $offer['shop']['logo']['name'];
@@ -283,7 +283,15 @@ class FrontEnd_Helper_HomePagePartialFunctions
             ? mb_substr($offer['title'], 0, 160, 'UTF-8') . "..."
             : $offer['title'];
         $offerExclusiveText = $this->getOfferOptionText($offer['exclusiveCode']);
-        return $this->getRighColumnContent($shopImage, $shopPermalink, $shopName, $offerTitle, $offerExclusiveText);
+        return $this->getRighColumnContent(
+            $shopImage,
+            $shopPermalink,
+            $shopName,
+            $offerTitle,
+            $offerExclusiveText,
+            '',
+            $leftPanelSelection
+        );
     }
 
     public function getMoneySavingGuidesRightCoulumnList($dynamicDivId)
@@ -326,16 +334,21 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $shopName,
         $offerTitle,
         $offerExclusiveText,
-        $dynamicDivId = ''
+        $dynamicDivId = '',
+        $leftPanelSelection
     ) {
         $imageDimensions = 'width="84" height="42"';
         if ($dynamicDivId == 'saving-guides') {
             $imageDimensions = 'width="70"';
         }
-
-        $rightColumnContent = '
-        <li>
-            <a href="'.HTTP_PATH_LOCALE.$shopPermalink.'">
+        $rightColumnContent = '<li> <a href="'.HTTP_PATH_LOCALE.$shopPermalink.'">';
+        if ($leftPanelSelection == 'topOffers') {
+            $rightColumnContent .= ' 
+                <div class="logo-box '.$dynamicDivId.'">
+                    <img '.$imageDimensions.' alt="' . $shopName .'" src="' . $shopImage .'" title="' . $shopName .'">
+                </div>';
+        }
+        $rightColumnContent .= '
                 <div class="box">
                     <h3>
                        <span>'. $shopName .'</span>'.$offerExclusiveText.'
@@ -410,7 +423,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
                 $savingTitle,
                 $savingContent,
                 '',
-                'saving-guides'
+                'saving-guides',
+                ''
             );
         }
         $rightDiv.=$moneySavingGuidestHtml .'</ul></div>';
