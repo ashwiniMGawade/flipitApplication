@@ -85,29 +85,30 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface {
 	 * forget password check by email from the database
 	 * @param $eMail string       	
 	 */
-	public function forgotPassword($eMail) {
-		$result = Doctrine_Core::getTable ( 'User' )->findOneByemail ( $eMail );
-		if ($result) {
-			
-			return array ('id' => $result ['id'], 'username' => $result ['firstName'] );
-		} else {
-			return false;
-		
-		}
-	}
-	/**
+    public static function forgotPassword($eMail)
+    {
+        $result = Doctrine_Core::getTable('User')->findOneByemail($eMail);
+        if ($result) {
+            return array('id'=>$result ['id'], 'username'=>$result ['firstName']);
+        } else {
+            return false;
+        }
+    }
+
+    /**
 	 * generate new password for user
 	 * @param $length string       	
 	 */
-	public function genRandomString($length) {
-		$characters = "0123456789abcdefghijklmnopqrstuvwxyz";
-		$string = "";
-		for($p = 0; $p < $length; $p ++) {
-			$string .= $characters [mt_rand ( 0, strlen ( $characters ) - 1 )];
-		}
-		return $string;
-	}
-	
+    public static function genRandomString($length)
+    {
+        $characters = "0123456789abcdefghijklmnopqrstuvwxyz";
+        $string = "";
+        for ($loopLimit = 0; $loopLimit < $length; $loopLimit++) {
+            $string .= $characters[mt_rand(0, strlen($characters) - 1)];
+        }
+        return $string;
+    }
+
 	public function checkToken($token) {
 		$Obj = Doctrine_Core::getTable ( 'UserSession' )->findOneBy ( 'sessionid', $token );
 		$q = Doctrine_Query::create ()->select ()->from ( 'User u' )->leftJoin ( 'u.usersession us' )->Where ( 'us.sessionId = "' . $token . '"' )->fetchArray ();
