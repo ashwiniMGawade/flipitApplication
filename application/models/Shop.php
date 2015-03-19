@@ -91,7 +91,7 @@ class Shop extends BaseShop
     {
         $relatedShops = Doctrine_Query::create()->from('Shop s')
             ->select(
-                "s.name, s.permaLink, img.path, img.name, logo.path, logo.name,
+                "s.name, s.permaLink, logo.path, logo.name,
                 c.id,ss.name, ss.permaLink"
             )
             ->where("s.id = ".$shopId)
@@ -101,7 +101,7 @@ class Shop extends BaseShop
             ->leftJoin('c.shop ss')
             ->andWhere("ss.status = 1")
             ->andWhere("ss.deleted = 0")
-            ->leftJoin('ss.logo img')
+            ->leftJoin('ss.logo as logo')
             ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
         return $relatedShops;
     }
