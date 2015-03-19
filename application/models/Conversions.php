@@ -41,11 +41,33 @@ class Conversions extends BaseConversions
         $conversionInfo = array();
         
         if (is_numeric($id)) {
-            $conversionInfo = Doctrine_Query::create()->select('c.id,o.title as offerTitle,s.name as shopName,cat.name as categoryName')
+            $offerOrShopId = self::getConversionOfferOrShopId($id);
+            if (!empty($offerOrShopId) && $offerOrShopId['offerId'] != '') {
+                $conversionInfo = Doctrine_Query::create()->select('c.id,o.title as offerTitle,s.name as shopName,cat.name as categoryName')
+                    ->from("Conversions c")
+                    ->leftJoin("c.offer o")
+                    ->leftJoin("o.shop s")
+                    ->leftJoin('o.category cat');
+            } else {
+                $conversionInfo = Doctrine_Query::create()->select('c.id,s.name as shopName,cat.name as categoryName')
+                    ->from("Conversions c")
+                    ->leftJoin("c.shop s")
+                    ->leftJoin('s.category cat');
+            }
+            
+            $conversionInfo = $conversionInfo->where('c.id = '. $id)
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        }
+        return $conversionInfo;
+    }
+
+    public static function getConversionOfferOrShopId($id)
+    {
+        $conversionInfo = array();
+        
+        if (is_numeric($id)) {
+            $conversionInfo = Doctrine_Query::create()->select('c.shopId,c.offerId')
                 ->from("Conversions c")
-                ->leftJoin("c.offer o")
-                ->leftJoin("o.shop s")
-                ->leftJoin('o.category cat')
                 ->where('c.id = '. $id)
                 ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
         }
