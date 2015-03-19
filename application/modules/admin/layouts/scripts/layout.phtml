@@ -85,8 +85,8 @@ $path = ROOT_PATH . 'js/back_end/';
 if (!file_exists($path))
 	mkdir($path);
 $a = fopen($file, 'w');
-fwrite($a, $p);
-fclose($a);
+@fwrite($a, $p);
+@fclose($a);
 
 
 ?>
