@@ -7,6 +7,6 @@ class ConversiondataController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(true);
         $conversionId = $this->getRequest()->getParam("id", false);
         $conversionInfo = Conversions::getConversionInformationById($conversionId);
-        echo json_encode($conversionInfo);
+        echo $this->_helper->json->sendJson($conversionInfo);
     }
 }
