@@ -1234,7 +1234,8 @@ class Admin_ShopController extends Zend_Controller_Action
                                 }
 
                                 $shopList->screenshotId = 1;
-
+                                $shopList->created_at = new \DateTime('now');
+                                $shopList->updated_at = new \DateTime('now');
                                 \Zend_Registry::get('emLocale')->persist($shopList);
                                 \Zend_Registry::get('emLocale')->flush();
                                 if ($category != 'None' && $category != '') {
@@ -1262,11 +1263,15 @@ class Admin_ShopController extends Zend_Controller_Action
                                     $pr->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
                                     $pr->type = 'SHP';
                                     $pr->exactlink = 'store/storedetail/id/'.$shopList->id;
+                                    $pr->created_at = $pr->created_at;
+                                    $pr->updated_at = new \DateTime('now');
                                 } else {
                                     $pr = new \KC\Repository\RoutePermalink();
                                     $pr->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
                                     $pr->type = 'SHP';
                                     $pr->exactlink = 'store/storedetail/id/'.$shopList->id;
+                                    $pr->created_at = new \DateTime('now');
+                                    $pr->updated_at = new \DateTime('now');
                                 }
                                 \Zend_Registry::get('emLocale')->persist($pr);
                                 \Zend_Registry::get('emLocale')->flush();
