@@ -218,7 +218,7 @@ function pageList(iSearchText,iStart,iSortCol,iSortDir,iType) {
 					state[ 'iSearchText' ] = iSearchText;
 					state[ 'iType' ] = iType;
 				
-					$("#pageListTbl").find('tr').find('td:lt(6)').click(function () {
+					$("#pageListTbl").find('tr').find('td:lt(4)').click(function () {
 							var eId = $(this).parent('tr').find('p').attr('editid');
 							state[ 'eId' ] = eId ;
 							$.bbq.pushState( state );
