@@ -109,6 +109,7 @@ $headerBlock = $frontShopHeaderHelper->getShopHeader(
     $message = 'storeDetail',
     $offerTitle = 'storeDetail'
 );
+
 $shopEditor = '';
 if($this->shopEditor != null || $this->ballonEditorText != null):
     $shopEditor = $this->partial(
@@ -187,5 +188,4 @@ endif;
     echo $expiredOffers;
     ?>
     </div>
-  
 </div>
