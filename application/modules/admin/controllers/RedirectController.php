@@ -198,7 +198,7 @@ class Admin_RedirectController extends Zend_Controller_Action
         if ($this->getRequest ()->isPost ()) {
 
             if (isset($_FILES['excelFile']['name']) && @$_FILES['excelFile']['name'] != '') {
-                $RouteRedirectObj = new RouteRedirect();
+                $RouteRedirectObj = new KC\Repository\RouteRedirect();
                 $result = @$RouteRedirectObj->uploadExcel($_FILES['excelFile']['name']);
 
                 if ($result['status'] == 200) {
@@ -227,11 +227,14 @@ class Admin_RedirectController extends Zend_Controller_Action
                         $redirectUrl =  $data[$cell->getRow()]['B'];
                         //find by name if exist in database
                         if (!empty($orignalURL)) {
-                            $redirect = Doctrine_Core::getTable('RouteRedirect')->findOneBy('orignalurl', $orignalURL);
+                            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                            $query = $queryBuilder->select('r')
+                                ->from('KC\Entity\RouteRedirect', 'r')
+                                ->where('r.orignalurl ='.$queryBuilder->expr()->literal($orignalURL);
+                            $redirect = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                             if (!empty($redirect)){
                             } else {
-
-                                $redirect  =new RouteRedirect();
+                                $redirect  = new KC\Entity\RouteRedirect();
 
                             }
                             if($orignalURL != " "){
@@ -242,7 +245,11 @@ class Admin_RedirectController extends Zend_Controller_Action
 
                                 $redirect->redirectto= $redirectUrl;
                             }
-                            $redirect->save();
+                            $redirect->deleted = 0;
+                            $redirect->created_at = new \DateTime('now');
+                            $redirect->updated_at = new \DateTime('now');
+                            \Zend_Registry::get('emLocale')->persist($redirect);
+                            \Zend_Registry::get('emLocale')->flush();
 
                         } else {
                             $flash = $this->_helper->getHelper ( 'FlashMessenger' );
