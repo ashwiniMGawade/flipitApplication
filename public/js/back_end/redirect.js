@@ -275,7 +275,7 @@ function getRedirectList(iStart,iSortCol,iSortDir){
 					
 					
 					var state = {};
-					$("#RedirectListTbl").find('tr').find('td').click(function () {
+					$("#RedirectListTbl").find('tr').find('td:lt(3)').click(function () {
 							var eId = $(this).parent('tr').find('p').attr('editid');
 							state[ 'eId' ] = eId ;
 							$.bbq.pushState( state );
