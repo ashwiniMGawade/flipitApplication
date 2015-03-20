@@ -59,9 +59,15 @@ class FrontEnd_Helper_Mailer {
         );
 
         if (!empty($pathConstants)) {
-            $siteUrl = $pathConstants['httpPathLocale'];
-            $httpPath = $pathConstants['httpPath'].'/';
-            $locale = $pathConstants['locale'];
+            if (!isset($pathConstants['exportScript'])) {
+                $siteUrl = $pathConstants['httpPathLocale'];
+                $httpPath = $pathConstants['httpPath'].'/';
+                $locale = $pathConstants['locale'];
+            } else {
+                $siteUrl = LOCALE != '' ? 'http://www.flipit.com/'.LOCALE.'/' : 'http://www.kortingscode.nl/';
+                $httpPath = LOCALE != '' ? 'http://www.flipit.com/' : 'http://www.kortingscode.nl/';
+                $locale = LOCALE;
+            }
         } else {
             $siteUrl = LOCALE != '' ? 'http://www.flipit.com/'.LOCALE.'/' : 'http://www.kortingscode.nl/';
             $httpPath = LOCALE != '' ? 'http://www.flipit.com/' : 'http://www.kortingscode.nl/';
