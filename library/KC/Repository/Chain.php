@@ -119,7 +119,7 @@ class Chain extends \KC\Entity\Chain
             ->from('KC\Entity\Chain', 'c')
             ->leftJoin('c.chainItem', 'ci')
             ->leftJoin('ci.website', 'w')
-            ->where("c.id = (SELECT cii.chainId FROM ChainItem cii where cii.id = ?)", $chainItemId)
+            ->where("c.id = (SELECT cii.id FROM KC\Entity\ChainItem cii where cii.id = c.id)", $chainItemId)
             ->andWhere('ci.status = 1')
             ->orderBy('w.name', 'ASC');
         $chainInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

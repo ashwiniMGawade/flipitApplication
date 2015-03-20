@@ -4,7 +4,7 @@ class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
     public function sidebarChainWidget($id, $shopName = false, $chainItemId = false)
     {
         if ($shopName) {
-            $chain = Chain::returnChainData($chainItemId, $id);
+            $chain = KC\Repository\Chain::returnChainData($chainItemId, $id);
             if (! $chain) {
                 return false;
             }
