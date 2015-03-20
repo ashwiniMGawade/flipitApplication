@@ -517,16 +517,15 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
     
     public static function updateNewsletterSchedulingStatus()
     {
-        $date = new DateTime();
+        $date = new \DateTime();
         $date->modify("+1 days");
         $date = $date->format('Y-m-d H:i:s');
         $currentDate = \FrontEnd_Helper_viewHelper::getCurrentDate();
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
-            ->set('signupmaxaccount.newletter_scheduled_time', '?', $date)
-            ->set('signupmaxaccount.newletter_is_scheduled', '?', 0)
-            ->set('signupmaxaccount.newletter_status', '?', 1)
-            ->set('newsletter_sent_time', '?', $currentDate)
+            ->set('signupmaxaccount.newletter_scheduled_time', $entityManagerUser->expr()->literal($date))
+            ->set('signupmaxaccount.newletter_is_scheduled', 0)
+            ->set('signupmaxaccount.newsletter_sent_time', $entityManagerUser->expr()->literal($currentDate))
             ->where('signupmaxaccount.id = 1')
             ->getQuery();
         $query->execute();
