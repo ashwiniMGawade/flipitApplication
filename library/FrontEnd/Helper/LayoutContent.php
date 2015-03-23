@@ -185,16 +185,20 @@ class FrontEnd_Helper_LayoutContent
             } else {
                 $cssClassForLastLi = strtolower($menu['name']) == 'plus' ? $classForFlipIt: '';
             }
-
-            if (str_replace("-", "", $menu['url']) === str_replace("-", "", FrontEnd_Helper_viewHelper::__link('link_top-20')) && $navigation == 'mobile') {
+            $stringReplacedMenuUrlVariable = str_replace("-", "", $menu['url']);
+            $stringReplacedtop20Variable = str_replace("-", "", FrontEnd_Helper_viewHelper::__link('link_top-20'));
+            if ($stringReplacedMenuUrlVariable === $stringReplacedtop20Variable && $navigation == 'mobile') {
                 $ulOfMainMenu.=
-                '<li class="' . $cssClassForLastLi .'" id="'. $menu["name"] .'">
-                    <a id="'. $menu["name"] . '" name="'. $menu["name"] . '" 
-                        class="" href="'. HTTP_PATH_LOCALE  . $menu['url'] . '">' . ucfirst($menu["name"])
-                    . '</a></li><li class="' . $cssClassForLastLi .'" id="plus">
-                    <a id="plus" name="plus" 
-                        class="" href="'. HTTP_PATH_LOCALE  . 'plus">' . ucfirst('plus')
-                    . '</a></li>';
+                    '<li class="' . $cssClassForLastLi .'" id="'. $menu["name"] .'">
+                        <a id="'. $menu["name"] . '" name="'. $menu["name"] . '" 
+                            class="" href="'. HTTP_PATH_LOCALE  . $menu['url'] . '">' . ucfirst($menu["name"])
+                        . '</a>
+                    </li>
+                    <li class="' . $cssClassForLastLi .'" id="plus">
+                        <a id="plus" name="plus" 
+                            class="" href="'. HTTP_PATH_LOCALE  . 'plus">' . ucfirst('plus')
+                        . '</a>
+                    </li>';
             } else {
                 $ulOfMainMenu.=
                 '<li class="' . $cssClassForLastLi .'" id="'. $menu["name"] .'">
