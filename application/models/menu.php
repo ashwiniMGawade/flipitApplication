@@ -354,18 +354,18 @@ public static function deleteAllMenuRecord()
 }
 
 //********************FRONT-END FUNCTION********************//
-/**
- * get menu from datbase where parent =0
- * @author kraj
- * @version 1.0
- * @return array $all
- */
-public static function getFirstLevelMenu()
-{
-    $mainMenu = Doctrine_Query::create()->from('menu')->orderBy('position')->where('parentId=0')->fetchArray();
-    return $mainMenu;
-
-}
+    public static function getFirstLevelMenu($navigation = '')
+    {
+        $mainMenu = Doctrine_Query::create()
+            ->from('menu')
+            ->orderBy('position')
+            ->where('parentId=0');
+        if ($navigation == 'mobile') {
+            $mainMenu = $mainMenu->andWhere("name != 'plus'");
+        }
+        $mainMenu = $mainMenu->fetchArray();
+        return $mainMenu;
+    }
 /**
  * get menu from datbase by parent on second level
  * @author kraj
