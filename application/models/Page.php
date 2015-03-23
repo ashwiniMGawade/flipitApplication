@@ -118,6 +118,7 @@ class Page extends BasePage
             ->from('Page p')
             ->leftJoin("p.homepageimage homepageimage")
             ->where('p.permalink="'.$permalink.'"')
+            ->andWhere('p.deleted = 0')
             ->fetchOne();
         $imagePath = '';
         if (!empty($pageHomeImage->homepageimage)) {
