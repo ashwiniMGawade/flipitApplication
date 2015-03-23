@@ -171,19 +171,19 @@ foreach ($this->offers as $offer) {
                 </a>
             </div>
         </div>
-        <?php if ($termsAndConditions != '') : 
+        <?php 
         if ($offer->userGenerated == 1) { ?>
             <input type="hidden" id="userGenerated" alt="<?php echo $offer->id ;?>" value="1" />
-        <?php } ?>    
+        <?php } ?>
         <div  class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
             <h2><?php echo $this->translate('Terms &amp; Conditions');
             if (!empty($defaultText)) { echo ' : ' .$defaultText; }?></h2>
+        <?php if ($termsAndConditions != '') { ?>
             <ol class="num-list">
-            <?php echo $termsAndConditions;?>
+                <?php echo $termsAndConditions;?>
             </ol>
+        <?php } ?>
         </div>
-        <?php endif; ?>
-       
     </article>
     <?php
     if($offerCounter == 1) :
