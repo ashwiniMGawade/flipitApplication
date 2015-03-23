@@ -167,29 +167,52 @@ class FrontEnd_Helper_LayoutContent
      
     public static function getUlOfMainMenu($navigation = '')
     {
-        $mainMenu = menu::getFirstLevelMenu();
-        $classForFlipIt = LOCALE=='' ? "kc-menu" : 'flipit-menu';
+        $mainMenu = menu::getFirstLevelMenu($navigation);
+        $classForFlipIt = LOCALE == '' ? "kc-menu" : 'flipit-menu';
         $ulOfMainMenu =
         '<ul>';
         if ($navigation == 'mobile') {
             $ulOfMainMenu .=
             '<li>
-                <a href="'. HTTP_PATH_LOCALE.'"> Home </a>
+                <a href="'. HTTP_PATH_LOCALE.'">'.FrontEnd_Helper_viewHelper::__translate('Home').' </a>
             </li>';
         }
-        
+
         foreach ($mainMenu as $menu) {
-            $cssClassForLastLi = strtolower($menu['name'])=='plus' ? $classForFlipIt: '';
-            $ulOfMainMenu.=
-            '<li class="' . $cssClassForLastLi .'" id="'. $menu["name"] .'">
-                <a id="'. $menu["name"] . '" name="'. $menu["name"] . '" 
-                    class="" href="'. HTTP_PATH_LOCALE  . $menu['url'] . '">' . ucfirst($menu["name"])
-                . '</a>';
-            if (strpos($menu['url'], '09-e')) {
-                $ulOfMainMenu.=self::generateTopShopsDropdown();
+            if ($navigation == 'mobile') {
+                $cssClassForLastLi = strtolower($menu['name']) == FrontEnd_Helper_viewHelper::__translate('category')
+                ? $classForFlipIt: '';
+            } else {
+                $cssClassForLastLi = strtolower($menu['name']) == 'plus' ? $classForFlipIt: '';
             }
-            $ulOfMainMenu.='</li>';
+            $stringReplacedMenuUrlVariable = str_replace("-", "", $menu['url']);
+            $stringReplacedtop20Variable = str_replace("-", "", FrontEnd_Helper_viewHelper::__link('link_top-20'));
+            if ($stringReplacedMenuUrlVariable === $stringReplacedtop20Variable && $navigation == 'mobile') {
+                $ulOfMainMenu.=
+                    '<li class="' . $cssClassForLastLi .'" id="'. $menu["name"] .'">
+                        <a id="'. $menu["name"] . '" name="'. $menu["name"] . '" 
+                            class="" href="'. HTTP_PATH_LOCALE  . $menu['url'] . '">' . ucfirst($menu["name"])
+                        . '</a>
+                    </li>
+                    <li class="' . $cssClassForLastLi .'" id="plus">
+                        <a id="plus" name="plus" 
+                            class="" href="'. HTTP_PATH_LOCALE  . 'plus">' . ucfirst('plus')
+                        . '</a>
+                    </li>';
+            } else {
+                $ulOfMainMenu.=
+                '<li class="' . $cssClassForLastLi .'" id="'. $menu["name"] .'">
+                    <a id="'. $menu["name"] . '" name="'. $menu["name"] . '" 
+                        class="" href="'. HTTP_PATH_LOCALE  . $menu['url'] . '">' . ucfirst($menu["name"])
+                    . '</a>';
+                
+                if (strpos($menu['url'], '09-e')) {
+                    $ulOfMainMenu.=self::generateTopShopsDropdown();
+                }
+                $ulOfMainMenu.='</li>';
+            }
         }
+        
         $ulOfMainMenu .=
         '</ul>';
         return $ulOfMainMenu;
