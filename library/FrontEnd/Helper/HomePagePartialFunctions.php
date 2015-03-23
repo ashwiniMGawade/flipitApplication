@@ -174,7 +174,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
                 $pageLeftImage = !empty($pageLeftImage) ? $pageLeftImage : HTTP_PATH ."public/images/img-08.png";
                 $imageTagOrSpan = self::getLeftPanelImage($pageLeftImage, $imageSize, $imageDescription);
             } else if ($listType =='newOffers') {
-                $pageLeftImage = Page::getPageHomeImageByPermalink(FrontEnd_Helper_viewHelper::__link('link_neiuw'));
+                $pageLeftImage = Page::getPageHomeImageByPermalink(FrontEnd_Helper_viewHelper::__link('link_nieuw'));
                 $pageLeftImage = !empty($pageLeftImage) ? $pageLeftImage : HTTP_PATH ."public/images/img-09.png";
                 $imageTagOrSpan = self::getLeftPanelImage($pageLeftImage, $imageSize, $imageDescription);
             }
