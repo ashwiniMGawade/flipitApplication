@@ -43,6 +43,8 @@ echo $this->esi($this->locale.'signup/signupwidget?shopId='
 
 $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
 echo $frontendSidebarHelper->popularShopWidget();
+echo $frontendSidebarHelper->popularCategoryWidget();
+echo $this->partial('socialcode/social-code.phtml', array('zendForm' => $this->zendForm));
 ?>
     </aside>
 </div>

@@ -315,7 +315,8 @@ class StoreController extends Zend_Controller_Action
         $this->view->selectedAlphabet = $startingAndEndingCharacter;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->storesInformation = $allStoresList;
-       
+        $socialCodeForm = new Application_Form_SocialCode();
+        $this->view->zendForm = $socialCodeForm;
         $this->view->popularStores = $popularStores;
         $this->view->pageCssClass = 'all-stores-page';
     }
@@ -412,6 +413,8 @@ class StoreController extends Zend_Controller_Action
         );
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+        $socialCodeForm = new Application_Form_SocialCode();
+        $this->view->zendForm = $socialCodeForm;
     }
 
     public function addtofavouriteAction()
