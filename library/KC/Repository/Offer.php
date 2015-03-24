@@ -951,14 +951,13 @@ class Offer Extends \KC\Entity\Offer
         //with new change we willd delete above code after completons of datatatable
         $request  = \DataTable_Helper::createSearchRequest(
             $parameters,
-            array('title','name','discountType','refURL','couponcode','startDate',
-                'endDate', 'totalViewcount','authorName'
+            array('o.title','s.name','o.discountType','o.refURL','o.couponcode','o.startDate',
+                'o.endDate', 'o.totalViewcount','o.authorName'
             )
         );
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
-            ->from('KC\Entity\Offer', 'o')
-            ->leftJoin('o.shopOffers', 's')
+            ->setQueryBuilder($getOffersQuery)
             ->add('text', 'o.title')
             ->add('text', 's.name')
             ->add('text', 'o.discountType')
@@ -969,7 +968,8 @@ class Offer Extends \KC\Entity\Offer
             ->add('number', 'o.totalViewcount')
             ->add('text', 'o.authorName');
 
-        $offersList = $builder->getTable()->getResponseArray();
+        $offersList = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
+        $offersList = \DataTable_Helper::getResponse($offersList, $request);
         return $offersList;
     }
 
