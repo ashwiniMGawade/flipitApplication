@@ -5,9 +5,6 @@ $(document).ready(function() {
         showCodeInformation(getQueryStringParams("popup"));
        }
     }
-    if ($('#userGenerated').val() == 1) {
-        showTermAndConditions($('#userGenerated').attr('alt'));
-    }
 });
 
 function scrollToDisqus(){

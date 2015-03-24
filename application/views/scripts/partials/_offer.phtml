@@ -118,7 +118,7 @@ foreach ($this->offers as $offer) {
     }
     $showHyphen = $termsAndConditions != '' || $extendedOffer == 1 ? '<li> -</li>' : '';
     if ($this->offersType!='extendedOffer') {
-        if ($termsAndConditions != '') {
+        if ($termsAndConditions != '' || $offer->userGenerated == 1 ) {
             echo $offerPartial->getTermAndConditionsLink($offer, $termsAndConditions);
         }
         echo $offerPartial->getExtendedOfferLink($offer);
@@ -171,18 +171,12 @@ foreach ($this->offers as $offer) {
                 </a>
             </div>
         </div>
-        <?php 
-        if ($offer->userGenerated == 1) { ?>
-            <input type="hidden" id="userGenerated" alt="<?php echo $offer->id ;?>" value="1" />
-        <?php } ?>
         <div  class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
             <h2><?php echo $this->translate('Terms &amp; Conditions');
-            if (!empty($defaultText)) { echo ' : ' .$defaultText; }?></h2>
-        <?php if ($termsAndConditions != '') { ?>
+            if ($termsAndConditions == '') { echo ' : ' .$defaultText; }?></h2>
             <ol class="num-list">
-                <?php echo $termsAndConditions;?>
+            <?php echo $termsAndConditions;?>
             </ol>
-        <?php } ?>
         </div>
     </article>
     <?php
