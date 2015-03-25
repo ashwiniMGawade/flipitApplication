@@ -341,7 +341,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
         if ($dynamicDivId == 'saving-guides') {
             $imageDimensions = 'width="70"';
         }
-        $rightColumnContent = '<li> <a href="'.HTTP_PATH_LOCALE.$shopPermalink.'">';
+        $rightColumnContent = '<li> <div class="top-box">';
         if ($leftPanelSelection == 'topOffers') {
             $rightColumnContent .= ' 
                 <div class="logo-box '.$dynamicDivId.'">
@@ -353,9 +353,11 @@ class FrontEnd_Helper_HomePagePartialFunctions
                     <h3>
                        <span>'. $shopName .'</span>'.$offerExclusiveText.'
                     </h3>
-                   <p class="sub-text">' . FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offerTitle) .'</p>
+                    <a href="'.HTTP_PATH_LOCALE.$shopPermalink.'">
+                        <p class="sub-text">' . FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offerTitle) .'</p>
+                    </a>
                 </div>
-            </a>
+            </div>
         </li>';
         return $rightColumnContent;
     }
