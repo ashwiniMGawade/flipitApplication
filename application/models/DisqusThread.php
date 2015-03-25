@@ -1,5 +1,5 @@
 <?php
-class DisqusComments extends BaseDisqusComments
+class DisqusThread extends BaseDisqusThread
 {
     public static function saveComments($comments)
     {
