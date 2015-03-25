@@ -1,22 +1,15 @@
 <?php
 class DisqusComments extends BaseDisqusComments
 {
-    public static function saveComments($comments)
+    public static function saveComments($post)
     {
-        $databaseConnection = Doctrine_Manager::getInstance()->getCurrentConnection()->getDbh();
-        $databaseConnection->query('TRUNCATE TABLE disqus_comments');
-        $disqusComment = new Doctrine_Collection('DisqusComments');
-        foreach ($comments as $key => $comment) {
-            $disqusComment[$key]->comment_id = $comment['commentId'];
-            $disqusComment[$key]->message =  $comment['message'];
-            $disqusComment[$key]->page_title =  $comment['pageTitle'];
-            $disqusComment[$key]->page_url =  $comment['pageURL'];
-            $disqusComment[$key]->created_at =  $comment['createdAt'];
-            $disqusComment[$key]->author_name =  $comment['authorName'];
-            $disqusComment[$key]->author_profile_url =  $comment['authorProfileURL'];
-            $disqusComment[$key]->author_avtar =  $comment['authorAvatar'];
-        }
-        $disqusComment->save();
+        $comments  = new DisqusComments();
+        $comments->id = $post->id;
+        $comments->author_name = $post->author->name;
+        $comments->comment = $post->raw_message;
+        $comments->thread_id = $post->thread;
+        $comments->created = strtotime($post->createdAt."+0000");
+        $comments->save();
         $tempFiles = glob(PUBLIC_PATH.'tmp/*');
         foreach ($tempFiles as $tempFile) {
             if (is_file($tempFile)) {
@@ -25,13 +18,38 @@ class DisqusComments extends BaseDisqusComments
         }
     }
 
+    public static function getMaxCreatedDate()
+    {
+        $commentMaxCreatedDate = Doctrine_Query::create()
+            ->select('max(created) as max')
+            ->from('DisqusComments')
+            ->fetchArray();
+        return $commentMaxCreatedDate;
+    }
+
+    public static function getThreadIds()
+    {
+        $unknownThreads = array();
+        $commentThreadIds = Doctrine_Query::create()
+            ->select('c.thread_id')
+            ->from('DisqusComments c')
+            ->where("(SELECT count(*) from DisqusThread where id = c.thread_id) = 0")
+            ->fetchArray();
+        foreach ($commentThreadIds as $row) {
+            $unknownThreads[] = $row['thread_id'];
+        }
+
+        return $unknownThreads;
+    }
+
     public static function getPageUrlBasedDisqusComments($pageUrl)
     {
-        $commentInformation = Doctrine_Query::create()
+        echo $commentInformation = Doctrine_Query::create()
             ->select('*')
-            ->from('DisqusComments')
-            ->where('page_url like '."'%".$pageUrl."%'")
-            ->fetchArray();
+            ->from('DisqusComments dc')
+            ->leftJoin('dc.thread dt')
+            ->where('dt.link like '."'%".$pageUrl."%'")
+            ->getSqlQuery();die;
         $disqusCommentMessages = !empty($commentInformation) ?  $commentInformation : '';
         return $disqusCommentMessages;
 

@@ -7,8 +7,6 @@ class AddTableDisqusComments extends Doctrine_Migration_Base
             'id' => array(
                     'type'     => 'integer',
                     'length'   => 10,
-                    'primary'  => 1,
-                    'autoincrement' => 1,
                     'notnull'  => 1
             ),
             'thread_id' => array(

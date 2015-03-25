@@ -7,21 +7,22 @@ class AddTableDisqusThread extends Doctrine_Migration_Base
             'id' => array(
                     'type'     => 'integer',
                     'length'   => 10,
-                    'primary'  => 1,
-                    'autoincrement' => 1,
                     'notnull'  => 1
             ),
             'title' => array(
                     'type'   => 'string',
-                    'length' => 255
+                    'length' => 255,
+                    'notnull'  => 1
             ),
             'link' => array(
                     'type'   => 'string',
-                    'length' => 255
+                    'length' => 255,
+                    'notnull'  => 1
             ),
             'created' => array(
                     'type'   => 'timestamp',
-                    'length' => 12
+                    'length' => 12,
+                    'notnull'  => 1
             )
         );
 

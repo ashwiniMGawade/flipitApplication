@@ -5,10 +5,7 @@ abstract class BaseDisqusComments extends Doctrine_Record
     {
         $this->setTableName('disqus_comments');
         $this->hasColumn('id', 'integer', 11, array(
-            'primary' => true,
             'type' => 'integer',
-            'autoincrement' => true,
-            'comment' => 'PK',
             'length' => '11'
         ));
         $this->hasColumn('thread_id', 'integer', 11, array(

@@ -1,78 +1,52 @@
 <?php
+require('disqusapi/disqusapi.php');
 function getDisqusRecentComments($parameters)
 {
+    try {
+        $disqus = new DisqusAPI($parameters['DISQUS_API_SECRET'], 'json', '3.0');
+       
+        $params = array(
+            'forum' => $parameters['DISQUS_FORUM_SHORTNAME'],
+            'order' =>  $parameters['DISQUS_FETCH_ORDER'],
+            'limit' => $parameters['DISQUS_FETCH_LIMIT']
+        );
 
-    if (!isset($parameters['APIKey']) || !isset($parameters['forumName'])) {
-        return false;
-    }
-    if (!isset($parameters['commentCount'])) {
-        $parameters['commentCount'] = 25;
-    }
-
-    $DisqusCommentsAPILink =
-    "http://disqus.com/api/3.0/posts/list.json?limit={$parameters['commentCount']}&api_key={$parameters['APIKey']}&forum={$parameters['forumName']}&include=approved";
-    $DisqusJsonCommentResponse = DisqusGetJson($DisqusCommentsAPILink);
-    $DisqusRawComments = json_decode($DisqusJsonCommentResponse, true);
-
-    if ($DisqusJsonCommentResponse != false && $DisqusRawComments['code'] != 2) {
-        $DisqusRawComments = json_decode($DisqusJsonCommentResponse, true);
-        $DisqusComments = $DisqusRawComments['response'];
-
-        for ($index = 0; $index < count($DisqusComments); $index++) {
-            $DisqusThreadAPILink ="http://disqus.com/api/3.0/threads/details.json?api_key={$parameters['APIKey']}&thread={$DisqusComments[$index]['thread']}";
-            $DisqusJsonThreadResponse = DisqusGetJson($DisqusThreadAPILink);
-            $DisqusRawThread = json_decode($DisqusJsonThreadResponse, true);
-         
-            $DisqusThread = $DisqusRawThread['response'];
-
-            if ($DisqusThread != false) {
-                $DisqusComments[$index]['pageTitle'] = $DisqusThread['title'];
-                $DisqusComments[$index]['pageURL'] = $DisqusThread['link'];
-            } else {
-                $DisqusComments[$index]['pageTitle'] = 'Page Not Found';
-                $DisqusComments[$index]['pageURL'] = '#';
-            }
-            $DisqusComments[$index]['commentId'] = $DisqusComments[$index]['id'];
-            $DisqusComments[$index]['authorName'] = $DisqusComments[$index]['author']['name'];
-            $DisqusComments[$index]['authorProfileURL'] = $DisqusComments[$index]['author']['profileUrl'];
-            $DisqusComments[$index]['authorAvatar'] = $DisqusComments[$index]['author']['avatar']['cache'];
-            $DisqusComments[$index]['message'] = $DisqusComments[$index]['raw_message'];
-            unset($DisqusComments[$index]['isJuliaFlagged']);
-            unset($DisqusComments[$index]['isFlagged']);
-            unset($DisqusComments[$index]['forum']);
-            unset($DisqusComments[$index]['parent']);
-            unset($DisqusComments[$index]['author']);
-            unset($DisqusComments[$index]['media']);
-            unset($DisqusComments[$index]['isDeleted']);
-            unset($DisqusComments[$index]['isApproved']);
-            unset($DisqusComments[$index]['dislikes']);
-            unset($DisqusComments[$index]['raw_message']);
-            unset($DisqusComments[$index]['id']);
-            unset($DisqusComments[$index]['thread']);
-            unset($DisqusComments[$index]['numReports']);
-            unset($DisqusComments[$index]['isEdited']);
-            unset($DisqusComments[$index]['isSpam']);
-            unset($DisqusComments[$index]['isHighlighted']);
-            unset($DisqusComments[$index]['points']);
-            unset($DisqusComments[$index]['likes']);
+        $disqusCommentCreated = DisqusComments::getMaxCreatedDate();
+        if (!empty($disqusCommentCreated[0]['max'])) {
+            $params['since'] = $disqusCommentCreated[0]['max'];
         }
-        return $DisqusComments;
-    } else {
-        $DisqusComments = '';
-        return $DisqusComments;
+     
+        do {
+            $posts = $disqus->posts->list($params);
+            $cursor = isset($posts->cursor) ? $posts->cursor : '';
+            $params['cursor'] = !empty($cursor->next) ? $cursor->next : '';
+            foreach ($posts as $post) {
+                DisqusComments::saveComments($post);
+            }
+        } while ($cursor->more);
+        unset($params['since']);
+        unset($params['cursor']);
+        
+        $unknownThreads = DisqusComments::getThreadIds();
+     
+        if (!empty($unknownThreads)) {
+            $params['thread'] = $unknownThreads;
+            do {
+                $posts = $disqus->threads->list($params);
+                // Create cursor to paginate through resultset
+                $cursor = isset($posts->cursor) ? $posts->cursor : '';
+                // Update our arguments with the cursor and the next position
+                $params['cursor'] = !empty($cursor->next) ? $cursor->next : '';
+     
+                foreach ($posts as $post) {
+                    DisqusThread::saveDisqusThread($post);
+                }
+            } while ($cursor->more);
+            // End forum threads
+        }
+    } catch (DisqusAPIError $e) {
+        echo $e->getMessage();
+        echo PHP_EOL;
+        exit;
     }
 }
-
-function DisqusGetJson($DisqusCommentsAPILink)
-{
-    $DisqusCURL = curl_init();
-    curl_setopt($DisqusCURL, CURLOPT_HEADER, false);
-    curl_setopt($DisqusCURL, CURLOPT_URL, $DisqusCommentsAPILink);
-    curl_setopt($DisqusCURL, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($DisqusCURL, CURLOPT_FRESH_CONNECT, true);
-    curl_setopt($DisqusCURL, CURLOPT_FORBID_REUSE, true);
-    $DisqusJsonResponse = curl_exec($DisqusCURL);
-    curl_close($DisqusCURL);
-    return $DisqusJsonResponse;
-}
-

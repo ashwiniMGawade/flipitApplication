@@ -9,10 +9,7 @@ abstract class BaseDisqusThread extends Doctrine_Record
             'integer',
             11,
             array(
-            'primary' => true,
             'type' => 'integer',
-            'autoincrement' => true,
-            'comment' => 'PK',
             'length' => '11'
             )
         );
