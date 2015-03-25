@@ -241,6 +241,8 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         $this->view->localeSettings = LocaleSettings::getLocaleSettings();
         $this->view->rights = $this->_settings['administration'];
         $this->view->timezones_list = Signupmaxaccount::$timezones;
+        $this->view->newsletterHeaderImage = Newsletterbanners::getHeaderOrFooterImage('H');
+        $this->view->newsletterFooterImage = Newsletterbanners::getHeaderOrFooterImage('F');
     }
 
     public function saveemailcontentAction()
@@ -359,4 +361,43 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         }
     }
 
+    public function updateHeaderImageAction()
+    {
+        if ($this->_request->isXmlHttpRequest()) {
+            if ($this->_request->isPost()) {
+                if (isset($_FILES['newsLetterHeaderImage']['name']) && $_FILES['newsLetterHeaderImage']['name'] != '') {
+                    $parmas = $this->_getAllParams();
+                    $result = Newsletterbanners::updateNewsletterImages($parmas, 'header');
+                    $this->_helper->json($result);
+                }
+            }
+        }
+        exit();
+    }
+
+    public function updateFooterImageAction()
+    {
+        if ($this->_request->isXmlHttpRequest()) {
+            if ($this->_request->isPost()) {
+                if (isset($_FILES['newsLetterFooterImage']['name']) && $_FILES['newsLetterFooterImage']['name'] != '') {
+                    $parmas = $this->_getAllParams();
+                    $result = Newsletterbanners::updateNewsletterImages($parmas, 'footer');
+                    $this->_helper->json($result);
+                }
+            }
+        }
+        exit();
+    }
+
+    public function deleteNewletterBannerImagesAction()
+    {
+        if ($this->_request->isXmlHttpRequest()) {
+            if ($this->_request->isPost()) {
+                $parmas = $this->_getAllParams();
+                $result = Newsletterbanners::deleteNewsletterImages($parmas, $parmas['imageType']);
+                $this->_helper->json($result);
+            }
+        }
+        exit();
+    }
 }
