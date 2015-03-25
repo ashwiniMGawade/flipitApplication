@@ -30,7 +30,7 @@ abstract class BaseDisqusComments extends Doctrine_Record
     {
         parent::setUp();
         $this->hasOne(
-            'Thread as thread',
+            'DisqusThread as thread',
             array(
             'local' => 'thread_id',
             'foreign' => 'id'
