@@ -27,7 +27,7 @@ class IpAddresses Extends \KC\Entity\ipAddresses
     {
         $entityManagerUser = \Zend_Registry::get('emUser');
         if (isset($params['id'])) {
-            $ipaddress = $entityManagerUser->find('KC\Entity\ipAddresses', $params['id']);
+            $ipaddress = $entityManagerUser->find('KC\Entity\ipAddresses', \FrontEnd_Helper_viewHelper::sanitize($params['id']));
         } else {
             $ipaddress = new \KC\Entity\ipAddresses();
         }
@@ -38,7 +38,6 @@ class IpAddresses Extends \KC\Entity\ipAddresses
         $ipaddress->updated_at = new \DateTime('now');
         $entityManagerUser->persist($ipaddress);
         $entityManagerUser->flush();
-        self::updateAdminIpAddressInHtaccess();
         return true;
     }
 
@@ -46,11 +45,10 @@ class IpAddresses Extends \KC\Entity\ipAddresses
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
             $query = $queryBuilder->delete('KC\Entity\ipAddresses', 'ipAddresses')
-                ->setParameter(1, $id)
+                ->setParameter(1, \FrontEnd_Helper_viewHelper::sanitize($id))
                 ->where('ipAddresses.id = ?1')
                 ->getQuery();
             $query->execute();
-        self::updateAdminIpAddressInHtaccess();
         return true;
     }
 
@@ -59,7 +57,7 @@ class IpAddresses Extends \KC\Entity\ipAddresses
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('ips')
             ->from('\KC\Entity\ipAddresses', 'ips')
-            ->where("ips.id =".$id);
+            ->where("ips.id =".\FrontEnd_Helper_viewHelper::sanitize($id));
         $ipAddress = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $ipAddress;
     }
@@ -71,22 +69,5 @@ class IpAddresses Extends \KC\Entity\ipAddresses
             ->from('\KC\Entity\ipAddresses', 'ipaddress');
         $ipAddressesList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $ipAddressesList;
-    }
-
-    public static function updateAdminIpAddressInHtaccess()
-    {
-        $htaccessFilePath = APPLICATION_PATH."/modules/admin/.htaccess";
-        $allowedIpsList = self::getIpAdressList();
-        $htaccessContent = "order deny,allow";
-        $htaccessContent .="\n";
-        $htaccessContent .= "deny from all";
-        $htaccessContent .="\n";
-        foreach ($allowedIpsList as $allowedIpList) {
-            $htaccessContent .= 'Allow from '.$allowedIpList['ipaddress']."\n";
-        }
-        $ipAddressHandle = fopen($htaccessFilePath, 'w');
-        fwrite($ipAddressHandle, $htaccessContent);
-        fclose($ipAddressHandle);
-        return true;
     }
 }

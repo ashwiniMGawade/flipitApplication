@@ -16,6 +16,21 @@ class Shop extends \KC\Entity\Shop
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
 
+    public static function checkShop($shopName)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $shopExist = $queryBuilder->select('s.id')
+            ->from('KC\Entity\Shop', 's')
+            ->where(
+                "s.name='".
+                mysqli_real_escape_string(\FrontEnd_Helper_viewHelper::getDbConnectionDetails(), $shopName)
+                ."'"
+            )
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return isset($shopExist[0]['id']) ? $shopExist[0]['id'] : '';
+    }
+
     public static function getShopData($id)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -175,6 +190,36 @@ class Shop extends \KC\Entity\Shop
         return $popularStoreData;
     }
 
+    public static function getPopularStoresForHomePage($limit)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $popularStoresForHomePage = $queryBuilder->select('p.id,s.name,s.permaLink, img.path as imgpath, img.name as imgname')
+            ->from('KC\Entity\PopularShop', 'p')
+            ->leftJoin('p.popularshops', 's')
+            ->leftJoin('s.logo', 'img')
+            ->where('s.deleted=0')
+            ->addWhere('s.status=1')
+            ->orderBy('p.position', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $popularStoresForHomePage;
+    }
+
+    public static function getPopularStoresForDropDown($limit)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $popularStoreData = $queryBuilder->select('p.id, s.name, s.permaLink')
+        ->from('KC\Entity\PopularShop', 'p')
+        ->leftJoin('p.popularshops', 's')
+        ->where('s.deleted=0')
+        ->addWhere('s.status=1')
+        ->orderBy('p.position', 'ASC')
+        ->setMaxResults($limit);
+        $popularStoreData = $popularStoreData->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $popularStoreData;
+    }
+
     public static function getStoreDetails($shopId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -192,6 +237,19 @@ class Shop extends \KC\Entity\Shop
         ->setParameter(3, '1')
         ->andWhere('s.status= ?3');
         $allStoresDetail = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $allStoresDetail;
+    }
+
+    public static function getStoreDetailsForStorePage($shopId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $storeDetail = Doctrine_Query::create()->select('s,img')
+            ->from('KC\Entity\Shop', 's')
+            ->leftJoin('s.logo', 'img')
+            ->where('s.id='.$shopId)
+            ->andWhere('s.deleted=0')
+            ->andWhere('s.status=1');
+        $allStoresDetail = $storeDetail->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $allStoresDetail;
     }
 
@@ -264,6 +322,21 @@ class Shop extends \KC\Entity\Shop
         ->orderBy('p.position', 'ASC')
         ->setMaxResults($limit);
         $popularStores = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $popularStores;
+    }
+
+    public static function getAllPopularStoresForSidebarWidget($limit)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $popularStores = $queryBuilder->select('p.id,s.name,s.permaLink, s.deepLink, s.refUrl, s.actualUrl')
+        ->from('KC\Entity\PopularShop', 'p')
+        ->leftJoin('p.popularshops', 's')
+        ->where('s.deleted=0')
+        ->addWhere('s.status=1')
+        ->orderBy('p.position', 'ASC')
+        ->setMaxResults($limit)
+        ->getQuery()
+        ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $popularStores;
     }
 
@@ -368,6 +441,8 @@ class Shop extends \KC\Entity\Shop
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_'.$visitorId.'_favouriteShops');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('visitor_'.$visitorId.'_favouriteShopOffers');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('visitor_'.$visitorId.'_details');
+            $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $shopId . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             return array('shop' => $shopName->name, 'flag' => $addedStatus);
         }
         return;
@@ -460,6 +535,8 @@ class Shop extends \KC\Entity\Shop
             ->leftJoin("rf.shop", "rl")
             ->leftJoin("s.logo", "logo")
             ->where("s.id =".$id)
+            ->andWhere('rl.status = 1')
+            ->andWhere('rl.deleted = 0')
             ->orderBy("rf.position", "ASC")
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -495,6 +572,7 @@ class Shop extends \KC\Entity\Shop
 
     public static function getSimilarShopsForAlsoViewedWidget($shopId)
     {
+        $similarShops = array();
         $similarShopsBySimilarCategories[] = self::getSimilarShopsBySimilarCategories($shopId, 5);
         if (isset($similarShopsBySimilarCategories[0][0]['category'])) {
             foreach ($similarShopsBySimilarCategories[0][0]['category'] as $category) {
@@ -664,6 +742,8 @@ class Shop extends \KC\Entity\Shop
                     ->getQuery()->execute();
                
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $id);
+                $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $id . '_list';
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
                 //call cache function
                 $key = 'shop_similar_shops';
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -1010,6 +1090,10 @@ class Shop extends \KC\Entity\Shop
 
         $shopInfo->screenshotId = 1;
         //call cache function
+        $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $shopInfo->id . '_list';
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = '6_topOffers'  . $shopInfo->id . '_list';
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shopDetails_'  . $shopInfo->id . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $cacheKeyOfferDetails = 'offerDetails_'  . $shopInfo->id . '_list';
@@ -1241,6 +1325,8 @@ class Shop extends \KC\Entity\Shop
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
+                $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $shopInfo->id . '_list';
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
                 $key = 'shopDetails_'. $shopInfo->id.'_list';
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
                 $cacheKeyOfferDetails = 'offerDetails_'  . $shopInfo->id . '_list';
@@ -1571,7 +1657,7 @@ class Shop extends \KC\Entity\Shop
                 $ip = ip2long($clientIP);
                 # get click detail and replcae A2ASUBID click subid
                 $conversion = \KC\Repository\Conversions::getConversionId($data['id'], $ip, 'shop');
-                $subid = str_replace('A2ASUBID', $conversion['subid'], $subid);
+                $subid = str_replace('A2ASUBID',$conversion['id'] , $subid );
                 $subid = \FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
             }
         }
@@ -1735,6 +1821,8 @@ class Shop extends \KC\Entity\Shop
         $key = 'shop_similar_shops';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shopDetails_'.$params['id'].'_list';
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $params['id'] . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         return array('offlineSince'=>$shop->offlineSicne, 'howToUse'=>$shopDetail[0]['howToUse']);
     }

@@ -18,7 +18,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     public function getofferAction()
     {
         $params = $this->_getAllParams();
-        $offersList = \KC\Repository\UserGeneratedOffer::getOfferList($params);
+        $offersList = \KC\Repository\UserGeneratedOffer::getOffersList($params);
         echo Zend_Json::encode($offersList);
         die();
     }

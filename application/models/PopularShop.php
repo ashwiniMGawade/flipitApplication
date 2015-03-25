@@ -353,6 +353,8 @@ return $flag;
             }
         }
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShopsForDropdown_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('shop_popularShopForWidget_list');
     }
 
 }

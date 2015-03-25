@@ -20,10 +20,11 @@ class RouteRedirect extends BaseRouteRedirect
     public static function getRoute($orignalurl)
     {
         $orignalurl= trim($orignalurl, '/');
-        $data = Doctrine_Query::create()->select()
-                                        ->from('RouteRedirect')
-                                        ->where("orignalurl = ?" ,$orignalurl)
-                                        ->fetchArray();
+        $data = Doctrine_Query::create()
+            ->select('r.redirectto')
+            ->from('RouteRedirect r')
+            ->where("r.orignalurl = ?", FrontEnd_Helper_viewHelper::sanitize($orignalurl))
+            ->fetchArray();
         return $data;
     }
     public static function getRedirects($redirectto)

@@ -515,61 +515,127 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
         }
     }
     
-    public static function updateNewsletterSchedulingStatus()
-    {
-        $date = new \DateTime();
-        $date->modify("+1 days");
-        $date = $date->format('Y-m-d H:i:s');
-        $currentDate = \FrontEnd_Helper_viewHelper::getCurrentDate();
-        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
-            ->set('signupmaxaccount.newletter_scheduled_time', $entityManagerUser->expr()->literal($date))
-            ->set('signupmaxaccount.newletter_is_scheduled', 0)
-            ->set('signupmaxaccount.newsletter_sent_time', $entityManagerUser->expr()->literal($currentDate))
-            ->where('signupmaxaccount.id = 1')
-            ->getQuery();
-        $query->execute();
-    }
-
     public static function saveScheduledNewsletter($request)
     {
-        $scheduledDate = $request->getParam("sendDate", false);
-        $scheduledTime = $request->getParam("sendTime", false);
-        $timezone = $request->getParam("timezone", false);
-        $scheduledDate = explode('-', $scheduledDate);
-        $scheduledDate = $scheduledDate[1].'-'.$scheduledDate[0].'-'.$scheduledDate[2];
-        $currentDate = \FrontEnd_Helper_viewHelper::getCurrentDate();
-        $timestamp = date('Y-m-d', strtotime($scheduledDate)).' '.date('H:i:s', strtotime($scheduledTime));
-        try {
-            $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $entityManagerUser->select('s')
-                    ->from('KC\Entity\Signupmaxaccount', 's')
-                    ->setParameter(1, 1)
-                    ->where('s.id = ?1');
-            $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            if (empty($getRecord)) {
-                    $signupmaxaccount = new KC\Entity\Signupmaxaccount();
-                    $signupmaxaccount->id = 1;
-                    $signupmaxaccount->newletter_is_scheduled = $this->getRequest()->getParam("isScheduled", false);
-                    $signupmaxaccount->newletter_scheduled_time = $timestamp ;
-                    $signupmaxaccount->newletter_status = 0 ;
-                    \Zend_Registry::get('emLocale')->persist($signupmaxaccount);
-                    \Zend_Registry::get('emLocale')->flush();
-                return true;
+        $previousNewsletterScheduledDate = self::validateIfNewsLetterCanBeScheduled();
+        $scheduledDate = self::getFormattedScheduleDate(date($request->getParam("sendDate")));
+        $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
+        $formattedCurrentDate = date('m-d-Y', strtotime($currentDate));
+        $formattedScheduleDate = date('m-d-Y', strtotime($scheduledDate));
+        if ($formattedScheduleDate >= $formattedCurrentDate) {
+            if ($formattedScheduleDate >= $previousNewsletterScheduledDate) {
+                $scheduledTime = $request->getParam("sendTime", false);
+                $newsLetterScheduledDateTime = date(
+                    'Y-m-d',
+                    strtotime($scheduledDate)
+                ).' '.date(
+                    'H:i:s',
+                    strtotime($scheduledTime)
+                );
+                try {
+                    $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                    $getNewsletterDetail = $queryBuilder->select('p')
+                      ->from('KC\Entity\Signupmaxaccount', 'p')
+                      ->where('p.id = 1')
+                      ->getQuery()
+                      ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+                    if (empty($getNewsletterDetail)) {
+                        $returnValue = self::saveNewsletterScheduled($newsLetterScheduledDateTime);
+                    } else {
+                        $returnValue = self::updateNewsletterScheduled($newsLetterScheduledDateTime);
+                    }
+                } catch (Exception $e) {
+                    return false;
+                }
             } else {
-                $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $query = $queryBuilder->update('KC\Entity\Signupmaxaccount', 's')
-                    ->set('s.newletter_scheduled_time', $queryBuilder->expr()->literal($timestamp))
-                    ->set('s.newletter_is_scheduled', $request->getParam("isScheduled", false))
-                    ->set('s.newletter_status', 0)
-                    ->set('s.newsletter_sent_time', $queryBuilder->expr()->literal($currentDate))
-                    ->where('s.id = 1')
-                    ->getQuery();
-                $query->execute();
-                return true;
+                $returnValue = 2;
             }
-        } catch (Exception $e) {
-            return false;
+        } else {
+            $returnValue = 3;
         }
+        return $returnValue;
+    }
+
+    protected static function validateIfNewsLetterCanBeScheduled()
+    {
+        $newsletterSentDate = self::getNewsletterSentTime();
+        $newsletterSentDatabaseDate = $newsletterSentDate[0]['newsletter_sent_time'];
+        if (empty($newsletterSentDatabaseDate) || $newsletterSentDatabaseDate == '0000-00-00 00:00:00') {
+            $newsletterSentDatabaseDate = date('Y-m-d', strtotime('2000-01-01'));
+        } else {
+            $newsletterSentDatabaseDate = $newsletterSentDatabaseDate;
+        }
+        $previousNewsletterScheduledDate = date('m-d-Y', strtotime($newsletterSentDatabaseDate. "+1 days"));
+        return $previousNewsletterScheduledDate;
+    }
+
+    protected static function getNewsletterSentTime()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $newsletterSentTime = $queryBuilder->select('p.newsletter_sent_time')
+            ->from('KC\Entity\Signupmaxaccount', 'p')
+            ->where('p.id = 1')
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $newsletterSentTime;
+    }
+
+    protected static function getFormattedScheduleDate($scheduledDate)
+    {
+        $explodedScheduledDate = explode('-', $scheduledDate);
+        $formattedScheduledDate = $explodedScheduledDate[1].'-'.$explodedScheduledDate[0].'-'.$explodedScheduledDate[2];
+        return $formattedScheduledDate;
+    }
+
+    protected static function saveNewsletterScheduled($newsLetterScheduledDateTime)
+    {
+        $entityManagerLocale  = \Zend_Registry::get('emLocale');
+        $signupMaxAccount = new \KC\Entity\Signupmaxaccount();
+        $signupMaxAccount->id = 1;
+        $signupMaxAccount->newletter_is_scheduled = 1;
+        $signupMaxAccount->newletter_scheduled_time = $newsLetterScheduledDateTime;
+        $signupMaxAccount->created_at = $signupMaxAccount->created_at;
+        $signupMaxAccount->updated_at = new \DateTime('now');
+        $entityManagerLocale->persist($signupMaxAccount);
+        $entityManagerLocale->flush();
+        return 1;
+    }
+
+    protected static function updateNewsletterScheduled($newsLetterScheduledDateTime)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $queryBuilder->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+            ->set('signupmaxaccount.newletter_scheduled_time', $queryBuilder->expr()->literal($newsLetterScheduledDateTime))
+            ->set('signupmaxaccount.newletter_is_scheduled', 1)
+            ->where('signupmaxaccount.id=1')
+            ->getQuery()
+            ->execute();
+        return 1;
+    }
+
+    public static function disableNewsletterSchedulingStatus()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $queryBuilder->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+            ->set('signupmaxaccount.newletter_scheduled_time', '')
+            ->set('signupmaxaccount.newletter_is_scheduled', 0)
+            ->where('signupmaxaccount.id = 1')
+            ->getQuery()
+            ->execute();
+        return true;
+    }
+
+    public static function updateNewsletterSchedulingStatus()
+    {
+        $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $queryBuilder->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+            ->set('signupmaxaccount.newletter_scheduled_time', '')
+            ->set('signupmaxaccount.newletter_is_scheduled', 0)
+            ->set('signupmaxaccount.newsletter_sent_time', $queryBuilder->expr()->literal($currentDate))
+            ->where('signupmaxaccount.id = 1')
+            ->getQuery()
+            ->execute();
+        return true;
     }
 }

@@ -9,7 +9,7 @@ class RouteRedirect extends \KC\Entity\RouteRedirect
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('route')
             ->from('KC\Entity\RouteRedirect', 'route')
-            ->setParameter(1, $orignalurl)
+            ->setParameter(1, \FrontEnd_Helper_viewHelper::sanitize($orignalurl))
             ->where('route.orignalurl = ?1');
         $routeRedirectInfo = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $routeRedirectInfo;

@@ -440,6 +440,7 @@ class PopularCode extends \KC\Entity\PopularCode
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularOffersHome_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('shop_popularShopForWidget_list');
         return $flag;
 
     }
@@ -499,6 +500,7 @@ class PopularCode extends \KC\Entity\PopularCode
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'all_widget6_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('shop_popularShopForWidget_list');
             return true ;
         }
         return false ;
@@ -530,6 +532,7 @@ class PopularCode extends \KC\Entity\PopularCode
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
                 $key = 'all_widget6_list';
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('shop_popularShopForWidget_list');
             }
         }
     }
@@ -589,6 +592,7 @@ class PopularCode extends \KC\Entity\PopularCode
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('shop_popularShopForWidget_list');
         return true ;
     }
 
@@ -662,6 +666,7 @@ class PopularCode extends \KC\Entity\PopularCode
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('shop_popularShopForWidget_list');
     }
 
 }

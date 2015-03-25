@@ -269,7 +269,56 @@ class User extends \KC\Entity\User
         $cnt = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return count($cnt);
     }
-    
+    // to be checked if this function is needed or not
+    public function getPermissions()
+    {
+        if (intval($this->id) > 0) {
+            $perm = $genralPermission =  array();
+            $perm['roles'] =    $this->role->toArray();
+
+            unset($perm['roles']['created_at']);
+            unset($perm['roles']['updated_at']);
+
+
+            $perm['rights'] =   $this->role->rights->toArray();
+
+            for ($i=0; $i < count($perm['rights']); $i++) {
+                unset($perm['rights'][$i]['created_at']);
+                unset($perm['rights'][$i]['updated_at']);
+                unset($perm['rights'][$i]['id']);
+                unset($perm['rights'][$i]['roleId']);
+                $perm['rights'][$perm['rights'][$i]['name']]= $perm['rights'][$i];
+                unset($perm['rights'][$i]);
+            }
+
+            $perm['webaccess']= $this->refUserWebsite->toArray();
+            for ($i=0; $i < count($perm['webaccess']); $i++) {
+                unset($perm['webaccess'][$i]['id']);
+                unset($perm['webaccess'][$i]['userId']);
+                unset($perm['webaccess'][$i]['created_at']);
+                unset($perm['webaccess'][$i]['updated_at']);
+
+                $q = Doctrine_Query::create()
+                    ->select('w.name')
+                    ->from('Website w')
+                    ->where("id = ".$perm['webaccess'][$i]['websiteId']."")
+                    ->andWhere("w.status ='online'")
+                    ->orderBy("w.name")
+                    ->fetchArray();
+
+                $perm['webaccess'][$i]['websitename'] = $q['0']['name'];
+            }
+
+
+            # rearange websites based on website name and keep kortingscode at same place
+            $data = $perm['webaccess'];
+            $data = BackEnd_Helper_viewHelper::msort($data, array('websitename'), "kortingscode.nl");
+            $perm['webaccess'] = $data;
+            return $perm;
+        }
+        return null;
+    }
+
     public function update($params, $imageName = '', $normalUser = '')
     {
         

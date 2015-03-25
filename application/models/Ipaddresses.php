@@ -20,14 +20,14 @@ class Ipaddresses extends BaseIpaddresses
     public static function addIpaddress($params)
     {
         if (isset($params['id'])) {
-            $ipaddress = Doctrine_Core::getTable('Ipaddresses')->find($params['id']);
+            $ipaddress =
+                Doctrine_Core::getTable('Ipaddresses')->find(FrontEnd_Helper_viewHelper::sanitize($params['id']));
         } else {
             $ipaddress = new Ipaddresses();
         }
         $ipaddress->name = FrontEnd_Helper_viewHelper::sanitize($params['name']);
         $ipaddress->ipaddress = FrontEnd_Helper_viewHelper::sanitize($params['ipaddress']);
         $ipaddress->save();
-        self::updateAdminIpAddressInHtaccess();
         return true;
     }
 
@@ -35,9 +35,8 @@ class Ipaddresses extends BaseIpaddresses
     {
         Doctrine_Query::create()->delete()
             ->from('Ipaddresses e')
-            ->where("e.id=" . $id)
+            ->where("e.id=" . FrontEnd_Helper_viewHelper::sanitize($id))
             ->execute();
-        self::updateAdminIpAddressInHtaccess();
         return true;
     }
 
@@ -46,7 +45,7 @@ class Ipaddresses extends BaseIpaddresses
         $ipAddress = Doctrine_Query::create()
             ->select("ips.*")
             ->from("Ipaddresses as ips")
-            ->where("ips.id =".$id)
+            ->where("ips.id =". FrontEnd_Helper_viewHelper::sanitize($id))
             ->fetchArray();
         return $ipAddress;
     }
@@ -58,21 +57,5 @@ class Ipaddresses extends BaseIpaddresses
             ->from("Ipaddresses")
             ->fetchArray();
         return $ipAddressesList;
-    }
-
-    public static function updateAdminIpAddressInHtaccess()
-    {
-        $htaccessFilePath = APPLICATION_PATH."/modules/admin/.htaccess";
-        $allowedIpsList = self::getIpAdressList();
-        $htaccessContent = "order allow,deny";
-        $htaccessContent .="\n";
-        foreach ($allowedIpsList as $allowedIpList) {
-            $htaccessContent .= 'Allow from '.$allowedIpList['ipaddress']."\n";
-        }
-        $htaccessContent .= "deny from all";
-        $ipAddressHandle = fopen($htaccessFilePath, 'w');
-        fwrite($ipAddressHandle, $htaccessContent);
-        fclose($ipAddressHandle);
-        return true;
     }
 }

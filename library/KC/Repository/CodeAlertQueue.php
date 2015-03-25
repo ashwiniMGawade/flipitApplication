@@ -64,7 +64,7 @@ class CodeAlertQueue Extends \KC\Entity\CodeAlertQueue
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->delete('KC\Entity\CodeAlertQueue', 'c')
-            ->where('c.id ='.$codeAlertId)
+            ->where('c.offerId ='.$codeAlertId)
             ->getQuery();
         $query->execute();
         return true;
@@ -75,7 +75,8 @@ class CodeAlertQueue Extends \KC\Entity\CodeAlertQueue
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('c.offerId,c.shopId')
-            ->from('KC\Entity\CodeAlertQueue', 'c');
+            ->from('KC\Entity\CodeAlertQueue', 'c')
+            ->where('c.deleted = 0');
         $codeAlertOfferIds = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $offers =  array();
         $codeAlertOffers = array();
@@ -123,18 +124,19 @@ class CodeAlertQueue Extends \KC\Entity\CodeAlertQueue
             $offerIds = '';
         }
 
-        $queryBuilderOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $offerDetails = $queryBuilderOffer
-            ->from("KC\Entity\Offer", "o")
-             ->leftJoin('o.shopOffers', 's')
-            ->addSelect(
-                "(SELECT count(fs.id) FROM KC\Entity\FavoriteShop fs LEFT JOIN fs.visitor vs 
-                WHERE fs.shop = s.id AND vs.id = fs.visitor AND vs.codealert = 1) as visitors"
-            )
-            ->addSelect("(SELECT cq.id FROM KC\Entity\CodeAlertQueue cq WHERE cq.offerId = o.id) as codeAlertId")
-            ->where("o.userGenerated = 0");
         if (!empty($offerIds)) {
-            $offerDetails->andWhere($queryBuilderOffer->expr()->in('o.id', $offerIds));
+            $queryBuilderOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $offerDetails = $queryBuilderOffer
+                ->from("KC\Entity\Offer", "o")
+                 ->leftJoin('o.shopOffers', 's')
+                ->addSelect(
+                    "(SELECT count(fs.id) FROM KC\Entity\FavoriteShop fs LEFT JOIN fs.visitor vs 
+                    WHERE fs.shop = s.id AND vs.id = fs.visitor AND vs.codealert = 1) as visitors"
+                )
+                ->where("o.userGenerated = 0");
+            if (!empty($offerIds)) {
+                $offerDetails->andWhere($queryBuilderOffer->expr()->in('o.id', $offerIds));
+            }
         }
         $request  = \DataTable_Helper::createSearchRequest(
             $codeAlertParameters,

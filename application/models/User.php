@@ -388,8 +388,11 @@ class User extends BaseUser
 
                 $q = Doctrine_Query::create()
                      ->select('w.name')
-                     ->from('Website w')->where("id = ".$perm['webaccess'][$i]['websiteId']."")
-                     ->orderBy("w.name")->fetchArray();
+                     ->from('Website w')
+                     ->where("id = ".$perm['webaccess'][$i]['websiteId']."")
+                     ->andWhere("w.status ='online'")
+                     ->orderBy("w.name")
+                     ->fetchArray();
 
                 $perm['webaccess'][$i]['websitename'] = $q['0']['name'];
 

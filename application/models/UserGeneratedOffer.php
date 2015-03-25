@@ -8,42 +8,26 @@ class UserGeneratedOffer extends BaseOffer
 {
     public static function getOffersList($parameters)
     {
-        $userRole           = Auth_StaffAdapter::getIdentity()->roleId;
-        $searchOffer        = $parameters["offerText"]!='undefined' ? $parameters["offerText"] : '';
         $searchShop         = $parameters["shopText"]!='undefined' ? $parameters["shopText"] : '';
         $searchCoupon       = @$parameters["shopCoupon"]!='undefined' ? @$parameters["shopCoupon"] : '';
-        $searchCouponType   = $parameters["couponType"]!='undefined' ? $parameters["couponType"] : '';
         $deletedStatus      = $parameters['flag'];
         $getOffersQuery = Doctrine_Query::create()
-            ->select(
-                'o.id,o.id,o.title, s.name,s.accountManagerName as acName,o.totalViewcount as clicks,
-                o.discountType,o.Visability,o.extendedOffer,o.startDate,o.endDate,authorName,o.refURL,o.couponcode'
-            )
+            ->select('o.id, s.name, o.startDate, o.endDate, o.couponcode')
             ->from("UserGeneratedOffer o")
             ->leftJoin('o.shop s')
             ->where('o.deleted='.$deletedStatus)
             ->andWhere("o.userGenerated = 1")
             ->andWhere("o.approved = '0'");
-        if ($userRole=='4') {
-            $getOffersQuery->andWhere("o.Visability='DE'");
-        }
-        if ($searchOffer != '') {
-            $getOffersQuery->andWhere("o.title LIKE ?", "%".$searchOffer."%");
-        }
         if ($searchShop!='') {
             $getOffersQuery->andWhere("s.name LIKE ?", "%".$searchShop."%");
         }
         if ($searchCoupon!='') {
             $getOffersQuery->andWhere("o.couponcode LIKE ?", "%".$searchCoupon."%");
         }
-        if ($searchCouponType!='') {
-            $getOffersQuery->andWhere("o.discountType='".$searchCouponType."'");
-        }
         $offersList = DataTable_Helper::generateDataTableResponse(
             $getOffersQuery,
             $parameters,
-            array("__identifier" => 'o.id','o.title','s.name','o.discountType','o.refURL','o.couponcode','o.startDate',
-                'o.endDate', 'clicks','authorName'),
+            array("__identifier" => 'o.id','s.name','o.couponcode','o.startDate', 'o.endDate'),
             array(),
             array()
         );
@@ -108,27 +92,21 @@ class UserGeneratedOffer extends BaseOffer
         return $offer;
     }
 
-    public static function addOffer($parameters)
+    public static function addOffer($socialParameters)
     {
         $offer  = new UserGeneratedOffer();
-        $offer->nickname = $parameters['nickname'];
-        $offer->title = $parameters['title'];
-        $offer->offerUrl = $parameters['offerUrl'];
-        $offer->couponCode = BackEnd_Helper_viewHelper::stripSlashesFromString($parameters['code']);
+        $offer->shopId = Shop::checkShop(FrontEnd_Helper_viewHelper::sanitize($socialParameters['shops']));
+        $offer->couponCode = FrontEnd_Helper_viewHelper::sanitize($socialParameters['code']);
+        $offer->termandcondition[]->content = FrontEnd_Helper_viewHelper::sanitize($socialParameters['offerDetails']);
+        $offer->endDate = date('Y-m-d', strtotime(FrontEnd_Helper_viewHelper::sanitize($socialParameters['expireDate'])));
         $offer->startDate =  date('Y-m-d H:i:s');
-        $offer->endDate = date('Y-m-d', strtotime($parameters['expireDate']));
-        $offer->termandcondition[]->content = BackEnd_Helper_viewHelper::stripSlashesFromString(
-            $parameters['offerDetails']
-        );
-        $offer->shopId = base64_decode($parameters['shopId']);
         $offer->userGenerated = true;
-
         if (Auth_VisitorAdapter::hasIdentity()) {
-            $offer->authorId = Auth_VisitorAdapter::getIdentity()->id;
-            $offer->authorName = Auth_VisitorAdapter::getIdentity()->firstName. " "
-                . Auth_VisitorAdapter::getIdentity()->lastName;
+            $offer->authorId = FrontEnd_Helper_viewHelper::sanitize(Auth_VisitorAdapter::getIdentity()->id);
+            $offer->authorName =
+                FrontEnd_Helper_viewHelper::sanitize(Auth_VisitorAdapter::getIdentity()->firstName). " "
+                . FrontEnd_Helper_viewHelper::sanitize(Auth_VisitorAdapter::getIdentity()->lastName);
         }
-
         $offer->Visability = 'DE';
         $offer->discountType = 'CD';
         $offer->extendedoffertitle = '';

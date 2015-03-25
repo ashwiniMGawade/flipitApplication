@@ -23,7 +23,7 @@ class Conversions extends \KC\Entity\Conversions
         $queryBuilder
             ->update('KC\Entity\Conversions', 'c')
             ->set('c.converted', 1)
-            ->where('c.subid = ?', $subId)
+            ->where('c.subid = '. $subId)
             ->getQuery()
             ->execute();
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_conversion_details');
@@ -41,5 +41,22 @@ class Conversions extends \KC\Entity\Conversions
             ->where('subid = '. $subId)
             ->getQuery()
             ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+    }
+
+    public static function getConversionInformationById($id)
+    {
+        $conversionInfo = array();
+        
+        if (is_numeric($id)) {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $conversionInfo = $queryBuilder->select('c.id,o.title as offerTitle,s.name as shopName,cat.name as categoryName')
+                ->from("KC\Entity\Conversions", "c")
+                ->leftJoin("c.offer", "o")
+                ->leftJoin("o.shop", "s")
+                ->leftJoin("o.category", "cat")
+                ->where("c.id = ". $id)
+                ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        }
+        return $conversionInfo;
     }
 }

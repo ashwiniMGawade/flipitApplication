@@ -24,6 +24,19 @@ class Shop extends BaseShop
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
 
+    public static function checkShop($shopName)
+    {
+        $shopExist = Doctrine_Query::create()->select('s.id')
+            ->from('Shop s')
+            ->where(
+                "s.name='".
+                mysqli_real_escape_string(FrontEnd_Helper_viewHelper::getDbConnectionDetails(), $shopName)
+                ."'"
+            )
+            ->fetchArray();
+        return isset($shopExist[0]['id']) ? $shopExist[0]['id'] : '';
+    }
+
     public static function getShopData($id)
     {
         $shopDataExistOrNot = Doctrine_Core::getTable("Shop")->find($id);
@@ -145,6 +158,35 @@ class Shop extends BaseShop
         return $popularStoreData;
     }
 
+    public static function getPopularStoresForHomePage($limit)
+    {
+        $popularStoresForHomePage = Doctrine_Query::create()
+            ->select('p.id,s.name,s.permaLink, img.path as imgpath, img.name as imgname')
+            ->from('PopularShop p')
+            ->leftJoin('p.shop s')
+            ->leftJoin('s.logo img')
+            ->where('s.deleted=0')
+            ->addWhere('s.status=1')
+            ->orderBy('p.position ASC')
+            ->limit($limit)
+            ->fetchArray();
+        return $popularStoresForHomePage;
+    }
+
+    public static function getPopularStoresForDropDown($limit)
+    {
+        $popularStoreData = Doctrine_Query::create()
+        ->select('p.id, s.name, s.permaLink')
+        ->from('PopularShop p')
+        ->leftJoin('p.shop s')
+        ->where('s.deleted=0')
+        ->addWhere('s.status=1')
+        ->orderBy('p.position ASC')
+        ->limit($limit);
+        $popularStoreData = $popularStoreData->fetchArray();
+        return $popularStoreData;
+    }
+
     public static function getPopularStoresForMemeberPortal($limit, $shopId = null)
     {
         $currentDate = date('Y-m-d 00:00:00');
@@ -179,6 +221,18 @@ class Shop extends BaseShop
         ->where('s.id='.$shopId)
         ->andWhere('s.deleted=0')
         ->andWhere('s.status=1');
+        $allStoresDetail = $storeDetail->fetchArray(array(), Doctrine_Core::HYDRATE_ARRAY);
+        return $allStoresDetail;
+    }
+
+    public static function getStoreDetailsForStorePage($shopId)
+    {
+        $storeDetail = Doctrine_Query::create()->select('s.*,img.*')
+            ->from('Shop s')
+            ->leftJoin('s.logo img')
+            ->where('s.id='.$shopId)
+            ->andWhere('s.deleted=0')
+            ->andWhere('s.status=1');
         $allStoresDetail = $storeDetail->fetchArray(array(), Doctrine_Core::HYDRATE_ARRAY);
         return $allStoresDetail;
     }
@@ -234,6 +288,19 @@ class Shop extends BaseShop
         ->from('PopularShop p')
         ->leftJoin('p.shop s')
         ->leftJoin('s.logo img')
+        ->where('s.deleted=0')
+        ->addWhere('s.status=1')
+        ->orderBy('p.position ASC')
+        ->limit($limit)->fetchArray();
+        return $popularStores;
+    }
+
+    public static function getAllPopularStoresForSidebarWidget($limit)
+    {
+        $popularStores = Doctrine_Query::create()
+        ->select('p.id,s.name,s.permaLink, s.deepLink, s.refUrl, s.actualUrl')
+        ->from('PopularShop p')
+        ->leftJoin('p.shop s')
         ->where('s.deleted=0')
         ->addWhere('s.status=1')
         ->orderBy('p.position ASC')
@@ -323,6 +390,8 @@ class Shop extends BaseShop
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_'.$visitorId.'_favouriteShops');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('visitor_'.$visitorId.'_favouriteShopOffers');
+            $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             return array('shop' => $shopName->name, 'flag' => $addedStatus);
         }
         return;
@@ -371,12 +440,12 @@ class Shop extends BaseShop
 
     public static function getShopInformation($shopId)
     {
-        $shop = Doctrine_Query::create()
+        $shopDetail = Doctrine_Query::create()
             ->select('s.permaLink,s.name')
             ->from('Shop s')
             ->where('s.id='.$shopId)
             ->fetchArray();
-        return $shop;
+        return $shopDetail;
     }
 
     public static function getShopIdByPermalink($permalink)
@@ -411,6 +480,8 @@ class Shop extends BaseShop
             ->leftJoin("rf.relatedshops rl")
             ->leftJoin("rl.logo as logo")
             ->where("s.id = ?", $id)
+            ->andWhere('rl.status = 1')
+            ->andWhere('rl.deleted = 0')
             ->orderBy('rf.position')
             ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
         return $relatedShops;
@@ -443,6 +514,7 @@ class Shop extends BaseShop
 
     public static function getSimilarShopsForAlsoViewedWidget($shopId)
     {
+        $similarShops = array();
         $similarShopsBySimilarCategories[] = self::getSimilarShopsBySimilarCategories($shopId, 5);
         if (isset($similarShopsBySimilarCategories[0][0]['category'])) {
             foreach ($similarShopsBySimilarCategories[0][0]['category'] as $category) {
@@ -631,7 +703,8 @@ class Shop extends BaseShop
             ->where("permalink=". "'$this->permaLink'")->execute();
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $id);
-
+            $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $id . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             //call cache function
             $key = 'shop_similar_shops';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -1009,6 +1082,8 @@ class Shop extends BaseShop
         }
 
         //call cache function
+        $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $this->id . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
         $key = '6_topOffers'  . $this->id . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -1702,9 +1777,9 @@ public static function getShopDetail($shopId)
                  $ip = ip2long($clientIP);
 
                  # get click detail and replcae A2ASUBID click subid
-                 $conversion = \KC\Repository\Conversions::getConversionId( $data['id'] , $ip , 'shop') ;
+                 $conversion = Conversions::getConversionId( $data['id'] , $ip , 'shop') ;
 
-                 $subid = str_replace('A2ASUBID',$conversion['subid'] , $subid );
+                 $subid = str_replace('A2ASUBID',$conversion['id'] , $subid );
                 $subid = FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
             }
         }
@@ -1899,6 +1974,8 @@ public static function getShopDetail($shopId)
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shopDetails_'.$params['id'].'_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $params['id'] . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         return array('offlineSince'=>$shop->offlineSicne, 'howToUse'=>$shop->howToUse);
     }
 
@@ -1929,17 +2006,13 @@ public static function getShopDetail($shopId)
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
-
-
+        $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $this->id . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shopDetails_'. $this->id.'_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $cacheKeyOfferDetails = 'offerDetails_'  . $this->id . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails); 
-
-
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $this->id);
-
-
         try {
 
             $data = $this->getLastModified();

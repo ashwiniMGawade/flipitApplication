@@ -13,7 +13,7 @@ class Page Extends \KC\Entity\Page
             ->leftJoin('page.pagewidget', 'pagewidget')
             ->leftJoin('page.page', 'attr')
             ->leftJoin('page.pageHeaderImageId', 'himg')
-            ->where('page.permalink = ' . $entityManagerLocale->expr()->literal($permalink))
+            ->where('page.permalink = ' . $entityManagerLocale->expr()->literal(\FrontEnd_Helper_viewHelper::sanitize($permalink)))
             ->andWhere('page.publishDate <=' . $entityManagerLocale->expr()->literal($currentDate))
             ->andWhere('page.deleted = 0');
         $pageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -30,19 +30,6 @@ class Page Extends \KC\Entity\Page
         }
     }
 
-    public static function getSpecialPageDetailForMobileMenu()
-    {
-        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerLocale
-        ->select('p.permalink, p.pageTitle')
-        ->from('KC\Entity\Page', 'p')
-        ->where('p.deleted = 0')
-        ->andWhere('p.showinmobilemenu = 1')
-        ->setMaxResults(2);
-        $pageDetail = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $pageDetail;
-    }
-
     public static function getPageHomeImageByPermalink($permalink)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -50,7 +37,8 @@ class Page Extends \KC\Entity\Page
             ->select('homepageimage.path, homepageimage.name')
             ->from('KC\Entity\Page', 'p')
             ->leftJoin("p.homepageimage", "homepageimage")
-            ->where('p.permalink ='."'".$permalink."'");
+            ->where('p.permalink ='."'".$permalink."'")
+            ->andWhere('p.deleted = 0');
         $pageHomeImage = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $imagePath = '';
         if (!empty($pageHomeImage)) {
@@ -66,7 +54,7 @@ class Page Extends \KC\Entity\Page
             ->from('KC\Entity\Page', 'page')
             ->leftJoin('page.logo', 'img')
             ->leftJoin('page.pageHeaderImageId', 'himg')
-            ->where('page.permalink ='."'".$permalink."'")
+            ->where('page.permalink ='."'".\FrontEnd_Helper_viewHelper::sanitize($permalink)."'")
             ->andWhere('page.publish = 1')
             ->andWhere('page.pageLock = 0')
             ->andWhere('page.deleted = 0');
@@ -92,7 +80,7 @@ class Page Extends \KC\Entity\Page
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page')
             ->from('KC\Entity\Page', 'page')
-            ->setParameter(1, $entityManagerUser->expr()->literal($permalink))
+            ->setParameter(1, $entityManagerUser->expr()->literal(\FrontEnd_Helper_viewHelper::sanitize($permalink)))
             ->where('page.permalink = ?1')
             ->setParameter(2, 0)
             ->andWhere('page.deleted = ?2');
@@ -106,7 +94,7 @@ class Page Extends \KC\Entity\Page
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page.content, page.pageTitle')
             ->from('KC\Entity\Page', 'page')
-            ->setParameter(1, $entityManagerUser->expr()->literal($permalink))
+            ->setParameter(1, $entityManagerUser->expr()->literal(\FrontEnd_Helper_viewHelper::sanitize($permalink)))
             ->where('page.permalink = ?1')
             ->setParameter(2, 0)
             ->andWhere('page.deleted = ?2');
@@ -254,7 +242,7 @@ class Page Extends \KC\Entity\Page
             ->where('page.deleted = ?1')
             ->setParameter(2, $srhPage.'%')
             ->andWhere($entityManagerUser->expr()->like('page.pageTitle , ?2'));
-        $result =  DataTable_Helper::generateDataTableResponse(
+        $result =  \DataTable_Helper::generateDataTableResponse(
             $pageList,
             $params,
             array("__identifier" => 'page.pageTitle','page.created_at','page.updated_at','page.contentManagerName'),

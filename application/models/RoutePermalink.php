@@ -20,30 +20,30 @@ class RoutePermalink extends BaseRoutePermalink
     {
         $permalink= trim($permalink, '/');
         $data = Doctrine_Query::create()
-                        ->select()
-                        ->from('RoutePermalink')
-                        ->where("permalink = ?", $permalink)
-                        ->fetchArray();
+            ->select('r.permalink, r.exactlink')
+            ->from('RoutePermalink r')
+            ->where("r.permalink = ?", FrontEnd_Helper_viewHelper::sanitize($permalink))
+            ->fetchArray();
         return $data;
     }
     public static function getPageProperties($permalink)
     {
         $permalink= trim($permalink, '/');
         $pageDetails = Doctrine_Query::create()
-        ->select('p.*')
+        ->select('p.id')
         ->from('Page p')
-        ->where("permalink = ?", $permalink)
-        ->orderBy('id DESC')
-        ->limit(1)
+        ->where("permalink = ?", FrontEnd_Helper_viewHelper::sanitize($permalink))
         ->fetchArray();
         return $pageDetails;
     }
     public static function getPermalinks($exactLink)
     {
-        $q = Doctrine_Query::create()
+        $permalinks = Doctrine_Query::create()
         ->select('rp.permalink')->from('RoutePermalink rp')
-        ->where("rp.exactlink='?'" , $exactLink )->andWhere('deleted = 0')->fetchArray();
-        return $q;
+        ->where("rp.exactlink='?'", FrontEnd_Helper_viewHelper::sanitize($exactLink))
+        ->andWhere('deleted = 0')
+        ->fetchArray();
+        return $permalinks;
     }
 
     public static function getDefaultPageProperties($slug)
