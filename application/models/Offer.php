@@ -992,33 +992,50 @@ class Offer extends BaseOffer
 
     public static function getCloakLink($offerId, $checkRefUrl = false)
     {
-        $shopData = Doctrine_Query::create()
-        ->select(
-            's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl, o.refOfferUrl, o.refUrl'
-        )
-        ->from('Offer o')
-        ->leftJoin('o.shop s')
-        ->where('o.id = "'.$offerId.'"')
-        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        $shopInfo = self::getShopInfoByOfferId($offerId);
+        $network = Shop::getAffliateNetworkDetail($shopInfo['shop']['id']);
+        self::checkRefUrl($checkRefUrl, $shopInfo, $network);
+        $networkInfo = self::getSubidWithStringPattern($network, $shopInfo);
+        $url = self::getUrlForCloakLink(
+            $shopInfo,
+            $networkInfo['subidFlag'],
+            $networkInfo['subid'],
+            $networkInfo['stringPattern']
+        );
+        return $url;
+    }
 
-        $network = Shop::getAffliateNetworkDetail($shopData['shop']['id']);
+    public static function getShopInfoByOfferId($offerId)
+    {
+        $shopInfo = Doctrine_Query::create()
+            ->select(
+                's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl, o.refOfferUrl, o.refUrl'
+            )
+            ->from('Offer o')
+            ->leftJoin('o.shop s')
+            ->where('o.id = "'.$offerId.'"')
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return $shopInfo;
+    }
 
+    public static function checkRefUrl($checkRefUrl, $shopInfo, $network)
+    {
         if ($checkRefUrl) {
-            # retur false if s shop is not associated with any network
-            if (! isset($network['affliatenetwork'])) {
+            if (!isset($network['affliatenetwork'])) {
                 return false;
             }
-
-            if ($shopData['refURL'] != "") {
-                return true ;
-
-            } else if ($shopData['shop']['refUrl'] != "") {
+            if ($shopInfo['refURL'] != "") {
+                return true;
+            } else if ($shopInfo['shop']['refUrl'] != "") {
                 return true;
             } else {
                 return true;
             }
         }
+    }
 
+    public static function getSubidWithStringPattern($network, $shopInfo)
+    {
         $subid = "" ;
         $stringPattern = "";
         $subidWithCid = "";
@@ -1042,38 +1059,44 @@ class Offer extends BaseOffer
 
                 $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
                 $clientProperAddress = ip2long($clientIP);
-                # get click detail and replcae A2ASUBID click subid
-                $conversion = Conversions::getConversionId($shopData['id'], $clientProperAddress, 'offer');
+                $conversion = Conversions::getConversionId($shopInfo['id'], $clientProperAddress, 'offer');
                 $subid = str_replace('A2ASUBID', $conversion['id'], $subid);
                 $subid = FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
             }
         }
+        $networkInfo = array(
+            "subid" => $subid,
+            "stringPattern" => $stringPattern,
+            "subidFlag" => $subidFlag
+        );
+        return $networkInfo;
+    }
 
-        if ($shopData['refURL'] != "") {
-            if ($subidFlag == true && $stringPattern != "") {
-                $url = preg_replace("/".$stringPattern."/", $subid, $shopData['refURL']);
-                if ($url == null) {
-                    $url = $shopData['refURL'];
-                }
-            } else {
-                $url = $shopData['refURL'];
-                $url .= $subid;
-            }
-        } else if ($shopData['shop']['refUrl'] != "") {
-            if ($subidFlag == true && $stringPattern != "") {
-                $url = preg_replace("/".$stringPattern."/", $subid, $shopData['shop']['refUrl']);
-                if ($url == null) {
-                    $url = $shopData['shop']['refUrl'];
-                }
-            } else {
-                $url = $shopData['shop']['refUrl'];
-                $url .=  $subid;
-            }
-        } else if ($shopData['shop']['actualUrl'] != "") {
-            $url = $shopData['shop']['actualUrl'];
+    public static function getUrlForCloakLink($shopInfo, $subidFlag, $subid, $stringPattern)
+    {
+        if ($shopInfo['refURL'] != "") {
+            $url = self::replaceSubidByStringPattern($shopInfo['refURL'], $subidFlag, $subid, $stringPattern);
+        } else if ($shopInfo['shop']['refUrl'] != "") {
+            $url = self::replaceSubidByStringPattern($shopInfo['shop']['refUrl'], $subidFlag, $subid, $stringPattern);
+        } else if ($shopInfo['shop']['actualUrl'] != "") {
+            $url = $shopInfo['shop']['actualUrl'];
         } else {
-            $urll = $shopData['shop']['permalink'];
-            $url = HTTP_PATH_LOCALE.$urll;
+            $shopPermalink = $shopInfo['shop']['permalink'];
+            $url = HTTP_PATH_LOCALE.$shopPermalink;
+        }
+        return $url;
+    }
+
+    public static function replaceSubidByStringPattern($refUrl, $subidFlag, $subid, $stringPattern)
+    {
+        if ($subidFlag == true && $stringPattern != "") {
+            $url = preg_replace("/".$stringPattern."/", $subid, $refUrl);
+            if ($url == null) {
+                $url = $refUrl;
+            }
+        } else {
+            $url = $refUrl;
+            $url .= $subid;
         }
         return $url;
     }
