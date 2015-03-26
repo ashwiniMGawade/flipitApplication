@@ -191,12 +191,10 @@ class SendNewsletter
         $mandrillSenderEmailAddress = $newsLetterSetings[0]['emailperlocale'];
         $mandrillNewsletterSubject = $newsLetterSetings[0]['emailsubject'];
         $mandrillSenderName = $newsLetterSetings[0]['sendername'];
-
         $newsLetterHeaderImage = Newsletterbanners::getHeaderOrFooterImage('H');
         $newsLetterHeaderImage = !empty($newsLetterHeaderImage) ? $newsLetterHeaderImage : '';
         $newsLetterFooterImage = Newsletterbanners::getHeaderOrFooterImage('F');
         $newsLetterFooterImage = !empty($newsLetterFooterImage) ? $newsLetterFooterImage : '';
-
         try {
             FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
                 $topVouchercodes,

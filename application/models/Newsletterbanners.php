@@ -4,15 +4,15 @@ class Newsletterbanners extends BaseNewsletterbanners
 {
     public static function getHeaderOrFooterImage($imageType)
     {
-        $existedNewsLetterHeaderImage = Doctrine_Query::create()
+        $existedNewsLetterImage = Doctrine_Query::create()
             ->select('s.name, s.path')
             ->from("Newsletterbanners s")
              ->where('s.imagetype = "'.$imageType.'"')
             ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
-        if (!empty($existedNewsLetterHeaderImage)) {
-            $existedNewsLetterHeaderImage = $existedNewsLetterHeaderImage[0];
+        if (!empty($existedNewsLetterImage)) {
+            $existedNewsLetterImage = $existedNewsLetterImage[0];
         }
-        return $existedNewsLetterHeaderImage;
+        return $existedNewsLetterImage;
     }
     
     public static function updateNewsletterImages($params, $type)
@@ -20,31 +20,31 @@ class Newsletterbanners extends BaseNewsletterbanners
         $imageType = $type == 'footer' ? 'F' : 'H';
         $uploadedFile = $type == 'footer' ? 'newsLetterFooterImage' : 'newsLetterHeaderImage';
         if (isset($_FILES[$uploadedFile])) {
-            $result = self::uploadImage($uploadedFile);
-            if ($result['status'] == '200') {
-                $existedNewsLetterHeaderImage = Doctrine_Query::create()
+            $uploadedImage = self::uploadImage($uploadedFile);
+            if ($uploadedImage['status'] == '200') {
+                $existedNewsLetterImage = Doctrine_Query::create()
                     ->select('s.name, s.path')
                     ->from("Newsletterbanners s")
                     ->where('s.imagetype = "'.$imageType.'"')
                     ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-                if (empty($existedNewsLetterHeaderImage)) {
+                if (empty($existedNewsLetterImage)) {
                     $newsLetterHeaderImage = new Newsletterbanners();
-                    $newsLetterHeaderImage->name = $result['fileName'];
-                    $newsLetterHeaderImage->path = $result['path'];
+                    $newsLetterHeaderImage->name = $uploadedImage['fileName'];
+                    $newsLetterHeaderImage->path = $uploadedImage['path'];
                     $newsLetterHeaderImage->imagetype = $imageType;
                     $newsLetterHeaderImage->save();
                 } else {
-                    $fileName = $existedNewsLetterHeaderImage['name'];
-                    $filePath = $existedNewsLetterHeaderImage['path'];
+                    $fileName = $existedNewsLetterImage['name'];
+                    $filePath = $existedNewsLetterImage['path'];
                     @unlink(ROOT_PATH. $filePath . $fileName);
-                    @unlink(ROOT_PATH. $filePath . $result['cmsFilename_prefix'] . $fileName);
+                    @unlink(ROOT_PATH. $filePath . $uploadedImage['cmsFilename_prefix'] . $fileName);
                     Doctrine_Query::create()
                         ->update('Newsletterbanners')
-                        ->set('name', '?', $result['fileName'])
-                        ->set('path', '?', $result['path'])
+                        ->set('name', '?', $uploadedImage['fileName'])
+                        ->set('path', '?', $uploadedImage['path'])
                         ->execute();
                 }
-                return $result ;
+                return $uploadedImage;
             }
         }
     }
@@ -54,18 +54,18 @@ class Newsletterbanners extends BaseNewsletterbanners
         $uploadPath = "images/front_end/newsletterbannerimages/";
         $adapter = new Zend_File_Transfer_Adapter_Http();
         $rootPath = ROOT_PATH . $uploadPath;
-        $files = $adapter->getFileInfo($file);
+        $adapter->getFileInfo($file);
         if (!file_exists($rootPath)) {
             mkdir($rootPath);
         }
         $adapter->setDestination($rootPath);
         $adapter->addValidator('Extension', false, array('jpg,jpeg,png', true));
-        $name = $adapter->getFileName($file, false);
-        $newName = time() . "_" . $name;
-        $cp = $rootPath . $newName;
+        $imageName = $adapter->getFileName($file, false);
+        $changedImageName = time() . "_" . $imageName;
+        $targetPath = $rootPath . $changedImageName;
         $adapter->addFilter(
             new Zend_Filter_File_Rename(
-                array('target' => $cp, 'overwrite' => true)
+                array('target' => $targetPath, 'overwrite' => true)
             ),
             null,
             $file
@@ -73,7 +73,7 @@ class Newsletterbanners extends BaseNewsletterbanners
         $adapter->receive($file);
         if ($adapter->isValid($file)) {
             return array(
-                "fileName" => $newName,
+                "fileName" => $changedImageName,
                 "status" => "200",
                 "msg" => "File uploaded successfully",
                 "path" => $uploadPath
@@ -88,14 +88,14 @@ class Newsletterbanners extends BaseNewsletterbanners
 
     public static function deleteNewsletterImages($params, $imageType)
     {
-        $existedNewsLetterHeaderImage = Doctrine_Query::create()
+        $existedNewsLetterImage = Doctrine_Query::create()
             ->select('s.name, s.path')
             ->from("Newsletterbanners s")
             ->where('s.imagetype = "'.$imageType.'"')
             ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-        if (!empty($existedNewsLetterHeaderImage)) {
-            $fileName = $existedNewsLetterHeaderImage['name'];
-            $filePath = $existedNewsLetterHeaderImage['path'];
+        if (!empty($existedNewsLetterImage)) {
+            $fileName = $existedNewsLetterImage['name'];
+            $filePath = $existedNewsLetterImage['path'];
             @unlink(ROOT_PATH. $filePath . $fileName);
         }
         Doctrine_Query::create()

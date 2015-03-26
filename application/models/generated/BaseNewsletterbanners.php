@@ -12,18 +12,17 @@ abstract class BaseNewsletterbanners extends Doctrine_Record
              'comment' => 'PK',
              'length' => '11',
              ));
-
         $this->hasColumn('name', 'string', 255, array(
-                'type' => 'string',
-                'length' => '255'
+            'type' => 'string',
+            'length' => '255'
         ));
         $this->hasColumn('path', 'string', 255, array(
-                'type' => 'string',
-                'length' => '255'
+            'type' => 'string',
+            'length' => '255'
         ));
         $this->hasColumn('imagetype', 'string', 1, array(
-                'type' => 'string',
-                'length' => '1'
+            'type' => 'string',
+            'length' => '1'
         ));
     }
 
@@ -31,19 +30,21 @@ abstract class BaseNewsletterbanners extends Doctrine_Record
     {
         parent::setUp();
         $softdelete0 = new Doctrine_Template_SoftDelete(array(
-             'name' => 'deleted',
-             'type' => 'boolean',
-             ));
-        $timestampable0 = new Doctrine_Template_Timestampable(array(
-             'created' =>
-             array(
-              'name' => 'created_at',
-             ),
-             'updated' =>
-             array(
-              'name' => 'updated_at',
-             ),
-             ));
+            'name' => 'deleted',
+            'type' => 'boolean',
+        ));
+        $timestampable0 = new Doctrine_Template_Timestampable(
+            array(
+                'created' =>
+                    array(
+                        'name' => 'created_at',
+                    ),
+                'updated' =>
+                    array(
+                        'name' => 'updated_at',
+                    ),
+            )
+        );
         $this->actAs($softdelete0);
         $this->actAs($timestampable0);
     }

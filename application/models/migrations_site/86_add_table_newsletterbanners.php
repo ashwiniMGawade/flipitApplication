@@ -38,8 +38,8 @@ class AddTableNewsletterbanners extends Doctrine_Migration_Base
         );
 
         $options = array(
-                'type'    => 'INNODB',
-                'charset' => 'utf8'
+            'type'    => 'INNODB',
+            'charset' => 'utf8'
         );
         $this->createTable('newsletterbanners', $columns, $options);
     }

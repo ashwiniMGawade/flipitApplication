@@ -174,12 +174,11 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             } else {
                 $topCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
             }
-
+            
             $newsLetterHeaderImage = Newsletterbanners::getHeaderOrFooterImage('H');
             $newsLetterHeaderImage = !empty($newsLetterHeaderImage) ? $newsLetterHeaderImage : '';
             $newsLetterFooterImage = Newsletterbanners::getHeaderOrFooterImage('F');
             $newsLetterFooterImage = !empty($newsLetterFooterImage) ? $newsLetterFooterImage : '';
-
             $emailDetails = Signupmaxaccount::getAllMaxAccounts();
             $mandrillSenderEmailAddress = $emailDetails[0]['emailperlocale'];
             $mandrillNewsletterSubject = $emailDetails[0]['emailsubject'];
