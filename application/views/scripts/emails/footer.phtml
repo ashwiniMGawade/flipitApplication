@@ -7,24 +7,20 @@ if($this->locale == ''):
 else :
     $logo = $publicPath.'logo-footer.png';
 endif;
-
+$emailFooterImage = '';
+if ($this->newsLetterFooterImage!='') {
+    $emailFooterImage = $this->partial(
+        'emails/emailFooterImage.phtml',
+        array(
+            'newsLetterFooterImage' => $this->newsLetterFooterImage,
+            'publicPathCdn' => $this->publicPathCdn
+        )
+    );
+}
+echo $emailFooterImage;
 ?>
 <table width="100%" align="center" cellpadding="0" cellspacing="0">
     <tr><td height="46"></td></tr>
-    <?php 
-    if ($this->newsLetterFooterImage!='') {
-        ?>
-        <tr>
-            <td align="center">
-                <img width='728'
-                    alt="<?php echo $this->newsLetterFooterImage['name']; ?>" 
-                    title="<?php echo $this->newsLetterFooterImage['name']; ?>" 
-                    src="<?php echo $this->publicPathCdn.$this->newsLetterFooterImage['path']
-                    .$this->newsLetterFooterImage['name'] ?>">
-            </td>
-        </tr>
-        <?php 
-    } ?>
     <tr>
         <td align="center" style="padding:0 0 25px; font:12px/20px Arial, Helvetica, sans-serif; color:#878a8d;">
             <?php echo FrontEnd_Helper_viewHelper::__email('email_Je ontvangt deze nieuwsbrief omdat je ons toestemming hebt gegeven om je op de'); ?>
