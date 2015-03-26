@@ -38,6 +38,22 @@ if($this->mailType == 'codeAlert') {
                     <a href="<?php echo rtrim($this->httpPathLocale, '/'); ?>"><img src="<?php echo $logo; ?>" border="0" style="vertical-align:top;" alt="<?php echo $this->websiteName; ?>" title="<?php echo $this->websiteName; ?>"></a>
                 </td>
             </tr>
+            <?php 
+            if ($this->newsLetterHeaderImage!='') {
+                ?>
+                <tr>
+                    <td width="0"></td>
+                    <td width="800">
+                        <img 
+                            alt="<?php echo $this->newsLetterHeaderImage['name']; ?>" 
+                            title="<?php echo $this->newsLetterHeaderImage['name']; ?>" 
+                            src="<?php echo $this->publicPathCdn
+                            .$this->newsLetterHeaderImage['path']
+                            .$this->newsLetterHeaderImage['name'] ?>">
+                    </td>
+                </tr>
+                <?php 
+            } ?>
             <tr><td colspan="2" height="20"></td></tr>
         </tbody></table>
     </td>

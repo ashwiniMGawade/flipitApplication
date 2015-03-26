@@ -175,6 +175,11 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                 $topCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
             }
 
+            $newsLetterHeaderImage = Newsletterbanners::getHeaderOrFooterImage('H');
+            $newsLetterHeaderImage = !empty($newsLetterHeaderImage) ? $newsLetterHeaderImage : '';
+            $newsLetterFooterImage = Newsletterbanners::getHeaderOrFooterImage('F');
+            $newsLetterFooterImage = !empty($newsLetterFooterImage) ? $newsLetterFooterImage : '';
+
             $emailDetails = Signupmaxaccount::getAllMaxAccounts();
             $mandrillSenderEmailAddress = $emailDetails[0]['emailperlocale'];
             $mandrillNewsletterSubject = $emailDetails[0]['emailsubject'];
@@ -199,7 +204,10 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                     $this->_to,
                     $this->footerContent,
                     '',
-                    $newsletterHeader['email_header']
+                    $newsletterHeader['email_header'],
+                    '',
+                    $newsLetterHeaderImage,
+                    $newsLetterFooterImage
                 );
                 $message = $this->view->translate('Newsletter has been sent successfully');
             } catch (Mandrill_Error $e) {

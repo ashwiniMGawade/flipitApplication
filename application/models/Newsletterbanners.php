@@ -9,8 +9,12 @@ class Newsletterbanners extends BaseNewsletterbanners
             ->from("Newsletterbanners s")
              ->where('s.imagetype = "'.$imageType.'"')
             ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
+        if (!empty($existedNewsLetterHeaderImage)) {
+            $existedNewsLetterHeaderImage = $existedNewsLetterHeaderImage[0];
+        }
         return $existedNewsLetterHeaderImage;
     }
+    
     public static function updateNewsletterImages($params, $type)
     {
         $imageType = $type == 'footer' ? 'F' : 'H';
