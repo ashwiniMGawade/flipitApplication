@@ -1727,127 +1727,6 @@ public static function getShopDetail($shopId)
         return $data;
     }
 
-
-
-    /**
-     * getStoreLinks
-     * get links for a shop for cloaking purpose
-     *
-     * @author Raman modified by Surindetrpal Singhj
-     * @param integer $offerId id of an offer
-     * @param boolean $checkRefUrl if true then check only the shop has ref url|deep link  or not
-     *                                     if false then return the outgoing link
-     * @return array|boolean $data
-     * @version 1.0
-     */
-    public static function getStoreLinks($shopId, $checkRefUrl = false)
-    {
-        $shopInfo = self::getShopInfoByShopId($shopId);
-        $network = Shop::getAffliateNetworkDetail($shopId);
-        self::checkRefUrl($checkRefUrl, $shopInfo, $network);
-        $networkInfo = self::getSubidWithStringPattern($network, $shopInfo);
-        $url = self::getUrlForCloakLink(
-            $shopInfo,
-            $networkInfo['subidFlag'],
-            $networkInfo['subid'],
-            $networkInfo['stringPattern']
-        );
-        return $url;
-    }
-
-    public static function getShopInfoByShopId($shopId)
-    {
-        $shopInfo = Doctrine_Query::create()
-            ->select(
-                's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl'
-            )
-            ->from('Shop s')
-            ->where('s.id='.$shopId)
-            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-        return $shopInfo;
-    }
-
-    public static function checkRefUrl($checkRefUrl, $shopInfo, $network)
-    {
-        if ($checkRefUrl) {
-            if (!isset($network['affliatenetwork'])) {
-                return false;
-            }
-            if (isset($shopInfo['deepLink']) && $shopInfo['deepLink']!=null) {
-                return false;
-            } elseif (isset($shopInfo['refUrl']) && $shopInfo['refUrl']!=null) {
-                return true;
-            } else {
-                return true;
-            }
-        }
-    }
-
-    public static function getSubidWithStringPattern($network, $shopInfo)
-    {
-        $subid = "" ;
-        $stringPattern = "";
-        $subidWithCid = "";
-        if (isset($network['affliatenetwork'])) {
-            if (!empty($network['subid'])) {
-                if (strpos($network['subid'], "|") !== false) {
-                    $splitSubid = explode("|", $network['subid']);
-                    if (isset($splitSubid[0])) {
-                        $stringPattern = $splitSubid[0];
-                    }
-                    if (isset($splitSubid[1])) {
-                        $subidWithCid = $splitSubid[1];
-                    }
-
-                    $subid = $subidWithCid;
-                    $subidFlag = true;
-                } else {
-                    $subid = "&". $network['subid'];
-                    $subidFlag = false;
-                }
-
-                $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
-                $clientProperAddress = ip2long($clientIP);
-                $conversion = Conversions::getConversionId($shopInfo['id'], $clientProperAddress, 'shop');
-                $subid = str_replace('A2ASUBID', $conversion['id'], $subid);
-                $subid = FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
-            }
-        }
-        $networkInfo = array(
-            "subid" => $subid,
-            "stringPattern" => $stringPattern,
-            "subidFlag" => $subidFlag
-        );
-        return $networkInfo;
-    }
-
-    public static function getUrlForCloakLink($shopInfo, $subidFlag, $subid, $stringPattern)
-    {
-        if (isset($shopInfo['refUrl']) && $shopInfo['refUrl']!=null) {
-            $url = self::replaceSubidByStringPattern($shopInfo['refUrl'], $subidFlag, $subid, $stringPattern);
-        } else if (isset($shopInfo['actualUrl']) && $shopInfo['actualUrl']!=null) {
-            $url = $shopInfo['actualUrl'];
-        } else {
-            $shopPermalink = $shopInfo['permaLink'];
-            $url = HTTP_PATH_LOCALE.$shopPermalink;
-        }
-        return $url;
-    }
-
-    public static function replaceSubidByStringPattern($refUrl, $subidFlag, $subid, $stringPattern)
-    {
-        if ($subidFlag == true && $stringPattern != "") {
-            $url = preg_replace("/".$stringPattern."/", $subid, $refUrl);
-            if ($url == null) {
-                $url = $refUrl;
-            }
-        } else {
-            $url = $refUrl;
-            $url .= $subid;
-        }
-        return $url;
-    }
-
     /**
      * addConversion
      * add a conversion to a shop which is associted with a network
@@ -1862,7 +1741,7 @@ public static function getShopDetail($shopId)
         $ip = ip2long($clientIP);
 
         # save conversion detail if an offer is associated with a network
-        if(Shop::getStoreLinks($id , true )) {
+        if(FrontEnd_Helper_ClickoutFunctions::getStoreLinks($id , true )) {
 
             # check for previous cnversion of same ip
             $data = Doctrine_Query::create()

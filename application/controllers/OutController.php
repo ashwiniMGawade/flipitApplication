@@ -7,7 +7,7 @@ class OutController extends Zend_Controller_Action
         FrontEnd_Helper_viewHelper::viewCounter('offer', 'onclick', $offerId);
         FrontEnd_Helper_viewHelper::viewCounter('offer', 'onload', $offerId);
         Offer::addConversion($offerId);
-        $redirectUrl  = Offer::getCloakLink($offerId, false);
+        $redirectUrl  = FrontEnd_Helper_ClickoutFunctions::getCloakLink($offerId, false);
         $this->_helper->redirector->setCode(301);
         $this->_redirect($redirectUrl);
     }
@@ -15,7 +15,7 @@ class OutController extends Zend_Controller_Action
     public function exofferAction()
     {
         $offerId = $this->getRequest()->getParam('id');
-        $redirectUrl  = Offer::getCloakLink($offerId, false);
+        $redirectUrl  = FrontEnd_Helper_ClickoutFunctions::getCloakLink($offerId, false);
         $this->_helper->redirector->setCode(301);
         $this->_redirect($redirectUrl);
     }
@@ -25,7 +25,7 @@ class OutController extends Zend_Controller_Action
         $shopId = $this->getRequest()->getParam('id');
         FrontEnd_Helper_viewHelper::viewCounter('shop', 'onclick', $shopId);
         Shop::addConversion($shopId);
-        $redirectUrl = Shop::getStoreLinks($shopId, false);
+        $redirectUrl = FrontEnd_Helper_ClickoutFunctions::getStoreLinks($shopId, false);
         $this->_helper->redirector->setCode(301);
         $this->_redirect($redirectUrl);
     }
