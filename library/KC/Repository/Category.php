@@ -34,14 +34,13 @@ class Category extends \KC\Entity\Category
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDateAndTime = date('Y-m-d 00:00:00');
         $query = $queryBuilder
-        ->select("roc, c, o, s, terms, l, fv")
+        ->select("roc, c, o, s, terms, l")
         ->from("KC\Entity\RefOfferCategory", "roc")
         ->leftJoin("roc.categories", "c")
         ->leftJoin("roc.offers", "o")
         ->leftJoin("o.shopOffers", "s")
         ->leftJoin('o.offertermandcondition', 'terms')
         ->leftJoin("s.logo", "l")
-        ->leftJoin('s.favoriteshops', 'fv')
         ->where("roc.categories =".$categoryId)
         ->andWhere("c.deleted = 0")
         ->andWhere("c.status= 1")

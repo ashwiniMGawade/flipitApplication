@@ -264,13 +264,16 @@ class Menu extends \KC\Entity\Menu
 
     //********************FRONT-END FUNCTION********************//
    
-    public static function getFirstLevelMenu()
+    public static function getFirstLevelMenu($navigation = '')
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('menu')
             ->from('KC\Entity\Menu', 'menu')
             ->where('menu.parentId = 0')
             ->orderBy('menu.position', 'ASC');
+        if ($navigation == 'mobile') {
+            $query = $query->andWhere("name != 'plus'");
+        }
         $mainMenu = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $mainMenu;
     }

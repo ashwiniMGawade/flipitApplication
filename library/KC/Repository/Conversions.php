@@ -49,12 +49,35 @@ class Conversions extends \KC\Entity\Conversions
         
         if (is_numeric($id)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $conversionInfo = $queryBuilder->select('c.id,o.title as offerTitle,s.name as shopName,cat.name as categoryName')
+            $offerOrShopId = self::getConversionOfferOrShopId($id);
+            if (!empty($offerOrShopId) && $offerOrShopId['offerId'] != '') {
+                $conversionInfo = $queryBuilder->select('c.id,o.title as offerTitle,s.name as shopName,cat.name as categoryName')
+                    ->from("KC\Entity\Conversions", "c")
+                    ->leftJoin("c.offer", "o")
+                    ->leftJoin("o.shop", "s")
+                    ->leftJoin("o.category", "cat");
+            } else {
+                $conversionInfo = $queryBuilder->select('c.id,s.name as shopName,cat.name as categoryName')
+                    ->from("KC\Entity\Conversions", "c")
+                    ->leftJoin("c.shop", "s")
+                    ->leftJoin('s.category", "cat');
+            }
+            
+            $conversionInfo = $conversionInfo->where('c.id = '. $id)
+                ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        }
+        return $conversionInfo;
+    }
+
+    public static function getConversionOfferOrShopId($id)
+    {
+        $conversionInfo = array();
+        
+        if (is_numeric($id)) {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $conversionInfo = Doctrine_Query::create()->select('c.shopId,c.offerId')
                 ->from("KC\Entity\Conversions", "c")
-                ->leftJoin("c.offer", "o")
-                ->leftJoin("o.shop", "s")
-                ->leftJoin("o.category", "cat")
-                ->where("c.id = ". $id)
+                ->where('c.id = '. $id)
                 ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
         return $conversionInfo;

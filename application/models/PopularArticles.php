@@ -101,8 +101,8 @@ class PopularArticles extends BasePopularArticles
     public static function clearCacheOfArticles()
     {
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homemanisaving_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homemoneysaving_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homemanisaving_list');
     }
 }

@@ -9,7 +9,7 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDate = date("Y-m-d H:i");
         $query = $queryBuilder
-        ->select('op, o, terms, s, vot, l, fv')
+        ->select('op, o, terms, s, l')
         ->from('KC\Entity\SpecialPagesOffers', 'op')
         ->leftJoin('op.offers', 'o')
         ->leftJoin('o.offertermandcondition', 'terms')
@@ -18,9 +18,7 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
             or o.couponCodeType = 'GN'"
         )
         ->leftJoin('o.shopOffers', 's')
-        ->leftJoin('o.votes', 'vot')
         ->leftJoin('s.logo', 'l')
-        ->leftJoin('s.favoriteshops', 'fv')
         ->where('op.pages = '.$pageId)
         ->andWhere('o.endDate >'.$queryBuilder->expr()->literal($currentDate))
         ->andWhere('o.startDate <='.$queryBuilder->expr()->literal($currentDate))
