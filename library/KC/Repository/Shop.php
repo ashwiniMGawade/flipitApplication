@@ -332,7 +332,7 @@ class Shop extends \KC\Entity\Shop
         ->from('KC\Entity\PopularShop', 'p')
         ->leftJoin('p.popularshops', 's')
         ->where('s.deleted=0')
-        ->addWhere('s.status=1')
+        ->andWhere('s.status=1')
         ->orderBy('p.position', 'ASC')
         ->setMaxResults($limit)
         ->getQuery()
