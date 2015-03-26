@@ -1017,27 +1017,55 @@ class Offer extends BaseOffer
         }
 
         $subid = "" ;
+        $stringPattern = "";
+        $subidWithCid = "";
         if (isset($network['affliatenetwork'])) {
             if (!empty($network['subid'])) {
-                 $subid = "&". $network['subid'];
-                 $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
-                 $clientProperAddress = ip2long($clientIP);
-                 # get click detail and replcae A2ASUBID click subid
-                 $conversion = Conversions::getConversionId($shopData['id'], $clientProperAddress, 'offer');
-                 $subid = str_replace('A2ASUBID', $conversion['id'], $subid);
+                if (!empty($network['subid']) && strpos($network['subid'], "|") !== false) {
+                    $splitSubid = explode("|", $network['subid']);
+                    if (isset($splitSubid[0])) {
+                        $stringPattern = $splitSubid[0];
+                    }
+                    if (isset($splitSubid[1])) {
+                        $subidWithCid = $splitSubid[1];
+                    }
+
+                    $subid = $subidWithCid;
+                    $subidFlag = true;
+                } else {
+                    $subid = "&". $network['subid'];
+                    $subidFlag = false;
+                }
+
+                $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
+                $clientProperAddress = ip2long($clientIP);
+                # get click detail and replcae A2ASUBID click subid
+                $conversion = Conversions::getConversionId($shopData['id'], $clientProperAddress, 'offer');
+                $subid = str_replace('A2ASUBID', $conversion['id'], $subid);
                 $subid = FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
             }
         }
 
         if ($shopData['refURL'] != "") {
-            $url = $shopData['refURL'];
-            $url .= $subid;
-
+            if ($subidFlag == true && $stringPattern != "") {
+                $url = preg_replace("/".$stringPattern."/", $subid, $shopData['refURL']);
+                if ($url == null) {
+                    $url = $shopData['refURL'];
+                }
+            } else {
+                $url = $shopData['refURL'];
+                $url .= $subid;
+            }
         } else if ($shopData['shop']['refUrl'] != "") {
-
-            $url = $shopData['shop']['refUrl'];
-            $url .=  $subid;
-
+            if ($subidFlag == true && $stringPattern != "") {
+                $url = preg_replace("/".$stringPattern."/", $subid, $shopData['shop']['refUrl']);
+                if ($url == null) {
+                    $url = $shopData['shop']['refUrl'];
+                }
+            } else {
+                $url = $shopData['shop']['refUrl'];
+                $url .=  $subid;
+            }
         } else if ($shopData['shop']['actualUrl'] != "") {
             $url = $shopData['shop']['actualUrl'];
         } else {
