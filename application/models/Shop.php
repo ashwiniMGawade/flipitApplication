@@ -1740,50 +1740,65 @@ public static function getShopDetail($shopId)
      * @return array|boolean $data
      * @version 1.0
      */
-    public static function getStoreLinks($shopId , $checkRefUrl = false)
+    public static function getStoreLinks($shopId, $checkRefUrl = false)
     {
 
         $data = Doctrine_Query::create()->select('s.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl')
         ->from('Shop s')
         ->where('s.id='.$shopId)
-        ->fetchOne(null,Doctrine::HYDRATE_ARRAY );
+        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
 
-        $network = Shop::getAffliateNetworkDetail( $shopId );
+        $network = Shop::getAffliateNetworkDetail($shopId);
 
-        if($checkRefUrl) {
+        if ($checkRefUrl) {
             # retur false if s shop is not associated with any network
-            if(! isset($network['affliatenetwork'])) {
+            if (!isset($network['affliatenetwork'])) {
                 return false ;
             }
 
-            if(isset($data['deepLink']) && $data['deepLink']!=null){
+            if (isset($data['deepLink']) && $data['deepLink']!=null) {
 
                 # deeplink is now commetted for the time being, so we always @return false ;
                 return false;
-            }elseif(isset($data['refUrl']) && $data['refUrl']!=null){
+            } elseif (isset($data['refUrl']) && $data['refUrl']!=null) {
                 return true ;
-            }else{
+            } else {
                 return true ;
             }
         }
 
         $subid = "" ;
-        if( isset($network['affliatenetwork']) ) {
-            if(!empty($network['subid']) ) {
-                 $subid = "&". $network['subid'] ;
+        $stringPattern = "";
+        $subidWithCid = "";
+        if (isset($network['affliatenetwork'])) {
+            if (!empty($network['subid'])) {
+                if (strpos($network['subid'], "|") !== false) {
+                    $splitSubid = explode("|", $network['subid']);
+                    if (isset($splitSubid[0])) {
+                        $stringPattern = $splitSubid[0];
+                    }
+                    if (isset($splitSubid[1])) {
+                        $subidWithCid = $splitSubid[1];
+                    }
+
+                    $subid = $subidWithCid;
+                    $subidFlag = true;
+                } else {
+                    $subid = "&". $network['subid'];
+                    $subidFlag = false;
+                }
 
 
-                 $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
-                 $ip = ip2long($clientIP);
+                $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
+                $ip = ip2long($clientIP);
 
-                 # get click detail and replcae A2ASUBID click subid
-                 $conversion = Conversions::getConversionId( $data['id'] , $ip , 'shop') ;
+                # get click detail and replcae A2ASUBID click subid
+                $conversion = Conversions::getConversionId($data['id'], $ip, 'shop');
 
-                 $subid = str_replace('A2ASUBID',$conversion['id'] , $subid );
+                $subid = str_replace('A2ASUBID', $conversion['id'], $subid);
                 $subid = FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
             }
         }
-
         # deeplink is now commetted for the time being, so we always return false ;
         /*if(isset($data['deepLink']) && $data['deepLink']!=null){
             $url = $data['deepLink'];
@@ -1791,12 +1806,19 @@ public static function getShopDetail($shopId)
 
         }else*/
 
-        if(isset($data['refUrl']) && $data['refUrl']!=null){
-            $url = $data['refUrl'];
-            $url .=  $subid ;
-        }elseif (isset($data['actualUrl']) && $data['actualUrl']!=null){
+        if (isset($data['refUrl']) && $data['refUrl']!=null) {
+            if ($subidFlag == true && $stringPattern != "") {
+                $url = preg_replace("/".$stringPattern."/", $subid, $data['refUrl']);
+                if ($url == null) {
+                    $url = $data['refUrl'];
+                }
+            } else {
+                $url = $data['refUrl'];
+                $url .= $subid;
+            }
+        } elseif (isset($data['actualUrl']) && $data['actualUrl']!=null) {
             $url = $data['actualUrl'];
-        }else{
+        } else {
             $url = HTTP_PATH_LOCALE.@$data['permaLink'];
 
         }

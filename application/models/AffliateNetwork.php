@@ -23,7 +23,7 @@ class AffliateNetwork extends BaseAffliateNetwork
    {
        $data = new AffliateNetwork();
        $data->name = BackEnd_Helper_viewHelper::stripSlashesFromString($params['addNetworkText']);
-       $data->subId = BackEnd_Helper_viewHelper::stripSlashesFromString($params['subId']);
+       $data->subId = $params['subId'];
        $data->status = '1';
        $data->save ();
        //call cache function
@@ -130,7 +130,7 @@ class AffliateNetwork extends BaseAffliateNetwork
     $data->name = BackEnd_Helper_viewHelper::stripSlashesFromString($params["addNetworkText"]);
 
     if(isset($params["subId"])) {
-        $data->subId = BackEnd_Helper_viewHelper::stripSlashesFromString($params["subId"]);
+        $data->subId = $params["subId"];
     }
     $a = $data->save();
     //call cache function
