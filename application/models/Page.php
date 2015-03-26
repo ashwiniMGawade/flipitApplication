@@ -73,18 +73,6 @@ class Page extends BasePage
         return $pageDetail;
     }
 
-    public static function getSpecialPageDetailForMobileMenu()
-    {
-        $pageDetail = Doctrine_Query::create()
-        ->select('p.permalink, p.pagetitle')
-        ->from('Page p')
-        ->where('p.deleted = 0')
-        ->andWhere('p.showinmobilemenu = 1')
-        ->limit(2)
-        ->fetchArray();
-        return $pageDetail;
-    }
-
     public static function updatePageAttributeId()
     {
         for ($i = 1; $i <= 3; $i++) {
@@ -130,6 +118,7 @@ class Page extends BasePage
             ->from('Page p')
             ->leftJoin("p.homepageimage homepageimage")
             ->where('p.permalink="'.$permalink.'"')
+            ->andWhere('p.deleted = 0')
             ->fetchOne();
         $imagePath = '';
         if (!empty($pageHomeImage->homepageimage)) {

@@ -41,7 +41,7 @@ $howToUse = $this->partial(
         <h2><?php echo $shopAbout; ?></h2>
         <?php 
         echo  preg_replace('/(<a\b[^><]*)>/i', '$1 style="color: #0077cc;text-decoration: underline;">',
-        $this->shop['shopText']); ?>
+        FrontEnd_Helper_viewHelper::replaceStringVariable($this->shop['shopText'])); ?>
     </div>
 <?php echo $howToUse; ?>
 </article>

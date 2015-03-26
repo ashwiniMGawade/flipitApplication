@@ -61,7 +61,7 @@ var focusRules = {
     shopSubTitle : __("Enter subtitle"),
     shopNotes : __("Enter notes"),
     shopDeepLinkUrl : __("Enter Url"),
-    shopRefUrl : __("Enter Url"),
+    shopRefUrl : __("Enter Ref Url"),
     shopActualUrl : __("Enter Url"),
     shopOverwriteTitle : __("Enter overwrite title"),
     shopOverwriteSubTitle : __("Enter overwrite subtitle"),
@@ -732,6 +732,7 @@ function validateFormAddNewShop(){
                         regex : /((http|ftp|gopher|telnet|news|com|edu|gov):\/\/|)([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
                     },
                     shopRefUrl :{
+                        required : true,
                         regex : /((http|https):\/\/)([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
                     },
                     shopActualUrl :{
@@ -846,7 +847,7 @@ function validateFormAddNewShop(){
                         regex : __("Invalid Url")
                     },
                     shopRefUrl :{
-                        //required  : "Please enter Url",
+                        required  : "Please enter Ref Url",
                         regex : __("Invalid Url")
                     },
                     shopActualUrl :{

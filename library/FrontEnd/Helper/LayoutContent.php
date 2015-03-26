@@ -202,13 +202,13 @@ class FrontEnd_Helper_LayoutContent
         '<div class="drop-box">
             <div class="inner-box">
                 <ul class="info-area">';
-        $i = 1;
+        $shopsPerColumn = 1;
         foreach ($topShops as $topShop) {
-            if ($i == 5 || $i == 9 || $i==13) {
+            if ($shopsPerColumn == 7 || $shopsPerColumn == 13 || $shopsPerColumn== 19 || $shopsPerColumn == 25) {
                 $topShopsDropdown .='</ul><ul class="info-area">';
             }
             $topShopsDropdown .='<li><a href="'. HTTP_PATH_LOCALE. $topShop['shop']['permaLink']. '">'. $topShop['shop']['name'] . '</a></li>';
-            $i++;
+            $shopsPerColumn++;
         }
         $topShopsDropdown.=
             '</ul></div>
@@ -225,7 +225,7 @@ class FrontEnd_Helper_LayoutContent
             "all_popularShopsForDropdown_list",
             array(
                 'function' => 'Shop::getPopularStoresForDropDown',
-                'parameters' => array(16)
+                'parameters' => array(30)
             ),
             ''
         );
@@ -236,20 +236,7 @@ class FrontEnd_Helper_LayoutContent
     {
         return self::getUlOfMainMenu($navigation);
     }
-    public static function generateSpecialPageMobileMenu()
-    {
-        $specialPages = Page::getSpecialPageDetailForMobileMenu();
-        $ulOfSpecialPageMenu = '<ul>';
-        foreach ($specialPages as $specialPage) {
-            $ulOfSpecialPageMenu.=
-            '<li>
-                <a href="'. HTTP_PATH_LOCALE  . $specialPage['permaLink'] . '">'. ucfirst($specialPage["pageTitle"])
-                 . '</a>
-            </li>';
-        }
-        $ulOfSpecialPageMenu.= '</ul>';
-        return $ulOfSpecialPageMenu;
-    }
+    
     public static function getMostPopularCouponOnEarth()
     {
         $splashInformation = FrontEnd_Helper_viewHelper::getSplashInformation();
