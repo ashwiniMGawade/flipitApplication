@@ -35,6 +35,13 @@ class BootstrapDoctrineConnectionFunctions
         $emLocale = EntityManager::create($connectionParamsLocale, $config);
         Zend_Registry::set('emLocale', $emLocale);
         Zend_Registry::set('emUser', $emUser);
+        BootstrapConstantsFunctions::constantsForLocaleAndTimezoneSetting();
+        $localeValue = explode('_', COUNTRY_LOCALE);
+        if (LOCALE == '') {
+            date_default_timezone_set('Europe/Amsterdam');
+        } else if (strtolower($localeValue[1]) == LOCALE) {
+            date_default_timezone_set(LOCALE_TIMEZONE);
+        }
         return $emUser;
     }
 
@@ -52,14 +59,6 @@ class BootstrapDoctrineConnectionFunctions
             'password' => $dbPassword,
             'dbname'   => $dbName,
         );
-        BootstrapConstantsFunctions::constantsForLocaleAndTimezoneSetting();
-        $localeValue = explode('_', COUNTRY_LOCALE);
-        if (LOCALE == '') {
-            date_default_timezone_set('Europe/Amsterdam');
-        } else if (strtolower($localeValue[1]) == LOCALE) {
-            date_default_timezone_set(LOCALE_TIMEZONE);
-        }
-        return $imbullDbConnection;
     }
 
     public static function getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData)
