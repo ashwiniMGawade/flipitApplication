@@ -33,11 +33,7 @@ $this->minifyHeadScript()->appendFile("/public/js/front_end/disqusComments.js");
             ?>
                 <article class= "block">
                     <h5><b><?php echo $discussionComment['author_name'];?></b></h5>
-                    <b><?php echo date(
-                        'Y-m-d',
-                        strtotime($discussionComment['created'])
-                    );?>
-                    </b>
+                    <b><?php echo gmdate("Y-m-d", $discussionComment['created']);?></b>
                     <div class="box"><?php echo $discussionComment['comment'];?></div>
                 </article>
             <?php      
