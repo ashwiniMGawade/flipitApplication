@@ -47,13 +47,7 @@ class Newsletterbanners extends BaseNewsletterbanners
 
     public static function uploadImage($file)
     {
-        if (!file_exists(UPLOAD_IMG_PATH)) {
-            mkdir(UPLOAD_IMG_PATH);
-        }
-        $uploadPath = UPLOAD_IMG_PATH . "newletter/bannerimages/";
-        if (!file_exists($uploadPath)) {
-            mkdir($uploadPath, 0776, true);
-        }
+        $uploadPath = "images/front_end/newsletterbannerimages/";
         $adapter = new Zend_File_Transfer_Adapter_Http();
         $rootPath = ROOT_PATH . $uploadPath;
         $files = $adapter->getFileInfo($file);
