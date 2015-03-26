@@ -226,7 +226,6 @@ class FrontEnd_Helper_LayoutContent
     public static function generateTopShopsDropdown()
     {
         $topShops = self::getTopShopForDropdown();
-       
         $topShopsDropdown =
         '<div class="drop-box">
             <div class="inner-box">
@@ -236,7 +235,7 @@ class FrontEnd_Helper_LayoutContent
             if ($shopsPerColumn == 7 || $shopsPerColumn == 13 || $shopsPerColumn== 19 || $shopsPerColumn == 25) {
                 $topShopsDropdown .='</ul><ul class="info-area">';
             }
-            $topShopsDropdown .='<li><a href="'. HTTP_PATH_LOCALE. $topShop['shop']['permaLink']. '">'. $topShop['shop']['name'] . '</a></li>';
+            $topShopsDropdown .='<li><a href="'. HTTP_PATH_LOCALE. $topShop['permaLink']. '">'. $topShop['name'] . '</a></li>';
             $shopsPerColumn++;
         }
         $topShopsDropdown.=
@@ -253,7 +252,7 @@ class FrontEnd_Helper_LayoutContent
         $topShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             "all_popularShopsForDropdown_list",
             array(
-                'function' => 'Shop::getPopularStoresForDropDown',
+                'function' => 'KC\Repository\Shop::getPopularStoresForDropDown',
                 'parameters' => array(30)
             ),
             ''
