@@ -37,15 +37,15 @@ endif;
 ?>
     <div class="container bottom-nav">
         <div class="row">
-            <?php echo $footer[0]['middleColumn1'];?>
-            <?php echo FrontEnd_Helper_viewHelper::replaceStringVariable($footer[0]['middleColumn2']);?>
-            <?php echo $footer[0]['middleColumn3'];?>
+            <?php echo $footer['middleColumn1'];?>
+            <?php echo FrontEnd_Helper_viewHelper::replaceStringVariable($footer['middleColumn2']);?>
+            <?php echo $footer['middleColumn3'];?>
         </div>
     </div>
 
     <div class="container add-block">
-    <?php echo $footer[0]['middleColumn4'];?>
-    <?php echo $footer[0]['bottomFooter'];?>
+    <?php echo $footer['middleColumn4'];?>
+    <?php echo $footer['bottomFooter'];?>
     </div>
 <?php
 if (APPLICATION_ENV == 'development') {
