@@ -67,7 +67,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $this->view->catList = \KC\Repository\Category::getCategoriesInformation();
         $pageObj = new KC\Repository\Page();
         $this->view->pages = $pageObj->getPagesOffer();
-        $allTiles = $this->getalltiles2Action();
+        $allTiles = $this->getAllTilesForOfferAction();
         $this->view->tiles = $allTiles;
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages();
@@ -75,55 +75,58 @@ class Admin_OfferController extends Zend_Controller_Action
         $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
 
 
-     }
+    }
+
     public function editofferAction()
     {
-        $params = $this->_getAllParams();
-        $this->view->offerId = $params['id'];
-
+        $parameters = $this->_getAllParams();
+        $this->view->offerId = $parameters['id'];
+        $userGeneratedOfferStatus = KC\Repository\Offer::checkUserGeneratedOffer($parameters['id']);
+        if ($userGeneratedOfferStatus) {
+            $this->view->offerController = 1;
+        }
         $this->view->qstring = $_SERVER['QUERY_STRING'];
 
-        $offerId = $params['id'];
-
-        // new code added by bhart
-        $shop = KC\Repository\Offer::getOfferShopDetail($offerId);
-        //echo "<pre>";print_r($shop);die;
-        $this->view->offerShoLogo = $shop;
-        // end code
-        $this->view->shopList = \KC\Repository\Shop::getOfferShopList();
-        //echo "<pre>";print_r($this->view->shopList);die;
-        $this->view->catList = \KC\Repository\Category::getCategoriesInformation();
-        //echo "<pre>";print_r($this->view->catList);die;
-        $pageObj = new KC\Repository\Page();
-        $this->view->pages = $pageObj->getPagesOffer();
-        $allTiles = $this->getalltiles2Action();
-        //echo "<pre>";print_r($allTiles);die;
+        $offerId = $parameters['id'];
+        $shopImageOfOffer = new KC\Repository\Offer();
+        $shop = $shopImageOfOffer::getOfferShopDetail($offerId);
+        $this->view->offerShopLogo = $shop;
+        $shopObject = new KC\Repository\Shop();
+        $this->view->shopList = $shopObject->getOfferShopList();
+        $categoryObject = new KC\Repository\Category();
+        $this->view->categoryList = $categoryObject->getCategoriesInformation();
+        $pageObject = new KC\Repository\Page();
+        $this->view->pages = $pageObject->getPagesOffer();
+        $allTiles = $this->getAllTilesForOfferAction();
         $this->view->tiles = $allTiles;
-
     }
 
 
     public function updateofferAction()
     {
-        $params = $this->_getAllParams();
 
-        //$offer = Doctrine_Core::getTable("Offer")->find($params['offerId']);
-        $offer = new KC\Repository\Offer();
-        $offerUpdate = $offer->updateOffer($params);
-        $flash = $this->_helper->getHelper('FlashMessenger');
+        $parameters = $this->_getAllParams();
 
-        if ($offerUpdate['result']) {
-            //self::updateVarnish($params['offerId']);
+        $offer =\Zend_Registry::get('emLocale')->find('KC\Entity\Offer', $parameters['offerId']);
+        $offerUpdated = $offer->updateOffer($parameters);
+        if ($parameters['approveSocialCode'] == 1) {
+            KC\Repository\UserGeneratedOffer::saveApprovedStatus($parameters['offerId'], $parameters['approveSocialCode']);
+        }
+        $flashMessage = $this->_helper->getHelper('FlashMessenger');
+        if ($offerUpdated['result']) {
+            self::updateVarnish($parameters['offerId']);
             $message = $this->view->translate('Offer has been updated successfully.');
-            $flash->addMessage(array('success' => $message ));
+            $flashMessage->addMessage(array('success' => $message ));
         } else {
             $message = $this->view->translate('Error: Your file size exceeded 2MB');
-            $flash->addMessage(array('error' => $message ));
+            $flashMessage->addMessage(array('error' => $message ));
         }
-
-        $this->_redirect(HTTP_PATH.'admin/offer#'.$params['qString']);
+        if ($parameters['approveSocialCode'] == 1) {
+            $this->_redirect(HTTP_PATH.'admin/usergeneratedoffer#'.$parameters['qString']);
+        } else {
+            $this->_redirect(HTTP_PATH.'admin/offer#'.$parameters['qString']);
+        }
         die;
-        //echo "Edit shop is under progress";
     }
 
 
@@ -904,7 +907,7 @@ class Admin_OfferController extends Zend_Controller_Action
         //return $Tiles;
     }
 
-    public function getalltiles2Action()
+    public function getAllTilesForOfferAction()
     {
         $Tiles = \KC\Repository\OfferTiles::getAllTiles();
         //echo Zend_Json::encode($Tiles);

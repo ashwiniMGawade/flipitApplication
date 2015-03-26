@@ -24,7 +24,6 @@ if (!empty($this->authorsWithPagination)) {
     <?php 
     $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
     echo $frontendSidebarHelper->popularShopWidget();
-    echo $frontendSidebarHelper->socialMediaWidget();
     $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
     echo $this->esi($this->locale.'signup/signupwidget?shopId='
         .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');

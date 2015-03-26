@@ -84,6 +84,9 @@ echo $headerBlock;
         echo $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
         .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
     endif;
+    $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+    echo $frontendSidebarHelper->popularCategoryWidget();
+    echo $this->partial('socialcode/social-code.phtml', array('zendForm' => $this->zendForm));
     ?>
     </aside>
 </div>

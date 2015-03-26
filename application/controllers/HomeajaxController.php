@@ -10,7 +10,7 @@ class HomeajaxController extends Zend_Controller_Action
             "all_hometocategoryoffers". $categoryId ."_list",
             array(
                 'function' => 'KC\Repository\Category::getCategoryVoucherCodes',
-                'parameters' => array($categoryId, 0, 'homePage')
+                'parameters' => array($categoryId, 50, 'homePage')
             )
         );
         $offers = count($topCategoriesOffers) > 10
@@ -49,9 +49,10 @@ class HomeajaxController extends Zend_Controller_Action
 
     public function getmoneysavingguidesAction()
     {
-        $moneySavingGuidesList = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            "all_homemanisaving_list",
+        $moneySavingGuidesList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            "all_homemoneysaving_list",
             array('function' => 'KC\Repository\Articles::getAllArticles', 'parameters' => array(10))
+
         );
         $homePagePartials = new \FrontEnd_Helper_HomePagePartialFunctions();
         $guidesHtml = $homePagePartials->getMoneySavingGuidesRightForAjax(

@@ -3,8 +3,8 @@ class FrontEnd_Helper_viewHelper
 {
     public static function writeLog($message, $logfile = '')
     {
-        $requestTime = \Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_TIME');
-        $remoteAddress = \Zend_Controller_Front::getInstance()->getRequest()->getServer('REMOTE_ADDR');
+        /*$requestTime = Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_TIME');
+        $remoteAddress = Zend_Controller_Front::getInstance()->getRequest()->getServer('REMOTE_ADDR');
         if ($logfile == '') {
             $logDir = APPLICATION_PATH . "../logs/";
             if (!file_exists($logDir)) {
@@ -33,7 +33,7 @@ EOD;
             }
         } else {
             return array('status' => false, 'message' => 'Unable to open log '.$logfile.'!');
-        }
+        }*/
     }
 
     public static function getShopCouponCode($type, $limit, $shopId = 0)
@@ -693,10 +693,24 @@ EOD;
         return $variable;
     }
 
-
+    public static function replaceStringVariableForOfferTitle($variable)
+    {
+        $variable = str_replace(
+            array('[month]', '[year]', '[day]'),
+            array(CURRENT_MONTH, CURRENT_YEAR, CURRENT_DAY),
+            $variable
+        );
+        return $variable;
+    }
 
     public static function sanitize($string, $stripTags = true)
     {
+        require_once(LIBRARY_PATH.'/HTMLPurifier/HTMLPurifier.auto.php');
+        $config = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
+        $clean_html = $purifier->purify($string);
+        return $clean_html;
+        /*
         $search = array(
             '@<script[^>]*?>.*?</script>@si',   // Strip out javascript
             '@[\\\]@'   // Strip out slashes
@@ -705,7 +719,7 @@ EOD;
         $string = htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
         $string = trim(rtrim(rtrim($string)));
         $string = mysqli_real_escape_string(self::getDbConnectionDetails(), $string);
-        return $string;
+        return $string;*/
     }
 
     public static function getDbConnectionDetails()
@@ -1071,7 +1085,8 @@ EOD;
 
     public static function setClientIdForTracking($subId = '')
     {
-        $clientId = str_replace('GOOGLEANALYTICSTRACKINCID', $_COOKIE['_ga'], $subId);
+        $gaCookie = isset($_COOKIE['_ga']) ? $_COOKIE['_ga'] : 'notAvailable';
+        $clientId = str_replace('GOOGLEANALYTICSTRACKINCID', $gaCookie, $subId);
         return $clientId;
     }
 
@@ -1111,5 +1126,24 @@ EOD;
             </div>';
         }
         return $twoReasons;
+    }
+
+    public static function exceedMemoryLimitAndExcutionTime()
+    {
+        set_time_limit(10000);
+        ini_set('max_execution_time', 115200);
+        ini_set("memory_limit", "1024M");
+        return true;
+    }
+
+    public static function getCaptchaKey($keyName)
+    {
+        $application = new Zend_Application(
+            APPLICATION_ENV,
+            APPLICATION_PATH . '/configs/application.ini'
+        );
+        $frontControllerObject = $application->getOption('resources');
+        $captchaKey = $frontControllerObject['frontController']['params'][$keyName];
+        return  $captchaKey;
     }
 }

@@ -83,17 +83,13 @@ class generateOfferFeeds
             # check database is being must be site
             if ($key != 'imbull') {
                 try {
-
-                    $this->createConnection( $connection['dsn'],$key);
+                    $this->createConnection($connection['dsn'], $key);
                 } catch (Exception $e) {
-
                     echo $e->getMessage();
                     echo "\n\n" ;
-
                 }
             }
         }
-
     }
 
     protected function createConnection($dsn, $key)
@@ -115,49 +111,41 @@ class generateOfferFeeds
         }
 
         $DMC = Doctrine_Manager::connection($dsn, 'doctrine_site');
-
         spl_autoload_register(array('Doctrine', 'modelsAutoload'));
-
         $manager = Doctrine_Manager::getInstance();
         $manager->setAttribute(Doctrine_Core::ATTR_MODEL_LOADING, Doctrine_Core::MODEL_LOADING_CONSERVATIVE);
         $manager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
         $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
         Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
-
         $settings = LocaleSettings::getLocaleSettings();
-
         $cutsomLocale = !empty( $settings[0]['locale']) ? $settings[0]['locale'] : 'nl_NL';
-
         $this->_trans = new Zend_Translate(array(
                 'adapter' => 'gettext',
                 'disableNotices' => true));
 
         $this->_trans->addTranslation(
-                array(
-                        'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/fallback/frontend_php' . $suffix . '.mo',
-                       'locale' => $cutsomLocale,
-                )
+            array(
+                'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/fallback/frontend_php' . $suffix . '.mo',
+                'locale' => $cutsomLocale,
+            )
         );
 
         $this->_trans->addTranslation(
-                array(
-                        'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/form' . $suffix . '.mo',
-                        'locale' => $cutsomLocale,
-                )
+            array(
+                'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/form' . $suffix . '.mo',
+                'locale' => $cutsomLocale,
+            )
         );
 
         $this->_trans->addTranslation(
-                array(
-                        'content' => APPLICATION_PATH.'/../public/'.strtolower($this->_localePath).'language/po_links' . $suffix . '.mo',
-                        'locale' => $cutsomLocale ,
-                )
+            array(
+                'content' => APPLICATION_PATH.'/../public/'.strtolower($this->_localePath).'language/po_links' . $suffix . '.mo',
+                'locale' => $cutsomLocale ,
+            )
         );
-
         Zend_Registry::set('Zend_Translate', $this->_trans);
         Zend_Registry::set('Zend_Locale', $cutsomLocale);
-
-        call_user_func( array($this, $this->_method));
-
+        call_user_func(array($this, $this->_method));
         $manager->closeConnection($DMC);
     }
     protected function newOffers()
@@ -165,8 +153,9 @@ class generateOfferFeeds
         $offers = Offer::getNewestOffersForRSS();
         $entries = array();
 
-        foreach ($offers as  $offer) {
-            $shopImage = '<img src="'.$this->_public_cdn_path.ltrim($offer['shop']['logo']['shopImagePath'],'/').'thum_big_'.$offer['shop']['logo']['shopImageName'].'" alt="'.$offer['shop']['logo']['shopImageName'].'">';
+        foreach ($offers as $offer) {
+            $shopImage = '<img src="'.$this->_public_cdn_path.ltrim($offer['shop']['logo']['shopImagePath'], '/')
+            .'thum_big_'.$offer['shop']['logo']['shopImageName'].'" alt="'.$offer['shop']['logo']['shopImageName'].'">';
             $offerTermsWithShopImage = $offer['terms'].$shopImage;
             $entry = array(
                         'title'       => $offer['title'] ,
@@ -187,16 +176,18 @@ class generateOfferFeeds
                 'image'	=> $this->_logo,
                 'entries'=>$entries
         );
-        $feed = Zend_Feed::importArray ( $feedData, 'rss' );
+        $feed = Zend_Feed::importArray($feedData, 'rss');
         $rssDirectory = PUBLIC_PATH. $this->_localePath ."rss/";
         $fileName = FrontEnd_Helper_viewHelper::__form('form_newest-offers');
         $offerXml = $rssDirectory. "{$fileName}.xml";
 
-        if(!file_exists($rssDirectory))
+        if (!file_exists($rssDirectory)) {
             mkdir($rssDirectory, 0775, TRUE);
+        }
 
-        if(file_exists($offerXml))
+        if (file_exists($offerXml)) {
             unlink($offerXml);
+        }
 
         $rssFeed = $feed->saveXML();
         $offerHandle = fopen($offerXml, 'w');
@@ -208,13 +199,12 @@ class generateOfferFeeds
 
     protected function popularOffers()
     {
-        $offers = Offer::getPopularOffersForRSS();
+        $offers = Offer::getTopOffers(10);
         $entries = array();
-
-        foreach ($offers as  $offer) {
-            $shopImage = '<img src="'.$this->_public_cdn_path.ltrim($offer['shop']['logo']['shopImagePath'], '/').'thum_big_'.$offer['shop']['logo']['shopImageName'].'" alt="'.$offer['shop']['logo']['shopImageName'].'">';
-            $terms = isset($offer['termandcondition'][0]) ? $offer['termandcondition'][0]['terms']
-                         : '' ;
+        foreach ($offers as $offer) {
+            $shopImage = '<img src="'.$this->_public_cdn_path.ltrim($offer['shop']['logo']['path'], '/')
+            .'thum_big_'.$offer['shop']['logo']['name'].'" alt="'.$offer['shop']['logo']['name'].'">';
+            $terms = isset($offer['termandcondition'][0]) ? $offer['termandcondition'][0]['content'] : '' ;
             $offerTermsWithShopImage = $terms.$shopImage;
             $entry = array(
                         'title'       => $offer['title'] ,
@@ -235,16 +225,18 @@ class generateOfferFeeds
                 'image'	=> $this->_logo,
                 'entries'=>$entries
         );
-        $feed = Zend_Feed::importArray ( $feedData, 'rss' );
+        $feed = Zend_Feed::importArray($feedData, 'rss');
         $rssDirectory = PUBLIC_PATH. $this->_localePath ."rss/";
         $fileName = FrontEnd_Helper_viewHelper::__form('form_popular-offers');
         $offerXml = $rssDirectory. "{$fileName}.xml";
 
-        if(!file_exists($rssDirectory))
+        if (!file_exists($rssDirectory)) {
             mkdir($rssDirectory, 0775, TRUE);
+        }
 
-        if(file_exists($offerXml))
+        if (file_exists($offerXml)) {
             unlink($offerXml);
+        }
 
         $rssFeed = $feed->saveXML();
         $offerHandle = fopen($offerXml, 'w');
@@ -252,7 +244,6 @@ class generateOfferFeeds
         fclose($offerHandle);
         print print trim($this->_hostName, '/')." - RSS feed  for popular offers has been created successfully!!! \n";
     }
-
 }
 
 $locale = '';

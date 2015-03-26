@@ -39,17 +39,7 @@ $role =  Zend_Auth::getInstance()->getIdentity()->users->id;
         <div class="clear"></div>
         <div class="mainpage-content-colorbox">
             <form class="form-search" id="searchform">
-                <div class="fl">
-                    <input type='hidden' id="searchOffer" name="searchOffer" style="width:300px;"/>
-                </div>
-                <div class="fl ml15">
-                    <select id='couponType' name='couponType'>
-                        <option value=''><?php echo $this->translate('All');?></option>
-                        <option value='CD'><?php echo $this->translate('Coupon');?></option>
-                        <option value='SL'><?php echo $this->translate('Sale');?></option>
-                        <option value='PA'><?php echo $this->translate('Printable');?></option>
-                    </select>
-                </div>
+
                 <div class="mainpage-content-searchbart">
                     <div class="mainpage-content-right-searchbar-offer">
                         <button type='button' onClick='searchByShop();' 
@@ -57,13 +47,13 @@ $role =  Zend_Auth::getInstance()->getIdentity()->users->id;
                         class="btn btn-primary"><?php echo $this->translate('Search');?>
                         </button>
                     </div>
-                    <div class="mainpage-content-right-inner-left-searchbar-other">
+                    <div class="resetSearch mg-left mainpage-content-right-inner-right-searchbar-other">
                       <input type="hidden" class="span3" id="searchShop" 
-                      name="searchShop" style="width:35%;float:left;">
+                      name="searchShop">
                     </div>
-                    <div class="mainpage-content-right-inner-left-searchbar-other">
+                    <div class="resetSearch mainpage-content-right-inner-right-searchbar-other">
                       <input type="hidden" class="span3" id="searchCoupon" 
-                      name="searchCoupon" style="width:35%;float:left;">
+                      name="searchCoupon">
                     </div>
                 </div>
             </form>
@@ -71,15 +61,10 @@ $role =  Zend_Auth::getInstance()->getIdentity()->users->id;
         <table class="table table-bordered table-striped" id="offerListTable">
             <thead>
                 <tr>
-                    <th><?php echo $this->translate('Title');?></th>
                     <th><?php echo $this->translate('Shop');?></th>
-                    <th><?php echo $this->translate('Type');?></th>
-                    <th><?php echo $this->translate('Deeplinking');?></th>
                     <th><?php echo $this->translate('Coupon Code');?></th>
                     <th><?php echo $this->translate('Start');?></th>
                     <th><?php echo $this->translate('End');?></th>
-                    <th><?php echo $this->translate('Clickouts');?></th>
-                    <th><?php echo $this->translate('Author');?></th>
                     <th><?php echo $this->translate('Delete');?></th>
                 </tr>
             </thead>

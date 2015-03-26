@@ -1,7 +1,8 @@
 <?php
  if ($this->pageCssClass == 'contact-page') {
-    $this->minifyHeadScript()->appendFile("/public/js/front_end/contactForm.js");
-}
+    $this->minifyHeadScript()->appendFile("/public/js/front_end/contactForm.js");?>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+<?php }
 if (isset($this->successMessage) && $this->successMessage!='') : ?>
     <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
         <span class='glyphicon glyphicon-warning-sign'></span>
@@ -56,7 +57,14 @@ if ($this->pageMode == true) {
             $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
             echo $this->esi($this->locale.'signup/signupwidget?shopId='
                 .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
+
             echo $frontendSidebarHelper->popularShopWidget();
+            echo $frontendSidebarHelper->popularCategoryWidget();
+            echo $this->partial(
+                'socialcode/social-code.phtml',
+                array('zendForm' => $this->zendForm
+                )
+            );
              ?>  
         </aside> 
     </div>

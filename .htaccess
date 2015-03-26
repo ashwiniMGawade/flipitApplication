@@ -27,8 +27,6 @@ RewriteRule ^sitemaps$ public/flipit/robots.txt [NC,L]
 
 RewriteRule ^(.*)/$ /$1 [L,R=301]
 
-php_value upload_max_filesize 10M
-
 RewriteRule ^bespaarwijzer?$ http://www.kortingscode.nl/plus? [R=301,L]
 RewriteRule ^bespaarwijzer/aanbiedingen-folders?$ http://www.kortingscode.nl/plus/aanbiedingen-folders? [R=301,L]
 RewriteRule ^bespaarwijzer/akortingscodes-populair-onder-miljonairs?$ http://www.kortingscode.nl/plus/akortingscodes-populair-onder-miljonairs? [R=301,L]

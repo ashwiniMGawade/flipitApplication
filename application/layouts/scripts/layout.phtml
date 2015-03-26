@@ -11,10 +11,7 @@ endif;
 echo $this->doctype();
 
 # manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
-$localeName = KC\Repository\LocaleSettings::getLocaleSettings();
-$countryLocale = isset($localeName[0]['locale']) ?
-    $localeName[0]['locale'] : 'nl_NL';
-$locale = explode('_', $countryLocale);
+$locale = explode('_', COUNTRY_LOCALE);
 $language = $locale[0];
 ?>
 

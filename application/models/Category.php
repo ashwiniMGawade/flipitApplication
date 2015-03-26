@@ -36,8 +36,7 @@ class Category extends BaseCategory
         $categoryOffersList = Doctrine_Query::create()
         ->select(
             "roc.offerId as oid,roc.categoryId as cid,c.permalink as categoryPermalink,c.name as categoryName,
-            o.*,s.id as shopId, s.refUrl, s.actualUrl, s.name,s.permalink as permalink,l.path,l.name,
-            fv.shopId,fv.visitorId,fv.Id,terms.content"
+            o.*,s.id as shopId, s.refUrl, s.actualUrl, s.name,s.permalink as permalink,l.path,l.name,terms.content"
         )
         ->from("refOfferCategory roc")
         ->leftJoin("roc.Category c")
@@ -45,7 +44,6 @@ class Category extends BaseCategory
         ->leftJoin("o.shop s")
         ->leftJoin('o.termandcondition terms')
         ->leftJoin("s.logo l")
-        ->leftJoin('s.favoriteshops fv')
         ->where("roc.categoryId =".$categoryId)
         ->andWhere("c.deleted = 0")
         ->andWhere("c.status= 1")

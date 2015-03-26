@@ -74,6 +74,8 @@ class CategoryController extends Zend_Controller_Action
         \FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormLarge, $signUpFormSidebarWidget);
         $this->view->form = $signUpFormLarge;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+        $socialCodeForm = new Application_Form_SocialCode();
+        $this->view->zendForm = $socialCodeForm;
     }
 
     public function indexAction()

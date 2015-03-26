@@ -416,15 +416,7 @@
 			li{
 				&:after{.after;}
 			}
-			li:first-child{
-				a{
-					border-color:@white-color;
-					&:hover{
-						border-color:@orange-color;
-					}
-				}
-			}
-			a{
+			.top-box{
 				float:left;
 				width:100%;
 				border-top:1px solid @page-header-border-color;
@@ -442,24 +434,6 @@
 					width: 9px;
 					height: 15px;
 					margin:-8px 0 0;
-				}
-				&:hover{
-					text-decoration:none;
-					background:#fefdfb;
-					border-color:@orange-color;
-					z-index:2;
-					&:before{
-						background-position:-256px -350px;
-					}
-					&:after{
-						content:'';
-						position:absolute;
-						background:@orange-color;
-						width:100%;
-						height:1px;
-						bottom:-1px;
-						left:0;
-					}
 				}
 			}
 			.logo-box{
@@ -926,7 +900,7 @@
 					h3{
 						font-size:16px;
 					}
-					a{
+					.top-box{
 						height:auto;
 						padding:17px 20px 20px 12px;
 						&:before{
@@ -1020,7 +994,7 @@
             &:hover{text-decoration:underline;}
         }
         p{
-            margin:0 0 22px;
+            margin:0 0 10px;
             color: #696868;
         }
         h3{
@@ -1052,6 +1026,9 @@
             line-height:14px;
         }
         .widget-form{
+        	.g-recaptcha{
+        		margin-bottom: 20px;
+        	}
             textarea,
             input[type="text"]{
                 .border-radius (3px);
@@ -1072,6 +1049,13 @@
             textarea{
                 resize:none;
                 height:77px;
+            }
+            .clear-both{
+            	clear:both;
+            }
+            .error-message {
+            	color: red;
+            	font-size: 12px;
             }
             .input-block{
                 &:after {.after;}

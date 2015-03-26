@@ -111,13 +111,12 @@ $headerBlock = $frontShopHeaderHelper->getShopHeader(
 );
 
 $shopEditor = '';
-if($this->shopEditor != null || $this->ballonEditorText != null):
+if($this->shopEditor != null):
     $shopEditor = $this->partial(
         $storeViewPartialPath.'_storeEditor.phtml',
         array(
            'shopEditor' => array(
-                 $this->shopEditor,
-                 $this->ballonEditorText
+                $this->shopEditor
             ),
            'shop' => $this->currentStoreInformation[0],
            'howToUseGuidePermalink'=>$howToUseGuidePermalink,
@@ -156,7 +155,21 @@ endif;
 ?>
 </div></div>
 <div class="row"> 
-  <aside id="sidebar" class="col-md-4 col-sm-4">
+    <div id="content" class ="col-md-8 col-sm-8">
+    <?php 
+    echo $noMoneyNocodeMessage;
+    echo $offers;
+    echo $sixShopReasons;
+    echo $similarOffersHeader;
+    echo $similarOffers;
+    echo $moreTextForShop;
+    echo $similarShopsAndSimilarCategoriesShops;
+    echo $discussion;
+    echo $moneySavingGuide;
+    echo $expiredOffers;
+    ?> 
+    </div>
+    <aside id="sidebar" class="col-md-4 col-sm-4">
     <?php
     echo $this->partial(
         $storeViewPartialPath. '_shop-sidebar.phtml',
@@ -172,20 +185,9 @@ endif;
         echo $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
             .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
     endif;
+    $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+    echo $frontendSidebarHelper->popularCategoryWidget();
+    echo $this->partial('socialcode/social-code.phtml', array('zendForm' => $this->zendForm));
     ?>
     </aside>
-    <div id="content" class="col-md-8 col-sm-8">
-    <?php 
-    echo $noMoneyNocodeMessage;
-    echo $offers;
-    echo $sixShopReasons;
-    echo $similarOffersHeader;
-    echo $similarOffers;
-    echo $moreTextForShop;
-    echo $similarShopsAndSimilarCategoriesShops;
-    echo $discussion;
-    echo $moneySavingGuide;
-    echo $expiredOffers;
-    ?>
-    </div>
 </div>

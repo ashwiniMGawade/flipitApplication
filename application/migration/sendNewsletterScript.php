@@ -9,53 +9,19 @@ class SendNewsletter
     public $_siteName = null;
     public $_logo = null;
     public $_linkPath = null;
-    public $_publicPath = null;
     public $_public_cdn_path = null;
-    public $_http_path_cdn = null;
     public $_recipientMetaData  = array();
     public $_loginLinkAndData = array();
     public $_to = array();
     public $_mandrillKey = "";
     public $_template = "" ;
-    public $_rootPath = "" ;
+    public $_suffix = '';
 
     public function __construct()
     {
-        ini_set('memory_limit', '-1');
-        set_time_limit(0);
-        defined('APPLICATION_PATH')
-            || define(
-                'APPLICATION_PATH',
-                dirname(dirname(__FILE__))
-            );
-        defined('LIBRARY_PATH')
-            || define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
-        defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine1');
-        defined('APPLICATION_ENV')
-        || define(
-            'APPLICATION_ENV',
-            (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
-                : 'production')
-        );
-        set_include_path(
-            implode(
-                PATH_SEPARATOR,
-                array(
-                    realpath(APPLICATION_PATH . '/../library'),
-                    get_include_path(),)
-            )
-        );
-        set_include_path(
-            implode(
-                PATH_SEPARATOR,
-                array(realpath(DOCTRINE_PATH), get_include_path(),)
-            )
-        );
-
-        require_once(LIBRARY_PATH.'/PHPExcel/PHPExcel.php');
-        require_once(LIBRARY_PATH.'/BackEnd/Helper/viewHelper-v1.php');
-        require_once (LIBRARY_PATH . '/Zend/Application.php');
-        require_once(DOCTRINE_PATH . '/Doctrine.php');
+        require_once 'ConstantForMigration.php';
+        require_once('CommonMigrationFunctions.php');
+        CommonMigrationFunctions::setTimeAndMemoryLimit();
         $application = new Zend_Application(
             APPLICATION_ENV,
             APPLICATION_PATH . '/configs/application.ini'
@@ -63,16 +29,13 @@ class SendNewsletter
         $frontControlerObject = $application->getOption('resources');
         $this->_mandrillKey = $frontControlerObject['frontController']['params']['mandrillKey'];
         $this->_template = $frontControlerObject['frontController']['params']['newsletterTemplate'];
-        $connections = $application->getOption('doctrine');
-        spl_autoload_register(array('Doctrine', 'autoload'));
-        $manager = Doctrine_Manager::getInstance();
-        $imbull = $connections['imbull'];
-        $DMC1 = Doctrine_Manager::connection($connections['imbull'], 'doctrine');
-
-        foreach ($connections as $key => $connection) {
+        $dbConnections = CommonMigrationFunctions::getAllConnectionStrings();
+        $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
+        $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($dbConnections);
+        foreach ($dbConnections as $key => $dbConnection) {
             if ($key != 'imbull') {
                 try {
-                    $this->send($connection ['dsn'], $key, $imbull);
+                    $this->send($dbConnection ['dsn'], $key);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     echo "\n\n";
@@ -80,122 +43,119 @@ class SendNewsletter
                 echo "\n\n";
             }
         }
-        $manager->closeConnection($DMC1);
+        $manager->closeConnection($doctrineImbullDbConnection);
     }
 
-    protected function send($dsn, $key, $imbull)
+    protected function send($dsn, $key)
     {
         if ($key == 'en') {
-            $this->_localePath = '';
-            $this->_hostName = "http://www.kortingscode.nl";
-            $this->_logo = $this->_hostName ."/public/images/HeaderMail.gif" ;
-            $suffix = "" ;
-            $this->_locale = '';
-            $this->_siteName = "Kortingscode.nl";
-            $this->_public_cdn_path = "http://img.kortingscode.nl/public/";
+            self::setVariablesForKortingscodeSite();
         } else {
-            $this->_localePath = $key . "/";
-            $this->_hostName = "http://www.flipit.com";
-            $suffix = "_" . strtoupper($key) ;
-            $this->_locale = $key;
-            $this->_siteName = "Flipit.com";
-            $this->_logo =  $this->_hostName ."/public/images/flipit-welcome-mail.jpg";
-            $this->_public_cdn_path = "http://img.flipit.com/public/" . strtolower($this->_localePath);
+            self::setVariablesForLocales($key);
         }
-
-        defined('PUBLIC_PATH')
-            || define(
-                'PUBLIC_PATH',
-                dirname(dirname(dirname(__FILE__)))."/public/"
-            );
-
-        $DMC = Doctrine_Manager::connection($dsn, 'doctrine_site');
-        spl_autoload_register(array('Doctrine', 'modelsAutoload'));
-        $manager = Doctrine_Manager::getInstance();
-        $manager->setAttribute(Doctrine_Core::ATTR_MODEL_LOADING, Doctrine_Core::MODEL_LOADING_CONSERVATIVE);
-        $manager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
-        $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
-        Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
-
+        $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
+        $manager = CommonMigrationFunctions::loadDoctrineModels();
         try {
-            $settings = Signupmaxaccount::getAllMaxAccounts();
+            $newsLetterSettings = Signupmaxaccount::getAllMaxAccounts();
             $localeSettings = LocaleSettings::getLocaleSettings();
             $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
-            if (($settings[0]['newsletter_sent_time'] != $currentDate || $settings[0]['newsletter_sent_time'] == '')
-             && $settings[0]['newletter_status'] !=  1) {
-                if ($settings[0]['newletter_is_scheduled'] && $settings[0]['newletter_status'] ==  0) {
-                    $cutsomLocale = !empty( $localeSettings[0]['locale']) ? $localeSettings[0]['locale'] : 'nl_NL';
+            $scheduledTime =  date('Y-m-d', strtotime($newsLetterSettings[0]['newletter_scheduled_time']));
+            $newsletterSentTime = date('Y-m-d', strtotime($newsLetterSettings[0]['newsletter_sent_time']));
+            if ($newsLetterSettings[0]['newletter_is_scheduled'] == 1) {
+                if ($newsLetterSettings[0]['newletter_is_scheduled'] == 1
+                        && $scheduledTime <= $currentDate
+                        && $newsletterSentTime < $currentDate) {
+                    $customLocale= !empty($localeSettings[0]['locale']) ? $localeSettings[0]['locale'] : 'nl_NL';
                     $this->_trans = new Zend_Translate(array(
                             'adapter' => 'gettext',
                             'disableNotices' => true));
                     $this->_trans->addTranslation(
                         array(
                             'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
-                            'language/frontend_php' . $suffix . '.mo',
-                            'locale' => $cutsomLocale,
+                            'language/frontend_php' .$this->_suffix. '.mo',
+                            'locale' => $customLocale,
                         )
                     );
                     $this->_trans->addTranslation(
                         array(
                             'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
-                            'language/email' . $suffix . '.mo',
-                            'locale' => $cutsomLocale
+                            'language/email' .$this->_suffix. '.mo',
+                            'locale' => $customLocale
                         )
                     );
                     $this->_trans->addTranslation(
                         array(
                             'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
-                            'language/form' . $suffix . '.mo',
-                            'locale' => $cutsomLocale
+                            'language/form' .$this->_suffix. '.mo',
+                            'locale' => $customLocale
                         )
                     );
                     $this->_trans->addTranslation(
                         array(
                             'content'   => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
-                            'language/po_links' . $suffix . '.mo',
-                            'locale'    => $cutsomLocale
+                            'language/po_links' .$this->_suffix. '.mo',
+                            'locale'    => $customLocale
                         )
                     );
                     Zend_Registry::set('Zend_Translate', $this->_trans);
-                    Zend_Registry::set('Zend_Locale', $cutsomLocale);
-                    $timezone = $localeSettings[0]['timezone'];
+                    Zend_Registry::set('Zend_Locale', $customLocale);
+                    $localeTimezone = $localeSettings[0]['timezone'];
                     echo "\n" ;
-                    $sentTime = new Zend_Date($settings[0]['newletter_scheduled_time']);
-                    $sentTime->get('YYYY-MM-dd HH:mm:ss');
-                    $currentTime = new Zend_Date();
-                    $currentTime->setTimezone($timezone);
+                    $newsletterScheduledDateTime = new Zend_Date($newsLetterSettings[0]['newletter_scheduled_time']);
+                    $newsletterScheduledDateTime->get('YYYY-MM-dd HH:mm:ss');
+                    $currentDateTime = new Zend_Date();
+                    $currentDateTime->setTimezone($localeTimezone);
                     echo "\n" ;
-                    $currentTime->get('YYYY-MM-dd HH:mm:ss');
-                    if ($currentTime->isLater($sentTime)) {
+                    $currentDateTime->get('YYYY-MM-dd HH:mm:ss');
+                    if ($currentDateTime->isLater($newsletterScheduledDateTime)) {
                         echo "\nSending newletter...\n" ;
-                        $this->mandrilHandler($key, $settings);
+                        $this->mandrilHandler($key, $newsLetterSettings);
                     } else {
                         echo "\n";
                         print "$key - Newsletter scheduled date is greater than Current Date.";
                     }
                 } else {
                     echo "\n";
-                    print "$key - Already sent";
+                    print "$key - Newsletter has already been sent for the same day.";
                 }
             } else {
                 echo "\n";
-                print "$key - Newsletter has already been sent for the same day.";
+                print "$key - Newsletter has not been scheduled.";
             }
         } catch (Exception $e) {
             echo "\n";
             echo $e->getMessage();
         }
-
-        $manager->closeConnection($DMC);
+        $manager->closeConnection($doctrineSiteDbConnection);
     }
 
+    protected function setVariablesForLocales($key)
+    {
+        $this->_localePath = $key . "/";
+        $this->_hostName = "http://www.flipit.com";
+        $this->_suffix= "_" . strtoupper($key) ;
+        $this->_locale = $key;
+        $this->_siteName = "Flipit.com";
+        $this->_logo =  $this->_hostName ."/public/images/flipit-welcome-mail.jpg";
+        $this->_public_cdn_path = "http://img.flipit.com/public/" . strtolower($this->_localePath);
+        return true;
+    }
 
-    protected function mandrilHandler($key, $settings)
+    protected function setVariablesForKortingscodeSite()
+    {
+        $this->_localePath = '';
+        $this->_hostName = "http://www.kortingscode.nl";
+        $this->_logo = $this->_hostName ."/public/images/HeaderMail.gif" ;
+        $this->_suffix= "" ;
+        $this->_locale = '';
+        $this->_siteName = "Kortingscode.nl";
+        $this->_public_cdn_path = "http://img.kortingscode.nl/public/";
+        return true;
+    }
+
+    protected function mandrilHandler($key, $newsLetterSetings)
     {
         $this->_linkPath = $this->_hostName . '/' .$this->_localePath;
-        $this->_publicPath = $this->_hostName . '/public/' . $this->_localePath;
-        $this->_rootPath = PUBLIC_PATH . $this->_localePath;
-
         $newsLetterCache = NewsLetterCache::getAllNewsLetterCacheContent();
         if (!empty($newsLetterCache)) {
             echo 'Building newsletter from cache'."\n";
@@ -207,11 +167,11 @@ class SendNewsletter
             );
             $emailHeader = NewsLetterCache::getEmailHeaderByFallBack(
                 $newsLetterCache['email_header'],
-                $settings[0]['email_header']
+                $newsLetterSetings[0]['email_header']
             );
             $emailFooter = NewsLetterCache::getEmailFooterByFallBack(
                 $newsLetterCache['email_footer'],
-                $settings[0]['email_footer']
+                $newsLetterSetings[0]['email_footer']
             );
             $categoryName = $topCategory[0]['name'];
             $categoryPermalink = $topCategory[0]['permaLink'];
@@ -220,17 +180,17 @@ class SendNewsletter
             $topCategory = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);
             $topVouchercodes = Offer::getTopOffers(10);
             $categoryVouchers = array_slice(Category::getCategoryVoucherCodes($topCategory[0]['categoryId']), 0, 3);
-            $emailHeader = $settings[0]['email_header'];
-            $emailFooter = $settings[0]['email_footer'];
+            $emailHeader = $newsLetterSetings[0]['email_header'];
+            $emailFooter = $newsLetterSetings[0]['email_footer'];
             $categoryName = $topCategory[0]['category']['name'];
             $categoryPermalink = $topCategory[0]['category']['permaLink'];
         }
  
         BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'scheduleNewsletterSender', '', $this->_mandrillKey);
         $mandrill = new Mandrill_Init($this->_mandrillKey);
-        $mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
-        $mandrillNewsletterSubject = $settings[0]['emailsubject'];
-        $mandrillSenderName = $settings[0]['sendername'];
+        $mandrillSenderEmailAddress = $newsLetterSetings[0]['emailperlocale'];
+        $mandrillNewsletterSubject = $newsLetterSetings[0]['emailsubject'];
+        $mandrillSenderName = $newsLetterSetings[0]['sendername'];
         try {
             FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
                 $topVouchercodes,
@@ -262,5 +222,4 @@ class SendNewsletter
         print "$key - $message ";
     }
 }
-
 new SendNewsletter();

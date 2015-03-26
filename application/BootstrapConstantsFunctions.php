@@ -2,6 +2,15 @@
 
 class BootstrapConstantsFunctions
 {
+    public static function constantsForLocaleAndTimezoneSetting()
+    {
+        $localeSettings = LocaleSettings::getLocaleSettings();
+        $locale = !empty($localeSettings[0]['locale']) ? $localeSettings[0]['locale'] : 'nl_NL';
+        $localeTimezone = !empty($localeSettings[0]['timezone']) ? $localeSettings[0]['timezone'] : 'Europe/Amsterdam';
+        defined('COUNTRY_LOCALE') || define('COUNTRY_LOCALE', $locale);
+        defined('LOCALE_TIMEZONE') || define('LOCALE_TIMEZONE', $localeTimezone);
+    }
+
     public static function constantsForSettingRequestHeaders()
     {
         defined('REQUEST_URI') || define('REQUEST_URI', isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/');

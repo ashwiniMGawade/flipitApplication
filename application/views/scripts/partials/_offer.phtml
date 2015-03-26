@@ -21,7 +21,7 @@ foreach ($this->offers as $offer) {
     $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
     $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires((array)$offer->endDate);
     $urlToShow = $offerPartial->getUrlToShow($offer);
-    $offerTitle = FrontEnd_Helper_viewHelper::replaceStringVariable($offer->title);
+    $offerTitle = FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offer->title);
     $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
     $userLoggedInOrNot = $offerPartial->getUserIsLoggedInOrNot();
     $couponCode = $offer->couponCode;
@@ -30,10 +30,12 @@ foreach ($this->offers as $offer) {
     }
 
     $defaultText = '';
+    $offerClass = "active";
     $offerHolderClass = "offer-holder";
     if ($offer->exclusiveCode == '1') {
         $offerClass = "orange-block";
-    } else if ($offer->userGenerated == '1') {
+    }
+    if ($offer->userGenerated == '1') {
         $offerClass = "";
         $offerHolderClass = "";
         $urlToShow = 'javascript:void(0);';
@@ -42,10 +44,7 @@ foreach ($this->offers as $offer) {
             $offerHolderClass = "offer-holder";
             $urlToShow = $offerPartial->getUrlToShow($offer);
         }
-        $site = LOCALE == '' ? "Kortingscode" : "Flipit";
-        $defaultText = FrontEnd_Helper_viewHelper::__translate('This code is not verified by').' '.$site.' ';
-    } else {
-        $offerClass = "active";
+        $defaultText = FrontEnd_Helper_viewHelper::__translate('This code is not verified');
     }
 
     $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
@@ -135,11 +134,6 @@ foreach ($this->offers as $offer) {
     } else {
         echo $offerPartial->getViewAllCodeLink($offer->shopOffers['name'], $offer->shopOffers['permaLink'], '');
     }
-    if ($offer->userGenerated == 1 && ($offer->approved == '1' || $offer->approved == '0')) : ?>
-        <li id="fr">
-            <?php echo $this->translate('Code shared by').' '.$offer->nickname;?>
-        </li>
-        <?php endif;
     ?>
                 </ul>
             </div>
@@ -183,16 +177,17 @@ foreach ($this->offers as $offer) {
                 </a>
             </div>
         </div>
-        <?php if ($termsAndConditions != '') : ?>
+        <?php
+        if ($offer->userGenerated == 1) { ?>
+            <input type="hidden" id="userGenerated" alt="<?php echo $offer->id ;?>" value="1" />
+        <?php } ?>
         <div  class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
             <h2><?php echo $this->translate('Terms &amp; Conditions');
-            if (!empty($defaultText)) { echo '(' .$defaultText. ')';}?></h2>
+            if (!empty($defaultText)) { echo ' : <span class="social-term-font">' .$defaultText.'</span>'; }?></h2>
             <ol class="num-list">
             <?php echo $termsAndConditions;?>
             </ol>
         </div>
-        <?php endif; ?>
-       
     </article>
     <?php
     $shopLogoOrDefaultImage = $offerPartial->getShopLogoForSignUp($this->shopOffers);

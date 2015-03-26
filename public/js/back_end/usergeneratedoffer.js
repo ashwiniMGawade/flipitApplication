@@ -98,6 +98,11 @@ function init(){
         },
     });
 
+    $('.select2-search-choice-close').click(function(e){
+        $(this).parents('div.resetSearch').children('input').val('');
+        searchByShop();
+    });
+
     $("input#searchOffer").keypress(function(e) {
         if (e.which == 13) {            
             searchByShop();
@@ -175,69 +180,25 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
             + txtOffer  + "/shopText/"+ txtShop + "/shopCoupon/"+ txtCoupon 
             + "/couponType/"+ type +  "/flag/0"
         ),
-        "aoColumns" : [{
-            "fnRender" : function(obj) {
-                return name = "<p editId='" + obj.aData.id 
-                + "' class='editId colorAsLink word-wrap-without-margin-offer'><a href='javascript:void(0)' >"
-                +ucfirst(obj.aData.title)
-                +"</a></p>";
-            },
-            "sWidth": "542px"
-        },
+        "aoColumns" : [
         {
             "fnRender" : function(obj) {
                 var tag='';
                 if (obj.aData.shop!=undefined && obj.aData.shop!=null && obj.aData.shop!='') {
                     if (obj.aData.shop.name!=undefined && obj.aData.shop.name!=null && obj.aData.shop.name!='') {
-                        tag = "<p class='word-wrap-without-margin-offer'><a href='javascript:void(0)'>"
+                        tag = "<p class='word-wrap-without-margin-offer' editId='" + obj.aData.id 
+                + "'><a href='javascript:void(0)'>"
                         +ucfirst(obj.aData.shop.name)
                         +"</a></p>";
                     } else {
-                        tag = "<p class='word-wrap-without-margin-offer'><a href='javascript:void(0)'>"
+                        tag = "<p editId='" + obj.aData.id 
+                + "' class='word-wrap-without-margin-offer'><a href='javascript:void(0)'>"
                         +ucfirst(obj.aData.shop.name)
                         +"</p></a>";                        
                     }
                 }
                 return tag;
              },
-            "bSearchable" : true,
-            "bSortable" : true
-        },
-        {
-            "fnRender" : function(obj) {               
-                var type = '';
-                if (obj.aData.discountType == 'CD') {
-                    type = 'Coupon';
-                } else if (obj.aData.discountType == 'NW') {
-                    type = 'News';
-                } else if (obj.aData.discountType == 'SL') {
-                    type = 'Sale';
-                } else if (obj.aData.discountType == 'PA') {
-                    type = 'Printable';
-                } else {
-                    type = '';
-                }
-                var tag = "<p class='word-wrap-without-margin-offer'><a href='javascript:void(0)'>"
-                +ucfirst(type)
-                +"</a></p>"; 
-                return tag;
-             },            
-            "bSearchable" : true,
-            "bSortable" : true
-        },
-
-        {
-            "fnRender" : function(obj) {
-                var tag = '';            
-                if (obj.aData.refURL) {
-                    tag='Yes';
-                } else {
-                    tag = 'No';
-                }                                           
-                return  "<p editId='" + obj.aData.id 
-                + "' class='editId colorAsLink word-wrap-without-margin-offer'><a href='javascript:void(0)'>" 
-                + __( tag) + "</a></p>";   
-            },
             "bSearchable" : true,
             "bSortable" : true
         },
@@ -255,62 +216,38 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
             "bSortable" : true            
         },{
             "fnRender" : function(obj) {               
-                
-                var date = "";
-                if(obj.aData.startDate !=null && obj.aData.startDate !='undefined' ) {
-                    var splitdate = obj.aData.startDate.date.split(" ");
-                    if (obj.aData.startDate.date != null && splitdate[0] != '1970-01-01') {
-                        
-                            var date = obj.aData.startDate.date;
-                
-                    
-                    }
-                }   
-                return "<a href='javascript:void(0)'>" + date + "</a>";
+                var sd = "";
+                if (obj.aData.startDate != null) {
+                    var tag = '';
+                    var dat = obj.aData.startDate;
+                    tag = dat.split("-");
+                    tag2 = tag[2];
+                    var da = tag2.split(" ");               
+                    sd = (da[0]+'-'+tag[1]+'-'+tag[0]);
+                }
+                return "<a href='javascript:void(0)'>" + sd + "</a>";  
             },
             "bSearchable" : true,
             "bSortable" : true            
         },
         {
             "fnRender" : function(obj) {                
-                var date = "";
-                if(obj.aData.endDate !=null && obj.aData.endDate !='undefined' ) {
-                    var splitdate = obj.aData.endDate.date.split(" ");
-                    if (obj.aData.endDate.date != null && splitdate[0] != '1970-01-01') {
-                        
-                            var date = obj.aData.endDate.date;
-                
-                    
+                var endDate = "";
+                if (obj.aData.endDate != null) {
+                    var tag = '';
+                    var dat = obj.aData.endDate;
+                    tag = dat.split("-");
+                    tag2 = tag[2];
+                    var da = tag2.split(" ");
+                    endDate = (da[0]+'-'+tag[1]+'-'+tag[0]);
+                    if (endDate == '01-01-1970') {
+                        endDate = '';
                     }
-                }   
-                return "<a href='javascript:void(0)'>" + date + "</a>";                
+                }
+                return "<a href='javascript:void(0)'>" + endDate + "</a>";                 
             },
             "bSearchable" : true,
             "bSortable" : true            
-        },
-        {
-            "fnRender" : function(obj) {
-                var click ;
-                if (obj.aData.clicks > 0) {
-                    click = obj.aData.clicks;
-                } else {
-                    click = 0;
-                }
-                return "<a href='javascript:void(0)'>" + click + "</a>";
-             },
-            "bSearchable" : true,
-            "bSortable" : true
-        },
-        {
-        "fnRender" : function(obj) {             
-                var tag = '';
-                if(obj.aData.authorName!='' && obj.aData.authorName != null && obj.aData.authorName!=undefined){                   
-                    tag = "<p class='word-wrap-without-margin-offer'>"+obj.aData.authorName+"</p>";
-                }               
-                return "<a href='javascript:void(0)'>" + tag + "</a>";
-             },
-            "bSearchable" : true,
-            "bSortable" : true
         },
         {
             "fnRender" : function(obj) {                
@@ -334,12 +271,12 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
             state[ 'iOfferText' ] = txtOffer;
             state[ 'iShopText' ] = txtShop;
             state[ 'iType' ] = type;            
-            $("#offerListTable").find('tr').find('td:lt(9)').click(function () {
+            $("#offerListTable").find('tr').find('td:lt(3)').click(function () {
                 var eId = $(this).parent('tr').find('p').attr('editid');
                 state[ 'eId' ] = eId ;
                 $.bbq.pushState( state );
                 click = true;
-                window.location.href = HOST_PATH+"admin/usergeneratedoffer/editoffer/id/" + eId + "?iStart="+
+                window.location.href = HOST_PATH+"admin/offer/editoffer/id/" + eId + "?iStart="+
                 obj._iDisplayStart+"&iSortCol="+obj.aaSorting[0][0]+"&iSortDir="+
                 obj.aaSorting[0][1]+"&iOfferText="+txtOffer+"&iShopText="+txtShop+"&iShopCoupon="+txtCoupon+
                 "&iType="+type+"&eId="+eId;

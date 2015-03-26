@@ -113,10 +113,10 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
         $this->view->offerId = $params['id'];
         $this->view->qstring = $_SERVER['QUERY_STRING'];
         $shop = KC\Repository\Offer::getOfferShopDetail($params['id']);
-        $this->view->offerShoLogo = $shop;
+        $this->view->offerShopLogo = $shop;
         $this->view->shopList = KC\Repository\Shop::getOfferShopList();
         $this->view->catList= KC\Repository\Category::getCategoriesInformation();
-        $page = new \KC\Entity\Page();
+        $page = new KC\Repository\Page();
         $this->view->pages = $page->getPagesOffer();
         $allTiles = KC\Repository\OfferTiles::getAllTiles();
         $this->view->tiles = $allTiles;

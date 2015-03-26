@@ -59,6 +59,7 @@ $secret = base64_encode($code);
             </button>
         </h1>
         <input type="hidden" name='offerImageSelect' id='offerImageSelect' value='' />
+        <input type="hidden" id="saveAndAddnewId" name="saveAndAddnew" value="false" />
         <div class="row-fluid">
             <div class="span6">
                 <div class="mainpage-content">
@@ -417,7 +418,6 @@ $secret = base64_encode($code);
                         class="btn btn-large btn-primary fl" type="submit">
                         <?php echo $this->translate('Save and Add New Offer');?>
                     </button>
-                    <input type="hidden" id="saveAndAddnewId" name="saveAndAddnew" value="false" />
                         <a href="<?php echo HTTP_PATH; ?>admin/offer" class="fl m10">
                             <strong class="ml10">
                                 <?php echo $this->translate('CANCEL'); ?>
@@ -773,7 +773,7 @@ $secret = base64_encode($code);
                 <button id="saveAndAddnew" onclick="jQuery('#saveAndAddnewId').val(true);" 
                 class="btn btn-large btn-primary fl" type="submit">
                 <?php echo $this->translate('Save and Add New Offer');?></button>
-                <input type="hidden" id="saveAndAddnewId" name="saveAndAddnew" value="false" />
+                
                 <a href="<?php echo HTTP_PATH; ?>admin/offer" class="fl m10">
                     <strong class="ml10"><?php echo $this->translate('CANCEL'); ?></strong>
                 </a>

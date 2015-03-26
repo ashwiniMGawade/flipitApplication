@@ -52,6 +52,14 @@ class BootstrapDoctrineConnectionFunctions
             'password' => $dbPassword,
             'dbname'   => $dbName,
         );
+        BootstrapConstantsFunctions::constantsForLocaleAndTimezoneSetting();
+        $localeValue = explode('_', COUNTRY_LOCALE);
+        if (LOCALE == '') {
+            date_default_timezone_set('Europe/Amsterdam');
+        } else if (strtolower($localeValue[1]) == LOCALE) {
+            date_default_timezone_set(LOCALE_TIMEZONE);
+        }
+        return $imbullDbConnection;
     }
 
     public static function getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData)

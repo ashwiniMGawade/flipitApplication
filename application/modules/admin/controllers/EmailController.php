@@ -115,11 +115,7 @@ class Admin_EmailController extends Zend_Controller_Action
 
             if ($isScheduled) {
                 if (\KC\Repository\Signupmaxaccount::saveScheduledNewsletter($this->getRequest())) {
-                    $flash->addMessage(
-                        array(
-                            'success' => $this->view->translate('Newsletter has been successfully scheduled')
-                        )
-                    );
+                    $flash->addMessage(array('success' => $this->view->translate('Newsletter has been successfully scheduled')));
                 } else {
                     $flash->addMessage(array('error' => $this->view->translate('There is some problem in your data')));
                 }
@@ -127,30 +123,28 @@ class Admin_EmailController extends Zend_Controller_Action
                 $this->_helper->redirector('emailcontent', 'accountsetting', null);
             }
 
-            # update current scheduled status to sent
-            \KC\Repository\Signupmaxaccount::updateNewsletterSchedulingStatus();
-
             if (LOCALE == '') {
-                $imgLogoMail = "<a href=". rtrim(HTTP_PATH_FRONTEND, '/') ."><img src='".HTTP_PATH."public/images/HeaderMail.gif'/></a>";
+                $imgLogoMail =
+                "<a href=".rtrim(HTTP_PATH_FRONTEND, '/').">
+                    <img src='".HTTP_PATH."public/images/HeaderMail.gif'/>
+                </a>";
                 $siteName = "Kortingscode.nl";
             } else {
-                $imgLogoMail = "<a href=". rtrim(HTTP_PATH_FRONTEND, '/') ."><img src='".HTTP_PATH."public/images/flipit-welcome-mail.jpg'/></a>";
+                $imgLogoMail = "<a href=". rtrim(HTTP_PATH_FRONTEND, '/') .">
+                        <img src='".HTTP_PATH."public/images/flipit-welcome-mail.jpg'/>
+                </a>";
                 $siteName = "Flipit.com";
             }
-
-            set_time_limit(10000);
-            ini_set('max_execution_time', 115200);
-            ini_set("memory_limit", "1024M");
-
-            //get offers from top ten popular shops and top one cateory as in homepage
-            $voucherflag =  \FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularShops_list');
+            FrontEnd_Helper_viewHelper::exceedMemoryLimitAndExcutionTime();
+            $voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularShops_list');
             //key not exist in cache
 
             if ($voucherflag) {
 
                 # get 10 popular vouchercodes for news letter
-                $topVouchercodes = \FrontEnd_Helper_viewHelper::gethomeSections("popular", 10) ;
-                $topVouchercodes =  \FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes, 10);
+
+                $topVouchercodes = FrontEnd_Helper_viewHelper::gethomeSections("popular", 10) ;
+                $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes, 10);
 
             } else {
                 $topVouchercodes = \FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularShops_list');
@@ -161,8 +155,10 @@ class Admin_EmailController extends Zend_Controller_Action
             //key not exist in cache
 
             if ($categoryflag) {
+
                 $topCategories = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);
-                \FrontEnd_Helper_viewHelper::setInCache('10_popularCategories_list', $topCategories);
+
+                FrontEnd_Helper_viewHelper::setInCache('10_popularCategories_list', $topCategories);
 
             } else {
                 $topCategories = \FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');

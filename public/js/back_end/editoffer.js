@@ -110,6 +110,10 @@ function init(){
 	jQuery('#extendedOfferMetadesc').NobleCount('#metaDescLeft',{
 		max_chars: 150
 	});*/
+
+    if (jQuery('#socialCodeSelection').val() == 1) {
+        jQuery('#socialCode').addClass('new-blue');
+    }
 	
 	jQuery('.word_count').each(function() {
         var input = '#' + this.id;
@@ -369,6 +373,10 @@ function gethtmlAddmorenews(param){
 				  } 
 			});			   
 				   
+}
+
+function setApprovedStatus(){
+    jQuery('input#approveSocialCode').val(1);
 }
 
 function getDeeplinkForShop(param){
@@ -660,9 +668,12 @@ function setFormData(data){
 		  jQuery("#sale").click();
 		  
 	 }
-	
-	 jQuery('#addofferTitle').val(data[0].title);
-	 jQuery('#metaTextLeft').val(__("Offer title length ") + parseInt(data[0].title.length) + __(" characters"));
+
+	if (data[0].title != undefined || data[0].title != null) {
+	 	jQuery('#addofferTitle').val(data[0].title);
+	 	jQuery('#metaTextLeft').val(__("Offer title length ") + parseInt(data[0].title.length) + __(" characters"));
+	}
+
 	 jQuery('#offerRefUrl').val(data[0].refURL);
 	 if(data[0].refURL){
 		 jQuery('#deepLinkOnbtn').click(); 
@@ -703,7 +714,7 @@ function setFormData(data){
 	}else if(data[0].editorPicks){
 	    jQuery('#editorpicbtn').addClass('btn-primary'); 
 	    jQuery('input#editorpickcheckbox').attr('checked', 'checked') ;
-	} else if (data[0].userGenerated) {
+	} else if (data[0].userGenerated == 1) {
         jQuery('#socialcodebtn').addClass('btn-primary'); 
         jQuery('input#socialcodecheckbox').attr('checked', 'checked');
 	 } else {
@@ -744,6 +755,10 @@ function setFormData(data){
 	        }
 	});
 	jQuery('#ccode').html(' <label><strong>Coupon code</strong></label>');
+    if (jQuery('#socialCodeSelection').val() == 1) {
+        getShopDetail(jQuery("#selctedshop").val());
+    }
+	
 }
 
 function newschangelinkStatus(el)
@@ -1302,6 +1317,9 @@ function validateFormAddNewOffer(){
 				    		  return false; 
 				    	  }
 				    },
+				    offerImageSelect:{
+				    	required:true
+				    },
 				    'saleTiles[]':{ 
 				    	  required: function(el)
 				    	  {
@@ -1477,6 +1495,9 @@ function validateFormAddNewOffer(){
 				    'selectedTiles[]': { 
 				    	  required: __("Please select a offer image") 
 				    },
+				    offerImageSelect:{
+				    	required : __("Please Select Offer Tile")
+				    },
 					selctedshop : {
 						required : __("Please Select Shop")
 					},
@@ -1556,7 +1577,7 @@ function validateFormAddNewOffer(){
 								.addClass(errorClass);
 
 						jQuery('span.help-inline', jQuery(element).parent('div')
-										.prev('div')).removeClass(validClass) ;
+						.prev('div')).removeClass(validClass);
 						
 						if(element.name == 'selectedTiles[]' || element.name == 'saleTiles[]')
 						{

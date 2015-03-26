@@ -21,10 +21,7 @@ class BootstrapTranslationFunctions
         } else {
             $localePath = '/';
         }
-
-        $locale = \KC\Repository\LocaleSettings::getLocaleSettings();
-        $locale = !empty($locale[0]['locale']) ? $locale[0]['locale'] : 'nl_NL';
-        return array('locale' => $locale, 'localePath' => $localePath, 'suffix' => $suffix);
+        return array('locale' => COUNTRY_LOCALE, 'localePath' => $localePath, 'suffix' => $suffix);
     }
 
     public static function setTranslationInZendRegistery($domain, $moduleDirectoryName, $localeCookieData)

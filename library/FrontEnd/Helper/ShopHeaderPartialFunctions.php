@@ -69,19 +69,9 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         }
 
         if ($expiredMessage !='') {
-            $explodedShopUrl = explode('//', $shop['actualUrl']);
-            $shopWebsiteUrl = isset($explodedShopUrl[1]) ? $explodedShopUrl[1] : $explodedShopUrl[0];
-            $shopWebsiteUrlContent = $affliateUrl != '#' ? '<a target="_blank" rel="nofollow" 
-                class="btn text-blue-link fl store-header-link '.$affliateClass.' pop btn btn-sm btn-default" '
-                .$affliateDisabled.'
-                onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">'.$shopWebsiteUrl.'
-                </a>' : '<span disabled="disabled"
-                class="btn text-blue-link fl store-header-link pop btn btn-sm btn-default btn-disabled">'.
-                $shopWebsiteUrl.'</span>';
             $divContent .=
                 '<h1>'.FrontEnd_Helper_viewHelper::replaceStringVariable($shop['title']).'</h1>
-                <h2>'.FrontEnd_Helper_viewHelper::replaceStringVariable($shop['subTitle']).'</h2>
-                    '.$shopWebsiteUrlContent;
+                <h2>'.FrontEnd_Helper_viewHelper::replaceStringVariable($shop['subTitle']).'</h2>';
         } else {
             $divContent .='<h1>'.$offerTitle.'</h1>';
         }

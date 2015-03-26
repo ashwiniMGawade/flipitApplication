@@ -61,9 +61,11 @@ class Admin_ChainController extends Zend_Controller_Action
                 $localeSettings = new \KC\Repository\LocaleSettings($connObj['connName']);
                 $localeSetting = $localeSettings->getLocaleSettings();
                 $langLocale = !empty($localeSetting[0]['locale']) ? $localeSetting[0]['locale'] : 'nl_NL';
+
                 \Zend_Registry::set('db_locale', $locale ) ;
                 $chain = new \KC\Repository\ChainItem();
                 $ret = $chain->saveChain($request, $langLocale);
+
                 # if chain is saved then refresh shop page in varnish
                 if($ret) {
                     $message = $this->view->translate ( 'Shop has been added successfully' );

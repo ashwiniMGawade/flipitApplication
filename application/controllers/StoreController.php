@@ -79,7 +79,7 @@ class StoreController extends Zend_Controller_Action
             $allShopDetailKey = 'shopDetails_'.$ShopList;
             $shopInformation = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allShopDetailKey,
-                array('function' => 'KC\Repository\Shop::getStoreDetails', 'parameters' => array($shopId)
+                array('function' => 'KC\Repository\Shop::getStoreDetailsForStorePage', 'parameters' => array($shopId)
                 ),
                 ''
             );
@@ -87,8 +87,8 @@ class StoreController extends Zend_Controller_Action
             $offers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allOffersInStoreKey,
                 array(
-                    'function' => 'FrontEnd_Helper_viewHelper::commonfrontendGetCode',
-                    'parameters' => array("all", 10, $shopId, 0)
+                    'function' => 'Offer::getAllOfferOnShop',
+                    'parameters' => array($shopId)
                 ),
                 ''
             );
@@ -128,7 +128,7 @@ class StoreController extends Zend_Controller_Action
                 ''
             );
 
-            if (!count($shopInformation) >0) {
+            if (!count($shopInformation) > 0) {
                 $localeUrl = HTTP_PATH_LOCALE;
                 $this->_helper->redirector->setCode(301);
                 $this->_redirect($localeUrl);
@@ -179,17 +179,21 @@ class StoreController extends Zend_Controller_Action
         }
 
         $this->view->expiredOffers = $expiredOffers;
-        if ($shopInformation[0]['affliateProgram'] == 0) {
-            $numberOfSimilarOffers = 10;
-        } else {
-            $numberOfSimilarOffers = 3;
-        }
 
-        $similarShopsAndSimilarCategoriesOffers = \FrontEnd_Helper_viewHelper::getShopCouponCode(
-            'similarStoresAndSimilarCategoriesOffers',
-            $numberOfSimilarOffers,
-            $shopId
+
+        $similarShopsAndSimilarCategoriesOffersKey = 'shop_similarShopsAndSimilarCategoriesOffers'.$ShopList;
+        $similarShopsAndSimilarCategoriesOffers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            (string)$similarShopsAndSimilarCategoriesOffersKey,
+            array(
+                'function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode',
+                'parameters' => array("similarStoresAndSimilarCategoriesOffers", 10, $shopId)
+            ),
+            ''
         );
+
+        if ($shopInformation[0]['affliateProgram'] != 0) {
+            $similarShopsAndSimilarCategoriesOffers = array_slice($similarShopsAndSimilarCategoriesOffers, 3);
+        }
 
         $this->view->similarShopsAndSimilarCategoriesOffers = '';
         if (!empty($similarShopsAndSimilarCategoriesOffers)) {
@@ -198,9 +202,6 @@ class StoreController extends Zend_Controller_Action
             );
         }
 
-        $this->view->countPopularOffers = count(
-            \FrontEnd_Helper_viewHelper::commonfrontendGetCode('popular', $shopRecordsLimit, $currentShopId)
-        );
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->storeImage = $shopImage;
         $this->view->shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
@@ -213,15 +214,13 @@ class StoreController extends Zend_Controller_Action
                 ),
                 ''
             );
-
-        $this->view->ballonEditorText = KC\Repository\EditorBallonText::getEditorText($shopId);
         $customHeader = isset($shopInformation[0]['customHeader']) ? $shopInformation[0]['customHeader'] : '';
         $this->viewHelperObject->getMetaTags(
             $this,
             $shopInformation[0]['overriteTitle'],
             '',
             trim($shopInformation[0]['metaDescription']),
-            $shopInformation[0]['permaLink'],
+            $shopPermalink,
             $shopImage,
             $customHeader
         );
@@ -253,6 +252,9 @@ class StoreController extends Zend_Controller_Action
             $signUpFormSidebarWidget
         );
         $this->view->form = $signUpFormForStorePage;
+        $socialCodeForm = new Application_Form_SocialCode();
+        $socialCodeForm->getElement('shops')->setValue($shopInformation[0]['name']);
+        $this->view->zendForm = $socialCodeForm;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->pageCssClass = 'author-page';
     }
@@ -260,11 +262,11 @@ class StoreController extends Zend_Controller_Action
     public function indexAction()
     {
         $permalink = FrontEnd_Helper_viewHelper::getPagePermalink();
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
         $startingCharacter = $this->_helper->Store->getActualPermalink($permalink, 'firstCharacter');
         $endingCharacter = $this->_helper->Store->getActualPermalink($permalink, 'lastCharacter');
         $startingAndEndingCharacter = $startingCharacter. "-". $endingCharacter;
         $permalink = $this->_helper->Store->getActualPermalink($permalink, 'permalink');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
         $pageDetails = KC\Repository\Page::getPageDetailsFromUrl($permalink);
         $pageDetails = (object) $pageDetails;
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
@@ -315,6 +317,8 @@ class StoreController extends Zend_Controller_Action
         $this->view->selectedAlphabet = $startingAndEndingCharacter;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->storesInformation = $allStoresList;
+        $socialCodeForm = new Application_Form_SocialCode();
+        $this->view->zendForm = $socialCodeForm;
         $this->view->popularStores = $popularStores;
         $this->view->pageCssClass = 'all-stores-page';
     }
@@ -375,16 +379,22 @@ class StoreController extends Zend_Controller_Action
         $frontEndViewHelper = new \FrontEnd_Helper_SidebarWidgetFunctions();
         $this->view->popularStoresList = $frontEndViewHelper->PopularShopWidget();
         $this->view->latestShopUpdates = $latestShopUpdates;
-        $this->view->howToGuides=$howToGuides;
+        $this->view->howToGuides = $howToGuides;
         $shopName = isset($shopInformation[0]['name']) ? $shopInformation[0]['name'] : '';
         $howToGuides = isset($howToGuides[0][0]['howtoTitle']) ? $howToGuides[0][0]['howtoTitle'] : '';
         $customHeader = '';
+        $howToGuideUrlForMetaTags = isset($howToGuides[0]['permaLink'])
+            ? $howToGuides[0]['permaLink']
+            : $howToGuidePermalink;
+        $howToGuideMetaDescription = isset($howToGuides[0]['howtoMetaDescription'])
+            ? $howToGuides[0]['howtoMetaDescription']
+            : '';
         $this->viewHelperObject->getMetaTags(
             $this,
             str_replace('[shop]', $shopName, $howToGuides),
             '',
-            trim(isset($howToGuides[0][0]['howtoMetaDescription']) ? $howToGuides[0][0]['howtoMetaDescription'] : ''),
-            isset($howToGuides[0][0]['permaLink']) ? $howToGuides[0][0]['permaLink'] : '',
+            trim($howToGuideMetaDescription),
+            $howToGuideUrlForMetaTags,
             FACEBOOK_IMAGE,
             $customHeader
         );
@@ -404,6 +414,8 @@ class StoreController extends Zend_Controller_Action
         );
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+        $socialCodeForm = new Application_Form_SocialCode();
+        $this->view->zendForm = $socialCodeForm;
     }
 
     public function addtofavouriteAction()
@@ -441,34 +453,5 @@ class StoreController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
         $this->view->shopId = $this->getRequest()->getParam('shopid');
         $this->view->permalink = $this->getRequest()->getParam('permalink');
-    }
-
-    public function socialcodeAction()
-    {
-        $this->_helper->layout()->disableLayout();
-        $shopPermalink = $this->getRequest()->getParam('shopPermalink');
-        $shopId = base64_encode(Shop::getShopIdByPermalink($shopPermalink));
-        $socialcodeForm = new \Application_Form_SocialCode();
-        $socialcodeForm->getElement('shopPermalink')->setValue($shopPermalink);
-        $socialcodeForm->getElement('shopId')->setValue($shopId);
-        $this->view->zendForm = $socialcodeForm;
-        if ($this->getRequest()->isPost()) {
-            if ($socialcodeForm->isValid($this->getRequest()->getPost())) {
-                $socialcode = $socialcodeForm->getValues();
-                KC\Repository\UserGeneratedOffer::addOffer($socialcode);
-                $this->_redirect(HTTP_PATH_LOCALE. $socialcode['shopPermalink'].'?name=thanksMessage');
-                exit();
-            } else {
-                $socialcodeForm->highlightErrorElements();
-                $socialcode = $socialcodeForm->getValues();
-                $this->_redirect(HTTP_PATH_LOCALE. $socialcode['shopPermalink']);
-            }
-        }
-        $this->_redirect('/');
-    }
-
-    public function socialcodethanksAction()
-    {
-        $this->_helper->layout()->disableLayout();
     }
 }

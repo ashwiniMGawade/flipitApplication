@@ -72,8 +72,9 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getOfferOption($offerOption, $type)
     {
         if ($type == 'ex' || $type == 'ed') {
+            $starClass = $type == 'ex' ? 'glyphicon-star' : '';
             $offerOptionHtml = '<strong class="exclusive">
-            <span class="glyphicon glyphicon-star"></span>'.$offerOption.'</strong>';
+            <span class="glyphicon '.$starClass.'"></span>'.$offerOption.'</strong>';
         } else if ($type == 'sc') {
             $offerOptionHtml = '<strong class="social-color">
             <span class="social-icon"></span>'.$offerOption.'</strong>';
@@ -87,7 +88,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         if ($currentOffer->exclusiveCode == '1'):
             $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Exclusive'), 'ex');
         elseif ($currentOffer->editorPicks =='1'):
-            $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Editor'), 'ed');
+            $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Tip'), 'ed');
         elseif ($currentOffer->userGenerated =='1'):
             $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Social Code'), 'sc');
         endif;
@@ -439,9 +440,7 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getTermAndConditionsLink($currentOffer, $termsAndConditions)
     {
         $termAndConditionLink ='';
-        if ($termsAndConditions!=''
-            && $termsAndConditions!=null
-        ) {
+        if ($termsAndConditions != '' && $termsAndConditions != null) {
             $termAndConditionLink = '<li>
             <a id="termAndConditionLink'.$currentOffer->id
             .'" onclick="showTermAndConditions('.$currentOffer->id.')" class="terms"

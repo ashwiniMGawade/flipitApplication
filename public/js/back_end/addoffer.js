@@ -452,7 +452,7 @@ function getShopDetail(value){
 				if (data != null) {
 					if(data[0].notes != '' && data[0].notes != null){
 						jQuery('#aboutShopNoteDiv').show();
-						jQuery('#shopNotes').html(data[0].notes).addClass('alert');
+						jQuery('#shopNotes').html(data[0].notes).addClass('alert-error');
 					} 
 					if(data[0].affname != '' && data[0].affname != null){
 						jQuery('#aboutNertworkDiv').show();
@@ -907,8 +907,8 @@ function validateFormAddNewOffer(){
 				ignore: [],
 				errorPlacement : function(error, element) {
 					
-						element.parent("div").next("div")
-								.html(error);
+						/*element.parent("div").next("div")
+								.html(error);*/
 				},
   				// validation rules
 				rules : {
