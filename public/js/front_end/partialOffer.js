@@ -6,7 +6,7 @@ $(document).ready(function() {
        }
     }
     if ($('#userGenerated').val() == 1) {
-        showTermAndConditions($('#userGenerated').attr('alt'));
+       showTermAndConditions($('#userGenerated').attr('alt'));
     }
 });
 

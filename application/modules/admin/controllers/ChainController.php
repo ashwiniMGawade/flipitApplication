@@ -78,7 +78,7 @@ class Admin_ChainController extends Zend_Controller_Action
                 Zend_Registry::set('db_locale', $locale ) ;
                 
                 $chain = new ChainItem();
-                $ret = $chain->saveChain($request, $langLocale);
+                $ret = $chain->saveChain($request, $locale);
                 # if chain is saved then refresh shop page in varnish
                 if($ret) {
                     $message = $this->view->translate ( 'Shop has been added successfully' );

@@ -712,7 +712,7 @@ function setFormData(data){
 	}else if(data[0].editorPicks){
 	    jQuery('#editorpicbtn').addClass('btn-primary'); 
 	    jQuery('input#editorpickcheckbox').attr('checked', 'checked') ;
-	} else if (data[0].userGenerated) {
+	} else if (data[0].userGenerated == 1) {
         jQuery('#socialcodebtn').addClass('btn-primary'); 
         jQuery('input#socialcodecheckbox').attr('checked', 'checked');
 	 } else {

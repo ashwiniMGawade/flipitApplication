@@ -23,15 +23,10 @@ class PlusController extends Zend_Controller_Action
         $articlesOverviewPagePermalink  = FrontEnd_Helper_viewHelper::getPagePermalink();
         $pageDetails = Page::getPageDetailsFromUrl($articlesOverviewPagePermalink);
 
-        $mostReadArticles = FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache(
-                (string)"all_mostreadMsArticlePage_list",
-                array('function' =>
-                'MoneySaving::getMostReadArticles',
-                'parameters' => array(3)
-                ),
-                ''
-            );
+        $mostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            (string)"all_mostreadMsArticlePage_list",
+            array('function' => 'Articles::getAllArticles', 'parameters' => array(5))
+        );
 
         $categoryWiseArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
