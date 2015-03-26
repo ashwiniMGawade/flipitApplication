@@ -30,30 +30,30 @@
 
 
 $(document).ready(function() {
-	jQuery('#delete-header-image-btn').click(function(){
-		var headerImageName = jQuery('#delete-header-image-btn').attr('alt');
-		$.ajax({
-			url : HOST_PATH + 'admin/accountsetting/delete-newletter-banner-images/imageType/H',
-			type : 'post',
-			dataType : 'json',
-			data : {'imageName' : headerImageName},
-			success : function(obj) {
-				window.location.reload(true);
-			}
-		});
-	});
-	jQuery('#delete-footer-image-btn').click(function() {
-		var footerImageName = jQuery('#delete-footer-image-btn').attr('alt');
-		$.ajax({
-			url : HOST_PATH + 'admin/accountsetting/delete-newletter-banner-images/imageType/F',
-			type : 'post',
-			dataType : 'json',
-			data : {'imageName' : footerImageName},
-			success : function(obj){
-				window.location.reload(true);
-			}
-		});
-	});
+    jQuery('#delete-header-image-btn').click(function(){
+        var headerImageName = jQuery('#delete-header-image-btn').attr('alt');
+        $.ajax({
+            url : HOST_PATH + 'admin/accountsetting/delete-newletter-banner-images/imageType/H',
+            type : 'post',
+            dataType : 'json',
+            data : {'imageName' : headerImageName},
+            success : function(obj) {
+                window.location.reload(true);
+            }
+        });
+    });
+    jQuery('#delete-footer-image-btn').click(function() {
+        var footerImageName = jQuery('#delete-footer-image-btn').attr('alt');
+        $.ajax({
+            url : HOST_PATH + 'admin/accountsetting/delete-newletter-banner-images/imageType/F',
+            type : 'post',
+            dataType : 'json',
+            data : {'imageName' : footerImageName},
+            success : function(obj){
+                window.location.reload(true);
+            }
+        });
+    });
 
     'use strict'
     var url = HOST_PATH +  'admin/accountsetting/update-header-image';
@@ -71,15 +71,15 @@ $(document).ready(function() {
                     $(".header-image-cont span.message").html('');
                 });
             },500);
-            var retdata = data.result;
-            if(retdata.status == 200 ) {
+            var uploadedStatus = data.result;
+            if (uploadedStatus.status == 200 ) {
                 window.location.reload(true);
             }
         },
         add:function (e, data) {
             var acceptFileTypes = /jpg|JPG|png|PNG|jpeg|JPEG/ ;
             var fileName = data.originalFiles[0]['name'] ;
-            if(!acceptFileTypes.test(data.originalFiles[0]['name'])) {
+            if (!acceptFileTypes.test(data.originalFiles[0]['name'])) {
                 $(".header-image-cont span.message").html(  __('Please upload only *.jpg or *.png file'))
                 .addClass('error').removeClass('success');;
                 return false;
@@ -88,7 +88,7 @@ $(document).ready(function() {
             $("#update-header-image-btn", ".header-image-cont").show();
             $("#update-header-image-btn", ".header-image-cont").off('click').on('click',function () {
                 bootbox.confirm(__("are you sure you want to change newsletter header image?"),__('No'),__('Yes'),function(r){
-                    if(r){
+                    if (r) {
                         $("span#selected-filename", ".header-image-cont").html(fileName);
                         $('div.progress-file-detail', ".header-image-cont").show('fast');
                         data.submit();
@@ -110,7 +110,7 @@ $(document).ready(function() {
         done: function (e, data) {
             jQuery('#progress .bar',".footer-image-cont").css('width',  '100%');
             jQuery("#update-footer-image-btn").off("click");
-            setTimeout(function(){
+            setTimeout(function() {
                 jQuery('.progress-file-detail',".footer-image-cont").slideUp('slow',function() {
                     jQuery('#progress .bar',".footer-image-cont").css('width',  '0%');
                     jQuery("#update-footer-image-btn").hide();
@@ -118,15 +118,15 @@ $(document).ready(function() {
                     $(".footer-image-cont span.message").html('');
                 });
             },500);
-            var retdata = data.result;
-            if(retdata.status == 200 ) {
+            var uploadedStatus = data.result;
+            if (uploadedStatus.status == 200 ) {
                 window.location.reload(true);
             }
         },
         add:function (e, data) {
             var acceptFileTypes = /jpg|JPG|png|PNG|jpeg|JPEG/;
             var fileName = data.originalFiles[0]['name'] ;
-            if(!acceptFileTypes.test(data.originalFiles[0]['name'])) {
+            if (!acceptFileTypes.test(data.originalFiles[0]['name'])) {
                 $(".footer-image-cont span.message").html(  __('Please upload only *.jpg or *.png file'))
                 .addClass('error').removeClass('success');;
                 return false;
@@ -135,7 +135,7 @@ $(document).ready(function() {
             $("#update-footer-image-btn", ".footer-image-cont").show();
             $("#update-footer-image-btn", ".footer-image-cont").off('click').on('click',function () {
                 bootbox.confirm(__("are you sure you want to change newsletter footer image?"),__('No'),__('Yes'),function(r){
-                    if(r){
+                    if (r) {
                         $("span#selected-filename", ".footer-image-cont").html(fileName);
                         $('div.progress-file-detail', ".footer-image-cont").show('fast');
                         data.submit();
