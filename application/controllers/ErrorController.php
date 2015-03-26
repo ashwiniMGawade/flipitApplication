@@ -129,6 +129,8 @@ class ErrorController extends Zend_Controller_Action
         $this->view->helper = $this->_helper ;
         $this->view->form = $largeSignUpForm;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+        $socialCodeForm = new Application_Form_SocialCode();
+        $this->view->zendForm = $socialCodeForm;
     }
 
     public function getLog()
