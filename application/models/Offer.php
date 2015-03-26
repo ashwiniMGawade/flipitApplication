@@ -1021,7 +1021,7 @@ class Offer extends BaseOffer
         $subidWithCid = "";
         if (isset($network['affliatenetwork'])) {
             if (!empty($network['subid'])) {
-                if (!empty($network['subid']) && strpos($network['subid'], "|") !== false) {
+                if (strpos($network['subid'], "|") !== false) {
                     $splitSubid = explode("|", $network['subid']);
                     if (isset($splitSubid[0])) {
                         $stringPattern = $splitSubid[0];
