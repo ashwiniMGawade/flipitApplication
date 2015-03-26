@@ -272,7 +272,7 @@ class Menu extends \KC\Entity\Menu
             ->where('menu.parentId = 0')
             ->orderBy('menu.position', 'ASC');
         if ($navigation == 'mobile') {
-            $query = $query->andWhere("name != 'plus'");
+            $query = $query->andWhere("menu.name != 'plus'");
         }
         $mainMenu = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $mainMenu;

@@ -172,7 +172,7 @@ class FrontEnd_Helper_LayoutContent
      
     public static function getUlOfMainMenu($navigation = '')
     {
-        $mainMenu = menu::getFirstLevelMenu($navigation);
+        $mainMenu = KC\Repository\menu::getFirstLevelMenu($navigation);
         $classForFlipIt = LOCALE == '' ? "kc-menu" : 'flipit-menu';
         $ulOfMainMenu =
         '<ul>';
