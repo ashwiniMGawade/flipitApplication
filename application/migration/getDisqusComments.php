@@ -58,7 +58,6 @@ class GetDisqusComments
             'DISQUS_FETCH_LIMIT' => 100,
             'DISQUS_FETCH_ORDER' => 'asc'
         );
-        //get Recent Comments with API
         $DisqusComments = getDisqusRecentComments($DisqusParameters);
         if (!empty($DisqusComments)) {
             DisqusComments::saveComments($DisqusComments);

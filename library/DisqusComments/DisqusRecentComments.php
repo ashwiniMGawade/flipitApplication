@@ -4,8 +4,7 @@ function getDisqusRecentComments($parameters)
 {
     try {
         $disqus = new DisqusAPI($parameters['DISQUS_API_SECRET'], 'json', '3.0');
-       
-        $params = array(
+        $parameters = array(
             'forum' => $parameters['DISQUS_FORUM_SHORTNAME'],
             'order' =>  $parameters['DISQUS_FETCH_ORDER'],
             'limit' => $parameters['DISQUS_FETCH_LIMIT']
@@ -13,36 +12,30 @@ function getDisqusRecentComments($parameters)
 
         $disqusCommentCreated = DisqusComments::getMaxCreatedDate();
         if (!empty($disqusCommentCreated[0]['max'])) {
-            $params['since'] = $disqusCommentCreated[0]['max'];
+            $parameters['since'] = $disqusCommentCreated[0]['max'];
         }
      
         do {
-            $posts = $disqus->posts->list($params);
+            $posts = $disqus->posts->list($parameters);
             $cursor = isset($posts->cursor) ? $posts->cursor : '';
-            $params['cursor'] = !empty($cursor->next) ? $cursor->next : '';
+            $parameters['cursor'] = !empty($cursor->next) ? $cursor->next : '';
             foreach ($posts as $post) {
                 DisqusComments::saveComments($post);
             }
-        } while ($cursor->more);
-        unset($params['since']);
-        unset($params['cursor']);
-        
+        } while (isset($cursor->more) ? $cursor->more : '');
+        unset($parameters['since']);
+        unset($parameters['cursor']);
         $unknownThreads = DisqusComments::getThreadIds();
-     
         if (!empty($unknownThreads)) {
-            $params['thread'] = $unknownThreads;
+            $parameters['thread'] = $unknownThreads;
             do {
-                $posts = $disqus->threads->list($params);
-                // Create cursor to paginate through resultset
+                $posts = $disqus->threads->list($parameters);
                 $cursor = isset($posts->cursor) ? $posts->cursor : '';
-                // Update our arguments with the cursor and the next position
-                $params['cursor'] = !empty($cursor->next) ? $cursor->next : '';
-     
+                $parameters['cursor'] = !empty($cursor->next) ? $cursor->next : '';
                 foreach ($posts as $post) {
                     DisqusThread::saveDisqusThread($post);
                 }
-            } while ($cursor->more);
-            // End forum threads
+            } while (isset($cursor->more) ? $cursor->more : '');
         }
     } catch (DisqusAPIError $e) {
         echo $e->getMessage();
