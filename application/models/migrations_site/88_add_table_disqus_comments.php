@@ -19,7 +19,7 @@ class AddTableDisqusComments extends Doctrine_Migration_Base
             ),
             'comment' => array(
                 'type'   => 'string',
-                'length' => 255
+                'length' => 500
             ),
             'created' => array(
                 'type'   => 'integer',

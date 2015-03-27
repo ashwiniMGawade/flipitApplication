@@ -20,8 +20,8 @@ class AddTableDisqusThread extends Doctrine_Migration_Base
                 'notnull'  => 1
             ),
             'created' => array(
-                'type'   => 'timestamp',
-                'length' => 12,
+                'type'   => 'integer',
+                'length' => 10,
                 'notnull'  => 1
             )
         );
