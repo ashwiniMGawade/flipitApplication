@@ -84,7 +84,7 @@ class IndexController extends Zend_Controller_Action
                 "all_popularShops_list",
                 array(
                     'function' => 'KC\Repository\Shop::getPopularStoresForHomePage',
-                    'parameters' => array("popular", 48)
+                    'parameters' => array(48)
                 ),
                 ''
             );
