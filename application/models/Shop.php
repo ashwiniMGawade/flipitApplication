@@ -1771,8 +1771,8 @@ public static function getShopDetail($shopId)
                 $cnt  = new Conversions();
                 $cnt->shopId = $id;
                 $cnt->IP = $ip;
-                $cnt->utma = $_COOKIE["__utma"];
-                $cnt->utmz = $_COOKIE["__utmz"];
+                $cnt->utma = isset($_COOKIE["__utma"]) ? $_COOKIE["__utma"] : '';
+                $cnt->utmz = isset($_COOKIE["__utmz"]) ? $_COOKIE["__utmz"] : '';
                 $time = time();
                 $cnt->subid = md5(time()*rand(1,999));
                 $cnt->save();
@@ -1782,8 +1782,8 @@ public static function getShopDetail($shopId)
                 # update existing conversion detail
                 $cnt = Doctrine_Core::getTable("Conversions")->find($data['id']);
                 if($cnt) {
-                    $cnt->utma = $_COOKIE["__utma"];
-                    $cnt->utmz = $_COOKIE["__utmz"];
+                    $cnt->utma = isset($_COOKIE["__utma"]) ? $_COOKIE["__utma"] : '';
+                    $cnt->utmz = isset($_COOKIE["__utmz"]) ? $_COOKIE["__utmz"] : '';
                     $time = time();
                     $cnt->subid = md5(time()*rand(1,999));
                     $cnt->save();

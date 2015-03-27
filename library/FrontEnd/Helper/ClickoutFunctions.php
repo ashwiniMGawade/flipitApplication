@@ -53,7 +53,7 @@ class FrontEnd_Helper_ClickoutFunctions
             $shopInfo['refUrl'],
             "",
             $shopInfo['actualUrl'],
-            $shopInfo['permaLink'],
+            $shopInfo['permalink'],
             $networkInfo['subidFlag'],
             $networkInfo['subid'],
             $networkInfo['stringPattern']
