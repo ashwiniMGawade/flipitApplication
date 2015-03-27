@@ -100,7 +100,6 @@ class User extends \KC\Entity\User
     const INVALID_NEW_PASSWORD_STATUS = "-2";
     const INVALID_OLD_PASSWORD_STATUS = "-1";
     const SUCCESS = "200";
-
     public static function getWebsite($userId, $roleId)
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
@@ -123,7 +122,6 @@ class User extends \KC\Entity\User
                 break;
         }
         $ar = @$Q->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        //restructure manual array for user website
         $newArray = array();
         if ($roleId=='1') {
             $websites = $ar ;
@@ -134,7 +132,6 @@ class User extends \KC\Entity\User
         foreach ($websites as $website) {
             $newArray[] = array('id' => $website['id'], 'name' => $website['name']);
         }
-        //var_dump($newArray);
         return $newArray;
     }
 
@@ -190,7 +187,6 @@ class User extends \KC\Entity\User
         $lname = str_replace(' ', '-', $params['lastName']);
         $addUser->slug = \BackEnd_Helper_viewHelper::stripSlashesFromString(strtolower($fname ."-". $lname));
 
-        //  if(isset($params['imageName']))
         $pattern = '/^[0-9]{10}_(.+)/i' ;
         preg_match($pattern, $imageName, $matches);
         if (@$matches[1]) {
@@ -214,7 +210,6 @@ class User extends \KC\Entity\User
             self::saveEditorBallonText($params, $addUser->getId(), 'add');
         }
 
-        //save user website access
         if (isset($params['websites'])) {
             foreach ($params['websites'] as $web) {
                 $website = new \KC\Entity\refUserWebsite();
@@ -237,8 +232,7 @@ class User extends \KC\Entity\User
                 $entityManagerLocale->flush();
             }
         }
-        //end code of enteresting category in database
-        //save favorite store in database
+    
         if (!empty($params['fevoriteStore'])) {
             $splitStore  =explode(",", $params['fevoriteStore']);
             foreach ($splitStore as $str) {
@@ -249,7 +243,6 @@ class User extends \KC\Entity\User
                 $entityManagerLocale->flush();
             }
         }
-        //call cache function
         $key = 'user_'.$addUser->getId().'_details';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
@@ -269,7 +262,7 @@ class User extends \KC\Entity\User
         $cnt = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return count($cnt);
     }
-    // to be checked if this function is needed or not
+   
     public function getPermissions()
     {
         if (intval($this->id) > 0) {
@@ -309,8 +302,6 @@ class User extends \KC\Entity\User
                 $perm['webaccess'][$i]['websitename'] = $q['0']['name'];
             }
 
-
-            # rearange websites based on website name and keep kortingscode at same place
             $data = $perm['webaccess'];
             $data = BackEnd_Helper_viewHelper::msort($data, array('websitename'), "kortingscode.nl");
             $perm['webaccess'] = $data;
@@ -379,9 +370,9 @@ class User extends \KC\Entity\User
                 $updateUser->profileimage =  $entityManagerUser->find('KC\Entity\ProfileImage', $pImage->getId());
             }
         }
-        // check user want to update password or not based upon old password
+
         if (isset($params['confirmNewPassword']) && !empty($params['confirmNewPassword'])) {
-            # apply validation on password like it should strong enough and not same as previous one
+          
             if (! $updateUser->isPasswordDifferent($params['confirmNewPassword'])) {
                 return  array('error' => true, 'message' => 'New password can\'t be same as previous password');
             }
@@ -395,8 +386,6 @@ class User extends \KC\Entity\User
             }
         }
 
-        // check logged in user or not
-        // if yes then deleted reference websites otherwise skip
         if ($normalUser=='') {
 
             if ($params['id'] != \Auth_StaffAdapter::getIdentity()->id) {
@@ -407,7 +396,6 @@ class User extends \KC\Entity\User
 
                 $updateUser->createdBy = \Auth_StaffAdapter::getIdentity()->id;
                
-                
                 $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
                 $query = $queryBuilder->delete('KC\Entity\refUserWebsite', 'rf')
                     ->where("rf.websiteUsers=" . $params['id'])
@@ -517,7 +505,6 @@ class User extends \KC\Entity\User
                 APPLICATION_PATH . '/configs/application.ini');
 
         $connections = $application->getOption('doctrine');
-
         foreach ( $connections as $key => $connection ) {
 
             // check database is being must be site
@@ -553,14 +540,13 @@ class User extends \KC\Entity\User
                         ->set('sh.contentManagerName', "'$fullName'")
                         ->where('sh.contentManagerId ='.$id)
                         ->getQuery()->execute();
-                } else if($flag==1){
-                    //update offer
+                } else if($flag==1) {
                     $queryBuilder  = $entityManagerLocale->createQueryBuilder();
                     $query = $queryBuilder->select('o.id')
                         ->from('\KC\Entity\Offer', 'o')
                         ->where('o.authorId=' . $id);
                     $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-                    # check if there is atleast one offer exists in the array
+            
                     if (count($offers) > 0) {
 
                         $ids = array();
@@ -578,14 +564,13 @@ class User extends \KC\Entity\User
                             ->where($entityManagerUser->expr()->in('of.id', $ids));
                         $query->getQuery()->execute();
                     }
-
-                    //update page
+   
                     $pageQueryBuilder  = $entityManagerLocale->createQueryBuilder();
                     $query = $pageQueryBuilder->select('pg.id')
                         ->from('\KC\Entity\Page', 'pg')
                         ->where('pg.contentManagerId=' . $id);
                     $page = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-                    # check if there is atleast one page exists in the array
+                   
                     if (count($page) > 0) {
                         $ids = array();
                         if(!empty($page)):
@@ -602,14 +587,12 @@ class User extends \KC\Entity\User
                         $query->getQuery()->execute();
                     }
 
-                    //update articles
                     $articleQueryBuilder = $entityManagerLocale->createQueryBuilder();
                     $query = $articleQueryBuilder->select('art.id')
                         ->from('\KC\Entity\Articles', 'art')
                         ->where('art.authorid=' . $id);
                     $art = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-                    # check if there is atleast one page exists in the array
                     if (count($art) > 0) {
                         $ids = array();
                         if(!empty($art)):
@@ -626,13 +609,12 @@ class User extends \KC\Entity\User
                         $query->getQuery()->execute();
                     }
 
-                    //update shops
                     $shopsQueryBuilder  = $entityManagerLocale->createQueryBuilder();
                     $query = $shopsQueryBuilder->select('shop.id, shop.name')
                         ->from('\KC\Entity\Shop', 'shop')
                         ->where('shop.contentManagerId=' . $id);
                     $shops = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-                    # check if there is atleast one shop exists in the array
+        
                     if (count($shops) > 0) {
                         $ids = array();
                         if(!empty($shops)):
