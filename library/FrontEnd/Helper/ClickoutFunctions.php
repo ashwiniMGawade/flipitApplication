@@ -6,7 +6,7 @@ class FrontEnd_Helper_ClickoutFunctions
         $shopInfo = Offer::getShopInfoByOfferId($offerId);
         $network = Shop::getAffliateNetworkDetail($shopInfo['shop']['id']);
         if ($checkRefUrl) {
-            if (! isset($network['affliatenetwork'])) {
+            if (!isset($network['affliatenetwork'])) {
                 return false;
             }
             if ($shopInfo['refURL'] != "") {
@@ -18,7 +18,7 @@ class FrontEnd_Helper_ClickoutFunctions
             }
         }
         $networkInfo = self::getSubidWithStringPattern($network, $shopInfo, 'offer');
-        $url = self::getUrlForCloakLink(
+        $clickoutUrl = self::getUrlForCloakLink(
             $shopInfo['refURL'],
             $shopInfo['shop']['refUrl'],
             $shopInfo['shop']['actualUrl'],
@@ -27,7 +27,7 @@ class FrontEnd_Helper_ClickoutFunctions
             $networkInfo['subid'],
             $networkInfo['stringPattern']
         );
-        return $url;
+        return $clickoutUrl;
     }
 
     public static function getStoreLinks($shopId, $checkRefUrl = false)
@@ -49,7 +49,7 @@ class FrontEnd_Helper_ClickoutFunctions
         }
 
         $networkInfo = self::getSubidWithStringPattern($network, $shopInfo, 'shop');
-        $url = self::getUrlForCloakLink(
+        $clickoutUrl = self::getUrlForCloakLink(
             $shopInfo['refUrl'],
             "",
             $shopInfo['actualUrl'],
@@ -58,7 +58,7 @@ class FrontEnd_Helper_ClickoutFunctions
             $networkInfo['subid'],
             $networkInfo['stringPattern']
         );
-        return $url;
+        return $clickoutUrl;
     }
 
     public static function getSubidWithStringPattern($network, $shopInfo, $clickoutType)
@@ -69,12 +69,12 @@ class FrontEnd_Helper_ClickoutFunctions
         if (isset($network['affliatenetwork'])) {
             if (!empty($network['subid'])) {
                 if (strpos($network['subid'], "|") !== false) {
-                    $splitSubid = explode("|", $network['subid']);
-                    if (isset($splitSubid[0])) {
-                        $stringPattern = $splitSubid[0];
+                    $explodedNetworkSubid = explode("|", $network['subid']);
+                    if (isset($explodedNetworkSubid[0])) {
+                        $stringPattern = $explodedNetworkSubid[0];
                     }
-                    if (isset($splitSubid[1])) {
-                        $subidWithCid = $splitSubid[1];
+                    if (isset($explodedNetworkSubid[1])) {
+                        $subidWithCid = $explodedNetworkSubid[1];
                     }
 
                     $subid = $subidWithCid;
@@ -101,7 +101,7 @@ class FrontEnd_Helper_ClickoutFunctions
 
     public static function getUrlForCloakLink(
         $shopRefUrl,
-        $shopArrayRefUrl,
+        $shopSubRefUrl,
         $shopActualUrl,
         $shopPermalink,
         $subidFlag,
@@ -109,28 +109,28 @@ class FrontEnd_Helper_ClickoutFunctions
         $stringPattern
     ) {
         if (isset($shopRefUrl) && $shopRefUrl!=null) {
-            $url = self::replaceSubidByStringPattern($shopRefUrl, $subidFlag, $subid, $stringPattern);
-        } else if (isset($shopArrayRefUrl) && $shopArrayRefUrl!=null) {
-            $url = self::replaceSubidByStringPattern($shopArrayRefUrl, $subidFlag, $subid, $stringPattern);
+            $clickoutUrl = self::replaceSubidByStringPattern($shopRefUrl, $subidFlag, $subid, $stringPattern);
+        } else if (isset($shopSubRefUrl) && $shopSubRefUrl!=null) {
+            $clickoutUrl = self::replaceSubidByStringPattern($shopSubRefUrl, $subidFlag, $subid, $stringPattern);
         } else if (isset($shopActualUrl) && $shopActualUrl!=null) {
-            $url = $shopActualUrl;
+            $clickoutUrl = $shopActualUrl;
         } else {
-            $url = HTTP_PATH_LOCALE.$shopPermalink;
+            $clickoutUrl = HTTP_PATH_LOCALE.$shopPermalink;
         }
-        return $url;
+        return $clickoutUrl;
     }
 
     public static function replaceSubidByStringPattern($refUrl, $subidFlag, $subid, $stringPattern)
     {
         if ($subidFlag == true && $stringPattern != "") {
-            $url = preg_replace("/".$stringPattern."/", $subid, $refUrl);
-            if ($url == null) {
-                $url = $refUrl;
+            $clickoutUrl = preg_replace("/".$stringPattern."/", $subid, $refUrl);
+            if ($clickoutUrl == null) {
+                $clickoutUrl = $refUrl;
             }
         } else {
-            $url = $refUrl;
-            $url .= $subid;
+            $clickoutUrl = $refUrl;
+            $clickoutUrl .= $subid;
         }
-        return $url;
+        return $clickoutUrl;
     }
 }

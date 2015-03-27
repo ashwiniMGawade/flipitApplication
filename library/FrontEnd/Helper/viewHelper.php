@@ -373,14 +373,14 @@ EOD;
         $httpXForwardedFor = Zend_Controller_Front::getInstance()->getRequest()->getServer('HTTP_X_FORWARDED_FOR');
 
         if (!empty($clientIp)) {
-            $clinetIp = $clientIp;
+            $clientIpAddress = $clientIp;
         } else if (!empty($httpXForwardedFor)) {
             $ipRange = $httpXForwardedFor;
-            $clinetIp = current(array_slice(explode(",", $ipRange), 0, 1));
+            $clientIpAddress = current(array_slice(explode(",", $ipRange), 0, 1));
         } else {
-            $clinetIp = Zend_Controller_Front::getInstance()->getRequest()->getServer('REMOTE_ADDR');
+            $clientIpAddress = Zend_Controller_Front::getInstance()->getRequest()->getServer('REMOTE_ADDR');
         }
-        return $clinetIp;
+        return $clientIpAddress;
     }
 
     public function getHowToGuidesImage($howToGuideImages)

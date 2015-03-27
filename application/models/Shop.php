@@ -1802,16 +1802,13 @@ public static function getShopDetail($shopId)
      */
     public static function getAffliateNetworkDetail($shopId)
     {
-
-            return  Doctrine_Query::create()
-                        ->select('s.id,a.name as affname,a.subId as subid')
-                        ->from("Shop s")
-                        ->leftJoin('s.affliatenetwork a')
-                        ->where('s.deleted=0')
-                        ->andWhere("s.id =?" , $shopId)
-                        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-
+        return  Doctrine_Query::create()
+            ->select('s.id,a.name as affname,a.subId as subid')
+            ->from("Shop s")
+            ->leftJoin('s.affliatenetwork a')
+            ->where('s.deleted=0')
+            ->andWhere("s.id =?", $shopId)
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
     }
 
     /**
