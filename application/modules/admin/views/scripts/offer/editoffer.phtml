@@ -20,7 +20,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/editoffer.js");
 $date = date("Y-m-d");
 $twoMonthsLater = date('t-m-Y');
-$role = Zend_Auth::getInstance()->getIdentity()->roleId;
+$role = Zend_Auth::getInstance()->getIdentity()->users->id;
 $code = "kortingscodeoffernews";
 $shopLogo = $this->offerShopLogo;
 ?>

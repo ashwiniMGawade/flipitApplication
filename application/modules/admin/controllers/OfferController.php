@@ -108,7 +108,8 @@ class Admin_OfferController extends Zend_Controller_Action
         $parameters = $this->_getAllParams();
 
         $offer =\Zend_Registry::get('emLocale')->find('KC\Entity\Offer', $parameters['offerId']);
-        $offerUpdated = $offer->updateOffer($parameters);
+        $offerRepository = new KC\Repository\Offer();
+        $offerUpdated = $offerRepository->updateOffer($parameters);
         if ($parameters['approveSocialCode'] == 1) {
             KC\Repository\UserGeneratedOffer::saveApprovedStatus($parameters['offerId'], $parameters['approveSocialCode']);
         }
