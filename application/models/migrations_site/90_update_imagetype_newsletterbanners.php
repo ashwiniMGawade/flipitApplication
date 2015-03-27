@@ -1,5 +1,5 @@
 <?php
-class UpdateImagetypeNewsletterbanners.php extends Doctrine_Migration_Base
+class UpdateImagetypeNewsletterbanners extends Doctrine_Migration_Base
 {
     public function up()
     {
