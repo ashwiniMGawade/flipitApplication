@@ -955,6 +955,19 @@ class Offer extends BaseOffer
         return $offersList;
     }
 
+    public static function getShopInfoByOfferId($offerId)
+    {
+        $shopInfo = Doctrine_Query::create()
+            ->select(
+                's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl, o.refOfferUrl, o.refUrl'
+            )
+            ->from('Offer o')
+            ->leftJoin('o.shop s')
+            ->where('o.id = "'.$offerId.'"')
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return $shopInfo;
+    }
+    
     public static function addConversion($offerId)
     {
         $clientIP = ip2long(FrontEnd_Helper_viewHelper::getRealIpAddress());

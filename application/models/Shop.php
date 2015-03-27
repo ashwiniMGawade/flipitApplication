@@ -1727,6 +1727,18 @@ public static function getShopDetail($shopId)
         return $data;
     }
 
+    public static function getShopInfoByShopId($shopId)
+    {
+        $shopInfo = Doctrine_Query::create()
+            ->select(
+                's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl'
+            )
+            ->from('Shop s')
+            ->where('s.id='.$shopId)
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return $shopInfo;
+    }
+
     /**
      * addConversion
      * add a conversion to a shop which is associted with a network

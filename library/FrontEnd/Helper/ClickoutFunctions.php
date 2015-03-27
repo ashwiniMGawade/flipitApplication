@@ -3,71 +3,10 @@ class FrontEnd_Helper_ClickoutFunctions
 {
     public static function getCloakLink($offerId, $checkRefUrl = false)
     {
-        $shopInfo = self::getShopInfoByOfferId($offerId);
+        $shopInfo = Offer::getShopInfoByOfferId($offerId);
         $network = Shop::getAffliateNetworkDetail($shopInfo['shop']['id']);
-        self::checkRefUrl($checkRefUrl, $shopInfo, $network);
-        $networkInfo = self::getSubidWithStringPattern($network, $shopInfo, 'offer');
-        $url = self::getUrlForCloakLink(
-            $shopInfo['refURL'],
-            $shopInfo['shop']['refUrl'],
-            $shopInfo['shop']['actualUrl'],
-            $shopInfo['shop']['permalink'],
-            $networkInfo['subidFlag'],
-            $networkInfo['subid'],
-            $networkInfo['stringPattern']
-        );
-        echo $url; die;
-        return $url;
-    }
-
-    public static function getShopInfoByOfferId($offerId)
-    {
-        $shopInfo = Doctrine_Query::create()
-            ->select(
-                's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl, o.refOfferUrl, o.refUrl'
-            )
-            ->from('Offer o')
-            ->leftJoin('o.shop s')
-            ->where('o.id = "'.$offerId.'"')
-            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-        return $shopInfo;
-    }
-
-    public static function getStoreLinks($shopId, $checkRefUrl = false)
-    {
-        $shopInfo = self::getShopInfoByShopId($shopId);
-        $network = Shop::getAffliateNetworkDetail($shopId);
-        self::checkRefUrlForShop($checkRefUrl, $shopInfo, $network);
-        $networkInfo = self::getSubidWithStringPattern($network, $shopInfo);
-        $url = self::getUrlForCloakLink(
-            $shopInfo['refUrl'],
-            "",
-            $shopInfo['actualUrl'],
-            $shopInfo['permaLink'],
-            $networkInfo['subidFlag'],
-            $networkInfo['subid'],
-            $networkInfo['stringPattern']
-        );
-        echo $url; die;
-        return $url;
-    }
-
-    public static function getShopInfoByShopId($shopId)
-    {
-        $shopInfo = Doctrine_Query::create()
-            ->select(
-                's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl'
-            )
-            ->from('Shop s')
-            ->where('s.id='.$shopId)
-            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-        return $shopInfo;
-    }
-
-    public static function checkRefUrl($checkRefUrl, $shopInfo, $network)
-    {
         if ($checkRefUrl) {
-            if (!isset($network['affliatenetwork'])) {
+            if (! isset($network['affliatenetwork'])) {
                 return false;
             }
             if ($shopInfo['refURL'] != "") {
@@ -78,10 +17,24 @@ class FrontEnd_Helper_ClickoutFunctions
                 return true;
             }
         }
+        $networkInfo = self::getSubidWithStringPattern($network, $shopInfo, 'offer');
+        $url = self::getUrlForCloakLink(
+            $shopInfo['refURL'],
+            $shopInfo['shop']['refUrl'],
+            $shopInfo['shop']['actualUrl'],
+            $shopInfo['shop']['permalink'],
+            $networkInfo['subidFlag'],
+            $networkInfo['subid'],
+            $networkInfo['stringPattern']
+        );
+        return $url;
     }
 
-    public static function checkRefUrlForShop($checkRefUrl, $shopInfo, $network)
+    public static function getStoreLinks($shopId, $checkRefUrl = false)
     {
+        $shopInfo = Shop::getShopInfoByShopId($shopId);
+        $network = Shop::getAffliateNetworkDetail($shopId);
+
         if ($checkRefUrl) {
             if (!isset($network['affliatenetwork'])) {
                 return false;
@@ -94,6 +47,18 @@ class FrontEnd_Helper_ClickoutFunctions
                 return true;
             }
         }
+
+        $networkInfo = self::getSubidWithStringPattern($network, $shopInfo, 'shop');
+        $url = self::getUrlForCloakLink(
+            $shopInfo['refUrl'],
+            "",
+            $shopInfo['actualUrl'],
+            $shopInfo['permaLink'],
+            $networkInfo['subidFlag'],
+            $networkInfo['subid'],
+            $networkInfo['stringPattern']
+        );
+        return $url;
     }
 
     public static function getSubidWithStringPattern($network, $shopInfo, $clickoutType)
