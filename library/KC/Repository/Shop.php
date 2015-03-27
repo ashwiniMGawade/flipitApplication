@@ -243,7 +243,8 @@ class Shop extends \KC\Entity\Shop
     public static function getStoreDetailsForStorePage($shopId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $storeDetail = Doctrine_Query::create()->select('s,img')
+        $storeDetail = $queryBuilder
+            ->select('s, img')
             ->from('KC\Entity\Shop', 's')
             ->leftJoin('s.logo', 'img')
             ->where('s.id='.$shopId)

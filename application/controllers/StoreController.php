@@ -87,7 +87,7 @@ class StoreController extends Zend_Controller_Action
             $offers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allOffersInStoreKey,
                 array(
-                    'function' => 'Offer::getAllOfferOnShop',
+                    'function' => 'KC\Repository\Offer::getAllOfferOnShop',
                     'parameters' => array($shopId)
                 ),
                 ''
