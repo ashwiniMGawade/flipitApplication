@@ -1,5 +1,7 @@
 <?php   
-$mostReadArticles = $this->mostReadArticles;
+/*echo "<pre>";
+print_r($this->mostReadArticles);
+die;*/
 ?>
 <div class="slideshow-area">
     <div class="container">
@@ -8,30 +10,30 @@ $mostReadArticles = $this->mostReadArticles;
                 <?php 
                 $carouselCounter = 0;
                 $carouselIndicators = '';
-                foreach ($mostReadArticles as $mostReadArticle) {
+                foreach ($this->mostReadArticles as $mostReadArticle) {
                     if (
-                        !empty($mostReadArticle['featuredimagename'])
-                        && $mostReadArticle['featuredImageStatus'] == 1
+                        !empty($mostReadArticle['articles']['articleImage']['name'])
+                        && $mostReadArticle['articles']['featuredImageStatus'] == 1
                     ) {
                         $mostReadArticleImage = 
-                            !empty($mostReadArticle['featuredimagename'])
+                            !empty($mostReadArticle['articles']['articleImage']['name'])
                             ? PUBLIC_PATH_CDN
-                            .$mostReadArticle['featuredimagepath'] 
-                            .$mostReadArticle['featuredimagename']
+                            .$mostReadArticle['articles']['articleImage']['path'] 
+                            .$mostReadArticle['articles']['articleImage']['name']
                             : '';
                     } else {
                         $mostReadArticleImage = 
-                            !empty($mostReadArticle['thumbnailname'])
+                            !empty($mostReadArticle['articles']['thumbnail']['name'])
                             ? PUBLIC_PATH_CDN
-                            .$mostReadArticle['thumbnailpath'] 
-                            .$mostReadArticle['thumbnailname']
+                            .$mostReadArticle['articles']['thumbnail']['path'] 
+                            .$mostReadArticle['articles']['thumbnail']['name']
                             : '';
                     }
 
-                    $mostReadArticleTitle = mb_strlen($mostReadArticle['title']) > 50 ? 
-                                            mb_substr($mostReadArticle['title'], 0,50)
-                                            .'..' : $mostReadArticle['title'];
-                    $articleUpdatedAtDate = $mostReadArticle['created_at'];
+                    $mostReadArticleTitle = mb_strlen($mostReadArticle['articles']['title']) > 50 ? 
+                                            mb_substr($mostReadArticle['articles']['title'], 0,50)
+                                            .'..' : $mostReadArticle['articles']['title'];
+                    $articleUpdatedAtDate = (object) $mostReadArticle['articles']['created_at'];
                     $articleUpdatedAtDate = new Zend_Date($articleUpdatedAtDate->date);
                     $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
                     $activeClass = '';
@@ -50,7 +52,7 @@ $mostReadArticles = $this->mostReadArticles;
                             <div class="text-frame">
                                 <h2>
                                     <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink()
-                                    .'/'.$mostReadArticle['permalink'];?>">
+                                    .'/'.$mostReadArticle['articles']['permalink'];?>">
                                         <?php echo $mostReadArticleTitle;?>
                                     </a>
                                 </h2>
