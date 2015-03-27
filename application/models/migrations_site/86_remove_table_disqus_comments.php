@@ -5,9 +5,4 @@ class RemoveTableDisqusComments extends Doctrine_Migration_Base
     {
         $this->dropTable('disqus_comments');
     }
-
-    public function down()
-    {
-        $this->dropTable('disqus_comments');
-    }
 }

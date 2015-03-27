@@ -14,7 +14,6 @@ function getDisqusRecentComments($parameters)
         if (!empty($disqusCommentCreated[0]['max'])) {
             $parameters['since'] = $disqusCommentCreated[0]['max'];
         }
-     
         do {
             $posts = $disqus->posts->list($parameters);
             $cursor = isset($posts->cursor) ? $posts->cursor : '';

@@ -32,8 +32,8 @@ abstract class BaseDisqusComments extends Doctrine_Record
         $this->hasOne(
             'DisqusThread as thread',
             array(
-            'local' => 'thread_id',
-            'foreign' => 'id'
+                'local' => 'thread_id',
+                'foreign' => 'id'
             )
         );
     }
