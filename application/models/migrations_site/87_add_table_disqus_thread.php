@@ -5,30 +5,30 @@ class AddTableDisqusThread extends Doctrine_Migration_Base
     {
         $columns = array(
             'id' => array(
-                    'type'     => 'integer',
-                    'length'   => 10,
-                    'notnull'  => 1
+                'type'     => 'integer',
+                'length'   => 10,
+                'notnull'  => 1
             ),
             'title' => array(
-                    'type'   => 'string',
-                    'length' => 255,
-                    'notnull'  => 1
+                'type'   => 'string',
+                'length' => 255,
+                'notnull'  => 1
             ),
             'link' => array(
-                    'type'   => 'string',
-                    'length' => 255,
-                    'notnull'  => 1
+                'type'   => 'string',
+                'length' => 255,
+                'notnull'  => 1
             ),
             'created' => array(
-                    'type'   => 'timestamp',
-                    'length' => 12,
-                    'notnull'  => 1
+                'type'   => 'timestamp',
+                'length' => 12,
+                'notnull'  => 1
             )
         );
 
         $options = array(
-                'type'    => 'INNODB',
-                'charset' => 'utf8'
+            'type'    => 'INNODB',
+            'charset' => 'utf8'
         );
         $this->createTable('disqus_thread', $columns, $options);
     }

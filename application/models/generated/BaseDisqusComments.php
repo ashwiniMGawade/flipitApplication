@@ -9,20 +9,20 @@ abstract class BaseDisqusComments extends Doctrine_Record
             'length' => '11'
         ));
         $this->hasColumn('thread_id', 'integer', 11, array(
-                'type' => 'integer',
-                'length' => '11'
+            'type' => 'integer',
+            'length' => '11'
         ));
         $this->hasColumn('author_name', 'string', 255, array(
-                'type' => 'string',
-                'length' => '255'
+            'type' => 'string',
+            'length' => '255'
         ));
         $this->hasColumn('comment', 'string', 255, array(
-                'type' => 'string',
-                'length' => '255'
+            'type' => 'string',
+            'length' => '255'
         ));
         $this->hasColumn('created', 'integer', 11, array(
-                'type' => 'integer',
-                'length' => '11'
+            'type' => 'integer',
+            'length' => '11'
         ));
     }
 

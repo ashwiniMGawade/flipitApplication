@@ -52,15 +52,15 @@ class GetDisqusComments
         } else {
             $siteName = 'flipitcom'.$key;
         }
-        $DisqusParameters = array(
+        $disqusParameters = array(
             'DISQUS_API_SECRET' => $disqusAPIKey,
             'DISQUS_FORUM_SHORTNAME' => $siteName,
             'DISQUS_FETCH_LIMIT' => 100,
             'DISQUS_FETCH_ORDER' => 'asc'
         );
-        $DisqusComments = getDisqusRecentComments($DisqusParameters);
-        if (!empty($DisqusComments)) {
-            DisqusComments::saveComments($DisqusComments);
+        $disqusComments = getDisqusRecentComments($disqusParameters);
+        if (!empty($disqusComments)) {
+            DisqusComments::saveComments($disqusComments);
         }
         $manager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(

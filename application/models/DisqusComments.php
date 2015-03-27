@@ -35,8 +35,8 @@ class DisqusComments extends BaseDisqusComments
             ->from('DisqusComments c')
             ->where("(SELECT count(*) from DisqusThread where id = c.thread_id) = 0")
             ->fetchArray();
-        foreach ($commentThreadIds as $row) {
-            $unknownThreads[] = $row['thread_id'];
+        foreach ($commentThreadIds as $commentThreadId) {
+            $unknownThreads[] = $commentThreadId['thread_id'];
         }
 
         return $unknownThreads;
