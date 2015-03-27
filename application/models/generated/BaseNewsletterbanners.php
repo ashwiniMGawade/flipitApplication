@@ -1,5 +1,4 @@
 <?php
-
 abstract class BaseNewsletterbanners extends Doctrine_Record
 {
     public function setTableDefinition()
@@ -10,7 +9,7 @@ abstract class BaseNewsletterbanners extends Doctrine_Record
              'type' => 'integer',
              'autoincrement' => true,
              'comment' => 'PK',
-             'length' => '11',
+             'length' => '11'
              ));
         $this->hasColumn('name', 'string', 255, array(
             'type' => 'string',
@@ -31,17 +30,17 @@ abstract class BaseNewsletterbanners extends Doctrine_Record
         parent::setUp();
         $softdelete0 = new Doctrine_Template_SoftDelete(array(
             'name' => 'deleted',
-            'type' => 'boolean',
+            'type' => 'boolean'
         ));
         $timestampable0 = new Doctrine_Template_Timestampable(
             array(
                 'created' =>
                     array(
-                        'name' => 'created_at',
+                        'name' => 'created_at'
                     ),
                 'updated' =>
                     array(
-                        'name' => 'updated_at',
+                        'name' => 'updated_at'
                     ),
             )
         );

@@ -175,9 +175,9 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                 $topCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
             }
             
-            $newsLetterHeaderImage = Newsletterbanners::getHeaderOrFooterImage('H');
+            $newsLetterHeaderImage = Newsletterbanners::getHeaderOrFooterImage('header');
             $newsLetterHeaderImage = !empty($newsLetterHeaderImage) ? $newsLetterHeaderImage : '';
-            $newsLetterFooterImage = Newsletterbanners::getHeaderOrFooterImage('F');
+            $newsLetterFooterImage = Newsletterbanners::getHeaderOrFooterImage('footer');
             $newsLetterFooterImage = !empty($newsLetterFooterImage) ? $newsLetterFooterImage : '';
             $emailDetails = Signupmaxaccount::getAllMaxAccounts();
             $mandrillSenderEmailAddress = $emailDetails[0]['emailperlocale'];
@@ -248,8 +248,8 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         $this->view->localeSettings = LocaleSettings::getLocaleSettings();
         $this->view->rights = $this->_settings['administration'];
         $this->view->timezones_list = Signupmaxaccount::$timezones;
-        $this->view->newsletterHeaderImage = Newsletterbanners::getHeaderOrFooterImage('H');
-        $this->view->newsletterFooterImage = Newsletterbanners::getHeaderOrFooterImage('F');
+        $this->view->newsletterHeaderImage = Newsletterbanners::getHeaderOrFooterImage('header');
+        $this->view->newsletterFooterImage = Newsletterbanners::getHeaderOrFooterImage('footer');
     }
 
     public function saveemailcontentAction()
@@ -373,8 +373,8 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
                 if (isset($_FILES['newsLetterHeaderImage']['name']) && $_FILES['newsLetterHeaderImage']['name'] != '') {
-                    $parmas = $this->_getAllParams();
-                    $result = Newsletterbanners::updateNewsletterImages($parmas, 'header');
+                    $parameters = $this->_getAllParams();
+                    $result = Newsletterbanners::updateNewsletterImages($parameters, 'header');
                     $this->_helper->json($result);
                 }
             }
@@ -387,8 +387,8 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
                 if (isset($_FILES['newsLetterFooterImage']['name']) && $_FILES['newsLetterFooterImage']['name'] != '') {
-                    $parmas = $this->_getAllParams();
-                    $result = Newsletterbanners::updateNewsletterImages($parmas, 'footer');
+                    $parameters = $this->_getAllParams();
+                    $result = Newsletterbanners::updateNewsletterImages($parameters, 'footer');
                     $this->_helper->json($result);
                 }
             }
@@ -400,8 +400,8 @@ class Admin_AccountsettingController extends Zend_Controller_Action
     {
         if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
-                $parmas = $this->_getAllParams();
-                $result = Newsletterbanners::deleteNewsletterImages($parmas, $parmas['imageType']);
+                $parameters = $this->_getAllParams();
+                $result = Newsletterbanners::deleteNewsletterImages($parameters['imageType']);
                 $this->_helper->json($result);
             }
         }
