@@ -19,9 +19,9 @@ abstract class BaseNewsletterbanners extends Doctrine_Record
             'type' => 'string',
             'length' => '255'
         ));
-        $this->hasColumn('imagetype', 'string', 1, array(
+        $this->hasColumn('imagetype', 'string', 10, array(
             'type' => 'string',
-            'length' => '1'
+            'length' => '10'
         ));
     }
 
