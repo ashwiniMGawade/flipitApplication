@@ -4,7 +4,6 @@ class Newsletterbanners extends BaseNewsletterbanners
 {
     public static function getHeaderOrFooterImage($imageType)
     {
-        $imageType = $imageType == 'footer' ? 'F' : 'H';
         $existedNewsLetterImage = Doctrine_Query::create()
             ->select('s.name, s.path')
             ->from("Newsletterbanners s")
@@ -16,14 +15,13 @@ class Newsletterbanners extends BaseNewsletterbanners
         return $existedNewsLetterImage;
     }
     
-    public static function updateNewsletterImages($params, $type)
+    public static function updateNewsletterImages($params, $imageType)
     {
-        $imageType = $type == 'footer' ? 'F' : 'H';
-        $uploadedFile = $type == 'footer' ? 'newsLetterFooterImage' : 'newsLetterHeaderImage';
+        $uploadedFile = $imageType == 'footer' ? 'newsLetterFooterImage' : 'newsLetterHeaderImage';
         if (isset($_FILES[$uploadedFile])) {
             $uploadedImage = self::uploadImage($uploadedFile);
             if ($uploadedImage['status'] == '200') {
-                $existedNewsLetterImage = self::getHeaderOrFooterImage($type);
+                $existedNewsLetterImage = self::getHeaderOrFooterImage($imageType);
                 if (empty($existedNewsLetterImage)) {
                     self::saveNewsletterImages($uploadedImage, $imageType);
                 } else {
@@ -70,8 +68,7 @@ class Newsletterbanners extends BaseNewsletterbanners
         $rootPath = ROOT_PATH . $uploadPath;
         $adapter->getFileInfo($file);
         if (!file_exists($rootPath)) {
-            mkdir($rootPath);
-            chmod($rootPath, 0755);
+            mkdir($rootPath, 0755, true);
         }
         $adapter->setDestination($rootPath);
         $adapter->addValidator('Extension', false, array('jpg,jpeg,png', true));
@@ -104,7 +101,6 @@ class Newsletterbanners extends BaseNewsletterbanners
     public static function deleteNewsletterImages($imageType)
     {
         $existedNewsLetterImage = self::getHeaderOrFooterImage($imageType);
-        $imageType = $imageType == 'footer' ? 'F' : 'H';
         if (!empty($existedNewsLetterImage)) {
             self::unlinkFileFromDirectory($existedNewsLetterImage);
         }
