@@ -766,7 +766,9 @@ EOD;
         $footerContent,
         $pathConstants = '',
         $emailHeaderText = '',
-        $codeAlert = ''
+        $codeAlert = '',
+        $newsLetterHeaderImage = '',
+        $newsLetterFooterImage = ''
     ) {
         $basePath = new Zend_View();
         $basePath->setBasePath(APPLICATION_PATH . '/views/');
@@ -780,7 +782,8 @@ EOD;
                     'categoryInformation' => $categoryInformation,
                     'pathConstants' => $pathConstants,
                     'codeAlert' => $codeAlert,
-                    'mandrillNewsletterSubject' => $mandrillNewsletterSubject
+                    'mandrillNewsletterSubject' => $mandrillNewsletterSubject,
+                    'newsLetterHeaderImage' => $newsLetterHeaderImage
                 )
             )
         );
@@ -803,7 +806,8 @@ EOD;
                 !empty($recipientMetaData[$mandrillUsersKey]) ? $recipientMetaData[$mandrillUsersKey] : '',
                 $mandrillMergeVars[$mandrillUsersKey],
                 $footerContent,
-                $pathConstants
+                $pathConstants,
+                $newsLetterFooterImage
             );
         }
         return true;

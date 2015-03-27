@@ -30,8 +30,6 @@
 
 
 $(document).ready(function() {
-
-	
 	$("#testEmail").select2({
 		placeholder: __("Search Email"),
 		minimumInputLength: 1,
