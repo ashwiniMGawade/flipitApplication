@@ -952,6 +952,23 @@ echo $this->headTitle()->append('Edit Shop');?>
                    </div>
                                        
                 </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('Page slug'); ?></strong></label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" name="pageSlug" id="pageSlug" class="span3" 
+                            placeholder="<?php echo $this->translate('Page slug'); ?>" 
+                            value="<?php echo $this->data['howtoguideslug'] ; ?>" style="margin-bottom: 0;">
+                            <input type="text" id="pageSlugLeft" class="input-xlarge  btop word-count" 
+                            value="<?php echo $this->translate("Page slug length ")
+                            . strlen($this->data['howtoguideslug']) 
+                            . $this->translate(' characters');?>"
+                            placeholder="<?php echo $this->translate('0 characters');?>" disabled="disabled">
+                        </div>
+                    </div>
+                </div>
             	<div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Page title'); ?></strong></label></div>
                     <div class="mainpage-content-right">

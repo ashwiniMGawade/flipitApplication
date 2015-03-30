@@ -880,6 +880,7 @@ class Shop extends BaseShop
         $shopViewCount = isset($shopDetail['shopViewCount']) ? $shopDetail['shopViewCount'] : '0';
         $this->views = BackEnd_Helper_viewHelper::stripSlashesFromString($shopViewCount);
 
+        $this->howtoguideslug = FrontEnd_Helper_viewHelper::sanitize($shopDetail['pageSlug']);
         $this->howtoTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageTitle']);
         $this->howtoSubtitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubTitle']);
         $this->howtoSubSubTitle = FrontEnd_Helper_viewHelper::sanitize(
