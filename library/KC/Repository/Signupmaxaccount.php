@@ -587,7 +587,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $queryBuilder->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
-            ->set('signupmaxaccount.newletter_scheduled_time', '')
+            ->set('signupmaxaccount.newletter_scheduled_time', $queryBuilder->expr()->literal(''))
             ->set('signupmaxaccount.newletter_is_scheduled', 0)
             ->where('signupmaxaccount.id = 1')
             ->getQuery()
