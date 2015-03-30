@@ -230,7 +230,7 @@ class Admin_RedirectController extends Zend_Controller_Action
                             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
                             $query = $queryBuilder->select('r')
                                 ->from('KC\Entity\RouteRedirect', 'r')
-                                ->where('r.orignalurl ='.$queryBuilder->expr()->literal($orignalURL);
+                                ->where('r.orignalurl ='.$queryBuilder->expr()->literal($orignalURL));
                             $redirect = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                             if (!empty($redirect)){
                             } else {
