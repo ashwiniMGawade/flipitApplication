@@ -1740,53 +1740,6 @@ public static function getShopDetail($shopId)
     }
 
     /**
-     * addConversion
-     * add a conversion to a shop which is associted with a network
-     *
-     * @param integeter $id shopId
-     * @auther Surinderpal Singh
-     */
-
-    public static function addConversion($id)
-    {
-        $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
-        $ip = ip2long($clientIP);
-
-        # save conversion detail if an offer is associated with a network
-        $network = new FrontEnd_Helper_ClickoutFunctions(null, $id);
-        $hasNetwork = $network->checkIfShopHasAffliateNetwork();
-        if (isset($hasNetwork)) {
-            # check for previous cnversion of same ip
-            $data = Doctrine_Query::create()
-                ->select('count(c.id) as exists,c.id')
-                ->from('Conversions c')
-                ->andWhere('c.shopId="'.$id.'"')
-                ->andWhere('c.IP="'.$ip.'"')
-                ->andWhere("c.converted=0")
-                ->groupBy('c.id')
-                ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-            if (isset($data['exists'])) {
-                # update existing conversion detail
-                $cnt = Doctrine_Core::getTable("Conversions")->find($data['id']);
-                if ($cnt) {
-                    $time = time();
-                    $cnt->subid = md5(time()*rand(1, 999));
-                    $cnt->save();
-                }
-            } else {
-                # save conversion detail if an offer is associated with a network
-                $cnt  = new Conversions();
-                $cnt->shopId = $id;
-                $cnt->IP = $ip;
-                $time = time();
-                $cnt->subid = md5(time()*rand(1, 999));
-                $cnt->save();
-            }
-        }
-    }
-
-    /**
      * getAffliateNetworkDetail
      *
      *  get the affliate network detail for the given shop

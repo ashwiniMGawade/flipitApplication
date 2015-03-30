@@ -13,8 +13,8 @@ class FrontEnd_Helper_ClickoutFunctions
     public function __construct($offerId, $shopId)
     {
         if (isset($offerId)) {
-            $this->$offerId = $offerId;
-            $shopInfo = Offer::getShopInfoByOfferId($this->$offerId);
+            $this->offerId = $offerId;
+            $shopInfo = Offer::getShopInfoByOfferId($this->offerId);
             $shopId = isset($shopInfo['shop']['id']) ? $shopInfo['shop']['id'] : '';
             $this->shopRefUrl = isset($shopInfo['refURL']) ? $shopInfo['refURL'] : '';
             $this->shopSubRefUrl = isset($shopInfo['shop']['refUrl']) ? $shopInfo['shop']['refUrl'] : '';
@@ -30,7 +30,7 @@ class FrontEnd_Helper_ClickoutFunctions
         }
         
         $this->network = Shop::getAffliateNetworkDetail($shopId);
-        $this->$shopId = $shopId;
+        $this->shopId = $shopId;
     }
     
     public function checkIfShopHasAffliateNetwork()
@@ -41,43 +41,39 @@ class FrontEnd_Helper_ClickoutFunctions
             : true;
     }
 
-    public function getCloakLink($clickoutType)
+    public function getCloakLink($clickoutType, $conversionId = '')
     {
-        $networkInfo = self::getSubidWithStringPattern($this->network, $this->shopInfo, $clickoutType);
+        $networkInfo = self::getSubidWithStringPattern($this->network, $this->shopInfo, $clickoutType, $conversionId);
         $clickoutUrl = self::getUrlForCloakLink(
             $this->shopRefUrl,
             $this->shopSubRefUrl,
             $this->shopActualUrl,
             $this->shopPermalink,
-            $networkInfo['subidFlag'],
             $networkInfo['subid'],
             $networkInfo['stringPattern']
         );
         return $clickoutUrl;
     }
 
-    public static function getSubidWithStringPattern($network, $shopInfo, $clickoutType)
+    public static function getSubidWithStringPattern($network, $shopInfo, $clickoutType, $conversionId)
     {
         $subid = "" ;
         $stringPattern = "";
-        $subidFlag = "";
+
         if (isset($network['affliatenetwork'])) {
             if (!empty($network['subid'])) {
-                $subidInfo = self::getExplodedSubidWithPattern($network);
-                $stringPattern = $subidInfo['stringPattern'];
-                $subidFlag = $subidInfo['subidFlag'];
-                $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
-                $clientProperAddress = ip2long($clientIP);
-                $conversion = Conversions::getConversionId($shopInfo['id'], $clientProperAddress, $clickoutType);
-                $subid = str_replace('A2ASUBID', $conversion['id'], $subidInfo['subid']);
-                $subid = FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
+                $networkInformation = self::getExplodedSubidWithPattern($network);
+                $stringPattern = $networkInformation['stringPattern'];
+                $gaCookie = isset($_COOKIE['_ga']) ? $_COOKIE['_ga'] : 'notAvailable';
+
+                $subid = str_replace('A2ASUBID', $conversionId, $networkInformation['subid']);
+                $subid = str_replace('GOOGLEANALYTICSTRACKINCID', $gaCookie, $subid);
             }
         }
 
         $networkInfo = array(
             "subid" => $subid,
-            "stringPattern" => $stringPattern,
-            "subidFlag" => $subidFlag
+            "stringPattern" => $stringPattern
         );
         return $networkInfo;
     }
@@ -86,23 +82,19 @@ class FrontEnd_Helper_ClickoutFunctions
     {
         $subid = "" ;
         $stringPattern = "";
-        $subidFlag = "";
 
         if (!empty($network['subid'])) {
             if (strpos($network['subid'], "|") !== false) {
                 $explodedNetworkSubid = explode("|", $network['subid']);
                 $stringPattern = isset($explodedNetworkSubid[0]) ? $explodedNetworkSubid[0] : '';
                 $subid = isset($explodedNetworkSubid[1]) ? $explodedNetworkSubid[1] : '';
-                $subidFlag = true;
             } else {
-                $subid = "&". $network['subid'];
-                $subidFlag = false;
+                $subid = "&" . $network['subid'];
             }
         }
         $networkInfo = array(
             "subid" => $subid,
-            "stringPattern" => $stringPattern,
-            "subidFlag" => $subidFlag
+            "stringPattern" => $stringPattern
         );
         return $networkInfo;
     }
@@ -112,14 +104,13 @@ class FrontEnd_Helper_ClickoutFunctions
         $shopSubRefUrl,
         $shopActualUrl,
         $shopPermalink,
-        $subidFlag,
         $subid,
         $stringPattern
     ) {
         if (isset($shopRefUrl) && $shopRefUrl!=null) {
-            $clickoutUrl = self::replaceSubidByStringPattern($shopRefUrl, $subidFlag, $subid, $stringPattern);
+            $clickoutUrl = self::replaceSubidByStringPattern($shopRefUrl, $subid, $stringPattern);
         } else if (isset($shopSubRefUrl) && $shopSubRefUrl!=null) {
-            $clickoutUrl = self::replaceSubidByStringPattern($shopSubRefUrl, $subidFlag, $subid, $stringPattern);
+            $clickoutUrl = self::replaceSubidByStringPattern($shopSubRefUrl, $subid, $stringPattern);
         } else if (isset($shopActualUrl) && $shopActualUrl!=null) {
             $clickoutUrl = $shopActualUrl;
         } else {
@@ -128,11 +119,11 @@ class FrontEnd_Helper_ClickoutFunctions
         return $clickoutUrl;
     }
 
-    public static function replaceSubidByStringPattern($refUrl, $subidFlag, $subid, $stringPattern)
+    public static function replaceSubidByStringPattern($refUrl, $subid, $stringPattern)
     {
-        if ($subidFlag == true && $stringPattern != "") {
+        if (isset($stringPattern) && $stringPattern != "") {
             $clickoutUrl = preg_replace("/".$stringPattern."/", $subid, $refUrl);
-            if ($clickoutUrl == null) {
+            if ($clickoutUrl === null) {
                 $clickoutUrl = $refUrl;
             }
         } else {

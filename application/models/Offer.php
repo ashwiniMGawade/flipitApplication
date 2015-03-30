@@ -967,37 +967,6 @@ class Offer extends BaseOffer
             ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
         return $shopInfo;
     }
-    
-    public static function addConversion($offerId)
-    {
-        $clientIP = ip2long(FrontEnd_Helper_viewHelper::getRealIpAddress());
-        $network = new FrontEnd_Helper_ClickoutFunctions($offerId, null);
-        $hasNetwork = $network->checkIfShopHasAffliateNetwork();
-        if ($hasNetwork) {
-            $offerData = Doctrine_Query::create()
-                ->select('count(c.id) as exists,c.id')
-                ->from('Conversions c')
-                ->andWhere('c.offerId="'.$offerId.'"')
-                ->andWhere('c.IP="'.$clientIP.'"')
-                ->andWhere("c.converted=0")
-                ->groupBy('c.id')
-                ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-            if (isset($offerData['exists'])) {
-                $offerCount = Doctrine_Core::getTable("Conversions")->find($offerData['id']);
-                if ($offerCount) {
-                    $offerCount->subid = md5(time()*rand(1, 999));
-                    $offerCount->save();
-                }
-            } else {
-                $offerCount  = new Conversions();
-                $offerCount->offerId = $offerId;
-                $offerCount->IP = $clientIP;
-                $offerCount->subid = md5(time()*rand(1, 999));
-                $offerCount->save();
-            }
-        }
-    }
 
     public static function getOfferInfo($offerId)
     {

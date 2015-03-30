@@ -1052,13 +1052,6 @@ EOD;
         return $editorText;
     }
 
-    public static function setClientIdForTracking($subId = '')
-    {
-        $gaCookie = isset($_COOKIE['_ga']) ? $_COOKIE['_ga'] : 'notAvailable';
-        $clientId = str_replace('GOOGLEANALYTICSTRACKINCID', $gaCookie, $subId);
-        return $clientId;
-    }
-
     public static function getCurrentDate()
     {
         $currentDate = new Zend_Date();
