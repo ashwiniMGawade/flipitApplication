@@ -50,23 +50,84 @@ class Conversions extends \KC\Entity\Conversions
         if (is_numeric($id)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $offerOrShopId = self::getConversionOfferOrShopId($id);
-            if (!empty($offerOrShopId) && $offerOrShopId['offerId'] != '') {
-                $conversionInfo = $queryBuilder->select('c.id,o.title as offerTitle,s.name as shopName,cat.name as categoryName')
+            if (empty($offerOrShopId)) {
+                return $conversionInfo;
+            }
+
+            if (!empty($offerOrShopId) && $offerOrShopId[0]['offerId'] != '') {
+                $conversionInfo = $queryBuilder->select('c,o,s,cat,category')
                     ->from("KC\Entity\Conversions", "c")
                     ->leftJoin("c.offer", "o")
-                    ->leftJoin("o.shop", "s")
-                    ->leftJoin("o.category", "cat");
+                    ->leftJoin("o.shopOffers", "s")
+                    ->leftJoin("o.categoryoffres", "cat")
+                    ->leftJoin('cat.categories', 'category');
             } else {
-                $conversionInfo = $queryBuilder->select('c.id,s.name as shopName,cat.name as categoryName')
+                $conversionInfo = $queryBuilder->select('c,s,cat,category')
                     ->from("KC\Entity\Conversions", "c")
                     ->leftJoin("c.shop", "s")
-                    ->leftJoin('s.category", "cat');
+                    ->leftJoin("s.categoryshops", "cat")
+                    ->leftJoin("cat.shop", "category");
             }
             
             $conversionInfo = $conversionInfo->where('c.id = '. $id)
+                ->getQuery()
                 ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
+
+        if (!empty($conversionInfo['offer'])) {
+            $conversionInfo = self::traverseConversionInfoForOffers($conversionInfo);
+        } else {
+            $conversionInfo = self::traverseConversionInfoForShops($conversionInfo);
+        }
+
         return $conversionInfo;
+    }
+
+    public static function traverseConversionInfoForOffers($conversionInfo)
+    {
+        $conversionDetails = array();
+        if (!empty($conversionInfo['offer'])) {
+            $conversionCategory = array();
+
+            if (isset($conversionInfo['offer']['categoryoffres'])) {
+                foreach ($conversionInfo['offer']['categoryoffres'] as $key => $category) {
+                    $conversionCategory[$key]['id'] = $category['categories']['id'];
+                    $conversionCategory[$key]['categoryName'] = $category['categories']['name'];
+                }
+            }
+
+            if (!empty($conversionInfo)) {
+                $conversionDetails = array(
+                    "shopName" => $conversionInfo['offer']['shopOffers']['name'],
+                    "offerTitle" => $conversionInfo['offer']['title'],
+                    "category" => $conversionCategory
+                );
+            }
+        }
+        return $conversionDetails;
+    }
+
+    public static function traverseConversionInfoForShops($conversionInfo)
+    {
+        $conversionDetails = array();
+        if (!empty($conversionInfo['shop'])) {
+            $conversionCategory = array();
+
+            if (isset($conversionInfo['shop']['categoryshops'])) {
+                foreach ($conversionInfo['shop']['categoryshops'] as $key => $category) {
+                    $conversionCategory[$key]['id'] = $category['shop']['id'];
+                    $conversionCategory[$key]['categoryName'] = $category['shop']['name'];
+                }
+            }
+
+            if (!empty($conversionInfo)) {
+                $conversionDetails = array(
+                    "shopName" => $conversionInfo['shop']['name'],
+                    "category" => $conversionCategory
+                );
+            }
+        }
+        return $conversionDetails;
     }
 
     public static function getConversionOfferOrShopId($id)
@@ -75,10 +136,11 @@ class Conversions extends \KC\Entity\Conversions
         
         if (is_numeric($id)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $conversionInfo = Doctrine_Query::create()->select('c.shopId,c.offerId')
+            $conversionInfo = $queryBuilder->select('IDENTITY(c.shop) as shopId, IDENTITY(c.offer) as offerId')
                 ->from("KC\Entity\Conversions", "c")
                 ->where('c.id = '. $id)
-                ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+                ->getQuery()
+                ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
         return $conversionInfo;
     }
