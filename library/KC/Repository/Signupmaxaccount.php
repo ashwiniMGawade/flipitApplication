@@ -489,7 +489,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
     {
         $previousNewsletterScheduledDate = self::validateIfNewsLetterCanBeScheduled();
         $scheduledDate = self::getFormattedScheduleDate(date($request->getParam("sendDate")));
-        $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
+        $currentDate = \FrontEnd_Helper_viewHelper::getCurrentDate();
         $formattedCurrentDate = date('m-d-Y', strtotime($currentDate));
         $formattedScheduleDate = date('m-d-Y', strtotime($scheduledDate));
         if ($formattedScheduleDate >= $formattedCurrentDate) {
@@ -529,7 +529,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
     protected static function validateIfNewsLetterCanBeScheduled()
     {
         $newsletterSentDate = self::getNewsletterSentTime();
-        $newsletterSentDatabaseDate = $newsletterSentDate[0]['newsletter_sent_time'];
+        $newsletterSentDatabaseDate = $newsletterSentDate[0]['newsletter_sent_time']->format('Y-m-d');
         if (empty($newsletterSentDatabaseDate) || $newsletterSentDatabaseDate == '0000-00-00 00:00:00') {
             $newsletterSentDatabaseDate = date('Y-m-d', strtotime('2000-01-01'));
         } else {
