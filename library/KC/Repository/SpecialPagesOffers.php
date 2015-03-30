@@ -127,11 +127,11 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
             $query = $queryBuilder
                 ->update('KC\Entity\SpecialPagesOffers', 'p')
                 ->set('p.position', $queryBuilder->expr()->literal('p.position -1'))
-                ->where('p.position', $queryBuilder->expr()->gt($position))
+                ->where('p.position > '.$position)
                 ->andWhere('p.pages='. $pageId)
                 ->getQuery();
             $query->execute();
-             
+
             $query = $queryBuilder
                 ->select('p')
                 ->from('KC\Entity\SpecialPagesOffers', 'p')
@@ -144,7 +144,7 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
                 $query = $queryBuilder
                     ->update('KC\Entity\SpecialPagesOffers', 'p')
                     ->set('p.position', $newPosition)
-                    ->where('p.id = ', $newOffer['id'])
+                    ->where('p.id = '.$newOffer['id'])
                     ->getQuery();
                 $query->execute();
                 $newPosition++;
