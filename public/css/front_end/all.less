@@ -20,8 +20,45 @@
 @import "authors.less";
 @import "brands.less";
 @import "youroffers.less";
+
 input[type="email"], input[type="tel"], input[type="search"], input[type="text"], input[type="password"], input[type="file"], input[type="submit"], textarea{-webkit-appearance:none;}
 body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
+.show-code{
+	display: inline-block;
+	height: 37px;
+	line-height: 37px;
+	border: 1px solid #ffa600;
+	border-radius: 3px;
+	background-color: #fff;
+	font-family:arial, sans-serif;
+	width: 52px;
+	text-align: right;
+	padding-right: 8px;
+	font-size: 18px;
+	color: #3d3d3d;
+	position: absolute;
+	left: 155px;
+	top: 0px;
+}
+.blue-corner {
+	display: block;
+	width: 42px;
+	height: 40px;
+	position: absolute;
+	border-radius: 0 0 4px 4px;
+	left: 164px;
+	top: 3px;
+	z-index: 13;
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	-webkit-transition: -webkit-transform 250ms,background-position 250ms;
+	transition: transform 250ms,background-position 250ms;
+	-webkit-transform: rotateZ(22deg) translate(0,-10px) scaleX(.9);
+	-ms-transform: rotateZ(22deg) translate(0,-10px) scaleX(.9);
+	transform: rotateZ(22deg) translate(0,-10px) scaleX(.9);
+	margin-top: 2px;
+	background: linear-gradient(38deg,#48A5E1 0,#48A5E1 49%,rgba(202,235,137,0) 50%,rgba(255,255,255,0) 100%) 0 6px no-repeat;
+}
 #couponCode{
 	cursor: pointer;
 }

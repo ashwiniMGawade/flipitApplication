@@ -298,6 +298,13 @@ class FrontEnd_Helper_OffersPartialFunctions
                             href="'.$urlToShow.'" vote="0" rel="nofollow" 
                             target="_self" onClick="'.$onClick.'">
                         '.$offerAnchorText.' </a>';
+                        if ($class == 'offer-teaser-button kccode') {
+                            $offerLink .=
+                                '<a href="javascript:void(0);" class="">
+                                    <span class="show-code">'.self::generateRandomCharactersForOfferTeaser(4).'</span>
+                                    <span class="blue-corner"></span>
+                                </a>';
+                        }
                     }
                 } else if ($currentOffer->discountType == "SL") {
                     if ($class == "btn blue btn-primary") {
@@ -367,7 +374,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $urlToShow,
                     $offerBounceRate,
                     FrontEnd_Helper_viewHelper::__translate('Get code &amp; Open site'),
-                    "btn blue btn-primary"
+                    "offer-teaser-button kccode"
                 );
                 break;
             case 'offerTitle':
@@ -393,38 +400,6 @@ class FrontEnd_Helper_OffersPartialFunctions
                 break;
             return $redirectUrl;
         }
-    }
-
-
-    public function getSecondButtonforOffer($currentOffer, $urlToShow, $offerBounceRate, $permalink)
-    {
-        $buttonWithCodeforOffer = '';
-        if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
-            $onClick =
-                self::getUserIsLoggedInOrNot() == "true" ? "printIt('$urlToShow');" : "printIt('$urlToShow');";
-            $buttonWithCodeforOffer = '<a class="btn btn-default btn-print" onclick ="'.$onClick.'"  >'
-                .FrontEnd_Helper_viewHelper::__translate('print now').'<span class="ico-print"></span>
-            </a>';
-        } else if ($currentOffer->discountType=='CD') {
-            $popupLink = self::getPopupLink($currentOffer, $urlToShow);
-            $onClick =
-                "showCodeInformation($currentOffer->id), showCodePopUp(this),
-                ga('send','event', 'aff','$offerBounceRate'),
-                OpenInNewTab('".HTTP_PATH_LOCALE. $permalink.$popupLink."')";
-
-            if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
-                 $buttonWithCodeforOffer ='<span class="btn orange btn-warning btn-code"></span>';
-            } else {
-                $buttonWithCodeforOffer =
-                '<a id="'.$currentOffer->id.'" 
-                class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" 
-                rel="nofollow" target="_self" onClick="'.$onClick.'">'
-                .FrontEnd_Helper_viewHelper::__translate('Get this offer').'</a>';
-            }
-        } else if ($currentOffer->discountType == "SL") {
-            $buttonWithCodeforOffer = '';
-        }
-        return $buttonWithCodeforOffer;
     }
 
     public function getTermAndConditionsLink($currentOffer, $termsAndConditions)
@@ -505,5 +480,97 @@ class FrontEnd_Helper_OffersPartialFunctions
         $explodeContentManagerName = explode(' ', $contentManagerName);
         $contentManagerName = !empty($explodeContentManagerName[0]) ? $explodeContentManagerName[0] : '';
         return $contentManagerName;
+    }
+
+    protected static function assignRandomValue($number)
+    {
+        switch($number) {
+            case "1": $randomValue = "a";
+                break;
+            case "2": $randomValue = "b";
+                break;
+            case "3": $randomValue = "c";
+                break;
+            case "4": $randomValue = "d";
+                break;
+            case "5": $randomValue = "e";
+                break;
+            case "6": $randomValue = "f";
+                break;
+            case "7": $randomValue = "g";
+                break;
+            case "8": $randomValue = "h";
+                break;
+            case "9": $randomValue = "i";
+                break;
+            case "10": $randomValue = "j";
+                break;
+            case "11": $randomValue = "k";
+                break;
+            case "12": $randomValue = "l";
+                break;
+            case "13": $randomValue = "m";
+                break;
+            case "14": $randomValue = "n";
+                break;
+            case "15": $randomValue = "o";
+                break;
+            case "16": $randomValue = "p";
+                break;
+            case "17": $randomValue = "q";
+                break;
+            case "18": $randomValue = "r";
+                break;
+            case "19": $randomValue = "s";
+                break;
+            case "20": $randomValue = "t";
+                break;
+            case "21": $randomValue = "u";
+                break;
+            case "22": $randomValue = "v";
+                break;
+            case "23": $randomValue = "w";
+                break;
+            case "24": $randomValue = "x";
+                break;
+            case "25": $randomValue = "y";
+                break;
+            case "26": $randomValue = "z";
+                break;
+            case "27": $randomValue = "0";
+                break;
+            case "28": $randomValue = "1";
+                break;
+            case "29": $randomValue = "2";
+                break;
+            case "30": $randomValue = "3";
+                break;
+            case "31": $randomValue = "4";
+                break;
+            case "32": $randomValue = "5";
+                break;
+            case "33": $randomValue = "6";
+                break;
+            case "34": $randomValue = "7";
+                break;
+            case "35": $randomValue = "8";
+                break;
+            case "36": $randomValue = "9";
+                break;
+        }
+        return $randomValue;
+    }
+
+    public static function generateRandomCharactersForOfferTeaser($stringLength)
+    {
+        if ($stringLength > 0) {
+            $randomString=  "";
+            for ($stringCharacterCount=1; $stringCharacterCount<=$stringLength; $stringCharacterCount++) {
+                mt_srand((double)microtime() * 1000000);
+                $number = mt_rand(1, 36);
+                $randomString .= self::assignRandomValue($number);
+            }
+        }
+        return $randomString;
     }
 }
