@@ -4,14 +4,19 @@ class FrontEnd_Helper_ClickoutFunctions
     public static function getCloakLink($offerId, $checkRefUrl = false)
     {
         $shopInfo = Offer::getShopInfoByOfferId($offerId);
-        $network = Shop::getAffliateNetworkDetail($shopInfo['shop']['id']);
+        $shopRefUrl = isset($shopInfo['refURL']) ? $shopInfo['refURL'] : '';
+        $shopSubRefUrl = isset($shopInfo['shop']['refUrl']) ? $shopInfo['shop']['refUrl'] : '';
+        $shopActualUrl = isset($shopInfo['shop']['actualUrl']) ? $shopInfo['shop']['actualUrl'] : '';
+        $shopPermalink = isset($shopInfo['shop']['permalink']) ? $shopInfo['shop']['permalink'] : '';
+        $shopId = isset($shopInfo['shop']['id']) ? $shopInfo['shop']['id'] : '';
+        $network = Shop::getAffliateNetworkDetail($shopId);
         if ($checkRefUrl) {
             if (!isset($network['affliatenetwork'])) {
                 return false;
             }
-            if ($shopInfo['refURL'] != "") {
+            if ($shopRefUrl != "") {
                 return true;
-            } else if ($shopInfo['shop']['refUrl'] != "") {
+            } else if ($shopSubRefUrl != "") {
                 return true;
             } else {
                 return true;
@@ -19,10 +24,10 @@ class FrontEnd_Helper_ClickoutFunctions
         }
         $networkInfo = self::getSubidWithStringPattern($network, $shopInfo, 'offer');
         $clickoutUrl = self::getUrlForCloakLink(
-            $shopInfo['refURL'],
-            $shopInfo['shop']['refUrl'],
-            $shopInfo['shop']['actualUrl'],
-            $shopInfo['shop']['permalink'],
+            $shopRefUrl,
+            $shopSubRefUrl,
+            $shopActualUrl,
+            $shopPermalink,
             $networkInfo['subidFlag'],
             $networkInfo['subid'],
             $networkInfo['stringPattern']
@@ -33,6 +38,9 @@ class FrontEnd_Helper_ClickoutFunctions
     public static function getStoreLinks($shopId, $checkRefUrl = false)
     {
         $shopInfo = Shop::getShopInfoByShopId($shopId);
+        $shopRefUrl = isset($shopInfo['refUrl']) ? $shopInfo['refUrl'] : '';
+        $shopActualUrl = isset($shopInfo['actualUrl']) ? $shopInfo['actualUrl'] : '';
+        $shopPermalink = isset($shopInfo['permalink']) ? $shopInfo['permalink'] : '';
         $network = Shop::getAffliateNetworkDetail($shopId);
 
         if ($checkRefUrl) {
@@ -50,10 +58,10 @@ class FrontEnd_Helper_ClickoutFunctions
 
         $networkInfo = self::getSubidWithStringPattern($network, $shopInfo, 'shop');
         $clickoutUrl = self::getUrlForCloakLink(
-            $shopInfo['refUrl'],
+            $shopRefUrl,
             "",
-            $shopInfo['actualUrl'],
-            $shopInfo['permalink'],
+            $shopActualUrl,
+            $shopPermalink,
             $networkInfo['subidFlag'],
             $networkInfo['subid'],
             $networkInfo['stringPattern']
