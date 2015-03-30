@@ -66,6 +66,7 @@ class FrontEnd_Helper_ClickoutFunctions
         $subid = "" ;
         $stringPattern = "";
         $subidWithCid = "";
+        $subidFlag = "";
         if (isset($network['affliatenetwork'])) {
             if (!empty($network['subid'])) {
                 if (strpos($network['subid'], "|") !== false) {
