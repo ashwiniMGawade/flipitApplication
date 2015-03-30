@@ -450,16 +450,17 @@ class PopularCode extends \KC\Entity\PopularCode
         if ($id) {
             $queryBuilderPopularOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilderPopularOffer
-            ->select('pcode')
+            ->select('offer.id')
             ->from('KC\Entity\PopularCode', 'pcode')
+            ->leftJoin('pcode.popularcode', 'offer')
             ->where('pcode.id=' . $id)
             ->setMaxResults(1);
             $offerDetail = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            
+
             $queryBuilderOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $queryBuilderOffer->update('KC\Entity\Offer', 'o')
             ->set('o.editorPicks', '0')
-            ->where('o.id = '.$offerDetail[0]['offerId'])
+            ->where('o.id = '.$offerDetail[0]['id'])
             ->getQuery()->execute();
 
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -470,7 +471,7 @@ class PopularCode extends \KC\Entity\PopularCode
 
             //change position by 1 of each below element
             $queryBuilder ->update('KC\Entity\PopularCode', 'pc')
-            ->set('pc.position', 'pc.position -1')
+            ->set('pc.position', $queryBuilder->expr()->literal('pc.position -1'))
             ->where('pc.position > '.$position)
             ->getQuery()->execute();
 
@@ -483,8 +484,8 @@ class PopularCode extends \KC\Entity\PopularCode
             $newPos = 1;
             foreach ($newOfferList as $newOffer) {
                 $queryBuilder ->update('KC\Entity\PopularCode', 'popularCode')
-                    ->set('popularCodeposition', $newPos)
-                    ->where('popularCodeid ='.$newOffer['id'])
+                    ->set('popularCode.position', $newPos)
+                    ->where('popularCode.id ='.$newOffer['id'])
                     ->getQuery()->execute();
                 $newPos++;
             }

@@ -309,49 +309,19 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
     }
     public static function updateHeaderContent($value)
     {
-        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('p')
-        ->from('KC\Entity\Signupmaxaccount', 'p')
-        ->setParameter(1, 1)
-        ->where('p.id = ?1');
-        $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        if (empty($getRecord)) {
-            $data = new KC\Entity\Signupmaxaccount();
-            $data->id = 1;
-            $data->email_header = $value;
-            \Zend_Registry::get('emLocale')->persist($data);
-            \Zend_Registry::get('emLocale')->flush();
-            return ;
-        }
-        $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
-            ->set('signupmaxaccount.email_header', "'". $value . "'")
-            ->setParameter(1, 1)
-            ->where('signupmaxaccount.id = ?1')
-            ->getQuery();
-        $query->execute();
+        $data = \Zend_Registry::get('emLocale')->find('KC\Entity\Signupmaxaccount', 1);
+        $data->id = 1;
+        $data->email_header = $value;
+        \Zend_Registry::get('emLocale')->persist($data);
+        \Zend_Registry::get('emLocale')->flush();
     }
     public static function updateFooterContent($value)
     {
-        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('p')
-        ->from('KC\Entity\Signupmaxaccount', 'p')
-        ->setParameter(1, 1)
-        ->where('p.id = ?1');
-        $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        if (empty($getRecord)) {
-            $data = new KC\Entity\Signupmaxaccount();
-            $data->id = 1;
-            $data->email_footer = $value ;
-            \Zend_Registry::get('emLocale')->persist($data);
-            \Zend_Registry::get('emLocale')->flush();
-            return ;
-        }
-        $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
-            ->set('signupmaxaccount.email_footer', "'". $value . "'")
-            ->setParameter(1, 1)
-            ->where('signupmaxaccount.id = ?1')
-            ->getQuery();
-        $query->execute();
+        $data = \Zend_Registry::get('emLocale')->find('KC\Entity\Signupmaxaccount', 1);
+        $data->id = 1;
+        $data->email_footer = $value;
+        \Zend_Registry::get('emLocale')->persist($data);
+        \Zend_Registry::get('emLocale')->flush();
     }
     public static function getEmailHeaderFooter()
     {
@@ -519,7 +489,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
     {
         $previousNewsletterScheduledDate = self::validateIfNewsLetterCanBeScheduled();
         $scheduledDate = self::getFormattedScheduleDate(date($request->getParam("sendDate")));
-        $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
+        $currentDate = \FrontEnd_Helper_viewHelper::getCurrentDate();
         $formattedCurrentDate = date('m-d-Y', strtotime($currentDate));
         $formattedScheduleDate = date('m-d-Y', strtotime($scheduledDate));
         if ($formattedScheduleDate >= $formattedCurrentDate) {
@@ -559,7 +529,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
     protected static function validateIfNewsLetterCanBeScheduled()
     {
         $newsletterSentDate = self::getNewsletterSentTime();
-        $newsletterSentDatabaseDate = $newsletterSentDate[0]['newsletter_sent_time'];
+        $newsletterSentDatabaseDate = $newsletterSentDate[0]['newsletter_sent_time']->format('Y-m-d');
         if (empty($newsletterSentDatabaseDate) || $newsletterSentDatabaseDate == '0000-00-00 00:00:00') {
             $newsletterSentDatabaseDate = date('Y-m-d', strtotime('2000-01-01'));
         } else {
