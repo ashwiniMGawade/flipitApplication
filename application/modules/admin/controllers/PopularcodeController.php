@@ -213,7 +213,7 @@ class Admin_PopularcodeController extends Zend_Controller_Action
     public function updateVarnish()
     {
         // Add urls to refresh in Varnish
-        $varnishObj = new Varnish();
+        $varnishObj = new KC\Repository\Varnish();
         $varnishObj->addUrl( rtrim( HTTP_PATH_FRONTEND , '/'  ));
 
 
