@@ -26,7 +26,7 @@ class PlusController extends Zend_Controller_Action
 
         $mostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)"all_mostreadMsArticlePage_list",
-            array('function' => '\KC\Repository\Articles::getAllArticles', 'parameters' => array(5))
+            array('function' => '\KC\Repository\Articles::getMostReasArticlesForPlusOverview', 'parameters' => array(5))
         );
 
         $categoryWiseArticles = \FrontEnd_Helper_viewHelper::

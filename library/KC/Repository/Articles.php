@@ -82,6 +82,24 @@ class Articles extends \KC\Entity\Articles
         return $allArticles;
     }
 
+    public static function getMostReasArticlesForPlusOverview($limit = 0)
+    {
+        $currentDateTime = date('Y-m-d 00:00:00');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('p, a, artimg, thumb')
+            ->from('KC\Entity\PopularArticles', 'p')
+            ->leftJoin('p.articles', 'a')
+            ->leftJoin('a.articleImage', 'artimg')
+            ->leftJoin('a.thumbnail', 'thumb')
+            ->where('a.publish = 1')
+            ->andWhere('a.deleted = 0')
+            ->andWhere('a.publishdate <='. $queryBuilder->expr()->literal($currentDateTime))
+            ->orderBy('p.position', 'ASC')
+            ->setMaxResults($limit);
+            $allArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $allArticles;
+    }
+
     public static function generateArticlePermalinks()
     {
         $currentDateTime = date('Y-m-d 00:00:00');
