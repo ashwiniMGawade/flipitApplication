@@ -192,6 +192,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $getPermalinkFromDb = RoutePermalink::getRoute($permalink);
             $actualPermalink = $permalink;
         }
+        if (count($getPermalinkFromDb) <= 0) {
+            $exp = explode('/', $actualPermalink);
+            $ex = $exp[1].'/'.$exp[2];
+            $getPermalinkFromDb = RoutePermalink::getRoute($ex);
+            $actualPermalink = $ex;
+        }
         // check if permalink exists in route permalink table
         if (count($getPermalinkFromDb) > 0) {
             BootstrapRouterFunctions::setRouteForPermalink(

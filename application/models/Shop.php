@@ -1184,10 +1184,11 @@ class Shop extends BaseShop
             $key = 'shop_similar_shops';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
+            $howtoguide = 'store/howtoguide/shopid/'.$this->id;
+            $exactLink = 'store/storedetail/id/'.$this->id;
+            $howToGuideSlug = FrontEnd_Helper_viewHelper::sanitize($shopDetail['shopNavUrl']) . "/" 
+                . FrontEnd_Helper_viewHelper::sanitize($shopDetail['pageSlug']);
             if (!empty($getRouteLink)) {
-
-                $exactLink = 'store/storedetail/id/'.$this->id;
-                $howtoguide = 'store/howtoguide/shopid/'.$this->id;
                 $updateRouteLink = Doctrine_Query::create()->update('RoutePermalink')
                 ->set('permalink', "'".
                         BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopNavUrl'])
@@ -1199,16 +1200,16 @@ class Shop extends BaseShop
 
                 if(!empty($howToguideRoute)){
                     $updateRouteHow = Doctrine_Query::create()->update('RoutePermalink')
-                    ->set('permalink', "'how-to/".BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopNavUrl'])."'")
+                    ->set('permalink', "'".$howToGuideSlug."'")
                     ->set('type',"'SHP'")
                     ->set('exactlink', "'".$howtoguide."'" );
-                    $updateRouteHow->where('type = "SHP"')->andWhere("permalink = 'how-to/".$getRouteLink[0]['permalink']."'")->execute();
+                    $updateRouteHow->where('type = "SHP"')->andWhere("permalink = '".$howToGuideSlug."'")->execute();
 
                 }else{
                     $route = new RoutePermalink();
-                    $route->permalink = "how-to/" . BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopNavUrl']);
+                    $route->permalink = $howToGuideSlug;
                     $route->type = 'SHP';
-                    $route->exactlink = 'store/howtoguide/shopid/'.$this->id;
+                    $route->exactlink = $howtoguide;
                     $route->save();
                 }
 
@@ -1220,9 +1221,9 @@ class Shop extends BaseShop
                 $route->save();
 
                 $route = new RoutePermalink();
-                $route->permalink = "how-to/" . BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopNavUrl']);
+                $route->permalink = $howToGuideSlug;
                 $route->type = 'SHP';
-                $route->exactlink = 'store/howtoguide/shopid/'.$this->id;
+                $route->exactlink = $howtoguide;
                 $route->save();
             }
 
