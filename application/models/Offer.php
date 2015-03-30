@@ -971,34 +971,30 @@ class Offer extends BaseOffer
     public static function addConversion($offerId)
     {
         $clientIP = ip2long(FrontEnd_Helper_viewHelper::getRealIpAddress());
+        $network = new FrontEnd_Helper_ClickoutFunctions($offerId, null);
+        $hasNetwork = $network->checkIfShopHasAffliateNetwork();
+        if ($hasNetwork) {
+            $offerData = Doctrine_Query::create()
+                ->select('count(c.id) as exists,c.id')
+                ->from('Conversions c')
+                ->andWhere('c.offerId="'.$offerId.'"')
+                ->andWhere('c.IP="'.$clientIP.'"')
+                ->andWhere("c.converted=0")
+                ->groupBy('c.id')
+                ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
 
-        if (FrontEnd_Helper_ClickoutFunctions:: getCloakLink($offerId, true)) {
-                $offerData = Doctrine_Query::create()
-                        ->select('count(c.id) as exists,c.id')
-                        ->from('Conversions c')
-                        ->andWhere('c.offerId="'.$offerId.'"')
-                        ->andWhere('c.IP="'.$clientIP.'"')
-                        ->andWhere("c.converted=0")
-                        ->groupBy('c.id')
-                        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-            if (!$offerData['exists']) {
-                $offerCount  = new Conversions();
-                $offerCount->offerId = $offerId;
-                $offerCount->IP = $clientIP;
-                $offerCount->utma = Zend_Controller_Front::getInstance()->getRequest()->getCookie('__utma');
-                $offerCount->utmz = Zend_Controller_Front::getInstance()->getRequest()->getCookie('__utmz');
-                $offerCount->subid = md5(time()*rand(1, 999));
-                $offerCount->save();
-
-            } else {
+            if (isset($offerData['exists'])) {
                 $offerCount = Doctrine_Core::getTable("Conversions")->find($offerData['id']);
                 if ($offerCount) {
-                    $offerCount->utma = Zend_Controller_Front::getInstance()->getRequest()->getCookie('__utma');
-                    $offerCount->utmz = Zend_Controller_Front::getInstance()->getRequest()->getCookie('__utmz');
                     $offerCount->subid = md5(time()*rand(1, 999));
                     $offerCount->save();
                 }
+            } else {
+                $offerCount  = new Conversions();
+                $offerCount->offerId = $offerId;
+                $offerCount->IP = $clientIP;
+                $offerCount->subid = md5(time()*rand(1, 999));
+                $offerCount->save();
             }
         }
     }

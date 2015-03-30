@@ -1753,8 +1753,9 @@ public static function getShopDetail($shopId)
         $ip = ip2long($clientIP);
 
         # save conversion detail if an offer is associated with a network
-        if(FrontEnd_Helper_ClickoutFunctions::getStoreLinks($id , true )) {
-
+        $network = new FrontEnd_Helper_ClickoutFunctions(null, $id);
+        $hasNetwork = $network->checkIfShopHasAffliateNetwork();
+        if (isset($hasNetwork)) {
             # check for previous cnversion of same ip
             $data = Doctrine_Query::create()
                 ->select('count(c.id) as exists,c.id')
@@ -1765,29 +1766,22 @@ public static function getShopDetail($shopId)
                 ->groupBy('c.id')
                 ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
 
-            if(! $data['exists']) {
-
+            if (isset($data['exists'])) {
+                # update existing conversion detail
+                $cnt = Doctrine_Core::getTable("Conversions")->find($data['id']);
+                if ($cnt) {
+                    $time = time();
+                    $cnt->subid = md5(time()*rand(1, 999));
+                    $cnt->save();
+                }
+            } else {
                 # save conversion detail if an offer is associated with a network
                 $cnt  = new Conversions();
                 $cnt->shopId = $id;
                 $cnt->IP = $ip;
-                $cnt->utma = isset($_COOKIE["__utma"]) ? $_COOKIE["__utma"] : '';
-                $cnt->utmz = isset($_COOKIE["__utmz"]) ? $_COOKIE["__utmz"] : '';
                 $time = time();
-                $cnt->subid = md5(time()*rand(1,999));
+                $cnt->subid = md5(time()*rand(1, 999));
                 $cnt->save();
-            } else{
-
-
-                # update existing conversion detail
-                $cnt = Doctrine_Core::getTable("Conversions")->find($data['id']);
-                if($cnt) {
-                    $cnt->utma = isset($_COOKIE["__utma"]) ? $_COOKIE["__utma"] : '';
-                    $cnt->utmz = isset($_COOKIE["__utmz"]) ? $_COOKIE["__utmz"] : '';
-                    $time = time();
-                    $cnt->subid = md5(time()*rand(1,999));
-                    $cnt->save();
-                }
             }
         }
     }

@@ -342,12 +342,6 @@ EOD;
                     $resultStatus = "true";
                 }
                 break;
-            case 'onload':
-                if (ViewCount::getOfferOnload($offerId, $clientIp) == 0) {
-                    ViewCount::saveOfferOnload($offerId, $clientIp);
-                    $resultStatus = "true";
-                }
-                break;
             default:
                 break;
         }

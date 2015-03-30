@@ -1,67 +1,54 @@
 <?php
 class FrontEnd_Helper_ClickoutFunctions
 {
-    public static function getCloakLink($offerId, $checkRefUrl = false)
+    public $shopId;
+    public $offerId;
+    public $shopInfo;
+    public $network;
+    public $shopRefUrl;
+    public $shopSubRefUrl;
+    public $shopActualUrl;
+    public $shopPermalink;
+
+    public function __construct($offerId, $shopId)
     {
-        $shopInfo = Offer::getShopInfoByOfferId($offerId);
-        $shopRefUrl = isset($shopInfo['refURL']) ? $shopInfo['refURL'] : '';
-        $shopSubRefUrl = isset($shopInfo['shop']['refUrl']) ? $shopInfo['shop']['refUrl'] : '';
-        $shopActualUrl = isset($shopInfo['shop']['actualUrl']) ? $shopInfo['shop']['actualUrl'] : '';
-        $shopPermalink = isset($shopInfo['shop']['permalink']) ? $shopInfo['shop']['permalink'] : '';
-        $shopId = isset($shopInfo['shop']['id']) ? $shopInfo['shop']['id'] : '';
-        $network = Shop::getAffliateNetworkDetail($shopId);
-        if ($checkRefUrl) {
-            if (!isset($network['affliatenetwork'])) {
-                return false;
-            }
-            if ($shopRefUrl != "") {
-                return true;
-            } else if ($shopSubRefUrl != "") {
-                return true;
-            } else {
-                return true;
-            }
+        if (isset($offerId)) {
+            $this->$offerId = $offerId;
+            $shopInfo = Offer::getShopInfoByOfferId($this->$offerId);
+            $shopId = isset($shopInfo['shop']['id']) ? $shopInfo['shop']['id'] : '';
+            $this->shopRefUrl = isset($shopInfo['refURL']) ? $shopInfo['refURL'] : '';
+            $this->shopSubRefUrl = isset($shopInfo['shop']['refUrl']) ? $shopInfo['shop']['refUrl'] : '';
+            $this->shopActualUrl = isset($shopInfo['shop']['actualUrl']) ? $shopInfo['shop']['actualUrl'] : '';
+            $this->shopPermalink = isset($shopInfo['shop']['permalink']) ? $shopInfo['shop']['permalink'] : '';
+            $this->shopInfo = $shopInfo;
+        } else {
+            $shopInfo = Shop::getShopInfoByShopId($shopId);
+            $this->shopInfo = $shopInfo;
+            $this->shopRefUrl = isset($shopInfo['refUrl']) ? $shopInfo['refUrl'] : '';
+            $this->shopActualUrl = isset($shopInfo['actualUrl']) ? $shopInfo['actualUrl'] : '';
+            $this->shopPermalink = isset($shopInfo['permalink']) ? $shopInfo['permalink'] : '';
         }
-        $networkInfo = self::getSubidWithStringPattern($network, $shopInfo, 'offer');
-        $clickoutUrl = self::getUrlForCloakLink(
-            $shopRefUrl,
-            $shopSubRefUrl,
-            $shopActualUrl,
-            $shopPermalink,
-            $networkInfo['subidFlag'],
-            $networkInfo['subid'],
-            $networkInfo['stringPattern']
-        );
-        return $clickoutUrl;
+        
+        $this->network = Shop::getAffliateNetworkDetail($shopId);
+        $this->$shopId = $shopId;
+    }
+    
+    public function checkIfShopHasAffliateNetwork()
+    {
+        return (!isset($this->network['affliatenetwork']))
+            || (isset($this->shopInfo['deepLink']) && $this->shopInfo['deepLink'] != null)
+            ? false
+            : true;
     }
 
-    public static function getStoreLinks($shopId, $checkRefUrl = false)
+    public function getCloakLink($clickoutType)
     {
-        $shopInfo = Shop::getShopInfoByShopId($shopId);
-        $shopRefUrl = isset($shopInfo['refUrl']) ? $shopInfo['refUrl'] : '';
-        $shopActualUrl = isset($shopInfo['actualUrl']) ? $shopInfo['actualUrl'] : '';
-        $shopPermalink = isset($shopInfo['permalink']) ? $shopInfo['permalink'] : '';
-        $network = Shop::getAffliateNetworkDetail($shopId);
-
-        if ($checkRefUrl) {
-            if (!isset($network['affliatenetwork'])) {
-                return false;
-            }
-            if (isset($shopInfo['deepLink']) && $shopInfo['deepLink']!=null) {
-                return false;
-            } elseif (isset($shopInfo['refUrl']) && $shopInfo['refUrl']!=null) {
-                return true;
-            } else {
-                return true;
-            }
-        }
-
-        $networkInfo = self::getSubidWithStringPattern($network, $shopInfo, 'shop');
+        $networkInfo = self::getSubidWithStringPattern($this->network, $this->shopInfo, $clickoutType);
         $clickoutUrl = self::getUrlForCloakLink(
-            $shopRefUrl,
-            "",
-            $shopActualUrl,
-            $shopPermalink,
+            $this->shopRefUrl,
+            $this->shopSubRefUrl,
+            $this->shopActualUrl,
+            $this->shopPermalink,
             $networkInfo['subidFlag'],
             $networkInfo['subid'],
             $networkInfo['stringPattern']
@@ -73,31 +60,43 @@ class FrontEnd_Helper_ClickoutFunctions
     {
         $subid = "" ;
         $stringPattern = "";
-        $subidWithCid = "";
         $subidFlag = "";
         if (isset($network['affliatenetwork'])) {
             if (!empty($network['subid'])) {
-                if (strpos($network['subid'], "|") !== false) {
-                    $explodedNetworkSubid = explode("|", $network['subid']);
-                    if (isset($explodedNetworkSubid[0])) {
-                        $stringPattern = $explodedNetworkSubid[0];
-                    }
-                    if (isset($explodedNetworkSubid[1])) {
-                        $subidWithCid = $explodedNetworkSubid[1];
-                    }
-
-                    $subid = $subidWithCid;
-                    $subidFlag = true;
-                } else {
-                    $subid = "&". $network['subid'];
-                    $subidFlag = false;
-                }
-
+                $subidInfo = self::getExplodedSubidWithPattern($network);
+                $stringPattern = $subidInfo['stringPattern'];
+                $subidFlag = $subidInfo['subidFlag'];
                 $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
                 $clientProperAddress = ip2long($clientIP);
                 $conversion = Conversions::getConversionId($shopInfo['id'], $clientProperAddress, $clickoutType);
-                $subid = str_replace('A2ASUBID', $conversion['id'], $subid);
+                $subid = str_replace('A2ASUBID', $conversion['id'], $subidInfo['subid']);
                 $subid = FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
+            }
+        }
+
+        $networkInfo = array(
+            "subid" => $subid,
+            "stringPattern" => $stringPattern,
+            "subidFlag" => $subidFlag
+        );
+        return $networkInfo;
+    }
+
+    public static function getExplodedSubidWithPattern($network)
+    {
+        $subid = "" ;
+        $stringPattern = "";
+        $subidFlag = "";
+
+        if (!empty($network['subid'])) {
+            if (strpos($network['subid'], "|") !== false) {
+                $explodedNetworkSubid = explode("|", $network['subid']);
+                $stringPattern = isset($explodedNetworkSubid[0]) ? $explodedNetworkSubid[0] : '';
+                $subid = isset($explodedNetworkSubid[1]) ? $explodedNetworkSubid[1] : '';
+                $subidFlag = true;
+            } else {
+                $subid = "&". $network['subid'];
+                $subidFlag = false;
             }
         }
         $networkInfo = array(
