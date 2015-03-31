@@ -1727,133 +1727,16 @@ public static function getShopDetail($shopId)
         return $data;
     }
 
-
-
-    /**
-     * getStoreLinks
-     * get links for a shop for cloaking purpose
-     *
-     * @author Raman modified by Surindetrpal Singhj
-     * @param integer $offerId id of an offer
-     * @param boolean $checkRefUrl if true then check only the shop has ref url|deep link  or not
-     *                                     if false then return the outgoing link
-     * @return array|boolean $data
-     * @version 1.0
-     */
-    public static function getStoreLinks($shopId, $checkRefUrl = false)
+    public static function getShopInfoByShopId($shopId)
     {
-
-        $data = Doctrine_Query::create()->select('s.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl')
-        ->from('Shop s')
-        ->where('s.id='.$shopId)
-        ->fetchOne(null,Doctrine::HYDRATE_ARRAY );
-
-        $network = Shop::getAffliateNetworkDetail( $shopId );
-
-        if($checkRefUrl) {
-            # retur false if s shop is not associated with any network
-            if(! isset($network['affliatenetwork'])) {
-                return false ;
-            }
-
-            if(isset($data['deepLink']) && $data['deepLink']!=null){
-
-                # deeplink is now commetted for the time being, so we always @return false ;
-                return false;
-            }elseif(isset($data['refUrl']) && $data['refUrl']!=null){
-                return true ;
-            }else{
-                return true ;
-            }
-        }
-
-        $subid = "" ;
-        if( isset($network['affliatenetwork']) ) {
-            if(!empty($network['subid']) ) {
-                 $subid = "&". $network['subid'] ;
-
-
-                 $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
-                 $ip = ip2long($clientIP);
-
-                 # get click detail and replcae A2ASUBID click subid
-                 $conversion = Conversions::getConversionId( $data['id'] , $ip , 'shop') ;
-
-                 $subid = str_replace('A2ASUBID',$conversion['id'] , $subid );
-                $subid = FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
-            }
-        }
-
-        # deeplink is now commetted for the time being, so we always return false ;
-        /*if(isset($data['deepLink']) && $data['deepLink']!=null){
-            $url = $data['deepLink'];
-            $url .=  $subid ;
-
-        }else*/
-
-        if(isset($data['refUrl']) && $data['refUrl']!=null){
-            $url = $data['refUrl'];
-            $url .=  $subid ;
-        }elseif (isset($data['actualUrl']) && $data['actualUrl']!=null){
-            $url = $data['actualUrl'];
-        }else{
-            $url = HTTP_PATH_LOCALE.@$data['permaLink'];
-
-        }
-        return $url ;
-    }
-
-    /**
-     * addConversion
-     * add a conversion to a shop which is associted with a network
-     *
-     * @param integeter $id shopId
-     * @auther Surinderpal Singh
-     */
-
-    public static function addConversion($id)
-    {
-        $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
-        $ip = ip2long($clientIP);
-
-        # save conversion detail if an offer is associated with a network
-        if(Shop::getStoreLinks($id , true )) {
-
-            # check for previous cnversion of same ip
-            $data = Doctrine_Query::create()
-                ->select('count(c.id) as exists,c.id')
-                ->from('Conversions c')
-                ->andWhere('c.shopId="'.$id.'"')
-                ->andWhere('c.IP="'.$ip.'"')
-                ->andWhere("c.converted=0")
-                ->groupBy('c.id')
-                ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-            if(! $data['exists']) {
-
-                # save conversion detail if an offer is associated with a network
-                $cnt  = new Conversions();
-                $cnt->shopId = $id;
-                $cnt->IP = $ip;
-                $cnt->utma = $_COOKIE["__utma"];
-                $cnt->utmz = $_COOKIE["__utmz"];
-                $time = time();
-                $cnt->subid = md5(time()*rand(1,999));
-                $cnt->save();
-            } else{
-
-
-                # update existing conversion detail
-                $cnt = Doctrine_Core::getTable("Conversions")->find($data['id']);
-                if($cnt) {
-                    $cnt->utma = $_COOKIE["__utma"];
-                    $cnt->utmz = $_COOKIE["__utmz"];
-                    $time = time();
-                    $cnt->subid = md5(time()*rand(1,999));
-                    $cnt->save();
-                }
-            }
-        }
+        $shopInfo = Doctrine_Query::create()
+            ->select(
+                's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl'
+            )
+            ->from('Shop s')
+            ->where('s.id='.$shopId)
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return $shopInfo;
     }
 
     /**
@@ -1866,16 +1749,13 @@ public static function getShopDetail($shopId)
      */
     public static function getAffliateNetworkDetail($shopId)
     {
-
-            return  Doctrine_Query::create()
-                        ->select('s.id,a.name as affname,a.subId as subid')
-                        ->from("Shop s")
-                        ->leftJoin('s.affliatenetwork a')
-                        ->where('s.deleted=0')
-                        ->andWhere("s.id =?" , $shopId)
-                        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-
+        return  Doctrine_Query::create()
+            ->select('s.id,a.name as affname,a.subId as subid')
+            ->from("Shop s")
+            ->leftJoin('s.affliatenetwork a')
+            ->where('s.deleted=0')
+            ->andWhere("s.id =?", $shopId)
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
     }
 
     /**
