@@ -59,6 +59,7 @@ class FrontEnd_Helper_ClickoutFunctions
         return $clickoutUrl;
     }
 
+    // If the affliate network subid contains a regex pattern, then the subid will be splitted by the pipe and regex string pattern will be extracted from the subid.
     public static function getSubidWithStringPattern($network, $shopInfo, $clickoutType, $conversionId)
     {
         $subid = "" ;
