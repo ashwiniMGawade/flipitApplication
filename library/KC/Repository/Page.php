@@ -826,7 +826,7 @@ class Page Extends \KC\Entity\Page
             $pageId =  $savePage->getId();
             $permalink = $pagePermalinkParam;
             if (isset($permalink)) {
-                $varnishObj = new KC\Repository\Varnish();
+                $varnishObj = new \KC\Repository\Varnish();
                 $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink);
             }
             $route = new \KC\Entity\RoutePermalink();
