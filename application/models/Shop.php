@@ -1118,25 +1118,12 @@ class Shop extends BaseShop
             $getcategory = Doctrine_Query::create()->select()->from('Shop')->where('id = '.$shopDetail['id'] )->fetchArray();
         }
         if (!empty($getcategory[0]['permaLink'])) {
-            $validatedShopRoute = Doctrine_Query::create()
-                ->select('p.permalink')
-                ->from('RoutePermalink p')
-                ->where("p.permalink = '".$getcategory[0]['permaLink']."'")
-                ->andWhere('p.type = "SHP"')
-                ->fetchArray();
-            $validatedHowToGuideRoute = Doctrine_Query::create()
-                ->select('p.permalink')
-                ->from('RoutePermalink p')
-                ->where("p.permalink = '".$getcategory[0]['permaLink'] .'/'.$getcategory[0]['howtoguideslug']."'")
-                ->andWhere('p.type = "SHP"')
-                ->fetchArray();
+            $validatedShopRoute = RoutePermalink::validatePermalink($getcategory[0]['permaLink']);
+            $howToGuideLinkForValidate = $getcategory[0]['permaLink'] .'/'.$getcategory[0]['howtoguideslug'];
+            $validatedHowToGuideRoute = RoutePermalink::validatePermalink($howToGuideLinkForValidate);
             if (empty($validatedHowToGuideRoute)) {
-                $validatedHowToGuideRoute = Doctrine_Query::create()
-                ->select('p.permalink')
-                ->from('RoutePermalink p')
-                ->where("p.permalink = 'how-to/".$getcategory[0]['permaLink']."'")
-                ->andWhere('p.type = "SHP"')
-                ->fetchArray();
+                $howToGuideLinkForValidate = 'how-to/'.$getcategory[0]['permaLink'];
+                $validatedHowToGuideRoute = RoutePermalink::$validatedPermalink($howToGuideLinkForValidate);
             }
         }
         // screenshot has been deleted from edit and add shop but we need set a default in database
@@ -1199,51 +1186,28 @@ class Shop extends BaseShop
 
             $howToGuideExactLink = 'store/howtoguide/shopid/'.$this->id;
             $shopExactLink = 'store/storedetail/id/'.$this->id;
-            $howToGuideSlug = FrontEnd_Helper_viewHelper::sanitize($shopDetail['shopNavUrl']) . "/"
-                . FrontEnd_Helper_viewHelper::sanitize($shopDetail['pageSlug']);
-            if (!empty($validatedShopRoute)) {
-                    Doctrine_Query::create()
-                    ->update('RoutePermalink')
-                    ->set(
-                        'permalink',
-                        "'".BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl'])."'"
-                    )
-                    ->set('type', "'SHP'")
-                    ->set('exactlink', "'". $shopExactLink."'")
-                    ->where('type = "SHP"')
-                    ->andWhere("permalink = '".$validatedShopRoute[0]['permalink']."'")
-                    ->execute();
-
-                if (!empty($validatedHowToGuideRoute)) {
-                        Doctrine_Query::create()
-                        ->update('RoutePermalink')
-                        ->set('permalink', "'".$howToGuideSlug."'")
-                        ->set('type', "'SHP'")
-                        ->set('exactlink', "'".$howToGuideExactLink."'")
-                        ->where('type = "SHP"')
-                        ->andWhere("permalink = '".$validatedHowToGuideRoute[0]['permalink']."'")
-                        ->execute();
-
-                } else {
-                    $howToGuideRoute = new RoutePermalink();
-                    $howToGuideRoute->permalink = $howToGuideSlug;
-                    $howToGuideRoute->type = 'SHP';
-                    $howToGuideRoute->exactlink = $howToGuideExactLink;
-                    $howToGuideRoute->save();
-                }
-
+            $shopPermalink = FrontEnd_Helper_viewHelper::sanitize(
+                BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl'])
+            );
+            if (!empty($shopDetail['pageSlug'])) {
+                $howToGuidePermalink = $shopPermalink. "/".FrontEnd_Helper_viewHelper::sanitize($shopDetail['pageSlug']);
             } else {
-                $shopRoute = new RoutePermalink();
-                $shopRoute->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
-                $shopRoute->type = 'SHP';
-                $shopRoute->exactlink = $shopExactLink;
-                $shopRoute->save();
-
-                $howToGuideRoute = new RoutePermalink();
-                $howToGuideRoute->permalink = $howToGuideSlug;
-                $howToGuideRoute->type = 'SHP';
-                $howToGuideRoute->exactlink = $howToGuideExactLink;
-                $howToGuideRoute->save();
+                $howToGuidePermalink = 'how-to/' . $shopPermalink;
+            }
+            if (!empty($validatedShopRoute)) {
+                RoutePermalink::updateRoutePermalink($shopPermalink, $shopExactLink, $validatedShopRoute[0]['permalink']);
+                if (!empty($validatedHowToGuideRoute)) {
+                    RoutePermalink::updateRoutePermalink(
+                        $howToGuidePermalink,
+                        $howToGuideExactLink,
+                        $validatedHowToGuideRoute[0]['permalink']
+                    );
+                } else {
+                    RoutePermalink::saveRoutePermalink($howToGuidePermalink, $howToGuideExactLink);
+                }
+            } else {
+                RoutePermalink::saveRoutePermalink($shopPermalink, $shopExactLink);
+                RoutePermalink::saveRoutePermalink($howToGuidePermalink, $howToGuideExactLink);
             }
 
 
