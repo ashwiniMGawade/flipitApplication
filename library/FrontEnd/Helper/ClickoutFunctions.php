@@ -35,10 +35,14 @@ class FrontEnd_Helper_ClickoutFunctions
     
     public function checkIfShopHasAffliateNetwork()
     {
-        return (!isset($this->network['affliatenetwork']))
-            || (isset($this->shopInfo['deepLink']) && $this->shopInfo['deepLink'] != null)
-            ? false
-            : true;
+        if (!isset($this->network['affliatenetwork'])) {
+            return false;
+        }
+        if (isset($this->shopInfo['deepLink']) && $this->shopInfo['deepLink'] != null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public function getCloakLink($clickoutType, $conversionId = '')

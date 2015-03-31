@@ -51,7 +51,7 @@ class Conversions extends BaseConversions
         }
 
         $hasNetwork = $clickout->checkIfShopHasAffliateNetwork();
-        if (isset($hasNetwork)) {
+        if ($hasNetwork) {
             $conversionInfo = self::checkIfConversionExists($id, $clientIP, $clickoutType);
             $conversionId = $conversionInfo['id'];
 
