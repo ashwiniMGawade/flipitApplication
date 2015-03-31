@@ -1,6 +1,7 @@
 <?php
 namespace KC\Repository;
-class CodeAlertSettings Extends \KC\Entity\CodeAlertSettings
+
+class CodeAlertSettings extends \KC\Entity\CodeAlertSettings
 {
     public static function saveCodeAlertSettings($codeAlertEmailSubject, $codeAlertEmailHeader)
     {
@@ -53,7 +54,7 @@ class CodeAlertSettings Extends \KC\Entity\CodeAlertSettings
         $query = $queryBuilderUpdate
             ->update('KC\Entity\CodeAlertSettings', 'cs')
             ->set('cs.email_header', "'".$codeAlertSettingsParameters['data']."'")
-            ->where('id = 1')
+            ->where('cs.id = 1')
             ->getQuery()
             ->execute();
 

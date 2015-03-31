@@ -301,7 +301,7 @@ class FavoriteShop extends \KC\Entity\FavoriteShop
             ->andWhere("s.deleted= 0")
             ->andWhere("p.shop =" .$shopId)
             ->andWhere("v.status = 1")
-            ->andWhere("v.codealert = 1")
+            ->andWhere("v.codeAlert = 1")
             ->orderBy("s.name", "ASC");
         $shopVisitorInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopVisitorInformation;

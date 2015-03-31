@@ -116,10 +116,10 @@ class CodeAlertQueue Extends \KC\Entity\CodeAlertQueue
                 }
             }
         }
-
+        
+        $offerDetails = array();
         if (!empty($codeAlertOffersId)) {
             $offerIds = implode(',', $codeAlertOffersId);
-            $offerDetails = array();
         } else {
             $offerIds = '';
         }
@@ -131,7 +131,7 @@ class CodeAlertQueue Extends \KC\Entity\CodeAlertQueue
                  ->leftJoin('o.shopOffers', 's')
                 ->addSelect(
                     "(SELECT count(fs.id) FROM KC\Entity\FavoriteShop fs LEFT JOIN fs.visitor vs 
-                    WHERE fs.shop = s.id AND vs.id = fs.visitor AND vs.codealert = 1) as visitors"
+                    WHERE fs.shop = s.id AND vs.id = fs.visitor AND vs.codeAlert = 1) as visitors"
                 )
                 ->where("o.userGenerated = 0");
             if (!empty($offerIds)) {

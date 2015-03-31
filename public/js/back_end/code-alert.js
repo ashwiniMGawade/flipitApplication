@@ -76,7 +76,7 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
                    },
                 {
                     "fnRender" : function(obj) {
-                        var html = "<a href='javascript:void(0);' onclick='moveToTrash("+obj.aData.id+");'>"+__("Delete")+ "</a>";
+                        var html = "<a href='javascript:void(0);' onclick='moveToTrash("+obj.aData[0].id+");'>"+__("Delete")+ "</a>";
                         return html;
                     },
                     "bSearchable" : false,
