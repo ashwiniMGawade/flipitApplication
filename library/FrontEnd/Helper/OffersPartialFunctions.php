@@ -375,7 +375,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $currentOffer,
                     $urlToShow,
                     $offerBounceRate,
-                    FrontEnd_Helper_viewHelper::__translate('Get code'),
+                    FrontEnd_Helper_viewHelper::__translate('See the code'),
                     "offer-teaser-button kccode"
                 );
                 break;
