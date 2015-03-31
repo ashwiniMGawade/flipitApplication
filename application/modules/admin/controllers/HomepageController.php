@@ -703,6 +703,7 @@ class Admin_HomepageController extends Zend_Controller_Action
         }
         //get popular code from database
         $data = \KC\Repository\SpecialList::getsplpage();
+        echo "<pre>";print_r($data);die;
         echo \Zend_Json::encode($data);
         die();
     }

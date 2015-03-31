@@ -152,7 +152,7 @@ class SpecialList extends \KC\Entity\SpecialList
             $query = $queryBuilderNewposition
                 ->update('KC\Entity\SpecialList', 'spl')
                 ->set('spl.position', $pos)
-                ->where('spl.id = '.$id)
+                ->where('spl.page = '.$id)
                 ->getQuery()->execute();
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPagesHome_list');
             return true;
@@ -168,6 +168,7 @@ class SpecialList extends \KC\Entity\SpecialList
             ->from('KC\Entity\SpecialList', 'p')
             ->where('p.position ='.$pos);
         $PrevPc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
         if (!empty($PrevPc)) {
             $queryBuilderUpdate = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilderUpdate
@@ -175,12 +176,11 @@ class SpecialList extends \KC\Entity\SpecialList
                 ->set('sp.position', $position)
                 ->where('sp.id = '.$PrevPc[0]['id'])
                 ->getQuery()->execute();
-           
             $queryBuilderNewposition = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilderNewposition
                 ->update('KC\Entity\SpecialList', 'spl')
                 ->set('spl.position', $pos)
-                ->where('spl.id = '.$id)
+                ->where('spl.page = '.$id)
                 ->getQuery()->execute();
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPagesHome_list');
             return true;

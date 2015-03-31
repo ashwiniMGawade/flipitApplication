@@ -1648,7 +1648,7 @@ function moveDownSpecialoffer() {
 					var li = '';
 					for(var i in json) {
 
-						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].specialpageId + "' id='" + json[i].id + "' >" + json[i].page[0].title + "</li>";
+						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].specialpageId + "' id='" + json[i].id + "' >" + json[i].title + "</li>";
 
 						}
 					$('ul#mostSpecialList').append(li);
