@@ -955,99 +955,17 @@ class Offer extends BaseOffer
         return $offersList;
     }
 
-    public static function addConversion($offerId)
+    public static function getShopInfoByOfferId($offerId)
     {
-        $clientIP = ip2long(FrontEnd_Helper_viewHelper::getRealIpAddress());
-
-        if (self:: getCloakLink($offerId, true)) {
-                $offerData = Doctrine_Query::create()
-                        ->select('count(c.id) as exists,c.id')
-                        ->from('Conversions c')
-                        ->andWhere('c.offerId="'.$offerId.'"')
-                        ->andWhere('c.IP="'.$clientIP.'"')
-                        ->andWhere("c.converted=0")
-                        ->groupBy('c.id')
-                        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-            if (!$offerData['exists']) {
-                $offerCount  = new Conversions();
-                $offerCount->offerId = $offerId;
-                $offerCount->IP = $clientIP;
-                $offerCount->utma = Zend_Controller_Front::getInstance()->getRequest()->getCookie('__utma');
-                $offerCount->utmz = Zend_Controller_Front::getInstance()->getRequest()->getCookie('__utmz');
-                $offerCount->subid = md5(time()*rand(1, 999));
-                $offerCount->save();
-
-            } else {
-                $offerCount = Doctrine_Core::getTable("Conversions")->find($offerData['id']);
-                if ($offerCount) {
-                    $offerCount->utma = Zend_Controller_Front::getInstance()->getRequest()->getCookie('__utma');
-                    $offerCount->utmz = Zend_Controller_Front::getInstance()->getRequest()->getCookie('__utmz');
-                    $offerCount->subid = md5(time()*rand(1, 999));
-                    $offerCount->save();
-                }
-            }
-        }
-    }
-
-    public static function getCloakLink($offerId, $checkRefUrl = false)
-    {
-        $shopData = Doctrine_Query::create()
-        ->select(
-            's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl, o.refOfferUrl, o.refUrl'
-        )
-        ->from('Offer o')
-        ->leftJoin('o.shop s')
-        ->where('o.id = "'.$offerId.'"')
-        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-        $network = Shop::getAffliateNetworkDetail($shopData['shop']['id']);
-
-        if ($checkRefUrl) {
-            # retur false if s shop is not associated with any network
-            if (! isset($network['affliatenetwork'])) {
-                return false;
-            }
-
-            if ($shopData['refURL'] != "") {
-                return true ;
-
-            } else if ($shopData['shop']['refUrl'] != "") {
-                return true;
-            } else {
-                return true;
-            }
-        }
-
-        $subid = "" ;
-        if (isset($network['affliatenetwork'])) {
-            if (!empty($network['subid'])) {
-                 $subid = "&". $network['subid'];
-                 $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
-                 $clientProperAddress = ip2long($clientIP);
-                 # get click detail and replcae A2ASUBID click subid
-                 $conversion = Conversions::getConversionId($shopData['id'], $clientProperAddress, 'offer');
-                 $subid = str_replace('A2ASUBID', $conversion['id'], $subid);
-                $subid = FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
-            }
-        }
-
-        if ($shopData['refURL'] != "") {
-            $url = $shopData['refURL'];
-            $url .= $subid;
-
-        } else if ($shopData['shop']['refUrl'] != "") {
-
-            $url = $shopData['shop']['refUrl'];
-            $url .=  $subid;
-
-        } else if ($shopData['shop']['actualUrl'] != "") {
-            $url = $shopData['shop']['actualUrl'];
-        } else {
-            $urll = $shopData['shop']['permalink'];
-            $url = HTTP_PATH_LOCALE.$urll;
-        }
-        return $url;
+        $shopInfo = Doctrine_Query::create()
+            ->select(
+                's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl, o.refOfferUrl, o.refUrl'
+            )
+            ->from('Offer o')
+            ->leftJoin('o.shop s')
+            ->where('o.id = "'.$offerId.'"')
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return $shopInfo;
     }
 
     public static function getOfferInfo($offerId)

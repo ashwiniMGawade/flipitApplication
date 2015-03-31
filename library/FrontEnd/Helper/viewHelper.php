@@ -342,12 +342,6 @@ EOD;
                     $resultStatus = "true";
                 }
                 break;
-            case 'onload':
-                if (ViewCount::getOfferOnload($offerId, $clientIp) == 0) {
-                    ViewCount::saveOfferOnload($offerId, $clientIp);
-                    $resultStatus = "true";
-                }
-                break;
             default:
                 break;
         }
@@ -373,14 +367,14 @@ EOD;
         $httpXForwardedFor = Zend_Controller_Front::getInstance()->getRequest()->getServer('HTTP_X_FORWARDED_FOR');
 
         if (!empty($clientIp)) {
-            $clinetIp = $clientIp;
+            $clientIpAddress = $clientIp;
         } else if (!empty($httpXForwardedFor)) {
             $ipRange = $httpXForwardedFor;
-            $clinetIp = current(array_slice(explode(",", $ipRange), 0, 1));
+            $clientIpAddress = current(array_slice(explode(",", $ipRange), 0, 1));
         } else {
-            $clinetIp = Zend_Controller_Front::getInstance()->getRequest()->getServer('REMOTE_ADDR');
+            $clientIpAddress = Zend_Controller_Front::getInstance()->getRequest()->getServer('REMOTE_ADDR');
         }
-        return $clinetIp;
+        return $clientIpAddress;
     }
 
     public function getHowToGuidesImage($howToGuideImages)
@@ -1056,13 +1050,6 @@ EOD;
             $editorText = str_replace('[shop]', $shopName, $text);
         }
         return $editorText;
-    }
-
-    public static function setClientIdForTracking($subId = '')
-    {
-        $gaCookie = isset($_COOKIE['_ga']) ? $_COOKIE['_ga'] : 'notAvailable';
-        $clientId = str_replace('GOOGLEANALYTICSTRACKINCID', $gaCookie, $subId);
-        return $clientId;
     }
 
     public static function getCurrentDate()
