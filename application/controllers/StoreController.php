@@ -323,21 +323,17 @@ class StoreController extends Zend_Controller_Action
 
     public function howtoguideAction()
     {
-        $parameters = $this->_getAllParams();
-        print_r($parameters);
-        die;
-        $howToGuidePermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($howToGuidePermalink);
-        
-        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($parameters['permalink']);
+
+        $shopId = $this->getRequest()->getParam('shopid');
+        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopId);
         $howToGuides = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'store_'.$cacheKey.'_howToGuide',
-            array('function' => 'Shop::getshopDetails', 'parameters' => array($parameters['permalink']))
+            array('function' => 'Shop::getShopDetails', 'parameters' => array($shopId))
         );
-
         if (empty($howToGuides)) {
             throw new Zend_Controller_Action_Exception('', 404);
         }
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($howToGuides[0]['howtoguideslug']);
 
         $ShopList = $howToGuides[0]['id'].'_list';
         $allShopDetailKey = 'shopDetails_'.$ShopList;
@@ -383,17 +379,17 @@ class StoreController extends Zend_Controller_Action
         $this->view->howToGuides = $howToGuides;
         
         $shopName = isset($shopInformation[0]['name']) ? $shopInformation[0]['name'] : '';
-        $howToGuides = isset($howToGuides[0]['howtoTitle']) ? $howToGuides[0]['howtoTitle'] : '';
+        $howToGuidesTitle = isset($howToGuides[0]['howtoTitle']) ? $howToGuides[0]['howtoTitle'] : '';
         $customHeader = '';
         $howToGuideUrlForMetaTags = isset($howToGuides[0]['permaLink'])
             ? $howToGuides[0]['permaLink']
-            : $howToGuidePermalink;
+            : $howToGuides[0]['howtoguideslug'];
         $howToGuideMetaDescription = isset($howToGuides[0]['howtoMetaDescription'])
             ? $howToGuides[0]['howtoMetaDescription']
             : '';
         $this->viewHelperObject->getMetaTags(
             $this,
-            str_replace('[shop]', $shopName, $howToGuides),
+            str_replace('[shop]', $shopName, $howToGuidesTitle),
             '',
             trim($howToGuideMetaDescription),
             $howToGuideUrlForMetaTags,

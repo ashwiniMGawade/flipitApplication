@@ -1,6 +1,16 @@
 <?php
 class BootstrapRouterFunctions
 {
+    public static function getRouteForHowToGuide($actualPermalink)
+    {
+        $explodedPermalink = explode('/', $actualPermalink);
+        $reGaneratedPermalink = $actualPermalink;
+        if (isset($explodedPermalink[1])) {
+            $reGaneratedPermalink = $explodedPermalink[1].'/'.$explodedPermalink[2];
+        }
+        return $reGaneratedPermalink;
+    }
+
     public static function getPermalink()
     {
         $permalinkWithoutLeftSlash = ltrim(REQUEST_URI, '/');

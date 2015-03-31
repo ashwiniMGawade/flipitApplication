@@ -308,14 +308,14 @@ class Shop extends BaseShop
         return $popularStores;
     }
 
-    public static function getshopDetails($permalink)
+    public static function getShopDetails($shopId)
     {
         $shopDetails = Doctrine_Query::create()
         ->select('s.*,img.name,img.path,chptr.*')
         ->from('shop s')
         ->leftJoin('s.logo img')
         ->leftJoin('s.howtochapter chptr')
-        ->Where("s.permaLink='".$permalink."'")
+        ->Where("s.id='".$shopId."'")
         ->andWhere('s.status = 1')
         ->fetchArray();
         return $shopDetails;
@@ -708,8 +708,8 @@ class Shop extends BaseShop
             //call cache function
             $key = 'shop_similar_shops';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($this->permaLink);
-            $key = 'store_'.$cacheKey.'_howToGuide';
+           
+            $key = 'store_'.$id.'_howToGuide';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
@@ -747,9 +747,6 @@ class Shop extends BaseShop
         }
         //call cache function
         $key = 'shop_similar_shops';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($this->permaLink);
-        $key = 'store_'.$cacheKey.'_howToGuide';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsae_list');
@@ -1096,8 +1093,7 @@ class Shop extends BaseShop
         
         $key = 'shop_similar_shops';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopDetail['shopNavUrl']);
-        $key = 'store_'.$cacheKey.'_howToGuide';
+        $key = 'store_'.$this->id.'_howToGuide';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
