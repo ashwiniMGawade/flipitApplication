@@ -198,20 +198,26 @@ class Page Extends \KC\Entity\Page
         $query = $entityManagerLocale
             ->from('KC\Entity\Page', 'page')
             ->setParameter(1, 0)
-            ->where('page.deleted = ?1')
-            ->andWhere("page.pageTitle LIKE '$srhPage%'");
+            ->where('page.deleted = ?1');
+        if ($srhPage != '') {
+            $query->andWhere("page.pageTitle LIKE '$srhPage%'");
+        }
         if ($roleId>2) {
             $query->setParameter(3, 0);
             $query->andWhere('page.pageLock = ?3');
         }
-        if (trim($params["searchType"])!= 'undefined') {
-            $query->setParameter(4, $params['searchType']);
-            $query->andWhere('page.pageType = ?4');
-        }
 
+        if (trim($params['searchType'])!= 'undefined') {
+            if ($params['searchType'] == 'offer') {
+                $query->andWhere('page INSTANCE OF KC\Entity\OfferListPage');
+            } else if ($params['searchType'] == 'default') {
+                $query->andWhere('page INSTANCE OF KC\Entity\DefaultPage');
+            }
+        }
+        
         $request  = \DataTable_Helper::createSearchRequest(
             $params,
-            array('page.pageTitle','page.pageType','page.created_at',
+            array('page.pageTitle','page.created_at',
                 'page.publish','page.contentManagerName'
             )
         );
@@ -224,7 +230,7 @@ class Page Extends \KC\Entity\Page
             ->add('number', 'page.created_at')
             ->add('number', 'page.publish')
             ->add('text', 'page.contentManagerName');
-           
+         
         $pageList = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
         $pageList = \DataTable_Helper::getResponse($pageList, $request);
         return $pageList;
