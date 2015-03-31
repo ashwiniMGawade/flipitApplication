@@ -1420,7 +1420,7 @@ public static function getShopDetail($shopId)
  public static function getShopPermalinks()
  {
     $permalinks = Doctrine_Query::create()
-    ->select('s.permalink, s.howToUse')
+    ->select('s.permalink, s.howToUse, s.howtoguideslug')
     ->from("Shop s")
     ->where('s.deleted=0')
     ->andWhere('s.status=1')
@@ -1876,12 +1876,15 @@ public static function getShopDetail($shopId)
     public static function getAllUrls($id)
     {
         $shop  = Doctrine_Query::create()
-                    ->select("s.id, s.permaLink,s.contentManagerId, s.howToUse,c.permaLink, o.extendedOffer, o.extendedUrl,")
-                    ->from('Shop s')
-                    ->leftJoin("s.offer o")
-                    ->leftJoin("s.category c")
-                    ->where("s.id=? " , $id)
-                    ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+            ->select(
+                "s.id, s.permaLink,s.contentManagerId, s.howToUse,
+                c.permaLink, o.extendedOffer, o.extendedUrl, s.howtoguideslug"
+            )
+            ->from('Shop s')
+            ->leftJoin("s.offer o")
+            ->leftJoin("s.category c")
+            ->where("s.id=? " , $id)
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
 
         # redactie permalink
         $redactie =  User::returnEditorUrl($shop['contentManagerId']);
@@ -1897,7 +1900,11 @@ public static function getShopDetail($shopId)
         if($shop['howToUse']) {
             # check for extende offer url
             if( isset($shop['permaLink'])  && strlen( $shop['permaLink'] ) > 0 ) {
-                $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to') .'/'.$shop['permaLink'];
+                if (!empty($shop['howtoguideslug'])) {
+                    $urlsArray[] = $shop['permaLink']. '/'. $shop['howtoguideslug'];
+                } else {
+                    $urlsArray[] = 'how-to/'. $shop['permaLink'];
+                }
             }
         }
 

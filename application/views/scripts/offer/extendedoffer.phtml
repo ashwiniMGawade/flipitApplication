@@ -22,7 +22,12 @@ $extendedOffer = $this->partial(
     )
 );
 $storeViewPartialPath = 'store/';
-$howToUseGuidePermalink= "how-to/".$this->currentStoreInformation[0]['permaLink'];
+$howToUseGuidePermalink = "how-to/".$this->currentStoreInformation[0]['permaLink'];
+if (!empty($this->currentStoreInformation[0]['howtoguideslug'])) {
+    $howToUseGuidePermalink = 
+        $this->currentStoreInformation[0]['permaLink']. '/'
+        . $this->currentStoreInformation[0]['howtoguideslug'];
+}
 $actualUrlWithoutDoubleSlash = explode("//", $this->currentStoreInformation[0]['actualUrl']);
 if (isset($actualUrlWithoutDoubleSlash[1])):
     $actualUrl = $actualUrlWithoutDoubleSlash[1];

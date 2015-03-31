@@ -333,10 +333,15 @@ class PHPSitemap_sitemap
 				if($permalinks['permaLink'] != ""):
 				
 					if($permalinks['howToUse'] == 1):
+						if (!empty($permalinks['howtoguideslug'])) {
+                    		$howToGuidePermalink = $permalinks['permaLink']. '/'. $permalinks['howtoguideslug'];
+		                } else {
+		                    $howToGuidePermalink = 'how-to/'. $permalinks['permaLink'];
+		                }
 						if($locale=='en'):
-							$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('link_how-to').'/'.$permalinks['permaLink'].'</loc></url>';
+							$xml .= '<url><loc>'.$domain.'/'.$howToGuidePermalink.'</loc></url>';
 						else:
-							$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('link_how-to').'/'.$permalinks['permaLink'].'</loc></url>';
+							$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.$howToGuidePermalink.'</loc></url>';
 						endif;
 					endif;
 					

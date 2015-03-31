@@ -3277,7 +3277,7 @@ class Offer extends BaseOffer
         # get offer data
         $offer  = Doctrine_Query::create()->select(
             "o.id, o.extendedOffer,o.authorId , o.extendedUrl,
-            s.permaLink, s.howToUse ,s.contentManagerId , sp.permaLink, p.permaLink,c.permaLink"
+            s.permaLink, s.howToUse ,s.howtoguideslug, s.contentManagerId , sp.permaLink, p.permaLink,c.permaLink"
         )
           ->from('Offer o')
           ->leftJoin("o.category c")
@@ -3320,7 +3320,11 @@ class Offer extends BaseOffer
         if ($offer['shop']['howToUse']) {
             # check for extende offer url
             if (isset($offer['shop']['permaLink'])  && strlen($offer['shop']['permaLink']) > 0) {
-                $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to') .'/'. $offer['shop']['permaLink'];
+                if (!empty($offer['shop']['howtoguideslug'])) {
+                    $urlsArray[] = $offer['shop']['permaLink']. '/'. $offer['shop']['howtoguideslug'];
+                } else {
+                    $urlsArray[] = 'how-to/'. $offer['shop']['permaLink'];
+                }
             }
         }
 
