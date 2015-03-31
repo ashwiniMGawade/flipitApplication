@@ -1117,10 +1117,27 @@ class Shop extends BaseShop
         if(!empty($shopDetail['id'])) {
             $getcategory = Doctrine_Query::create()->select()->from('Shop')->where('id = '.$shopDetail['id'] )->fetchArray();
         }
-        if(!empty($getcategory[0]['permaLink'])){
-
-            $getRouteLink = Doctrine_Query::create()->select()->from('RoutePermalink')->where("permalink = '".$getcategory[0]['permaLink']."'")->andWhere('type = "SHP"')->fetchArray();
-            $howToguideRoute = Doctrine_Query::create()->select()->from('RoutePermalink')->where("permalink = 'how-to/".$getRouteLink[0]['permalink']."'")->andWhere('type = "SHP"')->fetchArray();
+        if (!empty($getcategory[0]['permaLink'])) {
+            $validatedShopRoute = Doctrine_Query::create()
+                ->select('p.permalink')
+                ->from('RoutePermalink p')
+                ->where("p.permalink = '".$getcategory[0]['permaLink']."'")
+                ->andWhere('p.type = "SHP"')
+                ->fetchArray();
+            $validatedHowToGuideRoute = Doctrine_Query::create()
+                ->select('p.permalink')
+                ->from('RoutePermalink p')
+                ->where("p.permalink = '".$getcategory[0]['permaLink'] .'/'.$getcategory[0]['howtoguideslug']."'")
+                ->andWhere('p.type = "SHP"')
+                ->fetchArray();
+            if (empty($validatedHowToGuideRoute)) {
+                $validatedHowToGuideRoute = Doctrine_Query::create()
+                ->select('p.permalink')
+                ->from('RoutePermalink p')
+                ->where("p.permalink = 'how-to/".$getcategory[0]['permaLink']."'")
+                ->andWhere('p.type = "SHP"')
+                ->fetchArray();
+            }
         }
         // screenshot has been deleted from edit and add shop but we need set a default in database
         $this->screenshotId = 0;
@@ -1180,47 +1197,53 @@ class Shop extends BaseShop
             $key = 'shop_similar_shops';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            $howtoguide = 'store/howtoguide/shopid/'.$this->id;
-            $exactLink = 'store/storedetail/id/'.$this->id;
-            $howToGuideSlug = FrontEnd_Helper_viewHelper::sanitize($shopDetail['shopNavUrl']) . "/" 
+            $howToGuideExactLink = 'store/howtoguide/shopid/'.$this->id;
+            $shopExactLink = 'store/storedetail/id/'.$this->id;
+            $howToGuideSlug = FrontEnd_Helper_viewHelper::sanitize($shopDetail['shopNavUrl']) . "/"
                 . FrontEnd_Helper_viewHelper::sanitize($shopDetail['pageSlug']);
-            if (!empty($getRouteLink)) {
-                $updateRouteLink = Doctrine_Query::create()->update('RoutePermalink')
-                ->set('permalink', "'".
-                        BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopNavUrl'])
-                        ."'")
-                ->set('type',"'SHP'")
-                ->set('exactlink', "'". $exactLink."'" );
-                $updateRouteLink->where('type = "SHP"')->andWhere("permalink = '".$getRouteLink[0]['permalink']."'")->execute();
+            if (!empty($validatedShopRoute)) {
+                    Doctrine_Query::create()
+                    ->update('RoutePermalink')
+                    ->set(
+                        'permalink',
+                        "'".BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl'])."'"
+                    )
+                    ->set('type', "'SHP'")
+                    ->set('exactlink', "'". $shopExactLink."'")
+                    ->where('type = "SHP"')
+                    ->andWhere("permalink = '".$validatedShopRoute[0]['permalink']."'")
+                    ->execute();
 
+                if (!empty($validatedHowToGuideRoute)) {
+                        Doctrine_Query::create()
+                        ->update('RoutePermalink')
+                        ->set('permalink', "'".$howToGuideSlug."'")
+                        ->set('type', "'SHP'")
+                        ->set('exactlink', "'".$howToGuideExactLink."'")
+                        ->where('type = "SHP"')
+                        ->andWhere("permalink = '".$validatedHowToGuideRoute[0]['permalink']."'")
+                        ->execute();
 
-                if(!empty($howToguideRoute)){
-                    $updateRouteHow = Doctrine_Query::create()->update('RoutePermalink')
-                    ->set('permalink', "'".$howToGuideSlug."'")
-                    ->set('type',"'SHP'")
-                    ->set('exactlink', "'".$howtoguide."'" );
-                    $updateRouteHow->where('type = "SHP"')->andWhere("permalink = '".$howToGuideSlug."'")->execute();
-
-                }else{
-                    $route = new RoutePermalink();
-                    $route->permalink = $howToGuideSlug;
-                    $route->type = 'SHP';
-                    $route->exactlink = $howtoguide;
-                    $route->save();
+                } else {
+                    $howToGuideRoute = new RoutePermalink();
+                    $howToGuideRoute->permalink = $howToGuideSlug;
+                    $howToGuideRoute->type = 'SHP';
+                    $howToGuideRoute->exactlink = $howToGuideExactLink;
+                    $howToGuideRoute->save();
                 }
 
-            }else{
-                $route = new RoutePermalink();
-                $route->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopNavUrl']);
-                $route->type = 'SHP';
-                $route->exactlink = 'store/storedetail/id/'.$this->id;
-                $route->save();
+            } else {
+                $shopRoute = new RoutePermalink();
+                $shopRoute->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
+                $shopRoute->type = 'SHP';
+                $shopRoute->exactlink = $shopExactLink;
+                $shopRoute->save();
 
-                $route = new RoutePermalink();
-                $route->permalink = $howToGuideSlug;
-                $route->type = 'SHP';
-                $route->exactlink = $howtoguide;
-                $route->save();
+                $howToGuideRoute = new RoutePermalink();
+                $howToGuideRoute->permalink = $howToGuideSlug;
+                $howToGuideRoute->type = 'SHP';
+                $howToGuideRoute->exactlink = $howToGuideExactLink;
+                $howToGuideRoute->save();
             }
 
 
