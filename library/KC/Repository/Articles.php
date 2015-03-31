@@ -289,7 +289,7 @@ class Articles extends \KC\Entity\Articles
         $data->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['articlepermalink']);
         $data->metatitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['articlemetaTitle']);
         $data->metadescription = \BackEnd_Helper_viewHelper::stripSlashesFromString(trim($params['articlemetaDesc']));
-        $data->authorid = $params['authorList']; 
+        $data->authorid = $params['authorList'];
         $data->authorname = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['authorNameHidden']);
 
         if (isset($_FILES['articleImage']['name']) && $_FILES['articleImage']['name'] != '') {
@@ -347,7 +347,7 @@ class Articles extends \KC\Entity\Articles
                     $articleFeaturedImage['fileName']
                 );
 
-                $articlesFeaturedImage = new \KC\Entity\ArticlesFeaturedImage();
+                $articlesFeaturedImage = new \KC\Entity\Image();
                 $articlesFeaturedImage->ext = $ext;
                 $articleFeaturedImage->path =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['path']);
@@ -359,7 +359,7 @@ class Articles extends \KC\Entity\Articles
                 $entityManagerLocale->persist($articleFeaturedImage);
                 $entityManagerLocale->flush();
                 $data->articlefeaturedimage = $entityManagerLocale->find(
-                    '\KC\Entity\ArticlesFeaturedImage',
+                    '\KC\Entity\Image',
                     $articleFeaturedImage->id
                 );
             } else {
@@ -395,6 +395,7 @@ class Articles extends \KC\Entity\Articles
         }
 
         try {
+
             $entityManagerLocale->persist($data);
             $entityManagerLocale->flush();
             $articleId = $data->__get('id');
@@ -524,7 +525,7 @@ class Articles extends \KC\Entity\Articles
                     $articleFeaturedImage['fileName']
                 );
 
-                $articlesFeaturedImage = new \KC\Entity\ArticlesFeaturedImage();
+                $articlesFeaturedImage = new \KC\Entity\Image();
                 $articlesFeaturedImage->ext = $ext;
                 $articleFeaturedImage->path =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['path']);
@@ -536,7 +537,7 @@ class Articles extends \KC\Entity\Articles
                 $entityManagerLocale->persist($articleFeaturedImage);
                 $entityManagerLocale->flush();
                 $data->articlefeaturedimage = $entityManagerLocale->find(
-                    '\KC\Entity\ArticlesFeaturedImage',
+                    '\KC\Entity\Image',
                     $articleFeaturedImage->id
                 );
             } else {
