@@ -160,6 +160,8 @@ class User extends \KC\Entity\User
         $addUser->currentLogIn = new \DateTime('now');
         $addUser->lastLogIn = new \DateTime('now');
         $addUser->deleted = '0';
+        $addUser->created_at = new \DateTime('now');
+        $addUser->updated_at = new \DateTime('now');
         
 
         if ($this->isValidPassword($params['password'])) {
