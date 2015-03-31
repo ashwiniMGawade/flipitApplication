@@ -307,18 +307,19 @@ class FrontEnd_Helper_OffersPartialFunctions
                         }
                     }
                 } else if ($currentOffer->discountType == "SL") {
-                    if ($class == "btn blue btn-primary") {
+                    if ($class == "offer-teaser-button kccode") {
                         $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
                         $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
                     }
                     $onClick = "viewCounter('onclick', 'offer', $currentOffer->id),
                     ga('send', 'event', 'aff', '$offerBounceRate')";
+                    $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn blue btn-primary';
                     $offerLink =
                         '<a id="'.$currentOffer->id.'" class="'.$class.'" 
                         href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
                      '.$offerAnchorText.'</a>';
                 } else {
-                    if ($class == "btn blue btn-primary") {
+                    if ($class == "offer-teaser-button kccode") {
                         $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
                         $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
                     }
@@ -326,6 +327,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                         self::getUserIsLoggedInOrNot() == "true"
                         ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')"
                         : HTTP_PATH_LOCALE."accountlogin";
+                    $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn blue btn-primary';
                     $offerLink =
                         '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
                         alt = "'.$urlToShow.'" target="_blank" onclick = "'.$onClick.'" rel="nofollow">
@@ -373,7 +375,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $currentOffer,
                     $urlToShow,
                     $offerBounceRate,
-                    FrontEnd_Helper_viewHelper::__translate('Get code &amp; Open site'),
+                    FrontEnd_Helper_viewHelper::__translate('Get code'),
                     "offer-teaser-button kccode"
                 );
                 break;
