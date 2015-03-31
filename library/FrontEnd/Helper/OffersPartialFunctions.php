@@ -300,10 +300,10 @@ class FrontEnd_Helper_OffersPartialFunctions
                         '.$offerAnchorText.' </a>';
                         if ($class == 'offer-teaser-button kccode') {
                             $offerLink .=
-                                '<a href="javascript:void(0);" class="">
+                                '<div>
                                     <span class="show-code">'.self::generateRandomCharactersForOfferTeaser(4).'</span>
                                     <span class="blue-corner"></span>
-                                </a>';
+                                </div>';
                         }
                     }
                 } else if ($currentOffer->discountType == "SL") {
@@ -484,94 +484,31 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $contentManagerName;
     }
 
-    protected static function assignRandomValue($number)
+    protected static function cryptoRandSecure($minimumRange, $maximumRange)
     {
-        switch($number) {
-            case "1": $randomValue = "a";
-                break;
-            case "2": $randomValue = "b";
-                break;
-            case "3": $randomValue = "c";
-                break;
-            case "4": $randomValue = "d";
-                break;
-            case "5": $randomValue = "e";
-                break;
-            case "6": $randomValue = "f";
-                break;
-            case "7": $randomValue = "g";
-                break;
-            case "8": $randomValue = "h";
-                break;
-            case "9": $randomValue = "i";
-                break;
-            case "10": $randomValue = "j";
-                break;
-            case "11": $randomValue = "k";
-                break;
-            case "12": $randomValue = "l";
-                break;
-            case "13": $randomValue = "m";
-                break;
-            case "14": $randomValue = "n";
-                break;
-            case "15": $randomValue = "o";
-                break;
-            case "16": $randomValue = "p";
-                break;
-            case "17": $randomValue = "q";
-                break;
-            case "18": $randomValue = "r";
-                break;
-            case "19": $randomValue = "s";
-                break;
-            case "20": $randomValue = "t";
-                break;
-            case "21": $randomValue = "u";
-                break;
-            case "22": $randomValue = "v";
-                break;
-            case "23": $randomValue = "w";
-                break;
-            case "24": $randomValue = "x";
-                break;
-            case "25": $randomValue = "y";
-                break;
-            case "26": $randomValue = "z";
-                break;
-            case "27": $randomValue = "0";
-                break;
-            case "28": $randomValue = "1";
-                break;
-            case "29": $randomValue = "2";
-                break;
-            case "30": $randomValue = "3";
-                break;
-            case "31": $randomValue = "4";
-                break;
-            case "32": $randomValue = "5";
-                break;
-            case "33": $randomValue = "6";
-                break;
-            case "34": $randomValue = "7";
-                break;
-            case "35": $randomValue = "8";
-                break;
-            case "36": $randomValue = "9";
-                break;
+        $range = $maximumRange - $minimumRange;
+        if ($range < 0) {
+            return $minimumRange;
         }
-        return $randomValue;
+        $log = log($range, 2);
+        $bytes = (int) ($log / 8) + 1;
+        $bits = (int) $log + 1;
+        $filter = (int) (1 << $bits) - 1;
+        do {
+            $random = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes)));
+            $random = $random & $filter;
+        } while ($random >= $range);
+        return $minimumRange + $random;
     }
 
     public static function generateRandomCharactersForOfferTeaser($stringLength)
     {
-        if ($stringLength > 0) {
-            $randomString=  "";
-            for ($stringCharacterCount=1; $stringCharacterCount<=$stringLength; $stringCharacterCount++) {
-                mt_srand((double)microtime() * 1000000);
-                $number = mt_rand(1, 36);
-                $randomString .= self::assignRandomValue($number);
-            }
+        $randomString = "";
+        $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
+        $codeAlphabet.= "0123456789";
+        for ($i=0; $i<$stringLength; $i++) {
+            $randomString .= $codeAlphabet[self::cryptoRandSecure(0, strlen($codeAlphabet))];
         }
         return $randomString;
     }
