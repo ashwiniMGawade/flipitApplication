@@ -311,13 +311,13 @@ class Shop extends BaseShop
     public static function getShopDetails($shopId)
     {
         $shopDetails = Doctrine_Query::create()
-        ->select('s.*,img.name,img.path,chptr.*')
-        ->from('shop s')
-        ->leftJoin('s.logo img')
-        ->leftJoin('s.howtochapter chptr')
-        ->Where("s.id='".$shopId."'")
-        ->andWhere('s.status = 1')
-        ->fetchArray();
+            ->select('s.*,img.name,img.path,chptr.*')
+            ->from('shop s')
+            ->leftJoin('s.logo img')
+            ->leftJoin('s.howtochapter chptr')
+            ->Where("s.id='".$shopId."'")
+            ->andWhere('s.status = 1')
+            ->fetchArray();
         return $shopDetails;
     }
 
@@ -1420,11 +1420,11 @@ public static function getShopDetail($shopId)
  public static function getShopPermalinks()
  {
     $permalinks = Doctrine_Query::create()
-    ->select('s.permalink, s.howToUse, s.howtoguideslug')
-    ->from("Shop s")
-    ->where('s.deleted=0')
-    ->andWhere('s.status=1')
-    ->fetchArray();
+        ->select('s.permalink, s.howToUse, s.howtoguideslug')
+        ->from("Shop s")
+        ->where('s.deleted=0')
+        ->andWhere('s.status=1')
+        ->fetchArray();
     return $permalinks;
 
  }
