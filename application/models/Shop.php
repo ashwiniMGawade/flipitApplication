@@ -1903,7 +1903,7 @@ public static function getShopDetail($shopId)
                 if (!empty($shop['howtoguideslug'])) {
                     $urlsArray[] = $shop['permaLink']. '/'. $shop['howtoguideslug'];
                 } else {
-                    $urlsArray[] = 'how-to/'. $shop['permaLink'];
+                    $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to'). '/'. $shop['permaLink'];
                 }
             }
         }

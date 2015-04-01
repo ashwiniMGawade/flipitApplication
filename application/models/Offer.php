@@ -3323,7 +3323,7 @@ class Offer extends BaseOffer
                 if (!empty($offer['shop']['howtoguideslug'])) {
                     $urlsArray[] = $offer['shop']['permaLink']. '/'. $offer['shop']['howtoguideslug'];
                 } else {
-                    $urlsArray[] = 'how-to/'. $offer['shop']['permaLink'];
+                    $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to'). '/'. $offer['shop']['permaLink'];
                 }
             }
         }

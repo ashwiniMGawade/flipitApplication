@@ -324,11 +324,15 @@ class StoreController extends Zend_Controller_Action
     public function howtoguideAction()
     {
         $shopId = $this->getRequest()->getParam('shopid');
+        if (!isset($shopId)) {
+            $shopId = Shop::getShopIdByPermalink($this->getRequest()->getParam('permalink'));
+        }
         $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopId);
         $howToGuides = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'store_'.$cacheKey.'_howToGuide',
             array('function' => 'Shop::getShopDetails', 'parameters' => array($shopId))
         );
+
         if (empty($howToGuides)) {
             throw new Zend_Controller_Action_Exception('', 404);
         }
