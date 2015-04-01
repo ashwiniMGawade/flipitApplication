@@ -323,7 +323,6 @@ class StoreController extends Zend_Controller_Action
 
     public function howtoguideAction()
     {
-
         $shopId = $this->getRequest()->getParam('shopid');
         $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopId);
         $howToGuides = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(

@@ -1119,11 +1119,11 @@ class Shop extends BaseShop
         }
         if (!empty($getcategory[0]['permaLink'])) {
             $validatedShopRoute = RoutePermalink::validatePermalink($getcategory[0]['permaLink']);
-            $howToGuideLinkForValidate = $getcategory[0]['permaLink'] .'/'.$getcategory[0]['howtoguideslug'];
-            $validatedHowToGuideRoute = RoutePermalink::validatePermalink($howToGuideLinkForValidate);
+            $howToGuideValidatedLink = $getcategory[0]['permaLink'] .'/'.$getcategory[0]['howtoguideslug'];
+            $validatedHowToGuideRoute = RoutePermalink::validatePermalink($howToGuideValidatedLink);
             if (empty($validatedHowToGuideRoute)) {
-                $howToGuideLinkForValidate = 'how-to/'.$getcategory[0]['permaLink'];
-                $validatedHowToGuideRoute = RoutePermalink::$validatedPermalink($howToGuideLinkForValidate);
+                $howToGuideValidatedLink = 'how-to/'.$getcategory[0]['permaLink'];
+                $validatedHowToGuideRoute = RoutePermalink::$validatedPermalink($howToGuideValidatedLink);
             }
         }
         // screenshot has been deleted from edit and add shop but we need set a default in database
