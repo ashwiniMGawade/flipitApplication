@@ -846,37 +846,26 @@ class Shop extends BaseShop
         return $data;
     }
 
-    /**
-     * CreateNewShop
-     *
-     * create new shop
-     *
-     * @param posted form data
-     * @author kkumar
-     * @version 1.0
-     */
+ 
     public function CreateNewShop($shopDetail)
     {
         $this->name = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopName']);
         $this->permaLink = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
         $this->metaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopMetaDescription']);
-        $this->notes =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopNotes']);
-
-    #   $this->deepLink =BackEnd_Helper_viewHelper::stripSlashesFromString (@$shopDetail['shopDeepLinkUrl']);
-    #   $this->deepLinkStatus =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['deepLinkStatus']);
-
-        $this->refUrl = BackEnd_Helper_viewHelper::stripSlashesFromString ($shopDetail['shopRefUrl']);
+        $this->notes =BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNotes']);
+        #$this->deepLink =BackEnd_Helper_viewHelper::stripSlashesFromString (@$shopDetail['shopDeepLinkUrl']);
+        #$this->deepLinkStatus =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['deepLinkStatus']);
+        $this->refUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopRefUrl']);
         $this->actualUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopActualUrl']);
         $this->affliateProgram = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['affiliateProgStatus']);
-        $this->title =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopTitle']);
-        $this->subTitle =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopSubTitle']);
+        $this->title =BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopTitle']);
+        $this->subTitle =BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopSubTitle']);
         $this->overriteTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopOverwriteTitle']);
         $this->shopText = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopDescription']);
         $this->customtext = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomText']);
         $this->moretextforshop = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['moretextforshop']);
         $shopViewCount = isset($shopDetail['shopViewCount']) ? $shopDetail['shopViewCount'] : '0';
         $this->views = BackEnd_Helper_viewHelper::stripSlashesFromString($shopViewCount);
-
         $this->howtoguideslug = FrontEnd_Helper_viewHelper::sanitize($shopDetail['pageSlug']);
         $this->howtoTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageTitle']);
         $this->howtoSubtitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubTitle']);
@@ -887,9 +876,9 @@ class Shop extends BaseShop
         $this->howtoMetaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaDesc']);
         $this->customHeader = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomHeader']);
         $this->howToIntroductionText = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['howToIntroductionText']);
-
         $this->showSimliarShops = BackEnd_Helper_viewHelper::stripSlashesFromString(
-            !empty($shopDetail['similarShops']) ? $shopDetail['similarShops'] : '0');
+            !empty($shopDetail['similarShops']) ? $shopDetail['similarShops'] : '0'
+        );
         $showChains = !empty($shopDetail['showChains']) ? $shopDetail['showChains'] : '0';
         $this->showChains = BackEnd_Helper_viewHelper::stripSlashesFromString($showChains);
         $strictConfirmation = !empty($shopDetail['strictConfirmation']) ? $shopDetail['strictConfirmation'] : '0';
@@ -900,27 +889,31 @@ class Shop extends BaseShop
 
         # display signup option on store detail page
         $this->showSignupOption = BackEnd_Helper_viewHelper::stripSlashesFromString(
-            !empty($shopDetail['signupOption']) ? $shopDetail['signupOption'] : '0');
-
+            !empty($shopDetail['signupOption']) ? $shopDetail['signupOption'] : '0'
+        );
         $this->lightboxfirsttext = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['lightboxfirsttext']);
-        $this->lightboxsecondtext =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['lightboxsecondtext']);
+        $this->lightboxsecondtext =BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['lightboxsecondtext']);
 
-        if( BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['displayExtraProperties']) ) {
+        if (BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['displayExtraProperties'])) {
             $this->ideal = BackEnd_Helper_viewHelper::stripSlashesFromString(
-                !empty($shopDetail['ideal']) ? $shopDetail['ideal'] : 0);
+                !empty($shopDetail['ideal']) ? $shopDetail['ideal'] : 0
+            );
             $this->qShops = BackEnd_Helper_viewHelper::stripSlashesFromString(
-                !empty($shopDetail['qShops']) ? $shopDetail['qShops'] : 0);
+                !empty($shopDetail['qShops']) ? $shopDetail['qShops'] : 0
+            );
             $this->freeReturns = BackEnd_Helper_viewHelper::stripSlashesFromString(
-                !empty($shopDetail['freeReturns']) ? $shopDetail['freeReturns'] : 0);
+                !empty($shopDetail['freeReturns']) ? $shopDetail['freeReturns'] : 0
+            );
             $this->pickupPoints = BackEnd_Helper_viewHelper::stripSlashesFromString(
-                !empty($shopDetail['pickupPoints']) ? $shopDetail['pickupPoints'] : 0);
+                !empty($shopDetail['pickupPoints']) ? $shopDetail['pickupPoints'] : 0
+            );
             $this->mobileShop = BackEnd_Helper_viewHelper::stripSlashesFromString(
-                !empty($shopDetail['mobileShop']) ? $shopDetail['mobileShop'] : 0);
+                !empty($shopDetail['mobileShop']) ? $shopDetail['mobileShop'] : 0
+            );
             $this->service = BackEnd_Helper_viewHelper::stripSlashesFromString(
-                !empty($shopDetail['service']) ? $shopDetail['service'] : 0);
-
-
-            if( BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['service']) ) {
+                !empty($shopDetail['service']) ? $shopDetail['service'] : 0
+            );
+            if (BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['service'])) {
 
                 $this->serviceNumber = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['serviceNumber']);
 
@@ -929,7 +922,7 @@ class Shop extends BaseShop
 
         $this->discussions = '0';
 
-        if(isset($shopDetail['discussions'])){
+        if (isset($shopDetail['discussions'])) {
             $this->discussions = '1';
         }
 
@@ -942,41 +935,37 @@ class Shop extends BaseShop
         }
         $this->usergenratedcontent = '0';
 
-        if(isset($shopDetail['usergenratedchk'])){
+        if (isset($shopDetail['usergenratedchk'])) {
             $this->usergenratedcontent = '1';
         }
 
         //$this->keywordlink = '';
-        if(isset($shopDetail['keywordlink'])){
+        if (isset($shopDetail['keywordlink'])) {
             $this->keywordlink = $shopDetail['keywordlink'];
         }
 
 
-        if( isset( $shopDetail['onlineStatus'] )) {
-
-            if( $shopDetail['onlineStatus'] == 1) {
+        if (isset($shopDetail['onlineStatus'] )) {
+            if ($shopDetail['onlineStatus'] == 1) {
                 $this->status = 1;
                 $this->offlineSicne = null;
             } else {
-
                 $this->status = 0;
-
-                if( strlen($shopDetail['offlineSince'])  > 18  ) {
+                if (strlen($shopDetail['offlineSince'])  > 18) {
                     $this->offlineSicne = $shopDetail['offlineSince'] ;
                 } else {
-                $this->offlineSicne = date("Y-m-d h:m:s") ;
-
+                    $this->offlineSicne = date("Y-m-d h:m:s") ;
                 }
             }
 
-        } else  {
+        } else {
 
             $this->status = 1 ;
         }
 
         $this->discussions = '0';
 
-        if(isset($shopDetail['discussions'])){
+        if (isset($shopDetail['discussions'])) {
             $this->discussions = '1';
         }
         $selectAccountManagers = isset($shopDetail['selectaccountmanagers']) ? $shopDetail['selectaccountmanagers'] : '0';
@@ -987,16 +976,15 @@ class Shop extends BaseShop
 
         $this->affliateNetworkId = NULL;
 
-        if($shopDetail['shopAffiliateNetwork']!= 0){
-
-                $this->affliateNetworkId = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopAffiliateNetwork']);
+        if ($shopDetail['shopAffiliateNetwork']!= 0){
+            $this->affliateNetworkId = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopAffiliateNetwork']);
         }
 
         $this->howToUse = $shopDetail['howTouseStatus'];
 
         if (intval($shopDetail['howTouseStatus']) > 0) {
             if (isset($shopDetail['shopHowToUsePageId'])) {
-                $this->howtoUsepageId = BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopHowToUsePageId']);
+                $this->howtoUsepageId = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopHowToUsePageId']);
             }
 
             //  upload small logo image for how to use page
@@ -1863,16 +1851,7 @@ public static function getShopDetail($shopId)
 
     }
 
-    /**
-     * getAllUrls
-     *
-     * returns the all the urls related to a offer like  special list pages,
-     * realted extended offer page, realted category pages, sreach pages, redactie pages,
-     * pageRelated How to use etc
-     * @param integer $id shop id
-     * @author Surinderpal Singh
-     * @return array array of urls
-     */
+    
     public static function getAllUrls($id)
     {
         $shop  = Doctrine_Query::create()
@@ -1883,23 +1862,15 @@ public static function getShopDetail($shopId)
             ->from('Shop s')
             ->leftJoin("s.offer o")
             ->leftJoin("s.category c")
-            ->where("s.id=? " , $id)
+            ->where("s.id=? ", $id)
             ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-        # redactie permalink
         $redactie =  User::returnEditorUrl($shop['contentManagerId']);
-
         $urlsArray = array();
-
-        # check for related shop permalink
-        if(isset($shop['permaLink'])) {
+        if (isset($shop['permaLink'])) {
             $urlsArray[] = $shop['permaLink'];
         }
-
-        # check for ho to use guide
-        if($shop['howToUse']) {
-            # check for extende offer url
-            if( isset($shop['permaLink'])  && strlen( $shop['permaLink'] ) > 0 ) {
+        if ($shop['howToUse']) {
+            if (isset($shop['permaLink'])  && strlen($shop['permaLink']) > 0) {
                 if (!empty($shop['howtoguideslug'])) {
                     $urlsArray[] = $shop['permaLink']. '/'. $shop['howtoguideslug'];
                 } else {
@@ -1907,19 +1878,15 @@ public static function getShopDetail($shopId)
                 }
             }
         }
-
         # check if an editor  has permalink then add it into array
-        if(isset($redactie['permalink']) && strlen($redactie['permalink']) > 0 ) {
+        if (isset($redactie['permalink']) && strlen($redactie['permalink']) > 0) {
             $urlsArray[] = $redactie['permalink'] ;
         }
-
         # check an offerr has one or more categories
-        if(isset($shop['category']) && count($shop['category']) > 0) {
-
+        if (isset($shop['category']) && count($shop['category']) > 0) {
             $categoriesPage = FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
-
             # traverse through all catgories
-            foreach($shop['category'] as $value) {
+            foreach ($shop['category'] as $value) {
                 # check if a category has permalink then add it into array
                 if (isset($value['permaLink']) && strlen($value['permaLink']) > 0) {
                     $urlsArray[] = $categoriesPage . $value['permaLink'];
@@ -1930,11 +1897,11 @@ public static function getShopDetail($shopId)
         }
 
         # check extended offer of this shop
-        if(isset($shop['offer']) && count($shop['offer']) > 0) {
+        if (isset($shop['offer']) && count($shop['offer']) > 0) {
             # traverse through all offer
-            foreach( $shop['offer'] as $value) {
+            foreach ($shop['offer'] as $value) {
                 # check the offer is extended or not
-                if(isset($value['extendedOffer']) && $value['extendedOffer']  ) {
+                if (isset($value['extendedOffer']) && $value['extendedOffer']) {
                     $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_deals') .'/'. $value['extendedUrl'] ;
                 }
             }
