@@ -1,16 +1,6 @@
 <?php
 class BootstrapRouterFunctions
 {
-    public static function getHowToGuidePermalink($actualPermalink)
-    {
-        $explodedPermalink = explode('/', $actualPermalink);
-        $reGaneratedActualPermalink = $actualPermalink;
-        if (isset($explodedPermalink[1])) {
-            $reGaneratedActualPermalink = $explodedPermalink[1].'/'.$explodedPermalink[2];
-        }
-        return $reGaneratedActualPermalink;
-    }
-
     public static function getPermalink()
     {
         $permalinkWithoutLeftSlash = ltrim(REQUEST_URI, '/');
@@ -49,13 +39,19 @@ class BootstrapRouterFunctions
                 if ($maximumIntegerNumber) {
                     $permalink = $splitRouteProperties[0];
                 } else {
-                    $permalink = $splitRouteProperties[1];
+                    if ($splitRouteProperties[0] == LOCALE) {
+                        $permalink = $splitRouteProperties[1];
+                    } else {
+                        $permalink = $splitRouteProperties[0]. '/'. $splitRouteProperties[1];
+                    }
                 }
             }
         } else if (count($splitRouteProperties) == 3) {
             preg_match('/^[1-3]{1}$/', $splitRouteProperties[2], $maximumIntegerNumber);
             if ($maximumIntegerNumber) {
                 $permalink = $splitRouteProperties[2];
+            } else if ($splitRouteProperties[0] == LOCALE) {
+                $permalink = $splitRouteProperties[1]. '/'. $splitRouteProperties[2];
             }
         }
 
