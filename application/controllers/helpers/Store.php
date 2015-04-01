@@ -78,4 +78,68 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         }
         return $urlString;
     }
+
+    public static function getHowToGuide($shopId)
+    {
+        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopId);
+        $howToGuides = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            'store_'.$cacheKey.'_howToGuide',
+            array('function' => 'Shop::getShopDetails', 'parameters' => array($shopId))
+        );
+        return $howToGuides;
+    }
+
+    public static function getShopInformation($shopId, $shopList)
+    {
+        $allShopDetailKey = 'shopDetails_'.$shopList;
+        $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            $allShopDetailKey,
+            array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId))
+        );
+        return $shopInformation;
+    }
+
+    public static function getShopLatestUpdates($shopId, $shopList)
+    {
+        $allLatestUpdatesInStoreKey = 'ShoplatestUpdates_'.$shopList;
+        $latestShopUpdates = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            $allLatestUpdatesInStoreKey,
+            array('function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode', 'parameters' => array(
+                'latestupdates',
+                4,
+                $shopId)
+            )
+        );
+        return $latestShopUpdates;
+    }
+
+    public static function getSixTopOffers($shopId, $shopList)
+    {
+        $allOffersInStoreKey = '6_topOffersHowto'.$shopList;
+        $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            $allOffersInStoreKey,
+            array('function' => 'FrontEnd_Helper_viewHelper::commonfrontendGetCode',
+                'parameters' => array('topSixOffers', 3, $shopId, 0)
+            )
+        );
+        $offers = array_chunk($offers, 3);
+        return $offers;
+    }
+
+    public static function getShopChain($shopInformation)
+    {
+        $shopChain = '';
+        if ($shopInformation[0]['showChains']) {
+            $frontEndViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+            $shopChains = $frontEndViewHelper->sidebarChainWidget(
+                $shopInformation[0]['id'],
+                $shopInformation[0]['name'],
+                $shopInformation[0]['chainItemId']
+            );
+            if ($shopChains['hasShops'] && isset($shopChains['string'])) {
+                $shopChain = $shopChains['string'];
+            }
+        }
+        return $shopChain;
+    }
 }
