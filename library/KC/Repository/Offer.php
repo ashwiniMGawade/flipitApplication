@@ -1584,8 +1584,7 @@ class Offer Extends \KC\Entity\Offer
         ->leftJoin('o.offerTiles', 't')
         ->addSelect("(SELECT count(cc.status) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status = 0) as used")
         ->addSelect("(SELECT count(ccc.status) FROM KC\Entity\CouponCode ccc WHERE ccc.offer = o.id and ccc.status = 1) as available")
-        ->andWhere("o.id =".$offerId)
-        ->andWhere("o.userGenerated = '0'");
+        ->andWhere("o.id =".$offerId);
         $offerDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $offerDetails;
     }
