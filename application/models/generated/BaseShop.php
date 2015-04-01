@@ -376,7 +376,7 @@ abstract class BaseShop extends Doctrine_Record
         ));
         $this->hasColumn('howtoguideslug', 'string', 100, array(
             'type' => 'string',
-            'length' => '512',
+            'length' => '100',
         ));
     }
 

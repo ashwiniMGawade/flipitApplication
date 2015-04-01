@@ -1,14 +1,14 @@
 <?php
 class BootstrapRouterFunctions
 {
-    public static function getRouteForHowToGuide($actualPermalink)
+    public static function getHowToGuidePermalink($actualPermalink)
     {
         $explodedPermalink = explode('/', $actualPermalink);
-        $reGaneratedPermalink = $actualPermalink;
+        $reGaneratedActualPermalink = $actualPermalink;
         if (isset($explodedPermalink[1])) {
-            $reGaneratedPermalink = $explodedPermalink[1].'/'.$explodedPermalink[2];
+            $reGaneratedActualPermalink = $explodedPermalink[1].'/'.$explodedPermalink[2];
         }
-        return $reGaneratedPermalink;
+        return $reGaneratedActualPermalink;
     }
 
     public static function getPermalink()
