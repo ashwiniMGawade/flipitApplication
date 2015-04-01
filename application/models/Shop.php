@@ -1123,7 +1123,7 @@ class Shop extends BaseShop
             $validatedHowToGuideRoute = RoutePermalink::validatePermalink($howToGuideValidatedLink);
             if (empty($validatedHowToGuideRoute)) {
                 $howToGuideValidatedLink = 'how-to/'.$getcategory[0]['permaLink'];
-                $validatedHowToGuideRoute = RoutePermalink::$validatedPermalink($howToGuideValidatedLink);
+                $validatedHowToGuideRoute = RoutePermalink::validatePermalink($howToGuideValidatedLink);
             }
         }
         // screenshot has been deleted from edit and add shop but we need set a default in database
