@@ -2868,7 +2868,7 @@ class Offer Extends \KC\Entity\Offer
             $key = 'shop_expiredOffers'  . intval($params['selctedshop']) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
                     
-            $key = 'offer_'.$this->id.'_details';
+            $key = 'offer_'.$offer_id.'_details';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'extendedTopOffer_of_'.intval($params['selctedshop']);
@@ -2893,7 +2893,7 @@ class Offer Extends \KC\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
-            return array('result' => true , 'ofer_id' => $this->id );
+            return array('result' => true , 'ofer_id' => $offer_id);
             $key = 'all_widget5_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'all_widget6_list';
@@ -3177,7 +3177,6 @@ class Offer Extends \KC\Entity\Offer
             $query->execute();
             if (isset($params['selectedcategories'])) {
                 foreach ($params['selectedcategories'] as $categories) {
-                    $this->refOfferCategory[]->categoryId = $categories ;
                     $offerCategory  = new \KC\Entity\RefOfferCategory();
                     $offerCategory->created_at = new \DateTime('now');
                     $offerCategory->updated_at = new \DateTime('now');
