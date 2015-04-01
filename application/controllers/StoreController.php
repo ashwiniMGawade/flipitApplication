@@ -336,7 +336,10 @@ class StoreController extends Zend_Controller_Action
         if (empty($howToGuides)) {
             throw new Zend_Controller_Action_Exception('', 404);
         }
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($howToGuides[0]['howtoguideslug']);
+        $canonical = !empty($howToGuides[0]['howtoguideslug'])
+            ? $howToGuides[0]['permaLink'] . "/". $howToGuides[0]['howtoguideslug']
+            : FrontEnd_Helper_viewHelper::__link('link_how-to'). "/" . $this->getRequest()->getParam('permalink');
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($canonical);
 
         $ShopList = $howToGuides[0]['id'].'_list';
         $allShopDetailKey = 'shopDetails_'.$ShopList;
