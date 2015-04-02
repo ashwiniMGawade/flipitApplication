@@ -134,79 +134,84 @@ class SendCodeAlert
         $codeAlertOffers = CodeAlertQueue::getCodealertOffers();
         if (!empty($codeAlertOffers)) {
             foreach ($codeAlertOffers as $codeAlertOffer) {
-                $this->setPhpExecutionLimit();
-                $topVouchercodes = FrontEnd_Helper_viewHelper::getShopCouponCode(
-                    'similarStoresAndSimilarCategoriesOffers',
-                    4,
-                    $codeAlertOffer['shop']['id']
-                );
-                $codeAlertSettings = CodeAlertSettings::getCodeAlertSettings();
-                $settings = Signupmaxaccount::getAllMaxAccounts();
-                $mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
-                $mandrillNewsletterSubject = isset($codeAlertSettings[0]['email_subject'])
-                    && $codeAlertSettings[0]['email_subject'] != ''
-                    ? $codeAlertSettings[0]['email_subject']
-                    : '';
-                $mandrillSenderName = $settings[0]['sendername'];
-                $visitors = $codeAlertOffer['shop']['visitors'];
-                $visitorIds = array();
-                foreach ($visitors as $visitorInfo) {
-                    $codeAlertVisitors = CodeAlertVisitors::getVisitorsToRemoveInCodeAlert(
-                        $visitorInfo['visitorId'],
-                        $codeAlertOffer['id']
+                $currentDate = date('Y-m-d H:i:s');
+                if (($codeAlertOffer['startDate'] <= $currentDate && $codeAlertOffer['endDate'] >= $currentDate) && $codeAlertOffer['offline'] == 0) {
+                    $this->setPhpExecutionLimit();
+                    $topVouchercodes = FrontEnd_Helper_viewHelper::getShopCouponCode(
+                        'similarStoresAndSimilarCategoriesOffers',
+                        4,
+                        $codeAlertOffer['shop']['id']
                     );
-                    if (empty($codeAlertVisitors)) {
-                        $visitorCodeAlertSendDate = Visitor::getVisitorCodeAlertSendDate($visitorInfo['visitorId']);
-                        if (date('Y-m-d', strtotime($visitorCodeAlertSendDate)) == date('Y-m-d')) {
-                        } else {
-                            $visitorIds[] = $visitorInfo['visitorId'];
+                    $codeAlertSettings = CodeAlertSettings::getCodeAlertSettings();
+                    $settings = Signupmaxaccount::getAllMaxAccounts();
+                    $mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
+                    $mandrillNewsletterSubject = isset($codeAlertSettings[0]['email_subject'])
+                        && $codeAlertSettings[0]['email_subject'] != ''
+                        ? $codeAlertSettings[0]['email_subject']
+                        : '';
+                    $mandrillSenderName = $settings[0]['sendername'];
+                    $visitors = $codeAlertOffer['shop']['visitors'];
+                    $visitorIds = array();
+                    foreach ($visitors as $visitorInfo) {
+                        $codeAlertVisitors = CodeAlertVisitors::getVisitorsToRemoveInCodeAlert(
+                            $visitorInfo['visitorId'],
+                            $codeAlertOffer['id']
+                        );
+                        if (empty($codeAlertVisitors)) {
+                            $visitorCodeAlertSendDate = Visitor::getVisitorCodeAlertSendDate($visitorInfo['visitorId']);
+                            if (date('Y-m-d', strtotime($visitorCodeAlertSendDate)) == date('Y-m-d')) {
+                            } else {
+                                $visitorIds[] = $visitorInfo['visitorId'];
+                            }
                         }
                     }
-                }
-                if (!empty($visitorIds)) {
-                    $visitorIds = implode(',', $visitorIds);
-                    $this->visitorId = $visitorIds;
-                    $this->shopId = $codeAlertOffer['shop']['id'];
-                    BackEnd_Helper_MandrillHelper::getDirectLoginLinks(
-                        $this,
-                        'scheduleNewsletterSender',
-                        '',
-                        $this->mandrillKey
-                    );
-                    try {
-                        $codeAlertHeader = isset($codeAlertSettings[0]['email_header'])
-                            ? $codeAlertSettings[0]['email_header']
-                            : 'Code alert header';
-                        FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
+                    if (!empty($visitorIds)) {
+                        $visitorIds = implode(',', $visitorIds);
+                        $this->visitorId = $visitorIds;
+                        $this->shopId = $codeAlertOffer['shop']['id'];
+                        BackEnd_Helper_MandrillHelper::getDirectLoginLinks(
+                            $this,
+                            'scheduleNewsletterSender',
                             '',
-                            '',
-                            '',
-                            str_replace('[shopname]', $codeAlertOffer['shop']['name'], $mandrillNewsletterSubject),
-                            $mandrillSenderEmailAddress,
-                            $mandrillSenderName,
-                            $this->_recipientMetaData,
-                            $this->_loginLinkAndData,
-                            $this->_to,
-                            '',
-                            array(
-                                'httpPath' => $this->hostName,
-                                'locale' => $this->locale,
-                                'httpPathLocale' => $this->_linkPath,
-                                'publicPathCdn' => $this->publicCdnPath,
-                                'mandrillKey' => $this->mandrillKey
-                            ),
-                            str_replace('[shopname]', $codeAlertOffer['shop']['name'], $codeAlertHeader),
-                            $codeAlertOffer
+                            $this->mandrillKey
                         );
-                        Visitor::addCodeAlertTimeStampForVisitor($visitorIds);
-                        CodeAlertVisitors::saveCodeAlertVisitors($visitorIds, $codeAlertOffer['id']);
-                        CodeAlertQueue::clearCodeAlertQueueByOfferId($codeAlertOffer['id']);
-                        $message = 'code alert has been sent successfully' ;
-                    } catch (Mandrill_Error $e) {
-                        $message ='There is some problem in your data';
+                        try {
+                            $codeAlertHeader = isset($codeAlertSettings[0]['email_header'])
+                                ? $codeAlertSettings[0]['email_header']
+                                : 'Code alert header';
+                            FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
+                                '',
+                                '',
+                                '',
+                                str_replace('[shopname]', $codeAlertOffer['shop']['name'], $mandrillNewsletterSubject),
+                                $mandrillSenderEmailAddress,
+                                $mandrillSenderName,
+                                $this->_recipientMetaData,
+                                $this->_loginLinkAndData,
+                                $this->_to,
+                                '',
+                                array(
+                                    'httpPath' => $this->hostName,
+                                    'locale' => $this->locale,
+                                    'httpPathLocale' => $this->_linkPath,
+                                    'publicPathCdn' => $this->publicCdnPath,
+                                    'mandrillKey' => $this->mandrillKey
+                                ),
+                                str_replace('[shopname]', $codeAlertOffer['shop']['name'], $codeAlertHeader),
+                                $codeAlertOffer
+                            );
+                            Visitor::addCodeAlertTimeStampForVisitor($visitorIds);
+                            CodeAlertVisitors::saveCodeAlertVisitors($visitorIds, $codeAlertOffer['id']);
+                            CodeAlertQueue::clearCodeAlertQueueByOfferId($codeAlertOffer['id']);
+                            $message = 'code alert has been sent successfully' ;
+                        } catch (Mandrill_Error $e) {
+                            $message ='There is some problem in your data';
+                        }
+                    } else {
+                        $message ='Code alert already sent...';
                     }
                 } else {
-                    $message ='Code alert already sent...';
+                    $message ='Code alert cannot be sent for offer yet to start or expired.';
                 }
             }
         } else {
