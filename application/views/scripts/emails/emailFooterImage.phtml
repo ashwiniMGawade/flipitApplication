@@ -13,7 +13,7 @@
                     <?php 
                 }
                 ?>
-                <img width='615'
+                <img style="display: block; border-radius: 5px;" width='615'
                     alt="<?php echo $this->newsLetterFooterImage['name']; ?>" 
                     title="<?php echo $this->newsLetterFooterImage['name']; ?>" 
                     src="<?php echo $this->publicPathCdn.$this->newsLetterFooterImage['path']
@@ -30,6 +30,8 @@
                 ?>
             </td>
         </tr>
+        <tr><td height="2"></td></tr>
         <?php 
-    } ?>
+    }
+    ?>
 </table>
