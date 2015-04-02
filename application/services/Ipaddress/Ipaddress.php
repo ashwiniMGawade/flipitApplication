@@ -19,10 +19,12 @@ class Application_Service_Ipaddress
         $password = $splitDbUsernameAndPassword[2];
         $hostname = $splitDbHostAndDatabaseName[0];
         $dbName = $splitDbHostAndDatabaseName[1];
-        $dbhandle = mysql_connect($hostname, $username, $password);
-        $databaseConnection = mysql_select_db($dbName, $dbhandle) or die('Connection not found');
-        $result = mysql_query("SELECT ipaddress FROM ip_addresses where ipaddress ='$ipAdress'");
-        $record = mysql_fetch_array($result);
+        $dbhandle = @new mysqli($hostname, $username, $password, $dbName);
+        if ($dbhandle->connect_errno) {
+            die('Connection not found.');
+        }
+        $result = $dbhandle->query("SELECT ipaddress FROM ip_addresses where ipaddress ='$ipAdress'");
+        $record = $result->fetch_array(MYSQLI_ASSOC);
         if (empty($record)) {
             header('Location: /');
             exit();
