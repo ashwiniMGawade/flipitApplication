@@ -2,6 +2,7 @@
     <?php 
     if (isset($this->newsLetterFooterImage['path']) && !empty($this->newsLetterFooterImage['path'])) {
         ?>
+        <tr><td height="5"></td></tr>
         <tr>
             <td align="center">
                 <?php 
@@ -9,7 +10,7 @@
                     isset($this->newsLetterFooterImage['footerurl']) 
                     && !empty($this->newsLetterFooterImage['footerurl'])) {
                     ?>
-                    <a href="<?php echo $this->newsLetterFooterImage['footerurl']; ?>">
+                    <a target = "_blank" href="<?php echo $this->newsLetterFooterImage['footerurl']; ?>">
                     <?php 
                 }
                 ?>
@@ -25,12 +26,11 @@
                 ) {
                     ?>
                     </a>
-                    <?php 
+                    <?php
                 }
                 ?>
             </td>
         </tr>
-        <tr><td height="2"></td></tr>
         <?php 
     }
     ?>
