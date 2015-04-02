@@ -2401,8 +2401,8 @@ class Offer Extends \KC\Entity\Offer
         $query = $queryBuilder
             ->select(
                 "o.id, o.title, o.extendedOffer,o.authorId , o.extendedUrl,
-                s.permaLink as shopPermalink, s.howToUse ,s.contentManagerId , sp.permaLink as shopPagePermalink,
-                p.permaLink as categoryPermalink, page.permaLink as pagePermalink"
+                s.permaLink as shopPermalink, s.howToUse ,s.contentManagerId , sp.permalink as shopPagePermalink,
+                p.permaLink as categoryPermalink, page.permalink as pagePermalink"
             )
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
@@ -2410,7 +2410,7 @@ class Offer Extends \KC\Entity\Offer
             ->leftJoin('o.offers', 'refPage')
             ->leftJoin('refPage.offers', 'page')
             ->leftJoin('s.shopPage', 'sp')
-            ->leftJoin('c.offers', 'p')
+            ->leftJoin('c.categories', 'p')
             ->where("o.id=".$id);
         $offer = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $urlsArray = array();
