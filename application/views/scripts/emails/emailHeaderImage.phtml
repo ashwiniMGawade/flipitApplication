@@ -3,17 +3,37 @@
         <table width="600" align="center" cellpadding="0" cellspacing="0">
             <tbody>
             <?php 
-            if ($this->newsLetterHeaderImage!='') {
+            if (isset($this->newsLetterHeaderImage['path']) && !empty($this->newsLetterHeaderImage['path'])) {
                 ?>
                 <tr>
                     <td width="0"></td>
                     <td width="800">
-                        <img width='728'
+                        <?php 
+                        if (
+                            isset($this->newsLetterHeaderImage['headerurl']) 
+                            && !empty($this->newsLetterHeaderImage['headerurl'])
+                        ) {
+                            ?>
+                            <a href="<?php echo $this->newsLetterHeaderImage['headerurl']; ?>">
+                            <?php 
+                        }
+                        ?>
+                        <img width='615'
                             alt="<?php echo $this->newsLetterHeaderImage['name']; ?>" 
                             title="<?php echo $this->newsLetterHeaderImage['name']; ?>" 
                             src="<?php echo $this->publicPathCdn
                             .$this->newsLetterHeaderImage['path']
                             .$this->newsLetterHeaderImage['name'] ?>">
+                        <?php 
+                        if (
+                            isset($this->newsLetterHeaderImage['headerurl']) 
+                            && !empty($this->newsLetterHeaderImage['headerurl'])
+                        ) {
+                            ?>
+                            </a>
+                            <?php 
+                        }
+                        ?>
                     </td>
                 </tr>
                 <?php 
