@@ -129,7 +129,7 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
     public static function getShopChain($shopInformation)
     {
         $shopChain = '';
-        if ($shopInformation[0]['showChains']) {
+        if (!empty($shopInformation[0]['showChains'])) {
             $frontEndViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
             $shopChains = $frontEndViewHelper->sidebarChainWidget(
                 $shopInformation[0]['id'],
