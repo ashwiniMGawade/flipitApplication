@@ -374,6 +374,10 @@ abstract class BaseShop extends Doctrine_Record
         $this->hasColumn('moretextforshop', 'blob', null, array(
              'type' => 'blob'
         ));
+        $this->hasColumn('howtoguideslug', 'string', 100, array(
+            'type' => 'string',
+            'length' => '100',
+        ));
     }
 
     public function setUp()

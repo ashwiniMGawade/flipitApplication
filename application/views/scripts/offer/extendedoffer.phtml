@@ -22,13 +22,6 @@ $extendedOffer = $this->partial(
     )
 );
 $storeViewPartialPath = 'store/';
-$howToUseGuidePermalink= "how-to/".$this->currentStoreInformation[0]['permaLink'];
-$actualUrlWithoutDoubleSlash = explode("//", $this->currentStoreInformation[0]['actualUrl']);
-if (isset($actualUrlWithoutDoubleSlash[1])):
-    $actualUrl = $actualUrlWithoutDoubleSlash[1];
-else:
-    $actualUrl = $this->currentStoreInformation[0]['actualUrl'];
-endif;
 
 $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
 $extendedTitle = !empty($offer->extendedoffertitle) ? $offer->extendedoffertitle : $offer->title;

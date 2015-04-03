@@ -3180,52 +3180,36 @@ class Offer extends BaseOffer
         return $data;
     }
 
-   /**
-   * getAllUrls
-   *
-   * returns the all the urls related to a offer like related stor page, special list pages,
-   * realted extended offer page, realted category pages, sreach pages, redactie pages,
-   * pageRelated How to use etc
-   * @param integer $id offer id
-   * @author Surinderpal Singh
-   * @return array array of urls
-   */
     public static function getAllUrls($id)
     {
-        # get offer data
-        $offer  = Doctrine_Query::create()->select(
+        $offer  = Doctrine_Query::create()
+        ->select(
             "o.id, o.extendedOffer,o.authorId , o.extendedUrl,
-            s.permaLink, s.howToUse ,s.contentManagerId , sp.permaLink, p.permaLink,c.permaLink"
+            s.permaLink, s.howToUse ,s.howtoguideslug, s.contentManagerId,
+            sp.permaLink, p.permaLink,c.permaLink"
         )
-          ->from('Offer o')
-          ->leftJoin("o.category c")
-          ->leftJoin("o.shop s")
-          ->leftJoin("s.page sp")
-          ->leftJoin("s.page")
-          ->leftJoin("o.page p")
-          ->where("o.id=? ", $id)
-          ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
+            ->from('Offer o')
+            ->leftJoin("o.category c")
+            ->leftJoin("o.shop s")
+            ->leftJoin("s.page sp")
+            ->leftJoin("s.page")
+            ->leftJoin("o.page p")
+            ->where("o.id=? ", $id)
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
         $urlsArray = array();
-
         # check for related shop permalink
         if (isset($offer['shop'])) {
             $urlsArray[] = $offer['shop']['permaLink'];
-
             # check if a shop has editor or not
             if (isset($offer['shop']['contentManagerId'])) {
-
                 # redactie permalink
                 $redactie =  User::returnEditorUrl($offer['shop']['contentManagerId']);
-
                 # check if an editor  has permalink then add it into array
                 if (isset($redactie['permalink']) && strlen($redactie['permalink']) > 0) {
                     $urlsArray[] = $redactie['permalink'] ;
                 }
             }
-
         }
-
         # check for extende offer page
         if (isset($offer['extendedOffer'])) {
             # check for extende offer url
@@ -3233,18 +3217,19 @@ class Offer extends BaseOffer
                 $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_deals') .'/'. $offer['extendedUrl'];
             }
         }
-
         # check for shop permalink
         if ($offer['shop']['howToUse']) {
             # check for extende offer url
             if (isset($offer['shop']['permaLink'])  && strlen($offer['shop']['permaLink']) > 0) {
-                $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to') .'/'. $offer['shop']['permaLink'];
+                if (!empty($offer['shop']['howtoguideslug'])) {
+                    $urlsArray[] = $offer['shop']['permaLink']. '/'. $offer['shop']['howtoguideslug'];
+                } else {
+                    $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to'). '/'. $offer['shop']['permaLink'];
+                }
             }
         }
-
         # check an offerr has one or more categories
         if (isset($offer['category']) && count($offer['category']) > 0) {
-
             $cetgoriesPage = FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
             # traverse through all catgories
             foreach ($offer['category'] as $value) {
@@ -3256,7 +3241,6 @@ class Offer extends BaseOffer
                 }
             }
         }
-
         # check an offerr has one or more pages
         if (isset($offer['page']) && count($offer['page']) > 0) {
             # traverse through all pages
@@ -3267,7 +3251,6 @@ class Offer extends BaseOffer
                 }
             }
         }
-
         return $urlsArray ;
     }
 
