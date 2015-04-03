@@ -308,16 +308,16 @@ class Shop extends BaseShop
         return $popularStores;
     }
 
-    public static function getshopDetails($permalink)
+    public static function getShopDetails($shopId)
     {
         $shopDetails = Doctrine_Query::create()
-        ->select('s.*,img.name,img.path,chptr.*')
-        ->from('shop s')
-        ->leftJoin('s.logo img')
-        ->leftJoin('s.howtochapter chptr')
-        ->Where("s.permaLink='".$permalink."'")
-        ->andWhere('s.status = 1')
-        ->fetchArray();
+            ->select('s.*,img.name,img.path,chptr.*')
+            ->from('shop s')
+            ->leftJoin('s.logo img')
+            ->leftJoin('s.howtochapter chptr')
+            ->Where("s.id='".$shopId."'")
+            ->andWhere('s.status = 1')
+            ->fetchArray();
         return $shopDetails;
     }
 
@@ -708,8 +708,8 @@ class Shop extends BaseShop
             //call cache function
             $key = 'shop_similar_shops';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($this->permaLink);
-            $key = 'store_'.$cacheKey.'_howToGuide';
+           
+            $key = 'store_'.$id.'_howToGuide';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
@@ -747,9 +747,6 @@ class Shop extends BaseShop
         }
         //call cache function
         $key = 'shop_similar_shops';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($this->permaLink);
-        $key = 'store_'.$cacheKey.'_howToGuide';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shopsae_list');
@@ -849,37 +846,27 @@ class Shop extends BaseShop
         return $data;
     }
 
-    /**
-     * CreateNewShop
-     *
-     * create new shop
-     *
-     * @param posted form data
-     * @author kkumar
-     * @version 1.0
-     */
+ 
     public function CreateNewShop($shopDetail)
     {
         $this->name = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopName']);
         $this->permaLink = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
         $this->metaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopMetaDescription']);
-        $this->notes =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopNotes']);
-
-    #   $this->deepLink =BackEnd_Helper_viewHelper::stripSlashesFromString (@$shopDetail['shopDeepLinkUrl']);
-    #   $this->deepLinkStatus =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['deepLinkStatus']);
-
-        $this->refUrl = BackEnd_Helper_viewHelper::stripSlashesFromString ($shopDetail['shopRefUrl']);
+        $this->notes =BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNotes']);
+        #$this->deepLink =BackEnd_Helper_viewHelper::stripSlashesFromString (@$shopDetail['shopDeepLinkUrl']);
+        #$this->deepLinkStatus =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['deepLinkStatus']);
+        $this->refUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopRefUrl']);
         $this->actualUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopActualUrl']);
         $this->affliateProgram = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['affiliateProgStatus']);
-        $this->title =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopTitle']);
-        $this->subTitle =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopSubTitle']);
+        $this->title =BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopTitle']);
+        $this->subTitle =BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopSubTitle']);
         $this->overriteTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopOverwriteTitle']);
         $this->shopText = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopDescription']);
         $this->customtext = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomText']);
         $this->moretextforshop = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['moretextforshop']);
         $shopViewCount = isset($shopDetail['shopViewCount']) ? $shopDetail['shopViewCount'] : '0';
         $this->views = BackEnd_Helper_viewHelper::stripSlashesFromString($shopViewCount);
-
+        $this->howtoguideslug = FrontEnd_Helper_viewHelper::sanitize($shopDetail['howToPageSlug']);
         $this->howtoTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageTitle']);
         $this->howtoSubtitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubTitle']);
         $this->howtoSubSubTitle = FrontEnd_Helper_viewHelper::sanitize(
@@ -889,9 +876,9 @@ class Shop extends BaseShop
         $this->howtoMetaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaDesc']);
         $this->customHeader = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomHeader']);
         $this->howToIntroductionText = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['howToIntroductionText']);
-
         $this->showSimliarShops = BackEnd_Helper_viewHelper::stripSlashesFromString(
-            !empty($shopDetail['similarShops']) ? $shopDetail['similarShops'] : '0');
+            !empty($shopDetail['similarShops']) ? $shopDetail['similarShops'] : '0'
+        );
         $showChains = !empty($shopDetail['showChains']) ? $shopDetail['showChains'] : '0';
         $this->showChains = BackEnd_Helper_viewHelper::stripSlashesFromString($showChains);
         $strictConfirmation = !empty($shopDetail['strictConfirmation']) ? $shopDetail['strictConfirmation'] : '0';
@@ -902,27 +889,31 @@ class Shop extends BaseShop
 
         # display signup option on store detail page
         $this->showSignupOption = BackEnd_Helper_viewHelper::stripSlashesFromString(
-            !empty($shopDetail['signupOption']) ? $shopDetail['signupOption'] : '0');
-
+            !empty($shopDetail['signupOption']) ? $shopDetail['signupOption'] : '0'
+        );
         $this->lightboxfirsttext = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['lightboxfirsttext']);
-        $this->lightboxsecondtext =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['lightboxsecondtext']);
+        $this->lightboxsecondtext =BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['lightboxsecondtext']);
 
-        if( BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['displayExtraProperties']) ) {
+        if (BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['displayExtraProperties'])) {
             $this->ideal = BackEnd_Helper_viewHelper::stripSlashesFromString(
-                !empty($shopDetail['ideal']) ? $shopDetail['ideal'] : 0);
+                !empty($shopDetail['ideal']) ? $shopDetail['ideal'] : 0
+            );
             $this->qShops = BackEnd_Helper_viewHelper::stripSlashesFromString(
-                !empty($shopDetail['qShops']) ? $shopDetail['qShops'] : 0);
+                !empty($shopDetail['qShops']) ? $shopDetail['qShops'] : 0
+            );
             $this->freeReturns = BackEnd_Helper_viewHelper::stripSlashesFromString(
-                !empty($shopDetail['freeReturns']) ? $shopDetail['freeReturns'] : 0);
+                !empty($shopDetail['freeReturns']) ? $shopDetail['freeReturns'] : 0
+            );
             $this->pickupPoints = BackEnd_Helper_viewHelper::stripSlashesFromString(
-                !empty($shopDetail['pickupPoints']) ? $shopDetail['pickupPoints'] : 0);
+                !empty($shopDetail['pickupPoints']) ? $shopDetail['pickupPoints'] : 0
+            );
             $this->mobileShop = BackEnd_Helper_viewHelper::stripSlashesFromString(
-                !empty($shopDetail['mobileShop']) ? $shopDetail['mobileShop'] : 0);
+                !empty($shopDetail['mobileShop']) ? $shopDetail['mobileShop'] : 0
+            );
             $this->service = BackEnd_Helper_viewHelper::stripSlashesFromString(
-                !empty($shopDetail['service']) ? $shopDetail['service'] : 0);
-
-
-            if( BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['service']) ) {
+                !empty($shopDetail['service']) ? $shopDetail['service'] : 0
+            );
+            if (BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['service'])) {
 
                 $this->serviceNumber = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['serviceNumber']);
 
@@ -931,7 +922,7 @@ class Shop extends BaseShop
 
         $this->discussions = '0';
 
-        if(isset($shopDetail['discussions'])){
+        if (isset($shopDetail['discussions'])) {
             $this->discussions = '1';
         }
 
@@ -944,41 +935,37 @@ class Shop extends BaseShop
         }
         $this->usergenratedcontent = '0';
 
-        if(isset($shopDetail['usergenratedchk'])){
+        if (isset($shopDetail['usergenratedchk'])) {
             $this->usergenratedcontent = '1';
         }
 
         //$this->keywordlink = '';
-        if(isset($shopDetail['keywordlink'])){
+        if (isset($shopDetail['keywordlink'])) {
             $this->keywordlink = $shopDetail['keywordlink'];
         }
 
 
-        if( isset( $shopDetail['onlineStatus'] )) {
-
-            if( $shopDetail['onlineStatus'] == 1) {
+        if (isset($shopDetail['onlineStatus'] )) {
+            if ($shopDetail['onlineStatus'] == 1) {
                 $this->status = 1;
                 $this->offlineSicne = null;
             } else {
-
                 $this->status = 0;
-
-                if( strlen($shopDetail['offlineSince'])  > 18  ) {
+                if (strlen($shopDetail['offlineSince'])  > 18) {
                     $this->offlineSicne = $shopDetail['offlineSince'] ;
                 } else {
-                $this->offlineSicne = date("Y-m-d h:m:s") ;
-
+                    $this->offlineSicne = date("Y-m-d h:m:s") ;
                 }
             }
 
-        } else  {
+        } else {
 
             $this->status = 1 ;
         }
 
         $this->discussions = '0';
 
-        if(isset($shopDetail['discussions'])){
+        if (isset($shopDetail['discussions'])) {
             $this->discussions = '1';
         }
         $selectAccountManagers = isset($shopDetail['selectaccountmanagers']) ? $shopDetail['selectaccountmanagers'] : '0';
@@ -989,16 +976,15 @@ class Shop extends BaseShop
 
         $this->affliateNetworkId = NULL;
 
-        if($shopDetail['shopAffiliateNetwork']!= 0){
-
-                $this->affliateNetworkId = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopAffiliateNetwork']);
+        if ($shopDetail['shopAffiliateNetwork']!= 0){
+            $this->affliateNetworkId = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopAffiliateNetwork']);
         }
 
         $this->howToUse = $shopDetail['howTouseStatus'];
 
         if (intval($shopDetail['howTouseStatus']) > 0) {
             if (isset($shopDetail['shopHowToUsePageId'])) {
-                $this->howtoUsepageId = BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopHowToUsePageId']);
+                $this->howtoUsepageId = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopHowToUsePageId']);
             }
 
             //  upload small logo image for how to use page
@@ -1095,8 +1081,7 @@ class Shop extends BaseShop
         
         $key = 'shop_similar_shops';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopDetail['shopNavUrl']);
-        $key = 'store_'.$cacheKey.'_howToGuide';
+        $key = 'store_'.$this->id.'_howToGuide';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
@@ -1120,10 +1105,14 @@ class Shop extends BaseShop
         if(!empty($shopDetail['id'])) {
             $getcategory = Doctrine_Query::create()->select()->from('Shop')->where('id = '.$shopDetail['id'] )->fetchArray();
         }
-        if(!empty($getcategory[0]['permaLink'])){
-
-            $getRouteLink = Doctrine_Query::create()->select()->from('RoutePermalink')->where("permalink = '".$getcategory[0]['permaLink']."'")->andWhere('type = "SHP"')->fetchArray();
-            $howToguideRoute = Doctrine_Query::create()->select()->from('RoutePermalink')->where("permalink = 'how-to/".$getRouteLink[0]['permalink']."'")->andWhere('type = "SHP"')->fetchArray();
+        if (!empty($getcategory[0]['permaLink'])) {
+            $validatedShopRoute = RoutePermalink::validatePermalink($getcategory[0]['permaLink']);
+            $howToGuideValidatedLink = $getcategory[0]['permaLink'] .'/'.$getcategory[0]['howtoguideslug'];
+            $validatedHowToGuideRoute = RoutePermalink::validatePermalink($howToGuideValidatedLink);
+            if (empty($validatedHowToGuideRoute)) {
+                $howToGuideValidatedLink = 'how-to/'.$getcategory[0]['permaLink'];
+                $validatedHowToGuideRoute = RoutePermalink::validatePermalink($howToGuideValidatedLink);
+            }
         }
         // screenshot has been deleted from edit and add shop but we need set a default in database
         $this->screenshotId = 0;
@@ -1183,46 +1172,30 @@ class Shop extends BaseShop
             $key = 'shop_similar_shops';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            if (!empty($getRouteLink)) {
-
-                $exactLink = 'store/storedetail/id/'.$this->id;
-                $howtoguide = 'store/howtoguide/shopid/'.$this->id;
-                $updateRouteLink = Doctrine_Query::create()->update('RoutePermalink')
-                ->set('permalink', "'".
-                        BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopNavUrl'])
-                        ."'")
-                ->set('type',"'SHP'")
-                ->set('exactlink', "'". $exactLink."'" );
-                $updateRouteLink->where('type = "SHP"')->andWhere("permalink = '".$getRouteLink[0]['permalink']."'")->execute();
-
-
-                if(!empty($howToguideRoute)){
-                    $updateRouteHow = Doctrine_Query::create()->update('RoutePermalink')
-                    ->set('permalink', "'how-to/".BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopNavUrl'])."'")
-                    ->set('type',"'SHP'")
-                    ->set('exactlink', "'".$howtoguide."'" );
-                    $updateRouteHow->where('type = "SHP"')->andWhere("permalink = 'how-to/".$getRouteLink[0]['permalink']."'")->execute();
-
-                }else{
-                    $route = new RoutePermalink();
-                    $route->permalink = "how-to/" . BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopNavUrl']);
-                    $route->type = 'SHP';
-                    $route->exactlink = 'store/howtoguide/shopid/'.$this->id;
-                    $route->save();
+            $howToGuideExactLink = 'store/howtoguide/shopid/'.$this->id;
+            $shopExactLink = 'store/storedetail/id/'.$this->id;
+            $shopPermalink = FrontEnd_Helper_viewHelper::sanitize(
+                BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl'])
+            );
+            if (!empty($shopDetail['howToPageSlug'])) {
+                $howToGuidePermalink = $shopPermalink. "/".FrontEnd_Helper_viewHelper::sanitize($shopDetail['howToPageSlug']);
+            } else {
+                $howToGuidePermalink = 'how-to/' . $shopPermalink;
+            }
+            if (!empty($validatedShopRoute)) {
+                RoutePermalink::updateRoutePermalink($shopPermalink, $shopExactLink, $validatedShopRoute[0]['permalink']);
+                if (!empty($validatedHowToGuideRoute)) {
+                    RoutePermalink::updateRoutePermalink(
+                        $howToGuidePermalink,
+                        $howToGuideExactLink,
+                        $validatedHowToGuideRoute[0]['permalink']
+                    );
+                } else {
+                    RoutePermalink::saveRoutePermalink($howToGuidePermalink, $howToGuideExactLink);
                 }
-
-            }else{
-                $route = new RoutePermalink();
-                $route->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopNavUrl']);
-                $route->type = 'SHP';
-                $route->exactlink = 'store/storedetail/id/'.$this->id;
-                $route->save();
-
-                $route = new RoutePermalink();
-                $route->permalink = "how-to/" . BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopNavUrl']);
-                $route->type = 'SHP';
-                $route->exactlink = 'store/howtoguide/shopid/'.$this->id;
-                $route->save();
+            } else {
+                RoutePermalink::saveRoutePermalink($shopPermalink, $shopExactLink);
+                RoutePermalink::saveRoutePermalink($howToGuidePermalink, $howToGuideExactLink);
             }
 
 
@@ -1435,11 +1408,11 @@ public static function getShopDetail($shopId)
  public static function getShopPermalinks()
  {
     $permalinks = Doctrine_Query::create()
-    ->select('s.permalink, s.howToUse')
-    ->from("Shop s")
-    ->where('s.deleted=0')
-    ->andWhere('s.status=1')
-    ->fetchArray();
+        ->select('s.permalink, s.howToUse, s.howtoguideslug')
+        ->from("Shop s")
+        ->where('s.deleted=0')
+        ->andWhere('s.status=1')
+        ->fetchArray();
     return $permalinks;
 
  }
@@ -1727,133 +1700,16 @@ public static function getShopDetail($shopId)
         return $data;
     }
 
-
-
-    /**
-     * getStoreLinks
-     * get links for a shop for cloaking purpose
-     *
-     * @author Raman modified by Surindetrpal Singhj
-     * @param integer $offerId id of an offer
-     * @param boolean $checkRefUrl if true then check only the shop has ref url|deep link  or not
-     *                                     if false then return the outgoing link
-     * @return array|boolean $data
-     * @version 1.0
-     */
-    public static function getStoreLinks($shopId, $checkRefUrl = false)
+    public static function getShopInfoByShopId($shopId)
     {
-
-        $data = Doctrine_Query::create()->select('s.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl')
-        ->from('Shop s')
-        ->where('s.id='.$shopId)
-        ->fetchOne(null,Doctrine::HYDRATE_ARRAY );
-
-        $network = Shop::getAffliateNetworkDetail( $shopId );
-
-        if($checkRefUrl) {
-            # retur false if s shop is not associated with any network
-            if(! isset($network['affliatenetwork'])) {
-                return false ;
-            }
-
-            if(isset($data['deepLink']) && $data['deepLink']!=null){
-
-                # deeplink is now commetted for the time being, so we always @return false ;
-                return false;
-            }elseif(isset($data['refUrl']) && $data['refUrl']!=null){
-                return true ;
-            }else{
-                return true ;
-            }
-        }
-
-        $subid = "" ;
-        if( isset($network['affliatenetwork']) ) {
-            if(!empty($network['subid']) ) {
-                 $subid = "&". $network['subid'] ;
-
-
-                 $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
-                 $ip = ip2long($clientIP);
-
-                 # get click detail and replcae A2ASUBID click subid
-                 $conversion = Conversions::getConversionId( $data['id'] , $ip , 'shop') ;
-
-                 $subid = str_replace('A2ASUBID',$conversion['id'] , $subid );
-                $subid = FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
-            }
-        }
-
-        # deeplink is now commetted for the time being, so we always return false ;
-        /*if(isset($data['deepLink']) && $data['deepLink']!=null){
-            $url = $data['deepLink'];
-            $url .=  $subid ;
-
-        }else*/
-
-        if(isset($data['refUrl']) && $data['refUrl']!=null){
-            $url = $data['refUrl'];
-            $url .=  $subid ;
-        }elseif (isset($data['actualUrl']) && $data['actualUrl']!=null){
-            $url = $data['actualUrl'];
-        }else{
-            $url = HTTP_PATH_LOCALE.@$data['permaLink'];
-
-        }
-        return $url ;
-    }
-
-    /**
-     * addConversion
-     * add a conversion to a shop which is associted with a network
-     *
-     * @param integeter $id shopId
-     * @auther Surinderpal Singh
-     */
-
-    public static function addConversion($id)
-    {
-        $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
-        $ip = ip2long($clientIP);
-
-        # save conversion detail if an offer is associated with a network
-        if(Shop::getStoreLinks($id , true )) {
-
-            # check for previous cnversion of same ip
-            $data = Doctrine_Query::create()
-                ->select('count(c.id) as exists,c.id')
-                ->from('Conversions c')
-                ->andWhere('c.shopId="'.$id.'"')
-                ->andWhere('c.IP="'.$ip.'"')
-                ->andWhere("c.converted=0")
-                ->groupBy('c.id')
-                ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-            if(! $data['exists']) {
-
-                # save conversion detail if an offer is associated with a network
-                $cnt  = new Conversions();
-                $cnt->shopId = $id;
-                $cnt->IP = $ip;
-                $cnt->utma = $_COOKIE["__utma"];
-                $cnt->utmz = $_COOKIE["__utmz"];
-                $time = time();
-                $cnt->subid = md5(time()*rand(1,999));
-                $cnt->save();
-            } else{
-
-
-                # update existing conversion detail
-                $cnt = Doctrine_Core::getTable("Conversions")->find($data['id']);
-                if($cnt) {
-                    $cnt->utma = $_COOKIE["__utma"];
-                    $cnt->utmz = $_COOKIE["__utmz"];
-                    $time = time();
-                    $cnt->subid = md5(time()*rand(1,999));
-                    $cnt->save();
-                }
-            }
-        }
+        $shopInfo = Doctrine_Query::create()
+            ->select(
+                's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl'
+            )
+            ->from('Shop s')
+            ->where('s.id='.$shopId)
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return $shopInfo;
     }
 
     /**
@@ -1866,68 +1722,51 @@ public static function getShopDetail($shopId)
      */
     public static function getAffliateNetworkDetail($shopId)
     {
-
-            return  Doctrine_Query::create()
-                        ->select('s.id,a.name as affname,a.subId as subid')
-                        ->from("Shop s")
-                        ->leftJoin('s.affliatenetwork a')
-                        ->where('s.deleted=0')
-                        ->andWhere("s.id =?" , $shopId)
-                        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-
+        return  Doctrine_Query::create()
+            ->select('s.id,a.name as affname,a.subId as subid')
+            ->from("Shop s")
+            ->leftJoin('s.affliatenetwork a')
+            ->where('s.deleted=0')
+            ->andWhere("s.id =?", $shopId)
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
     }
 
-    /**
-     * getAllUrls
-     *
-     * returns the all the urls related to a offer like  special list pages,
-     * realted extended offer page, realted category pages, sreach pages, redactie pages,
-     * pageRelated How to use etc
-     * @param integer $id shop id
-     * @author Surinderpal Singh
-     * @return array array of urls
-     */
+    
     public static function getAllUrls($id)
     {
         $shop  = Doctrine_Query::create()
-                    ->select("s.id, s.permaLink,s.contentManagerId, s.howToUse,c.permaLink, o.extendedOffer, o.extendedUrl,")
-                    ->from('Shop s')
-                    ->leftJoin("s.offer o")
-                    ->leftJoin("s.category c")
-                    ->where("s.id=? " , $id)
-                    ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-        # redactie permalink
+            ->select(
+                "s.id, s.permaLink,s.contentManagerId, s.howToUse,
+                c.permaLink, o.extendedOffer, o.extendedUrl, s.howtoguideslug"
+            )
+            ->from('Shop s')
+            ->leftJoin("s.offer o")
+            ->leftJoin("s.category c")
+            ->where("s.id=? ", $id)
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
         $redactie =  User::returnEditorUrl($shop['contentManagerId']);
-
         $urlsArray = array();
-
-        # check for related shop permalink
-        if(isset($shop['permaLink'])) {
+        if (isset($shop['permaLink'])) {
             $urlsArray[] = $shop['permaLink'];
         }
-
-        # check for ho to use guide
-        if($shop['howToUse']) {
-            # check for extende offer url
-            if( isset($shop['permaLink'])  && strlen( $shop['permaLink'] ) > 0 ) {
-                $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to') .'/'.$shop['permaLink'];
+        if ($shop['howToUse']) {
+            if (isset($shop['permaLink'])  && strlen($shop['permaLink']) > 0) {
+                if (!empty($shop['howtoguideslug'])) {
+                    $urlsArray[] = $shop['permaLink']. '/'. $shop['howtoguideslug'];
+                } else {
+                    $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to'). '/'. $shop['permaLink'];
+                }
             }
         }
-
         # check if an editor  has permalink then add it into array
-        if(isset($redactie['permalink']) && strlen($redactie['permalink']) > 0 ) {
+        if (isset($redactie['permalink']) && strlen($redactie['permalink']) > 0) {
             $urlsArray[] = $redactie['permalink'] ;
         }
-
         # check an offerr has one or more categories
-        if(isset($shop['category']) && count($shop['category']) > 0) {
-
+        if (isset($shop['category']) && count($shop['category']) > 0) {
             $categoriesPage = FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
-
             # traverse through all catgories
-            foreach($shop['category'] as $value) {
+            foreach ($shop['category'] as $value) {
                 # check if a category has permalink then add it into array
                 if (isset($value['permaLink']) && strlen($value['permaLink']) > 0) {
                     $urlsArray[] = $categoriesPage . $value['permaLink'];
@@ -1938,11 +1777,11 @@ public static function getShopDetail($shopId)
         }
 
         # check extended offer of this shop
-        if(isset($shop['offer']) && count($shop['offer']) > 0) {
+        if (isset($shop['offer']) && count($shop['offer']) > 0) {
             # traverse through all offer
-            foreach( $shop['offer'] as $value) {
+            foreach ($shop['offer'] as $value) {
                 # check the offer is extended or not
-                if(isset($value['extendedOffer']) && $value['extendedOffer']  ) {
+                if (isset($value['extendedOffer']) && $value['extendedOffer']) {
                     $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_deals') .'/'. $value['extendedUrl'] ;
                 }
             }

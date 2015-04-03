@@ -1,41 +1,6 @@
 <?php
 class Conversions extends BaseConversions
 {
-    public static function getConversionId($id, $ip, $type = 'offer')
-    {
-        $query =   Doctrine_Query::create()
-            ->select("id, subId")
-            ->from("Conversions")
-            ->where("ip = ?", $ip);
-        if ($type == 'offer') {
-            $query->andWhere("offerId= ? ", $id);
-        } else {
-            $query->andWhere("shopId= ? ", $id);
-        }
-        return $query->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
-    }
-
-    public static function updateConverted($subId)
-    {
-        Doctrine_Query::create()
-        ->update('Conversions')
-        ->set('converted', 1)
-        ->where('subid = ?', $subId)->execute();
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_conversion_details');
-        return true;
-    }
-
-    public static function getConversionDetail($subId)
-    {
-        return  Doctrine_Query::create()->select('c.subid,c.utma,c.utmz,o.id,s.id,n.*')
-            ->from("Conversions c")
-            ->leftJoin("c.offer o")
-            ->leftJoin("o.shop s")
-            ->leftJoin("s.affliatenetwork n")
-            ->where('subid = ?', $subId)
-            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-    }
-
     public static function getConversionInformationById($id)
     {
         $conversionInfo = array();
@@ -72,5 +37,62 @@ class Conversions extends BaseConversions
                 ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
         }
         return $conversionInfo;
+    }
+
+    public static function addConversion($id, $clickoutType)
+    {
+        $conversionId = '';
+        $clientIP = ip2long(FrontEnd_Helper_viewHelper::getRealIpAddress());
+
+        if ($clickoutType === 'offer') {
+            $clickout = new FrontEnd_Helper_ClickoutFunctions($id, null);
+        } else {
+            $clickout = new FrontEnd_Helper_ClickoutFunctions(null, $id);
+        }
+
+        $hasNetwork = $clickout->checkIfShopHasAffliateNetwork();
+        if ($hasNetwork) {
+            $conversionInfo = self::checkIfConversionExists($id, $clientIP, $clickoutType);
+            $conversionId = $conversionInfo['id'];
+
+            if (!isset($conversionInfo['exists'])) {
+                $conversionId = self::addNewConversion($id, $clientIP, $clickoutType);
+            }
+        }
+        return $conversionId;
+    }
+
+    private static function checkIfConversionExists($id, $clientIP, $clickoutType)
+    {
+        $conversionInfo = Doctrine_Query::create()
+                ->select('count(c.id) as exists,c.id')
+                ->from('Conversions c');
+
+        if ($clickoutType === 'offer') {
+            $conversionInfo = $conversionInfo->where('c.offerId="'.$id.'"');
+        } else {
+            $conversionInfo = $conversionInfo->where('c.shopId="'.$id.'"');
+        }
+    
+        $conversionInfo = $conversionInfo->andWhere('c.IP="'.$clientIP.'"')
+            ->andWhere("c.converted=0")
+            ->groupBy('c.id')
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return $conversionInfo;
+    }
+
+    private static function addNewConversion($id, $clientIP, $clickoutType)
+    {
+        $conversion = new Conversions();
+
+        if ($clickoutType === 'offer') {
+            $conversion->offerId = $id;
+        } else {
+            $conversion->shopId = $id;
+        }
+        
+        $conversion->IP = $clientIP;
+        $conversion->save();
+        return $conversion->id;
     }
 }
