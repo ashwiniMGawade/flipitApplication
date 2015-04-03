@@ -331,10 +331,10 @@ class StoreController extends Zend_Controller_Action
         if (empty($howToGuides)) {
             throw new Zend_Controller_Action_Exception('', 404);
         }
-        $canonical = !empty($howToGuides[0]['howtoguideslug'])
+        $howToGuidesUrl = !empty($howToGuides[0]['howtoguideslug'])
             ? $howToGuides[0]['permaLink'] . "/". $howToGuides[0]['howtoguideslug']
             : FrontEnd_Helper_viewHelper::__link('link_how-to'). "/" . $this->getRequest()->getParam('permalink');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($canonical);
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($howToGuidesUrl);
         $shopList = $howToGuides[0]['id'].'_list';
         $shopInformation = $this->_helper->Store->getShopInformation($howToGuides[0]['id'], $shopList);
         $this->view->shopChain = $this->_helper->Store->getShopChain($shopInformation);
@@ -349,9 +349,6 @@ class StoreController extends Zend_Controller_Action
         $shopName = isset($shopInformation[0]['name']) ? $shopInformation[0]['name'] : '';
         $howToGuidesTitle = isset($howToGuides[0]['howtoTitle']) ? $howToGuides[0]['howtoTitle'] : '';
         $customHeader = '';
-        $howToGuideUrlForMetaTags = isset($howToGuides[0]['permaLink'])
-            ? $howToGuides[0]['permaLink']
-            : $howToGuides[0]['howtoguideslug'];
         $howToGuideMetaDescription = isset($howToGuides[0]['howtoMetaDescription'])
             ? $howToGuides[0]['howtoMetaDescription']
             : '';
@@ -360,7 +357,7 @@ class StoreController extends Zend_Controller_Action
             str_replace('[shop]', $shopName, $howToGuidesTitle),
             '',
             trim($howToGuideMetaDescription),
-            $howToGuideUrlForMetaTags,
+            $howToGuidesUrl,
             FACEBOOK_IMAGE,
             $customHeader
         );
