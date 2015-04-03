@@ -866,7 +866,7 @@ class Shop extends BaseShop
         $this->moretextforshop = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['moretextforshop']);
         $shopViewCount = isset($shopDetail['shopViewCount']) ? $shopDetail['shopViewCount'] : '0';
         $this->views = BackEnd_Helper_viewHelper::stripSlashesFromString($shopViewCount);
-        $this->howtoguideslug = FrontEnd_Helper_viewHelper::sanitize($shopDetail['pageSlug']);
+        $this->howtoguideslug = FrontEnd_Helper_viewHelper::sanitize($shopDetail['howToPageSlug']);
         $this->howtoTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageTitle']);
         $this->howtoSubtitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubTitle']);
         $this->howtoSubSubTitle = FrontEnd_Helper_viewHelper::sanitize(
@@ -1177,8 +1177,8 @@ class Shop extends BaseShop
             $shopPermalink = FrontEnd_Helper_viewHelper::sanitize(
                 BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl'])
             );
-            if (!empty($shopDetail['pageSlug'])) {
-                $howToGuidePermalink = $shopPermalink. "/".FrontEnd_Helper_viewHelper::sanitize($shopDetail['pageSlug']);
+            if (!empty($shopDetail['howToPageSlug'])) {
+                $howToGuidePermalink = $shopPermalink. "/".FrontEnd_Helper_viewHelper::sanitize($shopDetail['howToPageSlug']);
             } else {
                 $howToGuidePermalink = 'how-to/' . $shopPermalink;
             }

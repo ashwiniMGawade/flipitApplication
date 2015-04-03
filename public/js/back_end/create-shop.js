@@ -31,7 +31,7 @@ var validRules = {
     serviceNumber : __("Phone number looks great"),
     shopCustomHeader : __("Custom header looks great"),
     selecteditors :  __("Editor looks great"),
-    pageSlug : __("Page slug looks great"), 
+    howToPageSlug : __("how to page slug looks great"), 
     pageTitle : __("Page title looks great"), 
     pageSubTitle : __("Page subtitle looks great"),
     pageSubSubTitle : __("Page sub subtitle looks great"),
@@ -72,7 +72,7 @@ var focusRules = {
     serviceNumber : __("Enter phone number"),
     shopCustomHeader : __("Enter Custom header"),
     selecteditors :  __("Select an editor"),
-    pageSlug : __("Enter page slug"), 
+    howToPageSlug : __("Enter how to page slug"), 
     pageTitle : __("Enter page title"), 
     pageSubTitle : __("Enter page subtitle"),
     pageSubSubTitle : __("Enter page sub subtitle"),
@@ -219,8 +219,8 @@ function init()
         jQuery('#shopNameLeft').text(__("Shop name length ") + (data.input) + __(" characters"));
     });
 
-    $('#pageSlug').textareaCount(options, function(data){
-        jQuery('#pageSlugLeft').text(__("Page slug length ") + (data.input) + __(" characters"));
+    $('#howToPageSlug').textareaCount(options, function(data){
+        jQuery('#howToPageSlugLeft').text(__("how to page slug length ") + (data.input) + __(" characters"));
     });
     
     $('#pageTitle').textareaCount(options, function(data){
@@ -756,7 +756,7 @@ function validateFormAddNewShop(){
                     customtextposition : {
                         regex : /^([1-9]|10)$/
                     },
-                    pageSlug :  
+                    howToPageSlug :  
                     {
                         required : function(el)
                         {
@@ -880,8 +880,8 @@ function validateFormAddNewShop(){
                         
                         required : __("Please select an editor")
                     },
-                    pageSlug : {
-                        required : __("Please enter page slug")
+                    howToPageSlug : {
+                        required : __("Please enter how to page slug")
                     }, 
                     pageTitle : {
                         

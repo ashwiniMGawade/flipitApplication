@@ -332,8 +332,8 @@ function init()
         jQuery('#shopNameLeft').val(__("Shop name length ") + (data.input) + __(" characters"));
     });
     
-    $('#pageSlug').textareaCount(options, function(data){
-        jQuery('#pageSlugLeft').val(__("Page slug length ") + (data.input) + __(" characters"));
+    $('#howToPageSlug').textareaCount(options, function(data){
+        jQuery('#howToPageSlugLeft').val(__("Page slug length ") + (data.input) + __(" characters"));
     });
 
     $('#pageTitle').textareaCount(options, function(data){
