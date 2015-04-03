@@ -13,7 +13,6 @@ $classLoader = new \Doctrine\Common\ClassLoader('KC\Entity', APPLICATION_PATH . 
 $classLoader->setNamespaceSeparator('_');
 $classLoader->register();
 
-
 use \Doctrine\ORM\Tools\Setup;
 use \Doctrine\ORM\EntityManager;
 use \Doctrine\ORM\Mapping\Driver\AnnotationDriver;
@@ -31,25 +30,16 @@ $config->setProxyDir(APPLICATION_PATH . '/../library/KC/Entity/Proxy');
 $config->setAutoGenerateProxyClasses(true);
 $config->setProxyNamespace('KC\Entity\Proxy');
 
-/*$connectionParamsLocale = array(
-            'driver'   => 'pdo_mysql',
-            'user'     => 'root',
-            'password' => 'password',
-            'dbname'   => 'flipit_test',
-        );*/
 $connectionParamsLocale = array(
-            'driver'   => 'pdo_sqlite',
-            'memory'   => true,
-        );
-
+    'driver'   => 'pdo_mysql',
+    'user'     => 'root',
+    'password' => 'password',
+    'dbname'   => 'flipit_test',
+);
+/*$connectionParamsLocale = array(
+    'driver'   => 'pdo_sqlite',
+    'memory'   => true,
+);*/
 $em = EntityManager::create($connectionParamsLocale, $config);
 \Codeception\Module\Doctrine2::$em = $em;
-
-// $schemaTool = new SchemaTool($em);
-
-// $cmf = $em->getMetadataFactory();
-// $classes = $cmf->getAllMetadata();
-// $schemaTool->dropDatabase();
-// $schemaTool->createSchema($classes);
-
 \Codeception\Util\Autoload::registerSuffix('Page', __DIR__.DIRECTORY_SEPARATOR.'_pages');
