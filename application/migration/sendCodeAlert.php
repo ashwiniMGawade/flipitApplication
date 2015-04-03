@@ -135,6 +135,9 @@ class SendCodeAlert
         if (!empty($codeAlertOffers)) {
             foreach ($codeAlertOffers as $codeAlertOffer) {
                 $currentDate = date('Y-m-d H:i:s');
+                if ($codeAlertOffer['endDate'] < $currentDate) {
+                    CodeAlertQueue::moveCodeAlertToTrash($codeAlertOffer['id']);
+                }
                 if (($codeAlertOffer['startDate'] <= $currentDate && $codeAlertOffer['endDate'] >= $currentDate) && $codeAlertOffer['offline'] == 0) {
                     $this->setPhpExecutionLimit();
                     $topVouchercodes = FrontEnd_Helper_viewHelper::getShopCouponCode(
@@ -211,7 +214,7 @@ class SendCodeAlert
                         $message ='Code alert already sent...';
                     }
                 } else {
-                    $message ='Code alert cannot be sent for offer yet to start or expired.';
+                    $message .=' and code alert cannot be sent for other offers yet to start or expired.';
                 }
             }
         } else {
