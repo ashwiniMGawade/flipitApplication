@@ -119,7 +119,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/ckeditor/" ; ?>" ;
                                         <div class="mainpage-content-right-inner">
                                             <div class='browse-container'>            
                                                 <?php  
-                                                if (isset($this->newsletterHeaderImage['path']) && !empty($this->newsletterHeaderImage['path'])) { 
+                                                if (!empty($this->newsletterHeaderImage['path'])) { 
                                                     ?>
                                                     <img class='image-container' 
                                                         src="<?php echo PUBLIC_PATH_CDN
@@ -143,10 +143,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/ckeditor/" ; ?>" ;
                                                 <span class="message help-inline success margin-bottom-tenpx"></span>
                                             </div>
                                             <?php 
-                                            if(
-                                                !isset($this->newsletterHeaderImage['path']) 
-                                                || empty($this->newsletterHeaderImage['path'])
-                                            ) {
+                                            if(empty($this->newsletterHeaderImage['path'])) {
                                                 ?>
                                                 <input type="file"  id="newsLetterHeaderImage" 
                                                     class="span3 margin-bottom-tenpx" 

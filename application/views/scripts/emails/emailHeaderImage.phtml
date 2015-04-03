@@ -1,13 +1,10 @@
 <?php 
-    if (isset($this->newsLetterHeaderImage['path']) && !empty($this->newsLetterHeaderImage['path'])) {
+    if (!empty($this->newsLetterHeaderImage['path'])) {
     ?>
     <tr>
         <td bgcolor="#0077cc">
         <?php 
-        if (
-            isset($this->newsLetterHeaderImage['headerurl']) 
-            && !empty($this->newsLetterHeaderImage['headerurl'])
-        ) {
+        if (!empty($this->newsLetterHeaderImage['headerurl'])) {
             ?>
             <a target = "_blank" href="<?php echo $this->newsLetterHeaderImage['headerurl']; ?>">
             <?php 
@@ -20,10 +17,7 @@
             .$this->newsLetterHeaderImage['path']
             .$this->newsLetterHeaderImage['name'] ?>">
         <?php 
-        if (
-            isset($this->newsLetterHeaderImage['headerurl']) 
-            && !empty($this->newsLetterHeaderImage['headerurl'])
-        ) {
+        if (!empty($this->newsLetterHeaderImage['headerurl'])) {
             ?>
             </a>
             <?php 
