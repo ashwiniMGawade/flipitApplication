@@ -336,7 +336,7 @@ class PHPSitemap_sitemap
 						if (!empty($permalinks['howtoguideslug'])) {
 							$howToGuidePermalink = $permalinks['permaLink']. '/'. $permalinks['howtoguideslug'];
 						} else {
-						    $howToGuidePermalink = FrontEnd_Helper_viewHelper::__link('link_how-to'). '/'. $permalinks['permaLink'];
+							$howToGuidePermalink = FrontEnd_Helper_viewHelper::__link('link_how-to'). '/'. $permalinks['permaLink'];
 						}
 						if($locale=='en'):
 							$xml .= '<url><loc>'.$domain.'/'.$howToGuidePermalink.'</loc></url>';
