@@ -214,7 +214,7 @@ class SendCodeAlert
                         $message ='Code alert already sent...';
                     }
                 } else {
-                    $message ='Code alert cannot be sent for offer yet to start or expired.';
+                    $message .=' and code alert cannot be sent for other offers yet to start or expired.';
                 }
             }
         } else {
