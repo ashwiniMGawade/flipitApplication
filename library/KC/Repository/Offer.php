@@ -1584,8 +1584,7 @@ class Offer Extends \KC\Entity\Offer
         ->leftJoin('o.offerTiles', 't')
         ->addSelect("(SELECT count(cc.status) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status = 0) as used")
         ->addSelect("(SELECT count(ccc.status) FROM KC\Entity\CouponCode ccc WHERE ccc.offer = o.id and ccc.status = 1) as available")
-        ->andWhere("o.id =".$offerId)
-        ->andWhere("o.userGenerated = '0'");
+        ->andWhere("o.id =".$offerId);
         $offerDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $offerDetails;
     }
@@ -2402,8 +2401,8 @@ class Offer Extends \KC\Entity\Offer
         $query = $queryBuilder
             ->select(
                 "o.id, o.title, o.extendedOffer,o.authorId , o.extendedUrl,
-                s.permaLink as shopPermalink, s.howToUse ,s.contentManagerId , sp.permaLink as shopPagePermalink,
-                p.permaLink as categoryPermalink, page.permaLink as pagePermalink"
+                s.permaLink as shopPermalink, s.howToUse ,s.contentManagerId , sp.permalink as shopPagePermalink,
+                p.permaLink as categoryPermalink, page.permalink as pagePermalink"
             )
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
@@ -2411,7 +2410,7 @@ class Offer Extends \KC\Entity\Offer
             ->leftJoin('o.offers', 'refPage')
             ->leftJoin('refPage.offers', 'page')
             ->leftJoin('s.shopPage', 'sp')
-            ->leftJoin('c.offers', 'p')
+            ->leftJoin('c.categories', 'p')
             ->where("o.id=".$id);
         $offer = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $urlsArray = array();
@@ -2868,7 +2867,7 @@ class Offer Extends \KC\Entity\Offer
             $key = 'shop_expiredOffers'  . intval($params['selctedshop']) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
                     
-            $key = 'offer_'.$this->id.'_details';
+            $key = 'offer_'.$offer_id.'_details';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'extendedTopOffer_of_'.intval($params['selctedshop']);
@@ -2893,7 +2892,7 @@ class Offer Extends \KC\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
-            return array('result' => true , 'ofer_id' => $this->id );
+            return array('result' => true , 'ofer_id' => $offer_id);
             $key = 'all_widget5_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'all_widget6_list';
@@ -3177,7 +3176,6 @@ class Offer Extends \KC\Entity\Offer
             $query->execute();
             if (isset($params['selectedcategories'])) {
                 foreach ($params['selectedcategories'] as $categories) {
-                    $this->refOfferCategory[]->categoryId = $categories ;
                     $offerCategory  = new \KC\Entity\RefOfferCategory();
                     $offerCategory->created_at = new \DateTime('now');
                     $offerCategory->updated_at = new \DateTime('now');

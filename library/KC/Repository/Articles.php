@@ -347,20 +347,20 @@ class Articles extends \KC\Entity\Articles
                     $articleFeaturedImage['fileName']
                 );
 
-                $articlesFeaturedImage = new \KC\Entity\Image();
-                $articlesFeaturedImage->ext = $ext;
-                $articleFeaturedImage->path =
-                    \BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['path']);
-                $articleFeaturedImage->name =
-                    \BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['fileName']);
-                $articleFeaturedImage->deleted = 0;
-                $articleFeaturedImage->created_at = new \DateTime('now');
-                $articleFeaturedImage->updated_at = new \DateTime('now');
-                $entityManagerLocale->persist($articleFeaturedImage);
+                $articlesFeaturedImage = new \KC\Entity\ImageArticleFeaturedImage();
+                $articlesFeaturedImage->ext = @$ext;
+                $articlesFeaturedImage->path =
+                    @\BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['path']);
+                $articlesFeaturedImage->name =
+                    @\BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['fileName']);
+                $articlesFeaturedImage->deleted = 0;
+                $articlesFeaturedImage->created_at = new \DateTime('now');
+                $articlesFeaturedImage->updated_at = new \DateTime('now');
+                $entityManagerLocale->persist($articlesFeaturedImage);
                 $entityManagerLocale->flush();
-                $data->articlefeaturedimage = $entityManagerLocale->find(
-                    '\KC\Entity\Image',
-                    $articleFeaturedImage->id
+                $data->featuredImage = $entityManagerLocale->find(
+                    '\KC\Entity\ImageArticleFeaturedImage',
+                    $articlesFeaturedImage->id
                 );
             } else {
                 return false;
@@ -395,7 +395,6 @@ class Articles extends \KC\Entity\Articles
         }
 
         try {
-
             $entityManagerLocale->persist($data);
             $entityManagerLocale->flush();
             $articleId = $data->__get('id');
@@ -525,20 +524,20 @@ class Articles extends \KC\Entity\Articles
                     $articleFeaturedImage['fileName']
                 );
 
-                $articlesFeaturedImage = new \KC\Entity\Image();
+                $articlesFeaturedImage = new \KC\Entity\ImageArticleFeaturedImage();
                 $articlesFeaturedImage->ext = $ext;
-                $articleFeaturedImage->path =
+                $articlesFeaturedImage->path =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['path']);
-                $articleFeaturedImage->name =
+                $articlesFeaturedImage->name =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['fileName']);
-                $articleFeaturedImage->deleted = 0;
-                $articleFeaturedImage->created_at = new \DateTime('now');
-                $articleFeaturedImage->updated_at = new \DateTime('now');
-                $entityManagerLocale->persist($articleFeaturedImage);
+                $articlesFeaturedImage->deleted = 0;
+                $articlesFeaturedImage->created_at = new \DateTime('now');
+                $articlesFeaturedImage->updated_at = new \DateTime('now');
+                $entityManagerLocale->persist($articlesFeaturedImage);
                 $entityManagerLocale->flush();
-                $data->articlefeaturedimage = $entityManagerLocale->find(
-                    '\KC\Entity\Image',
-                    $articleFeaturedImage->id
+                $data->featuredImage = $entityManagerLocale->find(
+                    '\KC\Entity\ImageArticleFeaturedImage',
+                    $articlesFeaturedImage->id
                 );
             } else {
                 return false;

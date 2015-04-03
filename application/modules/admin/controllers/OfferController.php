@@ -95,6 +95,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $this->view->shopList = $shopObject->getOfferShopList();
         $categoryObject = new KC\Repository\Category();
         $this->view->categoryList = $categoryObject->getCategoriesInformation();
+        //echo "<pre>";print_r($this->view->categoryList);die;
         $pageObject = new KC\Repository\Page();
         $this->view->pages = $pageObject->getPagesOffer();
         $allTiles = $this->getAllTilesForOfferAction();
@@ -739,7 +740,6 @@ class Admin_OfferController extends Zend_Controller_Action
             $id = $this->getRequest()->getParam('offerId');
             $offerObj = new KC\Repository\Offer();
             $offerDetail = $offerObj->getOfferDetail($id);
-            //echo "<pre>";print_r($offerDetail);die;
             echo Zend_Json::encode($offerDetail);
             die;
     }
@@ -1108,20 +1108,18 @@ class Admin_OfferController extends Zend_Controller_Action
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_categorieen'));
         $varnishObj->addUrl("http://www.flipit.com");
         # make markplaatfeed url's get refreashed only in case of kortingscode
-        if (LOCALE == '')
-        {
-            $varnishObj->addUrl(  HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
-            $varnishObj->addUrl(  HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed' );
-
+        if (LOCALE == '') {
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND . 'marktplaatsfeed');
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND. 'marktplaatsmobilefeed');
         }
 
         # get all the urls related to an offer
-        $varnishUrls = \KC\Repository\Offer::getAllUrls( $id );
+        $varnishUrls = \KC\Repository\Offer::getAllUrls($id);
 
         # check $varnishUrls has atleast one url
-        if(isset($varnishUrls) && count($varnishUrls) > 0) {
-            foreach($varnishUrls as $value) {
-                $varnishObj->addUrl( HTTP_PATH_FRONTEND . $value);
+        if (isset($varnishUrls) && count($varnishUrls) > 0) {
+            foreach ($varnishUrls as $value) {
+                $varnishObj->addUrl(HTTP_PATH_FRONTEND . $value);
             }
         }
 

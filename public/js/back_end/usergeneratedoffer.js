@@ -184,16 +184,16 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
         {
             "fnRender" : function(obj) {
                 var tag='';
-                if (obj.aData.shop!=undefined && obj.aData.shop!=null && obj.aData.shop!='') {
-                    if (obj.aData.shop.name!=undefined && obj.aData.shop.name!=null && obj.aData.shop.name!='') {
+                if (obj.aData.shopOffers!=undefined && obj.aData.shopOffers!=null && obj.aData.shopOffers!='') {
+                    if (obj.aData.shopOffers.name!=undefined && obj.aData.shopOffers.name!=null && obj.aData.shopOffers.name!='') {
                         tag = "<p class='word-wrap-without-margin-offer' editId='" + obj.aData.id 
                 + "'><a href='javascript:void(0)'>"
-                        +ucfirst(obj.aData.shop.name)
+                        +ucfirst(obj.aData.shopOffers.name)
                         +"</a></p>";
                     } else {
                         tag = "<p editId='" + obj.aData.id 
                 + "' class='word-wrap-without-margin-offer'><a href='javascript:void(0)'>"
-                        +ucfirst(obj.aData.shop.name)
+                        +ucfirst(obj.aData.shopOffers.name)
                         +"</p></a>";                        
                     }
                 }
@@ -216,35 +216,31 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
             "bSortable" : true            
         },{
             "fnRender" : function(obj) {               
-                var sd = "";
-                if (obj.aData.startDate != null) {
-                    var tag = '';
-                    var dat = obj.aData.startDate;
-                    tag = dat.split("-");
-                    tag2 = tag[2];
-                    var da = tag2.split(" ");               
-                    sd = (da[0]+'-'+tag[1]+'-'+tag[0]);
+                var date = "";
+                                
+                if(obj.aData.startDate !=null && obj.aData.startDate !='undefined' ) {
+                    var splitdate = obj.aData.startDate.date.split(" ");
+                    if(obj.aData.startDate.date != null && splitdate[0] != '1970-01-01') {
+                        var date = obj.aData.startDate.date;
+                    
+                    }
                 }
-                return "<a href='javascript:void(0)'>" + sd + "</a>";  
+                return "<a href='javascript:void(0)'>" + date + "</a>";  
             },
             "bSearchable" : true,
             "bSortable" : true            
         },
         {
             "fnRender" : function(obj) {                
-                var endDate = "";
-                if (obj.aData.endDate != null) {
-                    var tag = '';
-                    var dat = obj.aData.endDate;
-                    tag = dat.split("-");
-                    tag2 = tag[2];
-                    var da = tag2.split(" ");
-                    endDate = (da[0]+'-'+tag[1]+'-'+tag[0]);
-                    if (endDate == '01-01-1970') {
-                        endDate = '';
+                var date = "";
+                if(obj.aData.endDate !=null && obj.aData.endDate !='undefined' ) {
+                    var splitdate = obj.aData.endDate.date.split(" ");
+                    if (obj.aData.endDate.date != null && splitdate[0] != '1970-01-01') {
+                        
+                        var date = obj.aData.endDate.date;
                     }
-                }
-                return "<a href='javascript:void(0)'>" + endDate + "</a>";                 
+                }   
+                return "<a href='javascript:void(0)'>" + date + "</a>";                 
             },
             "bSearchable" : true,
             "bSortable" : true            

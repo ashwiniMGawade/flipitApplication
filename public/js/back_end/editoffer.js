@@ -492,6 +492,7 @@ function setFormData(data){
 
 
 			} else{
+
 				jQuery("#addOfferBtn,#saveAndAddnew").removeClass("disabled").removeAttr('disabled','disabled');
 				jQuery(".strict-confirmation-alert").hide();
 			}
@@ -2142,7 +2143,7 @@ function submitForm(){
 
 function selectOfferImage(id)
 {
-	//jQuery('a.unselect').hide();
+	jQuery('a.unselect').hide();
 	jQuery('a#selectImg_'+id).show();
 	jQuery('input#offerImageSelect').val(id);
 	//jQuery("input.tiles").removeAttr('checked').valid();
