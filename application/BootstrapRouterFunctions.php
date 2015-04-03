@@ -32,7 +32,7 @@ class BootstrapRouterFunctions
         if (count($splitRouteProperties) == 1) {
             $permalink = $splitRouteProperties[0];
         } else if (count($splitRouteProperties) == 2) {
-            if (intval($splitRouteProperties[0]) > 0) {
+            if (is_int($splitRouteProperties[0])) {
                 $permalink = $splitRouteProperties[0];
             } else {
                 preg_match('/^[1-3]{1}$/', $splitRouteProperties[1], $maximumIntegerNumber);
