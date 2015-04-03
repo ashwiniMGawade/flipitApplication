@@ -323,23 +323,19 @@ class StoreController extends Zend_Controller_Action
 
     public function howtoguideAction()
     {
+
+        $howToGuidePermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($howToGuidePermalink);
         $shopId = $this->getRequest()->getParam('shopid');
-        $fallBackHowToUrl = '';
+       
         if (!isset($shopId)) {
             $shopId = Shop::getShopIdByPermalink($this->getRequest()->getParam('permalink'));
-            $fallBackHowToUrl =
-                FrontEnd_Helper_viewHelper::__link('link_how-to'). "/"
-                . $this->getRequest()->getParam('permalink');
         }
         $howToGuides = $this->_helper->Store->getHowToGuide($shopId);
         if (empty($howToGuides)) {
             throw new Zend_Controller_Action_Exception('', 404);
         }
-        $shopPermalink = !empty($howToGuides[0]['permaLink']) ? $howToGuides[0]['permaLink'] . "/" : '';
-        $howToGuidesUrl = !empty($howToGuides[0]['howtoguideslug'])
-            ? $shopPermalink . $howToGuides[0]['howtoguideslug']
-            : $fallBackHowToUrl;
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($howToGuidesUrl);
+    
         $shopList = $howToGuides[0]['id'].'_list';
         $shopInformation = $this->_helper->Store->getShopInformation($howToGuides[0]['id'], $shopList);
         $this->view->shopChain = $this->_helper->Store->getShopChain($shopInformation);
@@ -362,7 +358,7 @@ class StoreController extends Zend_Controller_Action
             str_replace('[shop]', $shopName, $howToGuidesTitle),
             '',
             trim($howToGuideMetaDescription),
-            $howToGuidesUrl,
+            $howToGuidePermalink,
             FACEBOOK_IMAGE,
             $customHeader
         );
