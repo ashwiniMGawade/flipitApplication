@@ -132,7 +132,7 @@ class Offer extends BaseOffer
         if (count($similarShopsIds) > 0) {
             $similarShopsOffers = Doctrine_Query::create()
                 ->select(
-                    's.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus,
+                    's.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.contentManagerName,s.deepLinkStatus,
                     o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability,
                     o.discountType, o.couponCode,  o.refofferurl, o.startdate, o.userGenerated, o.nickname, o.approved,
                     o.enddate, o.exclusiveCode, o.authorName,
@@ -188,7 +188,7 @@ class Offer extends BaseOffer
             $commaSepratedCategroyIdValues = implode(', ', $similarCategoriesIds);
             $similarCategoriesOffer = Doctrine_Query::create()
             ->select(
-                's.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL,
+                's.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, s.contentManagerName,o.refURL,
                 o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType,
                 o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,
                 o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid,
@@ -843,7 +843,7 @@ class Offer extends BaseOffer
             $shopIds = ("'" . implode("', '", $shopIds) . "'");
             $shopOffersByShopIds = Doctrine_Query::create()
             ->select(
-                's.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.refURL,o.discountType,
+                's.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,s.contentManagerName,terms.content,o.refURL,o.discountType,
                 o.id,o.title,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, o.refofferurl, o.startdate,
                 o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount, o.authorId, o.authorName,
                 o.shopid, o.offerlogoid, o.userGenerated, o.approved, o.nickname, img.id, img.path, img.name,o.couponCodeType'
@@ -874,7 +874,7 @@ class Offer extends BaseOffer
     {
         $shopOffersBySearchedKeywords = Doctrine_Query::create()
                 ->select(
-                    's.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,
+                    's.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,s.contentManagerName,terms.content,
                     o.id,o.title,o.refURL,o.discountType,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, 
                     o.refofferurl, o.startdate,o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount,
                     o.authorId, o.authorName, o.shopid,o.offerlogoid,o.couponCodeType,img.id, img.path,
@@ -996,7 +996,7 @@ class Offer extends BaseOffer
             o.editorPicks,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,o.authorName,
             o.endDate,o.refOfferUrl,o.couponCodeType, o.approved, o.userGenerated, o.nickname,o.extendedUrl,
             l.*,t.*,s.id,s.name,s.permalink as permalink, s.refUrl,s.customtext, s.showcustomtext, s.customtextposition,
-            s.usergenratedcontent,s.deepLink,s.deepLinkStatus, s.actualUrl, terms.content,img.id, img.path,
+            s.usergenratedcontent,s.deepLink,s.deepLinkStatus, s.actualUrl, s.contentManagerName,terms.content,img.id, img.path,
             img.name,vot.id,vot.vote'
         )
         ->from('Offer o')
@@ -2383,7 +2383,7 @@ class Offer extends BaseOffer
     public static function getCouponDetails($extendedUrl)
     {
         $couponDetails = Doctrine_Query::create()
-                       ->select('t.*,o.*,s.name,s.id,s.discussions,s.permaLink as permalink,s.title,s.subTitle,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,s.affliateProgram,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
+                       ->select('t.*,o.*,s.name,s.id,s.discussions,s.permaLink as permalink,s.title,s.subTitle,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,s.affliateProgram,s.contentManagerName,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
                        ->from("Offer o")
                        ->leftJoin('o.shop s')
                        ->leftJoin('o.logo ologo')
