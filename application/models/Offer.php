@@ -462,7 +462,7 @@ class Offer extends BaseOffer
             o.couponCode,o.exclusiveCode,
             o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,
             o.updated_at as lastUpdate,s.name,s.refUrl,
-            s.actualUrl,s.permaLink as permalink,s.views,l.*,terms.content'
+            s.actualUrl,s.permaLink as permalink, s.contentManagerName,s.views,l.*,terms.content'
         )
         ->from('refOfferPage op')
         ->leftJoin('op.Offer o')
@@ -512,7 +512,7 @@ class Offer extends BaseOffer
             o.startDate,o.endDate,o.refURL,
             o.refOfferUrl,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,
             o.updated_at as lastUpdate, o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,
-            s.permaLink as permalink,s.views,l.*, o.authorName'
+            s.permaLink as permalink, s.contentManagerName,s.views,l.*, o.authorName'
         )
         ->from('Offer o')
         ->andWhere(
