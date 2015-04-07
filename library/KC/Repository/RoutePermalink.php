@@ -81,9 +81,9 @@ class RoutePermalink extends \KC\Entity\RoutePermalink
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('p.permalink')
-            ->from('RoutePermalink p')
+            ->from('KC\Entity\RoutePermalink', 'p')
             ->where("p.permalink = '".$permalink."'")
-            ->andWhere('p.type = "SHP"')
+            ->andWhere('p.type = "SHP"');
         $validatedPermalink = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $validatedPermalink;
     }
