@@ -886,12 +886,12 @@ class Shop extends \KC\Entity\Shop
         $shopInfo->howtoSubSubTitle = \FrontEnd_Helper_viewHelper::sanitize(
             \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubSubTitle'])
         );
-        $this->howtoguideslug = \FrontEnd_Helper_viewHelper::sanitize($shopDetail['howToPageSlug']);
+        $shopInfo->howtoguideslug = \FrontEnd_Helper_viewHelper::sanitize($shopDetail['howToPageSlug']);
         $shopInfo->howtoMetaTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaTitle']);
         $shopInfo->howtoMetaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaDesc']);
         $shopInfo->customHeader = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomHeader']);
         $shopInfo->howToIntroductionText = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['howToIntroductionText']);
-        $this->showSimliarShops = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+        $shopInfo->showSimliarShops = \BackEnd_Helper_viewHelper::stripSlashesFromString(
             !empty($shopDetail['similarShops']) ? $shopDetail['similarShops'] : '0'
         );
         $showChains = !empty($shopDetail['showChains']) ? $shopDetail['showChains'] : '0';
@@ -1101,7 +1101,7 @@ class Shop extends \KC\Entity\Shop
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);
         $key = 'shop_similar_shops';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        $key = 'store_'.$this->id.'_howToGuide';
+        $key = 'store_'.$shopInfo->id.'_howToGuide';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
@@ -1206,13 +1206,13 @@ class Shop extends \KC\Entity\Shop
             $key = 'shop_similar_shops';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            $howToGuideExactLink = 'store/howtoguide/shopid/'.$this->id;
-            $shopExactLink = 'store/storedetail/id/'.$this->id;
+            $howToGuideExactLink = 'store/howtoguide/shopid/'.$shopInfo->id;
+            $shopExactLink = 'store/storedetail/id/'.$shopInfo->id;
             $shopPermalink = \FrontEnd_Helper_viewHelper::sanitize(
                 \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl'])
             );
             if (!empty($shopDetail['howToPageSlug'])) {
-                $howToGuidePermalink = $shopPermalink. "/".FrontEnd_Helper_viewHelper::sanitize($shopDetail['howToPageSlug']);
+                $howToGuidePermalink = $shopPermalink. "/".\FrontEnd_Helper_viewHelper::sanitize($shopDetail['howToPageSlug']);
             } else {
                 $howToGuidePermalink = 'how-to/' . $shopPermalink;
             }
@@ -1638,7 +1638,7 @@ class Shop extends \KC\Entity\Shop
                 if (!empty($shop['howtoguideslug'])) {
                     $urlsArray[] = $shop['permaLink']. '/'. $shop['howtoguideslug'];
                 } else {
-                    $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to'). '/'. $shop['permaLink'];
+                    $urlsArray[] = \FrontEnd_Helper_viewHelper::__link('link_how-to'). '/'. $shop['permaLink'];
                 }
             }
         }

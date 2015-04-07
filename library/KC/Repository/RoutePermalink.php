@@ -68,10 +68,13 @@ class RoutePermalink extends \KC\Entity\RoutePermalink
 
     public static function saveRoutePermalink($permalink, $exactlink)
     {
-        $routePermalink = new KC\Entity\RoutePermalink();
+        $routePermalink = new \KC\Entity\RoutePermalink();
         $routePermalink->permalink = $permalink;
         $routePermalink->type = 'SHP';
         $routePermalink->exactlink = $exactlink;
+        $routePermalink->created_at = new \DateTime('now');
+        $routePermalink->updated_at = new \DateTime('now');
+        $routePermalink->deleted = 0;
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
         $entityManagerLocale->persist($routePermalink);
         $entityManagerLocale->flush();
