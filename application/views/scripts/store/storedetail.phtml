@@ -91,7 +91,12 @@ if($this->profileImage['addtosearch'] == 1):
     endif;
 endif;
 
-$howToUseGuidePermalink= "how-to/".$this->currentStoreInformation[0]['permaLink'];
+$howToUseGuidePermalink = "how-to/".$this->currentStoreInformation[0]['permaLink'];
+if (!empty($this->currentStoreInformation[0]['howtoguideslug'])) {
+    $howToUseGuidePermalink = 
+        $this->currentStoreInformation[0]['permaLink']. '/'
+        . $this->currentStoreInformation[0]['howtoguideslug'];
+}
 $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
 $offersCount = count($this->offers);
 

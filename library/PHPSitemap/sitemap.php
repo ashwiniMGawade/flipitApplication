@@ -307,56 +307,45 @@ class PHPSitemap_sitemap
 		}
 		return $sitemap->asXML();
 	}
-	
-	/**
-	 * Sitemap Generation for shops
-	 * @author Raman
-	 *
-	 */
-	
-	//Generates Shops sitemap
-	public function generate_shops_sitemap($domain, $locale){
-		
-		$xml = '<?xml version="1.0" encoding="UTF-8"?>
-			<urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+
+    public function generate_shops_sitemap($domain, $locale)
+    {
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>
+            <urlset
+            xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
-
-
-		$arr = array();
-		$arr = Shop::getShopPermalinks();
-		
-		if(!empty($arr)):
-			foreach($arr as $permalinks):
-				if($permalinks['permaLink'] != ""):
-				
-					if($permalinks['howToUse'] == 1):
-						if($locale=='en'):
-							$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('link_how-to').'/'.$permalinks['permaLink'].'</loc></url>';
-						else:
-							$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('link_how-to').'/'.$permalinks['permaLink'].'</loc></url>';
-						endif;
-					endif;
-					
-					if($locale=='en'):
-						$xml .= '<url><loc>'.$domain.'/'.$permalinks['permaLink'].'</loc></url>';
-					else:
-						$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.$permalinks['permaLink'].'</loc></url>';
-					endif;
-					
-				endif;
-			endforeach;
-		endif;
-		
-		$xml .= '</urlset>';
-		return $xml;
-
-
-	}
-	
-	
+        $arr = array();
+        $arr = Shop::getShopPermalinks();
+        if (!empty($arr)):
+            foreach ($arr as $permalinks):
+                if ($permalinks['permaLink'] != ""):
+                    if ($permalinks['howToUse'] == 1):
+                        if (!empty($permalinks['howtoguideslug'])):
+                            $howToGuidePermalink = $permalinks['permaLink']. '/'. $permalinks['howtoguideslug'];
+                        else:
+                            $howToGuidePermalink = FrontEnd_Helper_viewHelper::__link('link_how-to'). '/'. $permalinks['permaLink'];
+                        endif;
+                        if ($locale=='en'):
+                            $xml .= '<url><loc>'.$domain.'/'.$howToGuidePermalink.'</loc></url>';
+                        else:
+                            $xml .= '<url><loc>'.$domain.'/'.$locale.'/'.$howToGuidePermalink.'</loc></url>';
+                        endif;
+                    endif;
+                    
+                    if ($locale=='en'):
+                        $xml .= '<url><loc>'.$domain.'/'.$permalinks['permaLink'].'</loc></url>';
+                    else:
+                        $xml .= '<url><loc>'.$domain.'/'.$locale.'/'.$permalinks['permaLink'].'</loc></url>';
+                    endif;
+                    
+                endif;
+            endforeach;
+        endif;
+        $xml .= '</urlset>';
+        return $xml;
+    }
 	/**
 	 * Sitemap Generation for Guides
 	 * @author Raman

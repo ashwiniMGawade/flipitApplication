@@ -59,6 +59,7 @@ class Articles extends BaseArticles
                 ->leftJoin('a.relatedcategory as related')
                 ->leftJoin('a.thumbnail')
                 ->leftJoin('a.articleImage')
+                ->leftJoin('a.articlefeaturedimage')
                 ->leftJoin('stores.shop')
                 ->leftJoin('a.chapters chap')
                 ->where('a.publish = "1"')

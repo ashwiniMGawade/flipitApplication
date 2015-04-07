@@ -25,7 +25,8 @@ class FrontEnd_Helper_Mailer {
         $recipientMetaData = '',
         $directlinks = '',
         $footerContent = '',
-        $pathConstants = ''
+        $pathConstants = '',
+        $newsLetterFooterImage = ''
     ) {
         $to = is_array($visitorEmail) ? $visitorEmail : array(
                 array(
@@ -59,19 +60,15 @@ class FrontEnd_Helper_Mailer {
         );
 
         if (!empty($pathConstants)) {
-            if (!isset($pathConstants['exportScript'])) {
-                $siteUrl = $pathConstants['httpPathLocale'];
-                $httpPath = $pathConstants['httpPath'].'/';
-                $locale = $pathConstants['locale'];
-            } else {
-                $siteUrl = LOCALE != '' ? 'http://www.flipit.com/'.LOCALE.'/' : 'http://www.kortingscode.nl/';
-                $httpPath = LOCALE != '' ? 'http://www.flipit.com/' : 'http://www.kortingscode.nl/';
-                $locale = LOCALE;
-            }
+            $siteUrl = $pathConstants['httpPathLocale'];
+            $httpPath = $pathConstants['httpPath'].'/';
+            $locale = $pathConstants['locale'];
+            $publicPathCdn = $pathConstants['publicPathCdn'];
         } else {
             $siteUrl = LOCALE != '' ? 'http://www.flipit.com/'.LOCALE.'/' : 'http://www.kortingscode.nl/';
             $httpPath = LOCALE != '' ? 'http://www.flipit.com/' : 'http://www.kortingscode.nl/';
             $locale = LOCALE;
+            $publicPathCdn = LOCALE != '' ? 'http://img.flipit.com/public/'.LOCALE.'/' : 'http://img.kortingscode.nl/public/';
         }
 
         $footer = array(
@@ -92,7 +89,9 @@ class FrontEnd_Helper_Mailer {
                     array(
                         'httpPathLocale' => $siteUrl,
                         'httpPath' => $httpPath,
-                        'locale' => $locale
+                        'locale' => $locale,
+                        'newsLetterFooterImage' => $newsLetterFooterImage,
+                        'publicPathCdn' => $publicPathCdn
                     )
                 ),
                 array(

@@ -339,12 +339,6 @@ EOD;
                     $resultStatus = "true";
                 }
                 break;
-            case 'onload':
-                if (\KC\Repository\ViewCount::getOfferOnload($offerId, $clientIp) == 0) {
-                    \KC\Repository\ViewCount::saveOfferOnload($offerId, $clientIp);
-                    $resultStatus = "true";
-                }
-                break;
             default:
                 break;
         }
@@ -370,14 +364,14 @@ EOD;
         $httpXForwardedFor = \Zend_Controller_Front::getInstance()->getRequest()->getServer('HTTP_X_FORWARDED_FOR');
 
         if (!empty($clientIp)) {
-            $clinetIp = $clientIp;
+            $clientIpAddress = $clientIp;
         } else if (!empty($httpXForwardedFor)) {
             $ipRange = $httpXForwardedFor;
-            $clinetIp = current(array_slice(explode(",", $ipRange), 0, 1));
+            $clientIpAddress = current(array_slice(explode(",", $ipRange), 0, 1));
         } else {
-            $clinetIp = \Zend_Controller_Front::getInstance()->getRequest()->getServer('REMOTE_ADDR');
+            $clientIpAddress = \Zend_Controller_Front::getInstance()->getRequest()->getServer('REMOTE_ADDR');
         }
-        return $clinetIp;
+        return $clientIpAddress;
     }
 
     public function getHowToGuidesImage($howToGuideImages)
@@ -777,7 +771,9 @@ EOD;
         $footerContent,
         $pathConstants = '',
         $emailHeaderText = '',
-        $codeAlert = ''
+        $codeAlert = '',
+        $newsLetterHeaderImage = '',
+        $newsLetterFooterImage = ''
     ) {
         $basePath = new \Zend_View();
         $basePath->setBasePath(APPLICATION_PATH . '/views/');
@@ -791,7 +787,8 @@ EOD;
                     'categoryInformation' => $categoryInformation,
                     'pathConstants' => $pathConstants,
                     'codeAlert' => $codeAlert,
-                    'mandrillNewsletterSubject' => $mandrillNewsletterSubject
+                    'mandrillNewsletterSubject' => $mandrillNewsletterSubject,
+                    'newsLetterHeaderImage' => $newsLetterHeaderImage
                 )
             )
         );
@@ -814,7 +811,8 @@ EOD;
                 !empty($recipientMetaData[$mandrillUsersKey]) ? $recipientMetaData[$mandrillUsersKey] : '',
                 $mandrillMergeVars[$mandrillUsersKey],
                 $footerContent,
-                $pathConstants
+                $pathConstants,
+                $newsLetterFooterImage
             );
         }
         return true;
@@ -1081,13 +1079,6 @@ EOD;
             $editorText = str_replace('[shop]', $shopName, $text);
         }
         return $editorText;
-    }
-
-    public static function setClientIdForTracking($subId = '')
-    {
-        $gaCookie = isset($_COOKIE['_ga']) ? $_COOKIE['_ga'] : 'notAvailable';
-        $clientId = str_replace('GOOGLEANALYTICSTRACKINCID', $gaCookie, $subId);
-        return $clientId;
     }
 
     public static function getCurrentDate()

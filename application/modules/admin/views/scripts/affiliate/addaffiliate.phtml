@@ -38,6 +38,9 @@
                                         <?php echo $this->translate("If not implemented correctly then it might break the whole system!");?><br><br>
                                         <?php echo $this->translate("Subid should be A2ASUBID");?><br>
                                         <?php echo $this->translate("Clientid should be GOOGLEANALYTICSTRACKINCID");?><br>
+                                        <?php echo $this->translate("For the regex pattern to work for subid it should be added like: regexPattern|_A2ASUBID-GOOGLEANALYTICSTRACKINCID");?>
+                                        <br>
+                                        <?php echo "Note: regexPattern can be like \_(?=[^_]*$)";?>
                                     </div> 
                                 </div>    
                             </div>    

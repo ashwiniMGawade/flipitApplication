@@ -4,10 +4,10 @@ class OutController extends Zend_Controller_Action
     public function offerAction()
     {
         $offerId = $this->getRequest()->getParam('id');
-        \FrontEnd_Helper_viewHelper::viewCounter('offer', 'onclick', $offerId);
-        \FrontEnd_Helper_viewHelper::viewCounter('offer', 'onload', $offerId);
-        \KC\Repository\Offer::addConversion($offerId);
-        $redirectUrl  = \KC\Repository\Offer::getCloakLink($offerId, false);
+        FrontEnd_Helper_viewHelper::viewCounter('offer', 'onclick', $offerId);
+        $conversionId = \KC\Repository\Conversions::addConversion($offerId, 'offer');
+        $clickout = new FrontEnd_Helper_ClickoutFunctions($offerId, null);
+        $redirectUrl = $clickout->getCloakLink('offer', $conversionId);
         $this->_helper->redirector->setCode(301);
         $this->_redirect($redirectUrl);
     }
@@ -15,7 +15,8 @@ class OutController extends Zend_Controller_Action
     public function exofferAction()
     {
         $offerId = $this->getRequest()->getParam('id');
-        $redirectUrl  = \KC\Repository\Offer::getCloakLink($offerId, false);
+        $clickout = new FrontEnd_Helper_ClickoutFunctions($offerId, null);
+        $redirectUrl = $clickout->getCloakLink('offer');
         $this->_helper->redirector->setCode(301);
         $this->_redirect($redirectUrl);
     }
@@ -23,9 +24,10 @@ class OutController extends Zend_Controller_Action
     public function shopAction()
     {
         $shopId = $this->getRequest()->getParam('id');
-        \FrontEnd_Helper_viewHelper::viewCounter('shop', 'onclick', $shopId);
-        \KC\Repository\Shop::addConversion($shopId);
-        $redirectUrl = \KC\Repository\Shop::getStoreLinks($shopId, false);
+        FrontEnd_Helper_viewHelper::viewCounter('shop', 'onclick', $shopId);
+        $conversionId = \KC\Repository\Conversions::addConversion($shopId, 'shop');
+        $clickout = new FrontEnd_Helper_ClickoutFunctions(null, $shopId);
+        $redirectUrl = $clickout->getCloakLink('shop', $conversionId);
         $this->_helper->redirector->setCode(301);
         $this->_redirect($redirectUrl);
     }

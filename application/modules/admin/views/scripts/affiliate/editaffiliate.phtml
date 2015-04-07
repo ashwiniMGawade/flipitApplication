@@ -42,7 +42,10 @@
     									    <strong><?php echo $this->translate('Warning!');?></strong>&nbsp;<?php echo $this->translate("The subid and client id will change all the clickout urls of this network! Only make changes if you know what you are doing!");?><br><br>
                                             <?php echo $this->translate("Subid should be A2ASUBID");?><br>
                                             <?php echo $this->translate("Clientid should be GOOGLEANALYTICSTRACKINCID");?><br>
-                                            <?php echo $this->translate("For eg. for Zanox network it should be like: zpar0=[[A2ASUBID]]&zpar1=[[GOOGLEANALYTICSTRACKINCID]]");?>
+                                            <?php echo $this->translate("For eg. for Zanox network it should be like: zpar0=[[A2ASUBID]]&zpar1=[[GOOGLEANALYTICSTRACKINCID]]");?><br>
+                                            <?php echo $this->translate("For the regex pattern to work for subid it should be added like: regexPattern|_A2ASUBID-GOOGLEANALYTICSTRACKINCID");?>
+                                            <br>
+                                            <?php echo "Note: regexPattern can be like \_(?=[^_]*$)";?>
     								    </div>     
                                     </div>
 								</div>    

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Script for getting disqus comments for all locales
  *
@@ -15,14 +14,13 @@ class GetDisqusComments
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
         $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
         $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
-        $imbull = $connections['imbull'];
         echo CommonMigrationFunctions::showProgressMessage(
             'getting all Disqus comments and saving them into databases of all locales'
         );
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-                    $this->getAndSaveDisqusComments($connection['dsn'], $key, $imbull);
+                    $this->getAndSaveDisqusComments($connection['dsn'], $key);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     echo "\n\n";
@@ -34,7 +32,7 @@ class GetDisqusComments
         $manager->closeConnection($doctrineImbullDbConnection);
     }
 
-    protected function getAndSaveDisqusComments($dsn, $key, $imbull)
+    protected function getAndSaveDisqusComments($dsn, $key)
     {
         $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
         $manager = CommonMigrationFunctions::loadDoctrineModels();
@@ -54,20 +52,19 @@ class GetDisqusComments
         } else {
             $siteName = 'flipitcom'.$key;
         }
-        $DisqusParameters = array(
-            'APIKey' => $disqusAPIKey,
-            'forumName' => $siteName,
-            'commentCount' => 100,
-            'commentLength' => 255
+        $disqusParameters = array(
+            'DISQUS_API_SECRET' => $disqusAPIKey,
+            'DISQUS_FORUM_SHORTNAME' => $siteName,
+            'DISQUS_FETCH_LIMIT' => 100,
+            'DISQUS_FETCH_ORDER' => 'asc'
         );
-        //get Recent Comments with API
-        $DisqusComments = getDisqusRecentComments($DisqusParameters);
-        if (!empty($DisqusComments)) {
-            DisqusComments::saveComments($DisqusComments);
+        $disqusComments = getDisqusRecentComments($disqusParameters);
+        if (!empty($disqusComments)) {
+            DisqusComments::saveComments($disqusComments);
         }
         $manager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(
-            "$key - Old Comments have been Deleted and New are saved successfully!!!"
+            "$key - New Comments are saved successfully!!!"
         );
     }
 }

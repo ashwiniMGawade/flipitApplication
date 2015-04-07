@@ -31,6 +31,7 @@ var validRules = {
     serviceNumber : __("Phone number looks great"),
     shopCustomHeader : __("Custom header looks great"),
     selecteditors :  __("Editor looks great"),
+    howToPageSlug : __("how to page slug looks great"), 
     pageTitle : __("Page title looks great"), 
     pageSubTitle : __("Page subtitle looks great"),
     pageSubSubTitle : __("Page sub subtitle looks great"),
@@ -71,6 +72,7 @@ var focusRules = {
     serviceNumber : __("Enter phone number"),
     shopCustomHeader : __("Enter Custom header"),
     selecteditors :  __("Select an editor"),
+    howToPageSlug : __("Enter how to page slug"), 
     pageTitle : __("Enter page title"), 
     pageSubTitle : __("Enter page subtitle"),
     pageSubSubTitle : __("Enter page sub subtitle"),
@@ -215,6 +217,10 @@ function init()
     
     $('#shopName').textareaCount(options, function(data){
         jQuery('#shopNameLeft').text(__("Shop name length ") + (data.input) + __(" characters"));
+    });
+
+    $('#howToPageSlug').textareaCount(options, function(data){
+        jQuery('#howToPageSlugLeft').text(__("how to page slug length ") + (data.input) + __(" characters"));
     });
     
     $('#pageTitle').textareaCount(options, function(data){
@@ -750,6 +756,16 @@ function validateFormAddNewShop(){
                     customtextposition : {
                         regex : /^([1-9]|10)$/
                     },
+                    howToPageSlug :  
+                    {
+                        required : function(el)
+                        {
+                            if($("#howTouseStatus").val() == 1) {
+                                return true ;
+                            }
+                            return false;
+                        }
+                    },
                     pageTitle :  
                     {
                         required : function(el)
@@ -864,6 +880,9 @@ function validateFormAddNewShop(){
                         
                         required : __("Please select an editor")
                     },
+                    howToPageSlug : {
+                        required : __("Please enter how to page slug")
+                    }, 
                     pageTitle : {
                         
                         required : __("Please enter page title")
