@@ -120,9 +120,9 @@ class Conversions extends \KC\Entity\Conversions
         $hasNetwork = $clickout->checkIfShopHasAffliateNetwork();
         if ($hasNetwork) {
             $conversionInfo = self::checkIfConversionExists($id, $clientIP, $clickoutType);
-            $conversionId = $conversionInfo['id'];
+            $conversionId = isset($conversionInfo[0]['id']) ? $conversionInfo[0]['id'] : '';
 
-            if (!isset($conversionInfo['exists'])) {
+            if (!isset($conversionInfo[0]['exist'])) {
                 $conversionId = self::addNewConversion($id, $clientIP, $clickoutType);
             }
         }
@@ -133,33 +133,36 @@ class Conversions extends \KC\Entity\Conversions
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $conversionInfo = $queryBuilder
-            ->select('count(c.id) as exists, c.id')
-            ->from("KC\Entity\Conversions", "c");
+            ->select('count(c.id) as exist, c.id')
+            ->from('KC\Entity\Conversions', 'c');
         if ($clickoutType === 'offer') {
-            $conversionInfo = $conversionInfo->where('c.offerId="'.$id.'"');
+            $conversionInfo = $conversionInfo->where($queryBuilder->expr()->eq('c.offer', $id));
         } else {
-            $conversionInfo = $conversionInfo->where('c.shopId="'.$id.'"');
+            $conversionInfo = $conversionInfo->where($queryBuilder->expr()->eq('c.shop', $id));
         }
     
         $conversionInfo = $conversionInfo
-            ->andWhere('c.IP="'.$clientIP.'"')
+            ->andWhere($queryBuilder->expr()->eq('c.IP', $clientIP))
             ->andWhere("c.converted=0")
-            ->groupBy('c.id')->getQuery()->getSingleResult(null, Doctrine::HYDRATE_ARRAY);
+            ->groupBy('c.id')->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $conversionInfo;
     }
 
     private static function addNewConversion($id, $clientIP, $clickoutType)
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $conversion = new KC\Entity\Conversions();
+        $conversion = new \KC\Entity\Conversions();
 
         if ($clickoutType === 'offer') {
-            $conversion->offerId = $id;
+            $conversion->offer = \Zend_Registry::get('emLocale')->find('KC\Entity\Offer', $id);
         } else {
-            $conversion->shopId = $id;
+            $conversion->shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $id);
         }
         
         $conversion->IP = $clientIP;
+        $conversion->converted = 0;
+        $conversion->created_at = new \DateTime('now');
+        $conversion->updated_at = new \DateTime('now');
         $entityManagerLocale->persist($conversion);
         $entityManagerLocale->flush();
         return $conversion->id;

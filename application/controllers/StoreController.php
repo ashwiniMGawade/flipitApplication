@@ -325,8 +325,6 @@ class StoreController extends Zend_Controller_Action
 
     public function howtoguideAction()
     {
-
-
         $howToGuidePermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($howToGuidePermalink);
         $shopId = $this->getRequest()->getParam('shopid');
