@@ -341,14 +341,14 @@ class Shop extends \KC\Entity\Shop
         return $popularStores;
     }
 
-    public static function getshopDetails($permalink)
+    public static function getshopDetails($shopId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s,img.name,img.path,chptr')
         ->from('KC\Entity\Shop', 's')
         ->leftJoin('s.logo', 'img')
         ->leftJoin('s.howtochapter', 'chptr')
-        ->Where("s.permaLink= '".$permalink."'")
+        ->Where("s.permaLink= '".$shopId."'")
         ->andWhere('s.status = 1');
         $shopDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopDetails;
@@ -748,8 +748,7 @@ class Shop extends \KC\Entity\Shop
                 //call cache function
                 $key = 'shop_similar_shops';
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-                $cacheKey = \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopInfo->permaLink);
-                $key = 'store_'.$cacheKey.'_howToGuide';
+                $key = 'store_'.$id.'_howToGuide';
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
@@ -887,11 +886,12 @@ class Shop extends \KC\Entity\Shop
         $shopInfo->howtoSubSubTitle = \FrontEnd_Helper_viewHelper::sanitize(
             \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubSubTitle'])
         );
+        $this->howtoguideslug = FrontEnd_Helper_viewHelper::sanitize($shopDetail['howToPageSlug']);
         $shopInfo->howtoMetaTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaTitle']);
         $shopInfo->howtoMetaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaDesc']);
         $shopInfo->customHeader = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomHeader']);
         $shopInfo->howToIntroductionText = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['howToIntroductionText']);
-        $shopInfo->showSimliarShops = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+        $this->showSimliarShops = BackEnd_Helper_viewHelper::stripSlashesFromString(
             !empty($shopDetail['similarShops']) ? $shopDetail['similarShops'] : '0'
         );
         $showChains = !empty($shopDetail['showChains']) ? $shopDetail['showChains'] : '0';
@@ -1101,8 +1101,7 @@ class Shop extends \KC\Entity\Shop
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);
         $key = 'shop_similar_shops';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        $cacheKey = \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopDetail['shopNavUrl']);
-        $key = 'store_'.$cacheKey.'_howToGuide';
+        $key = 'store_'.$this->id.'_howToGuide';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
@@ -1123,20 +1122,13 @@ class Shop extends \KC\Entity\Shop
                
         }
         if (!empty($getcategory[0]['permaLink'])) {
-            $getRouteLink = $queryBuilder->select('routep.permalink')
-                ->from('KC\Entity\RoutePermalink', 'routep')
-                ->where("routep.permalink = '".$getcategory[0]['permaLink']."'")
-                ->andWhere("routep.type = 'SHP'")
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            $howToguideRoute = $queryBuilder->select('rpermalink.id')
-                ->from('KC\Entity\RoutePermalink', 'rpermalink')
-                ->where("rpermalink.permalink = 'how-to/".$getRouteLink[0]['permalink']."'")
-                ->andWhere("rpermalink.type = 'SHP'")
-                ->getQuery()
-                ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            
+            $validatedShopRoute = KC\Repository\RoutePermalink::validatePermalink($getcategory[0]['permaLink']);
+            $howToGuideValidatedLink = $getcategory[0]['permaLink'] .'/'.$getcategory[0]['howtoguideslug'];
+            $validatedHowToGuideRoute = KC\Repository\RoutePermalink::validatePermalink($howToGuideValidatedLink);
+            if (empty($validatedHowToGuideRoute)) {
+                $howToGuideValidatedLink = 'how-to/'.$getcategory[0]['permaLink'];
+                $validatedHowToGuideRoute = KC\Repository\RoutePermalink::validatePermalink($howToGuideValidatedLink);
+            }
         }
 
         try {
@@ -1211,62 +1203,30 @@ class Shop extends \KC\Entity\Shop
             $key = 'shop_similar_shops';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            if (!empty($getRouteLink)) {
-                $exactLink = 'store/storedetail/id/'.$shopInfo->id;
-                $howtoguide = 'store/howtoguide/shopid/'.$shopInfo->id;
-                $updateRouteLink = $queryBuilder->update('KC\Entity\RoutePermalink', 'rpm')
-                    ->set(
-                        'rpm.permalink',
-                        "'".\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl'])."'"
-                    )
-                    ->set('rpm.type', "'SHP'")
-                    ->set('rpm.exactlink', "'". $exactLink."'");
-                $updateRouteLink->where("rpm.type = 'SHP'")
-                    ->andWhere($queryBuilder->expr()->eq('rpm.permalink', $queryBuilder->expr()->literal($getRouteLink[0]['permalink'])))
-                    ->getQuery()
-                    ->execute();
-
-                if (!empty($howToguideRoute)) {
-                    $updateRouteHow = \Zend_Registry::get('emLocale')->createQueryBuilder()->update('KC\Entity\RoutePermalink', 'rpl')
-                    ->set('rpl.permalink', "'how-to/".\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl'])."'")
-                    ->set('rpl.type', "'SHP'")
-                    ->set('rpl.exactlink', "'".$howtoguide."'");
-                    $updateRouteHow->where("rpl.type = 'SHP'")
-                        ->andWhere($queryBuilder->expr()->eq('rpl.permalink', $queryBuilder->expr()->literal('how-to/'.$getRouteLink[0]['permalink'])))
-                        ->getQuery()
-                        ->execute();
-                } else {
-                    $route = new \KC\Entity\RoutePermalink();
-                    $route->permalink = "how-to/" . \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
-                    $route->type = 'SHP';
-                    $route->exactlink = 'store/howtoguide/shopid/'.$shopInfo->id;
-                    $route->deleted = 0;
-                    $route->created_at = new \DateTime('now');
-                    $route->updated_at = new \DateTime('now');
-                    \Zend_Registry::get('emLocale')->persist($route);
-                    \Zend_Registry::get('emLocale')->flush();
-                }
-                 
+            $howToGuideExactLink = 'store/howtoguide/shopid/'.$this->id;
+            $shopExactLink = 'store/storedetail/id/'.$this->id;
+            $shopPermalink = \FrontEnd_Helper_viewHelper::sanitize(
+                \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl'])
+            );
+            if (!empty($shopDetail['howToPageSlug'])) {
+                $howToGuidePermalink = $shopPermalink. "/".FrontEnd_Helper_viewHelper::sanitize($shopDetail['howToPageSlug']);
             } else {
-                $route = new \KC\Entity\RoutePermalink();
-                $route->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
-                $route->type = 'SHP';
-                $route->exactlink = 'store/storedetail/id/'.$shopInfo->id;
-                $route->deleted = 0;
-                $route->created_at = new \DateTime('now');
-                $route->updated_at = new \DateTime('now');
-                \Zend_Registry::get('emLocale')->persist($route);
-                \Zend_Registry::get('emLocale')->flush();
-
-                $route = new \KC\Entity\RoutePermalink();
-                $route->permalink = "how-to/" . \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
-                $route->type = 'SHP';
-                $route->exactlink = 'store/howtoguide/shopid/'.$shopInfo->id;
-                $route->deleted = 0;
-                $route->created_at = new \DateTime('now');
-                $route->updated_at = new \DateTime('now');
-                \Zend_Registry::get('emLocale')->persist($route);
-                \Zend_Registry::get('emLocale')->flush();
+                $howToGuidePermalink = 'how-to/' . $shopPermalink;
+            }
+            if (!empty($validatedShopRoute)) {
+                KC\Repository\RoutePermalink::updateRoutePermalink($shopPermalink, $shopExactLink, $validatedShopRoute[0]['permalink']);
+                if (!empty($validatedHowToGuideRoute)) {
+                    KC\Repository\RoutePermalink::updateRoutePermalink(
+                        $howToGuidePermalink,
+                        $howToGuideExactLink,
+                        $validatedHowToGuideRoute[0]['permalink']
+                    );
+                } else {
+                    KC\Repository\RoutePermalink::saveRoutePermalink($howToGuidePermalink, $howToGuideExactLink);
+                }
+            } else {
+                KC\Repository\RoutePermalink::saveRoutePermalink($shopPermalink, $shopExactLink);
+                KC\Repository\RoutePermalink::saveRoutePermalink($howToGuidePermalink, $howToGuideExactLink);
             }
 
             if (isset($shopDetail['similarstoreord'])) {
@@ -1475,7 +1435,7 @@ class Shop extends \KC\Entity\Shop
     public static function getShopPermalinks()
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $permalinks = $queryBuilder->select('s.permaLink as permalink, s.howToUse')
+        $permalinks = $queryBuilder->select('s.permaLink as permalink, s.howToUse, s.howtoguideslug')
             ->from('KC\Entity\Shop', 's')
             ->where('s.deleted=0')
             ->andWhere('s.status=1')
@@ -1624,104 +1584,16 @@ class Shop extends \KC\Entity\Shop
         return $data;
     }
 
-
-    public static function getStoreLinks($shopId, $checkRefUrl = false)
+    public static function getShopInfoByShopId($shopId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $data = $queryBuilder
-        ->select('s.id, s.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl')
-        ->from('KC\Entity\Shop', 's')
-        ->where('s.id='.$shopId)
-        ->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
-        $network = self::getAffliateNetworkDetail($shopId);
-
-       if ($checkRefUrl) {
-            # retur false if s shop is not associated with any network
-            if (!isset($network['affliatenetwork'])) {
-                return false ;
-            }
-            if (isset($data['deepLink']) && $data['deepLink']!= null) {
-                # deeplink is now commetted for the time being, so we always @return false ;
-                return false;
-            } elseif (isset($data['refUrl']) && $data['refUrl']!=null) {
-                return true ;
-            } else {
-                return true ;
-            }
-        }
-        $subid = "" ;
-        if (isset($network['affliatenetwork'])) {
-            if (!empty($network['subid'])) {
-                $subid = "&". $network['subid'] ;
-                $clientIP = \FrontEnd_Helper_viewHelper::getRealIpAddress();
-                $ip = ip2long($clientIP);
-                # get click detail and replcae A2ASUBID click subid
-                $conversion = \KC\Repository\Conversions::getConversionId($data['id'], $ip, 'shop');
-                $subid = str_replace('A2ASUBID',$conversion['id'] , $subid );
-                $subid = \FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
-            }
-        }
-
-        if (isset($data['refUrl']) && $data['refUrl']!=null) {
-            $url = $data['refUrl'];
-            $url .= $subid;
-        } elseif (isset($data['actualUrl']) && $data['actualUrl']!=null) {
-            $url = $data['actualUrl'];
-        } else {
-            $url = HTTP_PATH_LOCALE.@$data['permaLink'];
-
-        }
-        return $url;
-    }
-
-    public static function addConversion($id)
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $clientIP = \FrontEnd_Helper_viewHelper::getRealIpAddress();
-        $ip = ip2long($clientIP);
-
-        # save conversion detail if an offer is associated with a network
-        if (self::getStoreLinks($id, true)) {
-            # check for previous cnversion of same ip
-            $data = $queryBuilder->select("count(c.id) as exist, c.id")
-                ->from("KC\Entity\Conversions", "c")
-                ->andWhere("c.shop= '".$id."'")
-                ->andWhere("c.IP='".$ip."'")
-                ->andWhere("c.converted=0")
-                ->groupBy("c.id")->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
-            if (!isset($data[0]['exist'])) {
-                # save conversion detail if an offer is associated with a network
-                $cnt = new \KC\Entity\Conversions();
-                $cnt->shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $id);
-                $cnt->IP = $ip;
-                $cnt->utma = $_COOKIE["__utma"];
-                $cnt->utmz = $_COOKIE["__utmz"];
-                $time = time();
-                $cnt->subid = md5(time()*rand(1, 999));
-                \Zend_Registry::get('emLocale')->persist($cnt);
-                \Zend_Registry::get('emLocale')->flush();
-            } else {
-                # update existing conversion detail
-                $cnt = $queryBuilder->select("count(cs.id) as exist")
-                    ->from("KC\Entity\Conversions", "cs")
-                    ->andWhere("cs.id='".$data[0]['id']."'")
-                    ->getQuery()
-                    ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
-                if (!empty($cnt)) {
-                    $time = time();
-                    $queryBuilder->update('KC\Entity\Conversions', 'cv')
-                        ->set('cv.utma', $queryBuilder->expr()->literal($_COOKIE["__utma"]))
-                        ->set('cv.utmz', $queryBuilder->expr()->literal($_COOKIE["__utmz"]))
-                        ->set('cv.subid', $queryBuilder->expr()->literal(md5(time()*rand(1, 999))))
-                        ->where('cv.id = ?1')
-                        ->setParameter(1, $data[0]['id'])
-                        ->getQuery()->execute();
-                }
-            }
-        }
+        $shopInfo = $queryBuilder->select(
+            's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl'
+        )
+            ->from('Shop', 's')
+            ->where('s.id='.$shopId)
+            ->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $shopInfo;
     }
 
     public static function getAffliateNetworkDetail($shopId)
@@ -1731,13 +1603,15 @@ class Shop extends \KC\Entity\Shop
             ->from('KC\Entity\Shop', 's')
             ->leftJoin('s.affliatenetwork', 'a')
             ->where('s.deleted=0')
+            ->andWhere("s.id =?", $shopId)
             ->andWhere("s.id =".$shopId)->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
     }
     //to be checked again
     public static function getAllUrls($id)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select("s.id, s.permaLink,s.contentManagerId,c.id as test, s.howToUse, o.extendedOffer, o.extendedUrl")
+        $query = $queryBuilder->select(
+            "s.id, s.permaLink,s.contentManagerId,c.id as test, s.howToUse, s.howtoguideslug, o.extendedOffer, o.extendedUrl")
             ->from('KC\Entity\Shop', 's')
             ->leftJoin("s.offer", "o")
             ->leftJoin("s.categoryshops", "c")
@@ -1758,7 +1632,11 @@ class Shop extends \KC\Entity\Shop
         if ($shop[0]['howToUse']) {
             # check for extende offer url
             if (isset($shop[0]['permaLink']) && strlen($shop[0]['permaLink']) > 0) {
-                $urlsArray[] = \FrontEnd_Helper_viewHelper::__link('link_how-to') .'/'.$shop[0]['permaLink'];
+                if (!empty($shop['howtoguideslug'])) {
+                    $urlsArray[] = $shop['permaLink']. '/'. $shop['howtoguideslug'];
+                } else {
+                    $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to'). '/'. $shop['permaLink'];
+                }
             }
         }
 

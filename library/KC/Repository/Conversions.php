@@ -3,46 +3,6 @@ namespace KC\Repository;
 
 class Conversions extends \KC\Entity\Conversions
 {
-    public static function getConversionId($id, $ip, $type = 'offer')
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select("c.id, c.subid")
-            ->from("KC\Entity\Conversions", "c")
-            ->where("c.IP = ". $ip);
-        if ($type == 'offer') {
-            $query->andWhere("c.offer= ". $id);
-        } else {
-            $query->andWhere("c.shop= ". $id);
-        }
-        return $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-    }
-
-    public static function updateConverted($subId)
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $queryBuilder
-            ->update('KC\Entity\Conversions', 'c')
-            ->set('c.converted', 1)
-            ->where('c.subid = '. $subId)
-            ->getQuery()
-            ->execute();
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_conversion_details');
-        return true;
-    }
-
-    public static function getConversionDetail($subId)
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        return  $queryBuilder->select('c.subid,c.utma,c.utmz,o.id,s.id,n')
-            ->from("KC\Entity\Conversions", "c")
-            ->leftJoin("c.offer", "o")
-            ->leftJoin("o.shop", "s")
-            ->leftJoin("s.affliatenetwork", "n")
-            ->where('subid = '. $subId)
-            ->getQuery()
-            ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-    }
-
     public static function getConversionInformationById($id)
     {
         $conversionInfo = array();
@@ -143,5 +103,65 @@ class Conversions extends \KC\Entity\Conversions
                 ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
         return $conversionInfo;
+    }
+
+
+    public static function addConversion($id, $clickoutType)
+    {
+        $conversionId = '';
+        $clientIP = ip2long(\FrontEnd_Helper_viewHelper::getRealIpAddress());
+
+        if ($clickoutType === 'offer') {
+            $clickout = new \FrontEnd_Helper_ClickoutFunctions($id, null);
+        } else {
+            $clickout = new \FrontEnd_Helper_ClickoutFunctions(null, $id);
+        }
+
+        $hasNetwork = $clickout->checkIfShopHasAffliateNetwork();
+        if ($hasNetwork) {
+            $conversionInfo = self::checkIfConversionExists($id, $clientIP, $clickoutType);
+            $conversionId = $conversionInfo['id'];
+
+            if (!isset($conversionInfo['exists'])) {
+                $conversionId = self::addNewConversion($id, $clientIP, $clickoutType);
+            }
+        }
+        return $conversionId;
+    }
+
+    private static function checkIfConversionExists($id, $clientIP, $clickoutType)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $conversionInfo = $queryBuilder
+            ->select('count(c.id) as exists, c.id')
+            ->from("KC\Entity\Conversions", "c");
+        if ($clickoutType === 'offer') {
+            $conversionInfo = $conversionInfo->where('c.offerId="'.$id.'"');
+        } else {
+            $conversionInfo = $conversionInfo->where('c.shopId="'.$id.'"');
+        }
+    
+        $conversionInfo = $conversionInfo
+            ->andWhere('c.IP="'.$clientIP.'"')
+            ->andWhere("c.converted=0")
+            ->groupBy('c.id')->getQuery()->getSingleResult(null, Doctrine::HYDRATE_ARRAY);
+        return $conversionInfo;
+    }
+
+    private static function addNewConversion($id, $clientIP, $clickoutType)
+    {
+        $entityManagerLocale  = \Zend_Registry::get('emLocale');
+        $conversion = new KC\Entity\Conversions();
+
+        if ($clickoutType === 'offer') {
+            $conversion->offerId = $id;
+        } else {
+            $conversion->shopId = $id;
+        }
+        
+        $conversion->IP = $clientIP;
+        $entityManagerLocale->persist($conversion);
+        $entityManagerLocale->flush();
+        return $conversion->id;
     }
 }

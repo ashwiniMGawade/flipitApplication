@@ -8,7 +8,8 @@ class DisqusComments extends \KC\Entity\DisqusComments
         $query = $entityManagerLocale
             ->select('d')
             ->from('KC\Entity\DisqusComments', 'd')
-            ->where("d.page_url LIKE '%$pageUrl%'");
+            ->leftJoin('dc.thread dt')
+            ->where('dt.link like '."'%".$pageUrl."%'");
         $commentInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $disqusCommentMessages = !empty($commentInformation) ?  $commentInformation : '';
         return $disqusCommentMessages;
@@ -16,30 +17,38 @@ class DisqusComments extends \KC\Entity\DisqusComments
 
     public static function saveComments($comments)
     {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->delete('KC\Entity\DisqusComments', 'dc')
-            ->where('dc.id  > 0')
-            ->getQuery();
-        $query->execute();
-        foreach ($comments as $key => $comment) {
-            $entityManagerLocale  = \Zend_Registry::get('emLocale');
-            $disqusComment = new \KC\Entity\DisqusComments();
-            $disqusComment[$key]->comment_id = $comment['commentId'];
-            $disqusComment[$key]->message =  $comment['message'];
-            $disqusComment[$key]->page_title =  $comment['pageTitle'];
-            $disqusComment[$key]->page_url =  $comment['pageURL'];
-            $disqusComment[$key]->created_at =  $comment['createdAt'];
-            $disqusComment[$key]->author_name =  $comment['authorName'];
-            $disqusComment[$key]->author_profile_url =  $comment['authorProfileURL'];
-            $disqusComment[$key]->author_avtar =  $comment['authorAvatar'];
-            $entityManagerLocale->persist($disqusComment);
-            $entityManagerLocale->flush();
+        $entityManagerLocale  = \Zend_Registry::get('emLocale');
+        $comments  = new KC\Entity\DisqusComments();
+        $comments->id = $post->id;
+        $comments->author_name = $post->author->name;
+        $comments->comment = $post->raw_message;
+        $comments->thread_id = $post->thread;
+        $comments->created = strtotime($post->createdAt."+0000");
+        $entityManagerLocale->persist($comments);
+        $entityManagerLocale->flush();
+    }
+    public static function getMaxCreatedDate()
+    {
+        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $commentMaxCreatedDate = $entityManagerLocale
+            ->select('max(created) as max')
+            ->from('KC\Entity\DisqusComments', 'd');
+        $commentMaxCreatedDate = $commentMaxCreatedDate->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $commentMaxCreatedDate;
+    }
+
+    public static function getThreadIds()
+    {
+        $unknownThreads = array();
+        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $commentThreadIds = $entityManagerLocale
+            ->select('c.thread_id')
+            ->from('KC\Entity\DisqusComments', 'c')
+            ->where("(SELECT count(*) from DisqusThread where id = c.thread_id) = 0");
+        $commentThreadIds = $commentThreadIds->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        foreach ($commentThreadIds as $commentThreadId) {
+            $unknownThreads[] = $commentThreadId['thread_id'];
         }
-        $tempFiles = glob(PUBLIC_PATH.'tmp/*');
-        foreach ($tempFiles as $tempFile) {
-            if (is_file($tempFile)) {
-                unlink($tempFile);
-            }
-        }
+        return $unknownThreads;
     }
 }

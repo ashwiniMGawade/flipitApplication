@@ -980,123 +980,17 @@ class Offer Extends \KC\Entity\Offer
         return $offersList;
     }
 
-    public static function addConversion($offerId)
-    {
-        $clientIP = ip2long(\FrontEnd_Helper_viewHelper::getRealIpAddress());
-
-        if (self:: getCloakLink($offerId, true)) {
-            $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $query = $entityManagerUser
-                        ->select('count(c.id) as exist,c.id')
-                        ->from('KC\Entity\Conversions', 'c')
-                        ->setParameter(1, $offerId)
-                        ->andWhere('c.offer = ?1')
-                        ->setParameter(2, $clientIP)
-                        ->andWhere('c.IP = ?2')
-                        ->setParameter(3, 0)
-                        ->andWhere('c.converted = ?3')
-                        ->groupBy('c.id');
-                $offerData = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            if (!$offerData[0]['exist']) {
-                $offerCount  = new \KC\Entity\Conversions();
-                $offerCount->offerId = $offerId;
-                $offerCount->IP = $clientIP;
-                $offerCount->utma = \Zend_Controller_Front::getInstance()->getRequest()->getCookie('__utma');
-                $offerCount->utmz = \Zend_Controller_Front::getInstance()->getRequest()->getCookie('__utmz');
-                $offerCount->subid = md5(time()*rand(1, 999));
-                \Zend_Registry::get('emLocale')->persist($offerCount);
-                \Zend_Registry::get('emLocale')->flush();
-            } else {
-                $query = $entityManagerUser
-                            ->select('c')
-                            ->from('KC\Entity\Conversions', 'c')
-                            ->setParameter(1, $offerData[0]['id'])
-                            ->andWhere('c.offer = ?1');
-                $offerCount = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-                if ($offerCount) {
-                    $offerCount->utma = \Zend_Controller_Front::getInstance()->getRequest()->getCookie('__utma');
-                    $offerCount->utmz = \Zend_Controller_Front::getInstance()->getRequest()->getCookie('__utmz');
-                    $offerCount->subid = md5(time()*rand(1, 999));
-                    \Zend_Registry::get('emLocale')->persist($offerCount);
-                    \Zend_Registry::get('emLocale')->flush();
-                }
-            }
-        }
-    }
-
-    public static function getCloakLink($offerId, $checkRefUrl = false)
-    {
-        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser
-            ->select(
-                's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl as shoprefUrl, s.actualUrl,
-                o.refOfferUrl, o.refURL as refUrl, s.id as shopId'
-            )
-        ->from('KC\Entity\Offer', 'o')
-        ->leftJoin('o.shopOffers', 's')
-        ->setParameter(1, $offerId)
-        ->where('o.id = ?1');
-        $shopData = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
-        $network = \KC\Repository\Shop::getAffliateNetworkDetail($shopData['shopId']);
-        if ($checkRefUrl) {
-            if (! isset($network['affliatenetwork'])) {
-                return false;
-            }
-
-            if ($shopData['refUrl'] != "") {
-                return true ;
-            } else if ($shopData['shoprefUrl'] != "") {
-                return true;
-            } else {
-                return true;
-            }
-        }
-        $subid = "" ;
-        if (isset($network['affliatenetwork'])) {
-            if (!empty($network['subid'])) {
-                 $subid = "&". $network['subid'];
-                 $clientIP = \FrontEnd_Helper_viewHelper::getRealIpAddress();
-                 $clientProperAddress = ip2long($clientIP);
-                 $conversion = \KC\Repository\Conversions::getConversionId($shopData['id'], $clientProperAddress, 'offer');
-                 $subid = str_replace('A2ASUBID', $conversion['id'], $subid);
-                $subid = \FrontEnd_Helper_viewHelper::setClientIdForTracking($subid);
-            }
-        }
-        if ($shopData['refUrl'] != "") {
-            $url = $shopData['refUrl'];
-            $url .= $subid;
-
-        } else if ($shopData['shoprefUrl'] != "") {
-            $url = $shopData['shoprefUrl'];
-            $url .=  $subid;
-        } else if ($shopData['actualUrl'] != "") {
-            $url = $shopData['actualUrl'];
-        } else {
-            $urll = $shopData['permalink'];
-            $url = HTTP_PATH_LOCALE.$urll;
-        }
-        return $url;
-    }
-
     public static function getOfferInfo($offerId)
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
         ->select(
-            'o,s,a.name as affname,a.id as affiliateNetworkId,p.id as pageId,tc.content,cat.id as categoryId,
-            img.path as shopImagePath, img.name as shopImageName'
+            's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl, 
+            o.refOfferUrl, o.refUrl'
         )
-        ->from('KC\Entity\Offer', 'o')
+        ->from('Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
-        ->leftJoin('s.affliatenetwork', 'a')
-        ->leftJoin('o.offers', 'p')
-        ->leftJoin('o.offertermandcondition', 'tc')
-        ->leftJoin('o.categoryoffres', 'c')
-        ->leftJoin('c.categories', 'cat')
-        ->leftJoin('s.logo', 'img')
-        ->setParameter(1, $offerId)
-        ->where('o.id = ?1');
+        ->where('o.id = "'.$offerId.'"');
         $OfferDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $OfferDetails;
     }
@@ -2401,7 +2295,7 @@ class Offer Extends \KC\Entity\Offer
         $query = $queryBuilder
             ->select(
                 "o.id, o.title, o.extendedOffer,o.authorId , o.extendedUrl,
-                s.permaLink as shopPermalink, s.howToUse ,s.contentManagerId , sp.permalink as shopPagePermalink,
+                s.permaLink as shopPermalink, s.howToUse ,s.contentManagerId ,s.howtoguideslug, sp.permalink as shopPagePermalink,
                 p.permaLink as categoryPermalink, page.permalink as pagePermalink"
             )
             ->from('KC\Entity\Offer', 'o')
@@ -2431,7 +2325,11 @@ class Offer Extends \KC\Entity\Offer
 
         if ($offer[0]['howToUse']) {
             if (isset($offer[0]['shopPermaLink'])  && strlen($offer[0]['shopPermaLink']) > 0) {
-                $urlsArray[] = \FrontEnd_Helper_viewHelper::__link('link_how-to') .'/'. $offer[0]['shopPermaLink'];
+                if (!empty($offer['shop']['howtoguideslug'])) {
+                    $urlsArray[] = $offer['shop']['permaLink']. '/'. $offer['shop']['howtoguideslug'];
+                } else {
+                    $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to'). '/'. $offer['shop']['permaLink'];
+                }
             }
         }
 

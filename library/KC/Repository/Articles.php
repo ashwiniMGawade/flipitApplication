@@ -64,7 +64,7 @@ class Articles extends \KC\Entity\Articles
     {
         $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('p, a, stores, related, category, chapter, artimg, thumb')
+        $query = $queryBuilder->select('p, a, stores, related, category, chapter, artimg, thumb, articlefeaturedimage')
             ->from('KC\Entity\PopularArticles', 'p')
             ->leftJoin('p.articles', 'a')
             ->leftJoin('a.storearticles', 'stores')
@@ -73,6 +73,7 @@ class Articles extends \KC\Entity\Articles
             ->leftJoin('a.articleChapter', 'chapter')
             ->leftJoin('a.articleImage', 'artimg')
             ->leftJoin('a.thumbnail', 'thumb')
+            ->leftJoin('a.featuredImage', 'articlefeaturedimage')
             ->where('a.publish = 1')
             ->andWhere('a.deleted = 0')
             ->andWhere('a.publishdate <='. $queryBuilder->expr()->literal($currentDateTime))

@@ -7,7 +7,7 @@ class AffliateNetwork extends \KC\Entity\AffliateNetwork
     {
         $data = new \KC\Entity\AffliateNetwork();
         $data->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['addNetworkText']);
-        $data->subId = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['subId']);
+        $data->subId = $params['subId'];
         $data->status = '1';
         $data->deleted = '0';
         $data->created_at = new \DateTime('now');
