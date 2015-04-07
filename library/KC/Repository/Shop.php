@@ -886,12 +886,12 @@ class Shop extends \KC\Entity\Shop
         $shopInfo->howtoSubSubTitle = \FrontEnd_Helper_viewHelper::sanitize(
             \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubSubTitle'])
         );
-        $this->howtoguideslug = FrontEnd_Helper_viewHelper::sanitize($shopDetail['howToPageSlug']);
+        $this->howtoguideslug = \FrontEnd_Helper_viewHelper::sanitize($shopDetail['howToPageSlug']);
         $shopInfo->howtoMetaTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaTitle']);
         $shopInfo->howtoMetaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaDesc']);
         $shopInfo->customHeader = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomHeader']);
         $shopInfo->howToIntroductionText = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['howToIntroductionText']);
-        $this->showSimliarShops = BackEnd_Helper_viewHelper::stripSlashesFromString(
+        $this->showSimliarShops = \BackEnd_Helper_viewHelper::stripSlashesFromString(
             !empty($shopDetail['similarShops']) ? $shopDetail['similarShops'] : '0'
         );
         $showChains = !empty($shopDetail['showChains']) ? $shopDetail['showChains'] : '0';
@@ -1114,20 +1114,23 @@ class Shop extends \KC\Entity\Shop
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
 
         if (!empty($shopDetail['id'])) {
-            $getcategory = $queryBuilder->select('s.permaLink')
+            $getcategory = $queryBuilder->select('s.permaLink, s.howtoguideslug')
                 ->from('KC\Entity\Shop', 's')
                 ->where('s.id = '.$shopDetail['id'])
                 ->getQuery()
                 ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                
         }
+
         if (!empty($getcategory[0]['permaLink'])) {
-            $validatedShopRoute = KC\Repository\RoutePermalink::validatePermalink($getcategory[0]['permaLink']);
-            $howToGuideValidatedLink = $getcategory[0]['permaLink'] .'/'.$getcategory[0]['howtoguideslug'];
-            $validatedHowToGuideRoute = KC\Repository\RoutePermalink::validatePermalink($howToGuideValidatedLink);
+            $validatedShopRoute = \KC\Repository\RoutePermalink::validatePermalink($getcategory[0]['permaLink']);
+            $categoryPermalink = !empty($getcategory[0]['permaLink']) ? $getcategory[0]['permaLink'] : '';
+            $howToGuideSlug = !empty($getcategory[0]['howtoguideslug']) ? $getcategory[0]['howtoguideslug'] :'';
+            $howToGuideValidatedLink = $categoryPermalink .'/'.$howToGuideSlug;
+            $validatedHowToGuideRoute = \KC\Repository\RoutePermalink::validatePermalink($howToGuideValidatedLink);
             if (empty($validatedHowToGuideRoute)) {
-                $howToGuideValidatedLink = 'how-to/'.$getcategory[0]['permaLink'];
-                $validatedHowToGuideRoute = KC\Repository\RoutePermalink::validatePermalink($howToGuideValidatedLink);
+                $howToGuideValidatedLink = 'how-to/'.$categoryPermalink;
+                $validatedHowToGuideRoute = \KC\Repository\RoutePermalink::validatePermalink($howToGuideValidatedLink);
             }
         }
 
@@ -1214,19 +1217,19 @@ class Shop extends \KC\Entity\Shop
                 $howToGuidePermalink = 'how-to/' . $shopPermalink;
             }
             if (!empty($validatedShopRoute)) {
-                KC\Repository\RoutePermalink::updateRoutePermalink($shopPermalink, $shopExactLink, $validatedShopRoute[0]['permalink']);
+                \KC\Repository\RoutePermalink::updateRoutePermalink($shopPermalink, $shopExactLink, $validatedShopRoute[0]['permalink']);
                 if (!empty($validatedHowToGuideRoute)) {
-                    KC\Repository\RoutePermalink::updateRoutePermalink(
+                    \KC\Repository\RoutePermalink::updateRoutePermalink(
                         $howToGuidePermalink,
                         $howToGuideExactLink,
                         $validatedHowToGuideRoute[0]['permalink']
                     );
                 } else {
-                    KC\Repository\RoutePermalink::saveRoutePermalink($howToGuidePermalink, $howToGuideExactLink);
+                    \KC\Repository\RoutePermalink::saveRoutePermalink($howToGuidePermalink, $howToGuideExactLink);
                 }
             } else {
-                KC\Repository\RoutePermalink::saveRoutePermalink($shopPermalink, $shopExactLink);
-                KC\Repository\RoutePermalink::saveRoutePermalink($howToGuidePermalink, $howToGuideExactLink);
+                \KC\Repository\RoutePermalink::saveRoutePermalink($shopPermalink, $shopExactLink);
+                \KC\Repository\RoutePermalink::saveRoutePermalink($howToGuidePermalink, $howToGuideExactLink);
             }
 
             if (isset($shopDetail['similarstoreord'])) {

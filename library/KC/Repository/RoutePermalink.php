@@ -56,11 +56,12 @@ class RoutePermalink extends \KC\Entity\RoutePermalink
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->update('KC\Entity\RoutePermalink', 'p')
-            ->set('p.permalink', "'".$permalink."'")
-            ->set('p.type', "'SHP'")
-            ->set('p.exactlink', "'".$exactlink."'")
-            ->where('p.type = "SHP"')
-            ->andWhere("p.permalink = '".$validatedPermalink."'")
+            ->set('p.permalink', $queryBuilder->expr()->literal($permalink))
+            ->set('p.type', $queryBuilder->expr()->literal('SHP'))
+            ->set('p.exactlink', $queryBuilder->expr()->literal($exactlink))
+            ->where('p.type = '.$queryBuilder->expr()->literal('SHP'))
+            ->andWhere("p.permalink = ".$queryBuilder->expr()->literal($validatedPermalink))
+            ->getQuery()
             ->execute();
         return true;
     }
@@ -82,8 +83,8 @@ class RoutePermalink extends \KC\Entity\RoutePermalink
         $query = $queryBuilder
             ->select('p.permalink')
             ->from('KC\Entity\RoutePermalink', 'p')
-            ->where("p.permalink = '".$permalink."'")
-            ->andWhere('p.type = "SHP"');
+            ->where("p.permalink =".$queryBuilder->expr()->literal($permalink))
+            ->andWhere('p.type ='.$queryBuilder->expr()->literal('SHP'));
         $validatedPermalink = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $validatedPermalink;
     }
