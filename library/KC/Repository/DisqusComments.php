@@ -8,7 +8,7 @@ class DisqusComments extends \KC\Entity\DisqusComments
         $query = $entityManagerLocale
             ->select('d')
             ->from('KC\Entity\DisqusComments', 'd')
-            ->leftJoin('dc.thread dt')
+            ->leftJoin('d.disqusThread', 'dt')
             ->where('dt.link like '."'%".$pageUrl."%'");
         $commentInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $disqusCommentMessages = !empty($commentInformation) ?  $commentInformation : '';
