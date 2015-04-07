@@ -321,6 +321,10 @@ class Shop
      */
     private $lightboxfirsttext;
 
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $howtoguideslug;
 
     /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="shop")
