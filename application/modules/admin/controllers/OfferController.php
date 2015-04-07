@@ -86,7 +86,6 @@ class Admin_OfferController extends Zend_Controller_Action
             $this->view->offerController = 1;
         }
         $this->view->qstring = $_SERVER['QUERY_STRING'];
-
         $offerId = $parameters['id'];
         $shopImageOfOffer = new KC\Repository\Offer();
         $shop = $shopImageOfOffer::getOfferShopDetail($offerId);
@@ -95,7 +94,6 @@ class Admin_OfferController extends Zend_Controller_Action
         $this->view->shopList = $shopObject->getOfferShopList();
         $categoryObject = new KC\Repository\Category();
         $this->view->categoryList = $categoryObject->getCategoriesInformation();
-        //echo "<pre>";print_r($this->view->categoryList);die;
         $pageObject = new KC\Repository\Page();
         $this->view->pages = $pageObject->getPagesOffer();
         $allTiles = $this->getAllTilesForOfferAction();
