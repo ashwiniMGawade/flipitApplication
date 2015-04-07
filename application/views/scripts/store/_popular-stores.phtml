@@ -11,26 +11,25 @@ if($currentControllerName!='store') {
 <?php
 
 $popularStoreIncrementCheck = 1;
-
 foreach ($this->popularStores as $popularStore) :
     $popularStoreIncrementCheck++;
     if ($popularStoreIncrementCheck == 8) :
         break;
     endif;
 
-    if (count($popularStore['logo']) > 0) :
+    if (count($popularStore['popularshops']['logo']) > 0) :
         $popularStoreImage =
     		PUBLIC_PATH_CDN
-    		.ltrim($popularStore['logo']['path'], "/")
-    		."thum_medium_".$popularStore['logo']['name'];
+    		.ltrim($popularStore['popularshops']['logo']['path'], "/")
+    		."thum_medium_".$popularStore['popularshops']['logo']['name'];
     else :
         $popularStoreImage = HTTP_PATH . "public/images/NoImage/storeLogo100_50.jpg";
     endif;
 
     echo '<li>
-        <a href="'.HTTP_PATH_LOCALE.$popularStore['permaLink'].'">
+        <a href="'.HTTP_PATH_LOCALE.$popularStore['popularshops']['permaLink'].'">
             <img src="' . $popularStoreImage . '"  
-            alt="' .$popularStore['name'] . '" title="' .$popularStore['name'] . '" width="100" height="50" />
+            alt="' .$popularStore['popularshops']['name'] . '" title="' .$popularStore['popularshops']['name'] . '" width="100" height="50" />
         </a>
     </li>';
 endforeach;
