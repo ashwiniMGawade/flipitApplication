@@ -1588,9 +1588,9 @@ class Shop extends \KC\Entity\Shop
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $shopInfo = $queryBuilder->select(
-            's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl'
+            's'
         )
-            ->from('Shop', 's')
+            ->from('KC\Entity\Shop', 's')
             ->where('s.id='.$shopId)
             ->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopInfo;
@@ -1599,12 +1599,12 @@ class Shop extends \KC\Entity\Shop
     public static function getAffliateNetworkDetail($shopId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        return $queryBuilder->select('s.id,a.name as affname,a.subId as subid')
+        return $queryBuilder->select('s,a')
             ->from('KC\Entity\Shop', 's')
             ->leftJoin('s.affliatenetwork', 'a')
             ->where('s.deleted=0')
-            ->andWhere("s.id =?", $shopId)
-            ->andWhere("s.id =".$shopId)->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            ->andWhere('s.id ='. $shopId)
+            ->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
     }
     //to be checked again
     public static function getAllUrls($id)

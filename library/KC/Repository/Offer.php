@@ -980,6 +980,20 @@ class Offer Extends \KC\Entity\Offer
         return $offersList;
     }
 
+    public static function getShopInfoByOfferId($offerId)
+    {
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $shopInfo = $entityManagerUser
+            ->select(
+                's,o'
+            )
+            ->from('KC\Entity\Offer', 'o')
+            ->leftJoin('o.shopOffers', 's')
+            ->where('o.id = '.$offerId)
+            ->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $shopInfo;
+    }
+
     public static function getOfferInfo($offerId)
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -988,7 +1002,7 @@ class Offer Extends \KC\Entity\Offer
             's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl, 
             o.refOfferUrl, o.refUrl'
         )
-        ->from('Offer', 'o')
+        ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->where('o.id = "'.$offerId.'"');
         $OfferDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
