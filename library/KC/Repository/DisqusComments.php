@@ -6,7 +6,7 @@ class DisqusComments extends \KC\Entity\DisqusComments
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
-            ->select('d')
+            ->select('d, dt')
             ->from('KC\Entity\DisqusComments', 'd')
             ->leftJoin('d.disqusThread', 'dt')
             ->where('dt.link like '."'%".$pageUrl."%'");
