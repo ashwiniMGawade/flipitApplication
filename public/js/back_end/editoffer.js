@@ -739,11 +739,12 @@ function setFormData(data){
 
 	if(data[0]!=undefined && data[0]!=null && data[0].tilesId){
 		jQuery('a#selectImg_' + data[0].tilesId).show();
+		selectOfferImage(data[0].tilesId);
 		//jQuery("input#selectedTiles").attr('checked' , 'checked').valid();
 	}
 	//getAllTiles();
 	
-	selectOfferImage(tile_id);
+	//selectOfferImage(tile_id);
 	var fvshopId = jQuery('#selctedshop').val();
 	jQuery("#code-alert-visitors-count").text('Updating...');
 	jQuery.ajax({

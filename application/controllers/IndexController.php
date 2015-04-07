@@ -21,10 +21,6 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        /*echo "<pre>";
-        $test = KC\Repository\Offer::getOfferInfo('45336');
-        print_r($test[0]['shopImageName']);
-        die;*/
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();
@@ -54,6 +50,7 @@ class IndexController extends Zend_Controller_Action
                 ),
                 ''
             );
+ 
             $this->view->topCategories = $topCategories;
             $specialListPages = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_specialPagesHome_list",
