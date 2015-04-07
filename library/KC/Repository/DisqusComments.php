@@ -44,7 +44,7 @@ class DisqusComments extends \KC\Entity\DisqusComments
         $commentThreadIds = $entityManagerLocale
             ->select('c.thread_id')
             ->from('KC\Entity\DisqusComments', 'c')
-            ->where("(SELECT count(*) from DisqusThread where id = c.thread_id) = 0");
+            ->where("(SELECT count(dt.id) from KC\Entity\DisqusThread dt where dt.id = c.thread_id) = 0");
         $commentThreadIds = $commentThreadIds->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         foreach ($commentThreadIds as $commentThreadId) {
             $unknownThreads[] = $commentThreadId['thread_id'];
