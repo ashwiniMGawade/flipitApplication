@@ -130,29 +130,31 @@ class Chain extends \KC\Entity\Chain
         }
 
         $chainInformation = $chainInformation[0];
-        foreach ($chainInformation['chainItem'] as $chainValue) {
-            $locale = explode('_', $chainValue['locale']);
-            $locale = isset($locale[1]) ? $locale[1] : $locale[0];
-            $hrefLocale = isset($chainValue['locale']) ? $chainValue['locale'] : 'nl_NL';
-            $websiteUrl  = $chainValue['website']['url'] . '/' . $chainValue['permalink'] ;
-            $hrefLang = isset($chainValue['website']['chain']) && $chainValue['website']['chain'] != '' ?
-                $chainValue['website']['chain'] : preg_replace('~_~', '-', $hrefLocale);
-            $headLink = sprintf(
-                '<link rel="alternate" hreflang="%s" href="%s"/>',
-                $hrefLang,
-                $websiteUrl
-            );
-            $shop = array();
-
-            if ($chainValue['website']['name'] != $currentSite || $shopId != $chainValue['shopId']) {
-                $shop = array(
-                    'name' => $chainInformation['name'],
-                    'shop' => $chainValue['shopName'],
-                    'locale' => strtoupper($locale),
-                    'url' => $websiteUrl
+        if (isset($chainInformation['chainItem'])) {
+            foreach ($chainInformation['chainItem'] as $chainValue) {
+                $locale = explode('_', $chainValue['locale']);
+                $locale = isset($locale[1]) ? $locale[1] : $locale[0];
+                $hrefLocale = isset($chainValue['locale']) ? $chainValue['locale'] : 'nl_NL';
+                $websiteUrl  = $chainValue['website']['url'] . '/' . $chainValue['permalink'] ;
+                $hrefLang = isset($chainValue['website']['chain']) && $chainValue['website']['chain'] != '' ?
+                    $chainValue['website']['chain'] : preg_replace('~_~', '-', $hrefLocale);
+                $headLink = sprintf(
+                    '<link rel="alternate" hreflang="%s" href="%s"/>',
+                    $hrefLang,
+                    $websiteUrl
                 );
+                $shop = array();
+
+                if ($chainValue['website']['name'] != $currentSite || $shopId != $chainValue['shopId']) {
+                    $shop = array(
+                        'name' => $chainInformation['name'],
+                        'shop' => $chainValue['shopName'],
+                        'locale' => strtoupper($locale),
+                        'url' => $websiteUrl
+                    );
+                }
+                $chain[] = array('shops' => $shop, 'headLink' => $headLink);
             }
-            $chain[] = array('shops' => $shop, 'headLink' => $headLink);
         }
         return $chain;
     }
