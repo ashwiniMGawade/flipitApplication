@@ -124,7 +124,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/ckeditor/" ; ?>" ;
                                                     <img class='image-container' 
                                                         src="<?php echo PUBLIC_PATH_CDN
                                                         .$this->newsletterHeaderImage['path']
-                                                        .$this->newsletterHeaderImage['name'] ?>">
+                                                        .urldecode($this->newsletterHeaderImage['name']); ?>">
                                                     <?php 
                                                 } ?>
                                             </div>
@@ -152,7 +152,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/ckeditor/" ; ?>" ;
                                             } else {
                                                 ?>
                                                 <button class="btn btn-primary" type="button" 
-                                                    alt = "<?php echo $this->newsletterHeaderImage['name']; ?>" 
+                                                    alt = "<?php echo urldecode($this->newsletterHeaderImage['name']); ?>" 
                                                     id="delete-header-image-btn">
                                                     <?php echo $this->translate("Delete Image");?>
                                                 </button>
@@ -160,7 +160,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/ckeditor/" ; ?>" ;
                                             } 
                                             ?>  
                                             <button class="btn btn-primary hide" type="button" 
-                                                alt = "<?php echo $this->newsletterHeaderImage['name']; ?>" 
+                                                alt = "<?php echo urldecode($this->newsletterHeaderImage['name']); ?>" 
                                                 id="delete-header-image-btn">
                                                 <?php echo $this->translate("Delete Image");?>
                                             </button>
@@ -233,7 +233,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/ckeditor/" ; ?>" ;
                                                     ?>
                                                     <img class='image-container' 
                                                         src="<?php echo PUBLIC_PATH_CDN. $this->newsletterFooterImage['path']
-                                                        .$this->newsletterFooterImage['name'] ?>">
+                                                        .urldecode($this->newsletterFooterImage['name']); ?>">
                                                     <?php 
                                                 } ?>
                                             </div>
@@ -263,7 +263,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/ckeditor/" ; ?>" ;
                                             } else { 
                                                 ?>
                                                 <button class="btn btn-primary" type="button" 
-                                                    alt = "<?php echo $this->newsletterFooterImage['name']; ?>" 
+                                                    alt = "<?php echo urldecode($this->newsletterFooterImage['name']); ?>" 
                                                     id="delete-footer-image-btn">
                                                     <?php echo $this->translate("Delete Image");?>
                                                 </button>
@@ -271,7 +271,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/ckeditor/" ; ?>" ;
                                             } 
                                             ?>  
                                             <button class="btn btn-primary hide" type="button" 
-                                                alt = "<?php echo $this->newsletterFooterImage['name']; ?>" 
+                                                alt = "<?php echo urldecode($this->newsletterFooterImage['name']); ?>" 
                                                 id="delete-footer-image-btn">
                                                 <?php echo $this->translate("Delete Image");?>
                                             </button>
