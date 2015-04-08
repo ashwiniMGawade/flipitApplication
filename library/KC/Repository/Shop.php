@@ -351,7 +351,7 @@ class Shop extends \KC\Entity\Shop
             ->leftJoin('s.howtochapter', 'chptr')
             ->Where("s.id= ".$shopId)
             ->andWhere('s.status = 1');
-        $shopDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $shopDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopDetails;
     }
 

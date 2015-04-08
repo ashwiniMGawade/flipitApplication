@@ -335,7 +335,7 @@ class StoreController extends Zend_Controller_Action
         if (empty($howToGuides)) {
             throw new \Zend_Controller_Action_Exception('', 404);
         }
-
+        $howToGuides = $howToGuides[0];
         $shopList = $howToGuides[0]['id'].'_list';
         $shopInformation = $this->_helper->Store->getShopInformation($howToGuides[0]['id'], $shopList);
         $this->view->shopChain = $this->_helper->Store->getShopChain($shopInformation);
