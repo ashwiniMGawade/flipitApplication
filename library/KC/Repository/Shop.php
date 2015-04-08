@@ -418,17 +418,17 @@ class Shop extends \KC\Entity\Shop
                     ->getQuery()
                     ->execute();
                 $addedStatus = 1;
-                $favouriteShops = new \KC\Entity\FavoriteShop();
             } else {
                 $favouriteShops = new \KC\Entity\FavoriteShop();
+                $favouriteShops->visitor = \Zend_Registry::get('emLocale')->find('KC\Entity\Visitor', $visitorId);
+                $favouriteShops->shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $shopId);
+                $favouriteShops->deleted = 0;
+                $favouriteShops->created_at = new \DateTime('now');
+                $favouriteShops->updated_at = new \DateTime('now');
+                \Zend_Registry::get('emLocale')->persist($favouriteShops);
+                \Zend_Registry::get('emLocale')->flush();
             }
-            $favouriteShops->visitor = \Zend_Registry::get('emLocale')->find('KC\Entity\Visitor', $visitorId);
-            $favouriteShops->shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $shopId);
-            $favouriteShops->deleted = 0;
-            $favouriteShops->created_at = new \DateTime('now');
-            $favouriteShops->updated_at = new \DateTime('now');
-            \Zend_Registry::get('emLocale')->persist($favouriteShops);
-            \Zend_Registry::get('emLocale')->flush();
+        
             $shopName = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $shopId);
             $cacheKeyShopDetails = 'shopDetails_'  . $shopId . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);
