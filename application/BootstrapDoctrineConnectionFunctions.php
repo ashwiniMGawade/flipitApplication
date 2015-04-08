@@ -9,18 +9,36 @@ class BootstrapDoctrineConnectionFunctions
 {
     public static function doctrineConnections($doctrineOptions, $moduleDirectoryName, $localeCookieData)
     {
+        // globally used cache driver, in production use APC or memcached
+        if (APPLICATION_ENV == "development") {
+            $cache = new \Doctrine\Common\Cache\ArrayCache;
+        } else {
+            $cache = new \Doctrine\Common\Cache\ApcCache;
+        }
+          // standard annotation reader
+        $annotationReader = new Doctrine\Common\Annotations\AnnotationReader;
+        $cachedAnnotationReader = new Doctrine\Common\Annotations\CachedReader(
+            $annotationReader, // use reader
+            $cache // and a cache driver
+        );
+        
+
         $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
         $isDevMode = false;
         $config = Setup::createConfiguration($isDevMode);
-        $driver = new AnnotationDriver(new AnnotationReader(), $paths);
+        $driver = new AnnotationDriver($cachedAnnotationReader, $paths);
         // registering noop annotation autoloader - allow all annotations by default
         AnnotationRegistry::registerLoader('class_exists');
         $config->setMetadataDriverImpl($driver);
+
+        $config->setMetadataCacheImpl($cache);
+        $config->setQueryCacheImpl($cache);
 
         // set the proxy dir and set some options
         $config->setProxyDir(APPLICATION_PATH . '/../library/KC/Entity/Proxy');
         $config->setAutoGenerateProxyClasses(true);
         $config->setProxyNamespace('Proxy');
+
 
         // db connection parameters for user(imbull) database
         $emUser = EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);
