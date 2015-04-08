@@ -357,8 +357,6 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             $this->_helper->redirector('emailcontent', 'accountsetting', null);
         }
     }
-<<<<<<< HEAD
-=======
 
     public function updateHeaderImageAction()
     {
@@ -405,5 +403,4 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         Newsletterbanners::saveNewsletterImagesUrl($columnName, $columnValue);
         exit();
     }
->>>>>>> origin/release/sprint_35
 }
