@@ -12,10 +12,10 @@ class BootstrapDoctrineConnectionFunctions
         if (APPLICATION_ENV != "development") {
             $cache = new \Doctrine\Common\Cache\ArrayCache;
         } else {
-            $memcache = new Memcache();
-            $memcache->connect('localhost', 11211);
-            $cache = new \Doctrine\Common\Cache\MemcacheCache;
-            $cache->setMemcache($memcache);
+            $memcache = new Memcached();
+            $memcache->addServer('localhost', 11211);
+            $cache = new \Doctrine\Common\Cache\MemcachedCache;
+            $cache->setMemcached($memcache);
         }
     
         $annotationReader = new Doctrine\Common\Annotations\AnnotationReader;
