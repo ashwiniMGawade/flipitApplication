@@ -10,7 +10,7 @@
         <ul class="num-list">
             <?php
             $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-            foreach ($this->howToGuides[0][0]['howtochapter'] as $howToGuide) :
+            foreach ($this->howToGuides[0]['howtochapter'] as $howToGuide) :
                 preg_match_all(
                 	'/<img.+src=[\'"](?P<src>.+)[\'"].*>/i',
                 	$howToGuide['chapterDescription'],
