@@ -54,10 +54,14 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $categoriesHtml = '';
         $categories = $this->homePageData['topCategories'];
         foreach ($categories as $category) {
+            $categoryPath = isset($category[0]['category'][0]['categoryicon']['path']) 
+                ? $category[0]['category'][0]['categoryicon']['path'] : $category[0]['category']['categoryicon']['path'];
+            $categoryName = isset($category[0]['category'][0]['categoryicon']['name']) 
+                ? $category[0]['category'][0]['categoryicon']['name'] : $category[0]['category']['categoryicon']['name'];
             $categoryImage =
                 PUBLIC_PATH_CDN
-                .$category[0]['category'][0]['categoryicon']['path']
-                . $category[0]['category'][0]['categoryicon']['name'];
+                .$categoryPath
+                . $categoryName;
             $categoriesOffers =
                 $category['totalOffers'] . ' '
                 . \FrontEnd_Helper_viewHelper::__form('form_Offers'). ' ' . $category['countOff']

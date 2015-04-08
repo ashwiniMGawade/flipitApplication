@@ -320,21 +320,13 @@ class FrontEnd_Helper_OffersPartialFunctions
                     }
                     $onClick =
                         self::getUserIsLoggedInOrNot() == "true"
-                        ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')"
+                        ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permalink'].$popupLink."')"
                         : HTTP_PATH_LOCALE."accountlogin";
                     $offerLink =
                         '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
                         alt = "'.$urlToShow.'" target="_blank" onclick = "'.$onClick.'" rel="nofollow">
                         '.$offerAnchorText .'</a>';
                 }
-                $onClick =
-                    self::getUserIsLoggedInOrNot() == "true"
-                    ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')"
-                    : HTTP_PATH_LOCALE."accountlogin";
-                $offerLink =
-                    '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
-                    alt = "'.$urlToShow.'" target="_blank" onclick = "'.$onClick.'" rel="nofollow">
-                    '.$offerAnchorTagContent .'</a>';
             }
         }
         return $headOpen. $offerLink . $headClose;
