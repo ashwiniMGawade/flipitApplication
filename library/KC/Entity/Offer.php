@@ -215,9 +215,9 @@ class Offer
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\OfferTiles", mappedBy="offer")
+     * @ORM\JoinColumn(name="tilesId", referencedColumnName="id", onDelete="restrict")
      */
     private $offerTiles;
-
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\PopularCode", mappedBy="popularcode")

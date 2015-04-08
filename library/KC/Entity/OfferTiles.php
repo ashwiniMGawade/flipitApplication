@@ -62,7 +62,7 @@ class OfferTiles
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="offerTiles")
-     * @ORM\JoinColumn(name="offerId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id", referencedColumnName="tilesId")
      */
     private $offer;
 

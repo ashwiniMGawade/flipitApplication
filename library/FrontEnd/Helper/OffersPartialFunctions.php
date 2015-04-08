@@ -30,9 +30,9 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getDiscountImage($currentOffer)
     {
         $offerDiscountImage ='';
-        if (!empty ( $currentOffer->tiles)) {
+        if (!empty ( $currentOffer->offerTiles)) {
             $offerDiscountImage =
-            PUBLIC_PATH_CDN . ltrim($currentOffer->tiles['path'], "/").$currentOffer->tiles['name'];
+            PUBLIC_PATH_CDN . ltrim($currentOffer->offerTiles[0]['path'], "/").$currentOffer->offerTiles[0]['name'];
         }
         return $offerDiscountImage;
     }
@@ -161,7 +161,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         $offerImageDiv = '';
         if ($offersType == 'simple' || $offersType == 'extendedOffer') {
             $offerDiscountImage = self::getDiscountImage($currentOffer);
-            $altAttributeText = isset($currentOffer->tiles['label']) ? $currentOffer->tiles['label'] : '';
+            $altAttributeText = isset($currentOffer->offerTiles[0]['label']) ? $currentOffer->offerTiles[0]['label'] : '';
             if ($currentOffer->userGenerated == 1 and $currentOffer->approved == '0') {
                 $offerDiscountImage = HTTP_PATH ."public/images/front_end/box_bg_orange_16.png";
                 $altAttributeText = 'Social code';
