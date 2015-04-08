@@ -13,7 +13,10 @@ class BootstrapDoctrineConnectionFunctions
         if (APPLICATION_ENV == "development") {
             $cache = new \Doctrine\Common\Cache\ArrayCache;
         } else {
-            $cache = new \Doctrine\Common\Cache\ApcCache;
+            $memcache = new Memcache();
+            $memcache->connect('localhost', 11211);
+            $cache = new \Doctrine\Common\Cache\MemcacheCache;
+            $cache->setMemcache($memcache);
         }
           // standard annotation reader
         $annotationReader = new Doctrine\Common\Annotations\AnnotationReader;
