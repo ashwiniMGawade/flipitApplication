@@ -250,6 +250,8 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         $this->view->timezones_list = Signupmaxaccount::$timezones;
         $this->view->newsletterHeaderImage = Newsletterbanners::getHeaderOrFooterImage('header');
         $this->view->newsletterFooterImage = Newsletterbanners::getHeaderOrFooterImage('footer');
+        $this->view->newsletterHeaderImageUrl = Newsletterbanners::getHeaderOrFooterImageUrl('headerurl', 'header');
+        $this->view->newsletterFooterImageUrl = Newsletterbanners::getHeaderOrFooterImageUrl('footerurl', 'footer');
     }
 
     public function saveemailcontentAction()
@@ -373,8 +375,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
                 if (isset($_FILES['newsLetterHeaderImage']['name']) && $_FILES['newsLetterHeaderImage']['name'] != '') {
-                    $parameters = $this->_getAllParams();
-                    $result = Newsletterbanners::updateNewsletterImages($parameters, 'header');
+                    $result = Newsletterbanners::updateNewsletterImages('header');
                     $this->_helper->json($result);
                 }
             }
@@ -387,8 +388,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
                 if (isset($_FILES['newsLetterFooterImage']['name']) && $_FILES['newsLetterFooterImage']['name'] != '') {
-                    $parameters = $this->_getAllParams();
-                    $result = Newsletterbanners::updateNewsletterImages($parameters, 'footer');
+                    $result = Newsletterbanners::updateNewsletterImages('footer');
                     $this->_helper->json($result);
                 }
             }
@@ -405,6 +405,14 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                 $this->_helper->json($result);
             }
         }
+        exit();
+    }
+
+    public function saveNewsletterBannerImageUrlAction()
+    {
+        $columnValue = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('val'));
+        $columnName =  FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('name'));
+        Newsletterbanners::saveNewsletterImagesUrl($columnName, $columnValue);
         exit();
     }
 }

@@ -154,9 +154,13 @@ foreach ($this->offers as $offer) {
                     <?php echo $this->translate('Recommended by staff');?>
                 </span>
                 <?php
-                $contentManagerName = !empty($this->shop['contentManagerName']) ? $this->shop['contentManagerName'] : $offer->shop['contentManagerName'];
-                $contentManagerFirstName = $offerPartial->getContentManagerName($contentManagerName);
-                echo ' - '.ucfirst($contentManagerFirstName).' '.$this->translate('recommended this code');?>
+                $contentManagerInfo = isset($offer->shop['contentManagerName']) ? $offer->shop['contentManagerName'] : '';
+                $contentManagerName = !empty($this->shop['contentManagerName']) ? $this->shop['contentManagerName'] : $contentManagerInfo;
+                if (!empty($contentManagerName)) {
+                    $contentManagerFirstName = $offerPartial->getContentManagerName($contentManagerName);
+                    echo ' - '.ucfirst($contentManagerFirstName).' '.$this->translate('recommended this code');  
+                }
+                ?>
             </div>
         </div>
     <?php } ?>    

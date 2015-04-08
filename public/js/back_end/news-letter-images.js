@@ -117,3 +117,14 @@ $(document).ready(function() {
         }
     });
 });
+function saveNewsletterBannerUrl(el)
+{
+    var value = $(el).val().trim();
+    if(value != ''){
+        $.ajax({
+            url : HOST_PATH + 'admin/accountsetting/save-newsletter-banner-image-url',
+            type : 'post',
+            data : { name : $(el).attr('name'), val : value },
+        });
+    }
+}

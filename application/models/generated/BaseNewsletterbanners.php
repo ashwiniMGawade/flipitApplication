@@ -23,6 +23,14 @@ abstract class BaseNewsletterbanners extends Doctrine_Record
             'type' => 'string',
             'length' => '10'
         ));
+        $this->hasColumn('headerurl', 'string', 255, array(
+            'type' => 'string',
+            'length' => '255'
+        ));
+        $this->hasColumn('footerurl', 'string', 255, array(
+            'type' => 'string',
+            'length' => '255'
+        ));
     }
 
     public function setUp()
