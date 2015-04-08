@@ -9,11 +9,18 @@ class BootstrapDoctrineConnectionFunctions
 {
     public static function doctrineConnections($doctrineOptions, $moduleDirectoryName, $localeCookieData)
     {
+        $application = new Zend_Application(
+            APPLICATION_ENV,
+            APPLICATION_PATH . '/configs/application.ini'
+        );
+        $frontControllerObject = $application->getOption('resources');
+        $memcacheHostname = $frontControllerObject['frontController']['params']['memcache']['host'];
+        $memcachePort = $frontControllerObject['frontController']['params']['memcache']['port'];
         if (APPLICATION_ENV != "development") {
             $cache = new \Doctrine\Common\Cache\ArrayCache;
         } else {
             $memcache = new Memcached();
-            $memcache->addServer('localhost', 11211);
+            $memcache->addServer($memcacheHostname, $memcachePort);
             $cache = new \Doctrine\Common\Cache\MemcachedCache;
             $cache->setMemcached($memcache);
         }
