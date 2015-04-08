@@ -94,8 +94,9 @@ EOD;
         }
         $locale = LOCALE != '' ? '/'.LOCALE : '';
         $chainLocale = \KC\Repository\Website::getWebsiteDetails('', strtolower($site_name).$locale);
-        $chainLocale = isset($chainLocale[0]) ? $chainLocale[0] : '';
-        $ogCustomLocale = explode('_', $chainLocale['chain']);
+        $chainLocale = !empty($chainLocale[0]) ? $chainLocale[0] : '';
+        $chainLocaleChain = !empty($chainLocale['chain']) ? $chainLocale['chain'] : '';
+        $ogCustomLocale = explode('_', $chainLocaleChain);
         $ogCustomLocale = isset($ogCustomLocale[1]) ? $ogCustomLocale[1] : $ogCustomLocale[0];
         $ogLocale = !empty($chainLocale) && $chainLocale['chain'] != '' ?
             strtolower($ogCustomLocale) : $headMetaValue->facebookLocale;

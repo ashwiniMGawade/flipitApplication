@@ -760,19 +760,15 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function validatepasswordAction()
     {
-            $params = $this->getRequest()->getParams();
-
-            $isValid = "Old password don't matched" ;
-
-            if (intval($params['id']) > 0 ) {
-
-                $user = Doctrine_Core::getTable("User")->find($params['id']);
-                $isValid = $user->validatePassword($params['oldPassword']);
-
-            }
-
-            echo Zend_Json::encode($isValid);
-            die();
+        $params = $this->getRequest()->getParams();
+        $isValid = "Old password don't matched" ;
+        if (intval($params['id']) > 0) {
+            $entityManagerUser  =\Zend_Registry::get('emUser');
+            $user = $entityManagerUser->find('KC\Entity\User', $params['id']);
+            $isValid = $user->validatePassword($params['oldPassword']);
+        }
+        echo Zend_Json::encode($isValid);
+        die();
     }
     /**
      * render profile with data

@@ -243,11 +243,9 @@ class Admin_AccountsettingController extends Zend_Controller_Action
     public function emailcontentAction()
     {
         $data = \KC\Repository\Signupmaxaccount::getAllMaxAccounts();
-
         $this->view->data = $data;
         $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         $this->view->rights = $this->_settings['administration'];
-
         $this->view->timezones_list = \KC\Repository\Signupmaxaccount::$timezones;
         $this->view->newsletterHeaderImage = \KC\Repository\Newsletterbanners::getHeaderOrFooterImage('header');
         $this->view->newsletterFooterImage = \KC\Repository\Newsletterbanners::getHeaderOrFooterImage('footer');
@@ -357,8 +355,6 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             $this->_helper->redirector('emailcontent', 'accountsetting', null);
         }
     }
-<<<<<<< HEAD
-=======
 
     public function updateHeaderImageAction()
     {
@@ -405,5 +401,4 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         Newsletterbanners::saveNewsletterImagesUrl($columnName, $columnValue);
         exit();
     }
->>>>>>> origin/release/sprint_35
 }

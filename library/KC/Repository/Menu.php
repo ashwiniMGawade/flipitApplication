@@ -173,8 +173,9 @@ class Menu extends \KC\Entity\Menu
         } else {
             $position = $params['position'];
         }
+
         $imageid = null;
-        if ($params['imageid']!='') {
+        if ($params['imageid']!= 0) {
             $imageid = $params['imageid'];
             $image =  $entityManagerLocale->find('KC\Entity\Image', $params['imageid']);
             $image->path = $params['hidimage'];
