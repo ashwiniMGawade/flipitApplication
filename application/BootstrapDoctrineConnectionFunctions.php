@@ -9,8 +9,7 @@ class BootstrapDoctrineConnectionFunctions
 {
     public static function doctrineConnections($doctrineOptions, $moduleDirectoryName, $localeCookieData)
     {
-        // globally used cache driver, in production use APC or memcached
-        if (APPLICATION_ENV == "development") {
+        if (APPLICATION_ENV != "development") {
             $cache = new \Doctrine\Common\Cache\ArrayCache;
         } else {
             $memcache = new Memcache();
@@ -18,41 +17,31 @@ class BootstrapDoctrineConnectionFunctions
             $cache = new \Doctrine\Common\Cache\MemcacheCache;
             $cache->setMemcache($memcache);
         }
-          // standard annotation reader
+    
         $annotationReader = new Doctrine\Common\Annotations\AnnotationReader;
         $cachedAnnotationReader = new Doctrine\Common\Annotations\CachedReader(
-            $annotationReader, // use reader
-            $cache // and a cache driver
+            $annotationReader,
+            $cache
         );
         
-
         $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
         $isDevMode = false;
         $config = Setup::createConfiguration($isDevMode);
         $driver = new AnnotationDriver($cachedAnnotationReader, $paths);
-        // registering noop annotation autoloader - allow all annotations by default
         AnnotationRegistry::registerLoader('class_exists');
-        $config->setMetadataDriverImpl($driver);
 
+        $config->setMetadataDriverImpl($driver);
         $config->setMetadataCacheImpl($cache);
         $config->setQueryCacheImpl($cache);
-
-        // set the proxy dir and set some options
         $config->setProxyDir(APPLICATION_PATH . '/../library/KC/Entity/Proxy');
         $config->setAutoGenerateProxyClasses(true);
         $config->setProxyNamespace('Proxy');
-
-
-        // db connection parameters for user(imbull) database
         $emUser = EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);
-        // get locale name
         $localSiteDbConnection = strtolower(self::getLocaleNameForDbConnection(
             $moduleDirectoryName,
             $localeCookieData
         ));
-        // db connection parameters for locale database
         $connectionParamsLocale = self::getDatabaseCredentials($doctrineOptions[$localSiteDbConnection]['dsn']);
-
         $emLocale = EntityManager::create($connectionParamsLocale, $config);
         Zend_Registry::set('emLocale', $emLocale);
         Zend_Registry::set('emUser', $emUser);
