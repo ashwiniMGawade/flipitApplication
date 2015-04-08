@@ -98,7 +98,7 @@ class Newsletterbanners extends \KC\Entity\NewsLetterBanners
 
     public static function saveNewsletterImages($uploadedImage, $imageType)
     {
-        $newsLetterHeaderImage = new KC\Entity\NewsLetterBanners();
+        $newsLetterHeaderImage = new \KC\Entity\NewsLetterBanners();
         $newsLetterHeaderImage->name = $uploadedImage['fileName'];
         $newsLetterHeaderImage->path = $uploadedImage['path'];
         $newsLetterHeaderImage->imagetype = $imageType;
@@ -174,8 +174,8 @@ class Newsletterbanners extends \KC\Entity\NewsLetterBanners
         }
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $entityManagerLocale->update('KC\Entity\NewsLetterBanners', 'n')
-            ->set('n.name', '')
-            ->set('n.path', '')
+            ->set('n.name', $entityManagerLocale->expr()->literal(''))
+            ->set('n.path', $entityManagerLocale->expr()->literal(''))
             ->where('n.imagetype ='.$entityManagerLocale->expr()->literal($imageType))
             ->getQuery()->execute();
         return true ;

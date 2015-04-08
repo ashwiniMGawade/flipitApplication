@@ -361,7 +361,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
                 if (isset($_FILES['newsLetterHeaderImage']['name']) && $_FILES['newsLetterHeaderImage']['name'] != '') {
-                    $result = Newsletterbanners::updateNewsletterImages('header');
+                    $result = \KC\Repository\Newsletterbanners::updateNewsletterImages('header');
                     $this->_helper->json($result);
                 }
             }
@@ -374,7 +374,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
                 if (isset($_FILES['newsLetterFooterImage']['name']) && $_FILES['newsLetterFooterImage']['name'] != '') {
-                    $result = Newsletterbanners::updateNewsletterImages('footer');
+                    $result = \KC\Repository\Newsletterbanners::updateNewsletterImages('footer');
                     $this->_helper->json($result);
                 }
             }
@@ -387,7 +387,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
                 $parameters = $this->_getAllParams();
-                $result = Newsletterbanners::deleteNewsletterImages($parameters['imageType']);
+                $result = \KC\Repository\Newsletterbanners::deleteNewsletterImages($parameters['imageType']);
                 $this->_helper->json($result);
             }
         }
@@ -398,7 +398,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
     {
         $columnValue = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('val'));
         $columnName =  FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('name'));
-        Newsletterbanners::saveNewsletterImagesUrl($columnName, $columnValue);
+        \KC\Repository\Newsletterbanners::saveNewsletterImagesUrl($columnName, $columnValue);
         exit();
     }
 }
