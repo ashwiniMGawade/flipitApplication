@@ -94,7 +94,7 @@ class Newsletterbanners extends BaseNewsletterbanners
     public static function saveNewsletterImages($uploadedImage, $imageType)
     {
         $newsLetterHeaderImage = new Newsletterbanners();
-        $newsLetterHeaderImage->name = $uploadedImage['fileName'];
+        $newsLetterHeaderImage->name = urlencode($uploadedImage['fileName']);
         $newsLetterHeaderImage->path = $uploadedImage['path'];
         $newsLetterHeaderImage->imagetype = $imageType;
         $newsLetterHeaderImage->save();
@@ -113,7 +113,7 @@ class Newsletterbanners extends BaseNewsletterbanners
     {
         Doctrine_Query::create()
             ->update('Newsletterbanners n')
-            ->set('n.name', "'".$uploadedImage['fileName']."'")
+            ->set('n.name', "'".urlencode($uploadedImage['fileName'])."'")
             ->set('n.path', "'".$uploadedImage['path']."'")
             ->set('n.footerurl', "'".$uploadedImage['footerurl']."'")
             ->set('n.headerurl', "'".$uploadedImage['headerurl']."'")

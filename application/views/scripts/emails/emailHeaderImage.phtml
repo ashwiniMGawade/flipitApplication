@@ -11,11 +11,11 @@
         }
         ?>
         <img style="display: block; border-radius: 5px;" width='615'
-            alt="<?php echo $this->newsLetterHeaderImage['name']; ?>" 
-            title="<?php echo $this->newsLetterHeaderImage['name']; ?>" 
+            alt="<?php echo urldecode($this->newsLetterHeaderImage['name']); ?>"  
+            title="<?php echo urldecode($this->newsLetterHeaderImage['name']); ?>"  
             src="<?php echo $this->publicPathCdn
             .$this->newsLetterHeaderImage['path']
-            .$this->newsLetterHeaderImage['name'] ?>">
+            .urldecode($this->newsLetterHeaderImage['name']) ?>">
         <?php 
         if (!empty($this->newsLetterHeaderImage['headerurl'])) {
             ?>
