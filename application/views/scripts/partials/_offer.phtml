@@ -160,7 +160,7 @@ foreach ($this->offers as $offer) {
                     <?php echo $this->translate('Recommended by staff');?>
                 </span>
                 <?php
-                $contentManagerInfo = isset($offer->shop['contentManagerName']) ? $offer->shop['contentManagerName'] : '';
+                $contentManagerInfo = isset($offer->shopOffers['contentManagerName']) ? $offer->shopOffers['contentManagerName'] : '';
                 $contentManagerName = !empty($this->shop['contentManagerName']) ? $this->shop['contentManagerName'] : $contentManagerInfo;
                 if (!empty($contentManagerName)) {
                     $contentManagerFirstName = $offerPartial->getContentManagerName($contentManagerName);
