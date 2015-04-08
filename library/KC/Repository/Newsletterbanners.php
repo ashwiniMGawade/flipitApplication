@@ -6,7 +6,7 @@ class Newsletterbanners extends \KC\Entity\NewsLetterBanners
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
-            ->select('s.name, s.path, s.headerurl, s.footerurl')
+            ->select('s.name, s.path, s.headerurl, s.footerurl, s.imagetype')
             ->from("KC\Entity\NewsLetterBanners", "s")
             ->where('s.imagetype ='.$entityManagerLocale->expr()->literal($imageType));
         $existedNewsLetterImage = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -79,16 +79,17 @@ class Newsletterbanners extends \KC\Entity\NewsLetterBanners
             $uploadedImage = self::uploadImage($uploadedFile);
             if ($uploadedImage['status'] == '200') {
                 $existedNewsLetterImage = self::getHeaderOrFooterImage($imageType);
-                if (!empty($existedNewsLetterImage['path'])) {
+                if (!empty($existedNewsLetterImage)) {
                     self::unlinkFileFromDirectory($existedNewsLetterImage);
-                    self::updateNewsletterBanners($uploadedImage, $imageType);
+                    $uploadedImages = array(
+                        'fileName'=>$uploadedImage['fileName'],
+                        'path'=>$uploadedImage['path'],
+                        'footerurl'=>$existedNewsLetterImage['footerurl'],
+                        'headerurl'=>$existedNewsLetterImage['headerurl'],
+                    );
+                    self::updateNewsletterBanners($uploadedImages, $imageType);
                 } else {
-                    if (!empty($existedNewsLetterImage[$columnName])) {
-                        self::unlinkFileFromDirectory($existedNewsLetterImage);
-                        self::updateNewsletterBanners($uploadedImage, $imageType);
-                    } else {
-                        self::saveNewsletterImages($uploadedImage, $imageType);
-                    }
+                    self::saveNewsletterImages($uploadedImage, $imageType);
                 }
                 return $uploadedImage;
             }
@@ -124,6 +125,8 @@ class Newsletterbanners extends \KC\Entity\NewsLetterBanners
         $entityManagerLocale->update('KC\Entity\NewsLetterBanners', 'n')
             ->set('n.name', $entityManagerLocale->expr()->literal($uploadedImage['fileName']))
             ->set('n.path', $entityManagerLocale->expr()->literal($uploadedImage['path']))
+            ->set('n.footerurl', $entityManagerLocale->expr()->literal($uploadedImage['footerurl']))
+            ->set('n.headerurl', $entityManagerLocale->expr()->literal($uploadedImage['headerurl']))
             ->where('n.imagetype ='. $entityManagerLocale->expr()->literal($imageType))
             ->getQuery()->execute();
         return true;
