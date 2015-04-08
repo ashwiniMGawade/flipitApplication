@@ -33,4 +33,14 @@ class DisqusThread
      * @ORM\OneToMany(targetEntity="KC\Entity\DisqusComments", mappedBy="disqusThread")
      */
     private $disqusComments;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }
