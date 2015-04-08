@@ -132,7 +132,7 @@ class Offer extends BaseOffer
         if (count($similarShopsIds) > 0) {
             $similarShopsOffers = Doctrine_Query::create()
                 ->select(
-                    's.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus,
+                    's.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.contentManagerName,s.deepLinkStatus,
                     o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability,
                     o.discountType, o.couponCode,  o.refofferurl, o.startdate, o.userGenerated, o.nickname, o.approved,
                     o.enddate, o.exclusiveCode, o.authorName,
@@ -188,7 +188,7 @@ class Offer extends BaseOffer
             $commaSepratedCategroyIdValues = implode(', ', $similarCategoriesIds);
             $similarCategoriesOffer = Doctrine_Query::create()
             ->select(
-                's.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL,
+                's.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, s.contentManagerName,o.refURL,
                 o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType,
                 o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,
                 o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid,
@@ -462,7 +462,7 @@ class Offer extends BaseOffer
             o.couponCode,o.exclusiveCode,
             o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,
             o.updated_at as lastUpdate,s.name,s.refUrl,
-            s.actualUrl,s.permaLink as permalink,s.views,l.*,terms.content'
+            s.actualUrl,s.permaLink as permalink, s.contentManagerName,s.views,l.*,terms.content'
         )
         ->from('refOfferPage op')
         ->leftJoin('op.Offer o')
@@ -512,7 +512,7 @@ class Offer extends BaseOffer
             o.startDate,o.endDate,o.refURL,
             o.refOfferUrl,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,
             o.updated_at as lastUpdate, o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,
-            s.permaLink as permalink,s.views,l.*, o.authorName'
+            s.permaLink as permalink, s.contentManagerName,s.views,l.*, o.authorName'
         )
         ->from('Offer o')
         ->andWhere(
@@ -843,7 +843,7 @@ class Offer extends BaseOffer
             $shopIds = ("'" . implode("', '", $shopIds) . "'");
             $shopOffersByShopIds = Doctrine_Query::create()
             ->select(
-                's.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.refURL,o.discountType,
+                's.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,s.contentManagerName,terms.content,o.refURL,o.discountType,
                 o.id,o.title,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, o.refofferurl, o.startdate,
                 o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount, o.authorId, o.authorName,
                 o.shopid, o.offerlogoid, o.userGenerated, o.approved, o.nickname, img.id, img.path, img.name,o.couponCodeType'
@@ -874,7 +874,7 @@ class Offer extends BaseOffer
     {
         $shopOffersBySearchedKeywords = Doctrine_Query::create()
                 ->select(
-                    's.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,
+                    's.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,s.contentManagerName,terms.content,
                     o.id,o.title,o.refURL,o.discountType,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, 
                     o.refofferurl, o.startdate,o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount,
                     o.authorId, o.authorName, o.shopid,o.offerlogoid,o.couponCodeType,img.id, img.path,
@@ -996,7 +996,7 @@ class Offer extends BaseOffer
             o.editorPicks,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,o.authorName,
             o.endDate,o.refOfferUrl,o.couponCodeType, o.approved, o.userGenerated, o.nickname,o.extendedUrl,
             l.*,t.*,s.id,s.name,s.permalink as permalink, s.refUrl,s.customtext, s.showcustomtext, s.customtextposition,
-            s.usergenratedcontent,s.deepLink,s.deepLinkStatus, s.actualUrl, terms.content,img.id, img.path,
+            s.usergenratedcontent,s.deepLink,s.deepLinkStatus, s.actualUrl, s.contentManagerName,terms.content,img.id, img.path,
             img.name,vot.id,vot.vote'
         )
         ->from('Offer o')
@@ -2383,7 +2383,7 @@ class Offer extends BaseOffer
     public static function getCouponDetails($extendedUrl)
     {
         $couponDetails = Doctrine_Query::create()
-                       ->select('t.*,o.*,s.name,s.id,s.discussions,s.permaLink as permalink,s.title,s.subTitle,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,s.affliateProgram,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
+                       ->select('t.*,o.*,s.name,s.id,s.discussions,s.permaLink as permalink,s.title,s.subTitle,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,s.affliateProgram,s.contentManagerName,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
                        ->from("Offer o")
                        ->leftJoin('o.shop s')
                        ->leftJoin('o.logo ologo')
@@ -3180,52 +3180,36 @@ class Offer extends BaseOffer
         return $data;
     }
 
-   /**
-   * getAllUrls
-   *
-   * returns the all the urls related to a offer like related stor page, special list pages,
-   * realted extended offer page, realted category pages, sreach pages, redactie pages,
-   * pageRelated How to use etc
-   * @param integer $id offer id
-   * @author Surinderpal Singh
-   * @return array array of urls
-   */
     public static function getAllUrls($id)
     {
-        # get offer data
-        $offer  = Doctrine_Query::create()->select(
+        $offer  = Doctrine_Query::create()
+        ->select(
             "o.id, o.extendedOffer,o.authorId , o.extendedUrl,
-            s.permaLink, s.howToUse ,s.contentManagerId , sp.permaLink, p.permaLink,c.permaLink"
+            s.permaLink, s.howToUse ,s.howtoguideslug, s.contentManagerId,
+            sp.permaLink, p.permaLink,c.permaLink"
         )
-          ->from('Offer o')
-          ->leftJoin("o.category c")
-          ->leftJoin("o.shop s")
-          ->leftJoin("s.page sp")
-          ->leftJoin("s.page")
-          ->leftJoin("o.page p")
-          ->where("o.id=? ", $id)
-          ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
+            ->from('Offer o')
+            ->leftJoin("o.category c")
+            ->leftJoin("o.shop s")
+            ->leftJoin("s.page sp")
+            ->leftJoin("s.page")
+            ->leftJoin("o.page p")
+            ->where("o.id=? ", $id)
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
         $urlsArray = array();
-
         # check for related shop permalink
         if (isset($offer['shop'])) {
             $urlsArray[] = $offer['shop']['permaLink'];
-
             # check if a shop has editor or not
             if (isset($offer['shop']['contentManagerId'])) {
-
                 # redactie permalink
                 $redactie =  User::returnEditorUrl($offer['shop']['contentManagerId']);
-
                 # check if an editor  has permalink then add it into array
                 if (isset($redactie['permalink']) && strlen($redactie['permalink']) > 0) {
                     $urlsArray[] = $redactie['permalink'] ;
                 }
             }
-
         }
-
         # check for extende offer page
         if (isset($offer['extendedOffer'])) {
             # check for extende offer url
@@ -3233,18 +3217,19 @@ class Offer extends BaseOffer
                 $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_deals') .'/'. $offer['extendedUrl'];
             }
         }
-
         # check for shop permalink
         if ($offer['shop']['howToUse']) {
             # check for extende offer url
             if (isset($offer['shop']['permaLink'])  && strlen($offer['shop']['permaLink']) > 0) {
-                $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to') .'/'. $offer['shop']['permaLink'];
+                if (!empty($offer['shop']['howtoguideslug'])) {
+                    $urlsArray[] = $offer['shop']['permaLink']. '/'. $offer['shop']['howtoguideslug'];
+                } else {
+                    $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to'). '/'. $offer['shop']['permaLink'];
+                }
             }
         }
-
         # check an offerr has one or more categories
         if (isset($offer['category']) && count($offer['category']) > 0) {
-
             $cetgoriesPage = FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
             # traverse through all catgories
             foreach ($offer['category'] as $value) {
@@ -3256,7 +3241,6 @@ class Offer extends BaseOffer
                 }
             }
         }
-
         # check an offerr has one or more pages
         if (isset($offer['page']) && count($offer['page']) > 0) {
             # traverse through all pages
@@ -3267,7 +3251,6 @@ class Offer extends BaseOffer
                 }
             }
         }
-
         return $urlsArray ;
     }
 

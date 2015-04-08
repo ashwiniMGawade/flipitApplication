@@ -54,4 +54,38 @@ class RoutePermalink extends BaseRoutePermalink
         ->fetchArray();
         return $data;
     }
+
+    public static function updateRoutePermalink($permalink, $exactlink, $validatedPermalink)
+    {
+        Doctrine_Query::create()
+            ->update('RoutePermalink p')
+            ->set('p.permalink', "'".$permalink."'")
+            ->set('p.type', "'SHP'")
+            ->set('p.exactlink', "'".$exactlink."'")
+            ->where('p.type = "SHP"')
+            ->andWhere("p.permalink = '".$validatedPermalink."'")
+            ->execute();
+        return true;
+    }
+
+    public static function saveRoutePermalink($permalink, $exactlink)
+    {
+        $routePermalink = new RoutePermalink();
+        $routePermalink->permalink = $permalink;
+        $routePermalink->type = 'SHP';
+        $routePermalink->exactlink = $exactlink;
+        $routePermalink->save();
+        return true;
+    }
+
+    public static function validatePermalink($permalink)
+    {
+        $validatedPermalink = Doctrine_Query::create()
+            ->select('p.permalink')
+            ->from('RoutePermalink p')
+            ->where("p.permalink = '".$permalink."'")
+            ->andWhere('p.type = "SHP"')
+            ->fetchArray();
+        return $validatedPermalink;
+    }
 }

@@ -91,7 +91,12 @@ if($this->profileImage['addtosearch'] == 1):
     endif;
 endif;
 
-$howToUseGuidePermalink= "how-to/".$this->currentStoreInformation[0]['permaLink'];
+$howToUseGuidePermalink = "how-to/".$this->currentStoreInformation[0]['permaLink'];
+if (!empty($this->currentStoreInformation[0]['howtoguideslug'])) {
+    $howToUseGuidePermalink = 
+        $this->currentStoreInformation[0]['permaLink']. '/'
+        . $this->currentStoreInformation[0]['howtoguideslug'];
+}
 $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
 $offersCount = count($this->offers);
 
@@ -184,6 +189,8 @@ endif;
         echo $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
             .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
     endif;
+    $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+    echo $frontendSidebarHelper->popularCategoryWidget();
     echo $this->partial('socialcode/social-code.phtml', array('zendForm' => $this->zendForm));
     ?>
     </aside>

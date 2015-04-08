@@ -174,7 +174,11 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             } else {
                 $topCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
             }
-
+            
+            $newsLetterHeaderImage = Newsletterbanners::getHeaderOrFooterImage('header');
+            $newsLetterHeaderImage = !empty($newsLetterHeaderImage) ? $newsLetterHeaderImage : '';
+            $newsLetterFooterImage = Newsletterbanners::getHeaderOrFooterImage('footer');
+            $newsLetterFooterImage = !empty($newsLetterFooterImage) ? $newsLetterFooterImage : '';
             $emailDetails = Signupmaxaccount::getAllMaxAccounts();
             $mandrillSenderEmailAddress = $emailDetails[0]['emailperlocale'];
             $mandrillNewsletterSubject = $emailDetails[0]['emailsubject'];
@@ -199,7 +203,10 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                     $this->_to,
                     $this->footerContent,
                     '',
-                    $newsletterHeader['email_header']
+                    $newsletterHeader['email_header'],
+                    '',
+                    $newsLetterHeaderImage,
+                    $newsLetterFooterImage
                 );
                 $message = $this->view->translate('Newsletter has been sent successfully');
             } catch (Mandrill_Error $e) {
@@ -241,6 +248,10 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         $this->view->localeSettings = LocaleSettings::getLocaleSettings();
         $this->view->rights = $this->_settings['administration'];
         $this->view->timezones_list = Signupmaxaccount::$timezones;
+        $this->view->newsletterHeaderImage = Newsletterbanners::getHeaderOrFooterImage('header');
+        $this->view->newsletterFooterImage = Newsletterbanners::getHeaderOrFooterImage('footer');
+        $this->view->newsletterHeaderImageUrl = Newsletterbanners::getHeaderOrFooterImageUrl('headerurl', 'header');
+        $this->view->newsletterFooterImageUrl = Newsletterbanners::getHeaderOrFooterImageUrl('footerurl', 'footer');
     }
 
     public function saveemailcontentAction()
@@ -359,4 +370,49 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         }
     }
 
+    public function updateHeaderImageAction()
+    {
+        if ($this->_request->isXmlHttpRequest()) {
+            if ($this->_request->isPost()) {
+                if (isset($_FILES['newsLetterHeaderImage']['name']) && $_FILES['newsLetterHeaderImage']['name'] != '') {
+                    $result = Newsletterbanners::updateNewsletterImages('header');
+                    $this->_helper->json($result);
+                }
+            }
+        }
+        exit();
+    }
+
+    public function updateFooterImageAction()
+    {
+        if ($this->_request->isXmlHttpRequest()) {
+            if ($this->_request->isPost()) {
+                if (isset($_FILES['newsLetterFooterImage']['name']) && $_FILES['newsLetterFooterImage']['name'] != '') {
+                    $result = Newsletterbanners::updateNewsletterImages('footer');
+                    $this->_helper->json($result);
+                }
+            }
+        }
+        exit();
+    }
+
+    public function deleteNewletterBannerImagesAction()
+    {
+        if ($this->_request->isXmlHttpRequest()) {
+            if ($this->_request->isPost()) {
+                $parameters = $this->_getAllParams();
+                $result = Newsletterbanners::deleteNewsletterImages($parameters['imageType']);
+                $this->_helper->json($result);
+            }
+        }
+        exit();
+    }
+
+    public function saveNewsletterBannerImageUrlAction()
+    {
+        $columnValue = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('val'));
+        $columnName =  FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('name'));
+        Newsletterbanners::saveNewsletterImagesUrl($columnName, $columnValue);
+        exit();
+    }
 }

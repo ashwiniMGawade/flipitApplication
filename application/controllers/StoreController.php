@@ -315,88 +315,51 @@ class StoreController extends Zend_Controller_Action
         $this->view->selectedAlphabet = $startingAndEndingCharacter;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->storesInformation = $allStoresList;
-       
+        $socialCodeForm = new Application_Form_SocialCode();
+        $this->view->zendForm = $socialCodeForm;
         $this->view->popularStores = $popularStores;
         $this->view->pageCssClass = 'all-stores-page';
     }
 
     public function howtoguideAction()
     {
+
         $howToGuidePermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($howToGuidePermalink);
-        $parameters = $this->_getAllParams();
-        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($parameters['permalink']);
-        $howToGuides = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'store_'.$cacheKey.'_howToGuide',
-            array('function' => 'Shop::getshopDetails', 'parameters' => array($parameters['permalink']))
-        );
-
+        $shopId = $this->getRequest()->getParam('shopid');
+        if (!isset($shopId)) {
+            $shopId = Shop::getShopIdByPermalink($this->getRequest()->getParam('permalink'));
+        }
+        $howToGuides = $this->_helper->Store->getHowToGuide($shopId);
         if (empty($howToGuides)) {
             throw new Zend_Controller_Action_Exception('', 404);
         }
-
-        $ShopList = $howToGuides[0]['id'].'_list';
-        $allShopDetailKey = 'shopDetails_'.$ShopList;
-        $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            $allShopDetailKey,
-            array('function' => 'Shop::getStoreDetails', 'parameters' => array($howToGuides[0]['id']))
-        );
-
-        if ($shopInformation[0]['showChains']) {
-            $frontEndViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
-            $shopChains = $frontEndViewHelper->sidebarChainWidget(
-                $shopInformation[0]['id'],
-                $shopInformation[0]['name'],
-                $shopInformation[0]['chainItemId']
-            );
-            if ($shopChains['hasShops'] && isset($shopChains['string'])) {
-                $this->view->shopChain = $shopChains['string'];
-            }
-        }
-
-        $allLatestUpdatesInStoreKey = 'ShoplatestUpdates_'.$ShopList;
-        $latestShopUpdates = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            $allLatestUpdatesInStoreKey,
-            array('function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode', 'parameters' => array(
-                'latestupdates',
-                4,
-                $howToGuides[0]['id'])
-            )
-        );
-        $allOffersInStoreKey = '6_topOffersHowto'.$ShopList;
-        $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            $allOffersInStoreKey,
-            array('function' => 'FrontEnd_Helper_viewHelper::commonfrontendGetCode',
-                'parameters' => array('topSixOffers', 6, $howToGuides[0]['id'], 0)
-            )
-        );
-        $offers = array_chunk($offers, 3);
+        $shopList = $howToGuides[0]['id'].'_list';
+        $shopInformation = $this->_helper->Store->getShopInformation($howToGuides[0]['id'], $shopList);
+        $this->view->shopChain = $this->_helper->Store->getShopChain($shopInformation);
+        $latestShopUpdates = $this->_helper->Store->getShopLatestUpdates($howToGuides[0]['id'], $shopList);
+        $offers = $this->_helper->Store->getSixTopOffers($howToGuides[0]['id'], $shopList);
         $this->view->offers = $offers;
         $this->view->currentStoreInformation = $shopInformation;
         $frontEndViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
         $this->view->popularStoresList = $frontEndViewHelper->PopularShopWidget();
         $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->howToGuides = $howToGuides;
-        
         $shopName = isset($shopInformation[0]['name']) ? $shopInformation[0]['name'] : '';
-        $howToGuides = isset($howToGuides[0]['howtoTitle']) ? $howToGuides[0]['howtoTitle'] : '';
+        $howToGuidesTitle = isset($howToGuides[0]['howtoTitle']) ? $howToGuides[0]['howtoTitle'] : '';
         $customHeader = '';
-        $howToGuideUrlForMetaTags = isset($howToGuides[0]['permaLink'])
-            ? $howToGuides[0]['permaLink']
-            : $howToGuidePermalink;
         $howToGuideMetaDescription = isset($howToGuides[0]['howtoMetaDescription'])
             ? $howToGuides[0]['howtoMetaDescription']
             : '';
         $this->viewHelperObject->getMetaTags(
             $this,
-            str_replace('[shop]', $shopName, $howToGuides),
+            str_replace('[shop]', $shopName, $howToGuidesTitle),
             '',
             trim($howToGuideMetaDescription),
-            $howToGuideUrlForMetaTags,
+            $howToGuidePermalink,
             FACEBOOK_IMAGE,
             $customHeader
         );
-
         $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'largeSignupForm',
             'SignUp'
@@ -412,6 +375,8 @@ class StoreController extends Zend_Controller_Action
         );
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+        $socialCodeForm = new Application_Form_SocialCode();
+        $this->view->zendForm = $socialCodeForm;
     }
 
     public function addtofavouriteAction()

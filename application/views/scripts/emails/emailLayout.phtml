@@ -27,6 +27,16 @@ $emailHeader = $this->partial(
         'publicPath' => $publicPath
     )
 );
+$emailHeaderImage = '';
+if ($this->newsLetterHeaderImage!='') {
+    $emailHeaderImage = $this->partial(
+        $emailsViewPath. 'emailHeaderImage.phtml',
+        array(
+            'newsLetterHeaderImage' => $this->newsLetterHeaderImage,
+            'publicPathCdn' => $publicPathCdn
+        )
+    );
+}
 
 $welcomeTopBlock = '';
 if(!empty($this->topOffers)) {
@@ -110,6 +120,7 @@ if(!empty($this->codeAlert)) {
                 <tbody>
                 <?php
                 echo $emailHeader;
+                echo $emailHeaderImage;
                 echo $welcomeTopBlock;
                 echo $codeAlert;
                 echo $topOffers;

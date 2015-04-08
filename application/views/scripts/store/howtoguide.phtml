@@ -7,14 +7,6 @@ $headerBlock =
         $message = 'storeHowTo',
         $offerTitle = 'storeHowTo'
     );
-$howToUseGuidePermalink= "how-to/".$this->currentStoreInformation[0]['permaLink'];
-$actualUrlWithoutDoubleSlash = explode("//", $this->currentStoreInformation[0]['actualUrl']);
-if (isset($actualUrlWithoutDoubleSlash[1])):
-    $actualUrl = $actualUrlWithoutDoubleSlash[1];
-else:
-    $actualUrl = $this->currentStoreInformation[0]['actualUrl'];
-endif;
-
 $storeViewPartialPath = 'store/';
 $partialViewPath = 'partials/';
 
@@ -84,6 +76,9 @@ echo $headerBlock;
         echo $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
         .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
     endif;
+    $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+    echo $frontendSidebarHelper->popularCategoryWidget();
+    echo $this->partial('socialcode/social-code.phtml', array('zendForm' => $this->zendForm));
     ?>
     </aside>
 </div>
