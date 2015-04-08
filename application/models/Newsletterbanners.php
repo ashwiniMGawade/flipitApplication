@@ -5,7 +5,7 @@ class Newsletterbanners extends BaseNewsletterbanners
     public static function getHeaderOrFooterImage($imageType)
     {
         $existedNewsLetterImage = Doctrine_Query::create()
-            ->select('s.name, s.path, s.headerurl, s.footerurl')
+            ->select('s.name, s.path, s.headerurl, s.footerurl, s.imagetype')
             ->from("Newsletterbanners s")
             ->where('s.imagetype = "'.$imageType.'"')
             ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
@@ -73,16 +73,17 @@ class Newsletterbanners extends BaseNewsletterbanners
             $uploadedImage = self::uploadImage($uploadedFile);
             if ($uploadedImage['status'] == '200') {
                 $existedNewsLetterImage = self::getHeaderOrFooterImage($imageType);
-                if (!empty($existedNewsLetterImage['path'])) {
+                if (!empty($existedNewsLetterImage)) {
                     self::unlinkFileFromDirectory($existedNewsLetterImage);
-                    self::updateNewsletterBanners($uploadedImage, $imageType);
+                    $uploadedImages = array(
+                        'fileName'=>$uploadedImage['fileName'],
+                        'path'=>$uploadedImage['path'],
+                        'footerurl'=>$existedNewsLetterImage['footerurl'],
+                        'headerurl'=>$existedNewsLetterImage['headerurl'],
+                    );
+                    self::updateNewsletterBanners($uploadedImages, $imageType);
                 } else {
-                    if (!empty($existedNewsLetterImage[$columnName])) {
-                        self::unlinkFileFromDirectory($existedNewsLetterImage);
-                        self::updateNewsletterBanners($uploadedImage, $imageType);
-                    } else {
-                        self::saveNewsletterImages($uploadedImage, $imageType);
-                    }
+                    self::saveNewsletterImages($uploadedImage, $imageType);
                 }
                 return $uploadedImage;
             }
@@ -112,8 +113,10 @@ class Newsletterbanners extends BaseNewsletterbanners
     {
         Doctrine_Query::create()
             ->update('Newsletterbanners n')
-            ->set('n.name', '?', $uploadedImage['fileName'])
-            ->set('n.path', '?', $uploadedImage['path'])
+            ->set('n.name', "'".$uploadedImage['fileName']."'")
+            ->set('n.path', "'".$uploadedImage['path']."'")
+            ->set('n.footerurl', "'".$uploadedImage['footerurl']."'")
+            ->set('n.headerurl', "'".$uploadedImage['headerurl']."'")
             ->where('n.imagetype = "'.$imageType.'"')
             ->execute();
         return true;
