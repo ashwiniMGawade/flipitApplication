@@ -16,15 +16,10 @@ class BootstrapDoctrineConnectionFunctions
         $frontControllerObject = $application->getOption('resources');
         $memcacheHostname = $frontControllerObject['frontController']['params']['memcache']['host'];
         $memcachePort = $frontControllerObject['frontController']['params']['memcache']['port'];
-        if (APPLICATION_ENV != "development") {
-            $cache = new \Doctrine\Common\Cache\ArrayCache;
-        } else {
-            $memcache = new Memcached();
-            $memcache->addServer($memcacheHostname, $memcachePort);
-            $cache = new \Doctrine\Common\Cache\MemcachedCache;
-            $cache->setMemcached($memcache);
-        }
-    
+        $memcache = new Memcached();
+        $memcache->addServer($memcacheHostname, $memcachePort);
+        $cache = new \Doctrine\Common\Cache\MemcachedCache;
+        $cache->setMemcached($memcache);    
         $annotationReader = new Doctrine\Common\Annotations\AnnotationReader;
         $cachedAnnotationReader = new Doctrine\Common\Annotations\CachedReader(
             $annotationReader,
