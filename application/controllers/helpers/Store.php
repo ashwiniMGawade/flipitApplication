@@ -84,7 +84,7 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopId);
         $howToGuides = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'store_'.$cacheKey.'_howToGuide',
-            array('function' => 'Shop::getShopDetails', 'parameters' => array($shopId))
+            array('function' => 'KC\Repository\Shop::getShopDetails', 'parameters' => array($shopId))
         );
         return $howToGuides;
     }
@@ -94,7 +94,7 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         $allShopDetailKey = 'shopDetails_'.$shopList;
         $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             $allShopDetailKey,
-            array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId))
+            array('function' => 'KC\Repository\Shop::getStoreDetails', 'parameters' => array($shopId))
         );
         return $shopInformation;
     }

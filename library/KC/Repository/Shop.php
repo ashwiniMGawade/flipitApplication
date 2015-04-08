@@ -344,13 +344,14 @@ class Shop extends \KC\Entity\Shop
     public static function getshopDetails($shopId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('s,img.name,img.path,chptr')
-        ->from('KC\Entity\Shop', 's')
-        ->leftJoin('s.logo', 'img')
-        ->leftJoin('s.howtochapter', 'chptr')
-        ->Where("s.permaLink= '".$shopId."'")
-        ->andWhere('s.status = 1');
-        $shopDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $query = $queryBuilder
+            ->select('s,img.name,img.path,chptr')
+            ->from('KC\Entity\Shop', 's')
+            ->leftJoin('s.logo', 'img')
+            ->leftJoin('s.howtochapter', 'chptr')
+            ->Where("s.id= ".$shopId)
+            ->andWhere('s.status = 1');
+        $shopDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopDetails;
     }
 
