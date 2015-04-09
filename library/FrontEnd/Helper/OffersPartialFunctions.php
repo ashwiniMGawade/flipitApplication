@@ -143,9 +143,8 @@ class FrontEnd_Helper_OffersPartialFunctions
     }
     public function getOfferOptionAndOfferDates($currentOffer, $daysTillOfferExpires)
     {
-        $offerOption = self::getOfferExclusiveOrEditor($currentOffer);
         $offerDates = self::getOfferDates($currentOffer, $daysTillOfferExpires);
-        return $offerOption . $offerDates;
+        return $offerDates;
     }
     public function getCssClassNameForOffer($currentOffer, $offerType)
     {
@@ -505,5 +504,60 @@ class FrontEnd_Helper_OffersPartialFunctions
         $explodeContentManagerName = explode(' ', $contentManagerName);
         $contentManagerName = !empty($explodeContentManagerName[0]) ? $explodeContentManagerName[0] : '';
         return $contentManagerName;
+    }
+
+    public function getShopEditor($editorId)
+    {
+        $editorInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            'user_'.$editorId.'_details',
+            array(
+                'function' =>
+                'User::getUserDetails', 'parameters' => array($editorId)
+            ),
+            ''
+        );
+        return $editorInformation;
+    }
+
+    public function getShopEditorHtml($shopEditor)
+    {
+        $shopEditorPath =
+            HTTP_PATH_CDN
+            .ltrim($shopEditor['profileimage']['path'], "/")
+            .'thum_large_widget_' .$shopEditor['profileimage']['name'];
+
+        $editorPanelForOffer ='<span class="editor-text">
+            <img width="30" src="'.$shopEditorPath.'" class="recommended-thumb" alt="thumb" title="thumb">'.
+            FrontEnd_Helper_viewHelper::__translate('Tip from');
+        if (!empty($shopEditor['firstName'])) {
+            $editorPanelForOffer .= ' - '.ucfirst($shopEditor['firstName']);
+        }
+        $editorPanelForOffer .='</span>';
+        return $editorPanelForOffer;
+    }
+
+    public function getDaysTillExpire($daysTillOfferExpires)
+    {
+        $stringOnly = FrontEnd_Helper_viewHelper::__translate('Only');
+        $offerDates = '';
+        $cssClass = '';
+        if ($daysTillOfferExpires == 3 || $daysTillOfferExpires ==2) {
+            $offerDates .= $stringOnly;
+            $offerDates .= '&nbsp;';
+            $offerDates .= $daysTillOfferExpires;
+            $offerDates .= '&nbsp;';
+            $offerDates .= FrontEnd_Helper_viewHelper::__translate('days left!');
+        } elseif ($daysTillOfferExpires == 1) {
+            $offerDates .= $stringOnly;
+            $offerDates .= '&nbsp;';
+            $offerDates .= $daysTillOfferExpires;
+            $offerDates .= '&nbsp;';
+            $offerDates .= FrontEnd_Helper_viewHelper::__translate('day left!');
+            $cssClass = 'text-red';
+        } elseif ($daysTillOfferExpires == 0) {
+            $offerDates .= FrontEnd_Helper_viewHelper::__translate('Expires today');
+            $cssClass = 'text-red';
+        }
+        return "<span class='". $cssClass ."'>". $offerDates . "</span>";
     }
 }

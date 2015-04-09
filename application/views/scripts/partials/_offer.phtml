@@ -116,26 +116,33 @@ foreach ($this->offers as $offer) {
     } else {
         $extendedOffer = 0;
     }
+    $offerBottomTermsAndConditionLink = '';
+    $offerBottomExtendedLink = '';
+    $offerBottomViewAllShopsLink = '';
+    $offerBottomOfferExclusiveOrEditor = $offerPartial->getOfferExclusiveOrEditor($offer);
+    $offerBottomDaysTillExpireText = '';
+    if ($daysTillOfferExpires <=3) {
+        $offerBottomDaysTillExpireText = $offerPartial->getDaysTillExpire($daysTillOfferExpires);
+    }
     $showHyphen = $termsAndConditions != '' || $extendedOffer == 1 ? '<li> -</li>' : '';
     if ($this->offersType!='extendedOffer') {
         if ($termsAndConditions != '') {
-            echo $offerPartial->getTermAndConditionsLink($offer, $termsAndConditions);
+            $offerBottomTermsAndConditionLink = $offerPartial->getTermAndConditionsLink($offer, $termsAndConditions);
         }
-        echo $offerPartial->getExtendedOfferLink($offer);
+        $offerBottomExtendedLink =  $offerPartial->getExtendedOfferLink($offer);
         if($this->offersType!='simple'):
-            echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], $showHyphen);
+            $offerBottomViewAllShopsLink =  $offerPartial->getViewAllCodeLink(
+                $offer->shop['name'],
+                $offer->shop['permalink'],
+                $showHyphen
+            );
         endif;
     } else {
-        echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], '');
+        $offerBottomViewAllShopsLink = $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], '');
     }
     ?>
                 </ul>
             </div>
-            <?php 
-            if ($offer->userGenerated == 0) {
-                //echo $offerPartial->getVerifiedText();
-            }
-            ?>
         </div>
     <?php
     if ($this->offersType!='extendedOffer') {
@@ -143,27 +150,32 @@ foreach ($this->offers as $offer) {
     } else {
             $style = 'style="display:block;"';
     }
+    $offerBottomLink = '';
     if ($offer->editorPicks == 1) {
-    ?>
+        $contentManagerId = isset($offer->shop['contentManagerId']) ? $offer->shop['contentManagerId'] : '';
+        $contentManagerId = !empty($this->shop['contentManagerId']) 
+            ? $this->shop['contentManagerId'] 
+            : $contentManagerId;
+        $shopEditor = $offerPartial->getShopEditor($contentManagerId);
+        $offerBottomLink = $offerPartial->getShopEditorHtml($shopEditor);
+        $offerBottomOfferExclusiveOrEditor = $offerBottomLink;
+    } ?>
+    
         <hr class="alt2">
         <div class="recommended-outerDiv">
             <div class="recommended-arrow"></div>
             <div class="recommendedOffer">
-                <span>
-                    <img src="<?php echo HTTP_PATH.'public/images/rec-thumb.png';?>" class="recommended-thumb" alt="thumb" title="thumb">
-                    <?php echo $this->translate('Recommended by staff');?>
-                </span>
-                <?php
-                $contentManagerInfo = isset($offer->shop['contentManagerName']) ? $offer->shop['contentManagerName'] : '';
-                $contentManagerName = !empty($this->shop['contentManagerName']) ? $this->shop['contentManagerName'] : $contentManagerInfo;
-                if (!empty($contentManagerName)) {
-                    $contentManagerFirstName = $offerPartial->getContentManagerName($contentManagerName);
-                    echo ' - '.ucfirst($contentManagerFirstName).' '.$this->translate('recommended this code');  
-                }
+            <?php 
+            echo 
+                $offerBottomOfferExclusiveOrEditor
+                .$offerBottomDaysTillExpireText
+                .$offerBottomViewAllShopsLink
+                .$offerBottomExtendedLink
+                .$offerBottomTermsAndConditionLink;
                 ?>
             </div>
         </div>
-    <?php } ?>    
+
         <div class="offer-box" id="websiteOfferLink<?php echo $offer->id ;?>" <?php echo $style;?>>
             <hr class="alt2">
             <div class="offer">
