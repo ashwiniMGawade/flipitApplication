@@ -23,7 +23,7 @@ class Admin_OfferController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second excelDatabase
         $params = $this->_getAllParams();
         if (!Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
@@ -1552,161 +1552,97 @@ class Admin_OfferController extends Zend_Controller_Action
         if ($this->getRequest()->isPost()) {
             if (isset($_FILES['excelFile']['name']) && $_FILES['excelFile']['name'] != '') {
                 $RouteRedirectObj = new RouteRedirect();
-                $result = $RouteRedirectObj->uploadExcel($_FILES['excelFile']['name']);
-                if ($result['status'] == 200) {
+                $uploadResult = $RouteRedirectObj->uploadExcel($_FILES['excelFile']['name']);
+                if ($uploadResult['status'] == 200) {
                     Doctrine_Query::create()->delete('RouteRedirect')->execute();
-                    $spl = explode('/', HTTP_PATH);
-                    $path = $spl[0].'//' . $spl[2];
-                    $excelFilePath = $result['path'];
-                    $excelFile = $excelFilePath.$result['fileName'];
+                    $explodedHttpPath = explode('/', HTTP_PATH);
+                    $path = $explodedHttpPath[0].'//' . $explodedHttpPath[2];
+                    $excelFilePath = $uploadResult['path'];
+                    $excelFile = $excelFilePath.$uploadResult['fileName'];
                     $objReader = PHPExcel_IOFactory::createReader('Excel2007');
                     $objPHPExcel = $objReader->load($excelFile);
                     $worksheet = $objPHPExcel->getActiveSheet();
-                    $data =  array();
+                    $excelData =  array();
+                    $flashMessage = $this->_helper->getHelper('FlashMessenger');
                     foreach ($worksheet->getRowIterator() as $row) {
                         $cellIterator = $row->getCellIterator();
                         $cellIterator->setIterateOnlyExistingCells(false);
                         foreach ($cellIterator as $cell) {
-                            $data[$cell->getRow()][$cell->getColumn()] = $cell->getCalculatedValue();
+                            $excelData[$cell->getRow()][$cell->getColumn()] = $cell->getCalculatedValue();
                         }
-                        $offerTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['A']);
-                        $shopName = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['B']);
-                        $offerType = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['C']);
-                        $offerVisibility = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['D']);
-                        $offerExtended= strtolower($data[$cell->getRow()]['E']);
-                        $offerStartDate = strtolower($data[$cell->getRow()]['F']);
-                        $offerEndDate = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['G']);
-                        $offerClickouts  = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['H']);
-                        $offerAuthorName = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['I']);
-                        $offerCouponCode  =  $data[$cell->getRow()]['J'];
-                        $offerExclusive = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['K']);
-                        $offerEditorPick = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['L']);
-                        $offerUserGenerated = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['M']);
-                        $offerOffline = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['N']);
-                        $offerCreatedAt = strtolower($data[$cell->getRow()]['O']);
-                        $offerDeeplink = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['P']);
-                        $offerTileId = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['Q']);
-                        if (!empty($offerTitle) && !empty($shopName)) {
-                            $shopList = Doctrine_Core::getTable('Offer')->findOneBy('name', $name);
-                            if (empty($shopList)) {
-                                if (strtolower($name)!='shop name(must be filled)') {
-                                    $shopList = new Shop();
-                                    $shopList->name = BackEnd_Helper_viewHelper::stripSlashesFromString($name);
-                                    $shopList->status = false;
+                        $offerTitle = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['A']);
+                        $shopName = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['B']);
+                        $offerType = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['C']);
+                        $offerVisibility = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['D']);
+                        $offerExtended = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['E']);
+                        $offerStartDate = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['F']);
+                        $offerEndDate = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['G']);
+                        $offerClickouts  = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['H']);
+                        $offerAuthorName = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['I']);
+                        $offerCouponCode  =  FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['J']);
+                        $offerExclusive = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['K']);
+                        $offerEditorPick = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['L']);
+                        $offerUserGenerated = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['M']);
+                        $offerOffline = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['N']);
+                        $offerCreatedAt = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['O']);
+                        $offerDeeplink = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['P']);
+                        $offerTileId = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['Q']);
+                        if (
+                            (!empty($offerTitle)
+                                && $offerTitle != $this->view->translate('Offer Title(Must be filled)')
+                            )
+                            && (
+                                !empty($shopName) && $shopName != $this->view->translate('Shop Name(Must be filled)')
+                            )
+                            && (
+                                !empty($offerStartDate)
+                                && $offerStartDate != $this->view->translate('Start Date (must be filled)')
+                            )
+                            && (
+                                !empty($offerEndDate)
+                                && $offerEndDate != $this->view->translate('End Date (must be filled)')
+                            )
+                        ) {
+                            $shopId = Shop::getShopIdByShopName($shopName);
+                            if (!empty($shopId)) {
+                                $currentDate = date('Y-m-d');
+                                $startDate = date('Y-m-d', strtotime($offerStartDate));
+                                $endDate = date('Y-m-d', strtotime($offerEndDate));
+                                if ($startDate >= $currentDate && $endDate >= $currentDate) {
+                                    $offerList = new Offer();
+                                    $offerList->title = $offerTitle;
+                                    $offerList->shopid = $shopId;
+                                    $offerList->discounttype = !empty($offerCouponCode) ? 'CD' : 'SL';
+                                    $offerList->visability = !empty($offerVisibility) ? $offerVisibility : 'DE';
+                                    $offerList->extenedeoffer = 0;
+                                    $offerList->startdate = $startDate;
+                                    $offerList->enddate = $endDate;
+                                    $offerList->totalviewcount = !empty($offerClickouts) ? $offerClickouts : 0;
+                                    $offerList->authorName = !empty($offerAuthorName) ? $offerAuthorName : 'Arthur Goldman';
+                                    $offerList->couponcode = !empty($offerCouponCode) ? $offerCouponCode : '';
+                                    $offerList->exclusivecode = $offerExclusive == 1 ? 1 : 0;
+                                    $offerList->editorpicks = $offerEditorPick == 1 ? 1 : 0;
+                                    $offerList->userGenerated = 0;
+                                    $offerList->offline = 0;
+                                    $offerList->created_at = $currentDate;
+                                    $offerList->refurl = !empty($offerDeeplink) ? $offerDeeplink : '';
+                                    $offerList->tilesId = LOCALE == 'es' ? 135 : 0;
+                                    $offerList->maxcode = 0;
+                                    $offerList->deleted = 0;
+                                    $offerList->updated_at = $currentDate;
                                 }
+                                $offerList->save();
                             }
-                            if (strtolower($name)!='shop name(must be filled)' && $permalink!='' && $permalink!='None') {
-                                if ($permalink!='None' && $permalink!='') {
-                                    $shopList->permaLink = BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
-                                }
-                                if ($overwriteTitle!='None' && $overwriteTitle!='') {
-                                    $shopList->overriteTitle = FrontEnd_Helper_viewHelper::replaceStringVariable(BackEnd_Helper_viewHelper::stripSlashesFromString($overwriteTitle));
-                                }
-                                if ($metaDescription!='None' && $metaDescription!='') {
-                                    $shopList->metaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($metaDescription);
-                                }
-                                if ($allowUserGeneratedContent!='None' && $allowUserGeneratedContent!='') {
-                                    if ($allowUserGeneratedContent=='no') {
-                                        $shopList->usergenratedcontent = '0';
-                                    } else {
-                                        $shopList->usergenratedcontent = '1';
-                                    }
-                                }
-                                if ($allowDiscussions!='None' && $allowDiscussions!='') {
-                                    if ($allowDiscussions=='no') {
-                                        $shopList->discussions = '0';
-                                    } else {
-                                        $shopList->discussions = '1';
-                                    }
-                                }
-                                if ($title!='None' && $title!='') {
-                                    $shopList->title = BackEnd_Helper_viewHelper::stripSlashesFromString($title);
-                                }
-                                if ($subTitle!='None' && $subTitle!='') {
-                                    $shopList->subTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($subTitle);
-                                }
-                                if ($notes!='None' && $notes!='') {
-                                    $shopList->notes = BackEnd_Helper_viewHelper::stripSlashesFromString($notes);
-                                }
-                                if ($accountManager!='None' && $accountManager!='') {
-                                    $shopList->accountManagerName = $accountManager;
-                                    $acName = Doctrine_Core::getTable('User')->findOneBy('firstName', $accountManager);
-                                    if ($acName) {
-                                        $shopList->accoutManagerId = $acName->id;
-                                    }
-                                }
-                                if ($editor!='None' && $editor!='') {
-                                    $shopList->contentManagerName = $editor;
-                                    $cmName = Doctrine_Core::getTable('User')->findOneBy('firstName', $editor);
-                                    if ($cmName) {
-                                        $shopList->contentManagerId = $cmName->id;
-                                    }
-                                }
-                                if ($category!='None' && $category!='') {
-                                    $shopList->refShopCategory->delete();
-                                    $splitCat  = explode(',', $category);
-                                    foreach ($splitCat as $catName) {
-                                        $cat = Doctrine_Core::getTable('Category')->findOneBy('name', $catName);
-                                        if ($cat) {
-                                            $shopList->refShopCategory[]->categoryId = $cat->id;
-                                        }
-                                    }
-                                }
-                                if ($affiliateNetwork!='None' && $affiliateNetwork!='') {
-                                    $afNetwork = Doctrine_Core::getTable('AffliateNetwork')->findOneBy('name', $affiliateNetwork);
-                                    if ($afNetwork) {
-                                        $shopList->affliateNetworkId = $afNetwork->id;
-                                    }
-                                }
-                                if ($deeplinkingCode !='None' && $deeplinkingCode !='') {
-                                    if ($deeplinkingCode=='no') {
-                                        $shopList->deepLinkStatus = false;
-                                    } else {
-                                        $shopList->deepLinkStatus = true;
-                                    }
-                                }
-                                $shopList->displayExtraProperties = false;
-                                $shopList->views = 0;
-                                $shopList->howToUse = false;
-                                $shopList->deepLink = null;
-                                $format = 'Y-m-j H:i:s';
-                                $date = date($format);
-                                $shopList->offlineSicne = $date;
-                                $shopList->status = false;
-                                if ($shop_text!='None' && $shop_text != "") {
-                                    $shopList->shopText = BackEnd_Helper_viewHelper::stripSlashesFromString($shop_text);
-                                }
-                                $shopList->save();
-                                $pr  = Doctrine_Core::getTable('RoutePermalink')->findOneBy('permalink', $permalink);
-                                if ($pr) {
-                                    $pr->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
-                                    $pr->type = 'SHP';
-                                    $pr->exactlink = 'store/storedetail/id/'.$shopList->id;
-
-                                } else {
-
-                                    $pr = new RoutePermalink();
-                                    $pr->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
-                                    $pr->type = 'SHP';
-                                    $pr->exactlink = 'store/storedetail/id/'.$shopList->id;
-
-                                }
-                                $pr->save();
-                            }
-
-                        } else {
-                            $flash = $this->_helper->getHelper('FlashMessenger');
-                            $message = $this->view->translate('backend_Offers have been imported Successfully!!');
-                            $flash->addMessage(array('success' => $message));
-                            $this->_redirect(HTTP_PATH . 'admin/offer');
                         }
                     }
+                    $message = $this->view->translate('backend_Offers have been imported Successfully!!');
+                    $flashMessage->addMessage(array('success' => $message));
+                    $this->_redirect(HTTP_PATH . 'admin/offer');
+                } else {
+                    $message = $this->view->translate('Problem in your file!!');
+                    $flashMessage->addMessage(array('error' => $message));
+                    $this->_redirect(HTTP_PATH . 'admin/offer');
                 }
-            } else {
-                $flash = $this->_helper->getHelper('FlashMessenger');
-                $message = $this->view->translate('Problem in your file!!');
-                $flash->addMessage(array('error' => $message));
-                $this->_redirect(HTTP_PATH . 'admin/offer');
             }
         }
     }
