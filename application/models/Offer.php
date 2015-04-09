@@ -3295,6 +3295,67 @@ class Offer extends BaseOffer
         return $data;
     }
 
+    public static function getNumberOfOffersCreatedByShopId($shopId)
+    {
+        $format = 'Y-m-j H:i:s';
+        $date = date($format);
+        $past7Days = date($format, strtotime('-7 day' . $date));
+        $past31Days = date($format, strtotime('-31 day' . $date));
+        $offersCreated = array();
+        $offersInfo = self::getOffersForDateRange($shopId, $past7Days, $date);
+        $type = "week";
+
+        if (!empty($offersInfo) && $offersInfo['amountOffers'] < 2) {
+            $offersInfo = self::getOffersForDateRange($shopId, $past31Days, $date);
+            $type = "month";
+            if ($offersInfo['amountOffers'] < 2) {
+                $offersInfo = "";
+            }
+        }
+
+        if (!empty($offersInfo)) {
+            $offersCreated = array(
+                "offersInfo" => $offersInfo,
+                "type" => $type
+            );
+        }
+
+        return $offersCreated;
+    }
+
+    public static function getOffersForDateRange($shopId, $offsetDate, $date)
+    {
+        $offersInfo = Doctrine_Query::create()
+            ->select("count(o.id) as amountOffers")
+            ->from('Offer o')
+            ->leftJoin('o.shop s')
+            ->where('o.deleted = 0')
+            ->andWhere('o.offline = 0')
+            ->andWhere('o.discountType != "NW"')
+            ->andWhere('o.created_at BETWEEN "'.$offsetDate.'" AND "'.$date.'"')
+            ->andWhere('s.id = '.$shopId)
+            ->limit(1)
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return $offersInfo;
+    }
+
+    public static function currentActiveOffersByShopId($shopId)
+    {
+        $date = date('Y-m-j H:i:s');
+        $offersInfo = Doctrine_Query::create()
+            ->select("count(o.id) as liveOffers")
+            ->from('Offer o')
+            ->leftJoin('o.shop s')
+            ->where('o.deleted = 0')
+            ->andWhere('o.offline = 0')
+            ->andWhere('o.enddate > "'.$date.'"')
+            ->andWhere('o.startdate <= "'.$date.'"')
+            ->andWhere('s.id = '.$shopId)
+            ->limit(1)
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return $offersInfo;
+    }
+
     /**
      * get total No of offers created
      * @author Raman
