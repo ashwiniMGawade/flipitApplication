@@ -171,35 +171,9 @@ class FrontEnd_Helper_LayoutContent
         $classForFlipIt = LOCALE == '' ? "kc-menu" : 'flipit-menu';
         $ulOfMainMenu =
         '<ul>';
-        if ($navigation == 'mobile') {
-            $ulOfMainMenu .=
-            '<li>
-                <a href="'. HTTP_PATH_LOCALE.'">'.FrontEnd_Helper_viewHelper::__translate('Home').' </a>
-            </li>';
-        }
-
-        foreach ($mainMenu as $menu) {
-            if ($navigation == 'mobile') {
-                $cssClassForLastLi = strtolower($menu['name']) == FrontEnd_Helper_viewHelper::__translate('category')
-                ? $classForFlipIt: '';
-            } else {
+        if ($navigation != 'mobile') {
+            foreach ($mainMenu as $menu) {
                 $cssClassForLastLi = strtolower($menu['name']) == 'plus' ? $classForFlipIt: '';
-            }
-            $stringReplacedMenuUrlVariable = str_replace("-", "", $menu['url']);
-            $stringReplacedtop20Variable = str_replace("-", "", FrontEnd_Helper_viewHelper::__link('link_top-20'));
-            if ($stringReplacedMenuUrlVariable === $stringReplacedtop20Variable && $navigation == 'mobile') {
-                $ulOfMainMenu.=
-                    '<li class="' . $cssClassForLastLi .'" id="'. $menu["name"] .'">
-                        <a id="'. $menu["name"] . '" name="'. $menu["name"] . '" 
-                            class="" href="'. HTTP_PATH_LOCALE  . $menu['url'] . '">' . ucfirst($menu["name"])
-                        . '</a>
-                    </li>
-                    <li class="' . $cssClassForLastLi .'" id="plus">
-                        <a id="plus" name="plus" 
-                            class="" href="'. HTTP_PATH_LOCALE  . 'plus">' . ucfirst('plus')
-                        . '</a>
-                    </li>';
-            } else {
                 $ulOfMainMenu.=
                 '<li class="' . $cssClassForLastLi .'" id="'. $menu["name"] .'">
                     <a id="'. $menu["name"] . '" name="'. $menu["name"] . '" 
@@ -253,11 +227,6 @@ class FrontEnd_Helper_LayoutContent
             ''
         );
         return $topShops;
-    }
-
-    public static function generateMobileMenu($navigation)
-    {
-        return self::getUlOfMainMenu($navigation);
     }
     
     public static function getMostPopularCouponOnEarth()
