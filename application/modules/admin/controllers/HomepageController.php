@@ -189,7 +189,7 @@ class Admin_HomepageController extends Zend_Controller_Action
             $message = $this->view->translate('Changes has been saved successfully.');
             $flash->addMessage(array('success' => $message ));
             $parmas = $this->_getAllParams();
-            KC\Repository\SeenIn::update($parmas);
+            \KC\Repository\SeenIn::update($parmas);
             $this->_redirect('/admin/homepage');
         }
         // check if asSeenIn form is submitted

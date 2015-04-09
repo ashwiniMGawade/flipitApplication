@@ -394,7 +394,7 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
-                    ->set('signupmaxaccount.homepagebanner_name', '')
+                    ->set('signupmaxaccount.homepagebanner_name', $entityManagerUser->expr()->literal(''))
                     ->setParameter(1, 1)
                     ->where('signupmaxaccount.id = ?1')
                     ->getQuery();
