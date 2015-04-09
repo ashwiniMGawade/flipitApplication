@@ -348,3 +348,12 @@ a, #adminmenu a, #the-comment-list p.comment-author strong a, #media-upload a.de
 .mg-left{
     margin-left: -24px;
 }
+.width-204{
+    width: 204px !important;
+}
+.offer-import-customized{
+    float: right;
+    margin:-28px -28px 9px;
+    height : 20px;
+    width : 511px;
+}

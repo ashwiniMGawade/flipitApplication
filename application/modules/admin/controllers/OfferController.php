@@ -1550,398 +1550,178 @@ class Admin_OfferController extends Zend_Controller_Action
         ini_set('max_execution_time', 115200);
         $params = $this->_getAllParams();
         if ($this->getRequest()->isPost()) {
-            if (isset($_FILES['excelFile']['name']) && @$_FILES['excelFile']['name'] != '') {
+            if (isset($_FILES['excelFile']['name']) && $_FILES['excelFile']['name'] != '') {
                 $RouteRedirectObj = new RouteRedirect();
                 $result = $RouteRedirectObj->uploadExcel($_FILES['excelFile']['name']);
                 if ($result['status'] == 200) {
-                        Doctrine_Query::create()->delete('RouteRedirect')->execute();
-                        $spl = explode('/', HTTP_PATH);
-                        $path = $spl[0].'//' . $spl[2];
-                        $excelFilePath = $result['path'];
-                        $excelFile = $excelFilePath.$result['fileName'];
-                        $handle = opendir(ROOT_PATH . 'Logo/Logo');
-                        $rootpath = ROOT_PATH . 'Logo/Logo/';
-                        $pathToUpload = ROOT_PATH . 'images/upload/shop/';
-                        $pathUpload = 'images/upload/shop/';
-                        if (!file_exists($pathToUpload)) {
-                            mkdir($pathToUpload);
+                    Doctrine_Query::create()->delete('RouteRedirect')->execute();
+                    $spl = explode('/', HTTP_PATH);
+                    $path = $spl[0].'//' . $spl[2];
+                    $excelFilePath = $result['path'];
+                    $excelFile = $excelFilePath.$result['fileName'];
+                    $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+                    $objPHPExcel = $objReader->load($excelFile);
+                    $worksheet = $objPHPExcel->getActiveSheet();
+                    $data =  array();
+                    foreach ($worksheet->getRowIterator() as $row) {
+                        $cellIterator = $row->getCellIterator();
+                        $cellIterator->setIterateOnlyExistingCells(false);
+                        foreach ($cellIterator as $cell) {
+                            $data[$cell->getRow()][$cell->getColumn()] = $cell->getCalculatedValue();
                         }
-                        $siteHandle = opendir(ROOT_PATH . 'Logo/Screenshot');
-                        $rootSitePath = ROOT_PATH . 'Logo/Screenshot/';
-                        $pathToUploadSiteImg = ROOT_PATH . 'images/upload/screenshot/';
-                        $sitePathUpload = 'images/upload/screenshot/';
-                        if (!file_exists($pathToUploadSiteImg)) {
-                            mkdir($pathToUploadSiteImg);
-                        }
-                        $image_array =  array();
-                        $siteimage_array =  array();
-                        while ($file = readdir($handle)) {
-                        if ($file !== '.' && $file !== '..') {
-
-                            $image_array[] = $file;
-
+                        $offerTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['A']);
+                        $shopName = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['B']);
+                        $offerType = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['C']);
+                        $offerVisibility = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['D']);
+                        $offerExtended= strtolower($data[$cell->getRow()]['E']);
+                        $offerStartDate = strtolower($data[$cell->getRow()]['F']);
+                        $offerEndDate = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['G']);
+                        $offerClickouts  = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['H']);
+                        $offerAuthorName = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['I']);
+                        $offerCouponCode  =  $data[$cell->getRow()]['J'];
+                        $offerExclusive = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['K']);
+                        $offerEditorPick = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['L']);
+                        $offerUserGenerated = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['M']);
+                        $offerOffline = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['N']);
+                        $offerCreatedAt = strtolower($data[$cell->getRow()]['O']);
+                        $offerDeeplink = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['P']);
+                        $offerTileId = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['Q']);
+                        if (!empty($offerTitle) && !empty($shopName)) {
+                            $shopList = Doctrine_Core::getTable('Offer')->findOneBy('name', $name);
+                            if (empty($shopList)) {
+                                if (strtolower($name)!='shop name(must be filled)') {
+                                    $shopList = new Shop();
+                                    $shopList->name = BackEnd_Helper_viewHelper::stripSlashesFromString($name);
+                                    $shopList->status = false;
+                                }
                             }
-                        }
-
-                        while($fileSite = readdir($siteHandle)){
-                        if($fileSite !== '.' && $fileSite !== '..'){
-
-                            $siteimage_array[] = $fileSite;
-
-                            }
-                        }
-
-                        $objReader = PHPExcel_IOFactory::createReader('Excel2007');
-                        $objPHPExcel = $objReader->load($excelFile);
-                        $worksheet = $objPHPExcel->getActiveSheet();
-
-                        $data =  array();
-                        foreach ($worksheet->getRowIterator() as $row) {
-
-                                    $cellIterator = $row->getCellIterator();
-                                    $cellIterator->setIterateOnlyExistingCells(false);
-
-                                    foreach ($cellIterator as $cell) {
-
-                                        $data[$cell->getRow()][$cell->getColumn()] = $cell->getCalculatedValue();
+                            if (strtolower($name)!='shop name(must be filled)' && $permalink!='' && $permalink!='None') {
+                                if ($permalink!='None' && $permalink!='') {
+                                    $shopList->permaLink = BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
+                                }
+                                if ($overwriteTitle!='None' && $overwriteTitle!='') {
+                                    $shopList->overriteTitle = FrontEnd_Helper_viewHelper::replaceStringVariable(BackEnd_Helper_viewHelper::stripSlashesFromString($overwriteTitle));
+                                }
+                                if ($metaDescription!='None' && $metaDescription!='') {
+                                    $shopList->metaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($metaDescription);
+                                }
+                                if ($allowUserGeneratedContent!='None' && $allowUserGeneratedContent!='') {
+                                    if ($allowUserGeneratedContent=='no') {
+                                        $shopList->usergenratedcontent = '0';
+                                    } else {
+                                        $shopList->usergenratedcontent = '1';
                                     }
-
-                                    $name =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['A']);
-                                    $permalink =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['B']);
-
-                                    $overwriteTitle =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['C']);
-                                    $metaDescription =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['D']);
-
-                                    $allowUserGeneratedContent =  strtolower($data[$cell->getRow()]['E']);
-
-                                    $allowDiscussions =  strtolower($data[$cell->getRow()]['F']);
-                                    $title =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['G']);
-                                    $subTitle  =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['H']);
-
-                                    $notes  =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['I']);
-                                    $accountManager  =  $data[$cell->getRow()]['J'];
-                                    $editor =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['K']);
-                                    $category =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['L']);
-
-                                    $similarShops =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['M']);
-
-                                    $affiliateNetwork =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['N']);
-                                    $deeplinkingCode  =  strtolower($data[$cell->getRow()]['O']);
-                                    $refURL = BackEnd_Helper_viewHelper::stripSlashesFromString( $data[$cell->getRow()]['P']);
-
-                                    $actualURL =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['Q']);
-                                    $moneyShop =  $data[$cell->getRow()]['R'];
-
-                                    $logo =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['S']);
-                                    $websiteScreen =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['T']);
-
-                                    $shop_text = BackEnd_Helper_viewHelper::stripSlashesFromString( $data[$cell->getRow()]['U']);
-                                    ///$extraOptions =  strtolower($data[$cell->getRow()]['V']);
-                                    //$views =  $data[$cell->getRow()]['W'];
-                                    //$howToUseTheCode =  strtolower($data[$cell->getRow()]['X']);
-
-                                    //$deepLink =  strtolower($data[$cell->getRow()]['Y']);
-
-                                    # find by name if exist in database
-                                    if(!empty($name)){
-
-                                        # FIND SHOP BY NAME FROM DATABSE
-                                        $shopList = Doctrine_Core::getTable('Shop')->findOneBy('name', $name);
-
-                                        # IF SHOP EXIST IN DATABASE THEN CONTINUE TO EDIT THE SHOPS
-                                        if(empty($shopList)){
-                                            # ADD SHOPS DATA IN DATABASE IF SHOP NOT EXIST IN DATABASE
-                                            if(strtolower($name)!='shop name(must be filled)'){
-
-                                                $shopList = new Shop();
-                                                $shopList->name = BackEnd_Helper_viewHelper::stripSlashesFromString($name);
-                                                $shopList->status = false;
-                                            }
+                                }
+                                if ($allowDiscussions!='None' && $allowDiscussions!='') {
+                                    if ($allowDiscussions=='no') {
+                                        $shopList->discussions = '0';
+                                    } else {
+                                        $shopList->discussions = '1';
                                     }
-                                    if(strtolower($name)!='shop name(must be filled)' && $permalink!='' && $permalink!='None'){
-
-                                        # common data for shop edit or new
-                                        if($permalink!='None' && $permalink!=''){
-
-                                            $shopList->permaLink = BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
-                                        }
-
-                                        if($overwriteTitle!='None' && $overwriteTitle!=''){
-
-                                            $shopList->overriteTitle = FrontEnd_Helper_viewHelper::replaceStringVariable(BackEnd_Helper_viewHelper::stripSlashesFromString($overwriteTitle));
-                                        }
-
-                                        if($metaDescription!='None' && $metaDescription!=''){
-
-                                            $shopList->metaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($metaDescription);
-                                        }
-
-                                        if($allowUserGeneratedContent!='None' && $allowUserGeneratedContent!=''){
-
-                                            if($allowUserGeneratedContent=='no') {
-
-                                                $shopList->usergenratedcontent = '0';
-
-                                            } else {
-
-                                                $shopList->usergenratedcontent = '1';
-                                            }
-                                        }
-
-                                        if($allowDiscussions!='None' && $allowDiscussions!=''){
-
-                                            if($allowDiscussions=='no') {
-
-                                                $shopList->discussions = '0';
-
-                                            } else {
-
-                                                $shopList->discussions = '1';
-                                            }
-
-                                        }
-
-                                        if($title!='None' && $title!=''){
-
-                                            $shopList->title = BackEnd_Helper_viewHelper::stripSlashesFromString($title);
-                                        }
-
-                                        if($subTitle!='None' && $subTitle!=''){
-
-                                            $shopList->subTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($subTitle);
-                                        }
-
-                                        if($notes!='None' && $notes!=''){
-
-                                            $shopList->notes = BackEnd_Helper_viewHelper::stripSlashesFromString($notes);
-                                        }
-
-                                        if($accountManager!='None' && $accountManager!=''){
-
-                                            $shopList->accountManagerName = $accountManager;
-                                            $acName = Doctrine_Core::getTable('User')->findOneBy('firstName', $accountManager);
-                                            if($acName) {
-
-                                                $shopList->accoutManagerId = $acName->id;
-
-                                            }
-                                            # NEW USER ADD IN USER TABLE PENDING
-                                        }
-
-                                        if($editor!='None' && $editor!=''){
-
-                                            $shopList->contentManagerName = $editor;
-                                            $cmName = Doctrine_Core::getTable('User')->findOneBy('firstName', $editor);
-                                            if($cmName) {
-
-                                                $shopList->contentManagerId = $cmName->id;
-
-                                            }
-                                            # NEW USER ADD IN USER TABLE PENDING
-                                            }
-
-                                        if($category!='None' && $category!=''){
-
-                                            $shopList->refShopCategory->delete();
-                                            $splitCat  = explode(',', $category);
-                                            foreach ($splitCat as $catName){
-                                                $cat = Doctrine_Core::getTable('Category')->findOneBy('name', $catName);
-                                                if($cat){
-
-                                                    $shopList->refShopCategory[]->categoryId = $cat->id;
-
-                                                }
-                                            }
-                                        # NEW CATEGORY PENDIGN
-                                        }
-                                        if($affiliateNetwork!='None' && $affiliateNetwork!=''){
-
-                                            $afNetwork = Doctrine_Core::getTable('AffliateNetwork')->findOneBy('name', $affiliateNetwork);
-                                            if($afNetwork) {
-
-                                            $shopList->affliateNetworkId = $afNetwork->id;
-
-                                        }
-                                        # NEW AFFILATE NEWWORK SAVE IN DATABASE
-                                        }
-
-                                        if($deeplinkingCode!='None' && $deeplinkingCode!=''){
-
-                                            if($deeplinkingCode=='no') {
-
-                                            $shopList->deepLinkStatus = false;
-
-                                            } else {
-
-                                                $shopList->deepLinkStatus = true;
-                                            }
-                                        #deeplinkURL missing in excel
-                                        }
-
-                                        if($refURL!='None' && $refURL!=''){
-
-                                            $shopList->refUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($refURL);
-                                        }
-
-                                        if($actualURL!='None' && $actualURL!=''){
-
-                                            $shopList->actualUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($actualURL);
-                                        }
-
-                                        if($moneyShop!='None' && $moneyShop!=''){
-
-                                            if($moneyShop=='no') {
-
-                                                $shopList->affliateProgram = false;
-
-                                            } else {
-
-                                                $shopList->affliateProgram = true;
-                                            }
-                                        }
-
-
-                                        $shopList->displayExtraProperties = false;
-                                        $shopList->views = 0;
-                                        $shopList->howToUse = false;
-                                        $shopList->deepLink = null;
-                                        $format = 'Y-m-j H:i:s';
-                                        $date = date($format);
-                                        $shopList->offlineSicne = $date;
-                                        $shopList->status = false;
-
-                                        if($shop_text!='None' && $shop_text != ""){
-
-                                            $shopList->shopText = BackEnd_Helper_viewHelper::stripSlashesFromString($shop_text);
-
-                                        }
-
-                                        $key = array_search(strtolower($logo), array_map('strtolower', $image_array));
-
-                                        if($key>=0){
-
-                                                $file = BackEnd_Helper_viewHelper::stripSlashesFromString($image_array[$key]);
-                                                $newName = time() . "_" . $file;
-
-                                                $ext = BackEnd_Helper_viewHelper :: getImageExtension($file);
-                                                $originalpath = $rootpath.$file;
-
-                                                if($ext=='jpg' || $ext=='JPG' || $ext == 'png' || $ext =='PNG' || $ext =='gif' || $ext =='GIF' || $ext =='JPEG'  || $ext =='jpeg'){
-
-                                                $thumbpath = $pathToUpload . "thum_large_" . $newName;
-                                                BackEnd_Helper_viewHelper :: resizeImageFromFolder($originalpath, 200, 150, $thumbpath, $ext);
-
-                                                $thumbpath = $pathToUpload . "thum_small_" . $newName;
-                                                BackEnd_Helper_viewHelper :: resizeImageFromFolder($originalpath, 84, 42, $thumbpath, $ext);
-
-                                                $thumbpath = $pathToUpload . "thum_medium_store_" . $newName;
-                                                BackEnd_Helper_viewHelper::resizeImageFromFolder($originalpath, 200, 100, $thumbpath, $ext);
-
-                                                $thumbpath = $pathToUpload . "thum_medium_" . $newName;
-                                                BackEnd_Helper_viewHelper :: resizeImageFromFolder($originalpath, 100, 50, $thumbpath, $ext);
-
-                                                $thumbpath = $pathToUpload . "thum_big_" . $newName;
-                                                BackEnd_Helper_viewHelper :: resizeImageFromFolder($originalpath, 234, 117, $thumbpath, $ext);
-
-                                                $thumbpath = $pathToUpload . "thum_expired_" . $newName;
-                                                BackEnd_Helper_viewHelper :: resizeImageFromFolder($originalpath, 100, 50, $thumbpath, $ext);
-
-                                                $shopList->logo->ext = $ext;
-                                                $shopList->logo->path = $pathUpload;
-                                                $shopList->logo->name = $newName;
-
-                                                } else {
-                                                    echo $logo." This is an Invalid image";
-                                                }
-                                            }
-
-                                            # Website Screen shots
-                                            $keySite = array_search(strtolower($websiteScreen), array_map('strtolower', $siteimage_array));
-
-                                            if($keySite >=0){
-
-                                                $sitefile = BackEnd_Helper_viewHelper::stripSlashesFromString($siteimage_array[$keySite]);
-                                                $sitenewName = time() . "_" . $sitefile;
-
-                                                $siteExt = BackEnd_Helper_viewHelper :: getImageExtension($sitefile);
-                                                $originalpath = $rootSitePath.$sitefile;
-
-                                                if($siteExt=='jpg' || $siteExt=='JPG' || $siteExt == 'png' || $siteExt =='PNG' || $siteExt =='jpeg' || $siteExt =='JPEG' || $siteExt =='gif' || $siteExt =='GIF'){
-
-                                                $thumbpath = $pathToUploadSiteImg . "thum_large_" . $sitenewName;
-                                                BackEnd_Helper_viewHelper :: resizeImageFromFolder($originalpath, 450,0, $thumbpath, $siteExt);
-                                                $shopList->screenshot->ext = $siteExt;
-                                                $shopList->screenshot->path = $sitePathUpload;
-                                                $shopList->screenshot->name = $sitenewName;
-
-                                                } else {
-                                                    echo $websiteScreen." This is an Invalid image";
-                                                }
-                                            }
-
-                                        $shopList->save();
-
-                                        $pr  = Doctrine_Core::getTable('RoutePermalink')->findOneBy('permalink', $permalink);
-                                        if($pr) {
-                                            $pr->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
-                                            $pr->type = 'SHP';
-                                            $pr->exactlink = 'store/storedetail/id/'.$shopList->id;
-
-                                        }else{
-
-                                            $pr = new RoutePermalink();
-                                            $pr->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
-                                            $pr->type = 'SHP';
-                                            $pr->exactlink = 'store/storedetail/id/'.$shopList->id;
-
-                                        }
-                                        $pr->save();
-
-                                        //echo $shopList->id;
-
-                                        if($similarShops!='None' && $similarShops!=''){
-                                            $shopList->refShopRelatedshop->delete();
-                                            $splitShops  = explode(',', $similarShops);
-                                            $i = 1;
-                                            foreach ($splitShops as $key=>$shopName){
-                                                $shop = Doctrine_Core::getTable('Shop')->findOneBy('name', $shopName);
-                                                if($shop){
-                                                    $relateshopObj = new refShopRelatedshop();
-                                                    $relateshopObj->shopId = $shopList->id;
-                                                    $relateshopObj->relatedshopId = $shop->id;
-                                                    $relateshopObj->position = $i;
-                                                    $relateshopObj->save();
-                                                }
-                                            }
-                                            #NEW SHOPS ADD IN SHOP TABLE PENDING
-
-                                        }
-
-
+                                }
+                                if ($title!='None' && $title!='') {
+                                    $shopList->title = BackEnd_Helper_viewHelper::stripSlashesFromString($title);
+                                }
+                                if ($subTitle!='None' && $subTitle!='') {
+                                    $shopList->subTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($subTitle);
+                                }
+                                if ($notes!='None' && $notes!='') {
+                                    $shopList->notes = BackEnd_Helper_viewHelper::stripSlashesFromString($notes);
+                                }
+                                if ($accountManager!='None' && $accountManager!='') {
+                                    $shopList->accountManagerName = $accountManager;
+                                    $acName = Doctrine_Core::getTable('User')->findOneBy('firstName', $accountManager);
+                                    if ($acName) {
+                                        $shopList->accoutManagerId = $acName->id;
                                     }
+                                }
+                                if ($editor!='None' && $editor!='') {
+                                    $shopList->contentManagerName = $editor;
+                                    $cmName = Doctrine_Core::getTable('User')->findOneBy('firstName', $editor);
+                                    if ($cmName) {
+                                        $shopList->contentManagerId = $cmName->id;
+                                    }
+                                }
+                                if ($category!='None' && $category!='') {
+                                    $shopList->refShopCategory->delete();
+                                    $splitCat  = explode(',', $category);
+                                    foreach ($splitCat as $catName) {
+                                        $cat = Doctrine_Core::getTable('Category')->findOneBy('name', $catName);
+                                        if ($cat) {
+                                            $shopList->refShopCategory[]->categoryId = $cat->id;
+                                        }
+                                    }
+                                }
+                                if ($affiliateNetwork!='None' && $affiliateNetwork!='') {
+                                    $afNetwork = Doctrine_Core::getTable('AffliateNetwork')->findOneBy('name', $affiliateNetwork);
+                                    if ($afNetwork) {
+                                        $shopList->affliateNetworkId = $afNetwork->id;
+                                    }
+                                }
+                                if ($deeplinkingCode !='None' && $deeplinkingCode !='') {
+                                    if ($deeplinkingCode=='no') {
+                                        $shopList->deepLinkStatus = false;
+                                    } else {
+                                        $shopList->deepLinkStatus = true;
+                                    }
+                                }
+                                $shopList->displayExtraProperties = false;
+                                $shopList->views = 0;
+                                $shopList->howToUse = false;
+                                $shopList->deepLink = null;
+                                $format = 'Y-m-j H:i:s';
+                                $date = date($format);
+                                $shopList->offlineSicne = $date;
+                                $shopList->status = false;
+                                if ($shop_text!='None' && $shop_text != "") {
+                                    $shopList->shopText = BackEnd_Helper_viewHelper::stripSlashesFromString($shop_text);
+                                }
+                                $shopList->save();
+                                $pr  = Doctrine_Core::getTable('RoutePermalink')->findOneBy('permalink', $permalink);
+                                if ($pr) {
+                                    $pr->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
+                                    $pr->type = 'SHP';
+                                    $pr->exactlink = 'store/storedetail/id/'.$shopList->id;
 
                                 } else {
 
-                                    $flash = $this->_helper->getHelper ( 'FlashMessenger' );
-                                    $message = $this->view->translate ('The Shop Images Data has been imported Successfully!!');
-                                    $flash->addMessage ( array ('success' => $message ) );
-                                    $this->_redirect ( HTTP_PATH . 'admin/shop' );
+                                    $pr = new RoutePermalink();
+                                    $pr->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
+                                    $pr->type = 'SHP';
+                                    $pr->exactlink = 'store/storedetail/id/'.$shopList->id;
 
                                 }
+                                $pr->save();
+                            }
 
+                        } else {
+                            $flash = $this->_helper->getHelper('FlashMessenger');
+                            $message = $this->view->translate('backend_Offers have been imported Successfully!!');
+                            $flash->addMessage(array('success' => $message));
+                            $this->_redirect(HTTP_PATH . 'admin/offer');
                         }
                     }
-
-                } else{
-
-                    $flash = $this->_helper->getHelper ( 'FlashMessenger' );
-                    $message = $this->view->translate ('Problem in your file!!');
-                    $flash->addMessage ( array ('error' => $message ) );
-                    $this->_redirect ( HTTP_PATH . 'admin/shop' );
-
-                    //return false;
                 }
+            } else {
+                $flash = $this->_helper->getHelper('FlashMessenger');
+                $message = $this->view->translate('Problem in your file!!');
+                $flash->addMessage(array('error' => $message));
+                $this->_redirect(HTTP_PATH . 'admin/offer');
+            }
         }
+    }
+
+    public function emptyOfferXlxAction()
+    {
+        $file =  APPLICATION_PATH . '/migration/emptyOffer.xlsx' ;
+        $fileName =  $this->view->translate($file);
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->getResponse()
+            ->setHeader('Content-Disposition', 'attachment;filename=' . basename($fileName))
+            ->setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            ->setHeader('Cache-Control', 'max-age=0')
+            ->setBody(file_get_contents($fileName));
     }
 
 }
