@@ -11,6 +11,12 @@ if (!$authorName == '') {
     $byAuthorName[1] = $authorName;
 }
 $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName(LOCALE);
+$articleShareUrl = HTTP_PATH_LOCALE 
+    . FrontEnd_Helper_viewHelper::__link('link_plus'). '/'.$articleDetails['permalink'];
+$articleShareButtons = $this->partial(
+    'plus/_articleShareButtons.phtml',
+    array('shareUrl' => $articleShareUrl)
+);
 ?>
 <section class="post-box">
     <header class="meta meta-parding">
@@ -25,6 +31,7 @@ $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName(LOCALE);
             <?php echo '&nbsp; | &nbsp;'. $this->translate('back to') . " ";?>   
             <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_plus')?>">
             <?php echo $websiteName . " ". $this->translate('plus');?></a>
+            <?php echo $articleShareButtons;?>
         </p>
     </header>
 <?php  
@@ -36,4 +43,9 @@ $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName(LOCALE);
         endforeach;
     }
 ?> 
+    <header class="meta meta-parding">
+    </header>
+    <header class="meta text-center">
+        <?php echo $articleShareButtons;?>
+    </header>
 </section>
