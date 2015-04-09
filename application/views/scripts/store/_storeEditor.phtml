@@ -39,7 +39,10 @@ $howToUse = $this->partial(
             </div>
         </div>
         <h2><?php echo $shopAbout; ?></h2>
-        <?php 
+        <?php
+        if ($this->shop['discussions'] == 1): 
+    echo !empty($this->disqusReplyCounter) ? $this->disqusReplyCounter : '';
+endif;
         echo  preg_replace('/(<a\b[^><]*)>/i', '$1 style="color: #0077cc;text-decoration: underline;">',
         FrontEnd_Helper_viewHelper::replaceStringVariable($this->shop['shopText'])); ?>
     </div>

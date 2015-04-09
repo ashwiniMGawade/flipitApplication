@@ -3,8 +3,8 @@ $(document).ready(function() {
    $("#disqusComments").remove();
 });
 $(window).load(function() {
-    if (parseInt($("#commentCountSpan").text()) == 0|| $("#commentCountSpan").text() == '') {
-        $("#commentCount").hide();
+    if (parseInt($("#commentCountSpan").text()) || parseInt($("#commentCountSpan").text()) > 0) {
+        $("#commentCount").css("display", "inline-block");
     }
 });
 (function() {
