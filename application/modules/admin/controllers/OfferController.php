@@ -1579,7 +1579,7 @@ class Admin_OfferController extends Zend_Controller_Action
                         $offerEndDate = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['G']);
                         $offerClickouts  = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['H']);
                         $offerAuthorName = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['I']);
-                        $offerCouponCode  =  FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['J']);
+                        $offerCouponCode  = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['J']);
                         $offerExclusive = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['K']);
                         $offerEditorPick = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['L']);
                         $offerUserGenerated = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['M']);
