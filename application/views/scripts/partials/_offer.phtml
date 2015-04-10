@@ -116,14 +116,14 @@ foreach ($this->offers as $offer) {
     } else {
         $extendedOffer = 0;
     }
-    $offerBottomTermsAndConditionLink = '';
-    $offerBottomExtendedLink = '';
-    $offerBottomViewAllShopsLink = '';
     $offerBottomOfferExclusiveOrEditor = $offerPartial->getOfferExclusiveOrEditor($offer);
-    $offerBottomDaysTillExpireText = '';
     if ($daysTillOfferExpires <=3) {
         $offerBottomDaysTillExpireText = $offerPartial->getDaysTillExpire($daysTillOfferExpires);
     }
+    $offerBottomTermsAndConditionLink = '';
+    $offerBottomExtendedLink = '';
+    $offerBottomViewAllShopsLink = '';
+    $offerBottomDaysTillExpireText = '';
     $showHyphen = $termsAndConditions != '' || $extendedOffer == 1 ? '<li> -</li>' : '';
     if ($this->offersType!='extendedOffer') {
         if ($termsAndConditions != '') {
