@@ -3297,31 +3297,41 @@ class Offer extends BaseOffer
 
     public static function getNumberOfOffersCreatedByShopId($shopId)
     {
-        $format = 'Y-m-j H:i:s';
-        $date = date($format);
-        $past7Days = date($format, strtotime('-7 day' . $date));
-        $past31Days = date($format, strtotime('-31 day' . $date));
+        $dateFormat = 'Y-m-j H:i:s';
+        $currentDate = date($dateFormat);
+        $past7Days = date($dateFormat, strtotime('-7 day' . $currentDate));
+        $past31Days = date($dateFormat, strtotime('-31 day' . $currentDate));
         $offersCreated = array();
-        $offersInfo = self::getOffersForDateRange($shopId, $past7Days, $date);
-        $type = "week";
-
-        if (!empty($offersInfo) && $offersInfo['amountOffers'] < 2) {
-            $offersPast31Days = self::getOffersForDateRange($shopId, $past31Days, $date);
-            $type = "month";
-            $offersInfo = !empty($offersPast31Days) && $offersPast31Days['amountOffers'] < 2 ? "" : $offersPast31Days;
-        }
-
-        if (!empty($offersInfo)) {
-            $offersCreated = array(
-                "offersInfo" => $offersInfo,
-                "type" => $type
-            );
-        }
+        $offersInfo = self::getOffersForDateRange($shopId, $past7Days, $currentDate);
+        $offers = self::validateOffersAmount($offersInfo, $shopId, $past31Days, $currentDate, "week");
+        $offersCreated = !empty($offers)
+            ? array(
+                "offersInfo" => $offers["offersInfo"],
+                "type" => $offers["type"]
+            )
+            : "";
 
         return $offersCreated;
     }
 
-    public static function getOffersForDateRange($shopId, $offsetDate, $date)
+    public static function validateOffersAmount($offersInfo, $shopId, $past31Days, $currentDate, $type)
+    {
+        $offers = array(
+            "offersInfo" => $offersInfo,
+            "type" => $type
+        );
+        if (!empty($offersInfo) && $offersInfo['amountOffers'] < 2) {
+            $offersPast31Days = self::getOffersForDateRange($shopId, $past31Days, $currentDate);
+            $offersInfo = !empty($offersPast31Days) && $offersPast31Days['amountOffers'] < 2 ? "" : $offersPast31Days;
+            $offers = array(
+                "offersInfo" => $offersInfo,
+                "type" => "month"
+            );
+        }
+        return $offers;
+    }
+
+    public static function getOffersForDateRange($shopId, $offsetDate, $currentDate)
     {
         $offersInfo = Doctrine_Query::create()
             ->select("count(o.id) as amountOffers")
@@ -3330,7 +3340,7 @@ class Offer extends BaseOffer
             ->where('o.deleted = 0')
             ->andWhere('o.offline = 0')
             ->andWhere('o.discountType != "NW"')
-            ->andWhere('o.created_at BETWEEN "'.$offsetDate.'" AND "'.$date.'"')
+            ->andWhere('o.created_at BETWEEN "'.$offsetDate.'" AND "'.$currentDate.'"')
             ->andWhere('s.id = '.$shopId)
             ->limit(1)
             ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
