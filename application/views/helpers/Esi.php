@@ -103,6 +103,8 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
                 echo '<nav class="account-box" id="'.$divID.'"></nav>';
             } elseif (strpos($src, 'followbutton') !== false) {
                 echo '<span class="" id="'.$divID.'"></span>';
+            } elseif (strpos($src, 'createdoffers') !== false) {
+                echo '<span class="" id="'.$divID.'"></span>';
             } else {
                 echo '<div class="" id="'.$divID.'"></div>';
             }

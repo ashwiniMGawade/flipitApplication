@@ -3306,11 +3306,9 @@ class Offer extends BaseOffer
         $type = "week";
 
         if (!empty($offersInfo) && $offersInfo['amountOffers'] < 2) {
-            $offersInfo = self::getOffersForDateRange($shopId, $past31Days, $date);
+            $offersPast31Days = self::getOffersForDateRange($shopId, $past31Days, $date);
             $type = "month";
-            if ($offersInfo['amountOffers'] < 2) {
-                $offersInfo = "";
-            }
+            $offersInfo = !empty($offersPast31Days) && $offersPast31Days['amountOffers'] < 2 ? "" : $offersPast31Days;
         }
 
         if (!empty($offersInfo)) {
@@ -3333,23 +3331,6 @@ class Offer extends BaseOffer
             ->andWhere('o.offline = 0')
             ->andWhere('o.discountType != "NW"')
             ->andWhere('o.created_at BETWEEN "'.$offsetDate.'" AND "'.$date.'"')
-            ->andWhere('s.id = '.$shopId)
-            ->limit(1)
-            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-        return $offersInfo;
-    }
-
-    public static function currentActiveOffersByShopId($shopId)
-    {
-        $date = date('Y-m-j H:i:s');
-        $offersInfo = Doctrine_Query::create()
-            ->select("count(o.id) as liveOffers")
-            ->from('Offer o')
-            ->leftJoin('o.shop s')
-            ->where('o.deleted = 0')
-            ->andWhere('o.offline = 0')
-            ->andWhere('o.enddate > "'.$date.'"')
-            ->andWhere('o.startdate <= "'.$date.'"')
             ->andWhere('s.id = '.$shopId)
             ->limit(1)
             ->fetchOne(null, Doctrine::HYDRATE_ARRAY);

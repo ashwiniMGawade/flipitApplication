@@ -35,6 +35,7 @@ if(!empty($this->similarShopsAndSimilarCategoriesOffers)):
             'shopName' => $this->currentStoreInformation[0]['name'],
             'shop' => $this->currentStoreInformation[0]
         )
+
     );
 endif;
 
@@ -147,15 +148,12 @@ if (!empty($this->currentStoreInformation[0]['moretextforshop'])) {
     );
 }
 
-$offersAddedInShop = "";
-if (!empty($this->offersAddedInShop)) {
-    $offersAddedInShop = FrontEnd_Helper_viewHelper::__translate('This '.$this->offersAddedInShop['type']). ' '.$this->offersAddedInShop['offersInfo']['amountOffers'].' '.FrontEnd_Helper_viewHelper::__translate('offers have been added');
-}
-
 $activeOffersInShop = "";
-if (!empty($this->activeOffersInShop)) {
-    if (isset($this->activeOffersInShop['liveOffers']) && $this->activeOffersInShop['liveOffers'] > 1) {
-        $activeOffersInShop = ' | '.$this->activeOffersInShop['liveOffers'].' '.FrontEnd_Helper_viewHelper::__translate('current offers');
+if (!empty($offersCount)) {
+    if (isset($offersCount) && $offersCount > 1) {
+        $activeOffersInShop = $offersCount
+            .' '
+            .FrontEnd_Helper_viewHelper::__translate('current offers');
     }
 }
 ?>
@@ -168,7 +166,7 @@ echo $this->esi($this->locale.'store/followbutton?shopid='.$this->currentStoreIn
 if ($this->currentStoreInformation[0]['discussions'] == 1): 
     echo !empty($disqusReplyCounter) ? $disqusReplyCounter : '';
 endif;
-echo $offersAddedInShop;
+echo $this->esi($this->locale.'store/createdoffers?shopid='.$this->currentStoreInformation[0]['id']);
 echo $activeOffersInShop;
 ?>
 </div></div>

@@ -211,16 +211,6 @@ class StoreController extends Zend_Controller_Action
             ''
         );
 
-        $activeOffersInShopKey = "activeOffers".$shopId."_shop";
-        $this->view->activeOffersInShop = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            (string)$activeOffersInShopKey,
-            array(
-                'function' => 'Offer::currentActiveOffersByShopId',
-                'parameters' => array($shopId)
-            ),
-            ''
-        );
-
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->storeImage = $shopImage;
         $this->view->shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
@@ -434,5 +424,11 @@ class StoreController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
         $this->view->shopId = $this->getRequest()->getParam('shopid');
         $this->view->permalink = $this->getRequest()->getParam('permalink');
+    }
+
+    public function createdoffersAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->view->shopId = $this->getRequest()->getParam('shopid');
     }
 }
