@@ -320,7 +320,7 @@ class Offer extends BaseOffer
             o.editorPicks,o.couponCode,o.extendedOffer,o.totalViewcount,o.authorName,
             o.startDate,o.endDate,o.refOfferUrl,o.userGenerated,o.nickname, o.approved,
             o.extendedUrl, o.updated_at as lastUpdate, s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,
-            s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name, s.contentManagerName'
+            s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name, s.contentManagerId'
         )
         ->from('PopularCode p')
         ->leftJoin('p.offer o')

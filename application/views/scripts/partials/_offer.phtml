@@ -117,14 +117,14 @@ foreach ($this->offers as $offer) {
         $extendedOffer = 0;
     }
     $offerBottomOfferExclusiveOrEditor = $offerPartial->getOfferExclusiveOrEditor($offer);
+    $offerBottomDaysTillExpireText = '';
     if ($daysTillOfferExpires <=3) {
         $offerBottomDaysTillExpireText = $offerPartial->getDaysTillExpire($daysTillOfferExpires);
     }
     $offerBottomTermsAndConditionLink = '';
     $offerBottomExtendedLink = '';
     $offerBottomViewAllShopsLink = '';
-    $offerBottomDaysTillExpireText = '';
-    $showHyphen = $termsAndConditions != '' || $extendedOffer == 1 ? '<li> -</li>' : '';
+    $showHyphen =  '';
     if ($this->offersType!='extendedOffer') {
         if ($termsAndConditions != '') {
             $offerBottomTermsAndConditionLink = $offerPartial->getTermAndConditionsLink($offer, $termsAndConditions);
@@ -140,6 +140,16 @@ foreach ($this->offers as $offer) {
     } else {
         $offerBottomViewAllShopsLink = $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], '');
     }
+    $offerBottomLink = '';
+    if ($offer->editorPicks == 1) {
+        $contentManagerId = isset($offer->shop['contentManagerId']) ? $offer->shop['contentManagerId'] : '';
+        $contentManagerId = !empty($this->shop['contentManagerId']) 
+            ? $this->shop['contentManagerId'] 
+            : $contentManagerId;
+        $shopEditor = $offerPartial->getShopEditor($contentManagerId);
+        $offerBottomLink = $offerPartial->getShopEditorHtml($shopEditor);
+        $offerBottomOfferExclusiveOrEditor = $offerBottomLink;
+    } 
     ?>
                 </ul>
             </div>
@@ -150,16 +160,7 @@ foreach ($this->offers as $offer) {
     } else {
             $style = 'style="display:block;"';
     }
-    $offerBottomLink = '';
-    if ($offer->editorPicks == 1) {
-        $contentManagerId = isset($offer->shop['contentManagerId']) ? $offer->shop['contentManagerId'] : '';
-        $contentManagerId = !empty($this->shop['contentManagerId']) 
-            ? $this->shop['contentManagerId'] 
-            : $contentManagerId;
-        $shopEditor = $offerPartial->getShopEditor($contentManagerId);
-        $offerBottomLink = $offerPartial->getShopEditorHtml($shopEditor);
-        $offerBottomOfferExclusiveOrEditor = $offerBottomLink;
-    } ?>
+    ?>
     
         <hr class="alt2">
         <div class="recommended-outerDiv">
