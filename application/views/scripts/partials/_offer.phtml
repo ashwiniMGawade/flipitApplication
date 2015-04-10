@@ -131,9 +131,9 @@ foreach ($this->offers as $offer) {
     ?>
                 </ul>
             </div>
-            <?php 
-            if ($offer->userGenerated == 0) {
-                //echo $offerPartial->getVerifiedText();
+            <?php
+            if ($offer->userGenerated == 0 && (isset($offer->discountType) && $offer->discountType == 'CD')) {
+                echo $offerPartial->getVerifiedText();
             }
             ?>
         </div>
