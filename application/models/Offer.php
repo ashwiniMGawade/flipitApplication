@@ -22,6 +22,27 @@ class Offer extends BaseOffer
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
 
+    public static function getViewCountByOfferId($offerId)
+    {
+        $format = 'Y-m-j H:i:s';
+        $currentDate = date($format);
+        $past24Hours = date($format, strtotime('-1 day' . $currentDate));
+        $past7Days = date($format, strtotime('-7 day' . $currentDate));
+        $past31Days = date($format, strtotime('-31 day' . $currentDate));
+        $offerViewCount = ViewCount::getOfferViewCountBasedOnDate($offerId, $past24Hours, $currentDate);
+        $offerViewCount = self::getViewCountByCondition($offerViewCount, $offerId, $past7Days, $currentDate);
+        $offerViewCount = self::getViewCountByCondition($offerViewCount, $offerId, $past31Days, $currentDate);
+        return $offerViewCount;
+    }
+
+    public static function getViewCountByCondition($offerViewCount, $offerId, $offsetDate, $currentDate)
+    {
+        if (intval($offerViewCount) < 5) {
+            $offerViewCount = ViewCount::getOfferViewCountBasedOnDate($offerId, $offsetDate, $currentDate);
+        }
+        return $offerViewCount;
+    }
+
     public static function offerExistOrNot($offerId)
     {
         $offers = Doctrine_Core::getTable('Offer')->find($offerId);

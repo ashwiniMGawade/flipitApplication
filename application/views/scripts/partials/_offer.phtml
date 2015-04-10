@@ -140,15 +140,15 @@ foreach ($this->offers as $offer) {
     } else {
         $offerBottomViewAllShopsLink = $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], '');
     }
-    $offerBottomLink = '';
-    if ($offer->editorPicks == 1) {
+    $offerBottomRecomendedLink = '';
+    if (intval($offer->editorPicks)) == 1) {
         $contentManagerId = isset($offer->shop['contentManagerId']) ? $offer->shop['contentManagerId'] : '';
         $contentManagerId = !empty($this->shop['contentManagerId']) 
             ? $this->shop['contentManagerId'] 
             : $contentManagerId;
         $shopEditor = $offerPartial->getShopEditor($contentManagerId);
-        $offerBottomLink = $offerPartial->getShopEditorHtml($shopEditor);
-        $offerBottomOfferExclusiveOrEditor = $offerBottomLink;
+        $offerBottomRecomendedLink = $offerPartial->getShopEditorHtml($shopEditor);
+        $offerBottomOfferExclusiveOrEditor = $offerBottomRecomendedLink;
     } 
     ?>
                 </ul>
@@ -167,13 +167,16 @@ foreach ($this->offers as $offer) {
             <div class="recommended-arrow"></div>
             <div class="recommendedOffer">
             <?php 
-            echo 
+            echo
                 $offerBottomOfferExclusiveOrEditor
                 .$offerBottomDaysTillExpireText
                 .$offerBottomViewAllShopsLink
                 .$offerBottomExtendedLink
                 .$offerBottomTermsAndConditionLink;
-                ?>
+            if ($offer->discountType == "CD") {
+                $offerBottomNumberOfUsedCode = $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
+            }
+            ?>
             </div>
         </div>
 
