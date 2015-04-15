@@ -1399,7 +1399,7 @@ class Offer Extends \KC\Entity\Offer
         $query = $queryBuilder->select('s.name, s.id')
                 ->from('KC\Entity\Offer', 'o')
                 ->leftJoin('o.shopOffers', 's')
-                ->where('o.deleted='.$flag)
+                ->where('s.deleted='.$flag)
                 ->andWhere("s.name LIKE '$keyword%'")
                 ->andWhere('o.userGenerated = 0')
                 ->orderBy('s.id', 'ASC')
