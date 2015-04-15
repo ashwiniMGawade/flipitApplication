@@ -1560,6 +1560,7 @@ class Admin_OfferController extends Zend_Controller_Action
                     $objPHPExcel = $objReader->load($excelFile);
                     $worksheet = $objPHPExcel->getActiveSheet();
                     $excelData =  array();
+                    $offerList = new Doctrine_Collection('Offer');
                     foreach ($worksheet->getRowIterator() as $row) {
                         $cellIterator = $row->getCellIterator();
                         $cellIterator->setIterateOnlyExistingCells(false);
@@ -1605,33 +1606,32 @@ class Admin_OfferController extends Zend_Controller_Action
                                 $startDate = date('Y-m-d', strtotime($offerStartDate));
                                 $endDate = date('Y-m-d', strtotime($offerEndDate));
                                 if ($startDate >= $currentDate && $endDate >= $currentDate) {
-                                    $offerList = new Offer();
-                                    $offerList->title = $offerTitle;
-                                    $offerList->shopId = $shopId;
-                                    $offerList->discountType= !empty($offerCouponCode) ? 'CD' : 'SL';
-                                    $offerList->Visability = !empty($offerVisibility) ? 'DE' : 'MEM';
-                                    $offerList->extendedOffer = 0;
-                                    $offerList->startDate = $startDate;
-                                    $offerList->endDate = $endDate;
-                                    $offerList->totalViewcount = !empty($offerClickouts) ? $offerClickouts : 0;
-                                    $offerList->authorName = !empty($offerAuthorName) ? $offerAuthorName : 'Arthur Goldman';
-                                    $offerList->couponCode = !empty($offerCouponCode) ? $offerCouponCode : '';
-                                    $offerList->exclusiveCode = $offerExclusive == 1 ? 1 : 0;
-                                    $offerList->editorPicks = $offerEditorPick == 1 ? 1 : 0;
-                                    $offerList->userGenerated = 0;
-                                    $offerList->offline = 0;
-                                    $offerList->created_at = $currentDate;
-                                    $offerList->refURL = !empty($offerDeeplink) ? $offerDeeplink : '';
-                                    $offerList->tilesId = LOCALE == 'es' ? 135 : 0;
-                                    $offerList->maxcode = 0;
-                                    $offerList->deleted = 0;
-                                    $offerList->maxlimit = 0;
-                                    $offerList->updated_at = $currentDate;
-                                    $offerList->save();
+                                    $offerList[$shopId]->title = $offerTitle;
+                                    $offerList[$shopId]->shopId = $shopId;
+                                    $offerList[$shopId]->discountType= !empty($offerCouponCode) ? 'CD' : 'SL';
+                                    $offerList[$shopId]->Visability = !empty($offerVisibility) ? 'DE' : 'MEM';
+                                    $offerList[$shopId]->extendedOffer = 0;
+                                    $offerList[$shopId]->startDate = $startDate;
+                                    $offerList[$shopId]->endDate = $endDate.' 23:59:00';
+                                    $offerList[$shopId]->totalViewcount = !empty($offerClickouts) ? $offerClickouts : 0;
+                                    $offerList[$shopId]->authorName = !empty($offerAuthorName) ? $offerAuthorName : 'Arthur Goldman';
+                                    $offerList[$shopId]->couponCode = !empty($offerCouponCode) ? $offerCouponCode : '';
+                                    $offerList[$shopId]->exclusiveCode = $offerExclusive == 1 ? 1 : 0;
+                                    $offerList[$shopId]->editorPicks = $offerEditorPick == 1 ? 1 : 0;
+                                    $offerList[$shopId]->userGenerated = 0;
+                                    $offerList[$shopId]->offline = 0;
+                                    $offerList[$shopId]->created_at = $currentDate;
+                                    $offerList[$shopId]->refURL = !empty($offerDeeplink) ? $offerDeeplink : '';
+                                    $offerList[$shopId]->tilesId = LOCALE == 'es' ? 135 : 0;
+                                    $offerList[$shopId]->maxcode = 0;
+                                    $offerList[$shopId]->deleted = 0;
+                                    $offerList[$shopId]->maxlimit = 0;
+                                    $offerList[$shopId]->updated_at = $currentDate;
                                     $dataSaved = 1;
                                 }
                             }
                         }
+                        $offerList->save();
                         unlink($excelFile);
                     }
                     if ($dataSaved) {
