@@ -162,34 +162,34 @@ class FrontEnd_Helper_LayoutContent
 
     public static function generateMainMenu()
     {
-        return $navigationString ='<nav id="nav">' . self::getUlOfMainMenu() . '</nav>';
+        return $navigationString ='<nav id="nav">' . self::getWebsiteMainMenu() . '</nav>';
     }
      
-    public static function getUlOfMainMenu($navigation = '')
+    public static function getWebsiteMainMenu($navigation = '')
     {
-        $mainMenu = menu::getFirstLevelMenu($navigation);
-        $classForFlipIt = LOCALE == '' ? "kc-menu" : 'flipit-menu';
-        $ulOfMainMenu =
+        $websiteMenus = menu::getFirstLevelMenu($navigation);
+        $cssClass = LOCALE == '' ? "kc-menu" : 'flipit-menu';
+        $websiteMainMenu =
         '<ul>';
         if ($navigation != 'mobile') {
-            foreach ($mainMenu as $menu) {
-                $cssClassForLastLi = strtolower($menu['name']) == 'plus' ? $classForFlipIt: '';
-                $ulOfMainMenu.=
-                '<li class="' . $cssClassForLastLi .'" id="'. $menu["name"] .'">
-                    <a id="'. $menu["name"] . '" name="'. $menu["name"] . '" 
-                        class="" href="'. HTTP_PATH_LOCALE  . $menu['url'] . '">' . ucfirst($menu["name"])
+            foreach ($websiteMenus as $websiteMenu) {
+                $cssClassForLastLi = strtolower($websiteMenu['name']) == 'plus' ? $cssClass: '';
+                $websiteMainMenu.=
+                '<li class="' . $cssClassForLastLi .'" id="'. $websiteMenu["name"] .'">
+                    <a id="'. $websiteMenu["name"] . '" name="'. $websiteMenu["name"] . '" 
+                        class="" href="'. HTTP_PATH_LOCALE  . $websiteMenu['url'] . '">' . ucfirst($websiteMenu["name"])
                     . '</a>';
                 
-                if (strpos($menu['url'], '09-e')) {
-                    $ulOfMainMenu.=self::generateTopShopsDropdown();
+                if (strpos($websiteMenu['url'], '09-e')) {
+                    $websiteMainMenu.=self::generateTopShopsDropdown();
                 }
-                $ulOfMainMenu.='</li>';
+                $websiteMainMenu.='</li>';
             }
         }
         
-        $ulOfMainMenu .=
+        $websiteMainMenu .=
         '</ul>';
-        return $ulOfMainMenu;
+        return $websiteMainMenu;
     }
 
     public static function generateTopShopsDropdown()
