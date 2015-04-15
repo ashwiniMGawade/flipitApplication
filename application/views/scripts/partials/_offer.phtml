@@ -175,14 +175,14 @@ foreach ($this->offers as $offer) {
             <div class="recommendedOffer">
             <?php 
             echo $offerBottomOfferExclusiveOrEditor;
-            if (empty($offerBottomViewAllShopsLink)) {
-                echo $offerBottomDaysTillExpireText;
-            }
+            echo $offerBottomDaysTillExpireText;
             echo $offerBottomViewAllShopsLink;
-            echo $offerBottomExtendedLink;
-            if (empty($offerBottomExtendedLink)) {
+            if (empty($offerBottomDaysTillExpireText) || empty($offerBottomViewAllShopsLink)) {
+                echo $offerBottomExtendedLink;
+            } 
+            if (empty($offerBottomDaysTillExpireText) && empty($offerBottomViewAllShopsLink)) {
                 if ($offer->discountType == "CD") {
-                    $offerBottomNumberOfUsedCode = $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
+                    $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
                 }
             }
             echo $offerBottomTermsAndConditionLink;
