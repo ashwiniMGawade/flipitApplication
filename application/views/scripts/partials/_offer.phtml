@@ -117,6 +117,16 @@ foreach ($this->offers as $offer) {
         $extendedOffer = 0;
     }
     $offerBottomOfferExclusiveOrEditor = $offerPartial->getOfferExclusiveOrEditor($offer);
+    $offerBottomRecomendedLink = '';
+    if (intval($offer->editorPicks)) == 1) {
+        $contentManagerId = isset($offer->shop['contentManagerId']) ? $offer->shop['contentManagerId'] : '';
+        $contentManagerId = !empty($this->shop['contentManagerId']) 
+            ? $this->shop['contentManagerId'] 
+            : $contentManagerId;
+        $shopEditor = $offerPartial->getShopEditor($contentManagerId);
+        $offerBottomRecomendedLink = $offerPartial->getShopEditorHtml($shopEditor);
+        $offerBottomOfferExclusiveOrEditor = $offerBottomRecomendedLink;
+    } 
     $offerBottomDaysTillExpireText = '';
     if ($daysTillOfferExpires <=3) {
         $offerBottomDaysTillExpireText = $offerPartial->getDaysTillExpire($daysTillOfferExpires);
@@ -140,16 +150,6 @@ foreach ($this->offers as $offer) {
     } else {
         $offerBottomViewAllShopsLink = $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], '');
     }
-    $offerBottomRecomendedLink = '';
-    if (intval($offer->editorPicks)) == 1) {
-        $contentManagerId = isset($offer->shop['contentManagerId']) ? $offer->shop['contentManagerId'] : '';
-        $contentManagerId = !empty($this->shop['contentManagerId']) 
-            ? $this->shop['contentManagerId'] 
-            : $contentManagerId;
-        $shopEditor = $offerPartial->getShopEditor($contentManagerId);
-        $offerBottomRecomendedLink = $offerPartial->getShopEditorHtml($shopEditor);
-        $offerBottomOfferExclusiveOrEditor = $offerBottomRecomendedLink;
-    } 
     ?>
                 </ul>
             </div>
