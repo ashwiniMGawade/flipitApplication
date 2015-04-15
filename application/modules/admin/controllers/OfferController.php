@@ -1552,16 +1552,14 @@ class Admin_OfferController extends Zend_Controller_Action
         if ($this->getRequest()->isPost()) {
             if (isset($_FILES['excelFile']['name']) && $_FILES['excelFile']['name'] != '') {
                 $uploadResult = BackEnd_Helper_viewHelper::uploadExcel($_FILES['excelFile']['name']);
+                $flashMessage = $this->_helper->getHelper('FlashMessenger');
                 if ($uploadResult['status'] == 200) {
-                    $explodedHttpPath = explode('/', HTTP_PATH);
-                    $path = $explodedHttpPath[0].'//' . $explodedHttpPath[2];
                     $excelFilePath = $uploadResult['path'];
                     $excelFile = $excelFilePath.$uploadResult['fileName'];
                     $objReader = PHPExcel_IOFactory::createReader('Excel2007');
                     $objPHPExcel = $objReader->load($excelFile);
                     $worksheet = $objPHPExcel->getActiveSheet();
                     $excelData =  array();
-                    $flashMessage = $this->_helper->getHelper('FlashMessenger');
                     foreach ($worksheet->getRowIterator() as $row) {
                         $cellIterator = $row->getCellIterator();
                         $cellIterator->setIterateOnlyExistingCells(false);
@@ -1575,9 +1573,9 @@ class Admin_OfferController extends Zend_Controller_Action
                         $offerExtended = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['E']);
                         $offerStartDate = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['F']);
                         $offerEndDate = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['G']);
-                        $offerClickouts  = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['H']);
+                        $offerClickouts = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['H']);
                         $offerAuthorName = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['I']);
-                        $offerCouponCode  = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['J']);
+                        $offerCouponCode = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['J']);
                         $offerExclusive = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['K']);
                         $offerEditorPick = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['L']);
                         $offerUserGenerated = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['M']);
@@ -1587,20 +1585,21 @@ class Admin_OfferController extends Zend_Controller_Action
                         $offerTileId = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['Q']);
                         if (
                             (!empty($offerTitle)
-                                && $offerTitle != $this->view->translate('Offer Title(Must be filled)')
+                                && $offerTitle != $this->view->translate('backend_Offer Title(Must be filled)')
                             )
                             && (
-                                !empty($shopName) && $shopName != $this->view->translate('Shop Name(Must be filled)')
+                                !empty($shopName) && $shopName != $this->view->translate('backend_Shop Name(Must be filled)')
                             )
                             && (
                                 !empty($offerStartDate)
-                                && $offerStartDate != $this->view->translate('Start Date (must be filled)')
+                                && $offerStartDate != $this->view->translate('backend_Start Date(Must be filled)')
                             )
                             && (
                                 !empty($offerEndDate)
-                                && $offerEndDate != $this->view->translate('End Date (must be filled)')
+                                && $offerEndDate != $this->view->translate('backend_End Date(Must be filled)')
                             )
                         ) {
+                            $dataSaved = 0;
                             $shopId = Shop::getShopIdByShopName($shopName);
                             if (!empty($shopId)) {
                                 $currentDate = date('Y-m-d');
@@ -1630,16 +1629,23 @@ class Admin_OfferController extends Zend_Controller_Action
                                     $offerList->maxlimit = 0;
                                     $offerList->updated_at = $currentDate;
                                     $offerList->save();
+                                    $dataSaved = 1;
                                 }
                             }
                         }
                         unlink($excelFile);
                     }
-                    $message = $this->view->translate('backend_Offers have been imported Successfully!!');
-                    $flashMessage->addMessage(array('success' => $message));
-                    $this->_redirect(HTTP_PATH . 'admin/offer');
+                    if ($dataSaved) {
+                        $message = $this->view->translate('backend_Offers have been imported Successfully!!');
+                        $flashMessage->addMessage(array('success' => $message));
+                        $this->_redirect(HTTP_PATH . 'admin/offer');
+                    } else {
+                        $message = $this->view->translate('backend_Problem in your Data!!');
+                        $flashMessage->addMessage(array('error' => $message));
+                        $this->_redirect(HTTP_PATH . 'admin/offer');
+                    }
                 } else {
-                    $message = $this->view->translate('Problem in your file!!');
+                    $message = $this->view->translate('backend_Problem in your file size!!');
                     $flashMessage->addMessage(array('error' => $message));
                     $this->_redirect(HTTP_PATH . 'admin/offer');
                 }

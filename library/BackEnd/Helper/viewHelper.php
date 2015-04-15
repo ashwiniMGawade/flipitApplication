@@ -955,7 +955,7 @@ class BackEnd_Helper_viewHelper
         $adapter = new Zend_File_Transfer_Adapter_Http();
         $adapter->setDestination($rootPath);
         $adapter->addValidator('Extension', false, array('xlsx', true));
-        $adapter->addValidator('Size', false, array('min' => 20, 'max' => '2MB'));
+        $adapter->addValidator('Size', false, array('min' => 5, 'max' => '16KB'));
         $files = $adapter->getFileInfo($file);
         $fileName = $adapter->getFileName($file, false);
         $newFileName = time() . "_" . $fileName;
