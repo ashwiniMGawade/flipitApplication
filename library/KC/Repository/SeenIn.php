@@ -66,7 +66,7 @@ class SeenIn Extends \KC\Entity\SeenIn
                     $seenInImage->updated_at = new \DateTime('now');
                     $entityManagerLocale->persist($seenInImage);
                     $entityManagerLocale->flush();
-                    $seenIn->logo =  $seenInImage->getId();
+                    $seenIn->logo =  $entityManagerLocale->find('KC\Entity\Logo', $seenInImage->getId());
                 }
             }
             $seenIn->status =  0;
