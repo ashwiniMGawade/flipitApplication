@@ -34,7 +34,6 @@ endif;
                 FrontEnd_Helper_viewHelper::__translate('save money with online discount codes and save pointers')
             );?>
             </span>
-            <a class="btn-menu" href="#">account menu</a>
             <?php
                 $this->locale = LOCALE != 'en' ? LOCALE : '';
                 $userMenuLink = $this->locale. '/login/usermenu';
@@ -54,6 +53,7 @@ endif;
                     </a>
                 </strong>
                 <a href="<?php echo $websiteName;?>" class="menu-opener"><span class="glyphicon glyphicon-search"></span></a>
+                <a class="search-opener" href="javascript:void(0);"><span class="glyphicon glyphicon-search"></span></a>
                 <div class="nav-bar">
                 <?php 
                 $sessionNamespace = new Zend_Session_Namespace('ErrorPage');
@@ -62,7 +62,7 @@ endif;
                 {
                     ?>
                     <div class="search-box">
-                        <a href="javascript:void(0);" class="opener"><span class="glyphicon glyphicon-search"></span></a>
+                        <a href="<?php echo $websiteName;?>" class="opener"><span class="glyphicon glyphicon-search"></span></a>
                     <?php
                     $localePartialPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/scripts/partials/';
                     $basePartialViewPath = new Zend_View();

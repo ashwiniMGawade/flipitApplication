@@ -11,3 +11,11 @@
   -webkit-box-shadow: @shadow; // iOS <4.3 & Android <4.1
           box-shadow: @shadow;
 }
+// transition
+.transition (@animate...) {
+	transition        : @animate;
+	-moz-transition    : @animate;
+	-ms-transition    : @animate;
+	-o-transition      : @animate;
+	-webkit-transition : @animate;
+}
