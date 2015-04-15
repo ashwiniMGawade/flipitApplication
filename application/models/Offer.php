@@ -33,6 +33,9 @@ class Offer extends BaseOffer
         $offerViewCount = ViewCount::getOfferViewCountBasedOnDate($offerId, $past24Hours, $currentDate);
         $offerViewCount = self::getViewCountByCondition($offerViewCount, $offerId, $past7Days, $currentDate);
         $offerViewCount = self::getViewCountByCondition($offerViewCount, $offerId, $past31Days, $currentDate);
+        if (intval($offerViewCount) < 5) {
+            $offerViewCount = '';
+        }
         return $offerViewCount;
     }
 

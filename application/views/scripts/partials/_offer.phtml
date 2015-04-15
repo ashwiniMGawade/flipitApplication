@@ -180,11 +180,11 @@ foreach ($this->offers as $offer) {
             if (empty($offerBottomDaysTillExpireText) || empty($offerBottomViewAllShopsLink)) {
                 echo $offerBottomExtendedLink;
             } 
-            if (empty($offerBottomDaysTillExpireText) && empty($offerBottomViewAllShopsLink)) {
+            //if (empty($offerBottomDaysTillExpireText) && empty($offerBottomViewAllShopsLink)) {
                 if ($offer->discountType == "CD") {
                     $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
                 }
-            }
+            //}
             echo $offerBottomTermsAndConditionLink;
             ?>
             </div>

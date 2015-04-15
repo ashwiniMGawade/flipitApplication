@@ -73,6 +73,21 @@ class ViewCount extends BaseViewCount
         $offerOnload->save();
         return true;
     }
+
+    public static function updateCacheValueForOfferViewCount($offerId)
+    {
+        $cahceKey = 'viewCount_'.$offerId.'_text';
+        $keyStatus = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($cahceKey);
+        if ($keyStatus) {
+            $views = Offer::getViewCountByOfferId($offerId);
+            FrontEnd_Helper_viewHelper::setInCache($cahceKey, $views);
+        } else {
+            $views = FrontEnd_Helper_viewHelper::getFromCacheByKey($cahceKey);
+            $views = intval($views) + 1;
+            FrontEnd_Helper_viewHelper::setInCache($cahceKey, $views);
+        }
+        return $views;
+    }
     ##########################################
     ########### END REFACTORED CODE ##########
     ##########################################
