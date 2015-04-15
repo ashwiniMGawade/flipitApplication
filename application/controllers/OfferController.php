@@ -268,6 +268,11 @@ class OfferController extends Zend_Controller_Action
     public function offerViewCountAction()
     {
         $this->_helper->layout()->disableLayout();
-        $this->view->offerId = $this->getRequest()->getParam('offerId');
+        $offerId = $this->getRequest()->getParam('offerId');
+        $offerViewCount = Offer::getViewCountByOfferId($offerId);
+        if ($offerViewCount < 5) {
+            $offerViewCount = '';
+        }
+        $this->view->offerViewCount = $offerViewCount;
     }
 }

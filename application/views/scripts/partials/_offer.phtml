@@ -118,7 +118,7 @@ foreach ($this->offers as $offer) {
     }
     $offerBottomOfferExclusiveOrEditor = $offerPartial->getOfferExclusiveOrEditor($offer);
     $offerBottomRecomendedLink = '';
-    if (intval($offer->editorPicks)) == 1) {
+    if (intval($offer->editorPicks) == 1) {
         $contentManagerId = isset($offer->shop['contentManagerId']) ? $offer->shop['contentManagerId'] : '';
         $contentManagerId = !empty($this->shop['contentManagerId']) 
             ? $this->shop['contentManagerId'] 

@@ -29,6 +29,7 @@ class Offer extends BaseOffer
         $past24Hours = date($format, strtotime('-1 day' . $currentDate));
         $past7Days = date($format, strtotime('-7 day' . $currentDate));
         $past31Days = date($format, strtotime('-31 day' . $currentDate));
+        $offerViewCount = 0;
         $offerViewCount = ViewCount::getOfferViewCountBasedOnDate($offerId, $past24Hours, $currentDate);
         $offerViewCount = self::getViewCountByCondition($offerViewCount, $offerId, $past7Days, $currentDate);
         $offerViewCount = self::getViewCountByCondition($offerViewCount, $offerId, $past31Days, $currentDate);

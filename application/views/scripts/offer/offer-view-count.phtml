@@ -1,6 +1,5 @@
 <?php
-$offerViewCount = Offer::getViewCountByOfferId($this->offerId);
-if (!empty($offerViewCount)) {
-    echo $offerViewCount . " " . FrontEnd_Helper_viewHelper::__translate('used today');
+if (!empty($this->offerViewCount)) {
+    echo $this->offerViewCount . " " . FrontEnd_Helper_viewHelper::__translate('used today');
 }
 ?>
