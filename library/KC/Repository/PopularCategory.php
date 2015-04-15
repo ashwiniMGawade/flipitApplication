@@ -94,7 +94,7 @@ class PopularCategory extends \KC\Entity\PopularCategory
                 $pc->updated_at = new \DateTime('now');
                 \Zend_Registry::get('emLocale')->persist($pc);
                 \Zend_Registry::get('emLocale')->flush();
-                $flag = $pc->id;
+                $flag = array('position'=>intval($NewPos) + 1, 'id'=>$pc->id, 'categoryId'=>$catg[0]['id'], 'type'=>'MN');
             }
         }
 
