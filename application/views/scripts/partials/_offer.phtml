@@ -137,7 +137,10 @@ foreach ($this->offers as $offer) {
     $showHyphen =  '';
     if ($this->offersType!='extendedOffer') {
         if ($termsAndConditions != '') {
-            $offerBottomTermsAndConditionLink = $offerPartial->getTermAndConditionsLink($offer, $termsAndConditions);
+            $offerBottomTermsAndConditionLink = $offerPartial->getTermAndConditionsLink(
+                $offer,
+                $termsAndConditions
+            );
         }
         $offerBottomExtendedLink =  $offerPartial->getExtendedOfferLink($offer);
         if($this->offersType!='simple'):
@@ -148,7 +151,11 @@ foreach ($this->offers as $offer) {
             );
         endif;
     } else {
-        $offerBottomViewAllShopsLink = $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], '');
+        $offerBottomViewAllShopsLink = $offerPartial->getViewAllCodeLink(
+            $offer->shop['name'],
+            $offer->shop['permalink'],
+            ''
+        );
     }
     ?>
                 </ul>
@@ -167,15 +174,18 @@ foreach ($this->offers as $offer) {
             <div class="recommended-arrow"></div>
             <div class="recommendedOffer">
             <?php 
-            echo
-                $offerBottomOfferExclusiveOrEditor
-                .$offerBottomDaysTillExpireText
-                .$offerBottomViewAllShopsLink
-                .$offerBottomExtendedLink
-                .$offerBottomTermsAndConditionLink;
-            if ($offer->discountType == "CD") {
-                $offerBottomNumberOfUsedCode = $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
+            echo $offerBottomOfferExclusiveOrEditor;
+            if (empty($offerBottomViewAllShopsLink)) {
+                echo $offerBottomDaysTillExpireText;
             }
+            echo $offerBottomViewAllShopsLink;
+            echo $offerBottomExtendedLink;
+            if (empty($offerBottomExtendedLink)) {
+                if ($offer->discountType == "CD") {
+                    $offerBottomNumberOfUsedCode = $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
+                }
+            }
+            echo $offerBottomTermsAndConditionLink;
             ?>
             </div>
         </div>
