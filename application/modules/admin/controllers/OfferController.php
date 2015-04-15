@@ -1599,7 +1599,6 @@ class Admin_OfferController extends Zend_Controller_Action
                                 && $offerEndDate != $this->view->translate('backend_End Date(Must be filled)')
                             )
                         ) {
-                            $dataSaved = 0;
                             $shopId = Shop::getShopIdByShopName($shopName);
                             if (!empty($shopId)) {
                                 $currentDate = date('Y-m-d');
