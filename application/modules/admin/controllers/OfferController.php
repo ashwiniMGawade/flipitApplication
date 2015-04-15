@@ -1551,10 +1551,8 @@ class Admin_OfferController extends Zend_Controller_Action
         $params = $this->_getAllParams();
         if ($this->getRequest()->isPost()) {
             if (isset($_FILES['excelFile']['name']) && $_FILES['excelFile']['name'] != '') {
-                $RouteRedirectObj = new RouteRedirect();
-                $uploadResult = $RouteRedirectObj->uploadExcel($_FILES['excelFile']['name']);
+                $uploadResult = BackEnd_Helper_viewHelper::uploadExcel($_FILES['excelFile']['name']);
                 if ($uploadResult['status'] == 200) {
-                    Doctrine_Query::create()->delete('RouteRedirect')->execute();
                     $explodedHttpPath = explode('/', HTTP_PATH);
                     $path = $explodedHttpPath[0].'//' . $explodedHttpPath[2];
                     $excelFilePath = $uploadResult['path'];
@@ -1611,29 +1609,31 @@ class Admin_OfferController extends Zend_Controller_Action
                                 if ($startDate >= $currentDate && $endDate >= $currentDate) {
                                     $offerList = new Offer();
                                     $offerList->title = $offerTitle;
-                                    $offerList->shopid = $shopId;
-                                    $offerList->discounttype = !empty($offerCouponCode) ? 'CD' : 'SL';
-                                    $offerList->visability = !empty($offerVisibility) ? $offerVisibility : 'DE';
-                                    $offerList->extenedeoffer = 0;
-                                    $offerList->startdate = $startDate;
-                                    $offerList->enddate = $endDate;
-                                    $offerList->totalviewcount = !empty($offerClickouts) ? $offerClickouts : 0;
+                                    $offerList->shopId = $shopId;
+                                    $offerList->discountType= !empty($offerCouponCode) ? 'CD' : 'SL';
+                                    $offerList->Visability = !empty($offerVisibility) ? 'DE' : 'MEM';
+                                    $offerList->extendedOffer = 0;
+                                    $offerList->startDate = $startDate;
+                                    $offerList->endDate = $endDate;
+                                    $offerList->totalViewcount = !empty($offerClickouts) ? $offerClickouts : 0;
                                     $offerList->authorName = !empty($offerAuthorName) ? $offerAuthorName : 'Arthur Goldman';
-                                    $offerList->couponcode = !empty($offerCouponCode) ? $offerCouponCode : '';
-                                    $offerList->exclusivecode = $offerExclusive == 1 ? 1 : 0;
-                                    $offerList->editorpicks = $offerEditorPick == 1 ? 1 : 0;
+                                    $offerList->couponCode = !empty($offerCouponCode) ? $offerCouponCode : '';
+                                    $offerList->exclusiveCode = $offerExclusive == 1 ? 1 : 0;
+                                    $offerList->editorPicks = $offerEditorPick == 1 ? 1 : 0;
                                     $offerList->userGenerated = 0;
                                     $offerList->offline = 0;
                                     $offerList->created_at = $currentDate;
-                                    $offerList->refurl = !empty($offerDeeplink) ? $offerDeeplink : '';
+                                    $offerList->refURL = !empty($offerDeeplink) ? $offerDeeplink : '';
                                     $offerList->tilesId = LOCALE == 'es' ? 135 : 0;
                                     $offerList->maxcode = 0;
                                     $offerList->deleted = 0;
+                                    $offerList->maxlimit = 0;
                                     $offerList->updated_at = $currentDate;
+                                    $offerList->save();
                                 }
-                                $offerList->save();
                             }
                         }
+                        unlink($excelFile);
                     }
                     $message = $this->view->translate('backend_Offers have been imported Successfully!!');
                     $flashMessage->addMessage(array('success' => $message));
