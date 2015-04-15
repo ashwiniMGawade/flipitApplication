@@ -2210,15 +2210,14 @@ $(function () {
 				});
 			},500);
 
-			var $retdata = data.result;
+			var retdata = data.result;
 
-
-			if($retdata.status == 200 )
+			if(retdata.status == 200 )
 			{
 				var img = new Image();
 
 
-				var newSrc = PUBLIC_PATH_LOCALE + $retdata.path + $retdata.fileName ;
+				var newSrc = PUBLIC_PATH_LOCALE + retdata.path + retdata.fileName ;
 
 				img.onload = function() {
 
