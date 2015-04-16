@@ -27,7 +27,7 @@ class SocialcodeController extends Zend_Controller_Action
         $socialCodeForm = new Application_Form_SocialCode();
         $shopId = $this->getRequest()->getParam('id');
         if (isset($shopId)) {
-            $shopInformation = Shop::getShopInformation(base64_decode(FrontEnd_Helper_viewHelper::sanitize($shopId)));
+            $shopInformation = \KC\Repository\Shop::getShopInformation(base64_decode(FrontEnd_Helper_viewHelper::sanitize($shopId)));
             if (!empty($shopInformation)) {
                 $socialCodeForm->getElement('shops')->setValue($shopInformation[0]['name']);
             }
@@ -46,7 +46,7 @@ class SocialcodeController extends Zend_Controller_Action
                 }
                 if ($response != null && $response->success) {
                     try {
-                        UserGeneratedOffer::addOffer($socialCodeParameters);
+                        \KC\Repository\UserGeneratedOffer::addOffer($socialCodeParameters);
                         echo Zend_Json::encode($baseViewPath->render('socialcode/socialcodethanks.phtml'));
                         exit();
                     } catch (Exception $e) {
@@ -72,7 +72,7 @@ class SocialcodeController extends Zend_Controller_Action
     public function checkStoreAction()
     {
         $this->_helper->layout()->disableLayout();
-        $shopId = Shop::checkShop(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('shops')));
+        $shopId = \KC\Repository\Shop::checkShop(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('shops')));
         $shopStatus = $shopId!='' ? true : false;
         echo Zend_Json::encode($shopStatus);
         die;

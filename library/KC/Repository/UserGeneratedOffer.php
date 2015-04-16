@@ -101,9 +101,9 @@ class UserGeneratedOffer extends \KC\Entity\Offer
             $offer->approved = 1;
             $authorId = KC\Repository\Offer::getAuthorId($offerId);
             if (empty($authorId[0]['authorId'])) {
-                $offer->authorId = Auth_StaffAdapter::getIdentity()->id;
-                $offer->authorName = Auth_StaffAdapter::getIdentity()->firstName . " "
-                    . Auth_StaffAdapter::getIdentity()->lastName;
+                $offer->authorId = \Auth_StaffAdapter::getIdentity()->id;
+                $offer->authorName = \Auth_StaffAdapter::getIdentity()->firstName . " "
+                    . \Auth_StaffAdapter::getIdentity()->lastName;
             }
         } else {
             $offer->approved = 0;
@@ -117,7 +117,7 @@ class UserGeneratedOffer extends \KC\Entity\Offer
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $offer  = new \KC\Entity\Offer();
-        $offer->shopOffers =  $entityManagerUser->find('KC\Entity\Shop', Shop::checkShop(\FrontEnd_Helper_viewHelper::sanitize($socialParameters['shops'])));
+        $offer->shopOffers =  $entityManagerLocale->find('KC\Entity\Shop', Shop::checkShop(\FrontEnd_Helper_viewHelper::sanitize($socialParameters['shops'])));
         $offer->couponCode = \FrontEnd_Helper_viewHelper::sanitize($socialParameters['code']);
         $offer->endDate = new \DateTime(\FrontEnd_Helper_viewHelper::sanitize($socialParameters['expireDate']));
         $offer->startDate =  new \DateTime('now');

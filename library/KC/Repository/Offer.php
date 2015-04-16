@@ -2636,7 +2636,7 @@ class Offer Extends \KC\Entity\Offer
         $saveOffer->created_at = new \DateTime('now');
         $saveOffer->updated_at = new \DateTime('now');
         $saveOffer->userGenerated = 0;
-        $saveOffer->approved = 0;
+        $saveOffer->approved = true;
         $saveOffer->offline = 0;
 
         $saveOffer->authorId = \Auth_StaffAdapter::getIdentity()->id;
@@ -2970,8 +2970,12 @@ class Offer Extends \KC\Entity\Offer
         $getcategory = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         if (!empty($getcategory)) {
-
-            $extendedUrl = mysql_real_escape_string($getcategory[0]['extendedUrl']);
+            $extendedUrl = mysqli_real_escape_string(
+                \FrontEnd_Helper_viewHelper::getDbConnectionDetails(),
+                \BackEnd_Helper_viewHelper::stripSlashesFromString(
+                    $getcategory[0]['extendedUrl']
+                )
+            );
             $query = $queryBuilder
                 ->select('rp')
                 ->from('KC\Entity\RoutePermalink', 'rp')
@@ -3043,9 +3047,8 @@ class Offer Extends \KC\Entity\Offer
         $updateOffer->created_at = new \DateTime('now');
         $updateOffer->updated_at = new \DateTime('now');
         $updateOffer->userGenerated = 0;
-        $updateOffer->approved = 0;
+        $updateOffer->approved = true;
         $updateOffer->offline = 0;
-
         $entityManagerLocale->persist($updateOffer);
         $entityManagerLocale->flush();     // New code Ends
 
