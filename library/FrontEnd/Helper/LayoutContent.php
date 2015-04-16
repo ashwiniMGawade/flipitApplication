@@ -162,7 +162,7 @@ class FrontEnd_Helper_LayoutContent
 
     public static function generateMainMenu()
     {
-        return $navigationString ='<nav id="nav">' . self::getWebsiteMainMenu() . '</nav>';
+        return '<nav id="nav">' . self::getWebsiteMainMenu() . '</nav>';
     }
      
     public static function getWebsiteMainMenu($navigation = '')
