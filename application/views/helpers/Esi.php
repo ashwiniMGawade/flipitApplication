@@ -85,10 +85,10 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
     /**
      * Create an ESI tag for a given SRC.
      *
-     * @param  string $src
+     * @param  string $esiSource
      * @return string
      */
-    public function esi($src)
+    public function esi($esiSource)
     {
         if (!empty($_SERVER['HTTP_X_VARNISH']) && !isset($_COOKIE['passCache'])) {
             if (!self::$_varnishHeaderSent) {
@@ -96,21 +96,23 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
                 $response->setHeader(self::$_varnishHeaderName, self::$_varnishHeaderValue);
                 self::$_varnishHeaderSent = true;
             }
-            return '<esi:include src="' . HTTP_PATH . ltrim($src, '/') . '"/>';
+            return '<esi:include src="' . HTTP_PATH . ltrim($esiSource, '/') . '"/>';
         } else {
             $divID = rand(0, 99999);
-            if (strpos($src, 'login') !== false) {
+            if (strpos($esiSource, 'login') !== false) {
                 echo '<nav class="account-box" id="'.$divID.'"></nav>';
-            } elseif (strpos($src, 'followbutton') !== false) {
+            } elseif (strpos($esiSource, 'followbutton') !== false) {
+                echo '<span class="btn-holder" id="'.$divID.'"></span>';
+            } elseif (strpos($esiSource, 'createdoffers') !== false) {
                 echo '<span class="" id="'.$divID.'"></span>';
             } else {
                 echo '<div class="" id="'.$divID.'"></div>';
             }
             ?>
             <script type="text/javascript">
-                $.get('<?php echo HTTP_PATH . ltrim($src , '/'); ?>', function(data) {
+                $.get('<?php echo HTTP_PATH . ltrim($esiSource , '/'); ?>', function(data) {
                   $('#<?php echo $divID; ?>').html(data);
-                  console.log('Load of <?php echo $src; ?> was performed with ajax.');
+                  console.log('Load of <?php echo $esiSource; ?> was performed with ajax.');
                 });
             </script>
             <?php

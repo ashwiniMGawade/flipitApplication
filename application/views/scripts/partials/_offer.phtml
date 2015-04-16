@@ -28,19 +28,22 @@ foreach ($this->offers as $offer) {
     if (isset($offer->couponCodeType) && $offer->couponCodeType == 'UN') {
          $couponCode = '';
     }
-
+    $dayleftCss = '';
+    if (intval($daysTillOfferExpires) <=1) {
+        $dayleftCss = 'deal-less';
+    }
     $defaultText = '';
-    $offerClass = "active";
+    $offerClass = "active " . $dayleftCss;
     $offerHolderClass = "offer-holder";
     if ($offer->exclusiveCode == '1') {
-        $offerClass = "orange-block deal-offer";
+        $offerClass = "orange-block deal-offer ". $dayleftCss;
     }
     if ($offer->userGenerated == '1') {
         $offerClass = "";
         $offerHolderClass = "";
         $urlToShow = 'javascript:void(0);';
         if ($offer->approved == '1') {
-            $offerClass = "orange-block deal-offer"; 
+            $offerClass = "orange-block deal-offer " .$dayleftCss; 
             $offerHolderClass = "offer-holder";
             $urlToShow = $offerPartial->getUrlToShow($offer);
         }
@@ -62,13 +65,21 @@ foreach ($this->offers as $offer) {
     ?>
             <div class="box">
                 <div class="text">
-                    <p> <?php
+                    <ul class="meta-items">
+                        <?php
+                        if ($offer->userGenerated == 0 && (isset($offer->discountType) && $offer->discountType == 'CD')) {
+                            echo $offerPartial->getVerifiedText();
+                        }
+                        ?>
+                        <li>
+                        <?php
                         $membersOnly = isset($offer->Visability) && $offer->Visability == 'MEM'
                             ? '<span class="members-only-image"></span><span class="members-only">'.$this->translate("Members Only").'</span>'
                             : '';
                         echo $membersOnly.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires);
                         ?>
-                    </p>
+                        </li>
+                    </ul>
                     <?php 
                     if ($offer->Visability == 'MEM') {
                         echo $this->esi($esiLocale.'signup/signupmembersonlytitle?shopId='.$offer->shop['id']
@@ -155,7 +166,6 @@ foreach ($this->offers as $offer) {
     ?>
                 </ul>
             </div>
-        
     <?php
     if ($this->offersType!='extendedOffer') {
             $style = '';

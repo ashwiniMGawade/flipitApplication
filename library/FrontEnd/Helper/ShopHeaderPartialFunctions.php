@@ -53,7 +53,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
                 <div class="icon">
                 '.$shopImageContent.'
                 </div>
-            <div class="box">';
+            <div class="box"><div class="holder">';
 
         if ($expiredMessage =='storeDetail') {
             $shop['subTitle'] = $shop['subTitle'];

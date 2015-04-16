@@ -201,6 +201,16 @@ class StoreController extends Zend_Controller_Action
             );
         }
 
+        $offersAddedInShopKey = "offersAdded_".$shopId."_shop";
+        $this->view->offersAddedInShop = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            (string)$offersAddedInShopKey,
+            array(
+                'function' => 'Offer::getNumberOfOffersCreatedByShopId',
+                'parameters' => array($shopId)
+            ),
+            ''
+        );
+
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->storeImage = $shopImage;
         $this->view->shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
@@ -377,6 +387,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $socialCodeForm = new Application_Form_SocialCode();
         $this->view->zendForm = $socialCodeForm;
+        $this->view->pageCssClass = 'page-store';
     }
 
     public function addtofavouriteAction()
@@ -414,5 +425,11 @@ class StoreController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
         $this->view->shopId = $this->getRequest()->getParam('shopid');
         $this->view->permalink = $this->getRequest()->getParam('permalink');
+    }
+
+    public function createdoffersAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->view->shopId = $this->getRequest()->getParam('shopid');
     }
 }

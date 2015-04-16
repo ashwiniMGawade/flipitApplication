@@ -87,6 +87,6 @@ class SearchController extends Zend_Controller_Action
         );
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-
+        $this->view->pageCssClass = 'page-store';
     }
 }

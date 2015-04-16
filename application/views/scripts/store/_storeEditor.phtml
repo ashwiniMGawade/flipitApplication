@@ -5,14 +5,6 @@ if (isset($this->shopEditor[0]['firstName'])) {
         getAuthorName($this->shopEditor[0]['firstName'], $this->shopEditor[0]['lastName']);
 }
 
-$profileLink = '';
-if (isset($this->shopEditor[0]['slug'])) {
-    $profileLink = HTTP_PATH_LOCALE
-        .FrontEnd_Helper_viewHelper::__link("link_redactie")
-        ."/"
-        . $this->shopEditor[0]['slug'];
-}
-
 $shopHeader = $this->translate('Dealspotter for').' '.$this->shop['name'];
 
 $shopEditorPath = '';
@@ -37,11 +29,11 @@ $howToUse = $this->partial(
     <div class="intro intro-2">
         <div class="author-info">
             <div class="img-thumbnail">
-                <a href="<?php echo $profileLink; ?>"><img title="<?php echo $authorName; ?>" 
-                    alt="<?php echo $authorName; ?>" src="<?php echo $shopEditorPath; ?>" class="img-responsive"></a>
+                <img title="<?php echo $authorName; ?>" 
+                    alt="<?php echo $authorName; ?>" src="<?php echo $shopEditorPath; ?>" class="img-responsive">
             </div>
             <div class="textbox">
-                <h3><a href="<?php echo $profileLink; ?>"><?php echo $authorName; ?></a></h3>
+                <h3><?php echo $authorName; ?></h3>
                 <span class="text"><?php echo $shopHeader; ?></span>
                 <?php 
                 if ($this->shop['discussions'] == 1): 

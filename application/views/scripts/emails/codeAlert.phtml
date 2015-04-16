@@ -79,7 +79,7 @@ if( isset($topOffer->exclusiveCode) && $topOffer->exclusiveCode == 1) {
                                     </tr>
                                     <tr>
                                         <td style="font:12px/17px Arial, Helvetica, sans-serif; 
-                                        color:#32383e;"><?php echo BackEnd_Helper_MandrillHelper::getOfferDates($topOffer, $daysTillOfferExpires); ?></td>
+                                        color:#32383e;"><?php echo BackEnd_Helper_MandrillHelper::getOfferDates($topOffer, $daysTillOfferExpires, $this->locale); ?></td>
                                     </tr>
                                 </tbody></table>
                             </td>

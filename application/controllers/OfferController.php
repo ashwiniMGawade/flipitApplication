@@ -69,6 +69,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $socialCodeForm = new Application_Form_SocialCode();
         $this->view->zendForm = $socialCodeForm;
+        $this->view->pageCssClass = 'page-store';
     }
 
     public function extendedofferAction()
@@ -143,7 +144,7 @@ class OfferController extends Zend_Controller_Action
         );
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        $this->view->pageCssClass = 'flipit-expired-page';
+        $this->view->pageCssClass = 'flipit-expired-page page-store';
     }
 
     public function offerDetailAction()
@@ -240,6 +241,7 @@ class OfferController extends Zend_Controller_Action
         );
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+        $this->view->pageCssClass = 'page-store';
     }
 
     public static function getOfferUniqueCode($offerParameters)

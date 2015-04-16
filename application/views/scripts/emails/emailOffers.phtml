@@ -57,7 +57,7 @@ $utmParameters = $this->mailType != 'welcome'
                                             <td style="padding:0 0 15px; font:16px/22px Arial, Helvetica, sans-serif; color:#0077cc;"><a href="<?php echo $this->httpPathLocale.$topOffer->shop['permalink'].$utmParameters; ?>" style="text-decoration:underline; color:#0077cc;"><?php echo $topOffer->title; ?></a></td>
                                         </tr>
                                         <tr>
-                                            <td style="font:12px/17px Arial, Helvetica, sans-serif; color:#32383e;"><?php echo BackEnd_Helper_MandrillHelper::getOfferDates($topOffer, $daysTillOfferExpires); ?></td>
+                                            <td style="font:12px/17px Arial, Helvetica, sans-serif; color:#32383e;"><?php echo BackEnd_Helper_MandrillHelper::getOfferDates($topOffer, $daysTillOfferExpires, $this->locale); ?></td>
                                         </tr>
                                     </tbody></table>
                                 </td>
