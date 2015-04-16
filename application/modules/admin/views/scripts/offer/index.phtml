@@ -40,7 +40,7 @@ $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
           <a href="<?php echo HTTP_PATH ?>admin/offer/trash" class="red trash-link"><strong><?php echo $this->translate('Trash');?></strong></a>
 		<?php } ?>
           	<div class="clear"></div>
-          	<p class="text-right"><a href='<?php echo HTTP_PATH ?>admin/offer/export-xlx'><?php echo $this->translate('Export List')?></a></p>
+          	<p class="text-right"><a href="<?php echo HTTP_PATH ?>admin/offer/importoffers"><?php echo $this->translate('Import List'); ?></a> / <a href='<?php echo HTTP_PATH ?>admin/offer/export-xlx'><?php echo $this->translate('Export List')?></a></p>
             <div class="mainpage-content-colorbox">
                 <form class="form-search" id="searchform">
                 	<div class="resetSearch fl">

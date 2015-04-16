@@ -937,4 +937,57 @@ class BackEnd_Helper_viewHelper
 		
 	}
 
+    public static function uploadExcel($file, $import = false, $type = '')
+    {
+        if (!file_exists(UPLOAD_EXCEL_PATH)) {
+            mkdir(UPLOAD_EXCEL_PATH, 0776, true);
+        }
+        
+        $rootPath = UPLOAD_EXCEL_PATH;
+        if ($import) {
+            $rootPath .= 'import/';
+        }
+
+        if (!file_exists($rootPath)) {
+            mkdir($rootPath, 0775, true);
+        }
+        $maximumUploadLimit = $type == 'offer' ? '12KB' : '2MB';
+        $minimumUploadLimit = $type == 'offer' ? '5' : '20';
+        $adapter = new Zend_File_Transfer_Adapter_Http();
+        $adapter->setDestination($rootPath);
+        $adapter->addValidator('Extension', false, array('xlsx', true));
+        $adapter->addValidator('Size', false, array('min' => $minimumUploadLimit, 'max' => $maximumUploadLimit));
+        $files = $adapter->getFileInfo($file);
+        $fileName = $adapter->getFileName($file, false);
+        $newFileName = time() . "_" . $fileName;
+        $changedFilePath = $rootPath . $newFileName;
+        $adapter
+        ->addFilter(
+            new Zend_Filter_File_Rename(
+                array(
+                    'target' => $changedFilePath,
+                    'overwrite' => true
+                )
+            ),
+            null,
+            $file
+        );
+        $adapter->receive($file);
+        $messages = $adapter->getMessages();
+        echo '<pre>'.print_r($messages, true).'</pre>';
+        if ($adapter->isValid($newFileName)) {
+            return array(
+                "fileName" => $newFileName,
+                "status" => "200",
+                "msg" => "File uploaded successfully",
+                "path" => $rootPath
+            );
+        } else {
+            return array(
+                "status" => "-1",
+                "msg" => "Please upload the valid file"
+            );
+        }
+    }
+
 }
