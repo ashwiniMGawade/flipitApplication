@@ -110,9 +110,8 @@ class Admin_ArticleController extends Zend_Controller_Action
                 $val = $this->getRequest()->getParams();
                 if (isset($val['savePagebtn']) && @$val['savePagebtn'] == 'draft') {
 
-                    $createdartid = Doctrine_Query::create()->select("id")->from("Articles")->orderBy("id DESC")->limit(1)->fetchArray();
+                    $createdartid = KC\Repository\Articles::getArticleId();
                     $actualval = $createdartid[0]['id'];
-
                     $redirecturl = "/admin/article/editarticle/id/".$actualval;
                     $this->_redirect($redirecturl);
                     exit();

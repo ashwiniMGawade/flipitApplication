@@ -961,4 +961,16 @@ class Articles extends \KC\Entity\Articles
         }
         return $urlsArray ;
     }
+
+    public static function getArticleId()
+    {
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
+        $queryBuilder = $entityManagerLocale->createQueryBuilder();
+        $query = $queryBuilder->select('a.id')
+            ->from('\KC\Entity\Articles', 'a')
+            ->orderBy("a.id", "DESC")
+            ->setMaxResults(1);
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
+    }
 }
