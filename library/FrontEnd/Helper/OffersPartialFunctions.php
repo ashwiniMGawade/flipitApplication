@@ -99,8 +99,12 @@ class FrontEnd_Helper_OffersPartialFunctions
         $startDate = new Zend_Date(strtotime($currentOffer->startDate));
         $endDate = new Zend_Date(strtotime($currentOffer->endDate));
         $offerDates = '';
-        $startDateFormat = LOCALE == 'us' ? Zend_Date::MONTH_NAME.' '.Zend_Date::DAY : Zend_Date::DAY.' '.Zend_Date::MONTH_NAME;
-        $endDateFormat = LOCALE == 'us' ? Zend_Date::MONTH_NAME.' '.Zend_Date::DAY.', '.Zend_Date::YEAR: Zend_Date::DATE_LONG;
+        $startDateFormat = LOCALE == 'us'
+            ? Zend_Date::MONTH_NAME.' '.Zend_Date::DAY
+            : Zend_Date::DAY.' '.Zend_Date::MONTH_NAME;
+        $endDateFormat = LOCALE == 'us'
+            ? Zend_Date::MONTH_NAME.' '.Zend_Date::DAY.', '.Zend_Date::YEAR
+            : Zend_Date::DATE_LONG;
         if ($currentOffer->discountType == "CD") {
             $offerDates .= FrontEnd_Helper_viewHelper::__translate('valid from');
             $offerDates .= ' ';
@@ -442,10 +446,9 @@ class FrontEnd_Helper_OffersPartialFunctions
     public static function getVerifiedText()
     {
         $verifiedText = "
-            <div class='verified-text'>
-                <strong>" . FrontEnd_Helper_viewHelper::__translate('Verified') . "</strong>
-                <span class='glyphicon glyphicon-ok'></span>
-            </div>";
+            <li>
+                <span class='verification'>" . FrontEnd_Helper_viewHelper::__translate('Verified') . "</span>
+            </li>";
         return $verifiedText;
     }
 
