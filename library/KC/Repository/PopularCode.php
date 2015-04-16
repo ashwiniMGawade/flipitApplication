@@ -428,8 +428,7 @@ class PopularCode extends \KC\Entity\PopularCode
                 $pc->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($pc);
                 $entityManagerLocale->flush();
-                
-                $flag  = array('id'=>$pc->id,'type'=>'MN','popularcode'=>$id,'position'=>(intval($NewPos) + 1),'title'=>$Offer[0]['title']);
+                $flag  = array('id'=>$pc->id,'type'=>'MN','offerId'=>$id,'position'=>(intval($NewPos) + 1),'title'=>$Offer[0]['title']);
             }
 
         }
