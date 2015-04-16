@@ -241,6 +241,7 @@ class OfferController extends Zend_Controller_Action
         );
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+        $this->view->pageCssClass = 'page-store';
     }
 
     public static function getOfferUniqueCode($offerParameters)
