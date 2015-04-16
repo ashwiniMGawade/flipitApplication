@@ -1,10 +1,10 @@
 // page init
-jQuery(function(){console.log('ss');
+jQuery(function(){
 	initMobileNav();
 });
 
 // mobile menu init
-function initMobileNav() { console.log('ss');
+function initMobileNav() {
 	jQuery('body').mobileNav({
 		menuActiveClass: 'panel-active',
 		menuOpener: '.menu-opener'
