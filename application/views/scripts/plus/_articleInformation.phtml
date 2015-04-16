@@ -11,12 +11,18 @@ if (!$authorName == '') {
     $byAuthorName[1] = $authorName;
 }
 $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName(LOCALE);
-$articleShareUrl = HTTP_PATH_LOCALE 
-    . FrontEnd_Helper_viewHelper::__link('link_plus'). '/'.$articleDetails['permalink'];
-$articleShareButtons = $this->partial(
-    'plus/_articleShareButtons.phtml',
-    array('shareUrl' => $articleShareUrl)
-);
+$articleShareButtons = '';
+if (!empty($articleDetails['permalink'])) {
+    $articleShareUrl = HTTP_PATH_LOCALE 
+        . FrontEnd_Helper_viewHelper::__link('link_plus'). '/'.$articleDetails['permalink'];
+    $articleShareButtons = $this->partial(
+        'plus/_articleShareButtons.phtml',
+        array(
+            'shareUrl' => $articleShareUrl,
+            'title' => mb_substr($articleDetails['title'], 0, 50)
+        )
+    );
+}
 ?>
 <section class="post-box">
     <header class="meta meta-parding">
