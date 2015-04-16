@@ -1,11 +1,12 @@
 <?php
 $offersAddedInShop = Offer::getNumberOfOffersCreatedByShopId($this->shopId);
+$offersAdded = '';
 if (!empty($offersAddedInShop)) {
-    echo FrontEnd_Helper_viewHelper::__translate('This '.$offersAddedInShop['type'])
+    $offersAdded = FrontEnd_Helper_viewHelper::__translate('This '.$offersAddedInShop['type'])
         . ' '
         .$offersAddedInShop['offersInfo']['amountOffers']
         .' '
-        .FrontEnd_Helper_viewHelper::__translate('offers have been added')
-        .' | ';
+        .FrontEnd_Helper_viewHelper::__translate('offers have been added');
 }
 ?>
+<li><span class="icon time"></span><span class="text"><?php echo $offersAdded; ?></span></li>

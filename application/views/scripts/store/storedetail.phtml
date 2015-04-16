@@ -161,16 +161,21 @@ if (!empty($offersCount)) {
 <input type="hidden" name="currentShop" id="currentShop" 
 value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
 <?php echo $headerBlock; ?>
-<?php
-echo $this->esi($this->locale.'store/followbutton?shopid='.$this->currentStoreInformation[0]['id']
-    .'&permalink='.urlencode($this->currentStoreInformation[0]['permaLink']));
-if ($this->currentStoreInformation[0]['discussions'] == 1): 
-    echo !empty($disqusReplyCounter) ? $disqusReplyCounter : '';
-endif;
-echo $this->esi($this->locale.'store/createdoffers?shopid='.$this->currentStoreInformation[0]['id']);
-echo $activeOffersInShop;
-?>
-</div></div>
+</div>
+<div class="meta-holder">
+    <?php
+    echo $this->esi($this->locale.'store/followbutton?shopid='.$this->currentStoreInformation[0]['id']
+        .'&permalink='.urlencode($this->currentStoreInformation[0]['permaLink']));
+    ?>
+    <ul class="items">
+        <?php
+        echo $this->esi($this->locale.'store/createdoffers?shopid='.$this->currentStoreInformation[0]['id']);
+        ?>
+        <li><span class="icon active-people"></span><span class="text"><?php echo $activeOffersInShop; ?></span></li>
+    </ul>
+</div>
+</div>
+</div>
 <div class="row"> 
     <div id="content" class ="col-md-8 col-sm-8">
     <?php 
