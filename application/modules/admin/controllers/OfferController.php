@@ -23,14 +23,14 @@ class Admin_OfferController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second excelDatabase
+        $connection = BackEnd_Helper_viewHelper::addConnection();//connection generate with second excelDatabase
         $params = $this->_getAllParams();
         if (!Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        BackEnd_Helper_viewHelper::closeConnection($connection);
         $this->view->controllerName = $this->getRequest()
                 ->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
@@ -1559,7 +1559,7 @@ class Admin_OfferController extends Zend_Controller_Action
                     $objReader = PHPExcel_IOFactory::createReader('Excel2007');
                     $objPHPExcel = $objReader->load($excelFile);
                     $worksheet = $objPHPExcel->getActiveSheet();
-                    $excelData =  array();
+                    $excelData = array();
                     $offerList = new Doctrine_Collection('Offer');
                     foreach ($worksheet->getRowIterator() as $row) {
                         $cellIterator = $row->getCellIterator();
@@ -1654,8 +1654,8 @@ class Admin_OfferController extends Zend_Controller_Action
 
     public function emptyOfferXlxAction()
     {
-        $file =  APPLICATION_PATH . '/migration/emptyOffer.xlsx' ;
-        $fileName =  $this->view->translate($file);
+        $file = APPLICATION_PATH . '/migration/emptyOffer.xlsx' ;
+        $fileName = $this->view->translate($file);
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $this->getResponse()
