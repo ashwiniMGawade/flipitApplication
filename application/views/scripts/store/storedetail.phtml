@@ -124,7 +124,8 @@ if($this->shopEditor != null):
             ),
            'shop' => $this->currentStoreInformation[0],
            'howToUseGuidePermalink'=>$howToUseGuidePermalink,
-           'actualUrl'=>$actualUrl
+           'actualUrl'=>$actualUrl,
+           'disqusReplyCounter' => $disqusReplyCounter
         )
     );
 endif;
@@ -153,9 +154,6 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
 <?php
 echo $this->esi($this->locale.'store/followbutton?shopid='.$this->currentStoreInformation[0]['id']
     .'&permalink='.urlencode($this->currentStoreInformation[0]['permaLink']));
-if ($this->currentStoreInformation[0]['discussions'] == 1): 
-    echo !empty($disqusReplyCounter) ? $disqusReplyCounter : '';
-endif;
 ?>
 </div></div>
 <div class="row"> 
