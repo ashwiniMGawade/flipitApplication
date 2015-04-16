@@ -296,11 +296,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             echo $this->_helper->json('This page does not exist');
         }
         # sanitize data
-        $content =  mysql_real_escape_string(
-            \BackEnd_Helper_viewHelper::stripSlashesFromString(
-                $this->getRequest()->getParam('content')
-            )
-        );
+        $content = $this->getRequest()->getParam('content');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         switch ($this->getRequest()->getParam('type')){
             case 'testimonial1':
