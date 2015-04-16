@@ -23,6 +23,9 @@ $articleShareButtons = $this->partial(
         <h1><?php echo $articleDetails['title'];?></h1>
     </header>
     <header class="meta">
+        <div class="btn-area">
+            <?php echo $articleShareButtons;?>
+        </div>
         <p class="article-detail">
             <?php echo $byAuthorName[0]; ?>
             <a class='black-link-bold' href="<?php echo $profileLink; ?>"><?php echo $byAuthorName[1];?></a>
@@ -31,7 +34,6 @@ $articleShareButtons = $this->partial(
             <?php echo '&nbsp; | &nbsp;'. $this->translate('back to') . " ";?>   
             <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_plus')?>">
             <?php echo $websiteName . " ". $this->translate('plus');?></a>
-            <?php echo $articleShareButtons;?>
         </p>
     </header>
 <?php  
@@ -43,9 +45,7 @@ $articleShareButtons = $this->partial(
         endforeach;
     }
 ?> 
-    <header class="meta meta-parding">
-    </header>
-    <header class="meta text-center">
+    <div class="btn-area add">
         <?php echo $articleShareButtons;?>
-    </header>
+    </div>
 </section>

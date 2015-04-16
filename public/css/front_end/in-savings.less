@@ -21,6 +21,58 @@
 	position: initial;
 }
 .in-savings-page {
+	.btn-area{
+		float: right;
+		margin: -4px -4px 0 8px;
+		letter-spacing: -5px;
+		&.add{
+			border: solid #eaeaea;
+			border-width: 1px 0;
+			padding: 11px;
+			text-align: center;
+			float: none;
+			margin: 0 0 28px;
+			overflow: hidden;
+			@media only screen and (max-width: 767px) {
+				display: block;
+			}
+			a{
+				float: none;
+				display: inline-block;
+				vertical-align: middle;
+				@media only screen and (max-width: 767px) {
+					margin: 0 3px;
+				}
+			}
+		}
+		@media only screen and (max-width: 767px) {
+			display: table-footer-group;
+			float: none;
+		}
+		.btn-facebook, .btn-twitter{
+			.text-hide;
+			background:url(../../images/btn-social.png) no-repeat;
+			width: 71px;
+			height: 26px;
+			margin: 0 4px 0 3px;
+			float: left;
+			letter-spacing: 0;
+			@media only screen and (max-width: 767px) {
+				margin: 6px 7px 0 0;
+			}
+			&:hover{
+				opacity: 0.8;
+			}
+			&:focus, &:active, &.active{
+				opacity: 0.4;
+			}
+		}
+		.btn-twitter{
+			background-position: 100% 0;
+			width: 71px;
+		}
+		
+	}
 	.post-box {
 		h2{
 			font-size: 20px;
@@ -58,15 +110,6 @@
 				width: 90%;
 				color:#33383e;
 				font-weight: bold;
-			}
-		}
-		.share-buttons {
-			 float: right;
-		}
-		.text-center{
-			text-align: center;
-			.share-buttons {
-			 	float: none;
 			}
 		}
 		.meta-parding{
