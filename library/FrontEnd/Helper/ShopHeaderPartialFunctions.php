@@ -53,7 +53,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
                 <div class="icon">
                 '.$shopImageContent.'
                 </div>
-            <div class="box">';
+            <div class="box"><div class="holder">';
 
         if ($expiredMessage =='storeDetail') {
             $shop['subTitle'] = $shop['subTitle'];
@@ -90,13 +90,19 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
 
     public function getDisqusReplyCounter($shop)
     {
-        $shopPermalink = $shop['permaLink'];
-        $disqusUrl = HTTP_PATH_LOCALE.$shopPermalink;
-        $anchorTag =
-            '<a id="commentCount"  href="javascript:void(0);" onClick="scrollToDisqus();" 
-                class="btn text-blue-link fl store-header-link  pop btn btn-sm btn-default" 
-                rel="nofollow"><span id="commentCountSpan"  class="disqus-comment-count" data-disqus-url="'.$disqusUrl.'"> </span>
-            </a>';
+        $anchorTag = '';
+        if (isset($shop['permaLink'])) {
+            $shopPermalink = $shop['permaLink'];
+            $disqusUrl = HTTP_PATH_LOCALE.$shopPermalink;
+            $anchorTag =
+                '<a id="commentCount" href="javascript:void(0);" onClick="scrollToDisqus();" 
+                    class="btn text-blue-link fl store-header-link  pop btn btn-sm btn-default follow-button" 
+                    rel="nofollow"><span class="icon-chat"></span>
+                    <span id="commentCountSpan" 
+                    class="disqus-comment-count follow-text" data-disqus-url="'.$disqusUrl.'"> </span>
+                </a>';
+        }
+        
         return $anchorTag;
     }
 }

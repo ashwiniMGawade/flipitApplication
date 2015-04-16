@@ -704,16 +704,6 @@ EOD;
         $purifier = new HTMLPurifier($config);
         $clean_html = $purifier->purify($string);
         return $clean_html;
-        /*
-        $search = array(
-            '@<script[^>]*?>.*?</script>@si',   // Strip out javascript
-            '@[\\\]@'   // Strip out slashes
-        );
-        $string = preg_replace($search, array('',''), $string);
-        $string = htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
-        $string = trim(rtrim(rtrim($string)));
-        $string = mysqli_real_escape_string(self::getDbConnectionDetails(), $string);
-        return $string;*/
     }
 
     public static function getDbConnectionDetails()

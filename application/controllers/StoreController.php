@@ -191,7 +191,7 @@ class StoreController extends Zend_Controller_Action
         );
 
         if ($shopInformation[0]['affliateProgram'] != 0) {
-            $similarShopsAndSimilarCategoriesOffers = array_slice($similarShopsAndSimilarCategoriesOffers, 3);
+            $similarShopsAndSimilarCategoriesOffers = array_slice($similarShopsAndSimilarCategoriesOffers, 0, 3);
         }
 
         $this->view->similarShopsAndSimilarCategoriesOffers = '';
@@ -200,6 +200,16 @@ class StoreController extends Zend_Controller_Action
                 $similarShopsAndSimilarCategoriesOffers
             );
         }
+
+        $offersAddedInShopKey = "offersAdded_".$shopId."_shop";
+        $this->view->offersAddedInShop = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            (string)$offersAddedInShopKey,
+            array(
+                'function' => 'Offer::getNumberOfOffersCreatedByShopId',
+                'parameters' => array($shopId)
+            ),
+            ''
+        );
 
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->storeImage = $shopImage;
@@ -255,7 +265,7 @@ class StoreController extends Zend_Controller_Action
         $socialCodeForm->getElement('shops')->setValue($shopInformation[0]['name']);
         $this->view->zendForm = $socialCodeForm;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        $this->view->pageCssClass = 'author-page';
+        $this->view->pageCssClass = 'author-page page-store';
     }
 
     public function indexAction()
@@ -414,5 +424,11 @@ class StoreController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
         $this->view->shopId = $this->getRequest()->getParam('shopid');
         $this->view->permalink = $this->getRequest()->getParam('permalink');
+    }
+
+    public function createdoffersAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->view->shopId = $this->getRequest()->getParam('shopid');
     }
 }
