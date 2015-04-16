@@ -239,7 +239,6 @@ class Admin_ArticleController extends Zend_Controller_Action
         //cal to searchToFiveShop function from offer model class
 
         $data = \KC\Repository\Articles::searchKeyword($srh, $flag);
-
         $ar = array();
         $removeDup = array();
         if (sizeof($data) > 0) {
@@ -537,7 +536,7 @@ class Admin_ArticleController extends Zend_Controller_Action
      */
     public function trasharticleAction()
     {
-        $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
+        $role = Zend_Auth::getInstance()->getIdentity()->users->id;
         if ($role=='1' || $role=='2') {
             $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $flash->getMessages();

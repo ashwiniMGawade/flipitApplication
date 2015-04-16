@@ -738,7 +738,7 @@ class Articles extends \KC\Entity\Articles
     public static function searchKeyword($keyword, $flag)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('a.title')
+        $query = $queryBuilder->select('a.title, a.id')
             ->from('\KC\Entity\Articles', 'a')
             ->where('a.deleted ='. $flag)
             ->andWhere($queryBuilder->expr()->like('a.title', $queryBuilder->expr()->literal($keyword.'%')))
