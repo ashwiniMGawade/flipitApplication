@@ -117,31 +117,34 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
     public static function deleteCode($id, $position, $pageId)
     {
         if ($id) {
-            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder
+            $queryBuilderDelete = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilderDelete
                 ->delete('KC\Entity\SpecialPagesOffers', 'spl')
                 ->where('spl.id ='.$id)
                 ->getQuery();
             $query->execute();
-
-            $query = $queryBuilder
-                ->update('KC\Entity\SpecialPagesOffers', 'p')
-                ->set('p.position', $queryBuilder->expr()->literal('p.position -1'))
-                ->where('p.position > '.$position)
-                ->andWhere('p.pages='. $pageId)
+            
+            $queryBuilderUpdate = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilderUpdate
+                ->update('KC\Entity\SpecialPagesOffers', 'sp')
+                ->set('sp.position', $queryBuilderUpdate->expr()->literal('p.position -1'))
+                ->where('sp.position > '.$position)
+                ->andWhere('sp.pages='. $pageId)
                 ->getQuery();
             $query->execute();
 
-            $query = $queryBuilder
-                ->select('p')
-                ->from('KC\Entity\SpecialPagesOffers', 'p')
-                ->where('p.pages='. $pageId)
-                ->orderBy('p.position', 'ASC');
-            $newOffersList = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $queryBuilderSelect = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilderSelect
+                ->select('spo')
+                ->from('KC\Entity\SpecialPagesOffers', 'spo')
+                ->where('spo.pages='. $pageId)
+                ->orderBy('spo.position', 'ASC');
+            $newOffersList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
             $newPosition = 1;
+            $queryBuilderSpecialPage = \Zend_Registry::get('emLocale')->createQueryBuilder();
             foreach ($newOffersList as $newOffer) {
-                $query = $queryBuilder
+                $query = $queryBuilderSpecialPage
                     ->update('KC\Entity\SpecialPagesOffers', 'p')
                     ->set('p.position', $newPosition)
                     ->where('p.id = '.$newOffer['id'])

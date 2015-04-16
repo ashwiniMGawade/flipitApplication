@@ -82,7 +82,7 @@ class PopularArticles Extends \KC\Entity\PopularArticles
         $popularArticle->updated_at = new \DateTime('now');
         $entityManagerLocale->persist($popularArticle);
         $entityManagerLocale->flush();
-        return;
+        return true;
     }
 
     public static function updateArticles($changedArticlesDataForSorting)

@@ -26,6 +26,7 @@ class Admin_PopulararticlesController extends Zend_Controller_Action
 
     public function savepopulararticlespositionAction()
     {
+        //print_r($this->getRequest()->getParam('articleIds'));die;
         \KC\Repository\PopularArticles::savePopularArticlePosition($this->getRequest()->getParam('articleIds'));
         $popularArticles = \KC\Repository\PopularArticles::getPopularArticles();
         echo Zend_Json::encode($popularArticles);
