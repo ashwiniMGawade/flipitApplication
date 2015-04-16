@@ -1184,7 +1184,7 @@ class Offer Extends \KC\Entity\Offer
 
             $key = '6_topOffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $shophowtokey = '6_topOffersHowto'  . $u->shopId . '_list';
+            $shophowtokey = '6_topOffersHowto'  . $u['shopId'] . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = '4_shopLatestUpdates'  .$u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
