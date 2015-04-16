@@ -937,7 +937,7 @@ class BackEnd_Helper_viewHelper
 		
 	}
 
-    public static function uploadExcel($file, $import = false)
+    public static function uploadExcel($file, $import = false, $type = '')
     {
         if (!file_exists(UPLOAD_EXCEL_PATH)) {
             mkdir(UPLOAD_EXCEL_PATH, 0776, true);
@@ -951,11 +951,12 @@ class BackEnd_Helper_viewHelper
         if (!file_exists($rootPath)) {
             mkdir($rootPath, 0775, true);
         }
-
+        $maximumUploadLimit = $type == 'offer' ? '12KB' : '2MB';
+        $minimumUploadLimit = $type == 'offer' ? '5' : '20';
         $adapter = new Zend_File_Transfer_Adapter_Http();
         $adapter->setDestination($rootPath);
         $adapter->addValidator('Extension', false, array('xlsx', true));
-        $adapter->addValidator('Size', false, array('min' => 5, 'max' => '16KB'));
+        $adapter->addValidator('Size', false, array('min' => $minimumUploadLimit, 'max' => $maximumUploadLimit));
         $files = $adapter->getFileInfo($file);
         $fileName = $adapter->getFileName($file, false);
         $newFileName = time() . "_" . $fileName;

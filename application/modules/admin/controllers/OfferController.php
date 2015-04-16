@@ -1551,7 +1551,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $params = $this->_getAllParams();
         if ($this->getRequest()->isPost()) {
             if (isset($_FILES['excelFile']['name']) && $_FILES['excelFile']['name'] != '') {
-                $uploadResult = BackEnd_Helper_viewHelper::uploadExcel($_FILES['excelFile']['name']);
+                $uploadResult = BackEnd_Helper_viewHelper::uploadExcel($_FILES['excelFile']['name'], false, 'offer');
                 $flashMessage = $this->_helper->getHelper('FlashMessenger');
                 if ($uploadResult['status'] == 200) {
                     $excelFilePath = $uploadResult['path'];
