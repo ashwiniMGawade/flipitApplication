@@ -915,7 +915,7 @@ class Offer Extends \KC\Entity\Offer
         $userRole           = \Auth_StaffAdapter::getIdentity()->users->id;
         $searchOffer        = $parameters["offerText"]!='undefined' ? $parameters["offerText"] : '';
         $searchShop         = $parameters["shopText"]!='undefined' ? $parameters["shopText"] : '';
-        $searchCoupon       = $parameters["shopCoupon"]!='undefined' ? $parameters["shopCoupon"] : '';
+        $searchCoupon       = isset($parameters["shopCoupon"]) && $parameters["shopCoupon"]!='undefined' ? $parameters["shopCoupon"] : '';
         $searchCouponType   = $parameters["couponType"]!='undefined' ? $parameters["couponType"] : '';
         $deletedStatus      = $parameters['flag'];
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -1185,7 +1185,7 @@ class Offer Extends \KC\Entity\Offer
             $key = '6_topOffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $shophowtokey = '6_topOffersHowto'  . $u['shopId'] . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = '4_shopLatestUpdates'  .$u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_expiredOffers'  . $u['shopId'] . '_list';

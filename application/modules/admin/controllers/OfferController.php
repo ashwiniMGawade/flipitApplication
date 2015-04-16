@@ -686,7 +686,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
 
         //cal to deleteOffer function from offer model class
-    //	$deletePermanent = Offer::deleteOffer($id);
+        $deletePermanent = \KC\Repository\Offer::deleteOffer($id);
 
         $flash = $this->_helper->getHelper('FlashMessenger');
         if (intval($deletePermanent) > 0) {
