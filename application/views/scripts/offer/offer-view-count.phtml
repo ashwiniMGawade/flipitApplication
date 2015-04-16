@@ -1,5 +1,13 @@
 <?php
 if (!empty($this->offerViewCount)) {
-    echo $this->offerViewCount . " " . FrontEnd_Helper_viewHelper::__translate('used today');
+	?>
+	<li>
+		<span class="used text-info">
+			<span class="text-over">
+			<?php echo $this->offerViewCount . " " . FrontEnd_Helper_viewHelper::__translate('used today');?>
+			</span>
+		</span>
+	</li>
+	<?php
 }
 ?>

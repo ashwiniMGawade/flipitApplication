@@ -33,14 +33,14 @@ foreach ($this->offers as $offer) {
     $offerClass = "active";
     $offerHolderClass = "offer-holder";
     if ($offer->exclusiveCode == '1') {
-        $offerClass = "orange-block";
+        $offerClass = "orange-block deal-offer";
     }
     if ($offer->userGenerated == '1') {
         $offerClass = "";
         $offerHolderClass = "";
         $urlToShow = 'javascript:void(0);';
         if ($offer->approved == '1') {
-            $offerClass = "social-block"; 
+            $offerClass = "orange-block deal-offer"; 
             $offerHolderClass = "offer-holder";
             $urlToShow = $offerPartial->getUrlToShow($offer);
         }
@@ -132,7 +132,6 @@ foreach ($this->offers as $offer) {
     $offerBottomTermsAndConditionLink = '';
     $offerBottomExtendedLink = '';
     $offerBottomViewAllShopsLink = '';
-    $showHyphen =  '';
     if ($this->offersType!='extendedOffer') {
         if ($termsAndConditions != '') {
             $offerBottomTermsAndConditionLink = $offerPartial->getTermAndConditionsLink(
@@ -144,21 +143,19 @@ foreach ($this->offers as $offer) {
         if($this->offersType!='simple'):
             $offerBottomViewAllShopsLink =  $offerPartial->getViewAllCodeLink(
                 $offer->shop['name'],
-                $offer->shop['permalink'],
-                $showHyphen
+                $offer->shop['permalink']
             );
         endif;
     } else {
         $offerBottomViewAllShopsLink = $offerPartial->getViewAllCodeLink(
             $offer->shop['name'],
-            $offer->shop['permalink'],
-            ''
+            $offer->shop['permalink']
         );
     }
     ?>
                 </ul>
             </div>
-        </div>
+        
     <?php
     if ($this->offersType!='extendedOffer') {
             $style = '';
@@ -166,28 +163,26 @@ foreach ($this->offers as $offer) {
             $style = 'style="display:block;"';
     }
     ?>
-    
-        <hr class="alt2">
-        <div class="recommended-outerDiv">
-            <div class="recommended-arrow"></div>
-            <div class="recommendedOffer">
-            <?php 
-            echo $offerBottomOfferExclusiveOrEditor;
-            echo $offerBottomDaysTillExpireText;
-            echo $offerBottomViewAllShopsLink;
-            if (empty($offerBottomDaysTillExpireText) || empty($offerBottomViewAllShopsLink)) {
-                echo $offerBottomExtendedLink;
-            } 
-            //if (empty($offerBottomDaysTillExpireText) && empty($offerBottomViewAllShopsLink)) {
-                if ($offer->discountType == "CD") {
-                    $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
-                }
-            //}
-            echo $offerBottomTermsAndConditionLink;
-            ?>
+        <div class="info-area">
+            <?php echo $offerBottomTermsAndConditionLink;?>
+            <div class="info">
+               <ul>
+                    <?php echo $offerBottomOfferExclusiveOrEditor;?>
+                    <?php echo $offerBottomDaysTillExpireText;?>
+                    <?php echo $offerBottomViewAllShopsLink;
+                    if (empty($offerBottomDaysTillExpireText) || empty($offerBottomViewAllShopsLink)) {
+                        echo $offerBottomExtendedLink;
+                    } 
+                    if (empty($offerBottomDaysTillExpireText) && empty($offerBottomViewAllShopsLink)) {
+                        if ($offer->discountType == "CD") {
+                            $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
+                        }
+                    }
+                    ?>
+               </ul>
             </div>
         </div>
-
+    </div>
         <div class="offer-box" id="websiteOfferLink<?php echo $offer->id ;?>" <?php echo $style;?>>
             <hr class="alt2">
             <div class="offer">
