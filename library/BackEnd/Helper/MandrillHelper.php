@@ -138,50 +138,23 @@ class BackEnd_Helper_MandrillHelper
         $currentObject->_to = $visitorInformation;
     }
 
-    public static function getOfferDates($currentOffer, $daysTillOfferExpires)
+    public static function getOfferDates($currentOffer, $daysTillOfferExpires, $locale)
     {
-        $stringAdded = FrontEnd_Helper_viewHelper::__email('email_added');
-        $stringOnly = FrontEnd_Helper_viewHelper::__email('email_only');
         $startDate = new Zend_Date(strtotime($currentOffer->startDate));
+        $endDate = new Zend_Date(strtotime($currentOffer->endDate));
         $offerDates = '';
-        if($currentOffer->discountType == "CD"):
-            $offerDates .= $stringAdded;
-            $offerDates .= ': ';
-            $offerDates .= ucwords($startDate->get(Zend_Date::DATE_LONG));
-            $offerDates .= ', ';
-
-            if (
-                $daysTillOfferExpires ==5
-                || $daysTillOfferExpires ==4
-                || $daysTillOfferExpires ==3
-                || $daysTillOfferExpires ==2
-            ) {
-                $offerDates .= $stringOnly;
-                $offerDates .= '&nbsp;';
-                $offerDates .= $daysTillOfferExpires;
-                $offerDates .= '&nbsp;';
-                $offerDates .= FrontEnd_Helper_viewHelper::__email('email_days left!');
-            } elseif ($daysTillOfferExpires == 1) {
-                $offerDates .= $stringOnly;
-                $offerDates .= '&nbsp;';
-                $offerDates .= $daysTillOfferExpires;
-                $offerDates .= '&nbsp;';
-                $offerDates .= FrontEnd_Helper_viewHelper::__email('email_day left!');
-            } elseif ($daysTillOfferExpires == 0) {
-                    $offerDates .= FrontEnd_Helper_viewHelper::__email('email_expires today');
-            } else {
-                    $endDate = new Zend_Date(strtotime($currentOffer->endDate));
-                    $offerDates .= FrontEnd_Helper_viewHelper::__email('email_expires on:').' ';
-                    $offerDates .= ucwords($endDate->get(Zend_Date::DATE_LONG));
-            } elseif (
-                $currentOffer->discountType == "PR"
-                || $currentOffer->discountType == "SL"
-                || $currentOffer->discountType == "PA"
-            ):
-                $offerDates .= $stringAdded;
-                $offerDates .= ': ';
-                $offerDates .= ucwords($startDate->get(Zend_Date::DATE_LONG));
-        endif;
+        $startDateFormat = $locale == 'us' ? Zend_Date::MONTH_NAME.' '.Zend_Date::DAY : Zend_Date::DAY.' '.Zend_Date::MONTH_NAME;
+        $endDateFormat = $locale == 'us' ? Zend_Date::MONTH_NAME.' '.Zend_Date::DAY.', '.Zend_Date::YEAR: Zend_Date::DATE_LONG;
+        if ($currentOffer->discountType == "CD") {
+            $offerDates .= FrontEnd_Helper_viewHelper::__email('email_valid from');
+            $offerDates .= ' ';
+            $offerDates .= ucwords($startDate->get($startDateFormat));
+            $offerDates .= ' '.FrontEnd_Helper_viewHelper::__email('email_t/m');
+        } else {
+            $offerDates .= FrontEnd_Helper_viewHelper::__email('email_valid t/m');
+        }
+        $offerDates .= ' ';
+        $offerDates .= ucwords($endDate->get($endDateFormat));
         return $offerDates;
     }
 }
