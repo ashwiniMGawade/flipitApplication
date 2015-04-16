@@ -84,7 +84,8 @@ foreach ($this->offers as $offer) {
                     }
                     ?>
                 </div>
-                <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
+                <div class="buttons offer-teaser-button-wrapper" id="offerButton<?php echo $offer->id ;?>">
+                    <div class="offer-teaser-button-wrapper-inner">
     <?php
     $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shop['permalink'];
 
@@ -99,14 +100,11 @@ foreach ($this->offers as $offer) {
             $permalink,
             'mainOfferClickoutButton'
         );
-        echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink); 
+ 
     }
-    ?>
+    ?>              </div>
                 </div>
                 <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
-                    <span class="instruction">
-                        <strong><?php echo $this->translate('enter this code at checkout')?></strong>
-                    </span>
                     <strong class="code-value"><?php echo $couponCode;?></strong>
                 </div>
                 <ul class="view-list">

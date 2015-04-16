@@ -297,20 +297,28 @@ class FrontEnd_Helper_OffersPartialFunctions
                             href="'.$urlToShow.'" vote="0" rel="nofollow" 
                             target="_self" onClick="'.$onClick.'">
                         '.$offerAnchorText.' </a>';
+                        if ($class == 'offer-teaser-button kccode') {
+                            $offerLink .=
+                                '<div>
+                                    <span class="show-code">'.self::generateRandomCharactersForOfferTeaser(4).'</span>
+                                    <span class="blue-corner"></span>
+                                </div>';
+                        }
                     }
                 } else if ($currentOffer->discountType == "SL") {
-                    if ($class == "btn blue btn-primary") {
+                    if ($class == "offer-teaser-button kccode") {
                         $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
                         $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
                     }
                     $onClick = "viewCounter('onclick', 'offer', $currentOffer->id),
                     ga('send', 'event', 'aff', '$offerBounceRate')";
+                    $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn blue btn-primary';
                     $offerLink =
                         '<a id="'.$currentOffer->id.'" class="'.$class.'" 
                         href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
                      '.$offerAnchorText.'</a>';
                 } else {
-                    if ($class == "btn blue btn-primary") {
+                    if ($class == "offer-teaser-button kccode") {
                         $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
                         $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
                     }
@@ -318,6 +326,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                         self::getUserIsLoggedInOrNot() == "true"
                         ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')"
                         : HTTP_PATH_LOCALE."accountlogin";
+                    $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn blue btn-primary';
                     $offerLink =
                         '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
                         alt = "'.$urlToShow.'" target="_blank" onclick = "'.$onClick.'" rel="nofollow">
@@ -365,8 +374,8 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $currentOffer,
                     $urlToShow,
                     $offerBounceRate,
-                    FrontEnd_Helper_viewHelper::__translate('Get code &amp; Open site'),
-                    "btn blue btn-primary"
+                    FrontEnd_Helper_viewHelper::__translate('See the code'),
+                    "offer-teaser-button kccode"
                 );
                 break;
             case 'offerTitle':
@@ -392,38 +401,6 @@ class FrontEnd_Helper_OffersPartialFunctions
                 break;
             return $redirectUrl;
         }
-    }
-
-
-    public function getSecondButtonforOffer($currentOffer, $urlToShow, $offerBounceRate, $permalink)
-    {
-        $buttonWithCodeforOffer = '';
-        if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
-            $onClick =
-                self::getUserIsLoggedInOrNot() == "true" ? "printIt('$urlToShow');" : "printIt('$urlToShow');";
-            $buttonWithCodeforOffer = '<a class="btn btn-default btn-print" onclick ="'.$onClick.'"  >'
-                .FrontEnd_Helper_viewHelper::__translate('print now').'<span class="ico-print"></span>
-            </a>';
-        } else if ($currentOffer->discountType=='CD') {
-            $popupLink = self::getPopupLink($currentOffer, $urlToShow);
-            $onClick =
-                "showCodeInformation($currentOffer->id), showCodePopUp(this),
-                ga('send','event', 'aff','$offerBounceRate'),
-                OpenInNewTab('".HTTP_PATH_LOCALE. $permalink.$popupLink."')";
-
-            if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
-                 $buttonWithCodeforOffer ='<span class="btn orange btn-warning btn-code"></span>';
-            } else {
-                $buttonWithCodeforOffer =
-                '<a id="'.$currentOffer->id.'" 
-                class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" 
-                rel="nofollow" target="_self" onClick="'.$onClick.'">'
-                .FrontEnd_Helper_viewHelper::__translate('Get this offer').'</a>';
-            }
-        } else if ($currentOffer->discountType == "SL") {
-            $buttonWithCodeforOffer = '';
-        }
-        return $buttonWithCodeforOffer;
     }
 
     public function getTermAndConditionsLink($currentOffer, $termsAndConditions)
@@ -559,5 +536,34 @@ class FrontEnd_Helper_OffersPartialFunctions
             $cssClass = 'text-red';
         }
         return "<span class='". $cssClass ."'>". $offerDates . "</span>";
+    }
+    protected static function cryptoRandSecure($minimumRange, $maximumRange)
+    {
+        $range = $maximumRange - $minimumRange;
+        if ($range < 0) {
+            return $minimumRange;
+        }
+        $log = log($range, 2);
+        $bytes = (int) ($log / 8) + 1;
+        $bits = (int) $log + 1;
+        $filter = (int) (1 << $bits) - 1;
+        do {
+            $random = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes)));
+            $random = $random & $filter;
+        } while ($random >= $range);
+        return $minimumRange + $random;
+    }
+
+    public static function generateRandomCharactersForOfferTeaser($stringLength)
+    {
+        $randomString = "";
+        $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
+        $codeAlphabet.= "0123456789";
+        for ($i=0; $i<$stringLength; $i++) {
+            $randomString .= $codeAlphabet[self::cryptoRandSecure(0, strlen($codeAlphabet))];
+        }
+        return $randomString;
+
     }
 }

@@ -191,7 +191,7 @@ class StoreController extends Zend_Controller_Action
         );
 
         if ($shopInformation[0]['affliateProgram'] != 0) {
-            $similarShopsAndSimilarCategoriesOffers = array_slice($similarShopsAndSimilarCategoriesOffers, 3);
+            $similarShopsAndSimilarCategoriesOffers = array_slice($similarShopsAndSimilarCategoriesOffers, 0, 3);
         }
 
         $this->view->similarShopsAndSimilarCategoriesOffers = '';
@@ -255,7 +255,7 @@ class StoreController extends Zend_Controller_Action
         $socialCodeForm->getElement('shops')->setValue($shopInformation[0]['name']);
         $this->view->zendForm = $socialCodeForm;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        $this->view->pageCssClass = 'author-page';
+        $this->view->pageCssClass = 'author-page page-store';
     }
 
     public function indexAction()
