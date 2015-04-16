@@ -1,11 +1,18 @@
 <?php
-$authorName = FrontEnd_Helper_AuthorPartialFunctions::
-    getAuthorName($this->shopEditor[0]['firstName'], $this->shopEditor[0]['lastName']);
+$authorName = '';
+if (isset($this->shopEditor[0]['firstName'])) {
+    $authorName = FrontEnd_Helper_AuthorPartialFunctions::
+        getAuthorName($this->shopEditor[0]['firstName'], $this->shopEditor[0]['lastName']);
+}
 
-$profileLink = HTTP_PATH_LOCALE
-    .FrontEnd_Helper_viewHelper::__link("link_redactie")
-    ."/"
-    . $this->shopEditor[0]['slug'];
+$profileLink = '';
+if (isset($this->shopEditor[0]['slug'])) {
+    $profileLink = HTTP_PATH_LOCALE
+        .FrontEnd_Helper_viewHelper::__link("link_redactie")
+        ."/"
+        . $this->shopEditor[0]['slug'];
+}
+
 $shopHeader = $this->translate('Dealspotter for').' '.$this->shop['name'];
 
 $shopEditorPath = '';
