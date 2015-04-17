@@ -4,7 +4,12 @@ if (!empty($this->offerViewCount)) {
     <li>
         <span class="used text-info">
             <span class="text-over">
-            <?php echo $this->offerViewCount;?>
+            <?php 
+            $offsetType = 
+            	$this->offerViewCount['offsetType'] == 'day' 
+            	? 'used today' 
+            	: 'used this '. $this->offerViewCount['offsetType'];
+            echo $this->offerViewCount['viewCount'] . " " . FrontEnd_Helper_viewHelper::__translate($offsetType);?>
             </span>
         </span>
     </li>

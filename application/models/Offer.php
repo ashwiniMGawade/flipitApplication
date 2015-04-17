@@ -30,24 +30,19 @@ class Offer extends BaseOffer
         $past7Days = date($dateTimeFormat, strtotime('-7 day' . $currentDate));
         $past31Days = date($dateTimeFormat, strtotime('-31 day' . $currentDate));
         $offerViewCount = 0;
-        $viewCountTime = FrontEnd_Helper_viewHelper::__translate('used today');
-        $offerViewCount = ViewCount::getOfferViewCountBasedOnDate($offerId, $past24Hours, $currentDate);
-        $viewCountTime = FrontEnd_Helper_viewHelper::__translate('used this week');
-        $offerViewCount = self::getViewCountByCondition($offerViewCount, $offerId, $past7Days, $currentDate);
-        $viewCountTime = FrontEnd_Helper_viewHelper::__translate('used this month');
-        $offerViewCount = self::getViewCountByCondition($offerViewCount, $offerId, $past31Days, $currentDate);
-        if (intval($offerViewCount) < 5) {
+        $offerViewCount = ViewCount::getOfferViewCountBasedOnDate($offerId, $past24Hours, $currentDate, 'day');
+        $offerViewCount = self::getViewCountByCondition($offerViewCount, $offerId, $past7Days, $currentDate, 'week');
+        $offerViewCount = self::getViewCountByCondition($offerViewCount, $offerId, $past31Days, $currentDate, 'month');
+        if (intval($offerViewCount['viewCount']) < 5) {
             $offerViewCount = '';
-        } else {
-            $offerViewCount = $offerViewCount . " " .$viewCountTime;
         }
         return $offerViewCount;
     }
 
-    public static function getViewCountByCondition($offerViewCount, $offerId, $offsetDate, $currentDate)
+    public static function getViewCountByCondition($offerViewCount, $offerId, $offsetDate, $currentDate, $offsetType)
     {
-        if (intval($offerViewCount) < 5) {
-            $offerViewCount = ViewCount::getOfferViewCountBasedOnDate($offerId, $offsetDate, $currentDate);
+        if (intval($offerViewCount['viewCount']) < 5) {
+            $offerViewCount = ViewCount::getOfferViewCountBasedOnDate($offerId, $offsetDate, $currentDate, $offsetType);
         }
         return $offerViewCount;
     }

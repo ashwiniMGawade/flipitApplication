@@ -28,7 +28,7 @@ class ViewCount extends BaseViewCount
         return $offerClick[0]['exists'];
     }
 
-    public static function getOfferViewCountBasedOnDate($offerId, $offsetDate, $currentDate)
+    public static function getOfferViewCountBasedOnDate($offerId, $offsetDate, $currentDate, $offsetType)
     {
         $offerViewCount = Doctrine_Query::create()
             ->select('count(v.id) as viewCount')
@@ -37,7 +37,7 @@ class ViewCount extends BaseViewCount
             ->andWhere('v.created_at BETWEEN "'.$offsetDate.'" AND "'.$currentDate.'"')
             ->andWhere('v.offerId='.$offerId)
             ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-        return $offerViewCount['viewCount'];
+        return array('viewCount'=>$offerViewCount['viewCount'], 'offsetType'=>$offsetType);
     }
 
     public static function saveOfferClick($offerId, $clientIp)
