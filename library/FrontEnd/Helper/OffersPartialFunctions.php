@@ -497,7 +497,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         } elseif ($daysTillOfferExpires == 1) {
             $onlyDaysLeftString = $onlyDaysString. FrontEnd_Helper_viewHelper::__translate('day left!');
         } elseif ($daysTillOfferExpires == 0) {
-            $onlyDaysLeftString = $onlyDaysString. FrontEnd_Helper_viewHelper::__translate('Expires today');
+            $onlyDaysLeftString = FrontEnd_Helper_viewHelper::__translate('Expires today');
         }
         if (empty($onlyDaysLeftString)) {
             $onlyDaysLeftString = '';
