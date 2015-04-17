@@ -339,6 +339,7 @@ EOD;
             case 'onclick':
                 if (ViewCount::getOfferClick($offerId, $clientIp) == 0) {
                     ViewCount::saveOfferClick($offerId, $clientIp);
+                    ViewCount::updateCacheValueForOfferViewCount($offerId);
                     $resultStatus = "true";
                 }
                 break;

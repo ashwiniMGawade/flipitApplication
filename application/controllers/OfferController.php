@@ -266,4 +266,19 @@ class OfferController extends Zend_Controller_Action
         CouponCode::updateCodeStatus($offerParameters['id'], $getOfferUniqueCode['code']);
         exit();
     }
+
+    public function offerViewCountAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $offerId = $this->getRequest()->getParam('offerId');
+        $cahceKey = 'viewCount_'.$offerId.'_text';
+        $this->view->offerViewCount = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            $cahceKey,
+            array(
+                'function' => 'Offer::getViewCountByOfferId',
+                'parameters' => array($offerId)
+            ),
+            ''
+        );
+    }
 }

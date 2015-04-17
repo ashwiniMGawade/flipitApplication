@@ -68,26 +68,23 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $userLoginStatus;
     }
 
-    public function getOfferOption($offerOption, $type)
+    public function getOfferOption($offerOption, $offerDiscountType)
     {
-        if ($type == 'ex' || $type == 'ed') {
-            $starClass = $type == 'ex' ? 'glyphicon-star' : '';
-            $offerOptionHtml = '<strong class="exclusive">
-            <span class="glyphicon '.$starClass.'"></span>'.$offerOption.'</strong>';
-        } else if ($type == 'sc') {
-            $offerOptionHtml = '<strong class="social-color">
-            <span class="social-icon"></span>'.$offerOption.'</strong>';
+        if ($offerDiscountType == 'ex') {
+            $offerOptionHtml =
+                '<li class="visible-xs"><span class="exclusive text-info"><span class="text-over">'.$offerOption.'</span></span></li>';
+        } else if ($offerDiscountType == 'sc') {
+            $offerOptionHtml = '<li class="visible-xs"><strong class="social-color">
+            <span class="social-icon"></span>'.$offerOption.'</strong></li>';
         }
         return $offerOptionHtml;
     }
 
-    public function getOfferExclusiveOrEditor($currentOffer)
+    public function getOfferExclusiveOrSocial($currentOffer)
     {
         $offerOption = '';
         if ($currentOffer->exclusiveCode == '1'):
             $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Exclusive'), 'ex');
-        elseif ($currentOffer->editorPicks =='1'):
-            $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Tip'), 'ed');
         elseif ($currentOffer->userGenerated =='1'):
             $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Social Code'), 'sc');
         endif;
@@ -119,9 +116,8 @@ class FrontEnd_Helper_OffersPartialFunctions
     }
     public function getOfferOptionAndOfferDates($currentOffer, $daysTillOfferExpires)
     {
-        $offerOption = self::getOfferExclusiveOrEditor($currentOffer);
         $offerDates = self::getOfferDates($currentOffer, $daysTillOfferExpires);
-        return $offerOption . $offerDates;
+        return $offerDates;
     }
     public function getCssClassNameForOffer($currentOffer, $offerType)
     {
@@ -384,37 +380,33 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         $termAndConditionLink ='';
         if ($termsAndConditions != '' && $termsAndConditions != null) {
-            $termAndConditionLink = '<li>
-            <a id="termAndConditionLink'.$currentOffer->id
+            $termAndConditionLink = '<a id="termAndConditionLink'.$currentOffer->id
             .'" onclick="showTermAndConditions('.$currentOffer->id.')" class="terms"
             href="javascript:void(0);">'
             . FrontEnd_Helper_viewHelper::__translate('Terms &amp; Conditions') . '</a>';
-            if ($termsAndConditions!='' && $termsAndConditions!=null && $currentOffer->extendedOffer =='1') {
-                $termAndConditionLink.='&nbsp; - &nbsp;';
-            }
         }
-        return $termAndConditionLink ."</li>";
+        return $termAndConditionLink;
     }
 
     public function getExtendedOfferLink($currentOffer)
     {
         $extendedOfferLink = '';
         if (isset($currentOffer->extendedOffer) ? $currentOffer->extendedOffer =='1' : ''):
-            $extendedOfferLink ='<li><a class="text-blue-link"
+            $extendedOfferLink ='<li><span class="text"><span class="text-over"><a class=""
             href="'.HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('link_deals').'/'
             . $currentOffer->extendedUrl.'">'
-            .FrontEnd_Helper_viewHelper::__translate('More about this code').'</a></li>';
+            .FrontEnd_Helper_viewHelper::__translate('More about this code').'</a></span></span></li>';
         endif;
         return $extendedOfferLink;
     }
     
-    public function getViewAllCodeLink($shopName, $shopPermalink, $showHyphen)
+    public function getViewAllCodesLink($shopName, $shopPermalink)
     {
         $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-        return $viewAllLink = $showHyphen.'<li>'
+        return $viewAllLink = '<li><span class="text"><span class="text-over">'
             . FrontEnd_Helper_viewHelper::__translate("View all")
             .' <a href="'.$domainName.$shopPermalink.'">'. $shopName . ' '
-            . FrontEnd_Helper_viewHelper::__translate("Voucher Codes").'</a></li>';
+            . FrontEnd_Helper_viewHelper::__translate("Voucher Codes").'</a></span></span></li>';
     }
     
     public function getExpiredOfferMessage($endDate, $currentDate)
@@ -457,6 +449,64 @@ class FrontEnd_Helper_OffersPartialFunctions
         $explodeContentManagerName = explode(' ', $contentManagerName);
         $contentManagerName = !empty($explodeContentManagerName[0]) ? $explodeContentManagerName[0] : '';
         return $contentManagerName;
+    }
+
+    public function getShopEditor($editorId)
+    {
+        $editorInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            'user_'.$editorId.'_details',
+            array(
+                'function' =>
+                'User::getUserDetails', 'parameters' => array($editorId)
+            ),
+            ''
+        );
+        return $editorInformation;
+    }
+
+    public function getShopEditorHtml($shopEditor)
+    {
+        $profileLink = '';
+        if (isset($shopEditor['slug'])) {
+            $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/"
+                . $shopEditor['slug'];
+        }
+
+        $shopEditorImagePath = '';
+        if (isset($shopEditor['profileimage']['path'])) {
+            $shopEditorImagePath =
+                HTTP_PATH_CDN
+                .ltrim($shopEditor['profileimage']['path'], "/")
+                .'thum_large_widget_' .$shopEditor['profileimage']['name'];
+        }
+
+        $editorPanelForOffer ='<li class="visible-xs">'
+            .'<img 
+                class="img-author" src="'.$shopEditorImagePath.'" 
+                alt="'. $shopEditor['firstName'].'" title="'. $shopEditor['firstName'].'">'.
+            '<strong class="name"><a href="'.$profileLink.'"><span class="text-over">'
+            . FrontEnd_Helper_viewHelper::__translate('Tip from');
+        if (!empty($shopEditor['firstName'])) {
+            $editorPanelForOffer .= ' - '.ucfirst($shopEditor['firstName']);
+        }
+        $editorPanelForOffer .='</span></a></strong></li>';
+        return $editorPanelForOffer;
+    }
+
+    public function getDaysTillExpire($daysTillOfferExpires)
+    {
+        $onlyDaysString = FrontEnd_Helper_viewHelper::__translate('Only').' '. $daysTillOfferExpires.' ';
+        $onlyDaysLeftString = '';
+        if ($daysTillOfferExpires == 3 || $daysTillOfferExpires == 2) {
+            $onlyDaysLeftString = $onlyDaysString. FrontEnd_Helper_viewHelper::__translate('days left!');
+        } elseif ($daysTillOfferExpires == 1) {
+            $onlyDaysLeftString = $onlyDaysString. FrontEnd_Helper_viewHelper::__translate('day left!');
+        } elseif ($daysTillOfferExpires == 0) {
+            $onlyDaysLeftString = $onlyDaysString. FrontEnd_Helper_viewHelper::__translate('Expires today');
+        }
+        return '<li class="visible-xs">'
+            .'<time class="date text-info"><span class="text-over">'. $onlyDaysLeftString
+            . '</span></time></li>';
     }
 
     protected static function cryptoRandSecure($minimumRange, $maximumRange)
