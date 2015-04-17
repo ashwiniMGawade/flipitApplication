@@ -161,7 +161,10 @@ foreach ($this->offers as $offer) {
             );
         }
     } else {
-        $offerBottomViewAllShopsLink = $offerPartial->getViewAllCodesLink($offer->shop['name'], $offer->shop['permalink']);
+        $offerBottomViewAllShopsLink = $offerPartial->getViewAllCodesLink(
+            $offer->shop['name'],
+            $offer->shop['permalink']
+        );
     }
     $combinedOfferBottomText = $offerBottomTermsAndConditionLink
         .$offerBottomTextForExclusiveOrSocialOrEditor
@@ -179,6 +182,11 @@ foreach ($this->offers as $offer) {
                         .$offerBottomViewAllShopsLink;
                     if (empty($offerBottomDaysTillExpireText) || empty($offerBottomViewAllShopsLink)) {
                         echo $offerBottomExtendedLink;
+                        if (empty($offerBottomExtendedLink)) {
+                            if ($offer->discountType == "CD") {
+                                $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
+                            }
+                        }
                     } 
                     if (empty($offerBottomDaysTillExpireText) && empty($offerBottomViewAllShopsLink)) {
                         if ($offer->discountType == "CD") {

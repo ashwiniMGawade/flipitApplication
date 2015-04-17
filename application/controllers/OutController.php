@@ -6,7 +6,6 @@ class OutController extends Zend_Controller_Action
         $offerId = $this->getRequest()->getParam('id');
         FrontEnd_Helper_viewHelper::viewCounter('offer', 'onclick', $offerId);
         $conversionId = Conversions::addConversion($offerId, 'offer');
-        ViewCount::updateCacheValueForOfferViewCount($offerId);
         $clickout = new FrontEnd_Helper_ClickoutFunctions($offerId, null);
         $redirectUrl = $clickout->getCloakLink('offer', $conversionId);
         $this->_helper->redirector->setCode(301);
