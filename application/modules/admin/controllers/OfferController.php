@@ -1547,12 +1547,12 @@ class Admin_OfferController extends Zend_Controller_Action
 
     public function importoffersAction()
     {
+        $flashMessage = $this->_helper->getHelper('FlashMessenger');
         ini_set('max_execution_time', 115200);
         $params = $this->_getAllParams();
         if ($this->getRequest()->isPost()) {
             if (isset($_FILES['excelFile']['name']) && $_FILES['excelFile']['name'] != '') {
                 $uploadResult = BackEnd_Helper_viewHelper::uploadExcel($_FILES['excelFile']['name'], false, 'offer');
-                $flashMessage = $this->_helper->getHelper('FlashMessenger');
                 if ($uploadResult['status'] == 200) {
                     $excelFilePath = $uploadResult['path'];
                     $excelFile = $excelFilePath.$uploadResult['fileName'];
@@ -1564,15 +1564,17 @@ class Admin_OfferController extends Zend_Controller_Action
                     } else {
                         $message = $this->view->translate('backend_Problem in your Data!!');
                         $flashMessage->addMessage(array('error' => $message));
-                        $this->_redirect(HTTP_PATH . 'admin/offer');
+                        $this->_redirect(HTTP_PATH . 'admin/offer/importoffers');
                     }
                 } else {
                     $message = $this->view->translate('backend_Problem in your file size!!');
                     $flashMessage->addMessage(array('error' => $message));
-                    $this->_redirect(HTTP_PATH . 'admin/offer');
+                    $this->_redirect(HTTP_PATH . 'admin/offer/importoffers');
                 }
             }
         }
+        $message = $flashMessage->getMessages();
+        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
     }
 
     public function emptyOfferXlxAction()
