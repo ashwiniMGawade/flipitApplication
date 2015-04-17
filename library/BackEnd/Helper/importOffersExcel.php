@@ -53,7 +53,7 @@ class BackEnd_Helper_importOffersExcel
                     $currentDate = date('Y-m-d');
                     $startDate = date('Y-m-d', strtotime($offerStartDate));
                     $endDate = date('Y-m-d', strtotime($offerEndDate));
-                    if ($startDate >= $currentDate && $endDate >= $currentDate) {
+                    if ($endDate >= $currentDate) {
                         $offerList[$shopId]->title = $offerTitle;
                         $offerList[$shopId]->shopId = $shopId;
                         $offerList[$shopId]->discountType= !empty($offerCouponCode) ? 'CD' : 'SL';
