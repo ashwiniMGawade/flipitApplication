@@ -466,12 +466,6 @@ class FrontEnd_Helper_OffersPartialFunctions
 
     public function getShopEditorHtml($shopEditor)
     {
-        $profileLink = '';
-        if (isset($shopEditor['slug'])) {
-            $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/"
-                . $shopEditor['slug'];
-        }
-
         $shopEditorImagePath = '';
         if (isset($shopEditor['profileimage']['path'])) {
             $shopEditorImagePath =
@@ -484,17 +478,18 @@ class FrontEnd_Helper_OffersPartialFunctions
             .'<img 
                 class="img-author" src="'.$shopEditorImagePath.'" 
                 alt="'. $shopEditor['firstName'].'" title="'. $shopEditor['firstName'].'">'.
-            '<strong class="name"><a href="'.$profileLink.'"><span class="text-over">'
+            '<strong class="name"><span class="text-over text-blue">'
             . FrontEnd_Helper_viewHelper::__translate('Tip from');
         if (!empty($shopEditor['firstName'])) {
             $editorPanelForOffer .= ' - '.ucfirst($shopEditor['firstName']);
         }
-        $editorPanelForOffer .='</span></a></strong></li>';
+        $editorPanelForOffer .='</span></strong></li>';
         return $editorPanelForOffer;
     }
 
     public function getDaysTillExpire($daysTillOfferExpires)
     {
+        $daysTillOfferExpires = intval($daysTillOfferExpires);
         $onlyDaysString = FrontEnd_Helper_viewHelper::__translate('Only').' '. $daysTillOfferExpires.' ';
         $onlyDaysLeftString = '';
         if ($daysTillOfferExpires == 3 || $daysTillOfferExpires == 2) {
@@ -502,11 +497,16 @@ class FrontEnd_Helper_OffersPartialFunctions
         } elseif ($daysTillOfferExpires == 1) {
             $onlyDaysLeftString = $onlyDaysString. FrontEnd_Helper_viewHelper::__translate('day left!');
         } elseif ($daysTillOfferExpires == 0) {
-            $onlyDaysLeftString = $onlyDaysString. FrontEnd_Helper_viewHelper::__translate('Expires today');
+            $onlyDaysLeftString = FrontEnd_Helper_viewHelper::__translate('Expires today');
         }
-        return '<li class="visible-xs">'
+        if (empty($onlyDaysLeftString)) {
+            $onlyDaysLeftString = '';
+        } else {
+            $onlyDaysLeftString = '<li class="visible-xs">'
             .'<time class="date text-info"><span class="text-over">'. $onlyDaysLeftString
             . '</span></time></li>';
+        }
+        return  $onlyDaysLeftString;
     }
 
     protected static function cryptoRandSecure($minimumRange, $maximumRange)
@@ -529,8 +529,8 @@ class FrontEnd_Helper_OffersPartialFunctions
     public static function generateRandomCharactersForOfferTeaser($stringLength)
     {
         $randomString = "";
-        $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        $codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
+        $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVXYZ";
+        $codeAlphabet.= "abcdefghijklmnopqrstuvxyz";
         $codeAlphabet.= "0123456789";
         for ($i=0; $i<$stringLength; $i++) {
             $randomString .= $codeAlphabet[self::cryptoRandSecure(0, strlen($codeAlphabet))];
