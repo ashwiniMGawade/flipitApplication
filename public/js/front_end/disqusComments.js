@@ -4,7 +4,7 @@ $(document).ready(function() {
 });
 $(window).load(function() {
     if (parseInt($("#commentCountSpan").text()) || parseInt($("#commentCountSpan").text()) > 0) {
-        $("#commentCount").css("display", "inline-block");
+        $("#commentCount").css("visibility", "visible");
     }
 });
 (function() {
