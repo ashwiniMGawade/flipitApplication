@@ -70,8 +70,9 @@ class FrontEnd_Helper_OffersPartialFunctions
 
     public function getOfferOption($offerOption, $type)
     {
-        if ($type == 'ex' || $type == 'ed') {
-            $offerOptionHtml = '<li><span class="exclusive text-info"><span class="text-over">'.$offerOption.'</span></span></li>';
+        if ($type == 'ex') {
+            $offerOptionHtml =
+                '<li><span class="exclusive text-info"><span class="text-over">'.$offerOption.'</span></span></li>';
         } else if ($type == 'sc') {
             $offerOptionHtml = '<li><strong class="social-color">
             <span class="social-icon"></span>'.$offerOption.'</strong></li>';
@@ -79,13 +80,11 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $offerOptionHtml;
     }
 
-    public function getOfferExclusiveOrEditor($currentOffer)
+    public function getOfferExclusiveOrSocial($currentOffer)
     {
         $offerOption = '';
         if ($currentOffer->exclusiveCode == '1'):
             $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Exclusive'), 'ex');
-        elseif ($currentOffer->editorPicks =='1'):
-            $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Tip'), 'ed');
         elseif ($currentOffer->userGenerated =='1'):
             $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Social Code'), 'sc');
         endif;
@@ -467,13 +466,24 @@ class FrontEnd_Helper_OffersPartialFunctions
 
     public function getShopEditorHtml($shopEditor)
     {
-        $shopEditorPath =
-            HTTP_PATH_CDN
-            .ltrim($shopEditor['profileimage']['path'], "/")
-            .'thum_large_widget_' .$shopEditor['profileimage']['name'];
+        $profileLink = '';
+        if (isset($shopEditor['slug'])) {
+            $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/"
+                . $shopEditor['slug'];
+        }
 
-        $editorPanelForOffer ='<li class="visible-xs"><img class="img-author" src="'.$shopEditorPath.'" alt="thumb" title="thumb">'.
-            '<strong class="name"><a href="#"><span class="text-over">'. FrontEnd_Helper_viewHelper::__translate('Tip from');
+        $shopEditorPath = '';
+        if (isset($shopEditor['profileimage']['path'])) {
+            $shopEditorPath =
+                HTTP_PATH_CDN
+                .ltrim($shopEditor['profileimage']['path'], "/")
+                .'thum_large_widget_' .$shopEditor['profileimage']['name'];
+        }
+
+        $editorPanelForOffer ='<li class="visible-xs">'
+            .'<img class="img-author" src="'.$shopEditorPath.'" alt="thumb" title="thumb">'.
+            '<strong class="name"><a href="'.$profileLink.'"><span class="text-over">'
+            . FrontEnd_Helper_viewHelper::__translate('Tip from');
         if (!empty($shopEditor['firstName'])) {
             $editorPanelForOffer .= ' - '.ucfirst($shopEditor['firstName']);
         }
@@ -485,7 +495,6 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         $stringOnly = FrontEnd_Helper_viewHelper::__translate('Only');
         $offerDates = '';
-        $cssClass = '';
         if ($daysTillOfferExpires == 3 || $daysTillOfferExpires ==2) {
             $offerDates .= $stringOnly;
             $offerDates .= '&nbsp;';
@@ -498,13 +507,11 @@ class FrontEnd_Helper_OffersPartialFunctions
             $offerDates .= $daysTillOfferExpires;
             $offerDates .= '&nbsp;';
             $offerDates .= FrontEnd_Helper_viewHelper::__translate('day left!');
-            $cssClass = 'text-red';
         } elseif ($daysTillOfferExpires == 0) {
             $offerDates .= FrontEnd_Helper_viewHelper::__translate('Expires today');
-            $cssClass = 'text-red';
         }
         return '<li class="visible-xs">'
-            .'<time class="date text-info" datetime="2015-01-01"><span class="text-over">'. $offerDates 
+            .'<time class="date text-info" datetime="2015-01-01"><span class="text-over">'. $offerDates
             . '</span></time></li>';
     }
 
