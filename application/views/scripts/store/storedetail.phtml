@@ -166,12 +166,17 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
     echo $this->esi($this->locale.'store/followbutton?shopid='.$this->currentStoreInformation[0]['id']
         .'&permalink='.urlencode($this->currentStoreInformation[0]['permaLink']));
     ?>
-    <ul class="items">
-        <?php
-        echo $this->esi($this->locale.'store/createdoffers?shopid='.$this->currentStoreInformation[0]['id']);
-        ?>
-        <li><span class="icon active-people"></span><span class="text"><?php echo $activeOffersInShop; ?></span></li>
-    </ul>
+    <div class="items-holder">
+        <ul class="items">
+            <?php
+            echo $this->esi(
+                $this->locale.'store/createdoffers?shopid='.$this->currentStoreInformation[0]['id']
+            );
+            ?>
+            <li><span class="icon active-people"></span>
+            <span class="text"><?php echo $activeOffersInShop; ?></span></li>
+        </ul>
+    </div>
 </div>
 </div>
 </div>
