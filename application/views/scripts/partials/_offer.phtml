@@ -29,7 +29,7 @@ foreach ($this->offers as $offer) {
          $couponCode = '';
     }
     $dayleftCss = '';
-    if (intval($daysTillOfferExpires) <=1) {
+    if (intval($daysTillOfferExpires) <= 1) {
         $dayleftCss = 'deal-less';
     }
     $defaultText = '';
@@ -126,7 +126,7 @@ foreach ($this->offers as $offer) {
         $style = 'style="display:block;"';
     }
 
-    $offerBottomTextOfferExclusiveSocialOrEditor = '';
+    $offerBottomTextForExclusiveOrSocialOrEditor = '';
     $offerBottomRecomendedLink = '';
     if (intval($offer->editorPicks) == 1) {
         $contentManagerId = isset($offer->shop['contentManagerId']) ? $offer->shop['contentManagerId'] : '';
@@ -135,9 +135,9 @@ foreach ($this->offers as $offer) {
             : $contentManagerId;
         $shopEditor = $offerPartial->getShopEditor($contentManagerId);
         $offerBottomRecomendedLink = $offerPartial->getShopEditorHtml($shopEditor);
-        $offerBottomTextOfferExclusiveSocialOrEditor = $offerBottomRecomendedLink;
+        $offerBottomTextForExclusiveOrSocialOrEditor = $offerBottomRecomendedLink;
     } else {
-        $offerBottomTextOfferExclusiveSocialOrEditor = $offerPartial->getOfferExclusiveOrSocial($offer);
+        $offerBottomTextForExclusiveOrSocialOrEditor = $offerPartial->getOfferExclusiveOrSocial($offer);
     }
     $offerBottomDaysTillExpireText = '';
     if ($daysTillOfferExpires <= 3) {
@@ -146,7 +146,7 @@ foreach ($this->offers as $offer) {
     $offerBottomTermsAndConditionLink = '';
     $offerBottomExtendedLink = '';
     $offerBottomViewAllShopsLink = '';
-    if ($this->offersType!='extendedOffer') {
+    if ($this->offersType != 'extendedOffer') {
         if ($termsAndConditions != '') {
             $offerBottomTermsAndConditionLink = $offerPartial->getTermAndConditionsLink(
                 $offer,
@@ -154,7 +154,7 @@ foreach ($this->offers as $offer) {
             );
         }
         $offerBottomExtendedLink =  $offerPartial->getExtendedOfferLink($offer);
-        if ($this->offersType!='simple') {
+        if ($this->offersType != 'simple') {
             $offerBottomViewAllShopsLink =  $offerPartial->getViewAllCodeLink(
                 $offer->shop['name'],
                 $offer->shop['permalink']
@@ -164,7 +164,7 @@ foreach ($this->offers as $offer) {
         $offerBottomViewAllShopsLink = $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink']);
     }
     $combinedOfferBottomText = $offerBottomTermsAndConditionLink
-        .$offerBottomTextOfferExclusiveSocialOrEditor
+        .$offerBottomTextForExclusiveOrSocialOrEditor
         .$offerBottomDaysTillExpireText
         .$offerBottomViewAllShopsLink.$offerBottomExtendedLink;
     if (!empty($combinedOfferBottomText)) {
@@ -174,7 +174,7 @@ foreach ($this->offers as $offer) {
             <div class="info">
                <ul>
                     <?php 
-                    echo $offerBottomTextOfferExclusiveSocialOrEditor;
+                    echo $offerBottomTextForExclusiveOrSocialOrEditor;
                     echo $offerBottomDaysTillExpireText;
                     echo $offerBottomViewAllShopsLink;
                     if (empty($offerBottomDaysTillExpireText) || empty($offerBottomViewAllShopsLink)) {
