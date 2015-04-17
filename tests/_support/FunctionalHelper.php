@@ -15,7 +15,7 @@ class FunctionalHelper extends \Codeception\Module
 {
     public function databaseSwitch($databaseType = "")
     {
-        \Codeception\Module\Doctrine2::$em = "";
+        \Codeception\Module\Doctrine2::$em = array();
         $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
         $isDevMode = true;
         $config = \Doctrine\ORM\Tools\Setup::createConfiguration($isDevMode);
@@ -33,8 +33,7 @@ class FunctionalHelper extends \Codeception\Module
             'dbname'   => 'flipit_test'.$databaseType,
         );
         $em = EntityManager::create($connectionParamsLocale, $config);
-        // $test = new \Codeception\Module\Doctrine2();
-        // $test->config(array('cleanup' => true, 'auto_connect' => true));
         \Codeception\Module\Doctrine2::$em = $em;
+        $em->getConnection()->beginTransaction();
     }
 }
