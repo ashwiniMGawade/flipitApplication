@@ -22,7 +22,7 @@ function initMobileNav() {
     function MobileNav(options) {
         this.options = $.extend({
             container: null,
-            hideOnClickOutside: false,
+            hideOnClickOutside: true,
             menuActiveClass: 'nav-active',
             menuOpener: '.nav-opener',
             menuDrop: '.nav-drop',
@@ -50,8 +50,11 @@ function initMobileNav() {
             this.outsideClickHandler = function(e) {
                 if(self.isOpened()) {
                     var target = $(e.target);
-                    if(!target.closest(self.opener).length && !target.closest(self.drop).length) {
-                        self.hide();
+                    if (target.closest('.nav-bar').hasClass('nav-bar') === false 
+                        && target.closest('.top-panel').hasClass('top-panel') === false) {
+                        if(!target.closest(self.opener).length && !target.closest(self.drop).length) {
+                            self.hide();
+                        }
                     }
                 }
             };
