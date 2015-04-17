@@ -72,9 +72,9 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         if ($offerDiscountType == 'ex') {
             $offerOptionHtml =
-                '<li><span class="exclusive text-info"><span class="text-over">'.$offerOption.'</span></span></li>';
+                '<li class="visible-xs"><span class="exclusive text-info"><span class="text-over">'.$offerOption.'</span></span></li>';
         } else if ($offerDiscountType == 'sc') {
-            $offerOptionHtml = '<li><strong class="social-color">
+            $offerOptionHtml = '<li class="visible-xs"><strong class="social-color">
             <span class="social-icon"></span>'.$offerOption.'</strong></li>';
         }
         return $offerOptionHtml;
