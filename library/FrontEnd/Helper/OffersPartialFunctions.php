@@ -68,12 +68,12 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $userLoginStatus;
     }
 
-    public function getOfferOption($offerOption, $type)
+    public function getOfferOption($offerOption, $offerDiscountType)
     {
-        if ($type == 'ex') {
+        if ($offerDiscountType == 'ex') {
             $offerOptionHtml =
                 '<li><span class="exclusive text-info"><span class="text-over">'.$offerOption.'</span></span></li>';
-        } else if ($type == 'sc') {
+        } else if ($offerDiscountType == 'sc') {
             $offerOptionHtml = '<li><strong class="social-color">
             <span class="social-icon"></span>'.$offerOption.'</strong></li>';
         }
@@ -400,7 +400,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $extendedOfferLink;
     }
     
-    public function getViewAllCodeLink($shopName, $shopPermalink)
+    public function getViewAllCodesLink($shopName, $shopPermalink)
     {
         $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
         return $viewAllLink = '<li><span class="text"><span class="text-over">'
@@ -472,16 +472,18 @@ class FrontEnd_Helper_OffersPartialFunctions
                 . $shopEditor['slug'];
         }
 
-        $shopEditorPath = '';
+        $shopEditorImagePath = '';
         if (isset($shopEditor['profileimage']['path'])) {
-            $shopEditorPath =
+            $shopEditorImagePath =
                 HTTP_PATH_CDN
                 .ltrim($shopEditor['profileimage']['path'], "/")
                 .'thum_large_widget_' .$shopEditor['profileimage']['name'];
         }
 
         $editorPanelForOffer ='<li class="visible-xs">'
-            .'<img class="img-author" src="'.$shopEditorPath.'" alt="thumb" title="thumb">'.
+            .'<img 
+                class="img-author" src="'.$shopEditorImagePath.'" 
+                alt="'. $shopEditor['firstName'].'" title="'. $shopEditor['firstName'].'">'.
             '<strong class="name"><a href="'.$profileLink.'"><span class="text-over">'
             . FrontEnd_Helper_viewHelper::__translate('Tip from');
         if (!empty($shopEditor['firstName'])) {
@@ -493,25 +495,17 @@ class FrontEnd_Helper_OffersPartialFunctions
 
     public function getDaysTillExpire($daysTillOfferExpires)
     {
-        $stringOnly = FrontEnd_Helper_viewHelper::__translate('Only');
-        $offerDates = '';
-        if ($daysTillOfferExpires == 3 || $daysTillOfferExpires ==2) {
-            $offerDates .= $stringOnly;
-            $offerDates .= '&nbsp;';
-            $offerDates .= $daysTillOfferExpires;
-            $offerDates .= '&nbsp;';
-            $offerDates .= FrontEnd_Helper_viewHelper::__translate('days left!');
+        $onlyDaysString = FrontEnd_Helper_viewHelper::__translate('Only').' '. $daysTillOfferExpires.' ';
+        $onlyDaysLeftString = '';
+        if ($daysTillOfferExpires == 3 || $daysTillOfferExpires == 2) {
+            $onlyDaysLeftString = $onlyDaysString. FrontEnd_Helper_viewHelper::__translate('days left!');
         } elseif ($daysTillOfferExpires == 1) {
-            $offerDates .= $stringOnly;
-            $offerDates .= '&nbsp;';
-            $offerDates .= $daysTillOfferExpires;
-            $offerDates .= '&nbsp;';
-            $offerDates .= FrontEnd_Helper_viewHelper::__translate('day left!');
+            $onlyDaysLeftString = $onlyDaysString. FrontEnd_Helper_viewHelper::__translate('day left!');
         } elseif ($daysTillOfferExpires == 0) {
-            $offerDates .= FrontEnd_Helper_viewHelper::__translate('Expires today');
+            $onlyDaysLeftString = $onlyDaysString. FrontEnd_Helper_viewHelper::__translate('Expires today');
         }
         return '<li class="visible-xs">'
-            .'<time class="date text-info" datetime="2015-01-01"><span class="text-over">'. $offerDates
+            .'<time class="date text-info"><span class="text-over">'. $onlyDaysLeftString
             . '</span></time></li>';
     }
 
@@ -542,6 +536,5 @@ class FrontEnd_Helper_OffersPartialFunctions
             $randomString .= $codeAlphabet[self::cryptoRandSecure(0, strlen($codeAlphabet))];
         }
         return $randomString;
-
     }
 }
