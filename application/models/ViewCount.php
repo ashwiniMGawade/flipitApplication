@@ -28,6 +28,18 @@ class ViewCount extends BaseViewCount
         return $offerClick[0]['exists'];
     }
 
+    public static function getOfferViewCountBasedOnDate($offerId, $offsetDate, $currentDate, $offsetType)
+    {
+        $offerViewCount = Doctrine_Query::create()
+            ->select('count(v.id) as viewCount')
+            ->from('ViewCount v')
+            ->where('v.onClick!=0')
+            ->andWhere('v.created_at BETWEEN "'.$offsetDate.'" AND "'.$currentDate.'"')
+            ->andWhere('v.offerId='.$offerId)
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return array('viewCount'=>$offerViewCount['viewCount'], 'offsetType'=>$offsetType);
+    }
+
     public static function saveOfferClick($offerId, $clientIp)
     {
         $offerClick  = new ViewCount();
@@ -60,6 +72,21 @@ class ViewCount extends BaseViewCount
         $offerOnload->IP = $clientIp;
         $offerOnload->save();
         return true;
+    }
+
+    public static function updateCacheValueForOfferViewCount($offerId)
+    {
+        $cahceKey = 'viewCount_'.$offerId.'_text';
+        $keyStatus = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($cahceKey);
+        if ($keyStatus) {
+            $offerViewCount = Offer::getViewCountByOfferId($offerId);
+            FrontEnd_Helper_viewHelper::setInCache($cahceKey, $offerViewCount);
+        } else {
+            $offerViewCount = FrontEnd_Helper_viewHelper::getFromCacheByKey($cahceKey);
+            $offerViewCount = intval($offerViewCount) + 1;
+            FrontEnd_Helper_viewHelper::setInCache($cahceKey, $offerViewCount);
+        }
+        return $offerViewCount;
     }
     ##########################################
     ########### END REFACTORED CODE ##########
