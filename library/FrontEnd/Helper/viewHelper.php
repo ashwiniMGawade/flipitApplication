@@ -340,6 +340,8 @@ EOD;
                 if (ViewCount::getOfferClick($offerId, $clientIp) == 0) {
                     ViewCount::saveOfferClick($offerId, $clientIp);
                     ViewCount::updateCacheValueForOfferViewCount($offerId);
+                    $varnishObj = new Varnish();
+                    $varnishObj->addUrl(HTTP_PATH_LOCALE . 'offer/offer-view-count?offerId='. $offerId);
                     $resultStatus = "true";
                 }
                 break;
