@@ -489,6 +489,7 @@ class FrontEnd_Helper_OffersPartialFunctions
 
     public function getDaysTillExpire($daysTillOfferExpires)
     {
+        $daysTillOfferExpires = intval($daysTillOfferExpires);
         $onlyDaysString = FrontEnd_Helper_viewHelper::__translate('Only').' '. $daysTillOfferExpires.' ';
         $onlyDaysLeftString = '';
         if ($daysTillOfferExpires == 3 || $daysTillOfferExpires == 2) {
@@ -498,9 +499,14 @@ class FrontEnd_Helper_OffersPartialFunctions
         } elseif ($daysTillOfferExpires == 0) {
             $onlyDaysLeftString = $onlyDaysString. FrontEnd_Helper_viewHelper::__translate('Expires today');
         }
-        return '<li class="visible-xs">'
+        if (empty($onlyDaysLeftString)) {
+            $onlyDaysLeftString = '';
+        } else {
+            $onlyDaysLeftString = '<li class="visible-xs">'
             .'<time class="date text-info"><span class="text-over">'. $onlyDaysLeftString
             . '</span></time></li>';
+        }
+        return  $onlyDaysLeftString;
     }
 
     protected static function cryptoRandSecure($minimumRange, $maximumRange)

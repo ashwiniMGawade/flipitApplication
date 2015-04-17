@@ -176,21 +176,21 @@ foreach ($this->offers as $offer) {
             <?php echo $offerBottomTermsAndConditionLink;?>
             <div class="info">
                <ul>
-                    <?php 
+                    <?php
+                    $showUsedCode = false; 
                     echo $offerBottomTextForExclusiveOrSocialOrEditor
                         .$offerBottomDaysTillExpireText
                         .$offerBottomViewAllShopsLink;
                     if (empty($offerBottomDaysTillExpireText) || empty($offerBottomViewAllShopsLink)) {
                         echo $offerBottomExtendedLink;
                         if (empty($offerBottomExtendedLink)) {
-                            if ($offer->discountType == "CD") {
-                                $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
-                            }
+                           $showUsedCode = true;
                         }
                     } 
-                    if (empty($offerBottomDaysTillExpireText) && empty($offerBottomViewAllShopsLink)) {
+                    if ( (empty($offerBottomDaysTillExpireText) && empty($offerBottomViewAllShopsLink)) || $showUsedCode)
+                    {
                         if ($offer->discountType == "CD") {
-                            $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
+                            echo $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
                         }
                     }
                     ?>
