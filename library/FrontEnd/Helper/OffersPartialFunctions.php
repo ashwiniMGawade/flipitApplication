@@ -466,12 +466,6 @@ class FrontEnd_Helper_OffersPartialFunctions
 
     public function getShopEditorHtml($shopEditor)
     {
-        $profileLink = '';
-        if (isset($shopEditor['slug'])) {
-            $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/"
-                . $shopEditor['slug'];
-        }
-
         $shopEditorImagePath = '';
         if (isset($shopEditor['profileimage']['path'])) {
             $shopEditorImagePath =
@@ -484,12 +478,12 @@ class FrontEnd_Helper_OffersPartialFunctions
             .'<img 
                 class="img-author" src="'.$shopEditorImagePath.'" 
                 alt="'. $shopEditor['firstName'].'" title="'. $shopEditor['firstName'].'">'.
-            '<strong class="name"><a href="'.$profileLink.'"><span class="text-over">'
+            '<strong class="name"><span class="text-over text-blue">'
             . FrontEnd_Helper_viewHelper::__translate('Tip from');
         if (!empty($shopEditor['firstName'])) {
             $editorPanelForOffer .= ' - '.ucfirst($shopEditor['firstName']);
         }
-        $editorPanelForOffer .='</span></a></strong></li>';
+        $editorPanelForOffer .='</span></strong></li>';
         return $editorPanelForOffer;
     }
 
