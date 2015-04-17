@@ -34,18 +34,18 @@ class BackEnd_Helper_importOffersExcel
             $offerTileId = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['Q']);
             if (
                 (!empty($offerTitle)
-                    && $offerTitle != FrontEnd_Helper_viewHelper::__form('form_backend_Offer Title(Must be filled)')
+                    && $offerTitle != FrontEnd_Helper_viewHelper::__form('form_backend_Offer Title | Text | Required')
                 )
                 && (
-                    !empty($shopName) && $shopName != FrontEnd_Helper_viewHelper::__form('form_backend_Shop Name(Must be filled)')
+                    !empty($shopName) && $shopName != FrontEnd_Helper_viewHelper::__form('form_backend_Shop Name | Text | Required')
                 )
                 && (
                     !empty($offerStartDate)
-                    && $offerStartDate != FrontEnd_Helper_viewHelper::__form('form_backend_Start Date(Must be filled)')
+                    && $offerStartDate != FrontEnd_Helper_viewHelper::__form('form_backend_Shop Name | Text | Required')
                 )
                 && (
                     !empty($offerEndDate)
-                    && $offerEndDate != FrontEnd_Helper_viewHelper::__form('form_backend_End Date(Must be filled)')
+                    && $offerEndDate != FrontEnd_Helper_viewHelper::__form('form_backend_End Date | DD-MM-YYYY (01-01-1970) | Required | Must be in future')
                 )
             ) {
                 $shopId = Shop::getShopIdByShopName($shopName);

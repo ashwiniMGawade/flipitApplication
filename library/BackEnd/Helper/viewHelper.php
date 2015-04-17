@@ -951,7 +951,7 @@ class BackEnd_Helper_viewHelper
         if (!file_exists($rootPath)) {
             mkdir($rootPath, 0775, true);
         }
-        $maximumUploadLimit = $type == 'offer' ? '12KB' : '2MB';
+        $maximumUploadLimit = $type == 'offer' ? '2MB' : '2MB';
         $minimumUploadLimit = $type == 'offer' ? '5' : '20';
         $adapter = new Zend_File_Transfer_Adapter_Http();
         $adapter->setDestination($rootPath);
