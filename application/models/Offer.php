@@ -24,11 +24,11 @@ class Offer extends BaseOffer
 
     public static function getViewCountByOfferId($offerId)
     {
-        $format = 'Y-m-j H:i:s';
-        $currentDate = date($format);
-        $past24Hours = date($format, strtotime('-1 day' . $currentDate));
-        $past7Days = date($format, strtotime('-7 day' . $currentDate));
-        $past31Days = date($format, strtotime('-31 day' . $currentDate));
+        $dateTimeFormat = 'Y-m-j H:i:s';
+        $currentDate = date($dateTimeFormat);
+        $past24Hours = date($dateTimeFormat, strtotime('-1 day' . $currentDate));
+        $past7Days = date($dateTimeFormat, strtotime('-7 day' . $currentDate));
+        $past31Days = date($dateTimeFormat, strtotime('-31 day' . $currentDate));
         $offerViewCount = 0;
         $offerViewCount = ViewCount::getOfferViewCountBasedOnDate($offerId, $past24Hours, $currentDate);
         $offerViewCount = self::getViewCountByCondition($offerViewCount, $offerId, $past7Days, $currentDate);
@@ -157,13 +157,13 @@ class Offer extends BaseOffer
         if (count($similarShopsIds) > 0) {
             $similarShopsOffers = Doctrine_Query::create()
                 ->select(
-                    's.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.contentManagerName,
-                    s.contentManagerId,s.deepLinkStatus,
-                    o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability,
-                    o.discountType, o.couponCode,  o.refofferurl, o.startdate, o.userGenerated, o.nickname, o.approved,
+                    's.id, s.permalink as permalink, s.name, s.deepLink, s.usergenratedcontent, s.contentManagerName,
+                    s.contentManagerId, s.deepLinkStatus,
+                    o.refURL, o.refOfferUrl, s.refUrl, s.actualUrl, terms.content, o.id, o.title, o.Visability,
+                    o.discountType, o.couponCode, o.refofferurl, o.startdate, o.userGenerated, o.nickname, o.approved,
                     o.enddate, o.exclusiveCode, o.authorName,
-                    o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid,
-                    o.offerlogoid, o.couponCodeType, o.approved,o.discountvalueType,img.id, img.path, img.name'
+                    o.editorPicks, o.extendedoffer, o.extendedUrl, o.discount, o.authorId, o.authorName, o.shopid,
+                    o.offerlogoid, o.couponCodeType, o.approved, o.discountvalueType, img.id, img.path, img.name'
                 )
                 ->from('Offer o')
                 ->addSelect(
