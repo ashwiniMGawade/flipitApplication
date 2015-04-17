@@ -19,10 +19,7 @@ class Robot Extends \KC\Entity\Robot
         $entityManagerUser = \Zend_Registry::get('emUser')->createQueryBuilder();
         if (!empty($robotFileContentExistsOrNot)) {
             $robot =  \Zend_Registry::get('emUser')->find('KC\Entity\Robot', $robotWebsiteId);
-            $robot->content = mysqli_real_escape_string(
-                \FrontEnd_Helper_viewHelper::getDbConnectionDetails(),
-                $robotsTextFileContent
-            );
+            $robot->content = $robotsTextFileContent;
             $robot->updated_at = new \DateTime('now');
             \Zend_Registry::get('emUser')->persist($robot);
             \Zend_Registry::get('emUser')->flush();
