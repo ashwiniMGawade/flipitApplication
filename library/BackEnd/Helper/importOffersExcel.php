@@ -70,7 +70,7 @@ class BackEnd_Helper_importOffersExcel
                         $offerList[$shopId]->offline = 0;
                         $offerList[$shopId]->created_at = $currentDate;
                         $offerList[$shopId]->refURL = !empty($offerDeeplink) ? $offerDeeplink : '';
-                        $offerList[$shopId]->tilesId = LOCALE == 'es' ? 135 : 0;
+                        $offerList[$shopId]->tilesId = !empty($offerTileId) ? $offerTileId : '';
                         $offerList[$shopId]->maxcode = 0;
                         $offerList[$shopId]->deleted = 0;
                         $offerList[$shopId]->maxlimit = 0;
