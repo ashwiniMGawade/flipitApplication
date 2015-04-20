@@ -157,13 +157,13 @@ foreach ($this->offers as $offer) {
         if ($this->offersType != 'simple') {
             $offerBottomViewAllShopsLink =  $offerPartial->getViewAllCodesLink(
                 $offer->shopOffers['name'],
-                $offer->shopOffers['permalink']
+                $offer->shopOffers['permaLink']
             );
         }
     } else {
         $offerBottomViewAllShopsLink = $offerPartial->getViewAllCodesLink(
             $offer->shopOffers['name'],
-            $offer->shopOffers['permalink']
+            $offer->shopOffers['permaLink']
         );
     }
     $combinedOfferBottomText = $offerBottomTermsAndConditionLink
