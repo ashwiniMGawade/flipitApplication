@@ -94,8 +94,10 @@ class FrontEnd_Helper_OffersPartialFunctions
 
     public function getOfferDates($currentOffer, $daysTillOfferExpires)
     {
-        $startDate = new Zend_Date($currentOffer->startDate->date);
-        $endDate = new Zend_Date(strtotime($currentOffer->endDate->date));
+        $startDateObject = (object) $currentOffer->startDate;
+        $endDateObject = (object) $currentOffer->endDate;
+        $startDate = new Zend_Date($startDateObject->date);
+        $endDate = new Zend_Date(strtotime($endDateObject->date));
         $offerDates = '';
         $startDateFormat = LOCALE == 'us'
             ? Zend_Date::MONTH_NAME.' '.Zend_Date::DAY
