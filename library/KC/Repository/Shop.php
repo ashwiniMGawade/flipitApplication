@@ -860,7 +860,7 @@ class Shop extends \KC\Entity\Shop
     }
 
     public function CreateNewShop($shopDetail)
-    {
+    {//echo "<pre>";print_r($shopDetail);die;
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         if (!empty($shopDetail['id'])) {
             $shopInfo = \Zend_Registry::get('emLocale')
@@ -977,7 +977,7 @@ class Shop extends \KC\Entity\Shop
             } else {
                 $shopInfo->status = 0;
                 if (strlen($shopDetail['offlineSince']) > 18) {
-                    $shopInfo->offlineSicne = $shopDetail['offlineSince'] ;
+                    $shopInfo->offlineSicne = $shopDetail['offlineSince'];
                 } else {
                     $shopInfo->offlineSicne = date("Y-m-d h:m:s");
                 }
@@ -985,7 +985,6 @@ class Shop extends \KC\Entity\Shop
         } else {
             $shopInfo->status = 1 ;
         }
-
 
         $selectAccountManagers = isset($shopDetail['selectaccountmanagers']) ? $shopDetail['selectaccountmanagers'] : '0';
         $shopInfo->accoutManagerId = \BackEnd_Helper_viewHelper::stripSlashesFromString($selectAccountManagers);
