@@ -206,7 +206,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->offersAddedInShop = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)$offersAddedInShopKey,
             array(
-                'function' => 'Offer::getNumberOfOffersCreatedByShopId',
+                'function' => 'KC\Repository\Offer::getNumberOfOffersCreatedByShopId',
                 'parameters' => array($shopId)
             ),
             ''
