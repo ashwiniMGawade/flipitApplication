@@ -21,10 +21,11 @@ class ViewCount extends \KC\Entity\ViewCount
     public static function getOfferViewCountBasedOnDate($offerId, $offsetDate, $currentDate, $offsetType)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $offerViewCount = $queryBuilder
+        $query = $queryBuilder
             ->select('count(v.id) as viewCount')
             ->from('KC\Entity\ViewCount', 'v')
             ->where('v.onClick!=0')
+            ->andWhere('v.viewcount='.$offerId)
             ->add(
                 'where',
                 $queryBuilder->expr()->between(
@@ -32,9 +33,8 @@ class ViewCount extends \KC\Entity\ViewCount
                     $queryBuilder->expr()->literal($offsetDate),
                     $queryBuilder->expr()->literal($currentDate)
                 )
-            )
-            ->andWhere('v.viewcount='.$offerId)
-            ->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            );
+        $offerViewCount = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return array('viewCount'=>$offerViewCount['viewCount'], 'offsetType'=>$offsetType);
     }
 
