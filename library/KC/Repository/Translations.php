@@ -56,7 +56,7 @@ class Translations Extends \KC\Entity\Translations
             $entityManagerLocale  = \Zend_Registry::get('emLocale');
             $translation = new \KC\Entity\Translations();
             $translation->translationKey = $translationsAfterRemovingTags['translationKey'];
-            $translation->translation = $translationsAfterRemovingTags[(string)Zend_Registry::get('Zend_Locale')];
+            $translation->translation = $translationsAfterRemovingTags[(string) \Zend_Registry::get('Zend_Locale')];
             $translation->deleted = 0;
             $translation->created_at = new \DateTime('now');
             $translation->updated_at = new \DateTime('now');

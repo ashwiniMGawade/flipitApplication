@@ -1052,7 +1052,7 @@ echo $this->headTitle()->append('Edit Shop');?>
             <input type="hidden" name="accountManagerName" id="accountManagerName" value="<?php echo $this->data['accountManagerName'] ; ?>" />
             
             <input type="hidden" name="editorName" id="editorName" value="<?php echo $this->data['contentManagerName'] ; ?>" />
-            <input type="hidden" name="offlineSince" id="offlineSince" value="<?php echo ( $this->data['status'] ) ? "" :  $this->data['offlineSicne'] ;?>" />
+            <input type="hidden" name="offlineSince" id="offlineSince" value="<?php echo ( $this->data['status'] ) ? "" :  $this->data['offlineSicne']->format('Y-m-d') ;?>" />
             <input type="hidden" name="onlineStatus" id="onlineStatus" value="<?php echo ( $this->data['status'] ) ?  1 : 0 ; ?>" />
             <input type="hidden" name="deepLinkStatus" id="deepLinkStatus" value="<?php echo ( $this->data['deepLinkStatus'] ) ?  1 : 0 ; ?>" />
             <input type="hidden" name="affiliateProgStatus" id="affiliateProgStatus" value="<?php echo ( $this->data['affliateProgram'] ) ?  1 : 0 ; ?>" />
