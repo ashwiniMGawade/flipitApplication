@@ -143,7 +143,7 @@ class Admin_VisitorController extends Zend_Controller_Action
         $dataYear='';
 
         if (@$data['dateOfBirth']!='') {
-            list($dataYear, $dataMonth, $dataDay) = @split('[/.-]', $data['dateOfBirth']);
+            list($dataYear, $dataMonth, $dataDay) = @split('-', $data['dateOfBirth']->format('Y-m-d'));
         }
         //echo $dob;die;
         $year_limit = 0;
