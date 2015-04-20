@@ -2467,7 +2467,7 @@ class Offer Extends \KC\Entity\Offer
             ->andWhere('s.id = '.$shopId)
             ->setParameter(1, 'NW')
             ->andWhere('o.discountType != ?1')
-            ->limit(1);
+            ->setMaxResults(1);
         $offersInfo =  $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $offersInfo;
     }
