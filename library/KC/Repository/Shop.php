@@ -645,9 +645,18 @@ class Shop extends \KC\Entity\Shop
         $shopList = $queryBuilder
             ->from("KC\Entity\Shop", "s")
             ->leftJoin('s.affliatenetwork', 'a')
-            ->where('s.deleted = '. $flag)
-            ->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal("%".$srh."%")));
-        $request = \DataTable_Helper::createSearchRequest($params, array());
+            ->where('s.deleted = '. $flag);
+        if (!empty($srh)) {
+            $shopList->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal("%".$srh."%")));
+        }
+            
+        $request = \DataTable_Helper::createSearchRequest(
+            $params,
+            array('s.id', 's.name', 's.updated_at', 's.created_at', 's.permaLink', 's.affliateProgram', 'a.name',
+                's.discussions', 's.showSignupOption', 's.status', 's.lastSevendayClickouts', 's.shopAndOfferClickouts',
+                's.offlineSicne'
+            )
+        );
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
             ->setQueryBuilder($shopList)
