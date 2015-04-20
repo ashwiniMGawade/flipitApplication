@@ -44,11 +44,12 @@ class RouteRedirect extends \KC\Entity\RouteRedirect
 
     public static function getRedirect($params)
     {
-        $request  = \DataTable_Helper::createSearchRequest($params, array('orignalurl', 'redirectto', 'created_at'));
+        $request  = \DataTable_Helper::createSearchRequest($params, array('id','orignalurl', 'redirectto', 'created_at'));
         $qb = \Zend_Registry::get('emLocale')->createQueryBuilder()->from('KC\Entity\RouteRedirect', 'p');
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
             ->setQueryBuilder($qb)
+            ->add('number', 'p.id')
             ->add('text', 'p.orignalurl')
             ->add('text', 'p.redirectto')
             ->add('number', 'p.created_at');

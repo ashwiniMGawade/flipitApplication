@@ -23,7 +23,7 @@ $(document).ready(function() {
                 var li = '';
                 if(json!=''){
                     for(var i in json) {
-                        li+= "<li class='ui-state-default' id='" + json[i].id + "'>" 
+                        li+= "<li class='ui-state-default' id='" + json[i].articleId + "'>" 
                         + json[i].title + "</span></li>";
                     }
                     $('ul#popularArticles').append(li);

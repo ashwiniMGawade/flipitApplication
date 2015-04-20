@@ -33,7 +33,7 @@ class Offer Extends \KC\Entity\Offer
     public static function getViewCountByCondition($offerViewCount, $offerId, $offsetDate, $currentDate, $offsetType)
     {
         if (intval($offerViewCount['viewCount']) < 5) {
-            $offerViewCount = KC\Repository\ViewCount::getOfferViewCountBasedOnDate($offerId, $offsetDate, $currentDate, $offsetType);
+            $offerViewCount = \KC\Repository\ViewCount::getOfferViewCountBasedOnDate($offerId, $offsetDate, $currentDate, $offsetType);
         }
         return $offerViewCount;
     }
