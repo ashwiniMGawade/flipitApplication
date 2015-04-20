@@ -397,9 +397,9 @@ class Visitor extends \KC\Entity\Visitor
         }
 
         if (isset($params['code']) && $params['code'] != '') {
-            $visitor->codealert = \FrontEnd_Helper_viewHelper::sanitize($params['code']);
+            $visitor->codeAlert = \FrontEnd_Helper_viewHelper::sanitize($params['code']);
         } else {
-            $visitor->codealert = 0;
+            $visitor->codeAlert = 0;
         }
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();

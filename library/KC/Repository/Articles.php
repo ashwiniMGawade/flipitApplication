@@ -792,17 +792,13 @@ class Articles extends \KC\Entity\Articles
             ->set('a.deleted', '2')
             ->where('a.id=' . $id);
         $query->getQuery()->execute();
-
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
-        $pageIds = self::findPageIds($id);
-        $page_ids = array_unique($artArr);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
-        $catIds = self::findCategoryId($id);
         return 1;
     }
    
@@ -820,10 +816,10 @@ class Articles extends \KC\Entity\Articles
             
             foreach ($getVal as $st):
                 $key = 'shop_moneySavingArticles_'  . $st['id'] . '_list';
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-                $permalinkWithoutSpecilaChracter = str_replace("-", "", $st['permalink']);
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+                $permalinkWithoutSpecilaChracter = str_replace("-", "", $st['permaLink']);
                 $key = 'article_'.$permalinkWithoutSpecilaChracter.'_details';
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             endforeach;
 
             $queryBuilder  = $entityManagerLocale->createQueryBuilder();
@@ -875,7 +871,8 @@ class Articles extends \KC\Entity\Articles
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
-        $query = $queryBuilder->select('a, img')
+        $query = $queryBuilder
+            ->select('a, img')
             ->from('\KC\Entity\Articles', 'a')
             ->leftJoin('a.articleImage', 'img')
             ->where('a.deleted='. $flag)

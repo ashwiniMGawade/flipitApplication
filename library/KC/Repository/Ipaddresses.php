@@ -6,8 +6,7 @@ class IpAddresses Extends \KC\Entity\ipAddresses
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
-            ->from('KC\Entity\ipAddresses', 'ipa')
-            ->orderBy("ipa.created_at", "DESC");
+            ->from('KC\Entity\ipAddresses', 'ipa');
 
         $request  = \DataTable_Helper::createSearchRequest($params, array('name', 'ipaddress', 'created_at'));
 
