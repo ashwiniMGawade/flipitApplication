@@ -2463,10 +2463,17 @@ class Offer Extends \KC\Entity\Offer
             ->leftJoin('o.shopOffers', 's')
             ->where('o.deleted = 0')
             ->andWhere('o.offline = 0')
-            ->andWhere('o.created_at BETWEEN "'.$offsetDate.'" AND "'.$currentDate.'"')
+            ->add(
+                'where',
+                $queryBuilder->expr()->between(
+                    'o.created_at',
+                    $queryBuilder->expr()->literal($offsetDate),
+                    $queryBuilder->expr()->literal($currentDate)
+                )
+            )
             ->andWhere('s.id = '.$shopId)
-            ->setParameter(1, 'NW')
-            ->andWhere('o.discountType != ?1')
+            ->setParameter(0, 'NW')
+            ->andWhere('o.discountType != ?0')
             ->setMaxResults(1);
         $offersInfo =  $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $offersInfo;
