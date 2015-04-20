@@ -86,8 +86,8 @@ class Widget extends \KC\Entity\Widget
             ->setQueryBuilder($query)
             ->add('number', 'widget.id')
             ->add('text', 'widget.title')
-            ->add('text', 'widget.status')
-            ->add('text', 'widget.content');
+            ->add('text', 'widget.content')
+            ->add('text', 'widget.status');
         $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
         $list = \DataTable_Helper::getResponse($data, $request);
         return $list;
