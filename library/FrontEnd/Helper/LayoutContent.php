@@ -167,60 +167,35 @@ class FrontEnd_Helper_LayoutContent
 
     public static function generateMainMenu()
     {
-        return $navigationString ='<nav id="nav">' . self::getUlOfMainMenu() . '</nav>';
+        return '<nav id="nav">' . self::getWebsiteMainMenu() . '</nav>';
     }
      
-    public static function getUlOfMainMenu($navigation = '')
+    public static function getWebsiteMainMenu($navigation = '')
     {
-        $mainMenu = KC\Repository\menu::getFirstLevelMenu($navigation);
-        $classForFlipIt = LOCALE == '' ? "kc-menu" : 'flipit-menu';
-        $ulOfMainMenu =
-        '<ul>';
-        if ($navigation == 'mobile') {
-            $ulOfMainMenu .=
-            '<li>
-                <a href="'. HTTP_PATH_LOCALE.'">'.FrontEnd_Helper_viewHelper::__translate('Home').' </a>
-            </li>';
-        }
+        $websiteMenus = KC\Repository\menu::getFirstLevelMenu($navigation);
+        $cssClass = LOCALE == '' ? "kc-menu" : 'flipit-menu';
+        $websiteMainMenu =
 
-        foreach ($mainMenu as $menu) {
-            if ($navigation == 'mobile') {
-                $cssClassForLastLi = strtolower($menu['name']) == FrontEnd_Helper_viewHelper::__translate('category')
-                ? $classForFlipIt: '';
-            } else {
-                $cssClassForLastLi = strtolower($menu['name']) == 'plus' ? $classForFlipIt: '';
-            }
-            $stringReplacedMenuUrlVariable = str_replace("-", "", $menu['url']);
-            $stringReplacedtop20Variable = str_replace("-", "", FrontEnd_Helper_viewHelper::__link('link_top-20'));
-            if ($stringReplacedMenuUrlVariable === $stringReplacedtop20Variable && $navigation == 'mobile') {
-                $ulOfMainMenu.=
-                    '<li class="' . $cssClassForLastLi .'" id="'. $menu["name"] .'">
-                        <a id="'. $menu["name"] . '" name="'. $menu["name"] . '" 
-                            class="" href="'. HTTP_PATH_LOCALE  . $menu['url'] . '">' . ucfirst($menu["name"])
-                        . '</a>
-                    </li>
-                    <li class="' . $cssClassForLastLi .'" id="plus">
-                        <a id="plus" name="plus" 
-                            class="" href="'. HTTP_PATH_LOCALE  . 'plus">' . ucfirst('plus')
-                        . '</a>
-                    </li>';
-            } else {
-                $ulOfMainMenu.=
-                '<li class="' . $cssClassForLastLi .'" id="'. $menu["name"] .'">
-                    <a id="'. $menu["name"] . '" name="'. $menu["name"] . '" 
-                        class="" href="'. HTTP_PATH_LOCALE  . $menu['url'] . '">' . ucfirst($menu["name"])
+        '<ul>';
+        if ($navigation != 'mobile') {
+            foreach ($websiteMenus as $websiteMenu) {
+                $cssClassForLastLi = strtolower($websiteMenu['name']) == 'plus' ? $cssClass: '';
+                $websiteMainMenu.=
+                '<li class="' . $cssClassForLastLi .'" id="'. $websiteMenu["name"] .'">
+                    <a id="'. $websiteMenu["name"] . '" name="'. $websiteMenu["name"] . '" 
+                        class="" href="'. HTTP_PATH_LOCALE  . $websiteMenu['url'] . '">' . ucfirst($websiteMenu["name"])
                     . '</a>';
                 
-                if (strpos($menu['url'], '09-e')) {
-                    $ulOfMainMenu.=self::generateTopShopsDropdown();
+                if (strpos($websiteMenu['url'], '09-e')) {
+                    $websiteMainMenu.=self::generateTopShopsDropdown();
                 }
-                $ulOfMainMenu.='</li>';
+                $websiteMainMenu.='</li>';
             }
         }
         
-        $ulOfMainMenu .=
+        $websiteMainMenu .=
         '</ul>';
-        return $ulOfMainMenu;
+        return $websiteMainMenu;
     }
 
     public static function generateTopShopsDropdown()
@@ -258,11 +233,6 @@ class FrontEnd_Helper_LayoutContent
             ''
         );
         return $topShops;
-    }
-
-    public static function generateMobileMenu($navigation)
-    {
-        return self::getUlOfMainMenu($navigation);
     }
 
     public static function getMostPopularCouponOnEarth()

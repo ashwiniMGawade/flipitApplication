@@ -53,7 +53,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
                 <div class="icon">
                 '.$shopImageContent.'
                 </div>
-            <div class="box">';
+            <div class="box"><div class="holder">';
 
         if ($expiredMessage =='storeDetail') {
             $shop['subTitle'] = $shop['subTitle'];
@@ -68,20 +68,11 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
             $shop['subTitle'] = $this->__translate('Expired').' '.$shop['name'].' '.$this->__translate('copuon code');
         }
 
-        if ($expiredMessage !='') {
-            $explodedShopUrl = explode('//', $shop['actualUrl']);
-            $shopWebsiteUrl = isset($explodedShopUrl[1]) ? $explodedShopUrl[1] : $explodedShopUrl[0];
-            $shopWebsiteUrlContent = $affliateUrl != '#' ? '<a target="_blank" rel="nofollow" 
-                class="btn text-blue-link fl store-header-link '.$affliateClass.' pop btn btn-sm btn-default" '
-                .$affliateDisabled.'
-                onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">'.$shopWebsiteUrl.'
-                </a>' : '<span disabled="disabled"
-                class="btn text-blue-link fl store-header-link pop btn btn-sm btn-default btn-disabled">'.
-                $shopWebsiteUrl.'</span>';
+        if ($expiredMessage !='') {           
             $divContent .=
                 '<h1>'.FrontEnd_Helper_viewHelper::replaceStringVariable($shop['title']).'</h1>
                 <h2>'.FrontEnd_Helper_viewHelper::replaceStringVariable($shop['subTitle']).'</h2>
-                    '.$shopWebsiteUrlContent;
+                    ';
         } else {
             $divContent .='<h1>'.$offerTitle.'</h1>';
         }
@@ -90,13 +81,19 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
 
     public function getDisqusReplyCounter($shop)
     {
-        $shopPermalink = $shop['permaLink'];
-        $disqusUrl = HTTP_PATH_LOCALE.$shopPermalink;
-        $anchorTag =
-            '<a id="commentCount"  href="javascript:void(0);" onClick="scrollToDisqus();" 
-                class="btn text-blue-link fl store-header-link  pop btn btn-sm btn-default" 
-                rel="nofollow"><span id="commentCountSpan"  class="disqus-comment-count" data-disqus-url="'.$disqusUrl.'"> </span>
-            </a>';
+        $anchorTag = '';
+        if (isset($shop['permaLink'])) {
+            $shopPermalink = $shop['permaLink'];
+            $disqusUrl = HTTP_PATH_LOCALE.$shopPermalink;
+            $anchorTag =
+                '<a id="commentCount" href="javascript:void(0);" onClick="scrollToDisqus();" 
+                    class="btn text-blue-link fl store-header-link  pop btn btn-sm btn-default follow-button" 
+                    rel="nofollow"><span class="icon-chat"></span>
+                    <span id="commentCountSpan" 
+                    class="disqus-comment-count follow-text" data-disqus-url="'.$disqusUrl.'"> </span>
+                </a>';
+        }
+        
         return $anchorTag;
     }
 }

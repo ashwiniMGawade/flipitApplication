@@ -28,19 +28,22 @@ foreach ($this->offers as $offer) {
     if (isset($offer->couponCodeType) && $offer->couponCodeType == 'UN') {
          $couponCode = '';
     }
-
+    $dayleftCss = '';
+    if (intval($daysTillOfferExpires) <= 1) {
+        $dayleftCss = 'deal-less';
+    }
     $defaultText = '';
-    $offerClass = "active";
+    $offerClass = "active " . $dayleftCss;
     $offerHolderClass = "offer-holder";
     if ($offer->exclusiveCode == '1') {
-        $offerClass = "orange-block";
+        $offerClass = "orange-block deal-offer ". $dayleftCss;
     }
     if ($offer->userGenerated == '1') {
         $offerClass = "";
         $offerHolderClass = "";
         $urlToShow = 'javascript:void(0);';
         if ($offer->approved == '1') {
-            $offerClass = "social-block"; 
+            $offerClass = "orange-block deal-offer " .$dayleftCss; 
             $offerHolderClass = "offer-holder";
             $urlToShow = $offerPartial->getUrlToShow($offer);
         }
@@ -62,13 +65,21 @@ foreach ($this->offers as $offer) {
     ?>
             <div class="box">
                 <div class="text">
-                    <p> <?php
+                    <ul class="meta-items">
+                        <?php
+                        if ($offer->userGenerated == 0 && (isset($offer->discountType) && $offer->discountType == 'CD')) {
+                            echo $offerPartial->getVerifiedText();
+                        }
+                        ?>
+                        <li>
+                        <?php
                         $membersOnly = isset($offer->Visability) && $offer->Visability == 'MEM'
                             ? '<span class="members-only-image"></span><span class="members-only">'.$this->translate("Members Only").'</span>'
                             : '';
                         echo $membersOnly.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires);
                         ?>
-                    </p>
+                        </li>
+                    </ul>
                     <?php 
                     if ($offer->Visability == 'MEM') {
                         echo $this->esi($esiLocale.'signup/signupmembersonlytitle?shopId='.$offer->shopOffers['id']
@@ -84,9 +95,9 @@ foreach ($this->offers as $offer) {
                     }
                     ?>
                 </div>
-                <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
+                <div class="buttons offer-teaser-button-wrapper" id="offerButton<?php echo $offer->id ;?>">
+                    <div class="offer-teaser-button-wrapper-inner">
     <?php
-
     $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shopOffers['permaLink'];
 
     if ($offer->Visability == 'MEM') {
@@ -100,76 +111,96 @@ foreach ($this->offers as $offer) {
             $permalink,
             'mainOfferClickoutButton'
         );
-        echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink); 
+ 
     }
-
-    ?>
+    ?>              </div>
                 </div>
                 <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
-                    <span class="instruction">
-                        <strong><?php echo $this->translate('enter this code at checkout')?></strong>
-                    </span>
                     <strong class="code-value"><?php echo $couponCode;?></strong>
                 </div>
-                <ul class="view-list">
-    <?php 
-    if (isset($offer->extendedOffer) && $offer->extendedOffer =='1') {
-        $extendedOffer = 1;
-    } else {
-        $extendedOffer = 0;
-    }
-    $showHyphen = $termsAndConditions != '' || $extendedOffer == 1 ? '<li> -</li>' : '';
-    if ($this->offersType!='extendedOffer') {
-        if ($termsAndConditions != '') {
-            echo $offerPartial->getTermAndConditionsLink($offer, $termsAndConditions);
-        }
-        echo $offerPartial->getExtendedOfferLink($offer);
-        if($this->offersType!='simple'):
-            echo $offerPartial->getViewAllCodeLink(
-                $offer->shopOffers['name'],
-                $offer->shopOffers['permaLink'],
-                $showHyphen
-            );
-        endif;
-    } else {
-        echo $offerPartial->getViewAllCodeLink($offer->shopOffers['name'], $offer->shopOffers['permaLink'], '');
-    }
-    ?>
-                </ul>
             </div>
-            <?php 
-            if ($offer->userGenerated == 0) {
-                //echo $offerPartial->getVerifiedText();
-            }
-            ?>
-        </div>
     <?php
-    if ($this->offersType!='extendedOffer') {
-            $style = '';
+    if ($this->offersType != 'extendedOffer') {
+        $style = '';
     } else {
-            $style = 'style="display:block;"';
+        $style = 'style="display:block;"';
     }
-    if ($offer->editorPicks == 1) {
-    ?>
-        <hr class="alt2">
-        <div class="recommended-outerDiv">
-            <div class="recommended-arrow"></div>
-            <div class="recommendedOffer">
-                <span>
-                    <img src="<?php echo HTTP_PATH.'public/images/rec-thumb.png';?>" class="recommended-thumb" alt="thumb" title="thumb">
-                    <?php echo $this->translate('Recommended by staff');?>
-                </span>
-                <?php
-                $contentManagerInfo = isset($offer->shopOffers['contentManagerName']) ? $offer->shopOffers['contentManagerName'] : '';
-                $contentManagerName = !empty($this->shop['contentManagerName']) ? $this->shop['contentManagerName'] : $contentManagerInfo;
-                if (!empty($contentManagerName)) {
-                    $contentManagerFirstName = $offerPartial->getContentManagerName($contentManagerName);
-                    echo ' - '.ucfirst($contentManagerFirstName).' '.$this->translate('recommended this code');  
-                }
-                ?>
+
+    $offerBottomTextForExclusiveOrSocialOrEditor = '';
+    $offerBottomRecomendedLink = '';
+    if (intval($offer->editorPicks) == 1) {
+        $contentManagerId = isset($offer->shopOffers['contentManagerId']) ? $offer->shopOffers['contentManagerId'] : '';
+        $contentManagerId = !empty($this->shopOffers['contentManagerId'])
+            ? $this->shopOffers['contentManagerId'] 
+            : $contentManagerId;
+        $shopEditor = $offerPartial->getShopEditor($contentManagerId);
+        $offerBottomRecomendedLink = $offerPartial->getShopEditorHtml($shopEditor);
+        $offerBottomTextForExclusiveOrSocialOrEditor = $offerBottomRecomendedLink;
+    } else {
+        $offerBottomTextForExclusiveOrSocialOrEditor = $offerPartial->getOfferExclusiveOrSocial($offer);
+    }
+    $offerBottomDaysTillExpireText = '';
+    if ($daysTillOfferExpires <= 3) {
+        $offerBottomDaysTillExpireText = $offerPartial->getDaysTillExpire($daysTillOfferExpires);
+    }
+    $offerBottomTermsAndConditionLink = '';
+    $offerBottomExtendedLink = '';
+    $offerBottomViewAllShopsLink = '';
+    if ($this->offersType != 'extendedOffer') {
+        if ($termsAndConditions != '') {
+            $offerBottomTermsAndConditionLink = $offerPartial->getTermAndConditionsLink(
+                $offer,
+                $termsAndConditions
+            );
+        }
+        $offerBottomExtendedLink =  $offerPartial->getExtendedOfferLink($offer);
+        if ($this->offersType != 'simple') {
+            $offerBottomViewAllShopsLink =  $offerPartial->getViewAllCodesLink(
+                $offer->shopOffers['name'],
+                $offer->shopOffers['permaLink']
+            );
+        }
+    } else {
+        $offerBottomViewAllShopsLink = $offerPartial->getViewAllCodesLink(
+            $offer->shopOffers['name'],
+            $offer->shopOffers['permaLink']
+        );
+    }
+    $combinedOfferBottomText = $offerBottomTermsAndConditionLink
+        .$offerBottomTextForExclusiveOrSocialOrEditor
+        .$offerBottomDaysTillExpireText
+        .$offerBottomViewAllShopsLink.$offerBottomExtendedLink;
+    if (!empty($combinedOfferBottomText)) {
+        ?>
+        <div class="info-area">
+            <?php echo $offerBottomTermsAndConditionLink;?>
+            <div class="info">
+               <ul>
+                    <?php
+                    $showUsedCode = false; 
+                    echo $offerBottomTextForExclusiveOrSocialOrEditor
+                        .$offerBottomDaysTillExpireText
+                        .$offerBottomViewAllShopsLink;
+                    if (empty($offerBottomDaysTillExpireText) || empty($offerBottomViewAllShopsLink)) {
+                        echo $offerBottomExtendedLink;
+                        if (empty($offerBottomExtendedLink)) {
+                           $showUsedCode = true;
+                        }
+                    } 
+                    if ( (empty($offerBottomDaysTillExpireText) && empty($offerBottomViewAllShopsLink)) || $showUsedCode)
+                    {
+                        if ($offer->discountType == "CD") {
+                            echo $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
+                        }
+                    }
+                    ?>
+               </ul>
             </div>
         </div>
-    <?php } ?>    
+        <?php 
+    }
+    ?>
+    </div>
         <div class="offer-box" id="websiteOfferLink<?php echo $offer->id ;?>" <?php echo $style;?>>
             <hr class="alt2">
             <div class="offer">
@@ -194,7 +225,6 @@ foreach ($this->offers as $offer) {
         </div>
     </article>
     <?php
-    $shopLogoOrDefaultImage = $offerPartial->getShopLogoForSignUp($this->shopOffers);
     if($offerCounter == 1) :
         if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage'
             || $this->offersType=='offerWithPagenation' || $this->offersType=='newestOffer'):
@@ -223,7 +253,7 @@ if ($this->offersType!='extendedOffer') {
     }
     if (isset($this->pageType) && $this->pageType == 'howToGuide') {
         $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-        echo '<a class="link-box" href="'.$domainName.$offer->shopOffers['permaLink'].'">
+        echo '<a class="link-box" href="'.$domainName.$offer->shopOffers['permalink'].'">
                 <hr class="alt2">
                 '.$this->translate('View all voucher codes from').' '.$offer->shopOffers['name'].'
             </a>';

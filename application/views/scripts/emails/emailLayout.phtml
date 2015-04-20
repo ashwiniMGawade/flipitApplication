@@ -61,7 +61,8 @@ if(!empty($this->topOffers)) {
             'httpPathLocale' => $httpPathLocale,
             'publicPathCdn' => $publicPathCdn,
             'httpPath' => $httpPath,
-            'mailType' => $this->mailType
+            'mailType' => $this->mailType,
+            'locale' => $locale
         )
     );
 }
@@ -76,7 +77,8 @@ if(!empty($this->topVouchercodes)) {
             'httpPathLocale' => $httpPathLocale,
             'publicPathCdn' => $publicPathCdn,
             'httpPath' => $httpPath,
-            'mailType' => $this->mailType
+            'mailType' => $this->mailType,
+            'locale' => $locale
         )
     );
 }
@@ -91,7 +93,8 @@ if(!empty($this->categoryVouchers)) {
             'httpPathLocale' => $httpPathLocale,
             'publicPathCdn' => $publicPathCdn,
             'httpPath' => $httpPath,
-            'mailType' => $this->mailType
+            'mailType' => $this->mailType,
+            'locale' => $locale
         )
     );
 } 
@@ -107,7 +110,8 @@ if(!empty($this->codeAlert)) {
             'publicPathCdn' => $publicPathCdn,
             'httpPath' => $httpPath,
             'mailType' => $this->mailType,
-            'mandrillNewsletterSubject' => $this->mandrillNewsletterSubject
+            'mandrillNewsletterSubject' => $this->mandrillNewsletterSubject,
+            'locale' => $locale
         )
     );
 } 

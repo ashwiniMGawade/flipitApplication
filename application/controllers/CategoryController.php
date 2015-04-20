@@ -76,6 +76,7 @@ class CategoryController extends Zend_Controller_Action
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $socialCodeForm = new Application_Form_SocialCode();
         $this->view->zendForm = $socialCodeForm;
+        $this->view->pageCssClass = 'page-store';
     }
 
     public function indexAction()

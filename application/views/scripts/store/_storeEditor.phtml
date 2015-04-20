@@ -1,17 +1,21 @@
 <?php
-$authorName = FrontEnd_Helper_AuthorPartialFunctions::
-    getAuthorName($this->shopEditor[0]['firstName'], $this->shopEditor[0]['lastName']);
+$authorName = '';
+if (isset($this->shopEditor[0]['firstName'])) {
+    $authorName = FrontEnd_Helper_AuthorPartialFunctions::
+        getAuthorName($this->shopEditor[0]['firstName'], $this->shopEditor[0]['lastName']);
+}
 
-$profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/"
-                    . $this->shopEditor[0]['slug'];
-$shopHeader = $this->translate('All').' '.$this->shop['name'].' '.$this->translate('deals verified by');
-$shopEditorPath =
-	HTTP_PATH_CDN 
-	.ltrim($this->shopEditor[0]['profileimage']['path'], "/")
-	.'thum_large_widget_' .$this->shopEditor[0]['profileimage']['name'];
+$shopHeader = $this->translate('Dealspotter for').' '.$this->shop['name'];
+
+$shopEditorPath = '';
+if (isset($this->shopEditor[0]['profileimage']['name'])) {
+    $shopEditorPath =
+        HTTP_PATH_CDN 
+        .ltrim($this->shopEditor[0]['profileimage']['path'], "/")
+        .'' .$this->shopEditor[0]['profileimage']['name'];
+}
+
 $shopAbout = $this->translate('About').' '.$this->shop['name'];
-
-
 $howToUse = $this->partial(
     'store/_howToUseGuide.phtml',
     array(
@@ -20,28 +24,28 @@ $howToUse = $this->partial(
        'actualUrl'=>$this->actualUrl
     )
 );
-
 ?>
 <article class="block">
     <div class="intro intro-2">
-        <div class="deal">
-            <div class="deal-holder">
-                <span class="text"><?php echo $shopHeader; ?>
-                    <span class="name"><?php echo $authorName; ?></span>
-                </span>
-
-                <div class="photo">
-                    <span>
-                        <img title="<?php echo $authorName; ?>" alt="<?php echo $authorName; ?>" class=""
-                        src="<?php echo $shopEditorPath; ?>" width="120" height="120"/>
-                    </span>    
-                </div>
+        <div class="author-info">
+            <div class="img-thumbnail">
+                <img title="<?php echo $authorName; ?>" 
+                    alt="<?php echo $authorName; ?>" src="<?php echo $shopEditorPath; ?>" class="img-responsive">
+            </div>
+            <div class="textbox">
+                <h3><?php echo $authorName; ?></h3>
+                <span class="text"><?php echo $shopHeader; ?></span>
+                <?php 
+                if ($this->shop['discussions'] == 1): 
+                    echo !empty($this->disqusReplyCounter) ? $this->disqusReplyCounter : '';
+                endif;
+                ?>
             </div>
         </div>
         <h2><?php echo $shopAbout; ?></h2>
-        <?php 
+        <?php
         echo  preg_replace('/(<a\b[^><]*)>/i', '$1 style="color: #0077cc;text-decoration: underline;">',
         FrontEnd_Helper_viewHelper::replaceStringVariable($this->shop['shopText'])); ?>
     </div>
-<?php echo $howToUse; ?>
+    <?php echo $howToUse; ?>
 </article>

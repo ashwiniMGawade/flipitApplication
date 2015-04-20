@@ -13,6 +13,31 @@ class Offer Extends \KC\Entity\Offer
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
 
+    public static function getViewCountByOfferId($offerId)
+    {
+        $dateTimeFormat = 'Y-m-j H:i:s';
+        $currentDate = date($dateTimeFormat);
+        $past24Hours = date($dateTimeFormat, strtotime('-1 day' . $currentDate));
+        $past7Days = date($dateTimeFormat, strtotime('-7 day' . $currentDate));
+        $past31Days = date($dateTimeFormat, strtotime('-31 day' . $currentDate));
+        $offerViewCount = 0;
+        $offerViewCount = \KC\Repository\ViewCount::getOfferViewCountBasedOnDate($offerId, $past24Hours, $currentDate, 'day');
+        $offerViewCount = self::getViewCountByCondition($offerViewCount, $offerId, $past7Days, $currentDate, 'week');
+        $offerViewCount = self::getViewCountByCondition($offerViewCount, $offerId, $past31Days, $currentDate, 'month');
+        if (intval($offerViewCount['viewCount']) < 5) {
+            $offerViewCount = '';
+        }
+        return $offerViewCount;
+    }
+
+    public static function getViewCountByCondition($offerViewCount, $offerId, $offsetDate, $currentDate, $offsetType)
+    {
+        if (intval($offerViewCount['viewCount']) < 5) {
+            $offerViewCount = KC\Repository\ViewCount::getOfferViewCountBasedOnDate($offerId, $offsetDate, $currentDate, $offsetType);
+        }
+        return $offerViewCount;
+    }
+
     public static function offerExistOrNot($offerId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -2392,6 +2417,69 @@ class Offer Extends \KC\Entity\Offer
         return $data;
     }
 
+
+    public static function getNumberOfOffersCreatedByShopId($shopId)
+    {
+        $dateFormat = 'Y-m-j H:i:s';
+        $currentDate = date($dateFormat);
+        $past7Days = date($dateFormat, strtotime('-7 day' . $currentDate));
+        $past31Days = date($dateFormat, strtotime('-31 day' . $currentDate));
+        $offersCreated = array();
+        $offersInfo = self::getOffersForDateRange($shopId, $past7Days, $currentDate);
+        $offers = self::validateOffersAmount($offersInfo, $shopId, $past31Days, $currentDate, "week");
+        $offersCreated = !empty($offers)
+            ? array(
+                "offersInfo" => $offers["offersInfo"],
+                "type" => $offers["type"]
+            )
+            : "";
+
+        return $offersCreated;
+    }
+
+    public static function validateOffersAmount($offersInfo, $shopId, $past31Days, $currentDate, $type)
+    {
+        $offers = array(
+            "offersInfo" => $offersInfo,
+            "type" => $type
+        );
+        if (!empty($offersInfo) && $offersInfo['amountOffers'] < 2) {
+            $offersPast31Days = self::getOffersForDateRange($shopId, $past31Days, $currentDate);
+            $offersInfo = !empty($offersPast31Days) && $offersPast31Days['amountOffers'] < 2 ? "" : $offersPast31Days;
+            $offers = array(
+                "offersInfo" => $offersInfo,
+                "type" => "month"
+            );
+        }
+        return $offers;
+    }
+
+    public static function getOffersForDateRange($shopId, $offsetDate, $currentDate)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select("count(o.id) as amountOffers")
+            ->from('KC\Entity\Offer', 'o')
+            ->leftJoin('o.shopOffers', 's')
+            ->where('o.deleted = 0')
+            ->andWhere('o.offline = 0')
+            ->add(
+                'where',
+                $queryBuilder->expr()->between(
+                    'o.created_at',
+                    $queryBuilder->expr()->literal($offsetDate),
+                    $queryBuilder->expr()->literal($currentDate)
+                )
+            )
+            ->andWhere('s.id = '.$shopId)
+            ->setParameter(0, 'NW')
+            ->andWhere('o.discountType != ?0')
+            ->setMaxResults(1);
+        $offersInfo =  $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $offersInfo;
+    }
+
+
     public static function getTotalAmountOfOffers()
     {
         $format = 'Y-m-j H:i:s';
@@ -2797,7 +2885,8 @@ class Offer Extends \KC\Entity\Offer
                 \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['extendedOfferRefurl']).
                 '_couponDetails';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $key = 'offersAdded_'.intval($params['selctedshop']).'_shop';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
@@ -3153,7 +3242,8 @@ class Offer Extends \KC\Entity\Offer
 
             $key = 'shop_expiredOffers'  .intval($params['selctedshop']) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $key = 'offersAdded_'.intval($params['selctedshop']).'_shop';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'extendedTopOffer_of_'.intval($params['selctedshop']);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_similarShopsAndSimilarCategoriesOffers'. intval($params['selctedshop'])  . '_list';

@@ -5,13 +5,14 @@ $redirectUrl = HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='. $this->perma
 $titleTextForLove = FrontEnd_Helper_viewHelper::__form('form_Remove from Favourite');
 $emAndSpan = '<em>'.FrontEnd_Helper_viewHelper::__translate("I FOLLOW THIS").'</em>
     <strong>'.FrontEnd_Helper_viewHelper::__translate("REMOVE").'</strong>';
-$aTagClasses = 'pop btn btn-sm btn-default remove-fovourite blue';
-if (\KC\Repository\Visitor::getFavoriteShopsForUser($visitorId, $this->shopId)==false):
+$aTagClasses = 'pop btn btn-sm btn-default remove-fovourite blue btn-holder';
+if (KC\Repository\Visitor::getFavoriteShopsForUser($visitorId, $this->shopId)==false):
     $titleTextForLove = FrontEnd_Helper_viewHelper::__form("form_Add in Favourite");
     $emAndSpan = '<span class="glyphicon red-heart glyphicon-heart"></span>
         <span class = "follow-text">'.FrontEnd_Helper_viewHelper::__translate("FOLLOW").'</span>';
-    $aTagClasses = 'pop btn btn-sm btn-default follow-button';
+    $aTagClasses = 'pop btn btn-sm btn-default follow-button btn-holder';
 endif;
+
 $clickEvent = '';
 if ($visitorId==0) {
     $redirectUrl = 'javascript:void(0)';
