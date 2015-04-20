@@ -98,7 +98,7 @@ foreach ($this->offers as $offer) {
                 <div class="buttons offer-teaser-button-wrapper" id="offerButton<?php echo $offer->id ;?>">
                     <div class="offer-teaser-button-wrapper-inner">
     <?php
-    $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shopOffers['permalink'];
+    $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shopOffers['permaLink'];
 
     if ($offer->Visability == 'MEM') {
         echo $this->esi($esiLocale.'signup/signupwidgetcodes?shopId='.$offer->shopOffers['id']
