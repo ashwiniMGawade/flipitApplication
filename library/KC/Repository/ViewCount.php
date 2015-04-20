@@ -24,16 +24,15 @@ class ViewCount extends \KC\Entity\ViewCount
         $query = $queryBuilder
             ->select('count(v.id) as viewCount')
             ->from('KC\Entity\ViewCount', 'v')
-            ->where('v.onClick!=0')
-            ->andWhere('v.viewcount='.$offerId)
-            ->add(
-                'where',
+            ->where(
                 $queryBuilder->expr()->between(
                     'v.created_at',
                     $queryBuilder->expr()->literal($offsetDate),
                     $queryBuilder->expr()->literal($currentDate)
                 )
-            );
+            )
+            ->andWhere('v.onClick!=0')
+            ->andWhere('v.viewcount='.$offerId);
         $offerViewCount = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return array('viewCount'=>$offerViewCount['viewCount'], 'offsetType'=>$offsetType);
     }
