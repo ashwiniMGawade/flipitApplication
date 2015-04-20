@@ -9,6 +9,7 @@ class BackEnd_Helper_importOffersExcel
         $excelData = array();
         $offerList = new Doctrine_Collection('Offer');
         $dataSaved = 0;
+        $offerCounter = 1;
         foreach ($worksheet->getRowIterator() as $row) {
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
@@ -54,28 +55,29 @@ class BackEnd_Helper_importOffersExcel
                     $startDate = date('Y-m-d', strtotime($offerStartDate));
                     $endDate = date('Y-m-d', strtotime($offerEndDate));
                     if ($endDate >= $currentDate) {
-                        $offerList[$shopId]->title = $offerTitle;
-                        $offerList[$shopId]->shopId = $shopId;
-                        $offerList[$shopId]->discountType= !empty($offerCouponCode) ? 'CD' : 'SL';
-                        $offerList[$shopId]->Visability = !empty($offerVisibility) ? 'DE' : 'MEM';
-                        $offerList[$shopId]->extendedOffer = 0;
-                        $offerList[$shopId]->startDate = $startDate;
-                        $offerList[$shopId]->endDate = $endDate.' 23:59:00';
-                        $offerList[$shopId]->totalViewcount = !empty($offerClickouts) ? $offerClickouts : 0;
-                        $offerList[$shopId]->authorName = !empty($offerAuthorName) ? $offerAuthorName : 'Arthur Goldman';
-                        $offerList[$shopId]->couponCode = !empty($offerCouponCode) ? $offerCouponCode : '';
-                        $offerList[$shopId]->exclusiveCode = $offerExclusive == 1 ? 1 : 0;
-                        $offerList[$shopId]->editorPicks = $offerEditorPick == 1 ? 1 : 0;
-                        $offerList[$shopId]->userGenerated = 0;
-                        $offerList[$shopId]->offline = 0;
-                        $offerList[$shopId]->created_at = $currentDate;
-                        $offerList[$shopId]->refURL = !empty($offerDeeplink) ? $offerDeeplink : '';
-                        $offerList[$shopId]->tilesId = !empty($offerTileId) ? $offerTileId : '';
-                        $offerList[$shopId]->maxcode = 0;
-                        $offerList[$shopId]->deleted = 0;
-                        $offerList[$shopId]->maxlimit = 0;
-                        $offerList[$shopId]->updated_at = $currentDate;
+                        $offerList[$offerCounter]->title = $offerTitle;
+                        $offerList[$offerCounter]->shopId = $shopId;
+                        $offerList[$offerCounter]->discountType= !empty($offerCouponCode) ? 'CD' : 'SL';
+                        $offerList[$offerCounter]->Visability = !empty($offerVisibility) ? 'DE' : 'MEM';
+                        $offerList[$offerCounter]->extendedOffer = 0;
+                        $offerList[$offerCounter]->startDate = $startDate;
+                        $offerList[$offerCounter]->endDate = $endDate.' 23:59:00';
+                        $offerList[$offerCounter]->totalViewcount = !empty($offerClickouts) ? $offerClickouts : 0;
+                        $offerList[$offerCounter]->authorName = !empty($offerAuthorName) ? $offerAuthorName : 'Arthur Goldman';
+                        $offerList[$offerCounter]->couponCode = !empty($offerCouponCode) ? $offerCouponCode : '';
+                        $offerList[$offerCounter]->exclusiveCode = $offerExclusive == 1 ? 1 : 0;
+                        $offerList[$offerCounter]->editorPicks = $offerEditorPick == 1 ? 1 : 0;
+                        $offerList[$offerCounter]->userGenerated = 0;
+                        $offerList[$offerCounter]->offline = 0;
+                        $offerList[$offerCounter]->created_at = $currentDate;
+                        $offerList[$offerCounter]->refURL = !empty($offerDeeplink) ? $offerDeeplink : '';
+                        $offerList[$offerCounter]->tilesId = !empty($offerTileId) ? $offerTileId : '';
+                        $offerList[$offerCounter]->maxcode = 0;
+                        $offerList[$offerCounter]->deleted = 0;
+                        $offerList[$offerCounter]->maxlimit = 0;
+                        $offerList[$offerCounter]->updated_at = $currentDate;
                         $dataSaved = 1;
+                        $offerCounter++;
                     }
                 }
             }
