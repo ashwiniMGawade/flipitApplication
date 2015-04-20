@@ -60,8 +60,7 @@ class Website extends \KC\Entity\Website
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->update('KC\Entity\Website', 'w')
                 ->set('w.chain', $queryBuilder->expr()->literal($chain))
-                ->setParameter(1, $queryBuilder->expr()->literal($websiteName))
-                ->where('w.name = ?1')
+                ->where($queryBuilder->expr()->eq('w.name', $queryBuilder->expr()->literal($websiteName)))
                 ->getQuery();
         $query->execute();
         return true;
