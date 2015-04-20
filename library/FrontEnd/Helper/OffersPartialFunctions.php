@@ -459,7 +459,7 @@ class FrontEnd_Helper_OffersPartialFunctions
             'user_'.$editorId.'_details',
             array(
                 'function' =>
-                'User::getUserDetails', 'parameters' => array($editorId)
+                'KC\Repository\User::getUserDetails', 'parameters' => array($editorId)
             ),
             ''
         );
