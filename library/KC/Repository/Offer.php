@@ -2938,7 +2938,7 @@ class Offer Extends \KC\Entity\Offer
         if (isset($params['couponCodeCheckbox'])) {
             $updateOffer->discountType = 'CD';
             $updateOffer->couponCode = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponCode']);
-            $updateOffer->discount = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountamount']);
+            $updateOffer->discount = isset($params['discountamount']) ? \BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountamount']) : '';
             $updateOffer->discountvalueType = \BackEnd_Helper_viewHelper::stripSlashesFromString(
                 isset($params['discountchk']) ? $params['discountchk'] : 0
             );
@@ -3243,7 +3243,7 @@ class Offer Extends \KC\Entity\Offer
             $key = 'shop_expiredOffers'  .intval($params['selctedshop']) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'offersAdded_'.intval($params['selctedshop']).'_shop';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'extendedTopOffer_of_'.intval($params['selctedshop']);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_similarShopsAndSimilarCategoriesOffers'. intval($params['selctedshop'])  . '_list';
@@ -3266,7 +3266,7 @@ class Offer Extends \KC\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');      
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
