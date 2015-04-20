@@ -2886,7 +2886,7 @@ class Offer Extends \KC\Entity\Offer
                 '_couponDetails';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'offersAdded_'.intval($params['selctedshop']).'_shop';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
