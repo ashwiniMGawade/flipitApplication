@@ -1961,4 +1961,15 @@ class Shop extends \KC\Entity\Shop
         }
         return $relatedShopName;
     }
+
+    public static function getShopIdByShopName($shopName)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('s.id')
+            ->from('KC\Entity\Shop',  's')
+            ->where('s.name="'.ucfirst($shopName).'"');
+        $shopId = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return isset($shopId[0]) ? $shopId[0]['id'] : '';
+    }
 }

@@ -18,6 +18,19 @@ class ViewCount extends \KC\Entity\ViewCount
         return $offerClick[0]['countExists'];
     }
 
+    public static function getOfferViewCountBasedOnDate($offerId, $offsetDate, $currentDate, $offsetType)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $offerClick = $queryBuilder
+            ->select('count(v.id) as viewCount')
+            ->from('KC\Entity\ViewCount', 'v')
+            ->where('v.onClick!=0')
+            ->andWhere('v.created_at BETWEEN "'.$offsetDate.'" AND "'.$currentDate.'"')
+            ->andWhere('v.offerId='.$offerId)
+            ->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return array('viewCount'=>$offerViewCount['viewCount'], 'offsetType'=>$offsetType);
+    }
+
     public static function saveOfferClick($offerId, $clientIp)
     {
         $offerClick  = new \KC\Entity\ViewCount();
@@ -58,6 +71,22 @@ class ViewCount extends \KC\Entity\ViewCount
         \Zend_Registry::get('emLocale')->persist($offerOnload);
         \Zend_Registry::get('emLocale')->flush();
         return true;
+    }
+
+
+    public static function updateCacheValueForOfferViewCount($offerId)
+    {
+        $cahceKey = 'viewCount_'.$offerId.'_text';
+        $keyStatus = \FrontEnd_Helper_viewHelper::checkCacheStatusByKey($cahceKey);
+        if ($keyStatus) {
+            $offerViewCount = \KC\Repository\Offer::getViewCountByOfferId($offerId);
+            \FrontEnd_Helper_viewHelper::setInCache($cahceKey, $offerViewCount);
+        } else {
+            $offerViewCount = \FrontEnd_Helper_viewHelper::getFromCacheByKey($cahceKey);
+            $offerViewCount = intval($offerViewCount) + 1;
+            \FrontEnd_Helper_viewHelper::setInCache($cahceKey, $offerViewCount);
+        }
+        return $offerViewCount;
     }
 
     public static function getOfferForFrontEnd($offerType, $limit = 10)

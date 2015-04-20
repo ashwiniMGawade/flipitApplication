@@ -102,67 +102,8 @@ class RouteRedirect extends \KC\Entity\RouteRedirect
 
     public function uploadExcel($file, $import = false)
     {
-        if (!file_exists(UPLOAD_EXCEL_PATH)) {
-            mkdir(UPLOAD_EXCEL_PATH, 0776, true);
-        }
-        
-        // generate upload path for images related to shop
-        $rootPath = UPLOAD_EXCEL_PATH;
-        if ($import) {
-            $rootPath .= 'import/';
-        }
-
-        // check upload directory exists, if no then create upload directory
-        if (!file_exists($rootPath)) {
-            mkdir($rootPath, 0775, true);
-        }
-
-        $adapter = new \Zend_File_Transfer_Adapter_Http();
-        // set destination path and apply validations
-        $adapter->setDestination($rootPath);
-        $adapter->addValidator('Extension', false, array('xlsx', true));
-        $adapter->addValidator('Size', false, array('min' => 20, 'max' => '2MB'));
-        // get upload file info
-
-        $files = $adapter->getFileInfo($file);
-        // get file name
-        $name = $adapter->getFileName($file, false);
-
-        // rename file name to by prefixing current unix timestamp
-        $newName = time() . "_" . $name;
-
-        // generates complete path of image
-        $cp = $rootPath . $newName;
-
-
-        // apply filter to rename file name and set target
-        $adapter
-        ->addFilter(
-            new \Zend_Filter_File_Rename(
-                array('target' => $cp, 'overwrite' => true)
-            ),
-            null,
-            $file
-        );
-
-        // recieve file for upload
-        $adapter->receive($file);
-
-        // check is file is valid then
-        $messages = $adapter->getMessages();
-        echo '<pre>'.print_r($messages, true).'</pre>';
-        if ($adapter->isValid($newName)) {
-
-            return array("fileName" => $newName, "status" => "200",
-                    "msg" => "File uploaded successfully",
-                    "path" => $rootPath);
-
-        } else {
-
-            return array("status" => "-1",
-                    "msg" => "Please upload the valid file");
-
-        }
+        $uploadResponse = \BackEnd_Helper_viewHelper::uploadExcel($file, $import = false);
+        return $uploadResponse;
 
     }
 }
