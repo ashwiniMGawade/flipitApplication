@@ -7,7 +7,7 @@ class BackEnd_Helper_importOffersExcel
         $objPHPExcel = $objReader->load($excelFile);
         $worksheet = $objPHPExcel->getActiveSheet();
         $excelData = array();
-        $offerList = new Doctrine_Collection('Offer');
+        $offerList = new Doctrine_Collection('KC\Entity\Offer');
         $dataSaved = 0;
         $offerCounter = 1;
         foreach ($worksheet->getRowIterator() as $row) {
@@ -81,7 +81,10 @@ class BackEnd_Helper_importOffersExcel
                     }
                 }
             }
-            $offerList->save();
+           
+            $entityManagerLocale = \Zend_Registry::get('emLocale');
+            $entityManagerLocale->persist($offerList);
+            $entityManagerLocale->flush();
             unlink($excelFile);
         }
         return $dataSaved;
