@@ -21,7 +21,7 @@ class PopularArticles Extends \KC\Entity\PopularArticles
             ->where("a.publish = 1")
             ->andWhere("a.deleted= 0")
             ->andWhere($queryBuilder->expr()->lte("a.publishdate", $queryBuilder->expr()->literal($currentDateTime)))
-            ->orderBy("p.position", "ASC");    
+            ->orderBy("p.position", "ASC");
         $popularArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $popularArticles;
     }
