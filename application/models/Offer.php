@@ -1724,7 +1724,8 @@ class Offer extends BaseOffer
                 FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['extendedOfferRefurl']).
                 '_couponDetails';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $key = 'offersAdded_'.intval($params['selctedshop']).'_shop';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             self::clearSpecialPagesCache($this->id);
@@ -2040,7 +2041,8 @@ class Offer extends BaseOffer
                 FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['extendedOfferRefurl']).
                 '_couponDetails';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $key = 'offersAdded_'.intval($params['selctedshop']).'_shop';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'offer_'.$offerID.'_details';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');

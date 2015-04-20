@@ -15,6 +15,9 @@
             top:50%;
         }
     }
+    #main{
+        background-color: #f6f6f6;
+    }
     .top-panel{
         background:rgba(0, 0, 0,.7);
     }
@@ -82,11 +85,10 @@
         }
     }
     .section-top{
-        position:relative;
         height:690px;
         .text-block{
-            position:absolute;
-            bottom:74px;
+            position:relative;
+            top:36%;
             left:0;
             width:100%;
         }
@@ -233,7 +235,7 @@
     }
     .logos-panel{
         &:after{.after;}
-        margin:0 0 13px;
+        margin:0;
         .container{
             padding-bottom:33px;
         }
@@ -637,6 +639,9 @@
     .home-page {
         .section-top{
             height:500px;
+            .text-block{
+                top: 9%;
+            }
         }       
         .shops{
             li{
@@ -699,7 +704,7 @@
 @media only screen and (max-width: 979px){
     .home-page {
         .logos-panel{
-            margin:0 0 15px;
+            margin:0;
             .container{
                 padding-bottom: 16px;
             }
@@ -802,6 +807,9 @@
             }
         }
         .section-top{
+            .text-block{
+                top: 40%;
+            }
             .email-form{
                 margin: auto;
                 padding:15px 10px;
@@ -936,7 +944,7 @@
         .section-top{
             height: 410px;
             .text-block{
-                bottom:26px;
+                top: 29%;
             }
             .email-form{
                 margin: 10px;

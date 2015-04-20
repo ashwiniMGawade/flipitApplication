@@ -157,6 +157,16 @@ if (!empty($offersCount)) {
             .FrontEnd_Helper_viewHelper::__translate('current offers');
     }
 }
+
+$offersAdded = '';
+if (!empty($this->offersAddedInShop) && $this->offersAddedInShop['offersInfo'] != '') {
+    $offersAdded = '<li><span class="icon time"></span><span class="text">'
+        .FrontEnd_Helper_viewHelper::__translate('This '.$this->offersAddedInShop['type'])
+        . ' '
+        .$this->offersAddedInShop['offersInfo']['amountOffers']
+        .' '
+        .FrontEnd_Helper_viewHelper::__translate('offers have been added').'</span></li>';
+}
 ?>
 <input type="hidden" name="currentShop" id="currentShop" 
 value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
@@ -169,11 +179,7 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
     ?>
     <div class="items-holder">
         <ul class="items">
-            <?php
-            echo $this->esi(
-                $this->locale.'store/createdoffers?shopid='.$this->currentStoreInformation[0]['id']
-            );
-            ?>
+            <?php echo $offersAdded; ?>
             <li><span class="icon active-people"></span>
             <span class="text"><?php echo $activeOffersInShop; ?></span></li>
         </ul>
