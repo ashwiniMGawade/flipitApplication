@@ -652,8 +652,9 @@ class Shop extends \KC\Entity\Shop
             
         $request = \DataTable_Helper::createSearchRequest(
             $params,
-            array('s.id', 's.name', 's.updated_at', 's.created_at', 's.permaLink', 's.affliateProgram', 'a.name',
-                's.discussions', 's.showSignupOption', 's.status', 's.lastSevendayClickouts', 's.shopAndOfferClickouts',
+            array('s.id', 's.name', 's.permaLink', 's.affliateProgram', 's.created_at',
+                's.lastSevendayClickouts', 's.shopAndOfferClickouts','a.name',
+                's.discussions', 's.showSignupOption', 's.status',
                 's.offlineSicne'
             )
         );
@@ -662,16 +663,15 @@ class Shop extends \KC\Entity\Shop
             ->setQueryBuilder($shopList)
             ->add('number', 's.id')
             ->add('text', 's.name')
-            ->add('number', 's.updated_at')
-            ->add('number', 's.created_at')
             ->add('text', 's.permaLink')
             ->add('text', 's.affliateProgram')
+            ->add('number', 's.created_at')
+            ->add('number', 's.lastSevendayClickouts')
+            ->add('number', 's.shopAndOfferClickouts')
             ->add('text', 'a.name')
             ->add('text', 's.discussions')
             ->add('text', 's.showSignupOption')
             ->add('text', 's.status')
-            ->add('number', 's.lastSevendayClickouts')
-            ->add('number', 's.shopAndOfferClickouts')
             ->add('text', 's.offlineSicne');
         $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
         $result = \DataTable_Helper::getResponse($data, $request);
