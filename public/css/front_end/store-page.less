@@ -701,3 +701,33 @@
     z-index: 5999;
     opacity: 0.5;
 }
+.page-store {
+    .section .block{
+        .info-area {
+            .info{
+                ul {
+                    .info li+li {
+                        @media only screen and (max-width: 767px) {
+                            display: none;
+                        }
+                    }
+                    .info li+li+li {
+                       @media only screen and (max-width: 767px) {
+                            display: none;
+                        }
+                    }
+                    .info li+li+li {
+                        @media only screen and (max-width: 980px) {
+                            display: none;
+                        }
+                    }
+                    .info li+li+li {
+                        @media only screen and (max-width: 1200px) {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
