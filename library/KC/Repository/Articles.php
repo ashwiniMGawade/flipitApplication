@@ -854,22 +854,20 @@ class Articles extends \KC\Entity\Articles
         if ($id) {
             $entityManagerLocale = \Zend_Registry::get('emLocale');
             $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-            $query= $queryBuilder->delete('\KC\Entity\Articles', 'a')
+            $query= $queryBuilder->update('\KC\Entity\Articles', 'a')
+                ->set('a.deleted', '1')
                 ->where('a.id=' . $id);
             $query->getQuery()->execute();
         } else {
             $id = null;
         }
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
-        $pageIds = self::findPageIds($id);
-        $page_ids = array_unique($pageIds);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
-        $catIds = self::findCategoryId($id);
         return $id;
     }
 
