@@ -12,11 +12,11 @@
                     <?php 
                 }
                 ?>
-                <img style="display: block; border-radius: 5px;" width='615'
-                    alt="<?php echo urldecode($this->newsLetterFooterImage['name']); ?>"
-                    title="<?php echo urldecode($this->newsLetterFooterImage['name']); ?>"  
+                <img style="display: block" width='615'
+                    alt="<?php echo urldecode($this->newsLetterFooterImage['name']); ?>" 
+                    title="<?php echo urldecode($this->newsLetterFooterImage['name']); ?>" 
                     src="<?php echo $this->publicPathCdn.$this->newsLetterFooterImage['path']
-                    .urldecode($this->newsLetterFooterImage['name']) ?>">
+                    .urldecode($this->newsLetterFooterImage['name']); ?>">
                <?php 
                 if (!empty($this->newsLetterFooterImage['footerurl'])
                 ) {

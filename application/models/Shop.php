@@ -2180,4 +2180,14 @@ public static function getShopDetail($shopId)
         return round($shopRatio);
     }
 
+    public static function getShopIdByShopName($shopName)
+    {
+        $shopId = Doctrine_Query::create()
+            ->select('s.id')
+            ->from('Shop s')
+            ->where('s.name="'.ucfirst($shopName).'"')
+            ->fetchArray();
+        return isset($shopId[0]) ? $shopId[0]['id'] : '';
+    }
+
 }

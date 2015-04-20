@@ -41,7 +41,7 @@ class ErrorController extends Zend_Controller_Action
                         $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] :'';
                         $this->view->pageCssClass = 'contact-page';
                     } else {
-                        $this->view->pageCssClass = 'flipit-expired-page';
+                        $this->view->pageCssClass = 'flipit-expired-page page-store';
                     }
 
                     if (is_array($this->pagePermalink)) {

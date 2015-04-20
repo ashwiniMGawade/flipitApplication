@@ -35,8 +35,9 @@ class Category extends BaseCategory
         $currentDateAndTime = date('Y-m-d 00:00:00');
         $categoryOffersList = Doctrine_Query::create()
         ->select(
-            "roc.offerId as oid,roc.categoryId as cid,c.permalink as categoryPermalink,c.name as categoryName,
-            o.*,s.id as shopId, s.refUrl, s.actualUrl, s.name,s.permalink as permalink, s.contentManagerName, l.path,l.name,terms.content"
+            "roc.offerId as oid, roc.categoryId as cid, c.permalink as categoryPermalink, c.name as categoryName,
+            o.*, s.id as shopId, s.refUrl, s.actualUrl, s.name, s.permalink as permalink, s.contentManagerName,
+            s.contentManagerId, l.path,l.name, terms.content"
         )
         ->from("refOfferCategory roc")
         ->leftJoin("roc.Category c")
