@@ -2878,7 +2878,8 @@ class Offer Extends \KC\Entity\Offer
                 \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['extendedOfferRefurl']).
                 '_couponDetails';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $key = 'offersAdded_'.intval($params['selctedshop']).'_shop';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
@@ -3234,7 +3235,8 @@ class Offer Extends \KC\Entity\Offer
 
             $key = 'shop_expiredOffers'  .intval($params['selctedshop']) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $key = 'offersAdded_'.intval($params['selctedshop']).'_shop';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'extendedTopOffer_of_'.intval($params['selctedshop']);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_similarShopsAndSimilarCategoriesOffers'. intval($params['selctedshop'])  . '_list';
