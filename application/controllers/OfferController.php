@@ -287,7 +287,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->offerViewCount = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             $cahceKey,
             array(
-                'function' => 'KC\Repository\Offer::getViewCountByOfferId',
+                'function' => '\KC\Repository\Offer::getViewCountByOfferId',
                 'parameters' => array($offerId)
             ),
             ''
