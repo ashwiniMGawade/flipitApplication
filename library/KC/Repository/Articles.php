@@ -871,7 +871,8 @@ class Articles extends \KC\Entity\Articles
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
-        $query = $queryBuilder->select('a, img')
+        $query = $queryBuilder
+            ->select('a, img')
             ->from('\KC\Entity\Articles', 'a')
             ->leftJoin('a.articleImage', 'img')
             ->where('a.deleted='. $flag)
