@@ -60,6 +60,8 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
     public static function addOfferInList($offerId, $pageId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $specialPageOffersQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $specialPageOffersPositionQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('o')
             ->from('KC\Entity\Offer', 'o')
@@ -68,7 +70,7 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
         $offer = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $result = '0';
         if (sizeof($offer) > 0) {
-                $query = $queryBuilder
+                $query = $specialPageOffersQueryBuilder
                     ->select('sl')
                     ->from('KC\Entity\SpecialPagesOffers', 'sl')
                     ->where('sl.offers=' . $offerId)
@@ -78,7 +80,7 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
                 $result = '2';
             } else {
                 $result = '1';
-                $query = $queryBuilder
+                $query = $specialPageOffersPositionQueryBuilder
                     ->select('p.position')
                     ->from('KC\Entity\SpecialPagesOffers', 'p')
                     ->where('p.pages=' .$pageId)
