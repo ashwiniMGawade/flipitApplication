@@ -122,94 +122,63 @@ class Admin_SearchbarController extends Zend_Controller_Action
      */
     public function exportsearchbarlistAction()
     {
-        //call to get all keywords function from database
         $data = \KC\Repository\ExcludedKeyword::exportKeywordList ();
-
-        //create object of phpExcel
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->setActiveSheetIndex(0);
         $objPHPExcel->getActiveSheet()->setCellValue('A1', $this->view->translate('Excluded keywords'));
         $objPHPExcel->getActiveSheet()->setCellValue('B1', $this->view->translate('Action'));
         $objPHPExcel->getActiveSheet()->setCellValue('C1', $this->view->translate('Created'));
-
         $column = 2;
         $row = 2;
-
-        //loop for each keyword
         foreach ($data as $excludedkeyword) {
-            //print_r($excludedkeyword); die;
-            //get excluded keyword from array
-             $keyword = '';
-            if($excludedkeyword['keyword']=='' || $excludedkeyword['keyword']=='undefined' || $excludedkeyword['keyword']==null || $excludedkeyword['keyword']=='0') {
+            $keyword = '';
+            if ($excludedkeyword['keyword'] == '' || $excludedkeyword['keyword'] =='undefined' || $excludedkeyword['keyword'] == null || $excludedkeyword['keyword']=='0') {
                 $keyword = '';
-
             } else {
-
                 $keyword = $excludedkeyword['keyword'];
             }
-
-            //get action from array
-             $action = '';
-            if($excludedkeyword['action']=='' || $excludedkeyword['action']=='undefined' || $excludedkeyword['action']==null) {
+            $action = '';
+            if ($excludedkeyword['action'] =='' || $excludedkeyword['action'] == 'undefined' || $excludedkeyword['action'] == null) {
                 $action = '';
-
             } else {
-                 $action = $excludedkeyword['action'];
-                 if($action == '0'){
+                $action = $excludedkeyword['action'];
+                if ($action == '0') {
                     $action = "Redirect";
-                   }else{
+                } else {
                     $action = "Connect";
-                  }
+                }
             }
-            //create date format
-            $createdDate =  date("d-m-Y",strtotime($excludedkeyword['created_at']));
-
-            //set value in column of excel
+            $createdDate = $excludedkeyword['created_at']->format('Y-m-d');
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$column, $excludedkeyword['keyword']);
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$column, $action);
             $objPHPExcel->getActiveSheet()->setCellValue('C'.$column, $createdDate);
-
-            //counter incriment by 1
             $column++;
             $row++;
         }
-        //FORMATING OF THE EXCEL
-         $headerStyle = array(
-                'fill' => array(
-                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                        'color' => array('rgb'=>'00B4F2'),
-                ),
-                'font' => array(
-                        'bold' => true,
-                )
+        $headerStyle = array(
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb'=>'00B4F2'),
+            ),
+            'font' => array(
+                'bold' => true,
+            )
         );
          $borderStyle = array('borders' =>
-                array('outline' =>
-                        array('style' => PHPExcel_Style_Border::BORDER_THICK,
-                                'color' => array('argb' => '000000'))));
-
-        //HEADER COLOR
-
+            array('outline' =>
+                array('style' => PHPExcel_Style_Border::BORDER_THICK,
+                            'color' => array('argb' => '000000'))
+            )
+        );
         $objPHPExcel->getActiveSheet()->getStyle('A1:' . 'C1')->applyFromArray($headerStyle);
-
-        //SET ALIGN OF TEXT
         $objPHPExcel->getActiveSheet()->getStyle('A1:C1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getStyle('B2:I'.$row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
-
-        //BORDER TO CELL
         $objPHPExcel->getActiveSheet()->getStyle('A1:'.'C1')->applyFromArray($borderStyle);
         $borderColumn =  (intval($column) -1 );
         $objPHPExcel->getActiveSheet()->getStyle('A1:'.'C'.$borderColumn)->applyFromArray($borderStyle);
-
-
-        //SET SIZE OF THE CELL
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-
-
-        // redirect output to client browser
-
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="KeywordList.xlsx"');
         header('Cache-Control: max-age=0');
