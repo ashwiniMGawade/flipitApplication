@@ -72,9 +72,9 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         if ($offerDiscountType == 'ex') {
             $offerOptionHtml =
-                '<li class="visible-xs"><span class="exclusive text-info"><span class="text-over">'.$offerOption.'</span></span></li>';
+                '<li class="visible-md visible-lg"><span class="exclusive text-info"><span class="text-over">'.$offerOption.'</span></span></li>';
         } else if ($offerDiscountType == 'sc') {
-            $offerOptionHtml = '<li class="visible-xs"><strong class="social-color">
+            $offerOptionHtml = '<li class="visible-md visible-lg"><strong class="social-color">
             <span class="social-icon"></span>'.$offerOption.'</strong></li>';
         }
         return $offerOptionHtml;
@@ -392,7 +392,7 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         $extendedOfferLink = '';
         if (isset($currentOffer->extendedOffer) ? $currentOffer->extendedOffer =='1' : ''):
-            $extendedOfferLink ='<li><span class="text"><span class="text-over"><a class=""
+            $extendedOfferLink ='<li class="visible-lg"><span class="text"><span class="text-over"><a class=""
             href="'.HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('link_deals').'/'
             . $currentOffer->extendedUrl.'">'
             .FrontEnd_Helper_viewHelper::__translate('More about this code').'</a></span></span></li>';
@@ -403,7 +403,7 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getViewAllCodesLink($shopName, $shopPermalink)
     {
         $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-        return $viewAllLink = '<li><span class="text"><span class="text-over">'
+        return $viewAllLink = '<li class="visible-xs visible-sm visible-md visible-lg"><span class="text"><span class="text-over">'
             . FrontEnd_Helper_viewHelper::__translate("View all")
             .' <a href="'.$domainName.$shopPermalink.'">'. $shopName . ' '
             . FrontEnd_Helper_viewHelper::__translate("Voucher Codes").'</a></span></span></li>';
@@ -474,7 +474,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                 .'thum_large_widget_' .$shopEditor['profileimage']['name'];
         }
 
-        $editorPanelForOffer ='<li class="visible-xs">'
+        $editorPanelForOffer ='<li class="visible-md visible-lg">'
             .'<img 
                 class="img-author" src="'.$shopEditorImagePath.'" 
                 alt="'. $shopEditor['firstName'].'" title="'. $shopEditor['firstName'].'">'.
@@ -502,7 +502,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         if (empty($onlyDaysLeftString)) {
             $onlyDaysLeftString = '';
         } else {
-            $onlyDaysLeftString = '<li class="visible-xs">'
+            $onlyDaysLeftString = '<li class="visible-md visible-lg">'
             .'<time class="date text-info"><span class="text-over">'. $onlyDaysLeftString
             . '</span></time></li>';
         }
