@@ -637,7 +637,7 @@ class Articles extends \KC\Entity\Articles
                 foreach ($storeIds as $storeid) {
                     $relatedstores = new \KC\Entity\RefArticleStore();
                     $relatedstores->relatedstores = $entityManagerLocale->find('\KC\Entity\Articles', $params['id']);
-                    $relatedstores->articleshops = $entityManagerLocale->find('\KC\Entity\Shop', $params['id']);
+                    $relatedstores->articleshops = $entityManagerLocale->find('\KC\Entity\Shop', $storeid);
                     $relatedstores->created_at = new \DateTime('now');
                     $relatedstores->updated_at = new \DateTime('now');
                     $entityManagerLocale->persist($relatedstores);
