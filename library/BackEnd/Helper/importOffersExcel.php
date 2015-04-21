@@ -78,7 +78,7 @@ class BackEnd_Helper_importOffersExcel
                         $offerList->maxlimit = 0;
                         $offerList->approved = true;
                         $offerList->updated_at = new \DateTime('now');
-                        $dataSaved = 1;
+                        $dataSaved++;
                         $entityManagerLocale->persist($offerList);
                         $entityManagerLocale->flush();
                     }
