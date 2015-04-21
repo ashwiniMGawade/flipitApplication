@@ -177,10 +177,33 @@ foreach ($this->offers as $offer) {
             <div class="info">
                <ul>
                     <?php
-                    $showUsedCode = false; 
+                    $offerOptionsWithPriorityClasses = $offerPartial->getOffersOptionsByPriority(
+                        $offerBottomTextForExclusiveOrSocialOrEditor,
+                        $offerBottomDaysTillExpireText,
+                        $offerBottomViewAllShopsLink,
+                        $offerBottomExtendedLink
+                    ); 
+                    $offerBottomTextForExclusiveOrSocialOrEditor = 
+                        isset($offerOptionsWithPriorityClasses['offerBottomTextForExclusiveOrSocialOrEditor']) 
+                        ? $offerOptionsWithPriorityClasses['offerBottomTextForExclusiveOrSocialOrEditor'] 
+                        : '';
+                    $offerBottomDaysTillExpireText = 
+                        isset($offerOptionsWithPriorityClasses['offerBottomDaysTillExpireText']) 
+                        ? $offerOptionsWithPriorityClasses['offerBottomDaysTillExpireText'] 
+                        : '';
+                    $offerBottomViewAllShopsLink = 
+                        isset($offerOptionsWithPriorityClasses['offerBottomViewAllShopsLink']) 
+                        ? $offerOptionsWithPriorityClasses['offerBottomViewAllShopsLink'] 
+                        : '';
+                    $offerBottomExtendedLink = 
+                        isset($offerOptionsWithPriorityClasses['offerBottomExtendedLink']) 
+                        ? $offerOptionsWithPriorityClasses['offerBottomExtendedLink'] 
+                        : '';
+
                     echo $offerBottomTextForExclusiveOrSocialOrEditor
                         .$offerBottomDaysTillExpireText
                         .$offerBottomViewAllShopsLink;
+                    $showUsedCode = false;
                     if (empty($offerBottomDaysTillExpireText) || empty($offerBottomViewAllShopsLink)) {
                         echo $offerBottomExtendedLink;
                         if (empty($offerBottomExtendedLink)) {
@@ -190,7 +213,11 @@ foreach ($this->offers as $offer) {
                     if ( (empty($offerBottomDaysTillExpireText) && empty($offerBottomViewAllShopsLink)) || $showUsedCode)
                     {
                         if ($offer->discountType == "CD") {
-                            echo $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
+                            if (isset($offerOptionsWithPriorityClasses['numberOfCodeUsed'])) {
+                                echo $offerOptionsWithPriorityClasses['numberOfCodeUsed'];
+                                echo $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
+                                echo "</li>";
+                            }
                         }
                     }
                     ?>
