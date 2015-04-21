@@ -551,7 +551,7 @@ class User extends \KC\Entity\User
                     $query = $queryBuilder->select('o.id')
                         ->from('\KC\Entity\Offer', 'o')
                         ->where('o.authorId=' . $id);
-                    $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);           
+                    $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                     if (count($offers) > 0) {
                         $ids = array();
                         if(!empty($offers)):
