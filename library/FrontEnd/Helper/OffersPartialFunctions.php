@@ -544,7 +544,6 @@ class FrontEnd_Helper_OffersPartialFunctions
     ) {
         $offerOptionsWithPriority =  array();
         $resetOfferOptionsPriority =  array();
-        $offerOptionsWithPriorityClasses =  array();
         $offerOptionsWithPriority['offerBottomViewAllShopsLink'] = $offerBottomViewAllShopsLink;
         $offerOptionsWithPriority['offerBottomExtendedLink'] = $offerBottomExtendedLink;
         $offerOptionsWithPriority['offerBottomDaysTillExpireText'] = $offerBottomDaysTillExpireText;
@@ -554,7 +553,12 @@ class FrontEnd_Helper_OffersPartialFunctions
                 $resetOfferOptionsPriority[$offerOptionIndex] = $offerOption;
             }
         }
+        return self::getOfferOptionsWithPriorityClasses($resetOfferOptionsPriority);
+    }
 
+    public static function getOfferOptionsWithPriorityClasses($resetOfferOptionsPriority)
+    {
+        $offerOptionsWithPriorityClasses =  array();
         $optionPriority = 1;
         foreach ($resetOfferOptionsPriority as $offerOptionsPriorityIndex => $offerOptionsPriority) {
             if ($optionPriority == 1) {
@@ -569,7 +573,11 @@ class FrontEnd_Helper_OffersPartialFunctions
             }
             $optionPriority++;
         }
+        return self::getOfferOptionsWithCodeUsed($offerOptionsWithPriorityClasses);
+    }
 
+    public static function getOfferOptionsWithCodeUsed($offerOptionsWithPriorityClasses)
+    {
         if (count($offerOptionsWithPriorityClasses) == 0 || count($offerOptionsWithPriorityClasses) == 1) {
             if (count($offerOptionsWithPriorityClasses) == 0) {
                 $offerOptionsWithPriorityClasses['numberOfCodeUsed']
