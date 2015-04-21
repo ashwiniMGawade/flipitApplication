@@ -355,12 +355,12 @@ class Category extends \KC\Entity\Category
         $updateRouteLink = $queryBuilder->update('KC\Entity\RoutePermalink', 'rp')
             ->set(
                 'rp.permalink',
-                "'".\BackEnd_Helper_viewHelper::stripSlashesFromString($category["permaLink"]) ."'"
+                $queryBuilder->expr()->literal(\BackEnd_Helper_viewHelper::stripSlashesFromString($category["permaLink"]))
             )
-            ->set('rp.type', "'CAT'")
-            ->set('rp.exactlink', "'".$categoryPermalink."'");
-        $updateRouteLink->where('rp.type = "CAT"')
-            ->andWhere("rp.permalink = '".$categoryInfo[0]['permaLink']."'")
+            ->set('rp.type', $queryBuilder->expr()->literal("CAT"))
+            ->set('rp.exactlink', $queryBuilder->expr()->literal($categoryPermalink));
+        $updateRouteLink->where($queryBuilder->expr()->eq("rp.type", $queryBuilder->expr()->literal("CAT")))
+            ->andWhere($queryBuilder->expr()->eq("rp.permalink", $queryBuilder->expr()->literal($categoryInfo[0]['permaLink'])))
             ->getQuery()
             ->execute();
         return true;

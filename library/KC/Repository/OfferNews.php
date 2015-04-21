@@ -31,8 +31,7 @@ class OfferNews extends \KC\Entity\OfferNews
         $newstickerList =  $queryBuilder
             ->from("KC\Entity\OfferNews", "n")
             ->leftJoin("n.shop", "s")
-            ->where("n.deleted = 0")
-            ->orderBy("n.title", "ASC");
+            ->where("n.deleted = 0");
         $request = \DataTable_Helper::createSearchRequest($params, array());
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
