@@ -114,7 +114,7 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
 						 {
 							"fnRender" : function(obj) {
 							    var id = null;
-								return id = obj.aData.updated_at;
+								return id = obj.aData.id;
 						
 							},
 							"bVisible":    false ,
