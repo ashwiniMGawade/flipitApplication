@@ -345,7 +345,7 @@ function getKeywordList(iStart,iSortCol,iSortDir){
 					state[ 'iSortCol' ] = obj.aaSorting[0][0] ;
 					state[ 'iSortDir' ] = obj.aaSorting[0][1] ;
 
-					$("#keywordListTbl").find('tr').find('td').click(function () {
+					$("#keywordListTbl").find('tr').find('td:lt(3)').click(function () {
 							var eId = $(this).parent('tr').find('p').attr('editid');
 							state[ 'eId' ] = eId ;
 							click = true;

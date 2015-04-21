@@ -103,7 +103,7 @@ class RouteRedirect extends \KC\Entity\RouteRedirect
 
     public function uploadExcel($file, $import = false)
     {
-        $uploadResponse = \BackEnd_Helper_viewHelper::uploadExcel($file, $import = false);
+        $uploadResponse = \BackEnd_Helper_viewHelper::uploadExcel($file, $import = false, $type = '');
         return $uploadResponse;
 
     }
