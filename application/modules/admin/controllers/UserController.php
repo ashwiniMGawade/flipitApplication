@@ -256,19 +256,16 @@ class Admin_UserController extends Zend_Controller_Action
         $entityManagerUser  = \Zend_Registry::get('emUser');
         $id = $this->getRequest()->getParam('id');
         if ($id && $id != \Auth_StaffAdapter::getIdentity()->id) {
-
             $uDel = $entityManagerUser->find('KC\Entity\User', $id);
             $uDel->deleted = true;
             $entityManagerUser->persist($uDel);
             $entityManagerUser->flush();
-
             $User = new KC\Entity\User();
             //$User->updateInDatabase($id, null, 0);
             $userPermlink = $uDel->__get('slug');
             //self::updateVarnish($userPermlink);
 
         } else {
-
             $id = null;
         }
         $flash = $this->_helper->getHelper('FlashMessenger');
@@ -487,40 +484,34 @@ class Admin_UserController extends Zend_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         if ($id) {
+            $entityManagerUser  = \Zend_Registry::get('emUser');
+            $uRes  = $entityManagerUser->createQueryBuilder()
+                ->update('KC\Entity\User', 'u')
+                ->set('u.deleted', "0")
+                ->where('u.id ='.$id)
+                ->getQuery()->execute();
 
-            $uRes = Doctrine_Query::create()->update('User')
-                    ->set('deleted', '0')->where('id=' . $id);
-            $uRes  = $uRes->execute();
-
-            $fU = Doctrine_Core::getTable('User')->find($id);
+            $fU = \Zend_Registry::get('emUser')->find('KC\Entity\User', $id);
             $fullName = $fU->firstName . " " . $fU->lastName;
-
             $User = new \KC\Repository\User();
             $User->updateInDatabase($id, $fullName, 0);
-
-            # if a user is restored
-            if($uRes ) {
-
-                 $data =  Doctrine_Query::create()->select('u.slug')
-                                      ->from("User u")
-                                      ->where('u.id= ? ', $id)
-                                      ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
+            if ($uRes) {
+                $data =  Doctrine_Query::create()
+                    ->select('u.slug')
+                    ->from("User u")
+                    ->where('u.id= ? ', $id)
+                    ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
                 $userPermlink = $data['slug'] ;
                 //self::updateVarnish($userPermlink);
             }
-
         } else {
-
             $id = null;
         }
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $this->view->translate('User has been restored successfully.');
         $flash->addMessage(array('success' => $message ));
-        //call cache function
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
-
         echo Zend_Json::encode($id);
         die();
     }
@@ -533,23 +524,26 @@ class Admin_UserController extends Zend_Controller_Action
     public function permanentdeleteAction()
     {
         $id = $this->getRequest()->getParam('id');
-
         if ($id) {
-
+            $entityManagerUser  = \Zend_Registry::get('emUser');
             $User = new \KC\Repository\User();
             $User->updateInDatabase($id, null, 1);
+            $u = \Zend_Registry::get('emUser')->find('KC\Entity\User', $id);
+            $del1 = $entityManagerUser->createQueryBuilder()
+                ->delete('KC\Entity\refUserWebsite', 'r')
+                ->where('r.websiteUsers ='.$id)
+                ->getQuery()->execute();
 
-            $u = Doctrine_Core::getTable("User")->find($id);
-            $del1 = Doctrine_Query::create()->delete()
-                    ->from('refUserWebsite w')->where("w.userId=" . $id)
-                    ->execute();
-            $del = Doctrine_Query::create()->delete()->from('User u')
-                    ->where("u.id=" . $id)->execute();
+            $del = $entityManagerUser->createQueryBuilder()
+                ->delete('KC\Entity\User', 'u')
+                ->where('u.id ='.$id)
+                ->getQuery()->execute();
 
-            if( (intval($u->profileImageId)) > 0) {
-
-                $del2 = Doctrine_Query::create()->delete()->from('ProfileImage i')
-                    ->where("i.id=" . $u->profileImageId)->execute();
+            if ((intval($u->profileImageId)) > 0) {
+                $del = $entityManagerUser->createQueryBuilder()
+                    ->delete('KC\Entity\ProfileImage', 'i')
+                    ->where('i.id ='. $u->profileImageId)
+                    ->getQuery()->execute();
             }
 
         } else {

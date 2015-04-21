@@ -630,7 +630,7 @@ class User extends \KC\Entity\User
                         $query= $shopQueryBuilder->update('\KC\Entity\Shop', 'shp')
                             ->set('shp.contentManagerName', "'$fullName'")
                             ->set('shp.contentManagerId', 0)
-                            ->where($entityManagerUser->expr()->in('shp.id', $ids));
+                            ->where($shopQueryBuilder->expr()->in('shp.id', $ids));
                         $query->getQuery()->execute();
                     }
                 }
@@ -775,35 +775,35 @@ class User extends \KC\Entity\User
         $role = $params['role'];
         $srh = $params['searchtext'];
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $data = $queryBuilder->select('u,r.name as role,p.path as path,p.name as ppname')
+        $qb = $queryBuilder
             ->from('KC\Entity\User', 'u')
             ->leftJoin("u.users", "r")
             ->leftJoin('u.profileimage', 'p')
-            ->setParameter(1, '1')
-            ->where('u.deleted = ?1')
-            ->setParameter(2, \Auth_StaffAdapter::getIdentity()->users->id)
-            ->andWhere('r.id >=', '?2');
+            ->where('u.deleted = 1')
+            ->andWhere('r.id >='. \Auth_StaffAdapter::getIdentity()->users->id);
         if ((intval($role)) > 0) {
-            $data->setParameter(3, $role)
-                ->addWhere('r.id= ?3');
+            $qb->andWhere('r.id='. $role);
         }
         if ($srh!='undefined') {
-            $data->setParameter(4, $srh.'%')
-            ->andWhere($queryBuilder->expr()->like('u.firstName', '?4'));
+            $qb->andWhere($queryBuilder->expr()->like('u.firstName', $queryBuilder->expr()->literal($srh.'%')));
         }
-        $data->setParameter(5, \Auth_StaffAdapter::getIdentity()->id)
-            ->andWhere('u.id <>', '?5')
-            ->orderBy("u.id", "DESC")->getQuery();
+        $qb->andWhere('u.id <>'. \Auth_StaffAdapter::getIdentity()->id);
 
-        return Zend_Json::encode(
-            \DataTable_Helper::generateDataTableResponse(
-                $data,
-                $params,
-                array("__identifier" => "u.id, r.id, p.id",'u.id','u.firstName','u.email','role'),
-                array(),
-                array()
-            )
-        );
+        $request  = \DataTable_Helper::createSearchRequest($params, array('id', 'firstName', 'email'));
+
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emUser'), $request);
+        $builder
+            ->setQueryBuilder($qb)
+            ->add('number', 'u.id')
+            ->add('text', 'u.firstName, u.lastName')
+            ->add('text', 'u.email')
+            ->add('text', 'r.name')
+            ->add('text', 'p.path')
+            ->add('text', 'p.name');
+
+        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
+        $data = \DataTable_Helper::getResponse($data, $request);
+        return \Zend_Json::encode($data);
     }
 
     public function getPageAutor($site_name)

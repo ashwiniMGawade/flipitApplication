@@ -192,7 +192,7 @@ function getUserListFromTrash(searchtext,role) {
 									
 									"fnRender" : function(obj) {
 
-										return role =    obj.aData.role;
+										return role =    obj.aData.users.name;
 
 									},
 									
