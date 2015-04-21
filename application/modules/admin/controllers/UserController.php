@@ -529,20 +529,20 @@ class Admin_UserController extends Zend_Controller_Action
             $User = new \KC\Repository\User();
             $User->updateInDatabase($id, null, 1);
             $u = \Zend_Registry::get('emUser')->find('KC\Entity\User', $id);
-            $del1 = $entityManagerUser->createQueryBuilder()
+            $del1 =\Zend_Registry::get('emUser')->createQueryBuilder()
                 ->delete('KC\Entity\refUserWebsite', 'r')
                 ->where('r.websiteUsers ='.$id)
                 ->getQuery()->execute();
 
-            $del = $entityManagerUser->createQueryBuilder()
+            $del = \Zend_Registry::get('emUser')->createQueryBuilder()
                 ->delete('KC\Entity\User', 'u')
                 ->where('u.id ='.$id)
                 ->getQuery()->execute();
 
-            if ((intval($u->profileImageId)) > 0) {
-                $del = $entityManagerUser->createQueryBuilder()
+            if ((intval($u->profileimage->id)) > 0) {
+                $del = \Zend_Registry::get('emUser')->createQueryBuilder()
                     ->delete('KC\Entity\ProfileImage', 'i')
-                    ->where('i.id ='. $u->profileImageId)
+                    ->where('i.id ='. $u->profileimage->id)
                     ->getQuery()->execute();
             }
 

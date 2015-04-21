@@ -520,34 +520,34 @@ class User extends \KC\Entity\User
                 $entityManagerLocale  =\Zend_Registry::get('emLocale');
 
                 if ($flag==0) {
-                    $entityManagerLocale->createQueryBuilder()
+                    \Zend_Registry::get('emLocale')->createQueryBuilder()
                         ->update('KC\Entity\Offer', 'o')
                         ->set('o.authorName', "'$fullName'")
                         ->where('o.authorId ='.$id)
                         ->getQuery()->execute();
 
-                    $entityManagerLocale
+                    \Zend_Registry::get('emLocale')
                         ->createQueryBuilder()->update('KC\Entity\Page', 'p')
                         ->set('p.contentManagerName', "'$fullName'")
                         ->where('p.contentManagerId ='.$id)
                         ->getQuery()->execute();
 
-                    $entityManagerLocale->createQueryBuilder()->update('KC\Entity\Articles', 'a')
+                    \Zend_Registry::get('emLocale')->createQueryBuilder()->update('KC\Entity\Articles', 'a')
                         ->set('a.authorname', "'$fullName'")
                         ->where('a.authorid ='.$id)
                         ->getQuery()->execute();
 
-                    $entityManagerLocale->createQueryBuilder()->update('KC\Entity\Shop', 's')
+                    \Zend_Registry::get('emLocale')->createQueryBuilder()->update('KC\Entity\Shop', 's')
                         ->set('s.accountManagerName', "'$fullName'")
                         ->where('s.accoutManagerId ='.$id)
                         ->getQuery()->execute();
 
-                    $entityManagerLocale->createQueryBuilder()->update('KC\Entity\Shop', 'sh')
+                    \Zend_Registry::get('emLocale')->createQueryBuilder()->update('KC\Entity\Shop', 'sh')
                         ->set('sh.contentManagerName', "'$fullName'")
                         ->where('sh.contentManagerId ='.$id)
                         ->getQuery()->execute();
                 } else if ($flag==1) {
-                    $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                    $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
                     $query = $queryBuilder->select('o.id')
                         ->from('\KC\Entity\Offer', 'o')
                         ->where('o.authorId=' . $id);
@@ -559,7 +559,7 @@ class User extends \KC\Entity\User
                                 $ids[] = $arr['id'];
                             endforeach;
                         endif;
-                        $offerQueryBuilder  = $entityManagerLocale->createQueryBuilder();
+                        $offerQueryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
                         $query= $offerQueryBuilder->update('\KC\Entity\Offer', 'of')
                             ->set('of.authorName', "'$fullName'")
                             ->set('of.authorName', "'$fullName'")
@@ -568,7 +568,7 @@ class User extends \KC\Entity\User
                         $query->getQuery()->execute();
                     }
    
-                    $pageQueryBuilder  = $entityManagerLocale->createQueryBuilder();
+                    $pageQueryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
                     $query = $pageQueryBuilder->select('pg.id')
                         ->from('\KC\Entity\Page', 'pg')
                         ->where('pg.contentManagerId=' . $id);
@@ -582,7 +582,7 @@ class User extends \KC\Entity\User
                             endforeach;
                         endif;
 
-                        $pagesQueryBuilder  = $entityManagerLocale->createQueryBuilder();
+                        $pagesQueryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
                         $query= $pagesQueryBuilder->update('\KC\Entity\Page', 'page')
                             ->set('page.contentManagerName', "'$fullName'")
                             ->set('page.contentManagerId', 0)
@@ -590,7 +590,7 @@ class User extends \KC\Entity\User
                         $query->getQuery()->execute();
                     }
 
-                    $articleQueryBuilder = $entityManagerLocale->createQueryBuilder();
+                    $articleQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
                     $query = $articleQueryBuilder->select('art.id')
                         ->from('\KC\Entity\Articles', 'art')
                         ->where('art.authorid=' . $id);
@@ -604,7 +604,7 @@ class User extends \KC\Entity\User
                             endforeach;
                         endif;
 
-                        $articlesQueryBuilder  = $entityManagerLocale->createQueryBuilder();
+                        $articlesQueryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
                         $query= $articlesQueryBuilder->update('\KC\Entity\Articles', 'article')
                             ->set('article.authorname', "'$fullName'")
                             ->set('article.authorid', 0)
@@ -612,7 +612,7 @@ class User extends \KC\Entity\User
                         $query->getQuery()->execute();
                     }
 
-                    $shopsQueryBuilder  = $entityManagerLocale->createQueryBuilder();
+                    $shopsQueryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
                     $query = $shopsQueryBuilder->select('shop.id, shop.name')
                         ->from('\KC\Entity\Shop', 'shop')
                         ->where('shop.contentManagerId=' . $id);
@@ -626,7 +626,7 @@ class User extends \KC\Entity\User
                             endforeach;
                         endif;
 
-                        $shopQueryBuilder  = $entityManagerLocale->createQueryBuilder();
+                        $shopQueryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
                         $query= $shopQueryBuilder->update('\KC\Entity\Shop', 'shp')
                             ->set('shp.contentManagerName', "'$fullName'")
                             ->set('shp.contentManagerId', 0)
