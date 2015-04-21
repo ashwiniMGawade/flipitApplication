@@ -244,8 +244,7 @@ class Admin_VisitorController extends Zend_Controller_Action
         $params = $this->_getAllParams();
         if ($this->getRequest()->isPost()) {
             if (isset($_FILES['excelFile']['name']) && @$_FILES['excelFile']['name'] != '') {
-                $routeRedirectObj = new \KC\Repository\RouteRedirect();
-                $result = $routeRedirectObj->uploadExcel($_FILES['excelFile']['name'], true);
+                $result = \KC\Repository\RouteRedirect::uploadExcel($_FILES['excelFile']['name'], true);
                 $excelFilePath = $result['path'];
                 $excelFile = $excelFilePath.$result['fileName'];
                 if ($result['status'] == 200) {
