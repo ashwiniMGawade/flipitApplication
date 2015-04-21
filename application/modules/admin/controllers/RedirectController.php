@@ -121,68 +121,44 @@ class Admin_RedirectController extends Zend_Controller_Action
      */
     public function exportredirectlistAction()
     {
-        ini_set('max_execution_time',115200);
-        //call to get all keywords function from database
-        $data = \KC\Repository\RouteRedirect::exportRedirectList ();
-
-        //create object of phpExcel
+        ini_set('max_execution_time', 115200);
+        $data = \KC\Repository\RouteRedirect::exportRedirectList();
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->setActiveSheetIndex(0);
-        //$objPHPExcel->getActiveSheet()->setCellValue('A1', $this->view->translate('Original URL'));
-        //$objPHPExcel->getActiveSheet()->setCellValue('B1', $this->view->translate('Redirect To'));
-        //$objPHPExcel->getActiveSheet()->setCellValue('C1', $this->view->translate('Created'));
         $column = 1;
         $row = 1;
-        //loop for each keyword
         foreach ($data as $redirectTo) {
-
-            $createdDate =  date("d-m-Y",strtotime($redirectTo['created_at']));
-            //set value in column of excel
+            $createdDate =  $redirectTo['created_at']->format('Y-m-d');
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$column, $redirectTo['orignalurl']);
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$column, $redirectTo['redirectto']);
             $objPHPExcel->getActiveSheet()->setCellValue('C'.$column, $createdDate);
-
-            //counter incriment by 1
             $column++;
             $row++;
         }
-        //FORMATING OF THE EXCEL
-         $headerStyle = array(
-                'fill' => array(
-                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                        'color' => array('rgb'=>'00B4F2'),
-                ),
-                'font' => array(
-                        'bold' => true,
-                )
+        $headerStyle = array(
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb'=>'00B4F2'),
+            ),
+            'font' => array(
+                'bold' => true,
+            )
         );
          $borderStyle = array('borders' =>
-                array('outline' =>
-                        array('style' => PHPExcel_Style_Border::BORDER_THICK,
-                                'color' => array('argb' => '000000'))));
-
-        //HEADER COLOR
-
-        //$objPHPExcel->getActiveSheet()->getStyle('A1:' . 'C1')->applyFromArray($headerStyle);
-
-        //SET ALIGN OF TEXT
-        //$objPHPExcel->getActiveSheet()->getStyle('A1:C1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        //$objPHPExcel->getActiveSheet()->getStyle('B2:I'.$row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
-
-        //BORDER TO CELL
-        //$objPHPExcel->getActiveSheet()->getStyle('A1:'.'C1')->applyFromArray($borderStyle);
+            array('outline' =>
+                array(
+                    'style' => PHPExcel_Style_Border::BORDER_THICK,
+                    'color' => array(
+                    'argb' => '000000'
+                    )
+                )
+            )
+        );
         $borderColumn =  (intval($column) -1 );
         $objPHPExcel->getActiveSheet()->getStyle('A1:'.'C'.$column)->applyFromArray($borderStyle);
-
-
-        //SET SIZE OF THE CELL
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-
-
-        // redirect output to client browser
-
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="Redirect.xlsx"');
         header('Cache-Control: max-age=0');
@@ -193,77 +169,60 @@ class Admin_RedirectController extends Zend_Controller_Action
 
     public function importredirectAction()
     {
-        ini_set('max_execution_time',115200);
-        $params = $this->_getAllParams();
-        if ($this->getRequest ()->isPost ()) {
-
-            if (isset($_FILES['excelFile']['name']) && @$_FILES['excelFile']['name'] != '') {
+        ini_set('max_execution_time', 115200);
+        if ($this->getRequest()->isPost()) {
+            if (isset($_FILES['excelFile']['name']) && $_FILES['excelFile']['name'] != '') {
                 $RouteRedirectObj = new KC\Repository\RouteRedirect();
-                $result = @$RouteRedirectObj->uploadExcel($_FILES['excelFile']['name']);
-
+                $result = $RouteRedirectObj->uploadExcel($_FILES['excelFile']['name']);
                 if ($result['status'] == 200) {
-
-                    //Doctrine_Query::create()->delete('RouteRedirect')->execute();
-                    //die();
-                    //echo HTTP_PATH;
                     $spl = explode('/', HTTP_PATH);
-                    //print_r($spl);
                     $path = $spl[0].'//' . $spl[2];
-                    //die();
                     $excelFilePath = $result['path'];
                     $excelFile = $excelFilePath.$result['fileName'];
-
                     $objReader = PHPExcel_IOFactory::createReader('Excel2007');
-                    $objPHPExcel = $objReader->load(ROOT_PATH.$excelFile);
+                    $objPHPExcel = $objReader->load($excelFile);
                     $worksheet = $objPHPExcel->getActiveSheet();
                     foreach ($worksheet->getRowIterator() as $row) {
                         $cellIterator = $row->getCellIterator();
                         $cellIterator->setIterateOnlyExistingCells(false);
                         foreach ($cellIterator as $cell) {
                             $data[$cell->getRow()][$cell->getColumn()] = $cell->getValue();
-
                         }
                         $orignalURL =  $data[$cell->getRow()]['A'];
                         $redirectUrl =  $data[$cell->getRow()]['B'];
-                        //find by name if exist in database
                         if (!empty($orignalURL)) {
                             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
                             $query = $queryBuilder->select('r')
                                 ->from('KC\Entity\RouteRedirect', 'r')
                                 ->where('r.orignalurl ='.$queryBuilder->expr()->literal($orignalURL));
                             $redirect = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-                            if (!empty($redirect)){
+                            if (!empty($redirect)) {
                             } else {
                                 $redirect  = new KC\Entity\RouteRedirect();
-
                             }
-                            if($orignalURL != " "){
-
-                                $redirect->orignalurl= $orignalURL;
+                            if ($orignalURL != " ") {
+                                $redirect->orignalurl = $orignalURL;
                             }
-                            if($redirectUrl != " "){
-
-                                $redirect->redirectto= $redirectUrl;
+                            if ($redirectUrl != " ") {
+                                $redirect->redirectto = $redirectUrl;
                             }
                             $redirect->deleted = 0;
                             $redirect->created_at = new \DateTime('now');
                             $redirect->updated_at = new \DateTime('now');
                             \Zend_Registry::get('emLocale')->persist($redirect);
                             \Zend_Registry::get('emLocale')->flush();
-
                         } else {
-                            $flash = $this->_helper->getHelper ( 'FlashMessenger' );
-                            $message = $this->view->translate ( 'Redirect has been updated successfully' );
-                            $flash->addMessage ( array ('success' => $message ) );
-                            $this->_redirect ( HTTP_PATH . 'admin/redirect' );
+                            $flash = $this->_helper->getHelper('FlashMessenger');
+                            $message = $this->view->translate('Redirect has been updated successfully');
+                            $flash->addMessage(array('success' => $message));
+                            $this->_redirect(HTTP_PATH . 'admin/redirect');
                         }
-
                     }
-                    $flash = $this->_helper->getHelper ( 'FlashMessenger' );
-                    $message = $this->view->translate ( 'Redirect has been updated successfully' );
-                    $flash->addMessage ( array ('success' => $message ) );
-                    $this->_redirect ( HTTP_PATH . 'admin/redirect' );
-                } else{
+                    $flash = $this->_helper->getHelper('FlashMessenger');
+                    $message = $this->view->translate('Redirect has been updated successfully');
+                    $flash->addMessage(array('success' => $message));
+                    $this->_redirect(HTTP_PATH . 'admin/redirect');
+                } else {
                     die('aaaaa');
                     return false;
                 }

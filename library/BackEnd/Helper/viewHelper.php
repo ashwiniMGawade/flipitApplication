@@ -742,7 +742,6 @@ class BackEnd_Helper_viewHelper
         if (!file_exists(UPLOAD_EXCEL_PATH)) {
             mkdir(UPLOAD_EXCEL_PATH, 0776, true);
         }
-        
         $rootPath = UPLOAD_EXCEL_PATH;
         if ($import) {
             $rootPath .= 'import/';

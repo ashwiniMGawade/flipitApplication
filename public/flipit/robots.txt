@@ -105,7 +105,7 @@ Disallow: /nz/store/
 Disallow: /br/store/
 Disallow: /ca/store/
 Disallow: /us/store/
-Disallow: /no/store/
+Disallow: /no/store/we
 
 Sitemap: http://a63398.hostedsitemaps.com/3917361/sitemap.xml
 Sitemap: http://a63398.hostedsitemaps.com/3917361/sitemap_images.xml

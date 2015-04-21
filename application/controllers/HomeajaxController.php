@@ -51,7 +51,7 @@ class HomeajaxController extends Zend_Controller_Action
     {
         $moneySavingGuidesList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             "all_homemoneysaving_list",
-            array('function' => 'KC\Repository\Articles::getAllArticles', 'parameters' => array(10))
+            array('function' => 'KC\Repository\Articles::getAllArticlesForHomePage', 'parameters' => array(10))
 
         );
         $homePagePartials = new \FrontEnd_Helper_HomePagePartialFunctions();

@@ -83,6 +83,24 @@ class Articles extends \KC\Entity\Articles
         return $allArticles;
     }
 
+    public static function getAllArticlesForHomePage($limit = 0)
+    {
+        $currentDateTime = date('Y-m-d 00:00:00');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select("p, a, thumb")
+            ->from("KC\Entity\PopularArticles", "p")
+            ->leftJoin("p.articles", "a")
+            ->leftJoin('a.thumbnail', 'thumb')
+            ->where("a.publish = 1")
+            ->andWhere("a.deleted= 0")
+            ->andWhere($queryBuilder->expr()->lte("a.publishdate", $queryBuilder->expr()->literal($currentDateTime)))
+            ->orderBy("p.position", "ASC")
+            ->setMaxResults($limit);
+        $popularArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $popularArticles;
+    }
+
     public static function getMostReasArticlesForPlusOverview($limit = 0)
     {
         $currentDateTime = date('Y-m-d 00:00:00');
@@ -619,7 +637,7 @@ class Articles extends \KC\Entity\Articles
                 foreach ($storeIds as $storeid) {
                     $relatedstores = new \KC\Entity\RefArticleStore();
                     $relatedstores->relatedstores = $entityManagerLocale->find('\KC\Entity\Articles', $params['id']);
-                    $relatedstores->articleshops = $entityManagerLocale->find('\KC\Entity\Shop', $params['id']);
+                    $relatedstores->articleshops = $entityManagerLocale->find('\KC\Entity\Shop', $storeid);
                     $relatedstores->created_at = new \DateTime('now');
                     $relatedstores->updated_at = new \DateTime('now');
                     $entityManagerLocale->persist($relatedstores);
