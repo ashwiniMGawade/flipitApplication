@@ -378,7 +378,7 @@ class User extends \KC\Entity\User
             if (! $updateUser->isPasswordDifferent($params['confirmNewPassword'])) {
                 return  array('error' => true, 'message' => 'New password can\'t be same as previous password');
             }
-            if ($updateUser->isValidPassword($params['confirmNewPassword'])) {
+            if (self::isValidPassword($params['confirmNewPassword'])) {
                 $updateUser = self::setPassword($updateUser, $params['confirmNewPassword']);
             } else {
                 return  array(
@@ -503,11 +503,13 @@ class User extends \KC\Entity\User
     public function updateInDatabase($id, $fullName, $flag)
     {
         $entityManagerUser  = \Zend_Registry::get('emUser');
-        $application = new \Zend_Application(APPLICATION_ENV,
-                APPLICATION_PATH . '/configs/application.ini');
+        $application = new \Zend_Application(
+            APPLICATION_ENV,
+            APPLICATION_PATH . '/configs/application.ini'
+        );
 
         $connections = $application->getOption('doctrine');
-        foreach ( $connections as $key => $connection ) {
+        foreach ($connections as $key => $connection) {
 
             // check database is being must be site
             if ($key != 'imbull' && isset($connection ['dsn'])) {
@@ -517,13 +519,15 @@ class User extends \KC\Entity\User
                 $conn = '';
                 $entityManagerLocale  =\Zend_Registry::get('emLocale');
 
-                if($flag==0){
-                    $entityManagerLocale->createQueryBuilder()->update('KC\Entity\Offer', 'o')
+                if ($flag==0) {
+                    $entityManagerLocale->createQueryBuilder()
+                        ->update('KC\Entity\Offer', 'o')
                         ->set('o.authorName', "'$fullName'")
                         ->where('o.authorId ='.$id)
                         ->getQuery()->execute();
 
-                    $entityManagerLocale->createQueryBuilder()->update('KC\Entity\Page', 'p')
+                    $entityManagerLocale
+                        ->createQueryBuilder()->update('KC\Entity\Page', 'p')
                         ->set('p.contentManagerName', "'$fullName'")
                         ->where('p.contentManagerId ='.$id)
                         ->getQuery()->execute();
@@ -542,17 +546,14 @@ class User extends \KC\Entity\User
                         ->set('sh.contentManagerName', "'$fullName'")
                         ->where('sh.contentManagerId ='.$id)
                         ->getQuery()->execute();
-                } else if($flag==1) {
+                } else if ($flag==1) {
                     $queryBuilder  = $entityManagerLocale->createQueryBuilder();
                     $query = $queryBuilder->select('o.id')
                         ->from('\KC\Entity\Offer', 'o')
                         ->where('o.authorId=' . $id);
-                    $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            
+                    $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);           
                     if (count($offers) > 0) {
-
                         $ids = array();
-
                         if(!empty($offers)):
                             foreach($offers as $arr):
                                 $ids[] = $arr['id'];
