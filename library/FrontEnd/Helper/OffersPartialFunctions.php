@@ -569,12 +569,16 @@ class FrontEnd_Helper_OffersPartialFunctions
             }
             $optionPriority++;
         }
-        if (count($offerOptionsWithPriorityClasses) == 0) {
-            $offerOptionsWithPriorityClasses['numberOfCodeUsed']
+
+        if (count($offerOptionsWithPriorityClasses) == 0 || count($offerOptionsWithPriorityClasses) == 1) {
+            if (count($offerOptionsWithPriorityClasses) == 0) {
+                $offerOptionsWithPriorityClasses['numberOfCodeUsed']
                     = "<li class='visible-xs visible-sm visible-md visible-lg'>";
-        }
-        if (count($offerOptionsWithPriorityClasses) == 1) {
-            $offerOptionsWithPriorityClasses['numberOfCodeUsed'] = "<li class='visible-md visible-lg'>";
+            } else if (count($offerOptionsWithPriorityClasses) == 1) {
+                $offerOptionsWithPriorityClasses['numberOfCodeUsed'] = "<li class='visible-md visible-lg'>";
+            } else if (count($offerOptionsWithPriorityClasses) == 2) {
+                $offerOptionsWithPriorityClasses['numberOfCodeUsed'] = "<li class='visible-lg'>";
+            }
         }
         return $offerOptionsWithPriorityClasses;
     }
