@@ -534,12 +534,12 @@ class Page Extends \KC\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select(
-            'page.id, page.permalink, page.pageTitle, page.pagetype, page.metadescription, logo.path, logo.name'
+            'page.id, page.permalink, page.pageTitle, page.pageType, page.metadescription, logo.path, logo.name'
         )
             ->from('KC\Entity\Page', 'page')
             ->leftJoin('page.logo logo')
-            ->setParameter(1, 'offer')
-            ->where('page.pagetype = ?1')
+            ->setParameter(1, 'page INSTANCE OF KC\Entity\OfferListPage')
+            ->where('page.pageType = ?1')
             ->setParameter(2, 0)
             ->andWhere('page.deleted = ?2')
             ->setMaxResults(9);
@@ -707,11 +707,10 @@ class Page Extends \KC\Entity\Page
             $result = self::uploadImage('logoFile');
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $pageImage  = new \KC\Entity\Image();
+                $pageImage  = new \KC\Entity\Logo();
                 $pageImage->ext = $ext;
                 $pageImage->path = $result['path'];
                 $pageImage->name = $result['fileName'];
-                $pageImage->type = "LG";
                 $pageImage->deleted = 0;
                 $pageImage->created_at = new \DateTime('now');
                 $pageImage->updated_at = new \DateTime('now');
@@ -726,11 +725,10 @@ class Page Extends \KC\Entity\Page
             $result = self::uploadImage('headerFile');
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $pageImage  = new \KC\Entity\Image();
+                $pageImage  = new \KC\Entity\Logo();
                 $pageImage->ext = $ext;
                 $pageImage->path = $result['path'];
                 $pageImage->name = $result['fileName'];
-                $pageImage->type = "LG";
                 $pageImage->deleted = 0;
                 $pageImage->created_at = new \DateTime('now');
                 $pageImage->updated_at = new \DateTime('now');
@@ -744,10 +742,10 @@ class Page Extends \KC\Entity\Page
 
         if (isset($_FILES['homepageFile']['name']) && $_FILES['homepageFile']['name'] != '') {
             $result = self::uploadImage('homepageFile');
-            $savePage->pageHomeImageId = 0;
+            $savePage->homepageimage = $savePage->homepageimage;
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $homepageimage  = new \KC\Entity\Image();
+                $homepageimage  = new \KC\Entity\Logo();
                 $homepageimage->ext = $ext;
                 $homepageimage->path = $result['path'];
                 $homepageimage->name = $result['fileName'];
@@ -756,7 +754,7 @@ class Page Extends \KC\Entity\Page
                 $homepageimage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($homepageimage);
                 $entityManagerLocale->flush();
-                $savePage->pageHomeImageId = $entityManagerLocale->find('KC\Entity\Logo', $homepageimage->getId());
+                $savePage->homepageimage = $entityManagerLocale->find('KC\Entity\Logo', $homepageimage->getId());
             } else {
                 return false;
             }
@@ -992,11 +990,10 @@ class Page Extends \KC\Entity\Page
             $result = self::uploadImage('logoFile');
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $pageImage  = new \KC\Entity\Image();
+                $pageImage  = new \KC\Entity\Logo();
                 $pageImage->ext = $ext;
                 $pageImage->path = $result['path'];
                 $pageImage->name = $result['fileName'];
-                $pageImage->type = 'LG';
                 $pageImage->deleted = 0;
                 $pageImage->created_at = new \DateTime('now');
                 $pageImage->updated_at = new \DateTime('now');
@@ -1012,11 +1009,10 @@ class Page Extends \KC\Entity\Page
             $result = self::uploadImage('headerFile');
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $pageImage  = new \KC\Entity\Image();
+                $pageImage  = new \KC\Entity\Logo();
                 $pageImage->ext = $ext;
                 $pageImage->path = $result['path'];
                 $pageImage->name = $result['fileName'];
-                $pageImage->type = 'LG';
                 $pageImage->deleted = 0;
                 $pageImage->created_at = new \DateTime('now');
                 $pageImage->updated_at = new \DateTime('now');
@@ -1032,7 +1028,7 @@ class Page Extends \KC\Entity\Page
             $result = self::uploadImage('homepageFile');
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $homepageimage  = new \KC\Entity\Image();
+                $homepageimage  = new \KC\Entity\Logo();
                 $homepageimage->ext = $ext;
                 $homepageimage->path = $result['path'];
                 $homepageimage->name = $result['fileName'];
@@ -1041,7 +1037,7 @@ class Page Extends \KC\Entity\Page
                 $homepageimage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($homepageimage);
                 $entityManagerLocale->flush();
-                $updatePage->pageHomeImageId = $entityManagerLocale->find('KC\Entity\Logo', $homepageimage->getId());
+                $updatePage->homepageimage = $entityManagerLocale->find('KC\Entity\Logo', $homepageimage->getId());
             } else {
                 return false;
             }
