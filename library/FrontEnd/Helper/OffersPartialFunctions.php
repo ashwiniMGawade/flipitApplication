@@ -266,17 +266,16 @@ class FrontEnd_Helper_OffersPartialFunctions
                         $offerLink ='<span class="'.$class.'">'.$offerAnchorText.' </span>';
                     } else {
                         $offerLink =
-                            '<a  id="'.$currentOffer->id.'" class="'.$class.'" 
+                            '<a  id="'.$currentOffer->id.'"
                             href="'.$urlToShow.'" vote="0" rel="nofollow" 
                             target="_self" onClick="'.$onClick.'">
-                        '.$offerAnchorText.' </a>';
+                            <span class="'.$class.'">'.$offerAnchorText.'</span>';
                         if ($class == 'offer-teaser-button kccode') {
                             $offerLink .=
-                                '<div>
-                                    <span class="show-code">'.self::generateRandomCharactersForOfferTeaser(4).'</span>
-                                    <span class="blue-corner"></span>
-                                </div>';
+                                '<span class="show-code">'.self::generateRandomCharactersForOfferTeaser(4).'</span>
+                                 <span class="blue-corner"></span>';
                         }
+                        $offerLink .= '</a>';
                     }
                 } else if ($currentOffer->discountType == "SL") {
                     if ($class == "offer-teaser-button kccode") {
