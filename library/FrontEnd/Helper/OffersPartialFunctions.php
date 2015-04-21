@@ -554,15 +554,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                 $resetOfferOptionsPriority[$offerOptionIndex] = $offerOption;
             }
         }
-        if (count($resetOfferOptionsPriority) == 0 || count($resetOfferOptionsPriority) == 1) {
-            if (count($resetOfferOptionsPriority) == 0) {
-                $resetOfferOptionsPriority['numberOfCodeUsed']
-                    = "<li class='visible-xs visible-sm visible-md visible-lg'>";
-            } else {
-                $resetOfferOptionsPriority['numberOfCodeUsed']
-                    = "<li class='visible-md visible-lg'>";
-            }
-        }
+
         $optionPriority = 1;
         foreach ($resetOfferOptionsPriority as $offerOptionsPriorityIndex => $offerOptionsPriority) {
             if ($optionPriority == 1) {
@@ -576,6 +568,13 @@ class FrontEnd_Helper_OffersPartialFunctions
                     = "<li class='visible-lg'>".$offerOptionsPriority ."</li>";
             }
             $optionPriority++;
+        }
+        if (count($offerOptionsWithPriorityClasses) == 0) {
+            $offerOptionsWithPriorityClasses['numberOfCodeUsed']
+                    = "<li class='visible-xs visible-sm visible-md visible-lg'>";
+        }
+        if (count($offerOptionsWithPriorityClasses) == 1) {
+            $offerOptionsWithPriorityClasses['numberOfCodeUsed'] = "<li class='visible-md visible-lg'>";
         }
         return $offerOptionsWithPriorityClasses;
     }

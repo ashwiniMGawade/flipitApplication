@@ -5,9 +5,9 @@ if (!empty($this->offerViewCount)) {
         <span class="text-over">
         <?php 
         $offsetType = 
-        	$this->offerViewCount['offsetType'] == 'day' 
-        	? 'used today' 
-        	: 'used this '. $this->offerViewCount['offsetType'];
+            $this->offerViewCount['offsetType'] == 'day' 
+            ? 'used today' 
+            : 'used this '. $this->offerViewCount['offsetType'];
         echo $this->offerViewCount['viewCount'] . " " . FrontEnd_Helper_viewHelper::__translate($offsetType);?>
         </span>
     </span>

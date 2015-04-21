@@ -199,6 +199,10 @@ foreach ($this->offers as $offer) {
                         isset($offerOptionsWithPriorityClasses['offerBottomExtendedLink']) 
                         ? $offerOptionsWithPriorityClasses['offerBottomExtendedLink'] 
                         : '';
+                    $numberOfCodeUsed = 
+                        isset($offerOptionsWithPriorityClasses['numberOfCodeUsed']) 
+                        ? $offerOptionsWithPriorityClasses['numberOfCodeUsed'] 
+                        : '';
 
                     echo $offerBottomTextForExclusiveOrSocialOrEditor
                         .$offerBottomDaysTillExpireText
@@ -213,8 +217,8 @@ foreach ($this->offers as $offer) {
                     if ( (empty($offerBottomDaysTillExpireText) && empty($offerBottomViewAllShopsLink)) || $showUsedCode)
                     {
                         if ($offer->discountType == "CD") {
-                            if (isset($offerOptionsWithPriorityClasses['numberOfCodeUsed'])) {
-                                echo $offerOptionsWithPriorityClasses['numberOfCodeUsed'];
+                            if (!empty($numberOfCodeUsed)) {
+                                echo $numberOfCodeUsed;
                                 echo $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
                                 echo "</li>";
                             }
