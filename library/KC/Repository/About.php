@@ -106,5 +106,6 @@ class About Extends \KC\Entity\About
             }
             $entityManagerLocale->flush();
         }
+         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_about_page');
     }
 }
