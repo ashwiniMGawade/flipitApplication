@@ -136,7 +136,7 @@ class Admin_RedirectController extends Zend_Controller_Action
         //loop for each keyword
         foreach ($data as $redirectTo) {
 
-            $createdDate =  date("d-m-Y",strtotime($redirectTo['created_at']));
+            $createdDate =  $redirectTo['created_at']->format('Y-m-d');
             //set value in column of excel
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$column, $redirectTo['orignalurl']);
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$column, $redirectTo['redirectto']);

@@ -822,7 +822,7 @@ class Offer Extends \KC\Entity\Offer
             ->setParameter(4, 'CD')
             ->andWhere('o.discountType = ?4')
             ->orderBy('o.id', 'DESC');
-            $offerDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $offerDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (!empty($offerDetails)) {
             $shopDetails = self::getShopDetailFromOffer($offerDetails[0]['shopId']);
             $logoDetails = self::getShopLogo($shopDetails[0]['logoId']);
