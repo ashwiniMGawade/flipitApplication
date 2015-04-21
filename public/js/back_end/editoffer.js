@@ -815,22 +815,21 @@ function getShopDetail(value){
 			url : HOST_PATH + "admin/offer/shopdetail/shopId/" + value,
 				dataType : "json",
 				success : function(data) {
-					
 					if (data != null) {
 						
-						if(data[0].notes != '' && data[0].notes != null){
+						if(data.notes != '' && data.notes != null){
 
 							jQuery('#aboutShopNoteDiv').show();
-							jQuery('#shopNotes').html(data[0].notes).addClass('alert-error');;
+							jQuery('#shopNotes').html(data.notes).addClass('alert-error');;
 						} else {
 							jQuery('#shopNotes').html('&nbsp;')
 												  .removeClass('alert-error');
 						}
 
 
-						if(data[0].affname != '' && data[0].affname != null){
+						if(data.affname != '' && data.affname != null){
 							jQuery('#aboutNertworkDiv').show();
-							jQuery('#shopNetwork').html(data[0].affname).addClass('alert-error');;
+							jQuery('#shopNetwork').html(data.affname).addClass('alert-error');;
 						} else {
 							jQuery('#shopNetwork').html('&nbsp;')
 												  .removeClass('alert-error');
@@ -855,7 +854,7 @@ function getShopDetail(value){
 							
 							// check if selected shop has restrcited content or not
 							// if yes then disable submit button and ask check to accept term and conditions
-							if(data[0].strictConfirmation) {
+							if(data.strictConfirmation) {
 
 								jQuery("#updateOfferBtn").addClass("disabled").attr('disabled','disabled');
 								jQuery(".strict-confirmation-alert").show();
@@ -864,7 +863,7 @@ function getShopDetail(value){
 								// bind enable and disbale buttons event on checbox only when strcit confrimation is on 	
 								jQuery('#enableSaveButtons').click(function(){
 
-									if(data[0].strictConfirmation){
+									if(data.strictConfirmation){
 
 										if(jQuery(this).is(':checked')){
 											jQuery("#updateOfferBtn").removeClass("disabled").removeAttr('disabled','disabled');
@@ -878,19 +877,19 @@ function getShopDetail(value){
 								jQuery(".strict-confirmation-alert").hide();
 							}
 
-						var catCount = data[0].categoryId.length;
+						var catCount = data.length;
 						
 						for(var i=0 ; i< catCount ; i++ ){
 							// Add class by Er.kundal for select catg of shop
-							jQuery("#categoryBtn-"+data[0].category[i].categoryIdcategoryId).addClass('btn-primary');
-							jQuery("input#category-" + data[0].category[i].categoryId).attr('checked' , 'checked');
+							jQuery("#categoryBtn-"+data[i].categoryId).addClass('btn-primary');
+							jQuery("input#category-" + data[i].categoryId).attr('checked' , 'checked');
 						}
 						
-						if(data[0].notes=='' && data[0].affname=='' && data[0].accountManagerName=='') {
+						if(data.notes=='' && data.affname=='' && data.accountManagerName=='') {
 							jQuery('#aboutShopDiv').hide();
 						}
 						
-						/*if(data[0].notes=='' || data[0].accountManagerName=='' || data[0].affname=='') {
+						/*if(data.notes=='' || data.accountManagerName=='' || data.affname=='') {
 							 jQuery('#aboutShopNoteDiv').hide();
 							 jQuery('#aboutManagerDiv').hide();
 							 jQuery('#aboutNertworkDiv').hide();

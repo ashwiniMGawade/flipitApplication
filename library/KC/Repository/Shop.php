@@ -26,6 +26,7 @@ class Shop extends \KC\Entity\Shop
                 mysqli_real_escape_string(\FrontEnd_Helper_viewHelper::getDbConnectionDetails(), $shopName)
                 ."'"
             )
+            ->andWhere("s.deleted = 0")
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return isset($shopExist[0]['id']) ? $shopExist[0]['id'] : '';

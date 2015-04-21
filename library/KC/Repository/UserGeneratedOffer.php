@@ -5,16 +5,16 @@ class UserGeneratedOffer extends \KC\Entity\Offer
 {
     public static function getOffersList($parameters)
     {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $searchShop         = $parameters["shopText"]!='undefined' ? $parameters["shopText"] : '';
         $searchCoupon       = @$parameters["shopCoupon"]!='undefined' ? @$parameters["shopCoupon"] : '';
         $deletedStatus      = $parameters['flag'];
-        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $getOffersQuery = $entityManagerUser
+        $getOffersQuery = $queryBuilder
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->where('o.deleted ='. $deletedStatus)
             ->andWhere("o.userGenerated = 1")
-            ->andWhere("o.approved = 0");
+            ->andWhere($queryBuilder->expr()->eq("o.approved", $queryBuilder->expr()->literal("0")));
         if ($searchShop!='') {
             $getOffersQuery->andWhere($queryBuilder->expr()->like('s.name', $queryBuilder->expr()->literal('%'.$searchShop.'%')));
         }
@@ -142,6 +142,8 @@ class UserGeneratedOffer extends \KC\Entity\Offer
         $offer->maxcode = 0;
         $offer->shopExist = 0;
         $offer->deleted = 0;
+        $offer->approved = true;
+        $offer->offline = 0;
         $offer->created_at = new \DateTime('now');
         $offer->updated_at = new \DateTime('now');
         $entityManagerLocale->persist($offer);
@@ -157,6 +159,7 @@ class UserGeneratedOffer extends \KC\Entity\Offer
             \Zend_Registry::get('emLocale')->persist($offerTerms);
             \Zend_Registry::get('emLocale')->flush();
         }
+
         return true;
     }
 }
