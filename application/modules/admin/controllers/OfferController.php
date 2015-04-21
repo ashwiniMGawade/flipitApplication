@@ -1558,7 +1558,7 @@ class Admin_OfferController extends Zend_Controller_Action
                     $excelFile = $excelFilePath.$uploadResult['fileName'];
                     $dataSaved = BackEnd_Helper_importOffersExcel::importExcelOffers($excelFile);
                     if ($dataSaved) {
-                        $message = $dataSaved.' '.$this->view->translate('backend_Offers have been imported Successfully!!');
+                        $message = $dataSaved.' '.$this->view->translate('backend_Valid Offers have been imported Successfully!!');
                         $flashMessage->addMessage(array('success' => $message));
                         $this->_redirect(HTTP_PATH . 'admin/offer');
                     } else {
