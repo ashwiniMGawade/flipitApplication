@@ -93,46 +93,56 @@
             .pop{
                 margin: 0 3px 0 0;
                 padding: 5px 16px 5px 13px;
+                @media only screen and (max-width: 767px){
+                    width: 80px;
+                    padding: 5px;
+                    margin: 0 10px 0 0;
+                }
             }
+        }
+        .items-holder{
+            overflow: hidden;
         }
         .items{
             color: #949597;
             font-size: 13px;
-            display: block;
             overflow: hidden;
             line-height: 17px;
             list-style: none;
             margin: 5px 0;
-            overflow: hidden;
             padding: 0;
             @media only screen and (max-width: 767px){
                 overflow: visible;
                 font-size: 12px;
                 margin: 0 -8px 0 -7px;
                 padding: 7px 0 7px;
+                width: auto;
+                max-width: 100%;
             }
             .text{
                 display: block;
+                white-space: nowrap;
                 max-width: 100%;
                 text-overflow: ellipsis;
                 overflow: hidden;
-                white-space: nowrap;
             }
             li{
                 float: left;
                 margin: 0 11px 0 10px;
                 position: relative;
-                padding: 0 0 0 22px;
-                max-width: 44%;
+                padding: 1px 0 1px 22px;
+                
                 @media only screen and (max-width: 767px){
                     padding: 0 0 0 20px;
                     margin: 0 8px 11px 7px;
-                    max-width: 25%;
+                    max-width: 100%;
+                    display: none;
                 }
                 &:first-child{
                     margin-left: 10px;
                     @media only screen and (max-width: 767px){
                         margin-left: 7px;
+                        display: block;
                     }
                     &:after{
                         display: none;
@@ -305,9 +315,7 @@
             text-decoration: none !important;
             color: #333;
             margin-bottom: 7px !important;
-            .link{
-                color: #333;
-            }
+            a, &:hover { text-decoration: none !important; }
         }
         .info-area{
             overflow: hidden;
@@ -351,6 +359,13 @@
                     content: "";
                 }
                 }
+                .terms.uparrow{
+                    &:after{
+                        background:url(../../images/sprite.png) no-repeat -179px -127px;
+                    }
+                    &:hover:after,
+                    &:focus:after{background-position: -180px -157px;}
+                }
                 .info{
                     padding: 4px 0 0;
                     margin: 0;
@@ -366,8 +381,6 @@
                             float: left;
                             padding: 1px 10px 4px;
                             white-space: nowrap;
-                            text-overflow: ellipsis;
-                            max-width: 29%;
                             @media only screen and (max-width: 979px){
                                 padding: 0 6px 3px;
                             }
@@ -379,14 +392,11 @@
                                 display: block !important;
                             }
                             &:last-child{
-                                max-width: 40%;
                                 @media only screen and (max-width: 767px){
-                                    max-width: 100%;
                                 }
                             }
                             &:nth-child(2){
                                 @media only screen and (max-width: 479px){
-                                    max-width: 40%;
                                 }
                             }
                             .img-author{
@@ -398,8 +408,7 @@
                             .name{
                                 display: inline-block;
                                 vertical-align: top;
-                                max-width: 75%;
-                                a{
+                                .text-blue {
                                     color: #308cc9;
                                 }
                             }
@@ -524,8 +533,9 @@
         font-size: 13px;
         margin: -13px 0 20px;
         line-height: 16px;
-        @media only screen and (max-width: 779px){
+        @media only screen and (max-width: 979px){
             margin: 0 0 20px;
+            text-align: center;
         }
         .img-thumbnail{
             float: left;
@@ -537,9 +547,12 @@
             border-radius: 3px;
             overflow: hidden;
             @media only screen and (max-width: 979px){
-                
                 margin: 0 0 10px;
-                
+            }
+            @media only screen and (max-width: 979px){
+                float: none;
+                display: block;
+                margin: 0 auto 10px;
             }
         }
         .textbox{
@@ -560,7 +573,7 @@
             font-size: 28px;
             line-height: 32px;
             margin: 0 0 6px;
-            @media only screen and (max-width: 779px){
+            @media only screen and (max-width: 979px){
                 font-size: 24px;
                 line-height: 27px;
             }
@@ -580,9 +593,14 @@
             float: left;
             white-space: normal;
             position: relative;
+            margin: 0 !important;
             padding: 5px 5px 5px 28px;
             box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 0 #fff inset;
             -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 0 #fff inset;
+            @media only screen and (max-width: 979px){
+                float: none;
+                vertical-align: top;
+            }
             &:hover, &:focus{
                 background:#fff;
             }
@@ -656,7 +674,6 @@
         background-position: 100% 0;
         width: 71px;
     }
-    
 }
 .text-over {
     max-width: 100%;
