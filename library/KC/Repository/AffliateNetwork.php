@@ -37,8 +37,7 @@ class AffliateNetwork extends \KC\Entity\AffliateNetwork
             ->add('number', 'a.id')
             ->add('text', 'a.name')
             ->add('text', 'a.subId');
-        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $list = \DataTable_Helper::getResponse($data, $request);
+        $list = $builder->getTable()->getResponseArray();
         return $list;
     }
 

@@ -17,8 +17,7 @@ class IpAddresses Extends \KC\Entity\ipAddresses
             ->add('text', 'ipa.name')
             ->add('number', 'ipa.ipaddress')
             ->add('number', 'ipa.created_at');
-        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $ipAddressesList = \DataTable_Helper::getResponse($data, $request);
+        $ipAddressesList = $builder->getTable()->getResponseArray();
         return $ipAddressesList;
     }
 

@@ -22,8 +22,7 @@ class Emails extends \KC\Entity\Emails
             ->add('text', 'e.type')
             ->add('number', 'e.send_date')
             ->add('number', 'e.send_counter');
-        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $result = \DataTable_Helper::getResponse($data, $request);
+        $result = $builder->getTable()->getResponseArray();
         return $result;
     }
 

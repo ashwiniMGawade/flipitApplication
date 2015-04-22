@@ -210,8 +210,7 @@ class Articles extends \KC\Entity\Articles
             ->add('text', 'art.permalink')
             ->add('text', 'art.publish')
             ->add('text', 'art.authorname');
-        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $result = \DataTable_Helper::getResponse($data, $request);
+        $result = $builder->getTable()->getResponseArray();
         return $result;
     }
 
@@ -245,8 +244,7 @@ class Articles extends \KC\Entity\Articles
             ->add('text', 'art.created_at')
             ->add('text', 'art.publish')
             ->add('text', 'art.authorname');
-        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $result = \DataTable_Helper::getResponse($data, $request);
+        $result = $builder->getTable()->getResponseArray();
         return $result;
     }
 

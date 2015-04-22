@@ -519,9 +519,7 @@ class Category extends \KC\Entity\Category
             ->add('number', 'c.id')
             ->add('text', 'c.name')
             ->add('text', 'c.status');
-
-        $list = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $list = \DataTable_Helper::getResponse($list, $request);
+        $list = $builder->getTable()->getResponseArray();;
         return $list;
 
     }

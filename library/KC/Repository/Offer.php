@@ -999,9 +999,7 @@ class Offer Extends \KC\Entity\Offer
             ->add('number', 'o.endDate')
             ->add('number', 'o.totalViewcount')
             ->add('text', 'o.authorName');
-
-        $offersList = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $offersList = \DataTable_Helper::getResponse($offersList, $request);
+        $offersList = $builder->getTable()->getResponseArray();
         return $offersList;
     }
 

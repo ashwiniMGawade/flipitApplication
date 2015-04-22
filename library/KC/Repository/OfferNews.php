@@ -41,8 +41,7 @@ class OfferNews extends \KC\Entity\OfferNews
             ->add('text', 's.name')
             ->add('text', 'n.startdate')
             ->add('text', 'n.linkstatus');
-        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $list = \DataTable_Helper::getResponse($data, $request);
+        $list = $builder->getTable()->getResponseArray();
         return $list;
     }
 

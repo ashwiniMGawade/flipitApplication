@@ -54,8 +54,7 @@ class Chain extends \KC\Entity\Chain
             ->add('number', 'c.id as id')
             ->add('text', 'c.name as name')
             ->add('number', '(SELECT count(ci.id) FROM KC\Entity\ChainItem ci WHERE ci.chainItem = c.id) as totalShops');
-        $list = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $list = \DataTable_Helper::getResponse($list, $request);
+        $list = $builder->getTable()->getResponseArray();
         return $list;
     }
 
