@@ -627,13 +627,16 @@ class Page Extends \KC\Entity\Page
 
     public function savePage($params)
     {
-        $savePage = new \KC\Entity\Page();
+        if (isset($params['selectedpageType'])) {
+            $savePage = new \KC\Entity\OfferListPage();
+        } else {
+            $savePage = new \KC\Entity\DefaultPage();
+        }
+        
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $savePage->pageType ='default';
         $savePage->maxOffers  = 0;
         $savePage->oderOffers = 0;
         if (isset($params['selectedpageType'])) {
-              $savePage->pageType ='offer';
             if (trim($params['maxOffer'])!='') {
                   $savePage->maxOffers = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['maxOffer']);
             }
@@ -800,7 +803,7 @@ class Page Extends \KC\Entity\Page
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$savePage->getId().'_image');
             $key = 'all_widget' . $params['pageTemplate'] . "_list";
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        
+
             $entityManagerLocale->persist($savePage);
             $entityManagerLocale->flush();
 
@@ -879,6 +882,7 @@ class Page Extends \KC\Entity\Page
                     $route->exactlink = 'login/memberwelcome/attachedpage/'.$savePage->getId();
                     break;
             }
+
             $entityManagerLocale->persist($route);
             $entityManagerLocale->flush();
             return true;
@@ -890,12 +894,16 @@ class Page Extends \KC\Entity\Page
     public function updatePage($params)
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $repo = $entityManagerLocale->getRepository('KC\Entity\Page');
+
+        if (isset($params['selectedpageType'])) {
+            $repo = $entityManagerLocale->getRepository('KC\Entity\OfferListPage');
+        } else {
+            $repo = $entityManagerLocale->getRepository('KC\Entity\DefaultPage');
+        }
+
         $updatePage = $repo->find($params['pageId']);
         $updatePage->slug =  $params['slug'];
-        $updatePage->pageType='default';
         if (isset($params['selectedpageType'])) {
-            $updatePage->pageType='offer';
             $updatePage->maxOffers ='';
             if (trim($params['maxOffer'])!='') {
                 $updatePage->maxOffers = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['maxOffer']);
