@@ -1,23 +1,29 @@
-<article class="section section-2">
+<header class='heading-box text-shop'>
     <h2>
-    <?php echo $this->headerText;?>
+        <?php echo $this->headerText;?>
     </h2>
-    <ul class="shops shops-2">
-        <?php
-        foreach ($this->popularStores as $popularStore)
-        { 
-            $popularStore = isset($popularStore['shop']) ?  $popularStore['shop'] :  $popularStore;
-            $popularStoreImage =
-                isset($popularStore['logo']) ? 
-                PUBLIC_PATH_CDN.ltrim($popularStore['logo']['imgpath'], '/')
-                ."thum_big_".$popularStore['logo']['imgname'] : '';    
-            echo '<li>
-                <a href="' .HTTP_PATH_LOCALE. $popularStore['permaLink']. '">
-                    <img src="' . $popularStoreImage . '"  
-                    alt="' .$popularStore['name'] . '"  width="122" title="' .$popularStore['name'] . '" />
-                </a>
-            </li>';
-        }
-        ?>
-    </ul>
-</article>
+</header>
+<section class="section">
+    <div class='block'>
+        <div class='holder'>
+        <ul class="shops">
+            <?php
+            foreach ($this->popularStores as $popularStore)
+            { 
+                $popularStore = isset($popularStore['shop']) ?  $popularStore['shop'] :  $popularStore;
+                $popularStoreImage =
+                    isset($popularStore['logo']) ? 
+                    PUBLIC_PATH_CDN.ltrim($popularStore['logo']['imgpath'], '/')
+                    ."thum_small_".$popularStore['logo']['imgname'] : '';    
+                echo '<li>
+                    <a href="' .HTTP_PATH_LOCALE. $popularStore['permaLink']. '">
+                        <img src="' . $popularStoreImage . '"  
+                        alt="' .$popularStore['name'] . '" title="' .$popularStore['name'] . '" />
+                    </a>
+                </li>';
+            }
+            ?>
+        </ul>
+    </div>
+    </div>
+</section>
