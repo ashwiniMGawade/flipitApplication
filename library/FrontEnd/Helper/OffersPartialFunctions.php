@@ -72,10 +72,10 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         if ($offerDiscountType == 'ex') {
             $offerOptionHtml =
-                '<li class="visible-xs"><span class="exclusive text-info"><span class="text-over">'.$offerOption.'</span></span></li>';
+                '<span class="exclusive text-info"><span class="text-over">'.$offerOption.'</span></span>';
         } else if ($offerDiscountType == 'sc') {
-            $offerOptionHtml = '<li class="visible-xs"><strong class="social-color">
-            <span class="social-icon"></span>'.$offerOption.'</strong></li>';
+            $offerOptionHtml = '<strong class="social-color">
+            <span class="social-icon"></span>'.$offerOption.'</strong>';
         }
         return $offerOptionHtml;
     }
@@ -266,17 +266,16 @@ class FrontEnd_Helper_OffersPartialFunctions
                         $offerLink ='<span class="'.$class.'">'.$offerAnchorText.' </span>';
                     } else {
                         $offerLink =
-                            '<a  id="'.$currentOffer->id.'" class="'.$class.'" 
+                            '<a  id="'.$currentOffer->id.'"
                             href="'.$urlToShow.'" vote="0" rel="nofollow" 
                             target="_self" onClick="'.$onClick.'">
-                        '.$offerAnchorText.' </a>';
+                            <span class="'.$class.'">'.$offerAnchorText.'</span>';
                         if ($class == 'offer-teaser-button kccode') {
                             $offerLink .=
-                                '<div>
-                                    <span class="show-code">'.self::generateRandomCharactersForOfferTeaser(4).'</span>
-                                    <span class="blue-corner"></span>
-                                </div>';
+                                '<span class="show-code">'.self::generateRandomCharactersForOfferTeaser(4).'</span>
+                                 <span class="blue-corner"></span>';
                         }
+                        $offerLink .= '</a>';
                     }
                 } else if ($currentOffer->discountType == "SL") {
                     if ($class == "offer-teaser-button kccode") {
@@ -392,10 +391,10 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         $extendedOfferLink = '';
         if (isset($currentOffer->extendedOffer) ? $currentOffer->extendedOffer =='1' : ''):
-            $extendedOfferLink ='<li><span class="text"><span class="text-over"><a class=""
+            $extendedOfferLink ='<span class="text"><span class="text-over"><a class=""
             href="'.HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('link_deals').'/'
             . $currentOffer->extendedUrl.'">'
-            .FrontEnd_Helper_viewHelper::__translate('More about this code').'</a></span></span></li>';
+            .FrontEnd_Helper_viewHelper::__translate('More about this code').'</a></span></span>';
         endif;
         return $extendedOfferLink;
     }
@@ -403,10 +402,10 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getViewAllCodesLink($shopName, $shopPermalink)
     {
         $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-        return $viewAllLink = '<li><span class="text"><span class="text-over">'
+        return $viewAllLink = '<span class="text"><span class="text-over">'
             . FrontEnd_Helper_viewHelper::__translate("View all")
             .' <a href="'.$domainName.$shopPermalink.'">'. $shopName . ' '
-            . FrontEnd_Helper_viewHelper::__translate("Voucher Codes").'</a></span></span></li>';
+            . FrontEnd_Helper_viewHelper::__translate("Voucher Codes").'</a></span></span>';
     }
     
     public function getExpiredOfferMessage($endDate, $currentDate)
@@ -474,8 +473,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                 .'thum_large_widget_' .$shopEditor['profileimage']['name'];
         }
 
-        $editorPanelForOffer ='<li class="visible-xs">'
-            .'<img 
+        $editorPanelForOffer ='<img 
                 class="img-author" src="'.$shopEditorImagePath.'" 
                 alt="'. $shopEditor['firstName'].'" title="'. $shopEditor['firstName'].'">'.
             '<strong class="name"><span class="text-over text-blue">'
@@ -483,7 +481,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         if (!empty($shopEditor['firstName'])) {
             $editorPanelForOffer .= ' - '.ucfirst($shopEditor['firstName']);
         }
-        $editorPanelForOffer .='</span></strong></li>';
+        $editorPanelForOffer .='</span></strong>';
         return $editorPanelForOffer;
     }
 
@@ -502,9 +500,8 @@ class FrontEnd_Helper_OffersPartialFunctions
         if (empty($onlyDaysLeftString)) {
             $onlyDaysLeftString = '';
         } else {
-            $onlyDaysLeftString = '<li class="visible-xs">'
-            .'<time class="date text-info"><span class="text-over">'. $onlyDaysLeftString
-            . '</span></time></li>';
+            $onlyDaysLeftString = '<time class="date text-info"><span class="text-over">'. $onlyDaysLeftString
+            . '</span></time>';
         }
         return  $onlyDaysLeftString;
     }
@@ -536,5 +533,60 @@ class FrontEnd_Helper_OffersPartialFunctions
             $randomString .= $codeAlphabet[self::cryptoRandSecure(0, strlen($codeAlphabet))];
         }
         return $randomString;
+    }
+
+    public static function getOffersOptionsByPriority(
+        $offerBottomTextForExclusiveOrSocialOrEditor,
+        $offerBottomDaysTillExpireText,
+        $offerBottomViewAllShopsLink,
+        $offerBottomExtendedLink
+    ) {
+        $offerOptionsWithPriority =  array();
+        $resetOfferOptionsPriority =  array();
+        $offerOptionsWithPriority['offerBottomViewAllShopsLink'] = $offerBottomViewAllShopsLink;
+        $offerOptionsWithPriority['offerBottomExtendedLink'] = $offerBottomExtendedLink;
+        $offerOptionsWithPriority['offerBottomDaysTillExpireText'] = $offerBottomDaysTillExpireText;
+        $offerOptionsWithPriority['offerBottomTextForExclusiveOrSocialOrEditor'] = $offerBottomTextForExclusiveOrSocialOrEditor;
+        foreach ($offerOptionsWithPriority as $offerOptionIndex => $offerOption) {
+            if (!empty($offerOption)) {
+                $resetOfferOptionsPriority[$offerOptionIndex] = $offerOption;
+            }
+        }
+        return self::getOfferOptionsWithPriorityClasses($resetOfferOptionsPriority);
+    }
+
+    public static function getOfferOptionsWithPriorityClasses($resetOfferOptionsPriority)
+    {
+        $offerOptionsWithPriorityClasses =  array();
+        $optionPriority = 1;
+        foreach ($resetOfferOptionsPriority as $offerOptionsPriorityIndex => $offerOptionsPriority) {
+            if ($optionPriority == 1) {
+                $offerOptionsWithPriorityClasses[$offerOptionsPriorityIndex]
+                    = "<li class='visible-xs visible-sm visible-md visible-lg'>".$offerOptionsPriority ."</li>";
+            } else if ($optionPriority == 2) {
+                $offerOptionsWithPriorityClasses[$offerOptionsPriorityIndex]
+                    = "<li class='visible-md visible-lg'>".$offerOptionsPriority ."</li>";
+            } else {
+                $offerOptionsWithPriorityClasses[$offerOptionsPriorityIndex]
+                    = "<li class='visible-lg'>".$offerOptionsPriority ."</li>";
+            }
+            $optionPriority++;
+        }
+        return self::getOfferOptionsWithCodeUsed($offerOptionsWithPriorityClasses);
+    }
+
+    public static function getOfferOptionsWithCodeUsed($offerOptionsWithPriorityClasses)
+    {
+        if (count($offerOptionsWithPriorityClasses) == 0 || count($offerOptionsWithPriorityClasses) == 1) {
+            if (count($offerOptionsWithPriorityClasses) == 0) {
+                $offerOptionsWithPriorityClasses['numberOfCodeUsed']
+                    = "<li class='visible-xs visible-sm visible-md visible-lg'>";
+            } else if (count($offerOptionsWithPriorityClasses) == 1) {
+                $offerOptionsWithPriorityClasses['numberOfCodeUsed'] = "<li class='visible-md visible-lg'>";
+            } else if (count($offerOptionsWithPriorityClasses) == 2) {
+                $offerOptionsWithPriorityClasses['numberOfCodeUsed'] = "<li class='visible-lg'>";
+            }
+        }
+        return $offerOptionsWithPriorityClasses;
     }
 }

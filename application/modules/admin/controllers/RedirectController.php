@@ -214,7 +214,7 @@ class Admin_RedirectController extends Zend_Controller_Action
                     $excelFile = $excelFilePath.$result['fileName'];
 
                     $objReader = PHPExcel_IOFactory::createReader('Excel2007');
-                    $objPHPExcel = $objReader->load(ROOT_PATH.$excelFile);
+                    $objPHPExcel = $objReader->load($excelFile);
                     $worksheet = $objPHPExcel->getActiveSheet();
                     foreach ($worksheet->getRowIterator() as $row) {
                         $cellIterator = $row->getCellIterator();

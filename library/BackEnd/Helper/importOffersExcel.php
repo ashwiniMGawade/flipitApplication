@@ -8,8 +8,7 @@ class BackEnd_Helper_importOffersExcel
         $worksheet = $objPHPExcel->getActiveSheet();
         $excelData = array();
         $offerList = new Doctrine_Collection('Offer');
-        $dataSaved = 0;
-        $offerCounter = 1;
+        $offerCounter = 0;
         foreach ($worksheet->getRowIterator() as $row) {
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
@@ -76,7 +75,6 @@ class BackEnd_Helper_importOffersExcel
                         $offerList[$offerCounter]->deleted = 0;
                         $offerList[$offerCounter]->maxlimit = 0;
                         $offerList[$offerCounter]->updated_at = $currentDate;
-                        $dataSaved = 1;
                         $offerCounter++;
                     }
                 }
@@ -84,6 +82,6 @@ class BackEnd_Helper_importOffersExcel
             $offerList->save();
             unlink($excelFile);
         }
-        return $dataSaved;
+        return $offerCounter;
     }
 }
