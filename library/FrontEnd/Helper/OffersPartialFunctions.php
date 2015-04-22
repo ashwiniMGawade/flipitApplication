@@ -579,7 +579,9 @@ class FrontEnd_Helper_OffersPartialFunctions
 
     public static function getOfferOptionsWithCodeUsed($offerOptionsWithPriorityClasses)
     {
-        if (count($offerOptionsWithPriorityClasses) == 0 || count($offerOptionsWithPriorityClasses) == 1) {
+        if (count($offerOptionsWithPriorityClasses) == 0
+            || count($offerOptionsWithPriorityClasses) == 1
+            || count($offerOptionsWithPriorityClasses) == 2) {
             if (count($offerOptionsWithPriorityClasses) == 0) {
                 $offerOptionsWithPriorityClasses['numberOfCodeUsed']
                     = "<li class='visible-xs visible-sm visible-md visible-lg'>";
