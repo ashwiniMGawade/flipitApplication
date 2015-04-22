@@ -782,16 +782,17 @@ EOD;
                     'pathConstants' => $pathConstants,
                     'codeAlert' => $codeAlert,
                     'mandrillNewsletterSubject' => $mandrillNewsletterSubject,
-                    'newsLetterHeaderImage' => $newsLetterHeaderImage
+                    'newsLetterHeaderImage' => $newsLetterHeaderImage,
+                    'testStatus' => 'doc2'
                 )
             )
         );
         sort($mandrillUsersList);
         sort($recipientMetaData);
         sort($mandrillMergeVars);
-        $mandrillUsersLists  = array_chunk($mandrillUsersList, 500);
-        $recipientMetaData   = array_chunk($recipientMetaData, 500);
-        $mandrillMergeVars    = array_chunk($mandrillMergeVars, 500);
+        $mandrillUsersLists = array_chunk($mandrillUsersList, 500);
+        $recipientMetaData = array_chunk($recipientMetaData, 500);
+        $mandrillMergeVars = array_chunk($mandrillMergeVars, 500);
         foreach ($mandrillUsersLists as $mandrillUsersKey => $mandrillUsersEmailList) {
             $mailer = new \FrontEnd_Helper_Mailer($pathConstants);
             $mailer->send(

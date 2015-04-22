@@ -97,7 +97,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         $startDateObject = (object) $currentOffer->startDate;
         $endDateObject = (object) $currentOffer->endDate;
         $startDate = new Zend_Date($startDateObject->date);
-        $endDate = new Zend_Date(strtotime($endDateObject->date));
+        $endDate = new Zend_Date($endDateObject->date);
         $offerDates = '';
         $startDateFormat = LOCALE == 'us'
             ? Zend_Date::MONTH_NAME.' '.Zend_Date::DAY
