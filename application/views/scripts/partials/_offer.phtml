@@ -222,7 +222,7 @@ foreach ($this->offers as $offer) {
                         if ($offer->discountType == "CD") {
                             if (!empty($numberOfCodeUsed)) {
                                 echo $numberOfCodeUsed;
-                                echo $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
+                                echo $this->esi($esiLocale.'offer/offer-view-count?offerId='.$offer->id);
                                 echo "</li>";
                             }
                         }
