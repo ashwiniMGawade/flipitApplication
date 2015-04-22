@@ -51,7 +51,7 @@ class SearchController extends Zend_Controller_Action
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             '10_popularShops_list',
             array('function' => 'Shop::getAllPopularStores',
-                'parameters' => array(10)),
+                'parameters' => array(12)),
             true
         );
         $offersBySearchedKeywords = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
