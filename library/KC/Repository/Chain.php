@@ -109,6 +109,14 @@ class Chain extends \KC\Entity\Chain
 
     public static function returnChainData($chainItemId, $shopId)
     {
+        $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select("ci.id")
+            ->from('KC\Entity\ChainItem', 'c')
+            ->leftJoin('c.chainItem', 'ci')
+            ->where('c.id = '.$chainItemId);
+        $chainItem = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+      
         $pattern = "~((?:.+://|)(?:www.|))(flipit.com/[a-z]{2}|kortingscode.nl)~";
         $permalink = trim(HTTP_PATH_LOCALE, '/');
         $replacement = '$2';
@@ -119,25 +127,23 @@ class Chain extends \KC\Entity\Chain
             ->from('KC\Entity\Chain', 'c')
             ->leftJoin('c.chainItem', 'ci')
             ->leftJoin('ci.website', 'w')
-            ->where("c.id = (SELECT cii.id FROM KC\Entity\ChainItem cii where cii.id = '".$chainItemId."')")
+            ->where("ci.chainItem =".$chainItem['id'])
             ->andWhere('ci.status = 1')
             ->orderBy('w.name', 'ASC');
         $chainInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $chain = array();
-
-        if (!isset($chainInformation[0])) {
+        if (!isset($chainInformation)) {
             return false;
         }
 
-        $chainInformation = $chainInformation[0];
-        if (isset($chainInformation['chainItem'])) {
-            foreach ($chainInformation['chainItem'] as $chainValue) {
+        if (isset($chainInformation)) {
+            foreach ($chainInformation as $chainValue) {
                 $locale = explode('_', $chainValue['locale']);
                 $locale = isset($locale[1]) ? $locale[1] : $locale[0];
                 $hrefLocale = isset($chainValue['locale']) ? $chainValue['locale'] : 'nl_NL';
-                $websiteUrl  = $chainValue['website']['url'] . '/' . $chainValue['permalink'] ;
-                $hrefLang = isset($chainValue['website']['chain']) && $chainValue['website']['chain'] != '' ?
-                    $chainValue['website']['chain'] : preg_replace('~_~', '-', $hrefLocale);
+                $websiteUrl  = $chainValue['url'] . '/' . $chainValue['permalink'] ;
+                $hrefLang = isset($chainValue['chain']) && $chainValue['chain'] != '' ?
+                    $chainValue['chain'] : preg_replace('~_~', '-', $hrefLocale);
                 $headLink = sprintf(
                     '<link rel="alternate" hreflang="%s" href="%s"/>',
                     $hrefLang,
@@ -145,7 +151,7 @@ class Chain extends \KC\Entity\Chain
                 );
                 $shop = array();
 
-                if ($chainValue['website']['name'] != $currentSite || $shopId != $chainValue['shopId']) {
+                if ($chainValue['name'] != $currentSite || $shopId != $chainValue['shopId']) {
                     $shop = array(
                         'name' => $chainInformation['name'],
                         'shop' => $chainValue['shopName'],
