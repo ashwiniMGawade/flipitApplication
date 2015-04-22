@@ -479,7 +479,7 @@ class FrontEnd_Helper_OffersPartialFunctions
             '<strong class="name"><span class="text-over text-blue">'
             . FrontEnd_Helper_viewHelper::__translate('Tip from');
         if (!empty($shopEditor['firstName'])) {
-            $editorPanelForOffer .= ' - '.ucfirst($shopEditor['firstName']);
+            $editorPanelForOffer .= ' '.ucfirst($shopEditor['firstName']);
         }
         $editorPanelForOffer .='</span></strong>';
         return $editorPanelForOffer;
