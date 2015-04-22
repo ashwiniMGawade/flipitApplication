@@ -52,8 +52,7 @@ class Admin_MediaController extends Zend_Controller_Action
             ->add('text', 'm.created_at')
             ->add('text', 'm.authorName')
             ->add('text', 'm.fileurl');
-        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $result = \DataTable_Helper::getResponse($data, $request);
+        $result = $builder->getTable()->getResponseArray();
         echo Zend_Json::encode($result);
         die();
     }

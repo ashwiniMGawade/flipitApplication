@@ -504,9 +504,9 @@ class Category extends \KC\Entity\Category
     #####################################################
     ############# ENd REFACORED CODE ####################
     #####################################################
-    public static function getCategoryList($params = "")
+    public static function getCategoryList($params = array())
     {
-        $srh = @$params["SearchText"] != 'undefined' ? @$params["SearchText"] : '';
+        $srh = @$params["SearchText"] != 'undefined' ? @$params["SearchText"] : array();
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $qb = $queryBuilder
             ->from("KC\Entity\Category", "c")
@@ -514,12 +514,12 @@ class Category extends \KC\Entity\Category
             ->andWhere($queryBuilder->expr()->like('c.name', $queryBuilder->expr()->literal($srh.'%')));
 
         $request  = \DataTable_Helper::createSearchRequest($params, array('id', 'name', 'status'));
-        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emUser'), $request);
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder->setQueryBuilder($qb)
             ->add('number', 'c.id')
             ->add('text', 'c.name')
             ->add('text', 'c.status');
-        $list = $builder->getTable()->getResponseArray();;
+        $list = $builder->getTable()->getResponseArray();
         return $list;
 
     }
