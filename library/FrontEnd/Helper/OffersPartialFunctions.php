@@ -285,7 +285,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     }
                     $onClick = "viewCounter('onclick', 'offer', $currentOffer->id),
                     ga('send', 'event', 'aff', '$offerBounceRate')";
-                    $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn blue btn-primary';
+                    $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
                     $offerLink =
                         '<a id="'.$currentOffer->id.'" class="'.$class.'" 
                         href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
@@ -299,7 +299,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                         self::getUserIsLoggedInOrNot() == "true"
                         ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')"
                         : HTTP_PATH_LOCALE."accountlogin";
-                    $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn blue btn-primary';
+                    $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
                     $offerLink =
                         '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
                         alt = "'.$urlToShow.'" target="_blank" onclick = "'.$onClick.'" rel="nofollow">
