@@ -23,14 +23,14 @@ class Admin_OfferController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $connection = BackEnd_Helper_viewHelper::addConnection();//connection generate with second excelDatabase
         $params = $this->_getAllParams();
         if (!Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        BackEnd_Helper_viewHelper::closeConnection($connection);
         $this->view->controllerName = $this->getRequest()
                 ->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
@@ -1543,6 +1543,51 @@ class Admin_OfferController extends Zend_Controller_Action
         ->setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         ->setHeader('Cache-Control', 'max-age=0')
         ->setBody(file_get_contents($fileName));
+    }
+
+    public function importoffersAction()
+    {
+        $flashMessage = $this->_helper->getHelper('FlashMessenger');
+        ini_set('max_execution_time', 115200);
+        $params = $this->_getAllParams();
+        if ($this->getRequest()->isPost()) {
+            if (isset($_FILES['excelFile']['name']) && $_FILES['excelFile']['name'] != '') {
+                $uploadResult = BackEnd_Helper_viewHelper::uploadExcel($_FILES['excelFile']['name'], false, 'offer');
+                if ($uploadResult['status'] == 200) {
+                    $excelFilePath = $uploadResult['path'];
+                    $excelFile = $excelFilePath.$uploadResult['fileName'];
+                    $dataSaved = BackEnd_Helper_importOffersExcel::importExcelOffers($excelFile);
+                    if ($dataSaved) {
+                        $message = $dataSaved.' '.$this->view->translate('backend_Valid Offers have been imported Successfully!!');
+                        $flashMessage->addMessage(array('success' => $message));
+                        $this->_redirect(HTTP_PATH . 'admin/offer');
+                    } else {
+                        $message = $this->view->translate('backend_Problem in your Data!!');
+                        $flashMessage->addMessage(array('error' => $message));
+                        $this->_redirect(HTTP_PATH . 'admin/offer/importoffers');
+                    }
+                } else {
+                    $message = $this->view->translate('backend_Problem in your file size!!');
+                    $flashMessage->addMessage(array('error' => $message));
+                    $this->_redirect(HTTP_PATH . 'admin/offer/importoffers');
+                }
+            }
+        }
+        $message = $flashMessage->getMessages();
+        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
+    }
+
+    public function emptyOfferXlxAction()
+    {
+        $file = APPLICATION_PATH . '/migration/emptyOffer.xlsx' ;
+        $fileName = $this->view->translate($file);
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->getResponse()
+            ->setHeader('Content-Disposition', 'attachment;filename=' . basename($fileName))
+            ->setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            ->setHeader('Cache-Control', 'max-age=0')
+            ->setBody(file_get_contents($fileName));
     }
 
 }

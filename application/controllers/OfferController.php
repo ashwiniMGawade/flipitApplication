@@ -69,6 +69,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $socialCodeForm = new Application_Form_SocialCode();
         $this->view->zendForm = $socialCodeForm;
+        $this->view->pageCssClass = 'page-store';
     }
 
     public function extendedofferAction()
@@ -143,7 +144,7 @@ class OfferController extends Zend_Controller_Action
         );
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        $this->view->pageCssClass = 'flipit-expired-page';
+        $this->view->pageCssClass = 'flipit-expired-page page-store';
     }
 
     public function offerDetailAction()
@@ -240,6 +241,7 @@ class OfferController extends Zend_Controller_Action
         );
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+        $this->view->pageCssClass = 'page-store';
     }
 
     public static function getOfferUniqueCode($offerParameters)
@@ -263,5 +265,20 @@ class OfferController extends Zend_Controller_Action
         $getOfferUniqueCode = self::getOfferUniqueCode($offerParameters);
         CouponCode::updateCodeStatus($offerParameters['id'], $getOfferUniqueCode['code']);
         exit();
+    }
+
+    public function offerViewCountAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $offerId = $this->getRequest()->getParam('offerId');
+        $cahceKey = 'viewCount_'.$offerId.'_text';
+        $this->view->offerViewCount = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            $cahceKey,
+            array(
+                'function' => 'Offer::getViewCountByOfferId',
+                'parameters' => array($offerId)
+            ),
+            ''
+        );
     }
 }

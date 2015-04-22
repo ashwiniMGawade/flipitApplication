@@ -6,9 +6,9 @@ $shopUrl = $this->shop['affliateProgram'] == '1' ?
 ?>
 <ul class="add-info">
 <?php
-if($this->shop['howToUse']):
-?>
-    <li>
+if ($this->shop['howToUse']):
+    ?>
+    <li class="question">
         <h4><?php echo $this->translate('How to use code'); ?></h4>
         <p>
             <?php 
@@ -19,7 +19,9 @@ if($this->shop['howToUse']):
             <?php echo $this->translate('help guide'); ?>.
         </p>
     </li>
-<?php endif; ?>    
+    <?php
+endif;
+?>    
     <li class="web">
         <h4><?php echo $this->translate('Official website'); ?></h4>
         <?php echo $shopUrl; ?>
