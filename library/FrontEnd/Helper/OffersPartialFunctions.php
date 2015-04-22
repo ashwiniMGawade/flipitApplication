@@ -107,11 +107,14 @@ class FrontEnd_Helper_OffersPartialFunctions
             $offerDates .= ' ';
             $offerDates .= ucwords($startDate->get($startDateFormat));
             $offerDates .= ' '.FrontEnd_Helper_viewHelper::__translate('t/m');
+            $offerDates .= ' ';
+            $offerDates .= ucwords($endDate->get($endDateFormat));
         } else {
-            $offerDates .= FrontEnd_Helper_viewHelper::__translate('valid t/m');
+            $offerDates .= FrontEnd_Helper_viewHelper::__translate('valid from');
+            $offerDates .= ' ';
+            $offerDates .= ucwords($startDate->get($endDateFormat));
         }
-        $offerDates .= ' ';
-        $offerDates .= ucwords($endDate->get($endDateFormat));
+        
         return $offerDates;
     }
     public function getOfferOptionAndOfferDates($currentOffer, $daysTillOfferExpires)
