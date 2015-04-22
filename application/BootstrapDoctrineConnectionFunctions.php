@@ -19,7 +19,7 @@ class BootstrapDoctrineConnectionFunctions
         $memcache = new Memcached();
         $memcache->addServer($memcacheHostname, $memcachePort);
         $cache = new \Doctrine\Common\Cache\MemcachedCache;
-        $cache->setMemcached($memcache);    
+        $cache->setMemcached($memcache);
         $annotationReader = new Doctrine\Common\Annotations\AnnotationReader;
         $cachedAnnotationReader = new Doctrine\Common\Annotations\CachedReader(
             $annotationReader,
@@ -49,9 +49,10 @@ class BootstrapDoctrineConnectionFunctions
         Zend_Registry::set('emUser', $emUser);
         BootstrapConstantsFunctions::constantsForLocaleAndTimezoneSetting();
         $localeValue = explode('_', COUNTRY_LOCALE);
+        $localeValue = isset($localeValue[1]) ? $localeValue[1] : $localeValue[0];
         if (LOCALE == '') {
             date_default_timezone_set('Europe/Amsterdam');
-        } else if (strtolower($localeValue[1]) == LOCALE) {
+        } else if (strtolower($localeValue) == LOCALE) {
             date_default_timezone_set(LOCALE_TIMEZONE);
         }
         return $emUser;
