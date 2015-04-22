@@ -674,8 +674,7 @@ class Shop extends \KC\Entity\Shop
             ->add('text', 's.showSignupOption')
             ->add('text', 's.status')
             ->add('text', 's.offlineSicne');
-        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $result = \DataTable_Helper::getResponse($data, $request);
+        $result = $builder->getTable()->getResponseArray();
         return $result;
     }
 

@@ -222,7 +222,10 @@ class Page Extends \KC\Entity\Page
             )
         );
 
-        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(
+            \Zend_Registry::get('emLocale'),
+            $request
+        );
         $builder
             ->setQueryBuilder($query)
             ->add('text', 'page.pageTitle')
@@ -230,9 +233,7 @@ class Page Extends \KC\Entity\Page
             ->add('text', 'page.permalink')
             ->add('number', 'page.created_at')
             ->add('text', 'page.contentManagerName');
-         
-        $pageList = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $pageList = \DataTable_Helper::getResponse($pageList, $request);
+        $pageList = $builder->getTable()->getResponseArray();
         return $pageList;
     }
 

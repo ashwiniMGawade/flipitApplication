@@ -764,9 +764,7 @@ class User extends \KC\Entity\User
             ->add('text', 'r.name')
             ->add('text', 'p.path')
             ->add('text', 'p.name');
-
-        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $data = \DataTable_Helper::getResponse($data, $request);
+        $data = $builder->getTable()->getResponseArray();
         return \Zend_Json::encode($data);
     }
    
@@ -800,9 +798,7 @@ class User extends \KC\Entity\User
             ->add('text', 'r.name')
             ->add('text', 'p.path')
             ->add('text', 'p.name');
-
-        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $data = \DataTable_Helper::getResponse($data, $request);
+        $data = $builder->getTable()->getResponseArray();
         return \Zend_Json::encode($data);
     }
 

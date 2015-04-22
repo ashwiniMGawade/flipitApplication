@@ -3,7 +3,7 @@ class DataTable_Helper extends \NeuroSYS\DoctrineDatatables\Table
 {
     public static function createSearchRequest($override = array(), $props = array(), $search = array())
     {
-        $request = array(
+         $request = array(
             'sEcho' => '1',
             'iColumns' => count($props),
             'sColumns' => '',
@@ -23,10 +23,5 @@ class DataTable_Helper extends \NeuroSYS\DoctrineDatatables\Table
             $request['bSortable_' . $i]   = 'true';
         }
         return array_merge($request, $override);
-    }
-
-    public static function getResponse($data, $params)
-    {
-        return array('aaData' => $data);
     }
 }

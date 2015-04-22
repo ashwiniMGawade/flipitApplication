@@ -36,9 +36,7 @@ class UserGeneratedOffer extends \KC\Entity\Offer
             ->add('text', 'o.couponCode')
             ->add('number', 'o.startDate')
             ->add('number', 'o.endDate');
-           
-        $offersList = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $offersList = \DataTable_Helper::getResponse($offersList, $request);
+        $offersList = $builder->getTable()->getResponseArray();
         return $offersList;
     }
 

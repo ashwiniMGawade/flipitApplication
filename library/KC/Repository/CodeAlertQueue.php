@@ -148,9 +148,7 @@ class CodeAlertQueue Extends \KC\Entity\CodeAlertQueue
         ->add('number', 'o.id')
         ->add('text', 's.name')
         ->add('text', 'o.title');
-
-        $codeAlertList = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $codeAlertList = \DataTable_Helper::getResponse($codeAlertList, $request);
+        $codeAlertList = $builder->getTable()->getResponseArray();
         return $codeAlertList;
     }
 

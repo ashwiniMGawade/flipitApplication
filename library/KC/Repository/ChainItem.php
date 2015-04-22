@@ -73,8 +73,7 @@ class ChainItem extends \KC\Entity\ChainItem
             ->add('text', 'w.name')
             ->add('text', 'c.locale')
             ->add('number', 'c.status');
-        $list = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $list = \DataTable_Helper::getResponse($list, $request);
+        $list = $builder->getTable()->getResponseArray();
         return $list;
     }
 

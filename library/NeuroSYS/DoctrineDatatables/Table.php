@@ -234,7 +234,7 @@ class Table extends Entity
         }
 
         foreach ($results as $i => $result) {
-            $results[$i] = $this->formatResult($result, $hydrate);
+            //$results[$i] = $this->formatResult($result, $hydrate);
         }
         return $results;
     }

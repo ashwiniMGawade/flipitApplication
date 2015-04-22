@@ -239,8 +239,7 @@ class Articlecategory extends \KC\Entity\Articlecategory
             ->add('text', 'cat.name')
             ->add('text', 'cat.permalink')
             ->add('text', 'cat.metatitle');
-        $result = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $result = \DataTable_Helper::getResponse($result, $request);
+        $result = $builder->getTable()->getResponseArray();
         return $result;
     }
 
@@ -260,8 +259,7 @@ class Articlecategory extends \KC\Entity\Articlecategory
             ->add('text', 'cat.name')
             ->add('text', 'cat.permalink')
             ->add('text', 'cat.metatitle');
-        $result = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $result = \DataTable_Helper::getResponse($result, $request);
+        $result = $builder->getTable()->getResponseArray();
         return $result;
     }
 

@@ -513,8 +513,7 @@ class Visitor extends \KC\Entity\Visitor
             ->add('text', 'v.active')
             ->add('text', 'v.weeklyNewsLetter')
             ->add('number', 'v.created_at');
-        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
-        $result = \DataTable_Helper::getResponse($data, $request);
+        $result = $builder->getTable()->getResponseArray();
         return $result;
     }
 
