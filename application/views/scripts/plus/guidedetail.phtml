@@ -35,6 +35,7 @@ endif;
 
 $partialViewPath = 'partials/';
 $savingGuides = '';
+
 if(!empty($this->articlesRelatedToCurrentCategory)):
     $savingGuides = $this->partial(
         $partialViewPath.'_authorMostReadArticles.phtml', 

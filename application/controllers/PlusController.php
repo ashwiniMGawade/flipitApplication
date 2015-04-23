@@ -92,8 +92,8 @@ class PlusController extends Zend_Controller_Action
                 '\KC\Repository\Articles::getArticleByPermalink', 'parameters' => array($permalink))
             );
         if (!empty($articleDetails)) {
-            $currentArticleCategory = !empty($articleDetails[0]['relatedcategory'][0]['articlecategory'])
-                                      ? $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'] : '';
+            $currentArticleCategory = !empty($articleDetails[0]['category'][0])
+                                      ? $articleDetails[0]['category'][0]['name'] : '';
             $categoryWiseArticles = \FrontEnd_Helper_viewHelper::
                 getRequestedDataBySetGetCache(
                     (string)"4_categoriesArticles_list",

@@ -7,8 +7,7 @@ class MoneySaving Extends \KC\Entity\MoneySaving
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select(
-            'chap.id as chapterId, chap.content as chapterContent, av.id, sum(av.onload) as pop,
-            a.title, a.permalink, a.metadescription, a.content, a.featuredImageStatus, a.created_at, at.path as thumbnailpath, at.name as thumbnailname, ai.name, ai.path, afi.name as featuredimagename, afi.path as featuredimagepath'
+            'chap, av, a, at, ai, afi, sum(av.onload) as pop'
         )
         ->from('KC\Entity\ArticleViewCount', 'av')
         ->leftJoin('av.articles', 'a')
@@ -116,9 +115,7 @@ class MoneySaving Extends \KC\Entity\MoneySaving
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select(
-                'chap.id as chapterId, chap.content as chapterContent, a.id, a.title, a.plusTitle, a.permalink, a.content,
-                a.authorid, a.authorname, a.plusTitle, a.created_at, a.publishdate, ai.path as articleImagePath,
-                ai.name as articleImageName, aai.path, aai.name, ac.categorytitlecolor'
+                'chap, a, ai, aai, ac'
             )
             ->from('KC\Entity\Articles', 'a')
             ->leftJoin('a.thumbnail', 'ai')

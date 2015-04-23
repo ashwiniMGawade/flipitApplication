@@ -41,7 +41,7 @@ class Articles extends \KC\Entity\Articles
     public static function getArticleByPermalink($permalink)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('a, stores, related, category, chapter, artimg, shops')
+        $query = $queryBuilder->select('a, stores, related, category, chapter, artimg, shops, thum')
             ->from('KC\Entity\Articles', 'a')
             ->leftJoin('a.storearticles', 'stores')
             ->leftJoin('a.category', 'related')
