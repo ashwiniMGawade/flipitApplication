@@ -253,7 +253,7 @@ if ($this->offersType!='extendedOffer') {
     }
     if (isset($this->pageType) && $this->pageType == 'howToGuide') {
         $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-        echo '<a class="link-box" href="'.$domainName.$offer->shopOffers['permalink'].'">
+        echo '<a class="link-box" href="'.$domainName.$offer->shopOffers['permaLink'].'">
                 <hr class="alt2">
                 '.$this->translate('View all voucher codes from').' '.$offer->shopOffers['name'].'
             </a>';
