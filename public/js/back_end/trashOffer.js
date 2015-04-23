@@ -129,7 +129,6 @@ var offerListTable = $('#offerListTable').dataTable();
 function getOffers(txtOffer,txtShop,type) {
 	addOverLay();
 	$("ul.ui-autocomplete").css('display','none');
-	$('#offerListTable').addClass('widthTB');
 	shopListTable = $("#offerListTable")
 	.dataTable(
 			{
@@ -143,16 +142,8 @@ function getOffers(txtOffer,txtShop,type) {
 				"aaSorting": [[ 1, 'ASC' ]],
 				"sPaginationType" : "bootstrap",
 				//"sAjaxSource" : HOST_PATH+"admin/offer/getoffer/data/" + data,
-				"sAjaxSource" : HOST_PATH+"admin/offer/getoffer/offerText/"+ txtOffer  + "/shopText/"+ txtShop + "/couponType/"+ type+  "/flag/1",
+				"sAjaxSource" : HOST_PATH+"admin/offer/gettrashedoffer/offerText/"+ txtOffer  + "/shopText/"+ txtShop + "/couponType/"+ type+  "/flag/1",
 				"aoColumns" : [
-						{
-							"fnRender" : function(obj) {
-								return name = obj.aData.id;
-						},
-								"bSortable" : false,
-								"sType": 'numeric',
-								"bVisible":    false 
-						},
 						{
 							"fnRender" : function(obj) {
 								var tag = "<p editId='" + obj.aData.id + "' class=' editId colorAsLink word-wrap-without-margin-offer_trash'>"+ucfirst(obj.aData.title)+"</p>"; 
