@@ -7,6 +7,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.j
 $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
 $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/select2.css" );
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/page.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
+$this->headScript ()->prependFile ( PUBLIC_PATH . "js/back_end/widget-location.js");
 ?>
 <?php echo $this->headTitle()->append('Pages List');?>
    <!-- pageList starts -->
@@ -70,4 +72,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/page.js");
          </div>
            
         </div>
+      <?php 
+      echo $this->render('widgetlocation/widgetlocation.phtml');
+      ?>
        <!-- pageList end -->
