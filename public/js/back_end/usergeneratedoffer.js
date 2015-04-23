@@ -3,49 +3,9 @@ function init(){
     var iStart = $.bbq.getState( 'iStart' , true ) || 0;
     var iSortCol = $.bbq.getState( 'iSortCol' , true ) || 5;
     var iSortDir = $.bbq.getState( 'iSortDir' , true ) || 'desc';
-    var iOfferText = $.bbq.getState( 'iOfferText' , true ) || undefined;
     var iShopText = $.bbq.getState( 'iShopText' , true ) || undefined;
     var iShopCoupon = $.bbq.getState( 'iShopCoupon' , true ) || undefined;
-    var iType = $.bbq.getState( 'iType' , true ) || undefined;
-
-    getOffers(iOfferText,iShopText,iShopCoupon,iType,iStart, iSortCol, iSortDir);
-
-    $("#couponType").select2();
-    $("#couponType").select2("val", "");
-    $("#searchOffer").select2({
-        placeholder: __("Search offer"),
-        minimumInputLength: 1,
-        ajax: {
-            url: HOST_PATH + "admin/usergeneratedoffer/searchtopfiveoffer",
-            dataType: 'json',
-            data: function(term, page) {
-                return {
-                    keyword: term,
-                    flag: 0
-                };
-            },
-            type: 'post',
-            results: function (data, page) {
-                return {results: data};
-            }
-        },
-        formatResult: function(data) { 
-            return data; 
-        },
-        formatSelection: function(data) { 
-            $("#searchOffer").val(data);
-            return data; 
-        }
-    }).on('change', function(e) {
-        console.log(e)
-        try {
-            var slug = e.val.slug;
-            window.location.href = "http://localhost/mysite/posts/"+slug;
-        } catch(error) {
-            console.log('Selected search result is invalid: ');
-        }
-    });;
-    
+    getOffers(iShopText,iShopCoupon,iStart, iSortCol, iSortDir);
     $("#searchShop").select2({
         placeholder: __("Search shop"),
         minimumInputLength: 1,
@@ -102,26 +62,16 @@ function init(){
         $(this).parents('div.resetSearch').children('input').val('');
         searchByShop();
     });
-
-    $("input#searchOffer").keypress(function(e) {
-        if (e.which == 13) {            
-            searchByShop();
-        }
-    });
-
     $("input#searchShop").keypress(function(e) {
         if (e.which == 13) {
             searchByShop();
         }
     });
-   
     $("input#searchCoupon").keypress(function(e) {
         if (e.which == 13) {     
             searchByShop();
         }
     });
-
-    $('select#couponType').change(searchByShop);
     $(window).bind( 'hashchange', function(e) {
         if (hashValue != location.hash && click == false){
             offerListTable.fnCustomRedraw();
@@ -131,32 +81,21 @@ function init(){
 
 function searchByShop()
 {
-    var type = $("#couponType").select2('val');
-    if (type=='' || type==null) {
-        type = undefined;
-    }
-
     var searchShop = $("#searchShop").select2('val');
     if (searchShop=='' || searchShop==null) {
         searchShop = undefined;
     }
-
-    var txtOffer = $('#searchOffer').select2('val');
-    if (txtOffer=='' || txtOffer==null) {
-        txtOffer = undefined;
-    }
-
     var searchCoupon = $("#searchCoupon").select2('val');
     if (searchCoupon =='' || searchCoupon == null) {
         searchCoupon = undefined;
     } 
-    getOffers(txtOffer,searchShop,searchCoupon,type,0,5,'desc');
+    getOffers(searchShop,searchCoupon,0,5,'desc');
 }
 
 var offerListTable = $('#offerListTable').dataTable();
 var hashValue = "";
 var click = false;
-function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
+function getOffers(txtShop,txtCoupon,iStart,iSortCol,iSortDir) {
     addOverLay();
     $("ul.ui-autocomplete").css('display','none');
     $('#offerListTable').removeClass('display-none');
@@ -176,9 +115,8 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
         "oLanguage": {
             "sInfo": "<b>_START_-_END_</b> of <b>_TOTAL_</b>"
         },
-        "sAjaxSource" : encodeURI(HOST_PATH+"admin/usergeneratedoffer/getoffer/offerText/"
-            + txtOffer  + "/shopText/"+ txtShop + "/shopCoupon/"+ txtCoupon 
-            + "/couponType/"+ type +  "/flag/0"
+        "sAjaxSource" : encodeURI(HOST_PATH+"admin/usergeneratedoffer/getoffer/shopText/"
+            + txtShop + "/shopCoupon/"+ txtCoupon + "/flag/0"
         ),
         "aoColumns" : [
         {
@@ -186,15 +124,11 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
                 var tag='';
                 if (obj.aData.shopOffers!=undefined && obj.aData.shopOffers!=null && obj.aData.shopOffers!='') {
                     if (obj.aData.shopOffers.name!=undefined && obj.aData.shopOffers.name!=null && obj.aData.shopOffers.name!='') {
-                        tag = "<p class='word-wrap-without-margin-offer' editId='" + obj.aData.id 
-                + "'><a href='javascript:void(0)'>"
-                        +ucfirst(obj.aData.shopOffers.name)
-                        +"</a></p>";
+                        tag = "<p class='word-wrap-without-margin-offer' editId='" + obj.aData.id + "'>" 
+                        + "<a href='javascript:void(0)'>" + ucfirst(obj.aData.shopOffers.name) + "</a></p>";
                     } else {
-                        tag = "<p editId='" + obj.aData.id 
-                + "' class='word-wrap-without-margin-offer'><a href='javascript:void(0)'>"
-                        +ucfirst(obj.aData.shopOffers.name)
-                        +"</p></a>";                        
+                        tag = "<p editId='" + obj.aData.id + "' class='word-wrap-without-margin-offer'>" 
+                        + "<a href='javascript:void(0)'>" + ucfirst(obj.aData.shopOffers.name) + "</p></a>";                        
                     }
                 }
                 return tag;
@@ -217,20 +151,17 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
         },{
             "fnRender" : function(obj) {               
                 var date = "";
-                                
                 if(obj.aData.startDate !=null && obj.aData.startDate !='undefined' ) {
                     var splitdate = obj.aData.startDate.date.split(" ");
                     if(obj.aData.startDate.date != null && splitdate[0] != '1970-01-01') {
                         var date = obj.aData.startDate.date;
-                    
                     }
                 }
                 return "<a href='javascript:void(0)'>" + date + "</a>";  
             },
             "bSearchable" : true,
             "bSortable" : true            
-        },
-        {
+        }, {
             "fnRender" : function(obj) {                
                 var date = "";
                 if(obj.aData.endDate !=null && obj.aData.endDate !='undefined' ) {
@@ -264,9 +195,7 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
             state[ 'iStart' ] = obj._iDisplayStart ;
             state[ 'iSortCol' ] = obj.aaSorting[0][0] ;
             state[ 'iSortDir' ] = obj.aaSorting[0][1] ;
-            state[ 'iOfferText' ] = txtOffer;
-            state[ 'iShopText' ] = txtShop;
-            state[ 'iType' ] = type;            
+            state[ 'iShopText' ] = txtShop;     
             $("#offerListTable").find('tr').find('td:lt(3)').click(function () {
                 var eId = $(this).parent('tr').find('p').attr('editid');
                 state[ 'eId' ] = eId ;
@@ -274,28 +203,19 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
                 click = true;
                 window.location.href = HOST_PATH+"admin/offer/editoffer/id/" + eId + "?iStart="+
                 obj._iDisplayStart+"&iSortCol="+obj.aaSorting[0][0]+"&iSortDir="+
-                obj.aaSorting[0][1]+"&iOfferText="+txtOffer+"&iShopText="+txtShop+"&iShopCoupon="+txtCoupon+
-                "&iType="+type+"&eId="+eId;
+                obj.aaSorting[0][1]+"&iShopText="+txtShop+"&iShopCoupon="+txtCoupon+
+                "&eId="+eId;
             });
             
-            $("#couponType").select2('val',type);
             $("#searchShop").select2('val',txtShop);
-            $("#searchOffer").select2('val',txtOffer);
             $("#searchCoupon").select2('val',txtCoupon);
-            
-            if (txtOffer == undefined) {
-                $.bbq.removeState( 'iOfferText' );
-            }
             if (txtShop == undefined) {
                 $.bbq.removeState( 'iShopText' );
             } 
             if (txtCoupon == undefined) {
                 $.bbq.removeState( 'iShopCoupon' );
-            } 
-            if (type == undefined){
-                $.bbq.removeState( 'iType' );
             }
-            $.bbq.pushState( state );
+            $.bbq.pushState(state);
 
             hashValue = location.hash;
             var aTrs = offerListTable.fnGetNodes();
