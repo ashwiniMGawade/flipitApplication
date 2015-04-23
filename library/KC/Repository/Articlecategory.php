@@ -250,7 +250,7 @@ class Articlecategory extends \KC\Entity\Articlecategory
         ->from('KC\Entity\Articlecategory', 'cat')
         ->where('cat.deleted = 0');
         $request  = \DataTable_Helper::createSearchRequest(
-            '',
+            array(),
             array('cat.id','cat.name','cat.permalink','cat.metatitle')
         );
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);

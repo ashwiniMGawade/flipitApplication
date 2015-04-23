@@ -239,7 +239,6 @@ class Articles extends \KC\Entity\Articles
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
             ->setQueryBuilder($qb)
-            ->add('number', 'art.id')
             ->add('text', 'art.title')
             ->add('text', 'art.created_at')
             ->add('text', 'art.publish')
