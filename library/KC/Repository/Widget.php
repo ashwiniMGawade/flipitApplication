@@ -74,12 +74,14 @@ class Widget extends \KC\Entity\Widget
 
     public static function getWidgetList($params)
     {
-        $srh = @$params["SearchText"] != 'undefined' ? @$params["SearchText"] : '';
-        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser
+        $srh = @$params["searchText"] != 'undefined' ? @$params["searchText"] : '';
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
             ->from('KC\Entity\Widget', 'widget')
             ->where('widget.deleted = 0')
-            ->andWhere($entityManagerUser->expr()->like("widget.title", $entityManagerUser->expr()->literal($srh."%")));
+            ->andWhere(
+                $queryBuilder->expr()->like('widget.title', $queryBuilder->expr()->literal($srh.'%'))
+            );
         $request = \DataTable_Helper::createSearchRequest($params, array());
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
@@ -97,12 +99,13 @@ class Widget extends \KC\Entity\Widget
     public static function searchKeyword($keyword)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('w')
+        $query = $queryBuilder
+            ->select('w')
             ->from('KC\Entity\Widget', 'w')
-            ->setParameter(1, $keyword.'%')
-            ->where($queryBuilder->expr()->like('w.title', '?1'))
-            ->setParameter(2, '1')
-            ->andWhere('w.status = ?2')
+            ->andWhere(
+                $queryBuilder->expr()->like('w.title', $queryBuilder->expr()->literal($keyword.'%'))
+            )
+            ->andWhere('w.status = 0')
             ->setMaxResults(5);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
