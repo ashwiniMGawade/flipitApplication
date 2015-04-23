@@ -1,0 +1,32 @@
+<div class="modal display-none popup-width" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" 
+    aria-hidden="true">
+    <div class="wrap columns-2">
+        <form name="widgetlocationForm" id="widgetlocationForm" method="post" 
+            action="<?php echo HTTP_PATH ?>admin/widgetlocation/widgetlocation">
+            <div class="m-item-popup-hdr"><?php echo $this->translate('New letter widget location');?></div>
+            <div id="poststuff" class="metabox-holder has-right-sidebar">
+                <div id="post-body">
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label>
+                                <strong><?php echo $this->translate('Widget Location');?></strong>
+                            </label>
+                        </div>
+                        <div class="mainpage-content-right-inner-right-other display-none"></div>
+                        <div class="mainpage-content-right">
+                            <input type="text" placeholder="widget Location.." class="span3" name="widgetlocation" 
+                            id="widgetlocation">
+                        </div>
+                    </div> 
+              </div>
+              <br class="clear">
+            </div>
+            <div class="m-item-popup-btm">
+                <input type="hidden" id="hidimageorg" name="hidimageorg">
+                <button id="submitButton" class="btn btn-large btn-primary fl export-submit-btn" 
+                    type="submit"><?php echo $this->translate('Submit');?></button> 
+                <button class="btn ml10 m5" data-dismiss="modal"><?php echo $this->translate('Cancel');?></button>
+            </div>
+        </form>
+    </div>
+</div>

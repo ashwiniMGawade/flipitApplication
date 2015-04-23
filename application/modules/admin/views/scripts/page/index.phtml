@@ -28,7 +28,14 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/page.js");
           <h1 class="fl"><?php echo $this->translate('Pages')?><button onclick="window.location.href='<?php echo HTTP_PATH;?>admin/page/addpage'" class="btn ml10"><?php echo $this->translate('Add New Page')?></button></h1>
           	<div class="clear"></div>
         
-          	<p class="text-right"><a href='<?php echo HTTP_PATH;?>admin/page/exportpagelist'><?php echo $this->translate('Export List')?></a></p>
+          	<p class="text-right">
+                <a href='javascript:void(0)' onclick="showLightBoxForWidgetLocation()">
+                    <?php echo $this->translate('Set Widget Location')?>
+                </a>
+                <a href='<?php echo HTTP_PATH;?>admin/page/exportpagelist'>
+                    <?php echo $this->translate('Export List')?>
+                </a>
+            </p>
           <div class="mainpage-content-colorbox">	
         <form class="form-search"  name="searchform" id="searchform">
           <div class="fl ml15"> 
