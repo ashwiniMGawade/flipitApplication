@@ -49,4 +49,8 @@ class About
     {
         $this->$property = $value;
     }
+    public function getId()
+    {
+        return $this->id;
+    }
 }
