@@ -8,8 +8,6 @@ class UserGeneratedOffer extends \KC\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $searchShop = $parameters["shopText"]!='undefined' ? $parameters["shopText"] : '';
         $searchCoupon = @$parameters["shopCoupon"]!='undefined' ? @$parameters["shopCoupon"] : '';
-        $offerText =  '';
-        $couponType = @$parameters["couponType"]!='undefined' ? @$parameters["couponType"] : '';
         $deletedStatus = $parameters['flag'];
         $getOffersQuery = $queryBuilder
             ->from('KC\Entity\Offer', 'o')
@@ -26,14 +24,11 @@ class UserGeneratedOffer extends \KC\Entity\Offer
 
         $request  = \DataTable_Helper::createSearchRequest(
             $parameters,
-            array('o.title','s.name','o.discountType','o.refURL','o.couponCode','o.startDate',
-                'o.endDate', 'o.totalViewcount','o.authorName'
-            )
+            array('s.name','o.couponCode','o.startDate','o.endDate')
         );
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
             ->setQueryBuilder($getOffersQuery)
-            ->add('text', 'o.id')
             ->add('text', 's.name')
             ->add('text', 'o.couponCode')
             ->add('number', 'o.startDate')

@@ -595,8 +595,7 @@ function getrightMenus(id){
 								
 							}
 						}
-						
-						$('div.m-beheer-rt').append("<div class='add_row_outer'><div class='add_btn'><button data-loading-text='"+__("Loading...")+"' title='"+__("Add")+"' class='btn btn-primary' type='button' onclick='showModel("+id+","+'""'+","+'"addRightli"'+")'>+</button></div></div>");
+						//$('div.m-beheer-rt').append("<div class='add_row_outer'><div class='add_btn'><button data-loading-text='"+__("Loading...")+"' title='"+__("Add")+"' class='btn btn-primary' type='button' onclick='showModel("+id+","+'""'+","+'"addRightli"'+")'>+</button></div></div>");
 						liselected(id);
 						removeOverLay();
 			}
