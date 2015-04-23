@@ -251,7 +251,7 @@ class Articles extends \KC\Entity\Articles
     public static function getArticleData($params)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('a, stores, related, category, chapter, artimg, shops')
+        $query = $queryBuilder->select('a, stores, related, category, chapter, artimg, shops, articlefeaturedimage, thum')
             ->from('KC\Entity\Articles', 'a')
             ->leftJoin('a.storearticles', 'stores')
             ->leftJoin('a.refArticleCategory', 'related')
@@ -259,6 +259,7 @@ class Articles extends \KC\Entity\Articles
             ->leftJoin('a.articleChapter', 'chapter')
             ->leftJoin('a.articleImage', 'artimg')
             ->leftJoin('a.thumbnail', 'thum')
+            ->leftJoin('a.featuredImage', 'articlefeaturedimage')
             ->leftJoin('stores.articleshops', 'shops')
             ->where('a.id ='. $params['id'])
             ->andWhere('a.deleted = 0');
@@ -518,7 +519,7 @@ class Articles extends \KC\Entity\Articles
             $artThumbnail = self::uploadImage('articleImageSmall');
             if (@$artThumbnail['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension(@$artThumbnail['fileName']);
-                $articleThumb = $entityManagerLocale->find('\KC\Entity\ImageArticlesThumb', $data->articleThumb->id);
+                $articleThumb = $entityManagerLocale->find('\KC\Entity\ImageArticlesThumb', $data->thumbnail->id);
                 $articleThumb->ext = @$ext;
                 $articleThumb->path = @\BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['path']);
                 $articleThumb->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['fileName']);

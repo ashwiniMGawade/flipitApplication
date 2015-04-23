@@ -322,7 +322,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                             <strong><?php echo $this->translate('Thumbnail Small'); ?></strong>
                             </label></div>
                             <div class="mainpage-content-right">
-                                <?php 
+                                <?php
                                 $articlePicture = '';
                                 if(
                                     isset( $this->articleData[0]['thumbnail']['name'] ) 
@@ -359,13 +359,13 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                                         <?php 
                                         $articlefeaturedimage = '';
                                         if(
-                                            isset( $this->articleData[0]['articlefeaturedimage']['name'] ) 
-                                            && $this->articleData[0]['articlefeaturedimage']['name'] != '' 
+                                            isset( $this->articleData[0]['featuredImage']['name'] ) 
+                                            && $this->articleData[0]['featuredImage']['name'] != '' 
                                         ) {
                                         $articlefeaturedimage =
                                             PUBLIC_PATH_CDN
-                                            . $this->articleData[0]['articlefeaturedimage']['path']
-                                            . $this->articleData[0]['articlefeaturedimage']['name'];
+                                            . $this->articleData[0]['featuredImage']['path']
+                                            . $this->articleData[0]['featuredImage']['name'];
                                         }   
                                         ?>
                                         <div class='browse-container'> 
