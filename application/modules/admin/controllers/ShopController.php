@@ -52,6 +52,15 @@ class Admin_ShopController extends Zend_Controller_Action
         die;
     }
 
+    public function gettrashshopAction()
+    {
+        $params = $this->_getAllParams();
+        $trashShopList = \KC\Repository\Shop::gettrashshopList($params);
+        echo Zend_Json::encode($trashShopList);
+        die;
+    }
+
+
     public function movetotrashAction()
     {
         $id = $this->getRequest()->getParam('id');
