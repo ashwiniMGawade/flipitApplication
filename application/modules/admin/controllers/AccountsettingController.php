@@ -221,11 +221,8 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
     public function emailHeaderFooterAction()
     {
-        $headerFooterContent = mysqli_real_escape_string(
-            \FrontEnd_Helper_viewHelper::getDbConnectionDetails(),
-            \BackEnd_Helper_viewHelper::stripSlashesFromString(
-                $this->getRequest()->getParam('data')
-            )
+        $headerFooterContent = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+            $this->getRequest()->getParam('data')
         );
 
         switch($this->getRequest()->getParam('template')) {
