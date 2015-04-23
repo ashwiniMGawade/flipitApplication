@@ -109,7 +109,7 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
 				"bDeferRender": true,
 				"aaSorting": [[ iSortCol , iSortDir ]],
 				"sPaginationType" : "bootstrap",
-				"sAjaxSource" : HOST_PATH+"admin/shop/getshop/searchText/"+ shopText + '/flag/1',
+				"sAjaxSource" : HOST_PATH+"admin/shop/gettrashshop/searchText/"+ shopText + '/flag/1',
 				"aoColumns" : [
 						 {
 							"fnRender" : function(obj) {
@@ -167,11 +167,11 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
 							"fnRender" : function(obj) {
 
 								var tag = '';
-								if(obj.aData.affname==null || obj.aData.affname=='' || obj.aData.affname==undefined){
+								if(obj.aData.affliatenetwork==null || obj.aData.affliatenetwork=='' || obj.aData.affliatenetwork==undefined){
 									tag = '';
 							}
 							else{
-								tag = "<p class='word-wrap-without-margin-shop-trash'>"+obj.aData.affname+"</p>";
+								tag = "<p class='word-wrap-without-margin-shop-trash'>"+obj.aData.affliatenetwork.name+"</p>";
 							}
 								
 							return tag;

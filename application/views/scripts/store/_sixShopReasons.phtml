@@ -10,22 +10,24 @@
         <div class="row">
             <?php
             for ($i=0; $i < count($this->reasons); $i++) {
-                if ($i%2==0 && $i!=0) {
+                if (!empty($this->reasons[$i][1]) && !empty($this->reasons[$i][0])) {
+                    if ($i%2==0 && $i!=0) {
+                        ?>
+                        </div>
+                        <div class="row">
+                        <?php
+                    }
                     ?>
+                    <div class="col-md-6">
+                        <div class='col-md-2 six-reason-image'>
+                        </div>
+                        <div class='col-md-10 six-reason-text'>
+                            <strong><?php echo $this->reasons[$i][0];?></strong>
+                            <p><?php echo $this->reasons[$i][1];?></p>
+                        </div>
                     </div>
-                    <div class="row">
                     <?php
-                }
-                ?>
-                <div class="col-md-6">
-                    <div class='col-md-2 six-reason-image'>
-                    </div>
-                    <div class='col-md-10 six-reason-text'>
-                        <strong><?php echo $this->reasons[$i][0];?></strong>
-                        <p><?php echo $this->reasons[$i][1];?></p>
-                    </div>
-                </div>
-                <?php
+                }    
             }
             ?>
         </div>

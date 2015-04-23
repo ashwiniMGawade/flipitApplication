@@ -6,9 +6,11 @@ class UserGeneratedOffer extends \KC\Entity\Offer
     public static function getOffersList($parameters)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $searchShop         = $parameters["shopText"]!='undefined' ? $parameters["shopText"] : '';
-        $searchCoupon       = @$parameters["shopCoupon"]!='undefined' ? @$parameters["shopCoupon"] : '';
-        $deletedStatus      = $parameters['flag'];
+        $searchShop = $parameters["shopText"]!='undefined' ? $parameters["shopText"] : '';
+        $searchCoupon = @$parameters["shopCoupon"]!='undefined' ? @$parameters["shopCoupon"] : '';
+        $offerText =  '';
+        $couponType = @$parameters["couponType"]!='undefined' ? @$parameters["couponType"] : '';
+        $deletedStatus = $parameters['flag'];
         $getOffersQuery = $queryBuilder
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
@@ -19,12 +21,12 @@ class UserGeneratedOffer extends \KC\Entity\Offer
             $getOffersQuery->andWhere($queryBuilder->expr()->like('s.name', $queryBuilder->expr()->literal('%'.$searchShop.'%')));
         }
         if ($searchCoupon!='') {
-            $getOffersQuery->andWhere($queryBuilder->expr()->like('o.couponcode', $queryBuilder->expr()->literal('%'.$searchCoupon.'%')));
+            $getOffersQuery->andWhere($queryBuilder->expr()->like('o.couponCode', $queryBuilder->expr()->literal('%'.$searchCoupon.'%')));
         }
 
         $request  = \DataTable_Helper::createSearchRequest(
             $parameters,
-            array('o.title','s.name','o.discountType','o.refURL','o.couponcode','o.startDate',
+            array('o.title','s.name','o.discountType','o.refURL','o.couponCode','o.startDate',
                 'o.endDate', 'o.totalViewcount','o.authorName'
             )
         );
@@ -64,10 +66,10 @@ class UserGeneratedOffer extends \KC\Entity\Offer
             ->select('o.id,s.name as name')
             ->from("KC\Entity\Offer", "o")
             ->leftJoin('o.shopOffers', 's')
-            ->where($queryBuilder->expr()->eq('o.deleted', $queryBuilder->expr()->literal($flag)))
+            ->where('o.deleted = '.$flag)
             ->andWhere('s.status = 1')
             ->andWhere($queryBuilder->expr()->like('s.name', $queryBuilder->expr()->literal($keyword.'%')))
-            ->andWhere($queryBuilder->expr()->eq("o.userGenerated='1'"))
+            ->andWhere("o.userGenerated = 1")
             ->orderBy("s.id", "ASC")
             ->setMaxResults(5)
             ->getQuery()
@@ -79,14 +81,15 @@ class UserGeneratedOffer extends \KC\Entity\Offer
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $coupons = $queryBuilder
-            ->select('o.title as title')
+            ->select('o.title as title, o.id, o.couponCode')
             ->from("KC\Entity\Offer", "o")
-            ->where($queryBuilder->expr()->eq('o.deleted', $queryBuilder->expr()->literal($flag)))
-            ->andWhere($queryBuilder->expr()->like('o.couponcode', $queryBuilder->expr()->literal($keyword.'%')))
-            ->andWhere("o.userGenerated = '1'")
-            ->orderBy("s.id", "ASC")
+            ->where('o.deleted = '.$flag)
+            ->andWhere($queryBuilder->expr()->like('o.couponCode', $queryBuilder->expr()->literal($keyword.'%')))
+            ->andWhere("o.userGenerated = 1")
+            ->orderBy("o.id", "ASC")
             ->setMaxResults(5)
-            ->fetchArray();
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $coupons;
     }
 
@@ -94,10 +97,10 @@ class UserGeneratedOffer extends \KC\Entity\Offer
     public static function saveApprovedStatus($offerId, $status)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $offer = $entityManagerLocale->find('\KC\Entity\Offer', $params['id']);
+        $offer = $entityManagerLocale->find('\KC\Entity\Offer', $offerId);
         if (!empty($status)) {
             $offer->approved = 1;
-            $authorId = KC\Repository\Offer::getAuthorId($offerId);
+            $authorId = \KC\Repository\Offer::getAuthorId($offerId);
             if (empty($authorId[0]['authorId'])) {
                 $offer->authorId = \Auth_StaffAdapter::getIdentity()->id;
                 $offer->authorName = \Auth_StaffAdapter::getIdentity()->firstName . " "

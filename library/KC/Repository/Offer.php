@@ -1493,9 +1493,9 @@ class Offer Extends \KC\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select(
-            'o.title,o.id,o.Visability,o.shopExist,o.discountType, o.couponCode, o.extendedOffer, o.couponCodeType,
-            s.name as shopName,
-            s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,o.extendedTitle,
+            'o.title, o.id, o.Visability, o.shopExist,o.discountType,
+            o.couponCode, o.extendedOffer, o.editorPicks, o.userGenerated, o.couponCodeType, s.name as shopName,
+            s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,o.extendedTitle, o.extendedoffertitle,
             o.extendedMetaDescription,
             page.id as pageId,tc.content as termsAndconditionContent,category.id as categoryId,img.name as imageName,
             img.path,news.title as newsTitle,
@@ -2690,12 +2690,13 @@ class Offer Extends \KC\Entity\Offer
 
         if (isset($params['extendedoffercheckbox'])) {                  // check if offer is extended
             $saveOffer->extendedOffer = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedoffercheckbox']);
-            $saveOffer->extendedTitle =\BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
+            $saveOffer->extendedTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
+            $saveOffer->extendedoffertitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedTitle']);
             $saveOffer->extendedUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferRefurl']);
             $saveOffer->extendedMetaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferMetadesc']);
             $saveOffer->extendedFullDescription =\BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponInfo']);
         } else {
-
+            $saveOffer->extendedoffertitle = '';
             $saveOffer->extendedOffer = 0;
             $saveOffer->extendedTitle = '';
             $saveOffer->extendedUrl = '';
