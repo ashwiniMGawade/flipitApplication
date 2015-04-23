@@ -11,16 +11,16 @@ class Admin_CategoryController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection (); // connection
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection (); // connection
                                                              // generate with second
                                                              // database
         $params = $this->_getAllParams ();
-        if (! Auth_StaffAdapter::hasIdentity ()) {
+        if (! \Auth_StaffAdapter::hasIdentity ()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect ( '/admin/auth/index' );
         }
-        BackEnd_Helper_viewHelper::closeConnection ( $conn2 );
+        \BackEnd_Helper_viewHelper::closeConnection ( $conn2 );
         $this->view->controllerName = $this->getRequest ()->getParam ( 'controller' );
         $this->view->action = $this->getRequest ()->getParam ( 'action' );
 
@@ -49,8 +49,8 @@ class Admin_CategoryController extends Zend_Controller_Action
     {
         if ($this->getRequest ()->isPost ()) {
             $params = $this->getRequest ()->getParams ();
-            $category = Category::saveCategories ($params);
-            self::updateVarnish($category[0]['id']);
+            $category = \KC\Repository\Category::saveCategories ($params);
+            self::updateVarnish($category[0]);
             $flash = $this->_helper->getHelper ( 'FlashMessenger' );
             if (gettype($category) == 'array') {
                 $message = $this->view->translate ( 'Category has been created successfully' );
@@ -71,7 +71,7 @@ class Admin_CategoryController extends Zend_Controller_Action
      */
     public function uploadimageAction()
     {
-        Category::uploadCategoriesImage ( $this->getRequest ()->getParams () );
+        \KC\Repository\Category::uploadCategoriesImage ( $this->getRequest ()->getParams () );
     }
     /**
      * search top file category for predictive search
@@ -82,7 +82,7 @@ class Admin_CategoryController extends Zend_Controller_Action
     public function searchtopfivecategoryAction()
     {
         $srh = $this->getRequest ()->getParam ( 'keyword' );
-        $data = Category::searchToFiveCategory ( $srh);
+        $data = \KC\Repository\Category::searchToFiveCategory ( $srh);
         $ar = array ();
         if (sizeof ( $data ) > 0) {
             foreach ( $data as $d ) {
@@ -107,7 +107,7 @@ class Admin_CategoryController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams ();
         // cal to function in category model class
-        $categoryList = Category::getCategoryList ( $params );
+        $categoryList = \KC\Repository\Category::getCategoryList ( $params );
         echo Zend_Json::encode ( $categoryList );
         die ();
 
@@ -121,19 +121,20 @@ class Admin_CategoryController extends Zend_Controller_Action
      */
     public function editcategoryAction()
     {
-        $this->view->role = Zend_Auth::getInstance ()->getIdentity ()->roleId;
+        $u = \Auth_StaffAdapter::getIdentity();
+        $this->view->role = $u->users->id;
         $id = $this->getRequest()->getParam ( 'id' );
         $this->view->qstring = $_SERVER['QUERY_STRING'];
         if ($id > 0) {
             // get edit category
-            $category = Category::getCategoryInformation($id);
+            $category = \KC\Repository\Category::getCategoryInformation($id);
             $this->view->categoryDetail = $category;
         }
 
         if ($this->getRequest ()->isPost ()) {
             $params = $this->getRequest ()->getParams ();
             // cal to update category function
-            $category = Category::updateCategory ( $params );
+            $category = \KC\Repository\Category::updateCategory ( $params );
 
             self::updateVarnish($id);
 
@@ -162,7 +163,7 @@ class Admin_CategoryController extends Zend_Controller_Action
 
         self::updateVarnish($params['id']);
 
-        Category::changeStatus ( $params );
+        \KC\Repository\Category::changeStatus ( $params );
         die ();
     }
     /**
@@ -177,7 +178,7 @@ class Admin_CategoryController extends Zend_Controller_Action
 
         self::updateVarnish($params['id']);
 
-        Category::deleteCategory ( $params );
+        \KC\Repository\Category::deleteCategory ( $params );
         $flash = $this->_helper->getHelper ( 'FlashMessenger' );
         $message = $this->view->translate ( 'Category has been deleted successfully' );
         $flash->addMessage ( array ('success' => $message ) );
@@ -202,7 +203,13 @@ class Admin_CategoryController extends Zend_Controller_Action
         $replace = array ("-","-");
         $url = preg_replace ( $pattern, $replace, $url );
         $url = strtolower($url);
-        $rp = Doctrine_Query::create()->select()->from("RoutePermalink")->where("permalink = '".urlencode($url)."'")->fetchArray();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $rp = $queryBuilder
+            ->select('rp.permalink')
+            ->from("KC\Entity\RoutePermalink", "rp")
+            ->where("rp.permalink = '".urlencode($url)."'")
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if($isEdit) {
             $exactLink = 'category/show/id/'.$id;
 
@@ -254,7 +261,8 @@ class Admin_CategoryController extends Zend_Controller_Action
     public function exportcategorylistAction()
     {
         // get all category from database
-        $data = Category::getAllCategories();
+        $data = \KC\Repository\Category::getAllCategories();
+
         // create object of phpExcel
         $objPHPExcel = new PHPExcel ();
         $objPHPExcel->setActiveSheetIndex ( 0 );
@@ -267,17 +275,17 @@ class Admin_CategoryController extends Zend_Controller_Action
 
             // condition apply on offer
             $name = '';
-            if ($category ['name'] == '' || $category ['name'] == 'undefined' || $category ['name'] == null || $category ['name'] == '0') {
+            if ($category[0]['name'] == '' || $category[0]['name'] == 'undefined' || $category[0]['name'] == null || $category[0]['name'] == '0') {
 
                 $name = '';
 
             } else {
 
-                $name = $category ['name'];
+                $name = $category[0]['name'];
             }
 
             $status = '';
-            if ($category ['status'] == true) {
+            if ($category[0]['status'] == true) {
 
                 $status = $this->view->translate ( 'Yes' );
 
@@ -332,12 +340,11 @@ class Admin_CategoryController extends Zend_Controller_Action
     public function updateVarnish($id)
     {
         # Add urls to refresh in Varnish
-        $varnishObj = new Varnish();
+        $varnishObj = new \KC\Repository\Varnish();
 
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen'));
-
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_categorieen'));
         # get all the urls related to this category
-        $varnishUrls = Category::getAllUrls($id);
+        $varnishUrls = \KC\Repository\Category::getAllUrls($id); 
 
         # check $varnishUrls has atleast one
         if(isset($varnishUrls) && count($varnishUrls) > 0) {

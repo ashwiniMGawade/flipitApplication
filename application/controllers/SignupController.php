@@ -23,35 +23,35 @@ class SignupController extends Zend_Controller_Action
         $message[0]['success'] : '';
         $this->view->messageError = isset($message[0]['error']) ?
         $message[0]['error'] : '';
-        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
+        $this->viewHelperObject = new \FrontEnd_Helper_viewHelper();
     }
 
     public function checkuserAction()
     {
         $visitorInformation = intval(
-            Visitor::checkDuplicateUser(
+            \KC\Repository\Visitor::checkDuplicateUser(
                 $this->_getParam('emailAddress'),
                 $this->_getParam('id')
             )
         );
-        $visitorStatus = $visitorInformation > 0 ? false : true;
-        echo Zend_Json::encode($visitorStatus);
+        $visitorStatus = $visitorInformation == 1 ? false : true;
+        echo \Zend_Json::encode($visitorStatus);
         exit;
     }
 
     public function indexAction()
-    { 
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical(
-            FrontEnd_Helper_viewHelper::getPagePermalink()
+    {
+        $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical(
+            \FrontEnd_Helper_viewHelper::getPagePermalink()
         );
-        if (Auth_VisitorAdapter::hasIdentity()) {
+        if (\Auth_VisitorAdapter::hasIdentity()) {
             $this->_redirect(
-                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
-                FrontEnd_Helper_viewHelper::__link('link_profiel')
+                HTTP_PATH_LOCALE. \FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
+                \FrontEnd_Helper_viewHelper::__link('link_profiel')
             );
         }
 
-        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
+        $pageDetails = KC\Repository\Page::getPageDetailsFromUrl(\FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
 
         $this->viewHelperObject->getMetaTags(
@@ -65,40 +65,40 @@ class SignupController extends Zend_Controller_Action
         );
 
         $emailAddressFromMemory = '';
-        $emailAddressSpace = new Zend_Session_Namespace('emailAddressSignup');
+        $emailAddressSpace = new \Zend_Session_Namespace('emailAddressSignup');
         if (isset($emailAddressSpace->emailAddressSignup)) {
             $emailAddressFromMemory = $emailAddressSpace->emailAddressSignup;
         }
         
         $shopId = '';
-        $shopIdNameSpace = new Zend_Session_Namespace('shopId');
+        $shopIdNameSpace = new \Zend_Session_Namespace('shopId');
         if (isset($shopIdNameSpace->shopId)) {
             $shopId = $shopIdNameSpace->shopId;
         }
         
-        $registrationForm = new Application_Form_Register();
+        $registrationForm = new \Application_Form_Register();
         $this->view->form = $registrationForm;
         $registrationForm->getElement('emailAddress')->setValue($emailAddressFromMemory);
         $registrationForm->getElement('shopId')->setValue($shopId);
         if ($this->getRequest()->isPost()) {
             if ($registrationForm->isValid($this->getRequest()->getPost())) {
                 $visitorInformation = $registrationForm->getValues();
-                if (Visitor::checkDuplicateUser($visitorInformation['emailAddress']) > 0) {
+                if (\KC\Repository\Visitor::checkDuplicateUser($visitorInformation['emailAddress']) > 0) {
                     self::showFlashMessage(
-                        FrontEnd_Helper_viewHelper::
+                        \FrontEnd_Helper_viewHelper::
                         __translate('Please change you E-mail address this user already exist'),
-                        HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'),
+                        HTTP_PATH_LOCALE. \FrontEnd_Helper_viewHelper::__link('link_inschrijven'),
                         'error'
                     );
                 } else {
-                    $visitorId = Visitor::addVisitor($visitorInformation);
+                    $visitorId = \KC\Repository\Visitor::addVisitor($visitorInformation);
                     if ($visitorId) {
-                        Shop::shopAddInFavourite($visitorId, base64_decode($visitorInformation['shopId']));
+                        \KC\Repository\Shop::shopAddInFavourite($visitorId, base64_decode($visitorInformation['shopId']));
                     }
                     self::redirectAccordingToMessage(
                         $visitorId,
-                        FrontEnd_Helper_viewHelper::__translate('Please enter valid information'),
-                        HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'),
+                        \FrontEnd_Helper_viewHelper::__translate('Please enter valid information'),
+                        HTTP_PATH_LOCALE. \FrontEnd_Helper_viewHelper::__link('link_inschrijven'),
                         'signup',
                         $visitorInformation['emailAddress'],
                         $visitorInformation['shopId']
@@ -108,7 +108,7 @@ class SignupController extends Zend_Controller_Action
                 $registrationForm->highlightErrorElements();
             }
         }
-        $testimonials = Signupmaxaccount::getTestimonials();
+        $testimonials = \KC\Repository\Signupmaxaccount::getTestimonials();
         $this->view->testimonials = $testimonials;
         $this->view->pageCssClass = 'register-page';
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
@@ -143,30 +143,32 @@ class SignupController extends Zend_Controller_Action
                     'success'
                 );
             } else {
-                $mandrillFunctions = new FrontEnd_Helper_MandrillMailFunctions();
-                if (Signupmaxaccount::getemailConfirmationStatus()) {
-                    $message = FrontEnd_Helper_viewHelper::
+                $mandrillFunctions = new \FrontEnd_Helper_MandrillMailFunctions();
+                if (\KC\Repository\Signupmaxaccount::getemailConfirmationStatus()) {
+                    $message = \FrontEnd_Helper_viewHelper::
                     __translate('Please check your mail and confirm your email address');
                     $mandrillFunctions->sendConfirmationMail($visitorEmail, $this);
                 } else {
-                    Visitor::setVisitorLoggedIn($visitorId);
-                    FrontEnd_Helper_viewHelper::redirectAddToFavouriteShop();
-                    $message = FrontEnd_Helper_viewHelper::
+                    \KC\Repository\Visitor::setVisitorLoggedIn($visitorId);
+                    \FrontEnd_Helper_viewHelper::redirectAddToFavouriteShop();
+                    $message = \FrontEnd_Helper_viewHelper::
                     __translate('Thanks for registration now enjoy the more coupons');
                     $this->sendWelcomeMail($visitorId);
                 }
-                $redirectUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
+                $redirectUrl = HTTP_PATH_LOCALE. \FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
                 if (isset($shopId) && $shopId!='') {
-                    $shopName = Shop::getShopName(base64_decode($shopId));
-                    $membersNamespace = new Zend_Session_Namespace('membersOnly');
+                    $shopName = \KC\Repository\Shop::getShopName(base64_decode($shopId));
+
+          $membersNamespace = new \Zend_Session_Namespace('membersOnly');
+
                     if (isset($membersNamespace->membersOnly) && $membersNamespace->membersOnly == '1') {
-                        $shopInfo = Shop::getShopInformation(base64_decode($shopId));
+                        $shopInfo = \KC\Repository\Shop::getShopInformation(base64_decode($shopId));
                         $shopPermalink = !empty($shopInfo) ? $shopInfo[0]['permaLink'] : '';
                     } else {
-                        $shopPermalink = FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
+                        $shopPermalink = \FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
                     }
                     $membersNamespace->membersOnly = '';
-                    $message = $shopName. " ".  FrontEnd_Helper_viewHelper::
+                    $message = $shopName. " ".  \FrontEnd_Helper_viewHelper::
                     __translate('have been added to your favorite shops');
                     $redirectUrl = HTTP_PATH_LOCALE. $shopPermalink;
                 }
@@ -178,30 +180,30 @@ class SignupController extends Zend_Controller_Action
 
     public function sendWelcomeMail($visitorId)
     {
-        $visitorDetails = Visitor::getUserDetails($visitorId);
-        $fromEmail = Signupmaxaccount::getEmailAddress();
-        $mailer  = new FrontEnd_Helper_Mailer();
+        $visitorDetails = \KC\Repository\Visitor::getUserDetails($visitorId);
+        $fromEmail = \KC\Repository\Signupmaxaccount::getEmailAddress();
+        $mailer  = new \FrontEnd_Helper_Mailer();
         $content = array(
                         'name'    => 'content',
                         'content' => $this->view->partial(
                             'emails/emailLayout.phtml',
                             array(
-                                'topOffers' => Offer::getTopOffers(5),
+                                'topOffers' => \KC\Repository\Offer::getTopOffers(5),
                                 'mailType' => 'welcome',
                                 'firstName' => $visitorDetails[0]['firstName']
                                 )
                         )
                     );
         $visitorName = $visitorDetails[0]['firstName'] .' '. $visitorDetails[0]['lastName'];
-        BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'frontend', $visitorDetails[0]['email']);
+        \BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'frontend', $visitorDetails[0]['email']);
         $mailer->send(
-            FrontEnd_Helper_viewHelper::__email('email_sitename'),
+            \FrontEnd_Helper_viewHelper::__email('email_sitename'),
             $fromEmail[0]['emailperlocale'],
             $visitorName,
             $visitorDetails[0]['email'],
-            FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail subject'),
+            \FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail subject'),
             $content,
-            FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail header'),
+            \FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail header'),
             '',
             $this->_loginLinkAndData
         );
@@ -209,26 +211,26 @@ class SignupController extends Zend_Controller_Action
     }
     public function sendConfirmationMail($visitoremailMail)
     {
-        $html = new Zend_View();
+        $html = new \Zend_View();
         $html->setScriptPath(APPLICATION_PATH . '/views/scripts/signup');
         $html->assign('email', $visitoremailMail);
         $bodyText = $html->render('confirmemail.phtml');
         $recipents = array("to" => $visitoremailMail);
-        $subject = FrontEnd_Helper_viewHelper::__translate("Welcome to Kortingscode.nl");
+        $subject = \FrontEnd_Helper_viewHelper::__translate("Welcome to Kortingscode.nl");
         $body = $bodyText;
-        BackEnd_Helper_viewHelper::SendMail($recipents, $subject, $body);
+        \BackEnd_Helper_viewHelper::SendMail($recipents, $subject, $body);
         return true;
     }
 
     public function profileAction()
     {
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
-        if (!Auth_VisitorAdapter::hasIdentity()) {
+        if (!\Auth_VisitorAdapter::hasIdentity()) {
             $this->_redirect('/');
         }
-        $visitorDetails = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
-        $visitorDetailsForForm = $visitorDetails[0];
-        $profileForm = new Application_Form_Profile();
+        $visitorDetails = \KC\Repository\Visitor::getUserDetails(\Auth_VisitorAdapter::getIdentity()->id);
+        $visitorDetailsForForm = $visitorDetails;
+        $profileForm = new \Application_Form_Profile();
         $this->view->form = $profileForm;
         if ($this->getRequest()->isPost()) {
             if ($profileForm->isValid($this->getRequest()->getPost())) {
@@ -238,7 +240,9 @@ class SignupController extends Zend_Controller_Action
                 $profileForm->highlightErrorElements();
             }
         } else {
-            $dateOfBirth = array_reverse(explode('-', $visitorDetailsForForm['dateOfBirth']));
+            if (!empty($visitorDetailsForForm['dateOfBirth'])) {
+                $dateOfBirth = array_reverse(explode('-', $visitorDetailsForForm['dateOfBirth']->format('Y-m-d')));
+            }
             $dateOfBirthDay = isset($dateOfBirth[0]) && $dateOfBirth[0] != '' ? $dateOfBirth[0] : '';
             $dateOfBirthMonth = isset($dateOfBirth[1]) && $dateOfBirth[1] != '' ? $dateOfBirth[1] : '';
             $dateOfBirthYear = isset($dateOfBirth[2]) && $dateOfBirth[2] != '' ? $dateOfBirth[2] : '';
@@ -255,7 +259,7 @@ class SignupController extends Zend_Controller_Action
             $profileForm->getElement('dateOfBirthYear')->setValue(isset($dateOfBirth[2]) && $dateOfBirth[2]=='0000' ? '' : $dateOfBirthYear);
             $profileForm->getElement('postCode')->setValue($visitorDetailsForForm['postalCode']);
             $profileForm->getElement('weeklyNewsLetter')->setValue($visitorDetailsForForm['weeklyNewsLetter']);
-            $profileForm->getElement('codealert')->setValue($visitorDetailsForForm['codealert']);
+            $profileForm->getElement('codealert')->setValue($visitorDetailsForForm['codeAlert']);
         }
         $this->view->pageCssClass = 'profile-page';
         $this->view->firstName = $visitorDetailsForForm['firstName'];
@@ -266,13 +270,13 @@ class SignupController extends Zend_Controller_Action
     public function addVisitor($visitorDetails, $profileUpdate = '')
     {
         $redirectLink =
-            HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
-            FrontEnd_Helper_viewHelper::__link('link_profiel');
-        $visitorId = Visitor::addVisitor($visitorDetails, $profileUpdate);
+            HTTP_PATH_LOCALE. \FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
+            \FrontEnd_Helper_viewHelper::__link('link_profiel');
+        $visitorId = \KC\Repository\Visitor::addVisitor($visitorDetails, $profileUpdate);
         if ($visitorId) {
-            $message = FrontEnd_Helper_viewHelper::__translate('Your information has been updated successfully !.');
+            $message = \FrontEnd_Helper_viewHelper::__translate('Your information has been updated successfully !.');
         } else {
-            $message = FrontEnd_Helper_viewHelper::__translate('Please enter valid information');
+            $message = \FrontEnd_Helper_viewHelper::__translate('Please enter valid information');
         }
         self::redirectAccordingToMessage($visitorId, $message, $redirectLink, 'profile');
     }
@@ -282,56 +286,55 @@ class SignupController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->view->shopLogo = $this->getRequest()->getParam('url');
         $this->view->shopId = $this->getRequest()->getParam('shopId');
-        $this->view->shopName = Shop::getShopName(base64_decode($this->getRequest()->getParam('shopId')));
-        $this->view->shopLightBoxText = Shop::getShopLightBoxText(base64_decode($this->getRequest()->getParam('shopId')));
+        $this->view->shopName = \KC\Repository\Shop::getShopName(base64_decode($this->getRequest()->getParam('shopId')));
+
+        $this->view->shopLightBoxText = \KC\Repository\Shop::getShopLightBoxText(base64_decode($this->getRequest()->getParam('shopId')));
+
         
     }
 
     public function signuplightboxsetsessionsAction()
     {
         $visitorInformation = intval(
-            Visitor::checkDuplicateUser(
+            \KC\Repository\Visitor::checkDuplicateUser(
                 $this->_getParam('emailAddress'),
                 $this->_getParam('id')
             )
         );
-        
         $this->_helper->layout->disableLayout();
         $params = $this->getRequest()->getParams();
-
-        $visitorShopId = new Zend_Session_Namespace('shopId');
+    $visitorShopId = new \Zend_Session_Namespace('shopId');
         $visitorShopId->shopId = $params['shopId'];
         if ($visitorInformation > 0) {
-            $message = FrontEnd_Helper_viewHelper::__translate(
+            $message = \FrontEnd_Helper_viewHelper::__translate(
                 'Your e-mail address is already known to us.
                  If you forgot your password, click here to change your password'
             );
             $forgotPasswordLink =
             HTTP_PATH_LOCALE .
-            FrontEnd_Helper_viewHelper::__link('link_login').'/'
-            .FrontEnd_Helper_viewHelper::__link('link_forgotpassword');
+            \FrontEnd_Helper_viewHelper::__link('link_login').'/'
+            .\FrontEnd_Helper_viewHelper::__link('link_forgotpassword');
 
             self::showFlashMessage(
                 $message ." " . "<a href='".$forgotPasswordLink."'>"
-                . FrontEnd_Helper_viewHelper::__translate('forgot password') ."</a>",
-                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login'),
+                . \FrontEnd_Helper_viewHelper::__translate('forgot password') ."</a>",
+                HTTP_PATH_LOCALE. \FrontEnd_Helper_viewHelper::__link('link_login'),
                 'error'
             );
             exit;
         }
-        $visitorEmail = new Zend_Session_Namespace('emailAddressSignup');
+        $visitorEmail = new \Zend_Session_Namespace('emailAddressSignup');
         $visitorEmail->emailAddressSignup = $params['emailAddress'];
-    
-        $this->_redirect(HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'));
+        $this->_redirect(HTTP_PATH_LOCALE. \FrontEnd_Helper_viewHelper::__link('link_inschrijven'));
     }
 
     public function setsessionAction()
     {
         $this->_helper->layout->disableLayout();
         $params = $this->getRequest()->getParams();
-        $visitorShopId = new Zend_Session_Namespace('shopId');
+        $visitorShopId = new \Zend_Session_Namespace('shopId');
         $visitorShopId->shopId = $params['shopId'];
-        $this->_redirect(HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login'));
+        $this->_redirect(HTTP_PATH_LOCALE. \FrontEnd_Helper_viewHelper::__link('link_login'));
     }
 
     
@@ -341,7 +344,7 @@ class SignupController extends Zend_Controller_Action
         $this->view->shopId = $this->getRequest()->getParam('shopId');
         $this->view->signupFormWidgetType = $this->getRequest()->getParam('signupFormWidgetType');
         $this->view->shopLogoOrDefaultImage = $this->getRequest()->getParam('shopLogoOrDefaultImage');
-        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+        $signUpFormSidebarWidget = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'formSignupSidebarWidget',
             'SignUp '
         );
@@ -354,7 +357,7 @@ class SignupController extends Zend_Controller_Action
         $this->view->shopId = $this->getRequest()->getParam('shopId');
         $this->view->signupFormWidgetType = $this->getRequest()->getParam('signupFormWidgetType');
         $this->view->shopLogoOrDefaultImage = $this->getRequest()->getParam('shopLogoOrDefaultImage');
-        $signUpFormLargeForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+        $signUpFormLargeForm = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'largeSignupForm',
             'SignUp'
         );
@@ -367,7 +370,7 @@ class SignupController extends Zend_Controller_Action
         $this->view->shopId = $this->getRequest()->getParam('shopId');
         $this->view->signupFormWidgetType = $this->getRequest()->getParam('signupFormWidgetType');
         $this->view->shopLogoOrDefaultImage = $this->getRequest()->getParam('shopLogoOrDefaultImage');
-        $signUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+        $signUpForm = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'footerLargeSignUpForm',
             'SignUp',
             'email-form form-inline',
@@ -383,48 +386,48 @@ class SignupController extends Zend_Controller_Action
         $this->view->offerId = $this->getRequest()->getParam('offerId');
         $this->view->signupFormWidgetType = $this->getRequest()->getParam('signupFormWidgetType');
         $this->view->shopLogoOrDefaultImage = $this->getRequest()->getParam('shopLogoOrDefaultImage');
-        $signUpFormLargeForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+        $signUpFormLargeForm = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'largeSignupForm'.rand(),
             'SignUp'
         );
         $this->view->zendForm =  $signUpFormLargeForm;
         $this->view->codesWidget = '1';
-        $this->view->formAction = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven')
+        $this->view->formAction = HTTP_PATH_LOCALE. \FrontEnd_Helper_viewHelper::__link('link_inschrijven')
             .'/'
-            .FrontEnd_Helper_viewHelper::__link('link_membersonlysetsessions');
+            .\FrontEnd_Helper_viewHelper::__link('link_membersonlysetsessions');
     }
 
     public function membersonlysetsessionsAction()
     {
         $visitorInformation = intval(
-            Visitor::checkDuplicateUser(
+            \KC\Repository\Visitor::checkDuplicateUser(
                 $this->_getParam('emailAddress'),
                 $this->_getParam('id')
             )
         );
         $this->_helper->layout->disableLayout();
         $params = $this->getRequest()->getParams();
-        $membersNamespace = new Zend_Session_Namespace('membersOnly');
+        $membersNamespace = new \Zend_Session_Namespace('membersOnly');
         $membersNamespace->membersOnly = $params['membersOnly'];
-        $visitorShopId = new Zend_Session_Namespace('shopId');
+        $visitorShopId = new \Zend_Session_Namespace('shopId');
         $visitorShopId->shopId = $params['shopId'];
         if ($visitorInformation > 0) {
-            $message = FrontEnd_Helper_viewHelper::__translate('Your e-mail address is already known to us. If you forgot your password, click here to change your password');
+            $message = \FrontEnd_Helper_viewHelper::__translate('Your e-mail address is already known to us. If you forgot your password, click here to change your password');
             $forgotPasswordLink =
                 HTTP_PATH_LOCALE .
-                FrontEnd_Helper_viewHelper::__link('link_login').'/'
-                .FrontEnd_Helper_viewHelper::__link('link_forgotpassword');
+                \FrontEnd_Helper_viewHelper::__link('link_login').'/'
+                .\FrontEnd_Helper_viewHelper::__link('link_forgotpassword');
             self::showFlashMessage(
                 $message ." " . "<a href='".$forgotPasswordLink."'>"
-                . FrontEnd_Helper_viewHelper::__translate('forgot password') ."</a>",
-                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login'),
+                . \FrontEnd_Helper_viewHelper::__translate('forgot password') ."</a>",
+                HTTP_PATH_LOCALE. \FrontEnd_Helper_viewHelper::__link('link_login'),
                 'error'
             );
             exit;
         }
-        $visitorEmail = new Zend_Session_Namespace('emailAddressSignup');
+        $visitorEmail = new \Zend_Session_Namespace('emailAddressSignup');
         $visitorEmail->emailAddressSignup = $params['emailAddress'];
-        $this->_redirect(HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'));
+        $this->_redirect(HTTP_PATH_LOCALE. \FrontEnd_Helper_viewHelper::__link('link_inschrijven'));
     }
 
     public function signupmembersonlytitleAction()

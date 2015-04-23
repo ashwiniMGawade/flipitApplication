@@ -10,14 +10,14 @@ class Admin_PopularcodeController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection(); // connection
+        //$conn2 = \BackEnd_Helper_viewHelper::addConnection(); // connection
         $params = $this->_getAllParams();
-        if (!Auth_StaffAdapter::hasIdentity()) {
-            $referer = new Zend_Session_Namespace('referer');
+        if (!\Auth_StaffAdapter::hasIdentity()) {
+            $referer = new \Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+       // \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()
                 ->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
@@ -45,13 +45,13 @@ class Admin_PopularcodeController extends Zend_Controller_Action
     public function indexAction()
     {
         //get Popular code from database
-        $data = PopularCode::getPopularCode();
+        $data = \KC\Repository\PopularCode::getPopularCode();
         $neAr = array();
         foreach ($data as $pOffer) {
 
             $neAr[] = $pOffer['offerId'];
         }
-        $allOffer = PopularCode::searchAllOffer($neAr);
+        $allOffer = \KC\Repository\PopularCode::searchAllOffer($neAr);
         $this->view->data = $data;
         $this->view->offer = $allOffer;
         //echo "<pre>";
@@ -72,7 +72,7 @@ class Admin_PopularcodeController extends Zend_Controller_Action
         if($this->getRequest()->getParam('selectedCodes') != '' && $this->getRequest()->getParam('selectedCodes') != 'undefined') {
             $alreadySelected = explode(',', $this->getRequest()->getParam('selectedCodes'));
         }
-        $data = PopularCode::searchTopTenOffer($srh, $flag);
+        $data = \KC\Repository\PopularCode::searchTopTenOffer($srh, $flag);
 
         $ar = array();
         $i = 0;
@@ -95,7 +95,7 @@ class Admin_PopularcodeController extends Zend_Controller_Action
             $ar[] = $msg;
         }
 
-        echo Zend_Json::encode($ar);
+        echo \Zend_Json::encode($ar);
         die();
 
     }
@@ -108,14 +108,14 @@ class Admin_PopularcodeController extends Zend_Controller_Action
     {
         $data = $this->getRequest()->getParam('id');
         //call to add offer function from model
-        $flag = PopularCode::addOfferInList($data);
+        $flag = \KC\Repository\PopularCode::addOfferInList($data);
 
         #if popular code is addedd then update varnsih as well
         if($flag && $flag != "0" && $flag != "1" && $flag != '2') {
             self::updateVarnish();
         }
 
-        echo Zend_Json::encode($flag);
+        echo \Zend_Json::encode($flag);
         die();
     }
     /**
@@ -128,7 +128,7 @@ class Admin_PopularcodeController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
-        $isUpdated = PopularCode::deletePapularCode($id, $position);
+        $isUpdated = \KC\Repository\PopularCode::deletePapularCode($id, $position);
 
         #if popular code is addedd then update varnsih as well
         if($isUpdated) {
@@ -136,8 +136,8 @@ class Admin_PopularcodeController extends Zend_Controller_Action
         }
 
         //get popular code from database
-        $data = PopularCode::getPopularCode();
-        echo Zend_Json::encode($data);
+        $data = \KC\Repository\PopularCode::getPopularCode();
+        echo \Zend_Json::encode($data);
         die();
     }
     /**
@@ -151,13 +151,13 @@ class Admin_PopularcodeController extends Zend_Controller_Action
         $currentPosition = $this->getRequest()->getParam('pos');
         $previousCodeId = $this->getRequest()->getParam('previousCodeId');
         $previousCodePosition = $this->getRequest()->getParam('previousCodePosition');
-        $isUpdated = PopularCode::moveUp($currentCodeId, $currentPosition, $previousCodeId, $previousCodePosition);
+        $isUpdated = \KC\Repository\PopularCode::moveUp($currentCodeId, $currentPosition, $previousCodeId, $previousCodePosition);
         
         if ($isUpdated) {
             self::updateVarnish();
         }
-        $data = PopularCode::getPopularCode();
-        echo Zend_Json::encode($data);
+        $data = \KC\Repository\PopularCode::getPopularCode();
+        echo \Zend_Json::encode($data);
         die();
     }
     /**
@@ -170,14 +170,14 @@ class Admin_PopularcodeController extends Zend_Controller_Action
         $currentCodeId = $this->getRequest()->getParam('id');
         $currentPosition = $this->getRequest()->getParam('pos');
         $nextCodeId = $this->getRequest()->getParam('nextCodeId');
-        $isUpdated  = PopularCode::moveDown($currentCodeId, $currentPosition, $nextCodeId);
+        $isUpdated  = \KC\Repository\PopularCode::moveDown($currentCodeId, $currentPosition, $nextCodeId);
 
         if ($isUpdated) {
             self::updateVarnish();
         }
 
-        $data = PopularCode::getPopularCode();
-        echo Zend_Json::encode($data);
+        $data = \KC\Repository\PopularCode::getPopularCode();
+        echo \Zend_Json::encode($data);
         die();
     }
 
@@ -190,7 +190,7 @@ class Admin_PopularcodeController extends Zend_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         //call model class function pass position and id
-        $isUpdated = PopularCode::lockElement($id);
+        $isUpdated = \KC\Repository\PopularCode::lockElement($id);
 
 
         #if an item is locked then update varnsih as well
@@ -200,8 +200,8 @@ class Admin_PopularcodeController extends Zend_Controller_Action
 
 
         //get popular code from database
-        $data = PopularCode::getPopularCode();
-        echo Zend_Json::encode($data);
+        $data = \KC\Repository\PopularCode::getPopularCode();
+        echo \Zend_Json::encode($data);
         die();
     }
 
@@ -213,7 +213,7 @@ class Admin_PopularcodeController extends Zend_Controller_Action
     public function updateVarnish()
     {
         // Add urls to refresh in Varnish
-        $varnishObj = new Varnish();
+        $varnishObj = new KC\Repository\Varnish();
         $varnishObj->addUrl( rtrim( HTTP_PATH_FRONTEND , '/'  ));
 
 
@@ -229,9 +229,9 @@ class Admin_PopularcodeController extends Zend_Controller_Action
 
     public function savepopularofferspositionAction()
     {
-        PopularCode::savePopularOffersPosition($this->getRequest()->getParam('offerid'));
-        $popularCode = PopularCode::getPopularCode();
-        echo Zend_Json::encode($popularCode);
+        \KC\Repository\PopularCode::savePopularOffersPosition($this->getRequest()->getParam('offerid'));
+        $popularCode = \KC\Repository\PopularCode::getPopularCode();
+        echo \Zend_Json::encode($popularCode);
         exit();
     }
 }

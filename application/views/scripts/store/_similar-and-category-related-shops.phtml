@@ -14,17 +14,18 @@ echo $this->translate('Check out these similar shops for more discounts');
     <div class="block">
        <div class="holder">
            <ul class="shops">
-<?php 
+<?php
 if (!empty($this->similarShopsAndSimilarCategoryShops)) {
     foreach ($this->similarShopsAndSimilarCategoryShops as $shop) {
-        $shopLogoName = isset($shop['logo']['name']) ? $shop['logo']['name'] : '';
-        $shopLogoPath = isset($shop['logo']['path']) ? $shop['logo']['path'] : '';
+        $shopLogoName = isset($shop['category']['logo']['name']) ? $shop['category']['logo']['name'] : '';
+        $shopLogoPath = isset($shop['category']['logo']['path']) ? $shop['category']['logo']['path'] : '';
         printf(
             '<li><a href="%s"><img style="max-width: 84px;" alt="%s" src="%s"></a></li>',
-            HTTP_PATH_LOCALE  . $shop['permaLink'],
-            $shop['name'],
+            HTTP_PATH_LOCALE  . $shop['category']['permaLink'],
+            $shop['category']['name'],
             PUBLIC_PATH_CDN . ltrim($shopLogoPath, "/") . 'thum_small_'. $shopLogoName
         );
+  
     }
 }
 ?>

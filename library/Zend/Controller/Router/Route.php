@@ -15,8 +15,8 @@
  * @category   Zend
  * @package    Zend_Controller
  * @subpackage Router
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Route.php 23775 2011-03-01 17:25:24Z ralph $
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @version    $Id$
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -28,7 +28,7 @@ require_once 'Zend/Controller/Router/Route/Abstract.php';
  *
  * @package    Zend_Controller
  * @subpackage Router
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @see        http://manuals.rubyonrails.com/read/chapter/65
  */
@@ -77,7 +77,7 @@ class Zend_Controller_Router_Route extends Zend_Controller_Router_Route_Abstract
     protected $_translatable = array();
 
     protected $_urlVariable = ':';
-    protected $_urlDelimiter = '/';
+    protected $_urlDelimiter = self::URI_DELIMITER;
     protected $_regexDelimiter = '#';
     protected $_defaultRegex = null;
 
@@ -157,12 +157,12 @@ class Zend_Controller_Router_Route extends Zend_Controller_Router_Route_Abstract
      */
     public function __construct($route, $defaults = array(), $reqs = array(), Zend_Translate $translator = null, $locale = null)
     {
-    	
         $route               = trim($route, $this->_urlDelimiter);
         $this->_defaults     = (array) $defaults;
         $this->_requirements = (array) $reqs;
         $this->_translator   = $translator;
         $this->_locale       = $locale;
+
         if ($route !== '') {
             foreach (explode($this->_urlDelimiter, $route) as $pos => $part) {
                 if (substr($part, 0, 1) == $this->_urlVariable && substr($part, 1, 1) != $this->_urlVariable) {
@@ -347,7 +347,7 @@ class Zend_Controller_Router_Route extends Zend_Controller_Router_Route_Abstract
                     $value = $this->_values[$name];
                 } elseif (!$reset && !$useDefault && isset($this->_wildcardData[$name])) {
                     $value = $this->_wildcardData[$name];
-                } elseif (isset($this->_defaults[$name])) {
+                } elseif (array_key_exists($name, $this->_defaults)) {
                     $value = $this->_defaults[$name];
                 } else {
                     require_once 'Zend/Controller/Router/Exception.php';

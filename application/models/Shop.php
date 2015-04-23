@@ -315,7 +315,7 @@ class Shop extends BaseShop
             ->from('shop s')
             ->leftJoin('s.logo img')
             ->leftJoin('s.howtochapter chptr')
-            ->Where("s.id='".$shopId."'")
+            ->Where("s.id=".$shopId)
             ->andWhere('s.status = 1')
             ->fetchArray();
         return $shopDetails;

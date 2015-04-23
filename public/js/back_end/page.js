@@ -160,7 +160,7 @@ function pageList(iSearchText,iStart,iSortCol,iSortDir,iType) {
 			
 				{
 					"fnRender" : function(obj) {
-						tag = "<p class='word-wrap-without-margin-page'><a href='javascript:void(0);'>"+ucfirst(obj.aData.permaLink)+"</a></p>";
+						tag = "<p class='word-wrap-without-margin-page'><a href='javascript:void(0);'>"+ucfirst(obj.aData.permalink)+"</a></p>";
 						return tag;
 					 },
 					"bSearchable" : true,
@@ -170,7 +170,7 @@ function pageList(iSearchText,iStart,iSortCol,iSortDir,iType) {
 				{
 					"fnRender" : function(obj) {
 						var tag = '';
-						var dat = obj.aData.created_at;
+						var dat = obj.aData.created_at.date;
 						tag = dat.split("-");
 						tag2 = tag[2];
 						var da = tag2.split(" ");
@@ -218,7 +218,7 @@ function pageList(iSearchText,iStart,iSortCol,iSortDir,iType) {
 					state[ 'iSearchText' ] = iSearchText;
 					state[ 'iType' ] = iType;
 				
-					$("#pageListTbl").find('tr').find('td:lt(6)').click(function () {
+					$("#pageListTbl").find('tr').find('td:lt(4)').click(function () {
 							var eId = $(this).parent('tr').find('p').attr('editid');
 							state[ 'eId' ] = eId ;
 							$.bbq.pushState( state );

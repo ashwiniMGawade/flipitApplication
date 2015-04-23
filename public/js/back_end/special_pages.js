@@ -48,7 +48,7 @@ $(document).ready(function() {
                     for(var i in json) {
                         li+= "<li class='ui-state-default' relpos='" + json[i].position 
                         + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' ><span>" 
-                        + json[i].offers.title +"</span></li>";
+                        + json[i].title +"</span></li>";
                     }
                     $('ul#specialPages').append(li);
                     $('ul#specialPages li').click(changeSelectedClass);
@@ -184,7 +184,7 @@ function deleteCode() {
             for(var i in json) {
                 li+= "<li class='ui-state-default' relpos='" + json[i].position 
                 + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' ><span>" 
-                + json[i].offers.title +"</span></li>";
+                + json[i].title +"</span></li>";
             }
 
             $('select#offerlist').append('<option value="' + offerId + '">' + title  + '</option>');

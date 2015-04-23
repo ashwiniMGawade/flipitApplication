@@ -3,12 +3,14 @@ class Zend_Controller_Action_Helper_Index extends Zend_Controller_Action_Helper_
 {
     public static function getSpecialListPagesOffers($specialListPages)
     {
-        $specialOfferslist = '';
+        $specialOfferslist = array();
         foreach ($specialListPages as $specialListPage) {
-            foreach ($specialListPage['page'] as $page) {
-                $specialOfferslistIndex = $page['permaLink'] . ',' . $page['pageTitle'];
-                $specialOfferslist[$specialOfferslistIndex] = self::removeDuplicateCode(Offer::getSpecialPageOffers($page));
-                
+            foreach ($specialListPage as $page) {
+                if (!empty($page['page'])) {
+                    $specialOfferslistIndex = $page['page']['permalink'] . ',' . $page['page']['pageTitle'];
+                    $specialOfferslist[$specialOfferslistIndex] =
+                        self::removeDuplicateCode(\KC\Repository\Offer::getSpecialPageOffers($page['page']));
+                }
             }
         }
         return $specialOfferslist;
@@ -18,7 +20,7 @@ class Zend_Controller_Action_Helper_Index extends Zend_Controller_Action_Helper_
     {
         $offersWithoutDuplicateShop = '';
         foreach ($offers as $offerId => $offer) {
-            $offersWithoutDuplicateShop[$offer['shop']['id']] = $offers[$offerId];
+            $offersWithoutDuplicateShop[$offer['shopOffers']['id']] = $offers[$offerId];
         }
         return $pageName == 'homePage' ? array_slice($offersWithoutDuplicateShop, 0, 10) : $offersWithoutDuplicateShop;
     }

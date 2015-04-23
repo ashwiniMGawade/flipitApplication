@@ -47,9 +47,10 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                         <?php echo $this->translate('Status:'); ?> 
                             <strong>
                             <?php
-                                if($this->articleData[0]['publish'] == 1 && date('d-m-Y',strtotime($this->articleData[0]['publishdate']))." ".date('H:i',strtotime($this->articleData[0]['publishdate'])) <= date('d-m-Y H:i')){
+                                $publishDate = $this->articleData[0]['publishdate'];
+                                if($this->articleData[0]['publish'] == 1 && $publishDate->format('d-m-Y H:i') <= date('d-m-Y H:i')){
                                     echo $this->translate('Published');
-                                }else if ($this->articleData[0]['publish'] == 1 && date('d-m-Y',strtotime($this->articleData[0]['publishdate']))." ".date('H:i',strtotime($this->articleData[0]['publishdate'])) > date('d-m-Y H:i')){
+                                }else if ($this->articleData[0]['publish'] == 1 &&  $publishDate->format('d-m-Y H:i') > date('d-m-Y H:i')){
                                     echo $this->translate('Scheduled');
                                 }else{
                                     echo $this->translate('Draft');
@@ -59,30 +60,36 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                         </div>
                      <div class="sidebar-content-box" style="width : 225px;">
                         <?php 
-                        if($this->articleData[0]['publish'] == 1 && date('d-m-Y',strtotime($this->articleData[0]['publishdate']))." ".date('H:i',strtotime($this->articleData[0]['publishdate'])) <= date('d-m-Y H:i')){
-                        echo $this->translate('Published on:');
-                        }else if ($this->articleData[0]['publish'] == 1 && date('d-m-Y',strtotime($this->articleData[0]['publishdate']))." ".date('H:i',strtotime($this->articleData[0]['publishdate'])) > date('d-m-Y H:i')){
-                        echo $this->translate('Scheduled for:');
+                        if(
+                            $this->articleData[0]['publish'] == 1  && $publishDate->format('d-m-Y H:i') <= date('d-m-Y H:i'))
+                        {
+                            echo $this->translate('Published on:');
+
+                        } else if (
+                            $this->articleData[0]['publish'] == 1 
+                            &&  $publishDate->format('d-m-Y H:i') > date('d-m-Y H:i'))
+                        {
+                            echo $this->translate('Scheduled for:');
                         }else{
-                        echo $this->translate('Published on:');
+                            echo $this->translate('Published on:');
                         }
                         ?>
                         <strong>
                         <?php 
                         echo 
                         $this->articleData[0]['publish'] == 1 
-                        ? date('d-m-Y',strtotime($this->articleData[0]['publishdate']))." ".date('H:i',strtotime($this->articleData[0]['publishdate'])) 
+                        ?  $publishDate->format('d-m-Y H:i') 
                        : $this->translate(' immediately');?>
                        </strong> 
                         <a href="javascript:;" onClick="showPublishDate()" 
                         id="editpublishLink"><?php echo $this->translate('Edit'); ?></a>
                         <span id="publishlater" class="display-none">
                         <input type="text" style="width:110px;margin-top:3px;" 
-                        value="<?php echo date('d-m-Y',strtotime($this->articleData[0]['publishdate']));?>" 
+                        value="<?php echo $publishDate->format('d-m-Y');?>" 
                         placeholder="Publish Date"  id="publishDate" name="publishDate" class="span3">
                         <input type="text" style="width:48px;margin-top:3px;" placeholder="HH" id="publishTimehh"
                          name="publishTimehh" class="span3" 
-                         value="<?php echo date('H:i:s',strtotime($this->articleData[0]['publishdate']));?>">
+                         value="<?php echo $publishDate->format('H:i:s');?>">
                         </span>
                     </div>
                     <div class="sidebar-box-footer">
@@ -148,10 +155,10 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                                     if($i%2 != 0){
                                         $class = 'grid-line2';
                                     }
-                                    foreach ($this->articleData[0]['relatedcategory'] as $relatedCat) {
-                                        if($relatedCat['relatedcategoryid'] == $artCategory['id']){
+                                    foreach ($this->articleData[0]['refArticleCategory'] as $relatedCat) {
+                                        if($relatedCat['articlecategory']['id'] == $artCategory['id']) {
                                             $class1 = "selected";
-                                            $arrayToImplode[] = $relatedCat['relatedcategoryid'];
+                                            $arrayToImplode[] = $relatedCat['articlecategory']['id'];
                                             break;
                                         }
                                     }
@@ -182,15 +189,15 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                                 <?php 
                                 $i=0;
                                 $arrayToImplodeStores = array();                            
-                                foreach ($this->articleData[0]['relatedstores'] as $relatedStores) {
+                                foreach ($this->articleData[0]['storearticles'] as $relatedStores) {
                                     $class = 'grid-line1';
                                     if($i%2 != 0){
                                         $class = 'grid-line2';
                                     }
-                                    $arrayToImplodeStores[] = $relatedStores['shop']['id'];
+                                    $arrayToImplodeStores[] = $relatedStores['articleshops']['id'];
                                     echo "<li class=".$class." 
-                                    value=".$relatedStores['shop']['id']." type=".$i.">"
-                                    .ucfirst($relatedStores['shop']['name'])."</li>";
+                                    value=".$relatedStores['articleshops']['id']." type=".$i.">"
+                                    .ucfirst($relatedStores['articleshops']['name'])."</li>";
                                     $i++;
                                 }
                                 ?>
@@ -315,7 +322,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                             <strong><?php echo $this->translate('Thumbnail Small'); ?></strong>
                             </label></div>
                             <div class="mainpage-content-right">
-                                <?php 
+                                <?php
                                 $articlePicture = '';
                                 if(
                                     isset( $this->articleData[0]['thumbnail']['name'] ) 
@@ -352,13 +359,13 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                                         <?php 
                                         $articlefeaturedimage = '';
                                         if(
-                                            isset( $this->articleData[0]['articlefeaturedimage']['name'] ) 
-                                            && $this->articleData[0]['articlefeaturedimage']['name'] != '' 
+                                            isset( $this->articleData[0]['featuredImage']['name'] ) 
+                                            && $this->articleData[0]['featuredImage']['name'] != '' 
                                         ) {
                                         $articlefeaturedimage =
                                             PUBLIC_PATH_CDN
-                                            . $this->articleData[0]['articlefeaturedimage']['path']
-                                            . $this->articleData[0]['articlefeaturedimage']['name'];
+                                            . $this->articleData[0]['featuredImage']['path']
+                                            . $this->articleData[0]['featuredImage']['name'];
                                         }   
                                         ?>
                                         <div class='browse-container'> 
@@ -618,11 +625,11 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
             </div>
                     
             <div id="multidiv" >   
-            <?php echo $this->partialLoop('article/chapters.phtml',$this->articleData[0]['chapters']);?>
+            <?php echo $this->partialLoop('article/chapters.phtml',$this->articleData[0]['articleChapter']);?>
             </div>
             <div class="mainpage-content-colorbox">
                 <a href="javascript:;" style="float:right;margin-top: 7px;" 
-                onclick="getchapterhtml(this);" rel="<?php echo count($this->articleData[0]['chapters']) ?>"><strong>
+                onclick="getchapterhtml(this);" rel="<?php echo count($this->articleData[0]['articleChapter']) ?>"><strong>
                 <?php echo $this->translate('+ Add another chapter'); ?></strong></a>
             </div>
             <div class="clear"></div>

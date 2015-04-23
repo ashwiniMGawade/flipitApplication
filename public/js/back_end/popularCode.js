@@ -50,7 +50,7 @@ $(document).ready(function() {
 							{
 								lockImage = HOST_PATH + "public/images/back_end/stock_lock.png";
 							    image = "<img src=" + lockImage + " height='20' style='float:right' width='20'>";
-							 	li+= "<li class='ui-state-default' reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' >" + json[i].offer.title + "</span>" + image + "</li>";
+							 	li+= "<li class='ui-state-default' reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' >" + json[i].title + "</span>" + image + "</li>";
 
 							}
 						$('ul#mostPopularCode').append(li);
@@ -387,7 +387,7 @@ function deletePopularCode() {
 						}else{
 							image = "";
 						}
-						li+= "<li class='ui-state-default' reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' ><span>" + json[i].offer.title +"</span>" + image + "</li>";
+						li+= "<li class='ui-state-default' reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' ><span>" + json[i].title +"</span>" + image + "</li>";
  						
 						
 					}

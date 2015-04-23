@@ -120,7 +120,7 @@ function getChainList(iStart, iSortCol, iSortDir) {
 
 										if (obj.aData.website != null) {
 											
-											var val = obj.aData.website;
+											var val = obj.aData.website.name;
 											 
 											return '<p editId="'
 													+ obj.aData.id
@@ -228,11 +228,10 @@ function getChainList(iStart, iSortCol, iSortDir) {
 
 function updateShops(el)
 {
-	var locale = parseInt(el.value) ;
+	var locale = parseInt(el.value);
 	if(locale > 0)
 	{
 		$("#searchShops").val("");
-		
 		$("#searchShops").select2({
 			placeholder: __("Search shop"),
 			minimumInputLength: 1,

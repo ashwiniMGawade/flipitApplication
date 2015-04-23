@@ -10,14 +10,14 @@ class Admin_AffiliateController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection (); // connection
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection (); // connection
         $params = $this->_getAllParams ();
-        if (! Auth_StaffAdapter::hasIdentity ()) {
+        if (!\Auth_StaffAdapter::hasIdentity ()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect ( '/admin/auth/index' );
         }
-        BackEnd_Helper_viewHelper::closeConnection ( $conn2 );
+        \BackEnd_Helper_viewHelper::closeConnection ( $conn2 );
         $this->view->controllerName = $this->getRequest ()->getParam ( 'controller' );
         $this->view->action = $this->getRequest ()->getParam ( 'action' );
 
@@ -43,7 +43,7 @@ class Admin_AffiliateController extends Zend_Controller_Action
      * @version 1.0
      */
     public function indexAction()
-    {
+    { 
         $flash = $this->_helper->getHelper ( 'FlashMessenger' );
         $message = $flash->getMessages ();
         $this->view->messageSuccess = isset ( $message [0] ['success'] ) ? $message [0] ['success'] : '';
@@ -62,7 +62,7 @@ class Admin_AffiliateController extends Zend_Controller_Action
         if ($this->getRequest ()->isPost ()) {
 
         $params = $this->getRequest ()->getParams ();
-        $network = AffliateNetwork::addNewnetwork($params);
+        $network = \KC\Repository\AffliateNetwork::addNewnetwork($params);
         if ($network != null) {
             $flash = $this->_helper->getHelper ( 'FlashMessenger' );
             $message = $this->view->translate ( 'Network has been created successfully' );
@@ -83,7 +83,7 @@ class Admin_AffiliateController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams();
         // cal to function in network model class
-        $networkList =  AffliateNetwork::getNetworkList($params);
+        $networkList =  \KC\Repository\AffliateNetwork::getNetworkList($params);
         echo Zend_Json::encode ( $networkList );
         die ;
     }
@@ -97,7 +97,7 @@ class Admin_AffiliateController extends Zend_Controller_Action
     public function searchtopfivenetworkAction()
     {
         $srh = $this->getRequest ()->getParam ( 'keyword' );
-        $data = AffliateNetwork::searchTopFiveNetwork( $srh);
+        $data = \KC\Repository\AffliateNetwork::searchTopFiveNetwork( $srh);
         $ar = array ();
         if (sizeof ( $data ) > 0) {
             foreach ( $data as $d ) {
@@ -124,7 +124,7 @@ class Admin_AffiliateController extends Zend_Controller_Action
     public function affiliatestatusAction()
     {
     $params = $this->_getAllParams ();
-    $status = AffliateNetwork::changeStatus($params);
+    $status = \KC\Repository\AffliateNetwork::changeStatus($params);
     die;
    }
 
@@ -135,19 +135,20 @@ class Admin_AffiliateController extends Zend_Controller_Action
     */
    public function editaffiliateAction()
    {
-    $this->view->role = Zend_Auth::getInstance ()->getIdentity ()->roleId;
+    $u = \Auth_StaffAdapter::getIdentity();
+    $this->view->role = $u->users->id;
     $id = $this->getRequest ()->getParam ( 'id' );
 
      $params = $this->_getAllParams();
      //function call to show network list in dropdown in edit case
-     $network =  AffliateNetwork::networklistDropdown($params);
+     $network =  \KC\Repository\AffliateNetwork::networklistDropdown($params);
      $this->view->getNetworkdropdown = $network;
 
 
      if ($id > 0) {
 
         // get network to edit
-        $network = AffliateNetwork::getNetworkForEdit($id);
+        $network = \KC\Repository\AffliateNetwork::getNetworkForEdit($id);
         $this->view->editNetwork = $network;
     }
 
@@ -156,7 +157,7 @@ class Admin_AffiliateController extends Zend_Controller_Action
         $params = $this->getRequest ()->getParams ();
 
         // cal to update network function
-        $network = AffliateNetwork::updateNetwork($params );
+        $network = \KC\Repository\AffliateNetwork::updateNetwork($params );
 
         $flash = $this->_helper->getHelper ( 'FlashMessenger' );
         $message = $this->view->translate ( 'Network details have been updated successfully' );
@@ -174,7 +175,7 @@ class Admin_AffiliateController extends Zend_Controller_Action
   {
     $params = $this->_getAllParams ();
 
-    AffliateNetwork::deleteNetwork( $params );
+    \KC\Repository\AffliateNetwork::deleteNetwork( $params );
     $flash = $this->_helper->getHelper ( 'FlashMessenger' );
     $message = $this->view->translate ( 'Network has been deleted successfully' );
     $flash->addMessage ( array ('success' => $message ) );
@@ -189,10 +190,8 @@ class Admin_AffiliateController extends Zend_Controller_Action
    */
    public function replacenetworkAction()
    {
-   $params = $this->_getAllParams ();
-   $network = AffliateNetwork::replaceNetwork($params);
-   die;
-
+       $params = $this->_getAllParams ();
+       $network = \KC\Repository\AffliateNetwork::replaceNetwork($params);
+       die;
    }
-
 }

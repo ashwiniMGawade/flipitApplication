@@ -114,6 +114,7 @@ $headerBlock = $frontShopHeaderHelper->getShopHeader(
     $message = 'storeDetail',
     $offerTitle = 'storeDetail'
 );
+
 $shopEditor = '';
 if($this->shopEditor != null):
     $shopEditor = $this->partial(
@@ -151,9 +152,10 @@ if (!empty($this->currentStoreInformation[0]['moretextforshop'])) {
 $activeOffersInShop = "";
 if (!empty($offersCount)) {
     if (isset($offersCount) && $offersCount > 1) {
-        $activeOffersInShop = $offersCount
+        $activeOffersInShop = '<li><span class="icon active-people"></span>
+            <span class="text">'.$offersCount
             .' '
-            .FrontEnd_Helper_viewHelper::__translate('current offers');
+            .FrontEnd_Helper_viewHelper::__translate('current offers').'</span></li>';
     }
 }
 
@@ -179,8 +181,7 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
     <div class="items-holder">
         <ul class="items">
             <?php echo $offersAdded; ?>
-            <li><span class="icon active-people"></span>
-            <span class="text"><?php echo $activeOffersInShop; ?></span></li>
+            <?php echo $activeOffersInShop; ?>
         </ul>
     </div>
 </div>

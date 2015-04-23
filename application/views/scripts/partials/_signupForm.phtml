@@ -18,9 +18,9 @@ if (!isset($_COOKIE['registered_user'])) {
 
         $shopLogoOrDefaultImage = '<div class="ico-mail"></div>';
         if ($shopId!=0) {
-            $shop = Shop::getShopLogoByShopId($shopId);
+            $shop = \KC\Repository\Shop::getShopLogoByShopId($shopId);
             if($shop!='') {
-                $shopLogoImage = PUBLIC_PATH_CDN.ltrim($shop['logo']['path'], "/").'thum_medium_'. $shop['logo']['name'];
+                $shopLogoImage = PUBLIC_PATH_CDN.ltrim($shop['path'], "/").'thum_medium_'. $shop['name'];
                 $shopLogoOrDefaultImage = '<img alt="' . $shop['permaLink']. '" src="'. $shopLogoImage .'" title="' . $shop['permaLink']. '">';
             }
         }
@@ -34,7 +34,7 @@ if (!isset($_COOKIE['registered_user'])) {
             $blockClass = 'block-form-background';
         }
 
-        if (Visitor::getFavoriteShopsForUser($visitorId, $shopId)==false):
+        if (KC\Repository\Visitor::getFavoriteShopsForUser($visitorId, $shopId)==false):
             if ($this->signupFormWidgetType== 'widgetWithinOffers') {?>
                 <div class="block block-form <?php echo $shopId==0 ? 'block-form-2' : ''.' '.$blockClass;?>">
                     <div class="holder" <?php echo $holderStyle; ?>>

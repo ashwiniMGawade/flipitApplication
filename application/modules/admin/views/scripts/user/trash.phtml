@@ -2,7 +2,7 @@
 <!-- <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script> -->
 <?php
 echo $this->headTitle()->append('Trashed Users List');
-$role =  Zend_Auth::getInstance()->getIdentity()->roleId;
+$role =  Zend_Auth::getInstance()->getIdentity()->users->id;
 if($role=='1' || $role=='2'){
 //$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.js");	
 $this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.dataTables.min.js");

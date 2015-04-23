@@ -1,16 +1,14 @@
 <section class="news-block">
-    <?php 
+    <?php
         if(!empty($this->recentlyAddedArticles)) {
             foreach($this->recentlyAddedArticles as $recentlyAddedArticle) :
-                $userInformationObject = new User();
+                $userInformationObject = new KC\Repository\User();
                 $userDetails =  $userInformationObject->getUserDetails($recentlyAddedArticle['authorid']);
                 $profileLink =
                     HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_redactie').'/'. $userDetails['slug'];
-
-                $articleUpdatedAtDate = new Zend_Date($recentlyAddedArticle['publishdate']);
-                $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
-                $articleImage = !empty($recentlyAddedArticle['thumbnail']) ? PUBLIC_PATH_CDN
-                    .$recentlyAddedArticle['thumbnail']['path'].$recentlyAddedArticle['thumbnail']['name'] : '';
+                $articleUpdatedAtDate = $recentlyAddedArticle['publishdate'];
+                $articleImage = !empty($recentlyAddedArticle['thumbnailname']) ? PUBLIC_PATH_CDN
+                    .$recentlyAddedArticle['thumbnailpath'].$recentlyAddedArticle['thumbnailname'] : '';
                 $authorName = 
                         FrontEnd_Helper_AuthorPartialFunctions::getAuthorName(
                             $userDetails['firstName'],
@@ -20,16 +18,16 @@
                                         mb_substr($recentlyAddedArticle['title'], 0, 50).'..' :
                                         $recentlyAddedArticle['title'];
                 $articleBy = $authorName != '' ? FrontEnd_Helper_viewHelper::__translate('By') : '';
-                $categoryTitleBackgroundColor = !empty($recentlyAddedArticle['articlecategory'][0]['categorytitlecolor'])
-                                                    ? $recentlyAddedArticle['articlecategory'][0]['categorytitlecolor']
+                $categoryTitleBackgroundColor = !empty($recentlyAddedArticle['categorytitlecolor'])
+                                                    ? $recentlyAddedArticle['categorytitlecolor']
                                                     : 'e69342';
     ?>
                 <article class="article col-md-3 col-sm-4 col-xs-6">
                     <div class="image" id = "recentlyadded">
                         <span class="category" style = "background :#<?php echo $categoryTitleBackgroundColor;?>;">
                             <?php 
-                                echo !empty($recentlyAddedArticle['articlecategory'])
-                                    ? $recentlyAddedArticle['articlecategory'][0]['name']
+                                echo !empty($recentlyAddedArticle['name'])
+                                    ? $recentlyAddedArticle['name']
                                     : '';
                             ?>
                         </span>
@@ -49,7 +47,7 @@
                             <span class="author"><?php echo $articleBy;?>
                                 <a href="<?php echo $profileLink;?>"><?php echo $authorName;?></a>
                             </span>
-                            <em class="clock"><?php echo $articleUpdatedAtDate;?></em>
+                            <em class="clock"><?php echo $articleUpdatedAtDate->format('Y-m-d');?></em>
                         </div>
                     </div>
                 </article>

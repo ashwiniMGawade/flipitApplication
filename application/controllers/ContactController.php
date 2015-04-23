@@ -17,7 +17,7 @@ class ContactController extends Zend_Controller_Action
         } else {
             $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
         }
-            $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
+            $this->viewHelperObject = new \FrontEnd_Helper_viewHelper();
     }
 
     public function getcontactformdetailsAction()
@@ -53,9 +53,9 @@ class ContactController extends Zend_Controller_Action
 
     public function sendMailThroughMandril($visitorName, $visitorEmail, $subject, $message)
     {
-        $adminEmail = Signupmaxaccount::getEmailAddress();
+        $adminEmail = \KC\Repository\Signupmaxaccount::getEmailAddress();
         if (!empty($visitorEmail)) {
-            $mailer  = new FrontEnd_Helper_Mailer();
+            $mailer  = new \FrontEnd_Helper_Mailer();
             $content = array(
                 'name'    => 'content',
                 'content' => $this->view->partial(
@@ -71,11 +71,11 @@ class ContactController extends Zend_Controller_Action
             $mailer->send(
                 $visitorName,
                 $visitorEmail,
-                FrontEnd_Helper_viewHelper::__email('email_sitename'),
+                \FrontEnd_Helper_viewHelper::__email('email_sitename'),
                 $adminEmail[0]['emailperlocale'],
-                FrontEnd_Helper_viewHelper::__email('email_'.$subject),
+                \FrontEnd_Helper_viewHelper::__email('email_'.$subject),
                 $content,
-                FrontEnd_Helper_viewHelper::__email('email_Contact header'),
+                \FrontEnd_Helper_viewHelper::__email('email_Contact header'),
                 '',
                 $this->_loginLinkAndData
             );
@@ -83,8 +83,8 @@ class ContactController extends Zend_Controller_Action
         $successMessage = "Your message has been sent.";
         $flashMessage = $this->_helper->getHelper('FlashMessenger');
         $flashMessage->addMessage(array('success' => $successMessage));
-        $urlToRedirect = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_info').'/'.
-            FrontEnd_Helper_viewHelper::__link('link_contact');
+        $urlToRedirect = HTTP_PATH_LOCALE.\FrontEnd_Helper_viewHelper::__link('link_info').'/'.
+            \FrontEnd_Helper_viewHelper::__link('link_contact');
         $this->_redirect($urlToRedirect);
     }
 }

@@ -306,11 +306,14 @@ function getKeywordList(iStart,iSortCol,iSortDir){
 						{
 							"fnRender" : function(obj) {
 								var tag = '';
-								var dat = obj.aData.created_at;
+								if(obj.aData.created_at!=undefined && obj.aData.created_at!=''){
+								var dat = obj.aData.created_at.date;
 								tag = dat.split("-");
 								tag2 = tag[2];
 								var da = tag2.split(" ");
-								return "<a href='javascript:void(0);'>" + (da[0]+'-'+tag[1]+'-'+tag[0]) + "</a>";
+								return "<a href='javascript:void(0)'>" +  (da[0]+'-'+tag[1]+'-'+tag[0]) + "</a>";
+								}
+								return "<a href='javascript:void(0)'></a>";
 								 
 							},
 							
@@ -342,7 +345,7 @@ function getKeywordList(iStart,iSortCol,iSortDir){
 					state[ 'iSortCol' ] = obj.aaSorting[0][0] ;
 					state[ 'iSortDir' ] = obj.aaSorting[0][1] ;
 
-					$("#keywordListTbl").find('tr').find('td').click(function () {
+					$("#keywordListTbl").find('tr').find('td:lt(3)').click(function () {
 							var eId = $(this).parent('tr').find('p').attr('editid');
 							state[ 'eId' ] = eId ;
 							click = true;
@@ -662,24 +665,16 @@ function regenerateObj(id)
 	var pr = $("#selectedShopForSearchbar").val().split(',');
 	var j = pr.length-1;
 	var newValOfPr = '';
-	for(var i in pr) {
-		
-		 if(pr[i]==id){
-			 
+	for (var i in pr) {
+		 if (pr[i] == id) { 
 		 } else {
-			if(i==j){
-				 
-				 newValOfPr += pr[i];
-				 
-			 } else {
-				 
-				 newValOfPr += pr[i] + ",";
-			 }
-			 
-		 }
-		
-	 }
+			if (i == j) { 
+				newValOfPr += pr[i];
+			} else {
+				newValOfPr += pr[i] + ",";
+			} 
+		 }	
+	}
 	$("#selectedShopForSearchbar").val(newValOfPr);
-	
 }
 

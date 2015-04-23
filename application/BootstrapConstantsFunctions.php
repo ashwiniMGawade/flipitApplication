@@ -4,7 +4,7 @@ class BootstrapConstantsFunctions
 {
     public static function constantsForLocaleAndTimezoneSetting()
     {
-        $localeSettings = LocaleSettings::getLocaleSettings();
+        $localeSettings = KC\Repository\LocaleSettings::getLocaleSettings();
         $locale = !empty($localeSettings[0]['locale']) ? $localeSettings[0]['locale'] : 'nl_NL';
         $localeTimezone = !empty($localeSettings[0]['timezone']) ? $localeSettings[0]['timezone'] : 'Europe/Amsterdam';
         defined('COUNTRY_LOCALE') || define('COUNTRY_LOCALE', $locale);
@@ -45,6 +45,7 @@ class BootstrapConstantsFunctions
 
     public static function constantsForDefaultModule($scriptName, $cdnUrlForDefaultModule, $scriptFileName)
     {
+        
         defined('LOCALE') || define('LOCALE', '');
         defined('HTTP_PATH_LOCALE') || define('HTTP_PATH_LOCALE', trim('http://' . HTTP_HOST . '/'));
         defined('PUBLIC_PATH') || define('PUBLIC_PATH', 'http://' . HTTP_HOST. dirname($scriptName) . '/');

@@ -11,12 +11,16 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
     	? $categoryWithSpecialPage['categoryicon'] 
     	: $categoryWithSpecialPage['logo'];
 
-    if (isset($categoryWithSpecialPage['featured_category']) && $categoryWithSpecialPage['featured_category'] != '') {
+    if (
+        isset($categoryWithSpecialPage['featured_category']) 
+        && $categoryWithSpecialPage['featured_category'] != ''
+        && $categoryWithSpecialPage['featured_category'] != '0'
+    ) {
         $featuredCategoryClass = "box-top";
         $categoryImage =
-           isset($categoryWithSpecialPage['categoryfeaturedimage']) 
-           ? $categoryWithSpecialPage['categoryfeaturedimage'] 
-           : $categoryWithSpecialPage['logo'];
+           isset($categoryWithSpecialPage['categoryFeaturedImage']) 
+           ? $categoryWithSpecialPage['categoryFeaturedImage'] 
+           : $categoryWithSpecialPage['categoryicon'];
     }
     
     $categoryImageSource = '';

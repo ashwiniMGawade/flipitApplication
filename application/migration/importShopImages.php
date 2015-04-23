@@ -7,7 +7,7 @@ defined('APPLICATION_PATH')
 defined('LIBRARY_PATH')
 || define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
 
-defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
+defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine1');
 
 // Define application environment
 defined('APPLICATION_ENV')
@@ -27,7 +27,7 @@ set_include_path(
 
 defined('ROOT_PATH')
 || define('ROOT_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/public'));
-require_once(LIBRARY_PATH.'/BackEnd/Helper/viewHelper.php');
+require_once(LIBRARY_PATH.'/BackEnd/Helper/viewHelper-v1.php');
 require_once(LIBRARY_PATH.'/PHPExcel/PHPExcel.php');
 
 /** Zend_Application */

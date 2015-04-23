@@ -3,20 +3,24 @@
 </header>
 <section class="section tips-section tips-section-2">
 <?php
+
 foreach ($this->authorMostReadArticles as $authorMostReadArticle) {
-    $authorMostReadArticle = (object) $authorMostReadArticle;
+    $authorMostReadArticle = isset($authorMostReadArticle[0]) ? $authorMostReadArticle[0] : $authorMostReadArticle;
+    $authorMostReadArticle = (object) $authorMostReadArticle;    
     $authorMostReadArticle = 
     	isset($authorMostReadArticle->articles) 
     	? $authorMostReadArticle->articles 
     	: (array) $authorMostReadArticle;
+
+    $authorMostReadArticleInfo = isset($authorMostReadArticle[0]) ? $authorMostReadArticle[0] :$authorMostReadArticle;
     $articleImage =
-        !empty($authorMostReadArticle['thumbnail']) 
-        ? PUBLIC_PATH_CDN.$authorMostReadArticle['thumbnail']['path']. $authorMostReadArticle['thumbnail']['name'] 
+        !empty($authorMostReadArticleInfo['thumbnail']['path']) 
+        ? PUBLIC_PATH_CDN.$authorMostReadArticleInfo['thumbnail']['path']. $authorMostReadArticleInfo['thumbnail']['name']
         : '';
     $articleContent = 
     	!empty($authorMostReadArticle['content']) 
     	? $authorMostReadArticle['content'] 
-    	: !empty($authorMostReadArticle['chapters']) ? $authorMostReadArticle['chapters'][0]['content'] : '';
+    	: !empty($authorMostReadArticleInfo['articleChapter']) ? $authorMostReadArticleInfo['articleChapter'][0]['content'] : '';
     if(mb_strlen($articleContent, 'UTF-8') > 200):
         $articleContent = mb_substr($articleContent, 0, 200, 'UTF-8').'...';
     endif;

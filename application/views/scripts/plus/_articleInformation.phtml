@@ -43,8 +43,8 @@ if (!empty($articleDetails['permalink'])) {
         </p>
     </header>
 <?php  
-    if (!empty($articleDetails['chapters'])) {
-        foreach ($articleDetails['chapters'] as $articleChapter) :                    
+    if (!empty($articleDetails['articleChapter'])) {
+        foreach ($articleDetails['articleChapter'] as $articleChapter) :                    
             echo '<h2 id="'.$articleChapter['id'].'">'.$articleChapter['title'].'</h2>';
             $chapters = preg_replace('/(<a\b[^><]*)>/i', '$1 style="color: #0077cc;text-decoration: underline;">', $articleChapter['content']);
             echo $chapters;

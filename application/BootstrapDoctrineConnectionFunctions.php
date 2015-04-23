@@ -1,36 +1,77 @@
 <?php
-class BootstrapDoctrineConnectionFunctions {
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 
-    public static function doctrineConnection($doctrineOptions, $moduleDirectoryName, $localeCookieData)
+class BootstrapDoctrineConnectionFunctions
+{
+    public static function doctrineConnections($doctrineOptions, $moduleDirectoryName, $localeCookieData)
     {
-        spl_autoload_register(array('Doctrine', 'modelsAutoload'));
-        $manager = Doctrine_Manager::getInstance();
-        $manager->setAttribute(
-            Doctrine_Core::ATTR_MODEL_LOADING,
-            Doctrine_Core::MODEL_LOADING_CONSERVATIVE
+        $application = new Zend_Application(
+            APPLICATION_ENV,
+            APPLICATION_PATH . '/configs/application.ini'
         );
-        $manager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
-        $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
-        Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
-        $doctrineOptions = $doctrineOptions;
-        $imbullDbConnection = Doctrine_Manager::connection(
-            $doctrineOptions['imbull'],
-            'doctrine'
+        $frontControllerObject = $application->getOption('resources');
+        $memcacheHostname = $frontControllerObject['frontController']['params']['memcache']['host'];
+        $memcachePort = $frontControllerObject['frontController']['params']['memcache']['port'];
+        $memcache = new Memcached();
+        $memcache->addServer($memcacheHostname, $memcachePort);
+        $cache = new \Doctrine\Common\Cache\MemcachedCache;
+        $cache->setMemcached($memcache);
+        $annotationReader = new Doctrine\Common\Annotations\AnnotationReader;
+        $cachedAnnotationReader = new Doctrine\Common\Annotations\CachedReader(
+            $annotationReader,
+            $cache
         );
+        
+        $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
+        $isDevMode = false;
+        $config = Setup::createConfiguration($isDevMode);
+        $driver = new AnnotationDriver($cachedAnnotationReader, $paths);
+        AnnotationRegistry::registerLoader('class_exists');
 
-        $localSiteDbConnection = self::getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData);
-        Doctrine_Manager::connection(
-            $doctrineOptions[strtolower($localSiteDbConnection)]['dsn'],
-            'doctrine_site'
-        );
+        $config->setMetadataDriverImpl($driver);
+        $config->setMetadataCacheImpl($cache);
+        $config->setQueryCacheImpl($cache);
+        $config->setProxyDir(APPLICATION_PATH . '/../library/KC/Entity/Proxy');
+        $config->setAutoGenerateProxyClasses(true);
+        $config->setProxyNamespace('Proxy');
+        $emUser = EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);
+        $localSiteDbConnection = strtolower(self::getLocaleNameForDbConnection(
+            $moduleDirectoryName,
+            $localeCookieData
+        ));
+        $connectionParamsLocale = self::getDatabaseCredentials($doctrineOptions[$localSiteDbConnection]['dsn']);
+        $emLocale = EntityManager::create($connectionParamsLocale, $config);
+        Zend_Registry::set('emLocale', $emLocale);
+        Zend_Registry::set('emUser', $emUser);
         BootstrapConstantsFunctions::constantsForLocaleAndTimezoneSetting();
         $localeValue = explode('_', COUNTRY_LOCALE);
+        $localeValue = isset($localeValue[1]) ? $localeValue[1] : $localeValue[0];
         if (LOCALE == '') {
             date_default_timezone_set('Europe/Amsterdam');
-        } else if (strtolower($localeValue[1]) == LOCALE) {
+        } else if (strtolower($localeValue) == LOCALE) {
             date_default_timezone_set(LOCALE_TIMEZONE);
         }
-        return $imbullDbConnection;
+        return $emUser;
+    }
+
+    public static function getDatabaseCredentials($doctrineOptions)
+    {
+        $splitDbName = explode('/', $doctrineOptions);
+        $splitDbUserName = explode(':', $splitDbName[2]);
+        $splitDbPassword = explode('@', $splitDbUserName[1]);
+        $dbPassword = $splitDbPassword[0];
+        $dbUserName = $splitDbUserName[0];
+        $dbName = $splitDbName[3];
+        return array(
+            'driver'   => 'pdo_mysql',
+            'user'     => $dbUserName,
+            'password' => $dbPassword,
+            'dbname'   => $dbName,
+        );
     }
 
     public static function getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData)

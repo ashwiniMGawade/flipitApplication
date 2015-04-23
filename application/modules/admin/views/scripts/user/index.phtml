@@ -1,6 +1,6 @@
 <?php
 $this->headTitle()->append($this->translate('Users List'));
-$role =  Zend_Auth::getInstance()->getIdentity()->roleId;
+$role =  Zend_Auth::getInstance()->getIdentity()->users->id;
 if($role=='1' || $role=='2')
 {
 //$this->headMeta('keyword', 'noF');asdafasfasfasfa

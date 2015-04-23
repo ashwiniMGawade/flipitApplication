@@ -158,7 +158,7 @@ function removetab(id){
 
 		$.ajax({
 			   type: "POST",
-			   url: HOST_PATH + "admin/homepage/deleteabout/",
+			   url: HOST_PATH + "admin/homepage/deleteabout",
 			   // dataType: 'json',
 			   cache: true,
 			   data: "removeid="+id+"&randval="+Math.random(),
@@ -814,7 +814,7 @@ function deletePopularCode() {
 				if(json!=''){
 					for(var i in json)
 						{
-						 	li+= "<li class='ui-state-default' reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].shopId + "' id='" + json[i].id + "' >" + json[i].shop.name + "</li>";
+						 	li+= "<li class='ui-state-default' reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].shopId + "' id='" + json[i].id + "' >" + json[i].name + "</li>";
 
 						}
 					$('ul#mostPopularCode').append(li);
@@ -1291,7 +1291,7 @@ function moveUpCategory() {
 					var li = '';
 					for(var i in json)
 						{
-						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].categoryId + "' id='" + json[i].id + "' >" + json[i].category.name + "</li>";
+						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].categoryId + "' id='" + json[i].id + "' >" + json[i].name + "</li>";
 
 						}
 					//console.log(id);
@@ -1389,7 +1389,7 @@ function moveDownCategory() {
 					var li = '';
 					for(var i in json) {
 
-						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].categoryId + "' id='" + json[i].id + "' >" + json[i].category.name + "</li>";
+						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].categoryId + "' id='" + json[i].id + "' >" + json[i].name + "</li>";
 
 						}
 					$('ul#mostCategories').append(li);
@@ -1458,7 +1458,7 @@ function deletePopularCategory() {
 					if(json!=''){
 					for(var i in json)
 						{
-						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].categoryId + "' id='" + json[i].id + "' >" + json[i].category.name + "</li>";
+						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].categoryId + "' id='" + json[i].id + "' >" + json[i].name + "</li>";
 
 						}
 					$('ul#mostCategories').append(li);
@@ -1549,7 +1549,7 @@ function moveUpSpecialoffer() {
 					var li = '';
 					for(var i in json)
 						{
-						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].specialpageId + "' id='" + json[i].id + "' >" + json[i].page[0].title + "</li>";
+						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].specialpageId + "' id='" + json[i].id + "' >" + json[i].title + "</li>";
 
 						}
 					//append li in ul( list of popular code
@@ -1648,7 +1648,7 @@ function moveDownSpecialoffer() {
 					var li = '';
 					for(var i in json) {
 
-						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].specialpageId + "' id='" + json[i].id + "' >" + json[i].page[0].title + "</li>";
+						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].specialpageId + "' id='" + json[i].id + "' >" + json[i].title + "</li>";
 
 						}
 					$('ul#mostSpecialList').append(li);
@@ -1718,7 +1718,7 @@ function deleteSpecialListOffer() {
 					var li = '';
 					for(var i in json)
 						{
-						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].specialpageId + "' id='" + json[i].id + "' >" + json[i].page[0].title + "</li>";
+						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].specialpageId + "' id='" + json[i].id + "' >" + json[i].title + "</li>";
 
 						}
 					$('ul#mostSpecialList').append(li);
@@ -1876,7 +1876,7 @@ function moveUpSaving() {
 					var li = '';
 					for(var i in json)
 						{
-						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].articleId + "' id='" + json[i].id + "' >" + json[i].article.title + "</li>";
+						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "'reloffer='" + json[i].moneysaving.id + "' id='" + json[i].id + "' >" + json[i].moneysaving.title + "</li>";
 						}
 					//append li in ul( list of popular code
 					$('ul#mostArticles').append(li);
@@ -1967,7 +1967,7 @@ function moveDownSaving() {
 					var li = '';
 					for(var i in json) {
 
-						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].articleId + "' id='" + json[i].id + "' >" + json[i].article.title + "</li>";
+						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].moneysaving.id + "' id='" + json[i].id + "' >" + json[i].moneysaving.title + "</li>";
 
 						}
 					$('ul#mostArticles').append(li);
@@ -2036,7 +2036,7 @@ function deletesavingmoney() {
 					if(json!=''){
 					for(var i in json)
 						{
-						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].articleId + "' id='" + json[i].id + "' >" + json[i].article.title + "</li>";
+						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].moneysaving.id + "' id='" + json[i].id + "' >" + json[i].moneysaving.title + "</li>";
 
 						}
 					$('ul#mostArticles').append(li);
@@ -2168,7 +2168,7 @@ $(function () {
 				if(json!=''){
 					for(var i in json)
 						{
-						 	li+= "<li class='ui-state-default' reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].shopId + "' id='" + json[i].id + "' >" + json[i].shop.name + "</li>";
+						 	li+= "<li class='ui-state-default' reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].shopId + "' id='" + json[i].id + "' >" + json[i].name + "</li>";
 
 						}
 					$('ul#mostPopularCode').append(li);
@@ -2210,15 +2210,14 @@ $(function () {
 				});
 			},500);
 
-			var $retdata = data.result;
+			var retdata = data.result;
 
-
-			if($retdata.status == 200 )
+			if(retdata.status == 200 )
 			{
 				var img = new Image();
 
 
-				var newSrc = PUBLIC_PATH_LOCALE + $retdata.path + $retdata.fileName ;
+				var newSrc = PUBLIC_PATH_LOCALE + retdata.path + retdata.fileName ;
 
 				img.onload = function() {
 

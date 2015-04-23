@@ -7,7 +7,8 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
         foreach ($categoryWiseAllArticles as $article) {
             $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/"
                     . $article['authorDetails']['slug'];
-            $articleUpdatedAtDate = new Zend_Date($article['articles']['publishdate']);
+            $articleUpdatedAtDate = $article['articles']['publishdate'];
+            $articleUpdatedAtDate = new Zend_Date($articleUpdatedAtDate->date);
             $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
             $authorName = FrontEnd_Helper_AuthorPartialFunctions::getAuthorName(
                 $article['authorDetails']['firstName'],
@@ -29,8 +30,8 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
             }
             
             $articleBy = $authorName != '' ? FrontEnd_Helper_viewHelper::__translate('By') : '';
-            $categoryTitleBackgroundColor = !empty($article['articles']['articlecategory'][0]['categorytitlecolor'])
-                                                ? $article['articles']['articlecategory'][0]['categorytitlecolor']
+            $categoryTitleBackgroundColor = !empty($article['articles']['category'][0]['categorytitlecolor'])
+                                                ? $article['articles']['category'][0]['categorytitlecolor']
                                                 : 'e69342';
             $relatedArticles .=
                     '<article class="article col-md-3 col-sm-4 col-xs-6 ">
@@ -72,9 +73,9 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
     {
         foreach ($categoryWiseArticles as $key => $categoryWiseArticle) {
             $categoryWiseArticles[$key]['authorDetails'] =
-                User::getUserDetails($categoryWiseArticle['articles']['authorid']);
-            $articleCategoryType = !empty($categoryWiseArticle['articles']['articlecategory'])
-                ? $categoryWiseArticle['articles']['articlecategory'][0]['name'] : '';
+                KC\Repository\User::getUserDetails($categoryWiseArticle['articles']['authorid']);
+            $articleCategoryType = !empty($categoryWiseArticle['articles']['category'])
+                ? $categoryWiseArticle['articles']['category'][0]['name'] : '';
             $categoryWiseArticles[$key]['artcileCategoryType'] = $articleCategoryType;
         }
         

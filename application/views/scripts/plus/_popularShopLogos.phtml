@@ -7,20 +7,20 @@
                 foreach ($this->popularStores as $popularStore) { 
                     $popularStoreImage =
                         PUBLIC_PATH_CDN
-                        .ltrim($popularStore['shop']['logo']['imgpath'], '/')
+                        .ltrim($popularStore['popularshops']['logo']['path'], '/')
                         .'thum_medium_'
-                        .$popularStore['shop']['logo']['imgname'];  
+                        .$popularStore['popularshops']['logo']['name'];  
                     ?>
                     <div class="slide">
-                        <a href="<?php echo HTTP_PATH_LOCALE.$popularStore['shop']['permaLink'];?>">
+                        <a href="<?php echo HTTP_PATH_LOCALE.$popularStore['popularshops']['permaLink'];?>">
                             <img class="lazy" data-original="<?php echo $popularStoreImage; ?>"
                             width ="100" height= "50"
-                            alt="<?php echo $popularStore['shop']['name']; ?>"
-                            title="<?php echo $popularStore['shop']['name']; ?>">
+                            alt="<?php echo $popularStore['popularshops']['name']; ?>"
+                            title="<?php echo $popularStore['popularshops']['name']; ?>">
                             <noscript>
                                 <img src="<?php echo $popularStoreImage; ?>" width ="100" height = "50"
-                                alt="<?php echo $popularStore['shop']['name']; ?>"
-                                title="<?php echo $popularStore['shop']['name']; ?>">
+                                alt="<?php echo $popularStore['popularshops']['name']; ?>"
+                                title="<?php echo $popularStore['popularshops']['name']; ?>">
                             </noscript>
                         </a>
                     </div>

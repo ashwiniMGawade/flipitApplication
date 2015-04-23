@@ -7,14 +7,14 @@ class Admin_EmailController extends Zend_Controller_Action
     public $_recipientMetaData = array();
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $params = $this->_getAllParams();
-        if (!Auth_StaffAdapter::hasIdentity()) {
-            $referer = new Zend_Session_Namespace('referer');
+        if (!\Auth_StaffAdapter::hasIdentity()) {
+            $referer = new \Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
         $sessionNamespace = new Zend_Session_Namespace();
@@ -48,92 +48,63 @@ class Admin_EmailController extends Zend_Controller_Action
     public function getEmailsAction()
     {
         $params = $this->_getAllParams();
-        $emailData = Emails::getAllEmailsContent($params);
+        $emailData = \KC\Repository\Emails::getAllEmailsContent($params);
 
         echo Zend_Json::encode($emailData);
         die();
     }
 
-
-    /**
-     * Get template data
-     * @author asharma
-     * @params template ID
-     * @version 1.0
-     */
     public function editEmailsAction()
     {
         $params = $this->_getAllParams();
         $this->view->offerId = $params['id'];
-
         $this->view->qstring = $_SERVER['QUERY_STRING'];
-
         $templateId = $params['id'];
-
-        $templateData = Emails::getTemplateContent($templateId);
-        //echo "<pre>";print_r($templateData);die;
+        $templateData = \KC\Repository\Emails::getTemplateContent($templateId);
         $this->view->templateId = $templateId;
         $this->view->templateData = $templateData;
-        // end code
     }
 
 
-    /**
-     * emailHeaderFooter
-     *
-     * save email header/footer content
-     *
-     * @author Amit Sharma
-     */
     public function emailHeaderFooterAction()
     {
         # sanitize data
         $data = mysql_escape_string(
-                BackEnd_Helper_viewHelper::stripSlashesFromString(
-                        $this->getRequest()->getParam('data'))) ;
-
-       $templateId = $this->getRequest()->getParam('templateId');
+            \BackEnd_Helper_viewHelper::stripSlashesFromString(
+                $this->getRequest()->getParam('data')
+            )
+        );
+        $templateId = $this->getRequest()->getParam('templateId');
         # check tepmlete type
         switch($this->getRequest()->getParam('template')) {
             case 'email-header':
                 # update headet template content
-                Emails::updateHeaderContent($data, $templateId );
-            break;
+                \KC\Repository\Emails::updateHeaderContent($data, $templateId);
+                break;
 
             case 'email-footer':
                 # update footer template content
-                Emails::updateFooterContent($data, $templateId);
-            break;
+                \KC\Repository\Emails::updateFooterContent($data, $templateId);
+                break;
         }
-
         die ;
     }
 
 
 
-      public function saveemailcontentAction()
+    public function saveemailcontentAction()
     {
         # sanitize data
         $val = mysql_escape_string(
-                            BackEnd_Helper_viewHelper::stripSlashesFromString(
-                                        $this->getRequest()->getParam('val'))) ;
-
+            \BackEnd_Helper_viewHelper::stripSlashesFromString(
+                $this->getRequest()->getParam('val')
+            )
+        );
         $templateId =  $this->getRequest()->getParam('templateId');
-
-        Emails::updateBodyContent($val, $templateId);
-
+        \KC\Repository\Emails::updateBodyContent($val, $templateId);
         die;
     }
 
-
-      /**
-     * mandrill
-     *
-     * This function initialize the mandrill and send the mail using mandrill template
-     *
-     * @author cbhopal
-     * @version 1.0
-     */
     public function mandrillAction()
     {
         if ($this->_request->isPost()) {
@@ -143,10 +114,10 @@ class Admin_EmailController extends Zend_Controller_Action
             $isScheduled = $this->getRequest()->getParam("isScheduled", false);
 
             if ($isScheduled) {
-                if (Signupmaxaccount::saveScheduledNewsletter($this->getRequest())) {
+                if (\KC\Repository\Signupmaxaccount::saveScheduledNewsletter($this->getRequest())) {
                     $flash->addMessage(array('success' => $this->view->translate('Newsletter has been successfully scheduled')));
                 } else {
-                    $flash->addMessage(array('error' => $this->view->translate('There is some problem in your data') ));
+                    $flash->addMessage(array('error' => $this->view->translate('There is some problem in your data')));
                 }
 
                 $this->_helper->redirector('emailcontent', 'accountsetting', null);
@@ -166,20 +137,20 @@ class Admin_EmailController extends Zend_Controller_Action
             }
             FrontEnd_Helper_viewHelper::exceedMemoryLimitAndExcutionTime();
             $voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularShops_list');
-
             //key not exist in cache
 
             if ($voucherflag) {
 
                 # get 10 popular vouchercodes for news letter
+
                 $topVouchercodes = FrontEnd_Helper_viewHelper::gethomeSections("popular", 10) ;
                 $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes, 10);
 
             } else {
-                $topVouchercodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularShops_list');
+                $topVouchercodes = \FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularShops_list');
             }
 
-            $categoryflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularCategories_list');
+            $categoryflag =  \FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularCategories_list');
 
             //key not exist in cache
 
@@ -190,9 +161,7 @@ class Admin_EmailController extends Zend_Controller_Action
                 FrontEnd_Helper_viewHelper::setInCache('10_popularCategories_list', $topCategories);
 
             } else {
-
-                $topCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
-
+                $topCategories = \FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
             }
 
 
@@ -286,7 +255,6 @@ class Admin_EmailController extends Zend_Controller_Action
                     'merge_vars' => $this->loginLinkAndData
             );
 
-
             try {
 
                 $mandrill->messages->sendTemplate($template_name, $template_content, $message);
@@ -298,19 +266,14 @@ class Admin_EmailController extends Zend_Controller_Action
                 $message = $this->view->translate('There is some problem in your data');
 
             }
-
             //send newsletter
-
             $flash->addMessage(array('success' => $message));
-
             //redirect to account setting controller after mail sent
             $this->_helper->redirector('emailcontent', 'accountsetting', null);
         } else {
-
             $this->_helper->redirector('index', 'index', null);
         }
         die;
-
     }
 
     public function emailSettingsAction()
@@ -323,16 +286,16 @@ class Admin_EmailController extends Zend_Controller_Action
             if ($sendersParameters['senderName']  == '' || $sendersParameters['senderEmail'] == '') {
                 $this->setFlashMessage('Error in updating Email Settings.');
             } else {
-                Settings::updateSendersSettings('sender_email_address', $sendersParameters['senderEmail']);
-                Settings::updateSendersSettings('sender_name', $sendersParameters['senderName']);
+                KC\Repository\Settings::updateSendersSettings('sender_email_address', $sendersParameters['senderEmail']);
+                KC\Repository\Settings::updateSendersSettings('sender_name', $sendersParameters['senderName']);
                 $this->setFlashMessage('Email Settings have been updated successfully');
             }
             $this->_redirect(HTTP_PATH . 'admin/email/email-settings');
         }
         
-        $sendersEmailAddress = Settings::getEmailSettings('sender_email_address');
+        $sendersEmailAddress = KC\Repository\Settings::getEmailSettings('sender_email_address');
         $this->view->sendersEmailAddress = $sendersEmailAddress;
-        $this->view->sendersName = Settings::getEmailSettings('sender_name');
+        $this->view->sendersName = KC\Repository\Settings::getEmailSettings('sender_name');
     }
 
     public function codeAlertAction()
@@ -347,14 +310,14 @@ class Admin_EmailController extends Zend_Controller_Action
 
     public function codeAlertSettingsAction()
     {
-        $codeAlertSettings = CodeAlertSettings::getCodeAlertSettings();
+        $codeAlertSettings = KC\Repository\CodeAlertSettings::getCodeAlertSettings();
         $this->view->codeAlertSettings = $codeAlertSettings;
         $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
         $this->getFlashMessage();
 
         if ($this->getRequest()->isPost()) {
             $codeAlertParameters = $this->getRequest()->getParams();
-            CodeAlertSettings::saveCodeAlertSettings(
+            KC\Repository\CodeAlertSettings::saveCodeAlertSettings(
                 $codeAlertParameters['emailSubject'],
                 $codeAlertParameters['emailHeader']
             );
@@ -368,26 +331,25 @@ class Admin_EmailController extends Zend_Controller_Action
         $codeAlertQueueParameters = $this->getRequest()->getParams();
         $codeAlertQueueShopId = $codeAlertQueueParameters['shopId'];
         $codeAlertQueueOfferId = $codeAlertQueueParameters['offerId'];
-        $codeAlertQueue = CodeAlertQueue::saveCodeAlertQueue($codeAlertQueueShopId, $codeAlertQueueOfferId);
+        $codeAlertQueue = KC\Repository\CodeAlertQueue::saveCodeAlertQueue($codeAlertQueueShopId, $codeAlertQueueOfferId);
         echo $codeAlertQueue;
         die;
     }
     
     public function savecodealertsettingsAction()
     {
-        CodeAlertSettings::saveCodeAlertSettings($this->getRequest()->getParams());
+        KC\Repository\CodeAlertSettings::saveCodeAlertSettings($this->getRequest()->getParams());
         die;
     }
     
     public function savecodealertemailsubjectAction()
     {
-        CodeAlertSettings::saveCodeAlertEmailSubject($this->getRequest()->getParams());
         die;
     }
 
     public function savecodealertemailheaderAction()
     {
-        CodeAlertSettings::saveCodeAlertEmailHeader($this->getRequest()->getParams());
+        KC\Repository\CodeAlertSettings::saveCodeAlertEmailHeader($this->getRequest()->getParams());
         die;
     }
 
@@ -398,21 +360,21 @@ class Admin_EmailController extends Zend_Controller_Action
             echo $this->_helper->json('This page does not exist');
         }
 
-        $visitors = CodeAlertQueue::getRecepientsCount();
+        $visitors = KC\Repository\CodeAlertQueue::getRecepientsCount();
         echo $this->_helper->json(array('recepients' => $visitors), true);
     }
     
     public function codealertlistAction()
     {
         $params = $this->_getAllParams();
-        $codeAlertQueue = CodeAlertQueue::getCodeAlertList($params);
-        echo Zend_Json::encode($codeAlertQueue);
+        $codeAlertQueue = KC\Repository\CodeAlertQueue::getCodeAlertList($params);
+        echo \Zend_Json::encode($codeAlertQueue);
         die();
     }
 
     public function movecodealerttotrashAction()
     {
-        $codeAlert = CodeAlertQueue::moveCodeAlertToTrash($this->_getParam('id'));
+        $codeAlert = KC\Repository\CodeAlertQueue::moveCodeAlertToTrash($this->_getParam('id'));
         if (intval($codeAlert) > 0) {
             $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate('Code alert has been moved to trash');
@@ -421,7 +383,7 @@ class Admin_EmailController extends Zend_Controller_Action
             $message = $this->view->translate('Problem in your data.');
             $flash->addMessage(array('error' => $message));
         }
-        echo Zend_Json::encode($codeAlert);
+        echo \Zend_Json::encode($codeAlert);
         die();
     }
 
@@ -443,8 +405,8 @@ class Admin_EmailController extends Zend_Controller_Action
     public function codealertsentlistAction()
     {
         $params = $this->_getAllParams();
-        $codeAlertQueue = CodeAlertQueue::getCodeAlertList($params, true);
-        echo Zend_Json::encode($codeAlertQueue);
+        $codeAlertQueue = KC\Repository\CodeAlertQueue::getCodeAlertList($params, true);
+        echo \Zend_Json::encode($codeAlertQueue);
         die();
     }
 }

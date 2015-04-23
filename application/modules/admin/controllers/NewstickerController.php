@@ -11,11 +11,11 @@ class Admin_NewstickerController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
 
         $params = $this->_getAllParams();
 
-        if (!Auth_StaffAdapter::hasIdentity()) {
+        if (!\Auth_StaffAdapter::hasIdentity()) {
 
             $referer = new Zend_Session_Namespace('referer');
 
@@ -23,7 +23,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
 
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
 
         $this->view->controllerName = $this->getRequest()->getParam('controller');
 
@@ -65,7 +65,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
 
 
 
-        $shopObj = new Shop();
+        $shopObj = new \KC\Repository\Shop();
 
         $shopNames = $shopObj::getOfferShopList();
 
@@ -75,7 +75,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
 
             $params = $this->_getAllParams();
 
-            $newsticker = OfferNews::saveNewsticker($params);
+            $newsticker = \KC\Repository\OfferNews::saveNewsticker($params);
 
             self::updateVarnish($newsticker);
 
@@ -114,7 +114,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams ();
 
-        $newstickerList = OfferNews::getnewstickerList($params);
+        $newstickerList = \KC\Repository\OfferNews::getnewstickerList($params);
 
         echo Zend_Json::encode ( $newstickerList );
 
@@ -134,7 +134,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
 
         self::updateVarnish($id);
 
-        $deletePermanent = OfferNews::deletenewsticker( $id );
+        $deletePermanent = \KC\Repository\OfferNews::deletenewsticker( $id );
 
         $flash = $this->_helper->getHelper('FlashMessenger');
 
@@ -153,7 +153,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
      */
     public function editnewstickerAction()
     {
-        $shopObj = new Shop();
+        $shopObj = new \KC\Repository\Shop();
 
         $shopNames = $shopObj::getOfferShopList();
 
@@ -163,7 +163,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
         $id = $this->getRequest ()->getParam ( 'id' );
         if ($id > 0) {
             // get edit newsticker
-            $newsticker = OfferNews::getNewsticker ($id);
+            $newsticker = \KC\Repository\OfferNews::getNewsticker ($id);
             $this->view->editNews = $newsticker;
 
         }
@@ -171,7 +171,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
         if ($this->getRequest ()->isPost ()) {
             $params = $this->getRequest ()->getParams ();
             // cal to update newsticker function
-            $newsticker = OfferNews::updateNewsticker( $params );
+            $newsticker = \KC\Repository\OfferNews::updateNewsticker( $params );
 
 
             self::updateVarnish($id);
@@ -195,10 +195,10 @@ class Admin_NewstickerController extends Zend_Controller_Action
     public function updateVarnish($id)
     {
                 // Add urls to refresh in Varnish
-            $varnishObj = new Varnish();
+            $varnishObj = new \KC\Repository\Varnish();
 
             # get all the urls related to this newsticker
-            $varnishUrls = OfferNews::getAllUrls($id);
+            $varnishUrls = \KC\Repository\OfferNews::getAllUrls($id);
 
             # check $varnishUrls has atleast one
             if(isset($varnishUrls) && count($varnishUrls) > 0) {
@@ -210,7 +210,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
 
     public function exportxlxAction()
     {
-        $newstickerList = OfferNews::getnewstickerListForExport();
+        $newstickerList =  \KC\Repository\OfferNews::getnewstickerListForExport();
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->setActiveSheetIndex(0);
         $objPHPExcel->getActiveSheet()->setCellValue('A1', $this->view->translate('Title'));
@@ -231,9 +231,9 @@ class Admin_NewstickerController extends Zend_Controller_Action
             if ($newsticker['url']!= null && $newsticker['url']!='') {
                 $tickerUrl = $newsticker['url'];
             }
-            $startDate = date('d-m-Y', strtotime($newsticker['startdate']));
+            $startDate = $newsticker['startdate']->format('d-m-Y');
             $objPHPExcel->getActiveSheet()->setCellValue('A' . $column, $newsticker['title']);
-            $objPHPExcel->getActiveSheet()->setCellValue('B' . $column, $newsticker['shop']['name']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $column, $newsticker['name']);
             $objPHPExcel->getActiveSheet()->setCellValue('C' . $column, $startDate);
             $objPHPExcel->getActiveSheet()->setCellValue('D' . $column, $newstickerStatus);
             $objPHPExcel->getActiveSheet()->setCellValue('E' . $column, $tickerUrl);

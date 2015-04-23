@@ -26,12 +26,6 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/page.js");
 		}?>
 		</div>
           <h1 class="fl"><?php echo $this->translate('Pages')?><button onclick="window.location.href='<?php echo HTTP_PATH;?>admin/page/addpage'" class="btn ml10"><?php echo $this->translate('Add New Page')?></button></h1>
-         
-          	<a href="<?php echo HTTP_PATH;?>admin/page/trash" class="red trash-link"><?php $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
-			
-          	if($role=='1' || $role=='2'){?>
-			<strong><?php echo $this->translate('Trash'); }?></strong></a>
-
           	<div class="clear"></div>
         
           	<p class="text-right"><a href='<?php echo HTTP_PATH;?>admin/page/exportpagelist'><?php echo $this->translate('Export List')?></a></p>

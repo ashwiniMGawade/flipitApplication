@@ -19,22 +19,22 @@ class Admin_HomepageController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection (); // connection
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection(); // connection
         // generate with second
         // database
-        $params = $this->_getAllParams ();
-        if (! Auth_StaffAdapter::hasIdentity ()) {
-            $referer = new Zend_Session_Namespace('referer');
+        $params = $this->_getAllParams();
+        if (! \Auth_StaffAdapter::hasIdentity()) {
+            $referer = new \Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-            $this->_redirect ( '/admin/auth/index' );
+            $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection ( $conn2 );
-        $this->view->controllerName = $this->getRequest ()->getParam ( 'controller' );
-        $this->view->action = $this->getRequest ()->getParam ( 'action' );
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
+        $this->view->controllerName = $this->getRequest()->getParam('controller');
+        $this->view->action = $this->getRequest()->getParam('action');
 
 
         # redirect of a user don't have any permission for this controller
-        $sessionNamespace = new Zend_Session_Namespace();
+        $sessionNamespace = new \Zend_Session_Namespace();
         $this->_settings  = $sessionNamespace->settings['rights'] ;
 
     }
@@ -47,20 +47,16 @@ class Admin_HomepageController extends Zend_Controller_Action
 
     public function getanothertabAction()
     {
-        if($this->_settings['content']['rights'] != '1') {
+        if ($this->_settings['content']['rights'] != '1') {
             $this->getResponse()->setHttpResponseCode(404);
             echo $this->_helper->json('This page does not exist');
-
         }
-
-
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-
         $params = $this->_getAllParams();
         $abouthtml = '';
 
-        if($params['tab'] == 'anothertab'){
+        if ($params['tab'] == 'anothertab') {
                     $no = $params['tabnumber'];
 
                     $abouthtml = '<div id="multidivchild_'.$no.'" ><div class="clear"></div>
@@ -143,16 +139,20 @@ class Admin_HomepageController extends Zend_Controller_Action
      */
     public function deleteaboutAction()
     {
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
         $parmas = $this->_getAllParams();
-        $id = @$parmas['removeid'];
-        //call model class function pass position and id
-                $about = About :: removeeabouttab($id);
-                $deleted = Settings :: removesettingabouttab($id);
-        //remove  about tab from database
-        if($deleted) {
-            echo "1";
-        }else { echo 0; }
-        die();
+        $id = $parmas['removeid'];
+        if ($id) {
+            $about = \KC\Repository\About::removeeabouttab($id);
+            $deleted = \KC\Repository\Settings::removesettingabouttab($id);
+            if ($deleted) {
+                echo "1";
+            } else {
+                echo 0;
+            }
+            die();
+        }
     }
 
     /**
@@ -162,12 +162,13 @@ class Admin_HomepageController extends Zend_Controller_Action
      */
     public function deletemenuAction()
     {
-        $deleted = menu :: deleteAllMenuRecord();
+        $deleted = \KC\Repository\Menu::deleteAllMenuRecord();
 
-        if($deleted){
+        if ($deleted) {
             echo "Deleted";
             die();
-        }else { echo 0;
+        } else {
+            echo 0;
         }
         die();
     }
@@ -175,7 +176,8 @@ class Admin_HomepageController extends Zend_Controller_Action
     public function indexAction()
     {
         // action body
-        $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
+        $u = \Auth_StaffAdapter::getIdentity();
+        $role = $u->users->id;
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages();
         $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
@@ -184,94 +186,61 @@ class Admin_HomepageController extends Zend_Controller_Action
         $this->view->rights = $this->_settings['content'];
 
         // check if asSeenIn form is submitted
-        if ($this->_request->isPost() &&
-                $this->getRequest()->getParam("form") == "asSeenIn" )
-        {
+        if ($this->_request->isPost() && $this->getRequest()->getParam("form") == "asSeenIn") {
             $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate('Changes has been saved successfully.');
             $flash->addMessage(array('success' => $message ));
             $parmas = $this->_getAllParams();
-            SeenIn::update($parmas);
-
-            self::updateVarnish();
-
-            $this->_redirect ( '/admin/homepage' );
-
+            \KC\Repository\SeenIn::update($parmas);
+            $this->_redirect('/admin/homepage');
         }
-
-
-
         // check if asSeenIn form is submitted
-        if ($this->_request->isPost() &&
-                $this->getRequest()->getParam("form") == "homepage_banner" )
-        {
+        if ($this->_request->isPost() && $this->getRequest()->getParam("form") == "homepage_banner") {
             $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate('Changes has been saved successfully.');
             $flash->addMessage(array('success' => $message ));
             $parmas = $this->_getAllParams();
-            $result = Signupmaxaccount::updateHeaderImage($parmas);
-
+            $result = \KC\Repository\Signupmaxaccount::updateHeaderImage($parmas);
             self::updateVarnish();
-
-            $this->_redirect ( '/admin/homepage' );
-
+            $this->_redirect('/admin/homepage');
         }
 
 
         // check if about form is submitted
-        if ($this->_request->isPost() &&
-                $this->getRequest()->getParam("form") == "about" )
-        {
-
-
-            if($this->_settings['content']['rights'] == '1') {
+        if ($this->_request->isPost() && $this->getRequest()->getParam("form") == "about") {
+            if ($this->_settings['content']['rights'] == '1') {
                 $flash = $this->_helper->getHelper('FlashMessenger');
                 $message = $this->view->translate('Changes has been saved successfully.');
                 $flash->addMessage(array('success' => $message ));
                 $parmas = $this->_getAllParams();
-                About::update($parmas);
-
+                \KC\Repository\About::update($parmas);
                 self::updateVarnish();
-
             } else {
-                $this->_redirect ( '/admin/index' );
+                $this->_redirect('/admin/index');
             }
-
-            //$this->_redirect ( '/admin/homepage' );
         }
-
-
-
         // return updated about content
-        $this->view->about = About::getAboutContent();
-
+        $this->view->about = \KC\Repository\About::getAboutContent();
         // return updated about content
-        $this->view->seenIn = SeenIn::getSeenInContent();
-
-        $this->view->data = PopularShop::getPopularShop();
-
+        $this->view->seenIn = \KC\Repository\SeenIn::getSeenInContent();
+        $this->view->data = \KC\Repository\PopularShop::getPopularShop();
         //Return Popular voucher code from database
-        //$data = PopularCode::getPopularCode();
-        $data = PopularVouchercodes::getPopularvoucherCode();
-        $this->view->code = @$data;
-
+        $data = KC\Repository\PopularVouchercodes::getPopularvoucherCode();
+        $this->view->code = $data;
         //Return Popular category code from database
-        $catg = PopularCategory::getPopularCategories();
+        $catg = \KC\Repository\PopularCategory::getPopularCategories();
         $this->view->category = @$catg;
-
         //Return Popular category code from database
-        $special = SpecialList::getsplpage();
+        $special = \KC\Repository\SpecialList::getsplpage();
+        
         $this->view->Speciallist = @$special;
-
         // Return Money saving Article from database
-        $this->view->articles = MoneysavingArticle::getSaving();
-
+        $this->view->articles = \KC\Repository\MoneysavingArticle::getSaving();
         // Return locale for front end
-        $this->view->locale = Signupmaxaccount::getAllMaxAccounts();
-        $this->view->localeSettings = LocaleSettings::getLocaleSettings();
-        $this->view->timezones_list = Signupmaxaccount::$timezones;
-        $this->view->localeStatus = Website::getLocaleStatus($_COOKIE['site_name']);
-
+        $this->view->locale = \KC\Repository\Signupmaxaccount::getAllMaxAccounts();
+        $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
+        $this->view->timezones_list = \KC\Repository\Signupmaxaccount::$timezones;
+        $this->view->localeStatus = \KC\Repository\Website::getLocaleStatus($_COOKIE['site_name']);
     }
 
     ///********End shop section function for popular shop ***********///
@@ -283,29 +252,22 @@ class Admin_HomepageController extends Zend_Controller_Action
     public function searchtoptenshopAction()
     {
         $srh = $this->getRequest()->getParam('keyword');
-
         $flag = 0;
         // $ststus = 1;
         //call to seach top 10 offer function in model class
-        $data = PopularShop::searchTopTenshop($srh, $flag);
+        $data = \KC\Repository\PopularShop::searchTopTenshop($srh, $flag);
         $ar = array();
         if (sizeof($data) > 0) {
-
             foreach ($data as $d) {
-
                 $ar[] = $d['name'];
-
             }
         } else {
-
             $msg = $this->view->translate('No Record Found');
             $ar[] = $msg;
         }
         echo Zend_Json::encode($ar);
         die();
-
     }
-
 
     /**
      * add manual a offer in popular shop
@@ -316,26 +278,20 @@ class Admin_HomepageController extends Zend_Controller_Action
     {
         $data = $this->getRequest()->getParam('name');
         //call to add offer function from model
-        $flag = PopularShop::addShopInList($data);
-
-
+        $flag = \KC\Repository\PopularShop::addShopInList($data);
         #if popular shop  is addedd then update varnsih as well
-        if($flag && $flag != "2" && $flag != "1" ) {
+        if ($flag && $flag != "2" && $flag != "1") {
             self::updateVarnish();
         }
-
-
-        echo Zend_Json::encode($flag);
+        echo \Zend_Json::encode($flag);
         $key = 'all_widget5_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShopsForDropdown_list');
         die();
     }
-
-
     /**
      * delete popular shop
      * @author Er.kundal
@@ -346,15 +302,13 @@ class Admin_HomepageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
-        PopularShop::deletePapularCode($id, $position);
-
+        \KC\Repository\PopularShop::deletePapularCode($id, $position);
         self::updateVarnish();
-
         //get popular code from database
-        $data = PopularShop::getPopularShop();
-        echo Zend_Json::encode($data);
+        $data = \KC\Repository\PopularShop::getPopularShop();
+        echo \Zend_Json::encode($data);
         $key = 'all_widget5_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
@@ -363,10 +317,10 @@ class Admin_HomepageController extends Zend_Controller_Action
     }
 
     public function savepopularshopspositionAction()
-    {
-        PopularShop::savePopularShopsPosition($this->getRequest()->getParam('shopid'));
-        $popularShop = PopularShop::getPopularShop();
-        echo Zend_Json::encode($popularShop);
+    { 
+        \KC\Repository\PopularShop::savePopularShopsPosition($this->getRequest()->getParam('shopid'));
+        $popularShop = \KC\Repository\PopularShop::getPopularShop();
+        echo \Zend_Json::encode($popularShop);
         exit();
     }
     /**
@@ -379,19 +333,16 @@ class Admin_HomepageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
-        $isUpdated = PopularShop::moveUp($id, $position);
-
+        $isUpdated = \KC\Repository\PopularShop::moveUp($id, $position);
         #if popular shop list  is updated then update varnsih as well
-        if($isUpdated) {
+        if ($isUpdated) {
             self::updateVarnish();
         }
-
-
         //get popular code from database
-        $data = PopularShop::getPopularShop();
-        echo Zend_Json::encode($data);
+        $data = \KC\Repository\PopularShop::getPopularShop();
+        echo \Zend_Json::encode($data);
         $key = 'all_widget5_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
@@ -408,18 +359,16 @@ class Admin_HomepageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
-        $isUpdated  = PopularShop::moveDown($id, $position);
-
+        $isUpdated  = \KC\Repository\PopularShop::moveDown($id, $position);
         #if popular shop  is updated then update varnsih as well
-        if($isUpdated) {
+        if ($isUpdated) {
             self::updateVarnish();
         }
-
         //get popular code from database
-        $data = PopularShop::getPopularShop();
-        echo Zend_Json::encode($data);
+        $data = \KC\Repository\PopularShop::getPopularShop();
+        echo \Zend_Json::encode($data);
         $key = 'all_widget5_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
@@ -434,25 +383,18 @@ class Admin_HomepageController extends Zend_Controller_Action
     {
         $srh = $this->getRequest()->getParam('keyword');
         $flag = 0;
-        //$status = 1;
         //call to seach top 10 offer function in model class
-        $data = PopularVouchercodes::searchTopTenOffer($srh, $flag);
+        $data = KC\Repository\PopularVouchercodes::searchTopTenOffer($srh, $flag);
         $ar = array();
-
-
         if (sizeof($data) > 0) {
-
             foreach ($data as $d) {
-
                 $ar[] = $d['offer']['title'];
-
             }
         } else {
-
             $msg = $this->view->translate('No Record Found');
             $ar[] = $msg;
         }
-        echo Zend_Json::encode($ar);
+        echo \Zend_Json::encode($ar);
         die();
     }
 
@@ -465,14 +407,13 @@ class Admin_HomepageController extends Zend_Controller_Action
     public function addoffercodeAction()
     {
         $data = $this->getRequest()->getParam('name');
-
         //call to add offer function from model
-        $flag = PopularVouchercodes::addOfferInVouchercode($data);
-        echo Zend_Json::encode($flag);
+        $flag = KC\Repository\PopularVouchercodes::addOfferInVouchercode($data);
+        echo \Zend_Json::encode($flag);
         $key = 'all_widget5_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         die();
     }
 
@@ -487,14 +428,14 @@ class Admin_HomepageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
-        PopularVouchercodes::deletePapularvocherCode($id, $position);
+        KC\Repository\PopularVouchercodes::deletePapularvocherCode($id, $position);
         //get popular code from database
-        $data = PopularVouchercodes::getPopularvoucherCode();
-        echo Zend_Json::encode($data);
+        $data = KC\Repository\PopularVouchercodes::getPopularvoucherCode();
+        echo \Zend_Json::encode($data);
         $key = 'all_widget5_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         die();
     }
 
@@ -508,14 +449,14 @@ class Admin_HomepageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
-        PopularVouchercodes::moveUpCode($id, $position);
+        KC\Repository\PopularVouchercodes::moveUpCode($id, $position);
         //get popular code from database
-        $data = PopularVouchercodes::getPopularvoucherCode();
-        echo Zend_Json::encode($data);
+        $data = KC\Repository\PopularVouchercodes::getPopularvoucherCode();
+        echo \Zend_Json::encode($data);
         $key = 'all_widget5_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         die();
     }
 
@@ -529,14 +470,14 @@ class Admin_HomepageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
-        PopularVouchercodes::moveDownCode($id, $position);
+        KC\Repository\PopularVouchercodes::moveDownCode($id, $position);
         //get popular code from database
-        $data = PopularVouchercodes::getPopularvoucherCode();
-        echo Zend_Json::encode($data);
+        $data = KC\Repository\PopularVouchercodes::getPopularvoucherCode();
+        echo \Zend_Json::encode($data);
         $key = 'all_widget5_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         die();
     }
 
@@ -550,25 +491,17 @@ class Admin_HomepageController extends Zend_Controller_Action
         $flag = 0;
         $ststus = 1;
         // call to seach top 10 offer function in model class
-        $data = PopularCategory::searchTopTenPopulerCategory($ststus, $srh, $flag);
-
-
+        $data = KC\Repository\PopularCategory::searchTopTenPopulerCategory($ststus, $srh, $flag);
         $ar = array();
-
-
         if (sizeof($data) > 0) {
-
             foreach ($data as $d) {
-
-                $ar[] = $d['categoryname'];
-
+                $ar[] = $d['name'];
             }
         } else {
-
             $msg = $this->view->translate('No Record Found');
             $ar[] = $msg;
         }
-        echo Zend_Json::encode($ar);
+        echo \Zend_Json::encode($ar);
         die();
     }
 
@@ -582,17 +515,16 @@ class Admin_HomepageController extends Zend_Controller_Action
     {
         $data = $this->getRequest()->getParam('name');
         //call to add offer function from model
-        $flag = PopularCategory::addCategoryInPopulerCategory($data);
-
+        $flag = \KC\Repository\PopularCategory::addCategoryInPopulerCategory($data);
         #if popular category is addedd then update varnsih as well
-        if($flag && $flag != "2" && $flag != "1" ) {
+        if ($flag && $flag != "2" && $flag != "1") {
             self::updateVarnish();
         }
-        echo Zend_Json::encode($flag);
+        echo \Zend_Json::encode($flag);
         $key = 'all_widget5_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         die();
     }
 
@@ -607,22 +539,18 @@ class Admin_HomepageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
-        $isUpdated = PopularCategory::deletePopulerCategory($id, $position);
-
-
+        $isUpdated = \KC\Repository\PopularCategory::deletePopulerCategory($id, $position);
         #if category list is updated then update varnsih as well
-        if($isUpdated) {
+        if ($isUpdated) {
             self::updateVarnish();
         }
-
-
         //get popular code from database
-        $data = PopularCategory::getPopularCategories();
-        echo Zend_Json::encode($data);
+        $data = \KC\Repository\PopularCategory::getPopularCategories();
+        echo \Zend_Json::encode($data);
         $key = 'all_widget5_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         die();
     }
 
@@ -636,21 +564,19 @@ class Admin_HomepageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
-        $isUpdated = PopularCategory::moveUpPopulerCategory($id, $position);
-
+        $isUpdated = \KC\Repository\PopularCategory::moveUpPopulerCategory($id, $position);
         #if money saving is updated then update varnsih as well
-        if($isUpdated) {
+        if ($isUpdated) {
             self::updateVarnish();
         }
-
-
         //get popular code from database
-        $data = PopularCategory::getPopularCategories();
-        echo Zend_Json::encode($data);
+        $data = \KC\Repository\PopularCategory::getPopularCategories();
+        //echo "<pre>";print_r($data);die;
+        echo \Zend_Json::encode($data);
         $key = 'all_widget5_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         die();
     }
 
@@ -664,22 +590,19 @@ class Admin_HomepageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
-        $isUpdated = PopularCategory::moveDownPopulerCategory($id, $position);
-
+        $isUpdated = \KC\Repository\PopularCategory::moveDownPopulerCategory($id, $position);
         #if money saving is updated then update varnsih as well
-        if($isUpdated) {
+        if ($isUpdated) {
             self::updateVarnish();
         }
-
-
         //get popular code from database
-        $data = PopularCategory::getPopularCategories();
-        echo Zend_Json::encode($data);
+        $data = \KC\Repository\PopularCategory::getPopularCategories();
+        echo \Zend_Json::encode($data);
 
         $key = 'all_widget5_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         die();
     }
 
@@ -695,23 +618,18 @@ class Admin_HomepageController extends Zend_Controller_Action
         $srh = $this->getRequest()->getParam('keyword');
         $flag = 0;
         //call to seach top 10 offer function in model class
-        $data = SpecialList::searchTopTenOffer($srh, $flag);
+        $data = \KC\Repository\SpecialList::searchTopTenOffer($srh, $flag);
         $ar = array();
         if (sizeof($data) > 0) {
-
             foreach ($data as $d) {
-
                 $ar[] = $d['title'];
-
             }
         } else {
-
             $msg = $this->view->translate('No Record Found');
             $ar[] = $msg;
         }
-        echo Zend_Json::encode($ar);
+        echo \Zend_Json::encode($ar);
         die();
-
     }
     /**
      * add manual a offer in Special List
@@ -722,14 +640,11 @@ class Admin_HomepageController extends Zend_Controller_Action
     {
         $data = $this->getRequest()->getParam('name');
         //call to add offer function from model
-        $flag = SpecialList::addOfferInList($data);
-
+        $flag = \KC\Repository\SpecialList::addOfferInList($data);
         #if popular shop  is addedd then update varnsih as well
-        if($flag && $flag != "2" && $flag != "1" ) {
+        if ($flag && $flag != "2" && $flag != "1") {
             self::updateVarnish();
         }
-
-
         echo Zend_Json::encode($flag);
         die();
     }
@@ -743,16 +658,14 @@ class Admin_HomepageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
-        $isUpdated = SpecialList::deletePapularCode($id, $position);
-
+        $isUpdated = \KC\Repository\SpecialList::deletePapularCode($id, $position);
         #if special list is updated then update varnsih as well
-        if($isUpdated) {
+        if ($isUpdated) {
             self::updateVarnish();
         }
-
         //get popular code from database
-        $data = SpecialList::getsplpage();
-        echo Zend_Json::encode($data);
+        $data = \KC\Repository\SpecialList::getsplpage();
+        echo \Zend_Json::encode($data);
         die();
     }
     /**
@@ -764,19 +677,15 @@ class Admin_HomepageController extends Zend_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
-
         //call model class function pass position and id
-        $isUpdated = SpecialList::moveUpSpecial($id, $position) ;
-
+        $isUpdated = \KC\Repository\SpecialList::moveUpSpecial($id, $position) ;
         #if special list  is updated then update varnsih as well
-        if($isUpdated) {
+        if ($isUpdated) {
             self::updateVarnish();
         }
-
-
         //get popular code from database
-        $data = SpecialList::getsplpage();
-        echo Zend_Json::encode($data);
+        $data = \KC\Repository\SpecialList::getsplpage();
+        echo \Zend_Json::encode($data);
         die();
     }
     /**
@@ -788,18 +697,15 @@ class Admin_HomepageController extends Zend_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
-
         //call model class function pass position and id
-        $isUpdated = SpecialList::moveDownSpecial($id, $position);
-
+        $isUpdated = \KC\Repository\SpecialList::moveDownSpecial($id, $position);
         #if special list is updated then update varnsih as well
-        if($isUpdated) {
+        if ($isUpdated) {
             self::updateVarnish();
         }
-
         //get popular code from database
-        $data = SpecialList::getsplpage();
-        echo Zend_Json::encode($data);
+        $data = \KC\Repository\SpecialList::getsplpage();
+        echo \Zend_Json::encode($data);
         die();
     }
 
@@ -813,24 +719,19 @@ class Admin_HomepageController extends Zend_Controller_Action
     public function searchtoptensavingAction()
     {
         $srh = $this->getRequest()->getParam('keyword');
-
         $flag = 0;
         // call to seach top 10 Article function in model class
-        $data = MoneysavingArticle::searchTopTenSaving($srh, $flag);
+        $data = \KC\Repository\MoneysavingArticle::searchTopTenSaving($srh, $flag);
         $ar = array();
         if (sizeof($data) > 0) {
-
             foreach ($data as $d) {
-
                 $ar[] = $d['title'];
-
             }
         } else {
-
             $msg = $this->view->translate('No Record Found');
             $ar[] = $msg;
         }
-        echo Zend_Json::encode($ar);
+        echo \Zend_Json::encode($ar);
         die();
 
     }
@@ -843,15 +744,11 @@ class Admin_HomepageController extends Zend_Controller_Action
     {
         $data = $this->getRequest()->getParam('name');
         //call to add articler function from model
-        $flag = MoneysavingArticle::addSaving($data);
-
+        $flag = \KC\Repository\MoneysavingArticle::addSaving($data);
         # if an artticle is added tehn update varnish
-        if($flag && $flag != "2" && $flag != "1" ) {
+        if ($flag && $flag != "2" && $flag != "1") {
             self::updateVarnish();
-
         }
-
-
         echo Zend_Json::encode($flag);
         die();
     }
@@ -865,18 +762,14 @@ class Admin_HomepageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
-        $isUpdated  = MoneysavingArticle::deleteSaving($id, $position);
-
-
+        $isUpdated  = \KC\Repository\MoneysavingArticle::deleteSaving($id, $position);
         #if movey saving  list is updated then update varnsih as well
-        if($isUpdated) {
+        if ($isUpdated) {
             self::updateVarnish();
         }
-
-
         //get Money saving article from database
-        $data = MoneysavingArticle::getSaving();
-        echo Zend_Json::encode($data);
+        $data = \KC\Repository\MoneysavingArticle::getSaving();
+        echo \Zend_Json::encode($data);
         die();
     }
     /**
@@ -889,16 +782,14 @@ class Admin_HomepageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
-        $isUpdated = MoneysavingArticle::moveUpSaving($id, $position);
-
+        $isUpdated = \KC\Repository\MoneysavingArticle::moveUpSaving($id, $position);
         #if money saving is updated then update varnsih as well
-        if($isUpdated) {
+        if ($isUpdated) {
             self::updateVarnish();
         }
-
         //get popular code from database
-        $data = MoneysavingArticle::getSaving();
-        echo Zend_Json::encode($data);
+        $data = \KC\Repository\MoneysavingArticle::getSaving();
+        echo \Zend_Json::encode($data);
         die();
     }
     /**
@@ -911,24 +802,20 @@ class Admin_HomepageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
-        $isUpdated = MoneysavingArticle::moveDownSaving($id, $position);
-
+        $isUpdated = \KC\Repository\MoneysavingArticle::moveDownSaving($id, $position);
         #if money saving is updated then update varnsih as well
-        if($isUpdated) {
+        if ($isUpdated) {
             self::updateVarnish();
         }
-
         //get Money saving article from database
-        $data = MoneysavingArticle::getSaving();
-        echo Zend_Json::encode($data);
+        $data = \KC\Repository\MoneysavingArticle::getSaving();
+        echo \Zend_Json::encode($data);
         die();
     }
 
     public function clearcacheAction()
     {
-        $cache = Zend_Registry::get('cache');
-        //$cache->remove('top_categories_list');
-        //$cache->remove('top_categories_output');
+        $cache = \Zend_Registry::get('cache');
         $cache->clean();
         echo 'cache is cleared';
         exit;
@@ -939,19 +826,15 @@ class Admin_HomepageController extends Zend_Controller_Action
         $del1 = Doctrine_Query::create()->delete()
         ->from('About')
         ->execute();
-
         $del2 = Doctrine_Query::create()->delete()
         ->from('Settings')
         ->execute();
-
         $del3 = Doctrine_Query::create()->delete()
         ->from('SeenIn')
         ->execute();
-
         $del4 = Doctrine_Query::create()->delete()
         ->from('Special')
         ->execute();
-
         return true;
 
     }
@@ -964,19 +847,14 @@ class Admin_HomepageController extends Zend_Controller_Action
     public function updateVarnish()
     {
         // Add urls to refresh in Varnish
-        $varnishObj = new Varnish();
-        $varnishObj->addUrl( rtrim( HTTP_PATH_FRONTEND , '/'  ));
-
+        $varnishObj = new \KC\Repository\Varnish();
+        $varnishObj->addUrl(rtrim(HTTP_PATH_FRONTEND, '/'));
         # make markplaatfeed url's get refreashed only in case of kortingscode
-        iF(LOCALE == '')
-        {
-            $varnishObj->addUrl(  HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
-            $varnishObj->addUrl(  HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed' );
-
+        if (LOCALE == '') {
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed');
         }
-
     }
-
 
     /**
      *  saveEmail
@@ -986,41 +864,33 @@ class Admin_HomepageController extends Zend_Controller_Action
 
     public function saveemailAction()
     {
-        Signupmaxaccount::saveemail($this->getRequest()->getParam('emailperlocale'));
+        \KC\Repository\Signupmaxaccount::saveemail($this->getRequest()->getParam('emailperlocale'));
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $this->view->translate('Email has been changed successfully.');
         $flash->addMessage(array('success' => $message ));
         die;
-            }
+    }
+
     public function getemailAction()
     {
-        $email_data = Signupmaxaccount::getAllMaxAccounts();
-        echo Zend_Json::encode($email_data[0]['emailperlocale']);
+        $email_data = \KC\Repository\Signupmaxaccount::getAllMaxAccounts();
+        echo \Zend_Json::encode($email_data[0]['emailperlocale']);
         die;
     }
 
     public function updateHeaderImageAction()
     {
-
-
-        if(	$this->_request->isXmlHttpRequest()) {
+        if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
                 if (isset($_FILES['homepageBanner']['name']) && @$_FILES['homepageBanner']['name'] != '') {
-
                     $parmas = $this->_getAllParams();
-                    $result = Signupmaxaccount::updateHeaderImage($parmas);
-
+                    $result = \KC\Repository\Signupmaxaccount::updateHeaderImage($parmas);
                     self::updateVarnish();
-
-
                     $this->_helper->json($result);
                 }
             }
-
         }
-
-        $this->_redirect ( '/admin/homepage' );
-
+        $this->_redirect('/admin/homepage');
     }
 
     /**
@@ -1031,47 +901,31 @@ class Admin_HomepageController extends Zend_Controller_Action
      */
     public function deleteHeaderImageAction()
     {
-
-
-        if(	$this->_request->isXmlHttpRequest()) {
+        if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
-                    $parmas = $this->_getAllParams();
-                    $result = Signupmaxaccount::deleteHeaderImage($parmas);
-
-                    self::updateVarnish();
-
-                    $this->_helper->json($result);
-
+                $parmas = $this->_getAllParams();
+                $result = \KC\Repository\Signupmaxaccount::deleteHeaderImage($parmas);
+                self::updateVarnish();
+                $this->_helper->json($result);
             }
-
         }
-
-        $this->_redirect ( '/admin/homepage' );
-
+        $this->_redirect('/admin/homepage');
     }
 
 
     public function updateWidgetBackgroundImageAction()
     {
-
-
-        if(	$this->_request->isXmlHttpRequest()) {
+        if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
                 if (isset($_FILES['homepageWidgetBackground']['name']) && @$_FILES['homepageWidgetBackground']['name'] != '') {
-
                     $parmas = $this->_getAllParams();
-                    $result = Signupmaxaccount::updateWidgetBackgroundImage($parmas);
-
+                    $result = \KC\Repository\Signupmaxaccount::updateWidgetBackgroundImage($parmas);
                     self::updateVarnish();
-
                     $this->_helper->json($result);
                 }
             }
-
         }
-
-        $this->_redirect ( '/admin/homepage' );
-
+        $this->_redirect('/admin/homepage');
     }
 
     /**
@@ -1083,22 +937,14 @@ class Admin_HomepageController extends Zend_Controller_Action
 
     public function deleteWidgetImageAction()
     {
-
-
-        if(	$this->_request->isXmlHttpRequest()) {
+        if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
-                    $parmas = $this->_getAllParams();
-                    $result = Signupmaxaccount::deleteWidgetImage($parmas);
-
-                    self::updateVarnish();
-
-                    $this->_helper->json($result);
-
+                $parmas = $this->_getAllParams();
+                $result = \KC\Repository\Signupmaxaccount::deleteWidgetImage($parmas);
+                self::updateVarnish();
+                $this->_helper->json($result);
             }
-
         }
-
-        $this->_redirect ( '/admin/homepage' );
-
+        $this->_redirect('/admin/homepage');
     }
 }

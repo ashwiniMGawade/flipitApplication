@@ -29,7 +29,7 @@ class SitemapRefreshVarnish
         defined('LIBRARY_PATH')
         || define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
 
-        defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
+        defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine1');
 
         // Define application environment
         defined('APPLICATION_ENV')
@@ -47,7 +47,7 @@ class SitemapRefreshVarnish
                         array(realpath(DOCTRINE_PATH), get_include_path(),)));
 
         /** Zend_Application */
-        require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper.php');
+        require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper-v1.php');
         require_once (LIBRARY_PATH . '/Zend/Application.php');
         require_once(DOCTRINE_PATH . '/Doctrine.php');
 

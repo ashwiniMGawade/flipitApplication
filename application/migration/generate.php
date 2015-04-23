@@ -8,7 +8,7 @@ p
 }
 </style>
 <?php
-require_once('../../library/Doctrine/Doctrine.php');
+require_once('../../library/Doctrine1/Doctrine.php');
 spl_autoload_register(array('Doctrine', 'autoload'));
 $manager = Doctrine_Manager::getInstance();
 

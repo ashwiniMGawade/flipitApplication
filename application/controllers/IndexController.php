@@ -15,8 +15,8 @@ class IndexController extends Zend_Controller_Action
         } else {
             $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
         }
-        $this->view->banner = Signupmaxaccount::getHomepageImages();
-        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
+        $this->view->banner = KC\Repository\Signupmaxaccount::getHomepageImages();
+        $this->viewHelperObject = new \FrontEnd_Helper_viewHelper();
     }
 
     public function indexAction()
@@ -24,7 +24,7 @@ class IndexController extends Zend_Controller_Action
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();
-        $pageDetails = Page::getPageDetailsFromUrl($this->getRequest()->getActionName());
+        $pageDetails = (object) KC\Repository\Page::getPageDetailsFromUrl($this->getRequest()->getActionName());
         $this->view->pageTitle = ucfirst(isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '');
         $this->viewHelperObject->getMetaTags(
             $this,
@@ -35,65 +35,66 @@ class IndexController extends Zend_Controller_Action
             FACEBOOK_IMAGE,
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
-        if (FrontEnd_Helper_HomePagePartialFunctions:: getFlipitHomePageStatus()) {
+        if (\FrontEnd_Helper_HomePagePartialFunctions:: getFlipitHomePageStatus()) {
 
-            $this->view->topOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            $this->view->topOffers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "10_popularOffersHome_list",
-                array('function' => 'Offer::getTopOffers', 'parameters' => array(10)
+                array('function' => 'KC\Repository\Offer::getTopOffers', 'parameters' => array(10)
                 ),
                 ''
             );
             
-            $topCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            $topCategories = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "10_popularCategories_list",
-                array('function' => 'Category::getPopularCategories', 'parameters' => array(10, 'home')
+                array('function' => 'KC\Repository\Category::getPopularCategories', 'parameters' => array(10, 'home')
                 ),
                 ''
             );
+ 
             $this->view->topCategories = $topCategories;
-            $specialListPages = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            $specialListPages = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_specialPagesHome_list",
-                array('function' => 'SpecialList::getSpecialPages', 'parameters' => array()
+                array('function' => 'KC\Repository\SpecialList::getSpecialPages', 'parameters' => array()
                 ),
                 ''
             );
             $this->view->specialListPages = $specialListPages;
-
+           
             $specialListCountKey ="all_specialPages_count";
-            $cacheStatus =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($specialListCountKey);
+            $cacheStatus =  \FrontEnd_Helper_viewHelper::checkCacheStatusByKey($specialListCountKey);
             if ($cacheStatus) {
                 $specialPagesOffers = $this->_helper->Index->getSpecialListPagesOffers($specialListPages);
-                FrontEnd_Helper_viewHelper::setInCache($specialListCountKey, $specialPagesOffers);
+                \FrontEnd_Helper_viewHelper::setInCache($specialListCountKey, $specialPagesOffers);
             } else {
-                $specialPagesOffers  = FrontEnd_Helper_viewHelper::getFromCacheByKey($specialListCountKey);
+                $specialPagesOffers  = \FrontEnd_Helper_viewHelper::getFromCacheByKey($specialListCountKey);
             }
+
             $this->view->specialPagesOffers = $specialPagesOffers;
-            $this->view->moneySavingGuidesCount = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            $this->view->moneySavingGuidesCount = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_moneySaving_list",
-                array('function' => 'Articles::getAllArticlesCount', 'parameters' => array()
+                array('function' => 'KC\Repository\Articles::getAllArticlesCount', 'parameters' => array()
                 ),
                 ''
             );
 
-
-            $this->view->topStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            $this->view->topStores = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_popularShops_list",
                 array(
-                    'function' => 'Shop::getPopularStoresForHomePage',
-                    'parameters' => array("popular", 48)
+                    'function' => 'KC\Repository\Shop::getPopularStoresForHomePage',
+                    'parameters' => array(48)
                 ),
                 ''
             );
 
-            $this->view->seeninContents = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            $this->view->seeninContents = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_homeSeenIn_list",
-                array('function' => 'SeenIn::getSeenInContent', 'parameters' => array(10)
+                array('function' => 'KC\Repository\SeenIn::getSeenInContent', 'parameters' => array(10)
                 ),
                 ''
             );
-            $this->view->aboutTabs = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            $this->view->aboutTabs = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_about_page",
-                array('function' => 'About::getAboutContent', 'parameters' => array(1)
+                array('function' => 'KC\Repository\About::getAboutContent', 'parameters' => array(1)
                 ),
                 ''
             );

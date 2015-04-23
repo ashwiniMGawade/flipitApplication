@@ -93,15 +93,15 @@
                               <div class="categories" style="position:relative;">
                               <?php 
                               $arr = array();
-                              foreach ($this->data['relatedcategory'] as $related) {
-                                $arr[] = $related['id'];
+                              foreach ($this->data['refArticlecategoryRelatedcategory'] as $related) {
+                                $arr[] = $related['category']['id'];
                               }
                               
                               for($i = 0; $i < count($this->categoryList) ; $i++) { ?>
                               
                                <?php 
                               
-                                    if( @in_array($this->categoryList[$i]['id'], $arr) )
+                                    if(@in_array($this->categoryList[$i]['id'], $arr) )
                                     {
                                         //echo "true";
                                         $checked = 'checked="checked"' ;

@@ -108,8 +108,28 @@ if (LOCALE == '') {
                                             ?>
                                         </ul>
                                     </div>
-                                    <?php endif; ?>
                                 </div>
+                                <div class="sponsors-block">
+                                    <h2>
+                                    	<?php echo $this->translate('Flipit! Get ready to flip over a great deal&#33;');?>
+                                    </h2>
+                                    <ul>
+                                        <?php
+                                        foreach ($this->popularShops as $popularShop) : ?>
+                                        <li>
+                                            <a href="<?php echo HTTP_PATH_LOCALE.$popularShop['popularshops']['permaLink']; ?>">
+                                               <img width="90" height="45" alt="<?php echo $popularShop['popularshops']['name']; ?>"
+                                               src="<?php echo PUBLIC_PATH_CDN
+                                               .ltrim($popularShop['popularshops']['logo']['path'], '/')
+                                               .'thum_medium_'.$popularShop['popularshops']['logo']['name']; ?>" title="Shop Logo">
+                                            </a>
+                                        </li>
+                                        <?php
+                                        endforeach;
+                                        ?>
+                                    </ul>
+                                </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </main>

@@ -19,8 +19,8 @@
                     <?php 
                     if (!empty($this->articles)) { 
                         foreach ($this->articles as $articles) {
-                        echo  "<li class='ui-state-default' id='".$articles['articles']['id']."'>
-                            <span>".$articles['articles']['title']."</span></li>";
+                        echo  "<li class='ui-state-default' id='".$articles['articleId']."'>
+                            <span>".$articles['title']."</span></li>";
                         }
                     } else {             
                         echo  "<li id='0'>". $this->translate('No record found !') . "</li>";

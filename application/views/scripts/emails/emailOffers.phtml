@@ -23,6 +23,15 @@ $utmParameters = $this->mailType != 'welcome'
                 <?php
                     foreach ($this->topOffers as $topOffer) {
                         $topOffer = (object) $topOffer;
+                        if (isset($this->testStatus) && $this->testStatus == 'doc2') { 
+                            $shopData = $topOffer->shopOffers;
+                            $permalink = $shopData['permaLink'];
+                            $testStatus = 'doc2';
+                        } else {
+                            $shopData = $topOffer->shop;
+                            $permalink = $shopData['permalink'];
+                            $testStatus = '';
+                        }
                         $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
                         $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($topOffer->endDate);
                         $urlToShow = $offerPartial->getUrlToShow($topOffer, $this->httpPathLocale);
@@ -40,10 +49,10 @@ $utmParameters = $this->mailType != 'welcome'
                                 <td width="132" >
                                     <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #dddddd; border-radius:5px;">
                                         <tbody><tr>
-                                            <td height="66" align="center"><a href="<?php echo $this->httpPathLocale.$topOffer->shop['permalink'].$utmParameters; ?>" style="text-decoration:none; color:#fff;"><img src="<?php echo $this->publicPathCdn.ltrim($topOffer->shop['logo']['path'],'/').'thum_big_'.$topOffer->shop['logo']['name']; ?>" style="vertical-align:top;" width="132" height="66" alt="<?php echo $topOffer->shop['name']; ?>" title="<?php echo $topOffer->shop['name']; ?>"></a></td>
+                                            <td height="66" align="center"><a href="<?php echo $this->httpPathLocale.$shopData['permaLink'].$utmParameters; ?>" style="text-decoration:none; color:#fff;"><img src="<?php echo $this->publicPathCdn.ltrim($shopData['logo']['path'],'/').'thum_big_'.$shopData['logo']['name']; ?>" style="vertical-align:top;" width="132" height="66" alt="<?php echo $shopData['name']; ?>" title="<?php echo $shopData['name']; ?>"></a></td>
                                         </tr>
                                         <tr>
-                                            <td bgcolor="#ea973d" align="center" style="border-radius:0 0 4px 4px; box-shadow:0 0 4px rgba(0,0,0,0.15); padding:6px 0 5px; font:11px/17px Arial, Helvetica, sans-serif; color:#fff;"><a href="<?php echo $this->httpPathLocale.$topOffer->shop['permalink'].$utmParameters; ?>" style="text-decoration:none; color:#fff;"><?php echo FrontEnd_Helper_viewHelper::__email('email_CODE'); ?></a></td>
+                                            <td bgcolor="#ea973d" align="center" style="border-radius:0 0 4px 4px; box-shadow:0 0 4px rgba(0,0,0,0.15); padding:6px 0 5px; font:11px/17px Arial, Helvetica, sans-serif; color:#fff;"><a href="<?php echo $this->httpPathLocale.$permalink.$utmParameters; ?>" style="text-decoration:none; color:#fff;"><?php echo FrontEnd_Helper_viewHelper::__email('email_CODE'); ?></a></td>
                                         </tr>
                                     </tbody></table>
                                 </td>
@@ -51,13 +60,13 @@ $utmParameters = $this->mailType != 'welcome'
                                 <td valign="top">
                                     <table width="100%" cellpadding="0" cellspacing="0">
                                         <tbody><tr>
-                                            <td style="padding:0 0 2px; font:14px/17px Arial, Helvetica, sans-serif; color:#363636;"><?php echo $topOffer->shop['name']; ?>&nbsp;<span style="color: #e89438; display: inline-block;"><?php echo $exclusiveCode; ?></span></td>
+                                            <td style="padding:0 0 2px; font:14px/17px Arial, Helvetica, sans-serif; color:#363636;"><?php echo $shopData['name']; ?>&nbsp;<span style="color: #e89438; display: inline-block;"><?php echo $exclusiveCode; ?></span></td>
                                         </tr>
                                         <tr>
-                                            <td style="padding:0 0 15px; font:16px/22px Arial, Helvetica, sans-serif; color:#0077cc;"><a href="<?php echo $this->httpPathLocale.$topOffer->shop['permalink'].$utmParameters; ?>" style="text-decoration:underline; color:#0077cc;"><?php echo $topOffer->title; ?></a></td>
+                                            <td style="padding:0 0 15px; font:16px/22px Arial, Helvetica, sans-serif; color:#0077cc;"><a href="<?php echo $this->httpPathLocale.$permalink.$utmParameters; ?>" style="text-decoration:underline; color:#0077cc;"><?php echo $topOffer->title; ?></a></td>
                                         </tr>
                                         <tr>
-                                            <td style="font:12px/17px Arial, Helvetica, sans-serif; color:#32383e;"><?php echo BackEnd_Helper_MandrillHelper::getOfferDates($topOffer, $daysTillOfferExpires, $this->locale); ?></td>
+                                            <td style="font:12px/17px Arial, Helvetica, sans-serif; color:#32383e;"><?php echo BackEnd_Helper_MandrillHelper::getOfferDates($topOffer, $daysTillOfferExpires, $this->locale, $testStatus); ?></td>
                                         </tr>
                                     </tbody></table>
                                 </td>

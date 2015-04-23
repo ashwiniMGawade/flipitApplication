@@ -446,7 +446,7 @@ function getVisitorList(iSearchText,iEmailText,iStart,iSortCol,iSortDir) {
 					{
 						"fnRender" : function(obj) {
 						
-							return "<a href='javascript:void(0);'>" + obj.aData.created_at + "</a>" ;
+							return "<a href='javascript:void(0);'>" + obj.aData.created_at.date + "</a>" ;
 							
 						},
 						//"bSearchable" : false,

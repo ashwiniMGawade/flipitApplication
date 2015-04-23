@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_XmlRpc
  * @subpackage Client
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Client.php 23969 2011-05-03 14:48:31Z ralph $
+ * @version    $Id$
  */
 
 
@@ -71,7 +71,7 @@ require_once 'Zend/XmlRpc/Fault.php';
  * @category   Zend
  * @package    Zend_XmlRpc
  * @subpackage Client
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_XmlRpc_Client
@@ -257,9 +257,15 @@ class Zend_XmlRpc_Client
     {
         $this->_lastRequest = $request;
 
-        iconv_set_encoding('input_encoding', 'UTF-8');
-        iconv_set_encoding('output_encoding', 'UTF-8');
-        iconv_set_encoding('internal_encoding', 'UTF-8');
+        if (PHP_VERSION_ID < 50600) {
+            iconv_set_encoding('input_encoding', 'UTF-8');
+            iconv_set_encoding('output_encoding', 'UTF-8');
+            iconv_set_encoding('internal_encoding', 'UTF-8');
+        } else {
+            ini_set('input_encoding', 'UTF-8');
+            ini_set('output_encoding', 'UTF-8');
+            ini_set('default_charset', 'UTF-8');
+        }
 
         $http = $this->getHttpClient();
         if($http->getUri() === null) {
@@ -294,7 +300,7 @@ class Zend_XmlRpc_Client
             $response = new Zend_XmlRpc_Response();
         }
         $this->_lastResponse = $response;
-        $this->_lastResponse->loadXml($httpResponse->getBody());
+        $this->_lastResponse->loadXml(trim($httpResponse->getBody()));
     }
 
     /**

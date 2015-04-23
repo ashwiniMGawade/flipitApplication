@@ -4,13 +4,13 @@ class Admin_SpecialpagesoffersController extends Zend_Controller_Action
 {
     public function preDispatch()
     {
-        $dbConnection = BackEnd_Helper_viewHelper::addConnection(); // connection
-        if (!Auth_StaffAdapter::hasIdentity()) {
+        $dbConnection = \BackEnd_Helper_viewHelper::addConnection(); // connection
+        if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($dbConnection);
+        \BackEnd_Helper_viewHelper::closeConnection($dbConnection);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
     }
@@ -18,18 +18,20 @@ class Admin_SpecialpagesoffersController extends Zend_Controller_Action
     public function indexAction()
     {
         $pageId = $this->getRequest()->getParam('pageId');
-        $specialListPages = Page::getSpecialListPages();
+        $specialListPages = \KC\Repository\Page::getSpecialListPages();
+
         if (isset($pageId)) {
             $pageId = $this->getRequest()->getParam('pageId');
         } else {
             $pageId = $specialListPages[0]['id'];
         }
-        $specialPageOffers = SpecialPagesOffers::getSpecialPageOfferById($pageId);
+        $specialPageOffers = \KC\Repository\SpecialPagesOffers::getSpecialPageOfferById($pageId);
+
         $offerIds = array();
         foreach ($specialPageOffers as $pOffer) {
             $offerIds[] = $pOffer['offerId'];
         }
-        $allOffer = PopularCode::searchAllOffer($offerIds);
+        $allOffer = \KC\Repository\PopularCode::searchAllOffer($offerIds);
         $this->view->specialPageOffers = $specialPageOffers;
         $this->view->offer = $allOffer;
         $this->view->specialPages = $specialListPages;
@@ -41,7 +43,7 @@ class Admin_SpecialpagesoffersController extends Zend_Controller_Action
     {
         $offerId = $this->getRequest()->getParam('id');
         $pageId = $this->getRequest()->getParam('pageId');
-        $result = SpecialPagesOffers::addOfferInList($offerId, $pageId);
+        $result = \KC\Repository\SpecialPagesOffers::addOfferInList($offerId, $pageId);
         echo Zend_Json::encode($result);
         exit();
     }
@@ -51,8 +53,8 @@ class Admin_SpecialpagesoffersController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         $pageId = $this->getRequest()->getParam('pageId');
-        $isUpdated = SpecialPagesOffers::deleteCode($id, $position, $pageId);
-        $specialPageOffers = SpecialPagesOffers::getSpecialPageOfferById($pageId);
+        $isUpdated = \KC\Repository\SpecialPagesOffers::deleteCode($id, $position, $pageId);
+        $specialPageOffers = \KC\Repository\SpecialPagesOffers::getSpecialPageOfferById($pageId);
         echo Zend_Json::encode($specialPageOffers);
         exit();
     }
@@ -60,8 +62,8 @@ class Admin_SpecialpagesoffersController extends Zend_Controller_Action
     public function savepositionAction()
     {
         $pageId = $this->getRequest()->getParam('pageId');
-        SpecialPagesOffers::savePosition($this->getRequest()->getParam('offersIds'), $pageId);
-        $popularArticles = SpecialPagesOffers::getSpecialPageOfferById($pageId);
+        \KC\Repository\SpecialPagesOffers::savePosition($this->getRequest()->getParam('offersIds'), $pageId);
+        $popularArticles = \KC\Repository\SpecialPagesOffers::getSpecialPageOfferById($pageId);
         echo Zend_Json::encode($popularArticles);
         exit();
     }

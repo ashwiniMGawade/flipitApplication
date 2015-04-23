@@ -4,13 +4,13 @@ class FrontEnd_Helper_LayoutContent
     public static function loadFlipitHomePage($flipitUrl)
     {
         $htmlPath = '';
-        $flipit = new Zend_View();
+        $flipit = new \Zend_View();
         $flipit->setBasePath(APPLICATION_PATH . '/modules/flipit/views');
-        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        $httpScheme = \FrontEnd_Helper_viewHelper::getServerNameScheme();
         if($flipitUrl == 'http://'.$httpScheme.'.flipit.com'
             || $flipitUrl == 'flipit.com'
             || $flipitUrl =='http://flipit.com') :
-            zend_Controller_Front::getInstance()->getRequest()
+            \zend_Controller_Front::getInstance()->getRequest()
             ->getControllerName() == 'index'
             ? $htmlPath = 'index/index.phtml'
             : $htmlPath = 'error/error.phtml';
@@ -46,18 +46,18 @@ class FrontEnd_Helper_LayoutContent
     {
         $robots = '';
         if(isset($page) && $page != ''
-                && zend_Controller_Front::getInstance()
+                && \zend_Controller_Front::getInstance()
                 ->getRequest()->getControllerName() == 'search'):
                 $robots = 'noindex, follow';
-        elseif (strtolower(zend_Controller_Front::getInstance()->getRequest()->getControllerName()) == 'login'
+        elseif (strtolower(\zend_Controller_Front::getInstance()->getRequest()->getControllerName()) == 'login'
                         && strtolower(
-                            zend_Controller_Front::getInstance()
+                            \zend_Controller_Front::getInstance()
                             ->getRequest()->getActionName() == 'forgotpassword'
                         )
                 ):
                 $robots = 'noindex, follow';
         else:
-            if(Zend_Controller_Front::getInstance()->getRequest()->getParam('page', null) > 1):
+            if(\Zend_Controller_Front::getInstance()->getRequest()->getParam('page', null) > 1):
                 $robots = 'noindex, follow';
             else:
                 if($robotOfDummyPages) :
@@ -109,7 +109,7 @@ class FrontEnd_Helper_LayoutContent
         $facebookDescription,
         $facebookLocale
     ) {
-        $fb = new Zend_View();
+        $fb = new \Zend_View();
         $fb->setScriptPath(APPLICATION_PATH . '/layouts/scripts/');
         $fb->assign('facebookTitle', $facebookTitle);
         $fb->assign('facebookShareUrl', $facebookShareUrl);
@@ -122,7 +122,7 @@ class FrontEnd_Helper_LayoutContent
     
     public static function loadTwitterMeta($twitterDescription, $twitterSite)
     {
-        $twitter = new Zend_View();
+        $twitter = new \Zend_View();
         $twitter->setScriptPath(APPLICATION_PATH . '/layouts/scripts/');
         $twitter->assign('twitterDescription', $twitterDescription);
         $fb->assign('twitterSite', $twitterSite);
@@ -132,15 +132,20 @@ class FrontEnd_Helper_LayoutContent
 
     public static function homePageBanner($homePageBanner)
     {
+
         $homePageBannerHtml = '';
         if (!empty($homePageBanner)) {
-            $homePageWidgetBannerPath = PUBLIC_PATH_CDN. trim($homePageBanner['homepagebanner_path'] . $homePageBanner['homepagebanner_name']);
+            $homePageWidgetBannerPath = PUBLIC_PATH_CDN. trim(
+                $homePageBanner[0]['homepagebanner_path']
+                . $homePageBanner[0]['homepagebanner_name']
+            );
             $homePageBannerHtml =
                 '<div class="block-image">
                     <div class="image-holder">
                         <div class="image-frame">
-                            <img class="position-cover" src="' . $homePageWidgetBannerPath .'" alt="' . $homePageBanner['homepage_widget_banner_name'] .'"
-                            title="' . $homePageBanner['homepage_widget_banner_name'] .'">
+                            <img class="position-cover" src="' . $homePageWidgetBannerPath .'" alt="'
+                            . $homePageBanner[0]['homepage_widget_banner_name'] .'"
+                            title="' . $homePageBanner[0]['homepage_widget_banner_name'] .'">
                         </div>
                     </div>
                 </div>';
@@ -152,8 +157,8 @@ class FrontEnd_Helper_LayoutContent
     {
         $divShow = false;
         if (
-            zend_Controller_Front::getInstance()->getRequest()->getControllerName()!= 'index'
-            && zend_Controller_Front::getInstance()->getRequest()->getControllerName()!= 'plus'
+            \zend_Controller_Front::getInstance()->getRequest()->getControllerName()!= 'index'
+            && \zend_Controller_Front::getInstance()->getRequest()->getControllerName()!= 'plus'
         ) {
             $divShow = true;
         }
@@ -167,9 +172,10 @@ class FrontEnd_Helper_LayoutContent
      
     public static function getWebsiteMainMenu($navigation = '')
     {
-        $websiteMenus = menu::getFirstLevelMenu($navigation);
+        $websiteMenus = KC\Repository\menu::getFirstLevelMenu($navigation);
         $cssClass = LOCALE == '' ? "kc-menu" : 'flipit-menu';
         $websiteMainMenu =
+
         '<ul>';
         if ($navigation != 'mobile') {
             foreach ($websiteMenus as $websiteMenu) {
@@ -204,7 +210,7 @@ class FrontEnd_Helper_LayoutContent
             if ($shopsPerColumn == 7 || $shopsPerColumn == 13 || $shopsPerColumn== 19 || $shopsPerColumn == 25) {
                 $topShopsDropdown .='</ul><ul class="info-area">';
             }
-            $topShopsDropdown .='<li><a href="'. HTTP_PATH_LOCALE. $topShop['shop']['permaLink']. '">'. $topShop['shop']['name'] . '</a></li>';
+            $topShopsDropdown .='<li><a href="'. HTTP_PATH_LOCALE. $topShop['permaLink']. '">'. $topShop['name'] . '</a></li>';
             $shopsPerColumn++;
         }
         $topShopsDropdown.=
@@ -221,23 +227,24 @@ class FrontEnd_Helper_LayoutContent
         $topShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             "all_popularShopsForDropdown_list",
             array(
-                'function' => 'Shop::getPopularStoresForDropDown',
+                'function' => 'KC\Repository\Shop::getPopularStoresForDropDown',
                 'parameters' => array(30)
             ),
             ''
         );
         return $topShops;
     }
-    
+
     public static function getMostPopularCouponOnEarth()
     {
-        $splashInformation = FrontEnd_Helper_viewHelper::getSplashInformation();
+        $splashInformation = \FrontEnd_Helper_viewHelper::getSplashInformation();
         if (!empty($splashInformation)) {
             $locale = $splashInformation[0]['locale'];
-            $connectionWithSiteDatabase = BackEnd_Helper_DatabaseManager::addConnection($locale);
-            $offer = new Offer($connectionWithSiteDatabase['connName']);
+            //$connectionWithSiteDatabase = \BackEnd_Helper_DatabaseManager::addConnection($locale);
+            //$offer = new \KC\Repository\Offer($connectionWithSiteDatabase['connName']);
+            $offer = new \KC\Repository\Offer();
             $mostPopularCoupon = $offer->getSplashPagePopularCoupon($splashInformation[0]['offerId']);
-            BackEnd_Helper_DatabaseManager::closeConnection($connectionWithSiteDatabase['adapter']);
+            //\BackEnd_Helper_DatabaseManager::closeConnection($connectionWithSiteDatabase['adapter']);
             return array('locale' => $locale,'mostPopularCoupon' => $mostPopularCoupon);
         } else {
             return array('locale' => '','mostPopularCoupon' => '');

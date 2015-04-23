@@ -4,6 +4,7 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
     protected $moduleName = '';
     protected $localeDirectoryName ='';
     protected $frontController = '';
+    public $currentLocale = null;
 
     /**
      * This function is called once after router shutdown. It automatically
@@ -110,7 +111,13 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
         if (isset( $this->localeDirectoryName ) &&  !empty($this->localeDirectoryName)) {
 
             if (Auth_VisitorAdapter::hasIdentity()) {
-                $visitorCurrentLocale =  Auth_VisitorAdapter::getIdentity()->currentLocale;
+                $req = \Zend_Controller_Front::getInstance()->getRequest();
+                $lang  = $req->getParam('lang', false);
+                # set propertry to current lcoale during login in case of flipit
+                if ($lang) {
+                    $this->currentLocale = $lang ;
+                }
+                $visitorCurrentLocale =  $this->currentLocale;
                 if ($visitorCurrentLocale != $this->localeDirectoryName) {
                     $request->setControllerName('login')->setActionName('logout');
                 }

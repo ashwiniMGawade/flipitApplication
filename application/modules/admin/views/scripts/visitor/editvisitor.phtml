@@ -176,7 +176,7 @@ $gender = $this->userDetail['gender'];
                         <div class="mainpage-content-left"><label><strong>Code alert</strong></label></div>
                         <div class="mainpage-content-right">
                              <div data-toggle="buttons-checkbox" class="btn-group">
-                                <?php if($this->userDetail['codealert']==1){?>
+                                <?php if($this->userDetail['codeAlert']==1){?>
                                         <button type="button" class="btn btn-primary" onClick="setOnOff(event,'code','on')"><?php echo $this->translate('On'); ?></button>                     
 			                            <button type="button" class="btn  default" onClick="setOnOff(event,'code','off')"><?php echo $this->translate('Off'); ?></button>
                             	<?php } else { ?>
@@ -222,10 +222,10 @@ $gender = $this->userDetail['gender'];
 	                            		
 	                            			<?php
 	                            			   # check visitor has one or more keyword
-	                            			   if(count($this->userDetail['keywords']) > 0)
+	                            			   if(count($this->userDetail['visitorKeyword']) > 0)
 	                            			   {
 	                            			   		# traverse through all keywords
-		                            			 	foreach ($this->userDetail['keywords'] as $value){
+		                            			 	foreach ($this->userDetail['visitorKeyword'] as $value){
 		                            				
 	                            			   			#create delete button  
 	                            						$aTag = sprintf("<a onclick='deleteKeyword(this)' herf='javascript:void(0);'>"
@@ -263,7 +263,7 @@ $gender = $this->userDetail['gender'];
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('New Password'); ?></strong></label></div>
                             <div class="mainpage-content-right">
                                 <div class="mainpage-content-right-inner-right-other"></div>
-                                <div class="mainpage-content-right-inner-left-other"><input autocomplete="off" type="password" id="newPassword" name="newPassword" placeholder="<?php echo $this->translate('New Password'); ?>" class="span3 passwordField"></div>                        
+                                <div class="mainpage-content-right-inner-left-other"><input autocomplete="off" type="password" id="newPassword" name="newPassword" class="span3 passwordField"></div>                        
                             </div>
                         </div>
                         <div class="mainpage-content-line">
@@ -285,7 +285,7 @@ $gender = $this->userDetail['gender'];
            <input  type="hidden" name="weekly" id="weekly" value="<?php echo $this->userDetail['weeklyNewsLetter']?>"/>
              <input type="hidden" name="fashion" id="fashion" value="<?php echo $this->userDetail['fashionNewsLetter'];?>"/>
               <input type="hidden" name="travel" id="travel" value="<?php echo $this->userDetail['travelNewsLetter'];?>"/>
-              <input type="hidden" name="code" id="code" value="<?php echo $this->userDetail['codealert'] ;?>"/>
+              <input type="hidden" name="code" id="code" value="<?php echo $this->userDetail['codeAlert'] ;?>"/>
             <div class="mainpage-content-colorbox">
             	<button type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('EDIT PROFILE'); ?></button>
                 <a href="<?php echo HTTP_PATH; ?>admin/visitor"  class="fl m10"><strong><?php echo $this->translate('CANCEL'); ?></strong></a>

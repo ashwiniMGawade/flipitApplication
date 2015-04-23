@@ -1,0 +1,78 @@
+<?php
+namespace KC\Entity;
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="mainmenu")
+ */
+class Mainmenu
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer", length=8)
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="integer", length=8, nullable=true)
+     */
+    private $parentId;
+
+    /**
+     * @ORM\Column(type="integer", length=8, nullable=true)
+     */
+    private $root_id;
+
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=true)
+     */
+    private $lft;
+
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=true)
+     */
+    private $rgt;
+
+    /**
+     * @ORM\Column(type="integer", length=2, nullable=true)
+     */
+    private $level;
+
+    /**
+     * @ORM\Column(type="integer", length=8, nullable=true)
+     */
+    private $iconId;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $url;
+
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=false)
+     */
+    private $position;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="mainmenu")
+     * @ORM\JoinColumn(name="iconId", referencedColumnName="id")
+     */
+    private $mainMenuIcon;
+    
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
+}

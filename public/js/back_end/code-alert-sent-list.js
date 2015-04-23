@@ -46,7 +46,7 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
             "aoColumns" : [
                 {
                     "fnRender" : function(obj) {
-                        return id = obj.aData.id;
+                        return id = obj.aData[0];
                     },
                     "bVisible":    false ,
                     "bSortable" : false,
@@ -55,9 +55,9 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
                {
                 "fnRender" : function(obj) {
                     var tag = "";
-                    tag ="<p editId='" + obj.aData.id + 
+                    tag ="<p editId='" + obj.aData[0].id + 
                     "' class='editId word-wrap-without-margin-widget store-offer'><a href='/admin/offer/editoffer/id/"+
-                    obj.aData.id +"'>"+obj.aData.shop.name + " - "+obj.aData.title+"</a></p>";
+                    obj.aData[0].id +"'>"+obj.aData[0].shopOffers.name + " - "+obj.aData[0].title+"</a></p>";
                     return tag;
                 },
                 "bSearchable" : true,
@@ -66,7 +66,7 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
                {
                     "fnRender" : function(obj) {
                         var tag = "";
-                        if(obj.aData.id){
+                        if(obj.aData[0]){
                             tag = obj.aData.visitors;
                         } 
                         return tag; 
@@ -76,7 +76,7 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
                    },
                 {
                     "fnRender" : function(obj) {
-                        var html = "<a href='javascript:void(0);' onclick='moveToTrash("+obj.aData.id+");'>"+__("Delete")+ "</a>";
+                        var html = "<a href='javascript:void(0);' onclick='moveToTrash("+obj.aData[0].id+");'>"+__("Delete")+ "</a>";
                         return html;
                     },
                     "bSearchable" : false,

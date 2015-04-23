@@ -520,13 +520,13 @@ function getShopDetail(value){
 						});	
 					});		
 					
-					var catCount = data[0].category.length;
 					
-					for(var i=0 ; i< catCount ; i++ ){
+					
+					
 						// Add class by Er.kundal for select catg of shop
-						jQuery("#categoryBtn-"+data[0].category[i].id).addClass('btn-primary');
-						jQuery("input#category-" + data[0].category[i].id).attr('checked' , 'checked');
-					}
+						jQuery("#categoryBtn-"+data[0].categoryId).addClass('btn-primary');
+						jQuery("input#category-" + data[0].categoryId).attr('checked' , 'checked');
+
 					
 					if(data[0].notes=='' && data[0].affname == '' && data[0].accountManagerName=='') {
 						jQuery('#aboutShopDiv').hide();
@@ -1522,8 +1522,8 @@ function validateMenu(){
 			ignore: ".ignore, :hidden",
 			//afterReset  : resetBorders,
 			errorPlacement : function(error, element) {
-				element.parent("div").prev("div")
-						.html(error);
+				/*element.parent("div").prev("div")
+						.html(error);*/
 			},
 		rules : {
 			label : {

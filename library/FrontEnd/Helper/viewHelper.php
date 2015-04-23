@@ -41,13 +41,13 @@ EOD;
         $shopCouponCodes = '';
         switch (strtolower($type)) {
             case 'expired':
-                $shopCouponCodes = Offer::getExpiredOffers($type, $limit, $shopId);
+                $shopCouponCodes = \KC\Repository\Offer::getExpiredOffers($type, $limit, $shopId);
                 break;
             case 'similarstoresandsimilarcategoriesoffers':
-                $shopCouponCodes = Offer::similarStoresAndSimilarCategoriesOffers($type, $limit, $shopId);
+                $shopCouponCodes = \KC\Repository\Offer::similarStoresAndSimilarCategoriesOffers($type, $limit, $shopId);
                 break;
             case 'latestupdates':
-                $shopCouponCodes = Offer::getLatestUpdates($type, $limit, $shopId);
+                $shopCouponCodes = \KC\Repository\Offer::getLatestUpdates($type, $limit, $shopId);
                 break;
             default:
                 break;
@@ -67,7 +67,7 @@ EOD;
             $permalink = $permalinkWithoutQueryString[0];
         }
         if (LOCALE!='en') {
-            $frontEndControllers = Zend_Controller_Front::getInstance();
+            $frontEndControllers = \Zend_Controller_Front::getInstance();
             $frontEndControllerDirectory = $frontEndControllers->getControllerDirectory();
             $moduleNames = array_keys($frontEndControllerDirectory);
             $moduleNameOrPermalink = explode('/', $permalink);
@@ -78,16 +78,10 @@ EOD;
         }
         return rtrim($permalink, '/');
     }
-
-    public static function generateShopMoneySavingGuideArticle($slug, $limit, $articleId)
-    {
-        $ShopMoneySavingGuideArticle = MoneySaving::generateShopMoneySavingGuideArticle($slug, $limit, $articleId);
-        return $ShopMoneySavingGuideArticle;
-    }
     
     public static function getFooterData()
     {
-        return Footer::getFooter();
+        return \KC\Repository\Footer::getFooter();
     }
 
     public static function getHeadMeta($headMetaValue)
@@ -99,24 +93,26 @@ EOD;
             $site_name = "Flipit.com";
         }
         $locale = LOCALE != '' ? '/'.LOCALE : '';
-        $chainLocale = Website::getWebsiteDetails('', strtolower($site_name).$locale);
-        $ogCustomLocale = explode('_', $chainLocale['chain']);
+        $chainLocale = \KC\Repository\Website::getWebsiteDetails('', strtolower($site_name).$locale);
+        $chainLocale = !empty($chainLocale[0]) ? $chainLocale[0] : '';
+        $chainLocaleChain = !empty($chainLocale['chain']) ? $chainLocale['chain'] : '';
+        $ogCustomLocale = explode('_', $chainLocaleChain);
         $ogCustomLocale = isset($ogCustomLocale[1]) ? $ogCustomLocale[1] : $ogCustomLocale[0];
         $ogLocale = !empty($chainLocale) && $chainLocale['chain'] != '' ?
             strtolower($ogCustomLocale) : $headMetaValue->facebookLocale;
 
         $socialMediaValue =
             array(
-                'og:title'=>FrontEnd_Helper_viewHelper::replaceStringVariable($headMetaValue->facebookTitle),
+                'og:title'=>self::replaceStringVariable($headMetaValue->facebookTitle),
                 'og:type'=>'website',
                 'og:url'=> $headMetaValue->facebookShareUrl,
-                'og:description'=>FrontEnd_Helper_viewHelper::replaceStringVariable(
+                'og:description'=>self::replaceStringVariable(
                     $headMetaValue->facebookDescription
                 ),
                 'og:locale'=>$ogLocale,
                 'og:image'=>$headMetaValue->facebookImage,
                 'og:site_name'=>$site_name,
-                'twitter:description'=>FrontEnd_Helper_viewHelper::replaceStringVariable(
+                'twitter:description'=>self::replaceStringVariable(
                     $headMetaValue->twitterDescription
                 ),
                 'twitter:site'=>$site_name
@@ -147,7 +143,7 @@ EOD;
         $paginationRange = 3
     ) {
         $currentPageNumber = !empty($paginationParameter['page']) ? $paginationParameter['page'] : '1';
-        $pagination = Zend_Paginator::factory($totalRecordsForPagination);
+        $pagination = \Zend_Paginator::factory($totalRecordsForPagination);
         $pagination->setCurrentPageNumber($currentPageNumber);
         $pagination->setItemCountPerPage($itemCountPerPage);
         $pagination->setPageRange($paginationRange);
@@ -156,7 +152,7 @@ EOD;
 
     public static function getPagnation($pageCount, $currentPage, $redirector, $pagesInRange, $nextPage)
     {
-        $requestUri = Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_URI');
+        $requestUri = \Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_URI');
         $permalink = ltrim($requestUri, '/');
         $permalink = rtrim($permalink, '/');
         $permalinkWithoutQueryString = explode('?', $permalink);
@@ -190,7 +186,7 @@ EOD;
             $permalink = $permalink;
         endif;
         $permalinkAfterQueryString = explode('?', $permalink);
-        $view = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view;
+        $view = \Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view;
         $view->headLink(array('rel' => 'canonical', 'href' => HTTP_PATH . strtolower($canocalUrl)));
         if ($pageCount > 1) :
             if ($currentPage < 9) :
@@ -253,6 +249,8 @@ EOD;
         } else {
             $functionToBeCached = call_user_func_array($relatedFunction['function'], $relatedFunction['parameters']);
         }
+
+
         $cacheStatusByKey = self::checkCacheStatusByKey($dataKey);
         if ($cacheStatusByKey) {
             if ($replaceStringArrayCheck == '1') {
@@ -293,14 +291,14 @@ EOD;
         $artcileExistsOrNot = "false";
         switch (strtolower($eventType)) {
             case 'onclick':
-                if (ArticleViewCount::getArticleClick($articleId, $clientIp) == 0) {
-                    ArticleViewCount::saveArticleClick($articleId, $clientIp);
+                if (\KC\Repository\ArticleViewCount::getArticleClick($articleId, $clientIp) == 0) {
+                    \KC\Repository\ArticleViewCount::saveArticleClick($articleId, $clientIp);
                     $artcileExistsOrNot = "true";
                 }
                 break;
             case 'onload':
-                if (ArticleViewCount::getArticleOnload($articleId, $clientIp) == 0) {
-                    ArticleViewCount::saveArticleOnLoad($articleId, $clientIp);
+                if (\KC\Repository\ArticleViewCount::getArticleOnload($articleId, $clientIp) == 0) {
+                    \KC\Repository\ArticleViewCount::saveArticleOnLoad($articleId, $clientIp);
                     $artcileExistsOrNot = "true";
                 }
                 break;
@@ -315,14 +313,14 @@ EOD;
         $resultStatus = "false";
         switch (strtolower($eventType)) {
             case 'onclick':
-                if (ShopViewCount::getShopClick($shopId, $clientIp) == 0) {
-                    ShopViewCount::getSaveShopClick($shopId, $clientIp);
+                if (\KC\Repository\ShopViewCount::getShopClick($shopId, $clientIp) == 0) {
+                    \KC\Repository\ShopViewCount::getSaveShopClick($shopId, $clientIp);
                     $resultStatus = "true";
                 }
                 break;
             case 'onload':
-                if (ShopViewCount::getShopOnload($shopId, $clientIp) == 0) {
-                    ShopViewCount::getSaveShopOnload($shopId, $clientIp);
+                if (\KC\Repository\ShopViewCount::getShopOnload($shopId, $clientIp) == 0) {
+                    \KC\Repository\ShopViewCount::getSaveShopOnload($shopId, $clientIp);
                     $resultStatus = "true";
                 }
                 break;
@@ -337,10 +335,10 @@ EOD;
         $resultStatus = "false";
         switch (strtolower($eventType)) {
             case 'onclick':
-                if (ViewCount::getOfferClick($offerId, $clientIp) == 0) {
-                    ViewCount::saveOfferClick($offerId, $clientIp);
-                    ViewCount::updateCacheValueForOfferViewCount($offerId);
-                    $varnishObj = new Varnish();
+                if (\KC\Repository\ViewCount::getOfferClick($offerId, $clientIp) == 0) {
+                    \KC\Repository\ViewCount::saveOfferClick($offerId, $clientIp);
+                    \KC\Repository\ViewCount::updateCacheValueForOfferViewCount($offerId);
+                    $varnishObj = new \KC\Repository\Varnish();
                     $varnishObj->addUrl(HTTP_PATH_LOCALE . 'offer/offer-view-count?offerId='. $offerId);
                     $resultStatus = "true";
                 }
@@ -356,7 +354,7 @@ EOD;
         $stores = '';
         switch (strtolower($storeType)) {
             case 'popular':
-                $stores = Shop::getPopularStores($limit);
+                $stores = \KC\Repository\Shop::getPopularStores($limit);
                 break;
             default:
                 break;
@@ -366,8 +364,8 @@ EOD;
 
     public static function getRealIpAddress()
     {
-        $clientIp = Zend_Controller_Front::getInstance()->getRequest()->getServer('HTTP_CLIENT_IP');
-        $httpXForwardedFor = Zend_Controller_Front::getInstance()->getRequest()->getServer('HTTP_X_FORWARDED_FOR');
+        $clientIp = \Zend_Controller_Front::getInstance()->getRequest()->getServer('HTTP_CLIENT_IP');
+        $httpXForwardedFor = \Zend_Controller_Front::getInstance()->getRequest()->getServer('HTTP_X_FORWARDED_FOR');
 
         if (!empty($clientIp)) {
             $clientIpAddress = $clientIp;
@@ -375,7 +373,7 @@ EOD;
             $ipRange = $httpXForwardedFor;
             $clientIpAddress = current(array_slice(explode(",", $ipRange), 0, 1));
         } else {
-            $clientIpAddress = Zend_Controller_Front::getInstance()->getRequest()->getServer('REMOTE_ADDR');
+            $clientIpAddress = \Zend_Controller_Front::getInstance()->getRequest()->getServer('REMOTE_ADDR');
         }
         return $clientIpAddress;
     }
@@ -397,7 +395,7 @@ EOD;
 
     public static function getSplashInformation()
     {
-        $splash = new Splash();
+        $splash = new \KC\Repository\Splash();
         return $splash->getSplashInformation();
     }
 
@@ -406,7 +404,7 @@ EOD;
         $countryName = '';
         if(!empty($locale)) :
             $locale = $locale == 'en' ? 'nl' : $locale;
-            $locale = new Zend_Locale(strtoupper($locale));
+            $locale = new \Zend_Locale(strtoupper($locale));
             $countries = $locale->getTranslationList('Territory', 'en');
             $countryName = ($countries[$locale->getRegion()]);
         endif;
@@ -427,15 +425,15 @@ EOD;
         }
 
         $facebookShareUrl = $permaLink != '' ? HTTP_PATH_LOCALE . $permaLink : rtrim(HTTP_PATH_LOCALE, '/');
-        $currentObject->view->headTitle(FrontEnd_Helper_viewHelper::replaceStringVariable($metaTitle));
+        $currentObject->view->headTitle(\FrontEnd_Helper_viewHelper::replaceStringVariable($metaTitle));
         $currentObject->view->headMeta()->setName(
             'description',
-            FrontEnd_Helper_viewHelper::replaceStringVariable($metaDescription)
+            \FrontEnd_Helper_viewHelper::replaceStringVariable($metaDescription)
         );
-        $currentObject->view->facebookTitle = FrontEnd_Helper_viewHelper::replaceStringVariable($title);
+        $currentObject->view->facebookTitle = \FrontEnd_Helper_viewHelper::replaceStringVariable($title);
         $currentObject->view->facebookShareUrl = $facebookShareUrl;
         $currentObject->view->facebookImage = $image;
-        $currentObject->view->facebookDescription = FrontEnd_Helper_viewHelper::replaceStringVariable(
+        $currentObject->view->facebookDescription = \FrontEnd_Helper_viewHelper::replaceStringVariable(
             $metaDescription
         );
         if (LOCALE == '') {
@@ -444,7 +442,7 @@ EOD;
             $facebookLocale = LOCALE;
         }
         $currentObject->view->facebookLocale = $facebookLocale;
-        $currentObject->view->twitterDescription = FrontEnd_Helper_viewHelper::replaceStringVariable(
+        $currentObject->view->twitterDescription = \FrontEnd_Helper_viewHelper::replaceStringVariable(
             $metaDescription
         );
         if (isset($customHeader)) {
@@ -456,28 +454,28 @@ EOD;
    
     public static function __link($variable)
     {
-        $trans = Zend_Registry::get('Zend_Translate');
+        $trans = \Zend_Registry::get('Zend_Translate');
         $variable = $trans->translate(_($variable));
         return $variable;
     }
 
     public static function __form($variable)
     {
-        $trans = Zend_Registry::get('Zend_Translate');
+        $trans = \Zend_Registry::get('Zend_Translate');
         $variable = $trans->translate(_($variable));
         return $variable;
     }
 
     public static function __email($variable)
     {
-        $trans = Zend_Registry::get('Zend_Translate');
+        $trans = \Zend_Registry::get('Zend_Translate');
         $variable = $trans->translate(_($variable));
         return $variable;
     }
 
     public static function __translate($variable)
     {
-        $translation = new Transl8_View_Helper_Translate();
+        $translation = new \Transl8_View_Helper_Translate();
         $variable = $translation->translate($variable);
         return $variable;
     }
@@ -485,7 +483,7 @@ EOD;
     public static function getWebsiteLocales($frontend = '')
     {
         $locales = '';
-        $websites = Website::getAllWebsites();
+        $websites = \KC\Repository\Website::getAllWebsites();
         foreach ($websites as $website) {
             $spiltWebsite  = explode('/', $website['name']);
             $locale = isset($spiltWebsite[1]) ? $spiltWebsite[1] : "nl";
@@ -504,7 +502,7 @@ EOD;
 
     public static function getAllCountriesByLocaleNames($frontend = '')
     {
-        $localesList = Zend_Locale::getLocaleList();
+        $localesList = \Zend_Locale::getLocaleList();
         $websiteLocales = self::getWebsiteLocales($frontend);
 
         foreach ($localesList as $localeIndex => $localeValue) {
@@ -512,7 +510,7 @@ EOD;
             $websiteLocale = isset($localeName[1]) ? $localeName[1] : '';
             
             if (array_key_exists($websiteLocale, $websiteLocales)) {
-                $locale = new Zend_Locale($localeIndex);
+                $locale = new \Zend_Locale($localeIndex);
                 $countries = $locale->getTranslationList('Territory', 'en');
                 if ($frontend == 'true') {
                     $countriesWithLocales[strtolower($localeName[1])] = ($countries[$locale->getRegion()]);
@@ -536,13 +534,13 @@ EOD;
     {
         switch (strtolower($type)) {
             case 'all':
-                $shopData = Offer::getAllOfferOnShop($shopId);
+                $shopData = \KC\Repository\Offer::getAllOfferOnShop($shopId);
                 break;
             case 'topsixoffers':
-                $shopData = Offer::getAllOfferOnShop($shopId, $limit, false, false, true);
+                $shopData = \KC\Repository\Offer::getAllOfferOnShop($shopId, $limit, false, false, true);
                 break;
             case 'popular':
-                $shopData = Offer::commongetpopularOffers($type, $limit, $shopId, $userId);
+                $shopData = \KC\Repository\Offer::commongetpopularOffers($type, $limit, $shopId, $userId);
                 break;
             default:
                 break;
@@ -554,7 +552,7 @@ EOD;
     {
         $key = $key. '_' .LOCALE;
         $flag = false;
-        $cache = Zend_Registry::get('cache');
+        $cache = \Zend_Registry::get('cache');
         if (($result = $cache->load($key)) === false) {
             $flag = true;
         }
@@ -564,7 +562,7 @@ EOD;
     public static function getFromCacheByKey($key)
     {
         $key = $key. '_' .LOCALE;
-        $cache = Zend_Registry::get('cache');
+        $cache = \Zend_Registry::get('cache');
         $cache = $cache->load($key);
         return $cache;
     }
@@ -572,20 +570,20 @@ EOD;
     public static function setInCache($key, $data)
     {
         $key = $key. '_' .LOCALE;
-        $cache = Zend_Registry::get('cache');
+        $cache = \Zend_Registry::get('cache');
         $cache->save($data, $key);
     }
 
     public static function clearCacheByKeyOrAll($key)
     {
-        $cache = Zend_Registry::get('cache');
+        $cache = \Zend_Registry::get('cache');
         if ($key=='all') {
             $cache->clean();
         } else {
-            if (! Zend_Registry::get('db_locale')) {
+            if (! \Zend_Registry::get('db_locale')) {
                 $locale = LOCALE;
             } else {
-                $locale  = Zend_Registry::get('db_locale') == 'en' ? '' : Zend_Registry::get('db_locale');
+                $locale  = \Zend_Registry::get('db_locale') == 'en' ? '' : \Zend_Registry::get('db_locale');
             }
             $key = $key. '_' .$locale;
             $cache->remove($key);
@@ -597,7 +595,7 @@ EOD;
 
     public static function getallrelatedshopsid($shopId)
     {
-        $data = Offer::commongetallrelatedshopsid($shopId);
+        $data = \KC\Repository\Offer::commongetallrelatedshopsid($shopId);
         return $data;
     }
 
@@ -621,41 +619,42 @@ EOD;
     {
         switch ($offertype) {
             case "popular":
-                $result = PopularCode::gethomePopularvoucherCode($limit);
+                $result = \KC\Repository\PopularCode::gethomePopularvoucherCode($limit);
                 break;
             case "newest":
-                $result = PopularVouchercodes::getNewstoffer($limit);
+                $result = \KC\Repository\PopularVouchercodes::getNewstoffer($limit);
                 break;
             case "category":
-                $result = Category::getPopularCategories($limit);
-                break;
-            case "specialList":
-                $result = $data = SpecialList::getfronendsplpage($limit);
+                $result = \KC\Repository\Category::getPopularCategories($limit);
                 break;
             case "moneySaving":
-                $result = Articles::getmoneySavingArticles($limit);
+                $result = \KC\Repository\Articles::getAllArticles($limit);
                 break;
             case "asseenin":
-                $result = SeenIn::getSeenInContent();
+                $result = \KC\Repository\SeenIn::getSeenInContent();
                 break;
             case "about":
                 $status = 1;
-                $result = About::getAboutContent($status);
+                $result = \KC\Repository\About::getAboutContent($status);
                 break;
         }
         return $result;
     }
-
-    public static function getAuthorId($offerId)
+    public static function objectToArray($obj)
     {
-        $userId = Doctrine_Query::create()
-        ->select('o.authorId')
-        ->from("Offer o")
-        ->where("o.id =".$offerId)
-        ->fetchArray();
-        return $userId;
+        if (is_object($obj)) {
+            $obj = (array) $obj;
+        }
+        if (is_array($obj)) {
+            $new = array();
+            foreach ($obj as $key => $val) {
+                $new[$key] = self::objectToArray($val);
+            }
+        } else {
+            $new = $obj;
+        }
+        return $new;
     }
-
     public static function replaceKeyword(&$item, $key)
     {
         $item = str_replace(
@@ -670,6 +669,8 @@ EOD;
 
     public static function replaceStringArray($originalArray)
     {
+        
+        $originalArray = self::objectToArray($originalArray);
         $obj = new self();
         array_walk_recursive($originalArray, array($obj, 'replaceKeyword'));
         return $originalArray;
@@ -680,11 +681,11 @@ EOD;
         $variable = str_replace(
             array('[month]', '[year]', '[day]', '[offers]', '[coupons]', '[accounts]', '[visitors]', '[shops]'),
             array(CURRENT_MONTH, CURRENT_YEAR, CURRENT_DAY,
-            Dashboard::getDashboardValueToDispaly("total_no_of_offers"),
-            Dashboard::getDashboardValueToDispaly("total_no_of_shops_online_code"),
-            Dashboard::getDashboardValueToDispaly("total_no_members"),
-            Dashboard::getDashboardValueToDispaly("total_no_members"),
-            Dashboard::getDashboardValueToDispaly("total_no_of_shops_online_code")),
+            \KC\Repository\Dashboard::getDashboardValueToDispaly("total_no_of_offers"),
+            \KC\Repository\Dashboard::getDashboardValueToDispaly("total_no_of_shops_online_code"),
+            \KC\Repository\Dashboard::getDashboardValueToDispaly("total_no_members"),
+            \KC\Repository\Dashboard::getDashboardValueToDispaly("total_no_members"),
+            \KC\Repository\Dashboard::getDashboardValueToDispaly("total_no_of_shops_online_code")),
             $variable
         );
         return $variable;
@@ -711,15 +712,25 @@ EOD;
 
     public static function getDbConnectionDetails()
     {
-        foreach (Doctrine_Manager::getInstance()->getConnections() as $connection) {
-            $dbConnection = $connection->getOptions();
-            preg_match('/host=(.*);/', $dbConnection['dsn'], $host);
+        $application = new \Zend_Application(
+            APPLICATION_ENV,
+            APPLICATION_PATH . '/configs/application.ini'
+        );
+
+        // bootstrap doctrine
+        //$application->getBootstrap()->bootstrap('doctrine');
+        $doctrineConnections = $application->getBootstrap()->getOptions('doctrine');
+        foreach ($doctrineConnections['doctrine'] as $connection) {
+            $dbConnection = $connection;
         }
-        $splitDbName = explode('=', $dbConnection['dsn']);
-        $dbName = $splitDbName[2];
-        $dbUserName = $dbConnection['username'];
-        $dbUserPassword = $dbConnection['password'];
-        $dbHost = $host[1];
+        $splitDbName = explode('//', $dbConnection);
+        $splitDbName = explode('/', $splitDbName[1]);
+        $dbName = $splitDbName[1];
+        $splitDbPasswordAndHost = explode(':', $splitDbName[0]);
+        $splitDbPassword = explode('@', $splitDbPasswordAndHost[1]);
+        $dbUserName = $splitDbPasswordAndHost[0];
+        $dbUserPassword = $splitDbPassword[0];
+        $dbHost = $splitDbPassword[1];
         $mysqlConnection = mysqli_connect($dbHost, $dbUserName, $dbUserPassword, $dbName);
         return $mysqlConnection;
     }
@@ -727,12 +738,13 @@ EOD;
     public static function fillupTopCodeWithNewest($offers, $number)
     {
         if (count($offers) < $number) {
+            $offers = array();
             $additionalCodes = $number - count($offers);
-            $additionalTopVouchercodes = Offer::getCommonNewestOffers('newest', $additionalCodes);
+            $additionalTopVouchercodes = \KC\Repository\Offer::getCommonNewestOffers('newest', $additionalCodes);
             foreach ($additionalTopVouchercodes as $additionalTopVouchercodekey => $additionalTopVouchercodevalue) {
                 $offers[] = array(
-                    'id'=> $additionalTopVouchercodevalue['shop']['id'],
-                    'permalink' => $additionalTopVouchercodevalue['shop']['permalink'],
+                    'id'=> $additionalTopVouchercodevalue['shopId'],
+                    'permalink' => $additionalTopVouchercodevalue['permalink'],
                     'offer' => $additionalTopVouchercodevalue
                 );
             }
@@ -757,7 +769,7 @@ EOD;
         $newsLetterHeaderImage = '',
         $newsLetterFooterImage = ''
     ) {
-        $basePath = new Zend_View();
+        $basePath = new \Zend_View();
         $basePath->setBasePath(APPLICATION_PATH . '/views/');
         $content = array(
             'name'    => 'content',
@@ -770,18 +782,19 @@ EOD;
                     'pathConstants' => $pathConstants,
                     'codeAlert' => $codeAlert,
                     'mandrillNewsletterSubject' => $mandrillNewsletterSubject,
-                    'newsLetterHeaderImage' => $newsLetterHeaderImage
+                    'newsLetterHeaderImage' => $newsLetterHeaderImage,
+                    'testStatus' => 'doc2'
                 )
             )
         );
         sort($mandrillUsersList);
         sort($recipientMetaData);
         sort($mandrillMergeVars);
-        $mandrillUsersLists  = array_chunk($mandrillUsersList, 500);
-        $recipientMetaData   = array_chunk($recipientMetaData, 500);
-        $mandrillMergeVars    = array_chunk($mandrillMergeVars, 500);
+        $mandrillUsersLists = array_chunk($mandrillUsersList, 500);
+        $recipientMetaData = array_chunk($recipientMetaData, 500);
+        $mandrillMergeVars = array_chunk($mandrillMergeVars, 500);
         foreach ($mandrillUsersLists as $mandrillUsersKey => $mandrillUsersEmailList) {
-            $mailer = new FrontEnd_Helper_Mailer($pathConstants);
+            $mailer = new \FrontEnd_Helper_Mailer($pathConstants);
             $mailer->send(
                 $mandrillSenderName,
                 $mandrillSenderEmailAddress,
@@ -802,13 +815,13 @@ EOD;
 
     public static function top10Xml($feedCheck = false)
     {
-        $zendTranslate = Zend_Registry::get('Zend_Translate');
-        $domainName ='http://'.Zend_Controller_Front::getInstance()->getRequest()->getServer('HTTP_HOST');
-        $topVouchercodes = PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(10);
+        $zendTranslate = \Zend_Registry::get('Zend_Translate');
+        $domainName ='http://'.\Zend_Controller_Front::getInstance()->getRequest()->getServer('HTTP_HOST');
+        $topVouchercodes = \KC\Repository\PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(10);
         $topVouchercodes = self::fillupTopCodeWithNewest($topVouchercodes, 10);
         $xmlTitle =  $zendTranslate->translate('Kortingscode.nl populairste kortingscodes');
         $xmlDescription  = $zendTranslate->translate('Populairste kortingscodes');
-        $xml = new XMLWriter();
+        $xml = new \XMLWriter();
         $xml->openURI('php://output');
         $xml->startDocument('1.0');
         $xml->setIndent(2);
@@ -831,13 +844,13 @@ EOD;
         foreach ($topVouchercodes as $offer) {
             $top10Offers = $offer['offer'];
             $xml->startElement("item");
-            $xml->writeElement($shopName, $top10Offers['shop']['name']);
+            $xml->writeElement($shopName, $top10Offers['shopName']);
             if (mb_strlen($top10Offers['title'], 'UTF-8') > 42) {
                 $xml->writeElement($description, mb_substr($top10Offers['title'], 0, 42, 'UTF-8')."...");
             } else {
                 $xml->writeElement($description, $top10Offers['title']);
             }
-            $xml->writeElement('link', $domainName . '/' . $top10Offers['shop']['permaLink']);
+            $xml->writeElement('link', $domainName . '/' . $top10Offers['permalink']);
             $xml->endElement();
         }
         if ($feedCheck == false) {
@@ -864,7 +877,7 @@ EOD;
 
     public static function getPagePermalink()
     {
-        $pagePermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $pagePermalink = ltrim(\Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $explodedPagePermalink = explode('/', $pagePermalink);
 
         if (LOCALE != '') {
@@ -884,11 +897,11 @@ EOD;
 
     public static function redirectAddToFavouriteShop()
     {
-        $favouriteShopIdFromSession = new Zend_Session_Namespace('favouriteShopId');
+        $favouriteShopIdFromSession = new \Zend_Session_Namespace('favouriteShopId');
         if (isset($favouriteShopIdFromSession->favouriteShopId)) {
             header(
                 'location:'.HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='
-                .FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten').'&shopId='
+                .\FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten').'&shopId='
                 . $favouriteShopIdFromSession->favouriteShopId
             );
             exit();
@@ -905,15 +918,15 @@ EOD;
     public static function setErrorPageParameters($currentObject)
     {
         $currentObject->getResponse()->setHttpResponseCode(404);
-        $currentObject->view->popularShops = Shop::getPopularStores(12);
-        $websitesWithLocales = self::getWebsitesLocales(Website::getAllWebsites());
+        $currentObject->view->popularShops = \KC\Repository\Shop::getPopularStores(12);
+        $websitesWithLocales = self::getWebsitesLocales(\KC\Repository\Website::getAllWebsites());
         $currentObject->view->flipitLocales = $websitesWithLocales;
     }
 
     public static function renderFlipitErrorPage()
     {
         $flipitViewPath = APPLICATION_PATH . '/modules/flipit/views/';
-        $flipitErrorViewPath = new Zend_View();
+        $flipitErrorViewPath = new \Zend_View();
         $flipitErrorViewPath->setBasePath($flipitViewPath);
         return $flipitErrorViewPath;
     }
@@ -956,6 +969,20 @@ EOD;
         return $cacheKey;
     }
 
+    public function sortNamesByOrder($unSortedNames, $order)
+    {
+        $sortedNames = array();
+        if ($order == 'asc') {
+            asort($unSortedNames);
+        } else {
+            rsort($unSortedNames);
+        }
+        foreach ($unSortedNames as $val) {
+            $sortedNames[] = $val;
+        }
+        return  $sortedNames;
+    }
+	
     public static function getPermalinkAfterRemovingSpecialCharacterAndReplacedWithHyphen($keyword)
     {
         $keyword = preg_replace("/[\/\&_~,`@!(){}:'*+^%#$?#.=-]/", "-", $keyword);
@@ -1058,6 +1085,17 @@ EOD;
         $currentDateFormation = $currentYear.'-'.$currentMonth.'-'.$currentDay;
         return $currentDateFormation;
     }
+
+    public static function getCategories($categories)
+    {
+        $categoryRemoveIndex = '';
+        foreach ($categories as $category) {
+            $category[0]['totalCoupons']  = $category['totalCoupons'];
+            $categoryRemoveIndex[] = $category[0];
+        }
+        return $categoryRemoveIndex;
+    }
+
     public static function getTwoReasons($reasons)
     {
         foreach ($reasons as $reason) {

@@ -3,14 +3,14 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
 {
     public function start()
     {
-        setcookie('passCache', '1', time() + 3600*8, '/');        
+        setcookie('passCache', '1', time() + 3600*8, '/');
 
         $storeUrl             = $this->getRequest()->getParam('storeUrl', false);
         $linkValidationHash   = $this->getRequest()->getParam('hash', false);
         $shopID               = $this->getRequest()->getParam('shopID', false);
 
         $session        = new Zend_Session_Namespace('Branding');
-        $shopBranding   = Shop::getShopBranding($shopID);
+        $shopBranding   = \KC\Repository\Shop::getShopBranding($shopID);
 
         if (!empty($shopBranding)) {
             $session->data = $shopBranding;
@@ -66,7 +66,7 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
         }
 
         if (empty($_POST['preview'])) {
-            $shop =  Doctrine_Core::getTable("Shop")->find($_POST['shop_id']);
+            $shop =  \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $_POST['shop_id']);
             if (empty($_POST['reset'])) {
                 $shop->brandingcss =  serialize($session->data);
                 $redirectUrl = self::stop();
@@ -74,7 +74,8 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
                 $shop->brandingcss  = null;
                 $session->data = $this->defaultStyles();
             }
-            $shop->save();
+            \Zend_Registry::get('emLocale')->persist($shop);
+            \Zend_Registry::get('emLocale')->flush();
         }
         return $redirectUrl;
     }

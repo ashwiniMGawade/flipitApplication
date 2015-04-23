@@ -31,7 +31,7 @@ class updateUsersName
     defined('LIBRARY_PATH')
     || define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
 
-    defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
+    defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine1');
 
     // Define application environment
     defined('APPLICATION_ENV')

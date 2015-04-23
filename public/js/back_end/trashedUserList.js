@@ -150,30 +150,22 @@ function getUserListFromTrash(searchtext,role) {
 							{
 
 								"fnRender" : function(obj) {
-
 									var imgSrc = "";
-									//alert(obj.aData.path);
-									if (obj.aData.ppname == null || obj.aData.ppname=='' || obj.aData.ppname==undefined) {
-
-												imgSrc = HOST_PATH_PUBLIC
-												+ "/images/back_end/user-avtar.jpg";
-
+									if (obj.aData.profileimage == null || obj.aData.profileimage=='' || obj.aData.profileimage==undefined) {
+									    imgSrc = HTTP_PATH_CDN
+											+ "/images/user-avtar.jpg";
 									} else {
-
-										var image = obj.aData.path
-												+ "thum_"
-												+ obj.aData.ppname;
-										imgSrc = HOST_PATH_PUBLIC + image;
-
+										var image = obj.aData.profileimage.path
+											+ obj.aData.profileimage.name;
+										imgSrc = HTTP_PATH_CDN + image;
 									}
-									var name = "<span class='word-wrap-nocolor-username'>" + ucfirst(obj.aData.firstName) + "</span>" ;
-									+ " "
-											+ ucfirst(obj.aData.lastName);
-									var html = "<div editId='" + obj.aData.id + "' class='grid-img'><img src='"
-											+ imgSrc
-											+ "'/></div>" +	name;
-									return html;
-
+									var name = "<span class='word-wrap-username'>" + ucfirst(obj.aData.firstName)
+											+ " "
+											+ ucfirst(obj.aData.lastName) + "</span>" ;
+									var html = "<div editId='" + obj.aData.id + "' class='grid-img'>"
+	                                        + "<a href='javascript:void(0);'><img src='" + imgSrc + "'/></a></div>" 
+	                                        + "<a href='javascript:void(0);'>" + name + "</a>";
+									return  html;
 								},
 								
 								"bSortable" : true
@@ -192,7 +184,7 @@ function getUserListFromTrash(searchtext,role) {
 									
 									"fnRender" : function(obj) {
 
-										return role =    obj.aData.role;
+										return role =    obj.aData.users.name;
 
 									},
 									

@@ -17,7 +17,7 @@ class Admin_UserController extends Zend_Controller_Action
     public function preDispatch()
     {
         $params = $this->_getAllParams();
-        if (!Auth_StaffAdapter::hasIdentity()) {
+        if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
@@ -58,7 +58,7 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function init()
     {
-        BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
     }
     /**
      * set the basic hidden field in user list and add new user
@@ -66,29 +66,33 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function indexAction()
     {
-        $u = Auth_StaffAdapter::getIdentity();
+       // echo "<pre>";
+       //  print_r(KC\Repository\RouteRedirect::getRedirect(array('role'=>1, "searchtext"=>'k')));
+       // die('END');
+
+        $u = \Auth_StaffAdapter::getIdentity();
         $this->view->id = $u->id;
-        $this->view->role = $u->roleId;
-        $this->view->roles = Role::createUserPermission($u->roleId);
+        $this->view->role = $u->users->id;
+        $this->view->roles = KC\Repository\Role::createUserPermission($u->users->id);
         //get flashes
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages();
         $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
         $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
-     }
+    }
     /**
      * add user form
      * @author kkumar
      */
     public function adduserAction()
     {
-        $u = Auth_StaffAdapter::getIdentity();
+        $u = \Auth_StaffAdapter::getIdentity();
         $this->view->id = $u->id;
-        $this->view->role = $u->roleId;
-        $this->view->roles = Role::createUserPermission($u->roleId);
-        $categoryList =  Category::getCategoryList();
+        $this->view->role = $u->users->id;
+        $this->view->roles = KC\Repository\Role::createUserPermission($u->users->id);
+        $categoryList =  KC\Repository\Category::getCategoryList();
         $this->view->categoryList = $categoryList['aaData'] ;
-        $this->view->countriesLocales = FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames();
+        $this->view->countriesLocales = \FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames();
     }
     /**
      * function use for getwebbsite acccording to useId and role
@@ -101,8 +105,10 @@ class Admin_UserController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout(true);
         $this->_helper->viewRenderer->setNoRender();
 
-        $data =  User::getWebsite($this->getRequest()->getParam('id'),
-                        $this->getRequest()->getParam('rolid'));
+        $data =  KC\Repository\User::getWebsite(
+            $this->getRequest()->getParam('id'),
+            $this->getRequest()->getParam('rolid')
+        );
         echo Zend_Json::encode($data);
         die();
     }
@@ -114,7 +120,7 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function gettopfiveAction()
     {
-        $ar = User::getTopFiveForAutoComp($this->getRequest()->getParam('for'),$this->getRequest()->getParam('text'));
+        $ar = KC\Repository\User::getTopFiveForAutoComp($this->getRequest()->getParam('for'),$this->getRequest()->getParam('text'));
         echo Zend_Json::encode($ar);
         die();
     }
@@ -127,7 +133,7 @@ class Admin_UserController extends Zend_Controller_Action
     public function getuserlistAction()
     {
         $params = $this->_getAllParams();
-        $userList =  User::getUserList($params);
+        $userList =  KC\Repository\User::getUserList($params);
         echo  $userList;
         die();
     }
@@ -142,29 +148,29 @@ class Admin_UserController extends Zend_Controller_Action
         $params = $this->getRequest()->getParams();
 
         $uesrPicName = '';
-        if(isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!=''){
-         $uesrPicName=self::uploadFile($_FILES['imageName']['name']);
+        if (isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!='') {
+            $uesrPicName = self::uploadFile($_FILES['imageName']['name']);
         }
 
         $flash = $this->_helper->getHelper('FlashMessenger');
         $result  = null;
         if ($params) {
-            $u = new User();
-            $result  = $u->addUser($params,$uesrPicName);
+            $u = new KC\Repository\User();
+            $result  = $u->addUser($params, $uesrPicName);
 
             # check if there is any error in user data
-            if(is_array($result) && isset($result['error'])) {
+            if (is_array($result) && isset($result['error'])) {
                     $message = $this->view->translate($result['message']);
-                    $flash->addMessage(array('error' => $message ));
+                    $flash->addMessage(array('error' => $message));
 
-                    $this->_redirect(HTTP_PATH.'admin/user/adduser' );
+                    $this->_redirect(HTTP_PATH.'admin/user/adduser');
 
                     exit;
             }
             //$userPermlink = $u->slug ;
             //self::updateVarnish($userPermlink);
         }
-        echo Zend_Json::encode(	$result);
+        echo Zend_Json::encode($result);
         $message = $this->view->translate('User has been created successfully.');
         $flash->addMessage(array('success' => $message ));
         $this->_redirect(HTTP_PATH.'admin/user');
@@ -179,7 +185,7 @@ class Admin_UserController extends Zend_Controller_Action
     public function uploadFile($imgName)
     {
         $uploadPath = "images/upload/";
-        $adapter = new Zend_File_Transfer_Adapter_Http();
+        $adapter = new \Zend_File_Transfer_Adapter_Http();
         $user_path = BASE_ROOT . $uploadPath;
         $img = $imgName;
 
@@ -204,21 +210,21 @@ class Admin_UserController extends Zend_Controller_Action
             $fname = $user_path . $orgName;
             //call function resize image
             $path = BASE_ROOT . $uploadPath . "thum_" . $orgName;
-            BackEnd_Helper_viewHelper::resizeImage($_FILES["imageName"], $orgName, 126, 90, $path);
+            \BackEnd_Helper_viewHelper::resizeImage($_FILES["imageName"], $orgName, 126, 90, $path);
 
             //call function resize image
             $path = BASE_ROOT . $uploadPath . "thum_medium_" . $orgName;
-            BackEnd_Helper_viewHelper::resizeImage($_FILES["imageName"], $orgName, 100, 85, $path);
+            \BackEnd_Helper_viewHelper::resizeImage($_FILES["imageName"], $orgName, 100, 85, $path);
 
             $path = BASE_ROOT . $uploadPath . "thum_large_" . $orgName;
-            BackEnd_Helper_viewHelper::resizeImage($_FILES["imageName"], $orgName, 132, 112, $path);
+            \BackEnd_Helper_viewHelper::resizeImage($_FILES["imageName"], $orgName, 132, 112, $path);
 
             $path = BASE_ROOT . $uploadPath . "thum_large_widget_" . $orgName;
-            BackEnd_Helper_viewHelper::resizeImage($_FILES["imageName"], $orgName, 142, 90, $path);
+            \BackEnd_Helper_viewHelper::resizeImage($_FILES["imageName"], $orgName, 142, 90, $path);
 
 
             $adapter->addFilter(
-                    new Zend_Filter_File_Rename(
+                    new \Zend_Filter_File_Rename(
                             array('target' => $fname,
                                     'overwrite' => true)), null, $file);
 
@@ -247,27 +253,27 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function deleteuserAction()
     {
+        $entityManagerUser  = \Zend_Registry::get('emUser');
         $id = $this->getRequest()->getParam('id');
-        if ($id && $id != Auth_StaffAdapter::getIdentity()->id ) {
-
-            $uDel = Doctrine_Core::getTable('User')->find($id);
-            $uDel->deleted  = true;
-            $uDel->save();
-            $User = new User();
-            $User->updateInDatabase($id, null, 0);
-            $userPermlink = $uDel->slug ;
+        if ($id && $id != \Auth_StaffAdapter::getIdentity()->id) {
+            $uDel = $entityManagerUser->find('KC\Entity\User', $id);
+            $uDel->deleted = true;
+            $entityManagerUser->persist($uDel);
+            $entityManagerUser->flush();
+            $User = new KC\Entity\User();
+            //$User->updateInDatabase($id, null, 0);
+            $userPermlink = $uDel->__get('slug');
             //self::updateVarnish($userPermlink);
 
         } else {
-
             $id = null;
         }
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $this->view->translate('User has been deleted successfully.');
         $flash->addMessage(array('success' => $message ));
         //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
 
         echo Zend_Json::encode($id);
         die();
@@ -294,15 +300,15 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function exportuserlistAction()
     {
-        $role =   Zend_Auth::getInstance()->getIdentity()->roleId;
+        $role =   \Zend_Auth::getInstance()->getIdentity()->roleId;
         //get data from database (user table)
                 $data = Doctrine_Query::create()
                 ->select('u.*,r.name as role,p.path as path,p.name as ppname')
                 ->from("User u")->leftJoin('u.profileimage p')
                 ->addSelect('(SELECT COUNT(us.createdby) FROM User us WHERE us.createdby = u.id)  as entries')
                 ->where('u.deleted=0')
-                ->addWhere('u.roleId >='.Auth_StaffAdapter::getIdentity()->roleId)
-                ->addWhere("u.id <>".Auth_StaffAdapter::getIdentity()->id)
+                ->addWhere('u.roleId >='.\Auth_StaffAdapter::getIdentity()->roleId)
+                ->addWhere("u.id <>".\Auth_StaffAdapter::getIdentity()->id)
                 ->leftJoin('u.role r')->orderBy("u.id DESC")->fetchArray();
         //CREATE A OBJECT OF PHPECEL CLASS
         $objPHPExcel = new PHPExcel();
@@ -409,7 +415,7 @@ class Admin_UserController extends Zend_Controller_Action
     public function uploadimageAction()
     {
         $uploadPath = "images/upload/";
-        $adapter = new Zend_File_Transfer_Adapter_Http();
+        $adapter = new \Zend_File_Transfer_Adapter_Http();
         $user_path = ROOT_PATH . $uploadPath;
         $img = $this->getRequest()->getParam('imageName');
 
@@ -432,16 +438,16 @@ class Admin_UserController extends Zend_Controller_Action
             $fname = $user_path . $orgName;
             //call function resize image
             $path = ROOT_PATH . $uploadPath . "thum_" . $orgName;
-            BackEnd_Helper_viewHelper::resizeImage($_FILES["files"], $orgName,
+            \BackEnd_Helper_viewHelper::resizeImage($_FILES["files"], $orgName,
                     126, 90, $path);
 
             //call function resize image
             $path = ROOT_PATH . $uploadPath . "thum_large" . $orgName;
-            BackEnd_Helper_viewHelper::resizeImage($_FILES["files"], $orgName,
+            \BackEnd_Helper_viewHelper::resizeImage($_FILES["files"], $orgName,
                     132, 95, $path);
 
             $adapter->addFilter(
-                            new Zend_Filter_File_Rename(
+                            new \Zend_Filter_File_Rename(
                                     array('target' => $fname,
                                             'overwrite' => true)), null, $file);
 
@@ -478,40 +484,34 @@ class Admin_UserController extends Zend_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         if ($id) {
+            $entityManagerUser  = \Zend_Registry::get('emUser');
+            $uRes  = $entityManagerUser->createQueryBuilder()
+                ->update('KC\Entity\User', 'u')
+                ->set('u.deleted', "0")
+                ->where('u.id ='.$id)
+                ->getQuery()->execute();
 
-            $uRes = Doctrine_Query::create()->update('User')
-                    ->set('deleted', '0')->where('id=' . $id);
-            $uRes  = $uRes->execute();
-
-            $fU = Doctrine_Core::getTable('User')->find($id);
+            $fU = \Zend_Registry::get('emUser')->find('KC\Entity\User', $id);
             $fullName = $fU->firstName . " " . $fU->lastName;
-
-            $User = new User();
+            $User = new \KC\Repository\User();
             $User->updateInDatabase($id, $fullName, 0);
-
-            # if a user is restored
-            if($uRes ) {
-
-                 $data =  Doctrine_Query::create()->select('u.slug')
-                                      ->from("User u")
-                                      ->where('u.id= ? ', $id)
-                                      ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
+            if ($uRes) {
+                $data =  Doctrine_Query::create()
+                    ->select('u.slug')
+                    ->from("User u")
+                    ->where('u.id= ? ', $id)
+                    ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
                 $userPermlink = $data['slug'] ;
                 //self::updateVarnish($userPermlink);
             }
-
         } else {
-
             $id = null;
         }
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $this->view->translate('User has been restored successfully.');
         $flash->addMessage(array('success' => $message ));
-        //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
-
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
         echo Zend_Json::encode($id);
         die();
     }
@@ -524,23 +524,26 @@ class Admin_UserController extends Zend_Controller_Action
     public function permanentdeleteAction()
     {
         $id = $this->getRequest()->getParam('id');
-
         if ($id) {
-
-            $User = new User();
+            $entityManagerUser  = \Zend_Registry::get('emUser');
+            $User = new \KC\Repository\User();
             $User->updateInDatabase($id, null, 1);
+            $u = \Zend_Registry::get('emUser')->find('KC\Entity\User', $id);
+            $del1 =\Zend_Registry::get('emUser')->createQueryBuilder()
+                ->delete('KC\Entity\refUserWebsite', 'r')
+                ->where('r.websiteUsers ='.$id)
+                ->getQuery()->execute();
 
-            $u = Doctrine_Core::getTable("User")->find($id);
-            $del1 = Doctrine_Query::create()->delete()
-                    ->from('refUserWebsite w')->where("w.userId=" . $id)
-                    ->execute();
-            $del = Doctrine_Query::create()->delete()->from('User u')
-                    ->where("u.id=" . $id)->execute();
+            $del = \Zend_Registry::get('emUser')->createQueryBuilder()
+                ->delete('KC\Entity\User', 'u')
+                ->where('u.id ='.$id)
+                ->getQuery()->execute();
 
-            if( (intval($u->profileImageId)) > 0) {
-
-                $del2 = Doctrine_Query::create()->delete()->from('ProfileImage i')
-                    ->where("i.id=" . $u->profileImageId)->execute();
+            if ((intval($u->profileimage->id)) > 0) {
+                $del = \Zend_Registry::get('emUser')->createQueryBuilder()
+                    ->delete('KC\Entity\ProfileImage', 'i')
+                    ->where('i.id ='. $u->profileimage->id)
+                    ->getQuery()->execute();
             }
 
         } else {
@@ -551,8 +554,8 @@ class Admin_UserController extends Zend_Controller_Action
         $message = $this->view->translate('User has been deleted permanentally.');
         $flash->addMessage(array('success' => $message ));
         //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
 
         echo Zend_Json::encode($id);
         die();
@@ -566,7 +569,7 @@ class Admin_UserController extends Zend_Controller_Action
     {
         // action body
         $params = $this->_getAllParams();
-        $trashUserList = User::getTrashUserList($params);
+        $trashUserList = \KC\Repository\User::getTrashUserList($params);
         echo $trashUserList;
         die();
     }
@@ -579,15 +582,12 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function checkuserAction()
     {
-        $u =  new User();
-        $cnt  = intval($u->checkDuplicateUser($this->_getParam('email')));
+        $u = KC\Repository\User::checkDuplicateUser($this->_getParam('email'));
+        $cnt  = intval($u);
 
-        if($cnt > 0) {
-
+        if ($cnt > 0) {
             echo Zend_Json::encode(false);
-
         } else {
-
             echo Zend_Json::encode(true);
         }
 
@@ -600,20 +600,20 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function edituserAction()
     {
+
      $id = intval($this->getRequest()->getParam('id'));
      $this->view->qstring = $_SERVER['QUERY_STRING'];
-     $this->view->countriesLocales = FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames();
-            //get category list from category table
-             $categoryList =  Category::getCategoryList() ;
-             //get favorites store of currect user(admin)
-             $favShop  = User::getUserFavouriteStores($id);
-             //get unterestng category of currecnt user(admin)
-             $intCat = User::getUserInterestingCat($id);
-
+     $this->view->countriesLocales = \FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames();
+	 $categoryList =  KC\Repository\Category::getCategoryList() ;
+	 //get favorites store of currect user(admin)
+	 $favShop  = KC\Repository\User::getUserFavouriteStores($id);
+	 //get unterestng category of currecnt user(admin)
+	 $intCat = KC\Repository\User::getUserInterestingCat($id);
+     //echo "<pre>";print_r($intCat);die;
      $catArray  = array();//array generate on key based
      foreach ($intCat as $categories){
 
-             $catArray[] = $categories['categoryId'];
+             $catArray[] = $categories['id'];
          }
          $this->view->catArray = '';
          if(isset($catArray) && count($catArray)>0){
@@ -625,18 +625,41 @@ class Admin_UserController extends Zend_Controller_Action
          $this->view->categoryList = $categoryList['aaData'] ;
          $this->view->favoritesShop = $favShop;
 
-         if($id > 0) {
+        $catArray  = array();//array generate on key based
+        foreach ($intCat as $categories) {
+            $catArray[] = $categories['category']['id'];
+        }
+        $this->view->catArray = '';
+        if (isset($catArray) && count($catArray)>0) {
+            $this->view->catArray =  $catArray  ;
+        }
+       
+        //pas value on phtml page
+        $this->view->categoryList = $categoryList['aaData'];
+        $this->view->favoritesShop = $favShop;
 
-            $u = Auth_StaffAdapter::getIdentity();
-            $data = Doctrine_Query::create()->select("u.* , w.id, pi.name,pi.path")
-                                            ->from('User u')
-                                            ->leftJoin("u.website w")
-                                            ->leftJoin("u.profileimage pi")
-                                            ->where("u.id = ?" , $id)
-                                            ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
-            $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
+        if ($id > 0) {
+            $u = \Auth_StaffAdapter::getIdentity();
+            $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
+            $query = $queryBuilder->select('u, rf, w, pi, r')
+                ->from('\KC\Entity\User', 'u')
+                ->leftJoin("u.profileimage", "pi")
+                ->leftJoin("u.users", "r")
+                ->leftJoin('u.refUserWebsite', 'rf')
+                ->leftJoin('rf.refUsersWebsite', 'w')
+                ->where($queryBuilder->expr()->eq('u.id', $id));
+            $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            //echo "<pre>";
+           // print_r($data);
+           // die();
+            $role =  Zend_Auth::getInstance()->getIdentity()->users->id;
 
-            if(($role=='3' || $role=='4') ||  $role > $data['roleId']  || $data['deleted']=='1' || $u->id==$id) {
+            if (($role=='3'
+                || $role=='4')
+                || $role > $data['users']['id']
+                || $data['users']['id'] == '1'
+                || $u->id == $id
+            ) {
 
                 $flash = $this->_helper->getHelper('FlashMessenger');
                 $message = $this->view->translate("You don't have permissions to edit this user.");
@@ -645,16 +668,18 @@ class Admin_UserController extends Zend_Controller_Action
             }
 
             $this->view->id = $u->id;
-            $this->view->roles = Role::createUserPermission($u->roleId);
-            $this->view->roleId = $data['roleId'];
+            $this->view->roles = KC\Repository\Role::createUserPermission($u->users->id);
+            $this->view->roleId = $data['users']['id'];
             $this->view->userId = $id;
             $this->view->userDetail = $data;
-            $this->view->role = $u->roleId;
+            $this->view->role = $u->users->id;
             $this->view->webAcess ='';
-            foreach($data['website'] as $key=>$value){
-                $this->view->webAcess.= $value['id'].',';
+
+       
+            foreach ($data['refUserWebsite'] as $key => $value) {
+                $this->view->webAcess.= $value['refUsersWebsite']['id'].',';
             }
-           $this->view->webAcess = rtrim($this->view->webAcess,',');
+            $this->view->webAcess = rtrim($this->view->webAcess, ',');
         }
         // echo Zend_Json::encode($data) ;
     }
@@ -678,25 +703,30 @@ class Admin_UserController extends Zend_Controller_Action
             if ($params) {
 
                 $uesrPicName = '';
-                if(isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!=''){
-                    $uesrPicName=self::uploadFile($_FILES['imageName']['name']);
+                if (isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!='') {
+                    $uesrPicName = self::uploadFile($_FILES['imageName']['name']);
                 }
 
-                $user = Doctrine_Core::getTable("User")->find($params['id']);
+                $entityManagerUser  = \Zend_Registry::get('emUser');
+                $repo = $entityManagerUser->getRepository('KC\Entity\User');
+                $user = $repo->find($params['id']);
                 $user->firstName = $params['firstName'];
                 $user->lastName = $params['lastName'];
-                $user->save();
-                $result = $user->update($params,$uesrPicName);
+                $entityManagerUser->persist($user);
+                $entityManagerUser->flush();
+
+                $u = new KC\Repository\User();
+                $result = $u->update($params, $uesrPicName);
 
                 $flash = $this->_helper->getHelper('FlashMessenger');
 
                 # check if there is any error in user data
-                if(is_array($result) && isset($result['error'])) {
+                if (is_array($result) && isset($result['error'])) {
 
                     $message = $this->view->translate($result['message']);
                     $flash->addMessage(array('error' => $message ));
 
-                    $this->_redirect(HTTP_PATH.'admin/user/edituser/id/' . trim($params['id']). '?'.$params['qString'] );
+                    $this->_redirect(HTTP_PATH.'admin/user/edituser/id/' . trim($params['id']). '?'.$params['qString']);
 
                     exit;
                 }
@@ -724,19 +754,15 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function validatepasswordAction()
     {
-            $params = $this->getRequest()->getParams();
-
-            $isValid = "Old password don't matched" ;
-
-            if(intval($params['id']) > 0 ) {
-
-                $user = Doctrine_Core::getTable("User")->find($params['id']);
-                $isValid = $user->validatePassword($params['oldPassword']);
-
-            }
-
-            echo Zend_Json::encode($isValid);
-            die();
+        $params = $this->getRequest()->getParams();
+        $isValid = "Old password don't matched" ;
+        if (intval($params['id']) > 0) {
+            $entityManagerUser  =\Zend_Registry::get('emUser');
+            $user = $entityManagerUser->find('KC\Entity\User', $params['id']);
+            $isValid = $user->validatePassword($params['oldPassword']);
+        }
+        echo Zend_Json::encode($isValid);
+        die();
     }
     /**
      * render profile with data
@@ -745,28 +771,28 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function profileAction()
     {
-        $id =  Auth_StaffAdapter::getIdentity()->id;
+        $id =  \Auth_StaffAdapter::getIdentity()->id;
 
-        $connUser = BackEnd_Helper_viewHelper::addConnection();
-        BackEnd_Helper_viewHelper::closeConnection($connUser);
-        $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
+        $connUser = \BackEnd_Helper_viewHelper::addConnection();
+        \BackEnd_Helper_viewHelper::closeConnection($connUser);
+        $connSite = \BackEnd_Helper_viewHelper::addConnectionSite();
         $this->view->countriesLocales = FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames();
             //get category list from category table
-            $categoryList =  Category::getCategoryList() ;
+            $categoryList =  \KC\Repository\Category::getCategoryList() ;
             //get favorites store of currect user(admin)
-            $favShop  = User::getUserFavouriteStores($id);
+            $favShop  = \KC\Repository\User::getUserFavouriteStores($id);
             //get unterestng category of currecnt user(admin)
-            $intCat = User::getUserInterestingCat($id);
+            $intCat = \KC\Repository\User::getUserInterestingCat($id);
             //print_r($favShop);
-        BackEnd_Helper_viewHelper::closeConnection($connSite);
+        \BackEnd_Helper_viewHelper::closeConnection($connSite);
         $connUser = BackEnd_Helper_viewHelper::addConnection();
         $catArray  = array();//array generate on key based
-        foreach ($intCat as $categories){
+        foreach ($intCat as $categories) {
 
-            $catArray[] = $categories['categoryId'];
+            $catArray[] = $categories['category']['id'];
         }
         $this->view->catArray = '';
-        if(isset($catArray) && count($catArray)>0){
+        if (isset($catArray) && count($catArray)>0) {
 
             $this->view->catArray =  $catArray  ;
         }
@@ -774,17 +800,22 @@ class Admin_UserController extends Zend_Controller_Action
         $this->view->categoryList = $categoryList['aaData'] ;
         $this->view->favoritesShop = $favShop;
 
-        $data = Doctrine_Query::create()->select("u.* ,pi.id, pi.name,pi.path")
-            ->from('User u')
-            ->leftJoin("u.profileimage pi")
-            ->where("u.id = ". $id)
-        ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
+       
         //$user = Doctrine_Core::getTable("User")->find($id);
         //echo "<pre>";
         //print_r($data);
         //die();
+        $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
+        $query = $queryBuilder->select('u, rf, w, pi, r')
+            ->from('\KC\Entity\User', 'u')
+            ->leftJoin("u.profileimage", "pi")
+            ->leftJoin("u.users", "r")
+            ->leftJoin('u.refUserWebsite', 'rf')
+            ->leftJoin('rf.refUsersWebsite', 'w')
+            ->where($queryBuilder->expr()->eq('u.id', $id));
+        $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-        $this->view->profile = $data ;
+        $this->view->profile = $data;
     }
 
     /**
@@ -800,29 +831,34 @@ class Admin_UserController extends Zend_Controller_Action
         if ($this->getRequest()->isPost()) {
 
             $params = $this->getRequest()->getParams();
-            $id = Auth_StaffAdapter::getIdentity()->id  ;
+            $id = \Auth_StaffAdapter::getIdentity()->id  ;
 
             if ($params) {
 
                 $uesrPicName = '';
-                if(isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!=''){
+                if (isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!='') {
                     $uesrPicName=self::uploadFile($_FILES['imageName']['name']);
                 }
 
-                $user = Doctrine_Core::getTable("User")->find($id);
+                $entityManagerUser  = \Zend_Registry::get('emUser');
+                $repo = $entityManagerUser->getRepository('KC\Entity\User');
+                $user = $repo->find($params['id']);
                 $user->firstName = $params['firstName'];
                 $user->lastName = $params['lastName'];
-                $user->save();
-                $result = $user->update($params, $uesrPicName, 'profileupdate');
+                $entityManagerUser->persist($user);
+                $entityManagerUser->flush();
+                
+                $u = new KC\Repository\User();
+                $result = $u->update($params, $uesrPicName, 'profileupdate');
 
                 $flash = $this->_helper->getHelper('FlashMessenger');
 
                 # check if there is any error in user data
-                if(is_array($result) && isset($result['error'])) {
+                if (is_array($result) && isset($result['error'])) {
 
                     $message = $this->view->translate($result['message']);
                     $flash->addMessage(array('error' => $message ));
-                }else {
+                } else {
 
                     $message = $this->view->translate("Profile has been updated successfully");
                     $flash->addMessage(array('success' => $message ));
@@ -844,7 +880,7 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function getrolesAction()
     {
-        $roles = User::getRoles();
+        $roles = KC\Repository\User::getRoles();
         echo Zend_Json::encode($roles);
         die();
     }
@@ -860,7 +896,7 @@ class Admin_UserController extends Zend_Controller_Action
         print_r($data);
         die("raman");
         //call to add offer function from model
-        $flag = User::addStoreInList($data);
+        $flag = KC\Repository\User::addStoreInList($data);
 
         echo Zend_Json::encode($flag);
         echo Zend_Json::encode($data);
@@ -875,7 +911,7 @@ class Admin_UserController extends Zend_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         //call model class function  id
-        User::deleteStore($id);
+        KC\Repository\User::deleteStore($id);
         //get popular code from database
         $data = User::getFavoriteStore();
         echo Zend_Json::encode($data);
@@ -888,16 +924,10 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function searchtoptenshopAction()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
-        $conn3 = BackEnd_Helper_viewHelper::addConnectionSite();//connection generate with second database
+        $srh = $this->getRequest()->getParam('keyword');
+        $selectedShop = $this->getRequest()->getParam('selectedShop');
+        $data = KC\Repository\User::searchTopTenStore($srh, $selectedShop);
 
-            $srh = $this->getRequest()->getParam('keyword');
-            $selectedShop = $this->getRequest()->getParam('selectedShop');
-            $data =User::searchTopTenStore($srh,$selectedShop);
-
-        BackEnd_Helper_viewHelper::closeConnection($conn3);
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();
 
         $ar = array();
         if (sizeof($data) > 0) {
@@ -918,7 +948,7 @@ class Admin_UserController extends Zend_Controller_Action
     public function checkstoreexistAction()
     {
         $name = $this->getRequest()->getParam('name');
-        $retVal = User::checkStoreExistOrNot($name);
+        $retVal = KC\Repository\User::checkStoreExistOrNot($name);
         echo Zend_Json::encode($retVal);
         die();
     }
@@ -932,10 +962,10 @@ class Admin_UserController extends Zend_Controller_Action
     public function updateVarnish($userPage)
     {
         // Add urls to refresh in Varnish
-        $varnishObj = new Varnish();
+        $varnishObj = new \KC\Repository\Varnish();
 
         # redatice page
-        $editor = FrontEnd_Helper_viewHelper::__link("link_redactie"). "/" ;
+        $editor = \FrontEnd_Helper_viewHelper::__link("link_redactie"). "/" ;
 
         #user page
         $userPage = $editor . $userPage ;
@@ -946,7 +976,7 @@ class Admin_UserController extends Zend_Controller_Action
 
     public function checkexportpasswordAction()
     {
-        $globalExportPassword =  new GlobalExportPassword();
+        $globalExportPassword =  new \KC\Repository\GlobalExportPassword();
         $globalExportPasswordCount = $globalExportPassword->checkPasswordForExport(
             $this->_getParam('password'),
             'shopExport'

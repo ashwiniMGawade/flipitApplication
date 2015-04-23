@@ -309,14 +309,14 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/ckeditor/" ; ?>" ;
                     </div>
 
                 	<?php
-                			$isScheduled = $this->data['0']['newletter_is_scheduled'] ;
-                			$sendDate = $isScheduled ?
-                							 date('m-d-Y', strtotime($this->data['0']['newletter_scheduled_time']))
-                							: date('m-d-Y');
+        			$isScheduled = $this->data['0']['newletter_is_scheduled'];
+        			$sendDate = $isScheduled ?
+						$this->data['0']['newletter_scheduled_time']->format('d-m-Y')
+						: date('m-d-Y');
 
-							$sendTime = isset($this->data['0']['newletter_is_scheduled'] )
-                						? date('H:i', strtotime($this->data['0']['newletter_scheduled_time']))
-                						: date('H:i:s');
+					$sendTime = isset($this->data['0']['newletter_is_scheduled'])
+						? $this->data['0']['newletter_scheduled_time']->format('H:i')
+						: date('H:i:s');
                 	?>
                 	<?php if($this->rights['rights'] ==  1 ) : ?>
 	       			<div class="mainpage-content-line mb10">

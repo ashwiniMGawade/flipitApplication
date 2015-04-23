@@ -9,18 +9,20 @@ class ErrorController extends Zend_Controller_Action
         $errors = $this->_getParam('error_handler');
         if (!$errors || !$errors instanceof ArrayObject) {
             $this->_helper->layout()->disableLayout();
-            FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
+            \FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
             $this->view->message = 'You have reached on error page';
             return;
         }
         switch ($errors->type) {
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
+            case \Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
+            case \Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
+            case \Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
 
                 $pagePermalink = $this->_helper->Error->getPageParmalink(ltrim($this->_request->getPathInfo(), '/'));
                 $pageNumber = $this->_helper->Error->getPageNumbering($pagePermalink);
                 $pageDetails = $this->getPageDetails($pagePermalink, $pageNumber);
+                $pageDetails = $pageDetails[0];
+                
                 if (isset($pageDetails['pageType']) && $pageDetails['pageType']=='default') {
                     if ($pageNumber > 0) {
                         $pageNumber = 10;
@@ -28,12 +30,12 @@ class ErrorController extends Zend_Controller_Action
                 }
                 if ($pageNumber >= 10) {
                     $this->_helper->layout()->disableLayout();
-                    FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
+                    \FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
                 }
                 if ($pageDetails) {
-                    if ($pageDetails['pageAttributeId'] == 2) {
+                    if ($pageDetails['page']['id'] == 2) {
                         $this->view->pageCssClass = 'faq-page';
-                    } else if (isset($pageDetails['pageAttributeId']) && $pageDetails['pageAttributeId'] == 1) {
+                    } else if (isset($pageDetails['page']['id']) && $pageDetails['page']['id'] == 1) {
                         $flashMessage = $this->_helper->getHelper('FlashMessenger');
                         $message = $flashMessage->getMessages();
                         $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] :'';
@@ -46,28 +48,30 @@ class ErrorController extends Zend_Controller_Action
                         $this->pagePermalink = end($this->pagePermalink);
                     }
                     if($pageDetails['pageType'] == 'default'):
-                        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($this->pagePermalink);
+                        $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($this->pagePermalink);
                     endif;
                     if ($pageDetails['customHeader']) {
                         $this->view->layout()->customHeader = "\n" . $pageDetails['customHeader'];
                     }
-                    $specialPageOffers = FrontEnd_Helper_viewHelper::
+
+                    $specialPageOffers = \FrontEnd_Helper_viewHelper::
                         getRequestedDataBySetGetCache(
-                            'error_specialPage'.$pageDetails->id.'_offers',
+                            'error_specialPage'.$pageDetails['id'].'_offers',
                             array(
-                                'function' => 'Offer::getSpecialPageOffers', 'parameters' => array($pageDetails)
+                                'function' => '\KC\Repository\Offer::getSpecialPageOffers',
+                                'parameters' => array($pageDetails)
                             ),
                             ''
                         );
                     $paginationNumber['page'] = $pageNumber;
-                    $specialOffersPaginator = FrontEnd_Helper_viewHelper::renderPagination(
+                    $specialOffersPaginator = \FrontEnd_Helper_viewHelper::renderPagination(
                         $specialPageOffers,
                         $paginationNumber,
                         20,
                         9
                     );
 
-                    $frontendViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+                    $frontendViewHelper = new \FrontEnd_Helper_SidebarWidgetFunctions();
                     $sidebarWidget = $frontendViewHelper->getSidebarWidget(
                         $sidebarParameters = array(),
                         rtrim($this->pagePermalink, '/')
@@ -79,12 +83,12 @@ class ErrorController extends Zend_Controller_Action
                     $this->view->matches = $pageNumber;
                     $this->view->page = $pageDetails;
                     $this->view->pageHeaderImage =
-                    FrontEnd_Helper_viewHelper::
+                    \FrontEnd_Helper_viewHelper::
                         getRequestedDataBySetGetCache(
-                            'page_header'.$pageDetails->id.'_image',
+                            'page_header'.$pageDetails['id'].'_image',
                             array(
-                                'function' => 'Logo::getPageLogo',
-                                'parameters' => array($pageDetails['pageHeaderImageId'])
+                                'function' => '\KC\Repository\Logo::getPageLogo',
+                                'parameters' => array($pageDetails['pageHeaderImageId']['id'])
                             ),
                             ''
                         );
@@ -94,23 +98,24 @@ class ErrorController extends Zend_Controller_Action
                     $this->view->pageMode = true;
                 } else {
                     $this->_helper->layout()->disableLayout();
-                    FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
+                    \FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
                 }
                 break;
             default:
                 $this->_helper->layout()->disableLayout();
                 $this->getResponse()->setHttpResponseCode(500);
-                $priority = Zend_Log::CRIT;
+                $priority = \Zend_Log::CRIT;
                 $this->view->message = 'Application error';
-                $this->view->popularShops = FrontEnd_Helper_viewHelper::
+                $this->view->popularShops = \FrontEnd_Helper_viewHelper::
                         getRequestedDataBySetGetCache(
                             '12_popularShops_list',
                             array(
-                                'function' => 'Shop::getPopularStores', 'parameters' => array(12)
+                                'function' => '\KC\Repository\Shop::getPopularStores', 'parameters' => array(12)
                             ),
                             ''
                         );
-                $this->view->flipitLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
+
+                $this->view->flipitLocales = \FrontEnd_Helper_viewHelper::getWebsitesLocales(KC\Repository\Website::getAllWebsites());
                 break;
         }
         if ($log = $this->getLog()) {
@@ -123,8 +128,8 @@ class ErrorController extends Zend_Controller_Action
 
         $largeSignUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget =
-            FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
-        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
+            \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
+        \FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
         $this->view->request   = $errors->request;
         $this->view->helper = $this->_helper ;
         $this->view->form = $largeSignUpForm;
@@ -156,10 +161,10 @@ class ErrorController extends Zend_Controller_Action
 
         if ($pagePermalink!='') {
             $this->pagePermalink = $pagePermalink;
-            $pagedata = Page::getPageDetailsInError(rtrim($pagePermalink, '/'));
+            $pageData = KC\Repository\Page::getPageDetailsInError(rtrim($pagePermalink, '/'));
         } else {
-            $pagedata= '';
+            $pageData= '';
         }
-        return $pagedata;
+        return $pageData;
     }
 }

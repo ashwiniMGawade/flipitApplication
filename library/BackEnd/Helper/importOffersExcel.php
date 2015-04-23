@@ -3,11 +3,11 @@ class BackEnd_Helper_importOffersExcel
 {
     public static function importExcelOffers($excelFile)
     {
+        defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine1');
         $objReader = PHPExcel_IOFactory::createReader('Excel2007');
         $objPHPExcel = $objReader->load($excelFile);
         $worksheet = $objPHPExcel->getActiveSheet();
         $excelData = array();
-        $offerList = new Doctrine_Collection('Offer');
         $offerCounter = 0;
         foreach ($worksheet->getRowIterator() as $row) {
             $cellIterator = $row->getCellIterator();
@@ -48,38 +48,42 @@ class BackEnd_Helper_importOffersExcel
                     && $offerEndDate != FrontEnd_Helper_viewHelper::__form('form_backend_End Date | DD-MM-YYYY (01-01-1970) | Required | Must be in future')
                 )
             ) {
-                $shopId = Shop::getShopIdByShopName($shopName);
+                $shopId = KC\Repository\Shop::getShopIdByShopName($shopName);
                 if (!empty($shopId)) {
                     $currentDate = date('Y-m-d');
                     $startDate = date('Y-m-d', strtotime($offerStartDate));
                     $endDate = date('Y-m-d', strtotime($offerEndDate));
                     if ($endDate >= $currentDate) {
-                        $offerList[$offerCounter]->title = $offerTitle;
-                        $offerList[$offerCounter]->shopId = $shopId;
-                        $offerList[$offerCounter]->discountType= !empty($offerCouponCode) ? 'CD' : 'SL';
-                        $offerList[$offerCounter]->Visability = !empty($offerVisibility) ? 'DE' : 'MEM';
-                        $offerList[$offerCounter]->extendedOffer = 0;
-                        $offerList[$offerCounter]->startDate = $startDate;
-                        $offerList[$offerCounter]->endDate = $endDate.' 23:59:00';
-                        $offerList[$offerCounter]->totalViewcount = !empty($offerClickouts) ? $offerClickouts : 0;
-                        $offerList[$offerCounter]->authorName = !empty($offerAuthorName) ? $offerAuthorName : 'Arthur Goldman';
-                        $offerList[$offerCounter]->couponCode = !empty($offerCouponCode) ? $offerCouponCode : '';
-                        $offerList[$offerCounter]->exclusiveCode = $offerExclusive == 1 ? 1 : 0;
-                        $offerList[$offerCounter]->editorPicks = $offerEditorPick == 1 ? 1 : 0;
-                        $offerList[$offerCounter]->userGenerated = 0;
-                        $offerList[$offerCounter]->offline = 0;
-                        $offerList[$offerCounter]->created_at = $currentDate;
-                        $offerList[$offerCounter]->refURL = !empty($offerDeeplink) ? $offerDeeplink : '';
-                        $offerList[$offerCounter]->tilesId = !empty($offerTileId) ? $offerTileId : '';
-                        $offerList[$offerCounter]->maxcode = 0;
-                        $offerList[$offerCounter]->deleted = 0;
-                        $offerList[$offerCounter]->maxlimit = 0;
-                        $offerList[$offerCounter]->updated_at = $currentDate;
+                        $offerList = new \KC\Entity\Offer();
+                        $entityManagerLocale = \Zend_Registry::get('emLocale');
+                        $offerList->title = $offerTitle;
+                        $offerList->shopOffers =  $entityManagerLocale->find('KC\Entity\Shop', $shopId);
+                        $offerList->discountType= !empty($offerCouponCode) ? 'CD' : 'SL';
+                        $offerList->Visability = !empty($offerVisibility) ? 'DE' : 'MEM';
+                        $offerList->extendedOffer = 0;
+                        $offerList->startDate = new \DateTime($startDate);
+                        $offerList->endDate = new \DateTime($endDate.' 23:59:00');
+                        $offerList->totalViewcount = !empty($offerClickouts) ? $offerClickouts : 0;
+                        $offerList->authorName = !empty($offerAuthorName) ? $offerAuthorName : 'Arthur Goldman';
+                        $offerList->couponCode = !empty($offerCouponCode) ? $offerCouponCode : '';
+                        $offerList->exclusiveCode = $offerExclusive == 1 ? 1 : 0;
+                        $offerList->editorPicks = $offerEditorPick == 1 ? 1 : 0;
+                        $offerList->userGenerated = 0;
+                        $offerList->offline = 0;
+                        $offerList->created_at = new \DateTime('now');
+                        $offerList->refURL = !empty($offerDeeplink) ? $offerDeeplink : '';
+                        $offerList->tilesId = !empty($offerTileId) ? $offerTileId : '';
+                        $offerList->maxcode = 0;
+                        $offerList->deleted = 0;
+                        $offerList->maxlimit = 0;
+                        $offerList->approved = true;
+                        $offerList->updated_at = new \DateTime('now');
                         $offerCounter++;
+                        $entityManagerLocale->persist($offerList);
+                        $entityManagerLocale->flush();
                     }
                 }
             }
-            $offerList->save();
             unlink($excelFile);
         }
         return $offerCounter;

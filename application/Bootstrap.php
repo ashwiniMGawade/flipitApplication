@@ -19,6 +19,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected $scriptName = '';
     protected $localeCookieData = '';
     public $frontController = null;
+    protected $em;
 
     public function _initRequest()
     {
@@ -104,15 +105,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         BootstrapConstantsFunctions::constantsForFacebookImageAndLocale();
     }
 
-    protected function _initDoctrine()
-    {
-        return BootstrapDoctrineConnectionFunctions::doctrineConnection(
-            $this->getOption('doctrine'),
-            $this->moduleDirectoryName,
-            $this->localeCookieData
-        );
-    }
-
     protected function _initAutoLoad()
     {
         $autoLoader = Zend_Loader_Autoloader::getInstance();
@@ -130,6 +122,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return $autoLoader;
     }
 
+    public function _initDoctrine()
+    {
+        return $localSiteDbConnection = BootstrapDoctrineConnectionFunctions::doctrineConnections(
+            $this->getOption('doctrine'),
+            $this->moduleDirectoryName,
+            $this->localeCookieData
+        );
+    }
+    
     public function _initTranslation()
     {
         BootstrapTranslationFunctions::setTranslationInZendRegistery(
@@ -174,7 +175,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->doctype('HTML5');
         $view->headMeta()->appendHttpEquiv('Content-type', 'text/html; charset=UTF-8');
     }
-
+   
     public function _initRouter()
     {
         $permalink = BootstrapRouterFunctions::getPermalink();
@@ -186,10 +187,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $matches = isset($matches[0]) ? $matches[0] : 0;
         if (intval($matches) > 0) {
             $permalink = explode('/'.$matches[0], $permalink);
-            $getPermalinkFromDb = RoutePermalink::getRoute($permalink[0]);
+            $getPermalinkFromDb = KC\Repository\RoutePermalink::getRoute($permalink[0]);
             $actualPermalink = $permalink[0];
         } else {
-            $getPermalinkFromDb = RoutePermalink::getRoute($permalink);
+            $getPermalinkFromDb = KC\Repository\RoutePermalink::getRoute($permalink);
             $actualPermalink = $permalink;
         }
         // check if permalink exists in route permalink table
@@ -204,7 +205,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
         self::setRoutersByRules($permalink, $httpScheme);
     }
-
+  
     public function setRoutersByRules($permalink, $httpScheme)
     {
         // for 301 redirections of old indexed pages

@@ -18,7 +18,7 @@ class TransController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
-        $translationModel = new Translations();
+        $translationModel = new \KC\Repository\Translations();
         $form = $this->getHelper('Transl8')->_createForm();
         $form->populate($this->getRequest()->getParams());
 
@@ -28,8 +28,8 @@ class TransController extends Zend_Controller_Action
             $translationKey = $formValues['translationKey'];
             $translationModel->saveTranslations($formValues);
 
-            if (Zend_Translate::hasCache()) {
-                Zend_Translate::clearCache();
+            if (\Zend_Translate::hasCache()) {
+                \Zend_Translate::clearCache();
             }
         }
     }
@@ -41,8 +41,8 @@ class TransController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
-        $session 	= new Zend_Session_Namespace('Transl8');
-        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        $session 	= new \Zend_Session_Namespace('Transl8');
+        $httpScheme = \FrontEnd_Helper_viewHelper::getServerNameScheme();
         $storeUrl 	= $this->_getParam('storeUrl', 'http://'.$httpScheme.'.flipit.com');
         $hash 		= $this->_getParam('hash', false);
 
@@ -73,16 +73,16 @@ class TransController extends Zend_Controller_Action
         self::writeTranslationsToCsv($localLanguageFilePath);
         self::writeCsvToS3($localLanguageFilePath);
 
-        $session = new Zend_Session_Namespace('Transl8');
+        $session = new \Zend_Session_Namespace('Transl8');
         $session->onlineTranslationActivated = false;
-        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        $httpScheme = \FrontEnd_Helper_viewHelper::getServerNameScheme();
         $this->_redirect('http://'.$httpScheme.'.flipit.com/admin');
     }
 
     protected function writeTranslationsToCsv($localLanguageFilePath)
     {
-        $csvWritableTranslations = Translations::getCsvWritableTranslations();
-        $csvWriter = new Application_Service_Infrastructure_Csv_Writer($localLanguageFilePath);
+        $csvWritableTranslations = \KC\Repository\Translations::getCsvWritableTranslations();
+        $csvWriter = new \Application_Service_Infrastructure_Csv_Writer($localLanguageFilePath);
         (!empty($csvWritableTranslations) ? $csvWriter->writeFromArray($csvWritableTranslations) : '');
     }
 
@@ -91,7 +91,7 @@ class TransController extends Zend_Controller_Action
         $cdnLanguageFilePath = '/public'
             .(LOCALE == '' ? '' : '/'.LOCALE)
             .'/language/translations.csv';
-        $cdnWriter = new Application_Service_Infrastructure_Cdn_Writer();
+        $cdnWriter = new \Application_Service_Infrastructure_Cdn_Writer();
         $cdnWriter->putFile($localLanguageFilePath, $cdnLanguageFilePath);
     }
 }

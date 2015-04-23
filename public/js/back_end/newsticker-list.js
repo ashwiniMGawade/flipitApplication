@@ -88,13 +88,15 @@ function getNewstickerList(iStart,iSortCol,iSortDir) {
 								{
 									"fnRender" : function(obj) {
 										var editLink = "";
-										if(obj.aData.startdate != null){
-										var tag = '';	
-										var dat = obj.aData.startdate;
-										tag = dat.split("-");
-										tag2 = tag[2];
-										var da = tag2.split(" ");
-										editLink = (da[0]+'-'+tag[1]+'-'+tag[0]);
+										if(obj.aData.startdate != null) {
+											if(obj.aData.startdate.date != null){
+											var tag = '';	
+											var dat = obj.aData.startdate.date;
+											tag = dat.split("-");
+											tag2 = tag[2];
+											var da = tag2.split(" ");
+											editLink = (da[0]+'-'+tag[1]+'-'+tag[0]);
+											}
 										}
 										//editLink = '<p editId="' + obj.aData.date + '" class="editId colorAsLink word-wrap-without-margin-offer">'  + obj.aData.date +'</p>';
 										return "<a href='javascript:void(0);'>" + editLink + "</a>";
