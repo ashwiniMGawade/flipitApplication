@@ -816,20 +816,20 @@ function getShopDetail(value){
 				dataType : "json",
 				success : function(data) {
 					if (data != null) {
-						
-						if(data.notes != '' && data.notes != null){
+
+						if(data[0].notes != '' && data[0].notes != null){
 
 							jQuery('#aboutShopNoteDiv').show();
-							jQuery('#shopNotes').html(data.notes).addClass('alert-error');;
+							jQuery('#shopNotes').html(data[0].notes).addClass('alert-error');;
 						} else {
 							jQuery('#shopNotes').html('&nbsp;')
 												  .removeClass('alert-error');
 						}
 
 
-						if(data.affname != '' && data.affname != null){
+						if(data[0].affname != '' && data[0].affname != null){
 							jQuery('#aboutNertworkDiv').show();
-							jQuery('#shopNetwork').html(data.affname).addClass('alert-error');;
+							jQuery('#shopNetwork').html(data[0].affname).addClass('alert-error');;
 						} else {
 							jQuery('#shopNetwork').html('&nbsp;')
 												  .removeClass('alert-error');
