@@ -40,7 +40,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
         $removeDuplicateRecords = array();
         if (sizeof($searchResults) > 0) {
             foreach ($searchResults as $shop) {
-                $id =  $shop['shop']['id'];
+                $id =  $shop['id'];
                 if (isset($removeDuplicateRecords[$id])) {
                     $removeDuplicateRecords[$id] = $id;
                 } else {
