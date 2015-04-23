@@ -372,15 +372,14 @@ class Page Extends \KC\Entity\Page
                 ->setParameter(1, $id)
                 ->where('page.id = ?1');
             $pageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
             $query = $queryBuilder->select('routePermalink')
                 ->from('KC\Entity\RoutePermalink', 'routePermalink')
-                ->setParameter(1, $pageDetails['permalink'])
+                ->setParameter(1, $pageDetails[0]['permalink'])
                 ->where('routePermalink.permalink = ?1');
             $routePermalinkDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             if (!empty($routePermalinkDetails)) {
                 $query = $queryBuilder->delete('KC\Entity\RoutePermalink', 'routePermalink')
-                    ->setParameter(1, $pageDetails['permalink'])
+                    ->setParameter(1, $pageDetails[0]['permalink'])
                     ->where('routePermalink.permalink = ?1')
                     ->getQuery();
                 $query->execute();
