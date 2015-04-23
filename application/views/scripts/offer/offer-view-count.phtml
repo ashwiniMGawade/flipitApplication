@@ -1,18 +1,16 @@
 <?php
-if (!empty($this->offerViewCount)) {
+if (!empty($this->offerViewCount['viewCount']) && !empty($this->offerViewCount['offsetType'])) {
     ?>
-    <li>
-        <span class="used text-info">
-            <span class="text-over">
-            <?php 
-            $offsetType = 
-            	$this->offerViewCount['offsetType'] == 'day' 
-            	? 'used today' 
-            	: 'used this '. $this->offerViewCount['offsetType'];
-            echo $this->offerViewCount['viewCount'] . " " . FrontEnd_Helper_viewHelper::__translate($offsetType);?>
-            </span>
+    <span class="used text-info">
+        <span class="text-over">
+        <?php 
+        $offsetType = 
+            $this->offerViewCount['offsetType'] == 'day' 
+                ? 'used today' 
+                : 'used this '. $this->offerViewCount['offsetType'];
+        echo $this->offerViewCount['viewCount'] . " " . FrontEnd_Helper_viewHelper::__translate($offsetType);?>
         </span>
-    </li>
+    </span>
     <?php
 }
 ?>

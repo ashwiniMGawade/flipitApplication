@@ -95,8 +95,11 @@ foreach ($this->offers as $offer) {
                     }
                     ?>
                 </div>
+    <?php
+    $couponClass = isset($offer->discountType) && $offer->discountType != 'CD' ? 'btn-blue-wrapper' : '';
+    ?>
                 <div class="buttons offer-teaser-button-wrapper" id="offerButton<?php echo $offer->id ;?>">
-                    <div class="offer-teaser-button-wrapper-inner">
+                    <div class="offer-teaser-button-wrapper-inner <?php echo $couponClass; ?>">
     <?php
     $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shopOffers['permaLink'];
 
@@ -177,20 +180,51 @@ foreach ($this->offers as $offer) {
             <div class="info">
                <ul>
                     <?php
-                    $showUsedCode = false; 
+                    $offerOptionsWithPriorityClasses = $offerPartial->getOffersOptionsByPriority(
+                        $offerBottomTextForExclusiveOrSocialOrEditor,
+                        $offerBottomDaysTillExpireText,
+                        $offerBottomViewAllShopsLink,
+                        $offerBottomExtendedLink
+                    ); 
+                    $offerBottomTextForExclusiveOrSocialOrEditor = 
+                        isset($offerOptionsWithPriorityClasses['offerBottomTextForExclusiveOrSocialOrEditor']) 
+                        ? $offerOptionsWithPriorityClasses['offerBottomTextForExclusiveOrSocialOrEditor'] 
+                        : '';
+                    $offerBottomDaysTillExpireText = 
+                        isset($offerOptionsWithPriorityClasses['offerBottomDaysTillExpireText']) 
+                        ? $offerOptionsWithPriorityClasses['offerBottomDaysTillExpireText'] 
+                        : '';
+                    $offerBottomViewAllShopsLink = 
+                        isset($offerOptionsWithPriorityClasses['offerBottomViewAllShopsLink']) 
+                        ? $offerOptionsWithPriorityClasses['offerBottomViewAllShopsLink'] 
+                        : '';
+                    $offerBottomExtendedLink = 
+                        isset($offerOptionsWithPriorityClasses['offerBottomExtendedLink']) 
+                        ? $offerOptionsWithPriorityClasses['offerBottomExtendedLink'] 
+                        : '';
+                    $numberOfCodeUsed = 
+                        isset($offerOptionsWithPriorityClasses['numberOfCodeUsed']) 
+                        ? $offerOptionsWithPriorityClasses['numberOfCodeUsed'] 
+                        : '';
+
                     echo $offerBottomTextForExclusiveOrSocialOrEditor
                         .$offerBottomDaysTillExpireText
                         .$offerBottomViewAllShopsLink;
+                    $showUsedCode = false;
                     if (empty($offerBottomDaysTillExpireText) || empty($offerBottomViewAllShopsLink)) {
                         echo $offerBottomExtendedLink;
                         if (empty($offerBottomExtendedLink)) {
                            $showUsedCode = true;
                         }
                     } 
-                    if ( (empty($offerBottomDaysTillExpireText) && empty($offerBottomViewAllShopsLink)) || $showUsedCode)
+                    if ((empty($offerBottomDaysTillExpireText) && empty($offerBottomViewAllShopsLink)) || $showUsedCode)
                     {
                         if ($offer->discountType == "CD") {
-                            echo $this->esi($this->locale.'offer/offer-view-count?offerId='.$offer->id);
+                            if (!empty($numberOfCodeUsed)) {
+                                echo $numberOfCodeUsed;
+                                echo $this->esi($esiLocale.'offer/offer-view-count?offerId='.$offer->id);
+                                echo "</li>";
+                            }
                         }
                     }
                     ?>

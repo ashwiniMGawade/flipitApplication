@@ -21,7 +21,7 @@ foreach ($this->popularStores as $popularStore) :
         $popularStoreImage =
     		PUBLIC_PATH_CDN
     		.ltrim($popularStore['popularshops']['logo']['path'], "/")
-    		."thum_medium_".$popularStore['popularshops']['logo']['name'];
+    		."thum_small_".$popularStore['popularshops']['logo']['name'];
     else :
         $popularStoreImage = HTTP_PATH . "public/images/NoImage/storeLogo100_50.jpg";
     endif;
@@ -29,7 +29,7 @@ foreach ($this->popularStores as $popularStore) :
     echo '<li>
         <a href="'.HTTP_PATH_LOCALE.$popularStore['popularshops']['permaLink'].'">
             <img src="' . $popularStoreImage . '"  
-            alt="' .$popularStore['popularshops']['name'] . '" title="' .$popularStore['popularshops']['name'] . '" width="100" height="50" />
+            alt="' .$popularStore['popularshops']['name'] . '" title="' .$popularStore['popularshops']['name'] . '" />
         </a>
     </li>';
 endforeach;

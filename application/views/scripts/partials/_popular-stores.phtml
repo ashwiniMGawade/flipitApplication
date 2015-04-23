@@ -1,9 +1,13 @@
-<article class="section section-2">
+<header class='heading-box text-shop'>
     <h2>
-    <?php echo $this->headerText;?>
+        <?php echo $this->headerText;?>
     </h2>
-    <ul class="shops shops-2">
-        <?php
+</header>
+<section class="section">
+    <div class='block'>
+        <div class='holder'>
+        <ul class="shops">
+            <?php
         foreach ($this->popularStores as $popularStore)
         { 
             $popularStore = isset($popularStore['popularshops'])
@@ -16,10 +20,12 @@
             echo '<li>
                 <a href="' .HTTP_PATH_LOCALE. $popularStore['permaLink']. '">
                     <img src="' . $popularStoreImage . '"  
-                    alt="' .$popularStore['name'] . '"  width="122" title="' .$popularStore['name'] . '" />
+                    alt="' .$popularStore['name'] . '" title="' .$popularStore['name'] . '" />
                 </a>
             </li>';
         }
         ?>
-    </ul>
-</article>
+        </ul>
+    </div>
+    </div>
+</section>

@@ -31,6 +31,7 @@ body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
 }
 .offer-teaser-button-wrapper-inner {
     position: relative;
+    a { text-decoration: none; }
 }
 .offer-teaser-button {
     position: relative;
@@ -113,14 +114,14 @@ body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
     background: linear-gradient(38deg,#48A5E1 0,#48A5E1 49%,rgba(202,235,137,0) 50%,rgba(255,255,255,0) 100%) 0 6px no-repeat;
 }
 .offer-teaser-button-wrapper:hover {
-.blue-corner {
-    background-position: 0 0;
-    -webkit-transform: rotateZ(15deg) translate(-9px,-3px) scaleX(1);
-    -ms-transform: rotateZ(15deg) translate(-9px,-3px) scaleX(1);
-    transform: rotateZ(15deg) translate(-9px,-3px) scaleX(1);
-}
-.show-code {
-    color:#3d3d3d;
+    .blue-corner {
+        background-position: 0 0;
+        -webkit-transform: rotateZ(15deg) translate(-9px,-3px) scaleX(1);
+        -ms-transform: rotateZ(15deg) translate(-9px,-3px) scaleX(1);
+        transform: rotateZ(15deg) translate(-9px,-3px) scaleX(1);
+    }
+    .show-code {
+        color:#3d3d3d;
     }
 }
 
@@ -789,7 +790,7 @@ div.box a.remove-fovourite.blue{
             background:#fef6ec;
         }
         .offer-holder:hover{
-            background:#fef6ec;
+            background:#fff2d9;
             border: none;
             padding: 30px;
         }
@@ -3913,7 +3914,6 @@ span.pop{
         }
     }
     #sidebar{
-        display: none;
         padding:0;
         .block{
             background:@white-color;
@@ -4265,7 +4265,6 @@ span.pop{
         }
     }
     #sidebar{
-        display: block;
         .block,.block.block-2{
             padding:10px;
         }

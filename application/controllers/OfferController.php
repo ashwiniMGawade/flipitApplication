@@ -54,7 +54,7 @@ class OfferController extends Zend_Controller_Action
         );
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'10_popularShops_list',
-            (array)array('function' => '\KC\Repository\Shop::getAllPopularStores', 'parameters' => array(10)
+            (array)array('function' => '\KC\Repository\Shop::getAllPopularStores', 'parameters' => array(12)
             ),
             ''
         );

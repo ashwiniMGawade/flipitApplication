@@ -8,7 +8,7 @@ class BackEnd_Helper_importOffersExcel
         $objPHPExcel = $objReader->load($excelFile);
         $worksheet = $objPHPExcel->getActiveSheet();
         $excelData = array();
-        $dataSaved = 0;
+        $offerCounter = 0;
         foreach ($worksheet->getRowIterator() as $row) {
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
@@ -78,7 +78,7 @@ class BackEnd_Helper_importOffersExcel
                         $offerList->maxlimit = 0;
                         $offerList->approved = true;
                         $offerList->updated_at = new \DateTime('now');
-                        $dataSaved++;
+                        $offerCounter++;
                         $entityManagerLocale->persist($offerList);
                         $entityManagerLocale->flush();
                     }
@@ -86,6 +86,6 @@ class BackEnd_Helper_importOffersExcel
             }
             unlink($excelFile);
         }
-        return $dataSaved;
+        return $offerCounter;
     }
 }

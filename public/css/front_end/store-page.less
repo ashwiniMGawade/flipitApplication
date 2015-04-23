@@ -315,9 +315,7 @@
             text-decoration: none !important;
             color: #333;
             margin-bottom: 7px !important;
-            .link{
-                color: #333;
-            }
+            a, &:hover { text-decoration: none !important; }
         }
         .info-area{
             overflow: hidden;
@@ -383,8 +381,6 @@
                             float: left;
                             padding: 1px 10px 4px;
                             white-space: nowrap;
-                            text-overflow: ellipsis;
-                            max-width: 29%;
                             @media only screen and (max-width: 979px){
                                 padding: 0 6px 3px;
                             }
@@ -396,14 +392,11 @@
                                 display: block !important;
                             }
                             &:last-child{
-                                max-width: 40%;
                                 @media only screen and (max-width: 767px){
-                                    max-width: 100%;
                                 }
                             }
                             &:nth-child(2){
                                 @media only screen and (max-width: 479px){
-                                    max-width: 40%;
                                 }
                             }
                             .img-author{
@@ -415,7 +408,6 @@
                             .name{
                                 display: inline-block;
                                 vertical-align: top;
-                                max-width: 75%;
                                 .text-blue {
                                     color: #308cc9;
                                 }
