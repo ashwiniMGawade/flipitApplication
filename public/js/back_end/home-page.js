@@ -158,7 +158,7 @@ function removetab(id){
 
 		$.ajax({
 			   type: "POST",
-			   url: HOST_PATH + "admin/homepage/deleteabout/",
+			   url: HOST_PATH + "admin/homepage/deleteabout",
 			   // dataType: 'json',
 			   cache: true,
 			   data: "removeid="+id+"&randval="+Math.random(),

@@ -8,7 +8,6 @@ class About Extends \KC\Entity\About
     {
         $aboutContent =  false;
         $aboutDetail = self::getAboutContentFromSettings();
-
         if ($aboutDetail) {
             if ($aboutStatus == 1) {
                 $aboutStatus = array("1");
@@ -68,7 +67,9 @@ class About Extends \KC\Entity\About
         //$settings->name =  constant(  "Settings::" . $name ) ;
         $settings->name = $name;
         $settings->value = $id;
-       
+        $settings->created_at = new \DateTime('now');
+        $settings->updated_at = new \DateTime('now');
+        $settings->deleted = 0;
         $entityManagerLocale->persist($settings);
         $entityManagerLocale->flush();
         //call cache function
@@ -91,21 +92,22 @@ class About Extends \KC\Entity\About
             } else {
 
                 # new object
-                $about = new KC\Entity\About();
+                $about = new \KC\Entity\About();
             }
-
             $about->title = @$params['title'][$a] ?
                                 \BackEnd_Helper_viewHelper::stripSlashesFromString($params['title'][$a]) : null;
             $about->content = @$params['content'][$a] ?
                                 \BackEnd_Helper_viewHelper::stripSlashesFromString($params['content'][$a]) : null;
-            $about->status = @$params['status'][$a] ? 1 : 0 ;
+            $about->status = @$params['status'][$a] ? 1 : 0;
+            $about->created_at = new \DateTime('now');
+            $about->updated_at = new \DateTime('now');
             $entityManagerLocale = \Zend_Registry::get('emLocale');
             $entityManagerLocale->persist($about);
+            $entityManagerLocale->flush();
             if (! $retVal) {
                 self::newAboutSetting($about->id, "about_".$i);
             }
-            $entityManagerLocale->flush();
         }
-         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_about_page');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_about_page');
     }
 }
