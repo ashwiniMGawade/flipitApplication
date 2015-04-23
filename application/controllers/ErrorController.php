@@ -63,7 +63,6 @@ class ErrorController extends Zend_Controller_Action
                             ),
                             ''
                         );
-
                     $paginationNumber['page'] = $pageNumber;
                     $specialOffersPaginator = \FrontEnd_Helper_viewHelper::renderPagination(
                         $specialPageOffers,

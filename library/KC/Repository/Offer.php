@@ -462,6 +462,7 @@ class Offer Extends \KC\Entity\Offer
             \KC\Repository\SpecialPagesOffers::getSpecialPageOffersByPageIdForFrontEnd($specialPage['id']),
             $pageRelatedOffersAndPageConstraintsOffers
         );
+
         $specialOffers = self::getDataForOfferPhtml($pageRelatedOffersAndPageConstraintsOffers, $specialPage);
         return $specialOffers;
     }
@@ -486,9 +487,9 @@ class Offer Extends \KC\Entity\Offer
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('s.logo', 'l')
         ->leftJoin('o.offertermandcondition', 'terms')
-        ->where('op.offers ='. $pageId)
-        ->andWhere('o.endDate >'."'".$currentDate."'")
-        ->andWhere('o.startDate <='."'".$currentDate."'")
+        ->where($entityManagerUser->expr()->eq('op.offers', $entityManagerUser->expr()->literal($pageId)))
+        ->andWhere($entityManagerUser->expr()->gt('o.endDate', $entityManagerUser->expr()->literal($currentDate)))
+        ->andWhere($entityManagerUser->expr()->lte('o.startDate', $entityManagerUser->expr()->literal($currentDate)))
         ->andWhere('o.deleted = 0')
         ->andWhere('s.deleted = 0')
         ->andWhere('s.status = 1')
@@ -531,9 +532,8 @@ class Offer Extends \KC\Entity\Offer
         )
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('s.logo', 'l')
-        ->setParameter(1, $entityManagerUser->expr()->literal($currentDate))
-        ->where($entityManagerUser->expr()->gt('o.endDate', '?1'))
-        ->andWhere($entityManagerUser->expr()->lte('o.startDate', '?1'))
+        ->where($entityManagerUser->expr()->gt('o.endDate', $entityManagerUser->expr()->literal($currentDate)))
+        ->andWhere($entityManagerUser->expr()->lte('o.startDate', $entityManagerUser->expr()->literal($currentDate)))
         ->andWhere('o.deleted = 0')
         ->andWhere('s.deleted = 0')
         ->andWhere('o.userGenerated = 0')
@@ -549,6 +549,7 @@ class Offer Extends \KC\Entity\Offer
 
     public static function implementOffersConstraints($offersConstraintsQuery, $specialPage)
     {
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         if (isset($specialPage['oderOffers']) && $specialPage['oderOffers'] == 1) {
             $offersConstraintsQuery->orderBy('o.title', 'ASC');
         } else if (isset($specialPage['oderOffers']) && $specialPage['oderOffers'] == 0) {
@@ -559,8 +560,7 @@ class Offer Extends \KC\Entity\Offer
         if (isset($specialPage['enableWordConstraint']) && $specialPage['enableWordConstraint'] > 0
                 && $specialPage['enableWordConstraint'] != null) {
             $wordTitle = $specialPage['wordTitle'];
-            $offersConstraintsQuery->setParameter(1, $wordTitle.'%');
-            $offersConstraintsQuery->andWhere($entityManagerUser->expr()->like('o.title, ?1'));
+            $offersConstraintsQuery->andWhere($entityManagerUser->expr()->like('o.title', $entityManagerUser->expr()->literal($wordTitle.'%')));
         }
 
         $offerEditorpick = $specialPage['couponEditorPick']==1 ? $specialPage['couponEditorPick'] : 0;
@@ -674,50 +674,55 @@ class Offer Extends \KC\Entity\Offer
 
     public static function noCouponCodeConstraint($offersConstraintsQuery)
     {
-        $offersConstraintsQuery->setParameter(1, 'CD');
-        $offersConstraintsQuery = $offersConstraintsQuery->andWhere('o.discountType != ?1');
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $offersConstraintsQuery = $offersConstraintsQuery->andWhere(
+            $entityManagerUser->expr()->neq('o.discountType', $entityManagerUser->expr()->literal('CD'))
+        );
         return $offersConstraintsQuery ;
     }
 
     public static function yesExclusiveOrYesEditorPickConstraints($offersConstraintsQuery)
     {
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         return  $offersConstraintsQuery->andWhere(
-            $offersConstraintsQuery->expr()->orX('o.exclusiveCode = 1', 'o.editroPicks = 1')
+            $entityManagerUser->expr()->orX('o.exclusiveCode = 1', 'o.editroPicks = 1')
         );
     }
 
     public static function noEditorPicksCodeConstraint($offersConstraintsQuery)
     {
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         return $offersConstraintsQuery->andWhere(
-            $offersConstraintsQuery->expr()->orX('o.editorPicks = 0', 'o.editorPicks is NULL')
+            $entityManagerUser->expr()->orX('o.editorPicks = 0', 'o.editorPicks is NULL')
         );
     }
 
     public static function notExclusiveCodeConstraint($offersConstraintsQuery)
     {
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         return $offersConstraintsQuery->andWhere(
-            $offersConstraintsQuery->expr()->orX('o.exclusiveCode = 0', 'o.exclusiveCode is NULL')
+            $entityManagerUser->expr()->orX('o.exclusiveCode = 0', 'o.exclusiveCode is NULL')
         );
     }
 
     public static function yesExclusiveCodeConstraint($offersConstraintsQuery)
     {
-        $offersConstraintsQuery->setParameter(1, 1);
-        $offersConstraintsQuery = $offersConstraintsQuery->andWhere('o.exclusiveCode = ?1');
+        $offersConstraintsQuery = $offersConstraintsQuery->andWhere('o.exclusiveCode = 1');
         return $offersConstraintsQuery;
     }
 
     public static function yesEditorPicksCodeConstraint($offersConstraintsQuery)
     {
-        $offersConstraintsQuery->setParameter(1, 1);
-        $offersConstraintsQuery = $offersConstraintsQuery->andWhere('o.editorPicks = ?1');
+        $offersConstraintsQuery = $offersConstraintsQuery->andWhere('o.editorPicks = 1');
         return $offersConstraintsQuery;
     }
 
     public static function yesCouponCodeConstraint($offersConstraintsQuery)
     {
-        $offersConstraintsQuery->setParameter(1, 'CD');
-        $offersConstraintsQuery = $offersConstraintsQuery->andWhere('o.discountType = ?1');
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $offersConstraintsQuery = $offersConstraintsQuery->andWhere(
+            $entityManagerUser->expr()->like('o.discountType', $entityManagerUser->expr()->literal('CD'))
+        );
         return $offersConstraintsQuery;
     }
 
@@ -728,8 +733,8 @@ class Offer Extends \KC\Entity\Offer
             $countOfSpecialOffersByConstraints = count($specialOffersByConstraints);
             for ($offerIndex = 0; $offerIndex < $countOfSpecialOffersByConstraints; $offerIndex++) {
 
-                $offerPublishDate = $specialOffersByConstraints[$offerIndex]['startdate']->format('Y-m-d');
-                $offerExpiredDate = $specialOffersByConstraints[$offerIndex]['enddate']->format('Y-m-d');
+                $offerPublishDate = $specialOffersByConstraints[$offerIndex]['startDate']->format('Y-m-d');
+                $offerExpiredDate = $specialOffersByConstraints[$offerIndex]['endDate']->format('Y-m-d');
                 $offerSubmissionDaysIncreasedBy = ' +'.$specialPage['timenumberOfDays'].' days';
                 $offerSubmissionDaysDecreasedBy  = ' -'.$specialPage['timenumberOfDays'].' days';
                 $increasedOfferPublishDate = date($offerPublishDate .$offerSubmissionDaysIncreasedBy);
@@ -1192,7 +1197,7 @@ class Offer Extends \KC\Entity\Offer
         $query = $entityManagerLocale
             ->select('r')
             ->from('KC\Entity\RefOfferPage', 'r')
-            ->where('r.offers = '.$offerID);
+            ->where('r.refoffers = '.$offerID);
         $specialPagesCacheRefresh = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         if (!empty($specialPagesCacheRefresh)) {

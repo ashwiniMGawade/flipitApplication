@@ -32,17 +32,6 @@ class RefOfferPage
      */
     private $updated_at;
 
-
-    /**
-     * @ORM\Column(type="integer", nullable=false)
-     */
-    private $pageId;
-
-    /**
-     * @ORM\Column(type="integer", nullable=false)
-     */
-    private $offerId;
-
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="offers")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id", nullable=false, onDelete="restrict")
