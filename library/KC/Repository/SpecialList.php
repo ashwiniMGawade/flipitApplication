@@ -23,6 +23,36 @@ class SpecialList extends \KC\Entity\SpecialList
         return $specialPages;
     }
 
+    public static function getSpecialPagesIds()
+    {
+        $currentDateAndTime = date('Y-m-d H:i:s');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('p.id as specialpageid, sp.total_offers, sp.total_coupons, p, l')
+            ->from('KC\Entity\SpecialList', 'sp')
+            ->leftJoin('sp.page', 'p')
+            ->leftJoin('p.logo', 'l')
+            ->where('p.deleted = 0')
+            ->andWhere('p.publish = 1')
+            ->orderBy('sp.position', 'ASC');
+        $specialPageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $specialPageDetails;
+    }
+
+    public static function updateTotalOffersAndTotalCoupons($totalOffers, $totalCoupons, $specialPageId)
+    {
+        if (!empty($specialPageId)) {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder
+                ->update('KC\Entity\SpecialList', 'sl')
+                ->set('sl.total_offers', $totalOffers)
+                ->set('sl.total_coupons', $totalCoupons)
+                ->where('sl.page ='.$specialPageId)
+                ->getQuery()->execute();
+        }
+        return true;
+    }
+
     public static function searchTopTenOffer($keyword, $flag)
     {
         $lastdata=self::getsplpage();

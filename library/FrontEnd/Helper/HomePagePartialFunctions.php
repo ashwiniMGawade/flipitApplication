@@ -198,11 +198,23 @@ class FrontEnd_Helper_HomePagePartialFunctions
     {
         $topOffer = $this->getRightColumnOffersHtml(
             'topOffers',
-            HTTP_PATH_LOCALE.\FrontEnd_Helper_viewHelper::__link('link_top-20'),
-            \FrontEnd_Helper_viewHelper::__form('form_All Top Codes')
+            HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_top-20'),
+            FrontEnd_Helper_viewHelper::__form('form_All Top Codes')
+        );
+        $newOffer = $this->getRightColumnOffersHtml(
+            'newOffers',
+            HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_nieuw'),
+            FrontEnd_Helper_viewHelper::__form('form_All New Codes')
+        );
+        $guidesHtml = self::getMoneySavingGuidesRightForAjax(
+            $this->homePageData['moneySavingGuidesList'],
+            'moneysaving',
+            FrontEnd_Helper_viewHelper::__form('form_All Saving Guides'),
+            HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_plus')
         );
         $specialListPage = $this->getRightColumnSpicialListHtml();
-        return $topOffer . $specialListPage;
+        $categoryListPage = $this->renderCategoryData();
+        return $topOffer.$newOffer.$categoryListPage.$specialListPage.$guidesHtml;
     }
     
     public function getRightColumnOffersHtml($offerDivName, $goToAllLink, $linkText, $dynamicDivId = '')
@@ -244,7 +256,10 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $offersHtml = '';
         switch ($offerDivName){
             case 'topOffers':
-                $offersHtml = $this->getTopOffersRightCoulumnList();
+                $offersHtml = $this->getTopOffersRightCoulumnList('topOffers');
+                break;
+            case 'newOffers':
+                $offersHtml = $this->getTopOffersRightCoulumnList('newOffers');
                 break;
             case 'special':
                 $offersHtml = $this->getSpecialPageRightCoulumnList($dynamicDivId);
@@ -270,7 +285,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
         if (is_array($this->homePageData['specialPagesOffers'][$dynamicDivId])) {
             $topTenSpecialListPageOffers = array_slice($this->homePageData['specialPagesOffers'][$dynamicDivId], 0, 10);
             foreach ($topTenSpecialListPageOffers as $specialOffer) {
-                $specialOffersRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($specialOffer);
+                $specialOffersRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($specialOffer['offers']);
             }
         }
         return $specialOffersRightHtml;

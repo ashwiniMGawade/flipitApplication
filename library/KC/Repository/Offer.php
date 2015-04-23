@@ -1243,6 +1243,22 @@ class Offer Extends \KC\Entity\Offer
         $relatedOffers = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $relatedOffers;
     }
+
+    public static function checkOfferExpired($offerId)
+    {
+        $currentDateTime = date("Y-m-d H:i:s");
+        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerLocale
+            ->select('o.id')
+            ->from('KC\Entity\Offer', 'o')
+            ->where('o.deleted = 0')
+            ->andWhere('o.enddate <'."'".$currentDateTime."'")
+            ->andWhere('o.id ='.$offerId)
+            ->andWhere('o.offline = 0')
+            ->setMaxResults(1);
+        $offerDetail = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return !empty($offerDetail) ? true : false;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################

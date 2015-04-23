@@ -2,7 +2,7 @@ $(document).ready(function() {
     $("#specialPagelist").select2();
     $("#specialPagelist").change(function(){
         $('#selctedPageId').val($(this).val());
-        loadSelectedPageOffers();
+        addNewOffers();
     });
 
     $("#offerlist").select2({placeholder: __("Search a offer")});
@@ -61,6 +61,19 @@ $(document).ready(function() {
         });
     });
 });
+
+function addNewOffers() {
+    $.ajax({
+        type : "POST",
+        url : HOST_PATH + "admin/specialpagesoffers/addnewoffers",
+        method : "post",
+        dataType : 'json',
+        data: '',
+        success : function(json) {
+            setTimeout(loadSelectedPageOffers, 1000);
+        }
+    });
+}
 
 function loadSelectedPageOffers() {
     var pageId =  $('#selctedPageId').val();

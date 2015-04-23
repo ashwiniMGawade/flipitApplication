@@ -67,4 +67,10 @@ class Admin_SpecialpagesoffersController extends Zend_Controller_Action
         echo Zend_Json::encode($popularArticles);
         exit();
     }
+
+    public function addnewoffersAction()
+    {
+        \KC\Repository\SSpecialPagesOffers::addNewSpecialPageOffers();
+        exit();
+    }
 }

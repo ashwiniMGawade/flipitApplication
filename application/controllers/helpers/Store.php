@@ -33,7 +33,7 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         foreach ($removeDuplicateShop as $shopIndex => $offer) {
             $offersUnique[] = $removeDuplicateShop[$shopIndex];
         }
-        return  $offersUnique;
+        return $offersUnique;
     }
 
     public static function changeIndexOfSixReasons($sixShopReasons)
@@ -54,14 +54,14 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         switch ($peramType)
         {
             case 'permalink':
-                    $countOfPermalinkStringValues = $splittedPermalink;
-                    if (array_key_exists(count($countOfPermalinkStringValues) - 2, $splittedPermalink)) {
-                        unset($splittedPermalink[count($countOfPermalinkStringValues) - 2]);
-                    }  
-                    if (array_key_exists(count($countOfPermalinkStringValues) - 1, $splittedPermalink)) {
-                        unset($splittedPermalink[count($countOfPermalinkStringValues) - 1]);
-                    }
-                    $urlString = implode("-", $splittedPermalink);
+                $countOfPermalinkStringValues = $splittedPermalink;
+                if (array_key_exists(count($countOfPermalinkStringValues) - 2, $splittedPermalink)) {
+                    unset($splittedPermalink[count($countOfPermalinkStringValues) - 2]);
+                }
+                if (array_key_exists(count($countOfPermalinkStringValues) - 1, $splittedPermalink)) {
+                    unset($splittedPermalink[count($countOfPermalinkStringValues) - 1]);
+                }
+                $urlString = implode("-", $splittedPermalink);
                 break;
 
             case 'firstCharacter':

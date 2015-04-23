@@ -14,21 +14,25 @@ class SpecialPagesOffers extends BaseSpecialPagesOffers
         $currentDate = date("Y-m-d H:i");
         $specialPageOffers = Doctrine_Query::create()
         ->select(
-            'op.pageId,op.offerId, o.userGenerated, o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,
+            'op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,
             o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
             o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,
             o.updated_at as lastUpdate,s.name,s.refUrl,
-            s.actualUrl,s.permaLink as permalink,s.views,l.*,terms.content'
+            s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path,
+            ologo.name,terms.content'
         )
         ->from('SpecialPagesOffers op')
         ->leftJoin('op.offers o')
+        ->leftJoin('o.logo ologo')
         ->leftJoin('o.termandcondition terms')
         ->andWhere(
             "(couponCodeType = 'UN' AND (SELECT count(id) FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0)
             or couponCodeType = 'GN'"
         )
         ->leftJoin('o.shop s')
+        ->leftJoin('o.vote vot')
         ->leftJoin('s.logo l')
+        ->leftJoin('s.favoriteshops fv')
         ->where('op.pageId = '.$pageId)
         ->andWhere('o.enddate > "'.$currentDate.'"')
         ->andWhere('o.startdate <= "'.$currentDate.'"')
@@ -53,55 +57,40 @@ class SpecialPagesOffers extends BaseSpecialPagesOffers
         return $specialOffersWithoutDuplication;
     }
 
-    public static function getSpecialPageOfferById($pageId)
+    public static function getSpecialPageOfferById($pageId, $limit = 0)
     {
         $specialPageOffers = Doctrine_Query::create()
-            ->select('p.id, p.pageId, p.offerId, o.title, p.position')
+            ->select('p.id, p.pageId, p.offerId, o.*,s.permaLink as permalink, s.name,l.*')
             ->from('SpecialPagesOffers p')
             ->leftJoin('p.offers o')
-            ->where('p.pageId ='.$pageId)
+            ->leftJoin('o.shop s')
+            ->leftJoin('s.logo l')
+            ->whereIn("p.pageId", $pageId)
             ->orderBy('p.position')
+            ->limit($limit)
             ->fetchArray();
         return $specialPageOffers;
     }
-
-    public static function addOfferInList($offerId, $pageId)
+    
+    public static function addOfferInList($offerId, $pageId, $type = '')
     {
-        $offer = Doctrine_query::create()
-            ->from('Offer')
-            ->where('id=' . $offerId)->limit(1)
-            ->fetchArray();
+        $offer = self::offerExistance($offerId);
         $result = '0';
         if (sizeof($offer) > 0) {
-            $specialPageOffer = Doctrine_query::create()
-                ->from('SpecialPagesOffers')
-                ->where('offerId=' . $offerId)
-                ->andWhere('pageId=' .$pageId)
-                ->limit(1)
-                ->fetchArray();
-            if (!empty($specialPageOffer)) {
+            $specialPageOffers = self::getSpecialPageOffers($offerId, $pageId);
+            if (!empty($specialPageOffers)) {
                 $result = '2';
             } else {
                 $result = '1';
-                $maxPosition = Doctrine_Query::create()
-                    ->select('p.position')
-                    ->from('SpecialPagesOffers p')
-                    ->where('pageId=' .$pageId)
-                    ->orderBy('p.position DESC')
-                    ->limit(1)
-                    ->fetchArray();
-                if (!empty($maxPosition)) {
-                    $newPosition = $maxPosition[0]['position'];
+                $specialPageOffermaxPosition = self::getSpecialPageMaxPosition($pageId);
+                if (!empty($specialPageOffermaxPosition)) {
+                    $newPosition = $specialPageOffermaxPosition[0]['position'];
                 } else {
                     $newPosition =  0 ;
                 }
-                $specialPageOffer = new SpecialPagesOffers();
-                $specialPageOffer->offerId = $offerId;
-                $specialPageOffer->pageId = $pageId;
-                $specialPageOffer->position = (intval($newPosition) + 1);
-                $specialPageOffer->save();
+                $specialPageOfferId = self::saveSpecialPageOffers($offerId, $pageId, $newPosition);
                 $result  = array(
-                    'id'=>$specialPageOffer->id,
+                    'id'=>$specialPageOfferId,
                     'type'=>'MN',
                     'offerId'=>$offerId,
                     'position'=>(intval($newPosition) + 1),
@@ -109,40 +98,124 @@ class SpecialPagesOffers extends BaseSpecialPagesOffers
                 );
             }
         }
-        self::clearCacheOfSpecialPagesOffers($pageId);
+        if ($type != 'cron') {
+            self::clearCacheOfSpecialPagesOffers($pageId);
+        }
         return $result;
     }
 
-
-    public static function deleteCode($id, $position, $pageId)
+    public static function offerExistance($offerId)
     {
-        if ($id) {
-            $deleteCode = Doctrine_Query::create()
-            ->delete('SpecialPagesOffers')
-            ->where('id=' . $id)
-            ->execute();
-            $updatePosition = Doctrine_Query::create()
+        $offer = array();
+        if (!empty($offerId)) {
+            $offer = Doctrine_query::create()
+                ->from('Offer')
+                ->where('id=' . $offerId)->limit(1)
+                ->fetchArray();
+        }
+        return $offer;
+    }
+
+    public static function getSpecialPageOffers($offerId, $pageId)
+    {
+        $specialPageOffers = array();
+        if (!empty($offerId) && !empty($pageId)) {
+            $specialPageOffers = Doctrine_query::create()
+                ->from('SpecialPagesOffers')
+                ->where('offerId=' . $offerId)
+                ->andWhere('pageId=' .$pageId)
+                ->limit(1)
+                ->fetchArray();
+        }
+        return $specialPageOffers;
+    }
+
+    public static function getSpecialPageMaxPosition($pageId)
+    {
+        if (!empty($pageId)) {
+            $maxPosition = Doctrine_Query::create()
+                ->select('p.position')
+                ->from('SpecialPagesOffers p')
+                ->where('pageId=' .$pageId)
+                ->orderBy('p.position DESC')
+                ->limit(1)
+                ->fetchArray();
+        }
+        return $maxPosition;
+    }
+
+    public static function saveSpecialPageOffers($offerId, $pageId, $newPosition)
+    {
+        $specialPageOffers = new SpecialPagesOffers();
+        $specialPageOffers->offerId = $offerId;
+        $specialPageOffers->pageId = $pageId;
+        $specialPageOffers->position = (intval($newPosition) + 1);
+        $specialPageOffers->save();
+        return $specialPageOffers->id;
+    }
+
+    public static function deleteSpecialPageOffer($id)
+    {
+        if (!empty($id)) {
+            Doctrine_Query::create()
+                ->delete('SpecialPagesOffers')
+                ->where('id=' . $id)
+                ->execute();
+        }
+        return true;
+    }
+
+    public static function updateSpecialPageOfferPosition($position, $pageId)
+    {
+        if (!empty($position) && !empty($pageId)) {
+            Doctrine_Query::create()
                 ->update('SpecialPagesOffers p')
                 ->set('p.position', 'p.position -1')
                 ->where('p.position >' . $position)
                 ->andWhere('p.pageId='. $pageId)
                 ->execute();
+        }
+        return true;
+    }
+
+    public static function getNewOfferList($pageId)
+    {
+        $newOffersList = array();
+        if (!empty($pageId)) {
             $newOffersList = Doctrine_Query::create()
                 ->select('p.*')
                 ->from('SpecialPagesOffers p')
                 ->where('p.pageId='. $pageId)
                 ->orderBy('p.position ASC')
                 ->fetchArray();
+        }
+        return $newOffersList;
+    }
+
+    public static function updateWithNewPosition($newPosition, $newOffer)
+    {
+        Doctrine_Query::create()
+            ->update('SpecialPagesOffers p')
+            ->set('position', $newPosition)
+            ->where('p.id = ?', $newOffer['id'])
+            ->execute();
+        return true;
+    }
+
+    public static function deleteCode($id, $position, $pageId, $type = '')
+    {
+        if ($id) {
+            self::deleteSpecialPageOffer($id);
+            self::updateSpecialPageOfferPosition($position, $pageId);
+            $newOffersList = self::getNewOfferList($pageId);
             $newPosition = 1;
             foreach ($newOffersList as $newOffer) {
-                $updateWithNewPosition = Doctrine_Query::create()
-                    ->update('SpecialPagesOffers p')
-                    ->set('position', $newPosition)
-                    ->where('p.id = ?', $newOffer['id']);
-                $updateWithNewPosition->execute();
+                self::updateWithNewPosition($newPosition, $newOffer);
                 $newPosition++;
             }
-            self::clearCacheOfSpecialPagesOffers($pageId);
+            if ($type != 'cron') {
+                self::clearCacheOfSpecialPagesOffers($pageId);
+            }
             return true;
         }
         return false;
@@ -167,6 +240,55 @@ class SpecialPagesOffers extends BaseSpecialPagesOffers
             }
         }
         self::clearCacheOfSpecialPagesOffers($pageId);
+    }
+
+    public static function deleteExpiredOffers()
+    {
+        $specialPageOffersDetails = Doctrine_Query::create()
+            ->select('p.offerId, p.id, p.position, p.pageId')
+            ->from('SpecialPagesOffers p')
+            ->where('p.deleted = 0')
+            ->orderBy('p.position ASC')
+            ->fetchArray();
+        if (!empty($specialPageOffersDetails)) {
+            foreach ($specialPageOffersDetails as $specialPageOfferDetail) {
+                $expiredStatus = Offer::checkOfferExpired($specialPageOfferDetail['offerId']);
+                if ($expiredStatus) {
+                    self::deleteCode(
+                        $specialPageOfferDetail['id'],
+                        $specialPageOfferDetail['position'],
+                        $specialPageOfferDetail['pageId'],
+                        'cron'
+                    );
+                }
+            }
+        }
+        return true;
+    }
+
+    public static function addNewSpecialPageOffers()
+    {
+        $currentDate = date("Y-m-d H:i");
+        $specialListPages = SpecialList::getSpecialPages();
+        if (!empty($specialListPages)) {
+            foreach ($specialListPages as $specialListPage) {
+                SpecialList::updateTotalOffersAndTotalCoupons(
+                    $specialListPage['totalOffers'],
+                    $specialListPage['totalCoupons'],
+                    $specialListPage['specialpageId']
+                );
+                foreach ($specialListPage['page'] as $page) {
+                    $pageRelatedOffers = Offer::getSpecialOffersByPage($page['id'], $currentDate);
+                    $constraintsRelatedOffers = Offer::getOffersByPageConstraints($page, $currentDate);
+                    $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
+                    foreach ($pageRelatedOffersAndPageConstraintsOffers as $pageRelatedOffersAndPageConstraintsOffer) {
+                        self::addOfferInList($pageRelatedOffersAndPageConstraintsOffer['id'], $page['id'], 'cron');
+                    }
+                    
+                }
+            }
+        }
+        return true;
     }
 
     public static function clearCacheOfSpecialPagesOffers($id)
