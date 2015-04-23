@@ -88,10 +88,11 @@ class Articles extends \KC\Entity\Articles
         $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select("p, a, thumb")
+            ->select("p, a, thumb, chapter")
             ->from("KC\Entity\PopularArticles", "p")
             ->leftJoin("p.articles", "a")
             ->leftJoin('a.thumbnail', 'thumb')
+            ->leftJoin('a.articleChapter', 'chapter')
             ->where("a.publish = 1")
             ->andWhere("a.deleted= 0")
             ->andWhere($queryBuilder->expr()->lte("a.publishdate", $queryBuilder->expr()->literal($currentDateTime)))

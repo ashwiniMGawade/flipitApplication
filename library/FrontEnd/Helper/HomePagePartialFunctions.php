@@ -420,8 +420,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
                 
             $allowedTags = '';
             $guideDescription = strip_tags(
-                isset($savingGuide['articles']['chapters'][0]['content'])
-                ? $savingGuide['articles']['chapters'][0]['content'] : '',
+                isset($savingGuide['articles']['articleChapter'][0]['content'])
+                ? $savingGuide['articles']['articleChapter'][0]['content'] : '',
                 $allowedTags
             );
             $savingContent = mb_strlen($guideDescription, 'UTF-8') > 85
