@@ -81,14 +81,9 @@ class Settings Extends \KC\Entity\Settings
     public static function removesettingabouttab($id)
     {
         if ($id) {
-            //delete about tab from list
-            $name = "about_";
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->delete('KC\Entity\Settings', 's')
-            ->setParameter(1, $id)
-            ->where('s.value = ?1')
-            ->setParameter(2, $name.'%')
-            ->andWhere($queryBuilder->expr()->like('s.name, ?2'))
+            ->where('s.value = '.$id)
             ->getQuery();
             $query->execute();
             return true;

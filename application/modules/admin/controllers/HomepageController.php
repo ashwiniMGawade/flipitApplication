@@ -139,18 +139,20 @@ class Admin_HomepageController extends Zend_Controller_Action
      */
     public function deleteaboutAction()
     {
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
         $parmas = $this->_getAllParams();
-        $id = @$parmas['removeid'];
-        //call model class function pass position and id
-                $about = About :: removeeabouttab($id);
-                $deleted = Settings :: removesettingabouttab($id);
-        //remove  about tab from database
-        if ($deleted) {
-            echo "1";
-        } else {
-            echo 0;
+        $id = $parmas['removeid'];
+        if ($id) {
+            $about = \KC\Repository\About::removeeabouttab($id);
+            $deleted = \KC\Repository\Settings::removesettingabouttab($id);
+            if ($deleted) {
+                echo "1";
+            } else {
+                echo 0;
+            }
+            die();
         }
-        die();
     }
 
     /**
@@ -160,7 +162,7 @@ class Admin_HomepageController extends Zend_Controller_Action
      */
     public function deletemenuAction()
     {
-        $deleted = menu :: deleteAllMenuRecord();
+        $deleted = \KC\Repository\Menu::deleteAllMenuRecord();
 
         if ($deleted) {
             echo "Deleted";

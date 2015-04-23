@@ -167,7 +167,7 @@ class Offer Extends \KC\Entity\Offer
                 ->andWhere('o.Visability != '.$entityManagerUser->expr()->literal('MEM'))
                 ->andWhere('o.endDate >'."'".$date."'")
                 ->andWhere('o.startDate <='."'".$date."'")
-                ->andWhere('o.discountType !='.$entityManagerUser->expr()->literal('CD'))
+                ->andWhere('o.discountType ='.$entityManagerUser->expr()->literal('CD'))
                 ->andWhere('s.deleted = 0')
                 ->andWhere('s.status = 1')
                 ->andWhere('o.userGenerated = 0')
@@ -219,7 +219,7 @@ class Offer Extends \KC\Entity\Offer
             ->andWhere('o.Visability != '.$entityManagerUser->expr()->literal('MEM'))
             ->andWhere('o.endDate >'."'".$date."'")
             ->andWhere('o.startDate <='."'".$date."'")
-            ->andWhere('o.discountType !='.$entityManagerUser->expr()->literal('CD'))
+            ->andWhere('o.discountType ='.$entityManagerUser->expr()->literal('CD'))
             ->andWhere('o.userGenerated = 0')
             ->andWhere($entityManagerUser->expr()->in('c.categoryId', $commaSepratedCategroyIdValues))
             ->andWhere('o.shopOffers !='. $shopId)
@@ -999,6 +999,69 @@ class Offer Extends \KC\Entity\Offer
             ->add('number', 'o.endDate')
             ->add('number', 'o.totalViewcount')
             ->add('text', 'o.authorName');
+        $offersList = $builder->getTable()->getResponseArray();
+        return $offersList;
+    }
+
+    public static function getTrashedOfferList($parameters)
+    {
+        $userRole           = \Auth_StaffAdapter::getIdentity()->users->id;
+        $searchOffer        = $parameters["offerText"]!='undefined' ? $parameters["offerText"] : '';
+        $searchShop         = $parameters["shopText"]!='undefined' ? $parameters["shopText"] : '';
+        $searchCoupon       = isset($parameters["shopCoupon"]) && $parameters["shopCoupon"]!='undefined' ? $parameters["shopCoupon"] : '';
+        $searchCouponType   = $parameters["couponType"]!='undefined' ? $parameters["couponType"] : '';
+        $deletedStatus      = $parameters['flag'];
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $getOffersQuery = $entityManagerUser
+            ->from('KC\Entity\Offer', 'o')
+            ->leftJoin('o.shopOffers', 's')
+            ->where($entityManagerUser->expr()->eq('o.deleted', $entityManagerUser->expr()->literal($deletedStatus)))
+            ->andWhere($entityManagerUser->expr()->eq('o.userGenerated', $entityManagerUser->expr()->literal('0')))
+            ->andWhere($entityManagerUser->expr()->eq('o.approved', $entityManagerUser->expr()->literal('0')));
+        if ($userRole=='4') {
+            $getOffersQuery->andWhere(
+                $entityManagerUser->expr()->like('o.Visability', $entityManagerUser->expr()->literal('DE'))
+            );
+        }
+        if ($searchOffer != '') {
+            $getOffersQuery->andWhere(
+                $entityManagerUser->expr()->like('o.title', $entityManagerUser->expr()->literal('%'.$searchOffer.'%'))
+            );
+        }
+        if ($searchShop!='') {
+            $getOffersQuery->andWhere(
+                $entityManagerUser->expr()->like('s.name', $entityManagerUser->expr()->literal('%'.$searchShop.'%'))
+            );
+        }
+        if ($searchCoupon!='') {
+            $getOffersQuery->andWhere(
+                $entityManagerUser->expr()->like('o.couponCode', $entityManagerUser->expr()->literal('%'.$searchCoupon.'%'))
+            );
+        }
+        if ($searchCouponType!='') {
+            if ($searchCouponType != 'EX') {
+                $getOffersQuery->andWhere(
+                    $entityManagerUser->expr()->eq('o.discountType', $entityManagerUser->expr()->literal($searchCouponType))
+                );
+            } else {
+                $getOffersQuery->andWhere($entityManagerUser->expr()->eq('o.extendedOffer', 1));
+            }
+        }
+        $request  = \DataTable_Helper::createSearchRequest(
+            $parameters,
+            array('o.title','s.name','o.discountType','o.refURL','o.extendedOffer','o.startDate','o.endDate'
+            )
+        );
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
+        $builder
+            ->setQueryBuilder($getOffersQuery)
+            ->add('text', 'o.title')
+            ->add('text', 's.name')
+            ->add('text', 'o.discountType')
+            ->add('text', 'o.refURL')
+            ->add('text', 'o.extendedOffer')
+            ->add('number', 'o.startDate')
+            ->add('number', 'o.endDate');
         $offersList = $builder->getTable()->getResponseArray();
         return $offersList;
     }

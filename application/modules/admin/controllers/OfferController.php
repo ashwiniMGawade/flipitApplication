@@ -13,6 +13,15 @@ class Admin_OfferController extends Zend_Controller_Action
         echo \Zend_Json::encode($offerList);
         die();
     }
+
+    public function gettrashedofferAction()
+    {
+        $parameters = $this->_getAllParams();
+        //echo "<pre>";print_r($parameters);die;
+        $offerList = \KC\Repository\Offer::getTrashedOfferList($parameters);
+        echo \Zend_Json::encode($offerList);
+        die();
+    }
     ############################################################
     ################ END REFACTORED CODE #######################
     ############################################################
