@@ -48,9 +48,9 @@ class Admin_MediaController extends Zend_Controller_Action
             ->setQueryBuilder($mediaList)
             ->add('number', 'm.id')
             ->add('text', 'm.name')
+            ->add('text', 'm.authorName')
             ->add('text', 'm.alternatetext')
             ->add('text', 'm.created_at')
-            ->add('text', 'm.authorName')
             ->add('text', 'm.fileurl');
         $result = $builder->getTable()->getResponseArray();
         echo Zend_Json::encode($result);
