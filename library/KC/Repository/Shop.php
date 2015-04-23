@@ -678,10 +678,39 @@ class Shop extends \KC\Entity\Shop
         return $result;
     }
 
+    public static function gettrashshopList($params)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $srh = $params["searchText"]=='undefined' ? '' : $params["searchText"];
+        $flag = @$params['flag'];
+
+        $shopList = $queryBuilder
+            ->from("KC\Entity\Shop", "s")
+            ->leftJoin('s.affliatenetwork', 'a')
+            ->where('s.deleted = '. $flag);
+        if (!empty($srh)) {
+            $shopList->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal("%".$srh."%")));
+        }
+            
+        $request = \DataTable_Helper::createSearchRequest(
+            $params,
+            array('s.id', 's.name', 's.affliateProgram', 's.created_at', 'a.name')
+        );
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
+        $builder
+            ->setQueryBuilder($shopList)
+            ->add('number', 's.id')
+            ->add('text', 's.name')
+            ->add('text', 's.affliateProgram')
+            ->add('number', 's.created_at')
+            ->add('text', 'a.name');
+        $result = $builder->getTable()->getResponseArray();
+        return $result;
+    }
+
     public static function moveToTrash($id)
     {
         if ($id) {
-            //find record by id and apply sofdeleted (change status 0 to 1)
             $u =  \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $id);
             $u->deleted = 1;
             \Zend_Registry::get('emLocale')->persist($u);
