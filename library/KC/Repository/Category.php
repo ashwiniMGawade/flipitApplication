@@ -140,9 +140,17 @@ class Category extends \KC\Entity\Category
             setCategoryImage($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
         $categoryHeaderImageId = self::
             setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
-        $category->categoryicon =  $entityManagerLoacle->find('KC\Entity\ImageCategoryIcon', $categoryIconId);
-        $category->categoryFeaturedImage =  $entityManagerLoacle->find('KC\Entity\ImageCategoryIcon', $categoryFeaturedImageId);
-        $category->categoryHeaderImage = $entityManagerLoacle->find('KC\Entity\ImageCategoryIcon', $categoryHeaderImageId);
+        if (!empty($categoryIconId)) {
+            $category->categoryicon =  $entityManagerLoacle->find('KC\Entity\ImageCategoryIcon', $categoryIconId);
+        }
+        if (!empty($categoryFeaturedImageId)) {
+            $category->categoryFeaturedImage =  $entityManagerLoacle->find('KC\Entity\ImageCategoryIcon', $categoryFeaturedImageId);
+        }
+        
+        if (!empty($categoryHeaderImageId)) {
+            $category->categoryHeaderImage = $entityManagerLoacle->find('KC\Entity\ImageCategoryIcon', $categoryHeaderImageId);
+        }
+        
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
         $permalinkWithoutSpecilaChracter = str_replace("-", "", $categoryParameter["permaLink"]);
@@ -506,7 +514,7 @@ class Category extends \KC\Entity\Category
     #####################################################
     public static function getCategoryList($params = array())
     {
-        $srh = @$params["SearchText"] != 'undefined' ? @$params["SearchText"] : array();
+        $srh = @$params["SearchText"] != 'undefined' ? @$params["SearchText"] : '';
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $qb = $queryBuilder
             ->from("KC\Entity\Category", "c")
