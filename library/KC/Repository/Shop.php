@@ -1201,7 +1201,7 @@ class Shop extends \KC\Entity\Shop
                     ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle4']) : '';
                 $shopReasons['reasonsubtitle4'] = !empty($shopDetail['reasonsubtitle4'])
                     ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle4']) : '';
-                $shopReasons['reasontitle5'] = !empty($shopDetail['reasontitle4'])
+                $shopReasons['reasontitle5'] = !empty($shopDetail['reasontitle5'])
                     ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle5']) : '';
                 $shopReasons['reasonsubtitle5'] = !empty($shopDetail['reasonsubtitle5'])
                     ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle5']) : '';
