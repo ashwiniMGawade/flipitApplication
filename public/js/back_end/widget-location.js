@@ -1,12 +1,12 @@
 var validRules = {
-    widgetlocation : ""
+    widgetPostion : ""
 };
 var focusRules = {
-    widgetlocation : ""
+    widgetPostion : ""
 };
 $(document).ready(init);
 function init() {
-    validateGlobalExportForm();
+    validateWidgetlocationForm();
 }
 
 function showLightBoxForWidgetLocation() {
@@ -28,7 +28,7 @@ function hideModel() {
     return false;
 }
 
-function validateGlobalExportForm(){
+function validateWidgetlocationForm() {
     var validateNewMenu = $("form#widgetlocationForm")
         .validate({ 
             errorClass : 'error',
@@ -40,13 +40,15 @@ function validateGlobalExportForm(){
                 .html(error);
             },
             rules : {
-                widgetlocation : {
-                    required : true
+                widgetPostion : {
+                    required : true,
+                    number : true
                 }
             },
             messages : {
-                widgetlocation : {
-                    required : ""
+                widgetPostion : {
+                    required : "",
+                    number : ""
                 }
             },
             onfocusin : function(element) {
@@ -153,9 +155,21 @@ function validateGlobalExportForm(){
                 }
             },
             submitHandler: function(form) {
-                form.submit();
-                $('#widgetlocationForm')[0].reset();
-                $('#myModal').modal('hide');
+                $.ajax({
+                    url : HOST_PATH + "admin/widgetlocation/save-or-update-widget-location",
+                    type : "post",
+                    data : $("#widgetlocationForm").serialize(),
+                    dataType : "json",
+                    success : function(data) {
+                        if (data == true) {
+                            $('div#message-display').html(__('Record has been saved successfully'))
+                                .addClass('widget-location-success-message');
+                        } else {
+                            $('div#message-display').html(__('You have entered wrong data'))
+                                .addClass('widget-location-error-message');
+                        }
+                    }
+                });
             }
         });
 }
