@@ -54,27 +54,27 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $categoriesHtml = '';
         $categories = $this->homePageData['topCategories'];
         foreach ($categories as $category) {
-            $categoryPath = isset($category[0]['category'][0]['categoryicon']['path'])
-                ? $category[0]['category'][0]['categoryicon']['path'] : $category[0]['category']['categoryicon']['path'];
-            $categoryName = isset($category[0]['category'][0]['categoryicon']['name'])
-                ? $category[0]['category'][0]['categoryicon']['name'] : $category[0]['category']['categoryicon']['name'];
+            $categoryPath = isset($category['category'][0]['categoryicon']['path'])
+                ? $category['category']['categoryicon']['path'] : $category['category']['categoryicon']['path'];
+            $categoryName = isset($category['category'][0]['categoryicon']['name'])
+                ? $category['category']['categoryicon']['name'] : $category['category']['categoryicon']['name'];
             $categoryImage =
                 PUBLIC_PATH_CDN
                 .$categoryPath
                 . $categoryName;
             $categoriesOffers =
-                $category['totalOffers'] . ' '
-                . \FrontEnd_Helper_viewHelper::__form('form_Offers'). ' ' . $category['countOff']
+                $category['total_offers'] . ' '
+                . \FrontEnd_Helper_viewHelper::__form('form_Offers'). ' ' . $category['total_coupons']
                 . " "
                 . \FrontEnd_Helper_viewHelper::__form('form_coupons');
             $categoriesHtml .= $this->getLeftColumnContent(
                 'categories',
                 $categoryImage,
-                $category[0]['category']['name'],
+                $category['category']['name'],
                 70,
-                $category[0]['category']['permaLink'],
+                $category['category']['permaLink'],
                 $categoriesOffers,
-                $category[0]['category']['id']
+                $category['category']['id']
             );
         }
         return $categoriesHtml;
@@ -224,11 +224,11 @@ class FrontEnd_Helper_HomePagePartialFunctions
     {
         $rightDiv = '';
         foreach ($this->homePageData['topCategories'] as $category) {
-            $link = HTTP_PATH_LOCALE.$category[0]['category']['permaLink'];
+            $link = HTTP_PATH_LOCALE.$category['category']['permaLink'];
             $rightDiv.=
             self::getRightDivByAjax(
-                $this->homePageData['categoriesOffers'][$category[0]['category']['permaLink']],
-                $category[0]['category']['permaLink'],
+                $this->homePageData['categoriesOffers'][$category['category']['permaLink']],
+                $category['category']['permaLink'],
                 '',
                 $link
             );
@@ -288,12 +288,12 @@ class FrontEnd_Helper_HomePagePartialFunctions
         }
         return $offersHtml;
     }
- 
-    public function getTopOffersRightCoulumnList()
+
+    public function getTopOffersRightCoulumnList($topOffers)
     {
         $topOfferRightHtml = '';
-        foreach ($this->homePageData['topOffers'] as $topOffer) {
-            $topOfferRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($topOffer, 'topOffers');
+        foreach ($this->homePageData[$topOffers] as $topOffer) {
+            $topOfferRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($topOffer);
         }
         return $topOfferRightHtml;
     }

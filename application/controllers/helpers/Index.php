@@ -35,8 +35,8 @@ class Zend_Controller_Action_Helper_Index extends Zend_Controller_Action_Helper_
     {
         $categoriesOffers = array();
         foreach ($categoryIds as $categoryId) {
-            $categoriesOffers[$categoryId[0]['category']['permaLink']] =
-            \KC\Repository\Category::getCategoryVoucherCodes($categoryId[0]['category']['id'], 0, 'homePage');
+            $categoriesOffers[$categoryId['category']['permaLink']] =
+            \KC\Repository\Category::getCategoryVoucherCodes($categoryId['category']['id'], 10, 'homePage');
         }
         return $categoriesOffers ;
     }

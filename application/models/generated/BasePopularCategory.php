@@ -53,6 +53,14 @@ abstract class BasePopularCategory extends Doctrine_Record
              'comment' => 'FK to category.id',
              'length' => '20',
              ));
+        $this->hasColumn('total_offers', 'integer', 20, array(
+            'type' => 'integer',
+            'length' => '20'
+        ));
+        $this->hasColumn('total_coupons', 'integer', 20, array(
+            'type' => 'integer',
+            'length' => '20',
+        ));
     }
 
     public function setUp()

@@ -208,6 +208,52 @@ class PopularCategory extends BasePopularCategory
         return false;
     }
 
+    public static function saveCategoryOfferCount()
+    {
+        $popularCategoriesOffersCount= self::getPopularCategoriesOffersCount();
+        if (!empty($popularCategoriesOffersCount)) {
+            foreach ($popularCategoriesOffersCount as $popularCategoryOffersCount) {
+                self::updateCategoryOffersCount($popularCategoryOffersCount);
+            }
+        }
+        return true;
+    }
+
+    public static function getPopularCategoriesOffersCount()
+    {
+        $currentDateAndTime = date('Y-m-d 00:00:00');
+        $popularCategories = Doctrine_Query::create()
+        ->select('p.id, p.categoryid')
+        ->from('PopularCategory p')
+        ->addSelect(
+            "(
+            SELECT  count(*) FROM refOfferCategory roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  WHERE  
+                off.deleted = 0 and s.deleted = 0 and roc.categoryId = p.categoryId and off.enddate >'"
+            .$currentDateAndTime."' and off.discounttype='CD' and off.Visability!='MEM') as totalCoupons"
+        )
+        ->addSelect(
+            "(SELECT count(off1.id) FROM refShopCategory roc1 LEFT JOIN roc1.shops s1 LEFT JOIN s1.offer off1  
+                WHERE  s1.deleted = 0 and 
+                s1.status = 1 and off1.deleted = 0 and roc1.categoryId = p.categoryId  
+                and off1.enddate >'".$currentDateAndTime."' and off1.startdate < '".$currentDateAndTime."') 
+                as totalOffers"
+        )
+        ->where('p.deleted = 0')
+        ->orderBy("totalCoupons DESC")
+        ->fetchArray();
+        return $popularCategories;
+    }
+
+    public static function updateCategoryOffersCount ($popularCategoryOffersCount)
+    {
+        Doctrine_Query::create()->update('PopularCategory p')
+            ->set('p.total_offers', $popularCategoryOffersCount['totalOffers'])
+            ->set('p.total_coupons', $popularCategoryOffersCount['totalCoupons'])
+            ->where('p.categoryid = ' . $popularCategoryOffersCount['categoryId'])
+            ->execute();
+        return true;
+    }
+
 
 /**********************	Start Front end home page *************************************/
 

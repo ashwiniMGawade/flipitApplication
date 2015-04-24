@@ -43,6 +43,7 @@ class IndexController extends Zend_Controller_Action
                 ),
                 ''
             );
+
             $topCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "10_popularCategories_list",
                 array('function' => 'KC\Repository\Category::getPopularCategories', 'parameters' => array(10, 'home')
@@ -51,7 +52,7 @@ class IndexController extends Zend_Controller_Action
             );
             $this->view->newOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_homenewoffer_list",
-                array('function' => 'KC\Repository\Offer::getNewestOffers', 'parameters' => array('newest', 10, '', '', 'homePage'))
+                array('function' => 'KC\Repository\Offer::getCommonNewestOffers', 'parameters' => array('newest', 10, '', '', 'homePage'))
             );
             $this->view->moneySavingGuidesList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_homemanisaving_list",

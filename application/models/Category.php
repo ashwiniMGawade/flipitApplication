@@ -83,21 +83,11 @@ class Category extends BaseCategory
     {
         $currentDateAndTime = date('Y-m-d 00:00:00');
         $popularCategories = Doctrine_Query::create()
-        ->select('p.id, o.name,o.categoryiconid,i.type,i.path,i.name,p.type,p.position,p.categoryId,o.permaLink')
+        ->select(
+            'p.id, o.name,o.categoryiconid,i.type,i.path,i.name,p.type,p.position,p.categoryId,o.permaLink,
+            p.total_offers as totalOffers, p.total_coupons as countOff'
+        )
         ->from('PopularCategory p')
-        ->addSelect(
-            "(
-                SELECT  count(*) FROM refOfferCategory roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  WHERE  
-                off.deleted = 0 and s.deleted = 0 and roc.categoryId = p.categoryId and off.enddate >'"
-            .$currentDateAndTime."' and off.discounttype='CD' and off.Visability!='MEM') as countOff"
-        )
-        ->addSelect(
-            "(SELECT count(off1.id) FROM refShopCategory roc1 LEFT JOIN roc1.shops s1 LEFT JOIN s1.offer off1  
-                WHERE  s1.deleted = 0 and 
-                s1.status = 1 and off1.deleted = 0 and roc1.categoryId = p.categoryId  
-                and off1.enddate >'".$currentDateAndTime."' and off1.startdate < '".$currentDateAndTime."') 
-                as totalOffers"
-        )
         ->leftJoin('p.category o')
         ->leftJoin('o.categoryicon i')
         ->where('o.deleted=0')

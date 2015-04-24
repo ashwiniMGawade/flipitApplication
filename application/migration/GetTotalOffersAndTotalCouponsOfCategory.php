@@ -1,9 +1,9 @@
 <?php
 /**
- * Script for deleting expired and adding new offers for all locales
+ * Script for fetching and storing total offers and coupons for all locales
  *
  */
-class DeleteExpiredOffersAndAddNewOffersToSpecialPage
+class GetTotalOffersAndTotalCouponsOfCategory
 {
     public function __construct()
     {
@@ -14,12 +14,12 @@ class DeleteExpiredOffersAndAddNewOffersToSpecialPage
         $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
         $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
         echo CommonMigrationFunctions::showProgressMessage(
-            'Deleting all Expired offers and saving new into databases of all locales'
+            'Fetching total number of coupons and offers for home page categories of all locales'
         );
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-                    $this->deleteAndSaveSpecialPageOffers($connection['dsn'], $key);
+                    $this->fetchAndSaveCategoryOffersCount($connection['dsn'], $key);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     echo "\n\n";
@@ -31,19 +31,15 @@ class DeleteExpiredOffersAndAddNewOffersToSpecialPage
         $manager->closeConnection($doctrineImbullDbConnection);
     }
 
-    protected function deleteAndSaveSpecialPageOffers($dsn, $key)
+    protected function fetchAndSaveCategoryOffersCount($dsn, $key)
     {
         $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
         $manager = CommonMigrationFunctions::loadDoctrineModels();
-        echo CommonMigrationFunctions::showProgressMessage(
-            "$key - Deleting the Expired and Adding New Special Page Offers!!!"
-        );
-        SpecialPagesOffers::deleteExpiredOffers();
-        SpecialPagesOffers::addNewSpecialPageOffers();
+        PopularCategory::saveCategoryOfferCount();
         $manager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(
-            "$key - Expired Offers have been Deleted and New are saved successfully!!!"
+            "$key - Offer counts for Homepage Categories have been saved!!!"
         );
     }
 }
-new DeleteExpiredOffersAndAddNewOffersToSpecialPage();
+new GetTotalOffersAndTotalCouponsOfCategory();
