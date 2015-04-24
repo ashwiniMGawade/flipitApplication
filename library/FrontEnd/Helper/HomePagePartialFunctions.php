@@ -54,9 +54,9 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $categoriesHtml = '';
         $categories = $this->homePageData['topCategories'];
         foreach ($categories as $category) {
-            $categoryPath = isset($category[0]['category'][0]['categoryicon']['path']) 
+            $categoryPath = isset($category[0]['category'][0]['categoryicon']['path'])
                 ? $category[0]['category'][0]['categoryicon']['path'] : $category[0]['category']['categoryicon']['path'];
-            $categoryName = isset($category[0]['category'][0]['categoryicon']['name']) 
+            $categoryName = isset($category[0]['category'][0]['categoryicon']['name'])
                 ? $category[0]['category'][0]['categoryicon']['name'] : $category[0]['category']['categoryicon']['name'];
             $categoryImage =
                 PUBLIC_PATH_CDN
@@ -85,8 +85,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $specialPageHtml = '';
         $specialListPages = $this->homePageData['specialPages'];
         foreach ($specialListPages as $indexOfPage => $specialListPage) {
-            $specialPageListIndex = $specialListPage[0]['page']['permalink'] .','
-               .$specialListPage[0]['page']['pageTitle'];
+            $specialPageListIndex = $specialListPage['page']['permalink'] .','
+               .$specialListPage['page']['pageTitle'];
             $totalCouponsCount =
                 is_array($this->homePageData['specialPagesOffers'][$specialPageListIndex])==true
                 ? count($this->homePageData['specialPagesOffers'][$specialPageListIndex])
@@ -96,9 +96,9 @@ class FrontEnd_Helper_HomePagePartialFunctions
                 $this->getLeftColumnContent(
                     'special',
                     '',
-                    $specialListPage[0]['page']['pageTitle'],
+                    $specialListPage['page']['pageTitle'],
                     70,
-                    $specialListPage[0]['page']['permalink'],
+                    $specialListPage['page']['permalink'],
                     $specialListPageOffers
                 );
         }
@@ -157,7 +157,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
         } else {
             if ($listType =='special') {
                 $pageLeftImage = KC\Repository\Page::getPageHomeImageByPermalink($imageDescription);
-                if (empty( $pageLeftImage)) {
+                if (empty($pageLeftImage)) {
                     $imageTagOrSpan =
                     '<span class="discount-label">'
                         . \FrontEnd_Helper_viewHelper::__translate($listType)
@@ -201,20 +201,39 @@ class FrontEnd_Helper_HomePagePartialFunctions
             HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_top-20'),
             FrontEnd_Helper_viewHelper::__form('form_All Top Codes')
         );
+
         $newOffer = $this->getRightColumnOffersHtml(
             'newOffers',
             HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_nieuw'),
             FrontEnd_Helper_viewHelper::__form('form_All New Codes')
         );
+
         $guidesHtml = self::getMoneySavingGuidesRightForAjax(
             $this->homePageData['moneySavingGuidesList'],
             'moneysaving',
             FrontEnd_Helper_viewHelper::__form('form_All Saving Guides'),
             HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_plus')
         );
-        $specialListPage = $this->getRightColumnSpicialListHtml();
-        $categoryListPage = $this->renderCategoryData();
+
+        $specialListPage = self::getRightColumnSpicialListHtml();
+        $categoryListPage = self::renderCategoryData();
         return $topOffer.$newOffer.$categoryListPage.$specialListPage.$guidesHtml;
+    }
+
+    public function renderCategoryData()
+    {
+        $rightDiv = '';
+        foreach ($this->homePageData['topCategories'] as $category) {
+            $link = HTTP_PATH_LOCALE.$category[0]['category']['permaLink'];
+            $rightDiv.=
+            self::getRightDivByAjax(
+                $this->homePageData['categoriesOffers'][$category[0]['category']['permaLink']],
+                $category[0]['category']['permaLink'],
+                '',
+                $link
+            );
+        }
+        return $rightDiv;
     }
     
     public function getRightColumnOffersHtml($offerDivName, $goToAllLink, $linkText, $dynamicDivId = '')

@@ -5,12 +5,10 @@ class Zend_Controller_Action_Helper_Index extends Zend_Controller_Action_Helper_
     {
         $specialOfferslist = '';
         foreach ($specialListPages as $specialListPage) {
-            foreach ($specialListPage['page'] as $page) {
-                $specialOfferslistIndex = $page['permaLink'] . ',' . $page['pageTitle'];
-                $specialOfferslist[$specialOfferslistIndex] =
-                \KC\Repository\SpecialPagesOffers::getSpecialPageOfferById($specialListPage['specialpageId'], 10);
-                
-            }
+            $specialOfferslistIndex = $specialListPage['page']['permalink'] . ',' . $specialListPage['page']['pageTitle'];
+            $specialOfferslist[$specialOfferslistIndex] =
+            \KC\Repository\SpecialPagesOffers::getSpecialPageOfferById($specialListPage['page']['id'], 10);
+
         }
         return $specialOfferslist;
     }
@@ -37,8 +35,8 @@ class Zend_Controller_Action_Helper_Index extends Zend_Controller_Action_Helper_
     {
         $categoriesOffers = array();
         foreach ($categoryIds as $categoryId) {
-            $categoriesOffers[$categoryId['category']['permaLink']] =
-            \KC\Repository\Category::getCategoryVoucherCodes($categoryId['categoryId'], 0, 'homePage');
+            $categoriesOffers[$categoryId[0]['category']['permaLink']] =
+            \KC\Repository\Category::getCategoryVoucherCodes($categoryId[0]['category']['id'], 0, 'homePage');
         }
         return $categoriesOffers ;
     }

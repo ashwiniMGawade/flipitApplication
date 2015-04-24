@@ -47,10 +47,7 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select(
-                'p.id, o.title, p.position, o.id as offerId, o, page.id as pageId,
-                s.permaLink as permalink, s.name, l'
-            )
+            ->select('o,p,s,l')
             ->from('KC\Entity\SpecialPagesOffers', 'p')
             ->leftJoin('p.offers', 'o')
             ->leftJoin('o.shopOffers', 's')

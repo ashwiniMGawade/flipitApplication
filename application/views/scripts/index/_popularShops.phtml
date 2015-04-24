@@ -1,14 +1,14 @@
 <div class="container our-shops">
     <h2><?php echo $this->translate('Don&#39;t miss out on one of our shops, more the  10.000 in total!');?></h2>
     <div class="row">
-<?php 
+<?php
 foreach ($this->topStores as $topStores):
     ?>
         <div class="col-md-2 col-sm-2 col-xs-6">
             <ul>
                 <li>
-                     <a href="<?php echo HTTP_PATH_LOCALE. $topStores['permaLink'];?>">
-                     <?php echo $topStores['name']; ?>
+                     <a href="<?php echo HTTP_PATH_LOCALE. $topStores['popularshops']['permaLink'];?>">
+                     <?php echo $topStores['popularshops']['name']; ?>
                      </a>
                 </li>
             </ul>

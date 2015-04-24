@@ -28,7 +28,7 @@ class SpecialList extends \KC\Entity\SpecialList
         $currentDateAndTime = date('Y-m-d H:i:s');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select('p.id as specialpageid, sp.total_offers, sp.total_coupons, p, l')
+            ->select('p, sp, l')
             ->from('KC\Entity\SpecialList', 'sp')
             ->leftJoin('sp.page', 'p')
             ->leftJoin('p.logo', 'l')
