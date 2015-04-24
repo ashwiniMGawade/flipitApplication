@@ -378,6 +378,14 @@ abstract class BaseShop extends Doctrine_Record
             'type' => 'string',
             'length' => '100',
         ));
+        $this->hasColumn(
+            'futurecode',
+            'boolean',
+            null,
+            array(
+                'type' => 'boolean',
+            )
+        );
     }
 
     public function setUp()

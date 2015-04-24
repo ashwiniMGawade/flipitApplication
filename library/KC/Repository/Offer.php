@@ -3386,4 +3386,23 @@ class Offer Extends \KC\Entity\Offer
         $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $offers;
     }
+
+    public static function getFutureOffersCountByShopId($shopId)
+    {
+        $startDate = date("Y-m-d H:i");
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('o.startDate')
+            ->from('KC\Entity\Offer', 'o')
+            ->leftJoin('o.shopOffers', 's')
+            ->where('o.deleted = 0')
+            ->andWhere('o.userGenerated = 0')
+            ->andWhere($queryBuilder->expr()->gt('o.startDate', $queryBuilder->expr()->literal($startDate)))
+            ->andWhere($queryBuilder->expr()->eq('o.discountType', $queryBuilder->expr()->literal('CD')))
+            ->andWhere('s.deleted = 0')
+            ->andWhere('s.status = 1')
+            ->andWhere('s.id = '. $shopId)
+            ->setMaxResults(1);
+        $futureOffersCount = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $futureOffersCount;
+    }
 }

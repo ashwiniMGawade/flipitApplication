@@ -168,6 +168,17 @@ if (!empty($this->offersAddedInShop) && $this->offersAddedInShop['offersInfo'] !
         .' '
         .FrontEnd_Helper_viewHelper::__translate('offers have been added').'</span></li>';
 }
+
+$storeViewPartialPath = 'store/';
+$futureCodeMessage = '';
+if (isset($this->currentStoreInformation[0]['futurecode']) && $this->currentStoreInformation[0]['futurecode'] == 1) {
+    if (!empty($this->futureCodeCount)) {
+        $futureCodeMessage = $this->partial(
+            $storeViewPartialPath.'_futureCodeMessage.phtml',
+            array('futureCodeCount' => $this->futureCodeCount)
+        );
+    }
+}
 ?>
 <input type="hidden" name="currentShop" id="currentShop" 
 value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
@@ -191,6 +202,7 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
     <div id="content" class ="col-md-8 col-sm-8">
     <?php 
     echo $noMoneyNocodeMessage;
+    echo $futureCodeMessage;
     echo $offers;
     echo $sixShopReasons;
     echo $similarOffersHeader;

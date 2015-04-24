@@ -482,8 +482,12 @@ class Shop
      * @ORM\Column(type="text", nullable=true)
      */
     private $customtext;
- 
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $futurecode;
+ 
     public function __get($property)
     {
         return $this->$property;

@@ -1,0 +1,17 @@
+<?php
+if (isset($this->futureCodeCount[0]) && $this->futureCodeCount[0]['futureOffersCount'] != 0) { ?>
+    <div class="message">
+        <div class="holder">
+        <?php
+        echo FrontEnd_Helper_viewHelper::__translate(
+        'New Zalando codes! Within')
+        . ' '
+        . $this->futureCodeCount[0]['futureOffersCount']
+        . ' ' 
+        . FrontEnd_Helper_viewHelper::__translate('days of new codes will be offered');
+        ?>
+         </div>
+    </div>
+    <?php
+}
+?>

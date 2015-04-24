@@ -212,6 +212,16 @@ class StoreController extends Zend_Controller_Action
             ''
         );
 
+        $futureCodeKey = "futurecode_".$shopId."_shop";
+        $this->view->futureCodeCount = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            (string)$futureCodeKey,
+            array(
+                'function' => 'KC\Repository\Offer::getFutureOffersCountByShopId',
+                'parameters' => array($shopId)
+            ),
+            ''
+        );
+
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->storeImage = $shopImage;
         $this->view->shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
