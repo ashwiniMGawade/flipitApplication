@@ -48,9 +48,10 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder
-            ->select('wl.id')
+            ->select('wl.id, wl.position')
             ->from('\KC\Entity\WidgetLocation', 'wl')
-            ->where($queryBuilder->expr()->eq('wl.relatedid', $relatedId));
+            ->where($queryBuilder->expr()->eq('wl.relatedid', $relatedId))
+            ->setMaxResults(1);
         $existedRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $existedRecord;
     }
@@ -60,11 +61,26 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder
-            ->select('wl.id')
+            ->select('wl.id, wl.position')
             ->from('\KC\Entity\WidgetLocation', 'wl')
             ->where($queryBuilder->expr()->eq('wl.location', $queryBuilder->expr()->literal($widgetLocation)))
-            ->andWhere($queryBuilder->expr()->eq('wl.pagetype', $queryBuilder->expr()->literal($pageType)));
+            ->andWhere($queryBuilder->expr()->eq('wl.pagetype', $queryBuilder->expr()->literal($pageType)))
+            ->setMaxResults(1);
         $existedRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $existedRecord;
+    }
+
+    public static function getWidgetPosition($pageType, $widgetLocation, $relatedId)
+    {
+        $existedRecord = '';
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
+        if (!empty($relatedId)) {
+            $existedRecord = self::getWidgetLocationIdByRelatedId($relatedId);
+        }
+        if (empty($existedRecord)) {
+            $existedRecord = self::getWidgetLocationIdByPageTypeAndLocation($widgetLocation, $pageType);
+        }
+        $widgetPosition = !empty($existedRecord[0]['position']) ? $existedRecord[0]['position'] : '';
+        return $widgetPosition;
     }
 }
