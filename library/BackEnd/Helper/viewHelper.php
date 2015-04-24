@@ -14,9 +14,10 @@ class BackEnd_Helper_viewHelper
     public function getWidgetLocationsByPageType($pageType, $relatedId = '')
     {
         $widgetLocations = '';
-        $widgetLocations['Global'] = $this->zendTranslate->translate('backend_Global');
         if (!empty($relatedId)) {
             $widgetLocations['Indvidual'] = $this->zendTranslate->translate('backend_Indvidual');
+        } else {
+            $widgetLocations['Global'] = $this->zendTranslate->translate('backend_Global');
         }
         if ($pageType=='shop') {
             $widgetLocations['Money Shop'] = $this->zendTranslate->translate('backend_Money Shop');

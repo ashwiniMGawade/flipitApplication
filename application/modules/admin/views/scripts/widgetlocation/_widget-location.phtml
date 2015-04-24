@@ -1,6 +1,6 @@
 <?php
 $backEndHelper = new BackEnd_Helper_viewHelper();
-$widgetLocations  = $backEndHelper->getWidgetLocationsByPageType($this->pageType);
+$widgetLocations  = $backEndHelper->getWidgetLocationsByPageType($this->pageType, $this->relatedId);
 ?>
 <div class="modal display-none popup-width" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" 
     aria-hidden="true">

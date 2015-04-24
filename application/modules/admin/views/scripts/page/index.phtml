@@ -33,7 +33,7 @@ $this->headScript ()->prependFile ( PUBLIC_PATH . "js/back_end/widget-location.j
           	<p class="text-right">
                 <a href='javascript:void(0)' onclick="showLightBoxForWidgetLocation()">
                     <?php echo $this->translate('Set Widget Location')?>
-                </a>
+                </a>  / 
                 <a href='<?php echo HTTP_PATH;?>admin/page/exportpagelist'>
                     <?php echo $this->translate('Export List')?>
                 </a>
@@ -72,12 +72,5 @@ $this->headScript ()->prependFile ( PUBLIC_PATH . "js/back_end/widget-location.j
          </div>
            
         </div>
-      <?php 
-      echo $this->partial(
-          'widgetlocation/_widget-location.phtml',
-          array(
-              'pageType' => 'page',
-              'relatedId' => ''
-          )
-      );?>
+<?php echo $this->partial('widgetlocation/_widget-location.phtml', array('pageType' => 'page', 'relatedId' => ''));?>
        <!-- pageList end -->
