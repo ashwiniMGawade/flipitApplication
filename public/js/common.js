@@ -66,6 +66,13 @@ function localeSettingCMS(obj) {
 }
 
 jQuery(document).ready(function() {
+    if(jQuery(".shops .similar-shops-images").length > 0) {
+        $(".shops li").each(function(index, value) { 
+            var backgroundImageAttribute = jQuery(this).find(".similar-shops-images").attr('data-src');
+            jQuery(this).find(".similar-shops-images").css("background-image", "url('" + backgroundImageAttribute + "')")
+        });
+    }
+
 	if(jQuery("div.coupon-code").length > 0) {
 		jQuery("div.coupon-code").bigText({'maximumFontSize': 20});
 	}
