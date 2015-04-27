@@ -20,6 +20,7 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
             $saveWidgetLocation = new \KC\Entity\WidgetLocation();
             $saveWidgetLocation->created_at = new \DateTime('now');
             $saveWidgetLocation->deleted = false;
+            $saveWidgetLocation->widgettype = 'signup';
         }
         $saveWidgetLocation->position = \FrontEnd_Helper_viewHelper::sanitize($parameters['widgetPostion']);
         $saveWidgetLocation->location = $widgetLocation;

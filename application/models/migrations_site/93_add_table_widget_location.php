@@ -27,6 +27,10 @@ class AddTableWidgetLocation extends Doctrine_Migration_Base
                 'type'   => 'integer',
                 'length' => 11
             ),
+            'widgettype' => array(
+                'type'   => 'string',
+                'length' => 100
+            ),
             'deleted' => array(
                 'type'   => 'boolean',
                 'length' => 1

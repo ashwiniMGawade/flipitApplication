@@ -36,6 +36,11 @@ class WidgetLocation
     private $relatedid;
 
     /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $widgettype;
+    
+    /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $deleted;
