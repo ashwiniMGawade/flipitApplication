@@ -33,6 +33,7 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
 
     public static function findWidgetById($widgetLocationId)
     {
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
         return $entityManagerLocale->find('KC\Entity\WidgetLocation', $widgetLocationId);
     }
 
