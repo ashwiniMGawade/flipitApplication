@@ -620,6 +620,5 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
               <br class="clear">
 </div>
 <?php 
-echo $this->partial(
-    'widgetlocation/_widget-location.phtml', array('pageType' => 'page', 'relatedId' => $this->pageDetail['id'])
-);?>
+$pageId = !empty($this->pageDetail['id']) ? $this->pageDetail['id'] : '';
+echo $this->partial('widgetlocation/_widget-location.phtml', array('pageType' => 'page', 'relatedId' => $pageId));?>
