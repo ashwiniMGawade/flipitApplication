@@ -57,7 +57,7 @@ $widgetPosition = \KC\Repository\WidgetLocation::getWidgetPosition($this->pageTy
                 <button id="submitButton" class="btn btn-large btn-primary fl export-submit-btn" type="submit">
                     <?php echo $this->translate('backend_Submit');?>
                 </button> 
-                <button class="btn ml10 m5" data-dismiss="modal">
+                <button type='button' class="btn ml10 m5" onclick="hideModel();">
                     <?php echo $this->translate('backend_Cancel');?>
                 </button>
             </div>

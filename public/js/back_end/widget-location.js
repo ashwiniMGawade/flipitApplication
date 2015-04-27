@@ -28,6 +28,7 @@ function removeBorders() {
 
 function hideModel() {
     $('#myModal').modal('hide');
+    window.location.reload();
     return false;
 }
 
@@ -126,6 +127,7 @@ function validateWidgetlocationForm() {
                     if (data == true) {
                         $('div#message-display').html(__('Record has been saved successfully'))
                             .addClass('widget-location-success-message');
+                        window.location.reload();
                     } else {
                         $('div#message-display').html(__('You have entered wrong data'))
                             .addClass('widget-location-error-message');
