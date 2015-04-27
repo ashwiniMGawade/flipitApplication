@@ -6,8 +6,8 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
     {
         $pageType = \FrontEnd_Helper_viewHelper::sanitize($parameters['pageType']);
         $pageTypeGloabalOrInvidual = !empty($pageType) ? $pageType : 'global';
-        $widgetLocation  = \FrontEnd_Helper_viewHelper::sanitize($parameters['widgetLocation']);
-        $relatedId  = \FrontEnd_Helper_viewHelper::sanitize($parameters['relatedId']);
+        $widgetLocation = \FrontEnd_Helper_viewHelper::sanitize($parameters['widgetLocation']);
+        $relatedId = \FrontEnd_Helper_viewHelper::sanitize($parameters['relatedId']);
         $widgetLocationId = self::validateWidgetLocation(
             $pageTypeGloabalOrInvidual,
             $widgetLocation,
@@ -32,14 +32,14 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
 
     public static function validateWidgetLocation($pageType, $widgetLocation, $relatedId)
     {
-        $existedRecord = '';
+        $existInDatabase = '';
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         if (!empty($relatedId)) {
-            $existedRecord = self::getWidgetLocationIdByRelatedId($relatedId);
+            $existInDatabase = self::getWidgetLocationIdByRelatedId($relatedId);
         } else {
-            $existedRecord = self::getWidgetLocationIdByPageTypeAndLocation($widgetLocation, $pageType);
+            $existInDatabase = self::getWidgetLocationIdByPageTypeAndLocation($widgetLocation, $pageType);
         }
-        $widgetLocationId = !empty($existedRecord[0]['id']) ? $existedRecord[0]['id'] : '';
+        $widgetLocationId = !empty($existInDatabase[0]['id']) ? $existInDatabase[0]['id'] : '';
         return $widgetLocationId;
     }
 
@@ -52,8 +52,8 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
             ->from('\KC\Entity\WidgetLocation', 'wl')
             ->where($queryBuilder->expr()->eq('wl.relatedid', $relatedId))
             ->setMaxResults(1);
-        $existedRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $existedRecord;
+        $existInDatabase = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $existInDatabase;
     }
 
     public static function getWidgetLocationIdByPageTypeAndLocation($widgetLocation, $pageType)
@@ -66,21 +66,21 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
             ->where($queryBuilder->expr()->eq('wl.location', $queryBuilder->expr()->literal($widgetLocation)))
             ->andWhere($queryBuilder->expr()->eq('wl.pagetype', $queryBuilder->expr()->literal($pageType)))
             ->setMaxResults(1);
-        $existedRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $existedRecord;
+        $existInDatabase = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $existInDatabase;
     }
 
     public static function getWidgetPosition($pageType, $widgetLocation, $relatedId)
     {
-        $existedRecord = '';
+        $existInDatabase = '';
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         if (!empty($relatedId)) {
-            $existedRecord = self::getWidgetLocationIdByRelatedId($relatedId);
+            $existInDatabase = self::getWidgetLocationIdByRelatedId($relatedId);
         }
-        if (empty($existedRecord)) {
-            $existedRecord = self::getWidgetLocationIdByPageTypeAndLocation($widgetLocation, $pageType);
+        if (empty($existInDatabase)) {
+            $existInDatabase = self::getWidgetLocationIdByPageTypeAndLocation($widgetLocation, $pageType);
         }
-        $widgetPosition = !empty($existedRecord[0]['position']) ? $existedRecord[0]['position'] : '';
+        $widgetPosition = !empty($existInDatabase[0]['position']) ? $existInDatabase[0]['position'] : '';
         return $widgetPosition;
     }
 }
