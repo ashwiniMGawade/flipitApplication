@@ -20,10 +20,10 @@ if (!empty($this->similarShopsAndSimilarCategoryShops)) {
         $shopLogoName = isset($shop['category']['logo']['name']) ? $shop['category']['logo']['name'] : '';
         $shopLogoPath = isset($shop['category']['logo']['path']) ? $shop['category']['logo']['path'] : '';
         printf(
-            '<li><a href="%s"><img style="max-width: 84px;" alt="%s" src="%s"></a></li>',
+            '<li><a href="%s"><span class="similar-shops-images" data-src="%s">%s</span></a></li>',
             HTTP_PATH_LOCALE  . $shop['category']['permaLink'],
-            $shop['category']['name'],
-            PUBLIC_PATH_CDN . ltrim($shopLogoPath, "/") . 'thum_small_'. $shopLogoName
+            PUBLIC_PATH_CDN . ltrim($shopLogoPath, "/") . 'thum_small_'. $shopLogoName,
+            $shop['category']['name']
         );
   
     }
