@@ -77,6 +77,9 @@ class CategoryController extends Zend_Controller_Action
         $socialCodeForm = new Application_Form_SocialCode();
         $this->view->zendForm = $socialCodeForm;
         $this->view->pageCssClass = 'page-store';
+        $categoryId = !empty($categoryDetails[0]['id']) ? $categoryDetails[0]['id'] : '';
+        $widgetPosition = \KC\Repository\WidgetLocation::getWidgetPosition('category', 'global', $categoryId);
+        $this->view->widgetPosition = $widgetPosition;
     }
 
     public function indexAction()

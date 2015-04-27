@@ -6,6 +6,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
 $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
 $this->headScript()->appendFile ( PUBLIC_PATH . "js/back_end/categories.js" );
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
+$this->headScript()->prependFile (PUBLIC_PATH . "js/back_end/widget-location.js");
 ?>
 
   <div id="categoryList">
@@ -30,7 +32,14 @@ $this->headScript()->appendFile ( PUBLIC_PATH . "js/back_end/categories.js" );
 	          	</button>
 
           </h1>
-          	<p class="text-right"><a href="<?php echo HTTP_PATH ?>admin/category/exportCategoryList"><?php echo $this->translate('Export List'); ?></a></p>
+          	<p class="text-right">
+                <a href='javascript:void(0)' onclick="showLightBoxForWidgetLocation()">
+                    <?php echo $this->translate('Set Widget Location')?>
+                </a>  /
+                <a href="<?php echo HTTP_PATH ?>admin/category/exportCategoryList">
+                    <?php echo $this->translate('Export List'); ?>
+                </a>
+            </p>
 
           	<form class="well form-search searchbarbox"  name="searchform" id="searchform">
               	<div class="mainpage-content-searchbart" style="width: 100%; float:left;">
@@ -62,3 +71,4 @@ $this->headScript()->appendFile ( PUBLIC_PATH . "js/back_end/categories.js" );
     </table>
     </div>
     </div>
+<?php echo $this->partial('widgetlocation/_widget-location.phtml', array('pageType' => 'category', 'relatedId' => ''));?>
