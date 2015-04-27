@@ -1,9 +1,9 @@
 <?php
 $backEndHelper = new BackEnd_Helper_viewHelper();
 $widgetLocations  = $backEndHelper->getWidgetLocationsByPageType($this->pageType, $this->relatedId);
-$widgetLocation = 'Global';
+$widgetLocation = 'global';
 if (!empty($this->relatedId)) {
-    $widgetLocation = 'Indvidul';
+    $widgetLocation = 'individual';
 }
 $widgetPosition = \KC\Repository\WidgetLocation::getWidgetPosition($this->pageType, $widgetLocation, $this->relatedId);
 ?>

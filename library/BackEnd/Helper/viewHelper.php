@@ -15,7 +15,7 @@ class BackEnd_Helper_viewHelper
     {
         $widgetLocations = '';
         if (!empty($relatedId)) {
-            $widgetLocations['indvidual'] = $this->zendTranslate->translate('backend_Indvidual');
+            $widgetLocations['individual'] = $this->zendTranslate->translate('backend_Individual');
         } else {
             $widgetLocations['global'] = $this->zendTranslate->translate('backend_Global');
         }
