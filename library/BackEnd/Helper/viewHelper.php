@@ -19,7 +19,7 @@ class BackEnd_Helper_viewHelper
         } else {
             $widgetLocations['global'] = $this->zendTranslate->translate('backend_Global');
         }
-        if ($pageType=='shop') {
+        if ($pageType == 'shop' && empty($relatedId)) {
             $widgetLocations['money-shop'] = $this->zendTranslate->translate('backend_Money Shop');
             $widgetLocations['no-money'] = $this->zendTranslate->translate('backend_No Money');
         }
