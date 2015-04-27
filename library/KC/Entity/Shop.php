@@ -327,6 +327,11 @@ class Shop
     private $howtoguideslug;
 
     /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $code_alert_send_date;
+    
+    /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="shop")
      * @ORM\JoinColumn(name="logoId", referencedColumnName="id", unique=true)
      */

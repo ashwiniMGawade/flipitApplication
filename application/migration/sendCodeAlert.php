@@ -161,7 +161,7 @@ class SendCodeAlert
                             $codeAlertOffer['id']
                         );
                         if (empty($codeAlertVisitors)) {
-                            $visitorCodeAlertSendDate = Visitor::getVisitorCodeAlertSendDate($visitorInfo['visitorId']);
+                            $visitorCodeAlertSendDate = Shop::getCodeAlertSendDateByShopId($codeAlertOffer['shop']['id']);
                             if (date('Y-m-d', strtotime($visitorCodeAlertSendDate)) == date('Y-m-d')) {
                             } else {
                                 $visitorIds[] = $visitorInfo['visitorId'];
@@ -203,7 +203,7 @@ class SendCodeAlert
                                 str_replace('[shopname]', $codeAlertOffer['shop']['name'], $codeAlertHeader),
                                 $codeAlertOffer
                             );
-                            Visitor::addCodeAlertTimeStampForVisitor($visitorIds);
+                            Shop::addCodeAlertTimeStampForShopId($codeAlertOffer['shop']['id']);
                             CodeAlertVisitors::saveCodeAlertVisitors($visitorIds, $codeAlertOffer['id']);
                             CodeAlertQueue::clearCodeAlertQueueByOfferId($codeAlertOffer['id']);
                             $message = 'code alert has been sent successfully' ;

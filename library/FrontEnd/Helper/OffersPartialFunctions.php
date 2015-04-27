@@ -51,8 +51,10 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getDaysTillOfferExpires($endDate)
     {
         $endDate = (array) $endDate;
+        $endDate = isset($endDate['date']) ? $endDate['date'] : $endDate;
+        $endDate = isset($endDate[0]) ? $endDate[0] : $endDate;
         $currentDate = date('Y-m-d');
-        $offerEndDate = date('Y-m-d', strtotime($endDate['date']));
+        $offerEndDate = date('Y-m-d', strtotime($endDate));
         $timeStampStart = strtotime($offerEndDate);
         $timeStampEnd = strtotime($currentDate);
         $dateDifference = abs($timeStampEnd - $timeStampStart);
