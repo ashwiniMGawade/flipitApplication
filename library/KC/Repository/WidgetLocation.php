@@ -5,17 +5,17 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
     public static function saveOrUpdateWidgetLocation($parameters)
     {
         $pageType = \FrontEnd_Helper_viewHelper::sanitize($parameters['pageType']);
-        $pageTypeGloabalOrInvidual = !empty($pageType) ? $pageType : 'global';
+        $pageTypeGloabalOrIndividual = !empty($pageType) ? $pageType : 'global';
         $widgetLocation = \FrontEnd_Helper_viewHelper::sanitize($parameters['widgetLocation']);
         $relatedId = \FrontEnd_Helper_viewHelper::sanitize($parameters['relatedId']);
         $widgetLocationId = self::validateWidgetLocation(
-            $pageTypeGloabalOrInvidual,
+            $pageTypeGloabalOrIndividual,
             $widgetLocation,
             $relatedId
         );
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         if (!empty($widgetLocationId)) {
-            $saveWidgetLocation = $entityManagerLocale->find('KC\Entity\WidgetLocation', $widgetLocationId);
+            $saveWidgetLocation = self::findWidgetById($widgetLocationId);
         } else {
             $saveWidgetLocation = new \KC\Entity\WidgetLocation();
             $saveWidgetLocation->created_at = new \DateTime('now');
@@ -24,10 +24,15 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
         $saveWidgetLocation->position = \FrontEnd_Helper_viewHelper::sanitize($parameters['widgetPostion']);
         $saveWidgetLocation->location = $widgetLocation;
         $saveWidgetLocation->relatedid = $relatedId;
-        $saveWidgetLocation->pagetype = $pageTypeGloabalOrInvidual;
+        $saveWidgetLocation->pagetype = $pageTypeGloabalOrIndividual;
         $saveWidgetLocation->updated_at = new \DateTime('now');
         $entityManagerLocale->persist($saveWidgetLocation);
         $entityManagerLocale->flush();
+    }
+
+    public static function findWidgetById($widgetLocationId)
+    {
+        return $entityManagerLocale->find('KC\Entity\WidgetLocation', $widgetLocationId);
     }
 
     public static function validateWidgetLocation($pageType, $widgetLocation, $relatedId)
