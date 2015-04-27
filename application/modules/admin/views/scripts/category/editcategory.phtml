@@ -10,7 +10,6 @@
 	$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
 	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/category-common.js");
 	$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/widget-location.js");
-
 	$categoryPicturePath = '';
 	$categoryPictureName = '';
 	if(isset($this->categoryDetail['categoryiconname'])) {
@@ -47,10 +46,10 @@
 	<?php $featuredCategory = $this->categoryDetail[0]['featured_category'] == '' ? 0 : 1; ?>
     <input type="hidden" name="featuredCategory" id="featuredCategory" value="<?php echo $featuredCategory;?>" />
 	<h1>
-		<?php echo $this->translate('Edit Category'); ?>
-		<input type="button"  Value='<?php echo $this->translate('Cancel'); ?>' class="btn ml10" 
-			onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/category'" />
-		<button type = "button" onclick="showLightBoxForWidgetLocation()" class="btn ml10">
+        <?php echo $this->translate('Edit Category'); ?>
+        <input type="button"  Value='<?php echo $this->translate('Cancel'); ?>' class="btn ml10" 
+            onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/category'" />
+        <button type = "button" onclick="showLightBoxForWidgetLocation()" class="btn ml10">
             <?php echo $this->translate('backend_Set widget location'); ?>
         </button>
 	</h1>
