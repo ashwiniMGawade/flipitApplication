@@ -207,7 +207,6 @@ class FrontEnd_Helper_HomePagePartialFunctions
             HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_nieuw'),
             FrontEnd_Helper_viewHelper::__form('form_All New Codes')
         );
-
         $guidesHtml = self::getMoneySavingGuidesRightForAjax(
             $this->homePageData['moneySavingGuidesList'],
             'moneysaving',
@@ -224,13 +223,14 @@ class FrontEnd_Helper_HomePagePartialFunctions
     {
         $rightDiv = '';
         foreach ($this->homePageData['topCategories'] as $category) {
-            $link = HTTP_PATH_LOCALE.$category['category']['permaLink'];
+            $categoryPermalink = HTTP_PATH_LOCALE.$category['category']['permaLink'];
             $rightDiv.=
             self::getRightDivByAjax(
                 $this->homePageData['categoriesOffers'][$category['category']['permaLink']],
                 $category['category']['permaLink'],
-                '',
-                $link
+                FrontEnd_Helper_viewHelper::__form('form_All') . " " . $category['category']['permaLink']. " "
+                . FrontEnd_Helper_viewHelper::__form('form_Code'),
+                $categoryPermalink
             );
         }
         return $rightDiv;
@@ -424,11 +424,11 @@ class FrontEnd_Helper_HomePagePartialFunctions
         }
     }
 
-    public function getRightDivByAjax($offers, $divId, $textButtomLink, $link)
+    public function getRightDivByAjax($offers, $divId, $textButtonLink, $link)
     {
         $rightDiv =
             '<div id="div_'. $divId .'" class="vouchers">
-                <a href="'. $link.'" class="all">'.$textButtomLink.'</a><ul>';
+                <a href="'. $link.'" class="all">'.$textButtonLink.'</a><ul>';
         foreach ($offers as $offer) {
             $rightDiv.= $this->getRightColumnOffersHtmlForAllOffersTypes($offer);
         }
@@ -436,11 +436,11 @@ class FrontEnd_Helper_HomePagePartialFunctions
         return $rightDiv;
     }
 
-    public function getMoneySavingGuidesRightForAjax($savingGuides, $divId, $textButtomLink, $link)
+    public function getMoneySavingGuidesRightForAjax($savingGuides, $divId, $textButtonLink, $link)
     {
         $rightDiv =
             '<div id="div_'. $divId .'" class="vouchers">
-                <a href="'. $link.'" class="all">'.$textButtomLink.'</a><ul>';
+                <a href="'. $link.'" class="all">'.$textButtonLink.'</a><ul>';
         $moneySavingGuidestHtml = '';
         foreach ($savingGuides as $savingGuide) {
             $savingImage = !empty($savingGuide['articles']['thumbnail'])

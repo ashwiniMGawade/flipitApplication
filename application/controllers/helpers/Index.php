@@ -6,8 +6,10 @@ class Zend_Controller_Action_Helper_Index extends Zend_Controller_Action_Helper_
         $specialOfferslist = '';
         foreach ($specialListPages as $specialListPage) {
             $specialOfferslistIndex = $specialListPage['page']['permalink'] . ',' . $specialListPage['page']['pageTitle'];
-            $specialOfferslist[$specialOfferslistIndex] =
-            \KC\Repository\SpecialPagesOffers::getSpecialPageOfferById($specialListPage['page']['id'], 10);
+            $specialOfferslist[$specialOfferslistIndex] = self::removeDuplicateCode(
+                \KC\Repository\SpecialPagesOffers::getSpecialPageOfferById($specialListPage['page']['id'], 10),
+                'specialPage'
+            );
 
         }
         return $specialOfferslist;
@@ -17,7 +19,13 @@ class Zend_Controller_Action_Helper_Index extends Zend_Controller_Action_Helper_
     {
         $offersWithoutDuplicateShop = '';
         foreach ($offers as $offerId => $offer) {
-            $offersWithoutDuplicateShop[$offer['shopOffers']['id']] = $offers[$offerId];
+            if ($pageName == 'specialPage') {
+                $offerData = $offer['offers']['shopOffers'];
+            } else {
+                $offerData = $offer['shopOffers'];
+            }
+
+            $offersWithoutDuplicateShop[$offerData['id']] = $offers[$offerId];
         }
         return $pageName == 'homePage' ? array_slice($offersWithoutDuplicateShop, 0, 10) : $offersWithoutDuplicateShop;
     }
@@ -35,8 +43,9 @@ class Zend_Controller_Action_Helper_Index extends Zend_Controller_Action_Helper_
     {
         $categoriesOffers = array();
         foreach ($categoryIds as $categoryId) {
-            $categoriesOffers[$categoryId['category']['permaLink']] =
-            \KC\Repository\Category::getCategoryVoucherCodes($categoryId['category']['id'], 10, 'homePage');
+            $categoriesOffers[$categoryId['category']['permaLink']] = self::removeDuplicateCode(
+                \KC\Repository\Category::getCategoryVoucherCodes($categoryId['category']['id'], 10, 'homePage')
+            );
         }
         return $categoriesOffers ;
     }
