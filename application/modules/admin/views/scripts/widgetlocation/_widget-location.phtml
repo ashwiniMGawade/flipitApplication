@@ -1,6 +1,11 @@
 <?php
 $backEndHelper = new BackEnd_Helper_viewHelper();
 $widgetLocations  = $backEndHelper->getWidgetLocationsByPageType($this->pageType, $this->relatedId);
+$widgetLocation = 'Global';
+if (!empty($this->relatedId)) {
+    $widgetLocation = 'Indvidul';
+}
+$widgetPosition = \KC\Repository\WidgetLocation::getWidgetPosition($this->pageType, $widgetLocation, $this->relatedId);
 ?>
 <div class="modal display-none popup-width" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" 
     aria-hidden="true">
@@ -41,7 +46,8 @@ $widgetLocations  = $backEndHelper->getWidgetLocationsByPageType($this->pageType
                         <div class="mainpage-content-right">
                             <input type="text" 
                                 placeholder="<?php echo $this->translate('backend_Widget Position');?>" 
-                                class="span3" name="widgetPostion" id="widgetPostion">
+                                class="span3" name="widgetPostion" id="widgetPostion" 
+                                value='<?php echo $widgetPosition;?>'>
                         </div>
                     </div> 
                 </div>

@@ -3,7 +3,7 @@ class Admin_WidgetlocationController extends Zend_Controller_Action
 {
     public function preDispatch()
     {
-        $dbConnection = \BackEnd_Helper_viewHelper::addConnection();
+        $dbConnection = BackEnd_Helper_viewHelper::addConnection();
         if (!Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
@@ -17,12 +17,12 @@ class Admin_WidgetlocationController extends Zend_Controller_Action
     public function saveOrUpdateWidgetLocationAction()
     {
         $parameters = $this->getRequest()->getParams();
-        $saveWidgetLocationStatus = false;
+        $savedOrUpdatedWidgetLocationStatus = false;
         if (!empty($parameters['widgetPostion']) && !empty($parameters['widgetLocation'])) {
             KC\Repository\WidgetLocation::saveOrUpdateWidgetLocation($parameters);
-            $saveWidgetLocationStatus = true;
+            $savedOrUpdatedWidgetLocationStatus = true;
         }
-        echo Zend_Json::encode($saveWidgetLocationStatus);
+        echo Zend_Json::encode($savedOrUpdatedWidgetLocationStatus);
         die();
     }
 }
