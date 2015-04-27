@@ -1,17 +1,16 @@
 <?php
-
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.dataTables.min.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/dataTableComman.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
-$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
-$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/select2.css" );
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/select2.css");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/shop.js");
-
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
+$this->headScript()->prependFile(PUBLIC_PATH . "js/back_end/widget-location.js");
 $sessionNamespace = new Zend_Session_Namespace();
-
 ?>
 
 <?php echo $this->headTitle()->append('Shops List');?>
@@ -41,7 +40,15 @@ $sessionNamespace = new Zend_Session_Namespace();
 		</div>
         <h1 class="fl">Shops<button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/shop/createshop'" ><?php echo $this->translate('Add New Shop'); ?></button></h1><?php if($this->role == '1' || $this->role == '2')  { ?><a class="red trash-link" href="<?php echo HTTP_PATH ?>admin/shop/trash"><strong><?php echo $this->translate('Trash'); ?></strong></a><?php }?>
         <div class="clear"></div>
-         <p class="text-right"><a href="<?php echo HTTP_PATH ?>admin/shop/importshops"><?php echo $this->translate('Import List'); ?></a> / <a href="<?php echo HTTP_PATH ?>admin/shop/local-export-xlx"><?php echo $this->translate('Local Export List'); ?></a>
+         <p class="text-right">
+              <a href='javascript:void(0)' onclick="showLightBoxForWidgetLocation()">
+                  <?php echo $this->translate('Set Widget Location')?>
+              </a>  / 
+              <a href="<?php echo HTTP_PATH ?>admin/shop/importshops">
+                  <?php echo $this->translate('Import List'); ?></a> / 
+              <a href="<?php echo HTTP_PATH ?>admin/shop/local-export-xlx">
+                  <?php echo $this->translate('Local Export List'); ?>
+              </a>
            <?php
             # make gloabl shop export only available for superadmins
          	if ( $sessionNamespace->settings['rights']['site']['rights'] == '1' ) : ?>
@@ -119,3 +126,4 @@ $sessionNamespace = new Zend_Session_Namespace();
         </form>
     </div>
 </div>
+<?php echo $this->partial('widgetlocation/_widget-location.phtml', array('pageType' => 'shop', 'relatedId' => ''));?>
