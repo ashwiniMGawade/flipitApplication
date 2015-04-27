@@ -11,6 +11,21 @@ class BackEnd_Helper_viewHelper
         $this->zendTranslate = Zend_Registry::get('Zend_Translate');
     }
 
+    public function getWidgetLocationsByPageType($pageType, $relatedId = '')
+    {
+        $widgetLocations = '';
+        if (!empty($relatedId)) {
+            $widgetLocations['individual'] = $this->zendTranslate->translate('backend_Individual');
+        } else {
+            $widgetLocations['global'] = $this->zendTranslate->translate('backend_Global');
+        }
+        if ($pageType=='shop') {
+            $widgetLocations['money-shop'] = $this->zendTranslate->translate('backend_Money Shop');
+            $widgetLocations['no-money'] = $this->zendTranslate->translate('backend_No Money');
+        }
+        return $widgetLocations;
+    }
+
     public function getOnOffButtonsForFeaturedCategory($featuredCategory)
     {
         if ($featuredCategory == 1) {
