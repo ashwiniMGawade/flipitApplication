@@ -15,13 +15,13 @@ class BackEnd_Helper_viewHelper
     {
         $widgetLocations = '';
         if (!empty($relatedId)) {
-            $widgetLocations['Indvidual'] = $this->zendTranslate->translate('backend_Indvidual');
+            $widgetLocations['indvidual'] = $this->zendTranslate->translate('backend_Indvidual');
         } else {
-            $widgetLocations['Global'] = $this->zendTranslate->translate('backend_Global');
+            $widgetLocations['global'] = $this->zendTranslate->translate('backend_Global');
         }
         if ($pageType=='shop') {
-            $widgetLocations['Money Shop'] = $this->zendTranslate->translate('backend_Money Shop');
-            $widgetLocations['No Money'] = $this->zendTranslate->translate('backend_No Money');
+            $widgetLocations['money-shop'] = $this->zendTranslate->translate('backend_Money Shop');
+            $widgetLocations['no-money'] = $this->zendTranslate->translate('backend_No Money');
         }
         return $widgetLocations;
     }

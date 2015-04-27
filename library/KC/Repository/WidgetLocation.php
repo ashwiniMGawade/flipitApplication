@@ -5,7 +5,7 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
     public static function saveOrUpdateWidgetLocation($parameters)
     {
         $pageType = \FrontEnd_Helper_viewHelper::sanitize($parameters['pageType']);
-        $pageTypeGloabalOrInvidual = !empty($pageType) ? $pageType : 'Global';
+        $pageTypeGloabalOrInvidual = !empty($pageType) ? $pageType : 'global';
         $widgetLocation  = \FrontEnd_Helper_viewHelper::sanitize($parameters['widgetLocation']);
         $relatedId  = \FrontEnd_Helper_viewHelper::sanitize($parameters['relatedId']);
         $widgetLocationId = self::validateWidgetLocation(

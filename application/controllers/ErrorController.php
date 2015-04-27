@@ -98,7 +98,7 @@ class ErrorController extends Zend_Controller_Action
                     $this->view->pageMode = true;
                     $this->view->widgetPosition = \KC\Repository\WidgetLocation::getWidgetPosition(
                         'page',
-                        'Global',
+                        'global',
                         $pageDetails['page']['id']
                     );
                 } else {

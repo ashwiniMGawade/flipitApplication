@@ -72,7 +72,7 @@ class OfferController extends Zend_Controller_Action
         $socialCodeForm = new Application_Form_SocialCode();
         $this->view->zendForm = $socialCodeForm;
         $this->view->pageCssClass = 'page-store';
-        $widgetPosition = \KC\Repository\WidgetLocation::getWidgetPosition('page', 'Global', $pageDetails->id);
+        $widgetPosition = \KC\Repository\WidgetLocation::getWidgetPosition('page', 'global', $pageDetails->id);
         $this->view->widgetPosition = $widgetPosition;
     }
 
@@ -256,7 +256,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->pageCssClass = 'page-store';
-        $widgetPosition = \KC\Repository\WidgetLocation::getWidgetPosition('page', 'Global', $pageDetails->id);
+        $widgetPosition = \KC\Repository\WidgetLocation::getWidgetPosition('page', 'global', $pageDetails->id);
         $this->view->widgetPosition = $widgetPosition;
     }
 
