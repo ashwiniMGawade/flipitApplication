@@ -17,12 +17,12 @@ class Admin_WidgetlocationController extends Zend_Controller_Action
     public function saveOrUpdateWidgetLocationAction()
     {
         $parameters = $this->getRequest()->getParams();
-        $savedOrUpdatedWidgetLocationStatus = false;
+        $widgetLocationStatus = false;
         if (!empty($parameters['widgetPostion']) && !empty($parameters['widgetLocation'])) {
             KC\Repository\WidgetLocation::saveOrUpdateWidgetLocation($parameters);
-            $savedOrUpdatedWidgetLocationStatus = true;
+            $widgetLocationStatus = true;
         }
-        echo Zend_Json::encode($savedOrUpdatedWidgetLocationStatus);
-        die();
+        echo Zend_Json::encode($widgetLocationStatus);
+        exit();
     }
 }
