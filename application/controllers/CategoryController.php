@@ -78,14 +78,13 @@ class CategoryController extends Zend_Controller_Action
         $this->view->zendForm = $socialCodeForm;
         $this->view->pageCssClass = 'page-store';
         $categoryId = !empty($categoryDetails[0]['id']) ? $categoryDetails[0]['id'] : '';
-        $widgetPosition = \KC\Repository\WidgetLocation::getWidgetPositionForFrontEnd(
+        $this->view->widgetPosition =  \KC\Repository\WidgetLocation::getWidgetPositionForFrontEnd(
             'category',
             'global',
             $categoryId,
             '',
             $categoryVoucherCodes
         );
-        $this->view->widgetPosition = $widgetPosition;
     }
 
     public function indexAction()

@@ -72,14 +72,13 @@ class OfferController extends Zend_Controller_Action
         $socialCodeForm = new Application_Form_SocialCode();
         $this->view->zendForm = $socialCodeForm;
         $this->view->pageCssClass = 'page-store';
-        $widgetPosition = \KC\Repository\WidgetLocation::getWidgetPositionForFrontEnd(
+        $this->view->widgetPosition = \KC\Repository\WidgetLocation::getWidgetPositionForFrontEnd(
             'page',
             'global',
             $pageDetails->id,
             '',
             $offers
         );
-        $this->view->widgetPosition = $widgetPosition;
     }
 
     public function extendedofferAction()
@@ -262,14 +261,13 @@ class OfferController extends Zend_Controller_Action
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->pageCssClass = 'page-store';
-        $widgetPosition = \KC\Repository\WidgetLocation::getWidgetPositionForFrontEnd(
+        $this->view->widgetPosition = \KC\Repository\WidgetLocation::getWidgetPositionForFrontEnd(
             'page',
             'global',
             $pageDetails->id,
             '',
             $offers
         );
-        $this->view->widgetPosition = $widgetPosition;
     }
 
     public static function getOfferUniqueCode($offerParameters)
