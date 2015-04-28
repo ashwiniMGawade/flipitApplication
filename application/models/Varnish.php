@@ -93,4 +93,14 @@ class Varnish extends BaseVarnish
             ->fetchArray();
         return !empty($varnishUrlsCount) ? $varnishUrlsCount[0]['count'] : 0;
     }
+
+    public function processQueueByUrl($url)
+    {
+        $queue = self::checkQueuedUrl($url);
+        if (!empty($queue)) {
+            sleep(1.5);
+            self::refreshVarnish($url);
+            self::removeFromQueue($queue['id']);
+        }
+    }
 }
