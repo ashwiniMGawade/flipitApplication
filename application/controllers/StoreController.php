@@ -272,7 +272,13 @@ class StoreController extends Zend_Controller_Action
             $moneyShop = 'money-shop';
         }
         $shopId = !empty($shopInformation[0]['id']) ? $shopInformation[0]['id'] : '';
-        $widgetPosition = \KC\Repository\WidgetLocation::getWidgetPosition('shop', 'global', $shopId, $moneyShop);
+        $widgetPosition = \KC\Repository\WidgetLocation::getWidgetPositionForFrontEnd(
+            'shop',
+            'global',
+            $shopId,
+            $moneyShop,
+            $this->view->offers
+        );
         $this->view->widgetPosition = $widgetPosition;
     }
 
