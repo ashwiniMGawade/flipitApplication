@@ -138,11 +138,9 @@ function addNewOffer() {
                         else if(data=='0' && data==0) {
                             bootbox.alert(__('This offer does not exist'));
                         } else {
-            
                             var li  = "<li class='ui-state-default'  relpos='" + data.position 
                             + "' reloffer='" + data.offerId + "' id='" + data.id + "' ><span>" 
                             + data.title.replace(/\\/g, '')  + "</span></li>";
-
                             $('ul#specialPages').append(li);
                             $('ul#specialPages li#'+ data.id).click(changeSelectedClass);
                             $('ul#specialPages li#0').remove();
