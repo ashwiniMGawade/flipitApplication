@@ -161,10 +161,12 @@ class SendCodeAlert
                             $codeAlertOffer['id']
                         );
                         if (empty($codeAlertVisitors)) {
-                            $visitorCodeAlertSendDate = Shop::getCodeAlertSendDateByShopId($codeAlertOffer['shop']['id']);
-                            if (date('Y-m-d', strtotime($visitorCodeAlertSendDate)) == date('Y-m-d')) {
-                            } else {
-                                $visitorIds[] = $visitorInfo['visitorId'];
+                            if (isset($codeAlertOffer['shop']['id'])) {
+                                $visitorCodeAlertSendDate = Shop::getCodeAlertSendDateByShopId($codeAlertOffer['shop']['id']);
+                                if (date('Y-m-d', strtotime($visitorCodeAlertSendDate)) == date('Y-m-d')) {
+                                } else {
+                                    $visitorIds[] = $visitorInfo['visitorId'];
+                                }
                             }
                         }
                     }
