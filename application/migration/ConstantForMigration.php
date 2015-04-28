@@ -63,5 +63,6 @@ defined('PUBLIC_PATH')
         );
 require_once(LIBRARY_PATH.'/PHPExcel/PHPExcel.php');
 require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper-v1.php');
+require_once(LIBRARY_PATH.'/BackEnd/Helper/MandrillHelper-v1.php');
 require_once (LIBRARY_PATH . '/Zend/Application.php');
 require_once(DOCTRINE_PATH . '/Doctrine.php');
