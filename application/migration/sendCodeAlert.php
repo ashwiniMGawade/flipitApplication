@@ -203,7 +203,11 @@ class SendCodeAlert
                                 str_replace('[shopname]', $codeAlertOffer['shop']['name'], $codeAlertHeader),
                                 $codeAlertOffer
                             );
-                            Shop::addCodeAlertTimeStampForShopId($codeAlertOffer['shop']['id']);
+                            
+                            if (isset($codeAlertOffer['shop']['id'])) {
+                                Shop::addCodeAlertTimeStampForShopId($codeAlertOffer['shop']['id']);
+                            }
+
                             CodeAlertVisitors::saveCodeAlertVisitors($visitorIds, $codeAlertOffer['id']);
                             CodeAlertQueue::clearCodeAlertQueueByOfferId($codeAlertOffer['id']);
                             $message = 'code alert has been sent successfully' ;

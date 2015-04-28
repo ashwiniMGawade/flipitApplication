@@ -17,17 +17,17 @@ class CodeAlertVisitors extends BaseCodeAlertVisitors
     {
         if (isset($visitorIds) && $visitorIds != '') {
             $visitorIds = explode(',', $visitorIds);
-            foreach ($visitorIds as $visitorValue) {
+            foreach ($visitorIds as $visitorId) {
                 $codeAlertInformation = Doctrine_Query::create()
-                    ->select()
-                    ->from("CodeAlertVisitors")
-                    ->where('offerId = '.$offerId)
-                    ->andWhere('visitorId = '.$visitorValue)
+                    ->select("c.id")
+                    ->from("CodeAlertVisitors c")
+                    ->where('c.offerId = '.$offerId)
+                    ->andWhere('c.visitorId = '.$visitorId)
                     ->fetchArray();
                 if (empty($codeAlertInformation)) {
                     $codeAlertQueue = new CodeAlertVisitors();
                     $codeAlertQueue->offerId = $offerId;
-                    $codeAlertQueue->visitorId = $visitorValue;
+                    $codeAlertQueue->visitorId = $visitorId;
                     $codeAlertQueue->save();
                 }
             }

@@ -2198,7 +2198,7 @@ public static function getShopDetail($shopId)
             ->where('s.deleted = 0')
             ->andWhere('s.id='. $shopId)
             ->limit(1);
-        $codeAlertSendDate = $codeAlertSendDate->fetchArray();
+        $codeAlertSendDate = $codeAlertSendDate->fetchArray(null, Doctrine::HYDRATE_ARRAY);
         return !empty($codeAlertSendDate) ?  $codeAlertSendDate[0]['code_alert_send_date'] : 0;
     }
 
