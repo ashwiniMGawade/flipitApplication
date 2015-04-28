@@ -267,10 +267,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->zendForm = $socialCodeForm;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->pageCssClass = 'author-page page-store';
-        $moneyShop = 'no-money';
-        if ($shopInformation[0]['affliateProgram'] != 0) {
-            $moneyShop = 'money-shop';
-        }
+        $moneyShop = $shopInformation[0]['affliateProgram'] != 0 ? 'money-shop' : 'no-money';
         $shopId = !empty($shopInformation[0]['id']) ? $shopInformation[0]['id'] : '';
         $this->view->widgetPosition = \KC\Repository\WidgetLocation::getWidgetPositionForFrontEnd(
             'shop',
