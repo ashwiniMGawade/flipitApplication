@@ -1,0 +1,18 @@
+<?php
+if (isset($this->futureCodeCount) && $this->futureCodeCount != '') {
+    ?>
+    <div class="message">
+        <div class="holder">
+        <?php
+        echo FrontEnd_Helper_viewHelper::__translate(
+        'New').' '.$this->shopName.' '.FrontEnd_Helper_viewHelper::__translate('codes! Within')
+        . ' '
+        . $this->futureCodeCount
+        . ' ' 
+        . FrontEnd_Helper_viewHelper::__translate('of new codes will be offered');
+        ?>
+        </div>
+    </div>
+    <?php
+}
+?>
