@@ -134,6 +134,7 @@ class SendCodeAlert
         $codeAlertOffers = CodeAlertQueue::getCodealertOffers();
         if (!empty($codeAlertOffers)) {
             foreach ($codeAlertOffers as $codeAlertOffer) {
+                $this->shopId = $codeAlertOffer['shop']['id'];
                 $currentDate = date('Y-m-d H:i:s');
                 if ($codeAlertOffer['endDate'] < $currentDate) {
                     CodeAlertQueue::moveCodeAlertToTrash($codeAlertOffer['id']);
@@ -143,7 +144,7 @@ class SendCodeAlert
                     $topVouchercodes = FrontEnd_Helper_viewHelper::getShopCouponCode(
                         'similarStoresAndSimilarCategoriesOffers',
                         4,
-                        $codeAlertOffer['shop']['id']
+                        $this->shopId
                     );
                     $codeAlertSettings = CodeAlertSettings::getCodeAlertSettings();
                     $settings = Signupmaxaccount::getAllMaxAccounts();
@@ -161,8 +162,8 @@ class SendCodeAlert
                             $codeAlertOffer['id']
                         );
                         if (empty($codeAlertVisitors)) {
-                            if (isset($codeAlertOffer['shop']['id'])) {
-                                $visitorCodeAlertSendDate = Shop::getCodeAlertSendDateByShopId($codeAlertOffer['shop']['id']);
+                            if (isset($this->shopId)) {
+                                $visitorCodeAlertSendDate = Shop::getCodeAlertSendDateByShopId($this->shopId);
                                 if (date('Y-m-d', strtotime($visitorCodeAlertSendDate)) == date('Y-m-d')) {
                                 } else {
                                     $visitorIds[] = $visitorInfo['visitorId'];
@@ -173,7 +174,6 @@ class SendCodeAlert
                     if (!empty($visitorIds)) {
                         $visitorIds = implode(',', $visitorIds);
                         $this->visitorId = $visitorIds;
-                        $this->shopId = $codeAlertOffer['shop']['id'];
                         BackEnd_Helper_MandrillHelper::getDirectLoginLinks(
                             $this,
                             'scheduleNewsletterSender',
@@ -206,8 +206,8 @@ class SendCodeAlert
                                 $codeAlertOffer
                             );
                             
-                            if (isset($codeAlertOffer['shop']['id'])) {
-                                Shop::addCodeAlertTimeStampForShopId($codeAlertOffer['shop']['id']);
+                            if (isset($this->shopId)) {
+                                Shop::addCodeAlertTimeStampForShopId($this->shopId);
                             }
 
                             CodeAlertVisitors::saveCodeAlertVisitors($visitorIds, $codeAlertOffer['id']);
