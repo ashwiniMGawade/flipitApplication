@@ -95,17 +95,17 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
         }
         if (empty($existInDatabase)) {
             if (!empty($moneyShop)) {
-                $existInDatabase = self::getWidgetLocationIdByPageTypeAndLocationByCache($moneyShop, $pageType);
+                $existInDatabase = self::getWidgetLocationPageType($moneyShop, $pageType);
             }
             if (empty($existInDatabase)) {
-                $existInDatabase = self::getWidgetLocationIdByPageTypeAndLocationByCache($widgetLocation, $pageType);
+                $existInDatabase = self::getWidgetLocationPageType($widgetLocation, $pageType);
             }
         }
         $widgetPosition = !empty($existInDatabase[0]['position']) ? $existInDatabase[0]['position'] : '';
         return $widgetPosition;
     }
 
-    public static function getWidgetLocationIdByPageTypeAndLocationByCache($widgetLocation, $pageType)
+    public static function getWidgetLocationPageType($widgetLocation, $pageType)
     {
         $cacheKey = 'widget_'. $pageType . '_position';
         $existInDatabase = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(

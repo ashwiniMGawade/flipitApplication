@@ -260,7 +260,7 @@ foreach ($this->offers as $offer) {
     </article>
     <?php
     $widgetPosition = !empty($this->widgetPosition) ? $this->widgetPosition : 1;
-    if($offerCounter == $widgetPosition) :
+    if ($offerCounter == $widgetPosition) :
         if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage'
             || $this->offersType=='offerWithPagenation' || $this->offersType=='newestOffer'):
             $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';

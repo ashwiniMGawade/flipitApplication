@@ -18,7 +18,7 @@ function showLightBoxForWidgetLocation() {
 
 function showModel1(id,rootid,type) {
     removeBorders();
-    $('#myModal1').modal('show');
+    $('#modelForWidgetLocation').modal('show');
 }
 
 function removeBorders() {
@@ -27,7 +27,7 @@ function removeBorders() {
 }
 
 function hideModel() {
-    $('#myModal1').modal('hide');
+    $('#modelForWidgetLocation').modal('hide');
     window.location.reload();
     return false;
 }
