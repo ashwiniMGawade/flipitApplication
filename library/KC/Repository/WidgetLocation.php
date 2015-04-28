@@ -79,6 +79,19 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
         return $existInDatabase;
     }
 
+    public static function getWidgetPositionInBackEnd($pageType, $widgetLocation, $relatedId)
+    {
+        $existInDatabase = '';
+        if (!empty($relatedId)) {
+            $existInDatabase = self::getWidgetLocationIdByRelatedId($relatedId);
+        }
+        if (empty($existInDatabase)) {
+            $existInDatabase = self::getWidgetLocationIdByPageTypeAndLocation($widgetLocation, $pageType);
+        }
+        $widgetPosition = !empty($existInDatabase[0]['position']) ? $existInDatabase[0]['position'] : '';
+        return $widgetPosition;
+    }
+
     public static function getWidgetPosition($pageType, $widgetLocation, $relatedId, $moneyShop = '')
     {
         $existInDatabase = '';
