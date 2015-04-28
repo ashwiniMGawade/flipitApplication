@@ -99,7 +99,7 @@ class ErrorController extends Zend_Controller_Action
                     $this->view->widgetPosition = \KC\Repository\WidgetLocation::getWidgetPositionForFrontEnd(
                         'page',
                         'global',
-                        $pageDetails['page']['id'],
+                        $pageDetails['id'],
                         '',
                         $specialPageOffers
                     );
