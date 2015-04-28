@@ -3519,3 +3519,6 @@ div#error-message {
     color: green;
     text-align: center;
 }
+.future-code-radius{
+	border-radius: 0 4px 4px 0;
+}

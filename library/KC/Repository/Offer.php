@@ -3391,14 +3391,14 @@ class Offer Extends \KC\Entity\Offer
 
     public static function getFutureOffersDatesByShopId($shopId)
     {
-        $startDate = date("Y-m-d H:i");
+        $currentDate = date("Y-m-d H:i");
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('o.startDate')
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->where('o.deleted = 0')
             ->andWhere('o.userGenerated = 0')
-            ->andWhere($queryBuilder->expr()->gt('o.startDate', $queryBuilder->expr()->literal($startDate)))
+            ->andWhere($queryBuilder->expr()->gt('o.startDate', $queryBuilder->expr()->literal($currentDate)))
             ->andWhere($queryBuilder->expr()->eq('o.discountType', $queryBuilder->expr()->literal('CD')))
             ->andWhere('s.deleted = 0')
             ->andWhere('s.status = 1')

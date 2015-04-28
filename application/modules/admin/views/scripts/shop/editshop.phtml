@@ -534,7 +534,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                      <div class="mainpage-content-right">
                         <div data-toggle="buttons-checkbox" class="btn-group">
                             <button onClick="setOnOff(event,'futurecode','on');" class="btn <?php if($this->data['futurecode']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
-                            <button onClick="setOnOff(event,'futurecode','off');" class="btn <?php if($this->data['futurecode']=='0' || $this->data['futurecode']==''){ echo 'btn-primary'; }  ?>" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
+                            <button onClick="setOnOff(event,'futurecode','off');" class="btn <?php if($this->data['futurecode']=='0' || $this->data['futurecode']==''){ echo 'btn-primary'; }  ?> future-code-radius" type="button"><?php echo $this->translate('No'); ?></button>
                             <input type="hidden" value="<?php echo $this->data['futurecode'] ? 1 : 0 ;?>" id="futurecode" name="futurecode" style="display:none;"> 
                         </div>
                      </div>
