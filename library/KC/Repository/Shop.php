@@ -948,6 +948,10 @@ class Shop extends \KC\Entity\Shop
         $shopInfo->lightboxfirsttext = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['lightboxfirsttext']);
         $shopInfo->lightboxsecondtext = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['lightboxsecondtext']);
 
+        $shopInfo->futurecode = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+            !empty($shopDetail['futurecode']) ? $shopDetail['futurecode'] : '0'
+        );
+
         if (\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['displayExtraProperties'])) {
             $shopInfo->ideal = \BackEnd_Helper_viewHelper::stripSlashesFromString(
                 !empty($shopDetail['ideal']) ? $shopDetail['ideal'] : 0

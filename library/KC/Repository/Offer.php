@@ -2943,7 +2943,8 @@ class Offer Extends \KC\Entity\Offer
                     
             $key = 'offer_'.$offer_id.'_details';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $key = 'futurecode_'.intval($params['selctedshop']).'_shop';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'extendedTopOffer_of_'.intval($params['selctedshop']);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_similarShopsAndSimilarCategoriesOffers'. intval($params['selctedshop'])  . '_list';
@@ -3322,7 +3323,8 @@ class Offer Extends \KC\Entity\Offer
 
             $key = 'offer_'.$offerID.'_details';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $key = 'futurecode_'.intval($params['selctedshop']).'_shop';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
@@ -3385,5 +3387,24 @@ class Offer Extends \KC\Entity\Offer
             ->andWhere('o.id='.$id);
         $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $offers;
+    }
+
+    public static function getFutureOffersDatesByShopId($shopId)
+    {
+        $currentDate = date("Y-m-d H:i");
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('o.startDate')
+            ->from('KC\Entity\Offer', 'o')
+            ->leftJoin('o.shopOffers', 's')
+            ->where('o.deleted = 0')
+            ->andWhere('o.userGenerated = 0')
+            ->andWhere($queryBuilder->expr()->gt('o.startDate', $queryBuilder->expr()->literal($currentDate)))
+            ->andWhere($queryBuilder->expr()->eq('o.discountType', $queryBuilder->expr()->literal('CD')))
+            ->andWhere('s.deleted = 0')
+            ->andWhere('s.status = 1')
+            ->andWhere('s.id = '. $shopId)
+            ->orderBy('o.startDate', 'ASC');
+        $futureOffersCount = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $futureOffersCount;
     }
 }
