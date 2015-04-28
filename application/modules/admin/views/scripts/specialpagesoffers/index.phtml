@@ -73,10 +73,10 @@
                     if (!empty($this->specialPageOffers)) {
                         foreach ($this->specialPageOffers as $specialPageOffers) {
                             echo  "<li class='ui-state-default'  id='".$specialPageOffers['id']."' 
-                            reloffer='".$specialPageOffers['offerId']."'
+                            reloffer='".$specialPageOffers['offers']['id']."'
                             relpos='".$specialPageOffers['position']."'
-                            relpageId='".$specialPageOffers['pageId']."'>
-                            <span>".$specialPageOffers['title']."</span></li>";
+                            relpageId='".$specialPageOffers['pages']['id']."'>
+                            <span>".$specialPageOffers['offers']['title']."</span></li>";
                         }
                     } else {             
                         echo  "<li id='0'>". $this->translate('No record found !') ."</li>";

@@ -68,7 +68,6 @@ function loadSelectedPageOffers() {
 function searchByTxt() {    
     $("ul.ui-autocomplete").css('display','none');
     $("ul.ui-autocomplete").html('');
-    console.log('ok');
 }
 
 function changeSelectedClass() {
@@ -181,8 +180,8 @@ function deleteCode() {
 
             for(var i in json) {
                 li+= "<li class='ui-state-default' relpos='" + json[i].position 
-                + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' ><span>" 
-                + json[i].title +"</span></li>";
+                + "' reloffer='" + json[i]['offers'].id + "' id='" + json[i].id + "' ><span>" 
+                + json[i]['offers'].title +"</span></li>";
             }
 
             $('select#offerlist').append('<option value="' + offerId + '">' + title  + '</option>');

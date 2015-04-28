@@ -272,19 +272,18 @@ class SpecialPagesOffers extends BaseSpecialPagesOffers
         $specialListPages = SpecialList::getSpecialPages();
         if (!empty($specialListPages)) {
             foreach ($specialListPages as $specialListPage) {
-                SpecialList::updateTotalOffersAndTotalCoupons(
-                    $specialListPage['totalOffers'],
-                    $specialListPage['totalCoupons'],
-                    $specialListPage['specialpageId']
-                );
                 foreach ($specialListPage['page'] as $page) {
                     $pageRelatedOffers = Offer::getSpecialOffersByPage($page['id'], $currentDate);
                     $constraintsRelatedOffers = Offer::getOffersByPageConstraints($page, $currentDate);
                     $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
+                    SpecialList::updateTotalOffersAndTotalCoupons(
+                        count($pageRelatedOffersAndPageConstraintsOffers),
+                        0,
+                        $page['id']
+                    );
                     foreach ($pageRelatedOffersAndPageConstraintsOffers as $pageRelatedOffersAndPageConstraintsOffer) {
                         self::addOfferInList($pageRelatedOffersAndPageConstraintsOffer['id'], $page['id'], 'cron');
                     }
-                    
                 }
             }
         }

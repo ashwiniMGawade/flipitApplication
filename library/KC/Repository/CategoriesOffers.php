@@ -7,52 +7,55 @@ class CategoriesOffers extends \KC\Entity\CategoriesOffers
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDate = date("Y-m-d H:i");
         $query = $queryBuilder
-        ->select('op, o, s, l')
-        ->from('KC\Entity\CategoriesOffers', 'op')
-        ->leftJoin('op.offers', 'o')
-        ->andWhere(
-            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and o.status=1)  > 0)
-            or o.couponCodeType = 'GN'"
-        )
-        ->leftJoin('o.shopOffers', 's')
-        ->leftJoin('s.logo', 'l')
-        ->where('op.categories = '.$categoryId)
-        ->andWhere('o.endDate >'.$queryBuilder->expr()->literal($currentDate))
-        ->andWhere('o.startDate <='.$queryBuilder->expr()->literal($currentDate))
-        ->andWhere('o.deleted = 0')
-        ->andWhere('s.deleted = 0')
-        ->andWhere('s.status = 1')
-        ->andWhere($queryBuilder->expr()->neq('o.Visability', $queryBuilder->expr()->literal("MEM")))
-        ->orderBy('op.position');
+            ->select('op, o, s, l')
+            ->from('KC\Entity\CategoriesOffers', 'op')
+            ->leftJoin('op.offers', 'o')
+            ->andWhere(
+                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and o.status=1)  > 0)
+                or o.couponCodeType = 'GN'"
+            )
+            ->leftJoin('o.shopOffers', 's')
+            ->leftJoin('s.logo', 'l')
+            ->where('op.categories = '.$categoryId)
+            ->andWhere('o.endDate >'.$queryBuilder->expr()->literal($currentDate))
+            ->andWhere('o.startDate <='.$queryBuilder->expr()->literal($currentDate))
+            ->andWhere('o.deleted = 0')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('s.status = 1')
+            ->andWhere($queryBuilder->expr()->neq('o.Visability', $queryBuilder->expr()->literal("MEM")))
+            ->orderBy('op.position');
         $categoryOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return self::removeDuplicateOffers($categoryOffers);
     }
 
-    public static function removeDuplicateOffers($specialPageOffers)
+    public static function removeDuplicateOffers($categoryOffers)
     {
-        $specialOffersWithoutDuplication = array();
-        if (count($specialPageOffers) > 0) {
-            $countOfSpecialPageOffers = count($specialPageOffers);
-            for ($offerIndex = 0; $offerIndex < $countOfSpecialPageOffers; $offerIndex++) {
-                $specialOffersWithoutDuplication[$offerIndex] = $specialPageOffers[$offerIndex]['offers'];
+        $categoryOffersWithoutDuplication = array();
+        if (count($categoryOffers) > 0) {
+            $countOfCategoryOffers = count($categoryOffers);
+            for ($offerIndex = 0; $offerIndex < $countOfCategoryOffers; $offerIndex++) {
+                $categoryOffersWithoutDuplication[$offerIndex] = $categoryOffers[$offerIndex]['offers'];
             }
         }
-        return $specialOffersWithoutDuplication;
+        return $categoryOffersWithoutDuplication;
     }
 
     public static function getCategoryOffersById($categoryId)
     {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder
-            ->select('o, p, s, l, c')
-            ->from('KC\Entity\CategoriesOffers', 'p')
-            ->leftJoin('p.offers', 'o')
-            ->leftJoin('o.shopOffers', 's')
-            ->leftJoin('s.logo', 'l')
-            ->leftJoin('p.categories', 'c')
-            ->where('p.categories =' .$categoryId)
-            ->orderBy('p.position');
-        $categoryOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $categoryOffers = array();
+        if (isset($categoryId)) {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder
+                ->select('o, p, s, l, c')
+                ->from('KC\Entity\CategoriesOffers', 'p')
+                ->leftJoin('p.offers', 'o')
+                ->leftJoin('o.shopOffers', 's')
+                ->leftJoin('s.logo', 'l')
+                ->leftJoin('p.categories', 'c')
+                ->where('p.categories =' .$categoryId)
+                ->orderBy('p.position');
+            $categoryOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        }
         return $categoryOffers;
     }
 
@@ -180,10 +183,10 @@ class CategoriesOffers extends \KC\Entity\CategoriesOffers
         if (!empty($categoryId)) {
             $queryBuilderSelect = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilderSelect
-                ->select('spo')
-                ->from('KC\Entity\CategoriesOffers', 'spo')
-                ->where('spo.categories='. $categoryId)
-                ->orderBy('spo.position', 'ASC');
+                ->select('catoffer')
+                ->from('KC\Entity\CategoriesOffers', 'catoffer')
+                ->where('catoffer.categories='. $categoryId)
+                ->orderBy('catoffer.position', 'ASC');
             $newOffersList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
         return $newOffersList;
@@ -191,13 +194,15 @@ class CategoriesOffers extends \KC\Entity\CategoriesOffers
 
     public static function updateWithNewPosition($newPosition, $newOffer)
     {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder
-            ->update('KC\Entity\CategoriesOffers', 'p')
-            ->set('p.position', $newPosition)
-            ->where('p.id = '.$newOffer['id'])
-            ->getQuery();
-        $query->execute();
+        if (isset($newOffer['id'])) {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder
+                ->update('KC\Entity\CategoriesOffers', 'p')
+                ->set('p.position', $newPosition)
+                ->where('p.id = '.$newOffer['id'])
+                ->getQuery();
+            $query->execute();
+        }
         return true;
     }
 
@@ -229,22 +234,28 @@ class CategoriesOffers extends \KC\Entity\CategoriesOffers
                 ->getQuery();
             $query->execute();
             $offerIds = explode(',', $offerIds);
-            $i = 1;
-            foreach ($offerIds as $offerId) {
-                $entityManagerLocale  = \Zend_Registry::get('emLocale');
-                $categoryOffer = new \KC\Entity\CategoriesOffers();
-                $categoryOffer->offers = $entityManagerLocale->find('KC\Entity\Offer', $offerId);
-                $categoryOffer->categories = $entityManagerLocale->find('KC\Entity\Category', $categoryId);
-                $categoryOffer->position = $i;
-                $categoryOffer->deleted = 0;
-                $categoryOffer->created_at = new \DateTime('now');
-                $categoryOffer->updated_at = new \DateTime('now');
-                $entityManagerLocale->persist($categoryOffer);
-                $entityManagerLocale->flush();
-                $i++;
-            }
+            self::saveCategoryOfferData($offerIds, $categoryId);
         }
         self::clearCacheOfCategoryOffers($categoryId);
+    }
+
+    public static function saveCategoryOfferData($offerIds, $categoryId)
+    {
+        $i = 1;
+        foreach ($offerIds as $offerId) {
+            $entityManagerLocale  = \Zend_Registry::get('emLocale');
+            $categoryOffer = new \KC\Entity\CategoriesOffers();
+            $categoryOffer->offers = $entityManagerLocale->find('KC\Entity\Offer', $offerId);
+            $categoryOffer->categories = $entityManagerLocale->find('KC\Entity\Category', $categoryId);
+            $categoryOffer->position = $i;
+            $categoryOffer->deleted = 0;
+            $categoryOffer->created_at = new \DateTime('now');
+            $categoryOffer->updated_at = new \DateTime('now');
+            $entityManagerLocale->persist($categoryOffer);
+            $entityManagerLocale->flush();
+            $i++;
+        }
+        return true;
     }
 
     public static function deleteExpiredOffers()

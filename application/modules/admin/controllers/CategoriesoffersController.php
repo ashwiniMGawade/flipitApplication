@@ -22,7 +22,7 @@ class Admin_CategoriesoffersController extends Zend_Controller_Action
         if (!empty($categoryId)) {
             $categoryId = $this->getRequest()->getParam('categoryId');
         } else {
-            $categoryId = $homePageCategoriesList[0]['category']['id'];
+            $categoryId = isset($homePageCategoriesList[0]) ? $homePageCategoriesList[0]['category']['id'] : '';
         }
         $currentCategoryHomePageOffers = \KC\Repository\CategoriesOffers::getCategoryOffersById($categoryId);
         $categoryOffers = \KC\Repository\Category::getCategoryVoucherCodes(

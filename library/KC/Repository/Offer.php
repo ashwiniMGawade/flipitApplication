@@ -451,20 +451,25 @@ class Offer Extends \KC\Entity\Offer
         self::clearSpecialPagesCache($offerId);
     }
 
+    public static function getSpecialPageOffersByFallBack($specialPage, $pageType = '')
+    {
+        $pageRelatedOffersAndPageConstraintsOffers =
+            \KC\Repository\SpecialPagesOffers::getSpecialPageOffersByPageIdForFrontEnd($specialPage['id'], $pageType);
+        if (empty($pageRelatedOffersAndPageConstraintsOffers)) {
+            $pageRelatedOffersAndPageConstraintsOffers = self::getSpecialPageOffers($specialPage);
+            $pageRelatedOffersAndPageConstraintsOffers =
+            self::getDataForOfferPhtml($pageRelatedOffersAndPageConstraintsOffers, $specialPage);
+        }
+        return $pageRelatedOffersAndPageConstraintsOffers;
+    }
+
     public static function getSpecialPageOffers($specialPage)
     {
         $currentDate = date("Y-m-d H:i");
         $pageRelatedOffers = self::getSpecialOffersByPage($specialPage['id'], $currentDate);
         $constraintsRelatedOffers = self::getOffersByPageConstraints($specialPage, $currentDate);
         $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
-
-        $pageRelatedOffersAndPageConstraintsOffers = array_merge(
-            \KC\Repository\SpecialPagesOffers::getSpecialPageOffersByPageIdForFrontEnd($specialPage['id']),
-            $pageRelatedOffersAndPageConstraintsOffers
-        );
-
-        $specialOffers = self::getDataForOfferPhtml($pageRelatedOffersAndPageConstraintsOffers, $specialPage);
-        return $specialOffers;
+        return $pageRelatedOffersAndPageConstraintsOffers;
     }
 
     public static function getSpecialOffersByPage($pageId, $currentDate)

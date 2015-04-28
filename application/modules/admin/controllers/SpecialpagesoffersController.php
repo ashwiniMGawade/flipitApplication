@@ -25,10 +25,9 @@ class Admin_SpecialpagesoffersController extends Zend_Controller_Action
             $pageId = $specialListPages[0]['id'];
         }
         $specialPageOffers = \KC\Repository\SpecialPagesOffers::getSpecialPageOfferById($pageId);
-
         $offerIds = array();
         foreach ($specialPageOffers as $pOffer) {
-            $offerIds[] = $pOffer['offerId'];
+            $offerIds[] = $pOffer['offers']['id'];
         }
         $allOffer = \KC\Repository\PopularCode::searchAllOffer($offerIds);
         $this->view->specialPageOffers = $specialPageOffers;

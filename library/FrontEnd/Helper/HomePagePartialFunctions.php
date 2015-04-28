@@ -87,9 +87,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
         foreach ($specialListPages as $indexOfPage => $specialListPage) {
             $specialPageListIndex = $specialListPage['page']['permalink'] .','
                .$specialListPage['page']['pageTitle'];
-            $totalCouponsCount =
-                is_array($this->homePageData['specialPagesOffers'][$specialPageListIndex])==true
-                ? count($this->homePageData['specialPagesOffers'][$specialPageListIndex])
+            $totalCouponsCount = isset($specialListPage['total_offers'])
+                ? $specialListPage['total_offers']
                 : 0;
             $specialListPageOffers = $totalCouponsCount . " " . \FrontEnd_Helper_viewHelper::__form('form_coupons');
             $specialPageHtml .=
@@ -275,10 +274,10 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $offersHtml = '';
         switch ($offerDivName){
             case 'topOffers':
-                $offersHtml = $this->getTopOffersRightCoulumnList('topOffers');
+                $offersHtml = $this->getTopOffersRightColumnList('topOffers');
                 break;
             case 'newOffers':
-                $offersHtml = $this->getTopOffersRightCoulumnList('newOffers');
+                $offersHtml = $this->getTopOffersRightColumnList('newOffers');
                 break;
             case 'special':
                 $offersHtml = $this->getSpecialPageRightCoulumnList($dynamicDivId);
@@ -289,7 +288,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
         return $offersHtml;
     }
 
-    public function getTopOffersRightCoulumnList($topOffers)
+    public function getTopOffersRightColumnList($topOffers)
     {
         $topOfferRightHtml = '';
         foreach ($this->homePageData[$topOffers] as $topOffer) {

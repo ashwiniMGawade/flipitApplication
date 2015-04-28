@@ -4,58 +4,62 @@ namespace KC\Repository;
 
 class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
 {
-    public static function getSpecialPageOffersByPageIdForFrontEnd($pageId)
+    public static function getSpecialPageOffersByPageIdForFrontEnd($pageId, $pageType = '')
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDate = date("Y-m-d H:i");
         $query = $queryBuilder
-        ->select('op, o, terms, s, l')
-        ->from('KC\Entity\SpecialPagesOffers', 'op')
-        ->leftJoin('op.offers', 'o')
-        ->leftJoin('o.offertermandcondition', 'terms')
-        ->andWhere(
-            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and o.status=1)  > 0)
-            or o.couponCodeType = 'GN'"
-        )
-        ->leftJoin('o.shopOffers', 's')
-        ->leftJoin('s.logo', 'l')
-        ->where('op.pages = '.$pageId)
-        ->andWhere('o.endDate >'.$queryBuilder->expr()->literal($currentDate))
-        ->andWhere('o.startDate <='.$queryBuilder->expr()->literal($currentDate))
-        ->andWhere('o.deleted = 0')
-        ->andWhere('s.deleted = 0')
-        ->andWhere('s.status = 1')
-        ->andWhere($queryBuilder->expr()->neq('o.Visability', $queryBuilder->expr()->literal("MEM")))
-        ->orderBy('op.position');
+            ->select('op, o, terms, s, l')
+            ->from('KC\Entity\SpecialPagesOffers', 'op')
+            ->leftJoin('op.offers', 'o')
+            ->leftJoin('o.offertermandcondition', 'terms')
+            ->andWhere(
+                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and o.status=1)  > 0)
+                or o.couponCodeType = 'GN'"
+            )
+            ->leftJoin('o.shopOffers', 's')
+            ->leftJoin('s.logo', 'l')
+            ->where('op.pages = '.$pageId)
+            ->andWhere('o.endDate >'.$queryBuilder->expr()->literal($currentDate))
+            ->andWhere('o.startDate <='.$queryBuilder->expr()->literal($currentDate))
+            ->andWhere('o.deleted = 0')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('s.status = 1')
+            ->andWhere($queryBuilder->expr()->neq('o.Visability', $queryBuilder->expr()->literal("MEM")))
+            ->orderBy('op.position');
         $specialPageOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return self::removeDuplicateOffers($specialPageOffers);
+        return self::removeDuplicateOffers($specialPageOffers, $pageType);
     }
 
-    public static function removeDuplicateOffers($specialPageOffers)
+    public static function removeDuplicateOffers($specialPageOffers, $pageType = '')
     {
         $specialOffersWithoutDuplication = array();
         if (count($specialPageOffers) > 0) {
             $countOfSpecialPageOffers = count($specialPageOffers);
             for ($offerIndex = 0; $offerIndex < $countOfSpecialPageOffers; $offerIndex++) {
-                $specialOffersWithoutDuplication[$offerIndex] = $specialPageOffers[$offerIndex]['offers'];
+                if ($pageType == 'home') {
+                    $specialOffersWithoutDuplication[$offerIndex] = $specialPageOffers[$offerIndex];
+                } else {
+                    $specialOffersWithoutDuplication[$offerIndex] = $specialPageOffers[$offerIndex]['offers'];
+                }
+                
             }
         }
         return $specialOffersWithoutDuplication;
     }
 
-    public static function getSpecialPageOfferById($pageId, $limit = 0)
+    public static function getSpecialPageOfferById($pageId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select('o,p,s,l')
+            ->select('o,p,s,l,page')
             ->from('KC\Entity\SpecialPagesOffers', 'p')
             ->leftJoin('p.offers', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->leftJoin('s.logo', 'l')
             ->leftJoin('p.pages', 'page')
             ->andWhere($queryBuilder->expr()->in('p.pages', $pageId))
-            ->orderBy('p.position')
-            ->setMaxResults($limit);
+            ->orderBy('p.position');
         $specialPageOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $specialPageOffers;
     }
@@ -66,7 +70,7 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
         $result = '0';
         if (sizeof($offer) > 0) {
             $specialPageOffers = self::getSpecialPageOffers($offerId, $pageId);
-            if (!empty($specialPageOffer)) {
+            if (!empty($specialPageOffers)) {
                 $result = '2';
             } else {
                 $result = '1';
@@ -197,12 +201,15 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
 
     public static function updateWithNewPosition($newPosition, $newOffer)
     {
-        $query = $queryBuilderSpecialPage
-            ->update('KC\Entity\SpecialPagesOffers', 'p')
-            ->set('p.position', $newPosition)
-            ->where('p.id = '.$newOffer['id'])
-            ->getQuery();
-        $query->execute();
+        if (isset($newOffer['id'])) {
+            $queryBuilderSpecialPage = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilderSpecialPage
+                ->update('KC\Entity\SpecialPagesOffers', 'p')
+                ->set('p.position', $newPosition)
+                ->where('p.id = '.$newOffer['id'])
+                ->getQuery();
+            $query->execute();
+        }
         return true;
     }
 
@@ -285,20 +292,14 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
         $specialListPages = \KC\Repository\SpecialList::getSpecialPages();
         if (!empty($specialListPages)) {
             foreach ($specialListPages as $specialListPage) {
+                $pageRelatedOffers = \KC\Repository\Offer::getSpecialOffersByPage($specialListPage[0]['page']['id'], $currentDate);
+                $constraintsRelatedOffers = \KC\Repository\Offer::getOffersByPageConstraints($specialListPage[0]['page'], $currentDate);
+                $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
                 \KC\Repository\SpecialList::updateTotalOffersAndTotalCoupons(
-                    $specialListPage['totalOffers'],
-                    $specialListPage['totalCoupons'],
+                    count($pageRelatedOffersAndPageConstraintsOffers),
+                    0,
                     $specialListPage[0]['page']['id']
                 );
-                $pageRelatedOffers = \KC\Repository\Offer::getSpecialOffersByPage(
-                    $specialListPage[0]['page']['id'],
-                    $currentDate
-                );
-                $constraintsRelatedOffers = \KC\Repository\Offer::getOffersByPageConstraints(
-                    $specialListPage[0]['page'],
-                    $currentDate
-                );
-                $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
                 foreach ($pageRelatedOffersAndPageConstraintsOffers as $pageRelatedOffersAndPageConstraintsOffer) {
                     self::addOfferInList(
                         $pageRelatedOffersAndPageConstraintsOffer['id'],
