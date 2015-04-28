@@ -5,7 +5,7 @@ if (isset($this->futureCodeCount) && $this->futureCodeCount != '') {
         <div class="holder">
         <?php
         echo FrontEnd_Helper_viewHelper::__translate(
-        'New Zalando codes! Within')
+        'New').' '.$this->shopName.' '.FrontEnd_Helper_viewHelper::__translate('codes! Within')
         . ' '
         . $this->futureCodeCount
         . ' ' 

@@ -175,7 +175,10 @@ if (isset($this->currentStoreInformation[0]['futurecode']) && $this->currentStor
     if (!empty($this->futureCodeCount)) {
         $futureCodeMessage = $this->partial(
             $storeViewPartialPath.'_futureCodeMessage.phtml',
-            array('futureCodeCount' => $this->futureCodeCount)
+            array(
+                'futureCodeCount' => $this->futureCodeCount,
+                'shopName' => $this->currentStoreInformation[0]['name']
+            )
         );
     }
 }
