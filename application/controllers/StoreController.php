@@ -267,6 +267,9 @@ class StoreController extends Zend_Controller_Action
         $this->view->zendForm = $socialCodeForm;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->pageCssClass = 'author-page page-store';
+        $shopId = !empty($shopInformation[0]['id']) ? $shopInformation[0]['id'] : '';
+        $widgetPosition = \KC\Repository\WidgetLocation::getWidgetPosition('shop', 'global', $shopId);
+        $this->view->widgetPosition = $widgetPosition;
     }
 
     public function indexAction()

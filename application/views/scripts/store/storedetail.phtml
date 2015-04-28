@@ -14,7 +14,8 @@ if(count($this->offers) > 0):
             'offersType'=>'simple',
             'shopName' => $this->currentStoreInformation[0]['name'],
             'shop' => $this->currentStoreInformation[0],
-            'zendForm'=>$this->form
+            'zendForm'=>$this->form,
+            'widgetPosition'=>$this->widgetPosition
         )
     );
 endif;
