@@ -286,8 +286,8 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
         if (!empty($specialListPages)) {
             foreach ($specialListPages as $specialListPage) {
                 \KC\Repository\SpecialList::updateTotalOffersAndTotalCoupons(
-                    $specialListPage[0]['total_offers'],
-                    $specialListPage[0]['total_coupons'],
+                    $specialListPage['totalOffers'],
+                    $specialListPage['totalCoupons'],
                     $specialListPage[0]['page']['id']
                 );
                 $pageRelatedOffers = \KC\Repository\Offer::getSpecialOffersByPage(
