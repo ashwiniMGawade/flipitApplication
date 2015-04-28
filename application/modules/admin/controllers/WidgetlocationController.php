@@ -25,4 +25,18 @@ class Admin_WidgetlocationController extends Zend_Controller_Action
         echo Zend_Json::encode($widgetLocationStatus);
         exit();
     }
+
+    public function getWidgetPositionAction()
+    {
+        $parameters = $this->getRequest()->getParams();
+        $widgetPosition = '';
+        if (!empty($parameters['pageType']) && !empty($parameters['widgetLocation'])) {
+            $widgetPosition = KC\Repository\WidgetLocation::getWidgetLocationIdByPageTypeAndLocation(
+                $parameters['widgetLocation'],
+                $parameters['pageType']
+            );
+        }
+        echo Zend_Json::encode($widgetPosition);
+        exit();
+    }
 }

@@ -259,7 +259,9 @@ foreach ($this->offers as $offer) {
         </div>
     </article>
     <?php
-    if($offerCounter == $this->widgetPosition) :
+    $widgetPosition = !empty($this->widgetPosition) ? $this->widgetPosition : 1;
+    $widgetPosition =  $widgetPosition > count($this->offers) ? count($this->offers) : $widgetPosition;
+    if($offerCounter == $widgetPosition) :
         if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage'
             || $this->offersType=='offerWithPagenation' || $this->offersType=='newestOffer'):
             $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';

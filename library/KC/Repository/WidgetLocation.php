@@ -77,7 +77,7 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
         return $existInDatabase;
     }
 
-    public static function getWidgetPosition($pageType, $widgetLocation, $relatedId)
+    public static function getWidgetPosition($pageType, $widgetLocation, $relatedId, $moneyShop = '')
     {
         $existInDatabase = '';
         $entityManagerLocale = \Zend_Registry::get('emLocale');
@@ -85,7 +85,12 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
             $existInDatabase = self::getWidgetLocationIdByRelatedId($relatedId);
         }
         if (empty($existInDatabase)) {
-            $existInDatabase = self::getWidgetLocationIdByPageTypeAndLocation($widgetLocation, $pageType);
+            if (!empty($moneyShop)) {
+                $existInDatabase = self::getWidgetLocationIdByPageTypeAndLocation($moneyShop, $pageType);
+            }
+            if (empty($existInDatabase)) {
+                $existInDatabase = self::getWidgetLocationIdByPageTypeAndLocation($widgetLocation, $pageType);
+            }
         }
         $widgetPosition = !empty($existInDatabase[0]['position']) ? $existInDatabase[0]['position'] : '';
         return $widgetPosition;
