@@ -29,7 +29,7 @@ class Category extends \KC\Entity\Category
         return $category;
     }
 
-    public static function getCategoryVoucherCodes($categoryId, $numberOfOffers = 0, $pageName = '')
+    public static function getCategoryVoucherCodes($categoryId, $numberOfOffers = 0, $pageName = '', $offerIds = '')
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDateAndTime = date('Y-m-d 00:00:00');
@@ -62,6 +62,14 @@ class Category extends \KC\Entity\Category
         ->addOrderBy('o.startDate', 'DESC');
         if ($numberOfOffers!=0) {
             $query->setMaxResults($numberOfOffers);
+        }
+        if ($offerIds != '') {
+            $savedCategoryOffersByAdmin = array();
+            foreach ($offerIds as $offerId) {
+                $savedCategoryOffersByAdmin[] = $offerId['offers']['id'];
+            }
+            $commaSepratedOfferIds = implode(',', $savedCategoryOffersByAdmin);
+            $query->andWhere($queryBuilder->expr()->notIn('o.id', $commaSepratedOfferIds));
         }
         $categoryOffersList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return self::changeDataAccordingToOfferHtml($categoryOffersList);

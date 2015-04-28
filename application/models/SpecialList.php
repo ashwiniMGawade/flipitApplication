@@ -48,7 +48,7 @@ class SpecialList extends BaseSpecialList
     }
 
     public static function updateTotalOffersAndTotalCoupons($totalOffers, $totalCoupons, $specialPageId)
-    {echo $specialPageId.'---'.$totalOffers.'----'.$totalCoupons;die;
+    {
         if (!empty($specialPageId)) {
             Doctrine_Query::create()
                 ->update('SpecialList sl')

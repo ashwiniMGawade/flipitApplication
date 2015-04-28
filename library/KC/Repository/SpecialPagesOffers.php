@@ -74,11 +74,11 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
                 if (!empty($specialPageOffermaxPosition)) {
                     $newPosition = $specialPageOffermaxPosition[0]['position'];
                 } else {
-                    $newPosition =  0 ;
+                    $newPosition =  0;
                 }
                 $specialPageOfferId = self::saveSpecialPageOffers($offerId, $pageId, $newPosition);
                 $result  = array(
-                    'id'=>$specialPageOffer->id,
+                    'id'=>$specialPageOfferId,
                     'type'=>'MN',
                     'offerId'=>$offerId,
                     'position'=>(intval($newPosition) + 1),
@@ -206,7 +206,7 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
         return true;
     }
 
-    public static function deleteCode($id, $position, $pageId)
+    public static function deleteCode($id, $position, $pageId, $type = '')
     {
         if ($id) {
             self::deleteSpecialPageOffer($id);
@@ -286,17 +286,25 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
         if (!empty($specialListPages)) {
             foreach ($specialListPages as $specialListPage) {
                 \KC\Repository\SpecialList::updateTotalOffersAndTotalCoupons(
-                    $specialListPage['totalOffers'],
-                    $specialListPage['totalCoupons'],
-                    $specialListPage['specialpageId']
+                    $specialListPage[0]['total_offers'],
+                    $specialListPage[0]['total_coupons'],
+                    $specialListPage[0]['page']['id']
                 );
-                foreach ($specialListPage['page'] as $page) {
-                    $pageRelatedOffers = \KC\Repository\Offer::getSpecialOffersByPage($page['id'], $currentDate);
-                    $constraintsRelatedOffers = \KC\Repository\Offer::getOffersByPageConstraints($page, $currentDate);
-                    $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
-                    foreach ($pageRelatedOffersAndPageConstraintsOffers as $pageRelatedOffersAndPageConstraintsOffer) {
-                        self::addOfferInList($pageRelatedOffersAndPageConstraintsOffer['id'], $page['id'], 'cron');
-                    }
+                $pageRelatedOffers = \KC\Repository\Offer::getSpecialOffersByPage(
+                    $specialListPage[0]['page']['id'],
+                    $currentDate
+                );
+                $constraintsRelatedOffers = \KC\Repository\Offer::getOffersByPageConstraints(
+                    $specialListPage[0]['page'],
+                    $currentDate
+                );
+                $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
+                foreach ($pageRelatedOffersAndPageConstraintsOffers as $pageRelatedOffersAndPageConstraintsOffer) {
+                    self::addOfferInList(
+                        $pageRelatedOffersAndPageConstraintsOffer['id'],
+                        $specialListPage[0]['page']['id'],
+                        'cron'
+                    );
                 }
             }
         }

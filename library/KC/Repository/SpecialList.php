@@ -125,6 +125,8 @@ class SpecialList extends \KC\Entity\SpecialList
                 $pc->page = $entityManager->find('KC\Entity\Page', $page[0]['id']);
                 $pc->position = (intval($NewPos) + 1);
                 $pc->deleted = 0;
+                $pc->total_offers = 0;
+                $pc->total_coupons = 0;
                 $pc->created_at = new \DateTime('now');
                 $pc->updated_at = new \DateTime('now');
                 $entityManagerLocale = \Zend_Registry::get('emLocale');

@@ -61,16 +61,17 @@ class Admin_SpecialpagesoffersController extends Zend_Controller_Action
 
     public function savepositionAction()
     {
+        $this->_helper->layout->disableLayout();
         $pageId = $this->getRequest()->getParam('pageId');
         \KC\Repository\SpecialPagesOffers::savePosition($this->getRequest()->getParam('offersIds'), $pageId);
-        $popularArticles = \KC\Repository\SpecialPagesOffers::getSpecialPageOfferById($pageId);
-        echo Zend_Json::encode($popularArticles);
+        $SpecialPagesOffers = \KC\Repository\SpecialPagesOffers::getSpecialPageOfferById($pageId);
+        echo Zend_Json::encode($SpecialPagesOffers);
         exit();
     }
 
     public function addnewoffersAction()
     {
-        \KC\Repository\SSpecialPagesOffers::addNewSpecialPageOffers();
+        \KC\Repository\SpecialPagesOffers::addNewSpecialPageOffers();
         exit();
     }
 }
