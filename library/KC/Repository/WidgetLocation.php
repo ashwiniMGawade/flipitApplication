@@ -135,6 +135,9 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
         $widgetPosition = self::getWidgetPosition($pageType, $widgetLocation, $relatedId, $moneyShop);
         $widgetOrDefaultPosition = !empty($widgetPosition) ? $widgetPosition : 1;
         $maxWidgetPosition =  $widgetOrDefaultPosition > count($offers) ? count($offers) : $widgetOrDefaultPosition;
+        if ($pageType == 'page' || $pageType == 'category') {
+            $maxWidgetPosition = $maxWidgetPosition > 20 ? 20 : $maxWidgetPosition;
+        }
         return $maxWidgetPosition;
     }
 }
