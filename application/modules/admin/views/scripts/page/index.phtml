@@ -7,6 +7,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.j
 $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
 $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/select2.css" );
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/page.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
+$this->headScript()->prependFile(PUBLIC_PATH . "js/back_end/widget-location.js");
 ?>
 <?php echo $this->headTitle()->append('Pages List');?>
    <!-- pageList starts -->
@@ -28,7 +30,14 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/page.js");
           <h1 class="fl"><?php echo $this->translate('Pages')?><button onclick="window.location.href='<?php echo HTTP_PATH;?>admin/page/addpage'" class="btn ml10"><?php echo $this->translate('Add New Page')?></button></h1>
           	<div class="clear"></div>
         
-          	<p class="text-right"><a href='<?php echo HTTP_PATH;?>admin/page/exportpagelist'><?php echo $this->translate('Export List')?></a></p>
+          	<p class="text-right">
+                <a href='javascript:void(0)' onclick="showLightBoxForWidgetLocation()">
+                    <?php echo $this->translate('Set Widget Location')?>
+                </a>  / 
+                <a href='<?php echo HTTP_PATH;?>admin/page/exportpagelist'>
+                    <?php echo $this->translate('Export List')?>
+                </a>
+            </p>
           <div class="mainpage-content-colorbox">	
         <form class="form-search"  name="searchform" id="searchform">
           <div class="fl ml15"> 
@@ -64,3 +73,4 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/page.js");
            
         </div>
        <!-- pageList end -->
+<?php echo $this->partial('widgetlocation/_widget-location.phtml', array('pageType' => 'page', 'relatedId' => ''));?>

@@ -386,6 +386,9 @@ abstract class BaseShop extends Doctrine_Record
                 'type' => 'boolean',
             )
         );
+        $this->hasColumn('code_alert_send_date', 'timestamp', null, array(
+            'type' => 'timestamp',
+        ));
     }
 
     public function setUp()

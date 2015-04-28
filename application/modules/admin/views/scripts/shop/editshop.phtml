@@ -1,15 +1,15 @@
 <?php 
-	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
-	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
-	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/edit-shop.js");
-	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.textareaCounter.plugin.js");
-	$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
-	$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
-    $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "js/back_end/openwysiwyg_v1.4.7/styles/wysiwyg.css" );
-	$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
-	$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
-	$this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
-
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/edit-shop.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.textareaCounter.plugin.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "js/back_end/openwysiwyg_v1.4.7/styles/wysiwyg.css");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.NobleCount.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/widget-location.js");
 $howToIntroductionText = '';
 $howToIntroductionText = $this->partial(
     'shop/_how-to-introduction-text.phtml',
@@ -35,7 +35,10 @@ echo $this->headTitle()->append('Edit Shop');?>
                 <?php echo $this->translate('Edit Shop');
                  $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme(); ?>
                 <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/shop<?php echo '#'.$this->qstring; ?>'"><?php echo $this->translate('Cancel'); ?></button>
-                <button type="button" class="btn btn-primary ml10" id='prefillData'><?php echo $this->translate('Pre-fill'); ?></button>	
+                <button type="button" class="btn btn-primary ml10" id='prefillData'><?php echo $this->translate('Pre-fill'); ?></button>
+                <button type = "button" onclick="showLightBoxForWidgetLocation()" class="btn ml10">
+                    <?php echo $this->translate('backend_Set widget location'); ?>
+                </button>	
                 <?php 
                 $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
                 $host = $httpScheme.'.kortingscode.nl';
@@ -1094,3 +1097,7 @@ echo $this->headTitle()->append('Edit Shop');?>
       </div>
       </div>   
      <!-- Create shops End -->
+<?php 
+$shopId = !empty($this->data['id']) ? $this->data['id'] : '';
+echo $this->partial('widgetlocation/_widget-location.phtml', array('pageType' => 'shop', 'relatedId' => $shopId));
+?>
