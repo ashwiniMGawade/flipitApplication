@@ -5,9 +5,13 @@ $widgetLocation = 'global';
 if (!empty($this->relatedId)) {
     $widgetLocation = 'individual';
 }
-$widgetPosition = \KC\Repository\WidgetLocation::getWidgetPosition($this->pageType, $widgetLocation, $this->relatedId);
+$widgetPosition = \KC\Repository\WidgetLocation::getWidgetPositionInBackEnd(
+    $this->pageType,
+    $widgetLocation,
+    $this->relatedId
+);
 ?>
-<div class="modal display-none popup-width" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" 
+<div class="modal display-none popup-width" id="modalForWidgetLocation" tabindex="1" role="dialog" aria-labelledby="myModalLabel" 
     aria-hidden="true">
     <div class="wrap columns-2">
         <form name="widgetlocationForm" id="widgetlocationForm" method="post" 
@@ -28,7 +32,7 @@ $widgetPosition = \KC\Repository\WidgetLocation::getWidgetPosition($this->pageTy
                         </div>
                         <div class="mainpage-content-right-inner-right-other display-none"></div>
                         <div class="mainpage-content-right">
-                            <select name='widgetLocation' id='widgetlocation'>
+                            <select onchange="showWidgetPosition()" name='widgetLocation' id='widgetlocation'>
                                 <?php 
                                 foreach ($widgetLocations as $widgetLocationIndex => $widgetLocation) {
                                    echo "<option value='". $widgetLocationIndex ."'>". $widgetLocation. "</option>";

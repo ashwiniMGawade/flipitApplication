@@ -96,10 +96,12 @@ class ErrorController extends Zend_Controller_Action
                     $this->view->offersPaginator = $specialOffersPaginator;
                     $this->view->widget = $sidebarWidget;
                     $this->view->pageMode = true;
-                    $this->view->widgetPosition = \KC\Repository\WidgetLocation::getWidgetPosition(
+                    $this->view->widgetPosition = \KC\Repository\WidgetLocation::getWidgetPositionForFrontEnd(
                         'page',
                         'global',
-                        $pageDetails['page']['id']
+                        $pageDetails['id'],
+                        '',
+                        $specialPageOffers
                     );
                 } else {
                     $this->_helper->layout()->disableLayout();
