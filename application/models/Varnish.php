@@ -101,7 +101,7 @@ class Varnish extends BaseVarnish
     public static function refreshVarnishUrlsByCron($refreshTime)
     {
         $varnish = new Varnish();
-        $currentTime = '2015-05-01 18:35:00';
+        $currentTime = FrontEnd_Helper_viewHelper::convertCurrentTimeToServerTime();
         $queue = Doctrine_Query::create()
             ->select('v.*')
             ->from("Varnish v")
