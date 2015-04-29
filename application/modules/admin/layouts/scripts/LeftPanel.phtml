@@ -403,6 +403,30 @@
             </a>
         </li>
 
+        <li 
+            <?php 
+            if($controller == 'categoriesoffers') { 
+                ?> 
+                class="imbull-has-submenu  menu-top menu-icon-popular imbull-has-current-submenu current" 
+                <?php 
+            } else { 
+                ?> 
+                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-popular" 
+                <?php 
+            }
+            ?> id="menu-links">
+            <div class="imbull-menu-image">
+                <a href="<?php echo HTTP_PATH;?>admin/categoriesoffers"><br></a>
+            </div>
+            <div class="">
+                <div></div>
+            </div>
+            <a href="<?php echo HTTP_PATH;?>admin/categoriesoffers"
+                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile">
+                <?php echo $this->translate('Category Pages Offers');?>
+            </a>
+        </li>
+
 	      <li <?php if($controller == 'searchbar') {?>  class="imbull-has-submenu menu-top menu-icon-searchbar imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-searchbar imbull-menu-open imbull-not-current-submenu" <?php }?> id="menu-links">
 
 	      <div class="imbull-menu-image"><a href="<?php echo HTTP_PATH?>admin/searchbar"><br></a></div>
