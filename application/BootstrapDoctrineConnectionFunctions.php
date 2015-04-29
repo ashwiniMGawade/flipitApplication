@@ -1,9 +1,9 @@
 <?php
-use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\ORM\Configuration;
 
 class BootstrapDoctrineConnectionFunctions
 {
@@ -30,13 +30,14 @@ class BootstrapDoctrineConnectionFunctions
         
         $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
         $isDevMode = false;
-        $config = Setup::createConfiguration($isDevMode);
+        $config = new Configuration();
         $driver = new AnnotationDriver($cachedAnnotationReader, $paths);
         AnnotationRegistry::registerLoader('class_exists');
 
         $config->setMetadataDriverImpl($driver);
         $config->setMetadataCacheImpl($cache);
         $config->setQueryCacheImpl($cache);
+        $config->setResultCacheImpl($cache);
         $config->setProxyDir(APPLICATION_PATH . '/../library/KC/Entity/Proxy');
         $config->setAutoGenerateProxyClasses(true);
         $config->setProxyNamespace('Proxy');
