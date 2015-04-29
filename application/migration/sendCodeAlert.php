@@ -129,136 +129,116 @@ class SendCodeAlert
 
     protected function mandrilHandler($key, $settings)
     {
-        $localeSettings = LocaleSettings::getLocaleSettings();
-        $localeTimezone = $localeSettings[0]['timezone'];
-        $currentDateTime = new Zend_Date('2014-01-10 08:01:01');
-        $currentDateTime->setTimezone($localeTimezone);
-       //print_r($currentDateTime->get('YYYY-MM-dd HH:mm:ss'));
-
-
-        $myDateTime = new DateTime('2009-03-21 9:14', new DateTimeZone($localeTimezone));
-//echo $myDateTime->format('y-m-d h:i:s')."\n\r";
-
-
-$myDateTime->setTimezone(new DateTimeZone('Asia/Kolkata'));
-$userTimezone = new DateTimeZone('America/New_York');
-$offset = $userTimezone->getOffset($myDateTime);
-//echo $offset.$myDateTime->format('y-m-d h:i:s')."\n\r";
-
-$userTimezone = new DateTimeZone($localeTimezone);
-$gmtTimezone = new DateTimeZone('Asia/Kolkata');
-$myDateTime = new DateTime('2009-03-21 12:58', $gmtTimezone);
-$offset = $userTimezone->getOffset($myDateTime);
-echo date('Y-m-d H:i', $myDateTime->format('U') + $offset);
-
-
-
-     //   echo "date==== ". $this->locale."\n\r";
-        die;
-        // $message = '';
-        // $this->_linkPath = $this->hostName . '/' .$this->localePath;
-        // $codeAlertOffers = CodeAlertQueue::getCodealertOffers();
-        // if (!empty($codeAlertOffers)) {
-        //     foreach ($codeAlertOffers as $codeAlertOffer) {
-        //         $this->shopId = $codeAlertOffer['shop']['id'];
-        //         $currentDate = date('Y-m-d H:i:s');
-        //         if ($codeAlertOffer['endDate'] < $currentDate) {
-        //             CodeAlertQueue::moveCodeAlertToTrash($codeAlertOffer['id']);
-        //         }
-        //         if (($codeAlertOffer['startDate'] <= $currentDate && $codeAlertOffer['endDate'] >= $currentDate) && $codeAlertOffer['offline'] == 0) {
-        //             $varnish = new Varnish();
-        //             $websiteLocale = isset($this->locale) ? $this->locale.'/' : '';
-        //             $shopUrl = $this->hostName.'/'.$websiteLocale.$codeAlertOffer['shop']['permalink'];
-        //             $varnish->addUrl($shopUrl);
-        //             sleep(3600);
-        //             $this->setPhpExecutionLimit();
-        //             $topVouchercodes = FrontEnd_Helper_viewHelper::getShopCouponCode(
-        //                 'similarStoresAndSimilarCategoriesOffers',
-        //                 4,
-        //                 $this->shopId
-        //             );
-        //             $codeAlertSettings = CodeAlertSettings::getCodeAlertSettings();
-        //             $settings = Signupmaxaccount::getAllMaxAccounts();
-        //             $mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
-        //             $mandrillNewsletterSubject = isset($codeAlertSettings[0]['email_subject'])
-        //                 && $codeAlertSettings[0]['email_subject'] != ''
-        //                 ? $codeAlertSettings[0]['email_subject']
-        //                 : '';
-        //             $mandrillSenderName = $settings[0]['sendername'];
-        //             $visitors = $codeAlertOffer['shop']['visitors'];
-        //             $visitorIds = array();
-        //             foreach ($visitors as $visitorInfo) {
-        //                 $codeAlertVisitors = CodeAlertVisitors::getVisitorsToRemoveInCodeAlert(
-        //                     $visitorInfo['visitorId'],
-        //                     $codeAlertOffer['id']
-        //                 );
-        //                 if (empty($codeAlertVisitors)) {
-        //                     if (isset($this->shopId)) {
-        //                         $visitorCodeAlertSendDate = Shop::getCodeAlertSendDateByShopId($this->shopId);
-        //                         if (date('Y-m-d', strtotime($visitorCodeAlertSendDate)) == date('Y-m-d')) {
-        //                         } else {
-        //                             $visitorIds[] = $visitorInfo['visitorId'];
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //             if (!empty($visitorIds)) {
-        //                 $visitorIds = implode(',', $visitorIds);
-        //                 $this->visitorId = $visitorIds;
-        //                 BackEnd_Helper_MandrillHelper::getDirectLoginLinks(
-        //                     $this,
-        //                     'scheduleNewsletterSender',
-        //                     '',
-        //                     $this->mandrillKey
-        //                 );
-        //                 try {
-        //                     $codeAlertHeader = isset($codeAlertSettings[0]['email_header'])
-        //                         ? $codeAlertSettings[0]['email_header']
-        //                         : 'Code alert header';
-        //                     FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
-        //                         '',
-        //                         '',
-        //                         '',
-        //                         str_replace('[shopname]', $codeAlertOffer['shop']['name'], $mandrillNewsletterSubject),
-        //                         $mandrillSenderEmailAddress,
-        //                         $mandrillSenderName,
-        //                         $this->_recipientMetaData,
-        //                         $this->_loginLinkAndData,
-        //                         $this->_to,
-        //                         '',
-        //                         array(
-        //                             'httpPath' => $this->hostName,
-        //                             'locale' => $this->locale,
-        //                             'httpPathLocale' => $this->_linkPath,
-        //                             'publicPathCdn' => $this->publicCdnPath,
-        //                             'mandrillKey' => $this->mandrillKey
-        //                         ),
-        //                         str_replace('[shopname]', $codeAlertOffer['shop']['name'], $codeAlertHeader),
-        //                         $codeAlertOffer
-        //                     );
+        $message = '';
+        $this->_linkPath = $this->hostName . '/' .$this->localePath;
+        $codeAlertOffers = CodeAlertQueue::getCodealertOffers();
+        if (!empty($codeAlertOffers)) {
+            foreach ($codeAlertOffers as $codeAlertOffer) {
+                $this->shopId = $codeAlertOffer['shop']['id'];
+                $currentDate = date('Y-m-d H:i:s');
+                if ($codeAlertOffer['endDate'] < $currentDate) {
+                    CodeAlertQueue::moveCodeAlertToTrash($codeAlertOffer['id']);
+                }
+                if (($codeAlertOffer['startDate'] <= $currentDate && $codeAlertOffer['endDate'] >= $currentDate) && $codeAlertOffer['offline'] == 0) {
+                    self::addUrlAndRefreshVarnish($this->locale, $this->hostName, $codeAlertOffer['shop']['permalink']);
+                    sleep(3600);
+                    $this->setPhpExecutionLimit();
+                    $topVouchercodes = FrontEnd_Helper_viewHelper::getShopCouponCode(
+                        'similarStoresAndSimilarCategoriesOffers',
+                        4,
+                        $this->shopId
+                    );
+                    $codeAlertSettings = CodeAlertSettings::getCodeAlertSettings();
+                    $settings = Signupmaxaccount::getAllMaxAccounts();
+                    $mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
+                    $mandrillNewsletterSubject = isset($codeAlertSettings[0]['email_subject'])
+                        && $codeAlertSettings[0]['email_subject'] != ''
+                        ? $codeAlertSettings[0]['email_subject']
+                        : '';
+                    $mandrillSenderName = $settings[0]['sendername'];
+                    $visitors = $codeAlertOffer['shop']['visitors'];
+                    $visitorIds = array();
+                    foreach ($visitors as $visitorInfo) {
+                        $codeAlertVisitors = CodeAlertVisitors::getVisitorsToRemoveInCodeAlert(
+                            $visitorInfo['visitorId'],
+                            $codeAlertOffer['id']
+                        );
+                        if (empty($codeAlertVisitors)) {
+                            if (isset($this->shopId)) {
+                                $visitorCodeAlertSendDate = Shop::getCodeAlertSendDateByShopId($this->shopId);
+                                if (date('Y-m-d', strtotime($visitorCodeAlertSendDate)) == date('Y-m-d')) {
+                                } else {
+                                    $visitorIds[] = $visitorInfo['visitorId'];
+                                }
+                            }
+                        }
+                    }
+                    if (!empty($visitorIds)) {
+                        $visitorIds = implode(',', $visitorIds);
+                        $this->visitorId = $visitorIds;
+                        BackEnd_Helper_MandrillHelper::getDirectLoginLinks(
+                            $this,
+                            'scheduleNewsletterSender',
+                            '',
+                            $this->mandrillKey
+                        );
+                        try {
+                            $codeAlertHeader = isset($codeAlertSettings[0]['email_header'])
+                                ? $codeAlertSettings[0]['email_header']
+                                : 'Code alert header';
+                            FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
+                                '',
+                                '',
+                                '',
+                                str_replace('[shopname]', $codeAlertOffer['shop']['name'], $mandrillNewsletterSubject),
+                                $mandrillSenderEmailAddress,
+                                $mandrillSenderName,
+                                $this->_recipientMetaData,
+                                $this->_loginLinkAndData,
+                                $this->_to,
+                                '',
+                                array(
+                                    'httpPath' => $this->hostName,
+                                    'locale' => $this->locale,
+                                    'httpPathLocale' => $this->_linkPath,
+                                    'publicPathCdn' => $this->publicCdnPath,
+                                    'mandrillKey' => $this->mandrillKey
+                                ),
+                                str_replace('[shopname]', $codeAlertOffer['shop']['name'], $codeAlertHeader),
+                                $codeAlertOffer
+                            );
                             
-        //                     if (isset($this->shopId)) {
-        //                         Shop::addCodeAlertTimeStampForShopId($this->shopId);
-        //                     }
+                            if (isset($this->shopId)) {
+                                Shop::addCodeAlertTimeStampForShopId($this->shopId);
+                            }
 
-        //                     CodeAlertVisitors::saveCodeAlertVisitors($visitorIds, $codeAlertOffer['id']);
-        //                     CodeAlertQueue::clearCodeAlertQueueByOfferId($codeAlertOffer['id']);
-        //                     $message = 'code alert has been sent successfully' ;
-        //                 } catch (Mandrill_Error $e) {
-        //                     $message ='There is some problem in your data';
-        //                 }
-        //             } else {
-        //                 $message ='Code alert already sent...';
-        //             }
-        //         } else {
-        //             $message .=' and code alert cannot be sent for other offers yet to start or expired.';
-        //         }
-        //     }
-        // } else {
-        //     $message ='Code alert queue empty.';
-        // }
-        // echo "\n";
-        // print "$key - $message ";
+                            CodeAlertVisitors::saveCodeAlertVisitors($visitorIds, $codeAlertOffer['id']);
+                            CodeAlertQueue::clearCodeAlertQueueByOfferId($codeAlertOffer['id']);
+                            $message = 'code alert has been sent successfully' ;
+                        } catch (Mandrill_Error $e) {
+                            $message ='There is some problem in your data';
+                        }
+                    } else {
+                        $message ='Code alert already sent...';
+                    }
+                } else {
+                    $message .=' and code alert cannot be sent for other offers yet to start or expired.';
+                }
+            }
+        } else {
+            $message ='Code alert queue empty.';
+        }
+        echo "\n";
+        print "$key - $message ";
+    }
+
+    public static function addUrlAndRefreshVarnish($locale, $hostName, $shopPermalink)
+    {
+        $varnish = new Varnish();
+        $websiteLocale = !empty($locale) ? $locale.'/' : '';
+        $shopUrl = $hostName.'/'.$websiteLocale.$shopPermalink;
+        $varnish->addUrl($shopUrl);
+        $varnish->processQueueByUrl($shopUrl);
     }
 }
 
