@@ -30,6 +30,7 @@ class Offer extends BaseOffer
             ->from('Offer o')
             ->andWhere('o.startdate >= '."'".$currentDate."'")
             ->fetchArray();
+        return $offers;
     }
     
     public static function getViewCountByOfferId($offerId)

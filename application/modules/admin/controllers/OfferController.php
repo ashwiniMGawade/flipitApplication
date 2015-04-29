@@ -1112,28 +1112,35 @@ class Admin_OfferController extends Zend_Controller_Action
         $varnishObj = new \KC\Repository\Varnish();
         # get all the urls related to an offer
         $varnishUrls = \KC\Repository\Offer::getAllUrls($id);
-
+        $varnishRefreshTime = (array) $varnishUrls['refreshTime'];
+        $refreshTime = BackEnd_Helper_viewHelper::convertOfferTimeToServerTime($varnishRefreshTime['date']);
         # check $varnishUrls has atleast one url
         if (isset($varnishUrls) && count($varnishUrls) > 0) {
             foreach ($varnishUrls as $varnishIndex => $varnishUrl) {
-                $refreshTime = '';
-                if ($varnishIndex == 'refreshTime') {
-                    $refreshTime = BackEnd_Helper_viewHelper::convertOfferTimeToServerTime($varnishUrls['refreshTime']);
+                if ($varnishIndex != 'refreshTime') {
+                    $varnishObj->addUrl(HTTP_PATH_FRONTEND . $varnishUrl, $refreshTime);
                 }
-                $varnishObj->addUrl(HTTP_PATH_FRONTEND . $varnishUrl, $refreshTime);
             }
         }
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND, $varnishUrls['refreshTime']);
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_nieuw'), $varnishUrls['refreshTime']);
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-20'), $varnishUrls['refreshTime']);
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_categorieen'), $varnishUrls['refreshTime']);
-        $varnishObj->addUrl("http://www.flipit.com", $varnishUrls['refreshTime']);
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND, $refreshTime);
+        $varnishObj->addUrl(
+            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_nieuw'),
+            $refreshTime
+        );
+        $varnishObj->addUrl(
+            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-20'),
+            $refreshTime
+        );
+        $varnishObj->addUrl(
+            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_categorieen'),
+            $refreshTime
+        );
+        $varnishObj->addUrl("http://www.flipit.com", $refreshTime);
         # make markplaatfeed url's get refreashed only in case of kortingscode
         if (LOCALE == '') {
-            $varnishObj->addUrl(HTTP_PATH_FRONTEND . 'marktplaatsfeed', $varnishUrls['refreshTime']);
-            $varnishObj->addUrl(HTTP_PATH_FRONTEND. 'marktplaatsmobilefeed', $varnishUrls['refreshTime']);
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND . 'marktplaatsfeed', $refreshTime);
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND. 'marktplaatsmobilefeed', $refreshTime);
         }
-
     }
 
     /**

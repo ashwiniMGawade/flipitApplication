@@ -989,18 +989,4 @@ class BackEnd_Helper_viewHelper
             );
         }
     }
-    
-    public static function convertOfferTimeToServerTime($offerTime)
-    {
-        $refreshTime = new DateTime($offerTime, new DateTimeZone(LOCALE_TIMEZONE));
-        $refreshTime->setTimezone(new DateTimeZone('Europe/Amsterdam'));
-        return $refreshTime->format('Y-m-d H:i:s');
-    }
-
-    public static function convertCurrentTimeToServerTime()
-    {
-        $refreshTime = new DateTime('now', new DateTimeZone(LOCALE_TIMEZONE));
-        $refreshTime->setTimezone(new DateTimeZone('Europe/Amsterdam'));
-        return $refreshTime->format('Y-m-d H:i:s');
-    }
 }

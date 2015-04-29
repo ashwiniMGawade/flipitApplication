@@ -38,34 +38,34 @@ class SpecificTimeOffers
         $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
         $manager = CommonMigrationFunctions::loadDoctrineModels();
         echo CommonMigrationFunctions::showProgressMessage(
-            "$key - Inserting popular articles in database!!!"
+            "$key - Getting offers from database!!!"
         );
         
         $futureOffersOnline = Offer::getFutureOnlineOffers();
-        self::refreshVarnish($futureOffersOnline);
+        $this->refreshVarnish($futureOffersOnline);
         
         $manager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(
-            "$key - Popular articles has been created successfully!!!"
+            "$key - Varnish has been refreshed successfully!!!"
         );
     }
 
-    protected static function refreshVarnish($futureOffersOnline)
+    protected function refreshVarnish($futureOffersOnline)
     {
-        foreach ($futureOffersOnline as $futureOfferIndex => $futureOffer) {
-            self::refreshVarnishByRefreshTime($futureOffer['startdate']);
+        if (!empty($futureOffersOnline)) {
+            foreach ($futureOffersOnline as $futureOfferIndex => $futureOffer) {
+                $this->refreshVarnishByRefreshTime($futureOffer['startDate']);
+            }
         }
     }
 
-    protected static function refreshVarnishByRefreshTime($offerStartDate)
+    protected function refreshVarnishByRefreshTime($offerStartDate)
     {
         if (!empty($offerStartDate)) {
             $varnishObj = new Varnish();
             $refreshTime = '';
-            if ($varnishIndex == 'refreshTime') {
-                $refreshTime = BackEnd_Helper_viewHelper::convertOfferTimeToServerTime($offerStartDate);
-                Varnish::refreshVarnishUrlsByCron($refreshTime);
-            }
+            $refreshTime = FrontEnd_Helper_viewHelper::convertOfferTimeToServerTime($offerStartDate);
+            Varnish::refreshVarnishUrlsByCron($refreshTime);
         }
     }
 }

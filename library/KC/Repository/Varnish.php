@@ -16,13 +16,14 @@ class Varnish extends \KC\Entity\Varnish
     public function addUrl($url, $refreshTime = '')
     {
         # add url if it is not queued
-        if (! self::checkQueuedUrl($url, $refreshTime)) {
+        $existedRecord = self::checkQueuedUrl($url, $refreshTime);
+        if (empty($existedRecord)) {
             $v          = new \KC\Entity\Varnish();
             $v->url     = rtrim($url, '/');
             $v->status  = 'queue';
             $v->created_at = new \DateTime('now');
             $v->updated_at = new \DateTime('now');
-            $v->refresh_time = $refreshTime;
+            $v->refresh_time = new \DateTime($refreshTime);
             $entityManagerLocale = \Zend_Registry::get('emLocale');
             $entityManagerLocale->persist($v);
             $entityManagerLocale->flush();
@@ -88,6 +89,7 @@ class Varnish extends \KC\Entity\Varnish
                 $queryBuilder->expr()->eq('v.refresh_time', $queryBuilder->expr()->literal($refreshTime))
             );
         }
+        $query = $query->setMaxResults(1);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return  $data;
     }
