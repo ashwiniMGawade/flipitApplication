@@ -13,12 +13,12 @@ function init() {
 }
 
 function showLightBoxForWidgetLocation() {
-    showModel("", "", "add");
+    showModel1("", "", "add");
 }
 
-function showModel(id,rootid,type) {
+function showModel1(id,rootid,type) {
     removeBorders();
-    $('#myModal').modal('show');
+    $('#modalForWidgetLocation').modal('show');
 }
 
 function removeBorders() {
@@ -27,9 +27,26 @@ function removeBorders() {
 }
 
 function hideModel() {
-    $('#myModal').modal('hide');
+    $('#modalForWidgetLocation').modal('hide');
     window.location.reload();
     return false;
+}
+
+function showWidgetPosition() {
+    $.ajax({
+        url : HOST_PATH + "admin/widgetlocation/get-widget-position",
+        type : "post",
+        data : {
+            'pageType' : $('#pageType').val(),
+            'widgetLocation' : $('#widgetlocation').val()
+        },
+        dataType : "json",
+        success : function(data) {
+            if (data!='') {
+                $('#widgetPostion').val(data[0].position);
+            }
+        }
+    });
 }
 
 function validateWidgetlocationForm() {
