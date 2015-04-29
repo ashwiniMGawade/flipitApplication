@@ -136,12 +136,16 @@ class SendCodeAlert
             foreach ($codeAlertOffers as $codeAlertOffer) {
                 $this->shopId = $codeAlertOffer['shop']['id'];
                 $currentDate = date('Y-m-d H:i:s');
+                $currentTime = FrontEnd_Helper_viewHelper::convertCurrentTimeToServerTime();
                 if ($codeAlertOffer['endDate'] < $currentDate) {
                     CodeAlertQueue::moveCodeAlertToTrash($codeAlertOffer['id']);
                 }
+                $refreshTime = FrontEnd_Helper_viewHelper::convertOfferTimeToServerTime($codeAlertOffer['startDate']);
+                if ($refreshTime >= $currentTime) {
+                    self::addUrlAndRefreshVarnish($this->locale, $this->hostName, $codeAlertOffer['shop']['permalink'], $refreshTime);
+                }
+                sleep(3600);
                 if (($codeAlertOffer['startDate'] <= $currentDate && $codeAlertOffer['endDate'] >= $currentDate) && $codeAlertOffer['offline'] == 0) {
-                    self::addUrlAndRefreshVarnish($this->locale, $this->hostName, $codeAlertOffer['shop']['permalink']);
-                    sleep(3600);
                     $this->setPhpExecutionLimit();
                     $topVouchercodes = FrontEnd_Helper_viewHelper::getShopCouponCode(
                         'similarStoresAndSimilarCategoriesOffers',
@@ -232,13 +236,16 @@ class SendCodeAlert
         print "$key - $message ";
     }
 
-    public static function addUrlAndRefreshVarnish($locale, $hostName, $shopPermalink)
+    public static function addUrlAndRefreshVarnish($locale, $hostName, $shopPermalink, $refreshTime)
     {
         $varnish = new Varnish();
         $websiteLocale = !empty($locale) ? $locale.'/' : '';
         $shopUrl = $hostName.'/'.$websiteLocale.$shopPermalink;
-        $varnish->addUrl($shopUrl);
-        $varnish->processQueueByUrl($shopUrl);
+        $varnish->addUrl($shopUrl, $refreshTime);
+        $currentTime = FrontEnd_Helper_viewHelper::convertCurrentTimeToServerTime();
+        if ($currentTime == $refreshTime) {
+            $varnish->processQueueByUrl($shopUrl);
+        }
     }
 }
 
