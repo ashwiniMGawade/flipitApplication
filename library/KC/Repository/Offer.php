@@ -2406,8 +2406,8 @@ class Offer Extends \KC\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select(
-                "o.id, o.title, o.extendedOffer,o.authorId , o.extendedUrl,
-                s.permaLink as shopPermalink, s.howToUse ,s.contentManagerId ,s.howtoguideslug, sp.permalink as shopPagePermalink,
+                "o.id, o.startDate, o.title, o.extendedOffer,o.authorId , o.extendedUrl, s.permaLink as shopPermalink, s.howToUse ,
+                s.contentManagerId ,s.howtoguideslug, sp.permalink as shopPagePermalink,
                 p.permaLink as categoryPermalink, page.permalink as pagePermalink"
             )
             ->from('KC\Entity\Offer', 'o')
@@ -2456,9 +2456,10 @@ class Offer Extends \KC\Entity\Offer
 
         foreach ($offer as $value) {
             if (isset($value['pagePermalink']) && strlen($value['pagePermalink']) > 0) {
-                $urlsArray[] = $value['pagePermalink'] ;
+                $urlsArray[] = $value['pagePermalink'];
             }
         }
+        $urlsArray['refreshTime'] = $offer['startDate'];
         return $urlsArray ;
     }
 
