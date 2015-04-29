@@ -51,6 +51,7 @@ class BackEnd_Helper_DatabaseManager
         $emLocale = EntityManager::create($connectionParamsLocale, $config);
         \Zend_Registry::set('emLocale', $emLocale);
     }
+    
     /**
      * Close databse connection
      * 
