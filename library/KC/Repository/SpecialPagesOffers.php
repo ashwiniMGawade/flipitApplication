@@ -59,7 +59,7 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
             ->leftJoin('s.logo', 'l')
             ->leftJoin('p.pages', 'page')
             ->andWhere($queryBuilder->expr()->in('p.pages', $pageId))
-            ->orderBy('p.position');
+            ->orderBy('p.position', 'ASC');
         $specialPageOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $specialPageOffers;
     }
@@ -169,21 +169,6 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
         return true;
     }
 
-    public static function updateSpecialPageOfferPosition($position, $pageId)
-    {
-        if (!empty($position) && !empty($pageId)) {
-            $queryBuilderUpdate = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilderUpdate
-                ->update('KC\Entity\SpecialPagesOffers', 'sp')
-                ->set('sp.position', $queryBuilderUpdate->expr()->literal('p.position -1'))
-                ->where('sp.position > '.$position)
-                ->andWhere('sp.pages='. $pageId)
-                ->getQuery();
-            $query->execute();
-        }
-        return true;
-    }
-
     public static function getNewOfferList($pageId)
     {
         $newOffersList = array();
@@ -217,7 +202,6 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
     {
         if ($id) {
             self::deleteSpecialPageOffer($id);
-            self::updateSpecialPageOfferPosition($position, $pageId);
             $newOffersList = self::getNewOfferList($pageId);
             $newPosition = 1;
             $queryBuilderSpecialPage = \Zend_Registry::get('emLocale')->createQueryBuilder();

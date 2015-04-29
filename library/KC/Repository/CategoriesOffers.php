@@ -162,21 +162,6 @@ class CategoriesOffers extends \KC\Entity\CategoriesOffers
         return true;
     }
 
-    public static function updateCategoryOfferPosition($position, $categoryId)
-    {
-        if (!empty($position) && !empty($categoryId)) {
-            $queryBuilderUpdate = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilderUpdate
-                ->update('KC\Entity\CategoriesOffers', 'sp')
-                ->set('sp.position', $queryBuilderUpdate->expr()->literal('p.position -1'))
-                ->where('sp.position > '.$position)
-                ->andWhere('sp.categories='. $categoryId)
-                ->getQuery();
-            $query->execute();
-        }
-        return true;
-    }
-
     public static function getNewOfferList($categoryId)
     {
         $newOffersList = array();
@@ -210,7 +195,6 @@ class CategoriesOffers extends \KC\Entity\CategoriesOffers
     {
         if ($id) {
             self::deleteCategoryOffer($id);
-            self::updateCategoryOfferPosition($position, $categoryId);
             $newOffersList = self::getNewOfferList($categoryId);
             $newPosition = 1;
             $queryBuilderSpecialPage = \Zend_Registry::get('emLocale')->createQueryBuilder();
