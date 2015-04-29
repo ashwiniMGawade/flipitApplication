@@ -66,7 +66,9 @@ class BootstrapDoctrineConnectionFunctions
         $dbPassword = $splitDbPassword[0];
         $dbUserName = $splitDbUserName[0];
         $dbName = $splitDbName[3];
+        $hostName = isset($splitDbPassword[1]) ? $splitDbPassword[1] : 'localhost';
         return array(
+            'host'     => $hostName,
             'driver'   => 'pdo_mysql',
             'user'     => $dbUserName,
             'password' => $dbPassword,
