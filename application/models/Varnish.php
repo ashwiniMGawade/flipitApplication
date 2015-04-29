@@ -100,15 +100,18 @@ class Varnish extends BaseVarnish
 
     public static function refreshVarnishUrlsByCron($refreshTime)
     {
-        $currentTime = FrontEnd_Helper_viewHelper::convertCurrentTimeToServerTime();
-        die('Hello');
-        $queue = Doctrine_core::getTable('Varnish')->findBy('refresh_time', "'".$refreshTime."'")->toArray();
+        $varnish = new Varnish();
+        $currentTime = '2015-05-01 18:35:00';
+        $queue = Doctrine_Query::create()
+            ->select('v.*')
+            ->from("Varnish v")
+            ->where('v.refresh_time', "'".$refreshTime."'")->fetchArray(null, Doctrine::HYDRATE_ARRAY);
         if (!empty($queue)) {
             foreach ($queue as $page) {
                 if ($currentTime == $page['refresh_time']) {
                     sleep(1.5);
-                    self::refreshVarnish($page['url']);
-                    self::removeFromQueue($page['id']);
+                    $varnish->refreshVarnish($page['url']);
+                    $varnish->removeFromQueue($page['id']);
                 }
             }
         }

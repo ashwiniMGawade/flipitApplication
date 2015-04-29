@@ -56,6 +56,10 @@ class SpecificTimeOffers
             foreach ($futureOffersOnline as $futureOfferIndex => $futureOffer) {
                 $this->refreshVarnishByRefreshTime($futureOffer['startDate']);
             }
+        } else {
+            echo CommonMigrationFunctions::showProgressMessage(
+                "$key - Varnish has already been refreshed successfully!!!"
+            );
         }
     }
 

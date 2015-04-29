@@ -1113,7 +1113,7 @@ class Admin_OfferController extends Zend_Controller_Action
         # get all the urls related to an offer
         $varnishUrls = \KC\Repository\Offer::getAllUrls($id);
         $varnishRefreshTime = (array) $varnishUrls['refreshTime'];
-        $refreshTime = BackEnd_Helper_viewHelper::convertOfferTimeToServerTime($varnishRefreshTime['date']);
+        $refreshTime = FrontEnd_Helper_viewHelper::convertOfferTimeToServerTime($varnishRefreshTime['date']);
         # check $varnishUrls has atleast one url
         if (isset($varnishUrls) && count($varnishUrls) > 0) {
             foreach ($varnishUrls as $varnishIndex => $varnishUrl) {
