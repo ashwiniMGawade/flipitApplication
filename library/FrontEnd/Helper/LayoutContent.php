@@ -172,7 +172,7 @@ class FrontEnd_Helper_LayoutContent
      
     public static function getWebsiteMainMenu($navigation = '')
     {
-        $websiteMenus = KC\Repository\menu::getFirstLevelMenu($navigation);
+        $websiteMenus = KC\Repository\Menu::getFirstLevelMenu($navigation);
         $cssClass = LOCALE == '' ? "kc-menu" : 'flipit-menu';
         $websiteMainMenu =
 
