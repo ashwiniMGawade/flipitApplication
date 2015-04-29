@@ -303,7 +303,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
         if (is_array($this->homePageData['specialPagesOffers'][$dynamicDivId])) {
             $topTenSpecialListPageOffers = array_slice($this->homePageData['specialPagesOffers'][$dynamicDivId], 0, 10);
             foreach ($topTenSpecialListPageOffers as $specialOffer) {
-                $specialOffersRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($specialOffer['offers']);
+                $offers = isset($specialOffer['offers']) ? $specialOffer['offers'] : $specialOffer;
+                $specialOffersRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($offers);
             }
         }
         return $specialOffersRightHtml;

@@ -177,13 +177,11 @@ function deleteCode() {
         success : function(json) {
             $('ul#category li').remove();
             var li = '';
-
             for(var i in json) {
                 li+= "<li class='ui-state-default' relpos='" + json[i].position 
                 + "' reloffer='" + json[i]['offers'].id + "' id='" + json[i].id + "' ><span>" 
                 + json[i]['offers'].title +"</span></li>";
             }
-
             $('select#offerlist').append('<option value="' + offerId + '">' + title  + '</option>');
             $('ul#category').append(li);
             $('ul#category li#'+id).addClass('selected');
