@@ -1,9 +1,9 @@
 <?php
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\ORM\Configuration;
 
 class BootstrapDoctrineConnectionFunctions
 {
@@ -14,7 +14,7 @@ class BootstrapDoctrineConnectionFunctions
             APPLICATION_PATH . '/configs/application.ini'
         );
         $frontControllerObject = $application->getOption('resources');
-        $memcacheHostParams = $frontControllerObject['frontController']['params']['memcache']['host'];
+        $memcacheHostParams = $frontControllerObject['frontController']['params']['memcache'];
         $splitMemcacheValues = explode(':', $memcacheHostParams);
         $memcachePort = isset($splitMemcacheValues[1]) ? $splitMemcacheValues[1] : '';
         $memcacheHost = isset($splitMemcacheValues[0]) ? $splitMemcacheValues[0] : '';
@@ -29,11 +29,10 @@ class BootstrapDoctrineConnectionFunctions
         );
         
         $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
-        $isDevMode = false;
-        $config = new Configuration();
         $driver = new AnnotationDriver($cachedAnnotationReader, $paths);
         AnnotationRegistry::registerLoader('class_exists');
 
+        $config = new Configuration();
         $config->setMetadataDriverImpl($driver);
         $config->setMetadataCacheImpl($cache);
         $config->setQueryCacheImpl($cache);
