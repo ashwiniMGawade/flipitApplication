@@ -216,6 +216,12 @@ class PopularCategory extends BasePopularCategory
                 self::updateCategoryOffersCount($popularCategoryOffersCount);
             }
         }
+        $tempFiles = glob(PUBLIC_PATH.'tmp/*');
+        foreach ($tempFiles as $tempFile) {
+            if (is_file($tempFile)) {
+                unlink($tempFile);
+            }
+        }
         return true;
     }
 
