@@ -14,10 +14,12 @@ class BootstrapDoctrineConnectionFunctions
             APPLICATION_PATH . '/configs/application.ini'
         );
         $frontControllerObject = $application->getOption('resources');
-        $memcacheHostname = $frontControllerObject['frontController']['params']['memcache']['host'];
-        $memcachePort = $frontControllerObject['frontController']['params']['memcache']['port'];
+        $memcacheHostParams = $frontControllerObject['frontController']['params']['memcache']['host'];
+        $splitMemcacheValues = explode(':', $memcacheHostParams);
+        $memcachePort = isset($splitMemcacheValues[1]) ? $splitMemcacheValues[1] : '';
+        $memcacheHost = isset($splitMemcacheValues[0]) ? $splitMemcacheValues[0] : '';
         $memcache = new Memcached();
-        $memcache->addServer($memcacheHostname, $memcachePort);
+        $memcache->addServer($memcacheHost, $memcachePort);
         $cache = new \Doctrine\Common\Cache\MemcachedCache;
         $cache->setMemcached($memcache);
         $annotationReader = new Doctrine\Common\Annotations\AnnotationReader;
@@ -63,10 +65,11 @@ class BootstrapDoctrineConnectionFunctions
         $splitDbName = explode('/', $doctrineOptions);
         $splitDbUserName = explode(':', $splitDbName[2]);
         $splitDbPassword = explode('@', $splitDbUserName[1]);
+        $splitHostName = explode('@', $splitDbUserName[1]);
         $dbPassword = $splitDbPassword[0];
         $dbUserName = $splitDbUserName[0];
         $dbName = $splitDbName[3];
-        $hostName = isset($splitDbPassword[1]) ? $splitDbPassword[1] : 'localhost';
+        $hostName = isset($splitHostName[1]) ? $splitHostName[1] : 'localhost';
         return array(
             'host'     => $hostName,
             'driver'   => 'pdo_mysql',
