@@ -32,8 +32,7 @@ class BootstrapDoctrineConnectionFunctions
         $cache = new \Doctrine\Common\Cache\MemcachedCache;
         $cache->setMemcached($memcache);
         $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
-        $isDevMode  = false;
-        $config = Setup::createConfiguration($isDevMode, null, $cache);
+        $config = Setup::createConfiguration(false, null, $cache);
         $driver = new AnnotationDriver(new AnnotationReader(), $paths);
         AnnotationRegistry::registerLoader('class_exists');
         $config->setMetadataDriverImpl($driver);
