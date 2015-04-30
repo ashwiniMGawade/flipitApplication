@@ -33,8 +33,8 @@ class BootstrapDoctrineConnectionFunctions
         $cache->setMemcached($memcache);
         $annotationReader = new Doctrine\Common\Annotations\AnnotationReader;
         $cachedAnnotationReader = new Doctrine\Common\Annotations\CachedReader($annotationReader, $cache);
-        $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
-        $driver = new AnnotationDriver($cachedAnnotationReader, $paths);
+        $entityClassesPath = array(APPLICATION_PATH . '/../library/KC/Entity');
+        $driver = new AnnotationDriver($cachedAnnotationReader, $entityClassesPath);
         AnnotationRegistry::registerLoader('class_exists');
         $config = new Configuration();
         $config->setMetadataDriverImpl($driver);
@@ -49,8 +49,8 @@ class BootstrapDoctrineConnectionFunctions
 
     public static function setEntityManagerForlocale($dsn, $config)
     {
-        $connectionParamsLocale = self::getDatabaseCredentials($dsn);
-        $emLocale = EntityManager::create($connectionParamsLocale, $config);
+        $databaseConnectionCredentials = self::getDatabaseCredentials($dsn);
+        $emLocale = EntityManager::create($databaseConnectionCredentials, $config);
         Zend_Registry::set('emLocale', $emLocale);
     }
 
