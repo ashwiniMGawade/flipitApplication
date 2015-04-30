@@ -34,35 +34,11 @@ class SpecificTimeOffers
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - Getting offers from database!!!"
         );
-        $futureOffersOnline = Offer::getFutureOnlineOffers();
-        $this->refreshVarnish($futureOffersOnline);
+        Varnish::refreshVarnishUrlsByCron();
         $manager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - Varnish has been refreshed successfully!!!"
         );
-    }
-
-    protected function refreshVarnish($futureOffersOnline)
-    {
-        if (!empty($futureOffersOnline)) {
-            foreach ($futureOffersOnline as $futureOfferIndex => $futureOffer) {
-                $this->refreshVarnishByRefreshTime($futureOffer['startDate']);
-            }
-        } else {
-            echo CommonMigrationFunctions::showProgressMessage(
-                "$key - Varnish has already been refreshed successfully!!!"
-            );
-        }
-    }
-
-    protected function refreshVarnishByRefreshTime($offerStartDate)
-    {
-        if (!empty($offerStartDate)) {
-            $varnishObj = new Varnish();
-            $refreshTime = '';
-            $refreshTime = FrontEnd_Helper_viewHelper::convertOfferTimeToServerTime($offerStartDate);
-            Varnish::refreshVarnishUrlsByCron($refreshTime);
-        }
     }
 }
 new SpecificTimeOffers();
