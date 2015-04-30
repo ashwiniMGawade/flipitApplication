@@ -34,11 +34,18 @@ class SpecificTimeOffers
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - Getting offers from database!!!"
         );
-        Varnish::refreshVarnishUrlsByCron();
+        $refreshUrls = Varnish::getAllUrlByRefreshTime();
+        if (!empty($refreshUrls)) {
+            Varnish::refreshVarnishUrlsByCron($refreshUrls);
+            echo CommonMigrationFunctions::showProgressMessage(
+                "$key - Varnish has been refreshed successfully!!!"
+            );
+        } else {
+            echo CommonMigrationFunctions::showProgressMessage(
+                "$key - Varnish has already been refreshed !!!"
+            );
+        }
         $manager->closeConnection($doctrineSiteDbConnection);
-        echo CommonMigrationFunctions::showProgressMessage(
-            "$key - Varnish has been refreshed successfully!!!"
-        );
     }
 }
 new SpecificTimeOffers();

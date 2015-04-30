@@ -98,20 +98,23 @@ class Varnish extends BaseVarnish
         return !empty($varnishUrlsCount) ? $varnishUrlsCount[0]['count'] : 0;
     }
 
-    public static function refreshVarnishUrlsByCron()
+    public static function getAllUrlByRefreshTime()
     {
-        $varnish = new Varnish();
         $currentTime = FrontEnd_Helper_viewHelper::convertCurrentTimeToServerTime();
-        $queue = Doctrine_Query::create()
+        $refreshUrls = Doctrine_Query::create()
             ->select('v.*')
             ->from("Varnish v")
-            ->where('v.refresh_time <=', "'".$currentTime."'")->fetchArray(null, Doctrine::HYDRATE_ARRAY);
-        if (!empty($queue)) {
-            foreach ($queue as $page) {
-                sleep(1.5);
-                $varnish->refreshVarnish($page['url']);
-                $varnish->removeFromQueue($page['id']);
-            }
+            ->where('v.refresh_time <='."'".$currentTime."'")->fetchArray(null, Doctrine::HYDRATE_ARRAY);
+        return $refreshUrls;
+    }
+
+    public static function refreshVarnishUrlsByCron($refreshUrls)
+    {
+        $varnish = new Varnish();
+        foreach ($refreshUrls as $refreshUrl) {
+            sleep(1.5);
+            $varnish->refreshVarnish($refreshUrl['url']);
+            $varnish->removeFromQueue($refreshUrl['id']);
         }
     }
 }
