@@ -153,8 +153,7 @@ autoloaderNamespaces[] = "Transl8_"
 ;; Memcache Settings    ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-resources.frontController.params.memcache.host = "localhost"
-resources.frontController.params.memcache.port = "11211"
+resources.frontController.params.memcache = "localhost:11211"
 
 [staging : production]
 

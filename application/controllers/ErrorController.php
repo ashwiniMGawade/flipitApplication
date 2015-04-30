@@ -58,7 +58,7 @@ class ErrorController extends Zend_Controller_Action
                         getRequestedDataBySetGetCache(
                             'error_specialPage'.$pageDetails['id'].'_offers',
                             array(
-                                'function' => '\KC\Repository\Offer::getSpecialPageOffers',
+                                'function' => '\KC\Repository\Offer::getSpecialPageOffersByFallBack',
                                 'parameters' => array($pageDetails)
                             ),
                             ''

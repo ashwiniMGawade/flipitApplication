@@ -451,20 +451,25 @@ class Offer Extends \KC\Entity\Offer
         self::clearSpecialPagesCache($offerId);
     }
 
+    public static function getSpecialPageOffersByFallBack($specialPage, $pageType = '')
+    {
+        $pageRelatedOffersAndPageConstraintsOffers =
+            \KC\Repository\SpecialPagesOffers::getSpecialPageOffersByPageIdForFrontEnd($specialPage['id'], $pageType);
+        if (empty($pageRelatedOffersAndPageConstraintsOffers)) {
+            $pageRelatedOffersAndPageConstraintsOffers = self::getSpecialPageOffers($specialPage);
+            $pageRelatedOffersAndPageConstraintsOffers =
+            self::getDataForOfferPhtml($pageRelatedOffersAndPageConstraintsOffers, $specialPage);
+        }
+        return $pageRelatedOffersAndPageConstraintsOffers;
+    }
+
     public static function getSpecialPageOffers($specialPage)
     {
         $currentDate = date("Y-m-d H:i");
         $pageRelatedOffers = self::getSpecialOffersByPage($specialPage['id'], $currentDate);
         $constraintsRelatedOffers = self::getOffersByPageConstraints($specialPage, $currentDate);
         $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
-
-        $pageRelatedOffersAndPageConstraintsOffers = array_merge(
-            \KC\Repository\SpecialPagesOffers::getSpecialPageOffersByPageIdForFrontEnd($specialPage['id']),
-            $pageRelatedOffersAndPageConstraintsOffers
-        );
-
-        $specialOffers = self::getDataForOfferPhtml($pageRelatedOffersAndPageConstraintsOffers, $specialPage);
-        return $specialOffers;
+        return $pageRelatedOffersAndPageConstraintsOffers;
     }
 
     public static function getSpecialOffersByPage($pageId, $currentDate)
@@ -1242,6 +1247,22 @@ class Offer Extends \KC\Entity\Offer
             ->setMaxResults(1);
         $relatedOffers = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $relatedOffers;
+    }
+
+    public static function checkOfferExpired($offerId)
+    {
+        $currentDateTime = date("Y-m-d H:i:s");
+        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerLocale
+            ->select('o.id')
+            ->from('KC\Entity\Offer', 'o')
+            ->where('o.deleted = 0')
+            ->andWhere('o.enddate <'."'".$currentDateTime."'")
+            ->andWhere('o.id ='.$offerId)
+            ->andWhere('o.offline = 0')
+            ->setMaxResults(1);
+        $offerDetail = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return !empty($offerDetail) ? true : false;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################

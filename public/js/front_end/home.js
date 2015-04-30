@@ -11,12 +11,6 @@ $(document).ready(function() {
     $('#div_topOffers').addClass('active-li');
 });
 function showRelatedDiv(element) {
-    var permalink = $(element).attr('id').split('_');
-    var elementDataAttribute = $(element).attr('data');
-    if ($.inArray(elementDataAttribute, urlsRequested) < 0) {
-        urlsRequested.push(elementDataAttribute);
-        getDetails(elementDataAttribute, permalink[1]);
-    }
     removeActiveClass();
     $('.vouchers').hide();
     $('div#'+$(element).attr('id')).show();

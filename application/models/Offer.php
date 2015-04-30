@@ -1182,6 +1182,21 @@ class Offer extends BaseOffer
 
         return !empty($offerVisiblity) ? true : false;
     }
+
+    public static function checkOfferExpired($offerId)
+    {
+        $currentDateTime = date("Y-m-d H:i:s");
+        $offerDetail = Doctrine_Query::create()
+            ->select('o.id')
+            ->from('Offer o')
+            ->where('o.deleted = 0')
+            ->andWhere('o.enddate<'."'".$currentDateTime."'")
+            ->andWhere('o.id ='.$offerId)
+            ->andWhere('o.offline = 0')
+            ->limit(1)
+            ->fetchArray();
+        return !empty($offerDetail) ? true : false;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################

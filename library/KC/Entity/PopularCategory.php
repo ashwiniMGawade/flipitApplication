@@ -51,6 +51,17 @@ class PopularCategory
      */
     private $category;
 
+    /**
+     * @ORM\Column(type="integer", length=20, nullable=true)
+     */
+    private $total_offers;
+
+    /**
+     * @ORM\Column(type="integer", length=20, nullable=true)
+     */
+    private $total_coupons;
+
+
     public function __get($property)
     {
         return $this->$property;
