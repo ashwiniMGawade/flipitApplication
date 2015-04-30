@@ -4,19 +4,19 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="special_pages_offers")
+ * @ORM\Table(name="categories_offers")
  */
-class SpecialPagesOffers
+class CategoriesOffers
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer", length=11)
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="integer", length=11, nullable=true)
+     * @ORM\Column(type="integer", length=10, nullable=true)
      */
     private $position;
 
@@ -36,16 +36,16 @@ class SpecialPagesOffers
     private $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="specialPagesOffers")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="categoriesOffers")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id")
      */
     private $offers;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Page", inversedBy="specialPagesOffers")
-     * @ORM\JoinColumn(name="pageId", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Category", inversedBy="categoriesOffers")
+     * @ORM\JoinColumn(name="categoryId", referencedColumnName="id")
      */
-    private $pages;
+    private $categories;
 
     public function __get($property)
     {

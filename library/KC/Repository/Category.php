@@ -29,7 +29,7 @@ class Category extends \KC\Entity\Category
         return $category;
     }
 
-    public static function getCategoryVoucherCodes($categoryId, $numberOfOffers = 0, $pageName = '')
+    public static function getCategoryVoucherCodes($categoryId, $numberOfOffers = 0, $pageName = '', $offerIds = '')
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDateAndTime = date('Y-m-d 00:00:00');
@@ -63,6 +63,14 @@ class Category extends \KC\Entity\Category
         if ($numberOfOffers!=0) {
             $query->setMaxResults($numberOfOffers);
         }
+        if ($offerIds != '') {
+            $savedCategoryOffersByAdmin = array();
+            foreach ($offerIds as $offerId) {
+                $savedCategoryOffersByAdmin[] = $offerId['offers']['id'];
+            }
+            $commaSepratedOfferIds = implode(',', $savedCategoryOffersByAdmin);
+            $query->andWhere($queryBuilder->expr()->notIn('o.id', $commaSepratedOfferIds));
+        }
         $categoryOffersList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return self::changeDataAccordingToOfferHtml($categoryOffersList);
     }
@@ -83,24 +91,11 @@ class Category extends \KC\Entity\Category
         $popularCategories = $queryBuilder
             ->select('p, o, i')
             ->from('KC\Entity\PopularCategory', 'p')
-            ->addSelect(
-                "(
-                    SELECT  count(roc) FROM KC\Entity\RefOfferCategory roc LEFT JOIN roc.offers off LEFT JOIN off.shopOffers s  WHERE  
-                    off.deleted = 0 and s.deleted = 0 and roc.categories = p.category and off.endDate >'"
-                .$currentDateAndTime."' and off.discountType='CD' and off.Visability!='MEM') as countOff"
-            )
-            ->addSelect(
-                "(SELECT count(off1.id) FROM KC\Entity\RefShopCategory roc1 LEFT JOIN roc1.category s1 LEFT JOIN s1.offer off1  
-                    WHERE  s1.deleted = 0 and 
-                    s1.status = 1 and off1.deleted = 0 and roc1.shop = p.category  
-                    and off1.endDate >'".$currentDateAndTime."' and off1.startDate < '".$currentDateAndTime."') 
-                    as totalOffers"
-            )
             ->leftJoin('p.category', 'o')
             ->leftJoin('o.categoryicon', 'i')
             ->where('o.deleted=0')
             ->andWhere('o.status= 1')
-            ->orderBy("countOff", "DESC")
+            ->orderBy("p.total_coupons", "DESC")
             ->setMaxResults($categoriesLimit)
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

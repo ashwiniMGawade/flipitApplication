@@ -79,7 +79,7 @@ class Articles extends \KC\Entity\Articles
             ->andWhere('a.publishdate <='. $queryBuilder->expr()->literal($currentDateTime))
             ->orderBy('p.position', 'ASC')
             ->setMaxResults($limit);
-            $allArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $allArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $allArticles;
     }
 
@@ -88,10 +88,9 @@ class Articles extends \KC\Entity\Articles
         $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select("p, a, thumb, chapter")
+            ->select("p, a, chapter")
             ->from("KC\Entity\PopularArticles", "p")
             ->leftJoin("p.articles", "a")
-            ->leftJoin('a.thumbnail', 'thumb')
             ->leftJoin('a.articleChapter', 'chapter')
             ->where("a.publish = 1")
             ->andWhere("a.deleted= 0")
@@ -116,7 +115,7 @@ class Articles extends \KC\Entity\Articles
             ->andWhere('a.publishdate <='. $queryBuilder->expr()->literal($currentDateTime))
             ->orderBy('p.position', 'ASC')
             ->setMaxResults($limit);
-            $allArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $allArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $allArticles;
     }
 

@@ -69,6 +69,16 @@ endif;
     <?php echo FrontEnd_Helper_LayoutContent::loadGoogleTagManager(); ?>
     <?php echo $this->render('branding_menu.phtml'); ?>
     <div id="wrapper">
+<?php
+if (
+    zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='store'
+    && zend_Controller_Front::getInstance()->getRequest()->getActionName()=='storedetail'
+) {
+    ?>
+    <a class="btn-top" href="#wrapper"><?php echo $this->translate('Top');?></a>
+    <?php 
+}
+?>
         <div class="w1">
             <div class="wrapper-holder">
                 <input type="hidden" name='cName' id='cName' value='<?php echo strtolower($this->controllerName);?>'/>

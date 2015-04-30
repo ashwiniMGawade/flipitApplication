@@ -31,6 +31,34 @@ class SpecialList extends BaseSpecialList
         ->orderBy('sp.position ASC')->fetchArray();
         return $specialPages;
     }
+
+    public static function getSpecialPagesIds()
+    {
+        $currentDateAndTime = date('Y-m-d H:i:s');
+        $specialPageDetails = Doctrine_Query::create()
+            ->select('sp.specialpageid, sp.total_offers, sp.total_coupons, p.*,l.*')
+            ->from('SpecialList sp')
+            ->leftJoin('sp.page p')
+            ->leftJoin('p.logo l')
+            ->where('p.deleted = 0')
+            ->andWhere('p.publish = 1')
+            ->orderBy('sp.position ASC')
+            ->fetchArray();
+        return $specialPageDetails;
+    }
+
+    public static function updateTotalOffersAndTotalCoupons($totalOffers, $totalCoupons, $specialPageId)
+    {
+        if (!empty($specialPageId)) {
+            Doctrine_Query::create()
+                ->update('SpecialList sl')
+                ->set('sl.total_offers', $totalOffers)
+                ->set('sl.total_coupons', $totalCoupons)
+                ->where('sl.specialpageid ='.$specialPageId)
+                ->execute();
+        }
+        return true;
+    }
     ####################################################
     ############ END REFACTORED CODE ###################
     ####################################################

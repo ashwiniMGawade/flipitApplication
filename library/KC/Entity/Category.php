@@ -106,8 +106,13 @@ class Category
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefShopCategory", mappedBy="shop")
      */
-    private $shopcategory;
 
+    private $shopcategory;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\CategoriesOffers", mappedBy="categories")
+     */
+    private $categoriesOffers;
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ImageCategoryIcon", inversedBy="category")
      * @ORM\JoinColumn(name="categoryiconid", referencedColumnName="id")
