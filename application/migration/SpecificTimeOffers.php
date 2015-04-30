@@ -5,19 +5,14 @@ class SpecificTimeOffers
     {
         require_once 'ConstantForMigration.php';
         require_once('CommonMigrationFunctions.php');
-
         CommonMigrationFunctions::setTimeAndMemoryLimit();
-
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
         $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
-
         $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
         $imbull = $connections['imbull'];
-
         echo CommonMigrationFunctions::showProgressMessage(
             'get all articles data from databases of all locales'
         );
-
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
@@ -29,7 +24,6 @@ class SpecificTimeOffers
                 echo "\n\n";
             }
         }
-
         $manager->closeConnection($doctrineImbullDbConnection);
     }
 
@@ -40,10 +34,8 @@ class SpecificTimeOffers
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - Getting offers from database!!!"
         );
-        
         $futureOffersOnline = Offer::getFutureOnlineOffers();
         $this->refreshVarnish($futureOffersOnline);
-        
         $manager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - Varnish has been refreshed successfully!!!"
