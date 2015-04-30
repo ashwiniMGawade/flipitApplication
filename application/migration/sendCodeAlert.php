@@ -242,10 +242,7 @@ class SendCodeAlert
         $websiteLocale = !empty($locale) ? $locale.'/' : '';
         $shopUrl = $hostName.'/'.$websiteLocale.$shopPermalink;
         $varnish->addUrl($shopUrl, $refreshTime);
-        $currentTime = FrontEnd_Helper_viewHelper::convertCurrentTimeToServerTime();
-        if ($currentTime == $refreshTime) {
-            $varnish->processQueueByUrl($shopUrl);
-        }
+        $varnish->refreshVarnishUrlsByCron();
     }
 }
 
