@@ -9,11 +9,20 @@ class BootstrapDoctrineConnectionFunctions
 {
     public static function doctrineConnections($doctrineOptions, $moduleDirectoryName, $localeCookieData)
     {
-        $application = new Zend_Application(
-            APPLICATION_ENV,
-            APPLICATION_PATH . '/configs/application.ini'
-        );
+        $application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
         $frontControllerObject = $application->getOption('resources');
+        $config = self::setMemcachedAndProxyClasses($frontControllerObject);
+        $emUser = EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);
+        $localSiteDbConnection = strtolower(self::getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData));
+        self::setEntityManagerForlocale($doctrineOptions[$localSiteDbConnection]['dsn'], $config);
+        Zend_Registry::set('emUser', $emUser);
+        BootstrapConstantsFunctions::constantsForLocaleAndTimezoneSetting();
+        self::setDefaultTimezone();
+        return $emUser;
+    }
+    
+    public static function setMemcachedAndProxyClasses($frontControllerObject)
+    {
         $memcacheHostParams = $frontControllerObject['frontController']['params']['memcache'];
         $splitMemcacheValues = explode(':', $memcacheHostParams);
         $memcachePort = isset($splitMemcacheValues[1]) ? $splitMemcacheValues[1] : '';
@@ -23,15 +32,10 @@ class BootstrapDoctrineConnectionFunctions
         $cache = new \Doctrine\Common\Cache\MemcachedCache;
         $cache->setMemcached($memcache);
         $annotationReader = new Doctrine\Common\Annotations\AnnotationReader;
-        $cachedAnnotationReader = new Doctrine\Common\Annotations\CachedReader(
-            $annotationReader,
-            $cache
-        );
-        
+        $cachedAnnotationReader = new Doctrine\Common\Annotations\CachedReader($annotationReader, $cache);
         $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
         $driver = new AnnotationDriver($cachedAnnotationReader, $paths);
         AnnotationRegistry::registerLoader('class_exists');
-
         $config = new Configuration();
         $config->setMetadataDriverImpl($driver);
         $config->setMetadataCacheImpl($cache);
@@ -40,16 +44,18 @@ class BootstrapDoctrineConnectionFunctions
         $config->setProxyDir(APPLICATION_PATH . '/../library/KC/Entity/Proxy');
         $config->setAutoGenerateProxyClasses(true);
         $config->setProxyNamespace('Proxy');
-        $emUser = EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);
-        $localSiteDbConnection = strtolower(self::getLocaleNameForDbConnection(
-            $moduleDirectoryName,
-            $localeCookieData
-        ));
-        $connectionParamsLocale = self::getDatabaseCredentials($doctrineOptions[$localSiteDbConnection]['dsn']);
+        return $config;
+    }
+
+    public static function setEntityManagerForlocale($dsn, $config)
+    {
+        $connectionParamsLocale = self::getDatabaseCredentials($dsn);
         $emLocale = EntityManager::create($connectionParamsLocale, $config);
         Zend_Registry::set('emLocale', $emLocale);
-        Zend_Registry::set('emUser', $emUser);
-        BootstrapConstantsFunctions::constantsForLocaleAndTimezoneSetting();
+    }
+
+    public static function setDefaultTimezone()
+    {
         $localeValue = explode('_', COUNTRY_LOCALE);
         $localeValue = isset($localeValue[1]) ? $localeValue[1] : $localeValue[0];
         if (LOCALE == '') {
@@ -57,7 +63,6 @@ class BootstrapDoctrineConnectionFunctions
         } else if (strtolower($localeValue) == LOCALE) {
             date_default_timezone_set(LOCALE_TIMEZONE);
         }
-        return $emUser;
     }
 
     public static function getDatabaseCredentials($doctrineOptions)
