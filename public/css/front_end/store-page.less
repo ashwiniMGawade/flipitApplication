@@ -1,4 +1,30 @@
 .page-store{
+    .btn-top {
+        background: url(../../images/btn-top.png);
+        .square(60px);
+        position: fixed;
+        bottom: 25px;
+        text-indent: -9999px;
+        outline: none !important;
+        z-index: 9999;
+        right: 40px;
+        @media only screen and (max-width: 1400px) {
+            right: 10px;
+        }
+        @media only screen and (max-width: 767px) {
+            margin: 0;
+            .square(40px);
+            
+            background-position: -10px -10px;
+        }
+        &:hover,
+        &:focus {
+            background-position: 100% 100%;
+            @media only screen and (max-width: 767px) {
+                background-position: -10px -84px;
+            }
+        }
+    }
     #sidebar .add-info{
         li{
             padding: 17px 0 15px 50px;
