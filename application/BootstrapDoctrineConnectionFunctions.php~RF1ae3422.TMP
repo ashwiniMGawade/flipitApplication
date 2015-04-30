@@ -23,7 +23,7 @@ class BootstrapDoctrineConnectionFunctions
     
     public static function setMemcachedAndProxyClasses($frontControllerObject)
     {
-        $memcacheHostParams = $frontControllerObject['frontController']['params']['memcache'];
+        /*$memcacheHostParams = $frontControllerObject['frontController']['params']['memcache'];
         $splitMemcacheValues = explode(':', $memcacheHostParams);
         $memcachePort = isset($splitMemcacheValues[1]) ? $splitMemcacheValues[1] : '';
         $memcacheHost = isset($splitMemcacheValues[0]) ? $splitMemcacheValues[0] : '';
@@ -31,13 +31,35 @@ class BootstrapDoctrineConnectionFunctions
         $memcache->addServer($memcacheHost, $memcachePort);
         $cache = new \Doctrine\Common\Cache\MemcachedCache;
         $cache->setMemcached($memcache);
-        $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
-        $isDevMode  = false;
-        $config = Setup::createConfiguration($isDevMode, null, $cache);
-        $driver = new AnnotationDriver(new AnnotationReader(), $paths);
+        $annotationReader = new Doctrine\Common\Annotations\AnnotationReader;
+        $cachedAnnotationReader = new Doctrine\Common\Annotations\CachedReader($annotationReader, $cache);
+        $entityClassesPath = array(APPLICATION_PATH . '/../library/KC/Entity');
+        $driver = new AnnotationDriver($cachedAnnotationReader, $entityClassesPath);
         AnnotationRegistry::registerLoader('class_exists');
+        $config = new Configuration();
         $config->setMetadataDriverImpl($driver);
-        return $config;
+        $config->setMetadataCacheImpl($cache);
+        $config->setQueryCacheImpl($cache);
+        $config->setResultCacheImpl($cache);
+        $config->setProxyDir(APPLICATION_PATH . '/../library/KC/Entity/Proxy');
+        $config->setAutoGenerateProxyClasses(true);
+        $config->setProxyNamespace('Proxy');
+        return $config;*/
+
+        /*$memcacheHostParams = $frontControllerObject['frontController']['params']['memcache'];
+        $splitMemcacheValues = explode(':', $memcacheHostParams);
+        $memcachePort = isset($splitMemcacheValues[1]) ? $splitMemcacheValues[1] : '';
+        $memcacheHost = isset($splitMemcacheValues[0]) ? $splitMemcacheValues[0] : '';
+        $memcache = new Memcached();
+        $memcache->addServer($memcacheHost, $memcachePort);
+        $cache = new \Doctrine\Common\Cache\MemcachedCache;
+        $cache->setMemcached($memcache);
+
+        $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
+        $isDevMode = false;
+        $config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, $cache);
+
+        return $config;*/
     }
 
     public static function setEntityManagerForlocale($dsn, $config)
