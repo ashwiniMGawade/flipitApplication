@@ -25,8 +25,7 @@ $classLoader->register();
 $classLoader = new \Doctrine\Common\ClassLoader('Symfony', 'Doctrine');
 $classLoader->register();
 
-$applicationPath  = '/var/www/';
-$classloader = new \Doctrine\Common\ClassLoader('KC', $applicationPath . 'library');
+$classloader = new \Doctrine\Common\ClassLoader('KC', getcwd());
 $classloader->register();
 
 $configFile = getcwd() . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'cli-config.php';
