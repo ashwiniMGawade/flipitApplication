@@ -33,7 +33,7 @@ class BootstrapDoctrineConnectionFunctions
         $cache->setMemcached($memcache);
         $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
         $isDevMode = false;
-        $proxyPath = '/tmp';
+        $proxyPath = null;
         if (APPLICATION_ENV == 'development') {
             $cache = null;
             $isDevMode = true;

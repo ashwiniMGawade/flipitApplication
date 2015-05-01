@@ -9,6 +9,7 @@ $paths = array('../library/KC/Entity');
 $config = Setup::createConfiguration(false);
 $driver = new AnnotationDriver(new AnnotationReader(), $paths);
 AnnotationRegistry::registerLoader('class_exists');
+$config->setProxyNamespace('Proxy');
 $config->setMetadataDriverImpl($driver);
 $dsn = array(
     'host' => 'localhost',
