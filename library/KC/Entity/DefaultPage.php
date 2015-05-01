@@ -1,8 +1,7 @@
 <?php
 namespace KC\Entity;
 use Doctrine\ORM\Mapping AS ORM;
-use Doctrine\Common\Annotations\Annotation;
-use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+
 /**
  * @ORM\Entity
  */
