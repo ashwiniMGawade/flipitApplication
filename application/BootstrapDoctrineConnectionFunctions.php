@@ -31,7 +31,7 @@ class BootstrapDoctrineConnectionFunctions
         $memcache->addServer($memcacheHost, $memcachePort);
         $cache = new \Doctrine\Common\Cache\MemcachedCache;
         $cache->setMemcached($memcache);
-        $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
+        
         $isDevMode = false;
         $proxyPath = null;
         if (APPLICATION_ENV == 'development') {
@@ -41,9 +41,12 @@ class BootstrapDoctrineConnectionFunctions
         }
         $config = Setup::createConfiguration($isDevMode, $proxyPath, $cache);
         $config->setProxyNamespace('Proxy');
+        
+        $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
         $driver = new AnnotationDriver(new AnnotationReader(), $paths);
         AnnotationRegistry::registerLoader('class_exists');
         $config->setMetadataDriverImpl($driver);
+        
         return $config;
     }
 
