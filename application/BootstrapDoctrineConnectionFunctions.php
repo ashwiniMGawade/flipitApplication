@@ -41,7 +41,7 @@ class BootstrapDoctrineConnectionFunctions
         }
         $config = Setup::createConfiguration($isDevMode, $proxyPath, $cache);
         $config->setProxyNamespace('Proxy');
-        
+
         $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
         $driver = new AnnotationDriver(new AnnotationReader(), $paths);
         AnnotationRegistry::registerLoader('class_exists');
