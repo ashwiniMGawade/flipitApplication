@@ -34,7 +34,7 @@ class SpecificTimeOffers
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - Getting offers from database!!!"
         );
-        $refreshUrls = Varnish::getAllUrlByRefreshTime();
+        $refreshUrls = Varnish::getAllUrlsByRefreshTime();
         if (!empty($refreshUrls)) {
             Varnish::refreshVarnishUrlsByCron($refreshUrls);
             echo CommonMigrationFunctions::showProgressMessage(

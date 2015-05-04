@@ -1100,7 +1100,7 @@ EOD;
         $localeSettings = LocaleSettings::getLocaleSettings();
         $localeTimezone = !empty($localeSettings[0]['timezone']) ? $localeSettings[0]['timezone'] : 'Europe/Amsterdam';
         $refreshTime = new DateTime($offerTime, new DateTimeZone($localeTimezone));
-        $refreshTime->setTimezone(new DateTimeZone('Europe/Amsterdam'));
+        $refreshTime->setTimezone(new DateTimeZone('GMT'));
         return $refreshTime->format('Y-m-d H:i:s');
     }
 
@@ -1109,7 +1109,7 @@ EOD;
         $localeSettings = LocaleSettings::getLocaleSettings();
         $localeTimezone = !empty($localeSettings[0]['timezone']) ? $localeSettings[0]['timezone'] : 'Europe/Amsterdam';
         $refreshTime = new DateTime('now', new DateTimeZone($localeTimezone));
-        $refreshTime->setTimezone(new DateTimeZone('Europe/Amsterdam'));
+        $refreshTime->setTimezone(new DateTimeZone('GMT'));
         return $refreshTime->format('Y-m-d H:i:s');
     }
 }

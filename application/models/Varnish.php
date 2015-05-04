@@ -23,11 +23,10 @@ class Varnish extends BaseVarnish
     public function addUrl($url, $refreshTime = '')
     {
         # add url if it is not queued
-        if(! self::checkQueuedUrl($url, $refreshTime)) {
-
-            $v 			= new Varnish();
-            $v->url 	= rtrim($url, '/');
-            $v->status 	= 'queue';
+        if (!self::checkQueuedUrl($url, $refreshTime)) {
+            $v = new Varnish();
+            $v->url = rtrim($url, '/');
+            $v->status = 'queue';
             $v->refresh_time = $refreshTime;
             $v->save();
             return $v->id;
@@ -98,7 +97,7 @@ class Varnish extends BaseVarnish
         return !empty($varnishUrlsCount) ? $varnishUrlsCount[0]['count'] : 0;
     }
 
-    public static function getAllUrlByRefreshTime()
+    public static function getAllUrlsByRefreshTime()
     {
         $currentTime = FrontEnd_Helper_viewHelper::convertCurrentTimeToServerTime();
         $refreshUrls = Doctrine_Query::create()
@@ -113,8 +112,10 @@ class Varnish extends BaseVarnish
         $varnish = new Varnish();
         foreach ($refreshUrls as $refreshUrl) {
             sleep(1.5);
-            $varnish->refreshVarnish($refreshUrl['url']);
-            $varnish->removeFromQueue($refreshUrl['id']);
+            if (!empty($refreshUrl['id'])) {
+                $varnish->refreshVarnish($refreshUrl['url']);
+                $varnish->removeFromQueue($refreshUrl['id']);
+            }
         }
     }
 }
