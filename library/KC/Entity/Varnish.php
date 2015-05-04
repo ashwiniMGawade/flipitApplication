@@ -35,6 +35,11 @@ class Varnish
      */
     private $updated_at;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $refresh_time;
+
     public function getId()
     {
         return $this->id;

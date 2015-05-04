@@ -1132,4 +1132,22 @@ EOD;
         $captchaKey = $frontControllerObject['frontController']['params'][$keyName];
         return  $captchaKey;
     }
+
+    public static function convertOfferTimeToServerTime($offerTime)
+    {
+        $localeSettings = KC\Repository\LocaleSettings::getLocaleSettings();
+        $localeTimezone = !empty($localeSettings[0]['timezone']) ? $localeSettings[0]['timezone'] : 'Europe/Amsterdam';
+        $refreshTime = new DateTime($offerTime, new DateTimeZone($localeTimezone));
+        $refreshTime->setTimezone(new DateTimeZone('GMT'));
+        return $refreshTime->format('Y-m-d H:i:s');
+    }
+
+    public static function convertCurrentTimeToServerTime()
+    {
+        $localeSettings = KC\Repository\LocaleSettings::getLocaleSettings();
+        $localeTimezone = !empty($localeSettings[0]['timezone']) ? $localeSettings[0]['timezone'] : 'Europe/Amsterdam';
+        $refreshTime = new DateTime('now', new DateTimeZone($localeTimezone));
+        $refreshTime->setTimezone(new DateTimeZone('GMT'));
+        return $refreshTime->format('Y-m-d H:i:s');
+    }
 }

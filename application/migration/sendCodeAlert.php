@@ -139,6 +139,7 @@ class SendCodeAlert
                 if ($codeAlertOffer['endDate'] < $currentDate) {
                     CodeAlertQueue::moveCodeAlertToTrash($codeAlertOffer['id']);
                 }
+                self::getOffersUrlsAndRefreshVarnish();
                 if (($codeAlertOffer['startDate'] <= $currentDate && $codeAlertOffer['endDate'] >= $currentDate) && $codeAlertOffer['offline'] == 0) {
                     $this->setPhpExecutionLimit();
                     $topVouchercodes = FrontEnd_Helper_viewHelper::getShopCouponCode(
@@ -181,6 +182,7 @@ class SendCodeAlert
                             $this->mandrillKey
                         );
                         try {
+                            sleep(3600);
                             $codeAlertHeader = isset($codeAlertSettings[0]['email_header'])
                                 ? $codeAlertSettings[0]['email_header']
                                 : 'Code alert header';
@@ -228,6 +230,15 @@ class SendCodeAlert
         }
         echo "\n";
         print "$key - $message ";
+    }
+
+    public static function getOffersUrlsAndRefreshVarnish()
+    {
+        $varnish = new Varnish();
+        $refreshUrls = $varnish->getAllUrlsByRefreshTime();
+        if (!empty($refreshUrls)) {
+            $varnish->refreshVarnishUrlsByCron($refreshUrls);
+        }
     }
 }
 

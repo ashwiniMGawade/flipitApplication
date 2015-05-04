@@ -989,5 +989,4 @@ class BackEnd_Helper_viewHelper
             );
         }
     }
-
 }
