@@ -29,6 +29,7 @@ class MoneySaving Extends \KC\Entity\MoneySaving
 
     public static function getRecentlyAddedArticles($articleId, $limit)
     {
+        $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select(
@@ -43,6 +44,7 @@ class MoneySaving Extends \KC\Entity\MoneySaving
             ->Where('a.deleted = 0')
             ->andWhere('a.id !='.$articleId)
             ->andWhere('a.publish = 1')
+            ->andWhere("a.publishdate <= ". $queryBuilder->expr()->literal($currentDateTime))
             ->orderBy('a.publishdate', 'DESC')
             ->setMaxResults($limit);
         $recentlyAddedArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -112,6 +114,7 @@ class MoneySaving Extends \KC\Entity\MoneySaving
 
     public static function getAllMoneySavingArticlesOfCategory($categoryId, $limit = 0)
     {
+        $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select(
@@ -126,6 +129,7 @@ class MoneySaving Extends \KC\Entity\MoneySaving
             ->where('ac.id ='.$categoryId)
             ->andWhere('a.deleted = 0')
             ->andWhere('a.publish = 1')
+            ->andWhere("a.publishdate <= ". $queryBuilder->expr()->literal($currentDateTime))
             ->setMaxResults($limit)
             ->orderBy('a.publishdate', 'DESC');
         $articles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -145,6 +149,7 @@ class MoneySaving Extends \KC\Entity\MoneySaving
 
     public static function generateShopMoneySavingGuideArticle($slug, $limit, $shopId)
     {
+        $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('a, ai, at, rs, chap')
         ->from('\KC\Entity\Articles', 'a')
@@ -154,6 +159,7 @@ class MoneySaving Extends \KC\Entity\MoneySaving
         ->leftJoin('a.articleChapter', 'chap')
         ->where('rs.articleshops='.$shopId)
         ->andWhere('a.deleted=0')
+        ->andWhere("a.publishdate <= ". $queryBuilder->expr()->literal($currentDateTime))
         ->setMaxResults($limit);
         $shopMoneySavingGuideArticle = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopMoneySavingGuideArticle;
@@ -161,6 +167,7 @@ class MoneySaving Extends \KC\Entity\MoneySaving
 
     public static function getPopularArticlesAndCategory()
     {
+        $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select(
@@ -174,8 +181,9 @@ class MoneySaving Extends \KC\Entity\MoneySaving
             ->leftJoin('a.refArticleCategory', 'r')
             ->leftjoin('a.category', 'ac')
             ->leftJoin('a.articleChapter', 'chap')
-            ->andWhere('a.deleted = 0')
+            ->where('a.deleted = 0')
             ->andWhere('a.publish = 1')
+            ->andWhere("a.publishdate <= ". $queryBuilder->expr()->literal($currentDateTime))
             ->orderBy('p.position', 'ASC');
         $popularArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $popularArticles;
