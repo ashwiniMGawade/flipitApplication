@@ -21,6 +21,9 @@ abstract class BaseVarnish extends Doctrine_Record
              'type' => 'string',
              'length' => '255',
              ));
+        $this->hasColumn('refresh_time', 'timestamp', null, array(
+            'type' => 'timestamp',
+        ));
     }
 
     public function setUp()
