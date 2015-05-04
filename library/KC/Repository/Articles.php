@@ -40,6 +40,7 @@ class Articles extends \KC\Entity\Articles
 
     public static function getArticleByPermalink($permalink)
     {
+        $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('a, stores, related, category, chapter, artimg, shops, thum')
             ->from('KC\Entity\Articles', 'a')
@@ -55,7 +56,8 @@ class Articles extends \KC\Entity\Articles
             ->setParameter(2, '1')
             ->andWhere('a.publish = ?2')
             ->setParameter(3, '0')
-            ->andWhere('a.deleted = ?3');
+            ->andWhere('a.deleted = ?3')
+            ->andWhere("a.publishdate <= ". $queryBuilder->expr()->literal($currentDateTime));
             $articleDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $articleDetails;
     }
