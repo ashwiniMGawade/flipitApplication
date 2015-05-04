@@ -194,7 +194,6 @@ class Setup
         $config->setProxyDir($proxyDir);
         $config->setProxyNamespace('DoctrineProxies');
         $config->setAutoGenerateProxyClasses($isDevMode);
-
         return $config;
     }
 }

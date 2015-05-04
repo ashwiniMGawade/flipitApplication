@@ -1,12 +1,12 @@
 <?php
 namespace KC\Repository;
-class EditorBallontext Extends \KC\Entity\EditorBallontext
+class EditorBallontext Extends \KC\Entity\EditorBallonText
 {
     public static function deletetext($id)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->delete('KC\Entity\EditorBallontext', 'ebt')
+            ->delete('KC\Entity\EditorBallonText', 'ebt')
             ->where('ebt.id ='.$id)
             ->getQuery();
         $query->execute();
@@ -19,7 +19,7 @@ class EditorBallontext Extends \KC\Entity\EditorBallontext
             $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $entityManagerLocale
                 ->select('ebt.ballontext')
-                ->from('KC\Entity\EditorBallontext', 'ebt')
+                ->from('KC\Entity\EditorBallonText', 'ebt')
                 ->where('ebt.shop ='.$shopId);
             $editorTextInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             return $editorTextInformation;

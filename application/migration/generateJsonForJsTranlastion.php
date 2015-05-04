@@ -133,8 +133,8 @@ class CreateTranslationJSON
         fclose($jsonHandle);
 
 
-        echo "\n";
-        print "$locale - JSON file for shops has been created successfully!!!";
+        // echo "\n";
+        // print "$locale - JSON file for shops has been created successfully!!!";
 
     }
 

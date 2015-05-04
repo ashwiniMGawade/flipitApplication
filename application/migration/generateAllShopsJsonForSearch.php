@@ -131,8 +131,8 @@ class CreateShopsJSON
         fclose($jsonHandle);
 
 
-        echo "\n";
-        print "$key - JSON file for shops has been created successfully!!!";
+        // echo "\n";
+        // print "$key - JSON file for shops has been created successfully!!!";
 
         $manager->closeConnection($DMC);
 

@@ -4,7 +4,7 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
-
+use Doctrine\ORM\Tools\Setup;
 class BootstrapDoctrineConnectionFunctions
 {
     public static function doctrineConnections($doctrineOptions, $moduleDirectoryName, $localeCookieData)
@@ -31,19 +31,22 @@ class BootstrapDoctrineConnectionFunctions
         $memcache->addServer($memcacheHost, $memcachePort);
         $cache = new \Doctrine\Common\Cache\MemcachedCache;
         $cache->setMemcached($memcache);
-        $annotationReader = new Doctrine\Common\Annotations\AnnotationReader;
-        $cachedAnnotationReader = new Doctrine\Common\Annotations\CachedReader($annotationReader, $cache);
-        $entityClassesPath = array(APPLICATION_PATH . '/../library/KC/Entity');
-        $driver = new AnnotationDriver($cachedAnnotationReader, $entityClassesPath);
-        AnnotationRegistry::registerLoader('class_exists');
-        $config = new Configuration();
-        $config->setMetadataDriverImpl($driver);
-        $config->setMetadataCacheImpl($cache);
-        $config->setQueryCacheImpl($cache);
-        $config->setResultCacheImpl($cache);
-        $config->setProxyDir(APPLICATION_PATH . '/../library/KC/Entity/Proxy');
-        $config->setAutoGenerateProxyClasses(true);
+        
+        $isDevMode = false;
+        $proxyPath = null;
+        if (APPLICATION_ENV == 'development') {
+            $cache = null;
+            $isDevMode = true;
+            $proxyPath = APPLICATION_PATH . '/../library/KC/Entity/Proxy';
+        }
+        $config = Setup::createConfiguration($isDevMode, $proxyPath, $cache);
         $config->setProxyNamespace('Proxy');
+
+        $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
+        $driver = new AnnotationDriver(new AnnotationReader(), $paths);
+        AnnotationRegistry::registerLoader('class_exists');
+        $config->setMetadataDriverImpl($driver);
+        
         return $config;
     }
 

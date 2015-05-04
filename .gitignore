@@ -222,4 +222,4 @@ tests/_log/
 
 tests/_output/*
 !application/migration/emptyOffer.xlsx
-library/KC/Entity/Proxy
+/library/KC/Entity/Proxy

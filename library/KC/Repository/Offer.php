@@ -1200,15 +1200,15 @@ class Offer Extends \KC\Entity\Offer
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
-            ->select('r')
+            ->select('r, p')
             ->from('KC\Entity\RefOfferPage', 'r')
+            ->leftJoin('r.offers', 'p')
             ->where('r.refoffers = '.$offerID);
         $specialPagesCacheRefresh = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
         if (!empty($specialPagesCacheRefresh)) {
             foreach ($specialPagesCacheRefresh as $specialPageCacheRefresh) {
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll(
-                    'error_specialPage'.$specialPageCacheRefresh['pageId'].'_offers'
+                    'error_specialPage'.$specialPageCacheRefresh['offers']['id'].'_offers'
                 );
             }
         }
@@ -2426,11 +2426,7 @@ class Offer Extends \KC\Entity\Offer
         # get offer data
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select(
-                "o.id, o.title, o.extendedOffer,o.authorId , o.extendedUrl,
-                s.permaLink as shopPermalink, s.howToUse ,s.contentManagerId ,s.howtoguideslug, sp.permalink as shopPagePermalink,
-                p.permaLink as categoryPermalink, page.permalink as pagePermalink"
-            )
+            ->select("o, s, sp, p, refPage, page, c")
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->leftJoin('o.categoryoffres', 'c')
@@ -2441,10 +2437,10 @@ class Offer Extends \KC\Entity\Offer
             ->where("o.id=".$id);
         $offer = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $urlsArray = array();
-        if (isset($offer['shop'])) {
-            $urlsArray[] = $offer[0]['shopPermaLink'];
-            if (isset($offer[0]['contentManagerId'])) {
-                $redactie =  \KC\Repository\User::returnEditorUrl($offer[0]['contentManagerId']);
+        if (isset($offer[0]['shopOffers'])) {
+            $urlsArray[] = $offer[0]['shopOffers']['permaLink'];
+            if (isset($offer[0]['shopOffers']['contentManagerId'])) {
+                $redactie =  \KC\Repository\User::returnEditorUrl($offer[0]['shopOffers']['contentManagerId']);
                 if (isset($redactie['permalink']) && strlen($redactie['permalink']) > 0) {
                     $urlsArray[] = $redactie['permalink'] ;
                 }
@@ -2456,30 +2452,31 @@ class Offer Extends \KC\Entity\Offer
             }
         }
 
-        if ($offer[0]['howToUse']) {
-            if (isset($offer[0]['shopPermaLink'])  && strlen($offer[0]['shopPermaLink']) > 0) {
-                if (!empty($offer['shop']['howtoguideslug'])) {
-                    $urlsArray[] = $offer['shop']['permaLink']. '/'. $offer['shop']['howtoguideslug'];
+        if ($offer[0]['shopOffers']['howToUse']) {
+            if (isset($offer[0]['shopOffers']['permaLink'])  && strlen($offer[0]['shopOffers']['permaLink']) > 0) {
+                if (!empty($offer[0]['shopOffers']['howtoguideslug'])) {
+                    $urlsArray[] = $offer[0]['shopOffers']['permaLink']. '/'. $offer[0]['shopOffers']['howtoguideslug'];
                 } else {
-                    $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to'). '/'. $offer['shop']['permaLink'];
+                    $urlsArray[] = \FrontEnd_Helper_viewHelper::__link('link_how-to'). '/'. $offer[0]['shopOffers']['permaLink'];
                 }
             }
         }
 
         $cetgoriesPage = \FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
         foreach ($offer as $value) {
-            if (isset($value['categoryPermalink']) && strlen($value['categoryPermalink']) > 0) {
-                $urlsArray[] = $cetgoriesPage . $value['categoryPermalink'];
-                $urlsArray[] = $cetgoriesPage . $value['categoryPermalink'] .'/2';
-                $urlsArray[] = $cetgoriesPage . $value['categoryPermalink'] .'/3';
+            if (isset($value['categoryoffres'][0]['categories']['permaLink']) && strlen($value['categoryoffres'][0]['categories']['permaLink']) > 0) {
+                $urlsArray[] = $cetgoriesPage . $value['categoryoffres'][0]['categories']['permaLink'];
+                $urlsArray[] = $cetgoriesPage . $value['categoryoffres'][0]['categories']['permaLink'] .'/2';
+                $urlsArray[] = $cetgoriesPage . $value['categoryoffres'][0]['categories']['permaLink'] .'/3';
             }
         }
 
-        foreach ($offer as $value) {
-            if (isset($value['pagePermalink']) && strlen($value['pagePermalink']) > 0) {
-                $urlsArray[] = $value['pagePermalink'] ;
+        foreach ($offer[0]['offers'] as $value) {
+            if (isset($value['offers']['permalink']) && strlen($value['offers']['permalink']) > 0) {
+                $urlsArray[] = $value['offers']['permalink'];
             }
         }
+        $urlsArray['refreshTime'] = $offer[0]['startDate'];
         return $urlsArray ;
     }
 
