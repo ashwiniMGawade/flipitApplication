@@ -173,6 +173,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             } else {
                 $topCategories = \FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
             }
+           
             $newsLetterHeaderImage = \KC\Repository\Newsletterbanners::getHeaderOrFooterImage('header');
             $newsLetterHeaderImage = !empty($newsLetterHeaderImage) ? $newsLetterHeaderImage : '';
             $newsLetterFooterImage = \KC\Repository\Newsletterbanners::getHeaderOrFooterImage('footer');
@@ -185,9 +186,9 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             \BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this);
             \BackEnd_Helper_MandrillHelper::getHeaderFooterContent($this);
             $mandrill = new Mandrill_Init($this->getInvokeArg('mandrillKey'));
-            $categoryVouchers = array_slice(\KC\Repository\Category::getCategoryVoucherCodes($topCategories[0][0]['category']['id']), 0, 3);
-            $categoryName = $topCategories[0][0]['category']['name'];
-            $categoryPermalink = $topCategories[0][0]['category']['permaLink'];
+            $categoryVouchers = array_slice(\KC\Repository\Category::getCategoryVoucherCodes($topCategories[0]['category']['id']), 0, 3);
+            $categoryName = $topCategories[0]['category']['name'];
+            $categoryPermalink = $topCategories[0]['category']['permaLink'];
             $newsletterHeader = \KC\Repository\Signupmaxaccount::getEmailHeaderFooter();
             try {
                 \FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
