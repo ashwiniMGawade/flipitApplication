@@ -22,6 +22,17 @@ class Offer extends BaseOffer
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
 
+    public static function getFutureOnlineOffers()
+    {
+        $currentDate = date("Y-m-d H:i");
+        $offers = Doctrine_Query::create()
+            ->select('o.id, o.startdate')
+            ->from('Offer o')
+            ->andWhere('o.startdate >= '."'".$currentDate."'")
+            ->fetchArray();
+        return $offers;
+    }
+    
     public static function getViewCountByOfferId($offerId)
     {
         $dateTimeFormat = 'Y-m-j H:i:s';
@@ -3239,7 +3250,7 @@ class Offer extends BaseOffer
     {
         $offer  = Doctrine_Query::create()
         ->select(
-            "o.id, o.extendedOffer,o.authorId , o.extendedUrl,
+            "o.id, s.startdate, o.extendedOffer,o.authorId , o.extendedUrl,
             s.permaLink, s.howToUse ,s.howtoguideslug, s.contentManagerId,
             sp.permaLink, p.permaLink, c.permaLink"
         )
@@ -3306,6 +3317,7 @@ class Offer extends BaseOffer
                 }
             }
         }
+        $urlsArray['refreshTime'] = $offer['startdate'];
         return $urlsArray ;
     }
 
