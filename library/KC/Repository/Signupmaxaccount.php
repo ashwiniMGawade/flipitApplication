@@ -529,7 +529,11 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
     protected static function validateIfNewsLetterCanBeScheduled()
     {
         $newsletterSentDate = self::getNewsletterSentTime();
-        $newsletterSentDatabaseDate = $newsletterSentDate[0]['newsletter_sent_time']->format('Y-m-d');
+        if (!empty($newsletterSentDate[0]['newsletter_sent_time'])) {
+            $newsletterSentDatabaseDate = $newsletterSentDate[0]['newsletter_sent_time']->format('Y-m-d');
+        } else {
+            $newsletterSentDatabaseDate = '';
+        }
         if (empty($newsletterSentDatabaseDate) || $newsletterSentDatabaseDate == '0000-00-00 00:00:00') {
             $newsletterSentDatabaseDate = date('Y-m-d', strtotime('2000-01-01'));
         } else {

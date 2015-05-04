@@ -61,7 +61,7 @@ if( isset($topOffer->exclusiveCode) && $topOffer->exclusiveCode == 1) {
                                                         style="padding:0 0 2px; 
                                                         font:14px/17px Arial, Helvetica, sans-serif; 
                                                         color:#363636;">
-                                                        <span style="float: left;"><?php echo $topOffer->shop['name']; ?></span>
+                                                        <span style="float: left;"><a href="<?php echo $this->httpPathLocale.$topOffer->shop['permaLink'];?>" style="text-decoration:none; color:#363636;"><?php echo $topOffer->shop['name']; ?></a></span>
                                                         <span style="margin-right: 5px; margin-left: 5px; float: left; font:14px/17px Arial, Helvetica, sans-serif; color: #e89438;">
                                                         <?php echo $exclusiveCode; ?>
                                                         </span>

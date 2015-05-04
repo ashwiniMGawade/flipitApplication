@@ -99,7 +99,9 @@ class FrontEnd_Helper_Mailer {
                 )
             );
         }
-        
+        echo "<pre>";
+        print_r($content);
+        die;
         $result = $this->mandrill->messages->sendTemplate('main', array($content, $footer, $emailHeader), $message);
     }
 }
