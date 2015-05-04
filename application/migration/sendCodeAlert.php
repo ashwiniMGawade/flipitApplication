@@ -136,11 +136,10 @@ class SendCodeAlert
             foreach ($codeAlertOffers as $codeAlertOffer) {
                 $this->shopId = $codeAlertOffer['shop']['id'];
                 $currentDate = date('Y-m-d H:i:s');
-                $currentTime = FrontEnd_Helper_viewHelper::convertCurrentTimeToServerTime();
                 if ($codeAlertOffer['endDate'] < $currentDate) {
                     CodeAlertQueue::moveCodeAlertToTrash($codeAlertOffer['id']);
                 }
-                self::addUrlAndRefreshVarnish();
+                self::getOffersUrlsAndRefreshVarnish();
                 if (($codeAlertOffer['startDate'] <= $currentDate && $codeAlertOffer['endDate'] >= $currentDate) && $codeAlertOffer['offline'] == 0) {
                     $this->setPhpExecutionLimit();
                     $topVouchercodes = FrontEnd_Helper_viewHelper::getShopCouponCode(
@@ -233,7 +232,7 @@ class SendCodeAlert
         print "$key - $message ";
     }
 
-    public static function addUrlAndRefreshVarnish()
+    public static function getOffersUrlsAndRefreshVarnish()
     {
         $varnish = new Varnish();
         $refreshUrls = $varnish->getAllUrlsByRefreshTime();
