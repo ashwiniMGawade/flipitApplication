@@ -1117,7 +1117,7 @@ class Admin_OfferController extends Zend_Controller_Action
         # check $varnishUrls has atleast one url
         if (isset($varnishUrls) && count($varnishUrls) > 0) {
             foreach ($varnishUrls as $varnishIndex => $varnishUrl) {
-                if ($varnishIndex != 'refreshTime') {
+                if (!is_object($varnishUrl)) {
                     $varnishObj->addUrl(HTTP_PATH_FRONTEND . $varnishUrl, $refreshTime);
                 }
             }

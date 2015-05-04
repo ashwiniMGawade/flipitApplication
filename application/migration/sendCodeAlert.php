@@ -140,11 +140,7 @@ class SendCodeAlert
                 if ($codeAlertOffer['endDate'] < $currentDate) {
                     CodeAlertQueue::moveCodeAlertToTrash($codeAlertOffer['id']);
                 }
-                $refreshTime = FrontEnd_Helper_viewHelper::convertOfferTimeToServerTime($codeAlertOffer['startDate']);
-                if ($refreshTime >= $currentTime) {
-                    self::addUrlAndRefreshVarnish($this->locale, $this->hostName, $codeAlertOffer['shop']['permalink'], $refreshTime);
-                }
-                sleep(3600);
+                self::addUrlAndRefreshVarnish();
                 if (($codeAlertOffer['startDate'] <= $currentDate && $codeAlertOffer['endDate'] >= $currentDate) && $codeAlertOffer['offline'] == 0) {
                     $this->setPhpExecutionLimit();
                     $topVouchercodes = FrontEnd_Helper_viewHelper::getShopCouponCode(
@@ -187,6 +183,7 @@ class SendCodeAlert
                             $this->mandrillKey
                         );
                         try {
+                            sleep(3600);
                             $codeAlertHeader = isset($codeAlertSettings[0]['email_header'])
                                 ? $codeAlertSettings[0]['email_header']
                                 : 'Code alert header';
@@ -236,13 +233,13 @@ class SendCodeAlert
         print "$key - $message ";
     }
 
-    public static function addUrlAndRefreshVarnish($locale, $hostName, $shopPermalink, $refreshTime)
+    public static function addUrlAndRefreshVarnish()
     {
         $varnish = new Varnish();
-        $websiteLocale = !empty($locale) ? $locale.'/' : '';
-        $shopUrl = $hostName.'/'.$websiteLocale.$shopPermalink;
-        $varnish->addUrl($shopUrl, $refreshTime);
-        $varnish->refreshVarnishUrlsByCron();
+        $refreshUrls = $varnish->getAllUrlsByRefreshTime();
+        if (!empty($refreshUrls)) {
+            $varnish->refreshVarnishUrlsByCron($refreshUrls);
+        }
     }
 }
 
