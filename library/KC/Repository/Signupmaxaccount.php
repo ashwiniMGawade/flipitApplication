@@ -532,9 +532,13 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
         if (!empty($newsletterSentDate[0]['newsletter_sent_time'])) {
             $newsletterSentDatabaseDate = $newsletterSentDate[0]['newsletter_sent_time']->format('Y-m-d');
         } else {
-            $newsletterSentDatabaseDate = '';
+            $newsletterSentDatabaseDate = '0000-00-00 00:00:00';
         }
-        if (empty($newsletterSentDatabaseDate) || $newsletterSentDatabaseDate == '0000-00-00 00:00:00') {
+        if (
+            empty($newsletterSentDatabaseDate)
+            || $newsletterSentDatabaseDate == '0000-00-00 00:00:00'
+            || $newsletterSentDatabaseDate == '-0001-11-30'
+        ) {
             $newsletterSentDatabaseDate = date('Y-m-d', strtotime('2000-01-01'));
         } else {
             $newsletterSentDatabaseDate = $newsletterSentDatabaseDate;

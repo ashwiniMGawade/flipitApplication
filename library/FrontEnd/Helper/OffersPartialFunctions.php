@@ -22,6 +22,27 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $urlToShow;
     }
 
+    public function getUrlToShowForEmail($currentOffer, $constants = HTTP_PATH_LOCALE)
+    {
+        if (
+            $currentOffer->refURL != ""
+            || $currentOffer->shop['refUrl']!= ""
+            || $currentOffer->shop['actualUrl'] != ""
+        ) {
+            $urlToShow = self::getOfferBounceUrl($currentOffer->id, $constants);
+        } else {
+            $urlToShow = $constants.$currentOffer->shop['permalink'];
+        }
+        if ($currentOffer->discountType=='PA' || $currentOffer->discountType=='PR') {
+            if ($currentOffer->refOfferUrl != null) {
+                $urlToShow = self::getOfferBounceUrl($currentOffer->id);
+            } else if (count($currentOffer->logo)>0) {
+                $urlToShow = PUBLIC_PATH_CDN.ltrim($currentOffer->logo['path'], "/").$currentOffer->logo['name'];
+            }
+        }
+        return $urlToShow;
+    }
+
     public function getOfferBounceUrl($offerId, $constants = HTTP_PATH_LOCALE)
     {
         return $constants."out/offer/".$offerId;

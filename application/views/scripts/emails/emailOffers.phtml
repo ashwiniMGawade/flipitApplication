@@ -34,7 +34,7 @@ $utmParameters = $this->mailType != 'welcome'
                         }
                         $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
                         $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($topOffer->endDate);
-                        $urlToShow = $offerPartial->getUrlToShow($topOffer, $this->httpPathLocale);
+                        $urlToShow = $offerPartial->getUrlToShowForEmail($topOffer, $this->httpPathLocale);
                         $exclusiveCode = '';
                         $exclusiveImage = '';
                         if( isset($topOffer->exclusiveCode) && $topOffer->exclusiveCode == 1) {
