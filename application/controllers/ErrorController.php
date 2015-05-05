@@ -21,7 +21,7 @@ class ErrorController extends Zend_Controller_Action
                 $pagePermalink = $this->_helper->Error->getPageParmalink(ltrim($this->_request->getPathInfo(), '/'));
                 $pageNumber = $this->_helper->Error->getPageNumbering($pagePermalink);
                 $pageDetails = $this->getPageDetails($pagePermalink, $pageNumber);
-                $pageDetails = $pageDetails[0];
+                $pageDetails = isset($pageDetails[0]) ? $pageDetails[0] : $pageDetails;
                 
                 if (isset($pageDetails['pageType']) && $pageDetails['pageType']=='default') {
                     if ($pageNumber > 0) {

@@ -79,7 +79,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
     public function setContantsForLocaleAndAdmin()
     {
-        if (strlen(strtolower($this->moduleDirectoryName))==2 && $this->httpHost != "www.kortingscode.nl") {
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        if (strlen(strtolower($this->moduleDirectoryName))==2 && $this->httpHost != $httpScheme.".kortingscode.nl") {
             BootstrapLocaleConstantsFunctions::constantsForLocale(
                 $this->moduleDirectoryName,
                 $this->scriptName,
@@ -200,7 +201,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 $actualPermalink,
                 $this->routeProperties,
                 $this->route,
-                $this->moduleName
+                $this->moduleName,
+                $httpScheme
             );
         }
         self::setRoutersByRules($permalink, $httpScheme);

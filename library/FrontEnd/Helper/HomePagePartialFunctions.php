@@ -222,7 +222,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
     {
         $rightDiv = '';
         foreach ($this->homePageData['topCategories'] as $category) {
-            $categoryPermalink = HTTP_PATH_LOCALE.$category['category']['permaLink'];
+            $categoryPermalink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_categorieen').'/'.$category['category']['permaLink'];
             $rightDiv.=
             self::getRightDivByAjax(
                 $this->homePageData['categoriesOffers'][$category['category']['permaLink']],

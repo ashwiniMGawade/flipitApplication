@@ -76,7 +76,8 @@ class BootstrapRouterFunctions
         $actualPermalink,
         $routeProperties,
         $routeObject,
-        $moduleName
+        $moduleName,
+        $httpScheme = ''
     ) {
         $urlArray = self::getPageUrls($getPermalinkFromDb, $actualPermalink);
         if (in_array(strtolower($routeProperties[0]), $moduleName)) {
@@ -84,8 +85,9 @@ class BootstrapRouterFunctions
             $urlArray['module'] = 'default';
             $urlArray['lang'] = $routeProperties[0];
 
-            self::routeForDefaultModule($routeObject);
-
+            if (self::routeForDefaultModule($routeObject, $httpScheme) == true) {
+                return;
+            }
             $route = new Zend_Controller_Router_Route(
                 $routeProperties[0] .'/'. $actualPermalink,
                 $urlArray
@@ -99,9 +101,9 @@ class BootstrapRouterFunctions
         return;
     }
 
-    public static function routeForDefaultModule($routeObject)
+    public static function routeForDefaultModule($routeObject, $httpScheme = '')
     {
-        if (HTTP_HOST == 'www.kortingscode.nl') {
+        if (HTTP_HOST == $httpScheme.'.kortingscode.nl') {
             $routeObject->addRoute(
                 'kortingscode',
                 new Zend_Controller_Router_Route(
@@ -112,7 +114,7 @@ class BootstrapRouterFunctions
                     )
                 )
             );
-            return;
+            return true;
         }
     }
 

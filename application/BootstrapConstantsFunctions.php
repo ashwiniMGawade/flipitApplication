@@ -13,8 +13,9 @@ class BootstrapConstantsFunctions
 
     public static function constantsForSettingRequestHeaders()
     {
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
         defined('REQUEST_URI') || define('REQUEST_URI', isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/');
-        defined('HTTP_HOST') || define('HTTP_HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'www.kortingscode.nl');
+        defined('HTTP_HOST') || define('HTTP_HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $httpScheme.'.kortingscode.nl');
         defined('HTTP_PATH') || define('HTTP_PATH', trim('http://' . HTTP_HOST . '/'));
     }
 

@@ -97,7 +97,7 @@ class BootstrapDoctrineConnectionFunctions
             $locale = isset($localeCookieData) ? $localeCookieData : 'en';
         } elseif ($moduleDirectoryName == "default") {
             $locale = 'en';
-        } elseif (strlen($moduleDirectoryName) == 2 && HTTP_HOST=='www.kortingscode.nl') {
+        } elseif (strlen($moduleDirectoryName) == 2 && HTTP_HOST== $httpScheme.'.kortingscode.nl') {
             $locale = 'en';
         }
         return $locale;

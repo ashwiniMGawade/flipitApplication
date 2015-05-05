@@ -9,8 +9,9 @@ class BootstrapTranslationFunctions
             $suffix = "_" . strtoupper(LOCALE);
         }
 
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
         if (strlen($moduleDirectoryName) == 2) {
-            if ($domain != "www.kortingscode.nl" && $domain != "kortingscode.nl") {
+            if ($domain != $httpScheme.".kortingscode.nl" && $domain != "kortingscode.nl") {
                 $localePath = '/'.$moduleDirectoryName.'/';
             } else {
                 $localePath = '/';
