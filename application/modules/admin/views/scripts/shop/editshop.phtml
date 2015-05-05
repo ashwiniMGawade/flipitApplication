@@ -35,10 +35,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                 <?php echo $this->translate('Edit Shop');
                  $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme(); ?>
                 <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/shop<?php echo '#'.$this->qstring; ?>'"><?php echo $this->translate('Cancel'); ?></button>
-                <button type="button" class="btn btn-primary ml10" id='prefillData'><?php echo $this->translate('Pre-fill'); ?></button>
-                <button type = "button" onclick="showLightBoxForWidgetLocation()" class="btn ml10">
-                    <?php echo $this->translate('backend_Set widget location'); ?>
-                </button>	
+                <button type="button" class="btn btn-primary ml10" id='prefillData'><?php echo $this->translate('Pre-fill'); ?></button>	
                 <?php 
                 $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
                 $host = $httpScheme.'.kortingscode.nl';
@@ -691,7 +688,27 @@ echo $this->headTitle()->append('Edit Shop');?>
                         </div>
                     </div>
                 </div>
-
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate("backend_Set widget location");?></strong></label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button type = "button" onclick="showLightBoxForWidgetLocation()" class="btn">
+                                <?php echo $this->translate('backend_Set widget location'); ?>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display singup option");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                             <button type="button" class="btn <?php if($this->data['showSignupOption']=='1'){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'signupOption','on');"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button type="button" class="btn <?php if($this->data['showSignupOption']=='0'){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'signupOption','off');"><?php echo $this->translate('No'); ?></button> 
+                          </div>
+                    </div>
+                </div>
                 <div class="mainpage-content-line mb10">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Allow user generated content'); ?></strong></label></div>
                     <div class="mainpage-content-right">
@@ -703,25 +720,19 @@ echo $this->headTitle()->append('Edit Shop');?>
                   </div>    
                 </div>
                 <div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display singup option");?></strong></label></div>
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('Allow Discussions'); ?></strong></label>
+                    </div>
                     <div class="mainpage-content-right">
                         <div data-toggle="buttons-checkbox" class="btn-group">
-                             <button type="button" class="btn <?php if($this->data['showSignupOption']=='1'){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'signupOption','on');"><?php echo $this->translate('Yes'); ?></button>                     
-                            <button type="button" class="btn <?php if($this->data['showSignupOption']=='0'){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'signupOption','off');"><?php echo $this->translate('No'); ?></button> 
-                          </div>
-                    </div>
-                </div>
-                <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Allow Discussions'); ?></strong></label></div>
-                <div class="mainpage-content-right">
-                    <div data-toggle="buttons-checkbox" class="btn-group">
-                            <button onclick="discussionCheck(event,'on')" class="btn <?php if($this->data['discussions']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                                <button onclick="discussionCheck(event,'on')" class="btn <?php if($this->data['discussions']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
 
-                            <button style="border-radius:0 4px 4px 0" onclick="discussionCheck(event,'off')" class="btn <?php if($this->data['discussions']=='0' || $this->data['discussions']==''){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('No'); ?></button>
-                            
-                            <input type="checkbox" id="discussions" <?php if($this->data['discussions']=='1'){ echo 'checked'; }  ?>  name="discussions" style="display:none;"> 
+                                <button style="border-radius:0 4px 4px 0" onclick="discussionCheck(event,'off')" class="btn <?php if($this->data['discussions']=='0' || $this->data['discussions']==''){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('No'); ?></button>
+                                
+                                <input type="checkbox" id="discussions" <?php if($this->data['discussions']=='1'){ echo 'checked'; }  ?>  name="discussions" style="display:none;"> 
+                        </div>
                     </div>
                 </div>
-                
                 
                 <div class="mainpage-content-line mb10">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display chains");?></strong></label></div>
