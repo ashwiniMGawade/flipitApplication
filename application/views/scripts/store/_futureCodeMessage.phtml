@@ -1,8 +1,8 @@
 <?php
-if (isset($this->futureCodeCount) && $this->futureCodeCount != '') {
+if (isset($this->futureCodeCount) && $this->futureCodeCount != '' && $this->futureCodeCount != 0) {
     ?>
-    <div class="message">
-        <div class="holder">
+    <div class="info-note">
+        <p>
         <?php
         echo FrontEnd_Helper_viewHelper::__translate(
         'New').' '.$this->shopName.' '.FrontEnd_Helper_viewHelper::__translate('codes! Within')
@@ -11,7 +11,7 @@ if (isset($this->futureCodeCount) && $this->futureCodeCount != '') {
         . ' ' 
         . FrontEnd_Helper_viewHelper::__translate('of new codes will be offered');
         ?>
-        </div>
+        </p>
     </div>
     <?php
 }

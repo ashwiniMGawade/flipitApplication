@@ -149,7 +149,7 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         if (!empty($offerInfo) && isset($offerInfo[0]['startDate'])) {
             $offerStartDate = $offerInfo[0]['startDate']->format('Y-m-d');
             $secondsForStartDate = strtotime($offerStartDate) - time();
-            $daysLeftTillOfferGetsLive = floor($secondsForStartDate / 86400);
+            $daysLeftTillOfferGetsLive = floor($secondsForStartDate / 86400) + 1;
             if ($daysLeftTillOfferGetsLive <= 5) {
                 $daysLeftTillOfferGetsLive = isset($daysLeftTillOfferGetsLive) && $daysLeftTillOfferGetsLive > 1
                     ? $daysLeftTillOfferGetsLive . ' ' . FrontEnd_Helper_viewHelper::__translate('days')
