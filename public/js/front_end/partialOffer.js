@@ -8,7 +8,24 @@ $(document).ready(function() {
     if ($('#userGenerated').val() == 1) {
        showTermAndConditions($('#userGenerated').attr('alt'));
     }
+    $('a.btn-top').hide();
+    var offersSectionArticlesCount = $('#content section.section:eq(0) article').length;
+    offersSectionArticlesCount = offersSectionArticlesCount - 1;
+    $(window).bind('scroll', function() {
+        var offersSection = $('#content section.section:eq(0) article:eq('+ offersSectionArticlesCount +')').offset();
+        if (offersSection.top <= $(window).scrollTop() ) {
+            $("a.btn-top").fadeIn("slow");
+        } else {
+            $('a.btn-top').fadeOut("slow");
+        }
+    });
 });
+
+function scrollToOffer(){
+    var offersSection = $('#content section.section article:eq(0)');
+    $('html,body').animate({scrollTop: offersSection.offset().top},'slow');
+    $('a.btn-top').fadeIn("slow");
+}
 
 function scrollToDisqus(){
     var disqusDivId = $('#disqus_thread');
