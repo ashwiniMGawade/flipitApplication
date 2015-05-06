@@ -44,12 +44,14 @@ class Varnish extends BaseVarnish
     // process all the urls waiting to refresh
     public function processQueue()
     {
-        $queue = Doctrine_core::getTable('Varnish')->findBy('status','queue')->toArray();
+        $queue = Doctrine_core::getTable('Varnish')->findBy('status', 'queue')->toArray();
         if (!empty($queue)) {
             foreach ($queue as $page) {
                 sleep(1.5);
-                self::refreshVarnish($page['url']);
-                self::removeFromQueue($page['id']);
+                if (empty($page['refresh_time'])) {
+                    self::refreshVarnish($page['url']);
+                    self::removeFromQueue($page['id']);
+                }
             }
         }
     }
