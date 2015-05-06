@@ -757,4 +757,15 @@ public static function Visitortotal_acc()
             ->fetchArray();
         return !empty($codeAlertSendDate) ?  $codeAlertSendDate[0]['code_alert_send_date'] : 0;
     }
+
+    public static function updateVisitorCodeAlertStatus()
+    {
+        Doctrine_Query::create()->update('Visitor')
+            ->set('codealert', 1)
+            ->where('status = 1')
+            ->andWhere('weeklyNewsLetter = 1')
+            ->andWhere('active = 1')
+            ->execute();
+        return true;
+    }
 }
