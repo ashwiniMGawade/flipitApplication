@@ -10,10 +10,14 @@ $(document).ready(function() {
     }
     $('a.btn-top').hide();
     var offersSectionArticlesCount = $('#content section.section:eq(0) article').length;
-    offersSectionArticlesCount = offersSectionArticlesCount - 1;
+    if (offersSectionArticlesCount >= 5) {
+        offersSectionArticlesCount = offersSectionArticlesCount - 5;
+    } else {
+        offersSectionArticlesCount = offersSectionArticlesCount - 1;
+    }    
     $(window).bind('scroll', function() {
         var offersSection = $('#content section.section:eq(0) article:eq('+ offersSectionArticlesCount +')').offset();
-        if (offersSection.top <= $(window).scrollTop() ) {
+        if (offersSection.top <= $(window).scrollTop()) {
             $("a.btn-top").fadeIn("slow");
         } else {
             $('a.btn-top').fadeOut("slow");
