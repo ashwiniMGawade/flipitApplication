@@ -756,11 +756,8 @@ function setFormData(data){
 			error: function(message) {
 	        }
 	});
-	jQuery('#ccode').html(' <label><strong>Coupon code</strong></label>');
-    if (jQuery('#socialCodeSelection').val() == 1) {
-        getShopDetail(jQuery("#selctedshop").val());
-    }
-	
+	jQuery('#ccode').html('<label><strong>Coupon code</strong></label>');
+    getShopDetail(jQuery("#selctedshop").val());
 }
 
 function newschangelinkStatus(el)
