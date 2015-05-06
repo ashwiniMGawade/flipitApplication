@@ -19,13 +19,11 @@ class Shop extends \KC\Entity\Shop
     public static function checkShop($shopName)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $shopName = mysqli_real_escape_string(\FrontEnd_Helper_viewHelper::getDbConnectionDetails(), $shopName);
+        $shopName = html_entity_decode($shopName);
         $shopExist = $queryBuilder->select('s.id')
             ->from('KC\Entity\Shop', 's')
-            ->where(
-                "s.name='".
-                mysqli_real_escape_string(\FrontEnd_Helper_viewHelper::getDbConnectionDetails(), $shopName)
-                ."'"
-            )
+            ->where($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal('%'.$shopName)))
             ->andWhere("s.deleted = 0")
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
