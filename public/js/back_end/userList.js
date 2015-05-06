@@ -348,14 +348,12 @@ function validateFormAddNewUser()
 					},
 					password : {
 						required : true,
-						minlength : 8,
-						maxlength :20
+						regex: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
 					},
 					confPassword : {
 						required : true,
-						minlength : 8,
-						maxlength :20,
-						equalTo : "#password"
+						equalTo : "#password",
+						regex: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
 					},
 					popularKortingscode :{
 						required : true,
@@ -397,13 +395,11 @@ function validateFormAddNewUser()
 					},
 					password : {
 						required : __("Please enter your password"),
-						minlength : __("Please enter minimum 8  characters"),
-						maxlength : __("Please enter maximum 20  characters")
+						regex :  __("Password must contain a number, capital letter and a special character and not less than 8 Characters")
 					},
 					confPassword : {
 						required : __("Please re-type your password"),
-						minlength : __("Please enter minimum 8  characters"),
-						maxlength : __("Please enter maximum 20  characters")
+						equalTo : __("Please re-type same password")
 					},
 					twitter:{
 
