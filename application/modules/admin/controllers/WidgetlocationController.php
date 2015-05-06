@@ -18,7 +18,7 @@ class Admin_WidgetlocationController extends Zend_Controller_Action
     {
         $parameters = $this->getRequest()->getParams();
         $widgetLocationStatus = false;
-        if (!empty($parameters['widgetPostion']) && !empty($parameters['widgetLocation'])) {
+        if ($parameters['widgetPostion']!='' && !empty($parameters['widgetLocation'])) {
             KC\Repository\WidgetLocation::saveOrUpdateWidgetLocation($parameters);
             $widgetLocationStatus = true;
         }

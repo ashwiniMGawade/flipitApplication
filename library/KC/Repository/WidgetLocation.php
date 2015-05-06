@@ -43,10 +43,10 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         if (!empty($relatedId)) {
             $existInDatabase = self::getWidgetLocationIdByRelatedId($relatedId);
-            self::clearCacheByPageTypeOrRelatedId($relatedId);
+            self::clearCacheByRelatedId($relatedId);
         } else {
             $existInDatabase = self::getWidgetLocationIdByPageTypeAndLocation($widgetLocation, $pageType);
-            self::clearCacheByPageTypeOrRelatedId($pageType);
+            self::clearCacheByPageType($widgetLocation, $pageType);
         }
         $widgetLocationId = !empty($existInDatabase[0]['id']) ? $existInDatabase[0]['id'] : '';
         return $widgetLocationId;
@@ -114,13 +114,13 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
                 $existInDatabase = self::getWidgetLocationPageType($widgetLocation, $pageType);
             }
         }
-        $widgetPosition = !empty($existInDatabase[0]['position']) ? $existInDatabase[0]['position'] : '';
+        $widgetPosition = isset($existInDatabase[0]['position']) ? $existInDatabase[0]['position'] : '';
         return $widgetPosition;
     }
 
     public static function getWidgetLocationPageType($widgetLocation, $pageType)
     {
-        $cacheKey = 'widget_'. $pageType . '_position';
+        $cacheKey = 'widget_'. \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($widgetLocation.$pageType) . '_position';
         $existInDatabase = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)$cacheKey,
             array(
@@ -132,9 +132,15 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
         return $existInDatabase;
     }
 
-    public static function clearCacheByPageTypeOrRelatedId($pageTypeOrId)
+    public static function clearCacheByRelatedId($relatedId)
     {
-        $cacheKey = 'widget_'. $pageTypeOrId . '_position';
+        $cacheKey = 'widget_'. $relatedId . '_position';
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKey);
+    }
+
+    public static function clearCacheByPageType($widgetLocation, $pageType)
+    {
+        $cacheKey = 'widget_'. \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($widgetLocation.$pageType) . '_position';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKey);
     }
 
@@ -146,8 +152,7 @@ class WidgetLocation Extends \KC\Entity\WidgetLocation
         $offers = ''
     ) {
         $widgetPosition = self::getWidgetPosition($pageType, $widgetLocation, $relatedId, $moneyShop);
-        $widgetOrDefaultPosition = !empty($widgetPosition) ? $widgetPosition : 1;
-        $maxWidgetPosition =  $widgetOrDefaultPosition > count($offers) ? count($offers) : $widgetOrDefaultPosition;
+        $maxWidgetPosition =  $widgetPosition > count($offers) ? count($offers) : $widgetPosition;
         if ($pageType == 'page' || $pageType == 'category') {
             $maxWidgetPosition = $maxWidgetPosition > 20 ? 20 : $maxWidgetPosition;
         }

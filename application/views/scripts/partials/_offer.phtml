@@ -262,10 +262,13 @@ foreach ($this->offers as $offer) {
     $widgetPosition = !empty($this->widgetPosition) ? $this->widgetPosition : 1;
     if (!empty($this->shopPage)) {
         $showSignupOption = $this->showSignupOption;
+        if ($this->shop['affliateProgram'] == 1) {
+            $widgetPosition = $this->widgetPosition;
+        }
     } else {
         $showSignupOption = 1;
     }
-    if ($offerCounter == $widgetPosition && $showSignupOption == 1) :
+    if ($offerCounter == $widgetPosition && $showSignupOption == 1 && $widgetPosition > 0) :
         if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage'
             || $this->offersType=='offerWithPagenation' || $this->offersType=='newestOffer'):
             $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
