@@ -2476,7 +2476,8 @@ class Offer Extends \KC\Entity\Offer
                 $urlsArray[] = $value['offers']['permalink'];
             }
         }
-        $urlsArray['refreshTime'] = $offer[0]['startDate'];
+        $urlsArray['startDate'] = $offer[0]['startDate'];
+        $urlsArray['endDate'] = $offer[0]['endDate'];
         return $urlsArray ;
     }
 

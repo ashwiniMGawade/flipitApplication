@@ -341,7 +341,36 @@ class Admin_EmailController extends Zend_Controller_Action
     {
         $varnishObj = new \KC\Repository\Varnish();
         $varnishUrls = \KC\Repository\Offer::getAllUrls($id);
-        $varnishRefreshTime = (array) $varnishUrls['refreshTime'];
+        $varnishRefreshTime = (array) $varnishUrls['startDate'];
+        $refreshTime = FrontEnd_Helper_viewHelper::convertOfferTimeToServerTime($varnishRefreshTime['date']);
+        if (isset($varnishUrls) && count($varnishUrls) > 0) {
+            foreach ($varnishUrls as $varnishIndex => $varnishUrl) {
+                if (!is_object($varnishUrl)) {
+                    $varnishObj->addUrl(HTTP_PATH_FRONTEND . $varnishUrl, $refreshTime);
+                }
+            }
+        }
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND, $refreshTime);
+        $varnishObj->addUrl(
+            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_nieuw'),
+            $refreshTime
+        );
+        $varnishObj->addUrl(
+            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-20'),
+            $refreshTime
+        );
+        $varnishObj->addUrl(
+            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_categorieen'),
+            $refreshTime
+        );
+        $varnishObj->addUrl("http://www.flipit.com", $refreshTime);
+        if (LOCALE == '') {
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND . 'marktplaatsfeed', $refreshTime);
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND. 'marktplaatsmobilefeed', $refreshTime);
+        }
+        
+        # add url for  end date
+        $varnishRefreshTime = (array) $varnishUrls['endDate'];
         $refreshTime = FrontEnd_Helper_viewHelper::convertOfferTimeToServerTime($varnishRefreshTime['date']);
         if (isset($varnishUrls) && count($varnishUrls) > 0) {
             foreach ($varnishUrls as $varnishIndex => $varnishUrl) {
