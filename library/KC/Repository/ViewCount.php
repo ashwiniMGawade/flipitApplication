@@ -86,10 +86,19 @@ class ViewCount extends \KC\Entity\ViewCount
         $keyStatus = \FrontEnd_Helper_viewHelper::checkCacheStatusByKey($cahceKey);
         if ($keyStatus) {
             $offerViewCount = \KC\Repository\Offer::getViewCountByOfferId($offerId);
+            if (empty($offerViewCount)) {
+                $offerViewCount = array(
+                    'viewCount'=> '',
+                    'offsetType'=> ''
+                );
+            }
             \FrontEnd_Helper_viewHelper::setInCache($cahceKey, $offerViewCount);
         } else {
-            $offerViewCount = \FrontEnd_Helper_viewHelper::getFromCacheByKey($cahceKey);
-            $offerViewCount = intval($offerViewCount) + 1;
+            $offerViewCountFromCache = \FrontEnd_Helper_viewHelper::getFromCacheByKey($cahceKey);
+            $offerViewCount = array(
+                'viewCount'=> intval($offerViewCountFromCache['viewCount']) + 1,
+                'offsetType'=>$offerViewCountFromCache['offsetType']
+            );
             \FrontEnd_Helper_viewHelper::setInCache($cahceKey, $offerViewCount);
         }
         return $offerViewCount;
