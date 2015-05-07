@@ -89,4 +89,52 @@ class CouponCode extends \KC\Entity\CouponCode
             ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }
+
+    public static function getCouponCode($offerId, $code)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $availableCoupon = $queryBuilder
+        ->select('c')
+        ->from('KC\Entity\CouponCode', 'c')
+        ->where("c.offer = " . $offerId)
+        ->andWhere('c.code ='.$code)
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $availableCoupon;
+    }
+
+    public static function updateCouponCode($newStaus, $code, $offerId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $queryBuilder->update('KC\Entity\CouponCode', 'c')
+            ->set('c.status', $newStaus)
+            ->where("c.code = '" . $code ."'")
+            ->andWhere('c.offer ='.  $offerId)
+            ->getQuery()
+            ->execute();
+        return true;
+    }
+
+    public static function saveCouponCode($newStaus, $code, $offerId)
+    {
+        $couponCode = new KC\Entity\CouponCode();
+        $couponCode->code = $code;
+        $couponCode->status = $newStaus;
+        $couponCode->offer = $offerId;
+        \Zend_Registry::get('emLocale')->persist($couponCode);
+        \Zend_Registry::get('emLocale')->flush();
+        return true;
+    }
+
+    public static function deleteCouponCode($offerId, $codesArray)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->delete('KC\Entity\CouponCode', 'c')
+            ->where("c.offer=" . $offerId)
+            ->andWhere($queryBuilder->expr()->notIn('c.code', $codesArray))
+            ->getQuery();
+            $query->execute();
+        return true;
+    }
 }

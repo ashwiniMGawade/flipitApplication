@@ -1366,205 +1366,86 @@ class Admin_OfferController extends Zend_Controller_Action
     {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-
-        # set memory limit to avoid memory allocation error
         ini_set('max_execution_time', 115200);
-
-
-        $errorFlag = true ;
-        # check request is post
-        if ($this->getRequest ()->isPost ()) {
-
-            # validate filename
+        $errorFlag = true;
+        if ($this->getRequest()->isPost()) {
             if (isset($_FILES['importCodes']['name']) && @$_FILES['importCodes']['name'] != '') {
-
                 try {
-
-
-                        # upload file to excel upload folder
-                        $RouteRedirectObj = new \KC\Repository\RouteRedirect();
-                        $result = @$RouteRedirectObj->uploadExcel($_FILES['importCodes']['name']);
-
-
-                        # check file is uploaded or not
-                        if($result['status'] == 200){
-
-
-                            # cretae path for uploaded file
-                            $spl = explode('/', HTTP_PATH);
-                            $path = $spl[0].'//' . $spl[2];
-                            $excelFilePath = $result['path'];
-                            $excelFile = $excelFilePath.$result['fileName'];
-
-                            # read excel file
-                            $objReader = PHPExcel_IOFactory::createReader('Excel2007');
-                            $objPHPExcel = $objReader->load($excelFile);
-                            $worksheet = $objPHPExcel->getActiveSheet();
-
-
-                            unlink($excelFile);
-                            $data =  array();
-
-                            $i = 0 ;
-
-
-                            $codesArray = array();
-
-
-                            # traverse the excel file to update codes
-                            foreach ($worksheet->getRowIterator() as $row) {
-
-                                $cellIterator = $row->getCellIterator();
-                                $cellIterator->setIterateOnlyExistingCells(false);
-
-                                # irrerate through a row
-                                foreach ($cellIterator as $cell) {
-
-                                    $data[$cell->getRow()][$cell->getColumn()] = $cell->getCalculatedValue();
-                                }
-
-
-                                # set code and its status to appropriate variables
-                                $code =  $data[$cell->getRow()]['A'];
-                                $status =  $data[$cell->getRow()]['B'];
-
-                                # skip first row of headers
-                                if($i == 0) {
-                                    # if validate excel sheet is correct according couponcodesx
-                                    if(strtolower( $code) == 'code' && strtolower( $status) == 'status') {
-                                        $errorFlag = false ;
-
-                                    }
-
-                                    $i++ ;
-                                    continue ;
-
-                                }
-
-
-
-
-
-
-                                if(! $errorFlag ){
-
-
-                                    # check code esists or not
-                                    if(!empty($code) ) {
-                                        $codesArray[] = $code;
-                                            $offerId = $this->getRequest()->getParam('offer' , null);
-
-                                            # FIND Code BY Offer id and code
-                                            $codeRecord = Doctrine::getTable('CouponCode')
-                                                    ->createQuery()
-                                                    ->where("code = '" . $code ."'")
-                                                    ->andWhere('offerid ='.  $offerId )
-                                                    ->limit(1)
-                                                    ->fetchArray();
-
-                                            # if record found then simply update its ttaus
-                                            if($codeRecord) {
-
-                                                $newStaus = 0 ;
-
-
-                                                if(strtolower($status) == 'available' ) {
-                                                    $newStaus = 1 ;
-                                                }
-
-                                                Doctrine_Query::create()->update('CouponCode')
-                                                    ->set('status',  $newStaus )
-                                                    ->where("code = '" . $code ."'")
-                                                    ->andWhere('offerid ='.  $offerId)
-                                                    ->execute();
-
-
-                                            } else {
-
-                                                # add new code with its status
-                                                $newStaus = 0 ;
-
-
-                                                if(strtolower($status) == 'available' ) {
-                                                    $newStaus = 1 ;
-                                                }
-
-
-                                                $couponCode = new CouponCode();
-                                                $couponCode->code = $code;
-                                                $couponCode->status = $newStaus;
-                                                $couponCode->offerid = $offerId;
-                                                $couponCode->save();
-                                                $couponCode->free(true);
-
-
-                                            }
-
-
-
-                                    }
-
-                                }else {
-
-
-                                    # display errors
-                                    $message = $this->view->translate ('Problem in your file!!');
-                                    echo Zend_Json::encode( array('status' => '100' , 'message' => $message));
-                                    die;
-                                }
+                    $RouteRedirectObj = new \KC\Repository\RouteRedirect();
+                    $result = $RouteRedirectObj->uploadExcel($_FILES['importCodes']['name']);
+                    if ($result['status'] == 200) {
+                        $spl = explode('/', HTTP_PATH);
+                        $path = $spl[0].'//' . $spl[2];
+                        $excelFilePath = $result['path'];
+                        $excelFile = $excelFilePath.$result['fileName'];
+                        $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+                        $objPHPExcel = $objReader->load($excelFile);
+                        $worksheet = $objPHPExcel->getActiveSheet();
+                        unlink($excelFile);
+                        $data =  array();
+                        $i = 0 ;
+                        $codesArray = array();
+                        foreach ($worksheet->getRowIterator() as $row) {
+                            $cellIterator = $row->getCellIterator();
+                            $cellIterator->setIterateOnlyExistingCells(false);
+                            foreach ($cellIterator as $cell) {
+                                $data[$cell->getRow()][$cell->getColumn()] = $cell->getCalculatedValue();
                             }
-
-
-
-                            $d3 = Doctrine_Query::create()->delete()
-                            ->from('CouponCode')
-                            ->where("offerid =" . $offerId)
-                            ->andWhereNotIn("code",$codesArray)
-                            ->execute();
-
-                            \KC\Repository\Offer::updateCache($offerId);
-
-                            self::updateVarnish($offerId);
-
-                            $codesDetail = \KC\Repository\CouponCode::returnCodesDetail($offerId);
-                            $codesDetail['status'] = '200' ;
-                            $codesDetail['message'] = $this->view->translate ('Codes have been imported successfully');
-
-                            echo Zend_Json::encode($codesDetail);
-
-                            die;
-
-
-                        } else {
-
-
-                            # display errors
-                            $message = $this->view->translate ('Problem in your file!!');
-                            echo Zend_Json::encode( array('status' => '100' , 'message' => $message));
-
-
+                            $code =  $data[$cell->getRow()]['A'];
+                            $status =  $data[$cell->getRow()]['B'];
+                            if ($i == 0) {
+                                if (strtolower($code) == 'code' && strtolower($status) == 'status') {
+                                    $errorFlag = false ;
+                                }
+                                $i++ ;
+                                continue ;
+                            }
+                            if (!$errorFlag) {
+                                if (!empty($code)) {
+                                    $codesArray[] = $code;
+                                    $offerId = $this->getRequest()->getParam('offer', null);
+                                    $codeRecord = \KC\Repository\CouponCode::getCouponCode($offerId, $code);
+                                    if ($codeRecord) {
+                                        $newStaus = 0 ;
+                                        if (strtolower($status) == 'available') {
+                                            $newStaus = 1 ;
+                                        }
+                                        \KC\Repository\CouponCode::updateCouponCode($newStaus, $code, $offerId);
+                                    } else {
+                                        $newStaus = 0 ;
+                                        if (strtolower($status) == 'available') {
+                                            $newStaus = 1 ;
+                                        }
+                                        \KC\Repository\CouponCode::saveCouponCode($code, $newStaus, $offerId);
+                                    }
+                                }
+                            } else {
+                                $message = $this->view->translate('Problem in your file!!');
+                                echo Zend_Json::encode(array('status' => '100', 'message' => $message));
+                                die;
+                            }
                         }
-
-
+                        \KC\Repository\CouponCode::deleteCouponCode($offerId, $codesArray);
+                        \KC\Repository\Offer::updateCache($offerId);
+                        self::updateVarnish($offerId);
+                        $codesDetail = \KC\Repository\CouponCode::returnCodesDetail($offerId);
+                        $codesDetail['status'] = '200' ;
+                        $codesDetail['message'] = $this->view->translate('Codes have been imported successfully');
+                        echo Zend_Json::encode($codesDetail);
+                        die;
+                    } else {
+                        $message = $this->view->translate('Problem in your file!!');
+                        echo Zend_Json::encode(array('status' => '100' , 'message' => $message));
+                    }
                 } catch (Exception $e) {
-
-
-                    # display errors
-
-                    $message = $this->view->translate ('Problem in your file!!!');
-                    echo Zend_Json::encode( array('status' => '100' , 'message' => $message));
-
+                    $message = $this->view->translate('Problem in your file!!!');
+                    echo Zend_Json::encode(array('status' => '100' , 'message' => $message));
                     die;
                 }
             }
         }
-
-
-        # display errors
-        $message = $this->view->translate ('Problem in your file!!');
-        echo Zend_Json::encode( array('status' => '100' , 'message' => $message));
-
-
+        $message = $this->view->translate('Problem in your file!!');
+        echo Zend_Json::encode(array('status' => '100' , 'message' => $message));
     }
 
 
