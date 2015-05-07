@@ -23,6 +23,21 @@ class Shop extends BaseShop
         }
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
+    
+    public static function setSignupOption()
+    {
+        $shops = Shop::getAllShopsId('all');
+        $shopIds = array();
+        foreach ($shops as $shop) {
+            $shopIds[] = $shop['id'];
+        }
+        $ids = implode(',', $shopIds);
+        $query = Doctrine_Query::create()
+            ->update('Shop s')
+            ->set('s.showSignupOption', '0')
+            ->where("s.id IN ($ids)")
+            ->execute();
+    }
 
     public static function checkShop($shopName)
     {
@@ -1486,14 +1501,16 @@ public static function getShopDetail($shopId)
         return true;
     }
 
-    public static function getAllShopsId()
+    public static function getAllShopsId($withChecks = '')
     {
-        $allShopsIds = Doctrine_Query::create()
+        $query = Doctrine_Query::create()
             ->select('s.id')
-            ->from("Shop s")
-            ->where('s.deleted = 0')
-            ->andWhere("s.status = 1")
-            ->fetchArray();
+            ->from("Shop s");
+        if (empty($withChecks)) {
+            $query = $query->where('s.deleted = 0')
+            ->andWhere("s.status = 1");
+        }
+        $allShopsIds = $query->fetchArray();
         return $allShopsIds;
     }
 
