@@ -90,6 +90,8 @@ class PopularCategory extends \KC\Entity\PopularCategory
                     ->find($catg[0]['id']);
                 $pc->position = (intval($NewPos) + 1);
                 $pc->deleted = 0;
+                $pc->total_offers = 0;
+                $pc->total_coupons = 0;
                 $pc->created_at = new \DateTime('now');
                 $pc->updated_at = new \DateTime('now');
                 \Zend_Registry::get('emLocale')->persist($pc);
