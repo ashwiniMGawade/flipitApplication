@@ -61,9 +61,9 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getOfferTermsAndCondition($currentOffer)
     {
         $termsAndConditions = '';
-        if (isset($currentOffer->termandcondition)) {
-            if (count($currentOffer->termandcondition) > 0) {
-                $termsAndConditions = $currentOffer->termandcondition[0]['content'];
+        if (isset($currentOffer->offertermandcondition)) {
+            if (count($currentOffer->offertermandcondition) > 0) {
+                $termsAndConditions = $currentOffer->offertermandcondition[0]['content'];
             }
         }
         return $termsAndConditions;

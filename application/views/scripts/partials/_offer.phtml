@@ -246,11 +246,7 @@ foreach ($this->offers as $offer) {
                 </a>
             </div>
         </div>
-        <?php
-        if ($offer->userGenerated == 1) { ?>
-            <input type="hidden" id="userGenerated" alt="<?php echo $offer->id ;?>" value="1" />
-        <?php } ?>
-        <div  class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
+        <div class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
             <h2><?php echo $this->translate('Terms &amp; Conditions');
             if (!empty($defaultText)) { echo ' : <span class="social-term-font">' .$defaultText.'</span>'; }?></h2>
             <ol class="num-list">

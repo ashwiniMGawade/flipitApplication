@@ -1117,7 +1117,7 @@ class Offer Extends \KC\Entity\Offer
         $nowDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
-            ->select('o, s, img, vot, t')
+            ->select('o, s, img, vot, t, terms')
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('s.logo', 'img')
