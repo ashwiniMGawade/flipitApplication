@@ -740,6 +740,10 @@ case 'customText' :
  */
 function validateFormAddNewShop(){
     
+    $.validator.addMethod("slugRegex", function(value, element) {
+        return this.optional(element) || /^[A-Za-z][a-z0-9-]+$/i.test(value);
+    }, "How to slug must contain only letters, numbers, or dashes.");
+
     validateNewShop  = $("form#createShop")
     .validate(
             {
@@ -846,6 +850,12 @@ function validateFormAddNewShop(){
                     },
                     customtextposition : {
                         regex : /^([1-9]|10)$/
+                    },
+                    howToPageSlug :{
+                        required : true,
+                        slugRegex  : function(element) {
+                            return $('#howTouseStatus').val() == 1;
+                        }
                     }
                 },
                 // error messages
@@ -853,6 +863,9 @@ function validateFormAddNewShop(){
                     shopName : {
                         required : __("Please enter shop name")
                     },  
+                    howToPageSlug : {
+                        required : __("Please enter how to slug name")
+                    },
                     shopNavUrl : {
                         required  : __("Please enter navigational Url"),
                         remote : __("Permalink already exists")
