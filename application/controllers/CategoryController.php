@@ -35,7 +35,6 @@ class CategoryController extends Zend_Controller_Action
                     'function' => '\KC\Repository\Category::getCategoryDetails', 'parameters' => array($categoryPermalink)
                 )
             );
-
         if (count($categoryDetails) > 0) {
             $categoryVoucherCodes = \FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
