@@ -5,9 +5,6 @@ $(document).ready(function() {
         showCodeInformation(getQueryStringParams("popup"));
        }
     }
-    if ($('#userGenerated').val() == 1) {
-       showTermAndConditions($('#userGenerated').attr('alt'));
-    }
     $('a.btn-top').hide();
     var offersSectionArticlesCount = $('#content section.section:eq(0) article').length;
     if (offersSectionArticlesCount >= 5) {
