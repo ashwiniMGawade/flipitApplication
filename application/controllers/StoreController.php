@@ -64,10 +64,13 @@ class StoreController extends Zend_Controller_Action
                     $this->_redirect(HTTP_PATH_LOCALE. $shopInfo[0]['permaLink']);
                 }
             }
-            $referer = $_SERVER['HTTP_REFERER'];
+
+            $referer = $this->getRequest();
+            $referer = $referer->getHeader('referer');
+
             if ($referer == '') {
-                $this->_redirect(HTTP_PATH_LOCALE. $shopInfo[0]['permaLink']);
-                exit();
+                //$this->_redirect(HTTP_PATH_LOCALE. $shopInfo[0]['permaLink']);
+                //exit();
             }
         }
 
