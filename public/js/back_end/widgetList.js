@@ -166,7 +166,7 @@ function getWidgetList(iSearchText,iStart,iSortCol,iSortDir){
 	               {
 					"fnRender" : function(obj) {
 						var tag = "";
-						tag ="<p editId='' class='editId word-wrap-without-margin-widget'>" + ucfirst(obj.aData.title)+ "</p>";
+						tag ="<p editId='" + obj.aData.id + "' class='editId word-wrap-without-margin-widget'>" + ucfirst(obj.aData.title)+ "</p>";
 						return tag;
 						 
 					},
@@ -219,20 +219,20 @@ function getWidgetList(iSearchText,iStart,iSortCol,iSortDir){
 						state[ 'iSortDir' ] = obj.aaSorting[0][1] ;
 						state[ 'iSearchText' ] = iSearchText;
 						
-						$("#widgetListdiv").find('tr').find('td:lt(2)').click(function (e) {
+						$("#widgetListtable").find('tr').find('td:lt(2)').click(function (e) {
 							
 							var el = e.target  ? e.target :  e.srcElement ;
 							
 							if(el.tagName != "BUTTON")
 							{
-								var eId = $(this).parent('tr').find('p,a').attr('editid');
+								var eId = $(this).parent('tr').find('p, a').attr('editid');
 								$('p', $(this) )
 								state[ 'eId' ] = eId ;
 								$.bbq.pushState( state );
 								click = true;
-								//window.location.href = HOST_PATH + "admin/widget/editwidget/id/" + eId+ "?iStart="+
-								//obj._iDisplayStart+"&iSortCol="+obj.aaSorting[0][0]+"&iSortDir="+
-								//obj.aaSorting[0][1]+"&iSearchText="+iSearchText+"&eId="+eId
+								window.location.href = HOST_PATH + "admin/widget/editwidget/id/" + eId+ "?iStart="+
+								obj._iDisplayStart+"&iSortCol="+obj.aaSorting[0][0]+"&iSortDir="+
+								obj.aaSorting[0][1]+"&iSearchText="+iSearchText+"&eId="+eId
 							}
 						});
 						
