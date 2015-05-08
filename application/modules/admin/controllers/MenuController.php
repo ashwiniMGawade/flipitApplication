@@ -11,14 +11,14 @@ class Admin_MenuController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $params = $this->_getAllParams();
-        if (!Auth_StaffAdapter::hasIdentity()) {
+        if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()
                 ->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
@@ -26,11 +26,12 @@ class Admin_MenuController extends Zend_Controller_Action
 
         # redirect of a user don't have any permission for this controller
         $sessionNamespace = new Zend_Session_Namespace();
-        if($sessionNamespace->settings['rights']['content']['rights'] != '1' && $sessionNamespace->settings['rights']['content']['rights'] != '2' ) {
-          $this->_redirect('/admin/auth/index');
+        if (
+            $sessionNamespace->settings['rights']['content']['rights'] != '1'
+            && $sessionNamespace->settings['rights']['content']['rights'] != '2'
+        ) {
+            $this->_redirect('/admin/auth/index');
         }
-
-
     }
     public function init()
     {
@@ -41,247 +42,262 @@ class Admin_MenuController extends Zend_Controller_Action
     {
 
     }
-/**
- * save menu data in database to create menu.
- * @author mkaur
- */
+    /**
+     * save menu data in database to create menu.
+     * @author mkaur
+     */
     public function addmenuAction()
     {
         $params = $this->_getAllParams();
         if ($params['hid']=='') {
-            $menu = menu::insertOne($params);
+            $menu = \KC\Repository\Menu::insertOne($params);
             echo Zend_Json::encode($menu);
-        } else{
-            $menu = menu::insertNode($params);
+        } else {
+            $menu = \KC\Repository\Menu::insertNode($params);
             echo Zend_Json::encode($menu);
         }
         die();
 
     }
+    
   /**
    * fetches list of records for left pannel
    * @author mkaur
    */
     public function listmenuAction()
     {
-        $menu = menu::getmenuList();
+        $menu = \KC\Repository\Menu::getmenuList();
         echo Zend_Json::encode($menu);
         die();
-     }
-/**
- * Fetches one row record for model popup
- * @author mkaur
- */
+    }
+
+    /**
+     * Fetches one row record for model popup
+     * @author mkaur
+     */
     public function getrecordAction()
     {
         $params = $this->getRequest()->getParam('id');
-        $menu = menu::getmenuRecord($params);
+        $menu = \KC\Repository\Menu::getmenuRecord($params);
         echo Zend_Json::encode($menu);
         die();
     }
-/**
- * update menu records.
- * @author mkaur
- */
-  public function editmenuAction()
-  {
+
+    /**
+     * update menu records.
+     * @author mkaur
+     */
+    public function editmenuAction()
+    {
         $params = $this->_getAllParams();
-        $menu = menu::editmenuRecord($params);
+        $menu = \KC\Repository\Menu::editmenuRecord($params);
         echo Zend_Json::encode($menu);
         die();
-        }
-/**
- * get right menu records
- * @author mkaur
- */
-   public function getrightmenuAction()
-   {
+    }
+
+    /**
+    * get right menu records
+    * @author mkaur
+    */
+    public function getrightmenuAction()
+    {
         $params = $this->getRequest()->getParam('id');
-        $menu = menu::getrtmenuRecord($params);
+        $menu = \KC\Repository\Menu::getrtmenuRecord($params);
         echo Zend_Json::encode($menu);
         die();
     }
-/**
- * get position min position in the database
- * @author mkaur
- */
-   public function getidAction()
-   {
-    $menu = menu::gethighposition();
-    echo Zend_Json::encode($menu);
-    die();
-   }
-/**
- * uploads image by creating thumb.
- * @author mkaur
- */
-   public function uploadimageAction()
-   {
 
-    $params = $this->_getAllParams();
-    $uploadPath = "images/upload/menu/";
-
-    $adapter = new Zend_File_Transfer_Adapter_Http();
-    $user_path = ROOT_PATH . $uploadPath;
-    if(!file_exists($user_path))
-        mkdir($user_path, 776, True);
-
-    $adapter->setDestination(ROOT_PATH . $uploadPath);
-    $adapter->addValidator('Extension', false, 'jpg,jpeg,png,gif');
-    $files = $adapter->getFileInfo();
-    foreach ($files as $file => $info) {
-
-        $name = $adapter->getFileName($file, false);
-        $name = $adapter->getFileName($file);
-        $orgName = time() . "_" . $info['name'];
-        $fname = $user_path . $orgName;
-
-        //call function resize image
-        $path = ROOT_PATH . $uploadPath . "thum_" . $orgName;
-        BackEnd_Helper_viewHelper::resizeImage($_FILES["files"], $orgName,
-                35,35, $path);
-
-        $adapter->addFilter(
-                new Zend_Filter_File_Rename(
-                        array('target' => $fname,
-                                'overwrite' => true)), null, $file);
-
-        $adapter->receive($file);
-        $status = "";
-        $data = "";
-        $msg = "";
-        if ($adapter->isValid($file) == 1) {
-            $data = $orgName;
-            $status = "200";
-            $statusMessage = "File uploaded successfully.";
-
-        } else {
-
-            $status = "-1";
-            $msg = "Please upload the valid file";
-
-        }
-        echo Zend_Json::encode(
-                array("fileName" => $data, "sttaus" => $status,
-                        "msg" => $msg, "displayFileName" => $info['name'],
-                        "path" => "$uploadPath"));
-
-
+    /**
+    * get position min position in the database
+    * @author mkaur
+    */
+    public function getidAction()
+    {
+        $menu = \KC\Repository\Menu::gethighposition();
+        echo Zend_Json::encode($menu);
+        die();
     }
-    die();
-   }
 
-   public function mainmenuAction()
-   {
-   //	$mainmenu = mainmenu::insertOne();
-   }
-   /**
+    /**
+    * uploads image by creating thumb.
+    * @author mkaur
+    */
+    public function uploadimageAction()
+    {
+
+        $params = $this->_getAllParams();
+        $uploadPath = "images/upload/menu/";
+
+        $adapter = new \Zend_File_Transfer_Adapter_Http();
+        $user_path = ROOT_PATH . $uploadPath;
+        if (!file_exists($user_path)) {
+            mkdir($user_path, 776, true);
+        }
+
+        $adapter->setDestination(ROOT_PATH . $uploadPath);
+        $adapter->addValidator('Extension', false, 'jpg,jpeg,png,gif');
+        $files = $adapter->getFileInfo();
+        foreach ($files as $file => $info) {
+            $name = $adapter->getFileName($file, false);
+            $name = $adapter->getFileName($file);
+            $orgName = time() . "_" . $info['name'];
+            $fname = $user_path . $orgName;
+
+            //call function resize image
+            $path = ROOT_PATH . $uploadPath . "thum_" . $orgName;
+            \BackEnd_Helper_viewHelper::resizeImage(
+                $_FILES["files"],
+                $orgName,
+                35,
+                35,
+                $path
+            );
+
+            $adapter->addFilter(
+                new \Zend_Filter_File_Rename(
+                    array('target' => $fname,
+                    'overwrite' => true)
+                ),
+                null,
+                $file
+            );
+
+            $adapter->receive($file);
+            $status = "";
+            $data = "";
+            $msg = "";
+            if ($adapter->isValid($file) == 1) {
+                $data = $orgName;
+                $status = "200";
+                $statusMessage = "File uploaded successfully.";
+
+            } else {
+
+                $status = "-1";
+                $msg = "Please upload the valid file";
+
+            }
+            echo Zend_Json::encode(
+                array(
+                    "fileName" => $data,
+                    "sttaus" => $status,
+                    "msg" => $msg,
+                    "displayFileName" => $info['name'],
+                    "path" => "$uploadPath"
+                )
+            );
+        }
+        die();
+    }
+
+    public function mainmenuAction()
+    {
+        // $mainmenu = mainmenu::insertOne();
+    }
+    
+    /**
     * Save mainmenu data in database to create menu.
     * @author mkaur
     */
-   public function addmainmenuAction()
-   {
+    public function addmainmenuAction()
+    {
         $params = $this->_getAllParams();
-    //print_r($params);die;
-    if ($params['hid']=='') {
-        $mainmenu = mainmenu::insertOne($params);
-        echo Zend_Json::encode($mainmenu);
-    } else{
-        $mainmenu = mainmenu::insertNode($params);
-        echo Zend_Json::encode($mainmenu);
+        //print_r($params);die;
+        if ($params['hid']=='') {
+            $mainmenu = \KC\Repository\mainmenu::insertOne($params);
+            echo Zend_Json::encode($mainmenu);
+        } else {
+            $mainmenu = \KC\Repository\mainmenu::insertNode($params);
+            echo Zend_Json::encode($mainmenu);
+        }
+        die();
     }
-    die();
-   }
-   /**
+
+    /**
     * fetches list of records for left pannel
     * @author mkaur
     */
-   public function listmainmenuAction()
-   {
-    $mainmenu = mainmenu::getmenuList();
-    //print_r($menu);die;
-    echo Zend_Json::encode($mainmenu);
-    die();
-   }
-   /**
+    public function listmainmenuAction()
+    {
+        $mainmenu = \KC\Repository\mainmenu::getmenuList();
+        //print_r($menu);die;
+        echo Zend_Json::encode($mainmenu);
+        die();
+    }
+    /**
     * Fetches one row record for model popup
     * @author mkaur
     */
-   public function getmainrecordAction()
-   {
-    $params = $this->getRequest()->getParam('id');
-    $mainmenu = mainmenu::getmenuRecord($params);
-//echo "<pre>";
-  // 	print_r($mainmenu);die;
-    echo Zend_Json::encode($mainmenu);
-    die();
-   }
-   /**
+    public function getmainrecordAction()
+    {
+        $params = $this->getRequest()->getParam('id');
+        $mainmenu = \KC\Repository\mainmenu::getmenuRecord($params);
+        //echo "<pre>";
+        //  print_r($mainmenu);die;
+        echo Zend_Json::encode($mainmenu);
+        die();
+    }
+    /**
     * edit Mainmenu records in the database
     * @author mkaur
     */
-   public function editmainmenuAction()
-   {
-    $params = $this->_getAllParams();
+    public function editmainmenuAction()
+    {
+        $params = $this->_getAllParams();
 
-   //	print_r($params);die;
-    $mainmenu = mainmenu::editmenuRecord($params);
-    echo Zend_Json::encode($mainmenu);
-    die();
-   }
+        // print_r($params);die;
+        $mainmenu = \KC\Repository\mainmenu::editmenuRecord($params);
+        echo Zend_Json::encode($mainmenu);
+        die();
+    }
 
-  public function getrtmainmenuAction()
-  {
+    public function getrtmainmenuAction()
+    {
         $params = $this->getRequest()->getParam('id');
-        $menu = mainmenu::getrtmainmenuRecord($params);
+        $menu = \KC\Repository\mainmenu::getrtmainmenuRecord($params);
         //$menu = mainmenu::getSecondLevel($params);
         //print_r($menu);die;
-
-
         echo Zend_Json::encode($menu);
         die();
     }
-   public function getmainidAction()
-   {
-    $menu = mainmenu::getmainhighposition();
-    echo Zend_Json::encode($menu);
-    die();
-
-   }
-   public function getthirdlevelAction()
-   {
-    $params = $this->getRequest()->getParam('id');
-    //$menu = mainmenu::getrtmainmenuRecord($params);
-    $menu = mainmenu::getThirdLevel($params);
-    //print_r($menu);die;
+    public function getmainidAction()
+    {
+        $menu = \KC\Repository\mainmenu::getmainhighposition();
         echo Zend_Json::encode($menu);
-    die();
-   }
+        die();
 
-   /**
+    }
+    public function getthirdlevelAction()
+    {
+        $params = $this->getRequest()->getParam('id');
+        //$menu = mainmenu::getrtmainmenuRecord($params);
+        $menu = \KC\Repository\mainmenu::getThirdLevel($params);
+        //print_r($menu);die;
+          echo Zend_Json::encode($menu);
+        die();
+    }
+
+    /**
     * Delete menu from database
     * @author mkaur
     */
-   public function deletemenuAction()
-   {
-    $params = $this->_getAllParams();
-    $menu = menu::deleteMenuRecord($params);
-    echo Zend_Json::encode($menu);
-    die();
-   }
+    public function deletemenuAction()
+    {
+        $params = $this->_getAllParams();
+        $menu = \KC\Repository\menu::deleteMenuRecord($params);
+        echo Zend_Json::encode($menu);
+        die();
+    }
 
-   /**
+    /**
     * Delete Mainmenu from database
     * @author mkaur
     */
-   public function deletemainmenuAction()
-   {
-    $params = $this->_getAllParams();
-    $menu = mainmenu::deleteMenuRecord($params);
-    echo Zend_Json::encode($menu);
-    die();
-   }
-
-
-
+    public function deletemainmenuAction()
+    {
+        $params = $this->_getAllParams();
+        $menu = \KC\Repository\mainmenu::deleteMenuRecord($params);
+        echo Zend_Json::encode($menu);
+        die();
+    }
  }

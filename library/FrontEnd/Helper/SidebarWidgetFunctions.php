@@ -4,7 +4,7 @@ class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
     public function sidebarChainWidget($id, $shopName = false, $chainItemId = false)
     {
         if ($shopName) {
-            $chain = Chain::returnChainData($chainItemId, $id);
+            $chain = KC\Repository\Chain::returnChainData($chainItemId, $id);
             if (! $chain) {
                 return false;
             }
@@ -51,7 +51,7 @@ EOD;
     
     public function popularCategoryWidget()
     {
-        $allCategories = Category::getAllCategories();
+        $allCategories = FrontEnd_Helper_viewHelper::getCategories(KC\Repository\Category::getAllCategories());
         $allCategories = array_slice($allCategories, 0, 10, true);
         $categoriesSidebarWidget =
         '<div class="block">
@@ -75,17 +75,19 @@ EOD;
 
     public function getSidebarWidget($array = array(), $page = '')
     {
-        $pageWidgets = Doctrine_Query::create()
-            ->select('p.id,p.slug,w.*,refpage.position')->from('Page p')
-            ->leftJoin('p.widget w')
-            ->leftJoin('w.refPageWidget refpage')
-            ->where("p.permalink="."'$page'")
-            ->andWhere('w.status=1')
-            ->andWhere('w.deleted=0')
-            ->fetchArray();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('p, w, refpage')
+            ->from('KC\Entity\Page', 'p')
+            ->leftJoin('p.pagewidget', 'w')
+            ->leftJoin('w.widget', 'refpage')
+            ->where("p.permalink=".$queryBuilder->expr()->literal("$page"))
+            ->andWhere('w.stauts = 1')
+            ->andWhere('p.deleted = 0');
+        $pageWidgets = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $sidebarWidgets = '';
         if (count($pageWidgets) > 0) {
-            for ($i=0; $i<count($pageWidgets[0]['widget']); $i++) {
+            for ($i=0; $i<count($pageWidgets[0]['pagewidget']); $i++) {
             }
         }
         return $sidebarWidgets;
@@ -96,7 +98,7 @@ EOD;
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'shop_popularShopForWidget_list',
             array(
-                'function' => 'Shop::getAllPopularStoresForSidebarWidget',
+                'function' => '\KC\Repository\Shop::getAllPopularStoresForSidebarWidget',
                 'parameters' => array(20)
             )
         );
@@ -110,20 +112,20 @@ EOD;
             if ($i%2==0) {
                 $class = 'class="none"';
             }
-            if ($popularStores[$i]['shop']['deepLink']!=null) {
-                $popularStoreUrl = $popularStores[$i]['shop']['deepLink'];
-            } elseif ($popularStores[$i]['shop']['refUrl']!=null) {
-                $popularStoreUrl = $popularStores[$i]['shop']['refUrl'];
-            } elseif ($popularStores[$i]['shop']['actualUrl']) {
-                $popularStoreUrl = $popularStores[$i]['shop']['actualUrl'];
+            if ($popularStores[$i]['deepLink']!=null) {
+                $popularStoreUrl = $popularStores[$i]['deepLink'];
+            } elseif ($popularStores[$i]['refUrl']!=null) {
+                $popularStoreUrl = $popularStores[$i]['refUrl'];
+            } elseif ($popularStores[$i]['actualUrl']) {
+                $popularStoreUrl = $popularStores[$i]['actualUrl'];
             } else {
-                $popularStoreUrl = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
+                $popularStoreUrl = HTTP_PATH_LOCALE .$popularStores[$i]['permaLink'];
             }
-            $popularStoreUrl = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
+            $popularStoreUrl = HTTP_PATH_LOCALE .$popularStores[$i]['permaLink'];
             $popularStoresContent .=
                 '<li '.$class.'>
-                    <a title='.$popularStores[$i]['shop']['name'].' 
-                    href='.$popularStoreUrl.'>'.ucfirst(self::substring($popularStores[$i]['shop']['name'], 200))
+                    <a title='.$popularStores[$i]['name'].' 
+                    href='.$popularStoreUrl.'>'.ucfirst(self::substring($popularStores[$i]['name'], 200))
                     .'</a>
                 </li>';
         }
@@ -134,7 +136,7 @@ EOD;
     public static function getShopsByFallback($storeIds)
     {
         foreach ($storeIds as $storeId) {
-            $storeExists = Shop::getShopData($storeId);
+            $storeExists =  \KC\Repository\Shop::getShopData($storeId);
             if ($storeExists) {
                 $cacheStatus = true;
             } else {
@@ -147,7 +149,7 @@ EOD;
 
     public function shopsAlsoViewedWidget($shopId, $shopName)
     {
-        $shopsAlsoViewed = Shop::getShopsAlsoViewed($shopId);
+        $shopsAlsoViewed =  \KC\Repository\Shop::getShopsAlsoViewed($shopId);
         if ($shopsAlsoViewed[0]['shopsViewedIds'] != '') {
             $similarStoresViewedContent = self::getSimilarStoresViewedDivContent($shopName);
             $storeIds = explode(',', $shopsAlsoViewed[0]['shopsViewedIds']);
@@ -157,7 +159,7 @@ EOD;
                     $similarStoresViewedContent .= self::addLiOfSimilarStoresViewedContent($storeId);
                 }
             } else {
-                $topFiveSimilarShopsViewed = Shop::getSimilarShopsForAlsoViewedWidget($shopId, 5);
+                $topFiveSimilarShopsViewed =  \KC\Repository\Shop::getSimilarShopsForAlsoViewedWidget($shopId, 5);
                 foreach ($topFiveSimilarShopsViewed as $similarShopId) {
                     $similarStoresViewedContent .= self::addLiOfSimilarStoresViewedContent($similarShopId);
                 }
@@ -171,7 +173,7 @@ EOD;
 
     public static function addLiOfSimilarStoresViewedContent($shopId)
     {
-        $storeDetails = Shop::getShopInformation($shopId);
+        $storeDetails = \KC\Repository\Shop::getShopInformation($shopId);
         $similarStoresViewedContent =
             '<li>
                 <a title='.$storeDetails[0]['name'].' 

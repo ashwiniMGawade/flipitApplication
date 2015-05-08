@@ -11,15 +11,21 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-timepicker.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
 $this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/date.js");
-
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/widget-location.js");
 $publishDate = date('d-m-Y');
 $publishHHM = date('H').':'.date('i');
 
+$publishDateOrginal = $this->pageDetail['publishDate'];
+$publishDateOrginal =  $publishDateOrginal->format('Y-m-d H:i:00');
+
  $currentTime = strtotime(date('d-m-Y H:i:00')); 
- $publishTime = strtotime($this->pageDetail['publishDate']); 
-  if(isset($this->pageDetail['publishDate']) && $this->pageDetail['publishDate']!='0000-00-00 00:00:00'){
-        $publishDateTime = explode(' ',$this->pageDetail['publishDate']);
-        $publishDate = date('d-m-Y',strtotime($publishDateTime[0])) ;
+ $publishTime = strtotime($publishDateOrginal); 
+
+
+
+  if(isset($this->pageDetail['publishDate']) && $publishDateOrginal!='0000-00-00 00:00:00'){
+        $publishDateTime = explode(' ', $publishDateOrginal);
+        $publishDate = date('d-m-Y',strtotime($publishDateTime[0]));
         $publishHHM =  explode(':',$publishDateTime[1]);
         $publishHHM = $publishHHM[0].':'.$publishHHM[1];
    }
@@ -53,7 +59,19 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 <div class="wrap columns-2">
         
         
-          <h1><?php  echo $this->translate('Edit Page'); ?><button type = "button" onClick="window.location.href='<?php echo HTTP_PATH;?>admin/page<?php echo '#'.$this->qstring; ?>'" class="btn ml10" ><?php echo $this->translate('Cancel'); ?></button><button type="button" class="btn btn-primary ml10" id='prefillData'><?php echo $this->translate('Pre-fill'); ?></button></h1>
+          <h1>
+              <?php  echo $this->translate('Edit Page'); ?>
+              <button type = "button" 
+                  onClick="window.location.href='<?php echo HTTP_PATH;?>admin/page<?php echo '#'.$this->qstring; ?>'" 
+                  class="btn ml10" ><?php echo $this->translate('Cancel'); ?>
+              </button>
+              <button type="button" class="btn btn-primary ml10" id='prefillData'>
+                  <?php echo $this->translate('Pre-fill'); ?>
+              </button>
+              <button type = "button" onclick="showLightBoxForWidgetLocation()" class="btn ml10">
+                  <?php echo $this->translate('backend_Set widget location'); ?>
+              </button>
+          </h1>
             <div class="btn-group mb20" data-toggle="buttons-checkbox">
                 
                 <button class="btn <?php if($this->pageDetail['pageType']=='default'){?>btn-primary <?php }?>" id="defaultPagebtn" onClick="selectPagetype('defaultPagebtn')"><?php echo $this->translate('Default Page'); ?></button>                     
@@ -79,7 +97,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                         <?php echo $this->translate('Status:'); ?> <strong><?php echo $status; ?></strong>
                     </div>
                    <div class="sidebar-content-box">
-                        <?php echo $publishText; ?> <?php echo date('d-m-Y H:i',strtotime($this->pageDetail['publishDate'])); ?> <strong><a href="javascript:;" onClick="showPublishDate()" id="editpublishLink"><?php echo $this->translate('Edit'); ?></a></strong>
+                        <?php echo $publishText; ?> <?php echo $publishDateOrginal; ?> <strong><a href="javascript:;" onClick="showPublishDate()" id="editpublishLink"><?php echo $this->translate('Edit'); ?></a></strong>
                      <span id="publishlater" class="display-none">
                       <input type="text" style="width:110px;margin-top:3px;" value="<?php echo $publishDate;?>" placeholder="Publish Date" id="publishDate" name="publishDate" class="span3">
                       <input type="text" style="width:48px;margin-top:3px;" value = "<?php echo $publishHHM; ?>" placeholder="HH" id="publishTimehh" name="publishTimehh" class="span3">
@@ -108,12 +126,12 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             <option value=""><?php echo $this->translate('Select Template'); ?></option>
                             <?php
                             $display = 'block;';
-                            foreach($this->pageattr as $pageattr){ 
+                            foreach($this->pageAttributes as $pageattr){ 
                             if($this->pageDetail['pageType']=='offer' && $pageattr['id']>3) {
                                  $display = 'none;';
                             }
                             ?>
-                             <option value="<?php echo $pageattr['id'];?>" style="display:<?php echo $display;?>" <?php if($this->pageDetail['pageAttributeId']==$pageattr['id']){?>selected="selected" <?php }?>><?php echo $pageattr['name'];?></option>  
+                             <option value="<?php echo $pageattr['id'];?>" style="display:<?php echo $display;?>" <?php if($this->pageDetail['page']['id']==$pageattr['id']){?>selected="selected" <?php }?>><?php echo $pageattr['name'];?></option>  
                         <?php    
                             } 
 
@@ -217,7 +235,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             <?php 
                             $i=0;
                            
-                            foreach($this->pageDetail['widget'] as $widgetList){
+                            foreach($this->widgetList as $widgetList){
                             $widgetArry[]=$widgetList['id'];
                             $class = 'grid-line1';
                             if($i%2 != 0){
@@ -277,7 +295,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                         </div>
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Permalink'); ?></strong></label></div>
-                            <div class="mainpage-content-right"><div class="mainpage-content-right-inner-left"><label><?php echo $this->translate('http://www.kortingscode.nl/'); ?></label></div><div class="mainpage-content-right-inner-right"><input <?php echo ($this->role == '3' || $this->role == '4') ? "disabled=disabled" : "" ;  ?> type="text" class="span3" value="<?php echo $this->pageDetail['permaLink']; ?>" name="pagepermalink" id="pagepermalink" placeholder="<?php echo $this->translate('permalink'); ?>"></div>
+                            <div class="mainpage-content-right"><div class="mainpage-content-right-inner-left"><label><?php echo $this->translate('http://www.kortingscode.nl/'); ?></label></div><div class="mainpage-content-right-inner-right"><input <?php echo ($this->role == '3' || $this->role == '4') ? "disabled=disabled" : "" ;  ?> type="text" class="span3" value="<?php echo $this->pageDetail['permalink']; ?>" name="pagepermalink" id="pagepermalink" placeholder="<?php echo $this->translate('permalink'); ?>"></div>
                             <?php if($this->role == '3' || $this->role == '4'){ ?>
                                 <input type="hidden" value="<?php echo $this->pageDetail['permaLink']?>" name="pagepermalink" id="pagepermalink">
                             <?php }?>   
@@ -292,7 +310,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             <div class="mainpage-content-right">
                                 <?php 
                                 $pageImage = '';
-                                if($this->pageDetail['logoId']) {
+                                if($this->pageDetail['logo']) {
                                     if(
                                         isset($this->pageDetail['logo']['name']) 
                                         && $this->pageDetail['logo']['name']!=''
@@ -337,20 +355,20 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             <div class="mainpage-content-right">
                                 <?php 
                                 $headerImage = '';
-                                if($this->pageDetail['pageheaderimage']) {
+                                if($this->pageDetail['pageHeaderImageId']) {
                                     if(
-                                        isset($this->pageDetail['pageheaderimage']['name']) 
-                                        && $this->pageDetail['pageheaderimage']['name']!=''
+                                        isset($this->pageDetail['pageHeaderImageId']['name']) 
+                                        && $this->pageDetail['pageHeaderImageId']['name']!=''
                                     ) {
-                                    $headerImage = PUBLIC_PATH_CDN.$this->pageDetail['pageheaderimage']['path']
-                                    .$this->pageDetail['pageheaderimage']['name'];
+                                    $headerImage = PUBLIC_PATH_CDN.$this->pageDetail['pageHeaderImageId']['path']
+                                    .$this->pageDetail['pageHeaderImageId']['name'];
                                 }
                                 ?>
                                 <div class='browse-container'>    
                                     <img class='image-container'  src="<?php echo $headerImage;?>"  
                                     alt="pageHeaderImage" align="top">
                                     <a  class="red" 
-                                    onclick="deleteImage(<?php echo $this->pageDetail['pageheaderimage']['id']; ?>,
+                                    onclick="deleteImage(<?php echo $this->pageDetail['pageHeaderImageId']['id']; ?>,
                                     <?php echo $this->pageDetail['id']; ?>)" 
                                     href="javascript:void(0);" id="deleteButton">
                                     <strong><?php echo $this->translate('DELETE');?></strong>
@@ -601,3 +619,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
             </form>  
               <br class="clear">
 </div>
+<?php 
+$pageId = !empty($this->pageDetail['id']) ? $this->pageDetail['id'] : '';
+echo $this->partial('widgetlocation/_widget-location.phtml', array('pageType' => 'page', 'relatedId' => $pageId));
+?>

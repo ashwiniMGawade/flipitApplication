@@ -20,14 +20,14 @@ class Varnish extends BaseVarnish
     }
 
     // add an url to the queue
-    public function addUrl($url)
+    public function addUrl($url, $refreshTime = '')
     {
         # add url if it is not queued
-        if(! self::checkQueuedUrl($url)) {
-
-            $v 			= new Varnish();
-            $v->url 	= rtrim($url, '/');
-            $v->status 	= 'queue';
+        if (!self::checkQueuedUrl($url, $refreshTime)) {
+            $v = new Varnish();
+            $v->url = rtrim($url, '/');
+            $v->status = 'queue';
+            $v->refresh_time = $refreshTime;
             $v->save();
             return $v->id;
         }
@@ -44,12 +44,14 @@ class Varnish extends BaseVarnish
     // process all the urls waiting to refresh
     public function processQueue()
     {
-        $queue = Doctrine_core::getTable('Varnish')->findBy('status','queue')->toArray();
+        $queue = Doctrine_core::getTable('Varnish')->findBy('status', 'queue')->toArray();
         if (!empty($queue)) {
             foreach ($queue as $page) {
                 sleep(1.5);
-                self::refreshVarnish($page['url']);
-                self::removeFromQueue($page['id']);
+                if (empty($page['refresh_time'])) {
+                    self::refreshVarnish($page['url']);
+                    self::removeFromQueue($page['id']);
+                }
             }
         }
     }
@@ -73,17 +75,20 @@ class Varnish extends BaseVarnish
     }
 
     // check a url is already in queue or not
-    public static function checkQueuedUrl($url)
+    public static function checkQueuedUrl($url, $refreshTime ='')
     {
+        $query = Doctrine_Query::create()->select('id')
+            ->from("Varnish")
+            ->where("url = ? ", rtrim($url, '/'))
+            ->andWhere("status = 'queue'");
 
+        if (!empty($refreshTime)) {
+            $query = $query->andWhere("refresh_time = '".$refreshTime."'");
+        }
 
-        return Doctrine_Query::create()->select('id')
-                        ->from("Varnish")
-                        ->where("url = ? " , rtrim($url, '/'))
-                        ->andWhere("status = 'queue'")
-                        ->limit(1)
-                        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
+        $query = $query->limit(1)
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return $query;
     }
 
     public static function getVarnishUrlsCount()
@@ -92,5 +97,27 @@ class Varnish extends BaseVarnish
             ->from("Varnish")
             ->fetchArray();
         return !empty($varnishUrlsCount) ? $varnishUrlsCount[0]['count'] : 0;
+    }
+
+    public static function getAllUrlsByRefreshTime()
+    {
+        $currentTime = FrontEnd_Helper_viewHelper::convertCurrentTimeToServerTime();
+        $refreshUrls = Doctrine_Query::create()
+            ->select('v.*')
+            ->from("Varnish v")
+            ->where('v.refresh_time <='."'".$currentTime."'")->fetchArray(null, Doctrine::HYDRATE_ARRAY);
+        return $refreshUrls;
+    }
+
+    public static function refreshVarnishUrlsByCron($refreshUrls)
+    {
+        $varnish = new Varnish();
+        foreach ($refreshUrls as $refreshUrl) {
+            sleep(1.5);
+            if (!empty($refreshUrl['id'])) {
+                $varnish->refreshVarnish($refreshUrl['url']);
+                $varnish->removeFromQueue($refreshUrl['id']);
+            }
+        }
     }
 }

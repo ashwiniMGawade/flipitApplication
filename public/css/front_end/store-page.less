@@ -1,4 +1,52 @@
 .page-store{
+    .btn-top {
+        background: url(../../images/btn-top.png);
+        .square(60px);
+        position: fixed;
+        bottom: 25px;
+        text-indent: -9999px;
+        outline: none !important;
+        z-index: 9999;
+        right: 40px;
+        @media only screen and (max-width: 1400px) {
+            right: 10px;
+        }
+        @media only screen and (max-width: 767px) {
+            margin: 0;
+            .square(40px);
+            
+            background-position: -10px -10px;
+        }
+        &:hover,
+        &:focus {
+            background-position: 100% 100%;
+            @media only screen and (max-width: 767px) {
+                background-position: -10px -84px;
+            }
+        }
+    }
+    .info-note {
+        overflow: hidden;
+        border: 1px dashed #bedef4;
+        background: #fef6ec;
+        color: #33383e;
+        margin: 0 0 22px;
+        font-size: 13px;
+        line-height: 16px;
+        padding: 24px 39px 26px;
+        @media only screen and (max-width: 979px) {
+            padding: 20px;
+        }
+        @media only screen and (max-width: 767px) {
+            padding: 15px;
+            font-size: 12px;
+            line-height: 15px;
+            margin: 0 0 15px;
+        }
+        p {
+            margin: 0;
+        }
+    }
     #sidebar .add-info{
         li{
             padding: 17px 0 15px 50px;

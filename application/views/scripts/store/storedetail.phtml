@@ -14,7 +14,10 @@ if(count($this->offers) > 0):
             'offersType'=>'simple',
             'shopName' => $this->currentStoreInformation[0]['name'],
             'shop' => $this->currentStoreInformation[0],
-            'zendForm'=>$this->form
+            'zendForm'=>$this->form,
+            'widgetPosition'=>$this->widgetPosition,
+            'showSignupOption'=>$this->currentStoreInformation[0]['showSignupOption'],
+            'shopPage'=>true
         )
     );
 endif;
@@ -114,6 +117,7 @@ $headerBlock = $frontShopHeaderHelper->getShopHeader(
     $message = 'storeDetail',
     $offerTitle = 'storeDetail'
 );
+
 $shopEditor = '';
 if($this->shopEditor != null):
     $shopEditor = $this->partial(
@@ -151,9 +155,10 @@ if (!empty($this->currentStoreInformation[0]['moretextforshop'])) {
 $activeOffersInShop = "";
 if (!empty($offersCount)) {
     if (isset($offersCount) && $offersCount > 1) {
-        $activeOffersInShop = $offersCount
+        $activeOffersInShop = '<li><span class="icon active-people"></span>
+            <span class="text">'.$offersCount
             .' '
-            .FrontEnd_Helper_viewHelper::__translate('current offers');
+            .FrontEnd_Helper_viewHelper::__translate('current offers').'</span></li>';
     }
 }
 
@@ -165,6 +170,20 @@ if (!empty($this->offersAddedInShop) && $this->offersAddedInShop['offersInfo'] !
         .$this->offersAddedInShop['offersInfo']['amountOffers']
         .' '
         .FrontEnd_Helper_viewHelper::__translate('offers have been added').'</span></li>';
+}
+
+$storeViewPartialPath = 'store/';
+$futureCodeMessage = '';
+if (isset($this->currentStoreInformation[0]['futurecode']) && $this->currentStoreInformation[0]['futurecode'] == 1) {
+    if (!empty($this->futureCodeCount)) {
+        $futureCodeMessage = $this->partial(
+            $storeViewPartialPath.'_futureCodeMessage.phtml',
+            array(
+                'futureCodeCount' => $this->futureCodeCount,
+                'shopName' => $this->currentStoreInformation[0]['name']
+            )
+        );
+    }
 }
 ?>
 <input type="hidden" name="currentShop" id="currentShop" 
@@ -179,8 +198,7 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
     <div class="items-holder">
         <ul class="items">
             <?php echo $offersAdded; ?>
-            <li><span class="icon active-people"></span>
-            <span class="text"><?php echo $activeOffersInShop; ?></span></li>
+            <?php echo $activeOffersInShop; ?>
         </ul>
     </div>
 </div>
@@ -190,6 +208,7 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
     <div id="content" class ="col-md-8 col-sm-8">
     <?php 
     echo $noMoneyNocodeMessage;
+    echo $futureCodeMessage;
     echo $offers;
     echo $sixShopReasons;
     echo $similarOffersHeader;

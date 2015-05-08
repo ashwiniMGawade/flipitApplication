@@ -40,12 +40,12 @@ class AdminSteps extends \FunctionalTester
             'editortext' => '',
             'popularKortingscode' => '0'
         );
-        $user = new \User();
-        $user->truncateTables();
-        $role = new \Role();
-        $role->addUserRoles();
-        $rights = new \Rights();
-        $rights->addRights();
-        $user->addUser($userParameters, 'test.png');
+        // $user = new \User();
+        // $user->truncateTables();
+        // $role = new \Role();
+        // $role->addUserRoles();
+        // $rights = new \Rights();
+        // $rights->addRights();
+        // $user->addUser($userParameters, 'test.png');
     }
 }

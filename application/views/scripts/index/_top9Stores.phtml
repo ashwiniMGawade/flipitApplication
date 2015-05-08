@@ -2,13 +2,14 @@
     <div class="container">
         <ul class="shops">
 <?php
-foreach ($this->top9Stores as $top9StoreIndex => $top9Store):
-    $storeImage = PUBLIC_PATH_CDN.ltrim($top9Store['imgpath'], "/") .'thum_medium_'. $top9Store['imgname'];
+foreach ($this->top9Stores as $top9Store):
+    $storeImage = PUBLIC_PATH_CDN.ltrim($top9Store['popularshops']['logo']['path'], "/") .'thum_medium_'
+    . $top9Store['popularshops']['logo']['name'];
 ?>
             <li>
-                <a href="<?php echo HTTP_PATH_LOCALE. $top9Store['shop']['permaLink'];?>">
+                <a href="<?php echo HTTP_PATH_LOCALE. $top9Store['popularshops']['permaLink'];?>">
                    <img src="<?php echo $storeImage;?>" width="100" height="50" 
-                   alt="<?php echo $top9Store['shop']['name'];?>" title="<?php echo $top9Store['shop']['name'];?>">
+                   alt="<?php echo $top9Store['popularshops']['name'];?>" title="<?php echo $top9Store['popularshops']['name'];?>">
                 </a>
             </li>
 <?php 

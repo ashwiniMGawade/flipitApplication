@@ -68,7 +68,7 @@ function init(){
 				{
 					  publicPath  = publicPath.replace('http://','http://www.')	;
 				}
-				var src = publicPath +'images/upload/media/thumb_L/'+json.fileUrl;
+				var src = publicPath +'images/upload/media/thumb_L/'+json.fileurl;
 			 
 				$('img#Image_'+id).attr("src",src);
 				$('input#name_'+id).val(json.name);
@@ -76,7 +76,7 @@ function init(){
 				$('input#caption_'+id).val(json.caption);
 				
 				
-				$('input#fileUrl_'+id).val(publicPath +'images/upload/media/'+json.fileUrl);
+				$('input#fileUrl_'+id).val(publicPath +'images/upload/media/'+json.fileurl);
 				$('#description_'+id).val(json.description);
 				$('#last').show();
 				removeOverLay();

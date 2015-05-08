@@ -9,11 +9,11 @@
     </div>
     <div class="text">
         <h2>
-        <?php 
-        echo $this->expiredOffer['shop']['name']
+        <?php
+        echo $this->expiredOffer['shopOffers']['name']
              .  ' '. $this->translate('coupon code') 
              .' - '. $this->translate('Expired')
-             . ' ' . date('Y-M-d', strtotime($this->expiredOffer['endDate']));?></h2>
+             . ' ' . date('Y-M-d', strtotime($this->expiredOffer['endDate']['date']));?></h2>
         <span class="meta">
             <?php echo $this->translate('Code:'). ' ' ?>
             <strong><?php echo $this->expiredOffer['couponCode'];?></strong>

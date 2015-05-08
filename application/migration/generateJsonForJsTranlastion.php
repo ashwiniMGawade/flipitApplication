@@ -28,7 +28,7 @@ class CreateTranslationJSON
         defined('LIBRARY_PATH')
         || define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
 
-        defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
+        defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine1');
 
         // Define application environment
         defined('APPLICATION_ENV')
@@ -47,7 +47,7 @@ class CreateTranslationJSON
                         array(realpath(DOCTRINE_PATH), get_include_path(),)));
 
         /** Zend_Application */
-        require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper.php');
+        require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper-v1.php');
         require_once (LIBRARY_PATH . '/Zend/Application.php');
         require_once(DOCTRINE_PATH . '/Doctrine.php');
 
@@ -117,7 +117,13 @@ class CreateTranslationJSON
         }
 
         $out = @array_combine($keys[1], $str);
-        $json = preg_replace("/\\\\u([a-f0-9]{4})/e", "iconv('UCS-4LE','UTF-8',pack('V', hexdec('U$1')))", json_encode($out));
+        $json = preg_replace_callback(
+            "/\\\\u([a-f0-9]{4})/",
+            function ($matches) {
+                return iconv('UCS-4LE', 'UTF-8', pack('V', hexdec('U'.$matches[1])));
+            },
+            json_encode($out)
+        );
         $translations = " var json = " . $json . " ;  var jsonData = {};  jsonData['frontend_js'] =json;  var gt = new Gettext({ 'domain' : 'frontend_js' , 'locale_data' : jsonData });";
 
 
@@ -133,8 +139,8 @@ class CreateTranslationJSON
         fclose($jsonHandle);
 
 
-        echo "\n";
-        print "$locale - JSON file for shops has been created successfully!!!";
+        // echo "\n";
+        // print "$locale - JSON file for shops has been created successfully!!!";
 
     }
 

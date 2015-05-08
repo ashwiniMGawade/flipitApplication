@@ -3,7 +3,7 @@
 	<form method="post" class="websites-access-list" action="<?php echo HTTP_PATH. "admin" ?>">
 		<?php
 		$sessionNamespace = new Zend_Session_Namespace();
-		$lastLogin = date('H:i M dS Y',strtotime(Zend_Auth::getInstance()->getIdentity()->lastLogIn));
+		$lastLogin = Zend_Auth::getInstance()->getIdentity()->lastLogIn->format('H:i M dS Y');
 		?>
 	   <select class="fl-ie" onchange="localeSettingCMS(this);">
 	     <?php 
@@ -32,7 +32,9 @@
     <a href='<?php echo $varnishSetPassCacheUrl; ?>' style="margin-left:10px;color:white;"><?php echo $varnishCacheOnOff ;?></a>
     <span class="varnish-count"><?php
     echo $this->translate('Varnish urls count:').' '.BackEnd_Helper_viewHelper::getVarnishUrlsCount();?></span>
-    <p class="toplinks-outer" style="width:480px;"><span class="text"><?php echo $this->translate('Welcome');?>,</span> <a class="userFirstName" href="<?php echo HTTP_PATH;?>admin/user/profile"><?php 
+    <p class="toplinks-outer" style="width:480px;"><span class="text"><?php echo $this->translate('Welcome');?>,</span>
+    <a class="userFirstName" href="<?php echo HTTP_PATH;?>admin/user/profile">
+    <?php 
 		$firstName =  Zend_Auth::getInstance()->getIdentity()->firstName;
 					if( strlen( $firstName ) > 20 ) {
             			$cut_text = substr( $firstName , 0, 10 ); //cut at 17 chars

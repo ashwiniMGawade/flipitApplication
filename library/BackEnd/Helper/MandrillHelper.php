@@ -3,9 +3,9 @@ class BackEnd_Helper_MandrillHelper
 {
     public static function getHeaderFooterContent($currentObject)
     {
-        $emailHeaderFooterContent = Signupmaxaccount::getEmailHeaderFooter();
-        $currentObject->headerContent = $emailHeaderFooterContent['email_header'];
-        $currentObject->footerContent = $emailHeaderFooterContent['email_footer'];
+        $emailHeaderFooterContent = \KC\Repository\Signupmaxaccount::getEmailHeaderFooter();
+        $currentObject->headerContent = $emailHeaderFooterContent[0]['email_header'];
+        $currentObject->footerContent = $emailHeaderFooterContent[0]['email_footer'];
     }
 
     public static function getDirectLoginLinks($currentObject, $linkType = '', $visitorEmail = '', $mandrillKey = '')
@@ -59,7 +59,7 @@ class BackEnd_Helper_MandrillHelper
                 if (
                     $usersInformationFromMandrillValue['soft_bounces'] >= 6
                     || $usersInformationFromMandrillValue['hard_bounces'] >= 2) {
-                    $updateActive = Visitor::updateVisitorActiveStatus($usersInformationFromMandrillValue['address']);
+                    $updateActive = \KC\Repository\Visitor::updateVisitorActiveStatus($usersInformationFromMandrillValue['address']);
                 }
             }
 
@@ -104,7 +104,7 @@ class BackEnd_Helper_MandrillHelper
         $passwordKey,
         $currentObject
     ) {
-        $visitorDetails = Visitor::getVisitorDetailsByEmail($visitorEmail);
+        $visitorDetails = \KC\Repository\Visitor::getVisitorDetailsByEmail($visitorEmail);
         $key = 0;
         if (defined('HTTP_PATH_FRONTEND')) {
             $httpPathLocale = HTTP_PATH_FRONTEND;
@@ -119,7 +119,7 @@ class BackEnd_Helper_MandrillHelper
             .FrontEnd_Helper_viewHelper::__link("link_login")
             . "/" .FrontEnd_Helper_viewHelper::__link("link_directlogin")
             . "/"
-            .base64_encode($visitorDetails[0]['email']) ."/". $visitorDetails[0]['password'];
+            .base64_encode($visitorDetails['email']) ."/". $visitorDetails['password'];
         
         $visitorDirectLoginInformation[$key]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
         
@@ -127,21 +127,28 @@ class BackEnd_Helper_MandrillHelper
             $httpPathLocale
             . FrontEnd_Helper_viewHelper::__link("link_login")
             . "/" ."directloginunsubscribe"
-            . "/" . base64_encode($visitorEmail) ."/". $visitorDetails[0]['password'];
+            . "/" . base64_encode($visitorEmail) ."/". $visitorDetails['password'];
         $visitorInformation[$key]['email'] = $visitorEmail;
         
         $visitorInformation[$key]['name'] =
-            !empty($visitorDetails[0]['firstName']) ? $visitorDetails[0]['firstName']
-            . ' ' .$visitorDetails[0]['lastName'] : 'member';
+            !empty($visitorDetails['firstName']) ? $visitorDetails['firstName']
+            . ' ' .$visitorDetails['lastName'] : 'member';
        
         $currentObject->_loginLinkAndData = $visitorDirectLoginInformation;
         $currentObject->_to = $visitorInformation;
     }
 
-    public static function getOfferDates($currentOffer, $daysTillOfferExpires, $locale)
+    public static function getOfferDates($currentOffer, $daysTillOfferExpires, $locale, $type = '')
     {
-        $startDate = new Zend_Date(strtotime($currentOffer->startDate));
-        $endDate = new Zend_Date(strtotime($currentOffer->endDate));
+        if ($type == 'doc2') {
+            $startDateObject = (object) $currentOffer->startDate;
+            $endDateObject = (object) $currentOffer->endDate;
+            $startDate = new Zend_Date($startDateObject->format('Y-m-d h:i:s'));
+            $endDate = new Zend_Date($endDateObject->format('Y-m-d h:i:s'));
+        } else {
+            $startDate = new Zend_Date(strtotime($currentOffer->startDate));
+            $endDate = new Zend_Date(strtotime($currentOffer->endDate));
+        }
         $offerDates = '';
         $startDateFormat = $locale == 'us' ? Zend_Date::MONTH_NAME.' '.Zend_Date::DAY : Zend_Date::DAY.' '.Zend_Date::MONTH_NAME;
         $endDateFormat = $locale == 'us' ? Zend_Date::MONTH_NAME.' '.Zend_Date::DAY.', '.Zend_Date::YEAR: Zend_Date::DATE_LONG;

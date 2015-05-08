@@ -24,14 +24,14 @@ class Admin_ArticlecategoryController extends Zend_Controller_Action
     public function preDispatch()
     {
 
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $params = $this->_getAllParams();
         if (!Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
 
@@ -43,28 +43,28 @@ class Admin_ArticlecategoryController extends Zend_Controller_Action
 
     public function addcategoryAction()
     {
-        $category = new Category();
+        $category = new \KC\Repository\Category();
         $categoryList =  $category->getCategoryList() ;
         $this->view->categoryList = $categoryList['aaData'] ;
 
-        if($this->getRequest()->isPost()) {
-            $save = new Articlecategory();
+        if ($this->getRequest()->isPost()) {
+            $save = new KC\Repository\Articlecategory();
             $result = $save->addcategory($this->getRequest()->getParams());
             $flash = $this->_helper->getHelper('FlashMessenger');
 
-            if($result){
+            if ($result) {
 
                 self::updateVarnish($result);
 
                 $message = $this->view->translate('Article category has been created successfully');
                 $flash->addMessage(array('success' => $message));
-                $this->_helper->redirector(null , 'articlecategory' , null ) ;
+                $this->_helper->redirector(null, 'articlecategory', null);
 
-            }else{
+            } else {
 
                 $message = $this->view->translate('Error: Your file size exceeded 2MB');
                 $flash->addMessage(array('error' => $message));
-                $this->_helper->redirector(null , 'articlecategory' , null ) ;
+                $this->_helper->redirector(null, 'articlecategory', null);
             }
 
         }
@@ -73,21 +73,17 @@ class Admin_ArticlecategoryController extends Zend_Controller_Action
 
     public function getcategoriesAction()
     {
-        $getList = new Articlecategory();
+        $getList = new \KC\Repository\Articlecategory();
         $list = $getList->getCategoryList($this->getRequest()->getParams());
-
-
         echo Zend_Json::encode($list);
         die;
-
-
     }
 
     public function searchkeyAction()
     {
         $srh = $this->getRequest()->getParam('keyword');
         $flag = $this->getRequest()->getParam('flag');
-        $data =Articlecategory::searchKeyword($srh,$flag);
+        $data = KC\Repository\Articlecategory::searchKeyword($srh, $flag);
         $ar = array();
         if (sizeof($data) > 0) {
             foreach ($data as $d) {
@@ -107,37 +103,38 @@ class Admin_ArticlecategoryController extends Zend_Controller_Action
 
     public function editcategoryAction()
     {
-        $this->view->role = Zend_Auth::getInstance ()->getIdentity ()->roleId;
+        $this->view->role = Zend_Auth::getInstance()->getIdentity()->users->id;
         $this->view->qstring = $_SERVER['QUERY_STRING'];
-        $category = new Category();
+        $category = new \KC\Repository\Category();
         $categoryList =  $category->getCategoryList() ;
 
         $this->view->categoryList = $categoryList['aaData'] ;
 
-        $data = new Articlecategory();
+        $data = new \KC\Repository\Articlecategory();
 
         $id = $this->getRequest()->getParam('id');
-        $varnishUrls = Articlecategory::getAllUrls($id);
-        if($this->getRequest()->isPost()){
-            $result = $data->editCategory($this->getRequest()->getParams(),'post');
+        $varnishUrls = \KC\Repository\Articlecategory::getAllUrls($id);
+        if ($this->getRequest()->isPost()) {
+            $result = $data->editCategory($this->getRequest()->getParams(), 'post');
             $flash = $this->_helper->getHelper('FlashMessenger');
 
-            if($result){
+            if ($result) {
 
                 self::updateVarnish($id);
 
                 $message = $this->view->translate('Article category has been updated successfully');
                 $flash->addMessage(array('success' => $message));
 
-            }else{
+            } else {
                 $message = $this->view->translate('Error: Your file size exceeded 2MB');
                 $flash->addMessage(array('error' => $message));
 
             }
             $this->_redirect(HTTP_PATH.'admin/articlecategory#'.$this->getRequest()->getParam('qString'));
 
-        }else{
-            $this->view->data = $data->editCategory($this->getRequest()->getParams(),null);
+        } else {
+            $this->view->data = $data->editCategory($this->getRequest()->getParams(), null);
+
         }
     }
 
@@ -148,7 +145,7 @@ class Admin_ArticlecategoryController extends Zend_Controller_Action
         self::updateVarnish($id);
 
 
-        $deletePermanent = Articlecategory::permanentDeleteArticleCategory($id);
+        $deletePermanent = \KC\Repository\Articlecategory::permanentDeleteArticleCategory($id);
         $flash = $this->_helper->getHelper('FlashMessenger');
         if (intval($deletePermanent) > 0) {
 
@@ -174,7 +171,7 @@ class Admin_ArticlecategoryController extends Zend_Controller_Action
     public function exportarticlecategorylistAction()
     {
         // get all shop from database
-        $data = Articlecategory::exportarticlecategorylist();
+        $data = \KC\Repository\Articlecategory::exportarticlecategorylist();
 
         // create object of phpExcel
         $objPHPExcel = new PHPExcel();
@@ -267,7 +264,8 @@ class Admin_ArticlecategoryController extends Zend_Controller_Action
         // redirect output to client browser
         $fileName =  $this->view->translate('ArticleCategoryList.xlsx');
         header(
-                'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
         header('Content-Disposition: attachment;filename='.$fileName);
         header('Cache-Control: max-age=0');
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
@@ -282,61 +280,63 @@ class Admin_ArticlecategoryController extends Zend_Controller_Action
      * @version 1.0
      * @author chetan
      */
-public function validatepermalinkAction()
-{
-        $url = $this->getRequest ()->getParam ( "permaLink" );
-        $id =  $this->getRequest ()->getParam ( "id" );
-        $pattern = array ('/\s/','/[\,+@#$%^&*!]+/');
+    public function validatepermalinkAction()
+    {
+        $url = $this->getRequest()->getParam("permaLink");
+        $id =  $this->getRequest()->getParam("id");
+        $pattern = array('/\s/','/[\,+@#$%^&*!]+/');
 
-        $replace = array ("-","-");
-        $url = preg_replace ( $pattern, $replace, $url );
+        $replace = array("-","-");
+        $url = preg_replace($pattern, $replace, $url);
 
         $url = strtolower($url);
 
-        $rp = Doctrine_Query::create()->select()->from("RoutePermalink")->where("permalink = '".$url."'")->fetchArray();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('p')
+            ->from('\KC\Entity\RoutePermalink', 'p')
+            ->where('p.permalink ='.  $queryBuilder->expr()->literal($url));
+        $rp = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-        if($id != '') {
+        if ($id != '') {
             $exactLink = 'moneysavingguide/category/id/'.$id;
 
-            if(@$rp[0]['permalink'] == $url ) {
-                if( @$rp[0]['exactlink'] == $exactLink){
+            if (@$rp[0]['permalink'] == $url) {
+                if (@$rp[0]['exactlink'] == $exactLink) {
 
-                    $res = array( 	'status' => '200' ,
-                            'url' => substr($url,3) ,
-                            'permaLink' => $url ) ;
+                    $res = array(
+                        'status' => '200' ,
+                        'url' => substr($url, 3),
+                        'permaLink' => $url
+                    );
 
-                    echo Zend_Json::encode( $res ) ;
+                    echo Zend_Json::encode($res);
                     die ;
-                }else	{
+                } else {
 
-                    $res = false ;
-                    echo Zend_Json::encode( $res ) ;
-                    die ;
+                    $res = false;
+                    echo Zend_Json::encode($res);
+                    die;
                 }
             }
         }
 
 
-        if (strlen ( $url ) > 0) {
+        if (strlen($url) > 0) {
 
+            if (@$rp[0]['permalink'] != $url) {
 
-            if(@$rp[0]['permalink'] != $url ) {
-
-                $res = array ( 'status' => '200',
-                        'url' => substr($url,3),
+                $res = array('status' => '200',
+                        'url' => substr($url, 3),
                         'permaLink' =>
-                        $this->getRequest ()->getParam ( "permaLink" )
+                        $this->getRequest()->getParam("permaLink")
                 );
-            }else {
-
-            $res = false;
+            } else {
+                $res = false;
             }
         } else {
-
             $res = false;
         }
-        echo Zend_Json::encode ( $res );
-
+        echo Zend_Json::encode($res);
         die ();
     }
 
@@ -352,18 +352,16 @@ public function validatepermalinkAction()
     public function updateVarnish($id)
     {
         // Add urls to refresh in Varnish
-        $varnishObj = new Varnish();
+        $varnishObj = new \KC\Repository\Varnish();
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . strtolower('plus'));
         # get all the urls related to this Articlecategory
-        $varnishUrls = Articlecategory::getAllUrls($id);
+        $varnishUrls = \KC\Repository\Articlecategory::getAllUrls($id);
 
         # check $varnishUrls has atleast one
-        if(isset($varnishUrls) && count($varnishUrls) > 0) {
-            foreach($varnishUrls as $value) {
-                $varnishObj->addUrl( HTTP_PATH_FRONTEND  . $value);
+        if (isset($varnishUrls) && count($varnishUrls) > 0) {
+            foreach ($varnishUrls as $value) {
+                $varnishObj->addUrl(HTTP_PATH_FRONTEND  . $value);
             }
         }
     }
-
-
 }

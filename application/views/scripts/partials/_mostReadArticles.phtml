@@ -1,6 +1,3 @@
-<?php   
-$mostReadArticles = $this->mostReadArticles;
-?>
 <div class="slideshow-area">
     <div class="container">
         <div class="slideshow carousel slide" id="carousel-example-generic" data-ride="carousel">
@@ -8,20 +5,20 @@ $mostReadArticles = $this->mostReadArticles;
                 <?php 
                 $carouselCounter = 0;
                 $carouselIndicators = '';
-                foreach ($mostReadArticles as $mostReadArticle) {
+                foreach ($this->mostReadArticles as $mostReadArticle) {
                     if (
-                        !empty($mostReadArticle['articles']['articlefeaturedimage'])
+                        !empty($mostReadArticle['articles']['articleImage']['name'])
                         && $mostReadArticle['articles']['featuredImageStatus'] == 1
                     ) {
                         $mostReadArticleImage = 
-                            !empty($mostReadArticle['articles']['articlefeaturedimage'])
+                            !empty($mostReadArticle['articles']['articleImage']['name'])
                             ? PUBLIC_PATH_CDN
-                            .$mostReadArticle['articles']['articlefeaturedimage']['path'] 
-                            .$mostReadArticle['articles']['articlefeaturedimage']['name']
+                            .$mostReadArticle['articles']['articleImage']['path'] 
+                            .$mostReadArticle['articles']['articleImage']['name']
                             : '';
                     } else {
                         $mostReadArticleImage = 
-                            !empty($mostReadArticle['articles']['thumbnail'])
+                            !empty($mostReadArticle['articles']['thumbnail']['name'])
                             ? PUBLIC_PATH_CDN
                             .$mostReadArticle['articles']['thumbnail']['path'] 
                             .$mostReadArticle['articles']['thumbnail']['name']
@@ -31,8 +28,9 @@ $mostReadArticles = $this->mostReadArticles;
                     $mostReadArticleTitle = mb_strlen($mostReadArticle['articles']['title']) > 50 ? 
                                             mb_substr($mostReadArticle['articles']['title'], 0,50)
                                             .'..' : $mostReadArticle['articles']['title'];
-                    $articleUpdatedAtDate = new Zend_Date($mostReadArticle['articles']['created_at']);
-                    $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG); 
+                    $articleUpdatedAtDate = (object) $mostReadArticle['articles']['created_at'];
+                    $articleUpdatedAtDate = new Zend_Date($articleUpdatedAtDate->date);
+                    $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
                     $activeClass = '';
                     if($carouselCounter == 0) {
                         $activeClass = 'active';

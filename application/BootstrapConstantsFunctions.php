@@ -4,7 +4,7 @@ class BootstrapConstantsFunctions
 {
     public static function constantsForLocaleAndTimezoneSetting()
     {
-        $localeSettings = LocaleSettings::getLocaleSettings();
+        $localeSettings = KC\Repository\LocaleSettings::getLocaleSettings();
         $locale = !empty($localeSettings[0]['locale']) ? $localeSettings[0]['locale'] : 'nl_NL';
         $localeTimezone = !empty($localeSettings[0]['timezone']) ? $localeSettings[0]['timezone'] : 'Europe/Amsterdam';
         defined('COUNTRY_LOCALE') || define('COUNTRY_LOCALE', $locale);
@@ -13,8 +13,9 @@ class BootstrapConstantsFunctions
 
     public static function constantsForSettingRequestHeaders()
     {
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
         defined('REQUEST_URI') || define('REQUEST_URI', isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/');
-        defined('HTTP_HOST') || define('HTTP_HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'www.kortingscode.nl');
+        defined('HTTP_HOST') || define('HTTP_HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $httpScheme.'.kortingscode.nl');
         defined('HTTP_PATH') || define('HTTP_PATH', trim('http://' . HTTP_HOST . '/'));
     }
 
@@ -45,6 +46,7 @@ class BootstrapConstantsFunctions
 
     public static function constantsForDefaultModule($scriptName, $cdnUrlForDefaultModule, $scriptFileName)
     {
+        
         defined('LOCALE') || define('LOCALE', '');
         defined('HTTP_PATH_LOCALE') || define('HTTP_PATH_LOCALE', trim('http://' . HTTP_HOST . '/'));
         defined('PUBLIC_PATH') || define('PUBLIC_PATH', 'http://' . HTTP_HOST. dirname($scriptName) . '/');

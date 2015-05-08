@@ -157,7 +157,7 @@ function getArticles(iSearchText,iStart,iSortCol,iSortDir) {
 						{
 							"fnRender" : function(obj) {
 								var tag = '';
-								var dat = obj.aData.publishdate;
+								var dat = obj.aData.publishdate.date;
 								tag = dat.split("-");
 								tag2 = tag[2];
 								var da = tag2.split(" ");
@@ -179,10 +179,10 @@ function getArticles(iSearchText,iStart,iSortCol,iSortDir) {
 							"fnRender" : function(obj) {
 								var tag = '';
 								if(obj.aData.publish==true){
-								tag='Yes';
+									tag='Yes';
 								}
 								else{
-								tag = 'No';
+									tag = 'No';
 								}
 								return "<a href='javascript:void(0)'>" + tag + "</a>";
 							 },

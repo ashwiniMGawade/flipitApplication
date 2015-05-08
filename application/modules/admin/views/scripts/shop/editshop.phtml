@@ -1,15 +1,15 @@
 <?php 
-	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
-	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
-	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/edit-shop.js");
-	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.textareaCounter.plugin.js");
-	$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
-	$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
-    $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "js/back_end/openwysiwyg_v1.4.7/styles/wysiwyg.css" );
-	$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
-	$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
-	$this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
-
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/edit-shop.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.textareaCounter.plugin.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "js/back_end/openwysiwyg_v1.4.7/styles/wysiwyg.css");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.NobleCount.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/widget-location.js");
 $howToIntroductionText = '';
 $howToIntroductionText = $this->partial(
     'shop/_how-to-introduction-text.phtml',
@@ -198,11 +198,11 @@ echo $this->headTitle()->append('Edit Shop');?>
                     <div class="mainpage-content-right">
                       <div class="category-error"></div>
                       <div class="categories" style="position:relative;">
-              <?php   
+              <?php 
               for($i = 0;  $i < count($this->categoryList) ; $i++){ ?>
               	<div class="square-btn-offer">
               <?php 
-              			if( @in_array( $this->categoryList[$i]['id'] , $this->catArray ) )
+              			if( @in_array( $this->categoryList[$i][0]['id'] , $this->catArray ) )
               				{
               					$checked = 'checked="checked"' ;
               				
@@ -211,33 +211,33 @@ echo $this->headTitle()->append('Edit Shop');?>
               					$checked = '' ;
               				}
               				?>
-				<input type="checkbox" <?php echo $checked ;?> value="<?php echo $this->categoryList[$i]['id']; ?>" class="" name="selectedCategoryies[]" id="category-<?php echo $this->categoryList[$i]['id']; ?>" />
+				<input type="checkbox" <?php echo $checked ;?> value="<?php echo $this->categoryList[$i][0]['id']; ?>" class="" name="selectedCategoryies[]" id="category-<?php echo $this->categoryList[$i][0]['id']; ?>" />
 				 <?php
 							
 	                       
-	                           if(trim($this->categoryList[$i]['name'])!=''){ 
+	                           if(trim($this->categoryList[$i][0]['name'])!=''){ 
 	                           	
 	                           	$categoryIconPath = '';
 	                           	 
 	                           	 
-	                           	$icons = $this->categoryList[$i];
+	                           	$icons = $this->categoryList[$i][0]['categoryicon'];
 	                           	 
-	                           	 
+
 	                           	# check an icon is available of not
-	                           	if(file_exists(ROOT_PATH.$icons['categoryicon']['path']."thum_medium_".$icons['categoryicon']['name'])){
-	                           		$categoryIconPath = PUBLIC_PATH_LOCALE.$icons['categoryicon']['path']."thum_medium_".$icons['categoryicon']['name'];
+	                           	if(file_exists(ROOT_PATH.$icons['path']."thum_medium_".$icons['name'])){
+	                           		$categoryIconPath = PUBLIC_PATH_LOCALE.$icons['path']."thum_medium_".$icons['name'];
 	                           	}else {
 	                           		$categoryIconPath = HTTP_PATH ."public/images/NoImage/NoImage50x50.jpg";
 	                           	}
 	                           	
 	                           	
 	                      	?>
-	                      	<button type="button" title="<?php echo $this->categoryList[$i]['name'];?>" class="btn square-btn <?php echo  @in_array( $this->categoryList[$i]['id'] , $this->catArray )  ? "btn-primary" : "" ?>" id="categoryBtn-<?php echo $this->categoryList[$i]['id'];?>" onClick="addCategory(event,'<?php echo $this->categoryList[$i]['id']; ?>')">
-	                      		<img onclick="$('#categoryBtn-<?php echo $this->categoryList[$i]['id'];?>').click();" alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
+	                      	<button type="button" title="<?php echo $this->categoryList[$i][0]['name'];?>" class="btn square-btn <?php echo  @in_array( $this->categoryList[$i][0]['id'] , $this->catArray )  ? "btn-primary" : "" ?>" id="categoryBtn-<?php echo $this->categoryList[$i][0]['id'];?>" onClick="addCategory(event,'<?php echo $this->categoryList[$i][0]['id']; ?>')">
+	                      		<img onclick="$('#categoryBtn-<?php echo $this->categoryList[$i][0]['id'];?>').click();" alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
 	                      	</button>
                       		<div class="clear"></div>
 				        	<span class="image-description-text">	  			   
-									<?php echo strlen($this->categoryList[$i]['name']) < 20 ? $this->categoryList[$i]['name'] : substr($this->categoryList[$i]['name'],0,20).'..'; ?>			    
+									<?php echo strlen($this->categoryList[$i][0]['name']) < 20 ? $this->categoryList[$i][0]['name'] : substr($this->categoryList[$i][0]['name'],0,20).'..'; ?>			    
 		  					</span>
 	                      	<?php } ?>
 	                              	</div>
@@ -467,28 +467,26 @@ echo $this->headTitle()->append('Edit Shop');?>
                 </div>  
             </div>
 
-
                 <div class="mainpage-content">
             	<div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Similar Shops'); ?></strong></label></div>
                     <div class="mainpage-content-right">
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div class="mainpage-content-right-inner-left-other-shop">
-                 
-                 
                 <div style="overflow-y:scroll;height:169px;width:160px !important;" class="sidebar-content-box-left">
                     <ul id="similarshopListul-li" style='margin : 0px;'>
-                    <?php 
-                    if (!empty($this->relatedShops['refShopRelatedshop'])) {
-                        for($r=0;$r < count ($this->relatedShops['refShopRelatedshop']);$r++) { 
+                    <?php
+                    if (!empty($this->data['relatedshops'])) {
+                        for($r=0;$r < count ($this->data['relatedshops']);$r++) { 
                             $className = 'grid-line2';
                             if ($r % 2 == 0) {
                                 $className = 'grid-line1';
                             }
                             ?> 
                             <li class="<?php echo $className; ?>" 
-                                value="<?php echo $this->relatedShops['refShopRelatedshop'][$r]['relatedshops']['id']; ?>">
-                                <?php echo $this->relatedShops['refShopRelatedshop'][$r]['relatedshops']['name']; ?>
+                                value="<?php echo $this->data['relatedshops'][$r]['relatedshopId']; ?>">
+                                <?php echo !empty($this->relatedShopName[$r]) ?
+                                    $this->relatedShopName[$r][0]['name'] : ''; ?>
                             </li>
                             <?php 
                         }
@@ -528,11 +526,20 @@ echo $this->headTitle()->append('Edit Shop');?>
                         </div>
                      </div>
                 </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Future Code");?></strong></label></div>
+                     <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onClick="setOnOff(event,'futurecode','on');" class="btn <?php if($this->data['futurecode']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button onClick="setOnOff(event,'futurecode','off');" class="btn <?php if($this->data['futurecode']=='0' || $this->data['futurecode']==''){ echo 'btn-primary'; }  ?> future-code-radius" type="button"><?php echo $this->translate('No'); ?></button>
+                            <input type="hidden" value="<?php echo $this->data['futurecode'] ? 1 : 0 ;?>" id="futurecode" name="futurecode" style="display:none;"> 
+                        </div>
+                     </div>
+                </div>
             </div>
             
             
             <div class="mainpage-content">
-            	
                 <div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Affiliate network'); ?></strong></label></div>
                     <div class="mainpage-content-right">
@@ -544,7 +551,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                              if(trim( $this->affiliateNetworkList[$i]['name'])!=''){
                            	?>
                            	
-                           	  <?php  if( $this->affiliateNetworkList[$i]['id'] == $this->data['affliateNetworkId'] ) { ?>
+                           	  <?php  if( $this->affiliateNetworkList[$i]['id'] == $this->data['affliatenetwork']['id'] ) { ?>
                            
                            		 <option selected="selected"  value="<?php echo $this->affiliateNetworkList[$i]['id']; ?>">
                             
@@ -681,7 +688,27 @@ echo $this->headTitle()->append('Edit Shop');?>
                         </div>
                     </div>
                 </div>
-
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate("backend_Set widget location");?></strong></label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button type = "button" onclick="showLightBoxForWidgetLocation()" class="btn">
+                                <?php echo $this->translate('backend_Set widget location'); ?>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display singup option");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                             <button type="button" class="btn <?php if($this->data['showSignupOption']=='1'){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'signupOption','on');"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button type="button" class="btn <?php if($this->data['showSignupOption']=='0'){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'signupOption','off');"><?php echo $this->translate('No'); ?></button> 
+                          </div>
+                    </div>
+                </div>
                 <div class="mainpage-content-line mb10">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Allow user generated content'); ?></strong></label></div>
                     <div class="mainpage-content-right">
@@ -693,25 +720,19 @@ echo $this->headTitle()->append('Edit Shop');?>
                   </div>    
                 </div>
                 <div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display singup option");?></strong></label></div>
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('Allow Discussions'); ?></strong></label>
+                    </div>
                     <div class="mainpage-content-right">
                         <div data-toggle="buttons-checkbox" class="btn-group">
-                             <button type="button" class="btn <?php if($this->data['showSignupOption']=='1'){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'signupOption','on');"><?php echo $this->translate('Yes'); ?></button>                     
-                            <button type="button" class="btn <?php if($this->data['showSignupOption']=='0'){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'signupOption','off');"><?php echo $this->translate('No'); ?></button> 
-                          </div>
-                    </div>
-                </div>
-                <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Allow Discussions'); ?></strong></label></div>
-                <div class="mainpage-content-right">
-                    <div data-toggle="buttons-checkbox" class="btn-group">
-                            <button onclick="discussionCheck(event,'on')" class="btn <?php if($this->data['discussions']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                                <button onclick="discussionCheck(event,'on')" class="btn <?php if($this->data['discussions']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
 
-                            <button style="border-radius:0 4px 4px 0" onclick="discussionCheck(event,'off')" class="btn <?php if($this->data['discussions']=='0' || $this->data['discussions']==''){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('No'); ?></button>
-                            
-                            <input type="checkbox" id="discussions" <?php if($this->data['discussions']=='1'){ echo 'checked'; }  ?>  name="discussions" style="display:none;"> 
+                                <button style="border-radius:0 4px 4px 0" onclick="discussionCheck(event,'off')" class="btn <?php if($this->data['discussions']=='0' || $this->data['discussions']==''){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('No'); ?></button>
+                                
+                                <input type="checkbox" id="discussions" <?php if($this->data['discussions']=='1'){ echo 'checked'; }  ?>  name="discussions" style="display:none;"> 
+                        </div>
                     </div>
                 </div>
-                
                 
                 <div class="mainpage-content-line mb10">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display chains");?></strong></label></div>
@@ -1055,7 +1076,7 @@ echo $this->headTitle()->append('Edit Shop');?>
             <input type="hidden" name="accountManagerName" id="accountManagerName" value="<?php echo $this->data['accountManagerName'] ; ?>" />
             
             <input type="hidden" name="editorName" id="editorName" value="<?php echo $this->data['contentManagerName'] ; ?>" />
-            <input type="hidden" name="offlineSince" id="offlineSince" value="<?php echo ( $this->data['status'] ) ? "" :  $this->data['offlineSicne'] ;?>" />
+            <input type="hidden" name="offlineSince" id="offlineSince" value="<?php echo ( $this->data['status'] ) ? "" :  $this->data['offlineSicne']->format('Y-m-d') ;?>" />
             <input type="hidden" name="onlineStatus" id="onlineStatus" value="<?php echo ( $this->data['status'] ) ?  1 : 0 ; ?>" />
             <input type="hidden" name="deepLinkStatus" id="deepLinkStatus" value="<?php echo ( $this->data['deepLinkStatus'] ) ?  1 : 0 ; ?>" />
             <input type="hidden" name="affiliateProgStatus" id="affiliateProgStatus" value="<?php echo ( $this->data['affliateProgram'] ) ?  1 : 0 ; ?>" />
@@ -1087,3 +1108,7 @@ echo $this->headTitle()->append('Edit Shop');?>
       </div>
       </div>   
      <!-- Create shops End -->
+<?php 
+$shopId = !empty($this->data['id']) ? $this->data['id'] : '';
+echo $this->partial('widgetlocation/_widget-location.phtml', array('pageType' => 'shop', 'relatedId' => $shopId));
+?>

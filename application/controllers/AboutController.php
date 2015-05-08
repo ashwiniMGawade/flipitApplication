@@ -15,17 +15,18 @@ class AboutController extends Zend_Controller_Action
         } else {
             $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
         }
-        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
+        $this->viewHelperObject = new \FrontEnd_Helper_viewHelper();
     }
 
     public function indexAction()
     {
-        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
-        $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $pageDetails = \KC\Repository\Page::getPageDetailsFromUrl(\FrontEnd_Helper_viewHelper::getPagePermalink());
+        $pageDetails = (object) $pageDetails;
+        $this->view->pageHeaderImage = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'page_header'.$pageDetails->id.'_image',
             array(
-                'function' => 'Logo::getPageLogo',
-                'parameters' => array($pageDetails->pageHeaderImageId)
+                'function' => '\KC\Repository\Logo::getPageLogo',
+                'parameters' => array($pageDetails->pageHeaderImageId['id'])
             )
         );
         $this->viewHelperObject->getMetaTags(
@@ -33,31 +34,31 @@ class AboutController extends Zend_Controller_Action
             isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
             isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
             isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
-            FrontEnd_Helper_viewHelper::__link('link_redactie'),
+            \FrontEnd_Helper_viewHelper::__link('link_redactie'),
             FACEBOOK_IMAGE,
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
-        $allAuthorsDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $allAuthorsDetails = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'all_users_list',
             array(
-                'function' => 'User::getAllUsersDetails',
+                'function' => '\KC\Repository\User::getAllUsersDetails',
                 'parameters' => array($this->_helper->About->getWebsiteNameWithLocale())
             ),
             ''
         );
-        $this->view->authorsWithPagination = FrontEnd_Helper_viewHelper::renderPagination(
+        $this->view->authorsWithPagination = \FrontEnd_Helper_viewHelper::renderPagination(
             $allAuthorsDetails,
             $this->_getAllParams(),
             20,
             9
         );
         
-        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+        $signUpFormSidebarWidget = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'formSignupSidebarWidget',
             'SignUp '
         );
-        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
+        \FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->pageCssClass = 'authors-page';
 
@@ -66,67 +67,67 @@ class AboutController extends Zend_Controller_Action
     public function profileAction()
     {
         $authorSlugName = $this->getRequest()->getParam('slug');
-        $authorId = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $authorId = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'user_'. str_replace('-', '_', $authorSlugName) .'_data',
-            array('function' => 'User::getUserIdBySlugName', 'parameters' => array($authorSlugName)),
+            array('function' => '\KC\Repository\User::getUserIdBySlugName', 'parameters' => array($authorSlugName)),
             0
         );
-        $authorDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $authorDetailsForView = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'user_'.$authorId .'_data',
             array(
-                'function' => 'User::getUserProfileDetails',
+                'function' => '\KC\Repository\User::getUserProfileDetails',
                 'parameters' => array($authorId, $this->_helper->About->getWebsiteNameWithLocale())
             ),
             0
         );
-        if (empty($authorDetails)) {
-            throw new Zend_Controller_Action_Exception('', 404);
+        if (empty($authorDetailsForView)) {
+            throw new \Zend_Controller_Action_Exception('', 404);
         }
 
-        $authorDetails = $authorDetails[0];
-        $authorFavouriteShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $authorDetails = $authorDetailsForView[0];
+        $authorFavouriteShops = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'user_'. 'favouriteShop'.$authorId .'_data',
-            array('function' => 'User::getUserFavouriteStores', 'parameters' => array($authorId)),
+            array('function' => '\KC\Repository\User::getUserFavouriteStores', 'parameters' => array($authorId)),
             0
         );
-        $authorMostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $authorMostReadArticles = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'user_'. 'mostRead'.$authorId .'_data',
-            array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(4, $authorId)),
+            array('function' => '\KC\Repository\MoneySaving::getMostReadArticles', 'parameters' => array(4, $authorId)),
             0
         );
         $authorFullName = $authorDetails['firstName'].' '. $authorDetails['lastName'];
-        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
+        $permalink = ltrim(\Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($permalink);
         $customHeader = '';
         $this->viewHelperObject->getMetaTags(
             $this,
             $authorFullName,
             '',
             trim($authorDetails['mainText']),
-            FrontEnd_Helper_viewHelper::__link('link_redactie') .'/'.$authorDetails['slug'],
+            \FrontEnd_Helper_viewHelper::__link('link_redactie') .'/'.$authorDetails['slug'],
             FACEBOOK_IMAGE,
             $customHeader
         );
 
-        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($authorSlugName);
+        $cacheKey = \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($authorSlugName);
         $this->view->discussionComments =
-            FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 'get_'.$cacheKey.'_disqusComments',
                 array(
-                    'function' => 'DisqusComments::getPageUrlBasedDisqusComments',
+                    'function' => '\KC\Repository\DisqusComments::getPageUrlBasedDisqusComments',
                     'parameters' => array($authorSlugName)
                 ),
                 ''
             );
-        $this->view->authorDetails = $authorDetails;
+        $this->view->authorDetails = $authorDetailsForView;
         $this->view->authorFavouriteShops = $authorFavouriteShops;
         $this->view->authorMostReadArticles = $authorMostReadArticles;
 
-        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+        $signUpFormSidebarWidget = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'formSignupSidebarWidget',
             'SignUp '
         );
-        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
+        \FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->pageCssClass = 'author-page';
     }

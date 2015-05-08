@@ -5,6 +5,27 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         if (
             $currentOffer->refURL != ""
+            || $currentOffer->shopOffers['refUrl']!= ""
+            || $currentOffer->shopOffers['actualUrl'] != ""
+        ) {
+            $urlToShow = self::getOfferBounceUrl($currentOffer->id, $constants);
+        } else {
+            $urlToShow = $constants.$currentOffer->shopOffers['permalink'];
+        }
+        if ($currentOffer->discountType=='PA' || $currentOffer->discountType=='PR') {
+            if ($currentOffer->refOfferUrl != null) {
+                $urlToShow = self::getOfferBounceUrl($currentOffer->id);
+            } else if (count($currentOffer->logo)>0) {
+                $urlToShow = PUBLIC_PATH_CDN.ltrim($currentOffer->logo['path'], "/").$currentOffer->logo['name'];
+            }
+        }
+        return $urlToShow;
+    }
+
+    public function getUrlToShowForEmail($currentOffer, $constants = HTTP_PATH_LOCALE)
+    {
+        if (
+            $currentOffer->refURL != ""
             || $currentOffer->shop['refUrl']!= ""
             || $currentOffer->shop['actualUrl'] != ""
         ) {
@@ -30,9 +51,9 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getDiscountImage($currentOffer)
     {
         $offerDiscountImage ='';
-        if (!empty ( $currentOffer->tiles)) {
+        if (!empty ( $currentOffer->offerTiles)) {
             $offerDiscountImage =
-            PUBLIC_PATH_CDN . ltrim($currentOffer->tiles['path'], "/").$currentOffer->tiles['name'];
+            PUBLIC_PATH_CDN . ltrim($currentOffer->offerTiles[0]['path'], "/").$currentOffer->offerTiles[0]['name'];
         }
         return $offerDiscountImage;
     }
@@ -40,9 +61,9 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getOfferTermsAndCondition($currentOffer)
     {
         $termsAndConditions = '';
-        if (isset($currentOffer->termandcondition)) {
-            if (count($currentOffer->termandcondition) > 0) {
-                $termsAndConditions = $currentOffer->termandcondition[0]['content'];
+        if (isset($currentOffer->offertermandcondition)) {
+            if (count($currentOffer->offertermandcondition) > 0) {
+                $termsAndConditions = $currentOffer->offertermandcondition[0]['content'];
             }
         }
         return $termsAndConditions;
@@ -50,6 +71,9 @@ class FrontEnd_Helper_OffersPartialFunctions
 
     public function getDaysTillOfferExpires($endDate)
     {
+        $endDate = (array) $endDate;
+        $endDate = isset($endDate['date']) ? $endDate['date'] : $endDate;
+        $endDate = isset($endDate[0]) ? $endDate[0] : $endDate;
         $currentDate = date('Y-m-d');
         $offerEndDate = date('Y-m-d', strtotime($endDate));
         $timeStampStart = strtotime($offerEndDate);
@@ -93,8 +117,10 @@ class FrontEnd_Helper_OffersPartialFunctions
 
     public function getOfferDates($currentOffer, $daysTillOfferExpires)
     {
-        $startDate = new Zend_Date(strtotime($currentOffer->startDate));
-        $endDate = new Zend_Date(strtotime($currentOffer->endDate));
+        $startDateObject = (object) $currentOffer->startDate;
+        $endDateObject = (object) $currentOffer->endDate;
+        $startDate = new Zend_Date($startDateObject->date);
+        $endDate = new Zend_Date($endDateObject->date);
         $offerDates = '';
         $startDateFormat = LOCALE == 'us'
             ? Zend_Date::MONTH_NAME.' '.Zend_Date::DAY
@@ -117,6 +143,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         
         return $offerDates;
     }
+    
     public function getOfferOptionAndOfferDates($currentOffer, $daysTillOfferExpires)
     {
         $offerDates = self::getOfferDates($currentOffer, $daysTillOfferExpires);
@@ -134,7 +161,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         $offerImageDiv = '';
         if ($offersType == 'simple' || $offersType == 'extendedOffer') {
             $offerDiscountImage = self::getDiscountImage($currentOffer);
-            $altAttributeText = isset($currentOffer->tiles['label']) ? $currentOffer->tiles['label'] : '';
+            $altAttributeText = isset($currentOffer->offerTiles[0]['label']) ? $currentOffer->offerTiles[0]['label'] : '';
             if ($currentOffer->userGenerated == 1 and $currentOffer->approved == '0') {
                 $offerDiscountImage = HTTP_PATH ."public/images/front_end/box_bg_orange_16.png";
                 $altAttributeText = 'Social code';
@@ -144,7 +171,7 @@ class FrontEnd_Helper_OffersPartialFunctions
             }
         } else {
             $offerDiscountImage = self::getShopLogoForOffer($currentOffer);
-            $altAttributeText = $currentOffer->shop['name'];
+            $altAttributeText = $currentOffer->shopOffers['name'];
             $imageTag = self::getImageTag($offerDiscountImage, $altAttributeText, true);
             $offerImageDiv =
                 $imageTag . '<footer class="bottom">'
@@ -157,8 +184,8 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getShopLogoForOffer($currentOffer)
     {
         return
-            PUBLIC_PATH_CDN.ltrim($currentOffer->shop['logo']['path'], "/").'thum_medium_store_'
-            . $currentOffer->shop['logo']['name'];
+            PUBLIC_PATH_CDN.ltrim($currentOffer->shopOffers['logo']['path'], "/").'thum_medium_store_'
+            . $currentOffer->shopOffers['logo']['name'];
     }
     
     public function getImageTag($offerDiscountImage, $altAttributeText, $shopCodeHolder)
@@ -251,6 +278,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                 '<div class="'.$class.'">
                 '.$offerAnchorTagContent.' </div>';
         } else {
+
             $visitorInformation = '';
             if (!empty(Auth_VisitorAdapter::getIdentity()->id)) {
                 $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
@@ -264,7 +292,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $onClick = $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
                     $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id),
                     ga('send', 'event', 'aff', '$offerBounceRate'),
-                    OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')";
+                    OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')";
                     if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
                         $offerLink ='<span class="'.$class.'">'.$offerAnchorText.' </span>';
                     } else {
@@ -299,7 +327,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     }
                     $onClick =
                         self::getUserIsLoggedInOrNot() == "true"
-                        ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')"
+                        ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permalink'].$popupLink."')"
                         : HTTP_PATH_LOCALE."accountlogin";
                     $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
                     $offerLink =
@@ -340,8 +368,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         $offerBounceRate,
         $offerAnchorTagContent,
         $type
-    )
-    {
+    ) {
         $redirectUrl = '';
         switch ($type){
             case 'mainOfferClickoutButton':
@@ -459,7 +486,7 @@ class FrontEnd_Helper_OffersPartialFunctions
             'user_'.$editorId.'_details',
             array(
                 'function' =>
-                'User::getUserDetails', 'parameters' => array($editorId)
+                'KC\Repository\User::getUserDetails', 'parameters' => array($editorId)
             ),
             ''
         );

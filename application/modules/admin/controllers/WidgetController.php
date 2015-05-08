@@ -23,14 +23,14 @@ class Admin_WidgetController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $params = $this->_getAllParams();
-        if (!Auth_StaffAdapter::hasIdentity()) {
+        if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
 
@@ -55,7 +55,7 @@ class Admin_WidgetController extends Zend_Controller_Action
     if ($this->_request->isPost()) {
         $params = $this->_getAllParams();
         $flash = $this->_helper->getHelper('FlashMessenger');
-        if(Widget::addWidget($params)) {
+        if(\KC\Repository\Widget::addWidget($params)) {
             $message = $this->view->translate('widget has been added successfully');
             $flash->addMessage(array('success' => $message));
             $this->_helper->redirector(null , 'widget' , null ) ;
@@ -76,7 +76,7 @@ class Admin_WidgetController extends Zend_Controller_Action
     public function widgetlistAction()
     {
         $params = $this->_getAllParams();
-        $data = Widget::getWidgetList($params);
+        $data = \KC\Repository\Widget::getWidgetList($params);
         echo Zend_Json::encode ($data);
         die ();
 
@@ -92,7 +92,7 @@ class Admin_WidgetController extends Zend_Controller_Action
     public function onlinestatusAction()
     {
         $params = $this->_getAllParams();
-        $id = Widget :: changeStatus($params);
+        $id = \KC\Repository\Widget::changeStatus($params);
         self::updateVarnish($id);
         echo Zend_Json::encode ( $id );
         die ();
@@ -108,12 +108,12 @@ class Admin_WidgetController extends Zend_Controller_Action
     $this->view->qstring = $_SERVER['QUERY_STRING'];
     $params = $this->_getAllParams();
     if(intval($id) > 0 ) {
-        $data = Widget::updateWidget($id);
+        $data = \KC\Repository\Widget::updateWidget($id);
         $this->view->data = $data ;
         $this->view->id = $id;
     }
     if ($this->_request->isPost()) {
-        $widget = Doctrine_Core::getTable("Widget")->find($id);
+        $widget = new \KC\Repository\Widget();
         $flash = $this->_helper->getHelper('FlashMessenger');
         if($widget->editWidgetRecord($params)) {
             self::updateVarnish($id);
@@ -128,7 +128,7 @@ class Admin_WidgetController extends Zend_Controller_Action
         }
     }
     if(@$params['act']=='delete'){
-        $widget = new Widget();
+        $widget = new \KC\Repository\Widget();
         $flash = $this->_helper->getHelper('FlashMessenger');
         if($widget->permanentDeleteWidget($params['id'])) {
             $message = $this->view->translate('Widget has been deleted successfully');
@@ -150,7 +150,7 @@ class Admin_WidgetController extends Zend_Controller_Action
     public function searchkeyAction()
     {
         $srh = $this->getRequest()->getParam('keyword');
-        $data = Widget::searchKeyword($srh);
+        $data = \KC\Repository\Widget::searchKeyword($srh);
         $ar = array();
         if (sizeof($data) > 0) {
             foreach ($data as $d) {
@@ -177,10 +177,10 @@ class Admin_WidgetController extends Zend_Controller_Action
     public function updateVarnish($id)
     {
         // Add urls to refresh in Varnish
-        $varnishObj = new Varnish();
+        $varnishObj = new \KC\Repository\Varnish();
 
         # get all the urls related to this shop
-        $varnishUrls = Widget::getAllUrls($id);
+        $varnishUrls = \KC\Repository\Widget::getAllUrls($id);
 
         # check $varnishUrls has atleast one
         if(isset($varnishUrls) && count($varnishUrls) > 0) {

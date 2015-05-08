@@ -23,6 +23,21 @@ class Shop extends BaseShop
         }
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
+    
+    public static function setSignupOption()
+    {
+        $shops = Shop::getAllShopsId('all');
+        $shopIds = array();
+        foreach ($shops as $shop) {
+            $shopIds[] = $shop['id'];
+        }
+        $ids = implode(',', $shopIds);
+        $query = Doctrine_Query::create()
+            ->update('Shop s')
+            ->set('s.showSignupOption', '0')
+            ->where("s.id IN ($ids)")
+            ->execute();
+    }
 
     public static function checkShop($shopName)
     {
@@ -315,7 +330,7 @@ class Shop extends BaseShop
             ->from('shop s')
             ->leftJoin('s.logo img')
             ->leftJoin('s.howtochapter chptr')
-            ->Where("s.id='".$shopId."'")
+            ->Where("s.id=".$shopId)
             ->andWhere('s.status = 1')
             ->fetchArray();
         return $shopDetails;
@@ -1486,14 +1501,16 @@ public static function getShopDetail($shopId)
         return true;
     }
 
-    public static function getAllShopsId()
+    public static function getAllShopsId($withChecks = '')
     {
-        $allShopsIds = Doctrine_Query::create()
+        $query = Doctrine_Query::create()
             ->select('s.id')
-            ->from("Shop s")
-            ->where('s.deleted = 0')
-            ->andWhere("s.status = 1")
-            ->fetchArray();
+            ->from("Shop s");
+        if (empty($withChecks)) {
+            $query = $query->where('s.deleted = 0')
+            ->andWhere("s.status = 1");
+        }
+        $allShopsIds = $query->fetchArray();
         return $allShopsIds;
     }
 
@@ -2190,4 +2207,26 @@ public static function getShopDetail($shopId)
         return isset($shopId[0]) ? $shopId[0]['id'] : '';
     }
 
+    public static function getCodeAlertSendDateByShopId($shopId)
+    {
+        $codeAlertSendDate = Doctrine_Query::create()
+            ->select('s.code_alert_send_date')
+            ->from('Shop s')
+            ->where('s.deleted = 0')
+            ->andWhere('s.id='. $shopId)
+            ->limit(1);
+        $codeAlertSendDate = $codeAlertSendDate->fetchArray(null, Doctrine::HYDRATE_ARRAY);
+        return !empty($codeAlertSendDate) ?  $codeAlertSendDate[0]['code_alert_send_date'] : 0;
+    }
+
+    public static function addCodeAlertTimeStampForShopId($shopId)
+    {
+        if (!empty($shopId)) {
+            Doctrine_Query::create()->update('Shop')
+                ->set('code_alert_send_date', "'".  date('Y-m-d 00:00:00') ."'")
+                ->where('id='. $shopId)
+                ->execute();
+        }
+        return true;
+    }
 }

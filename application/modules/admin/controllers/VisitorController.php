@@ -10,14 +10,14 @@ class Admin_VisitorController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $params = $this->_getAllParams();
-        if (!Auth_StaffAdapter::hasIdentity()) {
+        if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
 
@@ -28,36 +28,34 @@ class Admin_VisitorController extends Zend_Controller_Action
 
 
         # apply admin level access on all controllers
-        if($this->getRequest()->isXmlHttpRequest()) {
+        if ($this->getRequest()->isXmlHttpRequest()) {
 
             # add action as new case which needs to be viewed by other users
             switch(strtolower($this->view->action)) {
                 case 'searchemails':
                     # no restriction
-                break;
+                    break;
                 default:
-                    if( $this->_settings['administration']['rights'] != '1' &&
-                        $this->_settings['administration']['rights'] != '2'  ) {
+                    if (
+                        $this->_settings['administration']['rights'] != '1'
+                        && $this->_settings['administration']['rights'] != '2'
+                    ) {
 
                         $this->getResponse()->setHttpResponseCode(404);
-                        $this->_helper->redirector('index' , 'index' , null ) ;
+                        $this->_helper->redirector('index', 'index', null) ;
                     }
-
             }
 
         } else {
-            if($this->_settings['administration']['rights'] != '1' &&
-                        $this->_settings['administration']['rights'] != '2' ) 	{
+            if (
+                $this->_settings['administration']['rights'] != '1'
+                && $this->_settings['administration']['rights'] != '2'
+            ) {
                 $this->_redirect('/admin/auth/index');
             }
         }
     }
-    /**
-     * Flash success and error messages.
-     * (non-PHPdoc)
-     * @see Zend_Controller_Action::init()
-     * @author mkaur
-     */
+    
     public function init()
     {
         $flash = $this->_helper->getHelper('FlashMessenger');
@@ -74,19 +72,18 @@ class Admin_VisitorController extends Zend_Controller_Action
     {
         $visitorId = $this->getRequest()->getParam('id');
         if ($visitorId) {
-            $visitorInformation = Doctrine_Core::getTable("Visitor")
-            ->find($visitorId);
-            $deleteVisitorEnrty = Doctrine_Query::create()
-            ->delete()
-            ->from('Visitor v')
-            ->where("v.id=" . $visitorId)
-            ->execute();
-            if ((intval($visitorInformation->imageId)) > 0) {
-                Doctrine_Query::create()
-                ->delete()
-                ->from('VisitorImage i')
-                ->where("i.id=" . $visitorInformation->imageId)
-                ->execute();
+            $entityManagerLocale = \Zend_Registry::get('emLocale');
+            $visitorInformation = $entityManagerLocale->find('\KC\Entity\Visitor', $visitorId);
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder->delete('KC\Entity\Visitor', 'v')
+                ->where("v.id=" .$visitorId)
+                ->getQuery()->execute();
+
+            if (!empty($visitorInformation->imageId) && (intval($visitorInformation->imageId)) > 0) {
+                $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                $query = $queryBuilder->delete('KC\Entity\VisitorImage', 'i')
+                ->where("i.id=" .$visitorInformation->imageId)
+                ->getQuery()->execute();
             }
         } else {
             $visitorId = null;
@@ -99,124 +96,100 @@ class Admin_VisitorController extends Zend_Controller_Action
     }
     ############################# Refactored Block ###########
 
-   public function indexAction()
+    public function indexAction()
     {
 
     }
-    /**
-     * function use for getfavoriteshop acccording to visitorId
-     * @return array $data
-     * @author mkaur
-     * @version 1.0
-     */
+    
     public function getfavoriteshopAction()
     {
         $this->_helper->layout()->disableLayout(true);
         $this->_helper->viewRenderer->setNoRender();
-        $data =  Visitor::getFavorite($this->getRequest()->getParam('id'));
+        $data =  \KC\Repository\Visitor::getFavorite($this->getRequest()->getParam('id'));
         echo Zend_Json::encode($data);
         die();
     }
 
-    /**
-     * function use for get all visitors from database
-     * @return array $data
-     * @author mkaur
-     */
     public function getvisitorlistAction()
     {
         $params = $this->_getAllParams();
-        $visitorList = Visitor::VisitorList($params);
+        $visitorList = \KC\Repository\Visitor::VisitorList($params);
         echo Zend_Json::encode($visitorList);
         die();
-   }
+    }
 
-
-
-    /**
-     * Permanent delete User from database
-     * @param integer $id
-     * @version 1.0
-     * @author mkaur
-     */
-   
-
-    /**
-     * function for edit visitor and  fetch data form database
-     * @version 1.0
-     * @author mkaur
-     */
     public function editvisitorAction()
     {
-     $id = intval($this->getRequest()->getParam('id'));
-     $this->view->qstring = $_SERVER['QUERY_STRING'];
-        if(intval($id) > 0 ){
-            $data = Visitor :: editVisitor($id);
+        $id = intval($this->getRequest()->getParam('id'));
+        $this->view->qstring = $_SERVER['QUERY_STRING'];
+        if (intval($id) > 0) {
+            $data = \KC\Repository\Visitor::editVisitor($id);
             $this->view->data = $data ;
             $this->view->id = $id;
             $this->view->userDetail = $data;
-            //print_r($data);die;
+        /*    echo "<pre>";
+            print_r($this->view->userDetail);
+            die;*/
             $this->view->favShopId='';
-            //print_r($data);die;
-            foreach($data['favoritevisitorshops'] as $key=>$value){
-            $this->view->favShopId.= $value['id'].',';
+            foreach ($data['favoritevisitorshops'] as $key => $value) {
+                $this->view->favShopId.= $value['id'].',';
+            }
+            $this->view->favShopId = rtrim($this->view->favShopId, ',');
         }
-       $this->view->favShopId = rtrim($this->view->favShopId,',');
-    }
 
-    /* Date of birth dropdown*/
-    $dataMonth='';
-    $dataDay='';
-    $dataYear='';
+        /* Date of birth dropdown*/
+        $dataMonth='';
+        $dataDay='';
+        $dataYear='';
 
-    if(@$data['dateOfBirth']!=''){
-        list($dataYear, $dataMonth, $dataDay) = @split('[/.-]', $data['dateOfBirth']);
-    }
-    //echo $dob;die;
-    $year_limit = 0;
-    $html_output="";
-
-    /*days*/
-    $html_output .= '<select name="date_day" class="dateofbirth_visitor" id="day_select">'."\n";
-
-    for ($day = 1; $day <= 31; $day++) {
-        $select = ($day==$dataDay) ? "selected=selected" : "";
-        $html_output .= '<option '.$select.' value="'.$day.'">' . $day . '</option>'."\n";
-    }
-    $html_output .= '</select>'."\n";
-
-    /*months*/
-    $html_output .= '<select name="date_month" class="dateofbirth_visitor" id="month_select" >'."\n";
-    $months = array("", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
-
-    for ($month = 1; $month <= 12; $month++) {
-        $select = ($month==$dataMonth) ? "selected=selected" : "";
-        $html_output .= '<option value="'.$month .'" '.$select.'>' . $months[$month] . '</option>'."\n";
-    }
-    $html_output .= '</select>'."\n";
-
-    /*years*/
-    $html_output .= '<select name="date_year" class="dateofbirth_visitor" id="year_select">'."\n";
-    for ($year = 1900; $year <= (date("Y") - $year_limit); $year++) {
-        $select = ($year==$dataYear) ? "selected=selected" : "";
-        $html_output .= '<option '.$select.' value="'.$year.'">' . $year . '</option>'."\n";
-    }
-    $html_output .= '</select>'."\n";
-    $this->view->dateofbirth = $html_output;
-
-
-    if ($this->getRequest()->isPost()) {
-        $params = $this->getRequest()->getParams();
-        //var_dump($params);
-        if ($params) {
-            $visitor = Visitor::updateVisitor($params , true);
+        if (@$data['dateOfBirth']!='') {
+            list($dataYear, $dataMonth, $dataDay) = @split('-', $data['dateOfBirth']->format('Y-m-d'));
         }
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $this->view->translate('Visitor details has been updated successfully.');
-        $flash->addMessage(array('success' => $message ));
-        $this->_redirect(HTTP_PATH.'admin/visitor#'.$params['qString']);
+        //echo $dob;die;
+        $year_limit = 0;
+        $html_output="";
+
+        /*days*/
+        $html_output .= '<select name="date_day" class="dateofbirth_visitor" id="day_select">'."\n";
+
+        for ($day = 1; $day <= 31; $day++) {
+            $select = ($day==$dataDay) ? "selected=selected" : "";
+            $html_output .= '<option '.$select.' value="'.$day.'">' . $day . '</option>'."\n";
+        }
+        $html_output .= '</select>'."\n";
+
+        /*months*/
+        $html_output .= '<select name="date_month" class="dateofbirth_visitor" id="month_select" >'."\n";
+        $months = array("", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+
+        for ($month = 1; $month <= 12; $month++) {
+            $select = ($month==$dataMonth) ? "selected=selected" : "";
+            $html_output .= '<option value="'.$month .'" '.$select.'>' . $months[$month] . '</option>'."\n";
+        }
+        $html_output .= '</select>'."\n";
+
+        /*years*/
+        $html_output .= '<select name="date_year" class="dateofbirth_visitor" id="year_select">'."\n";
+        for ($year = 1900; $year <= (date("Y") - $year_limit); $year++) {
+            $select = ($year==$dataYear) ? "selected=selected" : "";
+            $html_output .= '<option '.$select.' value="'.$year.'">' . $year . '</option>'."\n";
+        }
+        $html_output .= '</select>'."\n";
+        $this->view->dateofbirth = $html_output;
+
+
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getRequest()->getParams();
+            //var_dump($params);
+            if ($params) {
+                $visitor =  \KC\Repository\Visitor::updateVisitor($params, true);
+            }
+            $flash = $this->_helper->getHelper('FlashMessenger');
+            $message = $this->view->translate('Visitor details has been updated successfully.');
+            $flash->addMessage(array('success' => $message ));
+            $this->_redirect(HTTP_PATH.'admin/visitor#'.$params['qString']);
+        }
     }
- }
 
     /**
      * Search top five visitors from database based on search text
@@ -226,13 +199,13 @@ class Admin_VisitorController extends Zend_Controller_Action
     {
         $srh = $this->getRequest()->getParam('keyword');
         $for = $this->getRequest()->getParam('flag');
-        $data = Visitor::searchKeyword($for,$srh);
+        $data = \KC\Repository\Visitor::searchKeyword($for, $srh);
         $ar = array();
         if (sizeof($data) > 0) {
             foreach ($data as $d) {
                 $ar[] = ucfirst($d['firstName']);
             }
-        } else{
+        } else {
             $ar[]="No Record Found.";
         }
         echo Zend_Json::encode($ar);
@@ -246,13 +219,13 @@ class Admin_VisitorController extends Zend_Controller_Action
     {
         $srh = $this->getRequest()->getParam('keyword');
         $for = $this->getRequest()->getParam('flag');
-        $data = Visitor::searchEmails($for,$srh);
+        $data = \KC\Repository\Visitor::searchEmails($for, $srh);
         $ar = array();
         if (sizeof($data) > 0) {
             foreach ($data as $d) {
                 $ar[] = ucfirst($d['email']);
             }
-        } else{
+        } else {
             $ar[]="No Record Found.";
         }
         echo Zend_Json::encode($ar);
@@ -261,39 +234,36 @@ class Admin_VisitorController extends Zend_Controller_Action
     public function deletefavoriteshopAction()
     {
         $params = $this->_getAllParams();
-        $success = Visitor::delelteFav($params);
+        $success = \KC\Repository\Visitor::delelteFav($params);
         echo Zend_Json::encode($success);
         die();
     }
 
-    public function importvisitorlistAction(){
+    public function importvisitorlistAction()
+    {
+        $params = $this->_getAllParams();
+        if ($this->getRequest()->isPost()) {
+            if (isset($_FILES['excelFile']['name']) && @$_FILES['excelFile']['name'] != '') {
+                $result = \KC\Repository\RouteRedirect::uploadExcel($_FILES['excelFile']['name'], true);
+                $excelFilePath = $result['path'];
+                $excelFile = $excelFilePath.$result['fileName'];
+                if ($result['status'] == 200) {
 
-    	$params = $this->_getAllParams();
-    	if($this->getRequest()->isPost ()){
-    		//echo "<pre>"; print_r($_FILES); die;
-    		if (isset($_FILES['excelFile']['name']) && @$_FILES['excelFile']['name'] != '') {
+                    chmod($excelFile, 0775);
+                    $flash = $this->_helper->getHelper('FlashMessenger');
+                    $message = $this->view->translate('Visitors uploaded successfully');
+                    $flash->addMessage(array('success' => $message));
+                    $this->_redirect(HTTP_PATH . 'admin/visitor/importvisitorlist');
+                }
 
-    			$RouteRedirectObj = new RouteRedirect();
-    			$result = @$RouteRedirectObj->uploadExcel($_FILES['excelFile']['name'], true);
-    			$excelFilePath = $result['path'];
-				$excelFile = $excelFilePath.$result['fileName'];
-    			if($result['status'] == 200){
+            } else {
 
-	    			chmod($excelFile, 0775);
-                    $flash = $this->_helper->getHelper ( 'FlashMessenger' );
-	    			$message = $this->view->translate ('Visitors uploaded successfully');
-	    			$flash->addMessage ( array ('success' => $message ) );
-	    			$this->_redirect ( HTTP_PATH . 'admin/visitor/importvisitorlist' );
-    			}
-
-		    } else{
-
-		    	$flash = $this->_helper->getHelper ( 'FlashMessenger' );
-	    		$message = $this->view->translate ('Problem in your file!!');
-	    		$flash->addMessage ( array ('error' => $message ) );
-	    		$this->_redirect ( HTTP_PATH . 'admin/visitor/importvisitorlist' );
-		    }
-    	}
+                $flash = $this->_helper->getHelper('FlashMessenger');
+                $message = $this->view->translate('Problem in your file!!');
+                $flash->addMessage(array('error' => $message));
+                $this->_redirect(HTTP_PATH . 'admin/visitor/importvisitorlist');
+            }
+        }
 
         $importFolder = UPLOAD_EXCEL_PATH.'import/';
         $xlsxFilesToProcess = array();
@@ -305,12 +275,6 @@ class Admin_VisitorController extends Zend_Controller_Action
         $this->view->importLog = (file_exists($filename)) ? file_get_contents($filename) : false;
     }
 
-    /**
-     * emptyXlx
-     *
-     * used to download empty xlsx file for visitor imports
-     * @author Surinderpal Singh
-     */
     public function emptyXlxAction()
     {
         # set fiel and its trnslattions
@@ -328,12 +292,6 @@ class Admin_VisitorController extends Zend_Controller_Action
                 ->setBody(file_get_contents($fileName));
     }
 
-    /**
-     * exportXlx
-     *
-     * used to download visitor export xlsx file of current locale
-     * @author Surinderpal Singh
-     */
     public function exportXlxAction()
     {
         # set fiel and its trnslattions
@@ -351,5 +309,4 @@ class Admin_VisitorController extends Zend_Controller_Action
         ->setHeader('Expires', '0')
         ->setBody(file_get_contents($fileName));
     }
- }
- 
+}

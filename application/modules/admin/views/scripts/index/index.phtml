@@ -31,11 +31,13 @@ $this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/dashboard.js" );
 		</div>
 	</div>
 	<div class='huidige-stores mb25 fl'>
+
 		<h3>
 			<?php echo $this->translate('Scores of the last 7 days'); ?>
-			<span>&nbsp;&nbsp;(<?php echo $this->translate('Last updated at'); ?>&nbsp;<?php echo date('H:i M jS Y',strtotime($this->data['updated_at'])); ?>)
+			<span>&nbsp;&nbsp;(<?php echo $this->translate('Last updated at'); ?>&nbsp;<?php echo $this->data['updated_at']->format('H:i M jS Y'); ?>)
 			</span>
 		</h3>
+
 		<div class="dashboard-content fl">
 			<div class="dashboard-heading">
 				<h4><?php echo $this->translate('No. of offers created'); ?></h4>
@@ -44,22 +46,19 @@ $this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/dashboard.js" );
 				<h4><?php echo $this->translate('No. of new subscribers'); ?></h4>
 			</div>
 			<div class="dashboard-boxes">
-		        <div class="box-count">
-		         	<span class="grey-text"><?php echo Dashboard::count_format($this->data['no_of_offers']);?></span>
-		        </div>	
-		        <div class="box-count">
-		         	<span class="grey-text">
-		         	<?php echo Dashboard::count_format($this->data['no_of_shops']);?>
-		         	</span>
-		        </div>	
-		        <div class="box-count">
-		         	<span class="grey-text"><?php echo Dashboard::count_format($this->data['no_of_clickouts']);?></span>
-		        </div>	
-		        <div class="box-count">
-		         	<span class="grey-text">
-		         		<?php echo Dashboard::count_format($this->data['no_of_subscribers']);?>
-		         	</span>
-		        </div>	
+		         <div class="box-count">
+		         	<span class="grey-text"><?php echo KC\Repository\Dashboard::count_format($this->data['no_of_offers']);?></span>
+		         </div>	
+		         <div class="box-count">
+		         	<span class="grey-text"><?php echo KC\Repository\Dashboard::count_format($this->data['no_of_shops']);?></span>
+		         </div>	
+		         <div class="box-count">
+		         	<span class="grey-text"><?php echo KC\Repository\Dashboard::count_format($this->data['no_of_clickouts']);?></span>
+		         </div>	
+		         <div class="box-count">
+		         	<span class="grey-text"><?php echo KC\Repository\Dashboard::count_format($this->data['no_of_subscribers']);?></span>
+		         </div>	
+
 			</div>
 		</div>
 	</div>
@@ -67,11 +66,13 @@ $this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/dashboard.js" );
 	<div class="clear"></div>
 
 	<div class='huidige-stores mb25 fl'>
+
 		<h3>
 			<?php echo $this->translate('Totals scores within this locale'); ?>
-			<span>&nbsp;&nbsp;(<?php echo $this->translate('Last updated at'); ?>&nbsp;<?php echo date('H:i M jS Y',strtotime($this->data['updated_at'])); ?>)
+			<span>&nbsp;&nbsp;(<?php echo $this->translate('Last updated at'); ?>&nbsp;<?php echo $this->data['updated_at']->format('H:i M jS Y'); ?>)
 			</span>
 		</h3>
+
 		<div class="dashboard-content fl">
 			<div class="dashboard-heading">
 				<h4><?php echo $this->translate('Total offers currently online'); ?></h4>
@@ -81,32 +82,31 @@ $this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/dashboard.js" );
 				<h4><?php echo $this->translate('Money Shop Ratio'); ?></h4>
 			</div>
 			<div class="dashboard-boxes">
-		        <div class="box-count">
-		         	<span class="grey-text">
-		         	<?php echo Dashboard::count_format($this->data['total_no_of_offers']);?>
-		         	</span>
-		        </div>	
-		        <div class="box-count">
-		        	<span class="grey-text">
-		        	<?php echo Dashboard::count_format($this->data['total_no_of_shops']);?>
-		        	</span>
-		        </div>	
-		        <div class="box-count">
-		         	<span class='divided-grey-text'>
-		         	<?php echo Dashboard::count_format($this->data['total_no_of_shops_online_code']);?>
-		         	</span>
+		         <div class="box-count">
+		         	<span class="grey-text"><?php echo KC\Repository\Dashboard::count_format($this->data['total_no_of_offers']);?></span>
+		         </div>	
+		         <div class="box-count">
+		         	<span class="grey-text"><?php echo KC\Repository\Dashboard::count_format($this->data['total_no_of_shops']);?></span>
+		         </div>	
+		         <div class="box-count">
+		         	<span class='divided-grey-text'><?php echo KC\Repository\Dashboard::count_format($this->data['total_no_of_shops_online_code']);?></span>
 		         	<span class='horizoantal-row'></span>
-		         	<div class='<?php echo $this->green_cls?>'>
-			         	<img src="<?php echo PUBLIC_PATH . '/images/'.$this->green_img.'.png'?>" alt="arrow"/>
-			         	<?php echo $this->prcnt[0].'<sup>.'.$this->prcnt[1].'%</sup>'; ?>
+		         	<div class='<?php echo $this->green_cls?>'>			         	
+			         	<?php
+			         	if(isset($this->prcnt[0]) && $this->prcnt[0] != 0) { ?>
+							<img src="<?php echo PUBLIC_PATH . '/images/'.$this->green_img.'.png'?>" alt="arrow"/>
+			         	<?php }
+			         	$percentNumber = isset($this->prcnt[0]) ? $this->prcnt[0].'<sup>.': '';
+			         	$percentDecimal = isset($this->prcnt[1]) ? $this->prcnt[1].'%</sup>': '';
+			         	 echo $percentNumber.$percentDecimal; ?>
 		         	</div>
 		        </div>	
 		        <div class="box-count">
-		         	<span class="grey-text"><?php echo Dashboard::count_format($this->data['total_no_members']);?>
+		         	<span class="grey-text"><?php echo KC\Repository\Dashboard::count_format($this->data['total_no_members']);?>
 		         	</span>
 		        </div>
 		        <div class="box-count">
-		         	<span class="grey-text"><?php echo Dashboard::count_format($this->data['money_shop_ratio']).'<sup>%</sup>';?>
+		         	<span class="grey-text"><?php echo KC\Repository\Dashboard::count_format($this->data['money_shop_ratio']).'<sup>%</sup>';?>
 		         	</span>
 		        </div>
 			</div>

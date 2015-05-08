@@ -1,0 +1,13 @@
+order deny,allow
+deny from all
+Allow from 123.232.323.23
+Allow from 323.343.434.343
+Allow from 323.343.434.343
+Allow from 121.323.232.232
+Allow from 34.23.42.45
+Allow from 127.0.0.1
+Allow from 121.241.123.42
+Allow from 121.241.123.42
+Allow from 121.241.123.42
+Allow from 121.241.123.42
+Allow from 121.241.123.42

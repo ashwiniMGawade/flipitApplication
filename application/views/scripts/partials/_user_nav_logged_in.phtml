@@ -1,5 +1,5 @@
 <?php 
-$visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
+$visitorInformation = \KC\Repository\Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
 ?>
 <nav class="account-box">
     <ul class=''>

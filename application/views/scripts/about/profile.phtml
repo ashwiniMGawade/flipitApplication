@@ -1,6 +1,6 @@
 <?php 
 $authorName = FrontEnd_Helper_AuthorPartialFunctions::
-    getAuthorName($this->authorDetails['firstName'], $this->authorDetails['lastName']);
+    getAuthorName($this->authorDetails[0]['firstName'], $this->authorDetails[0]['lastName']);
 $authorDetails  = '';
 if(!empty($this->authorDetails)):
 $authorDetails = $this->partial(
@@ -14,6 +14,7 @@ endif;
 
 $partialViewPath = 'partials/';
 $authorMostReadArticles = '';
+
 if(!empty($this->authorMostReadArticles)):
     $authorMostReadArticles = $this->partial(
         $partialViewPath.'_authorMostReadArticles.phtml',

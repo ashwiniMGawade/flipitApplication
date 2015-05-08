@@ -3,10 +3,13 @@ $this->minifyHeadScript()->appendFile("/public/js/front_end/home.js");
 $this->minifyHeadScript()->appendFile("/public/js/front_end/search.js");
 $homePageTopNewOffersCategoriesAndSpecialGuidesData = array(
     'topOffers'=>$this->topOffers,
+    'newOffers'=>$this->newOffers,
+    'moneySavingGuidesList'=>$this->moneySavingGuidesList,
     'topCategories'=>$this->topCategories,
     'specialPages'=>$this->specialListPages,
     'specialPagesOffers'=>$this->specialPagesOffers,
-    'moneySavingGuidesCount'=>$this->moneySavingGuidesCount
+    'moneySavingGuidesCount'=>$this->moneySavingGuidesCount,
+    'categoriesOffers' => $this->categoriesOffers
 );
 
 $indexViewPath = 'index/';

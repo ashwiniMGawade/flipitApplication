@@ -56,7 +56,7 @@ function init(){
         source: function( request, response)
         {
         	$.ajax({
-        		url : HOST_PATH + "admin/offer/searchtopfiveshop/keyword/" + $('#searchShop').val()+  "/flag/1",
+        		url : HOST_PATH + "admin/offer/searchtopfiveshop/keyword/" + $('#searchShop').val()+  "/flag/0",
      			method : "post",
      			dataType : "json",
      			type : "post",
@@ -129,7 +129,6 @@ var offerListTable = $('#offerListTable').dataTable();
 function getOffers(txtOffer,txtShop,type) {
 	addOverLay();
 	$("ul.ui-autocomplete").css('display','none');
-	$('#offerListTable').addClass('widthTB');
 	shopListTable = $("#offerListTable")
 	.dataTable(
 			{
@@ -143,16 +142,8 @@ function getOffers(txtOffer,txtShop,type) {
 				"aaSorting": [[ 1, 'ASC' ]],
 				"sPaginationType" : "bootstrap",
 				//"sAjaxSource" : HOST_PATH+"admin/offer/getoffer/data/" + data,
-				"sAjaxSource" : HOST_PATH+"admin/offer/getoffer/offerText/"+ txtOffer  + "/shopText/"+ txtShop + "/couponType/"+ type+  "/flag/1",
+				"sAjaxSource" : HOST_PATH+"admin/offer/gettrashedoffer/offerText/"+ txtOffer  + "/shopText/"+ txtShop + "/couponType/"+ type+  "/flag/1",
 				"aoColumns" : [
-						{
-							"fnRender" : function(obj) {
-								return name = obj.aData.id;
-						},
-								"bSortable" : false,
-								"sType": 'numeric',
-								"bVisible":    false 
-						},
 						{
 							"fnRender" : function(obj) {
 								var tag = "<p editId='" + obj.aData.id + "' class=' editId colorAsLink word-wrap-without-margin-offer_trash'>"+ucfirst(obj.aData.title)+"</p>"; 
@@ -164,9 +155,9 @@ function getOffers(txtOffer,txtShop,type) {
 						{
 							"fnRender" : function(obj) {
 								var tag='';
-								if(obj.aData.shopname!=undefined && obj.aData.shopname!=null && obj.aData.shopname!='')
+								if(obj.aData.shopOffers!=undefined && obj.aData.shopOffers!=null && obj.aData.shopOffers!='')
 								{
-									tag = "<p class='word-wrap-without-margin-offer'>"+ucfirst(obj.aData.shopname)+"</p>";
+									tag = "<p class='word-wrap-without-margin-offer'>"+ucfirst(obj.aData.shopOffers.name)+"</p>";
 								}else {
 									
 									tag = "<p class='word-wrap-without-margin-offer'>"+ucfirst('---')+"</p>";
@@ -234,25 +225,14 @@ function getOffers(txtOffer,txtShop,type) {
 						
 						{
 							"fnRender" : function(obj) {
-								/*var tag = '';
-								var dat = obj.aData.startDate;
-								tag = dat.split("-");
-								tag2 = tag[2];
-								var da = tag2.split(" ");
-								 return (da[0]+'-'+tag[1]+'-'+tag[0]);*/
-								 
-
-									var sd = "";
-									if(obj.aData.startDate != null){
-									var tag = '';
-									var dat = obj.aData.startDate;
-									tag = dat.split("-");
-									tag2 = tag[2];
-									var da = tag2.split(" ");
-									
-									sd = (da[0]+'-'+tag[1]+'-'+tag[0]);
+								var date = "";
+								if(obj.aData.startDate !=null && obj.aData.startDate !='undefined' ) {
+									var splitdate = obj.aData.startDate.date.split(" ");
+									if(obj.aData.startDate.date != null && splitdate[0] != '1970-01-01') {
+										var date = obj.aData.startDate.date;
 									}
-									 return sd;
+								}
+								 return "<a href='javascript:void(0)'>" + date + "</a>";
 								 
 							},
 							"bSearchable" : true,
@@ -261,23 +241,14 @@ function getOffers(txtOffer,txtShop,type) {
 						},
 						{
 							"fnRender" : function(obj) {
-								
-								/*var tag = '';
-								var dat = obj.aData.endDate;
-								tag = dat.split("-");
-								tag2 = tag[2];
-								var da = tag2.split(" ");
-								 return (da[0]+'-'+tag[1]+'-'+tag[0]);*/
-								var ed = "";
-								if(obj.aData.endDate != null){
-								var tag = '';
-								var dat = obj.aData.endDate;
-								tag = dat.split("-");
-								tag2 = tag[2];
-								var da = tag2.split(" ");
-								 ed = (da[0]+'-'+tag[1]+'-'+tag[0]);
+								var date = "";
+								if(obj.aData.endDate !=null && obj.aData.endDate !='undefined' ) {
+									var splitdate = obj.aData.endDate.date.split(" ");
+									if (obj.aData.endDate.date != null && splitdate[0] != '1970-01-01') {
+										var date = obj.aData.endDate.date;
+									}
 								}
-								 return ed;
+								return "<a href='javascript:void(0)'>" + date + "</a>";
 							},
 							"bSearchable" : true,
 							"bSortable" : true,

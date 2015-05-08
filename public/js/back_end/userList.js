@@ -348,14 +348,12 @@ function validateFormAddNewUser()
 					},
 					password : {
 						required : true,
-						minlength : 8,
-						maxlength :20
+						regex: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
 					},
 					confPassword : {
 						required : true,
-						minlength : 8,
-						maxlength :20,
-						equalTo : "#password"
+						equalTo : "#password",
+						regex: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
 					},
 					popularKortingscode :{
 						required : true,
@@ -397,13 +395,11 @@ function validateFormAddNewUser()
 					},
 					password : {
 						required : __("Please enter your password"),
-						minlength : __("Please enter minimum 8  characters"),
-						maxlength : __("Please enter maximum 20  characters")
+						regex :  __("Password must contain a number, capital letter and a special character and not less than 8 Characters")
 					},
 					confPassword : {
 						required : __("Please re-type your password"),
-						minlength : __("Please enter minimum 8  characters"),
-						maxlength : __("Please enter maximum 20  characters")
+						equalTo : __("Please re-type same password")
 					},
 					twitter:{
 
@@ -878,12 +874,12 @@ function getUserList(iSearchText,iStart,iSortCol,iSortDir,iRole) {
 
 							"fnRender" : function(obj) {
 								var imgSrc = "";
-								if (obj.aData.ppname == null || obj.aData.ppname=='' || obj.aData.ppname==undefined) {
+								if (obj.aData.profileimage == null || obj.aData.profileimage=='' || obj.aData.profileimage==undefined) {
 								    imgSrc = HTTP_PATH_CDN
 										+ "/images/user-avtar.jpg";
 								} else {
-									var image = obj.aData.path
-										+ obj.aData.ppname;
+									var image = obj.aData.profileimage.path
+										+ obj.aData.profileimage.name;
 									imgSrc = HTTP_PATH_CDN + image;
 								}
 								var name = "<span class='word-wrap-username'>" + ucfirst(obj.aData.firstName)
@@ -911,7 +907,7 @@ function getUserList(iSearchText,iStart,iSortCol,iSortDir,iRole) {
 
 							"fnRender" : function(obj) {
 
-								return role =    "<a href='javascript:void(0);'>" + obj.aData.role + "</a>";
+								return role =    "<a href='javascript:void(0);'>" + obj.aData.users.name + "</a>";
 
 							},
 

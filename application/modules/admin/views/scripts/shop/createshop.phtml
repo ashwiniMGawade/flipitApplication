@@ -147,32 +147,32 @@ $howToIntroductionText = '';
                     <div class="mainpage-content-right">
                       <div class="category-error"></div>
                       <div class="categories" style="position:relative;" name="category">
-             	 <?php   for($i = 0;  $i < count($this->categoryList) ; $i++ ){ ?>
+             	 <?php  for($i = 0;  $i < count($this->categoryList) ; $i++ ){ ?>
               	<div class="square-btn-offer">
-			              	<input type="checkbox" value="<?php echo $this->categoryList[$i]['id']; ?>" class="" name="selectedCategoryies[]" id="category-<?php echo $this->categoryList[$i]['id']; ?>" />
-			             	<?php  if(trim($this->categoryList[$i]['name'])!='') : 
+			              	<input type="checkbox" value="<?php echo $this->categoryList[$i][0]['id']; ?>" class="" name="selectedCategoryies[]" id="category-<?php echo $this->categoryList[$i][0]['id']; ?>" />
+			             	<?php  if(trim($this->categoryList[$i][0]['name'])!='') : 
 			             	
 			             	
 			             	$categoryIconPath = '';
 			             	
 			             	
-			             	$icons = $this->categoryList[$i];
+			             	$icons = $this->categoryList[$i][0]['categoryicon'];
 			             	
 			             	
 			             	# check an icon is available of not
-			             	if(file_exists(ROOT_PATH.$icons['categoryicon']['path']."thum_medium_".$icons['categoryicon']['name'])){
-			             		$categoryIconPath = PUBLIC_PATH_LOCALE.$icons['categoryicon']['path']."thum_medium_".$icons['categoryicon']['name'];
+			             	if(file_exists(ROOT_PATH.$icons['path']."thum_medium_".$icons['name'])){
+			             		$categoryIconPath = PUBLIC_PATH_LOCALE.$icons['path']."thum_medium_".$icons['name'];
 			             	}else {
 			             		$categoryIconPath = HTTP_PATH ."public/images/NoImage/NoImage50x50.jpg";
 			             	}
 			             	
 			             	?>
-			                      	<button type="button" name="selectCategory" title="<?php echo $this->categoryList[$i]['name'];?>" class="btn square-btn" id="categoryBtn-<?php echo $this->categoryList[$i]['id'];?>" onClick="addCategory(event,'<?php echo $this->categoryList[$i]['id']; ?>')">
-		                      			<img onclick="$('#categoryBtn-<?php echo $this->categoryList[$i]['id'];?>').click();" alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
+			                      	<button type="button" name="selectCategory" title="<?php echo $this->categoryList[$i][0]['name'];?>" class="btn square-btn" id="categoryBtn-<?php echo $this->categoryList[$i][0]['id'];?>" onClick="addCategory(event,'<?php echo $this->categoryList[$i][0]['id']; ?>')">
+		                      			<img onclick="$('#categoryBtn-<?php echo $this->categoryList[$i][0]['id'];?>').click();" alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
 			                      	</button>
 			                      	<div class="clear"></div>
 							        	 <span class="image-description-text">	  			   
-			            					 <?php echo strlen($this->categoryList[$i]['name']) < 20 ? $this->categoryList[$i]['name'] : substr($this->categoryList[$i]['name'],0,20).'..'; ?>			    
+			            					 <?php echo strlen($this->categoryList[$i][0]['name']) < 20 ? $this->categoryList[$i][0]['name'] : substr($this->categoryList[$i][0]['name'],0,20).'..'; ?>			    
 					  					 </span>
 			                      	<?php endif; ?>
 			                      	
@@ -435,6 +435,16 @@ $howToIntroductionText = '';
                             <button onClick="setOnOff(event,'similarShops','on');" class="btn" type="button"><?php echo $this->translate('Yes'); ?></button>                     
                             <button onClick="setOnOff(event,'similarShops','off');" class="btn btn-primary default" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
                             <input type="hidden" value="0" id="similarShops" name="similarShops" style="display:none;"> 
+                          </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Future Code");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onClick="setOnOff(event,'futurecode','on');" class="btn" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button onClick="setOnOff(event,'futurecode','off');" class="btn btn-primary default future-code-radius" type="button"><?php echo $this->translate('No'); ?></button>
+                            <input type="hidden" value="0" id="futurecode" name="futurecode" style="display:none;"> 
                           </div>
                     </div>
                 </div>

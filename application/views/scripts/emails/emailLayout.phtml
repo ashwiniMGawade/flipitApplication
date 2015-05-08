@@ -78,7 +78,8 @@ if(!empty($this->topVouchercodes)) {
             'publicPathCdn' => $publicPathCdn,
             'httpPath' => $httpPath,
             'mailType' => $this->mailType,
-            'locale' => $locale
+            'locale' => $locale,
+            'testStatus' => isset($this->testStatus) ? $this->testStatus :'' 
         )
     );
 }
@@ -94,7 +95,8 @@ if(!empty($this->categoryVouchers)) {
             'publicPathCdn' => $publicPathCdn,
             'httpPath' => $httpPath,
             'mailType' => $this->mailType,
-            'locale' => $locale
+            'locale' => $locale,
+            'testStatus' => isset($this->testStatus) ? $this->testStatus :''
         )
     );
 } 
@@ -111,7 +113,8 @@ if(!empty($this->codeAlert)) {
             'httpPath' => $httpPath,
             'mailType' => $this->mailType,
             'mandrillNewsletterSubject' => $this->mandrillNewsletterSubject,
-            'locale' => $locale
+            'locale' => $locale,
+            'testStatus' => isset($this->testStatus) ? $this->testStatus :''
         )
     );
 } 

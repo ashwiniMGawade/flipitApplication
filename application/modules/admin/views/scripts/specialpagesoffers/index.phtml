@@ -70,12 +70,12 @@
                 <div class="top-coupon-list">
                     <ul id='specialPages'>
                     <?php 
-                    if (!empty($this->specialPageOffers)) { 
+                    if (!empty($this->specialPageOffers)) {
                         foreach ($this->specialPageOffers as $specialPageOffers) {
                             echo  "<li class='ui-state-default'  id='".$specialPageOffers['id']."' 
-                            reloffer='".$specialPageOffers['offerId']."'
+                            reloffer='".$specialPageOffers['offers']['id']."'
                             relpos='".$specialPageOffers['position']."'
-                            relpageId='".$specialPageOffers['pageId']."'>
+                            relpageId='".$specialPageOffers['pages']['id']."'>
                             <span>".$specialPageOffers['offers']['title']."</span></li>";
                         }
                     } else {             

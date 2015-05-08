@@ -4,12 +4,16 @@ $currentDate = date('Y-m-d h:i:s ');
 $offer = (object) $this->couponDetails[0];
 $shopDiscussion = '';
 $partialViewPath = 'partials/';
-if($offer->shop['discussions'] == 1):
-    $shopDiscussion = $this->partial($partialViewPath.'_discussion.phtml', array('shopName' => $offer->shop['name']));
-endif;
+if ($offer->shopOffers['discussions'] == 1) {
+    $shopDiscussion = $this->partial(
+        $partialViewPath.'_discussion.phtml',
+        array('shopName' => $offer->shopOffers['name'])
+    );
+}
 
 $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
-$expiredMessage = $offerPartial->getExpiredOfferMessage($offer->endDate, $currentDate);
+$expiredMessage = $offerPartial->getExpiredOfferMessage(
+    $offer->endDate['date'], $currentDate);
 
 $extendedOffer = $this->partial(
     $partialViewPath.'_offer.phtml',
@@ -26,7 +30,11 @@ $storeViewPartialPath = 'store/';
 $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
 $extendedTitle = !empty($offer->extendedoffertitle) ? $offer->extendedoffertitle : $offer->title;
 $frontShopHeaderHelper = new FrontEnd_Helper_ShopHeaderPartialFunctions();
-echo $headerBlock = $frontShopHeaderHelper->getShopHeader($offer->shop, $expiredMessage, $extendedTitle);
+echo $headerBlock = $frontShopHeaderHelper->getShopHeader(
+    $offer->shopOffers,
+    $expiredMessage,
+    $extendedTitle
+);
 ?>
 </div></div></div>
 <div class="row">

@@ -9,30 +9,29 @@
 	$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "/css/jquery-ui-1.8.16.custom.css" );
 	$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
 	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/category-common.js");
-
-
+	$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/widget-location.js");
 	$categoryPicturePath = '';
 	$categoryPictureName = '';
-	if(isset($this->categoryDetail[0]['categoryicon']['name'])) {
-		$categoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryicon']['path']
-		.$this->categoryDetail[0]['categoryicon']['name'];
-		$categoryPictureName = $this->categoryDetail[0]['categoryicon']['name'];
+	if(isset($this->categoryDetail['categoryiconname'])) {
+		$categoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail['categoryiconpath']
+		.$this->categoryDetail['categoryiconname'];
+		$categoryPictureName = $this->categoryDetail['categoryiconname'];
 	}
 
     $featuredCategoryPicturePath = '';
     $featuredCategoryPictureName = '';
-    if(isset($this->categoryDetail[0]['categoryfeaturedimage']['name'])) {
-        $featuredCategoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryfeaturedimage']['path']
-        .$this->categoryDetail[0]['categoryfeaturedimage']['name'];
-        $featuredCategoryPictureName = $this->categoryDetail[0]['categoryfeaturedimage']['name'];
+    if(isset($this->categoryDetail['categoryfeaturedname'])) {
+        $featuredCategoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail['categoryfeaturedpath']
+        .$this->categoryDetail['categoryfeaturedname'];
+        $featuredCategoryPictureName = $this->categoryDetail['categoryfeaturedname'];
     }
 
     $headerCategoryPicturePath = '';
     $headerCategoryPictureName = '';
-    if(isset($this->categoryDetail[0]['categoryheaderimage']['name'])) {
-        $headerCategoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryheaderimage']['path']
-        .$this->categoryDetail[0]['categoryheaderimage']['name'];
-        $headerCategoryPictureName = $this->categoryDetail[0]['categoryheaderimage']['name'];
+    if(isset($this->categoryDetail['categoryheaderimagename'])) {
+        $headerCategoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail['categoryheaderimagepath']
+        .$this->categoryDetail['categoryheaderimagename'];
+        $headerCategoryPictureName = $this->categoryDetail['categoryheaderimagename'];
 	}
 ?>
 
@@ -40,13 +39,20 @@
 	<!-- update category -->
 <div id='editCategory' class="wrap columns-2">
 	<form action="<?php echo HTTP_PATH ;?>admin/category/editcategory" method="POST" name='updateCategoryForm' id="updateCategoryForm" method=POST enctype=multipart/form-data>
-	<input type="hidden" value="<?php echo $this->categoryDetail[0]['categoryIconId'] ;?>" name='iconId' id='iconId' />
+	<input type="hidden" value="<?php echo $this->categoryDetail['categoryIconId'] ;?>" name='iconId' id='iconId' />
 	<input type="hidden" value="<?php echo $this->categoryDetail[0]['id'] ?>" name='id' id='id' />
 	<input type="hidden" value="<?php echo $this->role; ?>" name='role' id='role' />
 	<input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />
 	<?php $featuredCategory = $this->categoryDetail[0]['featured_category'] == '' ? 0 : 1; ?>
     <input type="hidden" name="featuredCategory" id="featuredCategory" value="<?php echo $featuredCategory;?>" />
-	<h1><?php echo $this->translate('Edit Category'); ?><input type="button"  Value='<?php echo $this->translate('Cancel'); ?>' class="btn ml10" onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/category'" /></h1>
+	<h1>
+        <?php echo $this->translate('Edit Category'); ?>
+        <input type="button"  Value='<?php echo $this->translate('Cancel'); ?>' class="btn ml10" 
+            onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/category'" />
+        <button type = "button" onclick="showLightBoxForWidgetLocation()" class="btn ml10">
+            <?php echo $this->translate('backend_Set widget location'); ?>
+        </button>
+	</h1>
 		<div id="poststuff" class="metabox-holder has-right-sidebar">
 			<div id="post-body">
 				<div>
@@ -258,3 +264,7 @@
 		<!-- /poststuff -->
 	</form>
 </div>
+<?php 
+$categoryId = !empty($this->categoryDetail[0]['id']) ? $this->categoryDetail[0]['id'] : '';
+echo $this->partial('widgetlocation/_widget-location.phtml', array('pageType' => 'category', 'relatedId' => $categoryId));
+?>

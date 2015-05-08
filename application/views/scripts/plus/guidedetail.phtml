@@ -4,7 +4,7 @@ $userDetails = $this->userDetails;
 $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/". $userDetails['slug'];
 $firstName = str_replace(' ', '', $userDetails['firstName']);
 $lastName = str_replace(' ', '', $userDetails['lastName']);
-$articleUpdatedAtDate = new Zend_Date($articleDetails['publishdate']);
+$articleUpdatedAtDate = new Zend_Date($articleDetails['publishdate']['date']);
 $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
 $plusViewPath = 'plus/';
 $discussion = $this->partial(
@@ -35,6 +35,7 @@ endif;
 
 $partialViewPath = 'partials/';
 $savingGuides = '';
+
 if(!empty($this->articlesRelatedToCurrentCategory)):
     $savingGuides = $this->partial(
         $partialViewPath.'_authorMostReadArticles.phtml', 

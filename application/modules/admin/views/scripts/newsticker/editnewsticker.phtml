@@ -9,9 +9,9 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-datepicker.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/date.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/newsticker.js");
-$date = $this->editNews[0]['startdate']; 
-$dated =  strtotime($date) ; 
-$dateForm =  date('d-m-Y',$dated);
+$date = $this->editNews[0]['startdate'];
+$dateForm =  $date->format('Y-m-d') ; 
+
 ?>
 
 <div class="wrap columns-2">
@@ -30,7 +30,7 @@ $dateForm =  date('d-m-Y',$dated);
                     	<div class="mainpage-content-right-inner-left-other" style="padding-bottom: 10px; margin-left: -42px;">
                           <select style="display: none; width : 250px;" name="whichshop" class="combobox" id="whichshop">
 							  <option value=""></option>
-								<?php 
+								<?php
 								for($i=0;$i<count($this->shopList);$i++){
 		     						if(trim($this->shopList[$i]['name'])!='')
 		     						{

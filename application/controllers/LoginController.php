@@ -22,20 +22,20 @@ class LoginController extends Zend_Controller_Action
         $message[0]['success'] : '';
         $this->view->errorMessage = isset($message[0]['error']) ?
         $message[0]['error'] : '';
-        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
+        $this->viewHelperObject = new \FrontEnd_Helper_viewHelper();
     }
 
     public function preDispatch()
     {
         $action = $this->getRequest()->getActionName();
-        if (Auth_VisitorAdapter::hasIdentity()
+        if (\Auth_VisitorAdapter::hasIdentity()
             && ($action == 'forgotpassword'
             || $action == 'resetpassword'
             || $action == 'index')
         ) {
             $this->_redirect(
-                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
-                FrontEnd_Helper_viewHelper::__link('link_profiel')
+                HTTP_PATH_LOCALE. \FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
+                \FrontEnd_Helper_viewHelper::__link('link_profiel')
             );
         }
     }
@@ -43,12 +43,12 @@ class LoginController extends Zend_Controller_Action
     public function indexAction()
     {
         $emailAddressFromMemory = '';
-        $emailAddressSpace = new Zend_Session_Namespace('emailAddressSpace');
+        $emailAddressSpace = new \Zend_Session_Namespace('emailAddressSpace');
         if (isset($emailAddressSpace->emailAddressSpace)) {
             $emailAddressFromMemory = $emailAddressSpace->emailAddressSpace;
             $emailAddressSpace->emailAddressSpace = '';
         }
-        $loginForm = new Application_Form_Login();
+        $loginForm = new \Application_Form_Login();
         $this->view->form = $loginForm;
         $loginForm->getElement('emailAddress')->setValue($emailAddressFromMemory);
         $this->viewHelperObject->getMetaTags($this);
@@ -61,7 +61,7 @@ class LoginController extends Zend_Controller_Action
                 $loginForm->highlightErrorElements();
             }
         }
-        $this->view->headTitle(FrontEnd_Helper_viewHelper::__form('form_Members Only'));
+        $this->view->headTitle(\FrontEnd_Helper_viewHelper::__form('form_Members Only'));
         $this->view->pageCssClass = 'login-page';
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
@@ -69,38 +69,38 @@ class LoginController extends Zend_Controller_Action
 
     public function redirectByVisitorStatus($visitorDetails)
     {
-        if (Auth_VisitorAdapter::hasIdentity()) {
+        if (\Auth_VisitorAdapter::hasIdentity()) {
             $this->_helper->Login->setUserCookies();
-            FrontEnd_Helper_viewHelper::redirectAddToFavouriteShop();
+            \FrontEnd_Helper_viewHelper::redirectAddToFavouriteShop();
             $redirectUrl = HTTP_PATH_LOCALE
-                . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') . "/"
-                . FrontEnd_Helper_viewHelper::__link('link_memberonlycodes');
-            $shopIdNameSpace = new Zend_Session_Namespace('shopId');
+                . \FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') . "/"
+                . \FrontEnd_Helper_viewHelper::__link('link_memberonlycodes');
+            $shopIdNameSpace = new \Zend_Session_Namespace('shopId');
             if ($shopIdNameSpace->shopId) {
-                $shopName = Shop::getShopName(base64_decode($shopIdNameSpace->shopId));
-                $membersNamespace = new Zend_Session_Namespace('membersOnly');
+                $shopName = \KC\Repository\Shop::getShopName(base64_decode($shopIdNameSpace->shopId));
+                $membersNamespace = new \Zend_Session_Namespace('membersOnly');
                 if (isset($membersNamespace->membersOnly) && $membersNamespace->membersOnly == '1') {
-                    $shopInfo = Shop::getShopInformation(base64_decode($shopIdNameSpace->shopId));
+                    $shopInfo = \KC\Repository\Shop::getShopInformation(base64_decode($shopIdNameSpace->shopId));
                     $shopPermalink = !empty($shopInfo) ? $shopInfo[0]['permaLink'] : '';
                 } else {
-                    $shopPermalink = FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
+                    $shopPermalink = \FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
                 }
                 $membersNamespace->membersOnly = '';
-                $visitorFavouriteShopStatus = Visitor::getFavoriteShopsForUser(
-                    Auth_VisitorAdapter::getIdentity()->id,
+                $visitorFavouriteShopStatus = \KC\Repository\Visitor::getFavoriteShopsForUser(
+                    \Auth_VisitorAdapter::getIdentity()->id,
                     base64_decode($shopIdNameSpace->shopId)
                 );
                 if ($visitorFavouriteShopStatus) {
                     $messageText = 'shop already added in your favourite shops';
                 } else {
                     $messageText = 'have been added to your favorite shops';
-                    Shop::shopAddInFavourite(
-                        Auth_VisitorAdapter::getIdentity()->id,
+                    \KC\Repository\Shop::shopAddInFavourite(
+                        \Auth_VisitorAdapter::getIdentity()->id,
                         base64_decode($shopIdNameSpace->shopId)
                     );
                 }
                 $shopIdNameSpace->shopId = '';
-                $message = $shopName. " ".  FrontEnd_Helper_viewHelper::__translate($messageText);
+                $message = $shopName. " ".  \FrontEnd_Helper_viewHelper::__translate($messageText);
                 $redirectUrl = HTTP_PATH_LOCALE. $shopPermalink;
                 self::addFlashMessage($message, $redirectUrl, 'success');
             } else {
@@ -108,11 +108,11 @@ class LoginController extends Zend_Controller_Action
             }
 
         } else {
-            $visitorEmail = new Zend_Session_Namespace('emailAddressSpace');
+            $visitorEmail = new \Zend_Session_Namespace('emailAddressSpace');
             $visitorEmail->emailAddressSpace = $visitorDetails['emailAddress'];
             $this->addFlashMessage(
-                FrontEnd_Helper_viewHelper::__translate('User Does Not Exist'),
-                HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'),
+                \FrontEnd_Helper_viewHelper::__translate('User Does Not Exist'),
+                HTTP_PATH_LOCALE . \FrontEnd_Helper_viewHelper::__link('link_login'),
                 'error'
             );
         }
@@ -128,66 +128,66 @@ class LoginController extends Zend_Controller_Action
 
     public function logoutAction()
     {
-        Auth_VisitorAdapter::clearIdentity();
+        \Auth_VisitorAdapter::clearIdentity();
         setcookie('kc_unique_user_id', "", time() - (86400 * 3), '/');
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
-        Zend_Session::namespaceUnset('favouriteShopId');
+        \Zend_Session::namespaceUnset('favouriteShopId');
         $this->_redirect(HTTP_PATH_LOCALE);
     }
 
     public function forgotpasswordAction()
     {
-        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $this->view->headTitle(FrontEnd_Helper_viewHelper::__form('form_Members Only'));
-        $forgotPasswordForm = new Application_Form_ForgotPassword();
+        $permalink = ltrim(\Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($permalink);
+        $this->view->headTitle(\FrontEnd_Helper_viewHelper::__form('form_Members Only'));
+        $forgotPasswordForm = new \Application_Form_ForgotPassword();
         $this->view->form = $forgotPasswordForm;
         if ($this->getRequest()->isPost()) {
             if ($forgotPasswordForm->isValid($this->getRequest()->getPost())) {
-                $visitorDetails = Doctrine_Core::getTable('Visitor')->findOneByemail(
+                $visitorDetails = \KC\Repository\Visitor::getVisitorDetailsByEmail(
                     FrontEnd_Helper_viewHelper::sanitize($forgotPasswordForm->getValue('emailAddress'))
                 );
-                $fromEmail = Signupmaxaccount::getEmailAddress();
+                $fromEmail = \KC\Repository\Signupmaxaccount::getEmailAddress();
                 if ($visitorDetails!= false) {
-                    Visitor::updatePasswordRequest($visitorDetails['id'], 0);
-                    $mailer  = new FrontEnd_Helper_Mailer();
+                    \KC\Repository\Visitor::updatePasswordRequest($visitorDetails['id'], 0);
+                    $mailer  = new \FrontEnd_Helper_Mailer();
                     $content = array(
                                     'name'    => 'content',
                                     'content' => $this->view->partial(
                                         'emails/forgotpassword.phtml',
                                         array(
                                             'resetPasswordLink' => HTTP_PATH_LOCALE .
-                                            FrontEnd_Helper_viewHelper::__link('link_login').'/'
+                                            \FrontEnd_Helper_viewHelper::__link('link_login').'/'
                                             .FrontEnd_Helper_viewHelper::__link('link_resetpassword').'/'
                                             .base64_encode($visitorDetails['id'])
                                             )
                                     )
                                 );
                     $VisitorName = $visitorDetails['firstName'].' '.$visitorDetails['lastName'];
-                    BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'frontend', $visitorDetails['email']);
+                    \BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'frontend', $visitorDetails['email']);
                     $mailer->send(
-                        FrontEnd_Helper_viewHelper::__email('email_sitename'),
+                        \FrontEnd_Helper_viewHelper::__email('email_sitename'),
                         $fromEmail[0]['emailperlocale'],
                         $VisitorName,
                         $visitorDetails['email'],
-                        FrontEnd_Helper_viewHelper::__email('email_Forgot Password'),
+                        \FrontEnd_Helper_viewHelper::__email('email_Forgot Password'),
                         $content,
-                        FrontEnd_Helper_viewHelper::__email('email_Forgot password header'),
+                        \FrontEnd_Helper_viewHelper::__email('email_Forgot password header'),
                         '',
                         $this->_loginLinkAndData
                     );
                     $this->addFlashMessage(
-                        FrontEnd_Helper_viewHelper::__translate('Please check you mail and click on reset password link'),
-                        HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login') . '/'
-                        .FrontEnd_Helper_viewHelper::__link('link_forgotpassword'),
+                        \FrontEnd_Helper_viewHelper::__translate('Please check you mail and click on reset password link'),
+                        HTTP_PATH_LOCALE . \FrontEnd_Helper_viewHelper::__link('link_login') . '/'
+                        .\FrontEnd_Helper_viewHelper::__link('link_forgotpassword'),
                         'error'
                     );
                 } else {
                     $this->addFlashMessage(
-                        FrontEnd_Helper_viewHelper::__translate('Wrong Email address. Please enter valid email address'),
+                        \FrontEnd_Helper_viewHelper::__translate('Wrong Email address. Please enter valid email address'),
                         HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login') . '/'
-                        .FrontEnd_Helper_viewHelper::__link('link_forgotpassword'),
+                        .\FrontEnd_Helper_viewHelper::__link('link_forgotpassword'),
                         'error'
                     );
                 }
@@ -202,13 +202,13 @@ class LoginController extends Zend_Controller_Action
 
     public function resetpasswordAction()
     {
-        $this->view->headTitle(FrontEnd_Helper_viewHelper::__form('form_Members Only'));
-        $visitorId = FrontEnd_Helper_viewHelper::sanitize((base64_decode($this->_request->getParam("forgotid"))));
-        $visitor = Visitor::getVisitorDetails($visitorId);
-        $resetPasswordForm = new Application_Form_ResetPassword();
+        $this->view->headTitle(\FrontEnd_Helper_viewHelper::__form('form_Members Only'));
+        $visitorId = \FrontEnd_Helper_viewHelper::sanitize((base64_decode($this->_request->getParam("forgotid"))));
+        $visitor = \KC\Repository\Visitor::getUserDetails($visitorId);
+        $resetPasswordForm = new \Application_Form_ResetPassword();
         $this->view->form = $resetPasswordForm;
         if ($visitor['changepasswordrequest']) {
-            $this->view->resetLinkMessage = FrontEnd_Helper_viewHelper::__translate('This password reset link has already been used!');
+            $this->view->resetLinkMessage = \FrontEnd_Helper_viewHelper::__translate('This password reset link has already been used!');
             $this->view->linkAlreadyUsed = false;
         } else {
             $this->view->linkAlreadyUsed = true;
@@ -231,23 +231,23 @@ class LoginController extends Zend_Controller_Action
 
     public function resetPassword($visitorId, $newPassword, $encodedVisitorId)
     {
-        $updatedPassword = Visitor::updateVisitorPassword($visitorId, $newPassword);
+        $updatedPassword = \KC\Repository\Visitor::updateVisitorPassword($visitorId, $newPassword);
         if ($updatedPassword) {
-            if (!Auth_VisitorAdapter::hasIdentity()) {
-                Visitor::updatePasswordRequest($visitorId, 1);
-                $redirectLink = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login');
+            if (!\Auth_VisitorAdapter::hasIdentity()) {
+                \KC\Repository\Visitor::updatePasswordRequest($visitorId, 1);
+                $redirectLink = HTTP_PATH_LOCALE . \FrontEnd_Helper_viewHelper::__link('link_login');
             } else {
-                Visitor::updatePasswordRequest($visitorId, 1);
+                \KC\Repository\Visitor::updatePasswordRequest($visitorId, 1);
                 $redirectLink =
-                    HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'). '/'
-                    .FrontEnd_Helper_viewHelper::__link('link_profiel');
+                    HTTP_PATH_LOCALE . \FrontEnd_Helper_viewHelper::__link('link_login'). '/'
+                    .\FrontEnd_Helper_viewHelper::__link('link_profiel');
             }
-            $this->addFlashMessage(FrontEnd_Helper_viewHelper::__translate('Your password has been changed.'), $redirectLink, 'success');
+            $this->addFlashMessage(\FrontEnd_Helper_viewHelper::__translate('Your password has been changed.'), $redirectLink, 'success');
         } else {
             $this->addFlashMessage(
-                FrontEnd_Helper_viewHelper::__translate('Invalid reset password url please confirm again.'),
-                HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'). '/'
-                .FrontEnd_Helper_viewHelper::__link('link_resetpassword') .'/' . $encodedVisitorId,
+                \FrontEnd_Helper_viewHelper::__translate('Invalid reset password url please confirm again.'),
+                HTTP_PATH_LOCALE . \FrontEnd_Helper_viewHelper::__link('link_login'). '/'
+                .\FrontEnd_Helper_viewHelper::__link('link_resetpassword') .'/' . $encodedVisitorId,
                 'success'
             );
         }
@@ -257,26 +257,26 @@ class LoginController extends Zend_Controller_Action
     public function confirmemailAction()
     {
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
-        $visitorEmail = FrontEnd_Helper_viewHelper::sanitize((base64_decode($this->_request->getParam("email"))));
-        $visitor = Visitor::getVisitorDetailsByEmail($visitorEmail);
+        $visitorEmail = \FrontEnd_Helper_viewHelper::sanitize((base64_decode($this->_request->getParam("email"))));
+        $visitor = \KC\Repository\Visitor::getVisitorDetailsByEmail($visitorEmail);
         if (!empty($visitor)) {
-            if (Visitor::updateVisitorStatus($visitor[0]['id'])) {
+            if (\Visitor::updateVisitorStatus($visitor[0]['id'])) {
                 $this->addFlashMessage(
-                    FrontEnd_Helper_viewHelper::__translate('Your email address has been confirmed please login'),
-                    HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'),
+                    \FrontEnd_Helper_viewHelper::__translate('Your email address has been confirmed please login'),
+                    HTTP_PATH_LOCALE . \FrontEnd_Helper_viewHelper::__link('link_login'),
                     'success'
                 );
             } else {
                 $this->addFlashMessage(
-                    FrontEnd_Helper_viewHelper::__translate('Your email address is already confirmed'),
-                    HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'),
+                    \FrontEnd_Helper_viewHelper::__translate('Your email address is already confirmed'),
+                    HTTP_PATH_LOCALE . \FrontEnd_Helper_viewHelper::__link('link_login'),
                     'error'
                 );
             }
         } else {
             $this->addFlashMessage(
-                FrontEnd_Helper_viewHelper::__translate('Invalid confirmation link'),
-                HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'),
+                \FrontEnd_Helper_viewHelper::__translate('Invalid confirmation link'),
+                HTTP_PATH_LOCALE . \FrontEnd_Helper_viewHelper::__link('link_login'),
                 'error'
             );
         }
@@ -286,20 +286,20 @@ class LoginController extends Zend_Controller_Action
     {
         $username = base64_decode($this->getRequest()->getParam("email"));
         $password = $this->getRequest()->getParam("pwd");
-        $data_adapter = new Auth_VisitorAdapter($username, $password);
-        $auth = Zend_Auth::getInstance();
-        $auth->setStorage(new Zend_Auth_Storage_Session('front_login'));
+        $data_adapter = new \Auth_VisitorAdapter($username, $password);
+        $auth = \Zend_Auth::getInstance();
+        $auth->setStorage(new \Zend_Auth_Storage_Session('front_login'));
         $result = $auth->authenticate($data_adapter);
-        if (Auth_VisitorAdapter::hasIdentity()) {
-            $userid = Auth_VisitorAdapter::getIdentity()->id;
-            $obj = new Visitor();
+        if (\Auth_VisitorAdapter::hasIdentity()) {
+            $userid = \Auth_VisitorAdapter::getIdentity()->id;
+            $obj = new \KC\Entity\Visitor();
             $obj->updateLoginTime($userid);
             $this->_helper->Login->setUserCookies();
             $url =
                 HTTP_PATH_LOCALE
-                . FrontEnd_Helper_viewHelper::__link('link_inschrijven')
+                . \FrontEnd_Helper_viewHelper::__link('link_inschrijven')
                 .'/'
-                .FrontEnd_Helper_viewHelper::__link('link_profiel');
+                .\FrontEnd_Helper_viewHelper::__link('link_profiel');
             $this->getResponse()->setHeader('X-Nocache', 'no-cache');
             $this->_redirect($url);
         }
@@ -319,10 +319,10 @@ class LoginController extends Zend_Controller_Action
     {
         $username = base64_decode($this->getRequest()->getParam("email"));
         $password = $this->getRequest()->getParam("pwd");
-        $shopName = Shop::getShopName(base64_decode($this->getRequest()->getParam("shopid")));
+        $shopName = \KC\Repository\Shop::getShopName(base64_decode($this->getRequest()->getParam("shopid")));
         if ($type == 'codealert') {
-            $message = $shopName.' '.FrontEnd_Helper_viewHelper::__translate('have been removed from your favorite shops');
-            $visitorsId = Visitor::getVisitorDetailsByEmail($username);
+            $message = $shopName.' '.\FrontEnd_Helper_viewHelper::__translate('have been removed from your favorite shops');
+            $visitorsId = \KC\Repository\Visitor::getVisitorDetailsByEmail($username);
             $visitorsId = !empty($visitorsId) ? $visitorsId[0]['id'] : '';
             if (isset($visitorsId) && $visitorsId != '') {
                 $updateWeekNewLttr =
@@ -333,7 +333,7 @@ class LoginController extends Zend_Controller_Action
                         ->execute();
             }
         } else {
-            $message = FrontEnd_Helper_viewHelper::__translate('You are successfully unsubscribed to our newsletter');
+            $message = \FrontEnd_Helper_viewHelper::__translate('You are successfully unsubscribed to our newsletter');
             $updateWeekNewLttr =
                 Doctrine_Query::create()
                 ->update('Visitor')
@@ -343,21 +343,22 @@ class LoginController extends Zend_Controller_Action
         }
 
         $moduleKey = $this->getRequest()->getParam('lang', null);
-        $data_adapter = new Auth_VisitorAdapter($username, $password);
-        $auth = Zend_Auth::getInstance();
+
+        $data_adapter = new \Auth_VisitorAdapter($username, $password);
+        $auth = \Zend_Auth::getInstance();
         $auth->setStorage(new Zend_Auth_Storage_Session('front_login'));
         $result = $auth->authenticate($data_adapter);
-        if (Auth_VisitorAdapter::hasIdentity()) {
-            $userid = Auth_VisitorAdapter::getIdentity()->id;
-            $obj = new Visitor();
+        if (A\uth_VisitorAdapter::hasIdentity()) {
+            $userid = \Auth_VisitorAdapter::getIdentity()->id;
+            $obj = new \KC\Entity\Visitor();
             $obj->updateLoginTime($userid);
             $this->_helper->Login->setUserCookies();
             $flash = $this->_helper->getHelper('FlashMessenger');
             $flash->addMessage(array('success' => $message));
             $this->getResponse()->setHeader('X-Nocache', 'no-cache');
             $this->_helper->redirector(
-                FrontEnd_Helper_viewHelper::__link('link_profiel'),
-                FrontEnd_Helper_viewHelper::__link('link_inschrijven'),
+                \FrontEnd_Helper_viewHelper::__link('link_profiel'),
+                \FrontEnd_Helper_viewHelper::__link('link_inschrijven'),
                 $moduleKey
             );
         }

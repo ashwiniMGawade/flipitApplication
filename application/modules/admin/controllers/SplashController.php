@@ -5,18 +5,18 @@ class Admin_SplashController extends Zend_Controller_Action
 
     public function preDispatch()
     {
-        $databaseConnection = BackEnd_Helper_viewHelper::addConnection();
+        $databaseConnection = \BackEnd_Helper_viewHelper::addConnection();
 
-        if (!Auth_StaffAdapter::hasIdentity()) {
-            $pageReferer = new Zend_Session_Namespace('referer');
+        if (!\Auth_StaffAdapter::hasIdentity()) {
+            $pageReferer = new \Zend_Session_Namespace('referer');
             $pageReferer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
 
-        BackEnd_Helper_viewHelper::closeConnection($databaseConnection);
+        \BackEnd_Helper_viewHelper::closeConnection($databaseConnection);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
-        $sessionNamespace = new Zend_Session_Namespace();
+        $sessionNamespace = new \Zend_Session_Namespace();
 
         if ($sessionNamespace->settings['rights']['administration']['rights'] != '1'
             && $sessionNamespace->settings['rights']['administration']['rights'] !='2' ) {
@@ -26,7 +26,7 @@ class Admin_SplashController extends Zend_Controller_Action
             $this->_redirect('/admin');
         }
         $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        $this->splashObject = new Splash();
+        $this->splashObject = new \KC\Repository\Splash();
     }
 
     public function indexAction()
@@ -34,10 +34,9 @@ class Admin_SplashController extends Zend_Controller_Action
         $splashTableData = $this->splashObject->getSplashInformation();
 
         if (!empty($splashTableData)) {
-            $connectionObject = BackEnd_Helper_DatabaseManager::addConnection($splashTableData[0]['locale']);
+            \BackEnd_Helper_DatabaseManager::addConnection($splashTableData[0]['locale']);
             $splashOfferDetails = $this->splashObject->getOfferById($splashTableData[0]['offerId']);
-            BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
-            $this->view->currentOfferTitle = $splashOfferDetails['title'];
+            $this->view->currentOfferTitle = $splashOfferDetails->title;
             $this->view->currentOfferLocale = $splashTableData[0]['locale'];
         }
 
@@ -47,12 +46,12 @@ class Admin_SplashController extends Zend_Controller_Action
     public function addOfferAction()
     {
         $urlRequest = $this->getRequest();
-        $this->view->websites = Website::getAllWebsites();
+        $this->view->websites = \KC\Repository\Website::getAllWebsites();
         $this->getFlashMessage();
 
         if ($this->_request->isPost()) {
             $localeId = $urlRequest->getParam('locale', false);
-            $locale = BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
+            $locale = \BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
             $offerId = $urlRequest->getParam('searchOfferId', false);
             $splashTableData = $this->splashObject->getSplashInformation();
 
@@ -60,17 +59,12 @@ class Admin_SplashController extends Zend_Controller_Action
                 $this->splashObject->deleteSplashoffer();
             }
 
-            $this->splashObject->id = 1;
-            $this->splashObject->offerId = $offerId;
-            $this->splashObject->locale = $locale;
-            $this->splashObject->save();
-            $varnishObject = new Varnish();
+            $this->splashObject->saveSplashOffer($offerId, $locale);
+            $varnishObject = new \KC\Repository\Varnish();
             $varnishObject->addUrl("http://www.flipit.com");
             $this->setFlashMessage('Offer has been added successfully');
             $this->_redirect(HTTP_PATH . 'admin/splash');
         }
-
-
     }
 
     public function offersListAction()
@@ -79,12 +73,11 @@ class Admin_SplashController extends Zend_Controller_Action
             $localeId = intval($this->getRequest()->getParam('locale', false));
 
             if ($localeId) {
-                $locale = BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
-                $connectionObject = BackEnd_Helper_DatabaseManager::addConnection($locale);
-                $offers = new Offer($connectionObject['connName']);
+                $locale = \BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
+                \BackEnd_Helper_DatabaseManager::addConnection($locale);
+                $offers = new \KC\Repository\Offer();
                 $offerKeyword = $this->getRequest()->getParam('keyword');
                 $activeCoupons = $offers->getActiveCoupons($offerKeyword);
-                BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
                 $coupons = array();
                 if (!empty($activeCoupons)) {
                     foreach ($activeCoupons as $activeCoupon) {

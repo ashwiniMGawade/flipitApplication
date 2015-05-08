@@ -103,7 +103,7 @@ function getArticles(iSearchText,iStart,iSortCol,iSortDir) {
 						{
 							"fnRender" : function(obj) {
 								var tag = '';
-								var dat = obj.aData.created_at;
+								var dat = obj.aData.created_at.date;
 								tag = dat.split("-");
 								tag2 = tag[2];
 								var da = tag2.split(" ");

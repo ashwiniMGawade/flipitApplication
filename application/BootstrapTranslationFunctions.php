@@ -1,5 +1,6 @@
 <?php
-class BootstrapTranslationFunctions {
+class BootstrapTranslationFunctions
+{
     public static function getTranslationSettings($domain, $moduleDirectoryName, $localeCookieData)
     {
         # add suffix according to locale
@@ -8,8 +9,9 @@ class BootstrapTranslationFunctions {
             $suffix = "_" . strtoupper(LOCALE);
         }
 
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
         if (strlen($moduleDirectoryName) == 2) {
-            if ($domain != "www.kortingscode.nl" && $domain != "kortingscode.nl") {
+            if ($domain != $httpScheme.".kortingscode.nl" && $domain != "kortingscode.nl") {
                 $localePath = '/'.$moduleDirectoryName.'/';
             } else {
                 $localePath = '/';
@@ -27,7 +29,7 @@ class BootstrapTranslationFunctions {
     {
         $transSettings = self::getTranslationSettings($domain, $moduleDirectoryName, $localeCookieData);
         $locale = $transSettings['locale'];
-        Zend_Registry::set('Zend_Locale', $locale);
+        \Zend_Registry::set('Zend_Locale', $locale);
         return;
     }
 
@@ -46,7 +48,7 @@ class BootstrapTranslationFunctions {
     {
         $transSettings = self::getTranslationSettings($domain, $moduleDirectoryName, $localeCookieData);
         if ($moduleDirectoryName != 'admin') {
-            $session        = new Zend_Session_Namespace('Transl8');
+            $session        = new \Zend_Session_Namespace('Transl8');
             $activationMode = (isset($session->onlineTranslationActivated))
             ? $session->onlineTranslationActivated
             : false;
@@ -54,25 +56,25 @@ class BootstrapTranslationFunctions {
             $activationMode = false;
         }
 
-        Zend_Registry::set('Transl8_Activated', $activationMode);
-        Transl8_Translate_Writer_Csv::setDestinationFolder(
+        \Zend_Registry::set('Transl8_Activated', $activationMode);
+        \Transl8_Translate_Writer_Csv::setDestinationFolder(
             APPLICATION_PATH.'/../public'.$transSettings['localePath'].'language'
         );
         
-        if (Zend_Registry::get('Transl8_Activated')) {
-            $plugin = new Transl8_Controller_Plugin_Transl8();
+        if (\Zend_Registry::get('Transl8_Activated')) {
+            $plugin = new \Transl8_Controller_Plugin_Transl8();
             $plugin->setActionGetFormData($transSettings['localePath'].'trans/getformdata');
             $plugin->setActionSubmit($transSettings['localePath'].'trans/submit');
-            $front = Zend_Controller_Front::getInstance();
+            $front = \Zend_Controller_Front::getInstance();
             $front->registerPlugin($plugin);
 
-            Zend_Controller_Action_HelperBroker::addPath(
+            \Zend_Controller_Action_HelperBroker::addPath(
                 APPLICATION_PATH . '/../library/Transl8/Controller/Action/Helper/',
                 'Transl8_Controller_Action_Helper'
             );
             $locales = '';
-            $locales[Zend_Registry::get('Zend_Locale')] = Zend_Registry::get('Zend_Locale');
-            Transl8_Form::setLocales($locales);
+            $locales[\Zend_Registry::get('Zend_Locale')] = \Zend_Registry::get('Zend_Locale');
+            \Transl8_Form::setLocales($locales);
         }
     }
 
@@ -81,17 +83,17 @@ class BootstrapTranslationFunctions {
         $transSettings = self::getTranslationSettings($domain, $moduleDirectoryName, $localeCookieData);
         $locale        = $transSettings['locale'];
 
-        Zend_Locale::setDefault('en_US');
-        $locale = new Zend_Locale(Zend_Registry::get('Zend_Locale'));
-        $poTrans = new Zend_Translate(array('adapter' => 'gettext', 'locale'  => $locale, 'disableNotices' => true));
+        \Zend_Locale::setDefault('en_US');
+        $locale = new \Zend_Locale(Zend_Registry::get('Zend_Locale'));
+        $poTrans = new \Zend_Translate(array('adapter' => 'gettext', 'locale'  => $locale, 'disableNotices' => true));
         self::addTranslationFileInRegistry($poTrans, $transSettings, 'language/fallback/frontend_php', $locale);
         self::addTranslationFileInRegistry($poTrans, $transSettings, 'language/backend_php', $locale);
         self::getSavedTranslationFileAndSetInRegistry($poTrans, $locale);
         self::addTranslationFileInRegistry($poTrans, $transSettings, 'language/email', $locale);
         self::addTranslationFileInRegistry($poTrans, $transSettings, 'language/form', $locale);
         self::addTranslationFileInRegistry($poTrans, $transSettings, 'language/po_links', $locale);
-        Zend_Registry::set('Zend_Locale', $locale);
-        Zend_Registry::set('Zend_Translate', $poTrans);
+        \Zend_Registry::set('Zend_Locale', $locale);
+        \Zend_Registry::set('Zend_Translate', $poTrans);
     }
 
     public static function addTranslationFileInRegistry($poTrans, $transSettings, $fileName, $locale)
@@ -108,7 +110,7 @@ class BootstrapTranslationFunctions {
 
     public static function getSavedTranslationFileAndSetInRegistry($poTrans, $locale)
     {
-        $translateSession = new Zend_Session_Namespace('Transl8');
+        $translateSession = new \Zend_Session_Namespace('Transl8');
         if (!empty($translateSession->onlineTranslationActivated)) {
             $dbTranslations = self::getDbTranslations($locale);
             $poTrans->addTranslation($dbTranslations);
@@ -121,9 +123,9 @@ class BootstrapTranslationFunctions {
 
     public static function getDbTranslations($locale)
     {
-        $getDbTranslationsForZendTranslate = Translations::getDbTranslationsForZendTranslate();
+        $getDbTranslationsForZendTranslate = \KC\Repository\Translations::getDbTranslationsForZendTranslate();
         
-        $dbTranslations = new Zend_Translate(
+        $dbTranslations = new \Zend_Translate(
             array(
                 'adapter' => 'array',
                 'locale'  => $locale,
@@ -141,14 +143,14 @@ class BootstrapTranslationFunctions {
 
     public static function getCsvTranslations($locale)
     {
-        $inlineTranslationFolder = Transl8_Translate_Writer_Csv::getDestinationFolder();
+        $inlineTranslationFolder = \Transl8_Translate_Writer_Csv::getDestinationFolder();
         $csvTranslation = array(
             'adapter'   => 'Transl8_Translate_Adapter_Csv',
-            'scan'      => Zend_Translate::LOCALE_DIRECTORY,
+            'scan'      => \Zend_Translate::LOCALE_DIRECTORY,
             'content'   => $inlineTranslationFolder . '/',
             'locale'    => $locale
         );
-        $csvTranslate = new Zend_Translate($csvTranslation);
+        $csvTranslate = new \Zend_Translate($csvTranslation);
         return $csvTranslate;
     }
 }

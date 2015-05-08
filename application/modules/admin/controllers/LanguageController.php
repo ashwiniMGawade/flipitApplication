@@ -11,7 +11,7 @@ class Admin_LanguageController extends Zend_Controller_Action
     public function preDispatch()
     {
         $params = $this->_getAllParams();
-        if (!Auth_StaffAdapter::hasIdentity()) {
+        if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
@@ -85,7 +85,7 @@ class Admin_LanguageController extends Zend_Controller_Action
     {
         if (isset($_FILES['files']['name']) && $_FILES['files']['name'] != '') {
 
-            $ext = BackEnd_Helper_viewHelper::getImageExtension($_FILES['files']['name']);
+            $ext = \BackEnd_Helper_viewHelper::getImageExtension($_FILES['files']['name']);
 
 
             $result = self::uploadImage($_FILES['files']);
@@ -97,7 +97,7 @@ class Admin_LanguageController extends Zend_Controller_Action
     public function uploadimage($files)
     {
         $uploadPath = "language/";
-        $adapter = new Zend_File_Transfer_Adapter_Http();
+        $adapter = new \Zend_File_Transfer_Adapter_Http();
         $user_path = ROOT_PATH . $uploadPath;
         $img = $files['name'];
         //echo $user_path; die;
@@ -118,7 +118,7 @@ class Admin_LanguageController extends Zend_Controller_Action
             $fname = $user_path . $orgName;
 
             $adapter->addFilter(
-                    new Zend_Filter_File_Rename(
+                    new \Zend_Filter_File_Rename(
                             array('target' => $fname,
                                     'overwrite' => true)), null, $file);
 
@@ -162,7 +162,7 @@ class Admin_LanguageController extends Zend_Controller_Action
         $existlinks = strstr($fileName, 'links');// check if links keyword is present
         $existForm = strstr($fileName, 'form'  . $suffix);// check if form keyword is present
         $existEmail = strstr($fileName, 'email'  . $suffix);// check if emails keyword is present
-        $obj = new FrontEnd_Helper_POTCreator();
+        $obj = new \FrontEnd_Helper_POTCreator();
 
         if($existback_php){
             $scanPath[0] = APPLICATION_PATH . '/modules';

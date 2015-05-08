@@ -15,7 +15,7 @@ class CategoryController extends Zend_Controller_Action
         } else {
             $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
         }
-        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
+        $this->viewHelperObject = new \FrontEnd_Helper_viewHelper();
     }
     public function showAction()
     {
@@ -28,27 +28,26 @@ class CategoryController extends Zend_Controller_Action
             $cacheKey = $categoryPermalink;
         }
 
-        $categoryDetails = FrontEnd_Helper_viewHelper::
+        $categoryDetails = \FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 'category_'.$cacheKey.'_data',
                 array(
-                    'function' => 'Category::getCategoryDetails', 'parameters' => array($categoryPermalink)
+                    'function' => '\KC\Repository\Category::getCategoryDetails', 'parameters' => array($categoryPermalink)
                 )
             );
-
         if (count($categoryDetails) > 0) {
-            $categoryVoucherCodes = FrontEnd_Helper_viewHelper::
+            $categoryVoucherCodes = \FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 'category_'.$cacheKey.'_voucherCodes',
                 array(
-                    'function' => 'Category::getCategoryVoucherCodes',
+                    'function' => '\KC\Repository\Category::getCategoryVoucherCodes',
                     'parameters' => array($categoryDetails[0]['id'])
                 )
             );
-            $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination(
+            $offersWithPagination = \FrontEnd_Helper_viewHelper::renderPagination(
                 $categoryVoucherCodes,
                 $this->_getAllParams(),
-               20,
+                20,
                 9
             );
             $this->view->offersWithPagination = $offersWithPagination;
@@ -60,57 +59,66 @@ class CategoryController extends Zend_Controller_Action
                 $categoryDetails[0]['name'],
                 trim($categoryDetails[0]['metatitle']),
                 trim($categoryDetails[0]['metaDescription']),
-                FrontEnd_Helper_viewHelper::__link('link_categorieen') . '/' .$categoryDetails[0]['permaLink'],
+                \FrontEnd_Helper_viewHelper::__link('link_categorieen') . '/' .$categoryDetails[0]['permaLink'],
                 FACEBOOK_IMAGE,
                 $customHeader
             );
 
         } else {
-            throw new Zend_Controller_Action_Exception('', 404);
+            throw new \Zend_Controller_Action_Exception('', 404);
         }
-        $signUpFormLarge = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
+        $signUpFormLarge = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget =
-           FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
-        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormLarge, $signUpFormSidebarWidget);
+           \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
+        \FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormLarge, $signUpFormSidebarWidget);
         $this->view->form = $signUpFormLarge;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $socialCodeForm = new Application_Form_SocialCode();
         $this->view->zendForm = $socialCodeForm;
         $this->view->pageCssClass = 'page-store';
+        $categoryId = !empty($categoryDetails[0]['id']) ? $categoryDetails[0]['id'] : '';
+        $this->view->widgetPosition = \KC\Repository\WidgetLocation::getWidgetPositionForFrontEnd(
+            'category',
+            'global',
+            $categoryId,
+            '',
+            $categoryVoucherCodes
+        );
     }
 
     public function indexAction()
     {
-        $categoryPermalink = FrontEnd_Helper_viewHelper::getPagePermalink();
+        $categoryPermalink = \FrontEnd_Helper_viewHelper::getPagePermalink();
         $categoryPermalink = explode('?', $categoryPermalink);
         $categoryPermalink = isset($categoryPermalink[0]) ? $categoryPermalink[0] : '';
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink);
-        $pageDetails = Page::getPageDetailsFromUrl($categoryPermalink);
+        $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink);
+        $pageDetails = (object)\KC\Repository\Page::getPageDetailsFromUrl($categoryPermalink);
         $this->viewHelperObject->getMetaTags(
             $this,
             isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
             isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
             isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
-            FrontEnd_Helper_viewHelper::__link('link_categorieen'),
+            \FrontEnd_Helper_viewHelper::__link('link_categorieen'),
             FACEBOOK_IMAGE,
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
-        $allCategories = FrontEnd_Helper_viewHelper::
+        $allCategories = \FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 'all_category_list',
                 array(
-                    'function' => 'Category::getCategoriesInformation', 'parameters' => array()
+                    'function' => '\KC\Repository\Category::getCategoriesInformation', 'parameters' => array()
                 )
             );
-        $specialPagesList = FrontEnd_Helper_viewHelper::
+        $specialPagesList = \FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 'all_specialPages_list',
                 array(
-                    'function' => 'Page::getSpecialListPages', 'parameters' => array()
+                    'function' => '\KC\Repository\Page::getSpecialListPages', 'parameters' => array()
                 )
             );
         $specialPages = $this->_helper->Category->getSpecialPageWithOffersCount($specialPagesList);
-        $this->view->categoriesWithSpecialPagesList = array_merge($allCategories, $specialPages);
+        $categories = FrontEnd_Helper_viewHelper::getCategories($allCategories);
+        $this->view->categoriesWithSpecialPagesList = array_merge($categories, $specialPages);
         $this->view->pageCssClass = 'all-categories-alt-page';
     }
 }

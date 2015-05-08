@@ -7,7 +7,7 @@ echo $expiredOffersPartialClass->getExpiredOffersHeader($this->shopName);?>
 foreach ($this->expiredOffers as $offer) :
     $offer = (object) $offer;
     $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-    $shopUrl = $domainName.'out/shop/'.$offer->shop['id'];
+    $shopUrl = $domainName.'out/shop/'.$offer->shopOffers['id'];
     ?>
     <div class="line">
         <span class='replace'>
@@ -23,7 +23,7 @@ foreach ($this->expiredOffers as $offer) :
                     <?php echo $expiredOffersPartialClass->getOfferCouponCode($offer->couponCode)?>
                 </div>
             </div>
-            <span class="date"><?php echo $expiredOffersPartialClass->getExpiredOnDate($offer->endDate);?></span>
+            <span class="date"><?php echo $expiredOffersPartialClass->getExpiredOnDate($offer->endDate->format('Y-m-d'));?></span>
         </span>
     </div>
     <?php 

@@ -244,14 +244,14 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
 						{
 							"fnRender" : function(obj) {
 								var tag='';
-								if(obj.aData.shop!=undefined && obj.aData.shop!=null && obj.aData.shop!='') {
-									if(obj.aData.shop.name!=undefined && obj.aData.shop.name!=null && obj.aData.shop.name!='')
+								if(obj.aData.shopOffers!=undefined && obj.aData.shopOffers!=null && obj.aData.shopOffers!='') {
+									if(obj.aData.shopOffers.name!=undefined && obj.aData.shopOffers.name!=null && obj.aData.shopOffers.name!='')
 									{
-										tag = "<p class='word-wrap-without-margin-offer'><a href='javascript:void(0)'>"+ucfirst(obj.aData.shop.name)+"</a></p>";
+										tag = "<p class='word-wrap-without-margin-offer'><a href='javascript:void(0)'>"+ucfirst(obj.aData.shopOffers.name)+"</a></p>";
 									}else {
 										
 										
-										tag = "<p class='word-wrap-without-margin-offer'><a href='javascript:void(0)'>"+ucfirst(obj.aData.shop.name)+"</p></a>";
+										tag = "<p class='word-wrap-without-margin-offer'><a href='javascript:void(0)'>"+ucfirst(obj.aData.shopOffers.name)+"</p></a>";
 										
 									}
 								}
@@ -310,7 +310,6 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
 						},{
 							"fnRender" : function(obj) {
 								var tag = '';
-								
 								if(obj.aData.couponCode){
 									tag = obj.aData.couponCode;
 								}
@@ -325,18 +324,17 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
 							
 						},{
 							"fnRender" : function(obj) {
+								var date = "";
 								
-								var sd = "";
-								if(obj.aData.startDate != null){
-								var tag = '';
-								var dat = obj.aData.startDate;
-								tag = dat.split("-");
-								tag2 = tag[2];
-								var da = tag2.split(" ");
+								if(obj.aData.startDate !=null && obj.aData.startDate !='undefined' ) {
+								var splitdate = obj.aData.startDate.date.split(" ");
+								if(obj.aData.startDate.date != null && splitdate[0] != '1970-01-01') {
+									
+										var date = obj.aData.startDate.date;
 								
-								sd = (da[0]+'-'+tag[1]+'-'+tag[0]);
 								}
-								 return "<a href='javascript:void(0)'>" + sd + "</a>";
+							}
+								 return "<a href='javascript:void(0)'>" + date + "</a>";
 								 
 							},
 							"bSearchable" : true,
@@ -346,16 +344,17 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
 						{
 							"fnRender" : function(obj) {
 								
-								var ed = "";
-								if(obj.aData.endDate != null){
-								var tag = '';
-								var dat = obj.aData.endDate;
-								tag = dat.split("-");
-								tag2 = tag[2];
-								var da = tag2.split(" ");
-								 ed = (da[0]+'-'+tag[1]+'-'+tag[0]);
-								}
-								 return "<a href='javascript:void(0)'>" + ed + "</a>";
+								var date = "";
+								if(obj.aData.endDate !=null && obj.aData.endDate !='undefined' ) {
+									var splitdate = obj.aData.endDate.date.split(" ");
+									if (obj.aData.endDate.date != null && splitdate[0] != '1970-01-01') {
+										
+											var date = obj.aData.endDate.date;
+								
+									
+									}
+								}	
+								 return "<a href='javascript:void(0)'>" + date + "</a>";
 								 
 							},
 							"bSearchable" : true,
@@ -365,8 +364,8 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
 						{
 							"fnRender" : function(obj) {
 								var click ;
-								if(obj.aData.clicks > 0){
-									click = obj.aData.clicks;
+								if(obj.aData.totalViewcount > 0){
+									click = obj.aData.totalViewcount;
 								} else {
 									click = 0;
 								}

@@ -5,11 +5,11 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
     {
         $voucherCacheKeyCheck =
             FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularvouchercode_list_shoppage');
-        $shopCategories = Shop::returnShopCategories($shopId);
+        $shopCategories = \KC\Repository\Shop::returnShopCategories($shopId);
         if ($voucherCacheKeyCheck) {
-            $shopCategories = Shop::returnShopCategories($shopId);
+            $shopCategories = \KC\Repository\Shop::returnShopCategories($shopId);
             FrontEnd_Helper_viewHelper::setInCache('allCategoriesOf_shoppage_'. $shopId, $shopCategories);
-            $topVoucherCodes = Offer::getTopCouponCodes($shopCategories, 100);
+            $topVoucherCodes = \KC\Repository\Offer::getTopCouponCodes($shopCategories, 100);
             FrontEnd_Helper_viewHelper::setInCache('all_popularvouchercode_list_shoppage', $topVoucherCodes);
         } else {
             $shopCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('allCategoriesOf_shoppage_'. $shopId);
@@ -27,13 +27,13 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
     {
         $removeDuplicateShop = '';
         foreach ($similarShopsOffers as $offerIndex => $offer) {
-            $removeDuplicateShop[$offer['shop']['id']] = $similarShopsOffers[$offerIndex];
+            $removeDuplicateShop[$offer['shopOffers']['id']] = $similarShopsOffers[$offerIndex];
         }
         $offersUnique = '';
         foreach ($removeDuplicateShop as $shopIndex => $offer) {
             $offersUnique[] = $removeDuplicateShop[$shopIndex];
         }
-        return  $offersUnique;
+        return $offersUnique;
     }
 
     public static function changeIndexOfSixReasons($sixShopReasons)
@@ -54,14 +54,14 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         switch ($peramType)
         {
             case 'permalink':
-                    $countOfPermalinkStringValues = $splittedPermalink;
-                    if (array_key_exists(count($countOfPermalinkStringValues) - 2, $splittedPermalink)) {
-                        unset($splittedPermalink[count($countOfPermalinkStringValues) - 2]);
-                    }  
-                    if (array_key_exists(count($countOfPermalinkStringValues) - 1, $splittedPermalink)) {
-                        unset($splittedPermalink[count($countOfPermalinkStringValues) - 1]);
-                    }
-                    $urlString = implode("-", $splittedPermalink);
+                $countOfPermalinkStringValues = $splittedPermalink;
+                if (array_key_exists(count($countOfPermalinkStringValues) - 2, $splittedPermalink)) {
+                    unset($splittedPermalink[count($countOfPermalinkStringValues) - 2]);
+                }
+                if (array_key_exists(count($countOfPermalinkStringValues) - 1, $splittedPermalink)) {
+                    unset($splittedPermalink[count($countOfPermalinkStringValues) - 1]);
+                }
+                $urlString = implode("-", $splittedPermalink);
                 break;
 
             case 'firstCharacter':
@@ -84,7 +84,7 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopId);
         $howToGuides = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'store_'.$cacheKey.'_howToGuide',
-            array('function' => 'Shop::getShopDetails', 'parameters' => array($shopId))
+            array('function' => 'KC\Repository\Shop::getShopDetails', 'parameters' => array($shopId))
         );
         return $howToGuides;
     }
@@ -94,7 +94,7 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         $allShopDetailKey = 'shopDetails_'.$shopList;
         $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             $allShopDetailKey,
-            array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId))
+            array('function' => 'KC\Repository\Shop::getStoreDetails', 'parameters' => array($shopId))
         );
         return $shopInformation;
     }
@@ -141,5 +141,21 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
             }
         }
         return $shopChain;
+    }
+
+    public static function getNumberOfDaysTillOfferGetsLive($offerInfo)
+    {
+        $daysLeftTillOfferGetsLive = '';
+        if (!empty($offerInfo) && isset($offerInfo[0]['startDate'])) {
+            $offerStartDate = $offerInfo[0]['startDate']->format('Y-m-d');
+            $secondsForStartDate = strtotime($offerStartDate) - time();
+            $daysLeftTillOfferGetsLive = floor($secondsForStartDate / 86400) + 1;
+            if ($daysLeftTillOfferGetsLive <= 5) {
+                $daysLeftTillOfferGetsLive = isset($daysLeftTillOfferGetsLive) && $daysLeftTillOfferGetsLive > 1
+                    ? $daysLeftTillOfferGetsLive . ' ' . FrontEnd_Helper_viewHelper::__translate('days')
+                    : $daysLeftTillOfferGetsLive . ' ' . FrontEnd_Helper_viewHelper::__translate('day');
+            }
+        }
+        return $daysLeftTillOfferGetsLive;
     }
 }

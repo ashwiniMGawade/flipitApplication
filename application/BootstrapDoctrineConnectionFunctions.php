@@ -1,36 +1,90 @@
 <?php
-class BootstrapDoctrineConnectionFunctions {
-
-    public static function doctrineConnection($doctrineOptions, $moduleDirectoryName, $localeCookieData)
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\ORM\Tools\Setup;
+class BootstrapDoctrineConnectionFunctions
+{
+    public static function doctrineConnections($doctrineOptions, $moduleDirectoryName, $localeCookieData)
     {
-        spl_autoload_register(array('Doctrine', 'modelsAutoload'));
-        $manager = Doctrine_Manager::getInstance();
-        $manager->setAttribute(
-            Doctrine_Core::ATTR_MODEL_LOADING,
-            Doctrine_Core::MODEL_LOADING_CONSERVATIVE
-        );
-        $manager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
-        $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
-        Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
-        $doctrineOptions = $doctrineOptions;
-        $imbullDbConnection = Doctrine_Manager::connection(
-            $doctrineOptions['imbull'],
-            'doctrine'
-        );
-
-        $localSiteDbConnection = self::getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData);
-        Doctrine_Manager::connection(
-            $doctrineOptions[strtolower($localSiteDbConnection)]['dsn'],
-            'doctrine_site'
-        );
+        $application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
+        $frontControllerObject = $application->getOption('resources');
+        $config = self::setMemcachedAndProxyClasses($frontControllerObject);
+        $emUser = EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);
+        $localSiteDbConnection = strtolower(self::getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData));
+        self::setEntityManagerForlocale($doctrineOptions[$localSiteDbConnection]['dsn'], $config);
+        Zend_Registry::set('emUser', $emUser);
         BootstrapConstantsFunctions::constantsForLocaleAndTimezoneSetting();
+        self::setDefaultTimezone();
+        return $emUser;
+    }
+    
+    public static function setMemcachedAndProxyClasses($frontControllerObject)
+    {
+        $memcacheHostParams = $frontControllerObject['frontController']['params']['memcache'];
+        $splitMemcacheValues = explode(':', $memcacheHostParams);
+        $memcachePort = isset($splitMemcacheValues[1]) ? $splitMemcacheValues[1] : '';
+        $memcacheHost = isset($splitMemcacheValues[0]) ? $splitMemcacheValues[0] : '';
+        $memcache = new Memcached();
+        $memcache->addServer($memcacheHost, $memcachePort);
+        $cache = new \Doctrine\Common\Cache\MemcachedCache;
+        $cache->setMemcached($memcache);
+        
+        $isDevMode = false;
+        $proxyPath = null;
+        if (APPLICATION_ENV == 'development') {
+            $cache = null;
+            $isDevMode = true;
+            $proxyPath = APPLICATION_PATH . '/../library/KC/Entity/Proxy';
+        }
+        $config = Setup::createConfiguration($isDevMode, $proxyPath, $cache);
+        $config->setProxyNamespace('Proxy');
+
+        $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
+        $driver = new AnnotationDriver(new AnnotationReader(), $paths);
+        AnnotationRegistry::registerLoader('class_exists');
+        $config->setMetadataDriverImpl($driver);
+        
+        return $config;
+    }
+
+    public static function setEntityManagerForlocale($dsn, $config)
+    {
+        $databaseConnectionCredentials = self::getDatabaseCredentials($dsn);
+        $emLocale = EntityManager::create($databaseConnectionCredentials, $config);
+        Zend_Registry::set('emLocale', $emLocale);
+    }
+
+    public static function setDefaultTimezone()
+    {
         $localeValue = explode('_', COUNTRY_LOCALE);
+        $localeValue = isset($localeValue[1]) ? $localeValue[1] : $localeValue[0];
         if (LOCALE == '') {
             date_default_timezone_set('Europe/Amsterdam');
-        } else if (strtolower($localeValue[1]) == LOCALE) {
+        } else if (strtolower($localeValue) == LOCALE) {
             date_default_timezone_set(LOCALE_TIMEZONE);
         }
-        return $imbullDbConnection;
+    }
+
+    public static function getDatabaseCredentials($doctrineOptions)
+    {
+        $splitDbName = explode('/', $doctrineOptions);
+        $splitDbUserName = explode(':', $splitDbName[2]);
+        $splitDbPassword = explode('@', $splitDbUserName[1]);
+        $splitHostName = explode('@', $splitDbUserName[1]);
+        $dbPassword = $splitDbPassword[0];
+        $dbUserName = $splitDbUserName[0];
+        $dbName = $splitDbName[3];
+        $hostName = isset($splitHostName[1]) ? $splitHostName[1] : 'localhost';
+        return array(
+            'host'     => $hostName,
+            'driver'   => 'pdo_mysql',
+            'user'     => $dbUserName,
+            'password' => $dbPassword,
+            'dbname'   => $dbName,
+        );
     }
 
     public static function getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData)
@@ -43,7 +97,7 @@ class BootstrapDoctrineConnectionFunctions {
             $locale = isset($localeCookieData) ? $localeCookieData : 'en';
         } elseif ($moduleDirectoryName == "default") {
             $locale = 'en';
-        } elseif (strlen($moduleDirectoryName) == 2 && HTTP_HOST=='www.kortingscode.nl') {
+        } elseif (strlen($moduleDirectoryName) == 2 && HTTP_HOST== $httpScheme.'.kortingscode.nl') {
             $locale = 'en';
         }
         return $locale;

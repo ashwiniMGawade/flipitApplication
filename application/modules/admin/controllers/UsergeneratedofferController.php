@@ -3,22 +3,22 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
 {
     public function preDispatch()
     {
-        $dbConnection = BackEnd_Helper_viewHelper::addConnection();
+        $dbConnection = \BackEnd_Helper_viewHelper::addConnection();
         if (!Auth_StaffAdapter::hasIdentity()) {
-            $referer = new Zend_Session_Namespace('referer');
+            $referer = new \Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($dbConnection);
+        \BackEnd_Helper_viewHelper::closeConnection($dbConnection);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
-        $sessionNamespace = new Zend_Session_Namespace();
+        $sessionNamespace = new \Zend_Session_Namespace();
     }
 
     public function getofferAction()
     {
         $params = $this->_getAllParams();
-        $offersList = UserGeneratedOffer::getOffersList($params);
+        $offersList = \KC\Repository\UserGeneratedOffer::getOffersList($params);
         echo Zend_Json::encode($offersList);
         die();
     }
@@ -35,12 +35,12 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     {
         $searchString = $this->getRequest()->getParam('keyword');
         $deletedFlag = $this->getRequest()->getParam('flag');
-        $searchResults = UserGeneratedOffer::searchToFiveShop($searchString, $deletedFlag);
+        $searchResults = KC\Repository\UserGeneratedOffer::searchToFiveShop($searchString, $deletedFlag);
         $resultWithoutDuplication = array();
         $removeDuplicateRecords = array();
         if (sizeof($searchResults) > 0) {
             foreach ($searchResults as $shop) {
-                $id =  $shop['shop']['id'];
+                $id =  $shop['id'];
                 if (isset($removeDuplicateRecords[$id])) {
                     $removeDuplicateRecords[$id] = $id;
                 } else {
@@ -52,7 +52,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
             $recordNotFoundMessage = $this->view->translate('No Record Found');
             $resultWithoutDuplication[] = $recordNotFoundMessage;
         }
-        echo Zend_Json::encode($resultWithoutDuplication);
+        echo \Zend_Json::encode($resultWithoutDuplication);
         die;
     }
 
@@ -60,7 +60,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     {
         $searchString = $this->getRequest()->getParam('keyword');
         $deletedFlag = $this->getRequest()->getParam('flag');
-        $searchResults = UserGeneratedOffer::searchToFiveOffer($searchString, $deletedFlag);
+        $searchResults = KC\Repository\UserGeneratedOffer::searchToFiveOffer($searchString, $deletedFlag);
         $resultWithoutDuplication = array();
         $removeDuplicateRecords = array();
         if (sizeof($searchResults) > 0) {
@@ -77,7 +77,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
             $recordNotFoundMessage = $this->view->translate('No Record Found');
             $resultWithoutDuplication[] = $recordNotFoundMessage;
         }
-        echo Zend_Json::encode($resultWithoutDuplication);
+        echo \Zend_Json::encode($resultWithoutDuplication);
         die;
     }
 
@@ -85,7 +85,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     {
         $searchString = $this->getRequest()->getParam('keyword');
         $deletedFlag = $this->getRequest()->getParam('flag');
-        $searchResults = UserGeneratedOffer::searchToFiveCoupon($searchString, $deletedFlag);
+        $searchResults = KC\Repository\UserGeneratedOffer::searchToFiveCoupon($searchString, $deletedFlag);
         $resultWithoutDuplication = array();
         if (sizeof($searchResults) > 0) {
             foreach ($searchResults as $coupon) {
@@ -96,14 +96,14 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
             $recordNotFoundMessage = $this->view->translate('No Record Found');
             $resultWithoutDuplication[] = $recordNotFoundMessage;
         }
-        echo Zend_Json::encode($resultWithoutDuplication);
+        echo \Zend_Json::encode($resultWithoutDuplication);
         die;
     }
 
     public function permanentdeleteAction()
     {
         $id = $this->getRequest()->getParam('id');
-        $deletePermanent = Offer::deleteOffer($id);
+        $deletePermanent = KC\Repository\Offer::deleteOffer($id);
         die;
     }
 
@@ -112,20 +112,20 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
         $params = $this->_getAllParams();
         $this->view->offerId = $params['id'];
         $this->view->qstring = $_SERVER['QUERY_STRING'];
-        $shop = Offer::getOfferShopDetail($params['id']);
+        $shop = KC\Repository\Offer::getOfferShopDetail($params['id']);
         $this->view->offerShopLogo = $shop;
-        $this->view->shopList = Shop::getOfferShopList();
-        $this->view->catList= Category::getCategoriesInformation();
-        $page = new Page();
+        $this->view->shopList = KC\Repository\Shop::getOfferShopList();
+        $this->view->catList= KC\Repository\Category::getCategoriesInformation();
+        $page = new KC\Repository\Page();
         $this->view->pages = $page->getPagesOffer();
-        $allTiles = OfferTiles::getAllTiles();
+        $allTiles = KC\Repository\OfferTiles::getAllTiles();
         $this->view->tiles = $allTiles;
     }
 
     public function updateofferAction()
     {
         $params = $this->_getAllParams();
-        $offer = UserGeneratedOffer::saveApprovedStatus($params['offerId'], $params['approveSocialCode']);
+        $offer = KC\Repository\UserGeneratedOffer::saveApprovedStatus($params['offerId'], $params['approveSocialCode']);
         $offerUpdate = $offer->updateOffer($params);
         $flashMessage = $this->_helper->getHelper('FlashMessenger');
         if ($offerUpdate['result']) {
@@ -144,15 +144,15 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     {
         $varnishObj = new Varnish();
         $varnishObj->addUrl(HTTP_PATH_FRONTEND);
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_nieuw'));
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_top-20'));
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_nieuw'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-20'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_categorieen'));
         $varnishObj->addUrl("http://www.flipit.com");
         if (LOCALE == '') {
             $varnishObj->addUrl(HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
             $varnishObj->addUrl(HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed');
         }
-        $varnishUrls = Offer::getAllUrls($id);
+        $varnishUrls = KC\Repository\Offer::getAllUrls($id);
         if (isset($varnishUrls) && count($varnishUrls) > 0) {
             foreach ($varnishUrls as $value) {
                 $varnishObj->addUrl(HTTP_PATH_FRONTEND . $value);
@@ -163,7 +163,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     public function shopdetailAction()
     {
         $params = $this->_getAllParams();
-        echo Zend_Json::encode(Shop::getShopDetail($params['shopId']));
+        echo \Zend_Json::encode(KC\Repository\Shop::getShopDetail($params['shopId']));
         die;
     }
 }

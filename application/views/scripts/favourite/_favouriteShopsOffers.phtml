@@ -1,24 +1,24 @@
-<?php 
+<?php
 foreach ($this->favouriteShopsOffers as $favouriteShopsOffer) {
     $shopImage = 
-        PUBLIC_PATH_CDN.ltrim($favouriteShopsOffer['shop']['logo']['path'], "/")
-        . "thum_big_" . $favouriteShopsOffer['shop']['logo']['name'];
+        PUBLIC_PATH_CDN.ltrim($favouriteShopsOffer['shopOffers']['logo']['path'], "/")
+        . "thum_big_" . $favouriteShopsOffer['shopOffers']['logo']['name'];
 
-    $permaLink = isset($favouriteShopsOffer["shop"]["permaLink"]) 
-        ?  $favouriteShopsOffer["shop"]["permaLink"]
-        : $favouriteShopsOffer["shop"]["permalink"];
+    $permaLink = isset($favouriteShopsOffer["shopOffers"]["permaLink"]) 
+        ?  $favouriteShopsOffer["shopOffers"]["permaLink"]
+        : $favouriteShopsOffer["shopOffers"]["permalink"];
 
     $activeOffers = isset($favouriteShopsOffer['activeCount']) 
         ? $favouriteShopsOffer['activeCount'] 
-        : Shop::getActiveOffersCount($favouriteShopsOffer['shop']['id']);
+        : KC\Repository\Shop::getActiveOffersCount($favouriteShopsOffer['shopOffers']['id']);
 
     $activeOffers = isset($favouriteShopsOffer['activeCount']) 
         ? $activeOffers 
         : $activeOffers[0]['activeCount'];
     $showFavouriteButton = true;
-    if(!empty($favouriteShopsOffer['shop']['favoriteshops'])) {
-        foreach ($favouriteShopsOffer['shop']['favoriteshops'] as $favouriteShops) {
-            if($favouriteShops['visitorId'] == Auth_VisitorAdapter::getIdentity()->id) {
+    if(!empty($favouriteShopsOffer['shopOffers']['favoriteshops'])) {
+        foreach ($favouriteShopsOffer['shopOffers']['favoriteshops'] as $favouriteShops) {
+            if($favouriteShops['visitor']['id'] == Auth_VisitorAdapter::getIdentity()->id) {
                 $showFavouriteButton = false;
             }
         }
@@ -32,7 +32,7 @@ foreach ($this->favouriteShopsOffers as $favouriteShopsOffer) {
                     <div class="center">
                         <div class="code-holder">
                             <img src="<?php echo $shopImage;?>" width="132"
-                            alt="<?php echo $favouriteShopsOffer['shop']['name'];?>" title="<?php echo $favouriteShopsOffer['shop']['name'];?>">
+                            alt="<?php echo $favouriteShopsOffer['shopOffers']['name'];?>" title="<?php echo $favouriteShopsOffer['shopOffers']['name'];?>">
                         </div>
                     </div>
                     <footer class="bottom"><?php echo $this->translate('code');?></footer>
@@ -42,7 +42,7 @@ foreach ($this->favouriteShopsOffers as $favouriteShopsOffer) {
                 href='<?php echo HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='
                 . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') ."/"
                 . FrontEnd_Helper_viewHelper::__link('link_memberonlycodes').'&shopId='
-                . base64_encode($favouriteShopsOffer['shop']['id']);?>' class="pop btn btn-default">
+                . base64_encode($favouriteShopsOffer['shopOffers']['id']);?>' class="pop btn btn-default">
                     <span class="glyphicon red-heart glyphicon-heart"></span>
                     <span class='follow-text'><?php echo $this->translate('FOLLOW');?></span>
                 </a>
@@ -60,7 +60,7 @@ foreach ($this->favouriteShopsOffers as $favouriteShopsOffer) {
                         .$this->translate('other active codes for');
                         ?>
                         <a href="<?php echo HTTP_PATH_LOCALE. $permaLink;?>">
-                        <?php echo $favouriteShopsOffer['shop']['name'];?>
+                        <?php echo $favouriteShopsOffer['shopOffers']['name'];?>
                         </a>
                     </p>
                 </div>

@@ -15,38 +15,40 @@ class PlusController extends Zend_Controller_Action
         } else {
             $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
         }
-        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
+        $this->viewHelperObject = new \FrontEnd_Helper_viewHelper();
     }
 
     public function indexAction()
     {
-        $articlesOverviewPagePermalink  = FrontEnd_Helper_viewHelper::getPagePermalink();
-        $pageDetails = Page::getPageDetailsFromUrl($articlesOverviewPagePermalink);
+        $articlesOverviewPagePermalink  = \FrontEnd_Helper_viewHelper::getPagePermalink();
+        $pageDetails = \KC\Repository\Page::getPageDetailsFromUrl($articlesOverviewPagePermalink);
+        $pageDetails = (object) $pageDetails;
 
         $mostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)"all_mostreadMsArticlePage_list",
-            array('function' => 'Articles::getAllArticles', 'parameters' => array(5))
+            array('function' => '\KC\Repository\Articles::getMostReasArticlesForPlusOverview', 'parameters' => array(5))
         );
 
-        $categoryWiseArticles = FrontEnd_Helper_viewHelper::
+        $categoryWiseArticles = \FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 (string)"all_categoriesArticles_list",
                 array('function' =>
-                'MoneySaving::getPopularArticlesAndCategory', 'parameters' => array()
+                '\KC\Repository\MoneySaving::getPopularArticlesAndCategory', 'parameters' => array()
                 ),
                 ''
             );
-        $moneySavingPartialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
+
+        $moneySavingPartialFunctions = new \FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
         $allArticlesWithAuthorDetails = $moneySavingPartialFunctions->addAuthorDetailsInArticles($categoryWiseArticles);
-        $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $popularStores = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'7_popularShops_list',
-            array('function' => 'Shop::getAllPopularStores', 'parameters' => array(9)),
+            array('function' => '\KC\Repository\Shop::getAllPopularStores', 'parameters' => array(9)),
             true
         );
         
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->permaLink = $articlesOverviewPagePermalink;
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($articlesOverviewPagePermalink);
+        $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($articlesOverviewPagePermalink);
         $this->viewHelperObject->getMetaTags(
             $this,
             isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
@@ -56,11 +58,11 @@ class PlusController extends Zend_Controller_Action
             FACEBOOK_IMAGE,
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
-        $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $this->view->pageHeaderImage = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'page_header'.$pageDetails->id.'_image',
             array(
-                'function' => 'Logo::getPageLogo',
-                'parameters' => array($pageDetails->pageHeaderImageId)
+                'function' => '\KC\Repository\Logo::getPageLogo',
+                'parameters' => array($pageDetails->pageHeaderImageId['id'])
             ),
             ''
         );
@@ -73,7 +75,7 @@ class PlusController extends Zend_Controller_Action
     public function guidedetailAction()
     {
         $permalink = $this->getRequest()->getParam('permalink');
-        $articleObject = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
+        $articleObject = new \FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
         $positionOfSpecialCharactetr = strpos($permalink, "-");
         if ($positionOfSpecialCharactetr) {
             $stringWithoutSpecilaChracter = str_replace("-", "", $permalink);
@@ -83,21 +85,20 @@ class PlusController extends Zend_Controller_Action
             $cacheKey = $permalink;
         }
 
-        $articleDetails = FrontEnd_Helper_viewHelper::
+        $articleDetails = \FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 (string)"article_".$cacheKey."_details",
                 array('function' =>
-                'Articles::getArticleByPermalink', 'parameters' => array($permalink))
+                '\KC\Repository\Articles::getArticleByPermalink', 'parameters' => array($permalink))
             );
-
         if (!empty($articleDetails)) {
-            $currentArticleCategory = !empty($articleDetails[0]['relatedcategory'][0]['articlecategory'])
-                                      ? $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'] : '';
-            $categoryWiseArticles = FrontEnd_Helper_viewHelper::
+            $currentArticleCategory = !empty($articleDetails[0]['category'][0])
+                                      ? $articleDetails[0]['category'][0]['name'] : '';
+            $categoryWiseArticles = \FrontEnd_Helper_viewHelper::
                 getRequestedDataBySetGetCache(
                     (string)"4_categoriesArticles_list",
                     array('function' =>
-                    'MoneySaving::getCategoryWiseArticles', 'parameters' => array(5))
+                    '\KC\Repository\MoneySaving::getCategoryWiseArticles', 'parameters' => array(5))
                 );
 
             $articlesRelatedToCurrentCategory =
@@ -107,24 +108,24 @@ class PlusController extends Zend_Controller_Action
                     $articleDetails[0]['id']
                 )
                 : '';
-            $incrementArticleViewCountValue  = FrontEnd_Helper_viewHelper::
+            $incrementArticleViewCountValue  = \FrontEnd_Helper_viewHelper::
                 viewCounter('article', 'onload', $articleDetails[0]['id']);
                 $this->view->canonical =
-                    FrontEnd_Helper_viewHelper::generateCononical(
+                    \FrontEnd_Helper_viewHelper::generateCononical(
                         $this->getRequest()->getControllerName() .'/'. $permalink
                     );
-            $this->view->mostReadArticles = FrontEnd_Helper_viewHelper::
-                getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array(
-                    'function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
+          
             $this->view->articleDetails = $articleDetails[0];
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
-            $this->view->recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles($articleDetails[0]['id'], 3);
-            $this->view->topPopularOffers = FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache("5_topOffers_list", array('function' =>
-                'Offer::getTopOffers', 'parameters' => array(5)));
-            $this->view->userDetails = FrontEnd_Helper_viewHelper::
+
+            $this->view->recentlyAddedArticles = \KC\Repository\MoneySaving::getRecentlyAddedArticles($articleDetails[0]['id'], 3);
+       
+            $this->view->topPopularOffers =
+                \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("5_topOffers_list", array('function' =>
+                '\KC\Repository\Offer::getTopOffers', 'parameters' => array(5)));
+            $this->view->userDetails = \FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache('user_'.$articleDetails[0]['authorid'].'_details', array('function' =>
-                'User::getUserDetails', 'parameters' => array($articleDetails[0]['authorid'])));
+                '\KC\Repository\User::getUserDetails', 'parameters' => array($articleDetails[0]['authorid'])));
             $articleThumbNailImage = FACEBOOK_IMAGE;
             if (!empty($articleDetails[0]['thumbnail'])) {
                 $articleThumbNailImage = PUBLIC_PATH_CDN
@@ -140,19 +141,19 @@ class PlusController extends Zend_Controller_Action
                 $articleThumbNailImage,
                 ''
             );
-            $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($permalink);
+            $cacheKey = \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($permalink);
             $this->view->discussionComments =
-                FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                     'get_'.$cacheKey.'_disqusComments',
                     array(
-                        'function' => 'DisqusComments::getPageUrlBasedDisqusComments',
+                        'function' => '\KC\Repository\DisqusComments::getPageUrlBasedDisqusComments',
                         'parameters' => array($permalink)
                     ),
                     ''
                 );
             $this->view->pageCssClass = 'in-savings-page author-page';
         } else {
-              throw new Zend_Controller_Action_Exception('', 404);
+              throw new \Zend_Controller_Action_Exception('', 404);
         }
     }
 }

@@ -2,7 +2,7 @@ $(document).ready(function() {
     $("#specialPagelist").select2();
     $("#specialPagelist").change(function(){
         $('#selctedPageId').val($(this).val());
-        loadSelectedPageOffers();
+        addNewOffers();
     });
 
     $("#offerlist").select2({placeholder: __("Search a offer")});
@@ -47,8 +47,8 @@ $(document).ready(function() {
                 if(json!=''){
                     for(var i in json) {
                         li+= "<li class='ui-state-default' relpos='" + json[i].position 
-                        + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' ><span>" 
-                        + json[i].offers.title +"</span></li>";
+                        + "' reloffer='" + json[i]['offers'].id + "' id='" + json[i].id + "' ><span>" 
+                        + json[i]['offers'].title +"</span></li>";
                     }
                     $('ul#specialPages').append(li);
                     $('ul#specialPages li').click(changeSelectedClass);
@@ -61,6 +61,21 @@ $(document).ready(function() {
         });
     });
 });
+
+function addNewOffers() {
+    $('body').append("<div id='overlay'><img id='img-load' src='" +  HOST_PATH  + "/public/images/front_end/spinner_large.gif'/></div>");
+    $.ajax({
+        type : "POST",
+        url : HOST_PATH + "admin/specialpagesoffers/addnewoffers",
+        method : "post",
+        dataType : 'json',
+        data: '',
+        success : function(json) {
+            removeOverLay();
+            setTimeout(loadSelectedPageOffers, 1000);
+        }
+    });
+}
 
 function loadSelectedPageOffers() {
     var pageId =  $('#selctedPageId').val();
@@ -100,48 +115,40 @@ function addNewOffer() {
     var flag =  '#addNewOffer';
     $('#addNewOffer').attr('disabled' ,"disabled");
     addSelectedClassOnButton(flag);
-    if($('ul#specialPages li').length > 26) {
-        bootbox.alert(__('Code list can have maximum 27 records, please delete one if you want to add more code'));
+    if($("input#selctedOffer").val()=='' || $("input#selctedOffer").val()==undefined) {
+        bootbox.alert(__('Please select an offer'));
         $('#addNewOffer').removeAttr('disabled');
     } else {
-        if($("input#selctedOffer").val()=='' || $("input#selctedOffer").val()==undefined) {
-            bootbox.alert(__('Please select an offer'));
-            $('#addNewOffer').removeAttr('disabled');
-        } else {
-            
-            var id = $("input#selctedOffer").val();
-            var pageId = $("input#selctedPageId").val();
-            
-            $.ajax({
-                url : HOST_PATH + "admin/specialpagesoffers/addoffer/id/" + id + '/pageId/' + pageId,
-                method : "post",
-                dataType : "json",
-                type : "post",
-                success : function(data) {
-                    if(data=='2' || data==2)
-                        {
-                            bootbox.alert(__('This offer already exists in the list'));
-                        }
-                        else if(data=='0' && data==0) {
-                            bootbox.alert(__('This offer does not exist'));
-                        } else {
-            
-                            var li  = "<li class='ui-state-default'  relpos='" + data.position 
-                            + "' reloffer='" + data.offerId + "' id='" + data.id + "' ><span>" 
-                            + data.title.replace(/\\/g, '')  + "</span></li>";
-
-                            $('ul#specialPages').append(li);
-                            $('ul#specialPages li#'+ data.id).click(changeSelectedClass);
-                            $('ul#specialPages li#0').remove();
-                            $('div.coupon-sidebar-heading a.select2-choice').children('span').html(''); 
-                            $("#offerlist option[value='"+  id +"']").remove();
-                            $("input#selctedOffer").val('');
-                            selectedElements();
-                        }
-                    $('#addNewOffer').removeAttr('disabled');
-                }
-            });
-        }
+        var id = $("input#selctedOffer").val();
+        var pageId = $("input#selctedPageId").val();
+        
+        $.ajax({
+            url : HOST_PATH + "admin/specialpagesoffers/addoffer/id/" + id + '/pageId/' + pageId,
+            method : "post",
+            dataType : "json",
+            type : "post",
+            success : function(data) {
+                if(data=='2' || data==2)
+                    {
+                        bootbox.alert(__('This offer already exists in the list'));
+                    }
+                    else if(data=='0' && data==0) {
+                        bootbox.alert(__('This offer does not exist'));
+                    } else {
+                        var li  = "<li class='ui-state-default'  relpos='" + data.position 
+                        + "' reloffer='" + data.offerId + "' id='" + data.id + "' ><span>" 
+                        + data.title.replace(/\\/g, '')  + "</span></li>";
+                        $('ul#specialPages').append(li);
+                        $('ul#specialPages li#'+ data.id).click(changeSelectedClass);
+                        $('ul#specialPages li#0').remove();
+                        $('div.coupon-sidebar-heading a.select2-choice').children('span').html(''); 
+                        $("#offerlist option[value='"+  id +"']").remove();
+                        $("input#selctedOffer").val('');
+                        selectedElements();
+                    }
+                $('#addNewOffer').removeAttr('disabled');
+            }
+        });
     }
 }
 
@@ -183,8 +190,8 @@ function deleteCode() {
 
             for(var i in json) {
                 li+= "<li class='ui-state-default' relpos='" + json[i].position 
-                + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' ><span>" 
-                + json[i].offers.title +"</span></li>";
+                + "' reloffer='" + json[i]['offers'].id + "' id='" + json[i].id + "' ><span>" 
+                + json[i]['offers'].title +"</span></li>";
             }
 
             $('select#offerlist').append('<option value="' + offerId + '">' + title  + '</option>');

@@ -8,8 +8,18 @@ class Admin_OfferController extends Zend_Controller_Action
     public function getofferAction()
     {
         $parameters = $this->_getAllParams();
-        $offerList = Offer::getOfferList($parameters);
-        echo Zend_Json::encode($offerList);
+        //echo "<pre>";print_r($parameters);die;
+        $offerList = \KC\Repository\Offer::getOfferList($parameters);
+        echo \Zend_Json::encode($offerList);
+        die();
+    }
+
+    public function gettrashedofferAction()
+    {
+        $parameters = $this->_getAllParams();
+        //echo "<pre>";print_r($parameters);die;
+        $offerList = \KC\Repository\Offer::getTrashedOfferList($parameters);
+        echo \Zend_Json::encode($offerList);
         die();
     }
     ############################################################
@@ -23,14 +33,15 @@ class Admin_OfferController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $connection = BackEnd_Helper_viewHelper::addConnection();//connection generate with second excelDatabase
+
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $params = $this->_getAllParams();
-        if (!Auth_StaffAdapter::hasIdentity()) {
+        if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($connection);
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()
                 ->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
@@ -56,22 +67,18 @@ class Admin_OfferController extends Zend_Controller_Action
     public function permanentdeleteAction()
     {
         $id = $this->getRequest()->getParam('id');
-        $deletePermanent = Offer::permanentDeleteOffer($id);
+        $deletePermanent = \KC\Repository\Offer::permanentDeleteOffer($id);
         die;
     }
     public function addofferAction()
     {
 
-        $shopObj = new Shop();
-        $this->view->shopList=$shopObj->getOfferShopList();
-        $catObj = new Category();
-        $this->view->catList = $catObj->getCategoriesInformation();
-        $pageObj = new Page();
+        $this->view->shopList =\KC\Repository\Shop::getOfferShopList();
+        $this->view->catList = \KC\Repository\Category::getCategoriesInformation();
+        $pageObj = new KC\Repository\Page();
         $this->view->pages = $pageObj->getPagesOffer();
-
         $allTiles = $this->getAllTilesForOfferAction();
         $this->view->tiles = $allTiles;
-
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages();
         $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
@@ -84,20 +91,20 @@ class Admin_OfferController extends Zend_Controller_Action
     {
         $parameters = $this->_getAllParams();
         $this->view->offerId = $parameters['id'];
-        $userGeneratedOfferStatus = Offer::checkUserGeneratedOffer($parameters['id']);
+        $userGeneratedOfferStatus = KC\Repository\Offer::checkUserGeneratedOffer($parameters['id']);
         if ($userGeneratedOfferStatus) {
             $this->view->offerController = 1;
         }
         $this->view->qstring = $_SERVER['QUERY_STRING'];
         $offerId = $parameters['id'];
-        $shopImageOfOffer = new Offer();
+        $shopImageOfOffer = new KC\Repository\Offer();
         $shop = $shopImageOfOffer::getOfferShopDetail($offerId);
         $this->view->offerShopLogo = $shop;
-        $shopObject = new Shop();
+        $shopObject = new KC\Repository\Shop();
         $this->view->shopList = $shopObject->getOfferShopList();
-        $categoryObject = new Category();
+        $categoryObject = new KC\Repository\Category();
         $this->view->categoryList = $categoryObject->getCategoriesInformation();
-        $pageObject = new Page();
+        $pageObject = new KC\Repository\Page();
         $this->view->pages = $pageObject->getPagesOffer();
         $allTiles = $this->getAllTilesForOfferAction();
         $this->view->tiles = $allTiles;
@@ -106,11 +113,14 @@ class Admin_OfferController extends Zend_Controller_Action
 
     public function updateofferAction()
     {
+
         $parameters = $this->_getAllParams();
-        $offer = Doctrine_Core::getTable("Offer")->find($parameters['offerId']);
-        $offerUpdated = $offer->updateOffer($parameters);
+
+        $offer =\Zend_Registry::get('emLocale')->find('KC\Entity\Offer', $parameters['offerId']);
+        $offerRepository = new KC\Repository\Offer();
+        $offerUpdated = $offerRepository->updateOffer($parameters);
         if ($parameters['approveSocialCode'] == 1) {
-            UserGeneratedOffer::saveApprovedStatus($parameters['offerId'], $parameters['approveSocialCode']);
+            KC\Repository\UserGeneratedOffer::saveApprovedStatus($parameters['offerId'], $parameters['approveSocialCode']);
         }
         $flashMessage = $this->_helper->getHelper('FlashMessenger');
         if ($offerUpdated['result']) {
@@ -133,8 +143,9 @@ class Admin_OfferController extends Zend_Controller_Action
     public function shopdetailAction()
     {
         $params = $this->_getAllParams();
-        $shopObj = new Shop();
+        $shopObj = new \KC\Repository\Shop();
         $Getshopdetails = $shopObj->getShopDetail($params['shopId']);
+        //echo "<pre>";print_r($Getshopdetails);die;
         $details = Zend_Json::encode($Getshopdetails);
 
         echo $details;
@@ -144,7 +155,7 @@ class Admin_OfferController extends Zend_Controller_Action
     public function favouriteshopdetailAction()
     {
         $params = $this->_getAllParams();
-        $favoriteShop = new FavoriteShop();
+        $favoriteShop = new \KC\Repository\FavoriteShop();
         $getVisitorsCount = $favoriteShop->getVisitorsCountByFavoriteShopId($params['shopId']);
         echo $getVisitorsCount;
         die;
@@ -153,33 +164,30 @@ class Admin_OfferController extends Zend_Controller_Action
     public function saveofferAction()
     {
         $params = $this->_getAllParams();
-
-
-
-        $offerObj = new Offer();
+        $offerObj = new \KC\Repository\Offer();
         $offer = $offerObj->saveOffer($params);
 
         $flash = $this->_helper->getHelper('FlashMessenger');
-        if($offer['result']){
+        if ($offer['result']) {
 
             $type = isset($offer['errType']) ?  $offer['errType'] : "" ;
 
             # return appropriate message to user
             switch ($type) {
-                case 'shop' :
+                case 'shop':
 
                     $message = $this->view->translate('Please select a shop');
                     $flash->addMessage(array('error' => $message ));
 
-                break ;
-                default :
+                break;
+                default:
 
                     self::updateVarnish($offer['ofer_id']);
 
 
                     $message = $this->view->translate('Offer has been added successfully.');
 
-                    if(filter_var($params['saveAndAddnew'], FILTER_VALIDATE_BOOLEAN)) {
+                    if (filter_var($params['saveAndAddnew'], FILTER_VALIDATE_BOOLEAN)) {
                         $message = $this->view->translate('Offer has been added successfully and add new offer again');
                     }
 
@@ -187,12 +195,12 @@ class Admin_OfferController extends Zend_Controller_Action
 
             }
 
-        }else{
+        } else {
             $message = $this->view->translate('Error: Your file size exceeded 2MB');
             $flash->addMessage(array('error' => $message ));
         }
 
-        if(filter_var($params['saveAndAddnew'], FILTER_VALIDATE_BOOLEAN)) {
+        if (filter_var($params['saveAndAddnew'], FILTER_VALIDATE_BOOLEAN)) {
             $this->_redirect(HTTP_PATH.'admin/offer/addoffer');
 
         } else {
@@ -213,7 +221,7 @@ class Admin_OfferController extends Zend_Controller_Action
             self::updateVarnish($id);
 
             //cal to moveToTrash function from offer model class
-            $trash = Offer::moveToTrash($id);
+            $trash = \KC\Repository\Offer::moveToTrash($id);
 
             if (intval($trash) > 0) {
 
@@ -241,7 +249,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $srh = $this->getRequest()->getParam('keyword');
         $flag = $this->getRequest()->getParam('flag');
         //cal to searchToFiveShop function from offer model class
-        $data = Offer::searchToFiveShop($srh, $flag);
+        $data = \KC\Repository\Offer::searchToFiveShop($srh, $flag);
 
 
         $ar = array();
@@ -250,9 +258,9 @@ class Admin_OfferController extends Zend_Controller_Action
             //$ar[] = $srh;
             foreach ($data as $d) {
 
-                $id =  $d['shop']['id'];
+                $id =  $d['id'];
                 //array fro remove duplicate search text
-                $ar[] = ucfirst($d['shop']['name']);
+                $ar[] = ucfirst($d['name']);
 
             }
 
@@ -282,7 +290,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $srh = $this->getRequest()->getParam('keyword');
         $flag = $this->getRequest()->getParam('flag');
         //cal to searchToFiveShop function from offer model class
-        $data = Offer::searchToFiveCoupon($srh, $flag);
+        $data = \KC\Repository\Offer::searchToFiveCoupon($srh, $flag);
         //echo "<pre>";print_r($data);die;
 
         $ar = array();
@@ -322,7 +330,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $flag = $this->getRequest()->getParam('flag');
 
         //cal to searchToFiveShop function from offer model class
-        $data = Offer::searchToFiveOffer($srh, $flag);
+        $data = \KC\Repository\Offer::searchTopFiveOffer($srh, $flag);
 
         $ar = array();
         $removeDup = array();
@@ -332,7 +340,7 @@ class Admin_OfferController extends Zend_Controller_Action
 
                 $id =  $d['id'];
                 //array fro remove duplicate search text
-                if(isset($removeDup[$id])) {
+                if (isset($removeDup[$id])) {
                     $removeDup[$id] = $id;
 
                 } else {
@@ -364,9 +372,9 @@ class Admin_OfferController extends Zend_Controller_Action
      */
     public function exportofferlistAction()
     {
-        set_time_limit ( 10000 );
-        ini_set('max_execution_time',115200);
-        ini_set("memory_limit","1024M");
+        set_time_limit(10000);
+        ini_set('max_execution_time', 115200);
+        ini_set("memory_limit", "1024M");
 
         // get all shop from database
         $data = Offer::exportofferList();
@@ -688,7 +696,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
 
         //cal to deleteOffer function from offer model class
-    //	$deletePermanent = Offer::deleteOffer($id);
+        $deletePermanent = \KC\Repository\Offer::deleteOffer($id);
 
         $flash = $this->_helper->getHelper('FlashMessenger');
         if (intval($deletePermanent) > 0) {
@@ -716,7 +724,7 @@ class Admin_OfferController extends Zend_Controller_Action
         self::updateVarnish($id);
 
         //cal to restoreOffer function from offer model class
-        $restore = Offer::restoreOffer($id);
+        $restore = \KC\Repository\Offer::restoreOffer($id);
 
         if (intval($restore) > 0) {
 
@@ -738,7 +746,7 @@ class Admin_OfferController extends Zend_Controller_Action
     public function offerdetailAction()
     {
             $id = $this->getRequest()->getParam('offerId');
-            $offerObj = new Offer();
+            $offerObj = new KC\Repository\Offer();
             $offerDetail = $offerObj->getOfferDetail($id);
             echo Zend_Json::encode($offerDetail);
             die;
@@ -751,7 +759,7 @@ class Admin_OfferController extends Zend_Controller_Action
 
         $params = $this->_getAllParams();
 
-        if(isset($params['secret']) && @base64_decode($params['secret']) == "kortingscodeoffernews" && isset($params['secret']) && @$params['jcode'] == "passwordmd5") {
+        if (isset($params['secret']) && @base64_decode($params['secret']) == "kortingscodeoffernews" && isset($params['secret']) && @$params['jcode'] == "passwordmd5") {
 
             $morenews = '<div class="clear line"></div><div class="mainpage-content-right-inner-left"><label><strong>Title</strong></label></div>
                               <div class="mainpage-content-right-inner-right-other"></div>
@@ -798,7 +806,7 @@ class Admin_OfferController extends Zend_Controller_Action
 
         $url = strtolower($url);
 
-        $rp = Doctrine_Query::create()->select('extendedUrl')->from("Offer")->where("extendedUrl = '".urlencode($url)."'")->fetchArray();
+        $rp = KC\Repository\Offer::getExtendedUrl($url);
 
         if($id != '') {
 
@@ -849,9 +857,9 @@ class Admin_OfferController extends Zend_Controller_Action
     public function addoffertileAction()
     {
         $params = $this->_getAllParams();
-        $imgext = BackEnd_Helper_viewHelper::getImageExtension(@$params['hidimage']);
+        $imgext = \BackEnd_Helper_viewHelper::getImageExtension(@$params['hidimage']);
         //if(isset($params['position']) && $params['position']!=""){
-            $offerTile = OfferTiles::addOfferTile($params,$imgext);
+            $offerTile = \KC\Repository\OfferTiles::addOfferTile($params,$imgext);
             $newArr= array();
             $newArr['imagename'] = $params['hidimage'];
             $newArr['imagepath'] = PUBLIC_PATH_LOCALE."images/upload/offertiles/thum_small_".$params['hidimage'];
@@ -873,7 +881,7 @@ class Admin_OfferController extends Zend_Controller_Action
                     $temp['type'] = $_FILES['tileupload']['type'][0];
                     $temp['path'] = $_FILES['tileupload']['tmp_name'][0];
 
-                    $fileName = Offer::uploadTiles($_FILES['tileupload']['name'][0]);
+                    $fileName = \KC\Repository\Offer::uploadTiles($_FILES['tileupload']['name'][0]);
 
                     $temp['name'] = $fileName;
 
@@ -888,21 +896,21 @@ class Admin_OfferController extends Zend_Controller_Action
         //echo "hello"; die;
         $params = $this->_getAllParams();
         //print_r($params); die;
-        $menu = OfferTiles::deleteMenuRecord($params);
+        $menu = \KC\Repository\OfferTiles::deleteMenuRecord($params);
         echo Zend_Json::encode($menu);
         die();
     }
     public function getilebyidAction()
     {
         $id  = $this->getRequest()->getParam('id');
-        $offerTiles = OfferTiles::getOfferTilesList($id);
+        $offerTiles = \KC\Repository\OfferTiles::getOfferTilesList($id);
         echo Zend_Json::encode($offerTiles);
         die();
 
     }
     public function getalltilesAction()
     {
-        $Tiles = OfferTiles::getAllTiles();
+        $Tiles = \KC\Repository\OfferTiles::getAllTiles();
         echo Zend_Json::encode($Tiles);
         die;
         //return $Tiles;
@@ -910,7 +918,7 @@ class Admin_OfferController extends Zend_Controller_Action
 
     public function getAllTilesForOfferAction()
     {
-        $Tiles = OfferTiles::getAllTiles();
+        $Tiles = \KC\Repository\OfferTiles::getAllTiles();
         //echo Zend_Json::encode($Tiles);
         //die;
         return $Tiles;
@@ -935,8 +943,8 @@ class Admin_OfferController extends Zend_Controller_Action
         $siteimage_array =  array(); // Array for all site image names
 
         // Get all the images from the folder and store in an array-$image_array
-        while($file = readdir($handle)){
-            if($file !== '.' && $file !== '..'){
+        while ($file = readdir($handle)){
+            if ($file !== '.' && $file !== '..'){
 
                 $image_array[] = $file;
 
@@ -980,7 +988,7 @@ class Admin_OfferController extends Zend_Controller_Action
             $delTime = $data[$cell->getRow()]['H'];
 
             //find by name if exist in database
-            if(!empty($name)){
+            if (!empty($name)) {
 
                 $shopList = Doctrine_Core::getTable('Shop')->findOneBy('name', $name);
 
@@ -1036,7 +1044,7 @@ class Admin_OfferController extends Zend_Controller_Action
                             BackEnd_Helper_viewHelper :: resizeImageFromFolder($originalpath, 84, 42, $thumbpath, $ext);
 
                             $thumbpath = $pathToUpload . "thum_medium_store_" . $newName;
-                            BackEnd_Helper_viewHelper::resizeImageFromFolder($originalpath, 200, 100, $thumbpath, $ext);
+                            \BackEnd_Helper_viewHelper::resizeImageFromFolder($originalpath, 200, 100, $thumbpath, $ext);
 
                             $thumbpath = $pathToUpload . "thum_medium_" . $newName;
                             BackEnd_Helper_viewHelper :: resizeImageFromFolder($originalpath, 100, 50, $thumbpath, $ext);
@@ -1064,7 +1072,7 @@ class Admin_OfferController extends Zend_Controller_Action
                         $sitefile = $siteimage_array[$keySite];
                         $sitenewName = time() . "_" . $sitefile;
 
-                        $siteExt = BackEnd_Helper_viewHelper :: getImageExtension($sitefile);
+                        $siteExt = \BackEnd_Helper_viewHelper::getImageExtension($sitefile);
                         $originalpath = $rootSitePath.$sitefile;
 
                         if($siteExt=='jpg' || $siteExt == 'png' || $siteExt =='JPEG'|| $siteExt =='PNG' || $siteExt =='gif'){
@@ -1101,30 +1109,69 @@ class Admin_OfferController extends Zend_Controller_Action
     public function updateVarnish($id)
     {
         // Add urls to refresh in Varnish
-        $varnishObj = new Varnish();
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND);
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_nieuw'));
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_top-20'));
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen'));
-        $varnishObj->addUrl("http://www.flipit.com");
-        # make markplaatfeed url's get refreashed only in case of kortingscode
-        if(LOCALE == '')
-        {
-            $varnishObj->addUrl(  HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
-            $varnishObj->addUrl(  HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed' );
-
-        }
-
+        $varnishObj = new \KC\Repository\Varnish();
         # get all the urls related to an offer
-        $varnishUrls = Offer::getAllUrls( $id );
-
+        $varnishUrls = \KC\Repository\Offer::getAllUrls($id);
+        $varnishRefreshTime = (array) $varnishUrls['startDate'];
+        $refreshTime = FrontEnd_Helper_viewHelper::convertOfferTimeToServerTime($varnishRefreshTime['date']);
         # check $varnishUrls has atleast one url
-        if(isset($varnishUrls) && count($varnishUrls) > 0) {
-            foreach($varnishUrls as $value) {
-                $varnishObj->addUrl( HTTP_PATH_FRONTEND . $value);
+        if (isset($varnishUrls) && count($varnishUrls) > 0) {
+            foreach ($varnishUrls as $varnishIndex => $varnishUrl) {
+                if (!is_object($varnishUrl)) {
+                    $varnishObj->addUrl(HTTP_PATH_FRONTEND . $varnishUrl, $refreshTime);
+                }
             }
         }
-
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND, $refreshTime);
+        $varnishObj->addUrl(
+            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_nieuw'),
+            $refreshTime
+        );
+        $varnishObj->addUrl(
+            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-20'),
+            $refreshTime
+        );
+        $varnishObj->addUrl(
+            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_categorieen'),
+            $refreshTime
+        );
+        $varnishObj->addUrl("http://www.flipit.com", $refreshTime);
+        # make markplaatfeed url's get refreashed only in case of kortingscode
+        if (LOCALE == '') {
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND . 'marktplaatsfeed', $refreshTime);
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND. 'marktplaatsmobilefeed', $refreshTime);
+        }
+        
+        # add url for  end date
+        $varnishRefreshTime = (array) $varnishUrls['endDate'];
+        $refreshTime = FrontEnd_Helper_viewHelper::convertOfferTimeToServerTime($varnishRefreshTime['date']);
+        # check $varnishUrls has atleast one url
+        if (isset($varnishUrls) && count($varnishUrls) > 0) {
+            foreach ($varnishUrls as $varnishIndex => $varnishUrl) {
+                if (!is_object($varnishUrl)) {
+                    $varnishObj->addUrl(HTTP_PATH_FRONTEND . $varnishUrl, $refreshTime);
+                }
+            }
+        }
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND, $refreshTime);
+        $varnishObj->addUrl(
+            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_nieuw'),
+            $refreshTime
+        );
+        $varnishObj->addUrl(
+            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-20'),
+            $refreshTime
+        );
+        $varnishObj->addUrl(
+            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_categorieen'),
+            $refreshTime
+        );
+        $varnishObj->addUrl("http://www.flipit.com", $refreshTime);
+        # make markplaatfeed url's get refreashed only in case of kortingscode
+        if (LOCALE == '') {
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND . 'marktplaatsfeed', $refreshTime);
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND. 'marktplaatsmobilefeed', $refreshTime);
+        }
     }
 
     /**
@@ -1145,7 +1192,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $url = strtolower($url);
         $rp = Doctrine_Query::create()->select()->from("RoutePermalink")->where("permalink = '".urlencode($url)."'")->fetchArray();
 
-        if($isEdit) {
+        if ($isEdit) {
             $exactLink = "store/storedetail/id/".$this->getRequest()->getParam("id") ;
 
             if(@$rp[0]['permalink'] == $url ) {
@@ -1224,7 +1271,7 @@ class Admin_OfferController extends Zend_Controller_Action
             set_time_limit ( 10000 );
             ini_set('max_execution_time',115200);
             ini_set("memory_limit","1024M");
-            $data =  CouponCode::exportCodeList($id);
+            $data =  \KC\Repository\CouponCode::exportCodeList($id);
 
 
             //create object of phpExcel
@@ -1303,7 +1350,7 @@ class Admin_OfferController extends Zend_Controller_Action
 
         } else {
 
-            $this->_helper->redirector( 'index', 'offer', 'admin' ) ;
+            $this->_helper->redirector('index', 'offer', 'admin');
         }
 
 
@@ -1319,205 +1366,86 @@ class Admin_OfferController extends Zend_Controller_Action
     {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-
-        # set memory limit to avoid memory allocation error
-        ini_set('max_execution_time',115200);
-
-
-        $errorFlag = true ;
-        # check request is post
-        if($this->getRequest ()->isPost ()){
-
-            # validate filename
+        ini_set('max_execution_time', 115200);
+        $errorFlag = true;
+        if ($this->getRequest()->isPost()) {
             if (isset($_FILES['importCodes']['name']) && @$_FILES['importCodes']['name'] != '') {
-
                 try {
-
-
-                        # upload file to excel upload folder
-                        $RouteRedirectObj = new RouteRedirect();
-                        $result = @$RouteRedirectObj->uploadExcel($_FILES['importCodes']['name']);
-
-
-                        # check file is uploaded or not
-                        if($result['status'] == 200){
-
-
-                            # cretae path for uploaded file
-                            $spl = explode('/', HTTP_PATH);
-                            $path = $spl[0].'//' . $spl[2];
-                            $excelFilePath = $result['path'];
-                            $excelFile = $excelFilePath.$result['fileName'];
-
-                            # read excel file
-                            $objReader = PHPExcel_IOFactory::createReader('Excel2007');
-                            $objPHPExcel = $objReader->load($excelFile);
-                            $worksheet = $objPHPExcel->getActiveSheet();
-
-
-                            unlink($excelFile);
-                            $data =  array();
-
-                            $i = 0 ;
-
-
-                            $codesArray = array();
-
-
-                            # traverse the excel file to update codes
-                            foreach ($worksheet->getRowIterator() as $row) {
-
-                                $cellIterator = $row->getCellIterator();
-                                $cellIterator->setIterateOnlyExistingCells(false);
-
-                                # irrerate through a row
-                                foreach ($cellIterator as $cell) {
-
-                                    $data[$cell->getRow()][$cell->getColumn()] = $cell->getCalculatedValue();
-                                }
-
-
-                                # set code and its status to appropriate variables
-                                $code =  $data[$cell->getRow()]['A'];
-                                $status =  $data[$cell->getRow()]['B'];
-
-                                # skip first row of headers
-                                if($i == 0) {
-                                    # if validate excel sheet is correct according couponcodesx
-                                    if(strtolower( $code) == 'code' && strtolower( $status) == 'status') {
-                                        $errorFlag = false ;
-
-                                    }
-
-                                    $i++ ;
-                                    continue ;
-
-                                }
-
-
-
-
-
-
-                                if(! $errorFlag ){
-
-
-                                    # check code esists or not
-                                    if(!empty($code) ) {
-                                        $codesArray[] = $code;
-                                            $offerId = $this->getRequest()->getParam('offer' , null);
-
-                                            # FIND Code BY Offer id and code
-                                            $codeRecord = Doctrine::getTable('CouponCode')
-                                                    ->createQuery()
-                                                    ->where("code = '" . $code ."'")
-                                                    ->andWhere('offerid ='.  $offerId )
-                                                    ->limit(1)
-                                                    ->fetchArray();
-
-                                            # if record found then simply update its ttaus
-                                            if($codeRecord) {
-
-                                                $newStaus = 0 ;
-
-
-                                                if(strtolower($status) == 'available' ) {
-                                                    $newStaus = 1 ;
-                                                }
-
-                                                Doctrine_Query::create()->update('CouponCode')
-                                                    ->set('status',  $newStaus )
-                                                    ->where("code = '" . $code ."'")
-                                                    ->andWhere('offerid ='.  $offerId)
-                                                    ->execute();
-
-
-                                            } else {
-
-                                                # add new code with its status
-                                                $newStaus = 0 ;
-
-
-                                                if(strtolower($status) == 'available' ) {
-                                                    $newStaus = 1 ;
-                                                }
-
-
-                                                $couponCode = new CouponCode();
-                                                $couponCode->code = $code;
-                                                $couponCode->status = $newStaus;
-                                                $couponCode->offerid = $offerId;
-                                                $couponCode->save();
-                                                $couponCode->free(true);
-
-
-                                            }
-
-
-
-                                    }
-
-                                }else {
-
-
-                                    # display errors
-                                    $message = $this->view->translate ('Problem in your file!!');
-                                    echo Zend_Json::encode( array('status' => '100' , 'message' => $message));
-                                    die;
-                                }
+                    $RouteRedirectObj = new \KC\Repository\RouteRedirect();
+                    $result = $RouteRedirectObj->uploadExcel($_FILES['importCodes']['name']);
+                    if ($result['status'] == 200) {
+                        $spl = explode('/', HTTP_PATH);
+                        $path = $spl[0].'//' . $spl[2];
+                        $excelFilePath = $result['path'];
+                        $excelFile = $excelFilePath.$result['fileName'];
+                        $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+                        $objPHPExcel = $objReader->load($excelFile);
+                        $worksheet = $objPHPExcel->getActiveSheet();
+                        unlink($excelFile);
+                        $data =  array();
+                        $i = 0 ;
+                        $codesArray = array();
+                        foreach ($worksheet->getRowIterator() as $row) {
+                            $cellIterator = $row->getCellIterator();
+                            $cellIterator->setIterateOnlyExistingCells(false);
+                            foreach ($cellIterator as $cell) {
+                                $data[$cell->getRow()][$cell->getColumn()] = $cell->getCalculatedValue();
                             }
-
-
-
-                            $d3 = Doctrine_Query::create()->delete()
-                            ->from('CouponCode')
-                            ->where("offerid =" . $offerId)
-                            ->andWhereNotIn("code",$codesArray)
-                            ->execute();
-
-                            Offer::updateCache($offerId);
-
-                            self::updateVarnish($offerId);
-
-                            $codesDetail = CouponCode::returnCodesDetail($offerId);
-                            $codesDetail['status'] = '200' ;
-                            $codesDetail['message'] = $this->view->translate ('Codes have been imported successfully');
-
-                            echo Zend_Json::encode($codesDetail);
-
-                            die;
-
-
-                        } else {
-
-
-                            # display errors
-                            $message = $this->view->translate ('Problem in your file!!');
-                            echo Zend_Json::encode( array('status' => '100' , 'message' => $message));
-
-
+                            $code =  $data[$cell->getRow()]['A'];
+                            $status =  $data[$cell->getRow()]['B'];
+                            if ($i == 0) {
+                                if (strtolower($code) == 'code' && strtolower($status) == 'status') {
+                                    $errorFlag = false ;
+                                }
+                                $i++ ;
+                                continue ;
+                            }
+                            if (!$errorFlag) {
+                                if (!empty($code)) {
+                                    $codesArray[] = $code;
+                                    $offerId = $this->getRequest()->getParam('offer', null);
+                                    $codeRecord = \KC\Repository\CouponCode::getCouponCode($offerId, $code);
+                                    if ($codeRecord) {
+                                        $newStaus = 0 ;
+                                        if (strtolower($status) == 'available') {
+                                            $newStaus = 1 ;
+                                        }
+                                        \KC\Repository\CouponCode::updateCouponCode($newStaus, $code, $offerId);
+                                    } else {
+                                        $newStaus = 0 ;
+                                        if (strtolower($status) == 'available') {
+                                            $newStaus = 1 ;
+                                        }
+                                        \KC\Repository\CouponCode::saveCouponCode($code, $newStaus, $offerId);
+                                    }
+                                }
+                            } else {
+                                $message = $this->view->translate('Problem in your file!!');
+                                echo Zend_Json::encode(array('status' => '100', 'message' => $message));
+                                die;
+                            }
                         }
-
-
+                        \KC\Repository\CouponCode::deleteCouponCode($offerId, $codesArray);
+                        \KC\Repository\Offer::updateCache($offerId);
+                        self::updateVarnish($offerId);
+                        $codesDetail = \KC\Repository\CouponCode::returnCodesDetail($offerId);
+                        $codesDetail['status'] = '200' ;
+                        $codesDetail['message'] = $this->view->translate('Codes have been imported successfully');
+                        echo Zend_Json::encode($codesDetail);
+                        die;
+                    } else {
+                        $message = $this->view->translate('Problem in your file!!');
+                        echo Zend_Json::encode(array('status' => '100' , 'message' => $message));
+                    }
                 } catch (Exception $e) {
-
-
-                    # display errors
-
-                    $message = $this->view->translate ('Problem in your file!!!');
-                    echo Zend_Json::encode( array('status' => '100' , 'message' => $message));
-
+                    $message = $this->view->translate('Problem in your file!!!');
+                    echo Zend_Json::encode(array('status' => '100' , 'message' => $message));
                     die;
                 }
             }
         }
-
-
-        # display errors
-        $message = $this->view->translate ('Problem in your file!!');
-        echo Zend_Json::encode( array('status' => '100' , 'message' => $message));
-
-
+        $message = $this->view->translate('Problem in your file!!');
+        echo Zend_Json::encode(array('status' => '100' , 'message' => $message));
     }
 
 

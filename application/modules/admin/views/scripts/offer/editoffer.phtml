@@ -20,7 +20,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/editoffer.js");
 $date = date("Y-m-d");
 $twoMonthsLater = date('t-m-Y');
-$role = Zend_Auth::getInstance()->getIdentity()->roleId;
+$role = Zend_Auth::getInstance()->getIdentity()->users->id;
 $code = "kortingscodeoffernews";
 $shopLogo = $this->offerShopLogo;
 ?>
@@ -636,26 +636,26 @@ echo $this->headTitle()->append($browserTitle);?>
                         <div class="categories" style="position:relative;" name="category">
                        <?php for($i = 0; $i < count ($this->categoryList ); $i ++) {?>
                             <div class="square-btn-offer">
-                                <input type="checkbox" value="<?php echo $this->categoryList[$i]['id']; ?>" class=""
-                                name="selectedcategories[]" id="category-<?php echo $this->categoryList[$i]['id']; ?>" />
-                                <?php if (trim($this->categoryList[$i]['name'])!='') {
+                                <input type="checkbox" value="<?php echo $this->categoryList[$i][0]['id']; ?>" class=""
+                                name="selectedcategories[]" id="category-<?php echo $this->categoryList[$i][0]['id']; ?>" />
+                                <?php if (trim($this->categoryList[$i][0]['name'])!='') {
                                 $categoryIconPath = '';
-                                $icons = $this->categoryList[$i];
+                                $icons = $this->categoryList[$i][0];
                                 if(file_exists(ROOT_PATH.$icons['categoryicon']['path']."thum_medium_".$icons['categoryicon']['name'])){
                                     $categoryIconPath = PUBLIC_PATH_LOCALE.$icons['categoryicon']['path']."thum_medium_".$icons['categoryicon']['name'];
                                 }else {
                                     $categoryIconPath = HTTP_PATH ."public/images/NoImage/NoImage50x50.jpg";
                                 }
                             ?>
-                            <button type="button" name="selectCategory" title="<?php echo $this->categoryList[$i]['name'];?>"
-                             class="btn square-btn" id="categoryBtn-<?php echo $this->categoryList[$i]['id'];?>"
-                             onClick="addCategory('<?php echo $this->categoryList[$i]['id']; ?>')">
+                            <button type="button" name="selectCategory" title="<?php echo $this->categoryList[$i][0]['name'];?>"
+                             class="btn square-btn" id="categoryBtn-<?php echo $this->categoryList[$i][0]['id'];?>"
+                             onClick="addCategory('<?php echo $this->categoryList[$i][0]['id']; ?>')">
                                 <img alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
                              </button>
                              <div class="clear"></div>
                                  <span class="image-description-text">
-                                     <?php echo strlen($this->categoryList[$i]['name']) < 20 ? $this->categoryList[$i]['name'] : 
-                                     substr($this->categoryList[$i]['name'],0,20).'..'; ?>
+                                     <?php echo strlen($this->categoryList[$i][0]['name']) < 20 ? $this->categoryList[$i][0]['name'] : 
+                                     substr($this->categoryList[$i][0]['name'],0,20).'..'; ?>
                                  </span>
                             </div>
                             <?php }

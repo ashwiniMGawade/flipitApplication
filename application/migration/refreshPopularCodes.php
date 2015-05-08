@@ -17,7 +17,7 @@ defined('PUBLIC_PATH')
 defined('LIBRARY_PATH')
 || define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
 
-defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
+defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine1');
 
 // Define application environment
 defined('APPLICATION_ENV')
@@ -40,7 +40,7 @@ set_include_path(
 //echo LIBRARY_PATH;
 //echo DOCTRINE_PATH;
 //die;
-require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper.php');
+require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper-v1.php');
 require_once (LIBRARY_PATH . '/Zend/Application.php');
 require_once(DOCTRINE_PATH . '/Doctrine.php');
 
@@ -214,7 +214,7 @@ Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
                 $pc->save();
 
                 $offerID = $p['offerId'];
-                $authorId = FrontEnd_Helper_viewHelper::getAuthorId($offerID);
+                $authorId = \KC\Repsoitory\Offer::getAuthorId($offerID);
 
                 $uid = $authorId[0]['authorId'];
                 $popularcodekey ="all_". "popularcode".$uid ."_list";

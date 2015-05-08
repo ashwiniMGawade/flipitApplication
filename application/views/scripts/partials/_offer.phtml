@@ -19,7 +19,7 @@ foreach ($this->offers as $offer) {
     $offer = (object) $offer;
     $offerBounceRate = "/out/offer/".$offer->id;
     $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
-    $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($offer->endDate);
+    $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires((array)$offer->endDate);
     $urlToShow = $offerPartial->getUrlToShow($offer);
     $offerTitle = FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offer->title);
     $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
@@ -82,7 +82,7 @@ foreach ($this->offers as $offer) {
                     </ul>
                     <?php 
                     if ($offer->Visability == 'MEM') {
-                        echo $this->esi($esiLocale.'signup/signupmembersonlytitle?shopId='.$offer->shop['id']
+                        echo $this->esi($esiLocale.'signup/signupmembersonlytitle?shopId='.$offer->shopOffers['id']
                             .'&signupFormWidgetType=widgetWithinOffers&offerId='.$offer->id.'&shopLogoOrDefaultImage=');
                     } else {
                         echo $offerPartial->getCommonRedirectUrlForOffer(
@@ -101,10 +101,10 @@ foreach ($this->offers as $offer) {
                 <div class="buttons offer-teaser-button-wrapper" id="offerButton<?php echo $offer->id ;?>">
                     <div class="offer-teaser-button-wrapper-inner <?php echo $couponClass; ?>">
     <?php
-    $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shop['permalink'];
+    $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shopOffers['permaLink'];
 
     if ($offer->Visability == 'MEM') {
-        echo $this->esi($esiLocale.'signup/signupwidgetcodes?shopId='.$offer->shop['id']
+        echo $this->esi($esiLocale.'signup/signupwidgetcodes?shopId='.$offer->shopOffers['id']
             .'&signupFormWidgetType=widgetWithinOffers&offerId='.$offer->id.'&shopLogoOrDefaultImage=');
     } else {
         echo $offerPartial->getCommonRedirectUrlForOffer(
@@ -132,9 +132,9 @@ foreach ($this->offers as $offer) {
     $offerBottomTextForExclusiveOrSocialOrEditor = '';
     $offerBottomRecomendedLink = '';
     if (intval($offer->editorPicks) == 1) {
-        $contentManagerId = isset($offer->shop['contentManagerId']) ? $offer->shop['contentManagerId'] : '';
-        $contentManagerId = !empty($this->shop['contentManagerId'])
-            ? $this->shop['contentManagerId'] 
+        $contentManagerId = isset($offer->shopOffers['contentManagerId']) ? $offer->shopOffers['contentManagerId'] : '';
+        $contentManagerId = !empty($this->shopOffers['contentManagerId'])
+            ? $this->shopOffers['contentManagerId'] 
             : $contentManagerId;
         $shopEditor = $offerPartial->getShopEditor($contentManagerId);
         $offerBottomRecomendedLink = $offerPartial->getShopEditorHtml($shopEditor);
@@ -159,14 +159,14 @@ foreach ($this->offers as $offer) {
         $offerBottomExtendedLink =  $offerPartial->getExtendedOfferLink($offer);
         if ($this->offersType != 'simple') {
             $offerBottomViewAllShopsLink =  $offerPartial->getViewAllCodesLink(
-                $offer->shop['name'],
-                $offer->shop['permalink']
+                $offer->shopOffers['name'],
+                $offer->shopOffers['permaLink']
             );
         }
     } else {
         $offerBottomViewAllShopsLink = $offerPartial->getViewAllCodesLink(
-            $offer->shop['name'],
-            $offer->shop['permalink']
+            $offer->shopOffers['name'],
+            $offer->shopOffers['permaLink']
         );
     }
     $combinedOfferBottomText = $offerBottomTermsAndConditionLink
@@ -241,16 +241,12 @@ foreach ($this->offers as $offer) {
                 <span><?php echo $this->translate('Grab this offer now:');?></span>
                 <a target = "_blank" href="<?php echo $urlToShow;?>" rel= "nofollow">
                 <?php echo $this->translate('Open ');?>
-                <?php echo $offer->shop['name']; ?>
+                <?php echo $offer->shopOffers['name']; ?>
                 <?php echo $this->translate(' website');?>
                 </a>
             </div>
         </div>
-        <?php
-        if ($offer->userGenerated == 1) { ?>
-            <input type="hidden" id="userGenerated" alt="<?php echo $offer->id ;?>" value="1" />
-        <?php } ?>
-        <div  class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
+        <div class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
             <h2><?php echo $this->translate('Terms &amp; Conditions');
             if (!empty($defaultText)) { echo ' : <span class="social-term-font">' .$defaultText.'</span>'; }?></h2>
             <ol class="num-list">
@@ -259,7 +255,16 @@ foreach ($this->offers as $offer) {
         </div>
     </article>
     <?php
-    if($offerCounter == 1) :
+    $widgetPosition = !empty($this->widgetPosition) ? $this->widgetPosition : 1;
+    if (!empty($this->shopPage)) {
+        $showSignupOption = $this->showSignupOption;
+        if ($this->shop['affliateProgram'] == 1) {
+            $widgetPosition = $this->widgetPosition;
+        }
+    } else {
+        $showSignupOption = 1;
+    }
+    if ($offerCounter == $widgetPosition && $showSignupOption == 1 && $widgetPosition > 0) :
         if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage'
             || $this->offersType=='offerWithPagenation' || $this->offersType=='newestOffer'):
             $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
@@ -268,11 +273,11 @@ foreach ($this->offers as $offer) {
         endif;
     endif;
     if ($this->offersType=='simple') {
-        if ($offer->shop['showcustomtext'] == 1
-            && $offerCounter == $offer->shop['customtextposition']) { ?>
+        if ($offer->shopOffers['showcustomtext'] == 1
+            && $offerCounter == $offer->shopOffers['customtextposition']) { ?>
             <article class="block">
                 <div class="holder" style="">
-                    <?php echo $offer->shop['customtext'];?>
+                    <?php echo $offer->shopOffers['customtext'];?>
                 </div>
             </article>
     <?php 
@@ -287,9 +292,9 @@ if ($this->offersType!='extendedOffer') {
     }
     if (isset($this->pageType) && $this->pageType == 'howToGuide') {
         $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-        echo '<a class="link-box" href="'.$domainName.$offer->shop['permalink'].'">
+        echo '<a class="link-box" href="'.$domainName.$offer->shopOffers['permaLink'].'">
                 <hr class="alt2">
-                '.$this->translate('View all voucher codes from').' '.$offer->shop['name'].'
+                '.$this->translate('View all voucher codes from').' '.$offer->shopOffers['name'].'
             </a>';
     }
     ?>

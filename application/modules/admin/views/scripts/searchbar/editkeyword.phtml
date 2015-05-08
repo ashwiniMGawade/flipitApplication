@@ -35,13 +35,13 @@
                         <div class="mainpage-content-right">
                           <div class="mainpage-content-right-inner-left-other">
                            <div data-toggle="buttons-checkbox" class="btn-group">
-		                  <button id='btnredirect'  type="button" onclick="changeAction(this,0)" name="redirect" class="<?php if($keywordAction==0){echo "btn btn-primary";}else{echo "btn";}?>"><?php echo $this->translate("Redirect") ; ?></button>
-		                  <button id='btnconnect'  style="border-radius: 0 4px 4px 0;" type="button" onclick="changeAction(this,1)" name="connect" class="<?php if($keywordAction==1){echo "btn btn-primary";}else{echo "btn";}?>"><?php echo $this->translate("Connect") ; ?></button>
-		                 
-		                 <input value="<?php echo $keywordAction; ?>" class="display-none" type="checkbox"  name="actionType" id="actionType" checked="<?php echo $keywordAction==0 ? 'checked' : ''; ?>"/>
-		                 <input type="hidden" value='<?php echo $keywordAction ?>' id='checkBoxVal'/>
-		                 
-		                 </div>
+                          <button id='btnredirect'  type="button" onclick="changeAction(this,0)" name="redirect" class="<?php if($keywordAction==0){echo "btn btn-primary";}else{echo "btn";}?>"><?php echo $this->translate("Redirect") ; ?></button>
+                          <button id='btnconnect'  style="border-radius: 0 4px 4px 0;" type="button" onclick="changeAction(this,1)" name="connect" class="<?php if($keywordAction==1){echo "btn btn-primary";}else{echo "btn";}?>"><?php echo $this->translate("Connect") ; ?></button>
+                         
+                         <input value="<?php echo $keywordAction; ?>" class="display-none" type="checkbox"  name="actionType" id="actionType" checked="<?php echo $keywordAction==0 ? 'checked' : ''; ?>"/>
+                         <input type="hidden" value='<?php echo $keywordAction ?>' id='checkBoxVal'/>
+                         
+                         </div>
                           </div>
                          </div>
                         </div>
@@ -59,15 +59,13 @@
                                </div>
                             </div>
                         </div>
-                        
-                        
                        
-                         <div class="mainpage-content-line mt10" id='addButton'>
+                        <div class="mainpage-content-line mt10" id='addButton'>
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Connect to'); ?></strong></label></div>
                             <div class="mainpage-content-right">
                             <div class="mainpage-content-right-inner-right-other" style="margin-top:2px;">
                             <div data-toggle="buttons-checkbox" class="btn-group">
-                            	<button type="button" onclick="addShop();" name="addStore" id="addStore" class="btn btn-primary"><?php echo $this->translate("ADD STORE")?></button>
+                                <button type="button" onclick="addShop();" name="addStore" id="addStore" class="btn btn-primary"><?php echo $this->translate("ADD STORE")?></button>
                             </div>
                             </div>
                             <div class="mainpage-content-right-inner-left-other">
@@ -80,56 +78,43 @@
                        
                       
                         <div class="mainpage-content-line mt10" id="listShop" style="display:block">
-                         <div class="mainpage-content-left"></div>
-                         <div class="mainpage-content-right">
-                         <ul id="shopListul-li">
-                         <?php 
-                        //echo "<pre>";
-                        //print_r($this->editKeyword[0]['shops']);
-                         $ids ='';
-                         $j = 0;
-                         foreach ($this->editKeyword[0]['shops'] as $k)
-                         {
-                         	
-                         	foreach ($k['shopsofKeyword'] as $s)
-                         	{
-                         		
-                         		//print(count($this->editKeyword[0]['shops']));
-                         		 $li =  '<li class="search-add"  id='.$s['sid'].' type='.$s['sid'].'>';
-                         		 $li .= '<a href="javascript:void(0);" onClick=deleteShop(' . $s['sid'] .') ><img src="'.IMG_PATH.'kc-search-cross.png"/></a>'. '&nbsp;'.$s['name'].'</li>';
-                         		 echo $li;
-                         		 $j++;
-                         		if($j==count($this->editKeyword[0]['shops']))
-                         		 {
-                         		 	$ids.=$s['sid'];
-                         		 //	echo 'true';
-                         		 	
-                         		 } else {
-                         		 	
-                         		 	$ids.=$s['sid'].',';
-                         		 //	echo "false";
-                         		}
-                         	}
-						 }
-						 $a = rtrim(str_replace(","," ",$ids));
-						 $gIds =  str_replace(" ",",",$a);
-						 
-                         ?>
-                         </ul>
-                          <input type="hidden" id="selectedShopForSearchbar" name="selectedShopForSearchbar" value="<?php echo $gIds; ?>">
-                         <div class="clear mb10"></div>
-                         </div>
+                            <div class="mainpage-content-left"></div>
+                            <div class="mainpage-content-right">
+                                <ul id="shopListul-li">
+                                    <?php 
+                                    $ids ='';
+                                    $j = 0;
+                                    foreach ($this->editKeyword as $s)
+                                    { 
+                                        $li =  '<li class="search-add" id="'.$s['sid'].'" type="'.$s['sid'].'">';
+                                        $li .= '<a href="javascript:void(0);" onClick="deleteShop('.$s['sid'] .')">
+                                            <img src="'.IMG_PATH.'kc-search-cross.png"/></a>'.$s['name'].'</li>';
+                                        echo $li;
+                                        $j++;
+                                        if ($j == count($this->editKeyword)) {
+                                            $ids.= $s['sid'];
+                                         } else {
+                                            $ids.= $s['sid'].',';
+                                        }
+                                    }
+                                    $a = rtrim(str_replace(",", " ", $ids));
+                                    $gIds =  str_replace(" ", ",", $a); 
+                                    ?>
+                                </ul>
+                                <input type="hidden" id="selectedShopForSearchbar" name="selectedShopForSearchbar" value="<?php echo $gIds; ?>">
+                                <div class="clear mb10"></div>
+                            </div>
                         </div>
                          
                          <!-- hide show div  -->
-                         </div>
+                        </div>
                         </div>
                       </div>
                     <br class="clear">
                </div>    
                <div class="mainpage-content-colorbox">
                <button type="submit" id="editKeyword" class="btn btn-large btn-primary fl"><?php echo $this->translate('SAVE CHANGES'); ?>
-            	</button>
+                </button>
                 <a href="javascript:void(0);" onclick="window.location.href='<?php echo HTTP_PATH ;?>admin/searchbar'" class="fl m10" ><strong><?php echo $this->translate('CANCEL'); ?></strong>
                 </a>
                 <a id="deleteButton" class="fl red mt10" href="javascript:void(0);"  onclick="deleteKeywordByEdit();"><strong>

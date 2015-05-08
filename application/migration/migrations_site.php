@@ -1,6 +1,4 @@
 <?php
-
-
 // Define path to application directory
 defined('APPLICATION_PATH')
 || define('APPLICATION_PATH',
@@ -9,7 +7,7 @@ defined('APPLICATION_PATH')
 defined('LIBRARY_PATH')
 || define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
 
-defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
+defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine1');
 
 // Define application environment
 defined('APPLICATION_ENV')
@@ -125,12 +123,10 @@ function migrateDatabase($dsn, $key = "",$version = null)
         # crate migration instance
         $migration = new Doctrine_Migration(realpath(APPLICATION_PATH.'/models/migrations_site'), $DMC );
 
-
-        echo $migration->getLatestVersion() . "\n";
-
-        echo $migration->getNextVersion() . "\n";
-        echo $migration->getNextMigrationClassVersion() . "\n";
-        echo $migration->getCurrentVersion() . "\n";
+        // echo $migration->getLatestVersion() . "\n";
+        // echo $migration->getNextVersion() . "\n";
+        // echo $migration->getNextMigrationClassVersion() . "\n";
+        // echo $migration->getCurrentVersion() . "\n";
 
         if($migration->getLatestVersion() > $migration->getCurrentVersion() ) {
             # execute migrate()
@@ -144,8 +140,7 @@ function migrateDatabase($dsn, $key = "",$version = null)
         $manager->closeConnection($DMC);
 
     } catch (Exception $e) {
-
-         var_dump($e->getMessage());
+        // print_r($e->getMessage());
     }
 
 }

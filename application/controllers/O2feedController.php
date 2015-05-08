@@ -15,8 +15,8 @@ class O2feedController extends  Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(true);
 
         # fetch 10 Popular voucher offers for http://www.metronieuws.nl
-        $topVouchercodes = PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(9);
-        $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes, 9);
+        $topVouchercodes = \KC\Repository\PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(9);
+        $topVouchercodes =  \FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes, 9);
         $domain1 = $_SERVER['HTTP_HOST'];
         $domain = 'http://'.$domain1;
         $locale = LOCALE;

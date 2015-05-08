@@ -14,22 +14,21 @@ class FrontEnd_Helper_ClickoutFunctions
     {
         if (isset($offerId)) {
             $this->offerId = $offerId;
-            $shopInfo = Offer::getShopInfoByOfferId($this->offerId);
-            $shopId = isset($shopInfo['shop']['id']) ? $shopInfo['shop']['id'] : '';
+            $shopInfo = \KC\Repository\Offer::getShopInfoByOfferId($this->offerId);
+            $shopId = isset($shopInfo['shopOffers']['id']) ? $shopInfo['shopOffers']['id'] : '';
             $this->shopRefUrl = isset($shopInfo['refURL']) ? $shopInfo['refURL'] : '';
-            $this->shopSubRefUrl = isset($shopInfo['shop']['refUrl']) ? $shopInfo['shop']['refUrl'] : '';
-            $this->shopActualUrl = isset($shopInfo['shop']['actualUrl']) ? $shopInfo['shop']['actualUrl'] : '';
-            $this->shopPermalink = isset($shopInfo['shop']['permalink']) ? $shopInfo['shop']['permalink'] : '';
+            $this->shopSubRefUrl = isset($shopInfo['shopOffers']['refUrl']) ? $shopInfo['shopOffers']['refUrl'] : '';
+            $this->shopActualUrl = isset($shopInfo['shopOffers']['actualUrl']) ? $shopInfo['shopOffers']['actualUrl'] : '';
+            $this->shopPermalink = isset($shopInfo['shopOffers']['permalink']) ? $shopInfo['shopOffers']['permalink'] : '';
             $this->shopInfo = $shopInfo;
         } else {
-            $shopInfo = Shop::getShopInfoByShopId($shopId);
+            $shopInfo = \KC\Repository\Shop::getShopInfoByShopId($shopId);
             $this->shopInfo = $shopInfo;
             $this->shopRefUrl = isset($shopInfo['refUrl']) ? $shopInfo['refUrl'] : '';
             $this->shopActualUrl = isset($shopInfo['actualUrl']) ? $shopInfo['actualUrl'] : '';
             $this->shopPermalink = isset($shopInfo['permalink']) ? $shopInfo['permalink'] : '';
         }
-        
-        $this->network = Shop::getAffliateNetworkDetail($shopId);
+        $this->network = \KC\Repository\Shop::getAffliateNetworkDetail($shopId);
         $this->shopId = $shopId;
     }
     
@@ -66,7 +65,7 @@ class FrontEnd_Helper_ClickoutFunctions
         $stringPattern = "";
 
         if (isset($network['affliatenetwork'])) {
-            if (!empty($network['subid'])) {
+            if (!empty($network['affliatenetwork']['subId'])) {
                 $networkInformation = self::getExplodedSubidWithPattern($network);
                 $stringPattern = $networkInformation['stringPattern'];
                 $gaCookie = isset($_COOKIE['_ga']) ? $_COOKIE['_ga'] : 'notAvailable';
@@ -88,13 +87,13 @@ class FrontEnd_Helper_ClickoutFunctions
         $subid = "" ;
         $stringPattern = "";
 
-        if (!empty($network['subid'])) {
-            if (strpos($network['subid'], "|") !== false) {
-                $explodedNetworkSubid = explode("|", $network['subid']);
+        if (!empty($network['affliatenetwork']['subId'])) {
+            if (strpos($network['affliatenetwork']['subId'], "|") !== false) {
+                $explodedNetworkSubid = explode("|", $network['affliatenetwork']['subId']);
                 $stringPattern = isset($explodedNetworkSubid[0]) ? $explodedNetworkSubid[0] : '';
                 $subid = isset($explodedNetworkSubid[1]) ? $explodedNetworkSubid[1] : '';
             } else {
-                $subid = "&" . $network['subid'];
+                $subid = "&" . $network['affliatenetwork']['subId'];
             }
         }
         $networkInfo = array(

@@ -243,7 +243,7 @@ function getRedirectList(iStart,iSortCol,iSortDir){
 							"fnRender" : function(obj) {
 								var tag = '';
 								if(obj.aData.created_at!=undefined && obj.aData.created_at!=''){
-								var dat = obj.aData.created_at;
+								var dat = obj.aData.created_at.date;
 								tag = dat.split("-");
 								tag2 = tag[2];
 								var da = tag2.split(" ");
@@ -275,7 +275,7 @@ function getRedirectList(iStart,iSortCol,iSortDir){
 					
 					
 					var state = {};
-					$("#RedirectListTbl").find('tr').find('td').click(function () {
+					$("#RedirectListTbl").find('tr').find('td:lt(3)').click(function () {
 							var eId = $(this).parent('tr').find('p').attr('editid');
 							state[ 'eId' ] = eId ;
 							$.bbq.pushState( state );

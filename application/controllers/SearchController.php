@@ -17,29 +17,29 @@ class SearchController extends Zend_Controller_Action
         } else {
             $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
         }
-        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
+        $this->viewHelperObject = new \FrontEnd_Helper_viewHelper();
     }
 
     public function indexAction()
     {
-        $searchPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $searchPermalink = ltrim(\Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $splitSearchPermalink = explode('/', $searchPermalink);
         $pagePermalink = isset($splitSearchPermalink[2]) ? $splitSearchPermalink[1] : $splitSearchPermalink[0];
 
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
-        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::__link('link_zoeken'));
-        $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
+        $pageDetails = \KC\Repository\Page::getPageDetailsFromUrl(\FrontEnd_Helper_viewHelper::__link('link_zoeken'));
+        $pageDetails = (object) $pageDetails;
+        $this->view->pageHeaderImage = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'page_header'.$pageDetails->id.'_image',
             array(
-                'function' => 'Logo::getPageLogo',
-                'parameters' => array($pageDetails->pageHeaderImageId)
+                'function' => '\KC\Repository\Logo::getPageLogo',
+                'parameters' => array($pageDetails->pageHeaderImageId['id'])
             ),
             ''
         );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
-
         $searchedKeywords = strtolower(
-            FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialCharacterAndReplacedWithHyphen(
+            \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialCharacterAndReplacedWithHyphen(
                 $this->getRequest()->getParam('searchField')
             )
         );
@@ -48,17 +48,17 @@ class SearchController extends Zend_Controller_Action
         $shopsByShopIds = $this->_helper->Search->getshopsByExcludedShopIds($shopIds);
         $popularShops = $this->_helper->Search->getPopularStores($searchedKeywords);
         $shopsForSearchPage = $this->_helper->Search->getStoresForSearchResults($shopsByShopIds, $popularShops);
-        $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $popularStores = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             '10_popularShops_list',
-            array('function' => 'Shop::getAllPopularStores',
+            array('function' => '\KC\Repository\Shop::getAllPopularStores',
                 'parameters' => array(12)),
             true
         );
-        $offersBySearchedKeywords = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'offers_by_searchedkeywords'.FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter(
+        $offersBySearchedKeywords = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            'offers_by_searchedkeywords'.\FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter(
                 str_replace(" ", "", $searchedKeywords)
             ),
-            array('function' => 'Offer::searchOffers',
+            array('function' => '\KC\Repository\Offer::searchOffers',
                 'parameters' => array($this->_getAllParams(), $shopIds, 12)),
             true
         );
@@ -81,11 +81,11 @@ class SearchController extends Zend_Controller_Action
             FACEBOOK_IMAGE,
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
-        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+        $signUpFormSidebarWidget = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'formSignupSidebarWidget',
             'SignUp '
         );
-        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
+        \FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->pageCssClass = 'page-store';
     }

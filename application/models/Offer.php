@@ -22,6 +22,17 @@ class Offer extends BaseOffer
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
 
+    public static function getFutureOnlineOffers()
+    {
+        $currentDate = date("Y-m-d H:i");
+        $offers = Doctrine_Query::create()
+            ->select('o.id, o.startdate')
+            ->from('Offer o')
+            ->andWhere('o.startdate >= '."'".$currentDate."'")
+            ->fetchArray();
+        return $offers;
+    }
+    
     public static function getViewCountByOfferId($offerId)
     {
         $dateTimeFormat = 'Y-m-j H:i:s';
@@ -1170,6 +1181,21 @@ class Offer extends BaseOffer
             ->fetchArray();
 
         return !empty($offerVisiblity) ? true : false;
+    }
+
+    public static function checkOfferExpired($offerId)
+    {
+        $currentDateTime = date("Y-m-d H:i:s");
+        $offerDetail = Doctrine_Query::create()
+            ->select('o.id')
+            ->from('Offer o')
+            ->where('o.deleted = 0')
+            ->andWhere('o.enddate<'."'".$currentDateTime."'")
+            ->andWhere('o.id ='.$offerId)
+            ->andWhere('o.offline = 0')
+            ->limit(1)
+            ->fetchArray();
+        return !empty($offerDetail) ? true : false;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
@@ -3224,7 +3250,7 @@ class Offer extends BaseOffer
     {
         $offer  = Doctrine_Query::create()
         ->select(
-            "o.id, o.extendedOffer,o.authorId , o.extendedUrl,
+            "o.id, s.startdate, o.extendedOffer,o.authorId , o.extendedUrl,
             s.permaLink, s.howToUse ,s.howtoguideslug, s.contentManagerId,
             sp.permaLink, p.permaLink, c.permaLink"
         )
@@ -3291,6 +3317,7 @@ class Offer extends BaseOffer
                 }
             }
         }
+        $urlsArray['refreshTime'] = $offer['startdate'];
         return $urlsArray ;
     }
 

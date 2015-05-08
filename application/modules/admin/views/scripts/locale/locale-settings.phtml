@@ -107,8 +107,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div data-toggle="buttons-checkbox" class="mainpage-content-right-inner-left-other">
                             <input type="text"
-                            value="<?php echo isset($this->chainHrefLang['chain']) ?
-                                $this->chainHrefLang['chain'] : '';?>"
+                            value="<?php echo isset($this->chainHrefLang[0]['chain']) ?
+                                $this->chainHrefLang[0]['chain'] : '';?>"
                             placeholder=<?php echo $this->translate('Chain hreflang')?>
                             name="chain" id="chain" class="span3">
                         </div>

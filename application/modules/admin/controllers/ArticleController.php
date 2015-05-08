@@ -27,14 +27,14 @@ class Admin_ArticleController extends Zend_Controller_Action
     public function preDispatch()
     {
         //echo "<pre>"; print_r($_SERVER); die;
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $params = $this->_getAllParams();
-        if (!Auth_StaffAdapter::hasIdentity()) {
+        if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
 
@@ -50,9 +50,8 @@ class Admin_ArticleController extends Zend_Controller_Action
 
     public function getarticlesAction()
     {
-        $getList = new Articles();
+        $getList = new KC\Repository\Articles();
         $list = $getList->getArticleList($this->getRequest()->getParams());
-
         echo Zend_Json::encode($list);
         die;
 
@@ -61,72 +60,71 @@ class Admin_ArticleController extends Zend_Controller_Action
 
     public function gettrashlistAction()
     {
-        $getList = new Articles();
+        $getList = new \KC\Repository\Articles();
         $list = $getList->getTrashedList($this->getRequest()->getParams());
-
         echo Zend_Json::encode($list);
         die;
-
-
     }
 
     public function createarticleAction()
     {
-        $this->view->articleCategory = Doctrine_Query::create()->select()
-                                                               ->from("Articlecategory cat")
-                                                               ->where("deleted = 0")
-                                                               ->orderBy('cat.name ASC')
-                                                               ->fetchArray();
+        
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
+        $queryBuilder = $entityManagerLocale->createQueryBuilder();
+        $query = $queryBuilder->select('cat')
+            ->from('\KC\Entity\Articlecategory', 'cat')
+            ->where('cat.deleted= 0')
+            ->orderBy('cat.name', 'ASC');
 
-
-        if(isset($_COOKIE['site_name'])){
+        $this->view->articleCategory = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+      
+        if (isset($_COOKIE['site_name'])) {
             $site_name = "http://www.".$_COOKIE['site_name'];
         }
-        $this->view->authorList = Articles::getAuthorList($site_name);
+        $this->view->authorList = KC\Repository\Articles::getAuthorList($site_name);
 
-        if($this->getRequest()->isPost()){
+        if ($this->getRequest()->isPost()) {
 
             //echo "<pre>"; print_r($this->getRequest()->getParams()); die;
-            $result = Articles::saveArticle($this->getRequest()->getParams());
+
+            $result = KC\Repository\Articles::saveArticle($this->getRequest()->getParams());
+
 
             $flash = $this->_helper->getHelper('FlashMessenger');
 
             //echo "<pre>"; print_r($result);die;
 
-            if($result){
-                $popularArticles = PopularArticles::getPopularArticles();
-                $changedArticlesDataForSorting = PopularArticles::changeArticlesDataForSorting($popularArticles);
-                PopularArticles::updateArticles($changedArticlesDataForSorting);
-                PopularArticles::savePopularArticle($result['articleId'], 1);
+
+            if ($result) {
+
+                $popularArticles = \KC\Repository\PopularArticles::getPopularArticles();
+                $changedArticlesDataForSorting = \KC\Repository\PopularArticles::changeArticlesDataForSorting($popularArticles);
+                \KC\Repository\PopularArticles::updateArticles($changedArticlesDataForSorting);
+                \KC\Repository\PopularArticles::savePopularArticle($result['articleId'], 1);
+
                 # update only when article is being published immedately or some time later
-                if(! $result['isDraft']) {
+                if (! $result['isDraft']) {
                     self::updateVarnish($result['articleId']);
                 }
 
-
                 $val = $this->getRequest()->getParams();
-                if(isset($val['savePagebtn']) && @$val['savePagebtn'] == 'draft'){
+                if (isset($val['savePagebtn']) && @$val['savePagebtn'] == 'draft') {
 
-                    $createdartid = Doctrine_Query::create()->select("id")->from("Articles")->orderBy("id DESC")->limit(1)->fetchArray();
+                    $createdartid = KC\Repository\Articles::getArticleId();
                     $actualval = $createdartid[0]['id'];
-
                     $redirecturl = "/admin/article/editarticle/id/".$actualval;
                     $this->_redirect($redirecturl);
                     exit();
                 }
                 $message = $this->view->translate('The Article has been saved successfully');
                 $flash->addMessage(array('success' => $message));
-                $this->_helper->redirector(null , 'article' , null ) ;
-            }else{
+                $this->_helper->redirector(null, 'article', null);
+            } else {
                 $message = $this->view->translate('Error: Your file size exceeded 2MB');
                 $flash->addMessage(array('error' => $message));
-                $this->_helper->redirector(null , 'article' , null ) ;
+                $this->_helper->redirector(null, 'article', null) ;
             }
-
         }
-
-
-
     }
     /**
      * get all trashed pages from database
@@ -137,58 +135,62 @@ class Admin_ArticleController extends Zend_Controller_Action
     public function trashlistAction()
     {
         $params = $this->_getAllParams();
-        $articlesObj = new Articles();
+        $articlesObj = new KC\Repository\Articles();
         // cal to function in network model class
         $articlesList =  $articlesObj->gettrashedArticles($params);
-        echo Zend_Json::encode ( $articlesList );
+        echo Zend_Json::encode($articlesList);
         die ;
     }
 
     public function editarticleAction()
     {
-        $this->view->role = Zend_Auth::getInstance ()->getIdentity ()->roleId;
+        $this->view->role = Zend_Auth::getInstance()->getIdentity()->users->id;
 
-        $this->view->articleCategory = Doctrine_Query::create()->select()
-                                                               ->from("Articlecategory cat")
-                                                               ->leftJoin("cat.relatedcategory")
-                                                               ->where("deleted = 0")
-                                                               ->orderBy('cat.name ASC')
-                                                               ->fetchArray();
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
+        $queryBuilder = $entityManagerLocale->createQueryBuilder();
+        $query = $queryBuilder->select('cat')
+            ->from('\KC\Entity\Articlecategory', 'cat')
+            ->where('cat.deleted= 0')
+            ->orderBy('cat.name', 'ASC');
+
+        $this->view->articleCategory = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+       
         $articleId = $this->getRequest()->getParam('id');
-        if(isset($_COOKIE['site_name'])){
+        if (isset($_COOKIE['site_name'])) {
             $site_name = "http://www.".$_COOKIE['site_name'];
         }
-        $this->view->authorList = Articles::getAuthorList($site_name);
+        $this->view->authorList = KC\Repository\Articles::getAuthorList($site_name);
 
-        $articlcData = Articles::getArticleData($this->_getAllParams());
+
+        $articlcData = KC\Repository\Articles::getArticleData($this->_getAllParams());
+
+
         #redirect to article list
-        if(! $articlcData) {
-            $this->_helper->redirector(null , 'article' , null ) ;
+        if (!$articlcData) {
+            $this->_helper->redirector(null, 'article', null);
         }
 
         $this->view->articleData = $articlcData;
         $this->view->qstring = $_SERVER['QUERY_STRING'];
 
-        if($this->getRequest()->isPost()){
+        if ($this->getRequest()->isPost()) {
 
-            $result = Articles::editArticle($this->getRequest()->getParams());
+            $result = KC\Repository\Articles::editArticle($this->getRequest()->getParams());
             $flash = $this->_helper->getHelper('FlashMessenger');
-            if($result){
+            if ($result) {
 
                 self::updateVarnish($articleId);
 
                 $message = $this->view->translate('The Article has been updated successfully');
                 $flash->addMessage(array('success' => $message));
 
-            }else{
+            } else {
                 $message = $this->view->translate('Error: Your file size exceeded 2MB');
                 $flash->addMessage(array('error' => $message));
 
             }
             $this->_redirect(HTTP_PATH.'admin/article#'.$this->getRequest()->getParam('qString'));
         }
-
-// 		echo "<pre>"; print_r($this->view->articleData); die;
     }
 
     public function searchkeyAction()
@@ -196,17 +198,17 @@ class Admin_ArticleController extends Zend_Controller_Action
         $srh = $this->getRequest()->getParam('keyword');
         $flag = $this->getRequest()->getParam('flag');
 
-        if($this->getRequest()->getParam('keyword') != '' && $this->getRequest()->getParam('keyword') != 'undefined'){
+        if ($this->getRequest()->getParam('keyword') != '' && $this->getRequest()->getParam('keyword') != 'undefined') {
             $alreadySelected = explode(',', $this->getRequest()->getParam('selectedshops'));
         }
 
-        $data =Articles::getAllStores($srh,$flag);
+        $data = KC\Repository\Articles::getAllStores($srh, $flag);
         $ar = array();
         $i = 0;
         if (sizeof($data) > 0) {
             foreach ($data as $d) {
 
-                if( ! in_array($d['id'], $alreadySelected) ){
+                if (!in_array($d['id'], $alreadySelected)) {
                     $ar[$i]['label'] = ucfirst($d['name']);
                     $ar[$i]['value'] = ucfirst($d['name']);
                     $ar[$i]['id'] = $d['id'];
@@ -215,9 +217,7 @@ class Admin_ArticleController extends Zend_Controller_Action
             }
 
         }
-
-        if(sizeof($ar) == 0){
-
+        if (sizeof($ar) == 0) {
             $msg = $this->view->translate('No Record Found');
             $ar[] = $msg;
         }
@@ -238,8 +238,7 @@ class Admin_ArticleController extends Zend_Controller_Action
         $flag = $this->getRequest()->getParam('flag');
         //cal to searchToFiveShop function from offer model class
 
-        $data = Articles::searchKeyword($srh, $flag);
-
+        $data = \KC\Repository\Articles::searchKeyword($srh, $flag);
         $ar = array();
         $removeDup = array();
         if (sizeof($data) > 0) {
@@ -276,18 +275,15 @@ class Admin_ArticleController extends Zend_Controller_Action
     {
         $srh = $this->getRequest()->getParam('keyword');
         $flag = $this->getRequest()->getParam('flag');
-        $data =Articles::searchKeyword($srh,$flag);
+        $data = KC\Repository\Articles::searchKeyword($srh, $flag);
 
         $ar = array();
         if (sizeof($data) > 0) {
             foreach ($data as $d) {
-
                 $ar[] = ucfirst($d['title']);
-
             }
 
         } else {
-
             $msg = $this->view->translate('No Record Found');
             $ar[] = $msg;
         }
@@ -301,35 +297,45 @@ class Admin_ArticleController extends Zend_Controller_Action
      * @version 1.0
      * @author kkumar
      */
-public function validatepermalinkAction()
-{
-        $url = $this->getRequest ()->getParam ( "articlepermalink" );
+    public function validatepermalinkAction()
+    {
+        $url = $this->getRequest()->getParam("articlepermalink");
 
-        $pattern = array ('/\s/',"/[\,+@#$%'^&*!]+/");
-        $replace = array ("-","-");
+        $pattern = array('/\s/',"/[\,+@#$%'^&*!]+/");
+        $replace = array("-","-");
 
-        $url = preg_replace ( $pattern, $replace, $url );
+        $url = preg_replace($pattern, $replace, $url);
         $url = trim(strtolower($url), "-");
-        $id = $this->getRequest ()->getParam('id');
-        $isEdit = $this->getRequest ()->getParam('isEdit');
-        if($isEdit==1){
+        $id = $this->getRequest()->getParam('id');
+        $isEdit = $this->getRequest()->getParam('isEdit');
+        if ($isEdit==1) {
 
-            $rp = Doctrine_Query::create()->select()->from("Articles")->where("permalink = '".urlencode($url)."'")->andWhere('id='.$id)->fetchArray();
-            if(empty($rp)) {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder->select('a')
+                ->from('\KC\Entity\Articles', 'a')
+                ->where('a.permalink ='.  $queryBuilder->expr()->literal(urlencode($url)))
+                ->andWhere('a.id ='. $id);
+            $rp = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-                $rp = Doctrine_Query::create()->select()->from("Articles")->where("permalink = '".urlencode($url)."'")->fetchArray();
-                if(empty($rp)){
+            if (empty($rp)) {
+
+                $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                $query = $queryBuilder->select('a')
+                    ->from('\KC\Entity\Articles', 'a')
+                    ->where('a.permalink ='.  $queryBuilder->expr()->literal(urlencode($url)));
+                $rp = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+                if (empty($rp)) {
                     $res = array( 	'status' => '200' ,
                             'url' => $url ,
                             'permaLink' => $url ) ;
 
                     echo Zend_Json::encode($res);
                     die ;
-                }else	{
+                } else {
                     echo Zend_Json::encode(false);
                     die ;
                 }
-            }else{
+            } else {
                     $res = array( 	'status' => '200' ,
                             'url' => $url ,
                             'permaLink' => $url ) ;
@@ -338,18 +344,22 @@ public function validatepermalinkAction()
                     die ;
 
             }
-        }else{
+        } else {
 
-            $rp = Doctrine_Query::create()->select()->from("Articles")->where("permalink = '".urlencode($url)."'")->fetchArray();
-            //echo $rp ;
-            if(empty($rp)){
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder->select('a')
+                ->from('\KC\Entity\Articles', 'a')
+                ->where('a.permalink ='.  $queryBuilder->expr()->literal(urlencode($url)));
+            $rp = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+           
+            if (empty($rp)) {
                 $res = array( 	'status' => '200' ,
                         'url' => $url ,
                         'permaLink' => $url ) ;
 
                 echo Zend_Json::encode($res);
                 die ;
-            }else	{
+            } else {
                 echo Zend_Json::encode(false);
                 die ;
             }
@@ -365,8 +375,7 @@ public function validatepermalinkAction()
     public function exportarticlelistAction()
     {
         // get all shop from database
-        $data = Articles::exportarticlelist();
-        // create object of phpExcel
+        $data = KC\Repository\Articles::exportarticlelist();
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->setActiveSheetIndex(0);
         $objPHPExcel->getActiveSheet()->setCellValue('A1', $this->view->translate('Article Name'));
@@ -392,15 +401,15 @@ public function validatepermalinkAction()
 
 
             // get created from array
-            $Created = date("d-m-Y", strtotime($page['created_at']));
+            $Created = $page['created_at']->format('d-m-Y');
 
             // get Published from Array
 
             $Published = '';
-            if($page['publish']==true){
+            if ($page['publish'] == true) {
 
                 $Published= $this->view->translate('Yes');
-            } else{
+            } else {
                 $Published = $this->view->translate('No');
             }
 
@@ -475,7 +484,7 @@ public function validatepermalinkAction()
     {
         $id = $this->getRequest()->getParam('id');
         //cal to deleteOffer function from offer model class
-        $deletePermanent = Articles::deleteArticles($id);
+        $deletePermanent = \KC\Repository\Articles::deleteArticles($id);
         $flash = $this->_helper->getHelper('FlashMessenger');
         if (intval($deletePermanent) > 0) {
             $message = $this->view
@@ -499,7 +508,7 @@ public function validatepermalinkAction()
     {
         $id = $this->getRequest()->getParam('id');
         //cal to restoreOffer function from offer model class
-        $restore = Articles::restoreArticles($id);
+        $restore = \KC\Repository\Articles::restoreArticles($id);
 
         if (intval($restore) > 0) {
 
@@ -527,14 +536,14 @@ public function validatepermalinkAction()
      */
     public function trasharticleAction()
     {
-        $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
-        if($role=='1' || $role=='2') {
+        $role = Zend_Auth::getInstance()->getIdentity()->users->id;
+        if ($role=='1' || $role=='2') {
             $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $flash->getMessages();
             $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
             $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
 
-        }else{
+        } else {
 
             $this->_redirect(HTTP_PATH.'admin/article');
         }
@@ -549,7 +558,7 @@ public function validatepermalinkAction()
     {
         $id = $this->getRequest()->getParam('id');
 
-        $trash = Articles::moveToTrash($id);
+        $trash = KC\Repository\Articles::moveToTrash($id);
 
         if (intval($trash) > 0) {
 
@@ -576,7 +585,7 @@ public function validatepermalinkAction()
     {
         $this->_helper->layout()->disableLayout();
 
-        if($this->getRequest()->getParam('partialCounter') > 0){
+        if ($this->getRequest()->getParam('partialCounter') > 0) {
 
             $count = $this->getRequest()->getParam('partialCounter');
 
@@ -588,7 +597,7 @@ public function validatepermalinkAction()
     {
         $id = $this->getRequest()->getParam('id');
         if ($id > 0) {
-            $articles = Articles::deletechapters($id);
+            $articles = \KC\Repository\Articles::deletechapters($id);
         }
         echo Zend_Json::encode($articles);
         die;
@@ -604,7 +613,7 @@ public function validatepermalinkAction()
     public function updateVarnish($id)
     {
         # Add urls to refresh in Varnish
-        $varnishObj = new Varnish();
+        $varnishObj = new KC\Repository\Varnish();
         $varnishObj->addUrl(HTTP_PATH_FRONTEND);
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . strtolower('plus'));
         # make markplaatfeed url's get refreashed only in case of kortingscode
@@ -613,11 +622,11 @@ public function validatepermalinkAction()
             $varnishObj->addUrl(HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed');
         }
         # get all the urls related to this shop
-        $varnishUrls = Articles::getAllUrls($id);
+        $varnishUrls = \KC\Repository\Articles::getAllUrls($id);
         # check $varnishUrls has atleast one
         if (isset($varnishUrls) && count($varnishUrls) > 0) {
-            foreach($varnishUrls as $value) {
-                $varnishObj->addUrl( HTTP_PATH_FRONTEND  . $value);
+            foreach ($varnishUrls as $value) {
+                $varnishObj->addUrl(HTTP_PATH_FRONTEND  . $value);
             }
         }
     }

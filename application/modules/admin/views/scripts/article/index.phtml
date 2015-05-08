@@ -37,7 +37,7 @@
          </h1>
          
          <a href="<?php echo HTTP_PATH;?>admin/article/trasharticle" class="red trash-link">
-         <?php $role =  Zend_Auth::getInstance()->getIdentity()->roleId;			
+         <?php $role =  Zend_Auth::getInstance()->getIdentity()->users->id;			
           	if($role=='1' || $role=='2'){?>
          		<strong><?php echo $this->translate('Trash');
           	 }?>

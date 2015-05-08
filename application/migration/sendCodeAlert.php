@@ -134,16 +134,18 @@ class SendCodeAlert
         $codeAlertOffers = CodeAlertQueue::getCodealertOffers();
         if (!empty($codeAlertOffers)) {
             foreach ($codeAlertOffers as $codeAlertOffer) {
+                $this->shopId = $codeAlertOffer['shop']['id'];
                 $currentDate = date('Y-m-d H:i:s');
                 if ($codeAlertOffer['endDate'] < $currentDate) {
                     CodeAlertQueue::moveCodeAlertToTrash($codeAlertOffer['id']);
                 }
+
                 if (($codeAlertOffer['startDate'] <= $currentDate && $codeAlertOffer['endDate'] >= $currentDate) && $codeAlertOffer['offline'] == 0) {
                     $this->setPhpExecutionLimit();
                     $topVouchercodes = FrontEnd_Helper_viewHelper::getShopCouponCode(
                         'similarStoresAndSimilarCategoriesOffers',
                         4,
-                        $codeAlertOffer['shop']['id']
+                        $this->shopId
                     );
                     $codeAlertSettings = CodeAlertSettings::getCodeAlertSettings();
                     $settings = Signupmaxaccount::getAllMaxAccounts();
@@ -161,17 +163,18 @@ class SendCodeAlert
                             $codeAlertOffer['id']
                         );
                         if (empty($codeAlertVisitors)) {
-                            $visitorCodeAlertSendDate = Visitor::getVisitorCodeAlertSendDate($visitorInfo['visitorId']);
-                            if (date('Y-m-d', strtotime($visitorCodeAlertSendDate)) == date('Y-m-d')) {
-                            } else {
-                                $visitorIds[] = $visitorInfo['visitorId'];
+                            if (isset($this->shopId)) {
+                                $visitorCodeAlertSendDate = Shop::getCodeAlertSendDateByShopId($this->shopId);
+                                if (date('Y-m-d', strtotime($visitorCodeAlertSendDate)) == date('Y-m-d')) {
+                                } else {
+                                    $visitorIds[] = $visitorInfo['visitorId'];
+                                }
                             }
                         }
                     }
                     if (!empty($visitorIds)) {
                         $visitorIds = implode(',', $visitorIds);
                         $this->visitorId = $visitorIds;
-                        $this->shopId = $codeAlertOffer['shop']['id'];
                         BackEnd_Helper_MandrillHelper::getDirectLoginLinks(
                             $this,
                             'scheduleNewsletterSender',
@@ -179,6 +182,7 @@ class SendCodeAlert
                             $this->mandrillKey
                         );
                         try {
+                            sleep(3600);
                             $codeAlertHeader = isset($codeAlertSettings[0]['email_header'])
                                 ? $codeAlertSettings[0]['email_header']
                                 : 'Code alert header';
@@ -203,7 +207,11 @@ class SendCodeAlert
                                 str_replace('[shopname]', $codeAlertOffer['shop']['name'], $codeAlertHeader),
                                 $codeAlertOffer
                             );
-                            Visitor::addCodeAlertTimeStampForVisitor($visitorIds);
+                            
+                            if (isset($this->shopId)) {
+                                Shop::addCodeAlertTimeStampForShopId($this->shopId);
+                            }
+
                             CodeAlertVisitors::saveCodeAlertVisitors($visitorIds, $codeAlertOffer['id']);
                             CodeAlertQueue::clearCodeAlertQueueByOfferId($codeAlertOffer['id']);
                             $message = 'code alert has been sent successfully' ;

@@ -272,11 +272,11 @@
 	    <a <?php if($controller == 'email' && $action == 'index'){ echo 'style=color:#0088CC';} ?> href="<?php echo HTTP_PATH;?>admin/email/index" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" ><?php echo $this->translate('Emails');?></a>
 	 	</li>-->
 
-        <li <?php if($controller == 'email' && $action == 'emailSettings') { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" <?php }?> id="menu-links">
+        <li <?php if($controller == 'email' && $action == 'email-settings') { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" <?php }?> id="menu-links">
 
-      	<div class="imbull-menu-image"><a href="<?php echo HTTP_PATH;?>admin/email/emailSettings"><br></a></div>
+      	<div class="imbull-menu-image"><a href="<?php echo HTTP_PATH;?>admin/email/email-settings"><br></a></div>
 	    <div class=""><div></div></div>
-	    <a <?php if($controller == 'email' && $action == 'emailSettings'){ echo 'style=color:#0088CC';} ?> href="<?php echo HTTP_PATH;?>admin/email/email-settings" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" ><?php echo $this->translate('Email Settings');?></a>
+	    <a <?php if($controller == 'email' && $action == 'email-settings'){ echo 'style=color:#0088CC';} ?> href="<?php echo HTTP_PATH;?>admin/email/email-settings" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" ><?php echo $this->translate('Email Settings');?></a>
 	 	</li>
 
         <li <?php if($controller == 'email') { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" <?php }?> id="menu-posts">
@@ -400,6 +400,30 @@
             <a href="<?php echo HTTP_PATH;?>admin/specialpagesoffers"
                 class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile">
                 <?php echo $this->translate('Special Pages Offers');?>
+            </a>
+        </li>
+
+        <li 
+            <?php 
+            if($controller == 'categoriesoffers') { 
+                ?> 
+                class="imbull-has-submenu  menu-top menu-icon-popular imbull-has-current-submenu current" 
+                <?php 
+            } else { 
+                ?> 
+                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-popular" 
+                <?php 
+            }
+            ?> id="menu-links">
+            <div class="imbull-menu-image">
+                <a href="<?php echo HTTP_PATH;?>admin/categoriesoffers"><br></a>
+            </div>
+            <div class="">
+                <div></div>
+            </div>
+            <a href="<?php echo HTTP_PATH;?>admin/categoriesoffers"
+                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile">
+                <?php echo $this->translate('Category Pages Offers');?>
             </a>
         </li>
 

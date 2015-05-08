@@ -5,15 +5,15 @@ class Admin_RobotController extends Zend_Controller_Action
 
     public function preDispatch()
     {
-        $databaseConnection = BackEnd_Helper_viewHelper::addConnection();
+        $databaseConnection = \BackEnd_Helper_viewHelper::addConnection();
 
-        if (!Auth_StaffAdapter::hasIdentity()) {
+        if (!\Auth_StaffAdapter::hasIdentity()) {
             $pageReferer = new Zend_Session_Namespace('referer');
             $pageReferer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
 
-        BackEnd_Helper_viewHelper::closeConnection($databaseConnection);
+        \BackEnd_Helper_viewHelper::closeConnection($databaseConnection);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
         $sessionNamespace = new Zend_Session_Namespace();
@@ -26,7 +26,7 @@ class Admin_RobotController extends Zend_Controller_Action
             $this->_redirect('/admin');
         }
         $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        $this->robotObject = new Robot();
+        $this->robotObject = new \KC\Repository\Robot();
     }
 
     public function indexAction()

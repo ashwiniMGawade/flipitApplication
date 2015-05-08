@@ -109,12 +109,12 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
 				"bDeferRender": true,
 				"aaSorting": [[ iSortCol , iSortDir ]],
 				"sPaginationType" : "bootstrap",
-				"sAjaxSource" : HOST_PATH+"admin/shop/getshop/searchText/"+ shopText + '/flag/1',
+				"sAjaxSource" : HOST_PATH+"admin/shop/gettrashshop/searchText/"+ shopText + '/flag/1',
 				"aoColumns" : [
 						 {
 							"fnRender" : function(obj) {
 							    var id = null;
-								return id = obj.aData.updated_at;
+								return id = obj.aData.id;
 						
 							},
 							"bVisible":    false ,
@@ -152,7 +152,7 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
 						{
 							"fnRender" : function(obj) {
 								var tag = '';
-								var dat = obj.aData.created_at;
+								var dat = obj.aData.created_at.date;
 								tag = dat.split("-");
 								tag2 = tag[2];
 								var da = tag2.split(" ");
@@ -167,11 +167,11 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
 							"fnRender" : function(obj) {
 
 								var tag = '';
-								if(obj.aData.affname==null || obj.aData.affname=='' || obj.aData.affname==undefined){
+								if(obj.aData.affliatenetwork==null || obj.aData.affliatenetwork=='' || obj.aData.affliatenetwork==undefined){
 									tag = '';
 							}
 							else{
-								tag = "<p class='word-wrap-without-margin-shop-trash'>"+obj.aData.affname+"</p>";
+								tag = "<p class='word-wrap-without-margin-shop-trash'>"+obj.aData.affliatenetwork.name+"</p>";
 							}
 								
 							return tag;
