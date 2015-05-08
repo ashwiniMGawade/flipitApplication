@@ -291,8 +291,13 @@ class FrontEnd_Helper_HomePagePartialFunctions
     public function getTopOffersRightColumnList($topOffers)
     {
         $topOfferRightHtml = '';
+        if ($topOffers == 'topOffers') {
+            $leftPanelSelection = 'topOffers';
+        } else {
+            $leftPanelSelection = '';
+        }
         foreach ($this->homePageData[$topOffers] as $topOffer) {
-            $topOfferRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($topOffer);
+            $topOfferRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($topOffer, $leftPanelSelection);
         }
         return $topOfferRightHtml;
     }
