@@ -54,33 +54,41 @@ class BackEnd_Helper_importOffersExcel
                     $startDate = date('Y-m-d', strtotime($offerStartDate));
                     $endDate = date('Y-m-d', strtotime($offerEndDate));
                     if ($endDate >= $currentDate) {
-                        $offerList = new \KC\Entity\Offer();
                         $entityManagerLocale = \Zend_Registry::get('emLocale');
-                        $offerList->title = $offerTitle;
-                        $offerList->shopOffers =  $entityManagerLocale->find('KC\Entity\Shop', $shopId);
-                        $offerList->discountType= !empty($offerCouponCode) ? 'CD' : 'SL';
-                        $offerList->Visability = !empty($offerVisibility) ? 'DE' : 'MEM';
-                        $offerList->extendedOffer = 0;
-                        $offerList->startDate = new \DateTime($startDate);
-                        $offerList->endDate = new \DateTime($endDate.' 23:59:00');
-                        $offerList->totalViewcount = !empty($offerClickouts) ? $offerClickouts : 0;
-                        $offerList->authorName = !empty($offerAuthorName) ? $offerAuthorName : 'Arthur Goldman';
-                        $offerList->couponCode = !empty($offerCouponCode) ? $offerCouponCode : '';
-                        $offerList->exclusiveCode = $offerExclusive == 1 ? 1 : 0;
-                        $offerList->editorPicks = $offerEditorPick == 1 ? 1 : 0;
-                        $offerList->userGenerated = 0;
-                        $offerList->offline = 0;
-                        $offerList->created_at = new \DateTime('now');
-                        $offerList->refURL = !empty($offerDeeplink) ? $offerDeeplink : '';
-                        $offerList->tilesId = !empty($offerTileId) ? $offerTileId : '';
-                        $offerList->maxcode = 0;
-                        $offerList->deleted = 0;
-                        $offerList->maxlimit = 0;
-                        $offerList->approved = true;
-                        $offerList->updated_at = new \DateTime('now');
+                        $batchSize = 100;
+                        for ($i = 1; $i <= 100; ++$i) {
+                            $offerList = new \KC\Entity\Offer();
+                            $offerList->title = $offerTitle;
+                            $offerList->shopOffers =  $entityManagerLocale->find('KC\Entity\Shop', $shopId);
+                            $offerList->discountType= !empty($offerCouponCode) ? 'CD' : 'SL';
+                            $offerList->Visability = !empty($offerVisibility) ? 'DE' : 'MEM';
+                            $offerList->extendedOffer = 0;
+                            $offerList->startDate = new \DateTime($startDate);
+                            $offerList->endDate = new \DateTime($endDate.' 23:59:00');
+                            $offerList->totalViewcount = !empty($offerClickouts) ? $offerClickouts : 0;
+                            $offerList->authorName = !empty($offerAuthorName) ? $offerAuthorName : 'Arthur Goldman';
+                            $offerList->couponCode = !empty($offerCouponCode) ? $offerCouponCode : '';
+                            $offerList->exclusiveCode = $offerExclusive == 1 ? 1 : 0;
+                            $offerList->editorPicks = $offerEditorPick == 1 ? 1 : 0;
+                            $offerList->userGenerated = 0;
+                            $offerList->offline = 0;
+                            $offerList->created_at = new \DateTime('now');
+                            $offerList->refURL = !empty($offerDeeplink) ? $offerDeeplink : '';
+                            $offerList->tilesId = !empty($offerTileId) ? $offerTileId : '';
+                            $offerList->maxcode = 0;
+                            $offerList->deleted = 0;
+                            $offerList->maxlimit = 0;
+                            $offerList->approved = true;
+                            $offerList->updated_at = new \DateTime('now');
+                            $entityManagerLocale->persist($offerList);
+                            if (($i % $batchSize) === 0) {
+                                $entityManagerLocale->flush();
+                                $entityManagerLocale->clear();
+                            }
+                        }
                         $offerCounter++;
-                        $entityManagerLocale->persist($offerList);
                         $entityManagerLocale->flush();
+                        $entityManagerLocale->clear();
                     }
                 }
             }
