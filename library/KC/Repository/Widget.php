@@ -112,29 +112,35 @@ class Widget extends \KC\Entity\Widget
         return $data;
     }
 
-    public static function updateWidget($id)
+    public static function getWidgetInformation($id)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('w')
             ->from('KC\Entity\Widget', 'w')
             ->setParameter(1, $id)
             ->where('w.id = ?1');
-        $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $widgetInformation = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_widget_list');
-        return $data;
+        return $widgetInformation;
 
     }
 
-    public function editWidgetRecord($params)
+    public function updateWidget($parameters)
     {
-        $content = @addslashes($params['content']);
+        $content = @addslashes($parameters['content']);
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->update('KC\Entity\Widget', 'w')
-        ->set('w.title', $queryBuilder->expr()->literal(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['title'])))
-        ->set('w.content', $queryBuilder->expr()->literal(\BackEnd_Helper_viewHelper::stripSlashesFromString($content)))
-        ->setParameter(1, $params['id'])
-        ->where('w.id = ?1')
-        ->getQuery();
+            ->set(
+                'w.title',
+                $queryBuilder->expr()->literal(\BackEnd_Helper_viewHelper::stripSlashesFromString($parameters['title']))
+            )
+            ->set(
+                'w.content',
+                $queryBuilder->expr()->literal(\BackEnd_Helper_viewHelper::stripSlashesFromString($content))
+            )
+            ->setParameter(1, $parameters['id'])
+            ->where('w.id = ?1')
+            ->getQuery();
         $query->execute();
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_widget_list');
         return true;

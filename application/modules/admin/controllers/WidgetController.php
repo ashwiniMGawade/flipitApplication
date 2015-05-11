@@ -72,7 +72,7 @@ class Admin_WidgetController extends Zend_Controller_Action
         $this->view->qstring = $_SERVER['QUERY_STRING'];
         $parameters = $this->_getAllParams();
         if (intval($widgetId) > 0) {
-            $widgetInformation = \KC\Repository\Widget::updateWidget($widgetId);
+            $widgetInformation = \KC\Repository\Widget::getWidgetInformation($widgetId);
             $this->view->widgetInformation = $widgetInformation;
             $this->view->id = $widgetId;
             if (!$widgetInformation['showWithDefault']) {
@@ -93,7 +93,7 @@ class Admin_WidgetController extends Zend_Controller_Action
     {
         $flash = $this->_helper->getHelper('FlashMessenger');
         $widget = new \KC\Repository\Widget();
-        if ($widget->editWidgetRecord($parameters)) {
+        if ($widget->updateWidget($parameters)) {
             self::updateVarnish($id);
             $message = $this->view->translate('Widget has been updated successfully');
             $flash->addMessage(array('success' => $message));
