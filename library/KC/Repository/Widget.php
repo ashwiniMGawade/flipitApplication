@@ -13,6 +13,7 @@ class Widget extends \KC\Entity\Widget
         $w->deleted = 0;
         $w->created_at = new \DateTime('now');
         $w->updated_at = new \DateTime('now');
+        $w->showWithDefault = 1;
         $entityManagerLocale->persist($w);
         $entityManagerLocale->flush();
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_widget_list');

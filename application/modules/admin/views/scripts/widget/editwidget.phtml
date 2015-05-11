@@ -1,54 +1,74 @@
- <?php 
-	$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/addwidget.js");
-	$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js" );
-	$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
-	$this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
-	$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
-	?>
-	<?php echo $this->headTitle()->append('Edit Widget');?>
- <script type="text/javascript">
-	var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor" ; ?>" ;
+<?php 
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/addwidget.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
+$this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
+?>
+<?php echo $this->headTitle()->append('Edit Widget');?>
+<script type="text/javascript">
+  var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor" ; ?>" ;
 </script>
- <div class="wrap columns-2">
-<!-- editwidget div starts -->
-<div id="editWidgetDiv" class="wrap columns-2">
-<?php //echo $this->headTitle()->append('Create Widget');?>
-          <h1><span id="create"><?php echo $this->translate('Edit Widget');?></span><button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/widget<?php echo '#'.$this->qstring; ?>'"><?php echo $this->translate('Cancel');?></button></h1>
-         	<form name="createWidget" id="createWidget" method="post">
-         	<input type="hidden" name='editedWidgetId' id='editedWidgetId' value="<?php echo $this->id;?>" />
-         	<input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />
-         	<div id="poststuff" class="metabox-holder has-right-sidebar">
-              <div id="post-body">
-              	<div>
-              		<div class="mainpage-content margin_widget_editor">
-                    	<div class="mainpage-content-line">
-                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Title');?> </strong></label></div>
-                            <div class="mainpage-content-right">
-                                <div class="mainpage-content-right-inner-right-other"></div>
-                                <div class="mainpage-content-right-inner-left-other"><input type="text" value="<?php echo $this->data['title'];?>" placeholder="" name="title" id="title" class="span3" onchange="this.value=this.value.trim()"></div>                        
+<div class="wrap columns-2">
+    <div id="editWidgetDiv" class="wrap columns-2">
+    <h1>
+        <span id="create"><?php echo $this->translate('Edit Widget');?></span>
+        <button class="btn ml10" 
+            type="button" 
+            onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/widget<?php echo '#'.$this->qstring; ?>'">
+            <?php echo $this->translate('Cancel');?>
+        </button>
+    </h1>
+        <form name="createWidget" id="createWidget" method="post">
+            <input type="hidden" name='editedWidgetId' id='editedWidgetId' value="<?php echo $this->id;?>" />
+            <input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />
+            <div id="poststuff" class="metabox-holder has-right-sidebar">
+                <div id="post-body">
+                    <div>
+                        <div class="mainpage-content margin_widget_editor">
+                          <div class="mainpage-content-line">
+                                <div class="mainpage-content-left">
+                                    <label><strong>
+                                        <?php echo $this->translate('Title');?>
+                                    </strong></label>
+                                </div>
+                                <div class="mainpage-content-right">
+                                    <div class="mainpage-content-right-inner-right-other"></div>
+                                    <div class="mainpage-content-right-inner-left-other">
+                                        <input type="text" value="<?php echo $this->widgetInformation['title'];?>" 
+                                        placeholder="" name="title" id="title" class="span3" 
+                                        onchange="this.value=this.value.trim()">
+                                    </div>                        
+                                </div>
                             </div>
                         </div>
+                    <?php if ( $this->widgetInformation['content'] ) :?>
+                    <textarea name="content" id="content" ><?php echo $this->widgetInformation['content'];?></textarea>
+                    <?php endif;?>
                     </div>
-                    <!--<img class="mb10" src="<?php //echo IMG_PATH.'back_end/content-small.jpg';?>" border="0" />--> 
-              
-              	<?php if ( $this->data['content'] ) :?>
-                <textarea name="content" id="content" ><?php echo $this->data['content'];?></textarea>
-                <?php endif;?>
                 </div>
-              </div>
-              <br class="clear">
+                <br class="clear">
             </div>
-         	<?php if ( $this->data['content'] ) :?>
+            <?php 
+            if ( $this->widgetInformation['content'] ):
+                ?>
                <br>
-			<?php endif;?>
+                <?php 
+            endif;
+            ?>
             <div class="mainpage-content-colorbox margin_widget_content" >
-            	<button class="btn btn-large btn-primary fl" type="submit"><span id="save"><?php echo $this->translate('SAVE CHANGES');?></span></button>
-                <a href="<?php echo HTTP_PATH.'admin/widget#'.$this->qstring; ?>" class="fl m10" ><strong><?php echo $this->translate('CANCEL');?></strong></a>
-                <a href="#" onClick="javascript:callToPermanentDelete();" class="red fl mt10"><strong><span id="delete">DELETE</span></strong></a>
+                <button class="btn btn-large btn-primary fl" type="submit">
+                    <span id="save"><?php echo $this->translate('SAVE CHANGES');?></span>
+                </button>
+                <a href="<?php echo HTTP_PATH.'admin/widget#'.$this->qstring; ?>" class="fl m10" >
+                    <strong><?php echo $this->translate('CANCEL');?></strong>
+                </a>
+                <a href="#" onClick="javascript:callToPermanentDelete();" class="red fl mt10">
+                    <strong>
+                        <span id="delete">DELETE</span>
+                    </strong>
+                </a>
             </div>
-           
-            <!-- /poststuff -->
-             </form>
-        </div> 
-        </div>
-        <!-- edit div widget ends -->    
+        </form>
+    </div> 
+</div>
