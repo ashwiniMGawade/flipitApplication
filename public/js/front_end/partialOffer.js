@@ -24,7 +24,7 @@ $(document).ready(function() {
 
 function scrollToOffer(){
     var offersSection = $('#content section.section article:eq(0)');
-    $('html,body').animate({scrollTop: offersSection.offset().top},'slow');
+    $('html,body').animate({scrollTop: 0},'slow');
     $('a.btn-top').fadeOut("slow");
 }
 
