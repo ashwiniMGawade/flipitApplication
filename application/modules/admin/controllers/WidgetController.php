@@ -31,35 +31,28 @@ class Admin_WidgetController extends Zend_Controller_Action
     {
 
     }
+
     public function addwidgetAction()
     {
         if ($this->_request->isPost()) {
-            $parameters = $this->_getAllParams();
-            $flash = $this->_helper->getHelper('FlashMessenger');
-            if (\KC\Repository\Widget::addWidget($parameters)) {
-                $message = $this->view->translate('widget has been added successfully');
-                $flash->addMessage(array('success' => $message));
-                $this->_helper->redirector(null, 'widget', null);
+            if (\KC\Repository\Widget::addWidget($this->_getAllParams())) {
+                self::addFlashMessage('Widget has been added successfully', 'success', HTTP_PATH.'admin/widget');
             } else {
-                $message = $this->view->translate('Problem in your data.');
-                $flash->addMessage(array('error' => $message));
-                $this->_helper->redirector(null, 'widget', null);
+                self::addFlashMessage('Problem in your data', 'error', HTTP_PATH.'admin/widget');
             }
         }
     }
 
     public function widgetlistAction()
     {
-        $parameters = $this->_getAllParams();
-        $widgetList = \KC\Repository\Widget::getWidgetList($parameters);
+        $widgetList = \KC\Repository\Widget::getWidgetList($this->_getAllParams());
         echo Zend_Json::encode($widgetList);
         die ();
     }
 
     public function onlinestatusAction()
     {
-        $parameters = $this->_getAllParams();
-        $widgetId = \KC\Repository\Widget::changeStatus($parameters);
+        $widgetId = \KC\Repository\Widget::changeStatus($this->_getAllParams());
         self::updateVarnish($widgetId);
         echo Zend_Json::encode($widgetId);
         die ();
@@ -67,7 +60,6 @@ class Admin_WidgetController extends Zend_Controller_Action
 
     public function editwidgetAction()
     {
-        $flash = $this->_helper->getHelper('FlashMessenger');
         $widgetId = intval($this->getRequest()->getParam('id'));
         $this->view->qstring = $_SERVER['QUERY_STRING'];
         $parameters = $this->_getAllParams();
@@ -76,9 +68,8 @@ class Admin_WidgetController extends Zend_Controller_Action
             $this->view->widgetInformation = $widgetInformation;
             $this->view->id = $widgetId;
             if (!$widgetInformation['showWithDefault']) {
-                $message = $this->view->translate('This Widget has default widget');
-                $flash->addMessage(array('success' => $message));
-                $this->_redirect(HTTP_PATH.'admin/widget#'.$this->getRequest()->getParam('qString'));
+                $url = HTTP_PATH.'admin/widget#'.$this->getRequest()->getParam('qString');
+                self::addFlashMessage('This Widget has default widget', 'error', $url);
             }
         }
         if ($this->_request->isPost()) {
@@ -95,31 +86,30 @@ class Admin_WidgetController extends Zend_Controller_Action
         $widget = new \KC\Repository\Widget();
         if ($widget->updateWidget($parameters)) {
             self::updateVarnish($id);
-            $message = $this->view->translate('Widget has been updated successfully');
-            $flash->addMessage(array('success' => $message));
-            $this->_redirect(HTTP_PATH.'admin/widget#'.$this->getRequest()->getParam('qString'));
-
+            $url = HTTP_PATH.'admin/widget#'.$this->getRequest()->getParam('qString');
+            self::addFlashMessage('Widget has been updated successfully', 'success', $url);
         } else {
-            $message = $this->view->translate('Problem in your data.');
-            $flash->addMessage(array('error' => $message));
-            $this->_redirect(HTTP_PATH.'admin/widget#'.$this->getRequest()->getParam('qString'));
+            $url = HTTP_PATH.'admin/widget#'.$this->getRequest()->getParam('qString');
+            self::addFlashMessage('Problem in your data', 'error', $url);
         }
     }
 
     public function deleteWidget($widgetId)
     {
-        $flash = $this->_helper->getHelper('FlashMessenger');
         $widget = new \KC\Repository\Widget();
-        $flash = $this->_helper->getHelper('FlashMessenger');
         if ($widget->permanentDeleteWidget($widgetId)) {
-            $message = $this->view->translate('Widget has been deleted successfully');
-            $flash->addMessage(array('success' => $message));
-            $this->_helper->redirector(null, 'widget', null);
+            self::addFlashMessage('Widget has been deleted successfully', 'success', HTTP_PATH.'admin/widget');
         } else {
-            $message = $this->view->translate('Problem in your data.');
-            $flash->addMessage(array('error' => $message));
-            $this->_helper->redirector(null, 'widget', null);
+            self::addFlashMessage('Problem in your data', 'error', HTTP_PATH.'admin/widget');
         }
+    }
+
+    public function addFlashMessage($message, $errorType, $redirectUrl)
+    {
+        $flash = $this->_helper->getHelper('FlashMessenger');
+        $message = $this->view->translate($message);
+        $flash->addMessage(array($errorType => $message));
+        $this->_redirect($redirectUrl);
     }
 
     public function searchkeyAction()
