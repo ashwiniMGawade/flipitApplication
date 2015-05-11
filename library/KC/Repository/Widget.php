@@ -94,8 +94,6 @@ class Widget extends \KC\Entity\Widget
             ->add('text', 'widget.showWithDefault');
         $list = $builder->getTable()->getResponseArray();
         return $list;
-
-        
     }
 
     public static function searchKeyword($keyword)

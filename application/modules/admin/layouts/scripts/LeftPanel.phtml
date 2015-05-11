@@ -142,6 +142,19 @@
 		          		 <li>
 		                	<a href="<?php echo HTTP_PATH?>admin/widget/addwidget" class="<?php echo $widgetColorClass;?>" tabindex="1"><?php echo $this->translate('Add Widget');?> </a>
 		               	</li>
+		               	<?php 
+		               	if($controller == 'widget' && $action == 'sort-widget') { 
+		               		$widgetColorClass = "new-blue"; 
+		               	} else { 
+		               		$widgetColorClass = "new-gray"; 
+		               	}
+		               	?>
+                        <li>
+                            <a href="<?php echo HTTP_PATH?>admin/widget/sort-widget" 
+                                class="<?php echo $widgetColorClass;?>" tabindex="1">
+                                <?php echo $this->translate('backend_Sort Widget');?>
+                            </a>
+                        </li>
 		            </ul>
 		          </div>
 		        </div>

@@ -1,0 +1,82 @@
+<?php
+$this->headTitle()->append($this->translate('Widget Sorting'));
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css");
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/back_end/bootstrap-combobox.css" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/select2.min.js" );
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/special_pages.js");
+?>
+<div class="wrap columns-2">
+    <h1>
+        <?php echo $this->translate('Widget Sorting'); ?>
+    </h1>
+    <div class='mb10'> 
+        <select  style="display: none; width : 389px;" class="combobox" name="widgetCategories" id="widgetCategories">
+        <?php
+        foreach ($this->widgetCategories as $widgetCategory) { ?>
+            <option  value="<?php echo $widgetCategory['name']; ?>"><?php echo $widgetCategory['name']; ?></option>
+            <?php
+            }
+        ?>
+        </select>
+    </div>
+    <input type="hidden" name="selctedWidgetCategoryId" id="selctedWidgetId" value="<?php echo $this->widgetCategoryId;?>">
+    <div id="poststuff" class="metabox-holder has-right-sidebar">
+        <div id="side-info-column" class="inner-sidebar-coupon">
+            <div id="side-sortables" class="meta-box-sortables ui-sortable">
+                <div class="coupon-sidebar-outer">
+                    <div class="coupon-sidebar-heading">
+                        <select  style="display: none; width : 389px;" class="combobox" name="offerlist" id="offerlist">
+                            <option value=""></option>
+                            <?php
+                            foreach ($this->widgets as $widget) { 
+                                if (trim ($widget['title'] ) != '') {
+                                    $offer = substr ($widget['title'], 0, 70 );
+                                    ?>
+                                    <option  value="<?php echo $widget['id']; ?>"><?php echo $offer; ?></option>
+                                    <?php 
+                                }
+                            }
+                            ?>
+                        </select> 
+                        <input type="hidden" name="selctedWidget" id="selctedWidget" value="">
+                        <input type="hidden" name="selctedWidgetText" id="selctedWidgetText" value="">
+                        <input type='hidden' name="SearchedValueIds" id="SearchedValueIds" value="">
+                    </div>
+                    <div class="coupon-sidebar-content-box">
+                        <button id='addNewWidget' onClick='addNewWidget();'class="btn">
+                        <?php echo $this->translate('backend_ADD NEW WIDGET');?>
+                        </button>
+                    </div>
+                    <div class="coupon-sidebar-content-box mb10 image-loading-icon">
+                        <button id='deleteOne' onClick='deleteOne();' class="btn">
+                        <?php echo $this->translate("DELETE");?>
+                        </button>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+        <div id="post-body">
+            <div id="post-body-content-coupon">
+                <div class="top-coupon-list">
+                    <ul id='specialPages'>
+                    <?php 
+                    if (!empty($this->categoryWidgets)) {
+                        foreach ($this->categoryWidgets as $categoryWidget) {
+                            echo  "<li class='ui-state-default'  id='".$categoryWidget['id']."' 
+                            reloffer='".$categoryWidget['category']['id']."'
+                            relpos='".$categoryWidget['position']."'
+                            relpageId='".$categoryWidget['widget']['id']."'>
+                            <span>".$categoryWidget['widget']['title']."</span></li>";
+                        }
+                    } else {             
+                        echo  "<li id='0'>". $this->translate('No record found !') ."</li>";
+                    } ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <br class="clear">
+    </div>
+</div>

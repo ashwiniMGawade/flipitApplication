@@ -138,4 +138,9 @@ class Admin_WidgetController extends Zend_Controller_Action
             }
         }
     }
+
+    public function sortWidgetAction()
+    {
+        
+    }
 }
