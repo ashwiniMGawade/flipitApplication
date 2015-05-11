@@ -13,13 +13,13 @@ class Admin_WidgetController extends Zend_Controller_Action
 
     public function preDispatch()
     {
-        $dbConnection = \BackEnd_Helper_viewHelper::addConnection();
-        if (!\Auth_StaffAdapter::hasIdentity()) {
+        $dbConnection = BackEnd_Helper_viewHelper::addConnection();
+        if (!Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        \BackEnd_Helper_viewHelper::closeConnection($dbConnection);
+        BackEnd_Helper_viewHelper::closeConnection($dbConnection);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
         $sessionNamespace = new Zend_Session_Namespace();
@@ -47,7 +47,7 @@ class Admin_WidgetController extends Zend_Controller_Action
     {
         $widgetList = \KC\Repository\Widget::getWidgetList($this->_getAllParams());
         echo Zend_Json::encode($widgetList);
-        die ();
+        exit();
     }
 
     public function onlinestatusAction()
@@ -55,7 +55,7 @@ class Admin_WidgetController extends Zend_Controller_Action
         $widgetId = \KC\Repository\Widget::changeStatus($this->_getAllParams());
         self::updateVarnish($widgetId);
         echo Zend_Json::encode($widgetId);
-        die ();
+        exit();
     }
 
     public function editwidgetAction()
@@ -125,7 +125,7 @@ class Admin_WidgetController extends Zend_Controller_Action
             $widgets[] = $this->view->translate("No Record Found");
         }
         echo Zend_Json::encode($widgets);
-        die;
+        exit();
     }
 
     public function updateVarnish($id)
