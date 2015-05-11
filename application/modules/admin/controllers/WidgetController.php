@@ -75,7 +75,7 @@ class Admin_WidgetController extends Zend_Controller_Action
         if ($this->_request->isPost()) {
             self::updateWidget($parameters);
         }
-        if (@$parameters['act'] == 'delete') {
+        if (!empty($parameters['delete'])) {
             self::deleteWidget($parameters['id']);
         }
     }
