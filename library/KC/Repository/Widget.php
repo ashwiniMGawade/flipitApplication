@@ -90,7 +90,8 @@ class Widget extends \KC\Entity\Widget
             ->add('number', 'widget.id')
             ->add('text', 'widget.title')
             ->add('text', 'widget.content')
-            ->add('text', 'widget.status');
+            ->add('text', 'widget.status')
+            ->add('text', 'widget.showWithDefault');
         $list = $builder->getTable()->getResponseArray();
         return $list;
 
