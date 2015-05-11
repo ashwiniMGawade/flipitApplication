@@ -141,6 +141,49 @@ class Admin_WidgetController extends Zend_Controller_Action
 
     public function sortWidgetAction()
     {
-        
+        $widgetType = $this->getRequest()->getParam('widgetType');
+        $backEndHelper = new BackEnd_Helper_viewHelper();
+        $widgetCategories = $backEndHelper->widgetCategories();
+        if (isset($widgetType)) {
+            $widgetType = $this->getRequest()->getParam('widgetType');
+        } else {
+            $widgetType = key($widgetCategories);
+        }
+        $categoryWidgets = \KC\Repository\PageWidgets::getWidgetsByType($widgetType);
+        $widgetsList = \KC\Repository\Widget::getUserDefinedwidgetList();
+        $this->view->widgetCategories = $widgetCategories;
+        $this->view->widgetsList = $widgetsList;
+        $this->view->widgetType = $widgetType;
+        $this->view->categoryWidgets = $categoryWidgets;
+    }
+
+    public function addWidgetInSortListAction()
+    {
+        $widgetId = $this->getRequest()->getParam('id');
+        $widgetType = $this->getRequest()->getParam('widgetType');
+        $result = \KC\Repository\PageWidgets::addWidgetInList($widgetId, $widgetType);
+        echo Zend_Json::encode($result);
+        exit();
+    }
+ 
+    public function deleteWidgetAction()
+    {
+        $id = $this->getRequest()->getParam('id');
+        $position = $this->getRequest()->getParam('pos');
+        $widgetType = $this->getRequest()->getParam('widgetType');
+        $isUpdated = \KC\Repository\PageWidgets::deleteCode($id, $position, $widgetType);
+        $widgets = \KC\Repository\PageWidgets::getWidgetsByType($widgetType);
+        echo Zend_Json::encode($widgets);
+        exit();
+    }
+
+    public function savePositionAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $widgetType = $this->getRequest()->getParam('widgetType');
+        \KC\Repository\PageWidgets::savePosition($this->getRequest()->getParam('offersIds'), $widgetType);
+        $widgets = \KC\Repository\PageWidgets::getWidgetsByType($widgetType);
+        echo Zend_Json::encode($widgets);
+        exit();
     }
 }

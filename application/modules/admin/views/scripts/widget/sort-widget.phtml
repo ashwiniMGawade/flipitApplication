@@ -5,7 +5,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.j
 $this->headLink()->appendStylesheet(PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css");
 $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/back_end/bootstrap-combobox.css" );
 $this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/select2.min.js" );
-$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/special_pages.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/sort_widget.js");
 ?>
 <div class="wrap columns-2">
     <h1>
@@ -14,24 +14,24 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/special_pages.js");
     <div class='mb10'> 
         <select  style="display: none; width : 389px;" class="combobox" name="widgetCategories" id="widgetCategories">
         <?php
-        foreach ($this->widgetCategories as $widgetCategory) { ?>
-            <option  value="<?php echo $widgetCategory['name']; ?>"><?php echo $widgetCategory['name']; ?></option>
+        foreach ($this->widgetCategories as $widgetCategoryIndex => $widgetCategory) { ?>
+            <option value="<?php echo $widgetCategoryIndex; ?>"><?php echo $widgetCategory; ?></option>
             <?php
             }
         ?>
         </select>
     </div>
-    <input type="hidden" name="selctedWidgetCategoryId" id="selctedWidgetId" value="<?php echo $this->widgetCategoryId;?>">
+    <input type="hidden" name="widgetType" id="widgetType" value="<?php echo $this->widgetType;?>">
     <div id="poststuff" class="metabox-holder has-right-sidebar">
         <div id="side-info-column" class="inner-sidebar-coupon">
             <div id="side-sortables" class="meta-box-sortables ui-sortable">
                 <div class="coupon-sidebar-outer">
                     <div class="coupon-sidebar-heading">
-                        <select  style="display: none; width : 389px;" class="combobox" name="offerlist" id="offerlist">
+                        <select  style="display: none; width : 389px;" class="combobox" name="widgetslist" id="widgetslist">
                             <option value=""></option>
                             <?php
-                            foreach ($this->widgets as $widget) { 
-                                if (trim ($widget['title'] ) != '') {
+                            foreach ($this->widgetsList as $widget) { 
+                                if (trim ($widget['title']) != '') {
                                     $offer = substr ($widget['title'], 0, 70 );
                                     ?>
                                     <option  value="<?php echo $widget['id']; ?>"><?php echo $offer; ?></option>
@@ -41,7 +41,6 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/special_pages.js");
                             ?>
                         </select> 
                         <input type="hidden" name="selctedWidget" id="selctedWidget" value="">
-                        <input type="hidden" name="selctedWidgetText" id="selctedWidgetText" value="">
                         <input type='hidden' name="SearchedValueIds" id="SearchedValueIds" value="">
                     </div>
                     <div class="coupon-sidebar-content-box">
@@ -60,14 +59,15 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/special_pages.js");
         <div id="post-body">
             <div id="post-body-content-coupon">
                 <div class="top-coupon-list">
-                    <ul id='specialPages'>
+                    <ul id='sort-widgets-list'>
                     <?php 
+                  
                     if (!empty($this->categoryWidgets)) {
                         foreach ($this->categoryWidgets as $categoryWidget) {
                             echo  "<li class='ui-state-default'  id='".$categoryWidget['id']."' 
-                            reloffer='".$categoryWidget['category']['id']."'
+                            reloffer='".$categoryWidget['widget']['id']."'
                             relpos='".$categoryWidget['position']."'
-                            relpageId='".$categoryWidget['widget']['id']."'>
+                            relpageId='".$categoryWidget['widget_type']."'>
                             <span>".$categoryWidget['widget']['title']."</span></li>";
                         }
                     } else {             

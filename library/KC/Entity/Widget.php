@@ -65,6 +65,11 @@ class Widget
      */
     private $Widget;
 
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\PageWidgets", mappedBy="widget")
+     */
+    private $pageWidgets;
+
     public function __get($property)
     {
         return $this->$property;
