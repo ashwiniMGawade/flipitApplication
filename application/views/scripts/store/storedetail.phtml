@@ -208,6 +208,16 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
     <div id="content" class ="col-md-8 col-sm-8">
     <?php 
     echo $noMoneyNocodeMessage;
+    if (!empty($noMoneyNocodeMessage)) {
+        ?>
+        <section class="section">
+        <?php
+        echo $this->esi($this->locale.'signup/signupwidgetlarge?shopId='.$this->currentStoreInformation[0]['id']
+                .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage=');
+        ?>
+        </section>
+    <?php
+    }
     echo $futureCodeMessage;
     echo $offers;
     echo $sixShopReasons;
