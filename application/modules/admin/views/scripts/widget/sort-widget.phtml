@@ -14,11 +14,19 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/sort_widget.js");
     <div class='mb10'> 
         <select  style="display: none; width : 389px;" class="combobox" name="widgetCategories" id="widgetCategories">
         <?php
-        foreach ($this->widgetCategories as $widgetCategoryIndex => $widgetCategory) { ?>
-            <option value="<?php echo $widgetCategoryIndex; ?>"><?php echo $widgetCategory; ?></option>
-            <?php
+        foreach ($this->widgetCategories as $widgetCategoryIndex => $widgetCategory) { 
+            if($widgetCategoryIndex == $this->widgetType) {
+                ?>
+                <option selected='selected' value="<?php echo $widgetCategoryIndex;?>">
+                    <?php echo $widgetCategory; ?>
+                </option>
+                <?php
+            } else {
+                ?>
+                <option  value="<?php echo $widgetCategoryIndex; ?>"><?php echo $widgetCategory; ?></option>
+                <?php
             }
-        ?>
+         }?>
         </select>
     </div>
     <input type="hidden" name="widgetType" id="widgetType" value="<?php echo $this->widgetType;?>">
@@ -65,9 +73,9 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/sort_widget.js");
                     if (!empty($this->categoryWidgets)) {
                         foreach ($this->categoryWidgets as $categoryWidget) {
                             echo  "<li class='ui-state-default'  id='".$categoryWidget['id']."' 
-                            reloffer='".$categoryWidget['widget']['id']."'
+                            relwidget='".$categoryWidget['widget']['id']."'
                             relpos='".$categoryWidget['position']."'
-                            relpageId='".$categoryWidget['widget_type']."'>
+                            relwidgetType='".$categoryWidget['widget_type']."'>
                             <span>".$categoryWidget['widget']['title']."</span></li>";
                         }
                     } else {             

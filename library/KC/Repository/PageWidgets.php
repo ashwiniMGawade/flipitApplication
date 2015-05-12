@@ -18,7 +18,7 @@ class PageWidgets extends \KC\Entity\PageWidgets
 
     public static function addWidgetInList($widgetId, $widgetsType, $type = '')
     {
-        $widget = self::offerExistance($widgetId);
+        $widget = self::widgetExistance($widgetId);
         $result = '0';
         if (sizeof($widget) > 0) {
             $pageWidgets = self::getPageWidget($widgetId, $widgetsType);
@@ -32,9 +32,9 @@ class PageWidgets extends \KC\Entity\PageWidgets
                 } else {
                     $newPosition =  0;
                 }
-                $specialPageOfferId = self::savePageWidget($widgetId, $widgetsType, $newPosition);
+                $pageWidgetId = self::savePageWidget($widgetId, $widgetsType, $newPosition);
                 $result  = array(
-                    'id'=>$specialPageOfferId,
+                    'id'=>$pageWidgetId,
                     'type'=>'MN',
                     'widgetId'=>$widgetId,
                     'position'=>(intval($newPosition) + 1),
@@ -45,7 +45,7 @@ class PageWidgets extends \KC\Entity\PageWidgets
         return $result;
     }
 
-    public static function offerExistance($widgetId)
+    public static function widgetExistance($widgetId)
     {
         $widget = array();
         if (!empty($widgetId)) {
@@ -62,17 +62,17 @@ class PageWidgets extends \KC\Entity\PageWidgets
 
     public static function getPageWidget($widgetId, $widgetsType)
     {
-        $specialPageOffers = array();
-        if (!empty($offerId) && !empty($pageId)) {
-            $specialPageOffersQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $specialPageOffersQueryBuilder
+        $pageWidgets = array();
+        if (!empty($widgetId) && !empty($widgetsType)) {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder
                 ->select('sw')
                 ->from('KC\Entity\pageWidgets', 'sw')
                 ->where('sw.widget=' . $widgetId)
                 ->andWhere('sw.widget_type=' . $queryBuilder->expr()->literal($widgetsType));
-            $specialPageOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $pageWidgets = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
-        return $specialPageOffers;
+        return $pageWidgets;
     }
 
     public static function getPageWidgetMaxPosition($widgetsType)
@@ -105,11 +105,11 @@ class PageWidgets extends \KC\Entity\PageWidgets
         return $pageWidgets->id;
     }
 
-    public static function deleteSpecialPageOffer($id)
+    public static function deletePageWidgets($id)
     {
         if (!empty($id)) {
-            $queryBuilderDelete = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilderDelete
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder
                 ->delete('KC\Entity\pageWidgets', 'spl')
                 ->where('spl.id ='.$id)
                 ->getQuery();
@@ -118,44 +118,43 @@ class PageWidgets extends \KC\Entity\PageWidgets
         return true;
     }
 
-    public static function getNewOfferList($widgetsType)
+    public static function getNewPageWidgetsList($widgetsType)
     {
-        $newOffersList = array();
-        if (!empty($pageId)) {
-            $queryBuilderSelect = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilderSelect
+        $newWidgetsList = array();
+        if (!empty($widgetsType)) {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder
                 ->select('spo')
                 ->from('KC\Entity\pageWidgets', 'spo')
                 ->where('spo.widget_type='. $queryBuilder->expr()->literal($widgetsType))
                 ->orderBy('spo.position', 'ASC');
-            $newOffersList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $newWidgetsList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
-        return $newOffersList;
+        return $newWidgetsList;
     }
 
-    public static function updateWithNewPosition($newPosition, $newOffer)
+    public static function updateWithNewPosition($newPosition, $newWidget)
     {
-        if (isset($newOffer['id'])) {
-            $queryBuilderSpecialPage = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilderSpecialPage
+        if (isset($newWidget['id'])) {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder
                 ->update('KC\Entity\pageWidgets', 'p')
                 ->set('p.position', $newPosition)
-                ->where('p.id = '.$newOffer['id'])
+                ->where('p.id = '.$newWidget['id'])
                 ->getQuery();
             $query->execute();
         }
         return true;
     }
 
-    public static function deleteCode($id, $position, $pageId, $type = '')
+    public static function deleteWidget($pageWidgetId, $position, $widgetsType, $type = '')
     {
-        if ($id) {
-            self::deleteSpecialPageOffer($id);
-            $newOffersList = self::getNewOfferList($pageId);
+        if ($pageWidgetId) {
+            self::deletePageWidgets($pageWidgetId);
+            $newPageWidgetsList = self::getNewPageWidgetsList($widgetsType);
             $newPosition = 1;
-            $queryBuilderSpecialPage = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            foreach ($newOffersList as $newOffer) {
-                self::updateWithNewPosition($newPosition, $newOffer);
+            foreach ($newPageWidgetsList as $newWidget) {
+                self::updateWithNewPosition($newPosition, $newWidget);
                 $newPosition++;
             }
             return true;
@@ -188,31 +187,5 @@ class PageWidgets extends \KC\Entity\PageWidgets
                 $i++;
             }
         }
-    }
-
-    public static function addNewSpecialPageOffers()
-    {
-        $currentDate = date("Y-m-d H:i");
-        $specialListPages = \KC\Repository\SpecialList::getSpecialPages();
-        if (!empty($specialListPages)) {
-            foreach ($specialListPages as $specialListPage) {
-                $pageRelatedOffers = \KC\Repository\Offer::getSpecialOffersByPage($specialListPage[0]['page']['id'], $currentDate);
-                $constraintsRelatedOffers = \KC\Repository\Offer::getOffersByPageConstraints($specialListPage[0]['page'], $currentDate);
-                $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
-                \KC\Repository\SpecialList::updateTotalOffersAndTotalCoupons(
-                    count($pageRelatedOffersAndPageConstraintsOffers),
-                    0,
-                    $specialListPage[0]['page']['id']
-                );
-                foreach ($pageRelatedOffersAndPageConstraintsOffers as $pageRelatedOffersAndPageConstraintsOffer) {
-                    self::addOfferInList(
-                        $pageRelatedOffersAndPageConstraintsOffer['id'],
-                        $specialListPage[0]['page']['id'],
-                        'cron'
-                    );
-                }
-            }
-        }
-        return true;
     }
 }

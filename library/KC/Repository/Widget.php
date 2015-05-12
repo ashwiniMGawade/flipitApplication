@@ -25,26 +25,25 @@ class Widget extends \KC\Entity\Widget
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('w')
             ->from('KC\Entity\Widget', 'w')
-            ->setParameter(1, '0')
-            ->where('w.userDefined = ?1')
-            ->setParameter(2, '0')
-            ->andWhere('w.deleted = ?2')
-            ->setParameter(3, '1')
-            ->andWhere('w.status = ?3');
+            ->where('w.userDefined = 0')
+            ->andWhere('w.deleted = 0')
+            ->andWhere('w.status = 1');
         $widgetsList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $widgetsList;
     }
 
-    public static function getUserDefinedwidgetList()
+    public static function getUserDefinedwidgetList($widgetsIds = array())
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('w')
             ->from('KC\Entity\Widget', 'w')
-            ->setParameter(1, '0')
-            ->andWhere('w.deleted = ?1')
-            ->setParameter(2, '1')
-            ->andWhere('w.status = ?2')
-            ->orderBy('w.title');
+            ->andWhere('w.deleted = 0')
+            ->andWhere('w.status = 1');
+        if (!empty($widgetsIds)) {
+            $ids = implode(',', $widgetsIds);
+            $query =  $query->andWhere($queryBuilder->expr()->notIn('w.id', $ids));
+        }
+        $query = $query->orderBy('w.title');
         $widgetsList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $widgetsList;
     }

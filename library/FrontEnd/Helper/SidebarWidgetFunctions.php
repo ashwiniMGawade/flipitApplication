@@ -1,6 +1,30 @@
 <?php
 class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
 {
+    public function getSidebarWidgets($widgetType)
+    {
+        $widgets = \KC\Repository\PageWidgets::getWidgetsByType($widgetType);
+        $pageWidgets = '';
+        if (empty($widgets)) {
+            //fallback
+        } else {
+            foreach ($widgets as $widget) {
+                $widgetTitle = strtolower($widget['widget']['title']);
+                switch ($widgetTitle) {
+                    case 'popular category':
+                        echo $this->popularCategoryWidget();
+                        break;
+                    case 'popular stores':
+                        echo $this->popularShopWidget();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        return $pageWidgets;
+    }
+
     public function sidebarChainWidget($id, $shopName = false, $chainItemId = false)
     {
         if ($shopName) {
@@ -71,26 +95,6 @@ EOD;
         $categoriesSidebarWidget.=
                 '</ul></div>';
         return $categoriesSidebarWidget;
-    }
-
-    public function getSidebarWidget($array = array(), $page = '')
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder
-            ->select('p, w, refpage')
-            ->from('KC\Entity\Page', 'p')
-            ->leftJoin('p.pagewidget', 'w')
-            ->leftJoin('w.widget', 'refpage')
-            ->where("p.permalink=".$queryBuilder->expr()->literal("$page"))
-            ->andWhere('w.stauts = 1')
-            ->andWhere('p.deleted = 0');
-        $pageWidgets = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        $sidebarWidgets = '';
-        if (count($pageWidgets) > 0) {
-            for ($i=0; $i<count($pageWidgets[0]['pagewidget']); $i++) {
-            }
-        }
-        return $sidebarWidgets;
     }
     
     public function popularShopWidget()

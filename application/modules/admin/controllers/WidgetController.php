@@ -150,15 +150,31 @@ class Admin_WidgetController extends Zend_Controller_Action
             $widgetType = key($widgetCategories);
         }
         $categoryWidgets = \KC\Repository\PageWidgets::getWidgetsByType($widgetType);
-        $widgetsList = \KC\Repository\Widget::getUserDefinedwidgetList();
+        $widgetsIds = array();
+        if (!empty($categoryWidgets)) {
+            $widgetsIds = self::getWidgetIds($categoryWidgets);
+        }
+        $widgetsList = \KC\Repository\Widget::getUserDefinedwidgetList($widgetsIds);
         $this->view->widgetCategories = $widgetCategories;
         $this->view->widgetsList = $widgetsList;
         $this->view->widgetType = $widgetType;
         $this->view->categoryWidgets = $categoryWidgets;
     }
 
+    public function getWidgetIds($categoryWidgets)
+    {
+        $widgetsIds = array();
+        foreach ($categoryWidgets as $categoryWidget) {
+            if (!empty($categoryWidget['widget'])) {
+                $widgetsIds[] = $categoryWidget['widget']['id'];
+            }
+        }
+        return $widgetsIds;
+    }
+
     public function addWidgetInSortListAction()
     {
+        $this->_helper->layout->disableLayout();
         $widgetId = $this->getRequest()->getParam('id');
         $widgetType = $this->getRequest()->getParam('widgetType');
         $result = \KC\Repository\PageWidgets::addWidgetInList($widgetId, $widgetType);
@@ -168,10 +184,11 @@ class Admin_WidgetController extends Zend_Controller_Action
  
     public function deleteWidgetAction()
     {
-        $id = $this->getRequest()->getParam('id');
+        $this->_helper->layout->disableLayout();
+        $pageWidgetId = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         $widgetType = $this->getRequest()->getParam('widgetType');
-        $isUpdated = \KC\Repository\PageWidgets::deleteCode($id, $position, $widgetType);
+        $isUpdated = \KC\Repository\PageWidgets::deleteWidget($pageWidgetId, $position, $widgetType);
         $widgets = \KC\Repository\PageWidgets::getWidgetsByType($widgetType);
         echo Zend_Json::encode($widgets);
         exit();
