@@ -21,7 +21,7 @@ $("input#searchFieldHeader").autocomplete({
         $('.ajax-autocomplete ul').empty();
     },
     source :  function( request, response ) {
-        var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
+        var matcher = new RegExp("(" + $.ui.autocomplete.escapeRegex(request.term) + ")", "ig");
         response( $.grep( shopsJSON, function( item ){
         return matcher.test( item.label );
         }));
