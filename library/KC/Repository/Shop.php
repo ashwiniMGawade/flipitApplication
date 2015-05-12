@@ -1196,18 +1196,6 @@ class Shop extends \KC\Entity\Shop
                 }
             }
 
-            if (!empty($shopDetail['ballontextcontent'])) {
-                if (isset($shopDetail['id']) && $shopDetail['id'] != '') {
-                    $type = 'update';
-                    $shopId = $shopDetail['id'];
-                } else {
-                    $type = 'add';
-                    $shopId = $shopInfo->id;
-                }
-
-                self::saveEditorBallonText($shopDetail, $shopId, $type);
-            }
-
             if (!empty($shopDetail['reasontitle1'])
                 || !empty($shopDetail['reasontitle2'])
                 || !empty($shopDetail['reasontitle3'])
@@ -1939,31 +1927,6 @@ class Shop extends \KC\Entity\Shop
             ->where('s.id='.$shopID);
         $brandingCss = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return (!empty($brandingCss[0]['brandingcss'])) ? unserialize($brandingCss[0]['brandingcss']) : null;
-    }
-
-    public static function saveEditorBallonText($params, $shopId, $type)
-    {
-        if ($type == 'update') {
-            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder
-            ->delete("KC\Entity\EditorBallonText", "e")
-            ->where("e.shop = ".$shopId)
-            ->getQuery()
-            ->execute();
-        }
-        $contentInfo = array_map('trim', $params['ballontextcontent']);
-        foreach ($contentInfo as $key => $content) {
-            if (isset($content) && $content != '') {
-                $entityManagerLocale  = \Zend_Registry::get('emLocale');
-                $ballonText = new \KC\Entity\EditorBallonText();
-                $ballonText->shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $shopId);
-                $ballonText->ballontext = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['ballontextcontent'][$key]);
-                $ballonText->deleted = 0;
-                $entityManagerLocale->persist($ballonText);
-                $entityManagerLocale->flush();
-            }
-        }
-        return true;
     }
 
     public static function getTotalNumberOfMoneyShops()
