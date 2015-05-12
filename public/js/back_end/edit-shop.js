@@ -852,6 +852,7 @@ function validateFormAddNewShop(){
                         regex : /^([1-9]|10)$/
                     },
                     howToPageSlug :{
+                        required : true,
                         slugRegex  : function(element) {
                             return $('#howTouseStatus').val() == 1;
                         }
