@@ -9,6 +9,7 @@ class BackEnd_Helper_importOffersExcel
         $worksheet = $objPHPExcel->getActiveSheet();
         $excelData = array();
         $offerCounter = 0;
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
         foreach ($worksheet->getRowIterator() as $row) {
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
@@ -55,10 +56,9 @@ class BackEnd_Helper_importOffersExcel
                     $endDate = date('Y-m-d', strtotime($offerEndDate));
                     if ($endDate >= $currentDate) {
                         $offerList = new \KC\Entity\Offer();
-                        $entityManagerLocale = \Zend_Registry::get('emLocale');
                         $offerList->title = $offerTitle;
-                        $offerList->shopOffers =  $entityManagerLocale->find('KC\Entity\Shop', $shopId);
-                        $offerList->discountType= !empty($offerCouponCode) ? 'CD' : 'SL';
+                        $offerList->shopOffers = $entityManagerLocale->find('KC\Entity\Shop', $shopId);
+                        $offerList->discountType = !empty($offerCouponCode) ? 'CD' : 'SL';
                         $offerList->Visability = !empty($offerVisibility) ? 'DE' : 'MEM';
                         $offerList->extendedOffer = 0;
                         $offerList->startDate = new \DateTime($startDate);
@@ -80,12 +80,12 @@ class BackEnd_Helper_importOffersExcel
                         $offerList->updated_at = new \DateTime('now');
                         $offerCounter++;
                         $entityManagerLocale->persist($offerList);
-                        $entityManagerLocale->flush();
                     }
                 }
             }
             unlink($excelFile);
         }
+        $entityManagerLocale->flush();
         return $offerCounter;
     }
 }
