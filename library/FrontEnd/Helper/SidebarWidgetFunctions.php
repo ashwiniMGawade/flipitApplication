@@ -25,6 +25,129 @@ class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
         return $pageWidgets;
     }
 
+    public function shopLatestNewsWidget($latestShopUpdates, $shopName)
+    {
+        $lastesNews = '';
+        if (!empty($latestShopUpdates)) {
+            $lastesNews = '<section class="block">
+                <h4>'.
+                    $this->__translate('Latest news about').' '.$shopName.
+                '</h4>';
+            foreach ($latestShopUpdates as $latestShopUpdate) {
+                $latestShopUpdate = (object) $latestShopUpdate;
+                $newsStartDateObject = new Zend_Date($latestShopUpdate->created_at->format('Y-d-m'));
+                $newsStartDate = $newsStartDateObject->get(Zend_Date::DATE_LONG);
+                $httpStringPosition = 'http';
+                $content = '';
+                if ($latestShopUpdate->content!=""):
+                    $content = $latestShopUpdate->content;
+                else:
+                    $content = "No desc found";
+                endif;
+                $lastesNews .= '<div class="news-box">
+                    <article class="box">
+                        <em class="date">'. $newsStartDate.'</em><h5>';
+                if ($latestShopUpdate->url!=null && $latestShopUpdate->url!='') :
+                            $lastesNews .= '<a href="';
+                    if (strpos($latestShopUpdate->url, $httpStringPosition) !== false) :
+                        $lastesNews .= $latestShopUpdate->url;
+                    else :
+                        $lastesNews .=  'http://'.$latestShopUpdate->url;
+                    endif;
+                    $lastesNews .= 'target="_blank">'. $latestShopUpdate->title.'</a>';
+                else :
+                    $lastesNews .= $latestShopUpdate->title;
+                endif;
+                    $lastesNews .= '</h5>
+                        <p>'.
+                        $content.
+                        '</p>
+                    </article>
+                </div>';
+            }
+            $lastesNews .= '</section>';
+        }
+        return $lastesNews;
+    }
+
+    public function popularEditorWidget($shopEditor, $howToUseGuidePermalink, $actualUrl, $disqusReplyCounter, $shop)
+    {
+        $authorName = '';
+        if (isset($shopEditor['firstName'])) {
+            $authorName = FrontEnd_Helper_AuthorPartialFunctions::
+                getAuthorName($shopEditor['firstName'], $shopEditor['lastName']);
+        }
+        $shopHeader = $this->__translate('Dealspotter for').' '.$shop['name'];
+        $shopEditorPath = '';
+        if (isset($shopEditor['profileimage']['name'])) {
+            $shopEditorPath =
+                HTTP_PATH_CDN
+                .ltrim($shopEditor['profileimage']['path'], "/")
+                .'' .$shopEditor['profileimage']['name'];
+        }
+
+        $shopAbout = $this->__translate('About').' '.$shop['name'];
+        $howToUse = $this->howToUseGuide($shop, $actualUrl, $howToUseGuidePermalink);
+        $popularEditor = '<article class="block">
+            <div class="intro intro-2">
+                <div class="author-info">
+                    <div class="img-thumbnail">
+                        <img title="'. $authorName.'" 
+                            alt="'.$authorName.'" src="'. $shopEditorPath.'" class="img-responsive">
+                    </div>
+                    <div class="textbox">
+                        <h3><?php echo $authorName; ?></h3>
+                        <span class="text">'.$shopHeader.'</span>';
+        if ($shop['discussions'] == 1) {
+            $popularEditor .= !empty($disqusReplyCounter) ? $disqusReplyCounter : '';
+        }
+                    $popularEditor .= '</div>
+                </div>
+                <h2>'.$shopAbout.'</h2>'
+                .preg_replace(
+                    '/(<a\b[^><]*)>/i',
+                    '$1 style="color: #0077cc;text-decoration: underline;">',
+                    FrontEnd_Helper_viewHelper::replaceStringVariable($shop['shopText'])
+                ).'
+            </div>'
+            .$howToUse.'
+        </article>';
+        return $popularEditor;
+    }
+
+    public function howToUseGuide($shop, $actualUrl, $howToUseGuidePermalink)
+    {
+        $howToGude = '';
+        $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
+        $shopUrl = $shop['affliateProgram'] == '1' ?
+            '<a href="'.$domainName.'out/shop/'.$shop['id'].'" rel="nofollow" target="_blank">'.$actualUrl.'</a>' :
+             $actualUrl;
+        $howToGude = '<ul class="add-info">';
+        if ($shop['howToUse']):
+            $howToGude .= '<li class="question">
+                <h4>'. $this->__translate('How to use code').'</h4>
+                <p>'.$this->__translate('Read our full').
+                    '<a href="'. HTTP_PATH_LOCALE.$howToUseGuidePermalink.'#guide">'.$shop['name'].' '.$this->__translate('Promotional Code').'</a>'
+                   .$this->__translate('help guide').
+                '</p>
+            </li>';
+        endif;
+            $howToGude .= '<li class="web">
+                <h4>'.$this->__translate('Official website').'</h4>'.$shopUrl.'
+            </li>
+        </ul>';
+        return $howToGude;
+    }
+
+    public function shopChainWidget($shopChain)
+    {
+        $chain = '';
+        if ($shopChain) {
+            $chain = '<article class="block">'.$shopChain.'</article>';
+        }
+        return $chain;
+    }
+
     public function sidebarChainWidget($id, $shopName = false, $chainItemId = false)
     {
         if ($shopName) {
@@ -96,7 +219,7 @@ EOD;
                 '</ul></div>';
         return $categoriesSidebarWidget;
     }
-    
+
     public function popularShopWidget()
     {
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
