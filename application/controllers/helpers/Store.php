@@ -18,7 +18,7 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         $offers = array();
         $storeOfferIds = array();
         foreach ($topVoucherCodes as $topVouchercodeskey => $topVoucherCode) {
-            $offers[] = $topVoucherCode['offer'];
+            $offers[] = $topVoucherCode['popularcode'];
         }
         return $offers;
     }
