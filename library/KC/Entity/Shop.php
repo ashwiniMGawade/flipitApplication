@@ -393,11 +393,6 @@ class Shop
     private $viewcount;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\EditorBallonText", mappedBy="shop")
-     */
-    private $ballontext;
-
-    /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Signupfavoriteshop", mappedBy="signupfavoriteshop")
      */
     private $shop;

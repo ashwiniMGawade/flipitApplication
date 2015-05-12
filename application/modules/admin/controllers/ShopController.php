@@ -384,7 +384,6 @@ class Admin_ShopController extends Zend_Controller_Action
         //display shop reasons
         $shopReasons = new \KC\Repository\ShopReasons();
         $this->view->shopReasons = $shopReasons->getShopReasons($id);
-        $this->view->ballonData = \KC\Repository\EditorBallonText::getEditorText($id);
         // display managers and account managers list
         $users = new \KC\Repository\User();
         $this->view->MangersList = $users->getManagersLists($site_name);
@@ -1461,15 +1460,5 @@ class Admin_ShopController extends Zend_Controller_Action
             $count = $this->getRequest()->getParam('partialCounter');
             $this->view->partialCounter = $count;
         }
-    }
-
-    public function deleteballontextAction()
-    {
-        $textId = $this->getRequest()->getParam('id');
-        if (!empty($textId)) {
-            $ballonText = \KC\Repository\EditorBallonText::deletetext($textId);
-            echo Zend_Json::encode($ballonText);
-        }
-        die;
     }
 }
