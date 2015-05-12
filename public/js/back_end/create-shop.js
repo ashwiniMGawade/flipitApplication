@@ -662,7 +662,10 @@ function removeballontexthtml(el) {
  * apply validation on cretae new shop page
  */
 function validateFormAddNewShop(){
-    
+    $.validator.addMethod("slugRegex", function(value, element) {
+        return this.optional(element) || /^[A-Za-z][a-z0-9-]+$/i.test(value);
+    }, "How to slug must contain only letters, numbers, or dashes.");
+
     validateNewShop  = $("form#createShop")
     .validate(
             {
@@ -764,6 +767,9 @@ function validateFormAddNewShop(){
                                 return true ;
                             }
                             return false;
+                        },
+                        slugRegex  : function(element) {
+                            return $('#howTouseStatus').val() == 1;
                         }
                     },
                     pageTitle :  
