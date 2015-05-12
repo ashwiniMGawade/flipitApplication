@@ -1010,7 +1010,7 @@ class Shop extends \KC\Entity\Shop
                 if (strlen($shopDetail['offlineSince']) > 18) {
                     $shopInfo->offlineSicne = $shopDetail['offlineSince'];
                 } else {
-                    $shopInfo->offlineSicne = date("Y-m-d h:m:s");
+                    $shopInfo->offlineSicne = new \DateTime('now');
                 }
             }
         } else {
@@ -1022,7 +1022,12 @@ class Shop extends \KC\Entity\Shop
         $shopInfo->accountManagerName = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['accountManagerName']);
         $shopInfo->contentManagerId = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['selecteditors']);
         $shopInfo->contentManagerName = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['editorName']);
-
+        $shopInfo->featuredtext = isset($shopDetail['featuredtext']) && $shopDetail['featuredtext'] != ''
+            ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['featuredtext'])
+            : '';
+        $shopInfo->featuredtextdate = isset($shopDetail['featuredtextdate']) && $shopDetail['featuredtextdate'] != ''
+            ? new \DateTime(\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['featuredtextdate']))
+            : '';
         $shopInfo->affliateNetworkId = null;
 
         if ($shopDetail['shopAffiliateNetwork'] != 0) {

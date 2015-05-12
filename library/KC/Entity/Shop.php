@@ -330,6 +330,16 @@ class Shop
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $code_alert_send_date;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $featuredtext;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $featuredtextdate;
     
     /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="shop")

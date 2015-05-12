@@ -456,6 +456,7 @@ function init()
               }
            }); */
     reoderElements();
+    jQuery('#dp3').datepicker().on('changeDate');
 }
 
 /**

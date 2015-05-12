@@ -185,6 +185,16 @@ if (isset($this->currentStoreInformation[0]['futurecode']) && $this->currentStor
         );
     }
 }
+
+$featuredTextMessage = '';
+if (empty($futureCodeMessage)) {
+    $featuredTextMessage = $this->partial(
+        $storeViewPartialPath.'_featuredText.phtml',
+        array(
+            'shopInfo' => $this->currentStoreInformation[0]
+        )
+    );
+}
 ?>
 <input type="hidden" name="currentShop" id="currentShop" 
 value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
@@ -209,6 +219,7 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
     <?php 
     echo $noMoneyNocodeMessage;
     echo $futureCodeMessage;
+    echo $featuredTextMessage;
     echo $offers;
     echo $sixShopReasons;
     echo $similarOffersHeader;
