@@ -21,17 +21,17 @@ class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
         return $sidebarWidgets;
     }
 
-    public function sidebarWidgets($widgetType)
+    public function sidebarWidgets($widgetType, $obj)
     {
         $widgets = \KC\Repository\PageWidgets::getWidgetsByType($widgetType);
         $pageWidgets = '';
         if (!empty($widgets)) {
             foreach ($widgets as $widget) {
-                $widgetTitle = strtolower($widget['widget']['title']);
+                $widgetTitle = strtolower($widget['widget']['slug']);
                 if ($widget['widget']['showWithDefault'] == 1) {
                     $this->getNonDefaultWidget($widget);
                 } else {
-                    $this->$widgetTitle();
+                    $this->$widgetTitle($obj);
                 }
             }
         }
@@ -40,33 +40,52 @@ class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
 
     public function getNonDefaultWidget($widget)
     {
-        echo str_replace('<br />', '', html_entity_decode($widget['widget']['content']));
+        if (!empty($widget['widget']['content'])) {
+            echo str_replace('<br />', '', html_entity_decode($widget['widget']['content']));
+        }
     }
 
     public function socialCodeWidget($obj)
     {
-        echo $obj->partial('socialcode/social-code.phtml', array('zendForm' => $obj->zendForm));
+        if (!empty($obj->zendForm)) {
+            echo $obj->partial('socialcode/social-code.phtml', array('zendForm' => $obj->zendForm));
+        }
     }
 
     public function signUpWidget($obj)
     {
-        if ($obj->currentStoreInformation[0]['showSignupOption']) {
+        if ($obj->currentStoreInformation[0]['showSignupOption']) :
             echo $obj->esi(
                 $obj->locale.'signup/signupwidget?shopId='.$obj->currentStoreInformation[0]['id']
                 .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage='
             );
-        }
+        endif;
     }
 
     public function shopLatestNewsWidget($obj)
     {
-        if (!empty($obj->latestShopUpdates)):
+        if (!empty($obj->latestShopUpdates)) {
             echo $obj->partial('store/_latestNews.phtml', array('latestShopUpdates' => $obj->latestShopUpdates));
-        endif;
+        }
     }
 
-    public function popularEditorWidget($obj, $howToUseGuidePermalink, $actualUrl, $disqusReplyCounter)
+    public function popularEditorWidget($obj)
     {
+        $howToUseGuidePermalink = "how-to/".$obj->currentStoreInformation[0]['permaLink'];
+        if (!empty($obj->currentStoreInformation[0]['howtoguideslug'])) {
+            $howToUseGuidePermalink =
+                $obj->currentStoreInformation[0]['permaLink']. '/'
+                . $obj->currentStoreInformation[0]['howtoguideslug'];
+        }
+        $actualUrlWithoutDoubleSlash = explode("//", $obj->currentStoreInformation[0]['actualUrl']);
+        if (isset($actualUrlWithoutDoubleSlash[1])):
+            $actualUrl = $actualUrlWithoutDoubleSlash[1];
+        else:
+            $actualUrl = $obj->currentStoreInformation[0]['actualUrl'];
+        endif;
+        $frontShopHeaderHelper = new FrontEnd_Helper_ShopHeaderPartialFunctions();
+        $disqusReplyCounter = $frontShopHeaderHelper->getDisqusReplyCounter($obj->currentStoreInformation[0]);
+
         $shopEditor = '';
         if($obj->shopEditor != null):
             $shopEditor = $obj->partial(
@@ -220,8 +239,10 @@ EOD;
         return $cacheStatus;
     }
 
-    public function shopsAlsoViewedWidget($shopId, $shopName)
+    public function shopsAlsoViewedWidget($obj)
     {
+        $shopId = $this->currentStoreInformation[0]['id'];
+        $shopName = $this->currentStoreInformation[0]['name'];
         $shopsAlsoViewed =  \KC\Repository\Shop::getShopsAlsoViewed($shopId);
         if ($shopsAlsoViewed[0]['shopsViewedIds'] != '') {
             $similarStoresViewedContent = self::getSimilarStoresViewedDivContent($shopName);

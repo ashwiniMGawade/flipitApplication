@@ -222,23 +222,9 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4">
     <?php
-    echo $this->partial(
-        $storeViewPartialPath. '_shop-sidebar.phtml',
-        array(
-            'shopEditor' => $shopEditor,
-            'latestShopUpdates'=> $this->latestShopUpdates,
-            'shopChain' => $this->shopChain,
-            'shop' => $this->currentStoreInformation[0],
-            'popularStoresList'=> $this->popularStoresList
-            )
-    );
-    if ($this->currentStoreInformation[0]['showSignupOption']) :
-        echo $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
-            .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
-    endif;
+    $widgetType = $this->currentStoreInformation[0]['affliateProgram'] == 1 ? 'money-shops' : "no-money-shops";
     $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
-    echo $frontendSidebarHelper->popularCategoryWidget();
-    echo $this->partial('socialcode/social-code.phtml', array('zendForm' => $this->zendForm));
+    echo $frontendSidebarHelper->sidebarWidgets($widgetType, $this);
     ?>
     </aside>
 </div>
