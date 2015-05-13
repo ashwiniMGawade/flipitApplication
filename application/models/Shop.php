@@ -27,16 +27,31 @@ class Shop extends BaseShop
     public static function setSignupOption()
     {
         $shops = Shop::getAllShopsId('all');
-        $shopIds = array();
+        $moneyShopIds = array();
+        $noMoneyShopIds = array();
         foreach ($shops as $shop) {
-            $shopIds[] = $shop['id'];
+            if ($shop['affliateProgram'] == 1) {
+                $moneyShopIds[] = $shop['id'];
+            } else {
+                $noMoneyShopIds[] = $shop['id'];
+            }
         }
-        $ids = implode(',', $shopIds);
-        $query = Doctrine_Query::create()
-            ->update('Shop s')
-            ->set('s.showSignupOption', '0')
-            ->where("s.id IN ($ids)")
-            ->execute();
+        $moneyShopIds = implode(',', $moneyShopIds);
+        $noMoneyShopIds = implode(',', $noMoneyShopIds);
+        if (!empty($moneyShopIds )) {
+            $query = Doctrine_Query::create()
+                ->update('Shop s')
+                ->set('s.showSignupOption', '0')
+                ->where("s.id IN ($moneyShopIds)")
+                ->execute();
+        }
+        if (!empty($noMoneyShopIds )) {
+            $query = Doctrine_Query::create()
+                ->update('Shop s')
+                ->set('s.showSignupOption', '1')
+                ->where("s.id IN ($noMoneyShopIds)")
+                ->execute();
+        }
     }
 
     public static function checkShop($shopName)
@@ -1493,7 +1508,7 @@ public static function getShopDetail($shopId)
     public static function getAllShopsId($withChecks = '')
     {
         $query = Doctrine_Query::create()
-            ->select('s.id')
+            ->select('s.id, s.affliateProgram')
             ->from("Shop s");
         if (empty($withChecks)) {
             $query = $query->where('s.deleted = 0')
