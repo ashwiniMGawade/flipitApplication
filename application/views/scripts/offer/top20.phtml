@@ -23,6 +23,17 @@ if(count($this->top20PopularOffers) > 0):
     );
 endif;
 
+$editorInformation = '';
+if($this->editorInformation != null && $this->editorWidgetInformation[0]['status'] != ''):
+    $editorInformation = $this->partial(
+        $partialViewPath.'_editorWidget.phtml',
+        array(
+           'editorInformation' => $this->editorInformation,
+           'editorWidgetInformation' => $this->editorWidgetInformation
+        )
+    );
+endif;
+
 $popularStores = '';
 if (!empty($this->popularStores)) :
      $popularStores = $this->partial(
@@ -38,6 +49,7 @@ echo $popularStores; ?>
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
 <?php
+echo $editorInformation;
 $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
 echo $this->esi($this->locale.'signup/signupwidget?shopId='
     .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');

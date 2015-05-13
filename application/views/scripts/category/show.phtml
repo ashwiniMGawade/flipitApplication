@@ -6,6 +6,18 @@ $categoryHeaderImage =
 $categoryPartial = new FrontEnd_Helper_PageHeaderPartialFunctions();
 echo $categoryPartial->getCategoryOrPageHeader($this->categoryDetails[0]['name'], $categoryHeaderImage);
 $partialsViewPath = 'partials/';
+
+$editorInformation = '';
+if($this->editorInformation != null && $this->editorWidgetInformation[0]['status'] != ''):
+    $editorInformation = $this->partial(
+        $partialsViewPath.'_editorWidget.phtml',
+        array(
+           'editorInformation' => $this->editorInformation,
+           'editorWidgetInformation' => $this->editorWidgetInformation
+        )
+    );
+endif;
+
 $offers = '';
 if (count($this->offersWithPagination)>0) {
     $offers = $this->partial(
@@ -29,7 +41,8 @@ if (count($this->offersWithPagination)>0) {
     <?php echo $offers; ?>
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
-    <?php 
+    <?php
+    echo $editorInformation;
     $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
     echo $this->esi($this->locale.'signup/signupwidget?shopId='
         .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');

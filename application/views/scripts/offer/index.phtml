@@ -20,7 +20,18 @@ $newestOffers = $this->partial(
             'widgetPosition'=>$this->widgetPosition
         )
     );
-} 
+}
+
+$editorInformation = '';
+if($this->editorInformation != null && $this->editorWidgetInformation[0]['status'] != ''):
+    $editorInformation = $this->partial(
+        $partialsViewPath.'_editorWidget.phtml',
+        array(
+           'editorInformation' => $this->editorInformation,
+           'editorWidgetInformation' => $this->editorWidgetInformation
+        )
+    );
+endif;
 ?>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
@@ -28,6 +39,7 @@ $newestOffers = $this->partial(
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
         <?php
+        echo $editorInformation;
         $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
         echo $this->esi($this->locale.'signup/signupwidget?shopId='
             .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');

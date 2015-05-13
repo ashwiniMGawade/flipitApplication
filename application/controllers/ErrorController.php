@@ -70,7 +70,31 @@ class ErrorController extends Zend_Controller_Action
                         20,
                         9
                     );
-
+                    $editorWidgetInformation = FrontEnd_Helper_viewHelper::
+                        getRequestedDataBySetGetCache(
+                            'special_editor_data',
+                            array(
+                            'function' =>
+                            'KC\Repository\EditorWidget::getEditorWigetData', 'parameters' => array('special')
+                            ),
+                            ''
+                        );
+                    $editorId = !empty($editorWidgetInformation[0]['editorId'])
+                        ? $editorWidgetInformation[0]['editorId'] : '';
+                    if (!empty($editorId)) {
+                        $this->view->editorInformation = \FrontEnd_Helper_viewHelper::
+                            getRequestedDataBySetGetCache(
+                                'user_'.$editorId.'_details',
+                                array(
+                                'function' =>
+                                'KC\Repository\User::getUserDetails', 'parameters' => array($editorId)
+                                ),
+                                ''
+                            );
+                    } else {
+                        $this->view->editorInformation = '';
+                    }
+                    $this->view->editorWidgetInformation = $editorWidgetInformation;
                     $frontendViewHelper = new \FrontEnd_Helper_SidebarWidgetFunctions();
                     $sidebarWidget = $frontendViewHelper->getSidebarWidget(
                         $sidebarParameters = array(),

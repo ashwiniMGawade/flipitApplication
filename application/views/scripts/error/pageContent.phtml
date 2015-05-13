@@ -42,7 +42,18 @@ if ($this->pageMode == true) {
         } else {
             $pageContent ='<div class = "no-record">' . $this->translate('No record found') .'</div>';
         }
-    } 
+    }
+
+    $editorInformation = '';
+    if ($this->editorInformation != null && $this->editorWidgetInformation[0]['status'] != ''):
+        $editorInformation = $this->partial(
+            $partialsViewPath.'_editorWidget.phtml',
+            array(
+               'editorInformation' => $this->editorInformation,
+               'editorWidgetInformation' => $this->editorWidgetInformation
+            )
+        );
+    endif;
     $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
     $imagePath = isset($this->pageHeaderImage['path']) ? $this->pageHeaderImage['path'] : '';
     $imageName = isset($this->pageHeaderImage['name']) ? $this->pageHeaderImage['name'] : '';
@@ -54,7 +65,8 @@ if ($this->pageMode == true) {
             <?php echo $pageContent; ?>
         </div>
         <aside class="col-md-4 col-sm-4" id="sidebar"> 
-            <?php 
+            <?php
+            echo $editorInformation;
             $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
             echo $this->esi($this->locale.'signup/signupwidget?shopId='
                 .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');

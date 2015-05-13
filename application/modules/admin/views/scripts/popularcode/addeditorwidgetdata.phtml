@@ -11,7 +11,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js"
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
 ?>
 <h1>
-    <?php echo $this->translate('backend_Add Editor Widget Information for pages'); ?>
+    <?php echo $this->translate('backend_Add/Update Editor Widget Information for pages'); ?>
     <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/popularcode'"><?php echo $this->translate('Cancel'); ?></button>
 </h1>
 <div class='wrap columns-2'>
@@ -49,6 +49,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
                         <option default="default" value=""><?php echo $this->translate('None'); ?></option>
                         <option value="top20"><?php echo $this->translate('backend_Top 20 Page'); ?></option>
                         <option value="category"><?php echo $this->translate('backend_Catgeory Page'); ?></option>
+                        <option value="special"><?php echo $this->translate('backend_Special Page'); ?></option>
+                        <option value="newPage"><?php echo $this->translate('backend_new Offers Page'); ?></option>
                     </select>
                </div>  
             </div>

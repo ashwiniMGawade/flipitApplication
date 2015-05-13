@@ -4,17 +4,22 @@ class EditorWidget Extends \KC\Entity\EditorWidget
 {
     public static function addEditorWigetData($editorId, $description, $subTitle, $type, $status)
     {
-        $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $editorWidget = new \KC\Entity\EditorWidget();
-        $editorWidget->type = $type;
-        $editorWidget->description = $description;
-        $editorWidget->subtitle = $subTitle;
-        $editorWidget->created_at = new \DateTime('now');
-        $editorWidget->updated_at = new \DateTime('now');
-        $editorWidget->status = $status;
-        $editorWidget->editorId = $editorId;
-        $entityManagerLocale->persist($editorWidget);
-        $entityManagerLocale->flush();
+        $editorWidgetData = self::getEditorWigetData($type);
+        if (empty($editorWidgetData)) {
+            $entityManagerLocale = \Zend_Registry::get('emLocale');
+            $editorWidget = new \KC\Entity\EditorWidget();
+            $editorWidget->type = $type;
+            $editorWidget->description = $description;
+            $editorWidget->subtitle = $subTitle;
+            $editorWidget->created_at = new \DateTime('now');
+            $editorWidget->updated_at = new \DateTime('now');
+            $editorWidget->status = $status;
+            $editorWidget->editorId = $editorId;
+            $entityManagerLocale->persist($editorWidget);
+            $entityManagerLocale->flush();
+        } else {
+            self::updateEditorWigetData($editorId, $description, $subTitle, $type, $status);
+        }
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($type.'_editor_data');
         return true;
     }
@@ -32,7 +37,6 @@ class EditorWidget Extends \KC\Entity\EditorWidget
                 ->where('ew.type ='.$entityManagerLocale->expr()->literal($type))
                 ->getQuery()->execute();
         }
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($type.'_editor_data');
         return true;
     }
 
