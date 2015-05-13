@@ -285,9 +285,10 @@ class User
                 $query = $queryBuilder->select('w.name')
                     ->from('KC\Entity\Website', 'w')
                     ->where($queryBuilder->expr()->eq('w.id', $perm['webaccess'][$i]['websiteid']))
+                    ->andWhere($queryBuilder->expr()->eq('w.status', $queryBuilder->expr()->literal('online')))
                     ->orderBy('w.name', 'ASC');
                 $q = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
+                
                 $perm['webaccess'][$i]['websitename'] = $q['0']['name'];
             }
              # rearange websites based on website name and keep kortingscode at same place
