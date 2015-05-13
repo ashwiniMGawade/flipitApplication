@@ -38,8 +38,8 @@ class DeleteExpiredOffersAndAddNewOffersToSpecialPage
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - Deleting the Expired and Adding New Special Page Offers!!!"
         );
-        SpecialPagesOffers::deleteExpiredOffers();
-        SpecialPagesOffers::addNewSpecialPageOffers();
+       // SpecialPagesOffers::deleteExpiredOffers();
+       // SpecialPagesOffers::addNewSpecialPageOffers();
         $manager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - Expired Offers have been Deleted and New are saved successfully!!!"
