@@ -8,7 +8,7 @@ class DataTable_Helper extends \NeuroSYS\DoctrineDatatables\Table
             'iColumns' => count($props),
             'sColumns' => '',
             'iDisplayStart' => '0',
-            'iDisplayLength' => '10',
+            'iDisplayLength' => '100',
             'sSearch' => '',
             'bRegex' => 'false',
             'iSortingCols' => '1',
