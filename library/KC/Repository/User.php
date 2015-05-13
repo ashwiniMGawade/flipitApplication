@@ -989,19 +989,24 @@ class User extends \KC\Entity\User
 
     public function updatePassword($params = null)
     {
-        if ($this->validatePassword($params['curPassword'])) {
+        $entityManagerUser  = \Zend_Registry::get('emUser');
+        $repo = $entityManagerUser->getRepository('KC\Entity\User');
+        $updateUser = $repo->find($params['id']);
+        
+        if ($updateUser->validatePassword($params['curPassword'])) {
             // check user want to update password or not based upon old password
             if (isset($params['newPassword']) && isset($params['confirmPassword'])) {
                 if ($params['newPassword'] !== $params['confirmPassword']) {
                     return  'New password and confrim don\'t matched';
                 }
-                if (! $this->isPasswordDifferent($params['confirmPassword'])) {
+                if (! $updateUser->isPasswordDifferent($params['confirmPassword'])) {
                     return  'New password can\'t be same as previous password';
                 }
                 if ($this->isValidPassword($params['confirmPassword'])) {
                             // encrypt new passsword
-                    self::setPassword($params['confirmPassword']) ;
-                    $this->save();
+                    self::setPassword($updateUser, $params['confirmPassword']) ;
+                    $entityManagerUser->persist($updateUser);
+                    $entityManagerUser->flush();
 
                     # reeturn false to ensure password changed
                     return false;
