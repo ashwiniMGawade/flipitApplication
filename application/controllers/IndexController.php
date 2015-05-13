@@ -55,7 +55,7 @@ class IndexController extends Zend_Controller_Action
                 array('function' => 'KC\Repository\Offer::getNewestOffers', 'parameters' => array('newest', 10, '', '', 'homePage'))
             );
             $this->view->moneySavingGuidesList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "all_homemanisaving_list",
+                "all_homemoneysaving_list",
                 array('function' => 'KC\Repository\Articles::getAllArticlesForHomePage', 'parameters' => array(10))
             );
             $this->view->topCategories = $topCategories;

@@ -7,7 +7,6 @@ class PopularArticles Extends \KC\Entity\PopularArticles
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homemoneysaving_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homemoneysaving_list');
     }
 
     public static function getPopularArticles()
