@@ -270,6 +270,15 @@ abstract class BasePage extends Doctrine_Record
         $this->hasColumn('showinmobilemenu', 'boolean', null, array(
          'type' => 'boolean',
         ));
+        $this->hasColumn(
+            'subtitle',
+            'string',
+            255,
+            array(
+                'type' => 'string',
+                'length' => '255',
+            )
+        );
     }
 
     public function setUp()

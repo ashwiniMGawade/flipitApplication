@@ -249,6 +249,12 @@ class Page
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
     private $showsitemap;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $subtitle;
+    
     /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="page")
      * @ORM\JoinColumn(name="pageHeaderImageId", referencedColumnName="id", unique=true)

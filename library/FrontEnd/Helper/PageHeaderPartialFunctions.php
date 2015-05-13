@@ -23,8 +23,6 @@ class FrontEnd_Helper_PageHeaderPartialFunctions
         $headerSubTitle = '<h2>' . $headerSubText . '</h2>';
         $header = '<div class="header-block top-header-block"> 
             <div class="icon">
-                <a href=""><img width="50" height="50" alt="' . $headerText . '" title="' . $headerText . '"  
-                    src="' .  $headerImage . '" class="radiusImg"></a>
             </div>
             <div class="box">
                 <div class="holder">
