@@ -100,7 +100,7 @@ class Articles extends \KC\Entity\Articles
             ->orderBy("p.position", "ASC")
             ->setMaxResults($limit);
         $popularArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $popularArticles;
+        return array_slice($popularArticles, 0, 10);
     }
 
     public static function getMostReasArticlesForPlusOverview($limit = 0)
