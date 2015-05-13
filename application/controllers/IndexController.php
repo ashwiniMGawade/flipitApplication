@@ -56,7 +56,7 @@ class IndexController extends Zend_Controller_Action
             );
             $this->view->moneySavingGuidesList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_homemoneysaving_list",
-                array('function' => 'KC\Repository\Articles::getAllArticlesForHomePage', 'parameters' => array(10))
+                array('function' => 'KC\Repository\Articles::getAllArticlesForHomePage', 'parameters' => array(20))
             );
             $this->view->topCategories = $topCategories;
             $this->view->categoriesOffers = $this->_helper->Index->categoriesOffers($topCategories);
