@@ -29,28 +29,30 @@ class Shop extends BaseShop
         $shops = Shop::getAllShopsId('all');
         $moneyShopIds = array();
         $noMoneyShopIds = array();
-        foreach ($shops as $shop) {
-            if ($shop['affliateProgram'] == 1) {
-                $moneyShopIds[] = $shop['id'];
-            } else {
-                $noMoneyShopIds[] = $shop['id'];
+        if (!empty($shops)) {
+            foreach ($shops as $shop) {
+                if ($shop['affliateProgram'] == 1) {
+                    $moneyShopIds[] = $shop['id'];
+                } else {
+                    $noMoneyShopIds[] = $shop['id'];
+                }
             }
-        }
-        $moneyShopIds = implode(',', $moneyShopIds);
-        $noMoneyShopIds = implode(',', $noMoneyShopIds);
-        if (!empty($moneyShopIds )) {
-            $query = Doctrine_Query::create()
-                ->update('Shop s')
-                ->set('s.showSignupOption', '0')
-                ->where("s.id IN ($moneyShopIds)")
-                ->execute();
-        }
-        if (!empty($noMoneyShopIds )) {
-            $query = Doctrine_Query::create()
-                ->update('Shop s')
-                ->set('s.showSignupOption', '1')
-                ->where("s.id IN ($noMoneyShopIds)")
-                ->execute();
+            if (!empty($moneyShopIds) && $moneyShopIds!='') {
+                $moneyShopIds = implode(',', $moneyShopIds);
+                $query = Doctrine_Query::create()
+                    ->update('Shop s')
+                    ->set('s.showSignupOption', '0')
+                    ->where("s.id IN ($moneyShopIds)")
+                    ->execute();
+            }
+            if (!empty($noMoneyShopIds) && $noMoneyShopIds!='') {
+                $noMoneyShopIds = implode(',', $noMoneyShopIds);
+                $query = Doctrine_Query::create()
+                    ->update('Shop s')
+                    ->set('s.showSignupOption', '1')
+                    ->where("s.id IN ($noMoneyShopIds)")
+                    ->execute();
+            }
         }
     }
 
