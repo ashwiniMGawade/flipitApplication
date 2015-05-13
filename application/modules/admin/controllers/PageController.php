@@ -55,7 +55,7 @@ class Admin_PageController extends Zend_Controller_Action
         $widgetObj = new KC\Repository\Widget();
         $this->view->widgetList = $widgetObj->getDefaultwidgetList();
         $this->view->widgetListUserDefined = $widgetObj->getUserDefinedwidgetList();
-        $artcatg = KC\Repository\ArticleCategory:: getartCategories();
+        $artcatg = KC\Repository\Articlecategory:: getartCategories();
         $this->view->artcategory = $artcatg['aaData'];
 
         $entityManagerUser  = \Zend_Registry::get('emUser');
