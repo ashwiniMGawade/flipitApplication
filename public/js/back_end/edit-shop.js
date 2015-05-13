@@ -456,7 +456,7 @@ function init()
               }
            }); */
     reoderElements();
-    jQuery('#dp3').datepicker().on('changeDate');
+    jQuery('#featuredDatePicker').datepicker().on('changeDate');
 }
 
 /**

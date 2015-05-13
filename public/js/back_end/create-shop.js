@@ -372,7 +372,7 @@ function init()
     });
     
     validateFormAddNewShop();
-    jQuery('#dp3').datepicker().on('changeDate');
+    jQuery('#featuredDatePicker').datepicker().on('changeDate');
 }
 
 
