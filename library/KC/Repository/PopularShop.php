@@ -89,10 +89,14 @@ class PopularShop Extends \KC\Entity\PopularShop
                 $pc->popularshops = $entityManagerLocale->find('KC\Entity\Shop', $shop[0]['id']);
                 $pc->position = (intval($NewPos));
                 $pc->deleted = 0;
+                $pc->status = 1;
                 $pc->created_at = new \DateTime('now');
                 $pc->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($pc);
                 $entityManagerLocale->flush();
+                $lastInsertedId = $pc->getId();
+                return $flag =
+                array('type'=>'MN', 'position'=>intval($NewPos), 'shopId'=>$shop[0]['id'], 'id'=>$lastInsertedId);
             }
 
         }
