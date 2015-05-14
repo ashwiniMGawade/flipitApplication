@@ -87,8 +87,8 @@ class User extends \KC\Entity\User
             ->leftJoin("u.profileimage", "pi")
             ->setParameter(1, $userId)
             ->where('u.id = ?1');
-        $userDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $userDetails;
+        $userDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return !empty($userDetails) ? $userDetails[0] : '';
     }
 
     public static function getUserDetailsForPlus($userId)
