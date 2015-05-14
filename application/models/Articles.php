@@ -93,6 +93,7 @@ class Articles extends BaseArticles
             ->where('a.publish = "1"')
             ->andWhere("a.deleted= 0")
             ->andWhere('a.publishdate <="'.$currentDateTime.'"')
+            ->orderBy('a.publishdate DESC')
             ->fetchArray();
         return $articlesList;
     }
