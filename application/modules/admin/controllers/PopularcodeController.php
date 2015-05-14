@@ -258,6 +258,7 @@ class Admin_PopularcodeController extends Zend_Controller_Action
             \KC\Repository\EditorWidget::addEditorWigetData($editorId, $description, $subTitle, $type, $status);
             $message = $this->view->translate('backend_ Editor data has been updated successfully');
             $flashMessage->addMessage(array('success' => $message ));
+            $this->_redirect(HTTP_PATH.'admin/popularcode/addeditorwidgetdata');
         }
     }
 
