@@ -119,13 +119,17 @@ class PlusController extends Zend_Controller_Action
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
 
             $this->view->recentlyAddedArticles = \KC\Repository\MoneySaving::getRecentlyAddedArticles($articleDetails[0]['id'], 3);
-       
+
             $this->view->topPopularOffers =
                 \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("5_topOffers_list", array('function' =>
                 '\KC\Repository\Offer::getTopOffers', 'parameters' => array(5)));
             $this->view->userDetails = \FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache('user_'.$articleDetails[0]['authorid'].'_details', array('function' =>
                 '\KC\Repository\User::getUserDetails', 'parameters' => array($articleDetails[0]['authorid'])));
+
+            if (isset($this->view->userDetails) && $this->view->userDetails == '') {
+                throw new \Zend_Controller_Action_Exception('', 404);
+            }
             $articleThumbNailImage = FACEBOOK_IMAGE;
             if (!empty($articleDetails[0]['thumbnail'])) {
                 $articleThumbNailImage = PUBLIC_PATH_CDN
