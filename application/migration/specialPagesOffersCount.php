@@ -27,7 +27,7 @@ class specialPagesOffersCount
         try {
             $specialPagesList = Page::getSpecialListPages();
             foreach ($specialPagesList as $specialPageKey => $specialPage) {
-                Page::addSpecialPagesOffersCount($specialPage['id'], count(Offer::getSpecialPageOffers($specialPage)));
+                Page::addSpecialPagesOffersCount($specialPage['id'], count(Offer::getSpecialPageOffersByFallBack($specialPage)));
             }
 
             $logContent .= $keyIn.' - Added'."\n";
