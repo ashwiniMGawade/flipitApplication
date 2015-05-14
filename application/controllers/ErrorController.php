@@ -71,11 +71,6 @@ class ErrorController extends Zend_Controller_Action
                         9
                     );
 
-                    $frontendViewHelper = new \FrontEnd_Helper_SidebarWidgetFunctions();
-                    $sidebarWidget = $frontendViewHelper->getSidebarWidget(
-                        $sidebarParameters = array(),
-                        rtrim($this->pagePermalink, '/')
-                    );
                     $this->view->message = 'Page not found';
                     $this->view->pageTitle = $pageDetails['pageTitle'];
                     $this->view->headTitle($pageDetails['metaTitle']);
@@ -94,7 +89,6 @@ class ErrorController extends Zend_Controller_Action
                         );
                     $this->view->offercount = count($specialPageOffers);
                     $this->view->offersPaginator = $specialOffersPaginator;
-                    $this->view->widget = $sidebarWidget;
                     $this->view->pageMode = true;
                     $this->view->widgetPosition = \KC\Repository\WidgetLocation::getWidgetPositionForFrontEnd(
                         'page',

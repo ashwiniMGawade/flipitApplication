@@ -21,8 +21,6 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $f = new FrontEnd_Helper_SidebarWidgetFunctions();
-        echo $f->sidebarWidgets('money-shops'); die;
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();

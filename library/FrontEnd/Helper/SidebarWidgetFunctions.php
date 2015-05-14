@@ -1,43 +1,22 @@
 <?php
 class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
 {
-    public function getSidebarWidget($array = array(), $page = '')
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder
-            ->select('p, w, refpage')
-            ->from('KC\Entity\Page', 'p')
-            ->leftJoin('p.pagewidget', 'w')
-            ->leftJoin('w.widget', 'refpage')
-            ->where("p.permalink=".$queryBuilder->expr()->literal("$page"))
-            ->andWhere('w.stauts = 1')
-            ->andWhere('p.deleted = 0');
-        $pageWidgets = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        $sidebarWidgets = '';
-        if (count($pageWidgets) > 0) {
-            for ($i=0; $i<count($pageWidgets[0]['pagewidget']); $i++) {
-            }
-        }
-        return $sidebarWidgets;
-    }
-
-    public function sidebarWidgets($widgetType, $obj)
+    public function sidebarWidgets($widgetType, $currentView)
     {
         $widgets = \KC\Repository\PageWidgets::getWidgetsByType($widgetType);
-        $pageWidgets = '';
         if (!empty($widgets)) {
             foreach ($widgets as $widget) {
-                $widgetTitle = strtolower($widget['widget']['function_name']);
+                $widgetFunctionName = strtolower($widget['widget']['function_name']);
                 if ($widget['widget']['showWithDefault'] == 1) {
                     $this->getNonDefaultWidget($widget);
                 } else {
-                    if (!empty($widgetTitle)) {
-                        $this->$widgetTitle($widgetType, $obj);
+                    if (!empty($widgetFunctionName)) {
+                        $this->$widgetFunctionName($widgetType, $currentView);
                     }
                 }
             }
         }
-        return $pageWidgets;
+        return true;
     }
 
     public function getNonDefaultWidget($widget)
@@ -47,69 +26,73 @@ class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
         }
     }
 
-    public function socialCodeWidget($widgetType, $obj)
+    public function socialCodeWidget($widgetType, $currentView)
     {
-        if (!empty($obj->zendForm)) {
-            echo $obj->partial('socialcode/social-code.phtml', array('zendForm' => $obj->zendForm));
+        if (!empty($currentView->zendForm)) {
+            echo $currentView->partial('socialcode/social-code.phtml', array('zendForm' => $currentView->zendForm));
         }
     }
 
-    public function signUpWidget($widgetType, $obj)
+    public function signUpWidget($widgetType, $currentView)
     {
         if ($widgetType == 'no-money-shops' || $widgetType == 'money-shops') {
-            if ($obj->currentStoreInformation[0]['showSignupOption']) {
-                echo $obj->esi(
-                    $obj->locale.'signup/signupwidget?shopId='.$obj->currentStoreInformation[0]['id']
+            if ($currentView->currentStoreInformation[0]['showSignupOption']) {
+                echo $currentView->esi(
+                    $currentView->locale.'signup/signupwidget?shopId='.$currentView->currentStoreInformation[0]['id']
                     .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage='
                 );
             }
         } else {
-            echo $obj->esi(
-                $obj->locale.'signup/signupwidget?shopId='.''
+            echo $currentView->esi(
+                $currentView->locale.'signup/signupwidget?shopId='.''
                 .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage='
             );
         }
     }
 
-    public function shopLatestNewsWidget($widgetType, $obj)
+    public function shopLatestNewsWidget($widgetType, $currentView)
     {
-        if (!empty($obj->latestShopUpdates)) {
-            echo $obj->partial('store/_latestNews.phtml', array('latestShopUpdates' => $obj->latestShopUpdates));
+        if (!empty($currentView->latestShopUpdates)) {
+            echo $currentView->partial('store/_latestNews.phtml', array('latestShopUpdates' => $currentView->latestShopUpdates));
         }
     }
 
-    public function popularEditorWidget($widgetType, $obj)
+    public function popularEditorWidget($widgetType, $currentView)
     {
-        $howToUseGuidePermalink = "how-to/".$obj->currentStoreInformation[0]['permaLink'];
-        if (!empty($obj->currentStoreInformation[0]['howtoguideslug'])) {
-            $howToUseGuidePermalink =
-                $obj->currentStoreInformation[0]['permaLink']. '/'
-                . $obj->currentStoreInformation[0]['howtoguideslug'];
-        }
-        $actualUrlWithoutDoubleSlash = explode("//", $obj->currentStoreInformation[0]['actualUrl']);
-        if (isset($actualUrlWithoutDoubleSlash[1])):
-            $actualUrl = $actualUrlWithoutDoubleSlash[1];
-        else:
-            $actualUrl = $obj->currentStoreInformation[0]['actualUrl'];
-        endif;
-        $frontShopHeaderHelper = new FrontEnd_Helper_ShopHeaderPartialFunctions();
-        $disqusReplyCounter = $frontShopHeaderHelper->getDisqusReplyCounter($obj->currentStoreInformation[0]);
-
         $shopEditor = '';
-        if($obj->shopEditor != null):
-            $shopEditor = $obj->partial(
-                'store/_storeEditor.phtml',
-                array(
-                   'shopEditor' => array(
-                        $obj->shopEditor
-                    ),
-                   'shop' => $obj->currentStoreInformation[0],
-                   'howToUseGuidePermalink'=>$howToUseGuidePermalink,
-                   'actualUrl'=>$actualUrl,
-                   'disqusReplyCounter' => $disqusReplyCounter
-                )
-            );
-        endif;
+        if (!empty($currentView->currentStoreInformation)) {
+            $howToUseGuidePermalink = "how-to/".$currentView->currentStoreInformation[0]['permaLink'];
+            if (!empty($currentView->currentStoreInformation[0]['howtoguideslug'])) {
+                $howToUseGuidePermalink =
+                    $currentView->currentStoreInformation[0]['permaLink']. '/'
+                    . $currentView->currentStoreInformation[0]['howtoguideslug'];
+            }
+            $actualUrl = '';
+            if (!empty($currentView->currentStoreInformation[0]['actualUrl'])) {
+                $actualUrlWithoutDoubleSlash = explode("//", $currentView->currentStoreInformation[0]['actualUrl']);
+                if (isset($actualUrlWithoutDoubleSlash[1])) {
+                    $actualUrl = $actualUrlWithoutDoubleSlash[1];
+                } else {
+                    $actualUrl = $currentView->currentStoreInformation[0]['actualUrl'];
+                }
+            }
+            $frontShopHeaderHelper = new FrontEnd_Helper_ShopHeaderPartialFunctions();
+            $disqusReplyCounter = $frontShopHeaderHelper->getDisqusReplyCounter($currentView->currentStoreInformation[0]);
+            if($currentView->shopEditor != null):
+                $shopEditor = $currentView->partial(
+                    'store/_storeEditor.phtml',
+                    array(
+                       'shopEditor' => array(
+                            $currentView->shopEditor
+                        ),
+                       'shop' => $currentView->currentStoreInformation[0],
+                       'howToUseGuidePermalink'=>$howToUseGuidePermalink,
+                       'actualUrl'=>$actualUrl,
+                       'disqusReplyCounter' => $disqusReplyCounter
+                    )
+                );
+            endif;
+        }
         echo $shopEditor;
     }
 
@@ -248,12 +231,12 @@ EOD;
         return $cacheStatus;
     }
 
-    public function shopsAlsoViewedWidget($widgetType, $obj)
+    public function shopsAlsoViewedWidget($widgetType, $currentView)
     {
         $similarStoresViewedContent = '';
-        if (!empty($obj->currentStoreInformation[0]['id'])) {
-            $shopId = $obj->currentStoreInformation[0]['id'];
-            $shopName = $obj->currentStoreInformation[0]['name'];
+        if (!empty($currentView->currentStoreInformation[0]['id'])) {
+            $shopId = $currentView->currentStoreInformation[0]['id'];
+            $shopName = $currentView->currentStoreInformation[0]['name'];
             $shopsAlsoViewed =  \KC\Repository\Shop::getShopsAlsoViewed($shopId);
             if ($shopsAlsoViewed[0]['shopsViewedIds'] != '') {
                 $similarStoresViewedContent = self::getSimilarStoresViewedDivContent($shopName);
@@ -299,28 +282,28 @@ EOD;
         <ul class="tags">';
     }
 
-    public function plusTopPopularOffers($widgetType, $obj)
+    public function plusTopPopularOffers($widgetType, $currentView)
     {
         $topPopularOffers = '';
-        if (!empty($obj->topPopularOffers)) {
-            $topPopularOffers = $obj->partial(
+        if (!empty($currentView->topPopularOffers)) {
+            $topPopularOffers = $currentView->partial(
                 'plus/_topPopularOffers.phtml',
                 array(
-                    'topPopularOffers' => $obj->topPopularOffers,
+                    'topPopularOffers' => $currentView->topPopularOffers,
                 )
             );
         }
         echo $topPopularOffers;
     }
 
-    public function plusRecentlyAddedArticles($widgetType, $obj)
+    public function plusRecentlyAddedArticles($widgetType, $currentView)
     {
         $recentlyAddedArticles = '';
-        if (!empty($obj->recentlyAddedArticles)) {
-            $recentlyAddedArticles = $obj->partial(
+        if (!empty($currentView->recentlyAddedArticles)) {
+            $recentlyAddedArticles = $currentView->partial(
                 'plus/_recentlyAddedArticles.phtml',
                 array(
-                    'recentlyAddedArticles' => $obj->recentlyAddedArticles
+                    'recentlyAddedArticles' => $currentView->recentlyAddedArticles
                 )
             );
         }
