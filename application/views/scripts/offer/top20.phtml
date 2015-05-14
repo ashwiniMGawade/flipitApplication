@@ -1,7 +1,11 @@
 <?php
 $partialViewPath = 'partials/';
 $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
-echo $pageHeader->getTop20Header($this->pageTitle, $this->subtitle, $pageHeader->getCategoryOrPageHeaderImage($this->pageHeaderImage));
+echo $pageHeader->getTop20Header(
+    $this->pageTitle,
+    $this->subtitle,
+    $pageHeader->getCategoryOrPageHeaderImage($this->pageHeaderImage)
+);
 ?>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
