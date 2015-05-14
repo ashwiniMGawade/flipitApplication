@@ -473,6 +473,19 @@ class Offer extends BaseOffer
         self::clearSpecialPagesCache($offerId);
     }
 
+    public static function getSpecialPageOffersByFallBack($specialPage, $pageType = '')
+    {
+        $pageRelatedOffersAndPageConstraintsOffers =
+            SpecialPagesOffers::getSpecialPageOffersByPageIdForFrontEnd($specialPage['id'], $pageType);
+        if (empty($pageRelatedOffersAndPageConstraintsOffers)) {
+            $pageRelatedOffersAndPageConstraintsOffers = self::getSpecialPageOffers($specialPage);
+            $pageRelatedOffersAndPageConstraintsOffers =
+            self::getDataForOfferPhtml($pageRelatedOffersAndPageConstraintsOffers, $specialPage);
+        }
+        return $pageRelatedOffersAndPageConstraintsOffers;
+    }
+
+
     public static function getSpecialPageOffers($specialPage)
     {
         $currentDate = date("Y-m-d H:i");
