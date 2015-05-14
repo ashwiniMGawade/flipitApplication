@@ -38,14 +38,10 @@ $allSearchAlphabetPanel = $this->partial(
         </div>
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4 col-sm-4">
-<?php
-$this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-echo $this->esi($this->locale.'signup/signupwidget?shopId='
-    .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
-$frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
-echo $frontendSidebarHelper->popularShopWidget();
-echo $frontendSidebarHelper->popularCategoryWidget();
-echo $this->partial('socialcode/social-code.phtml', array('zendForm' => $this->zendForm));
-?>
+    <?php
+    $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+    $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+    echo $frontendSidebarHelper->sidebarWidgets('all-shop-page', $this);
+    ?>
     </aside>
 </div>

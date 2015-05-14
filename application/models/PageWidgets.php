@@ -17,7 +17,7 @@ class PageWidgets extends BasePageWidgets
             }
         }
     }
-    
+
     public static function truncatePageWidgets()
     {
         $databaseConnection = Doctrine_Manager::getInstance()->getConnection('doctrine_site')->getDbh();
@@ -39,6 +39,7 @@ class PageWidgets extends BasePageWidgets
         $widgetCategories['info-pages'] = 'Info pages';
         $widgetCategories['all-shop-page'] = 'All shoppage';
         $widgetCategories['top-20'] = 'Top-20';
+        $widgetCategories['newest-code'] = 'Newest code';
         return $widgetCategories;
     }
 }

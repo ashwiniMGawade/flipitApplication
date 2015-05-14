@@ -27,12 +27,10 @@ $newestOffers = $this->partial(
      <?php echo $newestOffers; ?>  
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
-        <?php
-        $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-        echo $this->esi($this->locale.'signup/signupwidget?shopId='
-            .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
-        $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
-        echo $frontendSidebarHelper->popularShopWidget();
-        ?>
+    <?php
+    $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+    $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+    echo $frontendSidebarHelper->sidebarWidgets('newest-code', $this);
+    ?>
     </aside>
 </div>

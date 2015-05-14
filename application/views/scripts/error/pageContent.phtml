@@ -56,17 +56,14 @@ if ($this->pageMode == true) {
         <aside class="col-md-4 col-sm-4" id="sidebar"> 
             <?php 
             $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-            echo $this->esi($this->locale.'signup/signupwidget?shopId='
-                .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
-
-            echo $frontendSidebarHelper->popularShopWidget();
-            echo $frontendSidebarHelper->popularCategoryWidget();
-            echo $this->partial(
-                'socialcode/social-code.phtml',
-                array('zendForm' => $this->zendForm
-                )
-            );
-             ?>  
+            if ($this->pageCssClass == 'faq-page') {
+                echo $frontendSidebarHelper->sidebarWidgets('faq-pages', $this);
+            } else if ($this->page['pageType'] == "offer") {
+                echo $frontendSidebarHelper->sidebarWidgets('special-page', $this);
+            } else {
+                echo $frontendSidebarHelper->sidebarWidgets('info-pages', $this);
+            }
+            ?>  
         </aside> 
     </div>
 <?php 

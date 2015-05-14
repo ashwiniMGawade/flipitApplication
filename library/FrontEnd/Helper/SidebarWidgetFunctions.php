@@ -32,7 +32,7 @@ class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
                     $this->getNonDefaultWidget($widget);
                 } else {
                     if (!empty($widgetTitle)) {
-                        $this->$widgetTitle($obj);
+                        $this->$widgetTitle($widgetType, $obj);
                     }
                 }
             }
@@ -47,31 +47,38 @@ class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
         }
     }
 
-    public function socialCodeWidget($obj)
+    public function socialCodeWidget($widgetType, $obj)
     {
         if (!empty($obj->zendForm)) {
             echo $obj->partial('socialcode/social-code.phtml', array('zendForm' => $obj->zendForm));
         }
     }
 
-    public function signUpWidget($obj)
+    public function signUpWidget($widgetType, $obj)
     {
-        if ($obj->currentStoreInformation[0]['showSignupOption']) :
+        if ($widgetType == 'no-money-shops' || $widgetType == 'money-shops') {
+            if ($obj->currentStoreInformation[0]['showSignupOption']) {
+                echo $obj->esi(
+                    $obj->locale.'signup/signupwidget?shopId='.$obj->currentStoreInformation[0]['id']
+                    .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage='
+                );
+            }
+        } else {
             echo $obj->esi(
-                $obj->locale.'signup/signupwidget?shopId='.$obj->currentStoreInformation[0]['id']
+                $obj->locale.'signup/signupwidget?shopId='.''
                 .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage='
             );
-        endif;
+        }
     }
 
-    public function shopLatestNewsWidget($obj)
+    public function shopLatestNewsWidget($widgetType, $obj)
     {
         if (!empty($obj->latestShopUpdates)) {
             echo $obj->partial('store/_latestNews.phtml', array('latestShopUpdates' => $obj->latestShopUpdates));
         }
     }
 
-    public function popularEditorWidget($obj)
+    public function popularEditorWidget($widgetType, $obj)
     {
         $howToUseGuidePermalink = "how-to/".$obj->currentStoreInformation[0]['permaLink'];
         if (!empty($obj->currentStoreInformation[0]['howtoguideslug'])) {
@@ -241,7 +248,7 @@ EOD;
         return $cacheStatus;
     }
 
-    public function shopsAlsoViewedWidget($obj)
+    public function shopsAlsoViewedWidget($widgetType, $obj)
     {
         $similarStoresViewedContent = '';
         if (!empty($obj->currentStoreInformation[0]['id'])) {
@@ -292,7 +299,7 @@ EOD;
         <ul class="tags">';
     }
 
-    public function plusTopPopularOffers($obj)
+    public function plusTopPopularOffers($widgetType, $obj)
     {
         $topPopularOffers = '';
         if (!empty($obj->topPopularOffers)) {
@@ -306,7 +313,7 @@ EOD;
         echo $topPopularOffers;
     }
 
-    public function plusRecentlyAddedArticles($obj)
+    public function plusRecentlyAddedArticles($widgetType, $obj)
     {
         $recentlyAddedArticles = '';
         if (!empty($obj->recentlyAddedArticles)) {

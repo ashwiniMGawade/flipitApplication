@@ -810,11 +810,12 @@ class BackEnd_Helper_viewHelper
         $widgetCategories['no-money-shops'] = $this->zendTranslate->translate('backend_No money shops');
         $widgetCategories['categories'] = $this->zendTranslate->translate('backend_Categories');
         $widgetCategories['special-page'] = $this->zendTranslate->translate('backend_Special page');
-        $widgetCategories['plus-page'] = $this->zendTranslate->translate('backend_Plus Page');
+        $widgetCategories['plus-page'] = $this->zendTranslate->translate('backend_Plus page');
         $widgetCategories['faq-pages'] = $this->zendTranslate->translate('backend_FAQ pages');
         $widgetCategories['info-pages'] = $this->zendTranslate->translate('backend_Info pages');
-        $widgetCategories['all-shop-pages'] = $this->zendTranslate->translate('backend_All shoppage');
+        $widgetCategories['all-shop-page'] = $this->zendTranslate->translate('backend_All shop page');
         $widgetCategories['top-20'] = $this->zendTranslate->translate('backend_Top-20');
+        $widgetCategories['newest-code'] = $this->zendTranslate->translate('backend_Newest code');
         return $widgetCategories;
     }
 }
