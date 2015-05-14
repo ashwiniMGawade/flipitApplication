@@ -117,10 +117,6 @@ class FrontEnd_Helper_OffersPartialFunctions
 
     public function getOfferDates($currentOffer, $daysTillOfferExpires)
     {
-        $startDateObject = (object) $currentOffer->startDate;
-        $endDateObject = (object) $currentOffer->endDate;
-        $startDate = new Zend_Date($startDateObject->date);
-        $endDate = new Zend_Date($endDateObject->date);
         $offerDates = '';
         $startDateFormat = LOCALE == 'us'
             ? Zend_Date::MONTH_NAME.' '.Zend_Date::DAY
@@ -128,6 +124,10 @@ class FrontEnd_Helper_OffersPartialFunctions
         $endDateFormat = LOCALE == 'us'
             ? Zend_Date::MONTH_NAME.' '.Zend_Date::DAY.', '.Zend_Date::YEAR
             : Zend_Date::DATE_LONG;
+        $startDateObject = (object) $currentOffer->startDate;
+        $endDateObject = (object) $currentOffer->endDate;
+        $startDate = new Zend_Date(strtotime($startDateObject->format('Y-m-d')));
+        $endDate = new Zend_Date(strtotime($endDateObject->format('Y-m-d')));
         if ($currentOffer->discountType == "CD") {
             $offerDates .= FrontEnd_Helper_viewHelper::__translate('valid from');
             $offerDates .= ' ';

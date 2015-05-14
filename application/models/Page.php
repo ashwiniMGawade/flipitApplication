@@ -95,7 +95,7 @@ class Page extends BasePage
     {
         $updatePage = Doctrine_Query::create()
             ->update('Page p')
-            ->set('p.permaLink',"'plus'")
+            ->set('p.permaLink', "'plus'")
             ->where('p.id=66')
             ->execute();
         return true;
