@@ -294,8 +294,16 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             <div class="mainpage-content-right" style="height : 20px;"></div>
                         </div>
                         <div class="mainpage-content-line">
-                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('backend_Page subtitle'); ?></strong></label></div>
-                            <div class="mainpage-content-right"><input type="text" value="<?php echo $this->pageDetail['subtitle']; ?>" name="subtitle" id="subtitle" class="span3" placeholder="<?php echo $this->translate('backend_Page subtitle'); ?>"></div>
+                            <div class="mainpage-content-left">
+                                <label>
+                                    <strong><?php echo $this->translate('backend_Page subtitle'); ?></strong>
+                                </label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <input type="text" value="<?php echo $this->pageDetail['subtitle']; ?>"
+                                    name="subtitle" id="subtitle" class="span3"
+                                    placeholder="<?php echo $this->translate('backend_Page subtitle'); ?>">
+                            </div>
                             <div class="mainpage-content-right" style="height : 20px;"></div>
                         </div>
                         <div class="mainpage-content-line">
