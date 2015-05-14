@@ -16,7 +16,7 @@ class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
                 }
             }
         }
-        return true;
+        return;
     }
 
     public function getNonDefaultWidget($widget)
@@ -300,12 +300,14 @@ EOD;
     {
         $recentlyAddedArticles = '';
         if (!empty($currentView->recentlyAddedArticles)) {
-            $recentlyAddedArticles = $currentView->partial(
+            $recentlyAddedArticles = '<div class="in-block">';
+            $recentlyAddedArticles .= $currentView->partial(
                 'plus/_recentlyAddedArticles.phtml',
                 array(
                     'recentlyAddedArticles' => $currentView->recentlyAddedArticles
                 )
             );
+            $recentlyAddedArticles .= "</div>";
         }
         echo $recentlyAddedArticles;
     }
