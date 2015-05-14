@@ -165,19 +165,6 @@ class SpecialPagesOffers extends BaseSpecialPagesOffers
         return true;
     }
 
-    public static function updateSpecialPageOfferPosition($position, $pageId)
-    {
-        if (!empty($position) && !empty($pageId)) {
-            Doctrine_Query::create()
-                ->update('SpecialPagesOffers p')
-                ->set('p.position', 'p.position -1')
-                ->where('p.position >' . $position)
-                ->andWhere('p.pageId='. $pageId)
-                ->execute();
-        }
-        return true;
-    }
-
     public static function getNewOfferList($pageId)
     {
         $newOffersList = array();
@@ -206,7 +193,6 @@ class SpecialPagesOffers extends BaseSpecialPagesOffers
     {
         if ($id) {
             self::deleteSpecialPageOffer($id);
-            self::updateSpecialPageOfferPosition($position, $pageId);
             $newOffersList = self::getNewOfferList($pageId);
             $newPosition = 1;
             foreach ($newOffersList as $newOffer) {
