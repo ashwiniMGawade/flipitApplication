@@ -160,29 +160,21 @@ class Widget extends \KC\Entity\Widget
         return $id;
     }
 
-    public static function getAllUrls($id)
+    public static function getAllUrls()
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('w, p, wp')
-            ->from('KC\Entity\Widget', 'w')
-            ->leftJoin('w.Widget', 'p')
-            ->leftJoin('p.widget', 'wp')
-            ->setParameter(1, $id)
-            ->where('w.id = ?1')
-            ->setParameter(2, 0)
-            ->andWhere('wp.deleted = ?2');
-        $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        $urlsArray = array();
-        # check this widget has one or more related pages
-        if (isset($data['Widget']) && count($data['Widget']) > 0) {
-            # traverse through all shops
-            foreach ($data['Widget'] as $value) {
-                # check if a category has permalink then add it into array
-                if (isset($value['widget']['permaLink']) && strlen($value['widget']['permaLink']) > 0) {
-                    $urlsArray[] = $value['widget']['permaLink'];
+        $query = $entityManagerUser->select('p.permalink')
+            ->from('KC\Entity\Page', 'p')
+            ->andWhere('p.deleted = 0');
+        $pages = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $pageUrls = array();
+        if (!empty($pages)) {
+            foreach ($pages as $page) {
+                if (!empty($page['permalink'])) {
+                    $pageUrls[] = $page['permalink'];
                 }
             }
         }
-        return $urlsArray ;
+        return $pageUrls ;
     }
 }

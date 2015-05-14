@@ -53,7 +53,7 @@ class Admin_WidgetController extends Zend_Controller_Action
     public function onlinestatusAction()
     {
         $widgetId = \KC\Repository\Widget::changeStatus($this->_getAllParams());
-        self::updateVarnish($widgetId);
+        self::updateVarnish();
         echo Zend_Json::encode($widgetId);
         exit();
     }
@@ -85,7 +85,7 @@ class Admin_WidgetController extends Zend_Controller_Action
         $flash = $this->_helper->getHelper('FlashMessenger');
         $widget = new \KC\Repository\Widget();
         if ($widget->updateWidget($parameters)) {
-            self::updateVarnish($id);
+            self::updateVarnish();
             $url = HTTP_PATH.'admin/widget#'.$this->getRequest()->getParam('qString');
             self::addFlashMessage('Widget has been updated successfully', 'success', $url);
         } else {
@@ -128,10 +128,10 @@ class Admin_WidgetController extends Zend_Controller_Action
         exit();
     }
 
-    public function updateVarnish($id)
+    public function updateVarnish()
     {
         $varnishObj = new \KC\Repository\Varnish();
-        $varnishUrls = \KC\Repository\Widget::getAllUrls($id);
+        $varnishUrls = \KC\Repository\Widget::getAllUrls();
         if (isset($varnishUrls) && count($varnishUrls) > 0) {
             foreach ($varnishUrls as $value) {
                 $varnishObj->addUrl(HTTP_PATH_FRONTEND . $value);
