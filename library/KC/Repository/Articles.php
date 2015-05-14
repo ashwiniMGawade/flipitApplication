@@ -146,7 +146,8 @@ class Articles extends \KC\Entity\Articles
             ->from('KC\Entity\Articles', 'a')
             ->where('a.publish = 1')
             ->andWhere('a.deleted= 0')
-            ->andWhere($queryBuilder->expr()->lte("a.publishdate", $queryBuilder->expr()->literal($currentDateTime)));
+            ->andWhere($queryBuilder->expr()->lte("a.publishdate", $queryBuilder->expr()->literal($currentDateTime)))
+            ->orderBy('a.publishdate', 'DESC');
         $articlesList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $articlesList;
     }
