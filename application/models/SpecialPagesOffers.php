@@ -263,7 +263,7 @@ class SpecialPagesOffers extends BaseSpecialPagesOffers
                     $constraintsRelatedOffers = Offer::getOffersByPageConstraints($page, $currentDate);
                     $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
                     SpecialList::updateTotalOffersAndTotalCoupons(
-                        count($pageRelatedOffersAndPageConstraintsOffers),
+                        count(Offer::getSpecialPageOffersByFallBack($page)),
                         0,
                         $page['id']
                     );
