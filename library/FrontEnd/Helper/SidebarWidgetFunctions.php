@@ -27,11 +27,13 @@ class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
         $pageWidgets = '';
         if (!empty($widgets)) {
             foreach ($widgets as $widget) {
-                $widgetTitle = strtolower($widget['widget']['slug']);
+                $widgetTitle = strtolower($widget['widget']['function_name']);
                 if ($widget['widget']['showWithDefault'] == 1) {
                     $this->getNonDefaultWidget($widget);
                 } else {
-                    $this->$widgetTitle($obj);
+                    if (!empty($widgetTitle)) {
+                        $this->$widgetTitle($obj);
+                    }
                 }
             }
         }
@@ -241,26 +243,27 @@ EOD;
 
     public function shopsAlsoViewedWidget($obj)
     {
-        $shopId = $this->currentStoreInformation[0]['id'];
-        $shopName = $this->currentStoreInformation[0]['name'];
-        $shopsAlsoViewed =  \KC\Repository\Shop::getShopsAlsoViewed($shopId);
-        if ($shopsAlsoViewed[0]['shopsViewedIds'] != '') {
-            $similarStoresViewedContent = self::getSimilarStoresViewedDivContent($shopName);
-            $storeIds = explode(',', $shopsAlsoViewed[0]['shopsViewedIds']);
-            $storePresent = self::getShopsByFallback($storeIds);
-            if ($storePresent) {
-                foreach ($storeIds as $storeId) {
-                    $similarStoresViewedContent .= self::addLiOfSimilarStoresViewedContent($storeId);
+        $similarStoresViewedContent = '';
+        if (!empty($obj->currentStoreInformation[0]['id'])) {
+            $shopId = $obj->currentStoreInformation[0]['id'];
+            $shopName = $obj->currentStoreInformation[0]['name'];
+            $shopsAlsoViewed =  \KC\Repository\Shop::getShopsAlsoViewed($shopId);
+            if ($shopsAlsoViewed[0]['shopsViewedIds'] != '') {
+                $similarStoresViewedContent = self::getSimilarStoresViewedDivContent($shopName);
+                $storeIds = explode(',', $shopsAlsoViewed[0]['shopsViewedIds']);
+                $storePresent = self::getShopsByFallback($storeIds);
+                if ($storePresent) {
+                    foreach ($storeIds as $storeId) {
+                        $similarStoresViewedContent .= self::addLiOfSimilarStoresViewedContent($storeId);
+                    }
+                } else {
+                    $topFiveSimilarShopsViewed =  \KC\Repository\Shop::getSimilarShopsForAlsoViewedWidget($shopId, 5);
+                    foreach ($topFiveSimilarShopsViewed as $similarShopId) {
+                        $similarStoresViewedContent .= self::addLiOfSimilarStoresViewedContent($similarShopId);
+                    }
                 }
-            } else {
-                $topFiveSimilarShopsViewed =  \KC\Repository\Shop::getSimilarShopsForAlsoViewedWidget($shopId, 5);
-                foreach ($topFiveSimilarShopsViewed as $similarShopId) {
-                    $similarStoresViewedContent .= self::addLiOfSimilarStoresViewedContent($similarShopId);
-                }
+                $similarStoresViewedContent .='</ul></div>';
             }
-            $similarStoresViewedContent .='</ul></div>';
-        } else {
-            $similarStoresViewedContent = '';
         }
         echo $similarStoresViewedContent;
     }

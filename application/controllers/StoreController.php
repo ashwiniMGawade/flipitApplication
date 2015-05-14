@@ -258,10 +258,7 @@ class StoreController extends Zend_Controller_Action
                 )
             );
         }
-
-        $frontendSidebarHelper = new \FrontEnd_Helper_SidebarWidgetFunctions();
-        $this->view->popularStoresList = $frontendSidebarHelper->PopularShopWidget();
-
+        
         $signUpFormForStorePage = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'largeSignupForm',
             'SignUp'

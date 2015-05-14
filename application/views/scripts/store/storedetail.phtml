@@ -94,45 +94,15 @@ if($this->profileImage['addtosearch'] == 1):
     endif;
 endif;
 
-$howToUseGuidePermalink = "how-to/".$this->currentStoreInformation[0]['permaLink'];
-if (!empty($this->currentStoreInformation[0]['howtoguideslug'])) {
-    $howToUseGuidePermalink = 
-        $this->currentStoreInformation[0]['permaLink']. '/'
-        . $this->currentStoreInformation[0]['howtoguideslug'];
-}
 $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
 $offersCount = count($this->offers);
 
-$actualUrlWithoutDoubleSlash = explode("//", $this->currentStoreInformation[0]['actualUrl']);
-if (isset($actualUrlWithoutDoubleSlash[1])):
-    $actualUrl = $actualUrlWithoutDoubleSlash[1];
-else:
-    $actualUrl = $this->currentStoreInformation[0]['actualUrl'];
-endif;
-
 $frontShopHeaderHelper = new FrontEnd_Helper_ShopHeaderPartialFunctions();
-$disqusReplyCounter = $frontShopHeaderHelper->getDisqusReplyCounter($this->currentStoreInformation[0]);
 $headerBlock = $frontShopHeaderHelper->getShopHeader(
     $this->currentStoreInformation[0],
     $message = 'storeDetail',
     $offerTitle = 'storeDetail'
 );
-
-$shopEditor = '';
-if($this->shopEditor != null):
-    $shopEditor = $this->partial(
-        $storeViewPartialPath.'_storeEditor.phtml',
-        array(
-           'shopEditor' => array(
-                $this->shopEditor
-            ),
-           'shop' => $this->currentStoreInformation[0],
-           'howToUseGuidePermalink'=>$howToUseGuidePermalink,
-           'actualUrl'=>$actualUrl,
-           'disqusReplyCounter' => $disqusReplyCounter
-        )
-    );
-endif;
 
 $sixShopReasons = '';
 if (!empty($this->sixShopReasons)) {

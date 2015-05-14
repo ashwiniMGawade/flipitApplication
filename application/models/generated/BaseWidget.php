@@ -55,6 +55,10 @@ abstract class BaseWidget extends Doctrine_Record
              'default' => 0,
              'type' => 'boolean',
              ));
+        $this->hasColumn('function_name', 'string', 255, array(
+            'type' => 'string',
+            'length' => '255',
+        ));
     }
 
     public function setUp()

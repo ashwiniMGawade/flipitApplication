@@ -26,6 +26,11 @@ class Widget
     private $slug;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $function_name;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $content;
