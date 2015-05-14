@@ -11,6 +11,7 @@ class PageWidgets extends \KC\Entity\PageWidgets
             ->from('KC\Entity\pageWidgets', 'sw')
             ->leftJoin('sw.widget', 'w')
             ->where($queryBuilder->expr()->eq('sw.widget_type', $queryBuilder->expr()->literal($widgetsType)))
+            ->andWhere('w.status= 1')
             ->orderBy('sw.position', 'ASC');
         $pageWidets = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageWidets;
