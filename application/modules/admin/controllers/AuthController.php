@@ -279,11 +279,12 @@ class Admin_AuthController extends Zend_Controller_Action
     {
         if($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
-
-            $id = \Auth_StaffAdapter::getIdentity();
-
+            $id = \Auth_StaffAdapter::getIdentity()->id;
+            $params['id'] = $id;
             # call used password update function
-            $user = Doctrine_Core::getTable ( 'User' )->find ( $id["id"] );
+            $entityManagerUser  = \Zend_Registry::get('emUser');
+            $repo = $entityManagerUser->getRepository('KC\Entity\User');
+            $user = new \KC\Repository\User();
             $result = $user->updatePassword($params);
 
             $flash = $this->_helper->getHelper('FlashMessenger');

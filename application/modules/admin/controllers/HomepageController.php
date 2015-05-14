@@ -240,7 +240,11 @@ class Admin_HomepageController extends Zend_Controller_Action
         $this->view->locale = \KC\Repository\Signupmaxaccount::getAllMaxAccounts();
         $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         $this->view->timezones_list = \KC\Repository\Signupmaxaccount::$timezones;
-        $this->view->localeStatus = \KC\Repository\Website::getLocaleStatus($_COOKIE['site_name']);
+        $site_name = "kortingscode.nl";
+        if (isset($_COOKIE['site_name'])) {
+            $site_name =  $_COOKIE['site_name'];
+        }
+        $this->view->localeStatus = \KC\Repository\Website::getLocaleStatus($site_name);
     }
 
     ///********End shop section function for popular shop ***********///

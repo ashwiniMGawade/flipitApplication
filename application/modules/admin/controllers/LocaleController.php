@@ -29,14 +29,17 @@ class Admin_LocaleController extends Zend_Controller_Action
         $this->view->locale = KC\Repository\Signupmaxaccount::getAllMaxAccounts();
         $this->view->localeSettings = KC\Repository\LocaleSettings::getLocaleSettings();
         $this->view->timezones_list = KC\Repository\Signupmaxaccount::$timezones;
-        $this->view->localeStatus = KC\Repository\Website::getLocaleStatus($_COOKIE['site_name']);
+        $site_name = "kortingscode.nl";
+        if (isset($_COOKIE['site_name'])) {
+            $site_name =  $_COOKIE['site_name'];
+        }
+        $this->view->localeStatus = KC\Repository\Website::getLocaleStatus($site_name);
         
-        $this->view->chainHrefLang = KC\Repository\Website::getWebsiteDetails('', $_COOKIE['site_name']);
+        $this->view->chainHrefLang = KC\Repository\Website::getWebsiteDetails('', $site_name);
 
         if ($this->getRequest()->isPost()) {
             $chainParameters = $this->getRequest()->getParams();
-            //echo "<pre>";print_r($this->view->chainParameters);die;
-            KC\Repository\Website::saveChain($chainParameters['chain'], $_COOKIE['site_name']);
+            KC\Repository\Website::saveChain($chainParameters['chain'], $site_name);
             $this->setFlashMessage($this, 'Chain has been updated successfully');
             $this->_redirect(HTTP_PATH . 'admin/locale/locale-settings');
         }

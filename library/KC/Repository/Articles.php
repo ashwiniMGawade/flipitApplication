@@ -100,18 +100,19 @@ class Articles extends \KC\Entity\Articles
             ->orderBy("p.position", "ASC")
             ->setMaxResults($limit);
         $popularArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $popularArticles;
+        return array_slice($popularArticles, 0, 10);
     }
 
     public static function getMostReasArticlesForPlusOverview($limit = 0)
     {
         $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('p, a, artimg, thumb')
+        $query = $queryBuilder->select('p, a, artimg, thumb, featuredImage')
             ->from('KC\Entity\PopularArticles', 'p')
             ->leftJoin('p.articles', 'a')
             ->leftJoin('a.articleImage', 'artimg')
             ->leftJoin('a.thumbnail', 'thumb')
+            ->leftJoin('a.featuredImage', 'featuredImage')
             ->where('a.publish = 1')
             ->andWhere('a.deleted = 0')
             ->andWhere('a.publishdate <='. $queryBuilder->expr()->literal($currentDateTime))

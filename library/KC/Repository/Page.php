@@ -41,7 +41,7 @@ class Page Extends \KC\Entity\Page
             ->andWhere('p.deleted = 0');
         $pageHomeImage = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $imagePath = '';
-        if (!empty($pageHomeImage)) {
+        if (!empty($pageHomeImage[0]['path']) && !empty($pageHomeImage[0]['name'])) {
             $imagePath = PUBLIC_PATH_CDN.$pageHomeImage[0]['path'].$pageHomeImage[0]['name'];
         }
         return $imagePath;

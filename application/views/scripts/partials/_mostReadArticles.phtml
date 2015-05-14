@@ -7,9 +7,16 @@
                 $carouselIndicators = '';
                 foreach ($this->mostReadArticles as $mostReadArticle) {
                     if (
-                        !empty($mostReadArticle['articles']['articleImage']['name'])
+                        !empty($mostReadArticle['articles']['featuredImage']['name'])
                         && $mostReadArticle['articles']['featuredImageStatus'] == 1
                     ) {
+                        $mostReadArticleImage = 
+                            !empty($mostReadArticle['articles']['featuredImage']['name'])
+                            ? PUBLIC_PATH_CDN
+                            .$mostReadArticle['articles']['featuredImage']['path'] 
+                            .$mostReadArticle['articles']['featuredImage']['name']
+                            : '';
+                    } else if (!empty($mostReadArticle['articles']['articleImage']['name'])) {        
                         $mostReadArticleImage = 
                             !empty($mostReadArticle['articles']['articleImage']['name'])
                             ? PUBLIC_PATH_CDN

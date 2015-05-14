@@ -138,15 +138,18 @@ class StoreController extends Zend_Controller_Action
             }
 
             if ($shopInformation[0]['showChains']) {
-                $frontEndViewHelper = new \FrontEnd_Helper_SidebarWidgetFunctions();
-                $shopChains = $frontEndViewHelper->sidebarChainWidget(
-                    $shopInformation[0]['id'],
-                    $shopInformation[0]['name'],
-                    $shopInformation[0]['chainItemId']
-                );
-                if ($shopChains['hasShops'] && isset($shopChains['string'])) {
-                    $this->view->shopChain = $shopChains['string'];
+                if ($shopInformation[0]['chainItemId'] != '') {
+                    $frontEndViewHelper = new \FrontEnd_Helper_SidebarWidgetFunctions();
+                    $shopChains = $frontEndViewHelper->sidebarChainWidget(
+                        $shopInformation[0]['id'],
+                        $shopInformation[0]['name'],
+                        $shopInformation[0]['chainItemId']
+                    );
+                    if ($shopChains['hasShops'] && isset($shopChains['string'])) {
+                        $this->view->shopChain = $shopChains['string'];
+                    }
                 }
+                
             }
 
             $shopImage = PUBLIC_PATH_CDN.ltrim($shopInformation[0]['logo']['path'], "/")
