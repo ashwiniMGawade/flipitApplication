@@ -769,7 +769,9 @@ class Page Extends \KC\Entity\Page
             $savePage->publishDate = new \DateTime($publishDate);
         }
         $savePage->pageTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageTitle']);
-        $savePage->subtitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['subtitle']);
+        $savePage->subtitle = \FrontEnd_Helper_viewHelper::sanitize(
+            \BackEnd_Helper_viewHelper::stripSlashesFromString($params['subtitle'])
+        );
         $savePage->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagepermalink']);
         $savePage->metaTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagemetaTitle']);
         $savePage->metaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagemetaDesc']);
@@ -1061,7 +1063,9 @@ class Page Extends \KC\Entity\Page
             $updatePage->publishDate = new \DateTime($publishDate);
         }
         $updatePage->pageTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageTitle']);
-        $updatePage->subtitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['subtitle']);
+        $updatePage->subtitle = \FrontEnd_Helper_viewHelper::sanitize(
+            \BackEnd_Helper_viewHelper::stripSlashesFromString($params['subtitle'])
+        );
         $updatePage->permaLink = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagepermalink']);
         $updatePage->metaTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagemetaTitle']);
         $updatePage->metaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagemetaDesc']);
