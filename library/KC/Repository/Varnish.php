@@ -23,7 +23,9 @@ class Varnish extends \KC\Entity\Varnish
             $v->status  = 'queue';
             $v->created_at = new \DateTime('now');
             $v->updated_at = new \DateTime('now');
-            $v->refresh_time = new \DateTime($refreshTime);
+            if (!empty($refreshTime)) {
+                $v->refresh_time = new \DateTime($refreshTime);
+            }
             $entityManagerLocale = \Zend_Registry::get('emLocale');
             $entityManagerLocale->persist($v);
             $entityManagerLocale->flush();
