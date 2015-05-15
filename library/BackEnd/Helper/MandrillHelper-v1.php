@@ -143,8 +143,10 @@ class BackEnd_Helper_MandrillHelper
         if ($type == 'doc2') {
             $startDateObject = (object) $currentOffer->startDate;
             $endDateObject = (object) $currentOffer->endDate;
-            $startDate = new Zend_Date(strtotime($startDateObject->format('Y-m-d h:i:s')));
-            $endDate = new Zend_Date(strtotime($endDateObject->format('Y-m-d h:i:s')));
+            $startDateString = isset($startDateObject->date) ? $startDateObject->date : $startDateObject->format('Y-m-d');
+            $endDateString = isset($endDateObject->date) ? $endDateObject->date : $endDateObject->format('Y-m-d');
+            $startDate = new Zend_Date(strtotime($startDateString));
+            $endDate = new Zend_Date(strtotime($endDateString));
         } else {
             $startDate = new Zend_Date(strtotime($currentOffer->startDate));
             $endDate = new Zend_Date(strtotime($currentOffer->endDate));
