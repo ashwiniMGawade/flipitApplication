@@ -126,8 +126,10 @@ class FrontEnd_Helper_OffersPartialFunctions
             : Zend_Date::DATE_LONG;
         $startDateObject = (object) $currentOffer->startDate;
         $endDateObject = (object) $currentOffer->endDate;
-        $startDate = new Zend_Date(strtotime($startDateObject->format('Y-m-d')));
-        $endDate = new Zend_Date(strtotime($endDateObject->format('Y-m-d')));
+        $startDateString = isset($startDateObject->date) ? $startDateObject->date : $startDateObject->format('Y-m-d');
+        $endDateString = isset($endDateObject->date) ? $endDateObject->date : $endDateObject->format('Y-m-d');
+        $startDate = new Zend_Date(strtotime($startDateString));
+        $endDate = new Zend_Date(strtotime($endDateString));
         if ($currentOffer->discountType == "CD") {
             $offerDates .= FrontEnd_Helper_viewHelper::__translate('valid from');
             $offerDates .= ' ';
