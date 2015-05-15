@@ -9,9 +9,9 @@ class PageWidgets extends BasePageWidgets
             $position = 1;
             foreach ($widgetsList as $widget) {
                 $pageWidgets = new PageWidgets();
-                $pageWidgets->widget_type = $widgetType;
-                $pageWidgets->position = $position;
-                $pageWidgets->widgetId = $widget['id'];
+                $pageWidgets->widget_type = FrontEnd_Helper_viewHelper::sanitize($widgetType);
+                $pageWidgets->position = FrontEnd_Helper_viewHelper::sanitize($position);
+                $pageWidgets->widgetId = FrontEnd_Helper_viewHelper::sanitize($widget['id']);
                 $pageWidgets->save();
                 $position++;
             }

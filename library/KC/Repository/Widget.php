@@ -6,18 +6,20 @@ class Widget extends \KC\Entity\Widget
     public function addWidget($params)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $w = new \KC\Entity\Widget();
-        $w->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params ['title']);
-        $w->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params ['content']);
-        $w->status = 1;
-        $w->deleted = 0;
-        $w->created_at = new \DateTime('now');
-        $w->updated_at = new \DateTime('now');
-        $w->showWithDefault = 1;
-        $entityManagerLocale->persist($w);
+        $widget = new \KC\Entity\Widget();
+        $widget->title = \FrontEnd_Helper_viewHelper::sanitize(
+            \BackEnd_Helper_viewHelper::stripSlashesFromString($params ['title'])
+        );
+        $widget->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params ['content']);
+        $widget->status = 1;
+        $widget->deleted = 0;
+        $widget->created_at = new \DateTime('now');
+        $widget->updated_at = new \DateTime('now');
+        $widget->showWithDefault = 1;
+        $entityManagerLocale->persist($widget);
         $entityManagerLocale->flush();
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_widget_list');
-        return $w->id;
+        return $widget->id;
     }
     
     public static function getDefaultwidgetList()

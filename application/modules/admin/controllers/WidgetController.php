@@ -119,7 +119,7 @@ class Admin_WidgetController extends Zend_Controller_Action
         $widgets = array();
         if (sizeof($widgetList) > 0) {
             foreach ($widgetList as $widget) {
-                    $widgets[] = ucfirst($widget['title']);
+                $widgets[] = ucfirst($widget['title']);
             }
         } else {
             $widgets[] = $this->view->translate("No Record Found");

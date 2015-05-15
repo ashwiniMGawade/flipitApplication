@@ -65,7 +65,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
                 </a>
                 <a href="#" onClick="javascript:callToPermanentDelete();" class="red fl mt10">
                     <strong>
-                        <span id="delete">DELETE</span>
+                        <span id="delete"><?php echo $this->translate('backend_DELETE');?></span>
                     </strong>
                 </a>
             </div>

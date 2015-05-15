@@ -95,9 +95,12 @@ class PageWidgets extends \KC\Entity\PageWidgets
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
         $pageWidgets = new \KC\Entity\pageWidgets();
-        $pageWidgets->widget_type = $widgetsType;
-        $pageWidgets->widget = $entityManagerLocale->find('KC\Entity\Widget', $widgetId);
-        $pageWidgets->position = (intval($newPosition) + 1);
+        $pageWidgets->widget_type = \FrontEnd_Helper_viewHelper::sanitize($widgetsType);
+        $pageWidgets->widget = $entityManagerLocale->find(
+            'KC\Entity\Widget',
+            \FrontEnd_Helper_viewHelper::sanitize($widgetId)
+        );
+        $pageWidgets->position = \FrontEnd_Helper_viewHelper::sanitize((intval($newPosition) + 1));
         $pageWidgets->deleted = 0;
         $pageWidgets->created_at = new \DateTime('now');
         $pageWidgets->updated_at = new \DateTime('now');
@@ -140,7 +143,7 @@ class PageWidgets extends \KC\Entity\PageWidgets
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->update('KC\Entity\pageWidgets', 'p')
-                ->set('p.position', $newPosition)
+                ->set('p.position', \FrontEnd_Helper_viewHelper::sanitize($newPosition))
                 ->where('p.id = '.$newWidget['id'])
                 ->getQuery();
             $query->execute();
@@ -177,8 +180,11 @@ class PageWidgets extends \KC\Entity\PageWidgets
             foreach ($widgetIds as $widgetId) {
                 $entityManagerLocale  = \Zend_Registry::get('emLocale');
                 $pageWidget = new \KC\Entity\PageWidgets();
-                $pageWidget->widget_type = $widgetType;
-                $pageWidget->widget = $entityManagerLocale->find('KC\Entity\Widget', $widgetId);
+                $pageWidget->widget_type = \FrontEnd_Helper_viewHelper::sanitize($widgetType);
+                $pageWidget->widget = $entityManagerLocale->find(
+                    'KC\Entity\Widget',
+                    \FrontEnd_Helper_viewHelper::sanitize($widgetId)
+                );
                 $pageWidget->position = $i;
                 $pageWidget->deleted = 0;
                 $pageWidget->created_at = new \DateTime('now');
