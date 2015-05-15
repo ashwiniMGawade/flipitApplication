@@ -177,6 +177,18 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             <div class="mainpage-content-right" style="height : 20px;"></div>
                         </div>
                         <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label>
+                                    <strong><?php echo $this->translate('backend_Page subtitle'); ?></strong>
+                                </label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <input type="text" name="subtitle" id="subtitle" class="span3"
+                                    placeholder="<?php echo $this->translate('backend_Page subtitle'); ?>">
+                            </div>
+                            <div class="mainpage-content-right" style="height : 20px;"></div>
+                        </div>
+                        <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Permalink'); ?></strong></label></div>
 
                             <div class="mainpage-content-right"><div class="mainpage-content-right-inner-left"><label><?php echo $this->translate('http://www.kortingscode.nl/'); ?></label></div><div class="mainpage-content-right-inner-right"><input type="text" class="span3" name="pagepermalink" id="pagepermalink" placeholder="<?php echo $this->translate('permalink'); ?>"></div>

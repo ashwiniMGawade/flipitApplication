@@ -37,6 +37,7 @@ class OfferController extends Zend_Controller_Action
             )
         );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
+        $this->view->subtitle = isset($pageDetails->subtitle) ? $pageDetails->subtitle : '';
         $this->viewHelperObject->getMetaTags(
             $this,
             isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',

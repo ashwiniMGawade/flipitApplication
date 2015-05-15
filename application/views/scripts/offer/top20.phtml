@@ -1,8 +1,9 @@
 <?php
 $partialViewPath = 'partials/';
 $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
-echo $pageHeader->getCategoryOrPageHeader(
+echo $pageHeader->getTop20Header(
     $this->pageTitle,
+    $this->subtitle,
     $pageHeader->getCategoryOrPageHeaderImage($this->pageHeaderImage)
 );
 ?>
