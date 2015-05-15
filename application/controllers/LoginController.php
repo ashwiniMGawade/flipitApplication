@@ -286,13 +286,13 @@ class LoginController extends Zend_Controller_Action
     {
         $username = base64_decode($this->getRequest()->getParam("email"));
         $password = $this->getRequest()->getParam("pwd");
-        $data_adapter = new \Auth_VisitorAdapter($username, $password);
+        $data_adapter = new \Auth_VisitorAdapter($username, MD5($password));
         $auth = \Zend_Auth::getInstance();
         $auth->setStorage(new \Zend_Auth_Storage_Session('front_login'));
         $result = $auth->authenticate($data_adapter);
         if (\Auth_VisitorAdapter::hasIdentity()) {
             $userid = \Auth_VisitorAdapter::getIdentity()->id;
-            $obj = new \KC\Entity\Visitor();
+            $obj = new \KC\Repository\Visitor();
             $obj->updateLoginTime($userid);
             $this->_helper->Login->setUserCookies();
             $url =
@@ -319,38 +319,38 @@ class LoginController extends Zend_Controller_Action
     {
         $username = base64_decode($this->getRequest()->getParam("email"));
         $password = $this->getRequest()->getParam("pwd");
-        $shopName = \KC\Repository\Shop::getShopName(base64_decode($this->getRequest()->getParam("shopid")));
+        
         if ($type == 'codealert') {
+            $shopName = \KC\Repository\Shop::getShopName(base64_decode($this->getRequest()->getParam("shopid")));
             $message = $shopName.' '.\FrontEnd_Helper_viewHelper::__translate('have been removed from your favorite shops');
             $visitorsId = \KC\Repository\Visitor::getVisitorDetailsByEmail($username);
-            $visitorsId = !empty($visitorsId) ? $visitorsId[0]['id'] : '';
+            $visitorsId = !empty($visitorsId) ? $visitorsId['id'] : '';
             if (isset($visitorsId) && $visitorsId != '') {
-                $updateWeekNewLttr =
-                    Doctrine_Query::create()->delete()
-                        ->from('FavoriteShop fs')
-                        ->where("fs.shopId=" . base64_decode($this->getRequest()->getParam("shopid")))
-                        ->andWhere('fs.visitorId='.$visitorsId)
-                        ->execute();
+                $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                $queryBuilder->delete("KC\Entity\FavoriteShop", "fv")
+                    ->where('fv.visitor='.$visitorsId)
+                    ->andWhere('fv.shop='.base64_decode($this->getRequest()->getParam("shopid")))
+                    ->getQuery()
+                    ->execute();
             }
         } else {
             $message = \FrontEnd_Helper_viewHelper::__translate('You are successfully unsubscribed to our newsletter');
-            $updateWeekNewLttr =
-                Doctrine_Query::create()
-                ->update('Visitor')
-                ->set('weeklyNewsLetter', 0)
-                ->where("email = '".$username."'")
-                ->execute();
+            $newsletterQueryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $newsletterQueryBuilder->update('KC\Entity\Visitor', 'v')
+                ->set('v.weeklyNewsLetter', 0)
+                ->where($newsletterQueryBuilder->expr()->eq("v.email", $newsletterQueryBuilder->expr()->literal($username)))
+                ->getQuery()->execute();
         }
 
         $moduleKey = $this->getRequest()->getParam('lang', null);
-
-        $data_adapter = new \Auth_VisitorAdapter($username, $password);
+        $data_adapter = new \Auth_VisitorAdapter($username, MD5($password));
         $auth = \Zend_Auth::getInstance();
         $auth->setStorage(new Zend_Auth_Storage_Session('front_login'));
         $result = $auth->authenticate($data_adapter);
-        if (A\uth_VisitorAdapter::hasIdentity()) {
+
+        if (\Auth_VisitorAdapter::hasIdentity()) {
             $userid = \Auth_VisitorAdapter::getIdentity()->id;
-            $obj = new \KC\Entity\Visitor();
+            $obj = new \KC\Repository\Visitor();
             $obj->updateLoginTime($userid);
             $this->_helper->Login->setUserCookies();
             $flash = $this->_helper->getHelper('FlashMessenger');
