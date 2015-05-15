@@ -190,17 +190,18 @@ class SignupController extends Zend_Controller_Action
                             array(
                                 'topOffers' => \KC\Repository\Offer::getTopOffers(5),
                                 'mailType' => 'welcome',
-                                'firstName' => $visitorDetails[0]['firstName']
+                                'firstName' => $visitorDetails['firstName'],
+                                'testStatus' => 'doc2'
                                 )
                         )
                     );
-        $visitorName = $visitorDetails[0]['firstName'] .' '. $visitorDetails[0]['lastName'];
-        \BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'frontend', $visitorDetails[0]['email']);
+        $visitorName = $visitorDetails['firstName'] .' '. $visitorDetails['lastName'];
+        \BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'frontend', $visitorDetails['email']);
         $mailer->send(
             \FrontEnd_Helper_viewHelper::__email('email_sitename'),
             $fromEmail[0]['emailperlocale'],
             $visitorName,
-            $visitorDetails[0]['email'],
+            $visitorDetails['email'],
             \FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail subject'),
             $content,
             \FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail header'),
