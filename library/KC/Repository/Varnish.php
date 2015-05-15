@@ -97,9 +97,10 @@ class Varnish extends \KC\Entity\Varnish
     public static function getVarnishUrlsCount()
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('count(v.id) as count')
+        $query = $queryBuilder
+            ->select('count(v.id) as Vcount')
             ->from('KC\Entity\Varnish', 'v');
         $varnishUrlsCount = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return !empty($varnishUrlsCount) ? $varnishUrlsCount[0]['count'] : 0;
+        return !empty($varnishUrlsCount) ? $varnishUrlsCount[0]['Vcount'] : 0;
     }
 }
