@@ -62,7 +62,8 @@ if(!empty($this->topOffers)) {
             'publicPathCdn' => $publicPathCdn,
             'httpPath' => $httpPath,
             'mailType' => $this->mailType,
-            'locale' => $locale
+            'locale' => $locale,
+            'testStatus' => isset($this->testStatus) ? $this->testStatus :''
         )
     );
 }
