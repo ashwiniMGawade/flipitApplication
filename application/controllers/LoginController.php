@@ -286,7 +286,7 @@ class LoginController extends Zend_Controller_Action
     {
         $username = base64_decode($this->getRequest()->getParam("email"));
         $password = $this->getRequest()->getParam("pwd");
-        $data_adapter = new \Auth_VisitorAdapter($username, MD5($password));
+        $data_adapter = new \Auth_VisitorAdapter($username, $password);
         $auth = \Zend_Auth::getInstance();
         $auth->setStorage(new \Zend_Auth_Storage_Session('front_login'));
         $result = $auth->authenticate($data_adapter);
@@ -343,7 +343,7 @@ class LoginController extends Zend_Controller_Action
         }
 
         $moduleKey = $this->getRequest()->getParam('lang', null);
-        $data_adapter = new \Auth_VisitorAdapter($username, MD5($password));
+        $data_adapter = new \Auth_VisitorAdapter($username, $password);
         $auth = \Zend_Auth::getInstance();
         $auth->setStorage(new Zend_Auth_Storage_Session('front_login'));
         $result = $auth->authenticate($data_adapter);
