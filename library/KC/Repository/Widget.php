@@ -127,7 +127,7 @@ class Widget extends \KC\Entity\Widget
 
     public function updateWidget($parameters)
     {
-        $content = @addslashes($parameters['content']);
+        $content = addslashes($parameters['content']);
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->update('KC\Entity\Widget', 'w')
             ->set(
