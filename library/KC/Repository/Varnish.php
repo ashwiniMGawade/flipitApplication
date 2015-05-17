@@ -25,6 +25,8 @@ class Varnish extends \KC\Entity\Varnish
             $v->updated_at = new \DateTime('now');
             if (!empty($refreshTime)) {
                 $v->refresh_time = new \DateTime($refreshTime);
+            }else{
+                $v->refresh_time = new \DateTime('now');
             }
             $entityManagerLocale = \Zend_Registry::get('emLocale');
             $entityManagerLocale->persist($v);

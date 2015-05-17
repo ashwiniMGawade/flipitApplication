@@ -38,7 +38,14 @@ class Varnish extends BaseVarnish
     {
         $curl = curl_init(rtrim($url, '/'));
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "REFRESH");
+        curl_setopt($curl, CURLOPT_NOBODY, true);
         curl_exec($curl);
+        if(!curl_errno($curl)) {
+                $info = curl_getinfo($curl);
+                echo "URL: " . $info['url'] . "\n";
+                echo "Time: " . $info['total_time'] . "\n\n";
+        }
+        curl_close($curl);
     }
 
     // process all the urls waiting to refresh
@@ -47,7 +54,6 @@ class Varnish extends BaseVarnish
         $queue = Doctrine_core::getTable('Varnish')->findBy('status', 'queue')->toArray();
         if (!empty($queue)) {
             foreach ($queue as $page) {
-                sleep(1.5);
                 if (empty($page['refresh_time'])) {
                     self::refreshVarnish($page['url']);
                     self::removeFromQueue($page['id']);
@@ -62,9 +68,9 @@ class Varnish extends BaseVarnish
         $page = Doctrine_core::getTable('Varnish')->find($id)->toArray();
         if (!empty($page)) {
             $update = Doctrine_Query::create()->update('Varnish')
-                                                            ->set('status', "'processed'")
-                                                                ->where('id = "'.$id.'"')
-                                                                ->execute();
+            ->set('status', "'processed'")
+            ->where('id = "'.$id.'"')
+            ->execute();
         }
     }
 
@@ -105,7 +111,9 @@ class Varnish extends BaseVarnish
         $refreshUrls = Doctrine_Query::create()
             ->select('v.*')
             ->from("Varnish v")
-            ->where('v.refresh_time <='."'".$currentTime."'")->fetchArray(null, Doctrine::HYDRATE_ARRAY);
+            ->where('v.refresh_time <='."'".$currentTime."'")
+            ->orWhere('v.refresh_time is NULL')
+            ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
         return $refreshUrls;
     }
 
@@ -113,7 +121,6 @@ class Varnish extends BaseVarnish
     {
         $varnish = new Varnish();
         foreach ($refreshUrls as $refreshUrl) {
-            sleep(1.5);
             if (!empty($refreshUrl['id'])) {
                 $varnish->refreshVarnish($refreshUrl['url']);
                 $varnish->removeFromQueue($refreshUrl['id']);
