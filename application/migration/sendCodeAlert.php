@@ -182,7 +182,7 @@ class SendCodeAlert
                             $this->mandrillKey
                         );
                         try {
-                           // sleep(3600);
+                            sleep(3600);
                             $codeAlertHeader = isset($codeAlertSettings[0]['email_header'])
                                 ? $codeAlertSettings[0]['email_header']
                                 : 'Code alert header';
