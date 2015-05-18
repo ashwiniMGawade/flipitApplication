@@ -52,7 +52,6 @@ class MarktplaatsfeedController extends Zend_Controller_Action
             $topCategories = \FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
         }
 
-
         $this->view->topCode = $topVouchercodes;
         $this->view->moneySaving = $moneySaving;
         $this->view->topCategories = $topCategories;

@@ -21,7 +21,6 @@ class MetronieuwsController extends  Zend_Controller_Action
 
         $topVouchercodes =  \FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes, 10);
 
-
         $domain1 = $_SERVER['HTTP_HOST'];
         $domain = 'http://'.$domain1;
 
@@ -54,17 +53,17 @@ class MetronieuwsController extends  Zend_Controller_Action
 
         foreach ($topVouchercodes as $offer) {
 
-            $offerData = $offer['offer'] ;
+            $offerData = isset($offer['offer']) ? $offer['offer'] : $offer['popularcode'];
 
             //item !
             $xml->startElement("item");
-            $xml->writeElement('shopname', $offerData['shop']['name']);
+            $xml->writeElement('shopname', $offerData['shopOffers']['name']);
             if (mb_strlen($offerData['title'], 'UTF-8') > 42) {
                 $xml->writeElement('title', mb_substr($offerData['title'], 0, 42, 'UTF-8')."...");
             } else {
                 $xml->writeElement('title', $offerData['title']);
             }
-            $xml->writeElement('link', $domainPath . '/' . $offerData['shop']['permaLink']);
+            $xml->writeElement('link', $domainPath . '/' . $offerData['shopOffers']['permaLink']);
             $xml->endElement();
 
         }

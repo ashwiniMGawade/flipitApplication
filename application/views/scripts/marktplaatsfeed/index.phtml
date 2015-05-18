@@ -18,23 +18,23 @@
           <div class="leftbox">
             <div class="number">
               <div class="numberarea">
-                <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'offer number');"  href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shop']['permaLink'];?>">
+                <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'offer number');"  href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shopOffers']['permaLink'];?>">
                 <?php echo $i ;?></a></div>
               <div class="textkorting">
                 <h1>
-                                <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'shop title');"   class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE.$value['offer']['shop']['permaLink'];  ?>"   >
+                                <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'shop title');"   class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE.$value['offer']['shopOffers']['permaLink'];  ?>"   >
 
                                 <?php
                                   # trim shim shop title if its length is gretaer that 28 chras
-                                  if($value['offer']['shop']['name']!='') if(mb_strlen($value['offer']['shop']['name'], 'UTF-8') > 28){
+                                  if($value['offer']['shopOffers']['name']!='') if(mb_strlen($value['offer']['shopOffers']['name'], 'UTF-8') > 28){
 
-                                    echo mb_substr($value['offer']['shop']['name'], 0,28,  'UTF-8')."...";
+                                    echo mb_substr($value['offer']['shopOffers']['name'], 0,28,  'UTF-8')."...";
 
-                                  }else{  echo $value['offer']['shop']['name'];  }?>
+                                  }else{  echo $value['offer']['shopOffers']['name'];  }?>
                                 </a>
                                 </h1>
                 <p>
-                   <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'offer title');"  href="<?php echo HTTP_PATH_LOCALE.$value['offer']['shop']['permaLink'];  ?>">
+                   <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'offer title');"  href="<?php echo HTTP_PATH_LOCALE.$value['offer']['shopOffers']['permaLink'];  ?>">
                                 <?php 
                                   # trim  shop title if its length is gretaer that 28 chras
                                     if(mb_strlen($value['offer']['title'], 'UTF-8') > 68) {
@@ -43,7 +43,7 @@
 
                                     } else { echo $value['offer']['title'];  }   ?>
                             </a></p>
-                <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'offer button');" href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shop']['permaLink'];  ?>" class="button"><?php echo $this->translate('Profiteer nu!')?></a>
+                <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'offer button');" href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shopOffers']['permaLink'];  ?>" class="button"><?php echo $this->translate('Profiteer nu!')?></a>
               </div>
             </div>
             <a target="_blank"></a>
@@ -51,9 +51,9 @@
 
             # check an image is available or not
                     
-            $img = PUBLIC_PATH_CDN.ltrim($value['offer']['shop']['logo']['path'], "/") .'thum_big_'. $value['offer']['shop']['logo']['name'];
+            $img = PUBLIC_PATH_CDN.ltrim($value['offer']['shopOffers']['logo']['path'], "/") .'thum_big_'. $value['offer']['shopOffers']['logo']['name'];
             ?>
-            <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'shop logo');" href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shop']['permaLink'];  ?>" class="zalando"><img src="<?php echo $img; ?>" alt="<?php echo $this->translate($value['offer']['shop']['name'])?>" title="<?php echo $this->translate($value['offer']['shop']['name'])?>" />&nbsp;</a>
+            <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'shop logo');" href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shopOffers']['permaLink'];  ?>" class="zalando"><img src="<?php echo $img; ?>" alt="<?php echo $this->translate($value['offer']['shopOffers']['name'])?>" title="<?php echo $this->translate($value['offer']['shopOffers']['name'])?>" />&nbsp;</a>
           </div>
    <?php    
         $i ++   ;
@@ -75,15 +75,9 @@
       <h1><?php echo $this->translate('Kortingscodes via Marktplaats Aanbiedingen'); ?></h1>
       <p><span><?php echo $this->translate('Klik op  &#34;Profiteer nu&#34; bij de webshop van uw keuze'); ?></span><img src="<?php echo PUBLIC_PATH ?>images/marktplaatsfeed/icon1.png" alt="" title="image" /></p>
       <div class="greyarrow"></div>
-<<<<<<< HEAD
-      <p><span><?php echo $this->translate('Klik op &#34;Pak code &amp; open site&#34; op kortingscode.nl'); ?></span><img src="<?php echo PUBLIC_PATH ?>images/marktplaatsfeed/doc.png" alt="" title="image" /></p>
-      <div class="greyarrow"></div>
-      <p><span><?php echo $this->translate('Verzilver deze code bij de webshop'); ?></span><img src="<?php echo PUBLIC_PATH ?>images/marktplaatsfeed/hme.png" alt="" title="image" /></p>
-=======
       <p><span><?php echo $this->translate('Klik op &#34;Pak code &amp; open site&#34; op kortingscode.nl'); ?></span><img src="<?php echo PUBLIC_PATH ?>images/marktplaatsfeed/doc.png" alt="" title="feeds" /></p>
       <div class="greyarrow"></div>
       <p><span><?php echo $this->translate('Verzilver deze code bij de webshop'); ?></span><img src="<?php echo PUBLIC_PATH ?>images/marktplaatsfeed/hme.png" alt="" title="feeds" /></p>
->>>>>>> feature/KC-4963_add_title_tag_to_images
        </div>
 
       
@@ -101,7 +95,7 @@
                         <div class="icontext popular-kortings-col1-text3">
                             <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'category');" class="text-blue-link fl" href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_categorieen').'/'.$category[$c]['category']['permaLink'];  ?>" ><?php if(mb_strlen($category[$c]['category']['name'], 'UTF-8') > 30){  echo mb_substr($category[$c]['category']['name'], 0,30, 'UTF-8').'...'; }else{ echo $category[$c]['category']['name']; } ?>
                                  </a><br />
-                            <span class="number-of-offers"><?php echo $category[$c]['countOff'];?> <?php echo $this->translate('kortingscodes') ?>
+                            <span class="number-of-offers"><?php echo $category[$c]['total_coupons'];?> <?php echo $this->translate('kortingscodes') ?>
                             </span>
                         </div>
                         <?php 
@@ -109,11 +103,7 @@
                      $img = PUBLIC_PATH_CDN.$category[$c]['category']['categoryicon']['path']  .'thum_small_'. $category[$c]['category']['categoryicon']['name'];
                 
                         ?>
-<<<<<<< HEAD
-                        <img class="" src="<?php  echo $img ; ?>" alt="<?php echo $category[$c]['category']['name'];?>" title="<?php echo $category[$c]['category']['name'];?>" />
-=======
                         <img class="" src="<?php  echo $img ; ?>" alt="<?php echo $category[$c]['category']['name'];?>" title="<?php echo $category[$c]['category']['name'];?>"/>
->>>>>>> feature/KC-4963_add_title_tag_to_images
                     </div>
               <?php } endif;?>
       </div>

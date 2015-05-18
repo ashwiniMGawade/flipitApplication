@@ -21,26 +21,26 @@
 $topPopularCouponCode = $this->topPopularCoupons;
 $offerNumber = 1;
 for ($couponCounter = 0; $couponCounter<count($topPopularCouponCode); $couponCounter++):
-    $couponImage = PUBLIC_PATH_CDN.ltrim($topPopularCouponCode[$couponCounter]['offer']['shop']['logo']['path'], "/") .'thum_large_'.$topPopularCouponCode[$couponCounter]['offer']['shop']['logo']['name'];
-        $couponContent = $topPopularCouponCode[$couponCounter]['offer']['title'];
+    $couponImage = PUBLIC_PATH_CDN.ltrim($topPopularCouponCode[$couponCounter]['path'], "/") .'thum_large_'.$topPopularCouponCode[$couponCounter]['name'];
+        $couponContent = $topPopularCouponCode[$couponCounter]['title'];
     ?>
             <li>
-                <a href="<?php echo HTTP_PATH_LOCALE.$topPopularCouponCode[$couponCounter]['offer']['shop']['permaLink'];  ?>" class="coupon-image" target="_blank">
-                    <img  src="<?php  echo $couponImage; ?>" alt="<?php echo $topPopularCouponCode[$couponCounter]['offer']['shop']['name'];?>" width="224" height="99" title="<?php echo $topPopularCouponCode[$couponCounter]['offer']['shop']['name'];?>">
+                <a href="<?php echo HTTP_PATH_LOCALE.$topPopularCouponCode[$couponCounter]['permaLink'];  ?>" class="coupon-image" target="_blank">
+                    <img  src="<?php  echo $couponImage; ?>" alt="<?php echo $topPopularCouponCode[$couponCounter]['shopName'];?>" width="224" height="99" title="<?php echo $topPopularCouponCode[$couponCounter]['shopName'];?>">
                 </a>
                 <div class="coupon-content">
                     <h1 class="title">
-                    <a class="text-blue-link" target="_blank" href="<?php echo HTTP_PATH_LOCALE.$topPopularCouponCode[$couponCounter]['offer']['shop']['permaLink'];  ?>">
+                    <a class="text-blue-link" target="_blank" href="<?php echo HTTP_PATH_LOCALE.$topPopularCouponCode[$couponCounter]['permaLink'];  ?>">
     <?php
     echo $couponContent;
     ?>
                     </a>
                     </h1>
                     <p class="date">
-                        <?php echo $this->translate('Añadido').':'.' '. date('d/m/Y', strtotime($topPopularCouponCode[$couponCounter]['offer']['startDate'])).','.' '.$this->translate('Expira').':'.' '.date('d/m/Y', strtotime($topPopularCouponCode[$couponCounter]['offer']['endDate'])); ?>
+                        <?php echo $this->translate('Añadido').':'.' '. date('d/m/Y', strtotime($topPopularCouponCode[$couponCounter]['startDate']->format('Y-m-d'))).','.' '.$this->translate('Expira').':'.' '.date('d/m/Y', strtotime($topPopularCouponCode[$couponCounter]['endDate']->format('Y-m-d'))); ?>
                     </p>
                     <span class="coupon-number">
-                        <a href="<?php echo HTTP_PATH_LOCALE.$topPopularCouponCode[$couponCounter]['offer']['shop']['permaLink'];  ?>" target="_blank">
+                        <a href="<?php echo HTTP_PATH_LOCALE.$topPopularCouponCode[$couponCounter]['permaLink'];  ?>" target="_blank">
                             <p class="number">
     <?php
     echo $offerNumber;
