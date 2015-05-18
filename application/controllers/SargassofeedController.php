@@ -30,8 +30,7 @@ class SargassofeedController extends Zend_Controller_Action
         }
 
 
-
-
+        
         $this->view->topCode = $topVouchercodes;
 
     }

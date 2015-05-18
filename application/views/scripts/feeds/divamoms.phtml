@@ -13,16 +13,16 @@
 $topPopularCouponCode = $this->topPopularCoupons;
 $offerNumber = 1;
 for ($couponCounter = 0; $couponCounter<count($topPopularCouponCode); $couponCounter++):
-    $couponContent = $topPopularCouponCode[$couponCounter]['offer']['title'];
+    $couponContent = $topPopularCouponCode[$couponCounter]['title'];
 
-    if(mb_strlen($topPopularCouponCode[$couponCounter]['offer']['title'], 'UTF-8') > 35):
-        $couponContent = mb_substr($topPopularCouponCode[$couponCounter]['offer']['title'], 0, 35, 'UTF-8').'...';
+    if(mb_strlen($topPopularCouponCode[$couponCounter]['title'], 'UTF-8') > 35):
+        $couponContent = mb_substr($topPopularCouponCode[$couponCounter]['title'], 0, 35, 'UTF-8').'...';
     endif;
     ?>
     <li>
         <div class="coupon-content">
         <span class="content">
-            <a href="<?php echo HTTP_PATH_LOCALE.$topPopularCouponCode[$couponCounter]['offer']['shop']['permaLink'];  ?>" target="_blank">
+            <a href="<?php echo HTTP_PATH_LOCALE.$topPopularCouponCode[$couponCounter]['permaLink'];  ?>" target="_blank">
     <?php
     echo '<p class="number">'.$offerNumber.'</p>. '.$couponContent;
     ?>

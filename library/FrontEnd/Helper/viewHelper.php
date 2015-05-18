@@ -743,8 +743,8 @@ EOD;
             $additionalTopVouchercodes = \KC\Repository\Offer::getCommonNewestOffers('newest', $additionalCodes);
             foreach ($additionalTopVouchercodes as $additionalTopVouchercodekey => $additionalTopVouchercodevalue) {
                 $offers[] = array(
-                    'id'=> $additionalTopVouchercodevalue['shopId'],
-                    'permalink' => $additionalTopVouchercodevalue['permalink'],
+                    'id'=> $additionalTopVouchercodevalue['shopOffers']['id'],
+                    'permalink' => $additionalTopVouchercodevalue['shopOffers']['permaLink'],
                     'offer' => $additionalTopVouchercodevalue
                 );
             }
@@ -842,15 +842,15 @@ EOD;
             $description = 'description';
         }
         foreach ($topVouchercodes as $offer) {
-            $top10Offers = $offer['offer'];
+            $top10Offers = isset($offer['offer']) ? $offer['offer'] : $offer['popularcode'];
             $xml->startElement("item");
-            $xml->writeElement($shopName, $top10Offers['shopName']);
+            $xml->writeElement($shopName, $top10Offers['shopOffers']['name']);
             if (mb_strlen($top10Offers['title'], 'UTF-8') > 42) {
                 $xml->writeElement($description, mb_substr($top10Offers['title'], 0, 42, 'UTF-8')."...");
             } else {
                 $xml->writeElement($description, $top10Offers['title']);
             }
-            $xml->writeElement('link', $domainName . '/' . $top10Offers['permalink']);
+            $xml->writeElement('link', $domainName . '/' . $top10Offers['shopOffers']['permaLink']);
             $xml->endElement();
         }
         if ($feedCheck == false) {

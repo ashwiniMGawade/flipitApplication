@@ -18,14 +18,14 @@
 		    	<div class="leftbox">
 			    	<?php
 						# check an image is available or not
-	    				  	$img = PUBLIC_PATH_CDN.ltrim($value['offer']['shop']['logo']['path'], "/") .'thum_medium_'. $value['offer']['shop']['logo']['name'];
+	    				  	$img = PUBLIC_PATH_CDN.ltrim($value['offer']['shopOffers']['logo']['path'], "/") .'thum_medium_'. $value['offer']['shopOffers']['logo']['name'];
 							
                     ?>
-			    	<a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'shop logo');" href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shop']['permaLink'];  ?>" class="zalando"><img src="<?php echo $img; ?>" alt="<?php echo $this->translate($value['offer']['shop']['name'])?>" title="<?php echo $this->translate($value['offer']['shop']['name'])?>" />&nbsp;</a>
+			    	<a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'shop logo');" href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shopOffers']['permaLink'];  ?>" class="zalando"><img src="<?php echo $img; ?>" alt="<?php echo $this->translate($value['offer']['shopOffers']['name'])?>" title="<?php echo $this->translate($value['offer']['shopOffers']['name'])?>" />&nbsp;</a>
 		    			<div class="number">
 				    	<div class="textkorting">
 				    		<p>
-									 <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'offer title');"  href="<?php echo HTTP_PATH_LOCALE.$value['offer']['shop']['permaLink'];  ?>">
+									 <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'offer title');"  href="<?php echo HTTP_PATH_LOCALE.$value['offer']['shopOffers']['permaLink'];  ?>">
                             		<?php 
                             			# trim  shop title if its length is gretaer that 28 chras
                             				if(mb_strlen($value['offer']['title'], 'UTF-8') > 68) {
@@ -34,7 +34,7 @@
 
                             				} else { echo $value['offer']['title'];  }   ?>
                         		</a></p>
-					    	<a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'offer button');" href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shop']['permaLink'];  ?>" class="button"><?php echo $this->translate('Pak deze code!')?></a>
+					    	<a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'offer button');" href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shopOffers']['permaLink'];  ?>" class="button"><?php echo $this->translate('Pak deze code!')?></a>
 				    	</div>
 			    	</div>
 			    	

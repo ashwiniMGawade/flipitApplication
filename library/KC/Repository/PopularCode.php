@@ -346,7 +346,7 @@ class PopularCode extends \KC\Entity\PopularCode
         $date = date('Y-m-d H:i:s');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select('p.id,o.title,o.couponCodeType,term.content as terms,o.extendedOffer,o.endDate,o.extendedUrl,o.couponCode as couponcode ,o.exclusiveCode as exclusivecode,o.discount, o.discountvalueType,s.name,s.permaLink, s.id as shopId, l.path,l.name as logoName, p.type, p.position')
+            ->select('p,o,s,l')
             ->from('KC\Entity\PopularCode', 'p')
             ->leftJoin('p.popularcode', 'o')
             ->leftJoin('o.shopOffers', 's')
