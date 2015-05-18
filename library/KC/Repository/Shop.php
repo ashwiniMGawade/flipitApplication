@@ -1025,9 +1025,9 @@ class Shop extends \KC\Entity\Shop
         $shopInfo->featuredtext = isset($shopDetail['featuredtext']) && $shopDetail['featuredtext'] != ''
             ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['featuredtext'])
             : '';
-        $shopInfo->featuredtextdate = isset($shopDetail['featuredtextdate']) && $shopDetail['featuredtextdate'] != ''
-            ? new \DateTime(\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['featuredtextdate']))
-            : '';
+        if (isset($shopDetail['featuredtextdate']) && $shopDetail['featuredtextdate'] != '') {
+            $shopInfo->featuredtextdate = new \DateTime(\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['featuredtextdate']));
+        }
         $shopInfo->affliateNetworkId = null;
 
         if ($shopDetail['shopAffiliateNetwork'] != 0) {
