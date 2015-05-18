@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="ip_addresses")
  */
-class ipAddresses
+class IpAddresses
 {
     /**
      * @ORM\Id
