@@ -16,7 +16,11 @@ class Varnish extends \KC\Entity\Varnish
     public function addUrl($url, $refreshTime = '')
     {
         # add url if it is not queued
-        $existedRecord = self::checkQueuedUrl($url, $refreshTime);
+        $checkTime = $refreshTime;
+        if (empty($refreshTime)) {
+            $checkTime = new \DateTime('now');
+        }
+        $existedRecord = self::checkQueuedUrl($url, $checkTime);
         if (empty($existedRecord)) {
             $v          = new \KC\Entity\Varnish();
             $v->url     = rtrim($url, '/');
@@ -25,7 +29,7 @@ class Varnish extends \KC\Entity\Varnish
             $v->updated_at = new \DateTime('now');
             if (!empty($refreshTime)) {
                 $v->refresh_time = new \DateTime($refreshTime);
-            }else{
+            } else {
                 $v->refresh_time = new \DateTime('now');
             }
             $entityManagerLocale = \Zend_Registry::get('emLocale');
@@ -81,18 +85,16 @@ class Varnish extends \KC\Entity\Varnish
     }
 
     // check a url is already in queue or not
-    public static function checkQueuedUrl($url, $refreshTime = '')
+    public static function checkQueuedUrl($url, $refreshTime)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v.id')
             ->from('KC\Entity\Varnish', 'v')
             ->where($queryBuilder->expr()->eq('v.url', $queryBuilder->expr()->literal(rtrim($url, '/'))))
-            ->andWhere("v.status = 'queue'");
-        if (!empty($refreshTime)) {
-            $query = $query->andWhere(
+            ->andWhere("v.status = 'queue'")
+            ->andWhere(
                 $queryBuilder->expr()->eq('v.refresh_time', $queryBuilder->expr()->literal($refreshTime))
             );
-        }
         $query = $query->setMaxResults(1);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return  $data;

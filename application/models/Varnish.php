@@ -54,10 +54,8 @@ class Varnish extends BaseVarnish
         $queue = Doctrine_core::getTable('Varnish')->findBy('status', 'queue')->toArray();
         if (!empty($queue)) {
             foreach ($queue as $page) {
-                if (empty($page['refresh_time'])) {
-                    self::refreshVarnish($page['url']);
-                    self::removeFromQueue($page['id']);
-                }
+                self::refreshVarnish($page['url']);
+                self::removeFromQueue($page['id']);
             }
         }
     }
