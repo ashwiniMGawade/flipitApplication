@@ -40,15 +40,15 @@ class EditorWidget Extends \KC\Entity\EditorWidget
         return true;
     }
 
-    public static function getEditorWigetData($type)
+    public static function getEditorWidgetData($type)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
             ->select('ew')
             ->from('KC\Entity\EditorWidget', 'ew')
             ->where('ew.type ='.$entityManagerLocale->expr()->literal($type));
-        $editorWigetData = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $editorWigetData;
+        $editorWidgetData = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $editorWidgetData;
     }
 
 }

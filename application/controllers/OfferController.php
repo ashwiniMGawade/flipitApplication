@@ -66,31 +66,6 @@ class OfferController extends Zend_Controller_Action
             'formSignupSidebarWidget',
             'SignUp '
         );
-        $editorWidgetInformation = FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache(
-                'top20_editor_data',
-                array(
-                'function' =>
-                'KC\Repository\EditorWidget::getEditorWigetData', 'parameters' => array('top20')
-                ),
-                ''
-            );
-        $editorId = !empty($editorWidgetInformation[0]['editorId'])
-            ? $editorWidgetInformation[0]['editorId'] : '';
-        if (!empty($editorId)) {
-            $this->view->editorInformation = \FrontEnd_Helper_viewHelper::
-                getRequestedDataBySetGetCache(
-                    'user_'.$editorId.'_details',
-                    array(
-                    'function' =>
-                    'KC\Repository\User::getUserDetails', 'parameters' => array($editorId)
-                    ),
-                    ''
-                );
-        } else {
-            $this->view->editorInformation = '';
-        }
-        $this->view->editorWidgetInformation = $editorWidgetInformation;
         \FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormLarge, $signUpFormSidebarWidget);
         $this->view->form = $signUpFormLarge;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
@@ -265,31 +240,6 @@ class OfferController extends Zend_Controller_Action
         $this->view->shopName = 'top20';
         $offersWithPagination = \FrontEnd_Helper_viewHelper::renderPagination($offers, $this->_getAllParams(), 20, 9);
         $this->view->offersWithPagination = $offersWithPagination;
-        $editorWidgetInformation = FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache(
-                'newPage_editor_data',
-                array(
-                    'function' =>
-                    'KC\Repository\EditorWidget::getEditorWigetData', 'parameters' => array('newPage')
-                ),
-                ''
-            );
-        $editorId = !empty($editorWidgetInformation[0]['editorId'])
-            ? $editorWidgetInformation[0]['editorId'] : '';
-        if (!empty($editorId)) {
-            $this->view->editorInformation = \FrontEnd_Helper_viewHelper::
-                getRequestedDataBySetGetCache(
-                    'user_'.$editorId.'_details',
-                    array(
-                    'function' =>
-                    'KC\Repository\User::getUserDetails', 'parameters' => array($editorId)
-                    ),
-                    ''
-                );
-        } else {
-            $this->view->editorInformation = '';
-        }
-        $this->view->editorWidgetInformation = $editorWidgetInformation;
         $signUpFormForStorePage = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'largeSignupForm',
             'SignUp'
