@@ -10,19 +10,19 @@ abstract class BasePageWidgets extends Doctrine_Record
             'type' => 'integer',
             'autoincrement' => true,
             'comment' => 'PK',
-            'length' => '11',
+            'length' => '11'
         ));
         $this->hasColumn('widget_type', 'string', 255, array(
             'type' => 'string',
-            'length' => '255',
+            'length' => '255'
         ));
         $this->hasColumn('position', 'integer', 11, array(
             'type' => 'integer',
-            'length' => '11',
+            'length' => '11'
         ));
         $this->hasColumn('widgetId', 'integer', 11, array(
             'type' => 'integer',
-            'length' => '11',
+            'length' => '11'
         ));
     }
 

@@ -6,14 +6,14 @@ class PageWidgets extends BasePageWidgets
         self::truncatePageWidgets();
         $widgetsCategories = self::widgetCategories();
         foreach ($widgetsCategories as $widgetType => $widgetsCategory) {
-            $position = 1;
+            $widgetPosition = 1;
             foreach ($widgetsList as $widget) {
                 $pageWidgets = new PageWidgets();
                 $pageWidgets->widget_type = FrontEnd_Helper_viewHelper::sanitize($widgetType);
-                $pageWidgets->position = FrontEnd_Helper_viewHelper::sanitize($position);
+                $pageWidgets->position = FrontEnd_Helper_viewHelper::sanitize($widgetPosition);
                 $pageWidgets->widgetId = FrontEnd_Helper_viewHelper::sanitize($widget['id']);
                 $pageWidgets->save();
-                $position++;
+                $widgetPosition++;
             }
         }
     }

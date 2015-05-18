@@ -7,7 +7,7 @@ class OneTimeMigrationAddWidgetsInSortList
         require_once('CommonMigrationFunctions.php');
         CommonMigrationFunctions::setTimeAndMemoryLimit();
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
-        $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
+        $connectionManager = CommonMigrationFunctions::getGlobalDbConnectionManger();
         $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
@@ -20,20 +20,20 @@ class OneTimeMigrationAddWidgetsInSortList
                 echo "\n\n";
             }
         }
-        $manager->closeConnection($doctrineImbullDbConnection);
+        $connectionManager->closeConnection($doctrineImbullDbConnection);
     }
 
     protected function addWidgetsInSortList($dsn, $key)
     {
         $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
-        $manager = CommonMigrationFunctions::loadDoctrineModels();
+        $connectionManager = CommonMigrationFunctions::loadDoctrineModels();
         echo CommonMigrationFunctions::showProgressMessage("Fetching all widgets of $key");
         $widgets = new Widget();
-        $widgetsList = $widgets->getUserDefinedwidgetList();
+        $widgetsList = $widgets->getUserDefinedWidgetList();
         PageWidgets::savePageWidgets($widgetsList);
-        $manager->closeConnection($doctrineSiteDbConnection);
+        $connectionManager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(
-            "$key - widgets has been added sucessfully!!!"
+            "$key - widgets have been added sucessfully!!!"
         );
     }
 }

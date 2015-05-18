@@ -3,8 +3,8 @@ class Admin_WidgetController extends Zend_Controller_Action
 {
     public function init()
     {
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $flash->getMessages();
+        $flashMessenger = $this->_helper->getHelper('FlashMessenger');
+        $message = $flashMessenger->getMessages();
         $this->view->messageSuccess = isset($message[0]['success']) ?
         $message[0]['success'] : '';
         $this->view->messageError = isset($message[0]['error']) ?
@@ -82,7 +82,7 @@ class Admin_WidgetController extends Zend_Controller_Action
 
     public function updateWidget($parameters)
     {
-        $flash = $this->_helper->getHelper('FlashMessenger');
+        $flashMessenger = $this->_helper->getHelper('FlashMessenger');
         $widget = new \KC\Repository\Widget();
         if ($widget->updateWidget($parameters)) {
             self::updateVarnish();
@@ -106,9 +106,9 @@ class Admin_WidgetController extends Zend_Controller_Action
 
     public function addFlashMessage($message, $errorType, $redirectUrl)
     {
-        $flash = $this->_helper->getHelper('FlashMessenger');
+        $flashMessenger = $this->_helper->getHelper('FlashMessenger');
         $message = $this->view->translate($message);
-        $flash->addMessage(array($errorType => $message));
+        $flashMessenger->addMessage(array($errorType => $message));
         $this->_redirect($redirectUrl);
     }
 
@@ -154,7 +154,7 @@ class Admin_WidgetController extends Zend_Controller_Action
         if (!empty($categoryWidgets)) {
             $widgetsIds = self::getWidgetIds($categoryWidgets);
         }
-        $widgetsList = \KC\Repository\Widget::getUserDefinedwidgetList($widgetsIds);
+        $widgetsList = \KC\Repository\Widget::getUserDefinedWidgetList($widgetsIds);
         $this->view->widgetCategories = $widgetCategories;
         $this->view->widgetsList = $widgetsList;
         $this->view->widgetType = $widgetType;
@@ -177,8 +177,8 @@ class Admin_WidgetController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $widgetId = $this->getRequest()->getParam('id');
         $widgetType = $this->getRequest()->getParam('widgetType');
-        $result = \KC\Repository\PageWidgets::addWidgetInList($widgetId, $widgetType);
-        echo Zend_Json::encode($result);
+        $savedStatus = \KC\Repository\PageWidgets::addWidgetInList($widgetId, $widgetType);
+        echo Zend_Json::encode($savedStatus);
         exit();
     }
  

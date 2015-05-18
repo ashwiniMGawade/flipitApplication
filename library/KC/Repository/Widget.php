@@ -34,7 +34,7 @@ class Widget extends \KC\Entity\Widget
         return $widgetsList;
     }
 
-    public static function getUserDefinedwidgetList($widgetsIds = array())
+    public static function getUserDefinedWidgetList($widgetsIds = array())
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('w')

@@ -258,7 +258,6 @@ class StoreController extends Zend_Controller_Action
                 )
             );
         }
-        
         $signUpFormForStorePage = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'largeSignupForm',
             'SignUp'

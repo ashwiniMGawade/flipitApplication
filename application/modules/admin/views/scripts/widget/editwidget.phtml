@@ -42,7 +42,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
                                 </div>
                             </div>
                         </div>
-                    <?php if ( $this->widgetInformation['content'] ) :?>
+                    <?php if ($this->widgetInformation['content']) :?>
                     <textarea name="content" id="content" ><?php echo $this->widgetInformation['content'];?></textarea>
                     <?php endif;?>
                     </div>
@@ -50,7 +50,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
                 <br class="clear">
             </div>
             <?php 
-            if ( $this->widgetInformation['content'] ):
+            if ($this->widgetInformation['content']):
                 ?>
                <br>
                 <?php 

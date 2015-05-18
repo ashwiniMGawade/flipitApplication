@@ -43,7 +43,7 @@ class Widget extends BaseWidget
         return $widgetsList;
      }
 
-     function getUserDefinedwidgetList()
+     function getUserDefinedWidgetList()
      {
         $widgetsList = Doctrine_Query::create()->select()
         ->from('widget w')
