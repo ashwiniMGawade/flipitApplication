@@ -11,22 +11,30 @@ class Varnish extends BaseVarnish
 
     public function __contruct($connName = false)
     {
-        if(! $connName) {
+        if (! $connName) {
             $connName = "doctrine_site" ;
         }
-
-
         Doctrine_Manager::getInstance()->bindComponent($connName, $connName);
     }
 
     // add an url to the queue
     public function addUrl($url, $refreshTime = '')
     {
+        $checkTime = $refreshTime;
+        if (empty($refreshTime)) {
+            $checkTime = date('Y-m-d h:i:s');
+        }
+        $existedRecord = self::checkQueuedUrl($url, $checkTime);
         # add url if it is not queued
-        if (!self::checkQueuedUrl($url, $refreshTime)) {
+        if (empty($existedRecord)) {
             $v = new Varnish();
             $v->url = rtrim($url, '/');
             $v->status = 'queue';
+            if (!empty($refreshTime)) {
+                $v->refresh_time = new \DateTime($refreshTime);
+            } else {
+                $v->refresh_time = new \DateTime('now');
+            }
             $v->refresh_time = $refreshTime;
             $v->save();
             return $v->id;
@@ -40,7 +48,7 @@ class Varnish extends BaseVarnish
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "REFRESH");
         curl_setopt($curl, CURLOPT_NOBODY, true);
         curl_exec($curl);
-        if(!curl_errno($curl)) {
+        if (!curl_errno($curl)) {
                 $info = curl_getinfo($curl);
                 echo "URL: " . $info['url'] . "\n";
                 echo "Time: " . $info['total_time'] . "\n\n";
@@ -51,7 +59,7 @@ class Varnish extends BaseVarnish
     // process all the urls waiting to refresh
     public function processQueue()
     {
-        $queue = Doctrine_core::getTable('Varnish')->findBy('status', 'queue')->toArray();
+        $queue = self::getAllUrlsByRefreshTime();
         if (!empty($queue)) {
             foreach ($queue as $page) {
                 self::refreshVarnish($page['url']);
@@ -79,18 +87,14 @@ class Varnish extends BaseVarnish
     }
 
     // check a url is already in queue or not
-    public static function checkQueuedUrl($url, $refreshTime ='')
+    public static function checkQueuedUrl($url, $refreshTime)
     {
         $query = Doctrine_Query::create()->select('id')
             ->from("Varnish")
             ->where("url = ? ", rtrim($url, '/'))
-            ->andWhere("status = 'queue'");
-
-        if (!empty($refreshTime)) {
-            $query = $query->andWhere("refresh_time = '".$refreshTime."'");
-        }
-
-        $query = $query->limit(1)
+            ->andWhere("status = 'queue'")
+            ->andWhere("refresh_time = '".$refreshTime."'")
+            ->limit(1)
             ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
         return $query;
     }

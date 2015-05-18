@@ -19,6 +19,7 @@ class Varnish extends \KC\Entity\Varnish
         $checkTime = $refreshTime;
         if (empty($refreshTime)) {
             $checkTime = new \DateTime('now');
+            $checkTime = $checkTime->format('Y-m-d h:i:s');
         }
         $existedRecord = self::checkQueuedUrl($url, $checkTime);
         if (empty($existedRecord)) {
