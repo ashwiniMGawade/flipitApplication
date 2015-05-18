@@ -9,21 +9,18 @@
 class Varnish extends BaseVarnish
 {
 
-    public function __contruct($connName = false)
+    public function __contruct($connectionName = false)
     {
-        if (! $connName) {
-            $connName = "doctrine_site" ;
+        if (!$connectionName) {
+            $connectionName = "doctrine_site" ;
         }
-        Doctrine_Manager::getInstance()->bindComponent($connName, $connName);
+        Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
 
     // add an url to the queue
     public function addUrl($url, $refreshTime = '')
     {
-        $validateRefreshTime = $refreshTime;
-        if (empty($refreshTime)) {
-            $validateRefreshTime = date('Y-m-d h:i:s');
-        }
+        $validateRefreshTime = empty($refreshTime) ? date('Y-m-d h:i:s') : $refreshTime;
         $existedRecord = self::checkQueuedUrl($url, $validateRefreshTime);
         if (empty($existedRecord)) {
             $varnish = new Varnish();
@@ -47,9 +44,9 @@ class Varnish extends BaseVarnish
         curl_setopt($curl, CURLOPT_NOBODY, true);
         curl_exec($curl);
         if (!curl_errno($curl)) {
-                $info = curl_getinfo($curl);
-                echo "URL: " . $info['url'] . "\n";
-                echo "Time: " . $info['total_time'] . "\n\n";
+            $info = curl_getinfo($curl);
+            echo "URL: " . $info['url'] . "\n";
+            echo "Time: " . $info['total_time'] . "\n\n";
         }
         curl_close($curl);
     }
@@ -71,10 +68,11 @@ class Varnish extends BaseVarnish
     {
         $page = Doctrine_core::getTable('Varnish')->find($id)->toArray();
         if (!empty($page)) {
-            $update = Doctrine_Query::create()->update('Varnish')
-            ->set('status', "'processed'")
-            ->where('id = "'.$id.'"')
-            ->execute();
+            $update = Doctrine_Query::create()
+                ->update('Varnish')
+                ->set('status', "'processed'")
+                ->where('id = "'.$id.'"')
+                ->execute();
         }
     }
 
