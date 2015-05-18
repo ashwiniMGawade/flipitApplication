@@ -18,22 +18,22 @@
           <div class="leftbox">
             <div class="number">
               <div class="numberarea">
-                <a target="_blank" onClick="ga('send', 'event', 'sargasso', 'click', 'offer number');"  href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shop']['permalink'];?>">
+                <a target="_blank" onClick="ga('send', 'event', 'sargasso', 'click', 'offer number');"  href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shopOffers']['permaLink'];?>">
                 <?php echo $i ;?></a></div>
               <div class="textkorting">
                 <h1>
-                    <a target="_blank" onClick="ga('send', 'event', 'sargasso', 'click', 'shop title');"   class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE.$value['offer']['shop']['permalink'];  ?>"   >
+                    <a target="_blank" onClick="ga('send', 'event', 'sargasso', 'click', 'shop title');"   class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE.$value['offer']['shopOffers']['permaLink'];  ?>"   >
                           <?php
                            # trim shim shop title if its length is gretaer that 28 chras
-                            if($value['offer']['shop']['name']!='') if(mb_strlen($value['offer']['shop']['name'], 'UTF-8') > 28){
+                            if($value['offer']['shopOffers']['name']!='') if(mb_strlen($value['offer']['shopOffers']['name'], 'UTF-8') > 28){
 
-                echo mb_substr($value['offer']['shop']['name'], 0,28,  'UTF-8')."...";
+                echo mb_substr($value['offer']['shopOffers']['name'], 0,28,  'UTF-8')."...";
 
-              } else {  echo $value['offer']['shop']['name'];  }?>
+              } else {  echo $value['offer']['shopOffers']['name'];  }?>
                    </a>
                 </h1>
         <p>
-                   <a target="_blank" onClick="ga('send', 'event', 'sargasso', 'click', 'offer title');"  href="<?php echo HTTP_PATH_LOCALE.$value['offer']['shop']['permalink'];  ?>">
+                   <a target="_blank" onClick="ga('send', 'event', 'sargasso', 'click', 'offer title');"  href="<?php echo HTTP_PATH_LOCALE.$value['offer']['shopOffers']['permaLink'];  ?>">
                                 <?php 
                                   # trim  shop title if its length is gretaer that 28 chras
                                     if(mb_strlen($value['offer']['title'], 'UTF-8') > 40) {
@@ -42,7 +42,7 @@
 
                                     } else { echo $value['offer']['title'];  }   ?>
                             </a></p>
-                   <a target="_blank" onClick="ga('send', 'event', 'sargasso', 'click', 'offer button');" href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shop']['permalink'];  ?>" class="button"><?php echo $this->translate('Profiteer nu!')?></a>
+                   <a target="_blank" onClick="ga('send', 'event', 'sargasso', 'click', 'offer button');" href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shopOffers']['permaLink'];  ?>" class="button"><?php echo $this->translate('Profiteer nu!')?></a>
                
               </div>
             </div>
@@ -51,10 +51,10 @@
 
             # check an image is available or not
                     
-                 $img = PUBLIC_PATH_CDN.ltrim($value['offer']['shop']['logo']['path'], "/") .'thum_small_'. $value['offer']['shop']['logo']['name'];
+                 $img = PUBLIC_PATH_CDN.ltrim($value['offer']['shopOffers']['logo']['path'], "/") .'thum_small_'. $value['offer']['shopOffers']['logo']['name'];
                
                     ?>
-            <a target="_blank" onClick="ga('send', 'event', 'sargasso', 'click', 'shop logo');" href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shop']['permalink'];  ?>" class="zalando"><img src="<?php echo $img; ?>" alt="<?php echo $this->translate($value['offer']['shop']['name'])?>" title="<?php echo $this->translate($value['offer']['shop']['name'])?>"/>&nbsp;</a>
+            <a target="_blank" onClick="ga('send', 'event', 'sargasso', 'click', 'shop logo');" href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shopOffers']['permaLink'];  ?>" class="zalando"><img src="<?php echo $img; ?>" alt="<?php echo $this->translate($value['offer']['shopOffers']['name'])?>" title="<?php echo $this->translate($value['offer']['shopOffers']['name'])?>"/>&nbsp;</a>
           </div>
    <?php    
         $i ++   ;

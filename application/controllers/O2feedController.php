@@ -43,11 +43,11 @@ class O2feedController extends  Zend_Controller_Action
         // each, and push the array onto the $entries array
         foreach ($topVouchercodes as $offer) {
 
-            $offerData = $offer['offer'] ;
+            $offerData = isset($offer['offer']) ? $offer['offer'] : $offer['popularcode'];
             $xml->startElement("item");
-            $xml->writeElement('shopname', $offerData['shop']['name']);
+            $xml->writeElement('shopname', $offerData['shopOffers']['name']);
             $xml->writeElement('title', $offerData['title']);
-            $xml->writeElement('link', $domainPath . '/' . $offerData['shop']['permaLink']);
+            $xml->writeElement('link', $domainPath . '/' . $offerData['shopOffers']['permaLink']);
             $xml->endElement();
         }
 
