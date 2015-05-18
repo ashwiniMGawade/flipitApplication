@@ -4,15 +4,14 @@ namespace KC\Repository;
 
 class Varnish extends \KC\Entity\Varnish
 {
-    public function __contruct($connName = false)
+    public function __contruct($connectionName = false)
     {
-        if (! $connName) {
-            $connName = "doctrine_site" ;
+        if (! $connectionName) {
+            $connectionName = "doctrine_site" ;
         }
-        Doctrine_Manager::getInstance()->bindComponent($connName, $connName);
+        Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
 
-    // add an url to the queue
     public function addUrl($url, $refreshTime = '')
     {
         $validateRefreshTime = empty($refreshTime) ? new \DateTime('now') : $refreshTime;
@@ -35,7 +34,6 @@ class Varnish extends \KC\Entity\Varnish
         }
     }
 
-    // preform the refresh on the varnish server
     private function refreshVarnish($url)
     {
         $curl = curl_init(rtrim($url, '/'));
@@ -50,7 +48,6 @@ class Varnish extends \KC\Entity\Varnish
         curl_close($curl);
     }
 
-    // process all the urls waiting to refresh
     public function processQueue()
     {
         $queue = self::getAllUrlsByRefreshTime();
@@ -62,7 +59,6 @@ class Varnish extends \KC\Entity\Varnish
         }
     }
 
-    // set the status for this record to 'processed'
     private function processed($id)
     {
         $page = \Zend_Registry::get('emLocale')->find('KC\Entity\Varnish', $id);
@@ -74,7 +70,6 @@ class Varnish extends \KC\Entity\Varnish
         }
     }
 
-    // remove the record from the Queue
     private function removeFromQueue($id)
     {
         $varnish = \Zend_Registry::get('emLocale')->find('KC\Entity\Varnish', $id);
@@ -82,7 +77,6 @@ class Varnish extends \KC\Entity\Varnish
         $entityManagerLocale->flush();
     }
 
-    // check a url is already in queue or not
     public static function checkQueuedUrl($url, $refreshTime)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -94,8 +88,8 @@ class Varnish extends \KC\Entity\Varnish
                 $queryBuilder->expr()->eq('v.refresh_time', $queryBuilder->expr()->literal($refreshTime))
             );
         $query = $query->setMaxResults(1);
-        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return  $data;
+        $varnishUrls = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return  $varnishUrls;
     }
 
     public static function getVarnishUrlsCount()

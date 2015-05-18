@@ -1,11 +1,4 @@
 <?php
-/**
- * Varnish
- *
- * This class contains methods to refresh cached url's in our varnish server
- * @author Daniel
- */
-
 class Varnish extends BaseVarnish
 {
 
@@ -17,7 +10,6 @@ class Varnish extends BaseVarnish
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
 
-    // add an url to the queue
     public function addUrl($url, $refreshTime = '')
     {
         $validateRefreshTime = empty($refreshTime) ? date('Y-m-d h:i:s') : $refreshTime;
@@ -36,7 +28,6 @@ class Varnish extends BaseVarnish
         }
     }
 
-    // preform the refresh on the varnish server
     private function refreshVarnish($url)
     {
         $curl = curl_init(rtrim($url, '/'));
@@ -51,7 +42,6 @@ class Varnish extends BaseVarnish
         curl_close($curl);
     }
 
-    // process all the urls waiting to refresh
     public function processQueue()
     {
         $queue = self::getAllUrlsByRefreshTime();
@@ -63,7 +53,6 @@ class Varnish extends BaseVarnish
         }
     }
 
-    // set the status for this record to 'processed'
     private function processed($id)
     {
         $page = Doctrine_core::getTable('Varnish')->find($id)->toArray();
@@ -76,13 +65,11 @@ class Varnish extends BaseVarnish
         }
     }
 
-    // remove the record from the Queue
     private function removeFromQueue($id)
     {
         Doctrine_Query::create()->delete()->from('Varnish')->where("id = ".$id)->execute();
     }
 
-    // check a url is already in queue or not
     public static function checkQueuedUrl($url, $refreshTime)
     {
         $query = Doctrine_Query::create()->select('id')
