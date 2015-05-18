@@ -20,22 +20,22 @@ class Varnish extends BaseVarnish
     // add an url to the queue
     public function addUrl($url, $refreshTime = '')
     {
-        $checkTime = $refreshTime;
+        $validateRefreshTime = $refreshTime;
         if (empty($refreshTime)) {
-            $checkTime = date('Y-m-d h:i:s');
+            $validateRefreshTime = date('Y-m-d h:i:s');
         }
-        $existedRecord = self::checkQueuedUrl($url, $checkTime);
+        $existedRecord = self::checkQueuedUrl($url, $validateRefreshTime);
         if (empty($existedRecord)) {
-            $v = new Varnish();
-            $v->url = rtrim($url, '/');
-            $v->status = 'queue';
+            $varnish = new Varnish();
+            $varnish->url = rtrim($url, '/');
+            $varnish->status = 'queue';
             if (!empty($refreshTime)) {
-                $v->refresh_time = $refreshTime;
+                $varnish->refresh_time = $refreshTime;
             } else {
-                $v->refresh_time = date('Y-m-d h:i:s');
+                $varnish->refresh_time = date('Y-m-d h:i:s');
             }
-            $v->save();
-            return $v->id;
+            $varnish->save();
+            return $varnish->id;
         }
     }
 

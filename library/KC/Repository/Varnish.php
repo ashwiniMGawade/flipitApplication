@@ -16,27 +16,27 @@ class Varnish extends \KC\Entity\Varnish
     public function addUrl($url, $refreshTime = '')
     {
         # add url if it is not queued
-        $checkTime = $refreshTime;
+        $validateRefreshTime = $refreshTime;
         if (empty($refreshTime)) {
-            $checkTime = new \DateTime('now');
-            $checkTime = $checkTime->format('Y-m-d h:i:s');
+            $validateRefreshTime = new \DateTime('now');
+            $validateRefreshTime = $validateRefreshTime->format('Y-m-d h:i:s');
         }
-        $existedRecord = self::checkQueuedUrl($url, $checkTime);
+        $existedRecord = self::checkQueuedUrl($url, $validateRefreshTime);
         if (empty($existedRecord)) {
-            $v          = new \KC\Entity\Varnish();
-            $v->url     = rtrim($url, '/');
-            $v->status  = 'queue';
-            $v->created_at = new \DateTime('now');
-            $v->updated_at = new \DateTime('now');
+            $varnish = new \KC\Entity\Varnish();
+            $varnish->url = rtrim($url, '/');
+            $varnish->status = 'queue';
+            $varnish->created_at = new \DateTime('now');
+            $varnish->updated_at = new \DateTime('now');
             if (!empty($refreshTime)) {
-                $v->refresh_time = new \DateTime($refreshTime);
+                $varnish->refresh_time = new \DateTime($refreshTime);
             } else {
-                $v->refresh_time = new \DateTime('now');
+                $varnish->refresh_time = new \DateTime('now');
             }
             $entityManagerLocale = \Zend_Registry::get('emLocale');
-            $entityManagerLocale->persist($v);
+            $entityManagerLocale->persist($varnish);
             $entityManagerLocale->flush();
-            return $v->getId();
+            return $varnish->getId();
         }
     }
 
@@ -48,9 +48,9 @@ class Varnish extends \KC\Entity\Varnish
         curl_setopt($curl, CURLOPT_NOBODY, true);
         curl_exec($curl);
         if (!curl_errno($curl)) {
-                $info = curl_getinfo($curl);
-                echo "URL: " . $info['url'] . "\n";
-                echo "Time: " . $info['total_time'] . "\n\n";
+            $info = curl_getinfo($curl);
+            echo "URL: " . $info['url'] . "\n";
+            echo "Time: " . $info['total_time'] . "\n\n";
         }
         curl_close($curl);
     }
