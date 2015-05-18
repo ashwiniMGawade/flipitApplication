@@ -197,13 +197,14 @@ class Admin_RedirectController extends Zend_Controller_Action
                                 ->where('r.orignalurl ='.$queryBuilder->expr()->literal($orignalURL));
                             $redirect = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                             if (!empty($redirect)) {
+                                $redirect = \Zend_Registry::get('emLocale')->find('KC\Entity\RouteRedirect', $redirect[0]['id']);
                             } else {
                                 $redirect  = new KC\Entity\RouteRedirect();
                             }
-                            if ($orignalURL != " ") {
+                            if ($orignalURL != "") {
                                 $redirect->orignalurl = $orignalURL;
                             }
-                            if ($redirectUrl != " ") {
+                            if ($redirectUrl != "") {
                                 $redirect->redirectto = $redirectUrl;
                             }
                             $redirect->deleted = 0;
