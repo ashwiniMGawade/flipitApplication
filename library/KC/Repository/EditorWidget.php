@@ -4,7 +4,7 @@ class EditorWidget Extends \KC\Entity\EditorWidget
 {
     public static function addEditorWidgetData($parameters)
     {
-        $editorWidgetData = self::getEditorWigetData($type);
+        $editorWidgetData = self::getEditorWidgetData($type);
         if (empty($editorWidgetData)) {
             $entityManagerLocale = \Zend_Registry::get('emLocale');
             $editorWidget = new \KC\Entity\EditorWidget();
