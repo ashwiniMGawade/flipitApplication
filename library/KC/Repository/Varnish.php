@@ -14,7 +14,8 @@ class Varnish extends \KC\Entity\Varnish
 
     public function addUrl($url, $refreshTime = '')
     {
-        $validateRefreshTime = empty($refreshTime) ? new \DateTime('now') : $refreshTime;
+        $currentTime = new \DateTime('now');
+        $validateRefreshTime = empty($refreshTime) ? $currentTime->format('Y-m-d h:i:s') : $refreshTime;
         $existedRecord = self::checkQueuedUrl($url, $validateRefreshTime);
         if (empty($existedRecord)) {
             $varnish = new \KC\Entity\Varnish();
