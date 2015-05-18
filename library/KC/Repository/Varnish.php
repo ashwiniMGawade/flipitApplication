@@ -45,20 +45,22 @@ class Varnish extends \KC\Entity\Varnish
     {
         $curl = curl_init(rtrim($url, '/'));
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "REFRESH");
+        curl_setopt($curl, CURLOPT_NOBODY, true);
         curl_exec($curl);
+        if (!curl_errno($curl)) {
+                $info = curl_getinfo($curl);
+                echo "URL: " . $info['url'] . "\n";
+                echo "Time: " . $info['total_time'] . "\n\n";
+        }
+        curl_close($curl);
     }
 
     // process all the urls waiting to refresh
     public function processQueue()
     {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('v')
-            ->from('KC\Entity\Varnish', 'v')
-            ->andWhere($queryBuilder->expr()->eq('v.status', 'queue'));
-        $queue = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $queue = self::getAllUrlsByRefreshTime();
         if (!empty($queue)) {
             foreach ($queue as $page) {
-                sleep(1.5);
                 self::refreshVarnish($page['url']);
                 self::removeFromQueue($page['id']);
             }
@@ -109,5 +111,20 @@ class Varnish extends \KC\Entity\Varnish
             ->from('KC\Entity\Varnish', 'v');
         $varnishUrlsCount = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return !empty($varnishUrlsCount) ? $varnishUrlsCount[0]['Vcount'] : 0;
+    }
+
+    public static function getAllUrlsByRefreshTime()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $currentTime = FrontEnd_Helper_viewHelper::convertCurrentTimeToServerTime();
+        $refreshUrls = $queryBuilder
+            ->select('v')
+            ->from('KC\Entity\Varnish', 'v')
+            ->andWhere(
+                $queryBuilder->expr()->lte('v.refresh_time', $queryBuilder->expr()->literal($currentTime))
+            )
+            ->orWhere('v.refresh_time is NULL')
+            ->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $refreshUrls;
     }
 }

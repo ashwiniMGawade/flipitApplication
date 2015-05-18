@@ -25,17 +25,15 @@ class Varnish extends BaseVarnish
             $checkTime = date('Y-m-d h:i:s');
         }
         $existedRecord = self::checkQueuedUrl($url, $checkTime);
-        # add url if it is not queued
         if (empty($existedRecord)) {
             $v = new Varnish();
             $v->url = rtrim($url, '/');
             $v->status = 'queue';
             if (!empty($refreshTime)) {
-                $v->refresh_time = new \DateTime($refreshTime);
+                $v->refresh_time = $refreshTime;
             } else {
-                $v->refresh_time = new \DateTime('now');
+                $v->refresh_time = date('Y-m-d h:i:s');
             }
-            $v->refresh_time = $refreshTime;
             $v->save();
             return $v->id;
         }
