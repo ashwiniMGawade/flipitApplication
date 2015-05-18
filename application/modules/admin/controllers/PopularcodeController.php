@@ -250,12 +250,7 @@ class Admin_PopularcodeController extends Zend_Controller_Action
 
         if ($this->_request->isPost()) {
             $parameters = $this->_getAllParams();
-            $editorId = $parameters['selecteditors'];
-            $type = $parameters['type'];
-            $description = $parameters['description'];
-            $subTitle = $parameters['subtitle'];
-            $status = $parameters['actionType'];
-            \KC\Repository\EditorWidget::addEditorWigetData($editorId, $description, $subTitle, $type, $status);
+            \KC\Repository\EditorWidget::addEditorWidgetData($parameters);
             $message = $this->view->translate('backend_ Editor data has been updated successfully');
             $flashMessage->addMessage(array('success' => $message ));
             $this->_redirect(HTTP_PATH.'admin/popularcode/addeditorwidgetdata');
@@ -264,7 +259,7 @@ class Admin_PopularcodeController extends Zend_Controller_Action
 
     public function pagetypedetailAction()
     {
-        $editorWidgetData = \KC\Repository\EditorWidget::getEditorWigetData($this->getRequest()->getParam('pageType'));
+        $editorWidgetData = \KC\Repository\EditorWidget::getEditorWidgetData($this->getRequest()->getParam('pageType'));
         $editorWidgetData = !empty($editorWidgetData) ? $editorWidgetData : '';
         echo \Zend_Json::encode($editorWidgetData);
         exit();
