@@ -1010,7 +1010,7 @@ class Shop extends \KC\Entity\Shop
                 if (strlen($shopDetail['offlineSince']) > 18) {
                     $shopInfo->offlineSicne = $shopDetail['offlineSince'];
                 } else {
-                    $shopInfo->offlineSicne = date("Y-m-d h:m:s");
+                    $shopInfo->offlineSicne = new \DateTime('now');
                 }
             }
         } else {
