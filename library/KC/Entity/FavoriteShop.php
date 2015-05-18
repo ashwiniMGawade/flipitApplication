@@ -26,6 +26,11 @@ class FavoriteShop
     private $deleted;
 
     /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $code_alert_send_date;
+
+    /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="favoriteshops")
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id")
      */
