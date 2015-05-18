@@ -36,6 +36,14 @@ abstract class BaseFavoriteShop extends Doctrine_Record
             'type' => 'integer',
              'length' => '20',
              ));
+        $this->hasColumn(
+            'code_alert_send_date',
+            'timestamp',
+            null,
+            array(
+                'type' => 'timestamp'
+            )
+        );
 
     }
 

@@ -164,7 +164,7 @@ class SendCodeAlert
                         );
                         if (empty($codeAlertVisitors)) {
                             if (isset($this->shopId)) {
-                                $visitorCodeAlertSendDate = Shop::getCodeAlertSendDateByShopId($this->shopId);
+                                $visitorCodeAlertSendDate = FavoriteShop::getCodeAlertSendDateByShopId($this->shopId, $visitorInfo['visitorId']);
                                 if (date('Y-m-d', strtotime($visitorCodeAlertSendDate)) == date('Y-m-d')) {
                                 } else {
                                     $visitorIds[] = $visitorInfo['visitorId'];
@@ -182,7 +182,7 @@ class SendCodeAlert
                             $this->mandrillKey
                         );
                         try {
-                            sleep(3600);
+                           // sleep(3600);
                             $codeAlertHeader = isset($codeAlertSettings[0]['email_header'])
                                 ? $codeAlertSettings[0]['email_header']
                                 : 'Code alert header';
@@ -209,7 +209,9 @@ class SendCodeAlert
                             );
                             
                             if (isset($this->shopId)) {
-                                Shop::addCodeAlertTimeStampForShopId($this->shopId);
+                                foreach ($visitors as $visitorsInfo) {
+                                    FavoriteShop::addCodeAlertTimeStampForShopId($this->shopId, $visitorsInfo['visitorId']);
+                                }
                             }
 
                             CodeAlertVisitors::saveCodeAlertVisitors($visitorIds, $codeAlertOffer['id']);

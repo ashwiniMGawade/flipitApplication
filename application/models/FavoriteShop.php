@@ -247,4 +247,28 @@ class FavoriteShop extends BaseFavoriteShop
             ->fetchArray();
         return !empty($shopVisitorInformation) ? count($shopVisitorInformation) : 0;
     }
+
+    public static function getCodeAlertSendDateByShopId($shopId, $visitorId)
+    {
+        $codeAlertSendDate = Doctrine_Query::create()
+            ->select('s.code_alert_send_date')
+            ->from('FavoriteShop s')
+            ->where('s.visitorId = '.$visitorId)
+            ->andWhere('s.shopId='. $shopId)
+            ->limit(1);
+        $codeAlertSendDate = $codeAlertSendDate->fetchArray(null, Doctrine::HYDRATE_ARRAY);
+        return !empty($codeAlertSendDate) ?  $codeAlertSendDate[0]['code_alert_send_date'] : 0;
+    }
+
+    public static function addCodeAlertTimeStampForShopId($shopId, $visitorId)
+    {
+        if (!empty($shopId)) {
+            Doctrine_Query::create()->update('FavoriteShop')
+                ->set('code_alert_send_date', "'".  date('Y-m-d 00:00:00') ."'")
+                ->where('visitorId = '.$visitorId)
+                ->andWhere('shopId='. $shopId)
+                ->execute();
+        }
+        return true;
+    }
 }
