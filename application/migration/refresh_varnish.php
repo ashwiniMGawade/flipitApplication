@@ -46,7 +46,7 @@ class RefreshVarnish
 
         require_once (LIBRARY_PATH . '/Zend/Application.php');
         require_once(DOCTRINE_PATH . '/Doctrine.php');
-
+        require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper-v1.php');
         // Create application, bootstrap, and run
         $application = new Zend_Application(APPLICATION_ENV,
                 APPLICATION_PATH . '/configs/application.ini');

@@ -4,63 +4,61 @@ namespace KC\Repository;
 
 class Varnish extends \KC\Entity\Varnish
 {
-    public function __contruct($connName = false)
+    public function __contruct($connectionName = false)
     {
-        if (! $connName) {
-            $connName = "doctrine_site" ;
+        if (! $connectionName) {
+            $connectionName = "doctrine_site" ;
         }
-        Doctrine_Manager::getInstance()->bindComponent($connName, $connName);
+        Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
 
-    // add an url to the queue
     public function addUrl($url, $refreshTime = '')
     {
-        # add url if it is not queued
-        $existedRecord = self::checkQueuedUrl($url, $refreshTime);
+        $validateRefreshTime = empty($refreshTime) ? new \DateTime('now') : $refreshTime;
+        $existedRecord = self::checkQueuedUrl($url, $validateRefreshTime);
         if (empty($existedRecord)) {
-            $v          = new \KC\Entity\Varnish();
-            $v->url     = rtrim($url, '/');
-            $v->status  = 'queue';
-            $v->created_at = new \DateTime('now');
-            $v->updated_at = new \DateTime('now');
+            $varnish = new \KC\Entity\Varnish();
+            $varnish->url = rtrim($url, '/');
+            $varnish->status = 'queue';
+            $varnish->created_at = new \DateTime('now');
+            $varnish->updated_at = new \DateTime('now');
             if (!empty($refreshTime)) {
-                $v->refresh_time = new \DateTime($refreshTime);
-            }else{
-                $v->refresh_time = new \DateTime('now');
+                $varnish->refresh_time = new \DateTime($refreshTime);
+            } else {
+                $varnish->refresh_time = new \DateTime('now');
             }
             $entityManagerLocale = \Zend_Registry::get('emLocale');
-            $entityManagerLocale->persist($v);
+            $entityManagerLocale->persist($varnish);
             $entityManagerLocale->flush();
-            return $v->getId();
+            return $varnish->getId();
         }
     }
 
-    // preform the refresh on the varnish server
     private function refreshVarnish($url)
     {
         $curl = curl_init(rtrim($url, '/'));
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "REFRESH");
+        curl_setopt($curl, CURLOPT_NOBODY, true);
         curl_exec($curl);
+        if (!curl_errno($curl)) {
+            $info = curl_getinfo($curl);
+            echo "URL: " . $info['url'] . "\n";
+            echo "Time: " . $info['total_time'] . "\n\n";
+        }
+        curl_close($curl);
     }
 
-    // process all the urls waiting to refresh
     public function processQueue()
     {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('v')
-            ->from('KC\Entity\Varnish', 'v')
-            ->andWhere($queryBuilder->expr()->eq('v.status', 'queue'));
-        $queue = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $queue = self::getAllUrlsByRefreshTime();
         if (!empty($queue)) {
             foreach ($queue as $page) {
-                sleep(1.5);
                 self::refreshVarnish($page['url']);
                 self::removeFromQueue($page['id']);
             }
         }
     }
 
-    // set the status for this record to 'processed'
     private function processed($id)
     {
         $page = \Zend_Registry::get('emLocale')->find('KC\Entity\Varnish', $id);
@@ -72,7 +70,6 @@ class Varnish extends \KC\Entity\Varnish
         }
     }
 
-    // remove the record from the Queue
     private function removeFromQueue($id)
     {
         $varnish = \Zend_Registry::get('emLocale')->find('KC\Entity\Varnish', $id);
@@ -80,22 +77,19 @@ class Varnish extends \KC\Entity\Varnish
         $entityManagerLocale->flush();
     }
 
-    // check a url is already in queue or not
-    public static function checkQueuedUrl($url, $refreshTime = '')
+    public static function checkQueuedUrl($url, $refreshTime)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v.id')
             ->from('KC\Entity\Varnish', 'v')
             ->where($queryBuilder->expr()->eq('v.url', $queryBuilder->expr()->literal(rtrim($url, '/'))))
-            ->andWhere("v.status = 'queue'");
-        if (!empty($refreshTime)) {
-            $query = $query->andWhere(
+            ->andWhere("v.status = 'queue'")
+            ->andWhere(
                 $queryBuilder->expr()->eq('v.refresh_time', $queryBuilder->expr()->literal($refreshTime))
             );
-        }
         $query = $query->setMaxResults(1);
-        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return  $data;
+        $varnishUrls = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return  $varnishUrls;
     }
 
     public static function getVarnishUrlsCount()
@@ -106,5 +100,20 @@ class Varnish extends \KC\Entity\Varnish
             ->from('KC\Entity\Varnish', 'v');
         $varnishUrlsCount = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return !empty($varnishUrlsCount) ? $varnishUrlsCount[0]['Vcount'] : 0;
+    }
+
+    public static function getAllUrlsByRefreshTime()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $currentTime = FrontEnd_Helper_viewHelper::convertCurrentTimeToServerTime();
+        $refreshUrls = $queryBuilder
+            ->select('v')
+            ->from('KC\Entity\Varnish', 'v')
+            ->andWhere(
+                $queryBuilder->expr()->lte('v.refresh_time', $queryBuilder->expr()->literal($currentTime))
+            )
+            ->orWhere('v.refresh_time is NULL')
+            ->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $refreshUrls;
     }
 }
