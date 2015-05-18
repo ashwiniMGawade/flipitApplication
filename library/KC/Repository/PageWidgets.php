@@ -20,13 +20,13 @@ class PageWidgets extends \KC\Entity\PageWidgets
     public static function addWidgetInList($widgetId, $widgetsType, $type = '')
     {
         $widget = self::widgetExistance($widgetId);
-        $result = '0';
+        $errorStatus = '0';
         if (sizeof($widget) > 0) {
             $pageWidgets = self::getPageWidget($widgetId, $widgetsType);
             if (!empty($pageWidgets)) {
-                $result = '2';
+                $errorStatus = '2';
             } else {
-                $result = '1';
+                $errorStatus = '1';
                 $pageWidgetMaxPosition = self::getPageWidgetMaxPosition($widgetsType);
                 if (!empty($pageWidgetMaxPosition)) {
                     $newPosition = $pageWidgetMaxPosition[0]['position'];
@@ -34,7 +34,7 @@ class PageWidgets extends \KC\Entity\PageWidgets
                     $newPosition =  0;
                 }
                 $pageWidgetId = self::savePageWidget($widgetId, $widgetsType, $newPosition);
-                $result  = array(
+                $errorStatus  = array(
                     'id'=>$pageWidgetId,
                     'type'=>'MN',
                     'widgetId'=>$widgetId,
@@ -43,7 +43,7 @@ class PageWidgets extends \KC\Entity\PageWidgets
                 );
             }
         }
-        return $result;
+        return $errorStatus;
     }
 
     public static function widgetExistance($widgetId)
@@ -169,14 +169,9 @@ class PageWidgets extends \KC\Entity\PageWidgets
     public static function savePosition($widgetIds, $widgetType)
     {
         if (!empty($widgetIds)) {
-            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder
-                ->delete('KC\Entity\PageWidgets', 'spl')
-                ->where('spl.widget_type ='.$queryBuilder->expr()->literal($widgetType))
-                ->getQuery();
-            $query->execute();
+            self::deletePageWidgetsByWidgetType($widgetType);
             $widgetIds = explode(',', $widgetIds);
-            $i = 1;
+            $widgetPosition = 1;
             foreach ($widgetIds as $widgetId) {
                 $entityManagerLocale  = \Zend_Registry::get('emLocale');
                 $pageWidget = new \KC\Entity\PageWidgets();
@@ -185,14 +180,25 @@ class PageWidgets extends \KC\Entity\PageWidgets
                     'KC\Entity\Widget',
                     \FrontEnd_Helper_viewHelper::sanitize($widgetId)
                 );
-                $pageWidget->position = $i;
+                $pageWidget->position = $widgetPosition;
                 $pageWidget->deleted = 0;
                 $pageWidget->created_at = new \DateTime('now');
                 $pageWidget->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($pageWidget);
                 $entityManagerLocale->flush();
-                $i++;
+                $widgetPosition++;
             }
         }
+    }
+
+    public static function deletePageWidgetsByWidgetType($widgetType)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->delete('KC\Entity\PageWidgets', 'spl')
+            ->where('spl.widget_type ='.$queryBuilder->expr()->literal($widgetType))
+            ->getQuery();
+        $query->execute();
+        return true;
     }
 }

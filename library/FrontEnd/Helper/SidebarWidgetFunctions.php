@@ -289,7 +289,7 @@ EOD;
             $topPopularOffers = $currentView->partial(
                 'plus/_topPopularOffers.phtml',
                 array(
-                    'topPopularOffers' => $currentView->topPopularOffers,
+                    'topPopularOffers' => $currentView->topPopularOffers
                 )
             );
         }
