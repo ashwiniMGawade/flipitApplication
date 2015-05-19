@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     uniqueConstraints={@ORM\UniqueConstraint(name="unique_shopname_website_idx", columns={"shopName"})}
  * )
  */
-class chainItem
+class ChainItem
 {
     /**
      * @ORM\Id
