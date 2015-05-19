@@ -12,7 +12,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/sort_widget.js");
         <?php echo $this->translate('Widget Sorting'); ?>
     </h1>
     <div class='mb10'> 
-        <select class="combobox wt-389-display-none" name="widgetCategories" id="widgetCategories">
+        <select style="display: none" class="combobox wt-389" name="widgetCategories" id="widgetCategories">
         <?php
         foreach ($this->widgetCategories as $widgetCategoryIndex => $widgetCategory) { 
             if($widgetCategoryIndex == $this->widgetType) {
@@ -35,7 +35,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/sort_widget.js");
             <div id="side-sortables" class="meta-box-sortables ui-sortable">
                 <div class="coupon-sidebar-outer">
                     <div class="coupon-sidebar-heading">
-                        <select class="combobox wt-389-display-none" name="widgetslist" id="widgetslist">
+                        <select style="display: none" class="combobox wt-389" name="widgetslist" id="widgetslist">
                             <option value=""></option>
                             <?php
                             foreach ($this->widgetsList as $widget) { 
