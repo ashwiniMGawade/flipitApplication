@@ -218,8 +218,8 @@ EOD;
             getRequestedDataBySetGetCache(
                 $pageType.'_editor_data',
                 array(
-                'function' =>
-                'KC\Repository\EditorWidget::getEditorWidgetData', 'parameters' => array($pageType)
+                    'function' =>
+                    'KC\Repository\EditorWidget::getEditorWidgetData', 'parameters' => array($pageType)
                 ),
                 ''
             );
@@ -234,8 +234,8 @@ EOD;
                 getRequestedDataBySetGetCache(
                     'user_'.$editorId.'_details',
                     array(
-                    'function' =>
-                    'KC\Repository\User::getUserDetails', 'parameters' => array($editorId)
+                        'function' =>
+                        'KC\Repository\User::getUserDetails', 'parameters' => array($editorId)
                     ),
                     ''
                 );
