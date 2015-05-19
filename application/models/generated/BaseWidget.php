@@ -57,7 +57,7 @@ abstract class BaseWidget extends Doctrine_Record
              ));
         $this->hasColumn('function_name', 'string', 255, array(
             'type' => 'string',
-            'length' => '255',
+            'length' => '255'
         ));
     }
 
