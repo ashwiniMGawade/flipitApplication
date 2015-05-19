@@ -143,7 +143,7 @@ class SendCodeAlert
                     CodeAlertQueue::moveCodeAlertToTrash($codeAlertOffer['id']);
                 }
 
-                if (($startDate <= $currentDate && $codeAlertOffer['endDate'] >= $currentDate) && $codeAlertOffer['offline'] == 0) {
+                if (($startDate <= $currentDate && $codeAlertOffer['endDate'] >= date('Y-m-d H:i:s')) && $codeAlertOffer['offline'] == 0) {
                     $this->setPhpExecutionLimit();
                     $topVouchercodes = FrontEnd_Helper_viewHelper::getShopCouponCode(
                         'similarStoresAndSimilarCategoriesOffers',
