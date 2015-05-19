@@ -39,8 +39,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/sort_widget.js");
                             <option value=""></option>
                             <?php
                             foreach ($this->widgetsList as $widget) { 
-                                if (trim ($widget['title']) != '') {
-                                    $offer = substr ($widget['title'], 0, 70 );
+                                if (trim($widget['title']) != '') {
+                                    $offer = substr($widget['title'], 0, 70);
                                     ?>
                                     <option  value="<?php echo $widget['id']; ?>"><?php echo $offer; ?></option>
                                     <?php 
