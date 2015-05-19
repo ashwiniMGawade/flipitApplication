@@ -800,7 +800,7 @@ class Shop extends \KC\Entity\Shop
                 # update chain if shop is associated with chain
                 if ($shopInfo->chainItemId) {
                     $RoutePermalinkQueryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-                    $query = $RoutePermalinkQueryBuilder->delete('KC\Entity\chainItem', 'ct')
+                    $query = $RoutePermalinkQueryBuilder->delete('KC\Entity\ChainItem', 'ct')
                         ->where("ct.chainItem=" . $shopInfo->chainId)
                         ->where("ct.shopId=" . $shopInfo->id)
                         ->getQuery()->execute();
@@ -1331,7 +1331,7 @@ class Shop extends \KC\Entity\Shop
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $shopInfo->id);
                 if ($shopInfo->chainItemId) {
                     $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-                    $query = $queryBuilder->update('KC\Entity\chainItem', 'ct')
+                    $query = $queryBuilder->update('KC\Entity\ChainItem', 'ct')
                         ->set('ct.shopName', $queryBuilder->expr()->literal($shopInfo->name))
                         ->set('ct.permalink', $queryBuilder->expr()->literal($shopInfo->permaLink))
                         ->set('ct.status', $queryBuilder->expr()->literal($shopInfo->status))
