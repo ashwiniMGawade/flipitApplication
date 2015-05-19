@@ -46,7 +46,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
             <div class="mainpage-content-right">
                 <div class="mainpage-content-right-inner-right-other"></div>
                 <div class="mainpage-content-right-inner-left-other">
-                    <select class="mainpage-content-right-select" id="pageType" name="type" onChange="getPageTypeData()">
+                    <select class="mainpage-content-right-select" id="pageType" name="type"
+                    onChange="getPageTypeWidgetData()">
                         <option default="default" value=""><?php echo $this->translate('None'); ?></option>
                         <option value="top20"><?php echo $this->translate('backend_Top 20 Page'); ?></option>
                         <option value="category"><?php echo $this->translate('backend_Catgeory Page'); ?></option>
@@ -67,7 +68,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
                 <div class="mainpage-content-right-inner-left-other">
                    <select class="mainpage-content-right-select"  id="selecteditors" name="selecteditors">
                     <option default="default" value=""><?php echo $this->translate('None'); ?></option>
-                    <?php for($i=0;$i<count($this->managersList['editors']);$i++){?>
+                    <?php for ($i=0; $i<count($this->managersList['editors']); $i++) {?>
                     <option value="<?php echo $this->managersList['editors'][$i]['id'];?>">
                     <?php echo ucfirst($this->managersList['editors'][$i]['fname']. " " . $this->managersList['editors'][$i]['lname']);?></option>
                     <?php }?>
@@ -82,7 +83,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
                 </label>
             </div>
             <div class="mainpage-content-right">
-                <div class="mainpage-content-right-inner-right-other" style="width:250px;"></div>
+                <div class="wdth250 mainpage-content-right-inner-right-other"></div>
                 <div class="mainpage-content-right-inner-left-other">
                     <input id = "subtitle" type="text" class="span3"
                     placeholder="<?php echo $this->translate('backend_subTitle'); ?>"  name="subtitle">

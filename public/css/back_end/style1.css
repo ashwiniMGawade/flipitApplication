@@ -360,3 +360,6 @@ a, #adminmenu a, #the-comment-list p.comment-author strong a, #media-upload a.de
 .br4{
     border-radius: 0 4px 4px 0;
 }
+.wdth250{
+    width:250px;
+}

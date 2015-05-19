@@ -30,7 +30,7 @@ function changeAction(e, type)
     $("input#actionType").val(type);
 }
 
-function getPageTypeData() {
+function getPageTypeWidgetData() {
     var pageType = $("#pageType").val();
     $.ajax({
         url: HOST_PATH + "admin/popularcode/pageTypeDetail",
