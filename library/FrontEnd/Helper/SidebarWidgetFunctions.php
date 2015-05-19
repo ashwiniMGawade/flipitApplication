@@ -194,4 +194,52 @@ EOD;
             </div>
         <ul class="tags">';
     }
+
+    public function getPageEditorWidget($pageType, $currentObject)
+    {
+        $editorWidgetInformation = self::editorWidgetInformation($pageType);
+        $editorId = !empty($editorWidgetInformation[0]['editorId'])
+            ? $editorWidgetInformation[0]['editorId'] : '';
+        $editorInformation = self::getEditorInformation($editorId);
+        if($editorInformation != '' && $editorWidgetInformation[0]['status'] != ''):
+            echo $editorInformation = $currentObject->partial(
+                'partials/_editorWidget.phtml',
+                array(
+                   'editorInformation' => $editorInformation,
+                   'editorWidgetInformation' => $editorWidgetInformation
+                )
+            );
+        endif;
+    }
+
+    public static function editorWidgetInformation($pageType)
+    {
+        $editorWidgetInformation = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                $pageType.'_editor_data',
+                array(
+                    'function' =>
+                    'KC\Repository\EditorWidget::getEditorWidgetData', 'parameters' => array($pageType)
+                ),
+                ''
+            );
+        return $editorWidgetInformation;
+    }
+
+    public static function getEditorInformation($editorId)
+    {
+        $editorInformation = '';
+        if (!empty($editorId)) {
+            $editorInformation = \FrontEnd_Helper_viewHelper::
+                getRequestedDataBySetGetCache(
+                    'user_'.$editorId.'_details',
+                    array(
+                        'function' =>
+                        'KC\Repository\User::getUserDetails', 'parameters' => array($editorId)
+                    ),
+                    ''
+                );
+        }
+        return $editorInformation;
+    }
 }

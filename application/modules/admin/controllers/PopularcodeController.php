@@ -143,4 +143,34 @@ class Admin_PopularcodeController extends Zend_Controller_Action
         echo \Zend_Json::encode($popularCode);
         exit();
     }
+
+    public function addEditorWidgetDataAction()
+    {
+        $site_name = "kortingscode.nl";
+        if (isset($_COOKIE['site_name'])) {
+            $site_name =  $_COOKIE['site_name'];
+        }
+        $users = new \KC\Repository\User();
+        $this->view->managersList = $users->getManagersLists($site_name);
+        $flashMessage = $this->_helper->getHelper('FlashMessenger');
+        $message = $flashMessage->getMessages();
+        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
+        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
+
+        if ($this->_request->isPost()) {
+            $parameters = $this->_getAllParams();
+            \KC\Repository\EditorWidget::addEditorWidgetData($parameters);
+            $message = $this->view->translate('backend_ Editor data has been updated successfully');
+            $flashMessage->addMessage(array('success' => $message ));
+            $this->_redirect(HTTP_PATH.'admin/popularcode/add-editor-widget-data');
+        }
+    }
+
+    public function pageTypeDetailAction()
+    {
+        $editorWidgetData = \KC\Repository\EditorWidget::getEditorWidgetData($this->getRequest()->getParam('pageType'));
+        $editorWidgetData = !empty($editorWidgetData) ? $editorWidgetData : '';
+        echo \Zend_Json::encode($editorWidgetData);
+        exit();
+    }
 }

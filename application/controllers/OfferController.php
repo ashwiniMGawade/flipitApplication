@@ -221,7 +221,7 @@ class OfferController extends Zend_Controller_Action
                 ),
                 ''
             );
-        }    
+        }
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->actionName = $this->getRequest()->getActionName();
@@ -235,11 +235,6 @@ class OfferController extends Zend_Controller_Action
             FACEBOOK_IMAGE,
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
-
-
-
-
-       
         $this->view->shopId = '';
         $this->view->controllerName = $params['controller'];
         $this->view->offersType = 'newestOffer';

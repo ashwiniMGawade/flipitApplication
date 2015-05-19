@@ -70,7 +70,6 @@ class ErrorController extends Zend_Controller_Action
                         20,
                         9
                     );
-
                     $frontendViewHelper = new \FrontEnd_Helper_SidebarWidgetFunctions();
                     $sidebarWidget = $frontendViewHelper->getSidebarWidget(
                         $sidebarParameters = array(),
