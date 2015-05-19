@@ -33,7 +33,7 @@ function changeAction(e, type)
 function getPageTypeWidgetData() {
     var pageType = $("#pageType").val();
     $.ajax({
-        url: HOST_PATH + "admin/popularcode/pageTypeDetail",
+        url: HOST_PATH + "admin/popularcode/page-type-detail",
         dataType: 'json',
         data: {'pageType' : pageType},
         success: function(dataSet) {
@@ -52,9 +52,10 @@ function getPageTypeWidgetData() {
                 }
                 
             } else {
-                $("#description").val();
-                $("#subtitle").val();
-                $("#selecteditors").val();
+                CKEDITOR.instances['description'].setData('');
+                $("#description").val('');
+                $("#subtitle").val('');
+                $("#selecteditors").val('');
                 $("#btnYes").val(1);
             }
         } 

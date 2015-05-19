@@ -26,7 +26,7 @@ class EditorWidget Extends \KC\Entity\EditorWidget
 
     public static function updateEditorWidgetData($parameters)
     {
-        if (!empty($editorId)) {
+        if (!empty($parameters['selecteditors'])) {
             $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $entityManagerLocale
                 ->update('KC\Entity\EditorWidget', 'ew')
