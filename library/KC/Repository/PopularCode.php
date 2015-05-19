@@ -298,8 +298,8 @@ class PopularCode extends \KC\Entity\PopularCode
             ->andWhere("o.userGenerated = 0")
             ->andWhere('s.deleted = 0')
             ->andWhere('o.offline = 0')
-            //->andWhere('o.endDate >'."'".$date."'")
-            //->andWhere('o.startDate <='."'".$date."'")
+            ->andWhere('o.endDate >'."'".$date."'")
+            ->andWhere('o.startDate <='."'".$date."'")
             ->setMaxResults($limit)
             ->orderBy('p.position', 'ASC');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
