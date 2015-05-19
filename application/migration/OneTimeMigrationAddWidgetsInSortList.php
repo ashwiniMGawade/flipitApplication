@@ -31,6 +31,7 @@ class OneTimeMigrationAddWidgetsInSortList
         $widgets = new Widget();
         $widgetsList = $widgets->getUserDefinedWidgetList();
         PageWidgets::savePageWidgets($widgetsList);
+        Widget::addFunctionNames();
         $connectionManager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - widgets have been added sucessfully!!!"

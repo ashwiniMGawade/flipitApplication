@@ -3,6 +3,39 @@ namespace KC\Repository;
 
 class Widget extends \KC\Entity\Widget
 {
+    public static function getAllWidgets()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('w')
+            ->from('KC\Entity\Widget', 'w')
+            ->andWhere('w.deleted = 0');
+        $widgetsList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $widgetsList;
+    }
+
+    public static function addFunctionNames()
+    {
+        $widgets = self::getAllWidgets();
+        foreach ($widgets as $widget) {
+            switch ($widget['slug']) {
+                case 'popular_category':
+                    break;
+                case 'e_mail_subscription':
+                    break;
+                case 'popular_stores':
+                    break;
+                case 'stuur_een':
+                    break;
+                case 'popular_editor':
+                    break;
+                case 'join_us':
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     public function addWidget($params)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
