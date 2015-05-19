@@ -5,7 +5,7 @@
 <?php 
 foreach ($this->latestShopUpdates as $latestShopUpdate) {
     $latestShopUpdate = (object) $latestShopUpdate;
-    $newsStartDateObject = new Zend_Date($latestShopUpdate->created_at->format('Y-d-m'));
+    $newsStartDateObject = new Zend_Date($latestShopUpdate->created_at->format('Y-m-d'));
     $newsStartDate = $newsStartDateObject->get(Zend_Date::DATE_LONG);
     $httpStringPosition = 'http';
 
