@@ -34,18 +34,18 @@ abstract class BasePageWidgets extends Doctrine_Record
             array(
                 'created' =>
                     array(
-                        'name' => 'created_at',
+                        'name' => 'created_at'
                     ),
                 'updated' =>
                     array(
-                        'name' => 'updated_at',
+                        'name' => 'updated_at'
                     ),
             )
         );
         $softdelete0 = new Doctrine_Template_SoftDelete(array(
-             'name' => 'deleted',
-             'type' => 'boolean',
-             ));
+            'name' => 'deleted',
+            'type' => 'boolean'
+        ));
         $this->actAs($timestampable0);
         $this->actAs($softdelete0);
     }
