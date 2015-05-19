@@ -45,10 +45,7 @@ class Translations Extends \KC\Entity\Translations
             $queryBuilder->update('KC\Entity\Translations', 't')
                 ->set(
                     't.translation',
-                    "'".mysqli_real_escape_string(
-                        \FrontEnd_Helper_viewHelper::getDbConnectionDetails(),
-                        $translationsAfterRemovingTags[(string)\Zend_Registry::get('Zend_Locale')]
-                    )."'"
+                    "'".$translationsAfterRemovingTags[(string)\Zend_Registry::get('Zend_Locale')]."'"
                 )
                 ->where('t.id = '.$existingTranslation[0]['id'])
                 ->getQuery()->execute();
