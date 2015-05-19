@@ -682,17 +682,17 @@ function setFormData(data){
 		 jQuery('#deepLinkoofbtn').click(); 
 	 }
 	 //console.log(data[0].termandcondition.length);
-	 
+	 CKEDITOR.instances['termsAndconditions'].setData(data[0].termsAndconditionContent);
 	 var termsCount = data.length;
 	
 		for(var i=0;i<termsCount;i++){
 			 if(i>4){
 			    jQuery('#addmoreBtn').click();
 			 }
-			 //jQuery('#termsAndcondition').val(data[0].termandcondition[i].content);
+			//Query('#termsAndconditions').val(data[0].termandcondition[i].termsAndconditionContent);
 
 		       
-			 CKEDITOR.instances['termsAndcondition'].setData(data[i].termsAndconditionContent);
+			
 			 
 			 
 		 }
