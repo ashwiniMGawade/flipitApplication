@@ -12,7 +12,7 @@ $(document).ready(function() {
 
 function changeAction(e, type)
 {
-    var id =   $(e).attr("id");
+    var id = $(e).attr("id");
     if (id=='btnNo') {
         $('#btnNo').addClass('btn-primary');
         $('#btnYes').removeClass('btn-primary');
@@ -20,11 +20,11 @@ function changeAction(e, type)
         $('#btnYes').addClass('btn-primary');
         $('#btnNo').removeClass('btn-primary');
         $('#redirectTo').parent('div').removeClass('error')
-        .removeClass('success')
-        .prev("div")
-        .addClass('focus')
-        .removeClass('error')
-        .removeClass('error');
+            .removeClass('success')
+            .prev("div")
+            .addClass('focus')
+            .removeClass('error')
+            .removeClass('error');
         $('span[for=redirectTo]').remove();
     }
     $("input#actionType").val(type);

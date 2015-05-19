@@ -4,7 +4,7 @@ class EditorWidget Extends \KC\Entity\EditorWidget
 {
     public static function addEditorWidgetData($parameters)
     {
-        $editorWidgetData = self::getEditorWidgetData($type);
+        $editorWidgetData = self::getEditorWidgetData($parameters['type']);
         if (empty($editorWidgetData)) {
             $entityManagerLocale = \Zend_Registry::get('emLocale');
             $editorWidget = new \KC\Entity\EditorWidget();
@@ -40,13 +40,13 @@ class EditorWidget Extends \KC\Entity\EditorWidget
         return true;
     }
 
-    public static function getEditorWidgetData($type)
+    public static function getEditorWidgetData($pageType)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
             ->select('ew')
             ->from('KC\Entity\EditorWidget', 'ew')
-            ->where('ew.type ='.$entityManagerLocale->expr()->literal($type));
+            ->where('ew.type ='.$entityManagerLocale->expr()->literal($pageType));
         $editorWidgetData = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $editorWidgetData;
     }
