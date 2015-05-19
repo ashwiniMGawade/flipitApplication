@@ -319,7 +319,7 @@ class Admin_ShopController extends Zend_Controller_Action
         $category = new \KC\Repository\Category();
         $this->view->categoryList = $category->getCategoriesInformation();
 
-        $site_name = "";
+        $site_name = "kortingscode.nl";
         if (isset($_COOKIE['site_name'])) {
             $site_name =  $_COOKIE['site_name'];
         }
