@@ -20,7 +20,7 @@ class EditorWidget Extends \KC\Entity\EditorWidget
         } else {
             self::updateEditorWidgetData($parameters);
         }
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($type.'_editor_data');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($parameters['type'].'_editor_data');
         return true;
     }
 
