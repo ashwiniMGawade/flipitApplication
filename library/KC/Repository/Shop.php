@@ -1336,11 +1336,11 @@ class Shop extends \KC\Entity\Shop
                         ->set('ct.permalink', $queryBuilder->expr()->literal($shopInfo->permaLink))
                         ->set('ct.status', $queryBuilder->expr()->literal($shopInfo->status))
                         ->where("ct.id=" . $shopInfo->chainItemId)
-                        ->where("ct.shopId=" . $shopInfo->id)
+                        ->andWhere("ct.shopId=" . $shopInfo->id)
                         ->getQuery()->execute();
                 }
             }
-        return $shopInfo->id;
+            return $shopInfo->id;
         } catch (Exception $e) {
             return false;
         }
