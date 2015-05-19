@@ -135,12 +135,15 @@ class SendCodeAlert
         if (!empty($codeAlertOffers)) {
             foreach ($codeAlertOffers as $codeAlertOffer) {
                 $this->shopId = $codeAlertOffer['shop']['id'];
-                $currentDate = date('Y-m-d H:i:s');
+                $currentDate = date('Y-m-d H:i:s', strtotime('+1 hour'));
+                $startDateTimestamp = strtotime($codeAlertOffer['startDate']) + 3600;
+                $startDate = date('Y-m-d H:i:s', $startDateTimestamp);
+
                 if ($codeAlertOffer['endDate'] < $currentDate) {
                     CodeAlertQueue::moveCodeAlertToTrash($codeAlertOffer['id']);
                 }
 
-                if (($codeAlertOffer['startDate'] <= $currentDate && $codeAlertOffer['endDate'] >= $currentDate) && $codeAlertOffer['offline'] == 0) {
+                if (($startDate <= $currentDate && $codeAlertOffer['endDate'] >= $currentDate) && $codeAlertOffer['offline'] == 0) {
                     $this->setPhpExecutionLimit();
                     $topVouchercodes = FrontEnd_Helper_viewHelper::getShopCouponCode(
                         'similarStoresAndSimilarCategoriesOffers',
