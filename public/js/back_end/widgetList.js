@@ -104,7 +104,7 @@ function getWidgetList(iSearchText,iStart,iSortCol,iSortDir) {
               "sInfo": "<b>_START_-_END_</b> of <b>_TOTAL_</b>"
         },
         "iDisplayStart" : iStart,
-        "aaSorting": [[ iSortCol , iSortDir ]],
+        "aaSorting": [[iSortCol , iSortDir]],
         "sPaginationType" : "bootstrap",
         "sAjaxSource" : HOST_PATH + "admin/widget/widgetlist/searchText/"+ iSearchText +"/flag/0",
         "aoColumns" : [{
@@ -168,17 +168,17 @@ function getWidgetList(iSearchText,iStart,iSortCol,iSortDir) {
         "fnDrawCallback" : function(obj) {
             $('#widgetListtable').css('opacity',1);
             var state = {};
-            state[ 'iStart' ] = obj._iDisplayStart;
-            state[ 'iSortCol' ] = obj.aaSorting[0][0];
-            state[ 'iSortDir' ] = obj.aaSorting[0][1];
-            state[ 'iSearchText' ] = iSearchText;
+            state['iStart'] = obj._iDisplayStart;
+            state['iSortCol'] = obj.aaSorting[0][0];
+            state['iSortDir'] = obj.aaSorting[0][1];
+            state['iSearchText'] = iSearchText;
             $("#widgetListtable").find('tr').find('td:lt(2)').click(function (e) {  
                 var el = e.target  ? e.target :  e.srcElement;
                 if (el.tagName != "BUTTON") {
                     var eId = $(this).parent('tr').find('p, a').attr('editid');
                     $('p', $(this))
                     if (eId!= '') {
-                        state[ 'eId' ] = eId;
+                        state['eId'] = eId;
                         $.bbq.pushState(state);
                         click = true;
                         window.location.href = HOST_PATH + "admin/widget/editwidget/id/" + eId+ "?iStart="+

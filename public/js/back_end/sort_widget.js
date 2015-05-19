@@ -12,9 +12,9 @@ $(document).ready(function() {
     addSelectedClassOnButton(1);
     selectedElements();
     $('ul#sort-widgets-list li').click(changeSelectedClass);
-    $( "#sort-widgets-list" ).sortable();
-    $( "#sort-widgets-list" ).disableSelection();
-    $( "#sort-widgets-list" ).on( "sortstop", function( event, ui ) {
+    $("#sort-widgets-list").sortable();
+    $("#sort-widgets-list").disableSelection();
+    $("#sort-widgets-list").on("sortstop", function(event, ui) {
         var widgetId = new Array();
         $('.ui-state-default').each(function() {
             widgetId.push($(this).attr('relwidget'));
@@ -29,12 +29,12 @@ $(document).ready(function() {
             data: {offersIds: widgetId, widgetType: $('#widgetType').val()},
             success : function(json) { 
                 $('#img-load').remove();
-                $( "#sort-widgets-list" ).sortable( "refresh" );
-                $( "#sort-widgets-list" ).sortable( "refreshPositions" );
+                $("#sort-widgets-list").sortable("refresh");
+                $("#sort-widgets-list").sortable("refreshPositions");
                 $('ul#sort-widgets-list li').remove();
                 var li = '';
                 if (json!='') {
-                    for(var i in json) {
+                    for (var i in json) {
                         li+= "<li class='ui-state-default' relpos='" + json[i].position 
                         + "' relwidget='" + json[i]['widget'].id + "' id='" + json[i].id + "' ><span>" 
                         + json[i]['widget'].title +"</span></li>";
