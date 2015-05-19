@@ -357,3 +357,6 @@ a, #adminmenu a, #the-comment-list p.comment-author strong a, #media-upload a.de
     height : 20px;
     width : 511px;
 }
+.br4{
+    border-radius: 0 4px 4px 0;
+}

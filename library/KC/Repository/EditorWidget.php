@@ -8,13 +8,13 @@ class EditorWidget Extends \KC\Entity\EditorWidget
         if (empty($editorWidgetData)) {
             $entityManagerLocale = \Zend_Registry::get('emLocale');
             $editorWidget = new \KC\Entity\EditorWidget();
-            $editorWidget->type = $parameters['type'];
-            $editorWidget->description = $parameters['description'];
-            $editorWidget->subtitle = $parameters['subtitle'];
+            $editorWidget->type = \FrontEnd_Helper_viewHelper::sanitize($parameters['type']);
+            $editorWidget->description = \FrontEnd_Helper_viewHelper::sanitize($parameters['description']);
+            $editorWidget->subtitle = \FrontEnd_Helper_viewHelper::sanitize($parameters['subtitle']);
             $editorWidget->created_at = new \DateTime('now');
             $editorWidget->updated_at = new \DateTime('now');
-            $editorWidget->status = $parameters['actionType'];
-            $editorWidget->editorId = $parameters['selecteditors'];
+            $editorWidget->status = \FrontEnd_Helper_viewHelper::sanitize($parameters['actionType']);
+            $editorWidget->editorId = \FrontEnd_Helper_viewHelper::sanitize($parameters['selecteditors']);
             $entityManagerLocale->persist($editorWidget);
             $entityManagerLocale->flush();
         } else {

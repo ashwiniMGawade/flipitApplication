@@ -12,11 +12,12 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
 ?>
 <h1>
     <?php echo $this->translate('backend_Add/Update Editor Widget Information for pages'); ?>
-    <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/popularcode'"><?php echo $this->translate('Cancel'); ?></button>
+    <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/popularcode'">
+    <?php echo $this->translate('Cancel'); ?></button>
 </h1>
 <div class='wrap columns-2'>
     <?php 
-    if ($this->messageSuccess!='' || $this->messageError!='' ) 
+    if ($this->messageSuccess!='' || $this->messageError!='') 
     {
         ?>
         <br><div class ="mainpage-content-colorbox success">
@@ -66,9 +67,9 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
                 <div class="mainpage-content-right-inner-left-other">
                    <select class="mainpage-content-right-select"  id="selecteditors" name="selecteditors">
                     <option default="default" value=""><?php echo $this->translate('None'); ?></option>
-                    <?php for($i=0;$i<count($this->MangersList['editors']);$i++){?>
-                    <option value="<?php echo $this->MangersList['editors'][$i]['id'];?>"><?php echo ucfirst( $this->MangersList['editors'][$i]['fname']. " " . $this->MangersList['editors'][$i]['lname']);?></option>
-                    
+                    <?php for($i=0;$i<count($this->managersList['editors']);$i++){?>
+                    <option value="<?php echo $this->managersList['editors'][$i]['id'];?>">
+                    <?php echo ucfirst($this->managersList['editors'][$i]['fname']. " " . $this->managersList['editors'][$i]['lname']);?></option>
                     <?php }?>
                   </select>
                </div>   
@@ -83,7 +84,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
             <div class="mainpage-content-right">
                 <div class="mainpage-content-right-inner-right-other" style="width:250px;"></div>
                 <div class="mainpage-content-right-inner-left-other">
-                    <input id = "subtitle" type="text" class="span3" placeholder="<?php echo $this->translate('subTitle'); ?>"  name="subtitle">
+                    <input id = "subtitle" type="text" class="span3"
+                    placeholder="<?php echo $this->translate('backend_subTitle'); ?>"  name="subtitle">
                 </div>
             </div>
         </div>
@@ -94,7 +96,9 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
             <div class="mainpage-content-right">
                 <div class="mainpage-content-right-inner-right-other"></div>
                 <div class="mainpage-content-right-inner-left-other">
-                    <textarea rows="3" id="description" name="description" placeholder="<?php echo $this->translate('backend_Description about the Editor')?>" class="input-xlarge mbot bbot ignore word_count"></textarea>            
+                    <textarea rows="3" id="description" name="description"
+                    placeholder="<?php echo $this->translate('backend_Description about the Editor')?>"
+                    class="input-xlarge mbot bbot ignore word_count"></textarea>            
                 </div>
             </div>
         </div>    
@@ -105,16 +109,22 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
             <div class="mainpage-content-right">
                 <div class="mainpage-content-right-inner-left-other">
                     <div data-toggle="buttons-checkbox" class="btn-group">
-                        <button id='btnNo' type="button" onclick="changeAction(this,0)" name="redirect" class="btn"><?php echo $this->translate("No") ; ?></button>    
-                        <button id='btnYes' style="border-radius: 0 4px 4px 0;" type="button" onclick="changeAction(this,1)" name="connect" class="btn btn-primary default"><?php echo $this->translate("Yes") ; ?></button>
-                        <input value="<?php echo "1"?>" class="display-none" type="checkbox"  name="actionType" id="actionType" checked="checked"/>
+                        <button id='btnNo' type="button" onclick="changeAction(this, 0)" name="redirect" class="btn">
+                        <?php echo $this->translate("No") ; ?></button>    
+                        <button id='btnYes' type="button"
+                        onclick="changeAction(this, 1)" name="connect" class="btn btn-primary default br4">
+                        <?php echo $this->translate("Yes") ; ?></button>
+                        <input value="<?php echo "1"?>" class="display-none" type="checkbox"  name="actionType"
+                        id="actionType" checked="checked"/>
                     </div>
                 </div>
             </div>
         </div>          
         <div class="mainpage-content-colorbox">
-            <button type="submit" id="createEditorWidget" class="btn btn-large btn-primary fl"><?php echo $this->translate('CREATE'); ?></button>
-            <a href="javascript:void(0);" onclick="window.location.href='<?php echo HTTP_PATH ;?>admin/popularcode'" class="fl m10" ><strong><?php echo $this->translate('CANCEL'); ?></strong></a>
+            <button type="submit" id="createEditorWidget" class="btn btn-large btn-primary fl">
+            <?php echo $this->translate('CREATE'); ?></button>
+            <a href="javascript:void(0);" onclick="window.location.href='<?php echo HTTP_PATH ;?>admin/popularcode'"
+            class="fl m10" ><strong><?php echo $this->translate('CANCEL'); ?></strong></a>
         </div>
     </div>
 </form>

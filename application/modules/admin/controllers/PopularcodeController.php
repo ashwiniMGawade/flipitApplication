@@ -235,14 +235,14 @@ class Admin_PopularcodeController extends Zend_Controller_Action
         exit();
     }
 
-    public function addeditorwidgetdataAction()
+    public function addEditorWidgetDataAction()
     {
         $site_name = "kortingscode.nl";
         if (isset($_COOKIE['site_name'])) {
             $site_name =  $_COOKIE['site_name'];
         }
         $users = new \KC\Repository\User();
-        $this->view->MangersList = $users->getManagersLists($site_name);
+        $this->view->managersList = $users->getManagersLists($site_name);
         $flashMessage = $this->_helper->getHelper('FlashMessenger');
         $message = $flashMessage->getMessages();
         $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
@@ -257,7 +257,7 @@ class Admin_PopularcodeController extends Zend_Controller_Action
         }
     }
 
-    public function pagetypedetailAction()
+    public function pageTypeDetailAction()
     {
         $editorWidgetData = \KC\Repository\EditorWidget::getEditorWidgetData($this->getRequest()->getParam('pageType'));
         $editorWidgetData = !empty($editorWidgetData) ? $editorWidgetData : '';
