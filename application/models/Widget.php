@@ -24,33 +24,36 @@ class Widget extends BaseWidget
     public static function addFunctionNames()
     {
         $widgets = self::getAllWidgets();
-        foreach ($widgets as $widget) {
-            switch (trim($widget['slug'])) {
-                case 'popular_category':
-                    self::addFunction($widget['id'], 'popularCategoryWidget');
-                    break;
-                case 'e_mail_subscription':
-                    self::addFunction($widget['id'], 'popularCategoryWidget');
-                    break;
-                case 'popular_stores':
-                    self::addFunction($widget['id'], 'popularShopWidget');
-                    break;
-                case 'stuur_een':
-                    self::addFunction($widget['id'], 'socialCodeWidget');
-                    break;
-                case 'popular_editor':
-                    self::addFunction($widget['id'], 'popularEditorWidget');
-                    break;
-                case 'most _popular_fashion':
-                    self::addFunction($widget['id'], 'plusRecentlyAddedArticles');
-                    break;
-                default:
-                    break;
+        if (!empty($widgets)) {
+            foreach ($widgets as $widget) {
+                switch (trim($widget['slug'])) {
+                    case 'popular_category':
+                        self::updateWidgetFunctionName($widget['id'], 'popularCategoryWidget');
+                        break;
+                    case 'e_mail_subscription':
+                        self::updateWidgetFunctionName($widget['id'], 'popularCategoryWidget');
+                        break;
+                    case 'popular_stores':
+                        self::updateWidgetFunctionName($widget['id'], 'popularShopWidget');
+                        break;
+                    case 'stuur_een':
+                        self::updateWidgetFunctionName($widget['id'], 'socialCodeWidget');
+                        break;
+                    case 'popular_editor':
+                        self::updateWidgetFunctionName($widget['id'], 'popularEditorWidget');
+                        break;
+                    case 'most _popular_fashion':
+                        self::updateWidgetFunctionName($widget['id'], 'plusRecentlyAddedArticles');
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         self::addNewDefaultWidgets('Popular Offer For Plus', 'plusTopPopularOffers');
         self::addNewDefaultWidgets('Shop Also Viwes', 'shopsAlsoViewedWidget');
         self::addNewDefaultWidgets('Popular Page Editor', 'getPageEditorWidget');
+        return true;
     }
 
     public static function addNewDefaultWidgets($widgetTitle, $functionName)
@@ -61,9 +64,10 @@ class Widget extends BaseWidget
         $widget->status = 1;
         $widget->showWithDefault = 0;
         $widget->save();
+        return true;
     }
 
-    public static function addFunction($widgetId, $functionName)
+    public static function updateWidgetFunctionName($widgetId, $functionName)
     {
         Doctrine_Query::create()
             ->update('Widget w')
