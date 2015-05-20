@@ -574,11 +574,10 @@ class User extends \KC\Entity\User
                             endforeach;
                         endif;
                         $offerQueryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                        $query= $offerQueryBuilder->update('\KC\Entity\Offer', 'of')
-                            ->set('of.authorName', "'$fullName'")
-                            ->set('of.authorName', "'$fullName'")
-                            ->set('of.authorId', 0)
-                            ->where($entityManagerUser->expr()->in('of.id', $ids));
+                        $query= $offerQueryBuilder->update('\KC\Entity\Offer', 'uo')
+                            ->set('uo.authorName', $offerQueryBuilder->expr()->literal($fullName))
+                            ->set('uo.authorId', 0)
+                            ->where($offerQueryBuilder->expr()->in('uo.id', $ids));
                         $query->getQuery()->execute();
                     }
    
