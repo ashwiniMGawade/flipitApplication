@@ -8,6 +8,7 @@ function ltrim(src){
     return src;
 }
 $('#submit').click( function(e) {
+    $('#submit').after("<img id='img-load' src='" +  HOST_PATH  + "/public/images/ajax-loader2.gif'/>");
     $.ajax({
         url : HOST_PATH_LOCALE + 'contact/getcontactformdetails',
         type: 'post',
