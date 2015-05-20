@@ -25,149 +25,149 @@ class User
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $firstName;
+    protected $firstName;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $lastName;
+    protected $lastName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $email;
+    protected $email;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $password;
+    protected $password;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $google;
+    protected $google;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $twitter;
+    protected $twitter;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $pinterest;
+    protected $pinterest;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $likes;
+    protected $likes;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $dislike;
+    protected $dislike;
 
     /**
      * @ORM\Column(type="string", nullable=false)
      */
-    private $mainText;
+    protected $mainText;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $createdBy;
+    protected $createdBy;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $currentLogIn;
+    protected $currentLogIn;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $lastLogIn;
+    protected $lastLogIn;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $showInAboutListing;
+    protected $showInAboutListing;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $slug;
+    protected $slug;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $addtosearch;
+    protected $addtosearch;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $popularKortingscode;
+    protected $popularKortingscode;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $passwordChangeTime;
+    protected $passwordChangeTime;
 
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
      */
-    private $countryLocale;
+    protected $countryLocale;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    private $editorText;
+    protected $editorText;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\UserSession", mappedBy="usersession")
      */
-    private $user;
+    protected $user;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\refUserWebsite", mappedBy="websiteUsers", cascade={"persist", "remove"})
      */
-    private $refUserWebsite;
+    protected $refUserWebsite;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ProfileImage", inversedBy="user")
      * @ORM\JoinColumn(name="profileImageId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
-    private $profileimage;
+    protected $profileimage;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Role", inversedBy="roleid")
      * @ORM\JoinColumn(name="roleId", referencedColumnName="id", onDelete="restrict")
      */
-    private $users;
+    protected $users;
 
     public function __get($property)
     {
