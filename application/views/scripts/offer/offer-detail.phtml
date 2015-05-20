@@ -1,7 +1,7 @@
 <?php
 $offer = (object) $this->offerdetail[0][0];
 $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
-$termsAndConditions =  $offerPartial->getOfferTermsAndCondition($offer);
+$termsAndConditions =  !empty($this->offerdetail[0]['content']) ? $this->offerdetail[0]['content'] : '';
 $daysTillOfferExpires =  $offerPartial->getDaysTillOfferExpires($offer->endDate);
 if ($this->offerImagePath == '') {
     $lightboxContent = $this->partial(

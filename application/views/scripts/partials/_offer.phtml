@@ -247,8 +247,8 @@ foreach ($this->offers as $offer) {
             </div>
         </div>
         <div class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
-            <h2><?php echo $this->translate('Terms &amp; Conditions');
-            if (!empty($defaultText)) { echo ' : <span class="social-term-font">' .$defaultText.'</span>'; }?></h2>
+            <div class='term-and-condition'><?php echo $this->translate('Terms &amp; Conditions');
+            if (!empty($defaultText)) { echo ' : <span class="social-term-font">' .$defaultText.'</span>'; }?></div>
             <ol class="num-list">
             <?php echo $termsAndConditions;?>
             </ol>
