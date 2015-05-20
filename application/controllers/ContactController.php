@@ -22,6 +22,8 @@ class ContactController extends Zend_Controller_Action
 
     public function getcontactformdetailsAction()
     {
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
         require_once LIBRARY_PATH. "/recaptchalib.php";
         if ($this->getRequest()->isPost()) {
             $parameters = $this->_getAllParams();
@@ -46,7 +48,8 @@ class ContactController extends Zend_Controller_Action
                 $flashMessage->addMessage(array('success' => $errorMessage));
                 $urlToRedirect = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_info').'/'.
                     FrontEnd_Helper_viewHelper::__link('link_contact');
-                $this->_redirect($urlToRedirect);
+                $urlToRedirect = array('urlLocation' => $urlToRedirect);
+                echo $this->_helper->json->sendJson($urlToRedirect);
             }
         }
     }
@@ -85,6 +88,7 @@ class ContactController extends Zend_Controller_Action
         $flashMessage->addMessage(array('success' => $successMessage));
         $urlToRedirect = HTTP_PATH_LOCALE.\FrontEnd_Helper_viewHelper::__link('link_info').'/'.
             \FrontEnd_Helper_viewHelper::__link('link_contact');
-        $this->_redirect($urlToRedirect);
+        $urlToRedirect = array('urlLocation' => $urlToRedirect);
+        echo $this->_helper->json->sendJson($urlToRedirect);
     }
 }
