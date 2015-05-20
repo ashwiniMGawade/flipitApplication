@@ -14,8 +14,10 @@ $('#submit').click( function(e) {
         dataType: 'json',
         data: $('form#contactform').serialize(),
         success: function(data) {
+          window.location.href = data.urlLocation;
         }
     });
+    return false;
 });
 var validator =  null;
 function validateRegistration() {
