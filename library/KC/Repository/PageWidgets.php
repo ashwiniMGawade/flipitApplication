@@ -171,21 +171,9 @@ class PageWidgets extends \KC\Entity\PageWidgets
         if (!empty($widgetIds)) {
             self::deletePageWidgetsByWidgetType($widgetType);
             $widgetIds = explode(',', $widgetIds);
-            $widgetPosition = 1;
+            $widgetPosition = 0;
             foreach ($widgetIds as $widgetId) {
-                $entityManagerLocale  = \Zend_Registry::get('emLocale');
-                $pageWidget = new \KC\Entity\PageWidgets();
-                $pageWidget->widget_type = \FrontEnd_Helper_viewHelper::sanitize($widgetType);
-                $pageWidget->widget = $entityManagerLocale->find(
-                    'KC\Entity\Widget',
-                    \FrontEnd_Helper_viewHelper::sanitize($widgetId)
-                );
-                $pageWidget->position = $widgetPosition;
-                $pageWidget->deleted = 0;
-                $pageWidget->created_at = new \DateTime('now');
-                $pageWidget->updated_at = new \DateTime('now');
-                $entityManagerLocale->persist($pageWidget);
-                $entityManagerLocale->flush();
+                self::savePageWidget($widgetId, $widgetType, $widgetPosition);
                 $widgetPosition++;
             }
         }
