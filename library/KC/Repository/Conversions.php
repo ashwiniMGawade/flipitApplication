@@ -60,7 +60,9 @@ class Conversions extends \KC\Entity\Conversions
                 $conversionDetails = array(
                     "shopName" => $conversionInfo['offer']['shopOffers']['name'],
                     "offerTitle" => $conversionInfo['offer']['title'],
-                    "category" => $conversionCategory
+                    "offer" => array(
+                        "category" => $conversionCategory
+                    )
                 );
             }
         }
@@ -83,7 +85,9 @@ class Conversions extends \KC\Entity\Conversions
             if (!empty($conversionInfo)) {
                 $conversionDetails = array(
                     "shopName" => $conversionInfo['shop']['name'],
-                    "category" => $conversionCategory
+                    "shop" => array(
+                        "category" => $conversionCategory
+                    )
                 );
             }
         }
