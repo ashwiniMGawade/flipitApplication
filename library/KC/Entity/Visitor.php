@@ -17,173 +17,173 @@ class Visitor
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $firstName;
+    protected $firstName;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $lastName;
+    protected $lastName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $email;
+    protected $email;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $username;
+    protected $username;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $password;
+    protected $password;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    private $pwd;
+    protected $pwd;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $gender;
+    protected $gender;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      */
-    private $dateOfBirth;
+    protected $dateOfBirth;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    private $postalCode;
+    protected $postalCode;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $weeklyNewsLetter;
+    protected $weeklyNewsLetter;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $fashionNewsLetter;
+    protected $fashionNewsLetter;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $travelNewsLetter;
+    protected $travelNewsLetter;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $codeAlert;
+    protected $codeAlert;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $createdBy;
+    protected $createdBy;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $currentLogIn;
+    protected $currentLogIn;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $lastLogIn;
+    protected $lastLogIn;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $interested;
+    protected $interested;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $profile_img;
+    protected $profile_img;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $active_codeid;
+    protected $active_codeid;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $active;
+    protected $active;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $changepasswordrequest;
+    protected $changepasswordrequest;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $code_alert_send_date;
+    protected $code_alert_send_date;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Conversions", mappedBy="visitor")
      */
-    private $conversions;
+    protected $conversions;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\VisitorKeyword", mappedBy="visitor")
      */
-    private $visitorKeyword;
+    protected $visitorKeyword;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\VisitorImage", inversedBy="visitor")
      * @ORM\JoinColumn(name="imageid", referencedColumnName="id")
      */
-    private $visitorimage;
+    protected $visitorimage;
 
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Offer", mappedBy="visitors")
      */
-    private $offer;
+    protected $offer;
 
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Shop", mappedBy="visitors")
      */
-    private $favoriteshops;
+    protected $favoriteshops;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\FavoriteOffer", mappedBy="visitor")
      */
-    private $favoriteOffer;
+    protected $favoriteOffer;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\FavoriteShop", mappedBy="visitor")
      */
-    private $favoritevisitorshops;
+    protected $favoritevisitorshops;
 
     public function __get($property)
     {
