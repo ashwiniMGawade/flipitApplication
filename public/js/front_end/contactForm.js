@@ -8,14 +8,17 @@ function ltrim(src){
     return src;
 }
 $('#submit').click( function(e) {
+    $('#submit').after("<img id='img-load' src='" +  HOST_PATH  + "/public/images/ajax-loader2.gif'/>");
     $.ajax({
         url : HOST_PATH_LOCALE + 'contact/getcontactformdetails',
         type: 'post',
         dataType: 'json',
         data: $('form#contactform').serialize(),
         success: function(data) {
+          window.location.href = data.urlLocation;
         }
     });
+    return false;
 });
 var validator =  null;
 function validateRegistration() {
