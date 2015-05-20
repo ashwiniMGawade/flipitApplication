@@ -533,30 +533,24 @@ class Admin_UserController extends Zend_Controller_Action
                 ->delete('KC\Entity\refUserWebsite', 'r')
                 ->where('r.websiteUsers ='.$id)
                 ->getQuery()->execute();
-
             $del = \Zend_Registry::get('emUser')->createQueryBuilder()
                 ->delete('KC\Entity\User', 'u')
                 ->where('u.id ='.$id)
                 ->getQuery()->execute();
-
             if ((intval($u->profileimage->id)) > 0) {
                 $del = \Zend_Registry::get('emUser')->createQueryBuilder()
                     ->delete('KC\Entity\ProfileImage', 'i')
                     ->where('i.id ='. $u->profileimage->id)
                     ->getQuery()->execute();
             }
-
         } else {
-
             $id = null;
         }
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $this->view->translate('User has been deleted permanentally.');
         $flash->addMessage(array('success' => $message ));
-        //call cache function
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
-
         echo Zend_Json::encode($id);
         die();
     }
