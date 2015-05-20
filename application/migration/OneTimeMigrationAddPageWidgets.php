@@ -1,5 +1,5 @@
 <?php
-class OneTimeMigrationAddWidgetsInSortList
+class OneTimeMigrationAddPageWidgets
 {
     public function __construct()
     {
@@ -38,4 +38,4 @@ class OneTimeMigrationAddWidgetsInSortList
         );
     }
 }
-new OneTimeMigrationAddWidgetsInSortList();
+new OneTimeMigrationAddPageWidgets();
