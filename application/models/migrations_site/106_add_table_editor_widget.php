@@ -13,7 +13,7 @@ class AddTableEditorWidget extends Doctrine_Migration_Base
             ),
             'type' => array(
                 'type'   => 'string',
-                'length' => 10
+                'length' => 255
 
             ),
             'description' => array(

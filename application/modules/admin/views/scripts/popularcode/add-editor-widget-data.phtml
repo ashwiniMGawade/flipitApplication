@@ -48,11 +48,12 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
                 <div class="mainpage-content-right-inner-left-other">
                     <select class="mainpage-content-right-select" id="pageType" name="type"
                     onChange="getPageTypeWidgetData()">
-                        <option default="default" value=""><?php echo $this->translate('None'); ?></option>
-                        <option value="top20"><?php echo $this->translate('backend_Top 20 Page'); ?></option>
-                        <option value="category"><?php echo $this->translate('backend_Catgeory Page'); ?></option>
-                        <option value="special"><?php echo $this->translate('backend_Special Page'); ?></option>
-                        <option value="newPage"><?php echo $this->translate('backend_new Offers Page'); ?></option>
+                    <option  value=""><?php echo $this->translate('backend_Select Page Type'); ?></option>
+                    <?php
+                    foreach ($this->widgetCategories as $widgetCategoryIndex => $widgetCategory) { ?>
+                        <option  value="<?php echo $widgetCategoryIndex; ?>"><?php echo $widgetCategory; ?></option>
+                        <?php
+                    }?>
                     </select>
                </div>  
             </div>

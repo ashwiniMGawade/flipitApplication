@@ -20,7 +20,8 @@ class EditorWidget Extends \KC\Entity\EditorWidget
         } else {
             self::updateEditorWidgetData($parameters);
         }
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($parameters['type'].'_editor_data');
+        $cacheKey = \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($parameters['type']);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKey.'_editor_data');
         return true;
     }
 

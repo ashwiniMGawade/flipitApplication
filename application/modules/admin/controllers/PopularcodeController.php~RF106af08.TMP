@@ -155,6 +155,12 @@ class Admin_PopularcodeController extends Zend_Controller_Action
         $backEndHelper = new BackEnd_Helper_viewHelper();
         $widgetCategories = $backEndHelper->widgetCategories();
         $this->view->widgetCategories = $widgetCategories;
+        if (isset($widgetType)) {
+            $widgetType = $this->getRequest()->getParam('widgetType');
+        } else {
+            $widgetType = key($widgetCategories);
+        }
+        $this->view->widgetType = $widgetType;
         $flashMessage = $this->_helper->getHelper('FlashMessenger');
         $message = $flashMessage->getMessages();
         $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';

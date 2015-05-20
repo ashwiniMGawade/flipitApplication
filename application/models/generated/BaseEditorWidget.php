@@ -35,10 +35,10 @@ abstract class BaseEditorWidget extends Doctrine_Record
         $this->hasColumn(
             'type',
             'string',
-            10,
+            255,
             array(
                 'type' => 'string',
-                'length' => '10'
+                'length' => '255'
             )
         );
         $this->hasColumn(

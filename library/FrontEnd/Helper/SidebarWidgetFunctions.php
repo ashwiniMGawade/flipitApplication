@@ -301,9 +301,10 @@ EOD;
 
     public static function editorWidgetInformation($pageType)
     {
+        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($pageType);
         $editorWidgetInformation = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                $pageType.'_editor_data',
+                $cacheKey.'_editor_data',
                 array(
                     'function' =>
                     'KC\Repository\EditorWidget::getEditorWidgetData', 'parameters' => array($pageType)
