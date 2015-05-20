@@ -42,7 +42,7 @@ class PopularCode extends \KC\Entity\PopularCode
         $format = 'Y-m-j H:i:s';
         $date = date($format);
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder
+        $data = $queryBuilder
             ->select('o.title as title')
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
