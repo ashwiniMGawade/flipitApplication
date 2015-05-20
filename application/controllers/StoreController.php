@@ -257,7 +257,7 @@ class StoreController extends Zend_Controller_Action
                 (string)'shop_similar_shops',
                 array(
                     'function' => 'KC\Repository\Shop::getSimilarShops',
-                    'parameters' => array($shopId, 11)
+                    'parameters' => array($shopId, 12)
                 )
             );
         }

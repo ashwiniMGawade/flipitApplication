@@ -152,7 +152,7 @@ class Chain extends \KC\Entity\Chain
 
                 if ($chainValue['name'] != $currentSite || $shopId != $chainValue['shopId']) {
                     $shop = array(
-                        'name' => $chainInformation['name'],
+                        'name' => $chainValue['name'],
                         'shop' => $chainValue['shopName'],
                         'locale' => strtoupper($locale),
                         'url' => $websiteUrl

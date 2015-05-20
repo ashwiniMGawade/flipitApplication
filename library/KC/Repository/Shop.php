@@ -86,30 +86,17 @@ class Shop extends \KC\Entity\Shop
     public static function getSimilarShops($shopId, $numberOfShops = 12)
     {
         $similarShops = self::getSimilarShopsByShopId($shopId, $numberOfShops);
-        if (count($similarShops) <= $numberOfShops) {
+        if (count($similarShops) < $numberOfShops) {
             $topCategoryShops = self::getSimilarShopsBySimilarCategories($shopId, $numberOfShops);
             $similarShops = self::removeDuplicateShops($similarShops, $topCategoryShops, $numberOfShops);
         }
-        return $similarShops;
+        return array_slice($similarShops, 0, 12);
     }
 
     public static function getSimilarShopsByShopId($shopId, $numberOfShops = 12)
     {
         $similarShops = self::getRelatedShop($shopId);
-        return self::setDataAsPerView($similarShops, $numberOfShops);
-    }
-
-    protected static function setDataAsPerView($similarShops, $numberOfShops)
-    {
-        $similarShopsWithoutDuplicate = array();
-        if (!empty($similarShops['refShopRelatedshop'])) {
-            foreach ($similarShops['refShopRelatedshop'] as $similarShop) {
-                if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
-                    $similarShopsWithoutDuplicate[$similarShop['relatedshops']['id']] = $similarShop['relatedshops'];
-                }
-            }
-        }
-        return $similarShopsWithoutDuplicate;
+        return $similarShops;
     }
 
     public static function getSimilarShopsBySimilarCategories($shopId, $numberOfShops)
@@ -492,7 +479,7 @@ class Shop extends \KC\Entity\Shop
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $shopsInformation = $queryBuilder
-            ->select('s.permaLink, img.path, img.name')
+            ->select('s.permaLink, img.path, img.name, s.name as shopName')
             ->from("KC\Entity\Shop", "s")
             ->leftJoin("s.logo", "img")
             ->where('s.deleted = 0')
@@ -529,18 +516,20 @@ class Shop extends \KC\Entity\Shop
     public static function getRelatedShop($id)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $relatedShops = $queryBuilder
-            ->select('s.id, rf.id as rid, rl.permaLink, rl.id as rld, rl.name')
+        $relatedShopsIds = $queryBuilder
+            ->select('s.id, rf.relatedshopId')
             ->from("KC\Entity\Shop", "s")
             ->leftJoin("s.relatedshops", "rf")
-            ->leftJoin("rf.shop", "rl")
-            ->leftJoin("s.logo", "logo")
             ->where("s.id =".$id)
-            ->andWhere('rl.status = 1')
-            ->andWhere('rl.deleted = 0')
+            ->andWhere('s.status = 1')
+            ->andWhere('s.deleted = 0')
             ->orderBy("rf.position", "ASC")
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $relatedShops = array();
+        foreach ($relatedShopsIds as $relatedShopsId) {
+            $relatedShops[] = self::getShopLogoByShopId($relatedShopsId['relatedshopId']);
+        }
         return $relatedShops;
     }
 

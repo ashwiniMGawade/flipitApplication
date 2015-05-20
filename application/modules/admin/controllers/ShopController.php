@@ -413,6 +413,7 @@ class Admin_ShopController extends Zend_Controller_Action
                 ->leftJoin("s.affliatenetwork", "af")
                 ->leftJoin("s.logo", "logo")
                 ->where("s.id = ". $id)
+                ->orderBy('sp.position', 'ASC')
                 ->getQuery()
                 ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             $this->view->relatedShopName = KC\Repository\Shop::getRelatedShops($data['relatedshops']);
