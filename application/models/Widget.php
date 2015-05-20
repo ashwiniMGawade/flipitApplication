@@ -12,6 +12,71 @@
  */
 class Widget extends BaseWidget
 {
+    public static function getAllWidgets()
+    {
+        $widgetsList = Doctrine_Query::create()->select()
+            ->from('widget w')
+            ->where('w.deleted=0')
+            ->fetchArray();
+        return $widgetsList;
+    }
+
+    public static function addFunctionNames()
+    {
+        $widgets = self::getAllWidgets();
+        if (!empty($widgets)) {
+            foreach ($widgets as $widget) {
+                switch (trim($widget['slug'])) {
+                    case 'popular_category':
+                        self::updateWidgetFunctionName($widget['id'], 'popularCategoryWidget');
+                        break;
+                    case 'e_mail_subscription':
+                        self::updateWidgetFunctionName($widget['id'], 'popularCategoryWidget');
+                        break;
+                    case 'popular_stores':
+                        self::updateWidgetFunctionName($widget['id'], 'popularShopWidget');
+                        break;
+                    case 'stuur_een':
+                        self::updateWidgetFunctionName($widget['id'], 'socialCodeWidget');
+                        break;
+                    case 'popular_editor':
+                        self::updateWidgetFunctionName($widget['id'], 'popularEditorWidget');
+                        break;
+                    case 'most _popular_fashion':
+                        self::updateWidgetFunctionName($widget['id'], 'plusRecentlyAddedArticles');
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        self::addNewDefaultWidgets('Popular Offer For Plus', 'plusTopPopularOffers');
+        self::addNewDefaultWidgets('Shop Also Viwes', 'shopsAlsoViewedWidget');
+        self::addNewDefaultWidgets('Popular Page Editor', 'getPageEditorWidget');
+        return true;
+    }
+
+    public static function addNewDefaultWidgets($widgetTitle, $functionName)
+    {
+        $widget = new Widget();
+        $widget->title = $widgetTitle;
+        $widget->function_name = $functionName;
+        $widget->status = 1;
+        $widget->showWithDefault = 0;
+        $widget->save();
+        return true;
+    }
+
+    public static function updateWidgetFunctionName($widgetId, $functionName)
+    {
+        Doctrine_Query::create()
+            ->update('Widget w')
+            ->set('w.function_name', '"'.$functionName.'"')
+            ->where('id='.$widgetId)
+            ->execute();
+        return true;
+    }
+
     /**
      * save widget in database
      * @param array $params
@@ -43,7 +108,7 @@ class Widget extends BaseWidget
         return $widgetsList;
      }
 
-     function getUserDefinedwidgetList()
+     function getUserDefinedWidgetList()
      {
         $widgetsList = Doctrine_Query::create()->select()
         ->from('widget w')
