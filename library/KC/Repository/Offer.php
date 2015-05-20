@@ -352,7 +352,7 @@ class Offer Extends \KC\Entity\Offer
             $query = $query->leftJoin('s.categoryshops', 'sc')
             ->andWhere($entityManagerUser->expr()->in('sc.shop', $shopCategories));
         }
-        $query
+        $topCouponCodes = $query
             ->andWhere('s.status = 1')
             ->andWhere('o.endDate >'."'".$currentDate."'")
             ->andWhere('o.startDate <='."'".$currentDate."'")
@@ -360,8 +360,11 @@ class Offer Extends \KC\Entity\Offer
             ->andWhere('o.userGenerated = 0')
             ->andWhere("o.Visability != 'MEM'")
             ->orderBy('p.position', 'ASC')
-            ->setMaxResults($limit);
-        $topCouponCodes = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->setResultCacheId('top20' . LOCALE)
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
         return $topCouponCodes;
     }
 
