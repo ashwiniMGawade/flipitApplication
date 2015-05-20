@@ -17,13 +17,15 @@ echo $this->translate('Check out these similar shops for more discounts');
 <?php
 if (!empty($this->similarShopsAndSimilarCategoryShops)) {
     foreach ($this->similarShopsAndSimilarCategoryShops as $shop) {
-        $shopLogoName = isset($shop['category']['logo']['name']) ? $shop['category']['logo']['name'] : '';
-        $shopLogoPath = isset($shop['category']['logo']['path']) ? $shop['category']['logo']['path'] : '';
+        $shopLogoName = isset($shop['category']['logo']['name']) ? $shop['category']['logo']['name'] : $shop['name'];
+        $shopLogoPath = isset($shop['category']['logo']['path']) ? $shop['category']['logo']['path'] : $shop['path'];
+        $shopPermalink = isset($shop['category']['permaLink']) ? $shop['category']['permaLink'] : $shop['permaLink'];
+        $shopName = isset($shop['category']['name']) ? $shop['category']['name'] : $shop['shopName'];
         printf(
             '<li><a href="%s"><span class="similar-shops-images" data-src="%s">%s</span></a></li>',
-            HTTP_PATH_LOCALE  . $shop['category']['permaLink'],
+            HTTP_PATH_LOCALE  . $shopPermalink,
             PUBLIC_PATH_CDN . ltrim($shopLogoPath, "/") . 'thum_small_'. $shopLogoName,
-            $shop['category']['name'].' '.FrontEnd_Helper_viewHelper::__form('form_discount vouchers')
+            $shopName.' '.FrontEnd_Helper_viewHelper::__form('form_discount vouchers')
         );
   
     }
