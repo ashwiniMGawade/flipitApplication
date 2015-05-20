@@ -80,7 +80,6 @@ class Newsletterbanners extends \KC\Entity\NewsLetterBanners
             if ($uploadedImage['status'] == '200') {
                 $existedNewsLetterImage = self::getHeaderOrFooterImage($imageType);
                 if (!empty($existedNewsLetterImage)) {
-                    self::unlinkFileFromDirectory($existedNewsLetterImage);
                     $uploadedImages = array(
                         'fileName'=>$uploadedImage['fileName'],
                         'path'=>$uploadedImage['path'],
@@ -108,14 +107,6 @@ class Newsletterbanners extends \KC\Entity\NewsLetterBanners
         $newsLetterHeaderImage->updated_at = new \DateTime('now');
         \Zend_Registry::get('emLocale')->persist($newsLetterHeaderImage);
         \Zend_Registry::get('emLocale')->flush();
-        return true;
-    }
-
-    public static function unlinkFileFromDirectory($existedNewsLetterImage)
-    {
-        $fileName = $existedNewsLetterImage['name'];
-        $filePath = $existedNewsLetterImage['path'];
-        @unlink(ROOT_PATH. $filePath . $fileName);
         return true;
     }
 
@@ -171,10 +162,6 @@ class Newsletterbanners extends \KC\Entity\NewsLetterBanners
 
     public static function deleteNewsletterImages($imageType)
     {
-        $existedNewsLetterImage = self::getHeaderOrFooterImage($imageType);
-        if (!empty($existedNewsLetterImage['path'])) {
-            self::unlinkFileFromDirectory($existedNewsLetterImage);
-        }
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $entityManagerLocale->update('KC\Entity\NewsLetterBanners', 'n')
             ->set('n.name', $entityManagerLocale->expr()->literal(''))
