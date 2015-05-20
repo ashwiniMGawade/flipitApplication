@@ -42,8 +42,8 @@ class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
                 } else {
                     $specialOffersWithoutDuplication[$offerIndex] = $specialPageOffers[$offerIndex]['offers'];
                 }
-                
             }
+
         }
         return $specialOffersWithoutDuplication;
     }

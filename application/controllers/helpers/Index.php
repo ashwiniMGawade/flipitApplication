@@ -6,8 +6,13 @@ class Zend_Controller_Action_Helper_Index extends Zend_Controller_Action_Helper_
         $specialOfferslist = array();
         foreach ($specialListPages as $specialListPage) {
             $specialOfferslistIndex = $specialListPage['page']['permalink'] . ',' . $specialListPage['page']['pageTitle'];
-            $specialOfferslist[$specialOfferslistIndex] =
-                \KC\Repository\Offer::getSpecialPageOffersByFallBack($specialListPage['page'], 'home');
+            $specialOfferslist[$specialOfferslistIndex] = self::removeDuplicateCode(
+                \KC\Repository\Offer::getSpecialPageOffersByFallBack(
+                    $specialListPage['page'],
+                    'home'
+                ),
+                'specialPage'
+            );
 
         }
         return $specialOfferslist;
