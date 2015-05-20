@@ -28,7 +28,6 @@ $newestOffers = $this->partial(
     <aside class="col-md-4 col-sm-4" id="sidebar">
     <?php
     $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-    echo $frontendSidebarHelper->getPageEditorWidget('newPage', $this);
     $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
     echo $frontendSidebarHelper->sidebarWidgets('newest-code', $this);
     ?>

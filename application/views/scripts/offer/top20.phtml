@@ -41,7 +41,6 @@ echo $popularStores; ?>
     <?php
     $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
     $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
-    echo $frontendSidebarHelper->getPageEditorWidget('top20', $this);
     echo $frontendSidebarHelper->sidebarWidgets('top-20', $this);
     ?>
     </aside>

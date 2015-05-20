@@ -31,8 +31,6 @@ if (count($this->offersWithPagination)>0) {
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
     <?php
-    $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
-    echo $frontendSidebarHelper->getPageEditorWidget('category', $this);
     $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
     $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
     echo $frontendSidebarHelper->sidebarWidgets('categories', $this);

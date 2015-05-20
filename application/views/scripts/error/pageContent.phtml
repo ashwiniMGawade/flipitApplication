@@ -56,7 +56,6 @@ if ($this->pageMode == true) {
         </div>
         <aside class="col-md-4 col-sm-4" id="sidebar"> 
             <?php
-            echo $frontendSidebarHelper->getPageEditorWidget('special', $this);
             $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
             if ($this->pageCssClass == 'faq-page') {
                 echo $frontendSidebarHelper->sidebarWidgets('faq-pages', $this);
