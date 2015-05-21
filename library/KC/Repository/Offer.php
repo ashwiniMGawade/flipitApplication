@@ -362,7 +362,6 @@ class Offer Extends \KC\Entity\Offer
             ->orderBy('p.position', 'ASC')
             ->setMaxResults($limit)
             ->getQuery()
-            ->setResultCacheId('top20' . LOCALE)
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         return $topCouponCodes;

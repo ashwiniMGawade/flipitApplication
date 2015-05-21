@@ -4,10 +4,6 @@ namespace KC\Repository;
 
 class PopularCode extends \KC\Entity\PopularCode
 {
-    #################################################
-    ###### REFACTED CODE ############################
-    #################################################
-
     public static function deleteExpiredPopularCode($date, $flagForCache)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -17,6 +13,7 @@ class PopularCode extends \KC\Entity\PopularCode
             ->leftJoin('p.popularcode offer')
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        
         foreach($popIds as $popId):
             $popIdsToDelete = $entityManagerLocale
                 ->select('o.id')
@@ -32,10 +29,6 @@ class PopularCode extends \KC\Entity\PopularCode
 
         return true;
     }
-
-    ################################################################
-    ########### END REFACTEDRED CODE ###############################
-    ################################################################
 
     public static function searchTopTenOffer($keyword, $flag)
     {
@@ -111,7 +104,6 @@ class PopularCode extends \KC\Entity\PopularCode
             ->orderBy('p.position', 'ASC')
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
         return $data;
     }
 
@@ -160,8 +152,8 @@ class PopularCode extends \KC\Entity\PopularCode
             ->leftJoin('o.offertermandcondition', 'term')
             ->where('o.deleted =0')
             ->andWhere(
-            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
-            cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
+                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
+                cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
             )
             ->andWhere('s.deleted=0')
             ->setParameter(1, $id)
@@ -179,7 +171,6 @@ class PopularCode extends \KC\Entity\PopularCode
             ->setMaxResults($flag)
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
         return $data;
     }
 
@@ -230,7 +221,7 @@ class PopularCode extends \KC\Entity\PopularCode
                 } else {
                     $NewPos =  0 ;
                 }
-                $entityManagerLocale  = \Zend_Registry::get('emLocale');                
+                $entityManagerLocale  = \Zend_Registry::get('emLocale');
                 $pc = new \KC\Entity\PopularCode();
                 $pc->type = 'MN';
                 $pc->popularcode = $entityManagerLocale->find('KC\Entity\Offer', $id);
@@ -242,9 +233,14 @@ class PopularCode extends \KC\Entity\PopularCode
                 $entityManagerLocale->persist($pc);
                 $entityManagerLocale->flush();
                 
-                $flag  = array('id'=>$pc->id,'type'=>'MN','offerId'=>$id,'position'=>(intval($NewPos) + 1),'title'=>$offer[0]['title']);
+                $flag  = array(
+                    'id'=>$pc->id,
+                    'type'=>'MN',
+                    'offerId'=>$id,
+                    'position'=>(intval($NewPos) + 1),
+                    'title'=>$offer[0]['title']
+                );
             }
-
         }
 
         self::clearTop20Cache();
@@ -255,40 +251,46 @@ class PopularCode extends \KC\Entity\PopularCode
     {
         if ($id) {
             $queryBuilderPopularOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilderPopularOffer
-            ->select('offer.id')
-            ->from('KC\Entity\PopularCode', 'pcode')
-            ->leftJoin('pcode.popularcode', 'offer')
-            ->where('pcode.id=' . $id)
-            ->setMaxResults(1);
-            $offerDetail = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $offerDetail = $queryBuilderPopularOffer
+                ->select('offer.id')
+                ->from('KC\Entity\PopularCode', 'pcode')
+                ->leftJoin('pcode.popularcode', 'offer')
+                ->where('pcode.id=' . $id)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
             $queryBuilderOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $queryBuilderOffer->update('KC\Entity\Offer', 'o')
-            ->set('o.editorPicks', '0')
-            ->where('o.id = '.$offerDetail[0]['id'])
-            ->getQuery()->execute();
+            $queryBuilderOffer
+                ->update('KC\Entity\Offer', 'o')
+                ->set('o.editorPicks', '0')
+                ->where('o.id = '.$offerDetail[0]['id'])
+                ->getQuery()
+                ->execute();
 
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->delete('KC\Entity\PopularCode', 's')
-            ->where('s.id ='.$id)
-            ->getQuery();
-            $query->execute();
+                ->where('s.id ='.$id)
+                ->getQuery()
+                ->execute();
 
-            //change position by 1 of each below element
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $queryBuilder ->update('KC\Entity\PopularCode', 'pc')
-            ->set('pc.position', $queryBuilder->expr()->literal('pc.position -1'))
-            ->where('pc.position > '.$position)
-            ->getQuery()->execute();
+                ->set('pc.position', $queryBuilder->expr()->literal('pc.position -1'))
+                ->where('pc.position > '.$position)
+                ->getQuery()
+                ->execute();
 
-            // If any position is missing it fixes so that all positions must be there
-            $query = $queryBuilder
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $newOfferList = $queryBuilder
                 ->select('popularcode')
                 ->from('KC\Entity\PopularCode', 'popularcode')
-                ->orderBy('popularcode.position', 'ASC');
-            $newOfferList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+                ->getQuery()
+                ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             $newPos = 1;
+
             foreach ($newOfferList as $newOffer) {
+                $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
                 $queryBuilder ->update('KC\Entity\PopularCode', 'popularCode')
                     ->set('popularCode.position', $newPos)
                     ->where('popularCode.id ='.$newOffer['id'])
@@ -305,7 +307,6 @@ class PopularCode extends \KC\Entity\PopularCode
     public static function deletePopular($id, $position, $flagForCache)
     {
         if ($id) {
-            //delete popular code from list
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->delete('KC\Entity\PopularCode', 's')
@@ -314,7 +315,6 @@ class PopularCode extends \KC\Entity\PopularCode
                 ->execute();
 
             if ($flagForCache==true) {
-                //change position by 1 of each below element
                 $queryBuilder
                     ->update('KC\Entity\PopularCode', 'pc')
                     ->set('pc.position', 'pc.position -1')
@@ -327,89 +327,15 @@ class PopularCode extends \KC\Entity\PopularCode
         }
     }
 
-    public static function moveUp($currentCodeId, $currentPosition, $previousCodeId, $previousCodePosition)
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $queryBuilder ->update('KC\Entity\PopularCode', 'pc')
-                ->set('pc.position', $previousCodePosition)
-                ->where('pc.id = '.$currentCodeId)
-                ->getQuery()->execute();
-
-        $nextCodePosition = (intval($previousCodePosition) + 1);
-
-        $queryBuilderForNewPosition = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $queryBuilderForNewPosition ->update('KC\Entity\PopularCode', 'p')
-                ->set('p.position', $nextCodePosition)
-                ->where('p.id = '.$previousCodeId)
-                ->getQuery()->execute();
-
-        self::clearTop20Cache();
-        return true;
-    }
-
-    public static function moveDown($currentCodeId, $currentPosition, $nextCodeId)
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $nextCodePosition = (intval($currentPosition) + 1);
-        $queryBuilder ->update('KC\Entity\PopularCode', 'p')
-            ->set('p.position', $nextCodePosition)
-            ->where('p.id ='. $currentCodeId)
-            ->getQuery()->execute();
-
-        $queryBuilderForNewPosition = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $queryBuilderForNewPosition ->update('KC\Entity\PopularCode', 'pc')
-            ->set('pc.position', $currentPosition)
-            ->where('pc.id ='.$nextCodeId)
-            ->getQuery()->execute();
-
-        self::clearTop20Cache();
-        return true;
-    }
-
-    public static function getAuthorId($offerId)
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder
-        ->select('o.authorId')
-        ->from('KC\Entity\Offer', 'o')
-        ->where('o.id ='.$offerId);
-        $userId = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $userId;
-    }
-
-    public static function lockElement($id)
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder
-        ->select('pc')
-        ->from('KC\Entity\PopularCode', 'pc')
-        ->where('pc.popularcode = '.$id);
-        $lockStatus = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        if (count($lockStatus) > 0) {
-
-            if ($lockStatus[0]['type'] == 'AT') {
-                $type = "MN";
-            } else {
-                $type = "AT";
-            }
-
-            $queryBuilder ->update('KC\Entity\PopularCode', 'p')
-            ->set('p.type', $queryBuilder->expr()->literal($type))
-            ->where('p.id ='. $lockStatus[0]['id'])
-            ->getQuery()->execute();
-            return true;
-        }
-        return false;
-    }
-
     public static function savePopularOffersPosition($offerId)
     {
         if (!empty($offerId)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\PopularCode', 's')
-            ->where('s.id > 0')
-            ->getQuery();
-            $query->execute();
+            $query = $queryBuilder
+                ->delete('KC\Entity\PopularCode', 's')
+                ->where('s.id > 0')
+                ->getQuery()
+                ->execute();
             $offerId = explode(',', $offerId);
             $i = 1;
             foreach ($offerId as $offerIdValue) {
@@ -430,9 +356,8 @@ class PopularCode extends \KC\Entity\PopularCode
         self::clearTop20Cache();
     }
 
-    protected static function clearTop20Cache() {
-        \BackEnd_Helper_CacheManager::clearResultCache('top20' . LOCALE);
-        
+    protected static function clearTop20Cache()
+    {
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularOffersHome_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
