@@ -64,137 +64,34 @@ class OfferExport
                 WHERE (o.deleted = 0 AND o.usergenerated= 0)
                 ORDER BY o.id DESC
             ';
-            $stmt = $this->dbh->prepare($sql);
-            if ($stmt->execute()) {
-                while ($offer = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    //echo "<pre>";print_r($offer);die;
-                    $title = '';
-                    if ($offer['title'] == '' || $offer['title'] == 'undefined'
-                        || $offer['title'] == null || $offer['title'] == '0') {
-                        $title = '';
-                    } else {
-                        $title = $offer['title'];
-                    }
-                    $shopName = '';
-                    if ($offer['shopName'] == ''
-                        || $offer['shopName'] == 'undefined'
-                        || $offer['shopName'] == null
-                        || $offer['shopName'] == '0') {
-                        $shopName = '';
-                    } else {
-                        $shopName = $offer['shopName'];
-                    }
-                    $offerType = '';
-                    if ($offer['discounttype'] == 'CD') {
-                        $offerType = 'Coupon';
-                    } elseif ($offer['discounttype'] == 'SL') {
-                        $offerType = 'Sale';
-                    } else {
-                        $offerType ='Printable';
-                    }
-                    $visability = '';
-                    if ($offer['visability'] == 'DE') {
-                        $visability ='Default';
-                    } else {
-                        $visability ='Members';
-                    }
-                    $extended = '';
-                    if ($offer['extendedoffer'] == true) {
-                        $extended = 'Yes';
-                    } else {
-                        $extended = 'No';
-                    }
-                    $startDate = date("d-m-Y", strtotime($offer['startdate']));
-                    $endDate = date("d-m-Y", strtotime($offer['enddate']));
-                    $clickouts = $offer['Count'];
-                    $author = '';
-                    if (isset($offer['authorName'])) {
-                        $author = $offer['authorName'];
-                    } else {
-                        $author = '';
-                    }
-                    $couponCode = '';
-                    if ($offer['couponcode'] == '' || $offer['couponcode'] == 'undefined'
-                        || $offer['couponcode'] == null) {
-                        $couponCode = '';
-                    } else {
-                        $couponCode = $offer['couponcode'];
-                    }
-                    $refUrl = '';
-                    if ($offer['refurl'] == '' || $offer['refurl'] == 'undefined'
-                            || $offer['refurl'] == null) {
-                        $refUrl = '';
-                    } else {
-                        $refUrl = $offer['refurl'];
-                    }
-                    $exclusive = '';
-                    if ($offer['exclusivecode'] == true) {
-                        $exclusive = 'Yes';
-                    } else {
-                        $exclusive = 'No';
-                    }
-                    $editor = '';
-                    if ($offer['editorpicks'] == true) {
-                        $editor = 'Yes';
-                    } else {
-                        $editor = 'No';
-                    }
-                    $usergenerated = '';
-                    if ($offer['userGenerated'] == true) {
-                        $usergenerated = 'Yes';
-                    } else {
-                        $usergenerated = 'No';
-                    }
-                    $approved = '';
-                    if ($offer['approved'] == true) {
-                        $approved = 'Yes';
-                    } else {
-                        $approved = 'No';
-                    }
-                    $offline = '';
-                    if ($offer['offline'] == true) {
-                        $offline = 'Yes';
-                    } else {
-                        $offline = 'No';
-                    }
-                    $created_at = '';
-                    if ($offer['created_at'] == '' || $offer['created_at'] == 'undefined'
-                        || $offer['created_at'] == null) {
-                        $created_at = '';
-                    } else {
-                        $created_at = date("d-m-Y", strtotime($offer['created_at']));
-                    }
-                    $deeplink = '';
-                    if ($offer['shopDeeplink'] == '' || $offer['shopDeeplink'] == 'undefined'
-                        || $offer['shopDeeplink'] == null) {
-                        $deeplink = '';
-                    } else {
-                        $deeplink = $offer['shopDeeplink'];
-                    }
-                    $termsAndConditions = '';
-                    if (!empty($offer['terms'])) {
-                        $termsAndConditions = $offer['terms'][0]['content'];
-                    }
+            $statement = $this->dbh->prepare($sql);
+            if ($statement->execute()) {
+                while ($offer = $statement->fetch(PDO::FETCH_ASSOC)) {
+                    $offerDates = self::getOfferDates($offer['startdate'], $offer['enddate'], $offer['created_at']);
+                    $offerYesNoOptions = self::getOfferYesNoOptions($offer);
+                    $offerCommonData = self::getOfferCommonData($offer);
+                    $offerShopData = self::getOfferShopData($offer['shopName'], $offer['shopDeeplink']);
+                    $offerTermsAndConditions = self::getOfferTermsAndConditions($offer['terms']);
                     $offerInformation = array(
-                        $title,
-                        $shopName,
-                        $offerType,
-                        $visability,
-                        $extended,
-                        $startDate,
-                        $endDate,
-                        $clickouts,
-                        $author,
-                        $couponCode,
-                        $refUrl,
-                        $exclusive,
-                        $editor,
-                        $usergenerated,
-                        $approved,
-                        $offline,
-                        $created_at,
-                        $deeplink,
-                        $termsAndConditions
+                        $offerCommonData['title'],
+                        $offerShopData['shopName'],
+                        $offerCommonData['offerType'],
+                        $offerCommonData['visability'],
+                        $offerYesNoOptions['extended'],
+                        $offerDates['startDate'],
+                        $offerDates['endDate'],
+                        $offerCommonData['clickouts'],
+                        $offerCommonData['author'],
+                        $offerCommonData['couponCode'],
+                        $offerCommonData['refUrl'],
+                        $offerYesNoOptions['exclusive'],
+                        $offerYesNoOptions['editor'],
+                        $offerYesNoOptions['usergenerated'],
+                        $offerYesNoOptions['approved'],
+                        $offerYesNoOptions['offline'],
+                        $offerDates['createdAt'],
+                        $offerShopData['deeplink'],
+                        $offerTermsAndConditions['termsAndConditions']
                     );
                     fputcsv($fileOpen, $offerInformation, ';');
                 }
@@ -208,6 +105,126 @@ class OfferExport
         } catch (Exception $e) {
             echo $e;
         }
+    }
+
+    protected static function getOfferDates($startDate, $endDate, $createdAtDate)
+    {
+        $startDate = date("d-m-Y", strtotime($startDate));
+        $endDate = date("d-m-Y", strtotime($endDate));
+        if ($createdAtDate == '' || $createdAtDate == 'undefined'
+            || $createdAtDate == null) {
+            $createdAt = '';
+        } else {
+            $createdAt = date("d-m-Y", strtotime($createdAtDate));
+        }
+        return array('startDate'=> $startDate, 'endDate'=>$endDate, 'createdAt'=>$createdAt);
+    }
+
+    protected static function getOfferYesNoOptions($offer)
+    {
+        if ($offer['extendedoffer'] == true) {
+            $extended = 'Yes';
+        } else {
+            $extended = 'No';
+        }
+        if ($offer['exclusivecode'] == true) {
+            $exclusive = 'Yes';
+        } else {
+            $exclusive = 'No';
+        }
+        if ($offer['editorpicks'] == true) {
+            $editor = 'Yes';
+        } else {
+            $editor = 'No';
+        }
+        if ($offer['userGenerated'] == true) {
+            $usergenerated = 'Yes';
+        } else {
+            $usergenerated = 'No';
+        }
+        if ($offer['approved'] == true) {
+            $approved = 'Yes';
+        } else {
+            $approved = 'No';
+        }
+        if ($offer['offline'] == true) {
+            $offline = 'Yes';
+        } else {
+            $offline = 'No';
+        }
+        return array('extended'=>$extended, 'exclusive'=>$exclusive, 'editor'=>$editor,
+            'usergenerated'=>$usergenerated, 'approved'=>$approved, 'offline'=>$offline);
+    }
+
+    protected static function getOfferCommonData($offer)
+    {
+        if ($offer['title'] == '' || $offer['title'] == 'undefined'
+            || $offer['title'] == null || $offer['title'] == '0') {
+            $title = '';
+        } else {
+            $title = $offer['title'];
+        }
+        $offerType = '';
+        if ($offer['discounttype'] == 'CD') {
+            $offerType = 'Coupon';
+        } elseif ($offer['discounttype'] == 'SL') {
+            $offerType = 'Sale';
+        } else {
+            $offerType ='Printable';
+        }
+        if ($offer['visability'] == 'DE') {
+            $visability ='Default';
+        } else {
+            $visability ='Members';
+        }
+        $clickouts = $offer['Count'];
+        if (isset($offer['authorName'])) {
+            $author = $offer['authorName'];
+        } else {
+            $author = '';
+        }
+        if ($offer['couponcode'] == '' || $offer['couponcode'] == 'undefined'
+            || $offer['couponcode'] == null) {
+            $couponCode = '';
+        } else {
+            $couponCode = $offer['couponcode'];
+        }
+        if ($offer['refurl'] == '' || $offer['refurl'] == 'undefined'
+                || $offer['refurl'] == null) {
+            $refUrl = '';
+        } else {
+            $refUrl = $offer['refurl'];
+        }
+        return array('title'=>$title, 'offerType'=>$offerType, 'visability'=>$visability,
+            'clickouts'=>$clickouts, 'author'=>$author, 'couponCode'=>$couponCode, 'refUrl'=>$refUrl);
+    }
+
+    protected static function getOfferShopData($shopName, $shopDeepLink)
+    {
+        if ($shopName == ''
+            || $shopName == 'undefined'
+            || $shopName == null
+            || $shopName == '0') {
+            $shopName = '';
+        } else {
+            $shopName = $shopName;
+        }
+        if ($shopDeepLink == '' || $shopDeepLink == 'undefined'
+            || $shopDeepLink == null) {
+            $deeplink = '';
+        } else {
+            $deeplink = $shopDeepLink;
+        }
+        return array('shopName'=>$shopName, 'deeplink'=>$deeplink);
+    }
+    
+    protected static function getOfferTermsAndConditions($terms)
+    {
+        $termsAndConditions = '';
+        if (!empty($terms)) {
+            $termsAndConditions = $terms;
+        }
+        return array('termsAndConditions'=>$termsAndConditions);
     }
 }
 new OfferExport();
