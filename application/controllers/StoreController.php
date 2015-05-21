@@ -241,7 +241,7 @@ class StoreController extends Zend_Controller_Action
                 ),
                 ''
             );
-        $customHeader = '';
+        $customHeader = isset($shopInformation[0]['customHeader']) ? $shopInformation[0]['customHeader'] : '';
         $this->viewHelperObject->getMetaTags(
             $this,
             $shopInformation[0]['overriteTitle'],
