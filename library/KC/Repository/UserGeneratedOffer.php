@@ -64,8 +64,9 @@ class UserGeneratedOffer extends \KC\Entity\Offer
             ->where('o.deleted = '.$flag)
             ->andWhere('s.status = 1')
             ->andWhere($queryBuilder->expr()->like('s.name', $queryBuilder->expr()->literal($keyword.'%')))
-            ->andWhere("o.userGenerated = 1")
+            ->andWhere("(o.userGenerated = 1 and o.approved='0')")
             ->orderBy("s.id", "ASC")
+            ->groupBy('s.name')
             ->setMaxResults(5)
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -80,8 +81,9 @@ class UserGeneratedOffer extends \KC\Entity\Offer
             ->from("KC\Entity\Offer", "o")
             ->where('o.deleted = '.$flag)
             ->andWhere($queryBuilder->expr()->like('o.couponCode', $queryBuilder->expr()->literal($keyword.'%')))
-            ->andWhere("o.userGenerated = 1")
+            ->andWhere("(o.userGenerated=1 and o.approved='0')")
             ->orderBy("o.id", "ASC")
+            ->groupBy('o.couponCode')
             ->setMaxResults(5)
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -144,18 +146,17 @@ class UserGeneratedOffer extends \KC\Entity\Offer
         $offer->updated_at = new \DateTime('now');
         $entityManagerLocale->persist($offer);
         $entityManagerLocale->flush();
-
-        if (isset($offer->id)) {
+        if ($offer->id) {
+            $entityManagerLocale = \Zend_Registry::get('emLocale');
             $offerTerms  = new \KC\Entity\TermAndCondition();
             $offerTerms->content = \FrontEnd_Helper_viewHelper::sanitize($socialParameters['offerDetails']);
             $offerTerms->deleted = 0;
-            $offerTerms->termandcondition = $entityManagerUser->find('KC\Entity\Offer', $offer->id);
+            $offerTerms->termandcondition = $entityManagerLocale->find('KC\Entity\Offer', $offer->id);
             $offerTerms->created_at = new \DateTime('now');
             $offerTerms->updated_at = new \DateTime('now');
-            \Zend_Registry::get('emLocale')->persist($offerTerms);
-            \Zend_Registry::get('emLocale')->flush();
+            $entityManagerLocale->persist($offerTerms);
+            $entityManagerLocale->flush();
         }
-
         return true;
     }
 }

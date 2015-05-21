@@ -15,6 +15,7 @@ $offerCounter = '';
 $visitorInformation = '';
 
 foreach ($this->offers as $offer) {
+    $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
     $offerCounter++;
     $offer = (object) $offer;
     $offerBounceRate = "/out/offer/".$offer->id;
@@ -47,10 +48,11 @@ foreach ($this->offers as $offer) {
             $offerHolderClass = "offer-holder";
             $urlToShow = $offerPartial->getUrlToShow($offer);
         }
-        $defaultText = FrontEnd_Helper_viewHelper::__translate('This code is not verified');
+        $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName($esiLocale);
+        $defaultText = 
+            FrontEnd_Helper_viewHelper::__translate('This code has been added by one of our users and not by the [websiteName] deal hunters');
+        $defaultText = str_replace('[websiteName]', $websiteName, $defaultText);
     }
-
-    $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
     ?>
     <article class="block <?php echo $offerClass; ?>">
         <div class="holder <?php echo $offerHolderClass; ?>" id="<?php echo $offer->id; ?>">
@@ -247,8 +249,15 @@ foreach ($this->offers as $offer) {
             </div>
         </div>
         <div class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
-            <div class='term-and-condition'><?php echo $this->translate('Terms &amp; Conditions');
-            if (!empty($defaultText)) { echo ' : <span class="social-term-font">' .$defaultText.'</span>'; }?></div>
+            <div class='term-and-condition'>
+                <?php 
+                if (empty($defaultText)) {
+                    echo $this->translate('Terms &amp; Conditions');
+                } else {
+                    echo '<span class="social-term-font">' .$defaultText.'</span>';
+                }
+                ?>
+            </div>
             <ol class="num-list">
             <?php echo $termsAndConditions;?>
             </ol>
