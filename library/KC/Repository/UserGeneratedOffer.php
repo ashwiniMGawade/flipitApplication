@@ -146,18 +146,17 @@ class UserGeneratedOffer extends \KC\Entity\Offer
         $offer->updated_at = new \DateTime('now');
         $entityManagerLocale->persist($offer);
         $entityManagerLocale->flush();
-
-        if (isset($offer->id)) {
+        if ($offer->id) {
+            $entityManagerLocale = \Zend_Registry::get('emLocale');
             $offerTerms  = new \KC\Entity\TermAndCondition();
             $offerTerms->content = \FrontEnd_Helper_viewHelper::sanitize($socialParameters['offerDetails']);
             $offerTerms->deleted = 0;
-            $offerTerms->termandcondition = $entityManagerUser->find('KC\Entity\Offer', $offer->id);
+            $offerTerms->termandcondition = $entityManagerLocale->find('KC\Entity\Offer', $offer->id);
             $offerTerms->created_at = new \DateTime('now');
             $offerTerms->updated_at = new \DateTime('now');
-            \Zend_Registry::get('emLocale')->persist($offerTerms);
-            \Zend_Registry::get('emLocale')->flush();
+            $entityManagerLocale->persist($offerTerms);
+            $entityManagerLocale->flush();
         }
-
         return true;
     }
 }
