@@ -253,7 +253,7 @@ class Page
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $subtitle;
+    protected $subtitle;
     
     /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="page")

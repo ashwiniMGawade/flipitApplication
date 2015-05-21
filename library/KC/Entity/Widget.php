@@ -28,7 +28,7 @@ class Widget
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $function_name;
+    protected $function_name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -73,7 +73,7 @@ class Widget
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\PageWidgets", mappedBy="widget")
      */
-    private $pageWidgets;
+    protected $pageWidgets;
 
     public function __get($property)
     {

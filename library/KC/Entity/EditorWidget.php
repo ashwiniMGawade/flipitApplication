@@ -13,42 +13,42 @@ class EditorWidget
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $type;
+    protected $type;
 
     /**
      * @ORM\Column(type="string", length=1024, nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $subtitle;
+    protected $subtitle;
 
     /**
      * @ORM\Column(type="integer", length=10, nullable=true)
      */
-    private $editorId;
+    protected $editorId;
 
     /**
      * @ORM\Column(type="boolean", length=1, nullable=true)
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    protected $updated_at;
     
     public function __get($property)
     {

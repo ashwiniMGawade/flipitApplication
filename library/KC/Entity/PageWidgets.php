@@ -23,7 +23,7 @@ class PageWidgets
     /**
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
-    private $position;
+    protected $position;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -44,7 +44,7 @@ class PageWidgets
      * @ORM\ManyToOne(targetEntity="KC\Entity\Widget", inversedBy="pageWidgets")
      * @ORM\JoinColumn(name="widgetId", referencedColumnName="id")
      */
-    private $widget;
+    protected $widget;
 
     public function __get($property)
     {
