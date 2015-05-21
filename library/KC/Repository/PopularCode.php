@@ -274,21 +274,23 @@ class PopularCode extends \KC\Entity\PopularCode
                 ->getQuery()
                 ->execute();
 
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $queryBuilder ->update('KC\Entity\PopularCode', 'pc')
                 ->set('pc.position', $queryBuilder->expr()->literal('pc.position -1'))
                 ->where('pc.position > '.$position)
                 ->getQuery()
                 ->execute();
 
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $newOfferList = $queryBuilder
                 ->select('popularcode')
                 ->from('KC\Entity\PopularCode', 'popularcode')
-                ->orderBy('popularcode.position', 'ASC')
                 ->getQuery()
                 ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             $newPos = 1;
 
             foreach ($newOfferList as $newOffer) {
+                $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
                 $queryBuilder ->update('KC\Entity\PopularCode', 'popularCode')
                     ->set('popularCode.position', $newPos)
                     ->where('popularCode.id ='.$newOffer['id'])
@@ -325,52 +327,6 @@ class PopularCode extends \KC\Entity\PopularCode
         }
     }
 
-    public static function moveUp($currentCodeId, $currentPosition, $previousCodeId, $previousCodePosition)
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $queryBuilder
-            ->update('KC\Entity\PopularCode', 'pc')
-            ->set('pc.position', $previousCodePosition)
-            ->where('pc.id = '.$currentCodeId)
-            ->getQuery()
-            ->execute();
-
-        $nextCodePosition = (intval($previousCodePosition) + 1);
-        $queryBuilderForNewPosition = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $queryBuilderForNewPosition
-            ->update('KC\Entity\PopularCode', 'p')
-            ->set('p.position', $nextCodePosition)
-            ->where('p.id = '.$previousCodeId)
-            ->getQuery()
-            ->execute();
-
-        self::clearTop20Cache();
-        return true;
-    }
-
-    public static function moveDown($currentCodeId, $currentPosition, $nextCodeId)
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $nextCodePosition = (intval($currentPosition) + 1);
-        $queryBuilder
-            ->update('KC\Entity\PopularCode', 'p')
-            ->set('p.position', $nextCodePosition)
-            ->where('p.id ='. $currentCodeId)
-            ->getQuery()
-            ->execute();
-
-        $queryBuilderForNewPosition = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $queryBuilderForNewPosition
-            ->update('KC\Entity\PopularCode', 'pc')
-            ->set('pc.position', $currentPosition)
-            ->where('pc.id ='.$nextCodeId)
-            ->getQuery()
-            ->execute();
-
-        self::clearTop20Cache();
-        return true;
-    }
-
     public static function getAuthorId($offerId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -381,34 +337,6 @@ class PopularCode extends \KC\Entity\PopularCode
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $userId;
-    }
-
-    public static function lockElement($id)
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $lockStatus = $queryBuilder
-            ->select('pc')
-            ->from('KC\Entity\PopularCode', 'pc')
-            ->where('pc.popularcode = '.$id)
-            ->getQuery()
-            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        
-        if (count($lockStatus) > 0) {
-            if ($lockStatus[0]['type'] == 'AT') {
-                $type = "MN";
-            } else {
-                $type = "AT";
-            }
-
-            $queryBuilder
-                ->update('KC\Entity\PopularCode', 'p')
-                ->set('p.type', $queryBuilder->expr()->literal($type))
-                ->where('p.id ='. $lockStatus[0]['id'])
-                ->getQuery()
-                ->execute();
-            return true;
-        }
-        return false;
     }
 
     public static function savePopularOffersPosition($offerId)
