@@ -3219,7 +3219,7 @@ class Offer Extends \KC\Entity\Offer
 
         }
         $updateOffer->deleted = 0;
-        $updateOffer->created_at = new \DateTime('now');
+        $updateOffer->created_at = $updateOffer->created_at;
         $updateOffer->updated_at = new \DateTime('now');
         $updateOffer->userGenerated = $updateOffer->userGenerated;
         if ($updateOffer->userGenerated == 1) {
