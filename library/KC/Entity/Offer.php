@@ -195,7 +195,7 @@ class Offer
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $couponCodeType;
+    private $couponCodeType = "GN";
 
     /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="offer")
