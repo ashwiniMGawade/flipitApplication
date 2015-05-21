@@ -327,18 +327,6 @@ class PopularCode extends \KC\Entity\PopularCode
         }
     }
 
-    public static function getAuthorId($offerId)
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $userId = $queryBuilder
-            ->select('o.authorId')
-            ->from('KC\Entity\Offer', 'o')
-            ->where('o.id ='.$offerId)
-            ->getQuery()
-            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $userId;
-    }
-
     public static function savePopularOffersPosition($offerId)
     {
         if (!empty($offerId)) {
