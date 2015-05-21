@@ -19,70 +19,70 @@ class Conversions
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    private $IP;
+    protected $IP;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    private $subid;
+    protected $subid;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $utma;
+    protected $utma;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $utmz;
+    protected $utmz;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $utmv;
+    protected $utmv;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $utmx;
+    protected $utmx;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $converted;
+    protected $converted;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="conversions")
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id")
      */
-    private $shop;
+    protected $shop;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Visitor", inversedBy="conversions")
      * @ORM\JoinColumn(name="visitorId", referencedColumnName="id")
      */
-    private $visitor;
+    protected $visitor;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="conversions")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id")
      */
-    private $offer;
+    protected $offer;
 
     public function __get($property)
     {

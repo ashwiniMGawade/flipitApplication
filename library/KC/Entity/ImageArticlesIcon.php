@@ -10,7 +10,7 @@ class ImageArticlesIcon extends \KC\Entity\Image
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Articles", mappedBy="articleImage")
      */
-    private $articles;
+    protected $articles;
 
     public function __get($property)
     {

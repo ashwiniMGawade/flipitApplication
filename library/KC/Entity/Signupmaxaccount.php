@@ -13,127 +13,127 @@ class Signupmaxaccount
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer", length=20, nullable=false)
      */
-    private $entered_uid;
+    protected $entered_uid;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $no_of_acc;
+    protected $no_of_acc;
 
     /**
      * @ORM\Column(type="integer", length=20, nullable=true)
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $email_confirmation;
+    protected $email_confirmation;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $email_header;
+    protected $email_header;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $email_footer;
+    protected $email_footer;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $max_account;
+    protected $max_account;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $emailperlocale;
+    protected $emailperlocale;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $sendername;
+    protected $sendername;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $emailsubject;
+    protected $emailsubject;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $testemail;
+    protected $testemail;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $testimonial1;
+    protected $testimonial1;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $testimonial2;
+    protected $testimonial2;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $testimonial3;
+    protected $testimonial3;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $showtestimonial;
+    protected $showtestimonial;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $homepagebanner_name;
+    protected $homepagebanner_name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $homepagebanner_path;
+    protected $homepagebanner_path;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $homepage_widget_banner_name;
+    protected $homepage_widget_banner_name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $homepage_widget_banner_path;
+    protected $homepage_widget_banner_path;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $newletter_is_scheduled;
+    protected $newletter_is_scheduled;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $newletter_scheduled_time;
+    protected $newletter_scheduled_time;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $newsletter_sent_time;
+    protected $newsletter_sent_time;
 
     public function __get($property)
     {

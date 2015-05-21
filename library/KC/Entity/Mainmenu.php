@@ -13,58 +13,58 @@ class Mainmenu
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $parentId;
+    protected $parentId;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $root_id;
+    protected $root_id;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
-    private $lft;
+    protected $lft;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
-    private $rgt;
+    protected $rgt;
 
     /**
      * @ORM\Column(type="integer", length=2, nullable=true)
      */
-    private $level;
+    protected $level;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $iconId;
+    protected $iconId;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $url;
+    protected $url;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=false)
      */
-    private $position;
+    protected $position;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="mainmenu")
      * @ORM\JoinColumn(name="iconId", referencedColumnName="id")
      */
-    private $mainMenuIcon;
+    protected $mainMenuIcon;
     
     public function __get($property)
     {

@@ -13,43 +13,43 @@ class ArticleViewCount
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=false)
      */
-    private $onclick;
+    protected $onclick;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $onload;
+    protected $onload;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $ip;
+    protected $ip;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=false)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Articles", inversedBy="articleviewcount")
      * @ORM\JoinColumn(name="articleid", referencedColumnName="id")
      */
-    private $articles;
+    protected $articles;
 
     public function __get($property)
     {

@@ -13,32 +13,32 @@ class Varnish
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $url;
+    protected $url;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $refresh_time;
+    protected $refresh_time;
 
     public function getId()
     {

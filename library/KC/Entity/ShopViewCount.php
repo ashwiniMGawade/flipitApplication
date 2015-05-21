@@ -13,43 +13,43 @@ class ShopViewCount
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $onclick;
+    protected $onclick;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $onload;
+    protected $onload;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $ip;
+    protected $ip;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="viewcount")
      * @ORM\JoinColumn(name="shopid", referencedColumnName="id")
      */
-    private $shop;
+    protected $shop;
 
     public function __get($property)
     {

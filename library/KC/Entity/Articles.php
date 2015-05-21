@@ -13,118 +13,118 @@ class Articles
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $permalink;
+    protected $permalink;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $metatitle;
+    protected $metatitle;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $metadescription;
+    protected $metadescription;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $content;
+    protected $content;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $publish;
+    protected $publish;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $publishdate;
+    protected $publishdate;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=false)
      */
-    private $authorid;
+    protected $authorid;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $authorname;
+    protected $authorname;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $thumbnailsmallid;
+    protected $thumbnailsmallid;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $plusTitle;
+    protected $plusTitle;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $featuredImageStatus;
+    protected $featuredImageStatus;
     
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\ArticleChapter", mappedBy="article")
      */
-    private $articleChapter;
+    protected $articleChapter;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\ArticleViewCount", mappedBy="articles")
      */
-    private $articleviewcount;
+    protected $articleviewcount;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\MoneysavingArticle", mappedBy="moneysaving")
      */
-    private $articles;
+    protected $articles;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefArticleStore", mappedBy="relatedstores")
      */
-    private $storearticles;
+    protected $storearticles;
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ImageArticleFeaturedImage", inversedBy="articles")
      * @ORM\JoinColumn(name="featuredImage", referencedColumnName="id")
      */
-    private $featuredImage;
+    protected $featuredImage;
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ImageArticlesIcon", inversedBy="articles")
      * @ORM\JoinColumn(name="thumbnailid", referencedColumnName="id")
      */
-    private $articleImage;
+    protected $articleImage;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ImageArticlesThumb", inversedBy="articles")
      * @ORM\JoinColumn(name="thumbnailsmallid", referencedColumnName="id")
      */
-    private $thumbnail;
+    protected $thumbnail;
 
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Articlecategory", inversedBy="articles")
@@ -134,17 +134,17 @@ class Articles
      *     inverseJoinColumns={@ORM\JoinColumn(name="relatedcategoryid", referencedColumnName="id", nullable=false)}
      * )
      */
-    private $category;
+    protected $category;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefArticleCategory", mappedBy="articles")
      */
-    private $refArticleCategory;
+    protected $refArticleCategory;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\PopularArticles", mappedBy="articles")
      */
-    private $populararticles;
+    protected $populararticles;
 
     public function __get($property)
     {

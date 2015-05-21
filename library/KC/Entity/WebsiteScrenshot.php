@@ -10,7 +10,7 @@ class WebsiteScrenshot extends \KC\Entity\Image
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Shop", mappedBy="screnshot")
      */
-    private $shop;
+    protected $shop;
 
     public function __get($property)
     {

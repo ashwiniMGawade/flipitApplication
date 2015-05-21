@@ -13,12 +13,12 @@ class MigrationVersion
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
-    private $version;
+    protected $version;
 
     public function __get($property)
     {

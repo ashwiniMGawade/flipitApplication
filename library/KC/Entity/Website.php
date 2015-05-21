@@ -13,53 +13,53 @@ class Website
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $url;
+    protected $url;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * 
      */
-    private $chain;
+    protected $chain;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\ChainItem", mappedBy="website")
      */
-    private $chainItem;
+    protected $chainItem;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\refUserWebsite", mappedBy="refUsersWebsite")
      */
-    private $websiteUsers;
+    protected $websiteUsers;
 
     public function __get($property)
     {

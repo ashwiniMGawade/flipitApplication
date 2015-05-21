@@ -13,33 +13,33 @@ class TermAndCondition
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $content;
+    protected $content;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="offertermandcondition")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id", onDelete="restrict")
      */
-    private $termandcondition;
+    protected $termandcondition;
 
     public function __get($property)
     {

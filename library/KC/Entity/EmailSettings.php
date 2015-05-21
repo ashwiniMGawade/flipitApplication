@@ -13,42 +13,42 @@ class EmailSettings
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $email;
+    protected $email;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $locale;
+    protected $locale;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $timezone;
+    protected $timezone;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    protected $updated_at;
 
     public function __get($property)
     {

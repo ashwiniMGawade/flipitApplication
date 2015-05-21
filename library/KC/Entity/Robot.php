@@ -13,32 +13,32 @@ class Robot
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="text", length=255, nullable=true)
      */
-    private $website;
+    protected $website;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $content;
+    protected $content;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    protected $updated_at;
 
     public function __get($property)
     {

@@ -13,63 +13,63 @@ class Votes
      * @ORM\Column(type="integer", length=11)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=200, nullable=true)
      */
-    private $ipAddress;
+    protected $ipAddress;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $date;
+    protected $date;
 
     /**
      * @ORM\Column(type="string", length=200, nullable=true)
      */
-    private $vote;
+    protected $vote;
 
     /**
      * @ORM\Column(type="float", nullable=false)
      */
-    private $moneySaved;
+    protected $moneySaved;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $product;
+    protected $product;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=false)
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $visitorId;
+    protected $visitorId;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="votes")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id")
      */
-    private $offer;
+    protected $offer;
 
     public function __get($property)
     {

@@ -17,48 +17,48 @@ class SeenIn
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $url;
+    protected $url;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $toolltip;
+    protected $toolltip;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $altText;
+    protected $altText;
 
     /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="seenin")
      * @ORM\JoinColumn(name="logoId", referencedColumnName="id", unique=true)
      */
-    private $logo;
+    protected $logo;
 
     public function __get($property)
     {

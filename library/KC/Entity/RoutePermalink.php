@@ -13,37 +13,37 @@ class RoutePermalink
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $permalink;
+    protected $permalink;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $type;
+    protected $type;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $exactlink;
+    protected $exactlink;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $deleted;
+    protected $deleted;
 
     public function __get($property)
     {
