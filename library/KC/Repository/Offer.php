@@ -3222,7 +3222,11 @@ class Offer Extends \KC\Entity\Offer
         $updateOffer->created_at = new \DateTime('now');
         $updateOffer->updated_at = new \DateTime('now');
         $updateOffer->userGenerated = $updateOffer->userGenerated;
-        $updateOffer->approved = '1';
+        if ($updateOffer->userGenerated == 1) {
+            $updateOffer->approved = '1';
+        } else {
+            $updateOffer->approved = '0';
+        }
         $updateOffer->offline = 0;
         $entityManagerLocale->persist($updateOffer);
         $entityManagerLocale->flush();     // New code Ends
