@@ -53,42 +53,42 @@ class OfferExport
                 'Terms & Conditions'
             );
             fputcsv($fileOpen, $headers, ';');
-            $sql ='
-                SELECT o.*,
-                s.name as shopName,
-                s.deeplink as shopDeeplink,
-                t.content as terms,
-                (SELECT COUNT(*) FROM view_count v WHERE (v.offerid = o.id)) AS Count
-                FROM offer o 
-                LEFT JOIN shop s ON o.shopid = s.id LEFT JOIN term_and_condition t ON o.id = t.offerid
-                WHERE (o.deleted = 0 AND o.usergenerated= 0)
-                ORDER BY o.id DESC
-            ';
-            $statement = $this->dbh->prepare($sql);
+            $statement = $this->dbh->prepare(self::getSqlQuery());
             if ($statement->execute()) {
                 while ($offer = $statement->fetch(PDO::FETCH_ASSOC)) {
                     $offerDates = self::getOfferDates($offer['startdate'], $offer['enddate'], $offer['created_at']);
-                    $offerYesNoOptions = self::getOfferYesNoOptions($offer);
-                    $offerCommonData = self::getOfferCommonData($offer);
+                    $offerTitle = self::getOfferTitle($offer['title']);
+                    $offerExtended = self::getOfferYesNoOptions($offer['extendedoffer']);
+                    $offerExclusive = self::getOfferYesNoOptions($offer['exclusivecode']);
+                    $offerEditor = self::getOfferYesNoOptions($offer['editorpicks']);
+                    $offerUserGenerated = self::getOfferYesNoOptions($offer['userGenerated']);
+                    $offerApproved = self::getOfferYesNoOptions($offer['approved']);
+                    $offerOffline = self::getOfferYesNoOptions($offer['offline']);
+                    $offerDiscountType = self::getOfferDiscountType($offer['discounttype']);
+                    $offerVisability = self::getOfferVisability($offer['visability']);
+                    $offerClickouts = self::getOfferClickouts($offer['Count']);
+                    $offerAuthorName = self::getOfferAuthorName($offer['authorName']);
+                    $offerCouponCode = self::getOfferCouponCode($offer['couponcode']);
+                    $offerRefUrl = self::getOfferRefUrl($offer['refurl']);
                     $offerShopData = self::getOfferShopData($offer['shopName'], $offer['shopDeeplink']);
                     $offerTermsAndConditions = self::getOfferTermsAndConditions($offer['terms']);
                     $offerInformation = array(
-                        $offerCommonData['title'],
+                        $offerTitle,
                         $offerShopData['shopName'],
-                        $offerCommonData['offerType'],
-                        $offerCommonData['visability'],
-                        $offerYesNoOptions['extended'],
+                        $offerDiscountType,
+                        $offerVisability,
+                        $offerExtended,
                         $offerDates['startDate'],
                         $offerDates['endDate'],
-                        $offerCommonData['clickouts'],
-                        $offerCommonData['author'],
-                        $offerCommonData['couponCode'],
-                        $offerCommonData['refUrl'],
-                        $offerYesNoOptions['exclusive'],
-                        $offerYesNoOptions['editor'],
-                        $offerYesNoOptions['usergenerated'],
-                        $offerYesNoOptions['approved'],
-                        $offerYesNoOptions['offline'],
+                        $offerClickouts,
+                        $offerAuthorName,
+                        $offerCouponCode,
+                        $offerRefUrl,
+                        $offerExclusive,
+                        $offerEditor,
+                        $offerUserGenerated,
+                        $offerApproved,
+                        $offerOffline,
                         $offerDates['createdAt'],
                         $offerShopData['deeplink'],
                         $offerTermsAndConditions['termsAndConditions']
@@ -107,6 +107,22 @@ class OfferExport
         }
     }
 
+    protected static function getSqlQuery()
+    {
+        $sqlQuery = '
+                SELECT o.*,
+                s.name as shopName,
+                s.deeplink as shopDeeplink,
+                t.content as terms,
+                (SELECT COUNT(*) FROM view_count v WHERE (v.offerid = o.id)) AS Count
+                FROM offer o 
+                LEFT JOIN shop s ON o.shopid = s.id LEFT JOIN term_and_condition t ON o.id = t.offerid
+                WHERE (o.deleted = 0 AND o.usergenerated= 0)
+                ORDER BY o.id DESC
+            ';
+        return $sqlQuery;
+    }
+
     protected static function getOfferDates($startDate, $endDate, $createdAtDate)
     {
         $startDate = date("d-m-Y", strtotime($startDate));
@@ -120,83 +136,86 @@ class OfferExport
         return array('startDate'=> $startDate, 'endDate'=>$endDate, 'createdAt'=>$createdAt);
     }
 
-    protected static function getOfferYesNoOptions($offer)
+    protected static function getOfferYesNoOptions($columnValue)
     {
-        if ($offer['extendedoffer'] == true) {
-            $extended = 'Yes';
+        if ($columnValue == true) {
+            $value = 'Yes';
         } else {
-            $extended = 'No';
+            $value = 'No';
         }
-        if ($offer['exclusivecode'] == true) {
-            $exclusive = 'Yes';
-        } else {
-            $exclusive = 'No';
-        }
-        if ($offer['editorpicks'] == true) {
-            $editor = 'Yes';
-        } else {
-            $editor = 'No';
-        }
-        if ($offer['userGenerated'] == true) {
-            $usergenerated = 'Yes';
-        } else {
-            $usergenerated = 'No';
-        }
-        if ($offer['approved'] == true) {
-            $approved = 'Yes';
-        } else {
-            $approved = 'No';
-        }
-        if ($offer['offline'] == true) {
-            $offline = 'Yes';
-        } else {
-            $offline = 'No';
-        }
-        return array('extended'=>$extended, 'exclusive'=>$exclusive, 'editor'=>$editor,
-            'usergenerated'=>$usergenerated, 'approved'=>$approved, 'offline'=>$offline);
+        return $value;
     }
 
-    protected static function getOfferCommonData($offer)
+    protected static function getOfferTitle($offerTitle)
     {
-        if ($offer['title'] == '' || $offer['title'] == 'undefined'
-            || $offer['title'] == null || $offer['title'] == '0') {
+        if ($offerTitle == '' || $offerTitle == 'undefined'
+            || $offerTitle == null || $offerTitle == '0') {
             $title = '';
         } else {
-            $title = $offer['title'];
+            $title = $offerTitle;
         }
+        return $title;
+    }
+    
+    protected static function getOfferDiscountType($offerDiscountType)
+    {
         $offerType = '';
-        if ($offer['discounttype'] == 'CD') {
+        if ($offerDiscountType == 'CD') {
             $offerType = 'Coupon';
-        } elseif ($offer['discounttype'] == 'SL') {
+        } elseif ($offerDiscountType == 'SL') {
             $offerType = 'Sale';
         } else {
             $offerType ='Printable';
         }
-        if ($offer['visability'] == 'DE') {
+        return $offerType;
+    }
+
+    protected static function getOfferVisability($offerVisability)
+    {
+        if ($offerVisability == 'DE') {
             $visability ='Default';
         } else {
             $visability ='Members';
         }
-        $clickouts = $offer['Count'];
-        if (isset($offer['authorName'])) {
-            $author = $offer['authorName'];
+        return $visability;
+    }
+    
+    protected static function getOfferClickouts($offerClickouts)
+    {
+        $clickouts = $offerClickouts;
+        return $clickouts;
+    }
+        
+    protected static function getOfferAuthorName($offerAuthorName)
+    {
+        if (isset($offerAuthorName)) {
+            $author = $offerAuthorName;
         } else {
             $author = '';
         }
-        if ($offer['couponcode'] == '' || $offer['couponcode'] == 'undefined'
-            || $offer['couponcode'] == null) {
+        return $author;
+    }
+
+    protected static function getOfferCouponCode($offerCouponCode)
+    {
+        if ($offerCouponCode == '' || $offerCouponCode == 'undefined'
+            || $offerCouponCode == null) {
             $couponCode = '';
         } else {
-            $couponCode = $offer['couponcode'];
+            $couponCode = $offerCouponCode;
         }
-        if ($offer['refurl'] == '' || $offer['refurl'] == 'undefined'
-                || $offer['refurl'] == null) {
+        return $couponCode;
+    }
+
+    protected static function getOfferRefUrl($offerRefUrl)
+    {
+        if ($offerRefUrl == '' || $offerRefUrl == 'undefined'
+                || $offerRefUrl == null) {
             $refUrl = '';
         } else {
-            $refUrl = $offer['refurl'];
+            $refUrl = $offerRefUrl;
         }
-        return array('title'=>$title, 'offerType'=>$offerType, 'visability'=>$visability,
-            'clickouts'=>$clickouts, 'author'=>$author, 'couponCode'=>$couponCode, 'refUrl'=>$refUrl);
+        return $refUrl;
     }
 
     protected static function getOfferShopData($shopName, $shopDeepLink)
