@@ -13,17 +13,17 @@ class Widget
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $slug;
+    protected $slug;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -33,42 +33,42 @@ class Widget
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $content;
+    protected $content;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $userDefined;
+    protected $userDefined;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $showWithDefault;
+    protected $showWithDefault;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefPageWidget", mappedBy="page")
      */
-    private $Widget;
+    protected $Widget;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\PageWidgets", mappedBy="widget")

@@ -19,33 +19,33 @@ class RefShopRelatedshop
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=false)
      */
-    private $relatedshopId;
+    protected $relatedshopId;
 
     /**
      * @ORM\Column(type="integer", length=5, nullable=false)
      */
-    private $position;
+    protected $position;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="relatedshops")
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id")
      */
-    private $shop;
+    protected $shop;
 
     public function __get($property)
     {

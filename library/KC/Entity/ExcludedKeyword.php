@@ -13,43 +13,43 @@ class ExcludedKeyword
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $keyword;
+    protected $keyword;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $url;
+    protected $url;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
-    private $action;
+    protected $action;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefExcludedkeywordShop", mappedBy="shops")
      */
-    private $keywords;
+    protected $keywords;
 
     /**
      * 
      * 
      */
-    private $shops;
+    protected $shops;
 
     public function __get($property)
     {

@@ -16,39 +16,39 @@ class RefPageWidget
      * @ORM\Column(type="integer", length=8, nullable=false)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $stauts;
+    protected $stauts;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $position;
+    protected $position;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Page", inversedBy="pagewidget")
      * @ORM\JoinColumn(name="pageId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
-    private $widget;
+    protected $widget;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Widget", inversedBy="Widget")
      * @ORM\JoinColumn(name="widgetid", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
-    private $page;
+    protected $page;
 
     public function __get($property)
     {

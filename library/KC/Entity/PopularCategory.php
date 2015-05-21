@@ -13,53 +13,53 @@ class PopularCategory
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $type;
+    protected $type;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $position;
+    protected $position;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Category", inversedBy="popularCategory")
      * @ORM\JoinColumn(name="categoryId", referencedColumnName="id")
      */
-    private $category;
+    protected $category;
 
     /**
      * @ORM\Column(type="integer", length=20, nullable=true)
      */
-    private $total_offers;
+    protected $total_offers;
 
     /**
      * @ORM\Column(type="integer", length=20, nullable=true)
      */
-    private $total_coupons;
+    protected $total_coupons;
 
 
     public function __get($property)

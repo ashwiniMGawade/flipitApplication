@@ -13,18 +13,18 @@ class VisitorKeyword
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $keyword;
+    protected $keyword;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Visitor", inversedBy="visitorKeyword")
      * @ORM\JoinColumn(name="visitorId", referencedColumnName="id")
      */
-    private $visitor;
+    protected $visitor;
 
     public function __get($property)
     {

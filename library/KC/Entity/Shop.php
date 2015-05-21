@@ -24,412 +24,420 @@ class Shop
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", unique=true, length=255, nullable=true)
      */
-    private $permaLink;
+    protected $permaLink;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $metaDescription;
+    protected $metaDescription;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $usergenratedcontent;
+    protected $usergenratedcontent;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $notes;
+    protected $notes;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $deepLink;
+    protected $deepLink;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $deepLinkStatus;
+    protected $deepLinkStatus;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $refUrl;
+    protected $refUrl;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $actualUrl;
+    protected $actualUrl;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $affliateProgram;
+    protected $affliateProgram;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $subTitle;
+    protected $subTitle;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $overriteTitle;
+    protected $overriteTitle;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $overriteSubtitle;
+    protected $overriteSubtitle;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $overriteBrowserTitle;
+    protected $overriteBrowserTitle;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $shopText;
+    protected $shopText;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $views;
+    protected $views;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $howToUse;
+    protected $howToUse;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $Deliverytime;
+    protected $Deliverytime;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $returnPolicy;
+    protected $returnPolicy;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
-    private $freeDelivery;
+    protected $freeDelivery;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $deliveryCost;
+    protected $deliveryCost;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $offlineSicne;
+    protected $offlineSicne;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $accoutManagerId;
+    protected $accoutManagerId;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $accountManagerName;
+    protected $accountManagerName;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $contentManagerId;
+    protected $contentManagerId;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $contentManagerName;
+    protected $contentManagerName;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $screenshotId;
+    protected $screenshotId;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $keywordlink;
+    protected $keywordlink;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $howtoTitle;
+    protected $howtoTitle;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $howtoSubtitle;
+    protected $howtoSubtitle;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $howtoMetaTitle;
+    protected $howtoMetaTitle;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $howtoMetaDescription;
+    protected $howtoMetaDescription;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $ideal;
+    protected $ideal;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $qShops;
+    protected $qShops;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $freeReturns;
+    protected $freeReturns;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $pickupPoints;
+    protected $pickupPoints;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $mobileShop;
+    protected $mobileShop;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $service;
+    protected $service;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $serviceNumber;
+    protected $serviceNumber;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $discussions;
+    protected $discussions;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $displayExtraProperties;
+    protected $displayExtraProperties;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $showSignupOption;
+    protected $showSignupOption;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $addtosearch;
+    protected $addtosearch;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $customHeader;
+    protected $customHeader;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $totalviewcount;
+    protected $totalviewcount;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $showSimliarShops;
+    protected $showSimliarShops;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $showChains;
+    protected $showChains;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $chainItemId;
+    protected $chainItemId;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $chainId;
+    protected $chainId;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $strictConfirmation;
+    protected $strictConfirmation;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $howToIntroductionText;
+    protected $howToIntroductionText;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $brandingcss;
+    protected $brandingcss;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $lightboxsecondtext;
+    protected $lightboxsecondtext;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $lightboxfirsttext;
+    protected $lightboxfirsttext;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    private $howtoguideslug;
+    protected $howtoguideslug;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $code_alert_send_date;
+    protected $code_alert_send_date;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $featuredtext;
+    protected $featuredtext;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $featuredtextdate;
-    
+    protected $featuredtextdate;
+
     /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="shop")
      * @ORM\JoinColumn(name="logoId", referencedColumnName="id", unique=true)
      */
-    private $logo;
+    protected $logo;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Adminfavoriteshp", mappedBy="shops")
      */
-    private $adminfevoriteshops;
+    protected $adminfevoriteshops;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Conversions", mappedBy="shop")
      */
-    private $conversions;
+    protected $conversions;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Offer", mappedBy="shopOffers")
      */
-    private $offer;
+    protected $offer;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\OfferNews", mappedBy="shop")
      */
-    private $offerNews;
+    protected $offerNews;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\PopularShop", mappedBy="popularshops")
      */
-    private $popularshop;
+    protected $popularshop;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefArticleStore", mappedBy="articleshops")
      */
-    private $articlestore;
+    protected $articlestore;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefExcludedkeywordShop", mappedBy="keywords")
      */
-    private $shopsofKeyword;
+    protected $shopsofKeyword;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefShopCategory", mappedBy="category")
      */
-    private $categoryshops;
+    protected $categoryshops;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefShopRelatedshop", mappedBy="shop")
      */
-    private $relatedshops;
+    protected $relatedshops;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\ShopHowToChapter", mappedBy="shop")
      */
-    private $howtochapter;
+    protected $howtochapter;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\ShopViewCount", mappedBy="shop")
      */
-    private $viewcount;
+    protected $viewcount;
 
     /**
+<<<<<<< HEAD
+=======
+     * @ORM\OneToMany(targetEntity="KC\Entity\EditorBallonText", mappedBy="shop")
+     */
+    protected $ballontext;
+
+    /**
+>>>>>>> hotfix/sesssion_problem
      * @ORM\OneToMany(targetEntity="KC\Entity\Signupfavoriteshop", mappedBy="signupfavoriteshop")
      */
-    private $shop;
+    protected $shop;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\AffliateNetwork", inversedBy="affliatenetwork")
      * @ORM\JoinColumn(name="affliateNetworkId", referencedColumnName="id", onDelete="restrict")
      */
-    private $affliatenetwork;
+    protected $affliatenetwork;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Page", inversedBy="pages")
      * @ORM\JoinColumn(name="howtoUsepageId", referencedColumnName="id", onDelete="restrict")
      */
-    private $shopPage;
+    protected $shopPage;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ImageHowToUseSmallImage", inversedBy="shop")
      * @ORM\JoinColumn(name="howtoUseSmallImageId", referencedColumnName="id")
      */
-    private $howtousesmallimage;
+    protected $howtousesmallimage;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ImageHowToUseBigImage", inversedBy="shop")
      * @ORM\JoinColumn(name="howtoUseBigImageId", referencedColumnName="id")
      */
-    private $howtousebigimage;
+    protected $howtousebigimage;
 
  
 
@@ -441,62 +449,62 @@ class Shop
      *     inverseJoinColumns={@ORM\JoinColumn(name="visitorId", referencedColumnName="id", nullable=false)}
      * )
      */
-    private $visitors;
+    protected $visitors;
 
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\ExcludedKeyword", mappedBy="shops")
      */
-    private $keywords;
+    protected $keywords;
     
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\FavoriteShop", mappedBy="shop")
      */
-    private $favoriteshops;
+    protected $favoriteshops;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $moretextforshop;
+    protected $moretextforshop;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $howtoSubSubTitle;
+    protected $howtoSubSubTitle;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    private $shopsViewedIds;
+    protected $shopsViewedIds;
 
     /**
      * @ORM\Column(type="integer", length=20, nullable=true)
      */
-    private $shopAndOfferClickouts;
+    protected $shopAndOfferClickouts;
 
     /**
      * @ORM\Column(type="integer", length=20, nullable=true)
      */
-    private $lastSevendayClickouts;
+    protected $lastSevendayClickouts;
 
     /**
      * @ORM\Column(type="integer", length=20, nullable=true)
      */
-    private $customtextposition;
+    protected $customtextposition;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $showcustomtext;
+    protected $showcustomtext;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $customtext;
+    protected $customtext;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $futurecode;
+    protected $futurecode;
  
     public function __get($property)
     {

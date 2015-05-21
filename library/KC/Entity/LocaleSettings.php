@@ -13,17 +13,17 @@ class LocaleSettings
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
      */
-    private $locale;
+    protected $locale;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $timezone;
+    protected $timezone;
 
     public function __get($property)
     {

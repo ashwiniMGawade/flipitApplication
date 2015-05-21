@@ -13,18 +13,18 @@ class Adminfavoriteshp
      * @ORM\Column(type="integer", length=11)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="adminfevoriteshops")
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id")
      */
-    private $shops;
+    protected $shops;
 
     public function __get($property)
     {

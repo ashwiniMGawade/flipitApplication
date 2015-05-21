@@ -13,34 +13,34 @@ class ArticleChapter
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $content;
+    protected $content;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Articles", inversedBy="articleChapter")
      * @ORM\JoinColumn(name="articleId", referencedColumnName="id")
      */
-    private $article;
+    protected $article;
 
     public function __get($property)
     {

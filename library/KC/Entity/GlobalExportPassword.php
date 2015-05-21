@@ -13,27 +13,27 @@ class GlobalExportPassword
      * @ORM\Column(type="integer", length=11)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $password;
+    protected $password;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    private $exportType;
+    protected $exportType;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    protected $updated_at;
     
     public function __get($property)
     {

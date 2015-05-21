@@ -10,27 +10,27 @@ class Logo extends \KC\Entity\Image
     /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Offer", mappedBy="logo")
      */
-    private $offer;
+    protected $offer;
 
     /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Page", mappedBy="logo")
      */
-    private $page;
+    protected $page;
 
     /**
      * @ORM\OneToOne(targetEntity="KC\Entity\SeenIn", mappedBy="logo")
      */
-    private $seenin;
+    protected $seenin;
 
     /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Shop", mappedBy="logo")
      */
-    private $shop;
+    protected $shop;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Page", mappedBy="homepageimage")
      */
-    private $homepageimage;
+    protected $homepageimage;
 
     public function __get($property)
     {

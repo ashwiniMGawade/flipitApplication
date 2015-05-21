@@ -13,34 +13,34 @@ class FavoriteShop
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=false)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $code_alert_send_date;
+    protected $code_alert_send_date;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="favoriteshops")
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id")
      */
-    private $shop;
+    protected $shop;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Visitor", inversedBy="favoritevisitorshops")
      * @ORM\JoinColumn(name="visitorId", referencedColumnName="id")
      */
-    private $visitor;
+    protected $visitor;
 
     public function __get($property)
     {

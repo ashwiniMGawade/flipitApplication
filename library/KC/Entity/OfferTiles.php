@@ -13,58 +13,58 @@ class OfferTiles
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $label;
+    protected $label;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    private $type;
+    protected $type;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    private $ext;
+    protected $ext;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $path;
+    protected $path;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $position;
+    protected $position;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="offerTiles")
      * @ORM\JoinColumn(name="id", referencedColumnName="tilesId")
      */
-    private $offer;
+    protected $offer;
 
     public function __get($property)
     {

@@ -13,27 +13,27 @@ class CodeAlertVisitors
      * @ORM\Column(type="integer", length=11)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $createda_at;
+    protected $createda_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
-    private $offerId;
+    protected $offerId;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
-    private $visitorId;
+    protected $visitorId;
     public function __get($property)
     {
         return $this->$property;

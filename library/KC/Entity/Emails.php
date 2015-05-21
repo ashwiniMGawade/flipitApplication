@@ -13,67 +13,67 @@ class Emails
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $type;
+    protected $type;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $header;
+    protected $header;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $body;
+    protected $body;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $footer;
+    protected $footer;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $schedule;
+    protected $schedule;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $test;
+    protected $test;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      */
-    private $send_date;
+    protected $send_date;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $send_counter;
+    protected $send_counter;
 
     public function __get($property)
     {

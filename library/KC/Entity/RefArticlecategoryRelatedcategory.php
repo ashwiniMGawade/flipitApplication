@@ -13,29 +13,29 @@ class RefArticlecategoryRelatedcategory
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Articlecategory", inversedBy="refArticlecategoryRelatedcategory")
      * @ORM\JoinColumn(name="articlecategoryid", referencedColumnName="id")
      */
-    private $articlecategory;
+    protected $articlecategory;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Category", inversedBy="refArticlecategoryRelatedcategory")
      * @ORM\JoinColumn(name="relatedcategoryid", referencedColumnName="id")
      */
-    private $category;
+    protected $category;
 
     public function __get($property)
     {

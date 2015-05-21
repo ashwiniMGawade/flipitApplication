@@ -13,32 +13,32 @@ class CodeAlertSettings
      * @ORM\Column(type="integer", length=11)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $email_subject;
+    protected $email_subject;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $email_header;
+    protected $email_header;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    protected $updated_at;
     public function __get($property)
     {
         return $this->$property;

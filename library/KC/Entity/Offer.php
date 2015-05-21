@@ -20,245 +20,245 @@ class Offer
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $title;
+    protected $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $Visability;
+    protected $Visability;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $discountType;
+    protected $discountType;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
      */
-    private $couponCode;
+    protected $couponCode;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $refOfferUrl;
+    protected $refOfferUrl;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $refURL;
+    protected $refURL;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $startDate;
+    protected $startDate;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $endDate;
+    protected $endDate;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $exclusiveCode;
+    protected $exclusiveCode;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $editorPicks;
+    protected $editorPicks;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $extendedOffer;
+    protected $extendedOffer;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $extendedTitle;
+    protected $extendedTitle;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $extendedoffertitle;
+    protected $extendedoffertitle;
 
     /**
      * @ORM\Column(type="string", length=500, nullable=true)
      */
-    private $offerUrl;
+    protected $offerUrl;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $nickname;
+    protected $nickname;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $extendedUrl;
+    protected $extendedUrl;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $extendedMetaDescription;
+    protected $extendedMetaDescription;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $extendedFullDescription;
+    protected $extendedFullDescription;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $discount;
+    protected $discount;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
-    private $discountvalueType;
+    protected $discountvalueType;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $authorId;
+    protected $authorId;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $authorName;
+    protected $authorName;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $maxlimit;
+    protected $maxlimit;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=false)
      */
-    private $maxcode;
+    protected $maxcode;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $userGenerated;
+    protected $userGenerated;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $approved;
+    protected $approved;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=false)
      */
-    private $offline;
+    protected $offline;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $tilesId;
+    protected $tilesId;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $shopExist;
+    protected $shopExist;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $totalViewcount;
+    protected $totalViewcount;
 
     /**
      * @ORM\Column(type="decimal", length=16, nullable=true, scale=4)
      */
-    private $popularityCount;
+    protected $popularityCount;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $couponCodeType;
+    protected $couponCodeType;
 
     /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="offer")
      * @ORM\JoinColumn(name="offerLogoId", referencedColumnName="id", unique=true)
      */
-    private $logo;
+    protected $logo;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Conversions", mappedBy="offer")
      */
-    private $conversions;
+    protected $conversions;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\CouponCode", mappedBy="offer")
      */
-    private $couponcode;
+    protected $couponcode;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\OfferTiles", mappedBy="offer")
      * @ORM\JoinColumn(name="tilesId", referencedColumnName="id", onDelete="restrict")
      */
-    private $offerTiles;
+    protected $offerTiles;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\PopularCode", mappedBy="popularcode")
      */
-    private $offer;
+    protected $offer;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\PopularVouchercodes", mappedBy="offer")
      */
-    private $popularVouchercodes;
+    protected $popularVouchercodes;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefOfferCategory", mappedBy="offers")
      */
-    private $categoryoffres;
+    protected $categoryoffres;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefOfferPage", mappedBy="refoffers")
      */
-    private $offers;
+    protected $offers;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\TermAndCondition", mappedBy="termandcondition")
      */
-    private $offertermandcondition;
+    protected $offertermandcondition;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\ViewCount", mappedBy="viewcount")
      */
-    private $offerviewcount;
+    protected $offerviewcount;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Votes", mappedBy="offer")
      */
-    private $votes;
+    protected $votes;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="offer")
      * @ORM\JoinColumn(name="shopid", referencedColumnName="id", onDelete="restrict")
      */
-    private $shopOffers;
+    protected $shopOffers;
 
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Visitor", inversedBy="offer")
@@ -268,22 +268,22 @@ class Offer
      *     inverseJoinColumns={@ORM\JoinColumn(name="visitorId", referencedColumnName="id", nullable=false)}
      * )
      */
-    private $visitors;
+    protected $visitors;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\FavoriteOffer", mappedBy="offer")
      */
-    private $favoriteOffer;
+    protected $favoriteOffer;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\SpecialPagesOffers", mappedBy="offers")
      */
-    private $specialPagesOffers;
+    protected $specialPagesOffers;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\CategoriesOffers", mappedBy="offers")
      */
-    private $categoriesOffers;
+    protected $categoriesOffers;
 
     public function __get($property)
     {

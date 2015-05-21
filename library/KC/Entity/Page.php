@@ -22,233 +22,233 @@ class Page
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $pageTitle;
+    protected $pageTitle;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $slug;
+    protected $slug;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $permalink;
+    protected $permalink;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $metaTitle;
+    protected $metaTitle;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $metaDescription;
+    protected $metaDescription;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $content;
+    protected $content;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $publish;
+    protected $publish;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $pageLock;
+    protected $pageLock;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=false)
      */
-    private $contentManagerId;
+    protected $contentManagerId;
 
     /**
      * @ORM\Column(type="string", length=256, nullable=true)
      */
-    private $contentManagerName;
+    protected $contentManagerName;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $enableTimeConstraint;
+    protected $enableTimeConstraint;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $timenumberOfDays;
+    protected $timenumberOfDays;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $timeType;
+    protected $timeType;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $timeMaxOffer;
+    protected $timeMaxOffer;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $timeOrder;
+    protected $timeOrder;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $enableWordConstraint;
+    protected $enableWordConstraint;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    private $wordTitle;
+    protected $wordTitle;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $wordMaxOffer;
+    protected $wordMaxOffer;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $publishDate;
+    protected $publishDate;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $wordOrder;
+    protected $wordOrder;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $awardConstratint;
+    protected $awardConstratint;
 
     /**
      * @ORM\Column(type="string", length=5, nullable=true)
      */
-    private $awardType;
+    protected $awardType;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $awardMaxOffer;
+    protected $awardMaxOffer;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $awardOrder;
+    protected $awardOrder;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $enableClickConstraint;
+    protected $enableClickConstraint;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $numberOfClicks;
+    protected $numberOfClicks;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $clickMaxOffer;
+    protected $clickMaxOffer;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $clickOrder;
+    protected $clickOrder;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=false)
      */
-    private $maxOffers;
+    protected $maxOffers;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=false)
      */
-    private $oderOffers;
+    protected $oderOffers;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $couponRegular;
+    protected $couponRegular;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $couponEditorPick;
+    protected $couponEditorPick;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $couponExclusive;
+    protected $couponExclusive;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $saleRegular;
+    protected $saleRegular;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $saleEditorPick;
+    protected $saleEditorPick;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $saleExclusive;
+    protected $saleExclusive;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $printableRegular;
+    protected $printableRegular;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $printableEditorPick;
+    protected $printableEditorPick;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $printableExclusive;
+    protected $printableExclusive;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $showPage;
+    protected $showPage;
 
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $customHeader;
+    protected $customHeader;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $showsitemap;
+    protected $showsitemap;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -259,64 +259,64 @@ class Page
      * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="page")
      * @ORM\JoinColumn(name="pageHeaderImageId", referencedColumnName="id", unique=true)
      */
-    private $pageHeaderImageId;
+    protected $pageHeaderImageId;
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $offersCount;
+    protected $offersCount;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $showinmobilemenu;
+    protected $showinmobilemenu;
 
     /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="page")
      * @ORM\JoinColumn(name="logoid", referencedColumnName="id", unique=true)
      */
-    private $logo;
+    protected $logo;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\MoneySaving", mappedBy="page")
      */
-    private $moneysaving;
+    protected $moneysaving;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefOfferPage", mappedBy="offers")
      */
-    private $pageoffers;
+    protected $pageoffers;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefPageWidget", mappedBy="widget")
      */
-    private $pagewidget;
+    protected $pagewidget;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Shop", mappedBy="shopPage")
      */
-    private $pages;
+    protected $pages;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\SpecialList", mappedBy="page")
      */
-    private $specialList;
+    protected $specialList;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\PageAttribute", inversedBy="pageattribute")
      * @ORM\JoinColumn(name="pageAttributeId", referencedColumnName="id", onDelete="restrict")
      */
-    private $page;
+    protected $page;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\SpecialPagesOffers", mappedBy="pages")
      */
-    private $specialPagesOffers;
+    protected $specialPagesOffers;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Logo", inversedBy="homepageimage")
      * @ORM\JoinColumn(name="pageHomeImageId", referencedColumnName="id")
      */
-    private $homepageimage;
+    protected $homepageimage;
 
     public function __get($property)
     {

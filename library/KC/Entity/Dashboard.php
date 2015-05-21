@@ -13,81 +13,81 @@ class Dashboard
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $message;
+    protected $message;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $no_of_offers;
+    protected $no_of_offers;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $no_of_shops;
+    protected $no_of_shops;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $no_of_clickouts;
+    protected $no_of_clickouts;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $no_of_subscribers;
+    protected $no_of_subscribers;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $total_no_of_offers;
+    protected $total_no_of_offers;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $total_no_of_shops;
+    protected $total_no_of_shops;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $total_no_of_shops_online_code;
+    protected $total_no_of_shops_online_code;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $total_no_of_shops_online_code_lastweek;
+    protected $total_no_of_shops_online_code_lastweek;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $total_no_members;
+    protected $total_no_members;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=false)
      */
-    private $total_no_of_shops_online_code_thisweek;
+    protected $total_no_of_shops_online_code_thisweek;
     /**
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
-    private $money_shop_ratio;
+    protected $money_shop_ratio;
 
     public function __get($property)
     {

@@ -10,7 +10,7 @@ class MediaImage extends \KC\Entity\Image
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Media", mappedBy="mediaimage")
      */
-    private $media;
+    protected $media;
 
     public function __get($property)
     {

@@ -12,28 +12,28 @@ class UserSession
      * @ORM\Id
      * @ORM\Column(type="integer", length=8)
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\User", inversedBy="user")
      * @ORM\JoinColumn(name="userId", referencedColumnName="id")
      */
-    private $usersession;
+    protected $usersession;
 
     public function __get($property)
     {

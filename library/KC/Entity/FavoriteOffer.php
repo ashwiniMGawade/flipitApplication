@@ -13,29 +13,29 @@ class FavoriteOffer
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Visitor", inversedBy="favoriteOffer")
      * @ORM\JoinColumn(name="visitorId", referencedColumnName="id")
      */
-    private $visitor;
+    protected $visitor;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="favoriteOffer")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id")
      */
-    private $offer;
+    protected $offer;
 
     public function __get($property)
     {

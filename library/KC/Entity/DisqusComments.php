@@ -19,64 +19,64 @@ class DisqusComments
      * @ORM\Column(type="integer", length=11, nullable=true)
      * 
      */
-    private $id;
+    protected $id;
 
     /**
      * 
      */
-    private $comment_id;
+    protected $comment_id;
 
     /**
      * 
      */
-    private $message;
+    protected $message;
 
     /**
      * 
      */
-    private $page_title;
+    protected $page_title;
 
     /**
      * 
      */
-    private $page_url;
+    protected $page_url;
 
     /**
      * 
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $author_name;
+    protected $author_name;
 
     /**
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="KC\Entity\DisqusThread", inversedBy="disqusComments")
      * @ORM\JoinColumn(name="thread_id", referencedColumnName="id")
      */
-    private $disqusThread;
+    protected $disqusThread;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
-    private $created;
+    protected $created;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $comment;
+    protected $comment;
 
     /**
      * 
      */
-    private $author_profile_url;
+    protected $author_profile_url;
 
     /**
      * 
      */
-    private $author_avtar;
+    protected $author_avtar;
     
     public function __get($property)
     {

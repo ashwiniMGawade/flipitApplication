@@ -13,18 +13,18 @@ class Interestingcategory
      * @ORM\Column(type="integer", length=11)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Category", inversedBy="interestingcategory")
      * @ORM\JoinColumn(name="categoryId", referencedColumnName="id")
      */
-    private $category;
+    protected $category;
 
     public function __get($property)
     {

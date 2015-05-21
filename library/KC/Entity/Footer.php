@@ -13,52 +13,52 @@ class Footer
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $topFooter;
+    protected $topFooter;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $middleColumn1;
+    protected $middleColumn1;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $middleColumn2;
+    protected $middleColumn2;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $middleColumn3;
+    protected $middleColumn3;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $middleColumn4;
+    protected $middleColumn4;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $bottomFooter;
+    protected $bottomFooter;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     public function __get($property)
     {
