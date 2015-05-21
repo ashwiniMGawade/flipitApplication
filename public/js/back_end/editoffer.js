@@ -504,8 +504,7 @@ function setFormData(data){
 		if(data[0].couponCodeType == 'UN')
 		{
 			couponType('unique');
-		}else if(data[0].couponCodeType == 'GN')
-		{
+		} else {
 			couponType('general');
 		}
 		
