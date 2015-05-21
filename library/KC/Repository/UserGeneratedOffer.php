@@ -64,8 +64,9 @@ class UserGeneratedOffer extends \KC\Entity\Offer
             ->where('o.deleted = '.$flag)
             ->andWhere('s.status = 1')
             ->andWhere($queryBuilder->expr()->like('s.name', $queryBuilder->expr()->literal($keyword.'%')))
-            ->andWhere("o.userGenerated = 1")
+            ->andWhere("(o.userGenerated = 1 and o.approved='0')")
             ->orderBy("s.id", "ASC")
+            ->groupBy('s.name')
             ->setMaxResults(5)
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -80,8 +81,9 @@ class UserGeneratedOffer extends \KC\Entity\Offer
             ->from("KC\Entity\Offer", "o")
             ->where('o.deleted = '.$flag)
             ->andWhere($queryBuilder->expr()->like('o.couponCode', $queryBuilder->expr()->literal($keyword.'%')))
-            ->andWhere("o.userGenerated = 1")
+            ->andWhere("(o.userGenerated=1 and o.approved='0')")
             ->orderBy("o.id", "ASC")
+            ->groupBy('o.couponCode')
             ->setMaxResults(5)
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

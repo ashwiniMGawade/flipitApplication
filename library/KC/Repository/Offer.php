@@ -958,8 +958,7 @@ class Offer Extends \KC\Entity\Offer
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->where($entityManagerUser->expr()->eq('o.deleted', $entityManagerUser->expr()->literal($deletedStatus)))
-            ->andWhere($entityManagerUser->expr()->eq('o.userGenerated', $entityManagerUser->expr()->literal('0')))
-            ->andWhere($entityManagerUser->expr()->eq('o.approved', $entityManagerUser->expr()->literal('0')));
+            ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')");
         if ($userRole=='4') {
             $getOffersQuery->andWhere(
                 $entityManagerUser->expr()->like('o.Visability', $entityManagerUser->expr()->literal('DE'))
@@ -1498,7 +1497,7 @@ class Offer Extends \KC\Entity\Offer
                 ->andWhere(
                     $queryBuilder->expr()->like('o.title', $queryBuilder->expr()->literal($keyword.'%'))
                 )
-                ->andWhere('o.userGenerated = 0')
+                ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
                 ->orderBy('o.title', 'ASC')
                 ->setMaxResults(5);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -1513,7 +1512,7 @@ class Offer Extends \KC\Entity\Offer
                 ->leftJoin('o.shopOffers', 's')
                 ->where('s.deleted='.$flag)
                 ->andWhere("s.name LIKE '$keyword%'")
-                ->andWhere('o.userGenerated = 0')
+                ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
                 ->orderBy('s.id', 'ASC')
                 ->groupBy('s.name')
                 ->setMaxResults(5);
