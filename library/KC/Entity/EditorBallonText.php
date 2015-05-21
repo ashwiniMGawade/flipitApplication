@@ -13,33 +13,33 @@ class EditorBallonText
      * @ORM\Column(type="integer", length=11)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $ballontext;
+    protected $ballontext;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="ballontext")
      * @ORM\JoinColumn(name="shopid", referencedColumnName="id")
      */
-    private $shop;
+    protected $shop;
 
     public function __get($property)
     {

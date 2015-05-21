@@ -13,39 +13,39 @@ class CategoriesOffers
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer", length=10, nullable=true)
      */
-    private $position;
+    protected $position;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="categoriesOffers")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id")
      */
-    private $offers;
+    protected $offers;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Category", inversedBy="categoriesOffers")
      * @ORM\JoinColumn(name="categoryId", referencedColumnName="id")
      */
-    private $categories;
+    protected $categories;
 
     public function __get($property)
     {

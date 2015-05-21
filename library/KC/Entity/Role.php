@@ -13,37 +13,37 @@ class Role
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Rights", mappedBy="role")
      */
-    private $rights;
+    protected $rights;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\User", mappedBy="users")
      */
-    private $roleid;
+    protected $roleid;
 
     public function __get($property)
     {

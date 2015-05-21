@@ -30,47 +30,47 @@ class Image
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=5, nullable=true)
      */
-    private $ext;
+    protected $ext;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $path;
+    protected $path;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Menu", mappedBy="menuIcon")
      */
-    private $menu;
+    protected $menu;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Mainmenu", mappedBy="mainMenuIcon")
      */
-    private $mainmenu;
+    protected $mainmenu;
 
     public function __get($property)
     {

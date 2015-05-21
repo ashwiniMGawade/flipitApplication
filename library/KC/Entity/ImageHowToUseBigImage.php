@@ -12,7 +12,7 @@ class ImageHowToUseBigImage extends \KC\Entity\Image
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Shop", mappedBy="howtousebigimage")
      */
-    private $shop;
+    protected $shop;
 
     public function __get($property)
     {

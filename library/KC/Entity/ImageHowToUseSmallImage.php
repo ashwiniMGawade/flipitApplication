@@ -10,7 +10,7 @@ class ImageHowToUseSmallImage extends \KC\Entity\Image
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Shop", mappedBy="howtousesmallimage")
      */
-    private $shop;
+    protected $shop;
 
     public function __get($property)
     {

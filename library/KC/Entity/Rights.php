@@ -13,38 +13,38 @@ class Rights
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="integer", length=3, nullable=true)
      */
-    private $rights;
+    protected $rights;
 
     /**
      * @ORM\Column(type="string", length=512, nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Role", inversedBy="rights")
      * @ORM\JoinColumn(name="roleId", referencedColumnName="id")
      */
-    private $role;
+    protected $role;
 
     public function __get($property)
     {

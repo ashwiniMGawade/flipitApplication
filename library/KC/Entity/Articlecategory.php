@@ -16,89 +16,89 @@ class Articlecategory
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $permalink;
+    protected $permalink;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $metatitle;
+    protected $metatitle;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $metadescription;
+    protected $metadescription;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="string", nullable=false)
      */
-    private $categorytitlecolor;
+    protected $categorytitlecolor;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\MoneySaving", mappedBy="articlecategory")
      */
-    private $moneysaving;
+    protected $moneysaving;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefArticleCategory", mappedBy="articlecategory")
      */
-    private $refArticleCategory;
+    protected $refArticleCategory;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ImageArticleCategoryIcon", inversedBy="articlecategory")
      * @ORM\JoinColumn(name="categoryiconid", referencedColumnName="id")
      */
-    private $ArtCatIcon;
+    protected $ArtCatIcon;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefArticlecategoryRelatedcategory", mappedBy="articlecategory")
      */
-    private $refArticlecategoryRelatedcategory;
+    protected $refArticlecategoryRelatedcategory;
 
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Category", mappedBy="articlecategory")
      */
-    private $category;
+    protected $category;
 
     /**
     * @ORM\ManyToMany(targetEntity="KC\Entity\Articles", mappedBy="category")
     */
-    private $articles;
+    protected $articles;
 
     public function __get($property)
     {

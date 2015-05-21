@@ -20,58 +20,58 @@ class ViewCount
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $loadTime;
+    protected $loadTime;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $onClick;
+    protected $onClick;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $onLoad;
+    protected $onLoad;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $onHover;
+    protected $onHover;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $IP;
+    protected $IP;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $memberId;
+    protected $memberId;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $counted;
+    protected $counted;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="offerviewcount")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id", onDelete="restrict")
      */
-    private $viewcount;
+    protected $viewcount;
 
     public function __get($property)
     {

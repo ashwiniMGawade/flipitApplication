@@ -10,7 +10,7 @@ class VisitorImage extends \KC\Entity\Image
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Visitor", mappedBy="visitorimage")
      */
-    private $visitor;
+    protected $visitor;
 
     public function __get($property)
     {

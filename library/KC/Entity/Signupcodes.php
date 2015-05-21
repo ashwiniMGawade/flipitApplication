@@ -13,27 +13,27 @@ class Signupcodes
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=false)
      */
-    private $entered_uid;
+    protected $entered_uid;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $code;
+    protected $code;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     public function __get($property)
     {

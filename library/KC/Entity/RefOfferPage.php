@@ -20,29 +20,29 @@ class RefOfferPage
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="offers")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
-    private $refoffers;
+    protected $refoffers;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Page", inversedBy="pageoffers")
      * @ORM\JoinColumn(name="pageId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
-    private $offers;
+    protected $offers;
 
     public function __get($property)
     {

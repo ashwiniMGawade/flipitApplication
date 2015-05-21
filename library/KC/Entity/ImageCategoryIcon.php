@@ -19,15 +19,15 @@ class ImageCategoryIcon extends \KC\Entity\Image
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Category", mappedBy="categoryicon")
      */
-    private $category;
+    protected $category;
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Category", mappedBy="categoryFeaturedImage")
      */
-    private $categoryfeatured;
+    protected $categoryfeatured;
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Category", mappedBy="categoryHeaderImage")
      */
-    private $categoryheader;
+    protected $categoryheader;
 
     public function __get($property)
     {

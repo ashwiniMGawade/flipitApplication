@@ -13,37 +13,37 @@ class newsLetterCache
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $value;
+    protected $value;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $deleted;
+    protected $deleted;
 
     public function __get($property)
     {

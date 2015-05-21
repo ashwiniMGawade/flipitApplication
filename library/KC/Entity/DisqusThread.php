@@ -12,27 +12,27 @@ class DisqusThread
      * @ORM\Id
      * @ORM\Column(type="integer", length=11)
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $link;
+    protected $link;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
-    private $created;
+    protected $created;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\DisqusComments", mappedBy="disqusThread")
      */
-    private $disqusComments;
+    protected $disqusComments;
 
     public function __get($property)
     {

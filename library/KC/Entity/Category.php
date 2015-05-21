@@ -29,105 +29,105 @@ class Category
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $permaLink;
+    protected $permaLink;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $metatitle;
+    protected $metatitle;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $metaDescription;
+    protected $metaDescription;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $description;
+    protected $description;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $status;
+    protected $status;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $deleted;
+    protected $deleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $featured_category;
+    protected $featured_category;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Interestingcategory", mappedBy="category")
      */
-    private $interestingcategory;
+    protected $interestingcategory;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\PopularCategory", mappedBy="category")
      */
-    private $popularCategory;
+    protected $popularCategory;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefArticlecategoryRelatedcategory", mappedBy="category")
      */
-    private $refArticlecategoryRelatedcategory;
+    protected $refArticlecategoryRelatedcategory;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefOfferCategory", mappedBy="categories")
      */
-    private $categoryoffres;
+    protected $categoryoffres;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefShopCategory", mappedBy="shop")
      */
 
-    private $shopcategory;
+    protected $shopcategory;
     
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\CategoriesOffers", mappedBy="categories")
      */
-    private $categoriesOffers;
+    protected $categoriesOffers;
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ImageCategoryIcon", inversedBy="category")
      * @ORM\JoinColumn(name="categoryiconid", referencedColumnName="id")
      */
-    private $categoryicon;
+    protected $categoryicon;
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ImageCategoryIcon", inversedBy="categoryfeatured")
      * @ORM\JoinColumn(name="categoryFeaturedImageId", referencedColumnName="id")
      */
-    private $categoryFeaturedImage;
+    protected $categoryFeaturedImage;
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ImageCategoryIcon", inversedBy="categoryheader")
      * @ORM\JoinColumn(name="categoryHeaderImageId", referencedColumnName="id")
      */
-    private $categoryHeaderImage;
+    protected $categoryHeaderImage;
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Articlecategory", inversedBy="category")
      * @ORM\JoinTable(
@@ -136,7 +136,7 @@ class Category
      *     inverseJoinColumns={@ORM\JoinColumn(name="articlecategoryid", referencedColumnName="id", nullable=false)}
      * )
      */
-    private $articlecategory;
+    protected $articlecategory;
 
     public function __get($property)
     {

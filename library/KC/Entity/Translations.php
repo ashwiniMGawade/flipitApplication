@@ -13,32 +13,32 @@ class Translations
      * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $translationKey;
+    protected $translationKey;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $translation;
+    protected $translation;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $deleted;
+    protected $deleted;
 
     public function __get($property)
     {
