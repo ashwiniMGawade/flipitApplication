@@ -403,14 +403,6 @@ class Shop
     protected $viewcount;
 
     /**
-<<<<<<< HEAD
-=======
-     * @ORM\OneToMany(targetEntity="KC\Entity\EditorBallonText", mappedBy="shop")
-     */
-    protected $ballontext;
-
-    /**
->>>>>>> hotfix/sesssion_problem
      * @ORM\OneToMany(targetEntity="KC\Entity\Signupfavoriteshop", mappedBy="signupfavoriteshop")
      */
     protected $shop;
