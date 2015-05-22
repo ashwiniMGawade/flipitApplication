@@ -478,7 +478,10 @@ echo $this->headTitle()->append($browserTitle);?>
         <div class="mainpage-content mainpage-content-buttons" id="offerButtons">
             <div class="row-fluid">
                 <div class="span12">
-                    <button id="updateOfferBtn" type="submit" class="btn btn-large btn-primary fl">
+                    <?php
+                        $onClick = $this->offerController == 1 ? "onclick='setApprovedStatus();'" : '';
+                    ?>
+                    <button <?php echo $onClick;?> id="updateOfferBtn" type="submit" class="btn btn-large btn-primary fl">
                         <?php
                         echo $editText = $this->offerController == 1 ? $this->translate('EDIT SOCIAL CODE')
                             : $this->translate('EDIT OFFER');
@@ -494,7 +497,7 @@ echo $this->headTitle()->append($browserTitle);?>
                     <a id="deleteButton" href="javascript:void(0);" onclick="deleteOffer(event);" class="fl red mt10">
                     <strong><?php echo $this->translate('DELETE'); ?></strong></a>
                     <?php if ($this->offerController == 1) {?>
-                        <button id="updateOfferBtn" type="submit" onCLick='setApprovedStatus();' 
+                        <button id="updateOfferBtn" type="submit" <?php echo $onClick;?> 
                         class="btn btn-large btn-primary fl ml20">
                         <?php echo $this->translate('backend_ADD OFFER'); ?>
                         </button>
