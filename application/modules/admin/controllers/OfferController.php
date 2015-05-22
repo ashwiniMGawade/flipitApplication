@@ -1098,18 +1098,12 @@ class Admin_OfferController extends Zend_Controller_Action
                                     $codesArray[] = $code;
                                     $offerId = $this->getRequest()->getParam('offer', null);
                                     $codeRecord = \KC\Repository\CouponCode::getCouponCode($offerId, $code);
-                                    if ($codeRecord) {
+                                    if (empty($codeRecord)) {
                                         $newStaus = 0 ;
                                         if (strtolower($status) == 'available') {
                                             $newStaus = 1 ;
                                         }
-                                        \KC\Repository\CouponCode::updateCouponCode($newStaus, $code, $offerId);
-                                    } else {
-                                        $newStaus = 0 ;
-                                        if (strtolower($status) == 'available') {
-                                            $newStaus = 1 ;
-                                        }
-                                        \KC\Repository\CouponCode::saveCouponCode($code, $newStaus, $offerId);
+                                        \KC\Repository\CouponCode::saveCouponCode($newStaus, $code, $offerId);
                                     }
                                 }
                             } else {
