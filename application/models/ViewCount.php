@@ -335,21 +335,16 @@ class ViewCount extends BaseViewCount
 
     public static function processViewCount($id = null)
     {
-
-
         $query = Doctrine_Query::create()
-                ->update('ViewCount v')
-                ->set('v.counted' , 1 )
-                ->where('v.counted = 0');
+            ->update('ViewCount v')
+            ->set('v.counted', 1)
+            ->where('v.counted = 0 or v.counted IS NULL');
 
         # set counted against given id
-        if($id){
-
-            $query = $query->andWhere('v.offerId =  ? ' , $id);
+        if ($id) {
+            $query = $query->andWhere('v.offerId =  ? ', $id);
         }
 
         $query->execute();
-
     }
-
 }

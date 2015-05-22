@@ -2991,7 +2991,7 @@ class Offer extends BaseOffer
          $data = Doctrine_Query::create()
                     ->select('o.id,o.totalViewcount,o.startDate,DATEDIFF(NOW(),o.startdate) as diff')
                     ->from('Offer o')
-                    ->addSelect("(SELECT  sum(v.onclick)  as clicks FROM ViewCount v WHERE v.offerId = o.id and v.counted=0 ) as clicks")
+                    ->addSelect("(SELECT  sum(v.onclick)  as clicks FROM ViewCount v WHERE v.offerId = o.id and (v.counted=0 or v.counted IS NULL)) as clicks")
                     ->fetchArray();
 
         foreach ($data as $value) {
