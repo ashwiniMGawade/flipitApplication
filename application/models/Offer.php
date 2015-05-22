@@ -3538,4 +3538,35 @@ class Offer extends BaseOffer
         $offers = $offers->fetchOne(null, Doctrine::HYDRATE_ARRAY);
         return $offers;
     }
+
+    public static function setNoneOptionForDualSelectedEditorAndExclusiveOffers()
+    {
+        $allExclusiveAndEditorSetOffers = self::getAllExclusiveAndEditorSetOffers();
+        foreach ($allExclusiveAndEditorSetOffers as $exclusiveAndEditorSetOffer) {
+            self::updateToNoneSelectedOffer($exclusiveAndEditorSetOffer['id']);
+        }
+        return true;
+    }
+
+    public static function getAllExclusiveAndEditorSetOffers()
+    {
+        $offersList = Doctrine_Query::create()
+            ->select('o.id')
+            ->from('Offer o')
+            ->where('o.exclusiveCode = 1')
+            ->andWhere('o.editorPicks = 1')
+            ->fetchArray();
+        return $offersList;
+    }
+
+    public static function updateToNoneSelectedOffer($offerId)
+    {
+        Doctrine_Query::create()
+            ->update('Offer')
+            ->set('exclusiveCode', '0')
+            ->set('editorPicks', '0')
+            ->where('id=' .$offerId)
+            ->execute();
+        return true;
+    }
 }
