@@ -96,7 +96,7 @@ class UserGeneratedOffer extends \KC\Entity\Offer
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $offer = $entityManagerLocale->find('\KC\Entity\Offer', $offerId);
         if (!empty($status)) {
-            $offer->approved = 1;
+            $offer->approved = '1';
             $authorId = \KC\Repository\Offer::getAuthorId($offerId);
             if (empty($authorId[0]['authorId'])) {
                 $offer->authorId = \Auth_StaffAdapter::getIdentity()->id;
@@ -104,7 +104,7 @@ class UserGeneratedOffer extends \KC\Entity\Offer
                     . \Auth_StaffAdapter::getIdentity()->lastName;
             }
         } else {
-            $offer->approved = 0;
+            $offer->approved = '0';
         }
         $entityManagerLocale->persist($offer);
         $entityManagerLocale->flush();
