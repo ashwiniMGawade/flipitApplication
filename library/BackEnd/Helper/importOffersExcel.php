@@ -76,7 +76,7 @@ class BackEnd_Helper_importOffersExcel
                         $offerList->maxcode = 0;
                         $offerList->deleted = 0;
                         $offerList->maxlimit = 0;
-                        $offerList->approved = true;
+                        $offerList->approved = '0';
                         $offerList->updated_at = new \DateTime('now');
                         $offerCounter++;
                         $entityManagerLocale->persist($offerList);
