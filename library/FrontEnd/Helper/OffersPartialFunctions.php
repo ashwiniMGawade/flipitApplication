@@ -73,7 +73,9 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         $endDate = (array) $endDate;
         $endDate = isset($endDate['date']) ? $endDate['date'] : $endDate;
-        $endDate = isset($endDate[0]) ? $endDate[0] : $endDate;
+        if (is_array($endDate)) {
+            $endDate = isset($endDate[0]) ? $endDate[0] : $endDate;
+        }
         $currentDate = date('Y-m-d');
         $offerEndDate = date('Y-m-d', strtotime($endDate));
         $timeStampStart = strtotime($offerEndDate);
