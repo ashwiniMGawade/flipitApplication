@@ -3554,11 +3554,8 @@ class Offer extends BaseOffer
         $offersList = Doctrine_Query::create()
             ->select('o.id')
             ->from('Offer o')
-            ->where('o.deleted = 0')
-            ->andWhere('o.enddate < '."'".$currentDateTime."'")
-            ->andWhere('o.exclusiveCode = 1')
+            ->where('o.exclusiveCode = 1')
             ->andWhere('o.editorPicks = 1')
-            ->andWhere('o.offline = 0')
             ->fetchArray();
         return $offersList;
     }
