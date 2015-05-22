@@ -240,11 +240,10 @@ class FrontEnd_Helper_LayoutContent
         $splashInformation = \FrontEnd_Helper_viewHelper::getSplashInformation();
         if (!empty($splashInformation)) {
             $locale = $splashInformation[0]['locale'];
-            //$connectionWithSiteDatabase = \BackEnd_Helper_DatabaseManager::addConnection($locale);
-            //$offer = new \KC\Repository\Offer($connectionWithSiteDatabase['connName']);
+            $connectionWithSiteDatabase = \BackEnd_Helper_DatabaseManager::addConnection($locale);
             $offer = new \KC\Repository\Offer();
             $mostPopularCoupon = $offer->getSplashPagePopularCoupon($splashInformation[0]['offerId']);
-            //\BackEnd_Helper_DatabaseManager::closeConnection($connectionWithSiteDatabase['adapter']);
+            \BackEnd_Helper_DatabaseManager::closeConnection($connectionWithSiteDatabase['adapter']);
             return array('locale' => $locale,'mostPopularCoupon' => $mostPopularCoupon);
         } else {
             return array('locale' => '','mostPopularCoupon' => '');
