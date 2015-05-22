@@ -3550,7 +3550,6 @@ class Offer extends BaseOffer
 
     public static function getAllExclusiveAndEditorSetOffers()
     {
-        $currentDateTime = date("Y-m-d H:i:s");
         $offersList = Doctrine_Query::create()
             ->select('o.id')
             ->from('Offer o')
