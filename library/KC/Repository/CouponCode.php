@@ -94,13 +94,13 @@ class CouponCode extends \KC\Entity\CouponCode
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $availableCoupon = $queryBuilder
-        ->select('c')
-        ->from('KC\Entity\CouponCode', 'c')
-        ->where("c.offer = " . $offerId)
-        ->andWhere('c.code ='.$code)
-        ->setMaxResults(1)
-        ->getQuery()
-        ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            ->select('c')
+            ->from('KC\Entity\CouponCode', 'c')
+            ->where("c.offer = " . $offerId)
+            ->andWhere('c.code ='. $queryBuilder->expr()->literal($code))
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $availableCoupon;
     }
 
@@ -118,10 +118,10 @@ class CouponCode extends \KC\Entity\CouponCode
 
     public static function saveCouponCode($newStaus, $code, $offerId)
     {
-        $couponCode = new KC\Entity\CouponCode();
+        $couponCode = new \KC\Entity\CouponCode();
         $couponCode->code = $code;
         $couponCode->status = $newStaus;
-        $couponCode->offer = $offerId;
+        $couponCode->offer = \Zend_Registry::get('emLocale')->find('KC\Entity\Offer', $offerId);
         \Zend_Registry::get('emLocale')->persist($couponCode);
         \Zend_Registry::get('emLocale')->flush();
         return true;
