@@ -2,8 +2,10 @@
 class OfferExport
 {
     protected $_localePath  = '/';
-    protected $_trans       = null;
-    private $dbh            = null;
+    protected $_trans;
+    private $dbh;
+    private $filePath;
+    private $locale;
     public function __construct()
     {
         require_once('ConstantForMigration.php');
@@ -12,7 +14,10 @@ class OfferExport
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-                    $this->exportOffers($connection ['dsn'], $key);
+                    $this->locale = $key == 'en' ? "-NL" : "-".strtoupper($key);
+                    $pathToTempExcelFolder = CommonMigrationFunctions::pathToTempExcelFolder($this->locale);
+                    $this->filePath = $pathToTempExcelFolder . "offerList".$this->locale.".csv";
+                    $this->runner($connection['dsn']);
                 } catch (Exception $e) {
                     echo $e->getMessage()."\n\n";
                 }
@@ -20,94 +25,126 @@ class OfferExport
         }
     }
 
-    protected function exportOffers($dsn, $keyIn)
+    public function runner($dsn)
     {
-        try {
-            $this->dbh = CommonMigrationFunctions::connectionToPDO($dsn);
-            $pathToTempExcelFolder = CommonMigrationFunctions::pathToTempExcelFolder($keyIn);
-            $locale = $keyIn == 'en' ? "-NL" : "-".strtoupper($keyIn);
-            $offerFile = $pathToTempExcelFolder . "offerList".$locale.".csv";
-            $fileOpen = fopen($offerFile, 'w');
-            print "Parse Offers data and save it into excel file\n";
-            $currentDateAndTime = array('Genration Date and Time', date('Y-m-d H:i:s'));
-            fputcsv($fileOpen, $currentDateAndTime, ';');
-            $headers = array(
-                'Title',
-                'Shop',
-                'Type',
-                'Visibility',
-                'Extended',
-                'Start',
-                'End',
-                'Clickouts',
-                'Author',
-                'Coupon Code',
-                'Ref URL',
-                'Exclusive',
-                'Editor Picks',
-                'User Generated',
-                'Approved',
-                'Offline',
-                'Created At',
-                'Deeplink',
-                'Terms & Conditions'
-            );
-            fputcsv($fileOpen, $headers, ';');
-            $statement = $this->dbh->prepare(self::getSqlQuery());
-            if ($statement->execute()) {
-                while ($offer = $statement->fetch(PDO::FETCH_ASSOC)) {
-                    $offerDates = self::getOfferDates($offer['startdate'], $offer['enddate'], $offer['created_at']);
-                    $offerTitle = self::getOfferTitle($offer['title']);
-                    $offerExtended = self::getOfferYesNoOptions($offer['extendedoffer']);
-                    $offerExclusive = self::getOfferYesNoOptions($offer['exclusivecode']);
-                    $offerEditor = self::getOfferYesNoOptions($offer['editorpicks']);
-                    $offerUserGenerated = self::getOfferYesNoOptions($offer['userGenerated']);
-                    $offerApproved = self::getOfferYesNoOptions($offer['approved']);
-                    $offerOffline = self::getOfferYesNoOptions($offer['offline']);
-                    $offerDiscountType = self::getOfferDiscountType($offer['discounttype']);
-                    $offerVisability = self::getOfferVisability($offer['visability']);
-                    $offerClickouts = self::getOfferClickouts($offer['Count']);
-                    $offerAuthorName = self::getOfferAuthorName($offer['authorName']);
-                    $offerCouponCode = self::getOfferCouponCode($offer['couponcode']);
-                    $offerRefUrl = self::getOfferRefUrl($offer['refurl']);
-                    $offerShopData = self::getOfferShopData($offer['shopName'], $offer['shopDeeplink']);
-                    $offerTermsAndConditions = self::getOfferTermsAndConditions($offer['terms']);
-                    $offerInformation = array(
-                        $offerTitle,
-                        $offerShopData['shopName'],
-                        $offerDiscountType,
-                        $offerVisability,
-                        $offerExtended,
-                        $offerDates['startDate'],
-                        $offerDates['endDate'],
-                        $offerClickouts,
-                        $offerAuthorName,
-                        $offerCouponCode,
-                        $offerRefUrl,
-                        $offerExclusive,
-                        $offerEditor,
-                        $offerUserGenerated,
-                        $offerApproved,
-                        $offerOffline,
-                        $offerDates['createdAt'],
-                        $offerShopData['deeplink'],
-                        $offerTermsAndConditions['termsAndConditions']
-                    );
-                    fputcsv($fileOpen, $offerInformation, ';');
-                }
+        $filePointer = fopen($this->filePath, 'w');
+        echo "Exporting Offers list into CSV for " . $this->locale . "\n";
+        $this->dbh = CommonMigrationFunctions::connectionToPDO($dsn);
+        $this->initOfferExportFile($filePointer);
+        $this->getOffers($filePointer);
+        $this->moveFilestoDataFolder();
+        fclose($filePointer);
+    }
+
+    private function initOfferExportFile($filePointer)
+    {
+        $this->timeStampOfferExport($filePointer);
+        $this->setupColumns($filePointer);
+    }
+
+    private function timeStampOfferExport($filePointer)
+    {
+        $currentDateAndTime = array('Genration Date and Time', date('Y-m-d H:i:s'));
+        $this->writeToFile($currentDateAndTime, $filePointer);
+    }
+
+    private function setupColumns($filePointer)
+    {
+        $offerExportHeader = array(
+            'Title',
+            'Shop',
+            'Type',
+            'Visibility',
+            'Extended',
+            'Start',
+            'End',
+            'Clickouts',
+            'Author',
+            'Coupon Code',
+            'Ref URL',
+            'Exclusive',
+            'Editor Picks',
+            'User Generated',
+            'Approved',
+            'Offline',
+            'Created At',
+            'Deeplink',
+            'Terms & Conditions'
+        );
+        $this->writeToFile($offerExportHeader, $filePointer);
+    }
+
+    private function writeToFile($content, $filePointer)
+    {
+        fputcsv($filePointer, $content, ';');
+        echo ".";
+    }
+
+    private function getOffers($filePointer)
+    {
+        $statement = $this->dbh->prepare($this->getSqlQuery());
+        if ($statement->execute()) {
+            while ($offer = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $offerInformation = $this->constructOffers($offer);
+                $this->writeToFile($offerInformation, $filePointer);
             }
-            echo "\n $keyIn - Offers have been exported successfully!!!";
-            if ($keyIn == 'en') {
-                $keyIn = 'excels';
-            }
-            CommonMigrationFunctions::copyDirectory(UPLOAD_EXCEL_TMP_PATH.$keyIn, UPLOAD_DATA_FOLDER_EXCEL_PATH.$keyIn);
-            CommonMigrationFunctions::deleteDirectory(UPLOAD_EXCEL_TMP_PATH.$keyIn);
-        } catch (Exception $e) {
-            echo $e;
         }
     }
 
-    protected static function getSqlQuery()
+    private function constructOffers($offer)
+    {
+        $offerDates = self::getOfferDates($offer['startdate'], $offer['enddate'], $offer['created_at']);
+        $offerTitle = self::getOfferTitle($offer['title']);
+        $offerExtended = self::getOfferYesNoOptions($offer['extendedoffer']);
+        $offerExclusive = self::getOfferYesNoOptions($offer['exclusivecode']);
+        $offerEditor = self::getOfferYesNoOptions($offer['editorpicks']);
+        $offerUserGenerated = self::getOfferYesNoOptions($offer['userGenerated']);
+        $offerApproved = self::getOfferYesNoOptions($offer['approved']);
+        $offerOffline = self::getOfferYesNoOptions($offer['offline']);
+        $offerDiscountType = self::getOfferDiscountType($offer['discounttype']);
+        $offerVisability = self::getOfferVisability($offer['visability']);
+        $offerClickouts = self::getOfferClickouts($offer['Count']);
+        $offerAuthorName = self::getOfferAuthorName($offer['authorName']);
+        $offerCouponCode = self::getOfferCouponCode($offer['couponcode']);
+        $offerRefUrl = self::getOfferRefUrl($offer['refurl']);
+        $offerShopName = self::getOfferShopName($offer['shopName']);
+        $offerShopDeepLink = self::getOfferShopDeepLink($offer['shopDeeplink']);
+        $offerTermsAndConditions = self::getOfferTermsAndConditions($offer['terms']);
+        $offerInformation = array(
+            $offerTitle,
+            $offerShopName,
+            $offerDiscountType,
+            $offerVisability,
+            $offerExtended,
+            $offerDates['startDate'],
+            $offerDates['endDate'],
+            $offerClickouts,
+            $offerAuthorName,
+            $offerCouponCode,
+            $offerRefUrl,
+            $offerExclusive,
+            $offerEditor,
+            $offerUserGenerated,
+            $offerApproved,
+            $offerOffline,
+            $offerDates['createdAt'],
+            $offerShopDeepLink,
+            $offerTermsAndConditions['termsAndConditions']
+        );
+        return $offerInformation;
+    }
+
+    private function moveFilestoDataFolder()
+    {
+        if ($this->locale == 'en') {
+            $this->locale = 'excels';
+        }
+        CommonMigrationFunctions::copyDirectory(UPLOAD_EXCEL_TMP_PATH.$this->locale, UPLOAD_DATA_FOLDER_EXCEL_PATH.$this->locale);
+        CommonMigrationFunctions::deleteDirectory(UPLOAD_EXCEL_TMP_PATH.$this->locale);
+        return true;
+    }
+
+    private function getSqlQuery()
     {
         $sqlQuery = '
                 SELECT o.*,
@@ -218,7 +255,7 @@ class OfferExport
         return $refUrl;
     }
 
-    protected static function getOfferShopData($shopName, $shopDeepLink)
+    protected static function getOfferShopName($shopName)
     {
         if ($shopName == ''
             || $shopName == 'undefined'
@@ -228,13 +265,18 @@ class OfferExport
         } else {
             $shopName = $shopName;
         }
+        return $shopName;
+    }
+
+    protected static function getOfferShopDeepLink($shopDeepLink)
+    {
         if ($shopDeepLink == '' || $shopDeepLink == 'undefined'
             || $shopDeepLink == null) {
             $deeplink = '';
         } else {
             $deeplink = $shopDeepLink;
         }
-        return array('shopName'=>$shopName, 'deeplink'=>$deeplink);
+        return $deeplink;
     }
     
     protected static function getOfferTermsAndConditions($terms)

@@ -1,7 +1,7 @@
 <?php
 
 # run offer export script
-// require 'offerExportScript.php';
+require 'offerExportScript.php';
 
 # run visitor export script
 require 'visitorExportScript.php';
