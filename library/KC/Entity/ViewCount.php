@@ -65,7 +65,7 @@ class ViewCount
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    protected $counted;
+    protected $counted = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="offerviewcount")
