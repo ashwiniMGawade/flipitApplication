@@ -427,6 +427,7 @@ class Offer Extends \KC\Entity\Offer
             ->setParameter(1, $offerId)
             ->where('o.id = ?1');
         $offerDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
         $shopId = $offerDetails[0]['id'];
         $key = 'shopDetails_'  . $shopId . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -442,12 +443,7 @@ class Offer Extends \KC\Entity\Offer
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
         $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $shopId . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allMoneySavingGuideLists');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allOfferList');
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allNewOfferList');
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allNewPopularCodeList');
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allHomeNewOfferList');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('extended_coupon_details');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
         self::clearSpecialPagesCache($offerId);
