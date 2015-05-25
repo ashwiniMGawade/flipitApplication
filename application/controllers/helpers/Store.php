@@ -158,4 +158,27 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         }
         return $daysLeftTillOfferGetsLiveCount;
     }
+
+    public static function sortOffersByViewCount($offersInfo)
+    {
+        if (!empty($offersInfo)) {
+            $sortByKeys = array();
+
+            foreach ($offersInfo as $offerIndex => $offerValue) {
+                $sortByKeys['totalViewcount'][$offerIndex] = $offerValue['totalViewcount'];
+                $sortByKeys['discountType'][$offerIndex] = $offerValue['discountType'] == 'CD'
+                    ? $offerValue['discountType'] : 'z';
+            }
+
+            array_multisort(
+                $sortByKeys['discountType'],
+                SORT_STRING,
+                $sortByKeys['totalViewcount'],
+                SORT_DESC,
+                $offersInfo
+            );
+        }
+
+        return $offersInfo;
+    }
 }
