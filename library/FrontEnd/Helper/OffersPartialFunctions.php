@@ -277,68 +277,62 @@ class FrontEnd_Helper_OffersPartialFunctions
             $headOpen = '<h3 class="'. $class .'">';
             $headClose = '</h3>';
         }
-        if ($offerImage == 'offerImage') {
-            $offerLink =
-                '<div class="'.$class.'">
-                '.$offerAnchorTagContent.' </div>';
-        } else {
 
-            $visitorInformation = '';
-            if (!empty(Auth_VisitorAdapter::getIdentity()->id)) {
-                $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
-            }
-            if (empty($visitorInformation) && isset($currentOffer->Visability) && $currentOffer->Visability == 'MEM') {
-                $offerLink =
-                    '<span class="'.$class.'">
-                '.$offerAnchorText.' </span>';
-            } else {
-                if ($currentOffer->discountType == "CD") {
-                    $onClick = $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
-                    $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id),
-                    ga('send', 'event', 'aff', '$offerBounceRate'),
-                    OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')";
-                    if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
-                        $offerLink ='<span class="'.$class.'">'.$offerAnchorText.' </span>';
-                    } else {
-                        $offerLink =
-                            '<a  id="'.$currentOffer->id.'"
-                            href="'.$urlToShow.'" vote="0" rel="nofollow" 
-                            target="_self" onClick="'.$onClick.'">
-                            <span class="'.$class.'">'.$offerAnchorText.'</span>';
-                        if ($class == 'offer-teaser-button kccode') {
-                            $offerLink .=
-                                '<span class="show-code">'.self::generateRandomCharactersForOfferTeaser(4).'</span>
-                                 <span class="blue-corner"></span>';
-                        }
-                        $offerLink .= '</a>';
-                    }
-                } else if ($currentOffer->discountType == "SL") {
-                    if ($class == "offer-teaser-button kccode") {
-                        $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
-                        $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
-                    }
-                    $onClick = "viewCounter('onclick', 'offer', $currentOffer->id),
-                    ga('send', 'event', 'aff', '$offerBounceRate')";
-                    $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
-                    $offerLink =
-                        '<a id="'.$currentOffer->id.'" class="'.$class.'" 
-                        href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
-                     '.$offerAnchorText.'</a>';
+        $visitorInformation = '';
+        if (!empty(Auth_VisitorAdapter::getIdentity()->id)) {
+            $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
+        }
+        if (empty($visitorInformation) && isset($currentOffer->Visability) && $currentOffer->Visability == 'MEM') {
+            $offerLink =
+                '<span class="'.$class.'">
+            '.$offerAnchorText.' </span>';
+        } else {
+            if ($currentOffer->discountType == "CD") {
+                $onClick = $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
+                $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id),
+                ga('send', 'event', 'aff', '$offerBounceRate'),
+                OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')";
+                if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
+                    $offerLink ='<span class="'.$class.'">'.$offerAnchorText.' </span>';
                 } else {
-                    if ($class == "offer-teaser-button kccode") {
-                        $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
-                        $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
-                    }
-                    $onClick =
-                        self::getUserIsLoggedInOrNot() == "true"
-                        ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permalink'].$popupLink."')"
-                        : HTTP_PATH_LOCALE."accountlogin";
-                    $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
                     $offerLink =
-                        '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
-                        alt = "'.$urlToShow.'" target="_blank" onclick = "'.$onClick.'" rel="nofollow">
-                        '.$offerAnchorText .'</a>';
+                        '<a  id="'.$currentOffer->id.'"
+                        href="'.$urlToShow.'" vote="0" rel="nofollow" 
+                        target="_self" onClick="'.$onClick.'">
+                        <span class="'.$class.'">'.$offerAnchorText.'</span>';
+                    if ($class == 'offer-teaser-button kccode') {
+                        $offerLink .=
+                            '<span class="show-code">'.self::generateRandomCharactersForOfferTeaser(4).'</span>
+                             <span class="blue-corner"></span>';
+                    }
+                    $offerLink .= '</a>';
                 }
+            } else if ($currentOffer->discountType == "SL") {
+                if ($class == "offer-teaser-button kccode") {
+                    $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
+                    $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
+                }
+                $onClick = "viewCounter('onclick', 'offer', $currentOffer->id),
+                ga('send', 'event', 'aff', '$offerBounceRate')";
+                $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
+                $offerLink =
+                    '<a id="'.$currentOffer->id.'" class="'.$class.'" 
+                    href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
+                 '.$offerAnchorText.'</a>';
+            } else {
+                if ($class == "offer-teaser-button kccode") {
+                    $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
+                    $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
+                }
+                $onClick =
+                    self::getUserIsLoggedInOrNot() == "true"
+                    ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permalink'].$popupLink."')"
+                    : HTTP_PATH_LOCALE."accountlogin";
+                $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
+                $offerLink =
+                    '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
+                    alt = "'.$urlToShow.'" target="_blank" onclick = "'.$onClick.'" rel="nofollow">
+                    '.$offerAnchorText .'</a>';
             }
         }
         return $headOpen. $offerLink . $headClose;
