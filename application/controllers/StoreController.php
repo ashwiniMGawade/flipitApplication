@@ -100,7 +100,7 @@ class StoreController extends Zend_Controller_Action
                 (string)$allExpiredOfferKey,
                 array(
                     'function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode',
-                    'parameters' => array("expired", 8, $shopId)
+                    'parameters' => array("expired", 10, $shopId)
                 ),
                 ''
             );
