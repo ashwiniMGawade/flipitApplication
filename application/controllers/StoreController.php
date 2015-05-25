@@ -137,7 +137,7 @@ class StoreController extends Zend_Controller_Action
                 $this->_redirect($localeUrl);
             }
 
-            if ($shopInformation[0]['showChains']) {
+           /* if ($shopInformation[0]['showChains']) {
                 if ($shopInformation[0]['chainItemId'] != '') {
                     $frontEndViewHelper = new \FrontEnd_Helper_SidebarWidgetFunctions();
                     $shopChains = $frontEndViewHelper->sidebarChainWidget(
@@ -150,7 +150,7 @@ class StoreController extends Zend_Controller_Action
                     }
                 }
                 
-            }
+            }*/
 
             $shopImage = PUBLIC_PATH_CDN.ltrim($shopInformation[0]['logo']['path'], "/")
                 .'thum_medium_store_'.$shopInformation[0]['logo']['name'];
@@ -370,7 +370,7 @@ class StoreController extends Zend_Controller_Action
         $howToGuides = $howToGuides[0];
         $shopList = $howToGuides[0]['id'].'_list';
         $shopInformation = $this->_helper->Store->getShopInformation($howToGuides[0]['id'], $shopList);
-        $this->view->shopChain = $this->_helper->Store->getShopChain($shopInformation);
+        //$this->view->shopChain = $this->_helper->Store->getShopChain($shopInformation);
         $latestShopUpdates = $this->_helper->Store->getShopLatestUpdates($howToGuides[0]['id'], $shopList);
         $offers = $this->_helper->Store->getSixTopOffers($howToGuides[0]['id'], $shopList);
 
