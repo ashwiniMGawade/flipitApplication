@@ -8,9 +8,20 @@ foreach ($this->expiredOffers as $offer) :
     $offer = (object) $offer;
     $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
     $shopUrl = $domainName.'out/shop/'.$offer->shopOffers['id'];
+    $target = $offer->shopOffers['affliateProgram'] == 0 ? '_self' : '_blank';
     ?>
     <div class="line">
+        <?php
+        if($offer->shopOffers['affliateProgram'] == 1) { ?>
+        <a href="<?php echo $shopUrl;?>"
+            rel="nofollow" target="<?php echo $target; ?>">
+        <?php
+        } else {
+        ?>
         <span class='replace'>
+        <?php 
+        }
+        ?>
             <div class="holder">
                 <strong class="mark status"><?php echo  $this->translate('Expired'); ?></strong>
                 <div class="box">
@@ -24,7 +35,16 @@ foreach ($this->expiredOffers as $offer) :
                 </div>
             </div>
             <span class="date"><?php echo $expiredOffersPartialClass->getExpiredOnDate($offer->endDate->format('Y-m-d'));?></span>
+        <?php
+        if($offer->shopOffers['affliateProgram'] == 1) { ?>
+        </a>
+        <?php
+        } else {
+        ?>
         </span>
+        <?php 
+        }
+        ?>
     </div>
     <?php 
 endforeach;?>
