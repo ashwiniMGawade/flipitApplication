@@ -14,7 +14,7 @@ foreach ($this->expiredOffers as $offer) :
         <?php
         if($offer->shopOffers['affliateProgram'] == 1) { ?>
         <a href="<?php echo $shopUrl;?>"
-            rel="nofollow" target="<?php echo $offer->extendedOffer == 1 ? '_self' : $target;?>">
+            rel="nofollow" target="<?php echo $target; ?>">
         <?php
         } else {
         ?>
