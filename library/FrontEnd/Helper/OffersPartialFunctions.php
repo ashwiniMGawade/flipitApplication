@@ -277,7 +277,10 @@ class FrontEnd_Helper_OffersPartialFunctions
             $headOpen = '<h3 class="'. $class .'">';
             $headClose = '</h3>';
         }
-
+        $imageClass = '';
+        if ($offerImage == 'offerImage') {
+            $imageClass = 'code';
+        }
         $visitorInformation = '';
         if (!empty(Auth_VisitorAdapter::getIdentity()->id)) {
             $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
@@ -316,7 +319,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                 ga('send', 'event', 'aff', '$offerBounceRate')";
                 $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
                 $offerLink =
-                    '<a id="'.$currentOffer->id.'" class="'.$class.'" 
+                    '<a id="'.$currentOffer->id.'" class="'.$class.' '.$imageClass.'" 
                     href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
                  '.$offerAnchorText.'</a>';
             } else {
@@ -330,7 +333,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     : HTTP_PATH_LOCALE."accountlogin";
                 $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
                 $offerLink =
-                    '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
+                    '<a id="'.$currentOffer->id.'" class="'.$class.' '.$imageClass.'" vote = "0" href= "'.$urlToShow.'" 
                     alt = "'.$urlToShow.'" target="_blank" onclick = "'.$onClick.'" rel="nofollow">
                     '.$offerAnchorText .'</a>';
             }
