@@ -26,12 +26,11 @@ class Zend_Controller_Action_Helper_Search extends Zend_Controller_Action_Helper
         return $shopIds;
     }
 
-    public static function getshopsByExcludedShopIds($shopIds, $limit)
+    public static function getshopsByExcludedShopIds($shopIds, $limit = '')
     {
         $shopsForSearchPage = array();
         if (!empty($shopIds)) {
-            $shopsByShopIds = \KC\Repository\Shop::getShopsByShopIds($shopIds, $limit);
-
+            $shopsByShopIds = \KC\Repository\Shop::getShopsByShopIds($shopIds, $limit = '');
             foreach ($shopsByShopIds as $shopsByShopId) :
                 $shopsForSearchPage[$shopsByShopId['id']] = $shopsByShopId;
             endforeach;

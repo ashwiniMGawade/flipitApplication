@@ -354,7 +354,7 @@ class Shop extends \KC\Entity\Shop
                 ->orderBy("s.name", "ASC");
             $shopsInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
-        if ($limit != '') {
+        if ($limit != '' && !empty($shopsInformation)) {
             return array_slice($shopsInformation, 0, 5);
         } else {
             return $shopsInformation;
