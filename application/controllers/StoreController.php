@@ -257,7 +257,7 @@ class StoreController extends Zend_Controller_Action
                 (string)'shop_similar_shops',
                 array(
                     'function' => 'KC\Repository\Shop::getSimilarShops',
-                    'parameters' => array($shopId, 12)
+                    'parameters' => array($shopId, 10)
                 )
             );
         }
@@ -322,8 +322,8 @@ class StoreController extends Zend_Controller_Action
         );
 
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            '10_popularShops_list',
-            array('function' => '\KC\Repository\Shop::getAllPopularStores', 'parameters' => array(10)),
+            '5_popularShops_list',
+            array('function' => '\KC\Repository\Shop::getAllPopularStores', 'parameters' => array(5)),
             true
         );
 

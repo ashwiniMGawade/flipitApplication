@@ -15,8 +15,8 @@
                 :  $popularStore;
             $popularStoreImage =
                 isset($popularStore['logo']) ? 
-                PUBLIC_PATH_CDN.ltrim($popularStore['logo']['path'], '/')."thum_small_".$popularStore['logo']['name'] 
-                : PUBLIC_PATH_CDN.ltrim($popularStore['imgpath'], '/')."thum_small_".$popularStore['imgname'];    
+                PUBLIC_PATH_CDN.ltrim($popularStore['logo']['path'], '/')."thum_medium_".$popularStore['logo']['name'] 
+                : PUBLIC_PATH_CDN.ltrim($popularStore['imgpath'], '/')."thum_medium_".$popularStore['imgname'];    
             echo '<li>
                 <a href="' .HTTP_PATH_LOCALE. $popularStore['permaLink']. '">
                     <img src="' . $popularStoreImage . '"  

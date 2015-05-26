@@ -45,13 +45,13 @@ class SearchController extends Zend_Controller_Action
         );
         $shopIds = "";
         $shopIds =$this->_helper->Search->getExcludedShopIdsBySearchedKeywords($searchedKeywords);
-        $shopsByShopIds = $this->_helper->Search->getshopsByExcludedShopIds($shopIds);
+        $shopsByShopIds = $this->_helper->Search->getshopsByExcludedShopIds($shopIds, 5);
         $popularShops = $this->_helper->Search->getPopularStores($searchedKeywords);
         $shopsForSearchPage = $this->_helper->Search->getStoresForSearchResults($shopsByShopIds, $popularShops);
         $popularStores = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             '10_popularShops_list',
             array('function' => '\KC\Repository\Shop::getAllPopularStores',
-                'parameters' => array(12)),
+                'parameters' => array(10)),
             true
         );
         $offersBySearchedKeywords = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
