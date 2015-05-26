@@ -235,6 +235,7 @@ public static function addShopInList($title)
 //call cache function
 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_popularShops_list');
 return $flag;
 
     }
@@ -256,6 +257,7 @@ return $flag;
                             //call cache function
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_popularShops_list');
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('search_pageHeader_image');
 
                         }
@@ -290,6 +292,7 @@ return $flag;
                             //call cache function
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_popularShops_list');
                             return true ;
                         }
                         return false ;
@@ -325,6 +328,7 @@ return $flag;
                             //call cache function
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_popularShops_list');
                             return true ;
                         }
                         return false ;

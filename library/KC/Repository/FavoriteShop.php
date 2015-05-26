@@ -206,6 +206,7 @@ class FavoriteShop extends \KC\Entity\FavoriteShop
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_popularShops_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('alreadyFavourite_'.$userid.'_shops');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_'.$userid.'_favouriteShops');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('visitor_'.$userid.'_favouriteShopOffers');
@@ -279,6 +280,7 @@ class FavoriteShop extends \KC\Entity\FavoriteShop
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_popularShops_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('alreadyFavourite_'.$userid.'_shops');

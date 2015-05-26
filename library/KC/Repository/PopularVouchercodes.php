@@ -95,6 +95,7 @@ class PopularVouchercodes Extends \KC\Entity\PopularVouchercodes
         }
         //call cache function
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_popularShops_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
         return $flag;
@@ -116,6 +117,7 @@ class PopularVouchercodes Extends \KC\Entity\PopularVouchercodes
                 ->getQuery()->execute();
             //call cache function
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_popularShops_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll(
                 'all_popularVoucherCodesList_feed'
@@ -212,6 +214,7 @@ class PopularVouchercodes Extends \KC\Entity\PopularVouchercodes
         }
         //call cache function
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_popularShops_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
         //return $flag;
@@ -241,6 +244,7 @@ class PopularVouchercodes Extends \KC\Entity\PopularVouchercodes
         }
         //call cache function
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_popularShops_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll(
