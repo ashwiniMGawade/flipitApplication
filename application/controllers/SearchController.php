@@ -73,7 +73,6 @@ class SearchController extends Zend_Controller_Action
             $this->view->popularStores = $popularStores;
             $this->view->offers = array();
             $this->view->top10Offers = $top10Offers;
-
         } else {
             $this->view->popularStores = $shopsForSearchPage;
             $this->view->offers = $offersBySearchedKeywords;
