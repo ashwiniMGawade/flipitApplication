@@ -1109,8 +1109,14 @@ class Offer Extends \KC\Entity\Offer
         return $OfferDetails;
     }
 
-    public static function getAllOfferOnShop($id, $limit = null, $getExclusiveOnly = false, $includingOffline = false, $visibility = false)
-    {
+    public static function getAllOfferOnShop(
+        $id,
+        $limit = null,
+        $getExclusiveOnly = false,
+        $includingOffline = false,
+        $visibility = false,
+        $expired = false
+    ) {
         $nowDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
@@ -1132,10 +1138,19 @@ class Offer Extends \KC\Entity\Offer
         
         $query->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
         ->andWhere('s.id ='. $id)
-        ->andWhere('s.deleted = 0')
-        ->andWhere('o.discountType !='.$entityManagerUser->expr()->literal('NW'))
-        ->orderBy('o.discountType', 'ASC')
-        ->addOrderBy('o.totalViewcount', 'DESC');
+        ->andWhere('s.deleted = 0');
+
+        if ($expired == true) {
+            $query = $query
+                ->andWhere('o.endDate <='."'".$nowDate."'")
+                ->andWhere('o.discountType ='.$entityManagerUser->expr()->literal('CD'))
+                ->addOrderBy('o.endDate', 'DESC');
+        } else {
+            $query = $query
+                ->andWhere('o.discountType !='.$entityManagerUser->expr()->literal('NW'))
+                ->orderBy('o.discountType', 'ASC')
+                ->addOrderBy('o.totalViewcount', 'DESC');
+        }
 
         if ($getExclusiveOnly) {
             $query = $query->andWhere('o.exclusiveCode = 1');

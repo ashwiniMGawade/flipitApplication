@@ -158,4 +158,35 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         }
         return $daysLeftTillOfferGetsLiveCount;
     }
+
+    public static function removeDuplicateExpiredOffers($expiredOffers, $topThreeExpiredOffers)
+    {
+        $filteredExpiredOffers = array();
+
+        if (!empty($expiredOffers)) {
+            foreach ($expiredOffers as $expiredOffersKey => $expiredOffersValue) {
+                if (!isset($topThreeExpiredOffers[$expiredOffersKey])) {
+                    $filteredExpiredOffers[$expiredOffersKey] = $expiredOffersValue;
+                    $filteredExpiredOffers[$expiredOffersKey]['expiredOffer'] = true;
+                }
+            }
+        }
+
+        return $filteredExpiredOffers;
+    }
+
+    public static function mergeExpiredOffersWithLiveOffers($liveOffers, $topThreeExpiredOffers)
+    {
+        $filteredExpiredOffers = array();
+        $offers = array();
+        if (!empty($topThreeExpiredOffers)) {
+            foreach ($topThreeExpiredOffers as $expiredOffersKey => $expiredOffersValue) {
+                $filteredExpiredOffers[$expiredOffersKey] = $expiredOffersValue;
+                $filteredExpiredOffers[$expiredOffersKey]['expiredOffer'] = true;
+            }
+            $offers = array_merge($liveOffers, $filteredExpiredOffers);
+        }
+
+        return $offers;
+    }
 }

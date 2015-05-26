@@ -117,7 +117,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $offerOption;
     }
 
-    public function getOfferDates($currentOffer, $daysTillOfferExpires)
+    public function getOfferDates($currentOffer, $daysTillOfferExpires, $expiredOffer = '')
     {
         $offerDates = '';
         $startDateFormat = LOCALE == 'us'
@@ -132,25 +132,31 @@ class FrontEnd_Helper_OffersPartialFunctions
         $endDateString = isset($endDateObject->date) ? $endDateObject->date : $endDateObject->format('Y-m-d');
         $startDate = new Zend_Date(strtotime($startDateString));
         $endDate = new Zend_Date(strtotime($endDateString));
-        if ($currentOffer->discountType == "CD") {
-            $offerDates .= FrontEnd_Helper_viewHelper::__translate('valid from');
-            $offerDates .= ' ';
-            $offerDates .= ucwords($startDate->get($startDateFormat));
-            $offerDates .= ' '.FrontEnd_Helper_viewHelper::__translate('t/m');
+        if (isset($expiredOffer) && $expiredOffer != '') {
+            $offerDates .= FrontEnd_Helper_viewHelper::__translate('expired on');
             $offerDates .= ' ';
             $offerDates .= ucwords($endDate->get($endDateFormat));
         } else {
-            $offerDates .= FrontEnd_Helper_viewHelper::__translate('valid from');
-            $offerDates .= ' ';
-            $offerDates .= ucwords($startDate->get($endDateFormat));
+            if ($currentOffer->discountType == "CD") {
+                $offerDates .= FrontEnd_Helper_viewHelper::__translate('valid from');
+                $offerDates .= ' ';
+                $offerDates .= ucwords($startDate->get($startDateFormat));
+                $offerDates .= ' '.FrontEnd_Helper_viewHelper::__translate('t/m');
+                $offerDates .= ' ';
+                $offerDates .= ucwords($endDate->get($endDateFormat));
+            } else {
+                $offerDates .= FrontEnd_Helper_viewHelper::__translate('valid from');
+                $offerDates .= ' ';
+                $offerDates .= ucwords($startDate->get($endDateFormat));
+            }
         }
-        
+   
         return $offerDates;
     }
     
-    public function getOfferOptionAndOfferDates($currentOffer, $daysTillOfferExpires)
+    public function getOfferOptionAndOfferDates($currentOffer, $daysTillOfferExpires, $expiredOffer = '')
     {
-        $offerDates = self::getOfferDates($currentOffer, $daysTillOfferExpires);
+        $offerDates = self::getOfferDates($currentOffer, $daysTillOfferExpires, $expiredOffer);
         return $offerDates;
     }
     public function getCssClassNameForOffer($currentOffer, $offerType)
@@ -620,5 +626,17 @@ class FrontEnd_Helper_OffersPartialFunctions
             }
         }
         return $offerOptionsWithPriorityClasses;
+    }
+
+    public static function getTotalViewCountOfOffer($viewCount)
+    {
+        $totalViewCount = '<span class="used text-info">
+            <span class="text-over">'
+            .$viewCount
+            .' '
+            .FrontEnd_Helper_viewHelper::__translate('codes used')
+            .'</span>
+        </span>';
+        return $totalViewCount;
     }
 }

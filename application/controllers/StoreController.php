@@ -160,6 +160,20 @@ class StoreController extends Zend_Controller_Action
             $this->_redirect($urlToRedirect);
         }
 
+        $topThreeExpiredOfferKey = 'shop_topthreeexpiredoffers'.$ShopList;
+        $topThreeExpiredOffers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            (string)$topThreeExpiredOfferKey,
+            array(
+                'function' => 'KC\Repository\Offer::getAllOfferOnShop',
+                'parameters' => array($shopId, 3, false, true, false, true)
+            ),
+            ''
+        );
+
+        if (!empty($topThreeExpiredOffers)) {
+            $offers = $this->_helper->Store->mergeExpiredOffersWithLiveOffers($offers, $topThreeExpiredOffers);
+        }
+        
         $this->view->currentStoreInformation = $shopInformation;
         $this->view->moneySavingGuideArticle = $moneySavingGuideArticle;
         $this->view->latestShopUpdates = $latestShopUpdates;
@@ -184,8 +198,10 @@ class StoreController extends Zend_Controller_Action
                 );
         }
 
-        $this->view->expiredOffers = $expiredOffers;
-
+        $this->view->expiredOffers = $this->_helper->Store->removeDuplicateExpiredOffers(
+            $expiredOffers,
+            $topThreeExpiredOffers
+        );
 
         $similarShopsAndSimilarCategoriesOffersKey = 'shop_similarShopsAndSimilarCategoriesOffers'.$ShopList;
         $similarShopsAndSimilarCategoriesOffers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
