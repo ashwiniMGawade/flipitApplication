@@ -66,7 +66,9 @@ class Category extends \KC\Entity\Category
         if ($offerIds != '') {
             $savedCategoryOffersByAdmin = array();
             foreach ($offerIds as $offerId) {
-                $savedCategoryOffersByAdmin[] = $offerId['offers']['id'];
+                if (!empty($offerId['offers'])) {
+                    $savedCategoryOffersByAdmin[] = $offerId['offers']['id'];
+                }
             }
             $commaSepratedOfferIds = implode(',', $savedCategoryOffersByAdmin);
             $query->andWhere($queryBuilder->expr()->notIn('o.id', $commaSepratedOfferIds));
