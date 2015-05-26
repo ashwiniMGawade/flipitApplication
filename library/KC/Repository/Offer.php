@@ -1134,12 +1134,8 @@ class Offer Extends \KC\Entity\Offer
         ->andWhere('s.id ='. $id)
         ->andWhere('s.deleted = 0')
         ->andWhere('o.discountType !='.$entityManagerUser->expr()->literal('NW'))
-        ->orderBy('o.editorPicks', 'DESC')
-        ->addOrderBy('o.exclusiveCode', 'DESC')
-        ->addOrderBy('o.discountType', 'ASC')
-        ->addOrderBy('o.startDate', 'DESC')
-        ->addOrderBy('o.totalViewcount', 'DESC')
-        ->addOrderBy('o.title', 'ASC');
+        ->orderBy('o.discountType', 'ASC')
+        ->addOrderBy('o.totalViewcount', 'DESC');
 
         if ($getExclusiveOnly) {
             $query = $query->andWhere('o.exclusiveCode = 1');
