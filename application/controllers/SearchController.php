@@ -62,13 +62,21 @@ class SearchController extends Zend_Controller_Action
                 'parameters' => array($this->_getAllParams(), $shopIds, 12)),
             true
         );
+        $top10Offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            "10_popularOffersHome_list",
+            array('function' => 'KC\Repository\Offer::getTopOffers', 'parameters' => array(10)
+            ),
+            ''
+        );
 
         if (empty($offersBySearchedKeywords) || $searchedKeywords == '') {
             $this->view->popularStores = $popularStores;
             $this->view->offers = array();
+            $this->view->top10Offers = $top10Offers;
         } else {
             $this->view->popularStores = $shopsForSearchPage;
             $this->view->offers = $offersBySearchedKeywords;
+            $this->view->top10Offers = array();
         }
 
         $this->view->searchedKeyword = ($searchedKeywords !="" || $searchedKeywords != null) ? $searchedKeywords : '';
