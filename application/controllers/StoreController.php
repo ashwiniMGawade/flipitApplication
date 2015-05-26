@@ -159,7 +159,7 @@ class StoreController extends Zend_Controller_Action
             $urlToRedirect = HTTP_PATH_LOCALE. 'store/index';
             $this->_redirect($urlToRedirect);
         }
-        
+
         $this->view->currentStoreInformation = $shopInformation;
         $this->view->moneySavingGuideArticle = $moneySavingGuideArticle;
         $this->view->latestShopUpdates = $latestShopUpdates;

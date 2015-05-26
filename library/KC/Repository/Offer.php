@@ -1138,7 +1138,7 @@ class Offer Extends \KC\Entity\Offer
         ->addOrderBy('o.exclusiveCode', 'DESC')
         ->addOrderBy('o.discountType', 'ASC')
         ->addOrderBy('o.startDate', 'DESC')
-        ->addOrderBy('o.popularityCount', 'DESC')
+        ->addOrderBy('o.totalViewcount', 'DESC')
         ->addOrderBy('o.title', 'ASC');
 
         if ($getExclusiveOnly) {
