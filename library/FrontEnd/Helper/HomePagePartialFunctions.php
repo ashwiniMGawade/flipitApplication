@@ -330,6 +330,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
             ? mb_substr($offer['title'], 0, 160, 'UTF-8') . "..."
             : $offer['title'];
         $offerExclusiveText = $this->getOfferOptionText($offer['exclusiveCode']);
+        $offerId = $offer['id'];
         return $this->getRighColumnContent(
             $shopImage,
             $shopPermalink,
@@ -337,7 +338,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
             $offerTitle,
             $offerExclusiveText,
             '',
-            $leftPanelSelection
+            $leftPanelSelection,
+            $offerId
         );
     }
 
@@ -382,7 +384,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $offerTitle,
         $offerExclusiveText,
         $dynamicDivId = '',
-        $leftPanelSelection
+        $leftPanelSelection, 
+        $offerId = ''
     ) {
         $imageDimensions = 'width="84" height="42"';
         if ($dynamicDivId == 'saving-guides') {
@@ -395,12 +398,17 @@ class FrontEnd_Helper_HomePagePartialFunctions
                     <img '.$imageDimensions.' alt="' . $shopName .'" src="' . $shopImage .'" title="' . $shopName .'">
                 </div>';
         }
+        if ($offerId != '') {
+            $offerRedirectUrl = HTTP_PATH_LOCALE.$shopPermalink.'?popup='.$offerId.'&type=code#'.$offerId;
+        } else {
+            $offerRedirectUrl = HTTP_PATH_LOCALE.$shopPermalink;
+        }
         $rightColumnContent .= '
                 <div class="box">
                     <h3>
                        <span>'. $shopName .'</span>'.$offerExclusiveText.'
                     </h3>
-                    <a href="'.HTTP_PATH_LOCALE.$shopPermalink.'">
+                    <a href="'.$offerRedirectUrl.'">
                         <p class="sub-text">' . FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offerTitle) .'</p>
                     </a>
                 </div>
