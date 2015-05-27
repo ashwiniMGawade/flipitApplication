@@ -94,7 +94,7 @@ class Shop extends \KC\Entity\Shop
                 $topCategoryShops = self::getSimilarShopsBySimilarCategories($shopId, $numberOfShops);
                 $similarShops = self::removeDuplicateShops($similarShops, $topCategoryShops, $numberOfShops);
             }
-            return array_slice($similarShops, 0, 10);
+            return array_slice($similarShops, 0, 12);
         }
     }
 
