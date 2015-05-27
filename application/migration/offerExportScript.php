@@ -15,9 +15,10 @@ class OfferExport
             if ($key != 'imbull') {
                 try {
                     $this->locale = $key == 'en' ? "-NL" : "-".strtoupper($key);
-                    $pathToTempExcelFolder = CommonMigrationFunctions::pathToTempExcelFolder($this->locale);
+                    $folderLocaleName = $key == 'en' ? "nl" : $key;
+                    $pathToTempExcelFolder = CommonMigrationFunctions::pathToTempExcelFolder($folderLocaleName);
                     $this->filePath = $pathToTempExcelFolder . "offerList".$this->locale.".csv";
-                    $this->runner($connection['dsn']);
+                    $this->runner($connection['dsn'], $folderLocaleName);
                 } catch (Exception $e) {
                     echo $e->getMessage()."\n\n";
                 }
@@ -25,14 +26,14 @@ class OfferExport
         }
     }
 
-    public function runner($dsn)
+    public function runner($dsn, $folderLocaleName)
     {
         $filePointer = fopen($this->filePath, 'w');
         echo "Exporting Offers list into CSV for " . $this->locale . "\n";
         $this->dbh = CommonMigrationFunctions::connectionToPDO($dsn);
         $this->initOfferExportFile($filePointer);
         $this->getOffers($filePointer);
-        $this->moveFilestoDataFolder();
+        $this->moveFilestoDataFolder($folderLocaleName);
         fclose($filePointer);
     }
 
@@ -134,13 +135,13 @@ class OfferExport
         return $offerInformation;
     }
 
-    private function moveFilestoDataFolder()
+    private function moveFilestoDataFolder($folderLocaleName)
     {
         if ($this->locale == 'en') {
             $this->locale = 'excels';
         }
-        CommonMigrationFunctions::copyDirectory(UPLOAD_EXCEL_TMP_PATH.$this->locale, UPLOAD_DATA_FOLDER_EXCEL_PATH.$this->locale);
-        CommonMigrationFunctions::deleteDirectory(UPLOAD_EXCEL_TMP_PATH.$this->locale);
+        CommonMigrationFunctions::copyDirectory(UPLOAD_EXCEL_TMP_PATH.$folderLocaleName, UPLOAD_DATA_FOLDER_EXCEL_PATH.$folderLocaleName);
+        CommonMigrationFunctions::deleteDirectory(UPLOAD_EXCEL_TMP_PATH.$folderLocaleName);
         return true;
     }
 
