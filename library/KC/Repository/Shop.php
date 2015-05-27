@@ -86,11 +86,16 @@ class Shop extends \KC\Entity\Shop
     public static function getSimilarShops($shopId, $numberOfShops = 12)
     {
         $similarShops = self::getSimilarShopsByShopId($shopId, $numberOfShops);
-        if (count($similarShops) < $numberOfShops) {
-            $topCategoryShops = self::getSimilarShopsBySimilarCategories($shopId, $numberOfShops);
-            $similarShops = self::removeDuplicateShops($similarShops, $topCategoryShops, $numberOfShops);
+        if (empty($similarShops)) {
+            $similarShops = array();
+            return $similarShops;
+        } else {
+            if (count($similarShops) < $numberOfShops) {
+                $topCategoryShops = self::getSimilarShopsBySimilarCategories($shopId, $numberOfShops);
+                $similarShops = self::removeDuplicateShops($similarShops, $topCategoryShops, $numberOfShops);
+            }
+            return array_slice($similarShops, 0, 10);
         }
-        return array_slice($similarShops, 0, 12);
     }
 
     public static function getSimilarShopsByShopId($shopId, $numberOfShops = 12)
@@ -527,10 +532,14 @@ class Shop extends \KC\Entity\Shop
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $relatedShops = array();
-        foreach ($relatedShopsIds as $relatedShopsId) {
-            $relatedShops[] = self::getShopLogoByShopId($relatedShopsId['relatedshopId']);
+        if (!empty($relatedShopsIds[0]['relatedshopId'])) {
+            foreach ($relatedShopsIds as $relatedShopsId) {
+                $relatedShops[] = self::getShopLogoByShopId($relatedShopsId['relatedshopId']);
+            }
+            return $relatedShops;
+        } else {
+            return;
         }
-        return $relatedShops;
     }
 
     public static function getAllActiveShopDetails ()
