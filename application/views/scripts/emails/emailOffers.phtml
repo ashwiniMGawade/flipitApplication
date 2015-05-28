@@ -43,7 +43,9 @@ if($this->categoryInformation != null) {
                             $exclusiveImage = "style='background:url(".$this->httpPath."public/images/exclusive-star.png) no-repeat right top #fef6ec;'";                 
                         }
                         $utmParameters = $this->mailType != 'welcome'
-                            ? '?popup='.$topOffer->id.'&utm_source=transactional&utm_medium=email&utm_campaign='.date('d-m-Y').'&type=code#'.$topOffer->id : '?popup='.$topOffer->id.'&type=code#'.$topOffer->id;
+                            ? '?popup='.$topOffer->id.'&utm_source=transactional&utm_medium=email&utm_campaign='
+                            .date('d-m-Y').'&type=code#'.$topOffer->id
+                            : '?popup='.$topOffer->id.'&type=code#'.$topOffer->id;
                  ?>
                 <tr <?php echo $exclusiveImage; ?>>
                     <td style="padding:28px 10px 30px 29px; border-bottom:1px solid #eaeaea;">

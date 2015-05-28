@@ -330,7 +330,6 @@ class FrontEnd_Helper_HomePagePartialFunctions
             ? mb_substr($offer['title'], 0, 160, 'UTF-8') . "..."
             : $offer['title'];
         $offerExclusiveText = $this->getOfferOptionText($offer['exclusiveCode']);
-        $offerId = $offer['id'];
         return $this->getRighColumnContent(
             $shopImage,
             $shopPermalink,
@@ -339,7 +338,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
             $offerExclusiveText,
             '',
             $leftPanelSelection,
-            $offerId
+            $offer['id']
         );
     }
 
