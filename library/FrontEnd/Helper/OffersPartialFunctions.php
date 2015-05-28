@@ -292,8 +292,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         } else {
             if ($currentOffer->discountType == "CD") {
                 $onClick = $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
-                $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id),
-                ga('send', 'event', 'aff', '$offerBounceRate'),
+                $onClick .= "ga('send', 'event', 'aff', '$offerBounceRate'),
                 OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')";
                 if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
                     $offerLink ='<span class="'.$class.'">'.$offerAnchorText.' </span>';
@@ -315,8 +314,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
                     $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
                 }
-                $onClick = "viewCounter('onclick', 'offer', $currentOffer->id),
-                ga('send', 'event', 'aff', '$offerBounceRate')";
+                $onClick = "ga('send', 'event', 'aff', '$offerBounceRate')";
                 $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
                 $offerLink =
                     '<a id="'.$currentOffer->id.'" class="'.$class.' '.$imageClass.'" 
