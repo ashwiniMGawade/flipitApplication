@@ -86,7 +86,6 @@ class BootstrapTranslationFunctions
         \Zend_Locale::setDefault('en_US');
         $locale = new \Zend_Locale(Zend_Registry::get('Zend_Locale'));
         $cache = new Application_Service_Translation_Cache();
-
         if (!$cache->cacheExists($locale)) {
             self::setGetTextTranslations($locale, $cache, $transSettings);
         } else {
