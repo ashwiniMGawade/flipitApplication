@@ -33,7 +33,7 @@ $config->setProxyNamespace('KC\Entity\Proxy');
 $connectionParamsLocale = array(
     'driver'   => 'pdo_mysql',
     'user'     => 'root',
-    'password' => 'password',
+    'password' => 'root',
     'dbname'   => 'flipit_test',
 );
 /*$connectionParamsLocale = array(
