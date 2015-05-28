@@ -89,7 +89,7 @@ class Admin_LanguageController extends Zend_Controller_Action
 
 
             $result = self::uploadImage($_FILES['files']);
-
+            \BackEnd_Helper_viewHelper::clearTranslationCache();
             die;
         }
     }
