@@ -31,10 +31,7 @@ class TransController extends Zend_Controller_Action
             if (\Zend_Translate::hasCache()) {
                 \Zend_Translate::clearCache();
             }
-            
-            $locale = new \Zend_Locale(Zend_Registry::get('Zend_Locale'));
-            $cache = new Application_Service_Translation_Cache();
-            $cache->clearCache($locale);
+            \BackEnd_Helper_viewHelper::clearTranslationCache();
         }
     }
 

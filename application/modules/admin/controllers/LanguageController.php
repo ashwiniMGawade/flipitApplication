@@ -89,9 +89,7 @@ class Admin_LanguageController extends Zend_Controller_Action
 
 
             $result = self::uploadImage($_FILES['files']);
-            $locale = new \Zend_Locale(Zend_Registry::get('Zend_Locale'));
-            $cache = new Application_Service_Translation_Cache();
-            $cache->clearCache($locale);
+            \BackEnd_Helper_viewHelper::clearTranslationCache();
             die;
         }
     }
