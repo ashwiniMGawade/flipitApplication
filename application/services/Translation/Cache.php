@@ -19,14 +19,12 @@ class Application_Service_Translation_Cache
 
     public function getCache($locale)
     {
-        $content = $this->cacheDriver->fetch($this->cacheId.$locale);
-        return $content;
+        return $this->cacheDriver->fetch($this->cacheId.$locale);
     }
 
     public function cacheExists($locale)
     {
-        $cache = $this->cacheDriver->contains($this->cacheId.$locale);
-        return $cache;
+        return $this->cacheDriver->contains($this->cacheId.$locale);
     }
 
     public function clearCache($locale)
