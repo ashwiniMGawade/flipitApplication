@@ -408,7 +408,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
                     <h3>
                        <span>'. $shopName .'</span>'.$offerExclusiveText.'
                     </h3>
-                    <a href="'.$offerRedirectUrl.'">
+                    <a href="'.$offerRedirectUrl.'" target="_blank" rel = "nofollow">
                         <p class="sub-text">' . FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offerTitle) .'</p>
                     </a>
                 </div>
