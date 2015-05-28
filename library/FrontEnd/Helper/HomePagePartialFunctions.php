@@ -397,11 +397,9 @@ class FrontEnd_Helper_HomePagePartialFunctions
                     <img '.$imageDimensions.' alt="' . $shopName .'" src="' . $shopImage .'" title="' . $shopName .'">
                 </div>';
         }
-        if ($offerId != '') {
-            $offerRedirectUrl = HTTP_PATH_LOCALE.$shopPermalink.'?popup='.$offerId.'&type=code#'.$offerId;
-        } else {
-            $offerRedirectUrl = HTTP_PATH_LOCALE.$shopPermalink;
-        }
+        $offerRedirectUrl = $offerId != ''
+            ? HTTP_PATH_LOCALE.$shopPermalink.'?popup='.$offerId.'&type=code#'.$offerId
+            : HTTP_PATH_LOCALE.$shopPermalink;
         $rightColumnContent .= '
                 <div class="box">
                     <h3>
