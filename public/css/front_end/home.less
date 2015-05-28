@@ -419,7 +419,7 @@
                     top:50%;
                     right:24px;
                     background:url(../../images/sprite.png) no-repeat -254px -388px;
-                    width: 9px;
+                    width: 13px;
                     height: 15px;
                     margin:-8px 0 0;
                 }
@@ -428,7 +428,7 @@
                         border-color: #e49542;
                         z-index: 2;
                         &:before{
-                            background-position: -256px -350px;
+                           background:url(../../images/icon-clickout.png) no-repeat;
                         }
                         &:after{
                             content: '';
@@ -1108,4 +1108,15 @@
             }
         }
     }
+}
+@media only screen and (max-width: 479px){
+    .vouchers{
+        ul{
+            li{
+                &:before{
+                    right: 20px;
+                }
+            }
+        }
+    }           
 }
