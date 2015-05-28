@@ -818,4 +818,11 @@ class BackEnd_Helper_viewHelper
         $widgetCategories['newest-code'] = $this->zendTranslate->translate('backend_Newest code');
         return $widgetCategories;
     }
+
+    public static function clearTranslationCache()
+    {
+        $locale = new \Zend_Locale(Zend_Registry::get('Zend_Locale'));
+        $cache = new Application_Service_Translation_Cache();
+        $cache->clearCache($locale);
+    }
 }
