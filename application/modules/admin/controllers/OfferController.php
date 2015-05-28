@@ -1152,8 +1152,8 @@ class Admin_OfferController extends Zend_Controller_Action
     {
         BootstrapConstantsFunctions::constantsUploadAndRootPathForDefaultModule($scriptFileName = '');
         $localeForFileName = LOCALE != "" ? "-".strtoupper(LOCALE) : "-NL";
-        $localeForFolderName = LOCALE != "" ? LOCALE : "nl";
-        $file =  UPLOAD_DATA_FOLDER_EXCEL_PATH . $localeForFolderName.'/excels/offerList'.$localeForFileName.'.csv';
+        $localeForFolderName = LOCALE != "" ? LOCALE : "";
+        $file =  UPLOAD_DATA_FOLDER_EXCEL_PATH .$localeForFolderName.'/excels/offerList'.$localeForFileName.'.csv';
         $fileName =  $this->view->translate($file);
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
