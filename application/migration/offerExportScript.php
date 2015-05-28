@@ -15,10 +15,9 @@ class OfferExport
             if ($key != 'imbull') {
                 try {
                     $this->locale = $key == 'en' ? "-NL" : "-".strtoupper($key);
-                    $folderLocaleName = $key == 'en' ? "nl" : $key;
-                    $pathToTempExcelFolder = CommonMigrationFunctions::pathToTempExcelFolder($folderLocaleName);
+                    $pathToTempExcelFolder = CommonMigrationFunctions::pathToTempExcelFolder($key);
                     $this->filePath = $pathToTempExcelFolder . "offerList".$this->locale.".csv";
-                    $this->runner($connection['dsn'], $folderLocaleName);
+                    $this->runner($connection['dsn'], $key);
                 } catch (Exception $e) {
                     echo $e->getMessage()."\n\n";
                 }
@@ -137,8 +136,8 @@ class OfferExport
 
     private function moveFilestoDataFolder($folderLocaleName)
     {
-        if ($this->locale == 'en') {
-            $this->locale = 'excels';
+        if ($folderLocaleName == 'en') {
+            $folderLocaleName = 'excels';
         }
         CommonMigrationFunctions::copyDirectory(UPLOAD_EXCEL_TMP_PATH.$folderLocaleName, UPLOAD_DATA_FOLDER_EXCEL_PATH.$folderLocaleName);
         CommonMigrationFunctions::deleteDirectory(UPLOAD_EXCEL_TMP_PATH.$folderLocaleName);
