@@ -220,7 +220,7 @@ class Visitor extends \KC\Entity\Visitor
         if (\Auth_VisitorAdapter::hasIdentity()) {
             $visitorId = \Auth_VisitorAdapter::getIdentity()->id;
             self::updateLoginTime($visitorId);
-            setcookie('kc_unique_user_id', $visitorId, time() + (86400 * 3), '/');
+            setcookie('kc_unique_user_id', $visitorId, time() + (Session_Helper_Session::getSessionTimeout()), '/');
             $visitorLoginStatus = true;
         }
         return $visitorLoginStatus;
