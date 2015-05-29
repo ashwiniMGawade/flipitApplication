@@ -28,7 +28,7 @@ class OneTimeMigrationAddPageWidgets
         $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
         $connectionManager = CommonMigrationFunctions::loadDoctrineModels();
         echo CommonMigrationFunctions::showProgressMessage("Fetching all widgets of $key");
-        Widget::addWidgets();
+        Widget::addDefaultWidgets();
         $widgets = new Widget();
         $widgetsList = $widgets->getUserDefinedWidgetList();
         PageWidgets::savePageWidgets($widgetsList);
