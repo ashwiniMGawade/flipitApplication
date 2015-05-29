@@ -56,28 +56,6 @@ function addNewWidget(e) {
     $('#textValue').val(data);
 }
 
-function changeStatus(id,obj,status) {
-    addOverLay();
-    $(obj).addClass("btn-primary").siblings().removeClass("btn-primary");
-    $.ajax({
-        url : HOST_PATH + "admin/widget/onlinestatus",
-        method : "post",
-        data : {
-            'id' : id,
-            'state' : status
-        },
-        dataType : "json",
-        type : "post",
-        success : function(data) {
-            if (data != null) {
-                removeOverLay();
-            } else {
-                alert(__('Problem in your data'));
-            }
-        }
-    });
-}
-
 function ucfirst(str) {
     if (str != null) {
     var firstLetter = str.substr(0,1);
@@ -134,7 +112,7 @@ function getWidgetList(iSearchText,iStart,iSortCol,iSortDir) {
                         editId = '';
                     }
                     var tag = "";
-                    if (obj.aData.content) {
+                    if (obj.aData.content && obj.aData.showWithDefault == '1') {
                         tag = "<a editId='" + editId + "' href='javascript:void(0);'>" +"Yes" + "</a>";
                     } else { 
                         tag = "<a editId='" + editId + "' href='javascript:void(0);'>"+"No"+"</a>";
@@ -143,23 +121,6 @@ function getWidgetList(iSearchText,iStart,iSortCol,iSortDir) {
                 },
                 "bSearchable" : false,
                 "bSortable" : true
-            }, {
-                "fnRender" : function(obj) {
-                    var onLine = "btn-primary";
-                    var offLine = "";
-                    if (obj.aData.status == '0') {
-                        var onLine = '';
-                        var offLine = 'btn-primary';
-                    }   
-                    var html = "<div editId='" + obj.aData.id + "' class='btn-group'data-toggle='buttons-checkbox'style='padding-bottom:16px;margin-top:0px;'>";
-                        html+= "<button class='btn "+ onLine +"' onClick='changeStatus("+ obj.aData.id+",this,\"online\")'>"+__('Yes')+"</button>";
-                        if (obj.aData.showWithDefault == '1') {
-                            html+= "<button class='btn "+ offLine +"'onClick='changeStatus("+ obj.aData.id+",this,\"offline\")'>"+__('No')+"</button>";
-                        }
-                        html+= "</div>";
-                        return html;
-                },
-                "bSortable" : false
             }
         ],
         "fnPreDrawCallback": function(oSettings) {

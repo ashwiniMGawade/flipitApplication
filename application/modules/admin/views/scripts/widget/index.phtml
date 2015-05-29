@@ -1,6 +1,5 @@
 <?php 
 	$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/back_end/ckeditor/ckeditor.js" );
-	//$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/back_end/ckeditor/config.js" );
 	$this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
 	$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.dataTables.min.js");
 	$this->headScript()->appendFile(PUBLIC_PATH . "/js/dataTableComman.js");
@@ -10,11 +9,9 @@
 	$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
 	$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/select2.css" );
 	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/widgetList.js");
-	
 	?>
 	<?php echo $this->headTitle()->append('Widgets List');?>
 	<script type="text/javascript">
-	//var CKEDITOR_BASEPATH = "<?php //echo PUBLIC_PATH . "js/back_end/ckeditor" ; ?>" ;
 	</script>
          <div id="imbullbody">
       <div style="overflow: hidden;" id="imbullbody-content">
@@ -49,8 +46,7 @@
                   <tr>
                   	<th><?php echo $this->translate('id');?></th>
                     <th><?php echo $this->translate('Name');?></th>
-                    <th><?php echo $this->translate('Dynamic Content');?></th>
-                    <th><?php echo $this->translate('Online');?></th>
+                    <th><?php echo $this->translate('backend_HTML widget');?></th>
                  </tr>
                   <input style="display: none; visibility: hidden;" type="checkbox" class="display-none" checked="checked" name="status" id="status" />
                 </thead>
