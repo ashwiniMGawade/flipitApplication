@@ -3,7 +3,7 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
 {
     public function start()
     {
-        setcookie('passCache', '1', time() + 3600*8, '/');
+        setcookie('passCache', '1', time() + Session_Helper_Session::getSessionTimeout(), '/');
 
         $storeUrl             = $this->getRequest()->getParam('storeUrl', false);
         $linkValidationHash   = $this->getRequest()->getParam('hash', false);
