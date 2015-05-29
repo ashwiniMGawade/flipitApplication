@@ -96,7 +96,7 @@ class Admin_AuthController extends Zend_Controller_Action
             if (\Auth_StaffAdapter::hasIdentity()) {
                 
                 //create object of user class
-                $timeSeconds = 28800;
+                $timeSeconds = Session_Helper_Session::getSessionTimeout();
                
                 $Obj = Zend_Registry::get('emUser')->find('KC\Entity\User', \Auth_StaffAdapter::getIdentity()->id);
 
