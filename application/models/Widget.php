@@ -12,49 +12,29 @@
  */
 class Widget extends BaseWidget
 {
-    public static function getAllWidgets()
+    public static function addWidgets()
     {
-        $widgetsList = Doctrine_Query::create()->select()
-            ->from('widget w')
-            ->where('w.deleted=0')
-            ->fetchArray();
-        return $widgetsList;
+        self::truncateWidget();
+        self::addNewDefaultWidgets('Author for shop', 'popularEditorWidget');
+        self::addNewDefaultWidgets('News ticker for shop', 'shopLatestNewsWidget');
+        self::addNewDefaultWidgets('International widget', 'getPageEditorWidget');
+        self::addNewDefaultWidgets('Top 20 popular shops', 'popularShopWidget');
+        self::addNewDefaultWidgets('Shop Also Viwes', 'shopsAlsoViewedWidget');
+        self::addNewDefaultWidgets('Popular categories', 'popularCategoryWidget');
+        self::addNewDefaultWidgets('Social codes', 'socialCodeWidget');
+        self::addNewDefaultWidgets('Newsletter subscription', 'signUpWidget');
+        self::addNewDefaultWidgets('Popular Offer For Plus', 'plusTopPopularOffers');
+        self::addNewDefaultWidgets('Related articles plus guides', 'plusRecentlyAddedArticles');
+        return true;
     }
 
-    public static function addFunctionNames()
+    public static function truncateWidget()
     {
-        $widgets = self::getAllWidgets();
-        if (!empty($widgets)) {
-            foreach ($widgets as $widget) {
-                switch (trim($widget['slug'])) {
-                    case 'popular_category':
-                        self::updateWidgetFunctionName($widget['id'], 'popularCategoryWidget');
-                        break;
-                    case 'e_mail_subscription':
-                        self::updateWidgetFunctionName($widget['id'], 'popularCategoryWidget');
-                        break;
-                    case 'popular_stores':
-                        self::updateWidgetFunctionName($widget['id'], 'popularShopWidget');
-                        break;
-                    case 'stuur_een':
-                        self::updateWidgetFunctionName($widget['id'], 'socialCodeWidget');
-                        break;
-                    case 'popular_editor':
-                        self::updateWidgetFunctionName($widget['id'], 'popularEditorWidget');
-                        break;
-                    case 'most _popular_fashion':
-                        self::updateWidgetFunctionName($widget['id'], 'plusRecentlyAddedArticles');
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-        self::addNewDefaultWidgets('Popular Offer For Plus', 'plusTopPopularOffers');
-        self::addNewDefaultWidgets('Shop Also Viwes', 'shopsAlsoViewedWidget');
-        self::addNewDefaultWidgets('Popular Page Editor', 'getPageEditorWidget');
-        self::addNewDefaultWidgets('News ticker for shop', 'shopLatestNewsWidget');
-        return true;
+        $databaseConnection = Doctrine_Manager::getInstance()->getConnection('doctrine_site')->getDbh();
+        $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 0;');
+        $databaseConnection->query('TRUNCATE TABLE widget');
+        $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 1;');
+        unset($databaseConnection);
     }
 
     public static function addNewDefaultWidgets($widgetTitle, $functionName)
@@ -67,17 +47,7 @@ class Widget extends BaseWidget
         $widget->save();
         return true;
     }
-
-    public static function updateWidgetFunctionName($widgetId, $functionName)
-    {
-        Doctrine_Query::create()
-            ->update('Widget w')
-            ->set('w.function_name', '"'.$functionName.'"')
-            ->where('id='.$widgetId)
-            ->execute();
-        return true;
-    }
-
+    
     /**
      * save widget in database
      * @param array $params
