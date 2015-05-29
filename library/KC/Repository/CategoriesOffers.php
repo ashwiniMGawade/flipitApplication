@@ -56,6 +56,7 @@ class CategoriesOffers extends \KC\Entity\CategoriesOffers
                 ->orderBy('p.position');
             $categoryOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
+
         return $categoryOffers;
     }
 
