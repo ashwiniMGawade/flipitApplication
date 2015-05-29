@@ -147,8 +147,9 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
     {
         $daysLeftTillOfferGetsLiveCount = '';
         if (!empty($offerInfo) && isset($offerInfo[0]['startDate'])) {
-            $offerStartDate = $offerInfo[0]['startDate']->format('Y-m-d h:i:s');
-            $currentDateTime = new DateTime('now');
+            $offerStartDate = $offerInfo[0]['startDate']->format('Y-m-d');
+            $currentDateTime = date('Y-m-d');
+            $currentDateTime = new DateTime($currentDateTime);
             $offerStartDateTime = new DateTime($offerStartDate);
             $daysLeftTillOfferGetsLive = $currentDateTime->diff($offerStartDateTime);
 
