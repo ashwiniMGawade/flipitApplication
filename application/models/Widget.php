@@ -53,6 +53,7 @@ class Widget extends BaseWidget
         self::addNewDefaultWidgets('Popular Offer For Plus', 'plusTopPopularOffers');
         self::addNewDefaultWidgets('Shop Also Viwes', 'shopsAlsoViewedWidget');
         self::addNewDefaultWidgets('Popular Page Editor', 'getPageEditorWidget');
+        self::addNewDefaultWidgets('News ticker for shop', 'shopLatestNewsWidget');
         return true;
     }
 
