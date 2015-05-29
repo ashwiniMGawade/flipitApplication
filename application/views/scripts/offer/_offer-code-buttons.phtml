@@ -1,21 +1,15 @@
 <?php
-$offer = Offer::getOfferDetailOnShop($this->offerId);
-$offer = (object) $offer;
+$offer = \KC\Repository\Offer::getOfferDetailOnShop($this->offerId);
+$offer = (object) $offer[0];
 $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
 $urlToShow = $offerPartial->getUrlToShow($offer);
 $offerBounceRate = "/out/offer/".$offer->id;
-$permalink = $offer->shop['permalink'];
+$permalink = $offer->shopOffers['permaLink'];
 echo $offerPartial->getCommonRedirectUrlForOffer(
-    $offer,
-    $urlToShow,
-    $offerBounceRate,
-    $permalink,
-    'mainOfferClickoutButton'
-);
-echo $offerPartial->getSecondButtonforOffer(
-    $offer,
-    $urlToShow,
-    $offerBounceRate,
-    $permalink
-);
+        $offer,
+        $urlToShow,
+        $offerBounceRate,
+        $permalink,
+        'mainOfferClickoutButton'
+    );
 ?>

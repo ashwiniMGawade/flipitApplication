@@ -16,7 +16,7 @@ if ($this->zendForm!='' && $this->zendForm!=null) {
     endif;
     $shopId = $this->shopId=='' ? 0 : $this->shopId;
 
-    if (Visitor::getFavoriteShopsForUser($visitorId, $shopId)==false):
+    if (\KC\Repository\Visitor::getFavoriteShopsForUser($visitorId, $shopId)==false):
         if ($this->signupFormWidgetType== 'widgetWithinOffers') {?>
             <div class="block block-form <?php echo $shopId==0 ? 'block-form-2' : ''.' block-form-background';?>">
                 <div class="holder" style="padding: 0;">
