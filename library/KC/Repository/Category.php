@@ -63,7 +63,7 @@ class Category extends \KC\Entity\Category
         if ($numberOfOffers!=0) {
             $query->setMaxResults($numberOfOffers);
         }
-        if ($offerIds != '') {
+        if (!empty($offerIds) && !empty($offerIds['offers'])) {
             $savedCategoryOffersByAdmin = array();
             foreach ($offerIds as $offerId) {
                 if (!empty($offerId['offers'])) {
