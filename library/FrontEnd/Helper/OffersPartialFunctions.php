@@ -282,8 +282,8 @@ class FrontEnd_Helper_OffersPartialFunctions
             $imageClass = 'code';
         }
         $visitorInformation = '';
-        if (!empty(Auth_VisitorAdapter::getIdentity()->id)) {
-            $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
+        if (Auth_VisitorAdapter::hasIdentity()) {
+            $visitorInformation = \KC\Repository\Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
         }
         if (empty($visitorInformation) && isset($currentOffer->Visability) && $currentOffer->Visability == 'MEM') {
             $offerLink =

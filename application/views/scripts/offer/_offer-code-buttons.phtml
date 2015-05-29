@@ -4,12 +4,12 @@ $offer = (object) $offer[0];
 $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
 $urlToShow = $offerPartial->getUrlToShow($offer);
 $offerBounceRate = "/out/offer/".$offer->id;
-$permalink = $offer->shopOffers['permaLink'];
+$shopPermalink = $offer->shopOffers['permaLink'];
 echo $offerPartial->getCommonRedirectUrlForOffer(
         $offer,
         $urlToShow,
         $offerBounceRate,
-        $permalink,
+        $shopPermalink,
         'mainOfferClickoutButton'
     );
 ?>

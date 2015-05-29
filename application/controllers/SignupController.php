@@ -433,11 +433,9 @@ class SignupController extends Zend_Controller_Action
 
     public function signupmembersonlytitleAction()
     {
-        $this->_helper->layout->disableLayout();
-        $url = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $explodeUrl = explode('&', $url);
-        $getOfferId = explode('=', $explodeUrl[2]);
-        $offerId =  $getOfferId[1];
-        $this->view->offer = \KC\Repository\Offer::getOfferDetailOnShop($offerId);
+        $this->_helper->layout()->disableLayout();
+        $this->view->shopId = $this->getRequest()->getParam('shopId');
+        $this->view->offerId = $this->getRequest()->getParam('offerId');
+        $this->view->offer = \KC\Repository\Offer::getOfferDetailOnShop($this->getRequest()->getParam('offerId'));
     }
 }
