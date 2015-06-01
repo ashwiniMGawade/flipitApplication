@@ -3411,4 +3411,59 @@ class Offer Extends \KC\Entity\Offer
         $futureOffersCount = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $futureOffersCount;
     }
+
+    public static function getOffers($type, $limit, $homeSection = '')
+    {
+        $dateTimeFormat = 'Y-m-d H:i:s';
+        $currentDate = date($dateTimeFormat);
+        $past3Days = date($dateTimeFormat, strtotime('-3 day' . $currentDate));
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser->select(
+            's, o, img, terms'
+        )
+            ->from('KC\Entity\Offer', 'o')
+            ->leftJoin('o.shopOffers', 's')
+            ->leftJoin('s.logo', 'img')
+            ->leftJoin('o.offertermandcondition', 'terms')
+            ->setParameter(10, 0)
+            ->where('o.deleted = ?10')
+            ->andWhere(
+                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
+                cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
+            )
+            ->setParameter(8, 0)
+            ->andWhere('s.deleted = ?8')
+            ->setParameter(9, 1)
+            ->andWhere('s.status = ?9')
+            ->setParameter(2, 'CD')
+            ->andWhere('o.discountType = ?2')
+            ->setParameter(3, 'NW')
+            ->andWhere('o.discountType != ?3')
+            ->setParameter(5, 'MEM')
+            ->andWhere('o.Visability != ?5');
+        if ($type == 'UserGeneratedOffers') {
+            $query->andWhere('o.userGenerated=1 and o.approved="0"');
+        } else {
+            $query->andWhere('o.userGenerated=0');
+        }
+
+        if ($type == 'totalViewCount') {
+            $query->andWhere('o.endDate >'."'".$currentDate."'")
+            ->andWhere('o.startDate <='."'".$currentDate."'")
+            ->groupBy('s.id')
+            ->orderBy('o.totalViewcount', 'DESC');
+        } else {
+            $query->andWhere('o.endDate >'."'".$currentDate."'")
+                ->andWhere('o.startDate <='."'".$currentDate."'")
+                ->orderBy('o.startDate', 'DESC')
+                ->groupBy('s.id');
+        }
+
+        if ($homeSection != '') {
+            $query->groupBy('s.id');
+        }
+        $query = $query->setMaxResults($limit);
+        $newestCouponCodes = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $newestCouponCodes;
+    }
 }

@@ -46,7 +46,7 @@ class BootstrapDoctrineConnectionFunctions
         $driver = new AnnotationDriver(new AnnotationReader(), $paths);
         AnnotationRegistry::registerLoader('class_exists');
         $config->setMetadataDriverImpl($driver);
-        
+
         return $config;
     }
 

@@ -7,7 +7,7 @@ class Application_Service_Translation_Cache
 
     public function __construct()
     {
-        $this->cacheDriver = APPLICATION_ENV == 'development'
+        $this->cacheDriver = APPLICATION_ENV == 'testing'
             ? new Application_Service_Cache_FileCache()
             : Zend_Registry::get('emLocale')->getCacheDriver();
     }

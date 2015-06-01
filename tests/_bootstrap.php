@@ -30,16 +30,21 @@ $config->setProxyDir(APPLICATION_PATH . '/../library/KC/Entity/Proxy');
 $config->setAutoGenerateProxyClasses(true);
 $config->setProxyNamespace('KC\Entity\Proxy');
 
+// $connectionParamsLocale = array(
+//     'driver'   => 'pdo_mysql',
+//     'user'     => 'root',
+//     'password' => 'root',
+//     'dbname'   => 'flipit_test',
+// );
 $connectionParamsLocale = array(
-    'driver'   => 'pdo_mysql',
-    'user'     => 'root',
-    'password' => 'root',
-    'dbname'   => 'flipit_test',
-);
-/*$connectionParamsLocale = array(
     'driver'   => 'pdo_sqlite',
     'memory'   => true,
-);*/
+);
+
 $em = EntityManager::create($connectionParamsLocale, $config);
 \Codeception\Module\Doctrine2::$em = $em;
+$mdFactory = $em->getMetadataFactory();
+$classes = $mdFactory->getAllMetadata();
+$tool->dropSchema($classes, \Doctrine\ORM\Tools\SchemaTool::DROP_DATABASE);
+$tool->createSchema($classes);
 \Codeception\Util\Autoload::registerSuffix('Page', __DIR__.DIRECTORY_SEPARATOR.'_pages');
