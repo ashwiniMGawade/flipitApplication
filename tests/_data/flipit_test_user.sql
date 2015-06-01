@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.4
+-- version 4.0.10deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 27, 2014 at 06:29 AM
--- Server version: 5.6.12-log
--- PHP Version: 5.4.16
+-- Generation Time: May 28, 2015 at 10:56 AM
+-- Server version: 5.5.41-0ubuntu0.14.04.1
+-- PHP Version: 5.5.9-1ubuntu4.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,8 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `flipit_test_user`
 --
-CREATE DATABASE IF NOT EXISTS `flipit_test_user` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `flipit_test_user`;
 
 -- --------------------------------------------------------
 
@@ -35,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `chain` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=580 ;
 
 -- --------------------------------------------------------
 
@@ -58,7 +56,38 @@ CREATE TABLE IF NOT EXISTS `chain_item` (
   UNIQUE KEY `unique_shopname_website_idx` (`shopname`,`websiteid`),
   KEY `ref_chain_items` (`chainid`),
   KEY `ref_chain_website` (`websiteid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2418 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `global_export_password`
+--
+
+CREATE TABLE IF NOT EXISTS `global_export_password` (
+  `id` smallint(6) NOT NULL AUTO_INCREMENT,
+  `password` varchar(255) DEFAULT NULL,
+  `exportType` varchar(50) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ip_addresses`
+--
+
+CREATE TABLE IF NOT EXISTS `ip_addresses` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `ipaddress` varchar(15) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 -- --------------------------------------------------------
 
@@ -85,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `profile_image` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=372 ;
 
 -- --------------------------------------------------------
 
@@ -102,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `ref_user_website` (
   PRIMARY KEY (`id`),
   KEY `userid_idx` (`userid`),
   KEY `websiteid_idx` (`websiteid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5556 ;
 
 -- --------------------------------------------------------
 
@@ -120,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `rights` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `roleid_idx` (`roleid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
 
 -- --------------------------------------------------------
 
@@ -136,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `robot` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -151,7 +180,7 @@ CREATE TABLE IF NOT EXISTS `role` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -167,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `splash` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -207,7 +236,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `email` (`email`),
   KEY `roleid_idx` (`roleid`),
   KEY `profileimageid_idx` (`profileimageid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=354 ;
 
 -- --------------------------------------------------------
 
@@ -240,7 +269,38 @@ CREATE TABLE IF NOT EXISTS `website` (
   `status` varchar(10) DEFAULT NULL,
   `chain` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=39 ;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `chain_item`
+--
+ALTER TABLE `chain_item`
+  ADD CONSTRAINT `ref_chain_items` FOREIGN KEY (`chainid`) REFERENCES `chain` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `ref_chain_website` FOREIGN KEY (`websiteid`) REFERENCES `website` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `ref_user_website`
+--
+ALTER TABLE `ref_user_website`
+  ADD CONSTRAINT `ref_user_website_userid_user_id` FOREIGN KEY (`userid`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `ref_user_website_websiteid_website_id` FOREIGN KEY (`websiteid`) REFERENCES `website` (`id`);
+
+--
+-- Constraints for table `rights`
+--
+ALTER TABLE `rights`
+  ADD CONSTRAINT `rights_roleid_role_id` FOREIGN KEY (`roleid`) REFERENCES `role` (`id`);
+
+--
+-- Constraints for table `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `user_profileimageid_profile_image_id` FOREIGN KEY (`profileimageid`) REFERENCES `profile_image` (`id`),
+  ADD CONSTRAINT `user_roleid_role_id` FOREIGN KEY (`roleid`) REFERENCES `role` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
