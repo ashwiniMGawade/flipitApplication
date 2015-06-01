@@ -192,7 +192,7 @@ class StoreController extends Zend_Controller_Action
             (string)$similarShopsAndSimilarCategoriesOffersKey,
             array(
                 'function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode',
-                'parameters' => array("similarStoresAndSimilarCategoriesOffers", 10, $shopId)
+                'parameters' => array("similarStoresAndSimilarCategoriesOffers", 30, $shopId)
             ),
             ''
         );
@@ -203,8 +203,12 @@ class StoreController extends Zend_Controller_Action
 
         $this->view->similarShopsAndSimilarCategoriesOffers = '';
         if (!empty($similarShopsAndSimilarCategoriesOffers)) {
-            $this->view->similarShopsAndSimilarCategoriesOffers = $this->_helper->Store->removeDuplicateShopsOffers(
-                $similarShopsAndSimilarCategoriesOffers
+            $this->view->similarShopsAndSimilarCategoriesOffers = array_slice(
+                $this->_helper->Store->removeDuplicateShopsOffers(
+                    $similarShopsAndSimilarCategoriesOffers
+                ),
+                0,
+                10
             );
         }
 

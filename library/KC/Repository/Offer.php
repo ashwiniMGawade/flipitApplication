@@ -174,7 +174,7 @@ class Offer Extends \KC\Entity\Offer
                 ->andWhere('o.shopOffers !='. $shopId)
                 ->andWhere('s.affliateProgram = 1')
                 ->andWhere($entityManagerUser->expr()->in('o.shopOffers', $similarShopsIds))
-                ->orderBy('o.startDate', 'DESC');
+                ->orderBy('o.totalViewcount', 'DESC');
             if ($limit!='') {
                 $query->setMaxResults($limit);
             }
@@ -223,7 +223,7 @@ class Offer Extends \KC\Entity\Offer
             ->andWhere('o.userGenerated = 0')
             ->andWhere($entityManagerUser->expr()->in('c.categoryId', $commaSepratedCategroyIdValues))
             ->andWhere('o.shopOffers !='. $shopId)
-            ->orderBy('o.startDate', 'DESC')
+            ->orderBy('o.totalViewcount', 'DESC')
             ->setMaxResults($limit);
             $similarCategoriesOffer = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
