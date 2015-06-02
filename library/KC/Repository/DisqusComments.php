@@ -7,9 +7,9 @@ class DisqusComments extends \KC\Entity\DisqusComments
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
             ->select('d, dt')
-            ->from('KC\Entity\DisqusComments', 'd')
-            ->leftJoin('d.disqusThread', 'dt')
-            ->where('dt.link like '."'%".$pageUrl."%'");
+            ->from('KC\Entity\DisqusThread', 'd')
+            ->leftJoin('d.disqusComments', 'dt')
+            ->where('d.link like '."'%".$pageUrl."%'");
         $commentInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $disqusCommentMessages = !empty($commentInformation) ?  $commentInformation : '';
         return $disqusCommentMessages;
