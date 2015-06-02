@@ -17,7 +17,7 @@ class DisqusComments
     /**
      * 
      * @ORM\Column(type="integer", length=11, nullable=true)
-     * 
+     * @ORM\Id
      */
     protected $id;
 

@@ -59,9 +59,6 @@ class GetDisqusComments
             'DISQUS_FETCH_ORDER' => 'asc'
         );
         $disqusComments = getDisqusRecentComments($disqusParameters);
-        if (!empty($disqusComments)) {
-            DisqusComments::saveComments($disqusComments);
-        }
         $manager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - New Comments are saved successfully!!!"
