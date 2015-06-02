@@ -1,29 +1,23 @@
 <?php
-namespace KC\Entity;
+namespace KC\Entity\User;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="role")
+ * @ORM\Table(name="user_session")
  */
-class Role
+class UserSession
 {
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", length=8)
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $name;
-
-    /**
-     * @ORM\Column(type="integer", length=1, nullable=false)
-     */
-    protected $deleted;
+    protected $sessionId;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
@@ -36,14 +30,10 @@ class Role
     protected $updated_at;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Rights", mappedBy="role")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\User\User", inversedBy="user")
+     * @ORM\JoinColumn(name="userId", referencedColumnName="id")
      */
-    protected $rights;
-
-    /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\User", mappedBy="users")
-     */
-    protected $roleid;
+    protected $usersession;
 
     public function __get($property)
     {
