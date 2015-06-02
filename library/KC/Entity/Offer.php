@@ -8,7 +8,8 @@ use Doctrine\ORM\Mapping AS ORM;
  *     name="offer",
  *     indexes={
  *         @ORM\Index(name="shopid_idx", columns={"shopId"}),
- *         @ORM\Index(name="ind_offer_shenex", columns={"shopId","endDate","exclusiveCode"})
+ *         @ORM\Index(name="ind_offer_shenex", columns={"shopId","endDate","exclusiveCode"}),
+ *         @ORM\Index(name="tilesId", columns={"tilesId"})
  *     },
  *     uniqueConstraints={@ORM\UniqueConstraint(name="offerlogoid", columns={"offerlogoid"})}
  * )
@@ -263,7 +264,7 @@ class Offer
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Visitor", inversedBy="offer")
      * @ORM\JoinTable(
-     *     name="favorite_offer",
+     *     name="favorite_offers",
      *     joinColumns={@ORM\JoinColumn(name="offerId", referencedColumnName="id", nullable=false)},
      *     inverseJoinColumns={@ORM\JoinColumn(name="visitorId", referencedColumnName="id", nullable=false)}
      * )

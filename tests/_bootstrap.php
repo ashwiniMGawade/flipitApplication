@@ -9,8 +9,7 @@ $classLoader = new \Doctrine\Common\ClassLoader('Doctrine', APPLICATION_PATH . '
 $classLoader->register();
 $classLoader = new \Doctrine\Common\ClassLoader('Symfony', APPLICATION_PATH . '/../library/Doctrine');
 $classLoader->register();
-$classLoader = new \Doctrine\Common\ClassLoader('KC\Entity', APPLICATION_PATH . '/../library/KC/Entity');
-$classLoader->setNamespaceSeparator('_');
+$classLoader = new \Doctrine\Common\ClassLoader('KC', APPLICATION_PATH . '/../library');
 $classLoader->register();
 
 use \Doctrine\ORM\Tools\Setup;
@@ -45,6 +44,7 @@ $em = EntityManager::create($connectionParamsLocale, $config);
 \Codeception\Module\Doctrine2::$em = $em;
 $mdFactory = $em->getMetadataFactory();
 $classes = $mdFactory->getAllMetadata();
-$tool->dropSchema($classes, \Doctrine\ORM\Tools\SchemaTool::DROP_DATABASE);
+$tool = new \Doctrine\ORM\Tools\SchemaTool($em);
+$tool->dropDatabase();
 $tool->createSchema($classes);
 \Codeception\Util\Autoload::registerSuffix('Page', __DIR__.DIRECTORY_SEPARATOR.'_pages');

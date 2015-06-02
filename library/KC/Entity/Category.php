@@ -131,7 +131,7 @@ class Category
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Articlecategory", inversedBy="category")
      * @ORM\JoinTable(
-     *     name="ref_articlecategory_relatedcategory",
+     *     name="ref_articlescategory_relatedcategory",
      *     joinColumns={@ORM\JoinColumn(name="relatedcategoryid", referencedColumnName="id", nullable=false)},
      *     inverseJoinColumns={@ORM\JoinColumn(name="articlecategoryid", referencedColumnName="id", nullable=false)}
      * )
