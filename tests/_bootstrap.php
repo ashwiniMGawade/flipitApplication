@@ -37,6 +37,7 @@ $config->setProxyNamespace('KC\Entity\Proxy');
 // );
 $connectionParamsLocale = array(
     'driver'   => 'pdo_sqlite',
+    'name'     => 'locale',
     'memory'   => true,
 );
 
