@@ -12,10 +12,11 @@ class BootstrapDoctrineConnectionFunctions
         $application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
         $frontControllerObject = $application->getOption('resources');
         $config = self::setMemcachedAndProxyClasses($frontControllerObject);
-        $emUser = EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);
+        $emUser = EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull'], 'user'), $config);
         $localSiteDbConnection = strtolower(self::getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData));
         self::setEntityManagerForlocale($doctrineOptions[$localSiteDbConnection]['dsn'], $config);
         Zend_Registry::set('emUser', $emUser);
+        self::createSchemaForSqlite($emUser);
         BootstrapConstantsFunctions::constantsForLocaleAndTimezoneSetting();
         self::setDefaultTimezone();
         return $emUser;
@@ -33,7 +34,7 @@ class BootstrapDoctrineConnectionFunctions
         $cache->setMemcached($memcache);
         $isDevMode = false;
         $proxyPath = null;
-        if (APPLICATION_ENV == 'development') {
+        if (APPLICATION_ENV == 'development' || APPLICATION_ENV == 'testing') {
             $cache = null;
             $isDevMode = true;
             $proxyPath = APPLICATION_PATH . '/../library/KC/Entity/Proxy';
@@ -53,6 +54,18 @@ class BootstrapDoctrineConnectionFunctions
         $databaseConnectionCredentials = self::getDatabaseCredentials($dsn);
         $emLocale = EntityManager::create($databaseConnectionCredentials, $config);
         Zend_Registry::set('emLocale', $emLocale);
+        self::createSchemaForSqlite($emLocale);
+    }
+
+    public static function createSchemaForSqlite($entityManager)
+    {
+        if (APPLICATION_ENV == 'testing') {
+            $mdFactory = $entityManager->getMetadataFactory();
+            $classes = $mdFactory->getAllMetadata();
+            $tool = new \Doctrine\ORM\Tools\SchemaTool($entityManager);
+            $tool->dropDatabase();
+            $tool->createSchema($classes);
+        }
     }
 
     public static function setDefaultTimezone()
@@ -66,7 +79,7 @@ class BootstrapDoctrineConnectionFunctions
         }
     }
 
-    public static function getDatabaseCredentials($doctrineOptions)
+    public static function getDatabaseCredentials($doctrineOptions, $dbType = '')
     {
         $splitDbName = explode('/', $doctrineOptions);
         $splitDbUserName = explode(':', $splitDbName[2]);
@@ -76,13 +89,24 @@ class BootstrapDoctrineConnectionFunctions
         $dbUserName = $splitDbUserName[0];
         $dbName = $splitDbName[3];
         $hostName = isset($splitHostName[1]) ? $splitHostName[1] : 'localhost';
-        return array(
-            'host'     => $hostName,
-            'driver'   => 'pdo_mysql',
-            'user'     => $dbUserName,
-            'password' => $dbPassword,
-            'dbname'   => $dbName,
-        );
+
+        if (APPLICATION_ENV == 'testing') {
+            $connectionName = $dbType == 'user' ? $dbType : 'locale';
+            $connection = array(
+                'driver'   => 'pdo_sqlite',
+                'name'     => $connectionName,
+                'memory'   => true,
+            );
+        } else {
+            $connection = array(
+                'host'     => $hostName,
+                'driver'   => 'pdo_mysql',
+                'user'     => $dbUserName,
+                'password' => $dbPassword,
+                'dbname'   => $dbName,
+            );
+        }
+        return $connection;
     }
 
     public static function getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData)
