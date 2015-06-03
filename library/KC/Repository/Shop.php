@@ -1020,7 +1020,12 @@ class Shop extends \KC\Entity\Shop
         $shopInfo->accountManagerName = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['accountManagerName']);
         $shopInfo->contentManagerId = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['selecteditors']);
         $shopInfo->contentManagerName = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['editorName']);
-
+        $shopInfo->featuredtext = isset($shopDetail['featuredtext']) && $shopDetail['featuredtext'] != ''
+            ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['featuredtext'])
+            : '';
+        if (isset($shopDetail['featuredtextdate']) && $shopDetail['featuredtextdate'] != '') {
+            $shopInfo->featuredtextdate = new \DateTime(\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['featuredtextdate']));
+        }
         $shopInfo->affliateNetworkId = null;
 
         if ($shopDetail['shopAffiliateNetwork'] != 0) {
@@ -1192,18 +1197,6 @@ class Shop extends \KC\Entity\Shop
                     \Zend_Registry::get('emLocale')->persist($refShopCategory);
                     \Zend_Registry::get('emLocale')->flush();
                 }
-            }
-
-            if (!empty($shopDetail['ballontextcontent'])) {
-                if (isset($shopDetail['id']) && $shopDetail['id'] != '') {
-                    $type = 'update';
-                    $shopId = $shopDetail['id'];
-                } else {
-                    $type = 'add';
-                    $shopId = $shopInfo->id;
-                }
-
-                self::saveEditorBallonText($shopDetail, $shopId, $type);
             }
 
             if (!empty($shopDetail['reasontitle1'])
@@ -1937,31 +1930,6 @@ class Shop extends \KC\Entity\Shop
             ->where('s.id='.$shopID);
         $brandingCss = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return (!empty($brandingCss[0]['brandingcss'])) ? unserialize($brandingCss[0]['brandingcss']) : null;
-    }
-
-    public static function saveEditorBallonText($params, $shopId, $type)
-    {
-        if ($type == 'update') {
-            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder
-            ->delete("KC\Entity\EditorBallonText", "e")
-            ->where("e.shop = ".$shopId)
-            ->getQuery()
-            ->execute();
-        }
-        $contentInfo = array_map('trim', $params['ballontextcontent']);
-        foreach ($contentInfo as $key => $content) {
-            if (isset($content) && $content != '') {
-                $entityManagerLocale  = \Zend_Registry::get('emLocale');
-                $ballonText = new \KC\Entity\EditorBallonText();
-                $ballonText->shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $shopId);
-                $ballonText->ballontext = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['ballontextcontent'][$key]);
-                $ballonText->deleted = 0;
-                $entityManagerLocale->persist($ballonText);
-                $entityManagerLocale->flush();
-            }
-        }
-        return true;
     }
 
     public static function getTotalNumberOfMoneyShops()

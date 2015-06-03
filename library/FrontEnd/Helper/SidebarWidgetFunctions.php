@@ -1,6 +1,110 @@
 <?php
 class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
 {
+    public function sidebarWidgets($widgetType, $currentView)
+    {
+        $widgets = \KC\Repository\PageWidgets::getWidgetsByType($widgetType);
+        if (!empty($widgets)) {
+            foreach ($widgets as $widget) {
+                $widgetFunctionName = strtolower($widget['widget']['function_name']);
+                if ($widget['widget']['showWithDefault'] == 1) {
+                    $this->getNonDefaultWidget($widget);
+                } else {
+                    if (!empty($widgetFunctionName)) {
+                        $this->$widgetFunctionName($widgetType, $currentView);
+                    }
+                }
+            }
+        }
+        return;
+    }
+
+    public function getNonDefaultWidget($widget)
+    {
+        if (!empty($widget['widget']['content'])) {
+            echo str_replace('<br />', '', html_entity_decode($widget['widget']['content']));
+        }
+    }
+
+    public function socialCodeWidget($widgetType, $currentView)
+    {
+        if (!empty($currentView->zendForm)) {
+            echo $currentView->partial('socialcode/social-code.phtml', array('zendForm' => $currentView->zendForm));
+        }
+    }
+
+    public function signUpWidget($widgetType, $currentView)
+    {
+        if ($widgetType == 'no-money-shops' || $widgetType == 'money-shops') {
+            if ($currentView->currentStoreInformation[0]['showSignupOption']) {
+                echo $currentView->esi(
+                    $currentView->locale.'signup/signupwidget?shopId='.$currentView->currentStoreInformation[0]['id']
+                    .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage='
+                );
+            }
+        } else {
+            echo $currentView->esi(
+                $currentView->locale.'signup/signupwidget?shopId='.''
+                .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage='
+            );
+        }
+    }
+
+    public function shopLatestNewsWidget($widgetType, $currentView)
+    {
+        if (!empty($currentView->latestShopUpdates)) {
+            echo $currentView->partial('store/_latestNews.phtml', array('latestShopUpdates' => $currentView->latestShopUpdates));
+        }
+    }
+
+    public function popularEditorWidget($widgetType, $currentView)
+    {
+        $shopEditor = '';
+        if (!empty($currentView->currentStoreInformation)) {
+            $howToUseGuidePermalink = "how-to/".$currentView->currentStoreInformation[0]['permaLink'];
+            if (!empty($currentView->currentStoreInformation[0]['howtoguideslug'])) {
+                $howToUseGuidePermalink =
+                    $currentView->currentStoreInformation[0]['permaLink']. '/'
+                    . $currentView->currentStoreInformation[0]['howtoguideslug'];
+            }
+            $actualUrl = '';
+            if (!empty($currentView->currentStoreInformation[0]['actualUrl'])) {
+                $actualUrlWithoutDoubleSlash = explode("//", $currentView->currentStoreInformation[0]['actualUrl']);
+                if (isset($actualUrlWithoutDoubleSlash[1])) {
+                    $actualUrl = $actualUrlWithoutDoubleSlash[1];
+                } else {
+                    $actualUrl = $currentView->currentStoreInformation[0]['actualUrl'];
+                }
+            }
+            $frontShopHeaderHelper = new FrontEnd_Helper_ShopHeaderPartialFunctions();
+            $disqusReplyCounter = $frontShopHeaderHelper->getDisqusReplyCounter($currentView->currentStoreInformation[0]);
+            if($currentView->shopEditor != null):
+                $shopEditor = $currentView->partial(
+                    'store/_storeEditor.phtml',
+                    array(
+                       'shopEditor' => array(
+                            $currentView->shopEditor
+                        ),
+                       'shop' => $currentView->currentStoreInformation[0],
+                       'howToUseGuidePermalink'=>$howToUseGuidePermalink,
+                       'actualUrl'=>$actualUrl,
+                       'disqusReplyCounter' => $disqusReplyCounter
+                    )
+                );
+            endif;
+        }
+        echo $shopEditor;
+    }
+
+    public function shopChainWidget($shopChain)
+    {
+        $chain = '';
+        if ($shopChain) {
+            $chain = '<article class="block">'.$shopChain.'</article>';
+        }
+        echo $chain;
+    }
+
     public function sidebarChainWidget($id, $shopName = false, $chainItemId = false)
     {
         if ($shopName) {
@@ -70,29 +174,9 @@ EOD;
         }
         $categoriesSidebarWidget.=
                 '</ul></div>';
-        return $categoriesSidebarWidget;
+        echo $categoriesSidebarWidget;
     }
 
-    public function getSidebarWidget($array = array(), $page = '')
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder
-            ->select('p, w, refpage')
-            ->from('KC\Entity\Page', 'p')
-            ->leftJoin('p.pagewidget', 'w')
-            ->leftJoin('w.widget', 'refpage')
-            ->where("p.permalink=".$queryBuilder->expr()->literal("$page"))
-            ->andWhere('w.stauts = 1')
-            ->andWhere('p.deleted = 0');
-        $pageWidgets = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        $sidebarWidgets = '';
-        if (count($pageWidgets) > 0) {
-            for ($i=0; $i<count($pageWidgets[0]['pagewidget']); $i++) {
-            }
-        }
-        return $sidebarWidgets;
-    }
-    
     public function popularShopWidget()
     {
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
@@ -130,7 +214,7 @@ EOD;
                 </li>';
         }
         $popularStoresContent .='</ul></div>';
-        return $popularStoresContent;
+        echo $popularStoresContent;
     }
     
     public static function getShopsByFallback($storeIds)
@@ -147,28 +231,31 @@ EOD;
         return $cacheStatus;
     }
 
-    public function shopsAlsoViewedWidget($shopId, $shopName)
+    public function shopsAlsoViewedWidget($widgetType, $currentView)
     {
-        $shopsAlsoViewed =  \KC\Repository\Shop::getShopsAlsoViewed($shopId);
-        if ($shopsAlsoViewed[0]['shopsViewedIds'] != '') {
-            $similarStoresViewedContent = self::getSimilarStoresViewedDivContent($shopName);
-            $storeIds = explode(',', $shopsAlsoViewed[0]['shopsViewedIds']);
-            $storePresent = self::getShopsByFallback($storeIds);
-            if ($storePresent) {
-                foreach ($storeIds as $storeId) {
-                    $similarStoresViewedContent .= self::addLiOfSimilarStoresViewedContent($storeId);
+        $similarStoresViewedContent = '';
+        if (!empty($currentView->currentStoreInformation[0]['id'])) {
+            $shopId = $currentView->currentStoreInformation[0]['id'];
+            $shopName = $currentView->currentStoreInformation[0]['name'];
+            $shopsAlsoViewed =  \KC\Repository\Shop::getShopsAlsoViewed($shopId);
+            if ($shopsAlsoViewed[0]['shopsViewedIds'] != '') {
+                $similarStoresViewedContent = self::getSimilarStoresViewedDivContent($shopName);
+                $storeIds = explode(',', $shopsAlsoViewed[0]['shopsViewedIds']);
+                $storePresent = self::getShopsByFallback($storeIds);
+                if ($storePresent) {
+                    foreach ($storeIds as $storeId) {
+                        $similarStoresViewedContent .= self::addLiOfSimilarStoresViewedContent($storeId);
+                    }
+                } else {
+                    $topFiveSimilarShopsViewed =  \KC\Repository\Shop::getSimilarShopsForAlsoViewedWidget($shopId, 5);
+                    foreach ($topFiveSimilarShopsViewed as $similarShopId) {
+                        $similarStoresViewedContent .= self::addLiOfSimilarStoresViewedContent($similarShopId);
+                    }
                 }
-            } else {
-                $topFiveSimilarShopsViewed =  \KC\Repository\Shop::getSimilarShopsForAlsoViewedWidget($shopId, 5);
-                foreach ($topFiveSimilarShopsViewed as $similarShopId) {
-                    $similarStoresViewedContent .= self::addLiOfSimilarStoresViewedContent($similarShopId);
-                }
+                $similarStoresViewedContent .='</ul></div>';
             }
-            $similarStoresViewedContent .='</ul></div>';
-        } else {
-            $similarStoresViewedContent = '';
         }
-        return $similarStoresViewedContent;
+        echo $similarStoresViewedContent;
     }
 
     public static function addLiOfSimilarStoresViewedContent($shopId)
@@ -194,4 +281,85 @@ EOD;
             </div>
         <ul class="tags">';
     }
+
+    public function getPageEditorWidget($pageType, $currentObject)
+    {
+        $editorWidgetInformation = self::editorWidgetInformation($pageType);
+        $editorId = !empty($editorWidgetInformation[0]['editorId'])
+            ? $editorWidgetInformation[0]['editorId'] : '';
+        $editorInformation = self::getEditorInformation($editorId);
+        if($editorInformation != '' && $editorWidgetInformation[0]['status'] != ''):
+            echo $editorInformation = $currentObject->partial(
+                'partials/_editorWidget.phtml',
+                array(
+                   'editorInformation' => $editorInformation,
+                   'editorWidgetInformation' => $editorWidgetInformation
+                )
+            );
+        endif;
+    }
+
+    public static function editorWidgetInformation($pageType)
+    {
+        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($pageType);
+        $editorWidgetInformation = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                $cacheKey.'_editor_data',
+                array(
+                    'function' =>
+                    'KC\Repository\EditorWidget::getEditorWidgetData', 'parameters' => array($pageType)
+                ),
+                ''
+            );
+        return $editorWidgetInformation;
+    }
+
+    public static function getEditorInformation($editorId)
+    {
+        $editorInformation = '';
+        if (!empty($editorId)) {
+            $editorInformation = \FrontEnd_Helper_viewHelper::
+                getRequestedDataBySetGetCache(
+                    'user_'.$editorId.'_details',
+                    array(
+                        'function' =>
+                        'KC\Repository\User::getUserDetails', 'parameters' => array($editorId)
+                    ),
+                    ''
+                );
+        }
+        return $editorInformation;
+    }
+
+
+    public function plusTopPopularOffers($widgetType, $currentView)
+    {
+        $topPopularOffers = '';
+        if (!empty($currentView->topPopularOffers)) {
+            $topPopularOffers = $currentView->partial(
+                'plus/_topPopularOffers.phtml',
+                array(
+                    'topPopularOffers' => $currentView->topPopularOffers
+                )
+            );
+        }
+        echo $topPopularOffers;
+    }
+
+    public function plusRecentlyAddedArticles($widgetType, $currentView)
+    {
+        $recentlyAddedArticles = '';
+        if (!empty($currentView->recentlyAddedArticles)) {
+            $recentlyAddedArticles = '<div class="in-block">';
+            $recentlyAddedArticles .= $currentView->partial(
+                'plus/_recentlyAddedArticles.phtml',
+                array(
+                    'recentlyAddedArticles' => $currentView->recentlyAddedArticles
+                )
+            );
+            $recentlyAddedArticles .= "</div>";
+        }
+        echo $recentlyAddedArticles;
+    }
 }
+

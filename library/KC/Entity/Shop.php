@@ -330,7 +330,17 @@ class Shop
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $code_alert_send_date;
-    
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $featuredtext;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $featuredtextdate;
+
     /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="shop")
      * @ORM\JoinColumn(name="logoId", referencedColumnName="id", unique=true)
@@ -391,11 +401,6 @@ class Shop
      * @ORM\OneToMany(targetEntity="KC\Entity\ShopViewCount", mappedBy="shop")
      */
     protected $viewcount;
-
-    /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\EditorBallonText", mappedBy="shop")
-     */
-    protected $ballontext;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Signupfavoriteshop", mappedBy="signupfavoriteshop")

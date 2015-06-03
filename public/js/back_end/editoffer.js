@@ -688,12 +688,6 @@ function setFormData(data){
 			 if(i>4){
 			    jQuery('#addmoreBtn').click();
 			 }
-			//Query('#termsAndconditions').val(data[0].termandcondition[i].termsAndconditionContent);
-
-		       
-			
-			 
-			 
 		 }
 
 

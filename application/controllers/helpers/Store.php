@@ -18,7 +18,7 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         $offers = array();
         $storeOfferIds = array();
         foreach ($topVoucherCodes as $topVouchercodeskey => $topVoucherCode) {
-            $offers[] = $topVoucherCode['offer'];
+            $offers[] = $topVoucherCode['popularcode'];
         }
         return $offers;
     }
@@ -148,12 +148,15 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         $daysLeftTillOfferGetsLiveCount = '';
         if (!empty($offerInfo) && isset($offerInfo[0]['startDate'])) {
             $offerStartDate = $offerInfo[0]['startDate']->format('Y-m-d');
-            $secondsForStartDate = strtotime($offerStartDate) - time();
-            $daysLeftTillOfferGetsLive = floor($secondsForStartDate / 86400);
-            if ($daysLeftTillOfferGetsLive <= 7) {
-                $daysLeftTillOfferGetsLiveCount = isset($daysLeftTillOfferGetsLive) && $daysLeftTillOfferGetsLive > 1
-                    ? $daysLeftTillOfferGetsLive . ' ' . FrontEnd_Helper_viewHelper::__translate('days')
-                    : $daysLeftTillOfferGetsLive . ' ' . FrontEnd_Helper_viewHelper::__translate('day');
+            $currentDateTime = date('Y-m-d');
+            $currentDateTime = new DateTime($currentDateTime);
+            $offerStartDateTime = new DateTime($offerStartDate);
+            $daysLeftTillOfferGetsLive = $currentDateTime->diff($offerStartDateTime);
+
+            if (!empty($daysLeftTillOfferGetsLive) && $daysLeftTillOfferGetsLive->d <= 7) {
+                $daysLeftTillOfferGetsLiveCount = !empty($daysLeftTillOfferGetsLive) && $daysLeftTillOfferGetsLive->d > 1
+                    ? $daysLeftTillOfferGetsLive->d . ' ' . FrontEnd_Helper_viewHelper::__translate('days')
+                    : $daysLeftTillOfferGetsLive->d . ' ' . FrontEnd_Helper_viewHelper::__translate('day');
             }
         }
         return $daysLeftTillOfferGetsLiveCount;

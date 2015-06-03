@@ -26,6 +26,11 @@ class Widget
     protected $slug;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $function_name;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected $content;
@@ -64,6 +69,11 @@ class Widget
      * @ORM\OneToMany(targetEntity="KC\Entity\RefPageWidget", mappedBy="page")
      */
     protected $Widget;
+
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\PageWidgets", mappedBy="widget")
+     */
+    protected $pageWidgets;
 
     public function __get($property)
     {

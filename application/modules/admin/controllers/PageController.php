@@ -53,11 +53,10 @@ class Admin_PageController extends Zend_Controller_Action
         $pageattrObj = new KC\Repository\PageAttribute();
         $this->view->pageattr = $pageattrObj->getPageAttributes();
         $widgetObj = new KC\Repository\Widget();
-        $this->view->widgetList = $widgetObj->getDefaultwidgetList();
-        $this->view->widgetListUserDefined = $widgetObj->getUserDefinedwidgetList();
-        $artcatg = KC\Repository\Articlecategory:: getartCategories();
+        $this->view->widgetList = $widgetObj->getUserDefinedWidgetList();
+        $this->view->widgetListUserDefined = $widgetObj->getUserDefinedWidgetList();
+        $artcatg = KC\Repository\ArticleCategory::getartCategories();
         $this->view->artcategory = $artcatg['aaData'];
-
         $entityManagerUser  = \Zend_Registry::get('emUser');
         if (\Auth_StaffAdapter::hasIdentity()) {
             $this->view->roleId = \Zend_Auth::getInstance()->getIdentity()->users->id;
@@ -80,7 +79,7 @@ class Admin_PageController extends Zend_Controller_Action
         $this->view->pageattr = $pageattrObj->getPageAttributes();
 
         $widgetObj = new KC\Repository\Widget();
-        $this->view->widgetList = $widgetObj->getDefaultwidgetList();
+        $this->view->widgetList = $widgetObj->getUserDefinedWidgetList();
         $this->view->widgetListUserDefined = $widgetObj->getUserDefinedwidgetList();
         
         $this->view->pageId = $params['id'];
@@ -91,7 +90,7 @@ class Admin_PageController extends Zend_Controller_Action
     
         $pageAttributeObj = new KC\Repository\PageAttribute();
         $this->view->pageAttributes = $pageAttributeObj->getPageAttributes();
-        $this->view->widgetList = KC\Repository\Widget::getDefaultwidgetList();
+        $this->view->widgetList = KC\Repository\Widget::getUserDefinedWidgetList();
         $this->view->widgetListUserDefined = KC\Repository\Widget::getUserDefinedwidgetList();
 
         $artcatg = KC\Repository\Articlecategory:: getartCategories();

@@ -78,7 +78,11 @@ $articleImage = PUBLIC_PATH_CDN.$articleDetails['articleImage']['path'].$article
             <?php echo $authorDetails. $savingGuides. $discussion;?>
         </div>
         <aside id="sidebar" class="col-md-4 col-sm-4">
-            <?php echo $topPopularOffers . $recentlyAddedArticles;?>
+            <?php 
+            $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+            $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+            echo $frontendSidebarHelper->sidebarWidgets('plus-page', $this);
+            ?>
         </aside>    
     </div>
 </main>

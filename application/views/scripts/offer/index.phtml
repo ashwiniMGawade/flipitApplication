@@ -6,7 +6,6 @@ echo $pageHeader->getCategoryOrPageHeader(
     $pageHeader->getCategoryOrPageHeaderImage($this->pageHeaderImage)
 );
 $storeViewPartialPath = 'store/';
-
 $newestOffers = ' <div class = "no-record">'.$this->translate('No record found') .'</div>';
 if (count($this->offersWithPagination)>0) {
 $newestOffers = $this->partial(
@@ -20,19 +19,17 @@ $newestOffers = $this->partial(
             'widgetPosition'=>$this->widgetPosition
         )
     );
-} 
+}
 ?>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
      <?php echo $newestOffers; ?>  
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
-        <?php
-        $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-        echo $this->esi($this->locale.'signup/signupwidget?shopId='
-            .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
-        $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
-        echo $frontendSidebarHelper->popularShopWidget();
-        ?>
+    <?php
+    $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+    $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+    echo $frontendSidebarHelper->sidebarWidgets('newest-code', $this);
+    ?>
     </aside>
 </div>

@@ -118,7 +118,7 @@ function callToPermanentDelete(){
 				return false;
 			}
 			else{
-				window.location.href = $('input#editedWidgetId').val()+"/act/delete";
+				window.location.href = $('input#editedWidgetId').val()+"/delete/delete";
 			}
 			
 		});

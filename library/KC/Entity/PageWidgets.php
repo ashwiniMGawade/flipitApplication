@@ -4,13 +4,13 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="editor_ballon_text")
+ * @ORM\Table(name="page_widgets")
  */
-class EditorBallonText
+class PageWidgets
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer", length=11)
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
@@ -18,7 +18,12 @@ class EditorBallonText
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $ballontext;
+    protected $widget_type;
+
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=true)
+     */
+    protected $position;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -36,10 +41,10 @@ class EditorBallonText
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="ballontext")
-     * @ORM\JoinColumn(name="shopid", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Widget", inversedBy="pageWidgets")
+     * @ORM\JoinColumn(name="widgetId", referencedColumnName="id")
      */
-    protected $shop;
+    protected $widget;
 
     public function __get($property)
     {

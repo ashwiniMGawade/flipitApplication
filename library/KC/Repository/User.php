@@ -221,11 +221,6 @@ class User extends \KC\Entity\User
 
         $entityManagerUser->persist($addUser);
         $entityManagerUser->flush();
-
-        if (!empty($params['content'])) {
-            self::saveEditorBallonText($params, $addUser->getId(), 'add');
-        }
-
         if (isset($params['websites'])) {
             foreach ($params['websites'] as $web) {
                 $website = new \KC\Entity\refUserWebsite();
@@ -433,11 +428,6 @@ class User extends \KC\Entity\User
 
         $entityManagerUser->persist($updateUser);
         $entityManagerUser->flush();
-
-        if (!empty($params['content'])) {
-            self::saveEditorBallonText($params, $updateUser->getId(), 'add');
-        }
-
         $fullName = $params['firstName'] . " " . $params['lastName'];
         // update session if profile is being updated
         if ($updateUser->getId() == \Auth_StaffAdapter::getIdentity()->id) {
@@ -1082,28 +1072,5 @@ class User extends \KC\Entity\User
         $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 1;');
         unset($databaseConnection);
         return true;
-    }
-
-
-    public static function saveEditorBallonText($params, $userId, $type)
-    {
-        $entityManagerUser  = \Zend_Registry::get('emUser');
-        if ($type == 'update') {
-            $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\EditorBallonText', 'e')
-                ->where("e.userid = ".$userId)
-                ->getQuery()->execute();
-        }
-        foreach ($params['content'] as $key => $content) {
-            if (!empty($params['content'][$key])) {
-                $ballonText = new \KC\Entity\EditorBallonText();
-                $ballonText->userid = $userId;
-                $ballonText->ballontext = BackEnd_Helper_viewHelper::stripSlashesFromString($params['content'][$key]);
-                $ballonText->deleted = 0;
-                $ballonText->save();
-                $entityManagerUser->persist($ballonText);
-                $entityManagerUser->flush();
-            }
-        }
     }
 }

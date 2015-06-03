@@ -89,7 +89,7 @@
             background-image: linear-gradient(to bottom,#48A5E1,#3086BF);
             border-radius: 3px;
             border: 0;
-            padding: 10px 20px 11px;
+            padding: 10px 14px 11px;
             box-shadow: 0 0 0 1px #2882BE;
             -webkit-box-shadow: 0 0 0 1px #2882BE;
             color: #fff;
@@ -98,6 +98,7 @@
             display: block;
             line-height: 18px;
             border-top: 1px solid #7FC1EB;
+            width:205px;
             &:hover{
                 background-color: #65b5e8;
                 background-image: -webkit-linear-gradient(top, #65b5e8, #398dc5);
@@ -223,7 +224,24 @@
             }
         }
     }
-
+    .top-header-block{
+        min-height: 30px;
+        padding: 0 20px;
+        .icon{
+            background: url(../../images/sprite.png) no-repeat;
+            background-position: -247px -114px; 
+            width: 32px;
+            height: 32px;
+            margin: 0 15px 0 0;
+        }
+        @media only screen and (max-width: 767px){
+            .icon{
+                img{
+                    width: auto;
+                }
+            }
+        }
+    }
     .section .block{
         &.deal-less {
             .info-area .info .text-info.date{

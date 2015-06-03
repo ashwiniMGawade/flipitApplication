@@ -17,17 +17,22 @@ echo $this->translate('Check out these similar shops for more discounts');
 <?php
 if (!empty($this->similarShopsAndSimilarCategoryShops)) {
     foreach ($this->similarShopsAndSimilarCategoryShops as $shop) {
-        $shopLogoName = isset($shop['category']['logo']['name']) ? $shop['category']['logo']['name'] : $shop['name'];
-        $shopLogoPath = isset($shop['category']['logo']['path']) ? $shop['category']['logo']['path'] : $shop['path'];
-        $shopPermalink = isset($shop['category']['permaLink']) ? $shop['category']['permaLink'] : $shop['permaLink'];
-        $shopName = isset($shop['category']['name']) ? $shop['category']['name'] : $shop['shopName'];
-        printf(
-            '<li><a href="%s"><span class="similar-shops-images" data-src="%s">%s</span></a></li>',
-            HTTP_PATH_LOCALE  . $shopPermalink,
-            PUBLIC_PATH_CDN . ltrim($shopLogoPath, "/") . 'thum_small_'. $shopLogoName,
-            $shopName.' '.FrontEnd_Helper_viewHelper::__form('form_discount vouchers')
-        );
-  
+        if (!empty($shop)) {
+            $shopName = isset($shop['name']) ? $shop['name'] : '';
+            $shopPath = isset($shop['path']) ? $shop['path'] : '';
+            $shopsPermalink = isset($shop['permaLink']) ? $shop['permaLink'] : '';
+            $shopLogoName = isset($shop['category']['logo']['name']) ? $shop['category']['logo']['name'] : $shopName;
+            $shopLogoPath = isset($shop['category']['logo']['path']) ? $shop['category']['logo']['path'] : $shopPath;
+            $shopPermalink = isset($shop['category']['permaLink']) ? $shop['category']['permaLink'] : $shopsPermalink;
+            $similarShopName = isset($shop['shopName']) ? $shop['shopName'] : '';
+            $shopName = isset($shop['category']['name']) ? $shop['category']['name'] : $similarShopName;
+            printf(
+                '<li><a href="%s"><span class="similar-shops-images" data-src="%s">%s</span></a></li>',
+                HTTP_PATH_LOCALE  . $shopPermalink,
+                PUBLIC_PATH_CDN . ltrim($shopLogoPath, "/") . 'thum_small_'. $shopLogoName,
+                $shopName.' '.FrontEnd_Helper_viewHelper::__form('form_discount vouchers')
+            );
+        } 
     }
 }
 ?>

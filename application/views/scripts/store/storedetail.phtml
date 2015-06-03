@@ -94,45 +94,15 @@ if($this->profileImage['addtosearch'] == 1):
     endif;
 endif;
 
-$howToUseGuidePermalink = "how-to/".$this->currentStoreInformation[0]['permaLink'];
-if (!empty($this->currentStoreInformation[0]['howtoguideslug'])) {
-    $howToUseGuidePermalink = 
-        $this->currentStoreInformation[0]['permaLink']. '/'
-        . $this->currentStoreInformation[0]['howtoguideslug'];
-}
 $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
 $offersCount = count($this->offers);
 
-$actualUrlWithoutDoubleSlash = explode("//", $this->currentStoreInformation[0]['actualUrl']);
-if (isset($actualUrlWithoutDoubleSlash[1])):
-    $actualUrl = $actualUrlWithoutDoubleSlash[1];
-else:
-    $actualUrl = $this->currentStoreInformation[0]['actualUrl'];
-endif;
-
 $frontShopHeaderHelper = new FrontEnd_Helper_ShopHeaderPartialFunctions();
-$disqusReplyCounter = $frontShopHeaderHelper->getDisqusReplyCounter($this->currentStoreInformation[0]);
 $headerBlock = $frontShopHeaderHelper->getShopHeader(
     $this->currentStoreInformation[0],
     $message = 'storeDetail',
     $offerTitle = 'storeDetail'
 );
-
-$shopEditor = '';
-if($this->shopEditor != null):
-    $shopEditor = $this->partial(
-        $storeViewPartialPath.'_storeEditor.phtml',
-        array(
-           'shopEditor' => array(
-                $this->shopEditor
-            ),
-           'shop' => $this->currentStoreInformation[0],
-           'howToUseGuidePermalink'=>$howToUseGuidePermalink,
-           'actualUrl'=>$actualUrl,
-           'disqusReplyCounter' => $disqusReplyCounter
-        )
-    );
-endif;
 
 $sixShopReasons = '';
 if (!empty($this->sixShopReasons)) {
@@ -185,6 +155,16 @@ if (isset($this->currentStoreInformation[0]['futurecode']) && $this->currentStor
         );
     }
 }
+
+$featuredTextMessage = '';
+if (empty($futureCodeMessage)) {
+    $featuredTextMessage = $this->partial(
+        $storeViewPartialPath.'_featuredText.phtml',
+        array(
+            'shopInfo' => $this->currentStoreInformation[0]
+        )
+    );
+}
 ?>
 <input type="hidden" name="currentShop" id="currentShop" 
 value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
@@ -208,7 +188,18 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
     <div id="content" class ="col-md-8 col-sm-8">
     <?php 
     echo $noMoneyNocodeMessage;
+    if (!empty($noMoneyNocodeMessage)) {
+        ?>
+        <section class="section">
+        <?php
+        echo $this->esi($this->locale.'signup/signupwidgetlarge?shopId='.$this->currentStoreInformation[0]['id']
+                .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage=');
+        ?>
+        </section>
+    <?php
+    }
     echo $futureCodeMessage;
+    echo $featuredTextMessage;
     echo $offers;
     echo $sixShopReasons;
     echo $similarOffersHeader;
@@ -222,23 +213,9 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4">
     <?php
-    echo $this->partial(
-        $storeViewPartialPath. '_shop-sidebar.phtml',
-        array(
-            'shopEditor' => $shopEditor,
-            'latestShopUpdates'=> $this->latestShopUpdates,
-            'shopChain' => $this->shopChain,
-            'shop' => $this->currentStoreInformation[0],
-            'popularStoresList'=> $this->popularStoresList
-            )
-    );
-    if ($this->currentStoreInformation[0]['showSignupOption']) :
-        echo $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
-            .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
-    endif;
+    $widgetType = $this->currentStoreInformation[0]['affliateProgram'] == 1 ? 'money-shops' : "no-money-shops";
     $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
-    echo $frontendSidebarHelper->popularCategoryWidget();
-    echo $this->partial('socialcode/social-code.phtml', array('zendForm' => $this->zendForm));
+    echo $frontendSidebarHelper->sidebarWidgets($widgetType, $this);
     ?>
     </aside>
 </div>
