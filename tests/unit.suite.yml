@@ -6,5 +6,4 @@ modules:
     enabled: [ZF1, Doctrine2, Asserts, UnitHelper]
     config:
         Doctrine2:
-            cleanup: true,
-            populate: true
+            cleanup: true

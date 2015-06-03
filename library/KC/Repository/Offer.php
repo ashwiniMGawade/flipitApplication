@@ -329,41 +329,40 @@ class Offer Extends \KC\Entity\Offer
     }
 
     public static function getTopCouponCodes($shopCategories, $limit = 5)
-    {
+    {   
         $currentDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select(
-            'p,o,s,terms,img'
+            'p'
         )
-        ->from('KC\Entity\PopularCode', 'p')
-        ->leftJoin('p.popularcode', 'o')
-        ->leftJoin('o.shopOffers', 's')
-        ->leftJoin('s.logo', 'img')
-        ->leftJoin('o.offertermandcondition', 'terms')
-        ->where('o.deleted = 0')
-        ->andWhere(
-            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
-            cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
-        )
-        ->andWhere('s.deleted = 0')
-        ->andWhere('o.offline = 0');
+        ->from('KC\Entity\PopularCode', 'p');
+        // ->leftJoin('p.popularcode', 'o')
+        // ->leftJoin('o.shopOffers', 's')
+        // ->leftJoin('s.logo', 'img')
+        // ->leftJoin('o.offertermandcondition', 'terms')
+        // ->where('o.deleted = 0')
+        // ->andWhere(
+        //     "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
+        //     cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
+        // )
+        // ->andWhere('s.deleted = 0')
+        // ->andWhere('o.offline = 0');
 
         if (!empty($shopCategories)) {
-            $query = $query->leftJoin('s.categoryshops', 'sc')
-            ->andWhere($entityManagerUser->expr()->in('sc.shop', $shopCategories));
+            // $query = $query->leftJoin('s.categoryshops', 'sc')
+            // ->andWhere($entityManagerUser->expr()->in('sc.shop', $shopCategories));
         }
         $topCouponCodes = $query
-            ->andWhere('s.status = 1')
-            ->andWhere('o.endDate >'."'".$currentDate."'")
-            ->andWhere('o.startDate <='."'".$currentDate."'")
-            ->andWhere("o.discountType = 'CD'")
-            ->andWhere('o.userGenerated = 0')
-            ->andWhere("o.Visability != 'MEM'")
-            ->orderBy('p.position', 'ASC')
-            ->setMaxResults($limit)
+            // ->andWhere('s.status = 1')
+            // ->andWhere('o.endDate >'."'".$currentDate."'")
+            // ->andWhere('o.startDate <='."'".$currentDate."'")
+            // ->andWhere("o.discountType = 'CD'")
+            // ->andWhere('o.userGenerated = 0')
+            // ->andWhere("o.Visability != 'MEM'")
+            // ->orderBy('p.position', 'ASC')
+            // ->setMaxResults($limit)
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
         return $topCouponCodes;
     }
 

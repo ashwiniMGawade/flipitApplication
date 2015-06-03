@@ -18,19 +18,24 @@ class TopOfferTest extends \Codeception\TestCase\Test
 
     public function testTopOffers()
     {
-        $offerRepositoryMock = $this->createOffersRepository();
-        $offerListing = new Application_Service_Offer_TopOffer($offerRepositoryMock, 20);
-        $topOffers = $offerListing->execute(20);
-        $this->tester->assertEquals(20, count($topOffers));
-    }
-
-    private function createOffersRepository()
-    {
-        $offerRepository = $this->getMock('KC\Repository\Offer');
-        //$offerEntity = new KC\Repository\Offer;
-        $offerRepository::staticExpects($this->once())
-            ->method('getTopCouponCodes')
-            ->will($this->returnValue('test'));
-        return $offerRepository;
+        $entityManager = \Codeception\Module\Doctrine2::$em;
+        $this->tester->persistEntity(
+            new KC\Entity\PopularCode(),
+            array(
+                'type' => 'MN',
+                'position' => 1,
+                'status' => 1,
+                'popularcode' => $entityManager->find('KC\Entity\Offer', 1),
+                'deleted' => 0,
+                'created_at' => new \DateTime('now'),
+                'updated_at' => new \DateTime('now'),
+            )
+        );
+        $offerRepository = new KC\Repository\Offer;
+        $topOffers = $offerRepository->getTopCouponCodes(array(), 20);
+        $test = $this->tester->grabFromRepository('KC\Entity\Offer', 'created_at', array('deleted' => 0));
+        print_r($test); die('ss');
+        //$offerListing = new Application_Service_Offer_TopOffer($offerRepository, 20);
+        $this->tester->assertEquals(1, count($topOffers));
     }
 }

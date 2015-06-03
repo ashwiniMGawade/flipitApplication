@@ -8,8 +8,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     name="offer",
  *     indexes={
  *         @ORM\Index(name="shopid_idx", columns={"shopId"}),
- *         @ORM\Index(name="ind_offer_shenex", columns={"shopId","endDate","exclusiveCode"}),
- *         @ORM\Index(name="tilesId", columns={"tilesId"})
+ *         @ORM\Index(name="ind_offer_shenex", columns={"shopId","endDate","exclusiveCode"})
  *     },
  *     uniqueConstraints={@ORM\UniqueConstraint(name="offerlogoid", columns={"offerlogoid"})}
  * )
@@ -172,11 +171,6 @@ class Offer
      * @ORM\Column(type="integer", length=11, nullable=false)
      */
     protected $offline;
-
-    /**
-     * @ORM\Column(type="integer", length=8, nullable=true)
-     */
-    protected $tilesId;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
