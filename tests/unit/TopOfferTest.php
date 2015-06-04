@@ -18,24 +18,42 @@ class TopOfferTest extends \Codeception\TestCase\Test
 
     public function testTopOffers()
     {
+        $this->persistPopularCodes(20);
+        $topOffers = $this->getTopOffers();
+        $this->tester->assertEquals(10, $topOffers);
+    }
+
+    public function testTopOffersWithLessPopularCodes()
+    {
+        $this->persistPopularCodes(4);
+        $topOffers = $this->getTopOffers();
+        $this->tester->assertEquals(10, $topOffers);
+    }
+
+    private function persistPopularCodes($count)
+    {
         $entityManager = \Codeception\Module\Doctrine2::$em;
-        $this->tester->persistEntity(
-            new KC\Entity\PopularCode(),
-            array(
-                'type' => 'MN',
-                'position' => 1,
-                'status' => 1,
-                'popularcode' => $entityManager->find('KC\Entity\Offer', 1),
-                'deleted' => 0,
-                'created_at' => new \DateTime('now'),
-                'updated_at' => new \DateTime('now'),
-            )
-        );
+        for ($i=1; $i <= $count; $i++) {
+            $this->tester->persistEntity(
+                new KC\Entity\PopularCode(),
+                array(
+                    'type' => 'MN',
+                    'position' => $i,
+                    'status' => 1,
+                    'popularcode' => $entityManager->find('KC\Entity\Offer', $i),
+                    'deleted' => 0,
+                    'created_at' => new \DateTime('now'),
+                    'updated_at' => new \DateTime('now'),
+                )
+            );
+        }
+    }
+
+    private function getTopOffers()
+    {
         $offerRepository = new KC\Repository\Offer;
-        $topOffers = $offerRepository->getTopCouponCodes(array(), 20);
-        $test = $this->tester->grabFromRepository('KC\Entity\Offer', 'created_at', array('deleted' => 0));
-        print_r($test); die('ss');
-        //$offerListing = new Application_Service_Offer_TopOffer($offerRepository, 20);
-        $this->tester->assertEquals(1, count($topOffers));
+        $offerListing = new Application_Service_Offer_TopOffer($offerRepository, 10);
+        $topOffers = $offerListing->execute(10);
+        return count($topOffers);
     }
 }

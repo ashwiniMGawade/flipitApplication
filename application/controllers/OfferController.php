@@ -49,7 +49,7 @@ class OfferController extends Zend_Controller_Action
         );
         $offers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'20_topOffers_list',
-            (array)array('function' => 'Application_Service_Offer_TopOffer::getTopOffers', 'parameters' => array(20)
+            (array)array('function' => 'Application_Service_Factory::topOffers', 'parameters' => array(20)
             ),
             ''
         );

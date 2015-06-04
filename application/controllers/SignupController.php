@@ -188,7 +188,7 @@ class SignupController extends Zend_Controller_Action
                         'content' => $this->view->partial(
                             'emails/emailLayout.phtml',
                             array(
-                                'topOffers' => \KC\Repository\Offer::getTopOffers(5),
+                                'topOffers' => Application_Service_Factory::topOffers(5),
                                 'mailType' => 'welcome',
                                 'firstName' => $visitorDetails['firstName'],
                                 'testStatus' => 'doc2'

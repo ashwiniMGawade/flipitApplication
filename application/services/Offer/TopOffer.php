@@ -13,7 +13,7 @@ class Application_Service_Offer_TopOffer extends Application_Service_Offer_Offer
     public function execute($limit)
     {
         $topCouponCodes = $this->offerRepository->getTopCouponCodes(array(), $limit);
-        print_r($topCouponCodes); die;
+
         if (count($topCouponCodes) < $limit) {
             $totalViewCountOffersLimit = $limit - count($topCouponCodes);
             $voucherCodes = $this->getOffersByType($limit, $totalViewCountOffersLimit);
@@ -40,7 +40,7 @@ class Application_Service_Offer_TopOffer extends Application_Service_Offer_Offer
     {
         if (!empty($topCouponCodes)) {
             foreach ($voucherCodes as $topVoucherCodeValue) {
-                $topCouponCodes[$topVoucherCodeValue['shopOffers']['id']] = array(
+                $topCouponCodes[] = array(
                     'id'=> $topVoucherCodeValue['shopOffers']['id'],
                     'permaLink' => $topVoucherCodeValue['shopOffers']['permaLink'],
                     'popularcode' => $topVoucherCodeValue

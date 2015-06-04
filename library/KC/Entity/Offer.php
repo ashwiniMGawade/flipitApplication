@@ -183,7 +183,7 @@ class Offer
     protected $totalViewcount;
 
     /**
-     * @ORM\Column(type="decimal", length=16, nullable=true, scale=4)
+     * @ORM\Column(type="integer", length=11, nullable=true)
      */
     protected $popularityCount;
 

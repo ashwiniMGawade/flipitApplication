@@ -78,35 +78,37 @@ class fixtures
         $this->entityManager->persist($image);
         $this->entityManager->flush();
 
-        $shop = new KC\Entity\Shop();
-        $shop->name = 'acceptance shop';
-        $shop->permalink = 'acceptance-shop';
-        $shop->title = 'acceptance shop title';
-        $shop->subTitle = 'acceptance shop title';
-        $shop->contentmanagerid = '1';
-        $shop->affliateprogram = 1;
-        $shop->refurl = 'http://www.kortingscode.nl/';
-        $shop->actualurl = 'http://www.kortingscode.nl/';
-        $shop->howToUse = '1';
-        $shop->howtoTitle = 'acceptance shop title';
-        $shop->howtoSubtitle = 'acceptance shop title';
-        $shop->howtoMetaTitle = 'acceptance shop title';
-        $shop->howtoMetaDescription = 'acceptance shop title';
-        $shop->howtousesmallimageid = 1;
-        $shop->howtousebigimageid = 2;
-        $shop->status = 1;
-        $shop->usergenratedcontent = 0;
-        $shop->deleted = 0;
-        $shop->created_at = new \DateTime('now');
-        $shop->updated_at = new \DateTime('now');
-        $shop->displayExtraProperties = 0;
-        $shop->showSignupOption = 0;
-        $shop->addtosearch = 0;
-        $shop->showSimliarShops = 0;
-        $shop->showChains = 0;
-        $shop->strictConfirmation = 0;
-        $this->entityManager->persist($shop);
-        $this->entityManager->flush();
+        for ($i=1; $i <= 20; $i++) {
+            $shop = new KC\Entity\Shop();
+            $shop->name = 'acceptance shop'.$i;
+            $shop->permalink = 'acceptance-shop'.$i;
+            $shop->title = 'acceptance shop title'.$i;
+            $shop->subTitle = 'acceptance shop title';
+            $shop->contentmanagerid = '1';
+            $shop->affliateprogram = 1;
+            $shop->refurl = 'http://www.kortingscode.nl/';
+            $shop->actualurl = 'http://www.kortingscode.nl/';
+            $shop->howToUse = '1';
+            $shop->howtoTitle = 'acceptance shop title';
+            $shop->howtoSubtitle = 'acceptance shop title';
+            $shop->howtoMetaTitle = 'acceptance shop title';
+            $shop->howtoMetaDescription = 'acceptance shop title';
+            $shop->howtousesmallimageid = 1;
+            $shop->howtousebigimageid = 2;
+            $shop->status = 1;
+            $shop->usergenratedcontent = 0;
+            $shop->deleted = 0;
+            $shop->created_at = new \DateTime('now');
+            $shop->updated_at = new \DateTime('now');
+            $shop->displayExtraProperties = 0;
+            $shop->showSignupOption = 0;
+            $shop->addtosearch = 0;
+            $shop->showSimliarShops = 0;
+            $shop->showChains = 0;
+            $shop->strictConfirmation = 0;
+            $this->entityManager->persist($shop);
+            $this->entityManager->flush();
+        }
 
         $refShopCategory = new KC\Entity\RefShopCategory();
         $refShopCategory->shopid = 'jpg';
@@ -137,27 +139,37 @@ class fixtures
         $routePermalink->updated_at = new \DateTime('now');
         $this->entityManager->flush();
 
-        $offer = new KC\Entity\Offer();
-        $offer->shopOffers = $shop;
-        $offer->couponCode = 'CD';
-        $offer->title = 'test offer';
-        $offer->Visability = 'DE';
-        $offer->discountType = 'CD';
-        $offer->startDate = new \DateTime('now');
-        $offer->endDate = new \DateTime('now');
-        $offer->authorId = 1;
-        $offer->shopExist = 1;
-        $offer->couponCodeType = 'GN';
-        $offer->discountvalueType = 2;
-        $offer->maxcode = 0;
-        $offer->userGenerated = 0;
-        $offer->approved = 0;
-        $offer->offline = 0;
-        $offer->deleted = 0;
-        $offer->created_at = new \DateTime('now');
-        $offer->updated_at = new \DateTime('now');
-        $this->entityManager->persist($offer);
-        $this->entityManager->flush();
+        $futureDate = new \DateTime();
+        $futureDate->modify('+1 week');
+        $futureDate = $futureDate->format('Y-m-d H:i:s');
+
+        $pastDate = new \DateTime();
+        $pastDate->modify('-1 week');
+        $pastDate = $pastDate->format('Y-m-d H:i:s');
+
+        for ($i=1; $i <= 20; $i++) {
+            $offer = new KC\Entity\Offer();
+            $offer->shopOffers = $this->entityManager->find('KC\Entity\Shop', $i);
+            $offer->couponCode = 'CD';
+            $offer->title = 'test offer'.$i;
+            $offer->Visability = 'DE';
+            $offer->discountType = 'CD';
+            $offer->startDate = new \DateTime($pastDate);
+            $offer->endDate = new \DateTime($futureDate);
+            $offer->authorId = 1;
+            $offer->shopExist = 1;
+            $offer->couponCodeType = 'GN';
+            $offer->discountvalueType = 2;
+            $offer->maxcode = 0;
+            $offer->userGenerated = 0;
+            $offer->approved = 0;
+            $offer->offline = 0;
+            $offer->deleted = 0;
+            $offer->created_at = new \DateTime('now');
+            $offer->updated_at = new \DateTime('now');
+            $this->entityManager->persist($offer);
+            $this->entityManager->flush();
+        }
 
         $offerTiles = new KC\Entity\OfferTiles();
         $offerTiles->label = 'test';
