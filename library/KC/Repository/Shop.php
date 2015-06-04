@@ -913,8 +913,8 @@ class Shop extends \KC\Entity\Shop
         $shopInfo->notes =\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNotes']);
     #   $shopInfo->deepLink =\BackEnd_Helper_viewHelper::stripSlashesFromString (@$shopDetail['shopDeepLinkUrl']);
     #   $shopInfo->deepLinkStatus =\BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['deepLinkStatus']);
-        $shopInfo->refUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopRefUrl']);
-        $shopInfo->actualUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopActualUrl']);
+        $shopInfo->refUrl = self::removeTargetKeyword(\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopRefUrl']));
+        $shopInfo->actualUrl = self::removeTargetKeyword(\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopActualUrl']));
         $shopInfo->affliateProgram = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['affiliateProgStatus']);
         $shopInfo->title =\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopTitle']);
         $shopInfo->subTitle =\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopSubTitle']);
@@ -1352,6 +1352,12 @@ class Shop extends \KC\Entity\Shop
         } catch (Exception $e) {
             return false;
         }
+    }
+
+    public static function removeTargetKeyword($url)
+    {
+        $refinedUrl = substr($url, 0, strpos($url, 'target'));
+        return trim($refinedUrl, '"');
     }
 
     public function uploadImage($file, $path)
