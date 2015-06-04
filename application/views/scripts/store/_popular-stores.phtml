@@ -21,7 +21,7 @@ foreach ($this->popularStores as $popularStore) :
         $popularStoreImage =
     		PUBLIC_PATH_CDN
     		.ltrim($popularStore['popularshops']['logo']['path'], "/")
-    		."thum_small_".$popularStore['popularshops']['logo']['name'];
+    		."thum_medium_".$popularStore['popularshops']['logo']['name'];
     else :
         $popularStoreImage = HTTP_PATH . "public/images/NoImage/storeLogo100_50.jpg";
     endif;

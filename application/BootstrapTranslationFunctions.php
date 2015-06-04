@@ -85,20 +85,51 @@ class BootstrapTranslationFunctions
 
         \Zend_Locale::setDefault('en_US');
         $locale = new \Zend_Locale(Zend_Registry::get('Zend_Locale'));
-        $poTrans = new \Zend_Translate(array('adapter' => 'gettext', 'locale'  => $locale, 'disableNotices' => true));
-        self::addTranslationFileInRegistry($poTrans, $transSettings, 'language/fallback/frontend_php', $locale);
-        self::addTranslationFileInRegistry($poTrans, $transSettings, 'language/backend_php', $locale);
-        self::getSavedTranslationFileAndSetInRegistry($poTrans, $locale);
-        self::addTranslationFileInRegistry($poTrans, $transSettings, 'language/email', $locale);
-        self::addTranslationFileInRegistry($poTrans, $transSettings, 'language/form', $locale);
-        self::addTranslationFileInRegistry($poTrans, $transSettings, 'language/po_links', $locale);
-        \Zend_Registry::set('Zend_Locale', $locale);
-        \Zend_Registry::set('Zend_Translate', $poTrans);
+        $cache = new Application_Service_Translation_Cache();
+        if (!$cache->cacheExists($locale)) {
+            self::setGetTextTranslations($locale, $cache, $transSettings);
+        } else {
+            self::setArrayTranslations($locale, $cache);
+        }
     }
 
-    public static function addTranslationFileInRegistry($poTrans, $transSettings, $fileName, $locale)
+    private static function setGetTextTranslations($locale, $cache, $transSettings)
     {
-        $poTrans->addTranslation(
+        $poTranslations = new \Zend_Translate(array('adapter' => 'gettext', 'locale'  => $locale, 'disableNotices' => true));
+        self::addTranslationFileInRegistry($poTranslations, $transSettings, 'language/fallback/frontend_php', $locale);
+        self::addTranslationFileInRegistry($poTranslations, $transSettings, 'language/backend_php', $locale);
+        self::getSavedTranslationFileAndSetInRegistry($poTranslations, $locale);
+        self::addTranslationFileInRegistry($poTranslations, $transSettings, 'language/email', $locale);
+        self::addTranslationFileInRegistry($poTranslations, $transSettings, 'language/form', $locale);
+        self::addTranslationFileInRegistry($poTranslations, $transSettings, 'language/po_links', $locale);
+        \Zend_Registry::set('Zend_Locale', $locale);
+        \Zend_Registry::set('Zend_Translate', $poTranslations);
+        $cache->setCache(serialize($poTranslations->getMessages()), $locale);
+    }
+
+    private static function setArrayTranslations($locale, $cache)
+    {
+        $translations = $cache->getCache($locale);
+        $arrayTranslations = new \Zend_Translate(
+            array(
+                'adapter' => 'array',
+                'locale'  => $locale,
+                'disableNotices' => true
+            )
+        );
+        $arrayTranslations->addTranslation(
+            array(
+                'content' => unserialize($translations),
+                'locale' => $locale
+            )
+        );
+        \Zend_Registry::set('Zend_Locale', $locale);
+        \Zend_Registry::set('Zend_Translate', $arrayTranslations);
+    }
+
+    public static function addTranslationFileInRegistry($poTranslations, $transSettings, $fileName, $locale)
+    {
+        $poTranslations->addTranslation(
             array(
                 'content'   => APPLICATION_PATH.'/../public'.strtolower($transSettings['localePath'])
                 . $fileName . $transSettings['suffix'] . '.mo',
@@ -108,15 +139,15 @@ class BootstrapTranslationFunctions
         return;
     }
 
-    public static function getSavedTranslationFileAndSetInRegistry($poTrans, $locale)
+    public static function getSavedTranslationFileAndSetInRegistry($poTranslations, $locale)
     {
         $translateSession = new \Zend_Session_Namespace('Transl8');
         if (!empty($translateSession->onlineTranslationActivated)) {
             $dbTranslations = self::getDbTranslations($locale);
-            $poTrans->addTranslation($dbTranslations);
+            $poTranslations->addTranslation($dbTranslations);
         } else {
             $csvTranslate = self::getCsvTranslations($locale);
-            $poTrans->addTranslation($csvTranslate);
+            $poTranslations->addTranslation($csvTranslate);
         }
         return;
     }

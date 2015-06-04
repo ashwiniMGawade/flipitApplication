@@ -24,10 +24,9 @@ if (!empty($this->similarShopsAndSimilarCategoryShops)) {
         printf(
             '<li><a href="%s"><span class="similar-shops-images" data-src="%s">%s</span></a></li>',
             HTTP_PATH_LOCALE  . $shopPermalink,
-            PUBLIC_PATH_CDN . ltrim($shopLogoPath, "/") . 'thum_small_'. $shopLogoName,
+            PUBLIC_PATH_CDN . ltrim($shopLogoPath, "/") . 'thum_medium_'. $shopLogoName,
             $shopName.' '.FrontEnd_Helper_viewHelper::__form('form_discount vouchers')
         );
-  
     }
 }
 ?>

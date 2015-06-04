@@ -103,6 +103,7 @@ class PopularShop Extends \KC\Entity\PopularShop
         //call cache function
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_popularShops_list');
         return $flag;
     }
 
@@ -115,6 +116,7 @@ class PopularShop Extends \KC\Entity\PopularShop
                 ->getQuery()->execute();
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_popularShops_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('search_pageHeader_image');
         }
     }
@@ -143,6 +145,7 @@ class PopularShop Extends \KC\Entity\PopularShop
             //call cache function
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_popularShops_list');
             return true ;
         }
         return false ;
@@ -173,6 +176,7 @@ class PopularShop Extends \KC\Entity\PopularShop
             //call cache function
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_popularShops_list');
             return true ;
         }
         return false ;
@@ -310,5 +314,6 @@ class PopularShop Extends \KC\Entity\PopularShop
             }
         }
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_popularShops_list');
     }
 }

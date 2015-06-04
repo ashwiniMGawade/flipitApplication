@@ -114,7 +114,7 @@ class CommonMigrationFunctions
 
     public static function pathToTempExcelFolder($locale)
     {
-        $localePath         = ($locale == 'en') ? '' : $locale.'/';
+        $localePath         = $locale == 'en' ? '' : $locale.'/';
         $pathToExcelFolder  = UPLOAD_EXCEL_TMP_PATH . strtolower($localePath) . 'excels/';
         if(!file_exists($pathToExcelFolder)) mkdir($pathToExcelFolder, 0774, TRUE);
         return $pathToExcelFolder;

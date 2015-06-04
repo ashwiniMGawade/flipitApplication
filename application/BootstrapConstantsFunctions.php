@@ -61,6 +61,8 @@ class BootstrapConstantsFunctions
         defined('UPLOAD_PATH') || define('UPLOAD_PATH', 'images/');
         defined('UPLOAD_IMG_PATH') || define('UPLOAD_IMG_PATH', UPLOAD_PATH . 'upload/');
         defined('UPLOAD_EXCEL_PATH') || define('UPLOAD_EXCEL_PATH', 'excels/');
+        defined('UPLOAD_DATA_FOLDER_EXCEL_PATH') ||
+        define('UPLOAD_DATA_FOLDER_EXCEL_PATH', APPLICATION_PATH. '/../data/');
     }
 
     public static function constantsForFacebookImageAndLocale()

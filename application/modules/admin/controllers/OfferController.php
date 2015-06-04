@@ -1150,15 +1150,13 @@ class Admin_OfferController extends Zend_Controller_Action
      */
     public function exportXlxAction()
     {
-        # set fiel and its translattions
-        $locale = LOCALE != "" ? "-".strtoupper(LOCALE) : "-NL";
-        $file =  UPLOAD_EXCEL_PATH . 'offerList'.$locale.'.xlsx' ;
+        BootstrapConstantsFunctions::constantsUploadAndRootPathForDefaultModule($scriptFileName = '');
+        $localeForFileName = LOCALE != "" ? "-".strtoupper(LOCALE) : "-NL";
+        $localeForFolderName = LOCALE != "" ? LOCALE : "";
+        $file =  UPLOAD_DATA_FOLDER_EXCEL_PATH .$localeForFolderName.'/excels/offerList'.$localeForFileName.'.csv';
         $fileName =  $this->view->translate($file);
-
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-
-        # set reponse headers and body
         $this->getResponse()
         ->setHeader('Content-Disposition', 'attachment;filename=' . basename($fileName))
         ->setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')

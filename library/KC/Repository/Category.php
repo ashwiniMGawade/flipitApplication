@@ -63,10 +63,12 @@ class Category extends \KC\Entity\Category
         if ($numberOfOffers!=0) {
             $query->setMaxResults($numberOfOffers);
         }
-        if ($offerIds != '') {
+        if (!empty($offerIds) && !empty($offerIds['offers'])) {
             $savedCategoryOffersByAdmin = array();
             foreach ($offerIds as $offerId) {
-                $savedCategoryOffersByAdmin[] = $offerId['offers']['id'];
+                if (!empty($offerId['offers'])) {
+                    $savedCategoryOffersByAdmin[] = $offerId['offers']['id'];
+                }
             }
             $commaSepratedOfferIds = implode(',', $savedCategoryOffersByAdmin);
             $query->andWhere($queryBuilder->expr()->notIn('o.id', $commaSepratedOfferIds));

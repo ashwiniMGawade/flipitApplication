@@ -97,7 +97,7 @@ class ViewCount extends \KC\Entity\ViewCount
             $offerViewCountFromCache = \FrontEnd_Helper_viewHelper::getFromCacheByKey($cahceKey);
             $offerViewCount = array(
                 'viewCount'=> intval($offerViewCountFromCache['viewCount']) + 1,
-                'offsetType'=>$offerViewCountFromCache['offsetType']
+                'offsetType'=>isset($offerViewCountFromCache['offsetType']) ? $offerViewCountFromCache['offsetType'] : ''
             );
             \FrontEnd_Helper_viewHelper::setInCache($cahceKey, $offerViewCount);
         }

@@ -45,7 +45,7 @@ foreach ($this->offers as $offer) {
         $offerHolderClass = "";
         $urlToShow = 'javascript:void(0);';
         if ($offer->approved == '1') {
-            $offerClass = "orange-block deal-offer " .$dayleftCss; 
+            $offerClass = "deal-offer " .$dayleftCss; 
             $offerHolderClass = "offer-holder";
             $urlToShow = $offerPartial->getUrlToShow($offer);
         }

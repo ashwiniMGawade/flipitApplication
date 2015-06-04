@@ -66,7 +66,9 @@ $directChapterLinks = $this->partial(
             'artcileDetails' => $articleDetails
         )
 );
-$articleImage = PUBLIC_PATH_CDN.$articleDetails['articleImage']['path'].$articleDetails['articleImage']['name'];
+$artcileImagePath = isset($articleDetails['articleImage']['path']) ? $articleDetails['articleImage']['path'] : '';
+$artcileImageName = isset($articleDetails['articleImage']['name']) ? $articleDetails['articleImage']['name'] : '';
+$articleImage = PUBLIC_PATH_CDN.$artcileImagePath.$artcileImageName;
 ?>
 <main role="main" id="main" class="container">
     <div class="banner-block">
