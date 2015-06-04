@@ -3,6 +3,10 @@ $offer = (object) $this->offerdetail[0][0];
 $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
 $termsAndConditions =  !empty($this->offerdetail[0]['content']) ? $this->offerdetail[0]['content'] : '';
 $daysTillOfferExpires =  $offerPartial->getDaysTillOfferExpires($offer->endDate);
+$expiredOffer = isset($offer->endDate) && is_array($offer->endDate)
+    ? $offer->endDate['date'] < date('Y-m-d')
+    : '';
+
 if ($this->offerImagePath == '') {
     $lightboxContent = $this->partial(
         'offer/_lightBoxPartial.phtml',
@@ -11,31 +15,38 @@ if ($this->offerImagePath == '') {
             'termsAndConditions' => $termsAndConditions,
             'siteImage' => $offerPartial->getSiteLogoforPopup(),
             'couponCode' => $this->couponCode,
-            'urlToShow' => $offerPartial->getUrlToShow($offer)
+            'urlToShow' => $offerPartial->getUrlToShow($offer),
+            'expiredOffer' => $expiredOffer
        )
     );
 } else {
     $lightboxContent = '<img src = "'.$this->offerImagePath.'" alt = "Printable Coupon" title="Printable Coupon">';
 }
+
+$expiredClass = $expiredOffer != '' ? 'expired' : '';
+$expiredSpanClass = $expiredOffer != '' ? 'text-info' : '';
 ?>
 <section id="code-lightbox">
     <div id="popup1" class="lightbox">
-    <a class="glyphicon glyphicon-remove btn-close" onclick="customPopUpClose()"></a>
-        <header class="head">
-            <div class="icon">
-                <img src="<?php echo $this->facebookImage; ?>" 
-                width="176" height="89" alt='<?php echo $offer->shopOffers['name'];?>' title='<?php echo $offer->shopOffers['name'];?>'>
-            </div>
-            <div class="box">
-                <div class="text">
-                    <p><?php echo  $offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires);?></p>
-                    <h3><?php echo $offer->title; ?></h3>
+        <a class="glyphicon glyphicon-remove btn-close" onclick="customPopUpClose()"></a>
+        <div class="popup-expired <?php echo $expiredClass; ?>">
+            <header class="header">
+                <div class="img-area">
+                    <img src="<?php echo $this->facebookImage; ?>" 
+                        width="176" height="89" alt='<?php echo $offer->shopOffers['name'];?>'
+                        title='<?php echo $offer->shopOffers['name'];?>'>
                 </div>
-            </div>
-        </header>
-       <?php
-        echo $lightboxContent;
-       ?> 
+                <div class="textbox">
+                    <span class="<?php echo $expiredSpanClass; ?>">
+                        <p><?php echo  $offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires, $expiredOffer);?></p>
+                    </span>
+                    <h2><?php echo $offer->title; ?></h2>
+                </div>                      
+            </header>
+            <?php
+            echo $lightboxContent;
+            ?>
+        </div>
     </div> 
 </section>
 

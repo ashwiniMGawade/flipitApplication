@@ -166,7 +166,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $className;
     }
 
-    public function getOfferImage($currentOffer, $offersType)
+    public function getOfferImage($currentOffer, $offersType, $expired = '')
     {
         $offerImageDiv = '';
         if ($offersType == 'simple' || $offersType == 'extendedOffer') {
@@ -175,9 +175,9 @@ class FrontEnd_Helper_OffersPartialFunctions
             if ($currentOffer->userGenerated == 1 and $currentOffer->approved == '0') {
                 $offerDiscountImage = HTTP_PATH ."public/images/front_end/box_bg_orange_16.png";
                 $altAttributeText = 'Social code';
-                $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);
+                $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false, $expired);
             } else {
-                $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);
+                $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false, $expired);
             }
         } else {
             $offerDiscountImage = self::getShopLogoForOffer($currentOffer);
@@ -198,15 +198,16 @@ class FrontEnd_Helper_OffersPartialFunctions
             . $currentOffer->shopOffers['logo']['name'];
     }
     
-    public function getImageTag($offerDiscountImage, $altAttributeText, $shopCodeHolder)
+    public function getImageTag($offerDiscountImage, $altAttributeText, $shopCodeHolder, $expired = '')
     {
         $imageTagForOffer = '';
+        $grayScaleClass = isset($expired) && $expired != 'grayscale' ? : '';
         if ($shopCodeHolder) {
             $imageTag ='<img width="130" height="68" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'" 
-            title="'.$altAttributeText.'"/>';
+            title="'.$altAttributeText.'" class="'.$grayScaleClass.'"/>';
             $imageTagForOffer = '<div class="center"><div class="code-holder">' . $imageTag . '</div></div>';
         } else {
-            $imageTagForOffer ='<img class="small-code" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"
+            $imageTagForOffer ='<img class="small-code "'.$grayScaleClass.'" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"
             title="'.$altAttributeText.'"/>';
         }
         return $imageTagForOffer;
@@ -372,7 +373,8 @@ class FrontEnd_Helper_OffersPartialFunctions
         $urlToShow,
         $offerBounceRate,
         $offerAnchorTagContent,
-        $type
+        $type,
+        $expired = ''
     ) {
         $redirectUrl = '';
         switch ($type){
@@ -399,7 +401,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $currentOffer,
                     $urlToShow,
                     $offerBounceRate,
-                    self::getOfferImage($currentOffer, $offerAnchorTagContent),
+                    self::getOfferImage($currentOffer, $offerAnchorTagContent, $expired),
                     self::getCssClassNameForOffer($currentOffer, $offerAnchorTagContent),
                     'offerImage'
                 );
@@ -628,13 +630,16 @@ class FrontEnd_Helper_OffersPartialFunctions
 
     public static function getTotalViewCountOfOffer($viewCount)
     {
-        $totalViewCount = '<span class="used text-info">
-            <span class="text-over">'
-            .$viewCount
-            .' '
-            .FrontEnd_Helper_viewHelper::__translate('codes used')
-            .'</span>
-        </span>';
+        $totalViewCount = '';
+        if (!empty($viewCount) && intval($viewCount) > 20) {
+            $totalViewCount = '<span class="used text-info">
+                <span class="text-over">'
+                .$viewCount
+                .' '
+                .FrontEnd_Helper_viewHelper::__translate('codes used')
+                .'</span>
+            </span>';
+        }
         return $totalViewCount;
     }
 }

@@ -38,7 +38,8 @@ foreach ($this->offers as $offer) {
     $offerClass = "active " . $dayleftCss;
     $offerHolderClass = "offer-holder";
     if ($offer->exclusiveCode == '1') {
-        $offerClass = "orange-block deal-offer ". $dayleftCss;
+        $orangeBlockClass = $expiredOffer != '' ? '' : 'orange-block';
+        $offerClass = $orangeBlockClass." deal-offer ". $dayleftCss;
     }
     if ($offer->userGenerated == '1') {
         $offerClass = "";
@@ -54,8 +55,15 @@ foreach ($this->offers as $offer) {
             FrontEnd_Helper_viewHelper::__translate('This code has been added by one of our users and not by the [websiteName] deal hunters');
         $defaultText = str_replace('[websiteName]', $websiteName, $defaultText);
     }
+
+    $expiredDealClass = '';
+    $imageGrayScaleClass = '';
+    if ($expiredOffer != '') {
+        $expiredDealClass = 'expired-deal';
+        $imageGrayScaleClass = 'grayscale';
+    }
     ?>
-    <article class="block <?php echo $offerClass; ?>">
+    <article class="block <?php echo $offerClass.' '.$expiredDealClass; ?>">
         <div class="holder <?php echo $offerHolderClass; ?>" id="<?php echo $offer->id; ?>">
     <?php 
     echo $offerPartial->getCommonRedirectUrlForOffer(
@@ -63,7 +71,8 @@ foreach ($this->offers as $offer) {
         $urlToShow,
         $offerBounceRate,
         $this->offersType,
-        'offerImage'
+        'offerImage',
+        $expiredOffer
     );
     ?>
             <div class="box">
