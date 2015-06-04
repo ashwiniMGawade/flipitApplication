@@ -12,7 +12,9 @@ class BootstrapDoctrineConnectionFunctions
         $application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
         $frontControllerObject = $application->getOption('resources');
         $config = self::setMemcachedAndProxyClasses($frontControllerObject);
-        $emUser = EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);
+        $emUser = APPLICATION_ENV == 'testing'
+            ? \Codeception\Module\Doctrine2::$em
+            : EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);
         $localSiteDbConnection = strtolower(self::getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData));
         self::setEntityManagerForlocale($doctrineOptions[$localSiteDbConnection]['dsn'], $config);
         Zend_Registry::set('emUser', $emUser);
@@ -51,10 +53,10 @@ class BootstrapDoctrineConnectionFunctions
     public static function setEntityManagerForlocale($dsn, $config)
     {
         $databaseConnectionCredentials = self::getDatabaseCredentials($dsn);
-        $emLocale = EntityManager::create($databaseConnectionCredentials, $config);
-        $enitityManager = \Codeception\Module\Doctrine2::$em;
-        //print_r($enitityManager);
-        Zend_Registry::set('emLocale', $enitityManager);
+        $emLocale = APPLICATION_ENV == 'testing'
+            ? \Codeception\Module\Doctrine2::$em
+            : EntityManager::create($databaseConnectionCredentials, $config);
+        Zend_Registry::set('emLocale', $emLocale);
     }
 
     public static function setDefaultTimezone()
