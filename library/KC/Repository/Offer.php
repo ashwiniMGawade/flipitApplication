@@ -439,6 +439,8 @@ class Offer Extends \KC\Entity\Offer
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shop_expiredOffers'  . $shopId . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'shop_topthreeexpiredoffers'  . $shopId . '_list';
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $shophowtokey = '6_topOffersHowto'  . $shopId . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
         $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $shopId . '_list';
@@ -1310,6 +1312,8 @@ class Offer Extends \KC\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_expiredOffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'shop_topthreeexpiredoffers'  . $u['shopId'] . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
@@ -1360,6 +1364,8 @@ class Offer Extends \KC\Entity\Offer
             $key = '4_shopLatestUpdates'  .$u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_expiredOffers'  . $u['shopId'] . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'shop_topthreeexpiredoffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'extendedTopOffer_of_'.$u['shopId'];
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -1464,6 +1470,8 @@ class Offer Extends \KC\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  . $u['shopId'] . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'shop_topthreeexpiredoffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -2967,7 +2975,8 @@ class Offer Extends \KC\Entity\Offer
 
             $key = 'shop_expiredOffers'  . intval($params['selctedshop']) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-                    
+            $key = 'shop_topthreeexpiredoffers'  . intval($params['selctedshop']) . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'offer_'.$offer_id.'_details';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'futurecode_'.intval($params['selctedshop']).'_shop';
@@ -3336,6 +3345,8 @@ class Offer Extends \KC\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  .intval($params['selctedshop']) . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'shop_topthreeexpiredoffers'  . intval($params['selctedshop']) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'offersAdded_'.intval($params['selctedshop']).'_shop';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
