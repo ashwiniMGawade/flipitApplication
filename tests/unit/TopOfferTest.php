@@ -20,14 +20,18 @@ class TopOfferTest extends \Codeception\TestCase\Test
     {
         $this->persistPopularCodes(20);
         $topOffers = $this->getTopOffers();
-        $this->tester->assertEquals(10, $topOffers);
+        $this->tester->assertEquals(10, count($topOffers));
+        $this->tester->assertEquals('test offer1', $topOffers[0]['title']);
+        $this->tester->assertEquals('acceptance shop1', $topOffers[0]['shopOffers']['name']);
     }
 
     public function testTopOffersWithLessPopularCodes()
     {
         $this->persistPopularCodes(4);
         $topOffers = $this->getTopOffers();
-        $this->tester->assertEquals(10, $topOffers);
+        $this->tester->assertEquals(10, count($topOffers));
+        $this->tester->assertEquals('test offer1', $topOffers[0]['title']);
+        $this->tester->assertEquals('acceptance shop1', $topOffers[0]['shopOffers']['name']);
     }
 
     private function persistPopularCodes($count)
@@ -54,6 +58,6 @@ class TopOfferTest extends \Codeception\TestCase\Test
         $offerRepository = new KC\Repository\Offer;
         $offerListing = new Application_Service_Offer_TopOffer($offerRepository, 10);
         $topOffers = $offerListing->execute(10);
-        return count($topOffers);
+        return $topOffers;
     }
 }
