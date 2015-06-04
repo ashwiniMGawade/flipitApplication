@@ -32,8 +32,8 @@ $connectionParamsLocale = array(
 );
 $em = EntityManager::create($connectionParamsLocale, $config);
 \Codeception\Module\Doctrine2::$em = $em;
-$mdFactory = $em->getMetadataFactory();
-$classes = $mdFactory->getAllMetadata();
+$metaDataFactory = $em->getMetadataFactory();
+$classes = $metaDataFactory->getAllMetadata();
 $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
 $tool->dropDatabase();
 $tool->createSchema($classes);

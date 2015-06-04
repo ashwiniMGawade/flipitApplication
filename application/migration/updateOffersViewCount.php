@@ -21,10 +21,7 @@ class UpdateOffersViewCount
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-                    if ($key == 'en') {
-                        $this->updateOfferViewCount($connection ['dsn'], $key);
-                    }
-                    
+                    $this->updateOfferViewCount($connection ['dsn'], $key);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     echo "\n\n";

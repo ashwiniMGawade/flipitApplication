@@ -3585,22 +3585,27 @@ class Offer extends BaseOffer
 
     public static function updateViewCountsForOffers($viewCounts)
     {
-        Doctrine_Query::create()
-            ->update('Offer')
-            ->set('popularityCount', 0)
-            ->execute();
-
+        self::updatePopularityCount(0);
         if (!empty($viewCounts)) {
             foreach ($viewCounts as $viewCountKey => $viewCountValue) {
                 if (!empty($viewCountValue['id'])) {
-                    Doctrine_Query::create()
-                        ->update('Offer')
-                        ->set('popularityCount', count($viewCountValue['viewcount']))
-                        ->where('id=' .$viewCountValue['id'])
-                        ->execute();
+                    self::updatePopularityCount(count($viewCountValue['viewcount']), $viewCountValue['id']);
                 }
             }
         }
         return true;
+    }
+
+    public static function updatePopularityCount($count, $offerId)
+    {
+        $query = Doctrine_Query::create()
+            ->update('Offer')
+            ->set('popularityCount', $count);
+
+        if ($offerId != '') {
+            $query = $query->where('id=' .$offerId);
+        }
+        
+        $query->execute();
     }
 }

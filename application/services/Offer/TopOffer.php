@@ -40,9 +40,15 @@ class Application_Service_Offer_TopOffer extends Application_Service_Offer_Offer
     {
         if (!empty($topCouponCodes)) {
             foreach ($voucherCodes as $topVoucherCodeValue) {
+                $shopId = isset($topVoucherCodeValue['shopOffers']['id'])
+                    ? $topVoucherCodeValue['shopOffers']['id']
+                    : '';
+                $shopPermalink = isset($topVoucherCodeValue['shopOffers']['permaLink'])
+                    ? $topVoucherCodeValue['shopOffers']['permaLink']
+                    : '';
                 $topCouponCodes[] = array(
-                    'id'=> $topVoucherCodeValue['shopOffers']['id'],
-                    'permaLink' => $topVoucherCodeValue['shopOffers']['permaLink'],
+                    'id'=> $shopId,
+                    'permaLink' => $shopPermalink,
                     'popularcode' => $topVoucherCodeValue
                 );
             }
