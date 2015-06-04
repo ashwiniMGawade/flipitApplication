@@ -22,7 +22,7 @@ class Splash extends \KC\Entity\User\Splash
 
     public function getOfferById($offerId)
     {
-        $offer = \Zend_Registry::get('emLocale')->find('\KC\Entity\User\Offer', $offerId);
+        $offer = \Zend_Registry::get('emLocale')->find('\KC\Entity\Offer', $offerId);
         return $offer;
     }
 

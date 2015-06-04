@@ -26,10 +26,9 @@ class FunctionalHelper extends \Codeception\Module
         $config->setAutoGenerateProxyClasses(true);
         $config->setProxyNamespace('KC\Entity\Proxy');
         $connectionParamsLocale = array(
-            'driver'   => 'pdo_mysql',
-            'user'     => 'root',
-            'password' => 'root',
-            'dbname'   => 'flipit_test'.$databaseType,
+            'driver'   => 'pdo_sqlite',
+            'name'     => 'user',
+            'memory' => true,
         );
         $em = EntityManager::create($connectionParamsLocale, $config);
         \Codeception\Module\Doctrine2::$em = $em;
