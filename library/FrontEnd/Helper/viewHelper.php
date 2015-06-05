@@ -43,9 +43,6 @@ EOD;
             case 'expired':
                 $shopCouponCodes = \KC\Repository\Offer::getExpiredOffers($type, $limit, $shopId);
                 break;
-            case 'similarstoresandsimilarcategoriesoffers':
-                $shopCouponCodes = \KC\Repository\Offer::similarStoresAndSimilarCategoriesOffers($type, $limit, $shopId);
-                break;
             case 'latestupdates':
                 $shopCouponCodes = \KC\Repository\Offer::getLatestUpdates($type, $limit, $shopId);
                 break;

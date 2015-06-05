@@ -136,18 +136,7 @@ class Offer Extends \KC\Entity\Offer
         $expiredOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $expiredOffers;
     }
-    public static function similarStoresAndSimilarCategoriesOffers($type, $limit, $shopId = 0)
-    {
-        $date = date("Y-m-d H:i");
-        $similarShopsOffers = self::getOffersBySimilarShops($date, $limit, $shopId);
-        $similarCategoriesOffers = self::getOffersBySimilarCategories($date, $limit, $shopId);
-        $similarShopsAndSimilarCategoriesOffers = self::mergeSimilarShopsOffersAndSimilarCategoriesOffers(
-            $similarShopsOffers,
-            $similarCategoriesOffers,
-            $limit
-        );
-        return $similarShopsAndSimilarCategoriesOffers;
-    }
+    
     public static function getOffersBySimilarShops($date, $limit, $shopId)
     {
         $similarShopsIds = self::getSimilarShopsIds($shopId);
