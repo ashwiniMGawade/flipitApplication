@@ -18,10 +18,10 @@
         codeBox.addClass("noflash");
     }
 </script>
-<div class="block">
+<div class="form">
     <form role="form">
-    <input type="hidden" name="copiedText" id='copiedText'
-        value='<?php echo FrontEnd_Helper_viewHelper::__form("COPIED");?>'>
+        <input type="hidden" name="copiedText" id='copiedText'
+            value='<?php echo FrontEnd_Helper_viewHelper::__form("COPIED");?>'>
         <fieldset>
             <div id="code-hint"><?php echo $this->translate('Press Ctrl + C to copy the code');?></div>
             <div class="holder">
@@ -43,17 +43,13 @@
         </fieldset>
     </form>
 </div>
-<footer class="bottom">
-    <ul class="view-list">
-        <li>
+<div class="meta">
 <?php
 if ($this->offer->userGenerated ==0 &&  $this->termsAndConditions!='' && $this->termsAndConditions!=null) { ?>
-            <a id="termAndConditionLinkPopup<?php echo $this->offer->id ;?>" 
-                onclick="showPopupTermAndConditions(<?php echo $this->offer->id; ?>)" class="terms"
-                            href="javascript:void(0);"><?php echo $this->translate('Terms &amp; Conditions'); ?> 
-            </a>
-        </li>
-    </ul>
+    <a id="termAndConditionLinkPopup<?php echo $this->offer->id ;?>" 
+        onclick="showPopupTermAndConditions(<?php echo $this->offer->id; ?>)" class="terms"
+                    href="javascript:void(0);"><?php echo $this->translate('Terms &amp; Conditions'); ?> 
+    </a>
     <?php
     if ($this->termsAndConditions!='' && $this->termsAndConditions!=null && $this->extendedOffer =='1') {?>
         &nbsp; | &nbsp;
@@ -61,9 +57,18 @@ if ($this->offer->userGenerated ==0 &&  $this->termsAndConditions!='' && $this->
     }
 }
 ?>
-    <div class="terms-block" id='termAndConditionsPopup<?php echo $this->offer->id ;?>' style = "display:none;">
-        <ol class="num-list">
-            <?php echo $this->termsAndConditions;?>
-        </ol>
-    </div>
-</footer>      
+<?php 
+if ($this->expiredOffer != '') { ?>
+    <span class="text">
+        <?php echo FrontEnd_Helper_viewHelper::__form('form_Deze code is helaas verlopen. Vaak blijken codes nog wel te werken');?>!
+    </span>
+<?php 
+}
+?>
+</div>
+<div class="terms-block info-block" id='termAndConditionsPopup<?php echo $this->offer->id ;?>' style = "display:none;">
+    <ol class="num-list">
+        <?php echo $this->termsAndConditions;?>
+    </ol>
+</div>
+   

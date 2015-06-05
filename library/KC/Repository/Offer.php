@@ -439,6 +439,8 @@ class Offer Extends \KC\Entity\Offer
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shop_expiredOffers'  . $shopId . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'shop_topthreeexpiredoffers'  . $shopId . '_list';
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $shophowtokey = '6_topOffersHowto'  . $shopId . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
         $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $shopId . '_list';
@@ -1109,8 +1111,14 @@ class Offer Extends \KC\Entity\Offer
         return $OfferDetails;
     }
 
-    public static function getAllOfferOnShop($id, $limit = null, $getExclusiveOnly = false, $includingOffline = false, $visibility = false)
-    {
+    public static function getAllOfferOnShop(
+        $id,
+        $limit = null,
+        $getExclusiveOnly = false,
+        $includingOffline = false,
+        $visibility = false,
+        $expired = false
+    ) {
         $nowDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
@@ -1132,10 +1140,19 @@ class Offer Extends \KC\Entity\Offer
         
         $query->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
         ->andWhere('s.id ='. $id)
-        ->andWhere('s.deleted = 0')
-        ->andWhere('o.discountType !='.$entityManagerUser->expr()->literal('NW'))
-        ->orderBy('o.discountType', 'ASC')
-        ->addOrderBy('o.totalViewcount', 'DESC');
+        ->andWhere('s.deleted = 0');
+
+        if ($expired == true) {
+            $query = $query
+                ->andWhere('o.endDate <='."'".$nowDate."'")
+                ->andWhere('o.discountType ='.$entityManagerUser->expr()->literal('CD'))
+                ->addOrderBy('o.endDate', 'DESC');
+        } else {
+            $query = $query
+                ->andWhere('o.discountType !='.$entityManagerUser->expr()->literal('NW'))
+                ->orderBy('o.discountType', 'ASC')
+                ->addOrderBy('o.totalViewcount', 'DESC');
+        }
 
         if ($getExclusiveOnly) {
             $query = $query->andWhere('o.exclusiveCode = 1');
@@ -1295,6 +1312,8 @@ class Offer Extends \KC\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_expiredOffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'shop_topthreeexpiredoffers'  . $u['shopId'] . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
@@ -1345,6 +1364,8 @@ class Offer Extends \KC\Entity\Offer
             $key = '4_shopLatestUpdates'  .$u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_expiredOffers'  . $u['shopId'] . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'shop_topthreeexpiredoffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'extendedTopOffer_of_'.$u['shopId'];
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -1449,6 +1470,8 @@ class Offer Extends \KC\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  . $u['shopId'] . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'shop_topthreeexpiredoffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -2952,7 +2975,8 @@ class Offer Extends \KC\Entity\Offer
 
             $key = 'shop_expiredOffers'  . intval($params['selctedshop']) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-                    
+            $key = 'shop_topthreeexpiredoffers'  . intval($params['selctedshop']) . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'offer_'.$offer_id.'_details';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'futurecode_'.intval($params['selctedshop']).'_shop';
@@ -3321,6 +3345,8 @@ class Offer Extends \KC\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'shop_expiredOffers'  .intval($params['selctedshop']) . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'shop_topthreeexpiredoffers'  . intval($params['selctedshop']) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'offersAdded_'.intval($params['selctedshop']).'_shop';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
