@@ -148,14 +148,48 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         $daysLeftTillOfferGetsLiveCount = '';
         if (!empty($offerInfo) && isset($offerInfo[0]['startDate'])) {
             $offerStartDate = $offerInfo[0]['startDate']->format('Y-m-d');
-            $secondsForStartDate = strtotime($offerStartDate) - time();
-            $daysLeftTillOfferGetsLive = floor($secondsForStartDate / 86400);
-            if ($daysLeftTillOfferGetsLive <= 7) {
-                $daysLeftTillOfferGetsLiveCount = isset($daysLeftTillOfferGetsLive) && $daysLeftTillOfferGetsLive > 1
-                    ? $daysLeftTillOfferGetsLive . ' ' . FrontEnd_Helper_viewHelper::__translate('days')
-                    : $daysLeftTillOfferGetsLive . ' ' . FrontEnd_Helper_viewHelper::__translate('day');
+            $currentDateTime = date('Y-m-d');
+            $currentDateTime = new DateTime($currentDateTime);
+            $offerStartDateTime = new DateTime($offerStartDate);
+            $daysLeftTillOfferGetsLive = $currentDateTime->diff($offerStartDateTime);
+
+            if (!empty($daysLeftTillOfferGetsLive) && $daysLeftTillOfferGetsLive->d <= 7) {
+                $daysLeftTillOfferGetsLiveCount = !empty($daysLeftTillOfferGetsLive) && $daysLeftTillOfferGetsLive->d > 1
+                    ? $daysLeftTillOfferGetsLive->d . ' ' . FrontEnd_Helper_viewHelper::__translate('days')
+                    : $daysLeftTillOfferGetsLive->d . ' ' . FrontEnd_Helper_viewHelper::__translate('day');
             }
         }
         return $daysLeftTillOfferGetsLiveCount;
+    }
+
+    public static function removeDuplicateExpiredOffers($expiredOffers, $topThreeExpiredOffers)
+    {
+        $filteredExpiredOffers = array();
+
+        if (!empty($expiredOffers)) {
+            foreach ($expiredOffers as $expiredOffersKey => $expiredOffersValue) {
+                if (!isset($topThreeExpiredOffers[$expiredOffersKey])) {
+                    $filteredExpiredOffers[$expiredOffersKey] = $expiredOffersValue;
+                    $filteredExpiredOffers[$expiredOffersKey]['expiredOffer'] = true;
+                }
+            }
+        }
+
+        return $filteredExpiredOffers;
+    }
+
+    public static function mergeExpiredOffersWithLiveOffers($liveOffers, $topThreeExpiredOffers)
+    {
+        $filteredExpiredOffers = array();
+        $offers = array();
+        if (!empty($topThreeExpiredOffers)) {
+            foreach ($topThreeExpiredOffers as $expiredOffersKey => $expiredOffersValue) {
+                $filteredExpiredOffers[$expiredOffersKey] = $expiredOffersValue;
+                $filteredExpiredOffers[$expiredOffersKey]['expiredOffer'] = true;
+            }
+            $offers = array_merge($liveOffers, $filteredExpiredOffers);
+        }
+
+        return $offers;
     }
 }

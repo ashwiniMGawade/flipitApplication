@@ -1,5 +1,5 @@
 <?php
-namespace KC\Entity;
+namespace KC\Entity\User;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
@@ -54,13 +54,13 @@ class ChainItem
     protected $shopId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Chain", inversedBy="chainItem")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\User\Chain", inversedBy="chainItem")
      * @ORM\JoinColumn(name="chainId", referencedColumnName="id")
      */
     protected $chainItem;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Website", inversedBy="chainItem")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\User\Website", inversedBy="chainItem")
      * @ORM\JoinColumn(name="websiteId", referencedColumnName="id")
      */
     protected $website;

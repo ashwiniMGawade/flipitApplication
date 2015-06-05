@@ -436,7 +436,7 @@ class Shop
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Visitor", inversedBy="favoriteshops")
      * @ORM\JoinTable(
-     *     name="favorite_shop",
+     *     name="favorite_shops",
      *     joinColumns={@ORM\JoinColumn(name="shopId", referencedColumnName="id", nullable=false)},
      *     inverseJoinColumns={@ORM\JoinColumn(name="visitorId", referencedColumnName="id", nullable=false)}
      * )

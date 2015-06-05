@@ -1,13 +1,13 @@
 <?php
 namespace KC\Repository;
 
-class Chain extends \KC\Entity\Chain
+class Chain extends \KC\Entity\User\Chain
 {
     ######### refactored code #################
     public static function updateChainItemLocale($newLocale, $oldLocale)
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $query = $queryBuilder->update('KC\Entity\ChainItem', 'c')
+        $query = $queryBuilder->update('KC\Entity\User\ChainItem', 'c')
                 ->set("c.locale", $queryBuilder->expr()->literal($newLocale))
                 ->setParameter(1, $queryBuilder->expr()->literal($oldLocale))
                 ->where('c.locale = ?1')
@@ -22,7 +22,7 @@ class Chain extends \KC\Entity\Chain
         if ($name) {
             try {
                 $entityManagerUser  = \Zend_Registry::get('emUser');
-                $chain = new \KC\Entity\Chain();
+                $chain = new \KC\Entity\User\Chain();
                 $chain->name = $name ;
                 $chain->created_at = new \DateTime('now');
                 $chain->updated_at = new \DateTime('now');
@@ -42,7 +42,7 @@ class Chain extends \KC\Entity\Chain
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
 
         $query = $queryBuilder
-            ->from('KC\Entity\Chain', 'c')
+            ->from('KC\Entity\User\Chain', 'c')
             ->where("c.name LIKE '$srh%'");
         $request  = \DataTable_Helper::createSearchRequest(
             $params,
@@ -53,7 +53,7 @@ class Chain extends \KC\Entity\Chain
             ->setQueryBuilder($query)
             ->add('number', 'c.id as id')
             ->add('text', 'c.name as name')
-            ->add('number', '(SELECT count(ci.id) FROM KC\Entity\ChainItem ci WHERE ci.chainItem = c.id) as totalShops');
+            ->add('number', '(SELECT count(ci.id) FROM KC\Entity\User\ChainItem ci WHERE ci.chainItem = c.id) as totalShops');
         $list = $builder->getTable()->getResponseArray();
         return $list;
     }
@@ -62,7 +62,7 @@ class Chain extends \KC\Entity\Chain
     {
         try {
             $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\Chain', 'c')
+            $query = $queryBuilder->delete('KC\Entity\User\Chain', 'c')
                     ->where("c.id=" . $id)
                     ->getQuery();
             $query->execute();
@@ -74,7 +74,7 @@ class Chain extends \KC\Entity\Chain
 
     public function preDelete($event)
     {
-        $chainItem = new \KC\Entity\ChainItem();
+        $chainItem = new \KC\Entity\User\ChainItem();
         $chainItem->updateVarnish($chainItem->__get('id'));
         $chainItem->free(true);
     }
@@ -84,7 +84,7 @@ class Chain extends \KC\Entity\Chain
         try {
             $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
             $query = $queryBuilder->select('c')
-            ->from('KC\Entity\Chain', 'c')
+            ->from('KC\Entity\User\Chain', 'c')
             ->where("c.id=" . $id);
             $chainDetail = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             return $chainDetail;
@@ -98,7 +98,7 @@ class Chain extends \KC\Entity\Chain
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
         ->select('c.name as name')
-        ->from('KC\Entity\Chain', 'c')
+        ->from('KC\Entity\User\Chain', 'c')
         ->where("c.name LIKE '$keyword%'")
         ->orderBy('c.name', 'ASC')
         ->setMaxResults(5);
@@ -111,7 +111,7 @@ class Chain extends \KC\Entity\Chain
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
             ->select("ci.id")
-            ->from('KC\Entity\ChainItem', 'c')
+            ->from('KC\Entity\User\ChainItem', 'c')
             ->leftJoin('c.chainItem', 'ci')
             ->where('c.id = '.$chainItemId);
         $chainItem = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -123,7 +123,7 @@ class Chain extends \KC\Entity\Chain
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
             ->select("c.name,ci.shopName,ci.permalink,w.name,w.url,ci.locale as locale,ci.shopId as shopId,w.chain")
-            ->from('KC\Entity\Chain', 'c')
+            ->from('KC\Entity\User\Chain', 'c')
             ->leftJoin('c.chainItem', 'ci')
             ->leftJoin('ci.website', 'w')
             ->where("ci.chainItem =".$chainItem['id'])

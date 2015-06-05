@@ -5,11 +5,7 @@ use Doctrine\ORM\Mapping AS ORM;
 /**
  * @ORM\Entity
  * @ORM\Table(
- *     name="disqus_comments",
- *     indexes={
- *         @ORM\Index(name="page_url_comments_idx", columns={"comment"}),
- *         @ORM\Index(name="message_comments_idx", columns={"thread_id"})
- *     }
+ *     name="disqus_comments"
  * )
  */
 class DisqusComments
@@ -17,34 +13,9 @@ class DisqusComments
     /**
      * 
      * @ORM\Column(type="integer", length=11, nullable=true)
-     * 
+     * @ORM\Id
      */
     protected $id;
-
-    /**
-     * 
-     */
-    protected $comment_id;
-
-    /**
-     * 
-     */
-    protected $message;
-
-    /**
-     * 
-     */
-    protected $page_title;
-
-    /**
-     * 
-     */
-    protected $page_url;
-
-    /**
-     * 
-     */
-    protected $created_at;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -64,19 +35,9 @@ class DisqusComments
     protected $created;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="text", length=512, nullable=true)
      */
     protected $comment;
-
-    /**
-     * 
-     */
-    protected $author_profile_url;
-
-    /**
-     * 
-     */
-    protected $author_avtar;
     
     public function __get($property)
     {

@@ -62,9 +62,13 @@ class OfferTiles
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="offerTiles")
-     * @ORM\JoinColumn(name="id", referencedColumnName="tilesId")
      */
     protected $offer;
+
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=true)
+     */
+    protected $offerId;
 
     public function __get($property)
     {

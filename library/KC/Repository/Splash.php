@@ -1,14 +1,14 @@
 <?php
 namespace KC\Repository;
 
-class Splash extends \KC\Entity\Splash
+class Splash extends \KC\Entity\User\Splash
 {
     public function getSplashInformation()
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
             ->select('s')
-            ->from('\KC\Entity\Splash', 's');
+            ->from('\KC\Entity\User\Splash', 's');
         $splashInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $splashInformation;
     }
@@ -16,7 +16,7 @@ class Splash extends \KC\Entity\Splash
     public function deleteSplashoffer()
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $query = $queryBuilder->delete('\KC\Entity\Splash', 's')->getQuery()->execute();
+        $query = $queryBuilder->delete('\KC\Entity\User\Splash', 's')->getQuery()->execute();
         return true;
     }
 
@@ -28,7 +28,7 @@ class Splash extends \KC\Entity\Splash
 
     public function saveSplashOffer($offerId, $locale)
     {
-        $splashObject = new \KC\Entity\Splash();
+        $splashObject = new \KC\Entity\User\Splash();
         $splashObject->id = 1;
         $splashObject->offerId = $offerId;
         $splashObject->locale = $locale;

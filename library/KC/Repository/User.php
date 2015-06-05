@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class User extends \KC\Entity\User
+class User extends \KC\Entity\User\User
 {
 
     ##########################################################
@@ -14,7 +14,7 @@ class User extends \KC\Entity\User
             'u.firstName, u.lastName, u.slug, u.mainText, u.showInAboutListing,
             u.popularKortingscode, pi.name, pi.path'
         )
-            ->from('\KC\Entity\User', 'u')
+            ->from('\KC\Entity\User\User', 'u')
             ->leftJoin("u.profileimage", "pi")
             ->leftJoin('u.refUserWebsite', 'rf')
             ->leftJoin('rf.refUsersWebsite', 'w')
@@ -32,7 +32,7 @@ class User extends \KC\Entity\User
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u.id')
-            ->from('\KC\Entity\User', 'u')
+            ->from('\KC\Entity\User\User', 'u')
             ->setParameter(1, $slug)
             ->where('u.slug = ?1');
         $userDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -44,7 +44,7 @@ class User extends \KC\Entity\User
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u, w.id, pi.name, pi.path')
             ->addSelect('DATE_DIFF(CURRENT_DATE(), u.created_at) as sinceDays')
-            ->from('\KC\Entity\User', 'u')
+            ->from('\KC\Entity\User\User', 'u')
             ->leftJoin("u.profileimage", "pi")
             ->leftJoin('u.refUserWebsite', 'rf')
             ->leftJoin('rf.refUsersWebsite', 'w')
@@ -83,7 +83,7 @@ class User extends \KC\Entity\User
         $query = $queryBuilder->select(
             'u, pi'
         )
-            ->from('\KC\Entity\User', 'u')
+            ->from('\KC\Entity\User\User', 'u')
             ->leftJoin("u.profileimage", "pi")
             ->setParameter(1, $userId)
             ->where('u.id = ?1');
@@ -97,7 +97,7 @@ class User extends \KC\Entity\User
         $query = $queryBuilder->select(
             'u, pi'
         )
-            ->from('\KC\Entity\User', 'u')
+            ->from('\KC\Entity\User\User', 'u')
             ->leftJoin("u.profileimage", "pi")
             ->setParameter(1, $userId)
             ->where('u.id = ?1');
@@ -119,14 +119,14 @@ class User extends \KC\Entity\User
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         switch ($roleId) {
             case '1':
-                $Q = $queryBuilder->select('w')->from('\KC\Entity\Website', 'w');
+                $Q = $queryBuilder->select('w')->from('\KC\Entity\User\Website', 'w');
                 break;
             case '2':
             case '3':
             case '4':
             case '5':
                  $Q= $queryBuilder->select('u, refW, w')
-                    ->from('KC\Entity\User', 'u')
+                    ->from('KC\Entity\User\User', 'u')
                     ->leftJoin('u.refUserWebsite', 'refW')
                     ->leftJoin('refW.refUsersWebsite', 'w')
                     ->setParameter(1, $userId)
@@ -151,7 +151,7 @@ class User extends \KC\Entity\User
 
     public function addUser($params, $imageName)
     {
-        $addUser = new \KC\Entity\User();
+        $addUser = new \KC\Entity\User\User();
         $entityManagerUser  = \Zend_Registry::get('emUser');
 
         $addtosearch = '0';
@@ -187,7 +187,7 @@ class User extends \KC\Entity\User
             );
         }
 
-        $addUser->users = $entityManagerUser->find('KC\Entity\Role', \BackEnd_Helper_viewHelper::stripSlashesFromString($params['role']));
+        $addUser->users = $entityManagerUser->find('KC\Entity\User\Role', \BackEnd_Helper_viewHelper::stripSlashesFromString($params['role']));
         $addUser->showInAboutListing = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['nameStatus']);
         $addUser->addtosearch = $addtosearch;
         $addUser->google = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['google']);
@@ -207,7 +207,7 @@ class User extends \KC\Entity\User
         preg_match($pattern, $imageName, $matches);
         if (@$matches[1]) {
             $ext =  \BackEnd_Helper_viewHelper::getImageExtension($imageName);
-            $pImage  = new \KC\Entity\ProfileImage();
+            $pImage  = new \KC\Entity\User\ProfileImage();
             $pImage->ext = $ext;
             $pImage->created_at = new \DateTime('now');
             $pImage->updated_at = new \DateTime('now');
@@ -216,18 +216,18 @@ class User extends \KC\Entity\User
             $pImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($imageName);
             $entityManagerUser->persist($pImage);
             $entityManagerUser->flush();
-            $addUser->profileImageId =  $entityManagerUser->find('KC\Entity\ProfileImage', $pImage->getId());
+            $addUser->profileImageId =  $entityManagerUser->find('KC\Entity\User\ProfileImage', $pImage->getId());
         }
 
         $entityManagerUser->persist($addUser);
         $entityManagerUser->flush();
         if (isset($params['websites'])) {
             foreach ($params['websites'] as $web) {
-                $website = new \KC\Entity\refUserWebsite();
+                $website = new \KC\Entity\User\refUserWebsite();
                 $website->created_at = new \DateTime('now');
                 $website->updated_at = new \DateTime('now');
-                $website->refUsersWebsite = $entityManagerUser->find('KC\Entity\Website', $web);
-                $website->websiteUsers = $entityManagerUser->find('KC\Entity\User', $addUser->getId());
+                $website->refUsersWebsite = $entityManagerUser->find('KC\Entity\User\Website', $web);
+                $website->websiteUsers = $entityManagerUser->find('KC\Entity\User\User', $addUser->getId());
                 $entityManagerUser->persist($website);
                 $entityManagerUser->flush();
             }
@@ -265,7 +265,7 @@ class User extends \KC\Entity\User
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u')
-            ->from('KC\Entity\User', 'u')
+            ->from('KC\Entity\User\User', 'u')
             ->setParameter(1, $email)
             ->where('u.email = ?1')
             ->setParameter(2, '0')
@@ -326,7 +326,7 @@ class User extends \KC\Entity\User
         
         $entityManagerUser  = \Zend_Registry::get('emUser');
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
-        $repo = $entityManagerUser->getRepository('KC\Entity\User');
+        $repo = $entityManagerUser->getRepository('KC\Entity\User\User');
         $updateUser = $repo->find($params['id']);
 
         $addtosearch = 0;
@@ -343,7 +343,7 @@ class User extends \KC\Entity\User
 
         $updateUser->firstName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['firstName']);
         $updateUser->lastName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
-        $updateUser->users =  $entityManagerUser->find('KC\Entity\Role', $params['role']);
+        $updateUser->users =  $entityManagerUser->find('KC\Entity\User\Role', $params['role']);
         $updateUser->showInAboutListing = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['nameStatus']);
         $updateUser->addtosearch =$addtosearch;
         $updateUser->google = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['google']);
@@ -366,9 +366,9 @@ class User extends \KC\Entity\User
             if (@$matches[1]) {
                 $ext =  \BackEnd_Helper_viewHelper::getImageExtension($imageName);
                 if (intval($params['pImageId']) > 0) {
-                    $pImage = $entityManagerUser->find('KC\Entity\ProfileImage', $params['pImageId']);
+                    $pImage = $entityManagerUser->find('KC\Entity\User\ProfileImage', $params['pImageId']);
                 } else {
-                    $pImage  = new \KC\Entity\ProfileImage();
+                    $pImage  = new \KC\Entity\User\ProfileImage();
                     $pImage->created_at = new \DateTime('now');
                     $pImage->updated_at = new \DateTime('now');
                     $pImage->deleted = '0';
@@ -378,7 +378,7 @@ class User extends \KC\Entity\User
                 $pImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($imageName);
                 $entityManagerUser->persist($pImage);
                 $entityManagerUser->flush();
-                $updateUser->profileimage =  $entityManagerUser->find('KC\Entity\ProfileImage', $pImage->getId());
+                $updateUser->profileimage =  $entityManagerUser->find('KC\Entity\User\ProfileImage', $pImage->getId());
             }
         }
 
@@ -402,23 +402,23 @@ class User extends \KC\Entity\User
             if ($params['id'] != \Auth_StaffAdapter::getIdentity()->id) {
 
                 if (isset($params['role'])) {
-                    $updateUser->users =  $entityManagerUser->find('KC\Entity\Role', $params['role']);
+                    $updateUser->users =  $entityManagerUser->find('KC\Entity\User\Role', $params['role']);
                 }
 
                 $updateUser->createdBy = \Auth_StaffAdapter::getIdentity()->id;
                
                 $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-                $query = $queryBuilder->delete('KC\Entity\refUserWebsite', 'rf')
+                $query = $queryBuilder->delete('KC\Entity\User\refUserWebsite', 'rf')
                     ->where("rf.websiteUsers=" . $params['id'])
                     ->getQuery()->execute();
 
                 if (isset($params['websites'])) {
                     foreach ($params['websites'] as $web) {
-                        $website = new \KC\Entity\refUserWebsite();
+                        $website = new \KC\Entity\User\refUserWebsite();
                         $website->created_at = new \DateTime('now');
                         $website->updated_at = new \DateTime('now');
-                        $website->refUsersWebsite = $entityManagerUser->find('KC\Entity\Website', $web);
-                        $website->websiteUsers = $entityManagerUser->find('KC\Entity\User', $params['id']);
+                        $website->refUsersWebsite = $entityManagerUser->find('KC\Entity\User\Website', $web);
+                        $website->websiteUsers = $entityManagerUser->find('KC\Entity\User\User', $params['id']);
                         $entityManagerUser->persist($website);
                         $entityManagerUser->flush();
                     }
@@ -647,7 +647,7 @@ class User extends \KC\Entity\User
         $entityManagerUser  = \Zend_Registry::get('emUser');
         $queryBuilder  = $entityManagerUser->createQueryBuilder();
         $query = $queryBuilder->select('u.id')
-            ->from('\KC\Entity\UserSession', 'u')
+            ->from('\KC\Entity\User\UserSession', 'u')
             ->orderBy('u.id', 'DESC')
             ->setMaxResults(1);
         $q = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -655,7 +655,7 @@ class User extends \KC\Entity\User
         if (count($q) > 0) {
             $id = $q[0]['id'] + 1 ;
         }
-        $usersession = new KC\Entity\UserSession();
+        $usersession = new KC\Entity\User\UserSession();
         $usersession->id = $id;
         $usersession->userId = $uId;
         $usersession->sessionId = $token;
@@ -669,7 +669,7 @@ class User extends \KC\Entity\User
         //return $data =  Doctrine::getTable("Role")->findAll()->toArray();
         $queryBuilder  = $entityManagerUser->createQueryBuilder();
         $query = $queryBuilder->select('r')
-            ->from('KC\Entity\Role', 'r')
+            ->from('KC\Entity\User\Role', 'r')
             ->setParameter(1, \Auth_StaffAdapter::getIdentity()->users->id)
             ->where('r.id >= ?1');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -696,7 +696,7 @@ class User extends \KC\Entity\User
         $entityManagerUser  = \Zend_Registry::get('emUser');
         $queryBuilder  = $entityManagerUser->createQueryBuilder();
         $query = $queryBuilder->select('u.id, u.firstName as fname,u.lastName as lname, r.id as role')
-            ->from('\KC\Entity\User', 'u')
+            ->from('\KC\Entity\User\User', 'u')
             ->leftJoin('u.refUserWebsite', 'rf')
             ->leftJoin('rf.refUsersWebsite', 'w')
             ->leftJoin("u.users", "r")
@@ -717,7 +717,7 @@ class User extends \KC\Entity\User
         $entityManagerUser  = \Zend_Registry::get('emUser');
         $queryBuilder  = $entityManagerUser->createQueryBuilder();
         $query = $queryBuilder->select('u.firstName as firstName')
-            ->from('\KC\Entity\User', 'u')
+            ->from('\KC\Entity\User\User', 'u')
             ->leftJoin("u.users", "r")
             ->where('u.deleted ='. $for)
             ->andWhere('r.id >='. \Auth_StaffAdapter::getIdentity()->users->id)
@@ -743,7 +743,7 @@ class User extends \KC\Entity\User
         $srh = $params['searchtext'];
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $qb = $queryBuilder
-            ->from('KC\Entity\User', 'u')
+            ->from('KC\Entity\User\User', 'u')
             ->leftJoin("u.users", "r")
             ->leftJoin('u.profileimage', 'p')
             ->where('u.deleted = 0')
@@ -777,7 +777,7 @@ class User extends \KC\Entity\User
         $srh = $params['searchtext'];
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $qb = $queryBuilder
-            ->from('KC\Entity\User', 'u')
+            ->from('KC\Entity\User\User', 'u')
             ->leftJoin("u.users", "r")
             ->leftJoin('u.profileimage', 'p')
             ->where('u.deleted = 1')
@@ -810,7 +810,7 @@ class User extends \KC\Entity\User
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
             ->select('u.id,u.firstName as fname,u.lastName as lname')
-            ->from('\KC\Entity\User', 'u')
+            ->from('\KC\Entity\User\User', 'u')
             ->leftJoin('u.refUserWebsite', 'rf')
             ->leftJoin('rf.refUsersWebsite', 'w')
             ->where($queryBuilder->expr()->eq('u.deleted', '0'))
@@ -909,7 +909,7 @@ class User extends \KC\Entity\User
 
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u, rf, w, pi')
-            ->from('\KC\Entity\User', 'u')
+            ->from('\KC\Entity\User\User', 'u')
             ->leftJoin('u.refUserWebsite', 'rf')
             ->leftJoin('rf.refUsersWebsite', 'w')
             ->leftJoin("u.profileimage", "pi")
@@ -923,7 +923,7 @@ class User extends \KC\Entity\User
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u, rf, w, pi')
-            ->from('\KC\Entity\User', 'u')
+            ->from('\KC\Entity\User\User', 'u')
             ->leftJoin('u.refUserWebsite', 'rf')
             ->leftJoin('rf.refUsersWebsite', 'w')
             ->leftJoin("u.profileimage", "pi")
@@ -950,7 +950,7 @@ class User extends \KC\Entity\User
         if (intval($id) > 0) {
             $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
             $query = $queryBuilder->select('u.slug')
-                ->from('\KC\Entity\User', 'u')
+                ->from('\KC\Entity\User\User', 'u')
                 ->leftJoin("u.profileimage", "pi")
                 ->where($queryBuilder->expr()->eq('u.id', $id));
             $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -966,7 +966,7 @@ class User extends \KC\Entity\User
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u.slug')
-            ->from('\KC\Entity\User', 'u')
+            ->from('\KC\Entity\User\User', 'u')
             ->leftJoin('u.refUserWebsite', 'rf')
             ->leftJoin('rf.refUsersWebsite', 'w')
             ->where($queryBuilder->expr()->eq('u.deleted', '0'))
@@ -980,7 +980,7 @@ class User extends \KC\Entity\User
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u.firstName, u.lastName')
-            ->from('\KC\Entity\User', 'u')
+            ->from('\KC\Entity\User\User', 'u')
             ->where($queryBuilder->expr()->eq('u.id', $uId));
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (!empty($data)) {
@@ -995,7 +995,7 @@ class User extends \KC\Entity\User
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u.id, u.firstName, u.lastName, u.deleted')
-            ->from('\KC\Entity\User', 'u');
+            ->from('\KC\Entity\User\User', 'u');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }
@@ -1003,7 +1003,7 @@ class User extends \KC\Entity\User
     public function updatePassword($params = null)
     {
         $entityManagerUser  = \Zend_Registry::get('emUser');
-        $repo = $entityManagerUser->getRepository('KC\Entity\User');
+        $repo = $entityManagerUser->getRepository('KC\Entity\User\User');
         $updateUser = $repo->find($params['id']);
         
         if ($updateUser->validatePassword($params['curPassword'])) {

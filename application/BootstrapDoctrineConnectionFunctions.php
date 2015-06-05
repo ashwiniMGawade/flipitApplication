@@ -12,7 +12,9 @@ class BootstrapDoctrineConnectionFunctions
         $application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
         $frontControllerObject = $application->getOption('resources');
         $config = self::setMemcachedAndProxyClasses($frontControllerObject);
-        $emUser = EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);
+        $emUser = APPLICATION_ENV == 'testing'
+            ? \Codeception\Module\Doctrine2::$em
+            : EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);
         $localSiteDbConnection = strtolower(self::getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData));
         self::setEntityManagerForlocale($doctrineOptions[$localSiteDbConnection]['dsn'], $config);
         Zend_Registry::set('emUser', $emUser);
@@ -31,7 +33,6 @@ class BootstrapDoctrineConnectionFunctions
         $memcache->addServer($memcacheHost, $memcachePort);
         $cache = new \Doctrine\Common\Cache\MemcachedCache;
         $cache->setMemcached($memcache);
-        
         $isDevMode = false;
         $proxyPath = null;
         if (APPLICATION_ENV == 'development') {
@@ -42,18 +43,19 @@ class BootstrapDoctrineConnectionFunctions
         $config = Setup::createConfiguration($isDevMode, $proxyPath, $cache);
         $config->setProxyNamespace('Proxy');
 
-        $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
+        $paths = array(APPLICATION_PATH . '/../library/KC/Entity', APPLICATION_PATH . '/../library/KC/Entity/User');
         $driver = new AnnotationDriver(new AnnotationReader(), $paths);
         AnnotationRegistry::registerLoader('class_exists');
         $config->setMetadataDriverImpl($driver);
-        
         return $config;
     }
 
     public static function setEntityManagerForlocale($dsn, $config)
     {
         $databaseConnectionCredentials = self::getDatabaseCredentials($dsn);
-        $emLocale = EntityManager::create($databaseConnectionCredentials, $config);
+        $emLocale = APPLICATION_ENV == 'testing'
+            ? \Codeception\Module\Doctrine2::$em
+            : EntityManager::create($databaseConnectionCredentials, $config);
         Zend_Registry::set('emLocale', $emLocale);
     }
 

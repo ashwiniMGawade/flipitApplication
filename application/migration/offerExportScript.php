@@ -64,7 +64,7 @@ class OfferExport
             'Ref URL',
             'Exclusive',
             'Editor Picks',
-            'User Generated',
+            'Social Code',
             'Approved',
             'Offline',
             'Created At',

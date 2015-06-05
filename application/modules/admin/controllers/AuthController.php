@@ -98,7 +98,7 @@ class Admin_AuthController extends Zend_Controller_Action
                 //create object of user class
                 $timeSeconds = 28800;
                
-                $Obj = Zend_Registry::get('emUser')->find('KC\Entity\User', \Auth_StaffAdapter::getIdentity()->id);
+                $Obj = Zend_Registry::get('emUser')->find('KC\Entity\User\User', \Auth_StaffAdapter::getIdentity()->id);
 
                 $Obj->updateLoginTime(\Auth_StaffAdapter::getIdentity()->id);
                 $user = new Zend_Session_Namespace('user');
@@ -283,7 +283,7 @@ class Admin_AuthController extends Zend_Controller_Action
             $params['id'] = $id;
             # call used password update function
             $entityManagerUser  = \Zend_Registry::get('emUser');
-            $repo = $entityManagerUser->getRepository('KC\Entity\User');
+            $repo = $entityManagerUser->getRepository('KC\Entity\User\User');
             $user = new \KC\Repository\User();
             $result = $user->updatePassword($params);
 

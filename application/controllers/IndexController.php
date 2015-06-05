@@ -39,7 +39,7 @@ class IndexController extends Zend_Controller_Action
             
             $this->view->topOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "10_popularOffersHome_list",
-                array('function' => 'KC\Repository\Offer::getTopOffers', 'parameters' => array(10)
+                array('function' => 'Application_Service_Factory::topOffers', 'parameters' => array(10)
                 ),
                 ''
             );
@@ -87,7 +87,7 @@ class IndexController extends Zend_Controller_Action
                 "all_popularShops_list",
                 array(
                     'function' => 'FrontEnd_Helper_viewHelper::getStoreForFrontEnd',
-                    'parameters' => array("popular", 24)
+                    'parameters' => array("popular", 30)
                 ),
                 ''
             );

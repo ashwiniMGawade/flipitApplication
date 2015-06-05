@@ -163,7 +163,7 @@ class Articles extends \KC\Entity\Articles
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('user.id, user.firstName, user.lastName')
-            ->from('\KC\Entity\User', 'user')
+            ->from('\KC\Entity\User\User', 'user')
             ->leftJoin('user.refUserWebsite', 'rf')
             ->leftJoin('rf.refUsersWebsite', 'w')
             ->where('user.deleted = 0')

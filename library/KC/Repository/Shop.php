@@ -804,7 +804,7 @@ class Shop extends \KC\Entity\Shop
                 # update chain if shop is associated with chain
                 if ($shopInfo->chainItemId) {
                     $RoutePermalinkQueryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-                    $query = $RoutePermalinkQueryBuilder->delete('KC\Entity\ChainItem', 'ct')
+                    $query = $RoutePermalinkQueryBuilder->delete('KC\Entity\User\ChainItem', 'ct')
                         ->where("ct.chainItem=" . $shopInfo->chainId)
                         ->where("ct.shopId=" . $shopInfo->id)
                         ->getQuery()->execute();
@@ -913,8 +913,8 @@ class Shop extends \KC\Entity\Shop
         $shopInfo->notes =\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNotes']);
     #   $shopInfo->deepLink =\BackEnd_Helper_viewHelper::stripSlashesFromString (@$shopDetail['shopDeepLinkUrl']);
     #   $shopInfo->deepLinkStatus =\BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['deepLinkStatus']);
-        $shopInfo->refUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopRefUrl']);
-        $shopInfo->actualUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopActualUrl']);
+        $shopInfo->refUrl = self::removeTargetKeyword(\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopRefUrl']));
+        $shopInfo->actualUrl = self::removeTargetKeyword(\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopActualUrl']));
         $shopInfo->affliateProgram = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['affiliateProgStatus']);
         $shopInfo->title =\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopTitle']);
         $shopInfo->subTitle =\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopSubTitle']);
@@ -1339,7 +1339,7 @@ class Shop extends \KC\Entity\Shop
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $shopInfo->id);
                 if ($shopInfo->chainItemId) {
                     $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-                    $query = $queryBuilder->update('KC\Entity\ChainItem', 'ct')
+                    $query = $queryBuilder->update('KC\Entity\User\ChainItem', 'ct')
                         ->set('ct.shopName', $queryBuilder->expr()->literal($shopInfo->name))
                         ->set('ct.permalink', $queryBuilder->expr()->literal($shopInfo->permaLink))
                         ->set('ct.status', $queryBuilder->expr()->literal($shopInfo->status))
@@ -1352,6 +1352,12 @@ class Shop extends \KC\Entity\Shop
         } catch (Exception $e) {
             return false;
         }
+    }
+
+    public static function removeTargetKeyword($url)
+    {
+        $refinedUrl = substr($url, 0, strpos($url, 'target'));
+        return trim($refinedUrl, '"');
     }
 
     public function uploadImage($file, $path)

@@ -1,12 +1,12 @@
 <?php
-namespace KC\Entity;
+namespace KC\Entity\User;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="robot")
+ * @ORM\Table(name="ip_addresses")
  */
-class Robot
+class IpAddresses
 {
     /**
      * @ORM\Id
@@ -16,19 +16,14 @@ class Robot
     protected $id;
 
     /**
-     * @ORM\Column(type="text", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $website;
+    protected $name;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $content;
-
-    /**
-     * @ORM\Column(type="integer", length=1, nullable=true)
-     */
-    protected $deleted;
+    protected $ipaddress;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -40,6 +35,11 @@ class Robot
      */
     protected $updated_at;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $deleted;
+
     public function __get($property)
     {
         return $this->$property;
@@ -49,4 +49,5 @@ class Robot
     {
         $this->$property = $value;
     }
+    
 }

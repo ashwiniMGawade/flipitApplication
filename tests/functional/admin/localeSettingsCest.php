@@ -48,7 +48,7 @@ class localeSettingsCest
     {
         $I->databaseSwitch("_user");
         $t =  $I->haveInRepository(
-            'KC\Entity\Website',
+            'KC\Entity\User\Website',
             array(
                 'name' => 'test',
                 'created_at' => new \DateTime('now'),
@@ -57,7 +57,7 @@ class localeSettingsCest
             )
         );
         $I->persistEntity(
-            new \KC\Entity\Website,
+            new \KC\Entity\User\Website,
             array(
             'name' => 'test2',
             'created_at' => new \DateTime('now'),
@@ -66,6 +66,6 @@ class localeSettingsCest
             'url' => 123
             )
         );
-        $test = $I->grabFromRepository('KC\Entity\Website', 'url', array('name' => 'test'));
+        $test = $I->grabFromRepository('KC\Entity\User\Website', 'url', array('name' => 'test'));
     }
 }

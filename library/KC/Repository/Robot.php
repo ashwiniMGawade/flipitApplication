@@ -1,13 +1,13 @@
 <?php
 namespace KC\Repository;
-class Robot Extends \KC\Entity\Robot
+class Robot Extends \KC\Entity\User\Robot
 {
     public function getRobotTextFileInformation($websiteId = '')
     {
         $entityManagerUser = \Zend_Registry::get('emUser')->createQueryBuilder();
             $query = $entityManagerUser
             ->select('r')
-            ->from('KC\Entity\Robot', 'r')
+            ->from('KC\Entity\User\Robot', 'r')
             ->where('r.id = '.$websiteId);
         $robotsTextFileInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $robotsTextFileInformation;
@@ -18,13 +18,13 @@ class Robot Extends \KC\Entity\Robot
         $robotFileContentExistsOrNot = self::getRobotTextFileInformation($robotWebsiteId);
         $entityManagerUser = \Zend_Registry::get('emUser')->createQueryBuilder();
         if (!empty($robotFileContentExistsOrNot)) {
-            $robot =  \Zend_Registry::get('emUser')->find('KC\Entity\Robot', $robotWebsiteId);
+            $robot =  \Zend_Registry::get('emUser')->find('KC\Entity\User\Robot', $robotWebsiteId);
             $robot->content = $robotsTextFileContent;
             $robot->updated_at = new \DateTime('now');
             \Zend_Registry::get('emUser')->persist($robot);
             \Zend_Registry::get('emUser')->flush();
         } else {
-            $robot = new KC\Entity\Robot();
+            $robot = new KC\Entity\User\Robot();
             $robot->website = $robotWebsiteId == 1 ? 'Flipit' : 'Kortingscode';
             $robot->content = mysqli_real_escape_string(
                 \FrontEnd_Helper_viewHelper::getDbConnectionDetails(),
