@@ -19,6 +19,7 @@ foreach ($this->offers as $offer) {
     $offerCounter++;
     $offer = (object) $offer;
     $offerBounceRate = "/out/offer/".$offer->id;
+    $expiredOffer = isset($offer->expiredOffer) ? $offer->expiredOffer : '';
     $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
     $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires((array)$offer->endDate);
     $urlToShow = $offerPartial->getUrlToShow($offer);
@@ -30,21 +31,22 @@ foreach ($this->offers as $offer) {
          $couponCode = '';
     }
     $dayleftCss = '';
-    if (intval($daysTillOfferExpires) <= 1) {
+    if (intval($daysTillOfferExpires) <= 1 || $expiredOffer != '') {
         $dayleftCss = 'deal-less';
     }
     $defaultText = '';
     $offerClass = "active " . $dayleftCss;
     $offerHolderClass = "offer-holder";
     if ($offer->exclusiveCode == '1') {
-        $offerClass = "orange-block deal-offer ". $dayleftCss;
+        $orangeBlockClass = $expiredOffer != '' ? '' : 'orange-block';
+        $offerClass = $orangeBlockClass." deal-offer ". $dayleftCss;
     }
     if ($offer->userGenerated == '1') {
         $offerClass = "";
         $offerHolderClass = "";
         $urlToShow = 'javascript:void(0);';
         if ($offer->approved == '1') {
-            $offerClass = "orange-block deal-offer " .$dayleftCss; 
+            $offerClass = "deal-offer " .$dayleftCss; 
             $offerHolderClass = "offer-holder";
             $urlToShow = $offerPartial->getUrlToShow($offer);
         }
@@ -53,8 +55,15 @@ foreach ($this->offers as $offer) {
             FrontEnd_Helper_viewHelper::__translate('This code has been added by one of our users and not by the [websiteName] deal hunters');
         $defaultText = str_replace('[websiteName]', $websiteName, $defaultText);
     }
+
+    $expiredDealClass = '';
+    $imageGrayScaleClass = '';
+    if ($expiredOffer != '') {
+        $expiredDealClass = 'expired-deal';
+        $imageGrayScaleClass = 'grayscale';
+    }
     ?>
-    <article class="block <?php echo $offerClass; ?>">
+    <article class="block <?php echo $offerClass.' '.$expiredDealClass; ?>">
         <div class="holder <?php echo $offerHolderClass; ?>" id="<?php echo $offer->id; ?>">
     <?php 
     echo $offerPartial->getCommonRedirectUrlForOffer(
@@ -62,7 +71,8 @@ foreach ($this->offers as $offer) {
         $urlToShow,
         $offerBounceRate,
         $this->offersType,
-        'offerImage'
+        'offerImage',
+        $expiredOffer
     );
     ?>
             <div class="box">
@@ -78,7 +88,7 @@ foreach ($this->offers as $offer) {
                         $membersOnly = isset($offer->Visability) && $offer->Visability == 'MEM'
                             ? '<span class="members-only-image"></span><span class="members-only">'.$this->translate("Members Only").'</span>'
                             : '';
-                        echo $membersOnly.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires);
+                        echo $membersOnly.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires, $expiredOffer);
                         ?>
                         </li>
                     </ul>
@@ -140,13 +150,18 @@ foreach ($this->offers as $offer) {
             : $contentManagerId;
         $shopEditor = $offerPartial->getShopEditor($contentManagerId);
         $offerBottomRecomendedLink = $offerPartial->getShopEditorHtml($shopEditor);
-        $offerBottomTextForExclusiveOrSocialOrEditor = $offerBottomRecomendedLink;
+        $offerBottomTextForExclusiveOrSocialOrEditor = isset($expiredOffer) && $expiredOffer != ''
+            ? ''
+            : $offerBottomRecomendedLink;
     } else {
         $offerBottomTextForExclusiveOrSocialOrEditor = $offerPartial->getOfferExclusiveOrSocial($offer);
     }
     $offerBottomDaysTillExpireText = '';
     if ($daysTillOfferExpires <= 3) {
         $offerBottomDaysTillExpireText = $offerPartial->getDaysTillExpire($daysTillOfferExpires);
+    }
+    if ($expiredOffer) {
+        $offerBottomDaysTillExpireText = '<time class="date text-info"><span class="text-over">'.FrontEnd_Helper_viewHelper::__translate('Expired').'</span></time>';
     }
     $offerBottomTermsAndConditionLink = '';
     $offerBottomExtendedLink = '';
@@ -224,7 +239,9 @@ foreach ($this->offers as $offer) {
                         if ($offer->discountType == "CD") {
                             if (!empty($numberOfCodeUsed)) {
                                 echo $numberOfCodeUsed;
-                                echo $this->esi($esiLocale.'offer/offer-view-count?offerId='.$offer->id);
+                                echo isset($expiredOffer) && $expiredOffer != ''
+                                    ? $offerPartial->getTotalViewCountOfOffer($offer->totalViewcount)
+                                    : $this->esi($esiLocale.'offer/offer-view-count?offerId='.$offer->id);
                                 echo "</li>";
                             }
                         }

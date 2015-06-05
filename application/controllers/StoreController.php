@@ -95,15 +95,6 @@ class StoreController extends Zend_Controller_Action
                 ),
                 ''
             );
-            $allExpiredOfferKey = 'shop_expiredOffers'.$ShopList;
-            $expiredOffers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                (string)$allExpiredOfferKey,
-                array(
-                    'function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode',
-                    'parameters' => array("expired", 10, $shopId)
-                ),
-                ''
-            );
             $allLatestUpdatesInStoreKey = '4_shopLatestUpdates_'.$ShopList;
             $latestShopUpdates = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allLatestUpdatesInStoreKey,
@@ -160,6 +151,23 @@ class StoreController extends Zend_Controller_Action
             $this->_redirect($urlToRedirect);
         }
 
+        $topThreeExpiredOfferKey = 'shop_topthreeexpiredoffers'.$ShopList;
+        $topThreeExpiredOffers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            (string)$topThreeExpiredOfferKey,
+            array(
+                'function' => 'KC\Repository\Offer::getAllOfferOnShop',
+                'parameters' => array($shopId, 10, false, true, false, true)
+            ),
+            ''
+        );
+
+        $expiredOffersForBottom = '';
+        if (!empty($topThreeExpiredOffers)) {
+            $expiredOffersForBottom = array_slice($topThreeExpiredOffers, 3, 10);
+            $topThreeExpiredOffers = array_slice($topThreeExpiredOffers, 0, 3);
+            $offers = $this->_helper->Store->mergeExpiredOffersWithLiveOffers($offers, $topThreeExpiredOffers);
+        }
+        
         $this->view->currentStoreInformation = $shopInformation;
         $this->view->moneySavingGuideArticle = $moneySavingGuideArticle;
         $this->view->latestShopUpdates = $latestShopUpdates;
@@ -184,8 +192,7 @@ class StoreController extends Zend_Controller_Action
                 );
         }
 
-        $this->view->expiredOffers = $expiredOffers;
-
+        $this->view->expiredOffers = $expiredOffersForBottom;
 
         $similarShopsAndSimilarCategoriesOffersKey = 'shop_similarShopsAndSimilarCategoriesOffers'.$ShopList;
         $similarShopsAndSimilarCategoriesOffers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
