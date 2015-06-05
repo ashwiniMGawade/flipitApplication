@@ -49,14 +49,16 @@ class fixtures
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $category = new KC\Entity\Category();
-        $category->name = 'test cat';
-        $category->permalink = 'test-cat';
-        $category->deleted = 0;
-        $category->created_at = new \DateTime('now');
-        $category->updated_at = new \DateTime('now');
-        $this->entityManager->persist($category);
-        $this->entityManager->flush();
+        for ($i=1; $i < 5; $i++) {
+            $category = new KC\Entity\Category();
+            $category->name = 'test cat'.$i;
+            $category->permalink = 'test-cat'.$i;
+            $category->deleted = 0;
+            $category->created_at = new \DateTime('now');
+            $category->updated_at = new \DateTime('now');
+            $this->entityManager->persist($category);
+            $this->entityManager->flush();
+        }
 
         $image = new KC\Entity\Logo();
         $image->ext = 'jpg';
@@ -85,7 +87,7 @@ class fixtures
             $shop->title = 'acceptance shop title'.$i;
             $shop->subTitle = 'acceptance shop title';
             $shop->contentmanagerid = '1';
-            $shop->affliateprogram = 1;
+            $shop->affliateProgram = 1;
             $shop->refurl = 'http://www.kortingscode.nl/';
             $shop->actualurl = 'http://www.kortingscode.nl/';
             $shop->howToUse = '1';
@@ -110,15 +112,49 @@ class fixtures
             $this->entityManager->flush();
         }
 
-        $refShopCategory = new KC\Entity\RefShopCategory();
-        $refShopCategory->shopid = 'jpg';
-        $refShopCategory->categoryid = 'HTUB';
-        $refShopCategory->deleted = 0;
-        $refShopCategory->created_at = new \DateTime('now');
-        $refShopCategory->updated_at = new \DateTime('now');
-        $this->entityManager->persist($refShopCategory);
-        $this->entityManager->flush();
+        for ($i=21; $i <= 40; $i++) {
+            $shop = new KC\Entity\Shop();
+            $shop->name = 'acceptance shop'.$i;
+            $shop->permalink = 'acceptance-shop'.$i;
+            $shop->title = 'acceptance shop title'.$i;
+            $shop->subTitle = 'acceptance shop title';
+            $shop->contentmanagerid = '1';
+            $shop->affliateProgram = 0;
+            $shop->refurl = 'http://www.kortingscode.nl/';
+            $shop->actualurl = 'http://www.kortingscode.nl/';
+            $shop->howToUse = '1';
+            $shop->howtoTitle = 'acceptance shop title';
+            $shop->howtoSubtitle = 'acceptance shop title';
+            $shop->howtoMetaTitle = 'acceptance shop title';
+            $shop->howtoMetaDescription = 'acceptance shop title';
+            $shop->howtousesmallimageid = 1;
+            $shop->howtousebigimageid = 2;
+            $shop->status = 1;
+            $shop->usergenratedcontent = 0;
+            $shop->deleted = 0;
+            $shop->created_at = new \DateTime('now');
+            $shop->updated_at = new \DateTime('now');
+            $shop->displayExtraProperties = 0;
+            $shop->showSignupOption = 0;
+            $shop->addtosearch = 0;
+            $shop->showSimliarShops = 0;
+            $shop->showChains = 0;
+            $shop->strictConfirmation = 0;
+            $this->entityManager->persist($shop);
+            $this->entityManager->flush();
+        }
 
+        for ($i=1; $i < 5; $i++) {
+            $refShopCategory = new KC\Entity\RefShopCategory();
+            $refShopCategory->category = $this->entityManager->find('KC\Entity\Shop', $i);
+            $refShopCategory->shop = $this->entityManager->find('KC\Entity\Category', 2);
+            $refShopCategory->deleted = 0;
+            $refShopCategory->created_at = new \DateTime('now');
+            $refShopCategory->updated_at = new \DateTime('now');
+            $this->entityManager->persist($refShopCategory);
+            $this->entityManager->flush();
+        }
+        
         $routePermalink = new KC\Entity\RoutePermalink();
         $routePermalink->permalink = 'acceptance-shop';
         $routePermalink->type = 'SHP';
@@ -190,7 +226,7 @@ class fixtures
 
         $offerTiles = new KC\Entity\RefOfferCategory();
         $offerTiles->offers = $offer;
-        $offerTiles->categories = $category;
+        $offerTiles->categories = $this->entityManager->find('KC\Entity\Category', 1);
         $offerTiles->deleted = 0;
         $offerTiles->created_at = new \DateTime('now');
         $offerTiles->updated_at = new \DateTime('now');

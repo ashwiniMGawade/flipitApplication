@@ -165,7 +165,7 @@ class Offer Extends \KC\Entity\Offer
                 ->andWhere($entityManagerUser->expr()->in('o.shopOffers', $similarShopsIds))
                 ->orderBy('o.totalViewcount', 'DESC');
             if ($limit!='') {
-                $query->setMaxResults($limit);
+                $query = $query->setMaxResults($limit);
             }
             $similarShopsOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         } else {
@@ -252,47 +252,6 @@ class Offer Extends \KC\Entity\Offer
             ->where('r.shop = ?1');
         $relatedShops = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $relatedShops;
-    }
-
-    public static function mergeSimilarShopsOffersAndSimilarCategoriesOffers(
-        $similarShopsOffers,
-        $similarCategoriesOffers,
-        $limit
-    ) {
-        $shopsOffers = self::createShopsArrayAccordingToOfferHtml($similarShopsOffers);
-        $categoriesOffers = self::createCategoriesArrayAccordingToOfferHtml($similarCategoriesOffers);
-        $mergedOffers = array_merge($shopsOffers, $categoriesOffers);
-        return self::sliceOffersByLimit($mergedOffers, $limit);
-    }
-
-    public static function createShopsArrayAccordingToOfferHtml($similarShopsOffers)
-    {
-        $NewOffersOfRelatedShops = array();
-        foreach ($similarShopsOffers as $shopOffer):
-            $NewOfferOfRelatedShops["'".$shopOffer[0]['id']."'"] = $shopOffer[0];
-        endforeach;
-        return $NewOffersOfRelatedShops;
-    }
-
-    public static function createCategoriesArrayAccordingToOfferHtml($similarCategoriesOffers)
-    {
-        $NewOfferOfRelatedCategories = array();
-        foreach ($similarCategoriesOffers as $categoryOffer):
-            $NewOfferOfRelatedCategories["'".$categoryOffer['id']."'"] = $categoryOffer;
-        endforeach;
-        return $NewOfferOfRelatedCategories;
-    }
-
-    public static function sliceOffersByLimit($mergedOffers, $limit)
-    {
-        $offers = array();
-        if (!empty($mergedOffers)) {
-            foreach($mergedOffers as $newOfShop):
-                $offers[] = $newOfShop;
-            endforeach;
-        }
-        $slicedOffers = array_slice($offers, 0, $limit);
-        return $slicedOffers;
     }
 
     public static function getTopOffers($limit)
@@ -1153,7 +1112,6 @@ class Offer Extends \KC\Entity\Offer
         if ($limit) {
             $query = $query->setMaxResults($limit);
         }
-
         $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $offers;
     }

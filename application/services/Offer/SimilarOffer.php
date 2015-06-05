@@ -1,80 +1,101 @@
 <?php
 class Application_Service_Offer_SimilarOffer extends Application_Service_Offer_OfferListing
 {
-    public static function fetchSimilarShopOffers($shopId, $shopList, $shopAffiliateprogram)
+    protected $offerRepository = '';
+    protected $shopId = '';
+    protected $affiliateProgram = '';
+    public function __construct($offerRepository, $shopId, $affiliateProgram)
     {
-        $getSimilarShopOffers = self::getSimilarShopOffers($shopId, $shopList);
+        $this->offerRepository = $offerRepository;
+        $this->shopId = $shopId;
+        $this->affiliateProgram = $affiliateProgram;
+    }
+
+    public function fetchSimilarShopOffers()
+    {
+        $getSimilarShopOffers = $this->getSimilarShopOffers();
         if (!empty($getSimilarShopOffers)) {
-            if ($shopAffiliateprogram != 0) {
-                $getSimilarShopOffers = self::getSlicedNumberOfShopSimilarOffers($getSimilarShopOffers, 3);
+            if ($this->affiliateProgram != 0) {
+                $getSimilarShopOffers = $this->getSlicedNumberOfShopSimilarOffers($getSimilarShopOffers, 3);
             } else {
-                $getSimilarShopOffers = self::getSlicedNumberOfShopSimilarOffers($getSimilarShopOffers, 10);
+                $getSimilarShopOffers = $this->getSlicedNumberOfShopSimilarOffers($getSimilarShopOffers, 10);
             }
         } else {
             $getSimilarShopOffers = '';
         }
+
         return $getSimilarShopOffers;
     }
 
-    protected static function getSimilarShopOffers($shopId, $shopList)
+    protected function getSimilarShopOffers()
     {
-        $similarShopsAndSimilarCategoriesOffersKey = 'shop_similarShopsAndSimilarCategoriesOffers'.$shopList;
-        $similarShopsAndSimilarCategoriesOffers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            (string)$similarShopsAndSimilarCategoriesOffersKey,
-            array(
-               'function' => 'Application_Service_Offer_SimilarOffer::getMergedSimilarShopOffers',
-                'parameters' => array($shopId, 30)
-
-            ),
-            ''
-        );
+        $similarShopsAndSimilarCategoriesOffers = $this->getMergedSimilarShopOffers(30);
         return $similarShopsAndSimilarCategoriesOffers;
     }
 
-    public static function getMergedSimilarShopOffers($shopId, $limit)
+    public function getMergedSimilarShopOffers($limit)
     {
         $date = date("Y-m-d H:i");
-        $similarOffersFromShops = self::getOffersBySimilarShops($date, $limit, $shopId);
-        $similarOffersFromShopCategories = self::getOffersBySimilarCategories($date, $limit, $shopId);
-        $similarShopsAndSimilarCategoriesOffers = self::mergeSimilarShopsOffersAndSimilarCategoriesOffers(
+        $similarOffersFromShops = $this->getOffersBySimilarShops($date, $limit);
+        $similarOffersFromShopCategories = $this->getOffersBySimilarCategories($date, $limit);
+        $similarShopsAndSimilarCategoriesOffers = $this->mergeSimilarShopsOffersAndSimilarCategoriesOffers(
             $similarOffersFromShops,
-            $similarOffersFromShopCategories,
-            $limit
+            $similarOffersFromShopCategories
         );
         return $similarShopsAndSimilarCategoriesOffers;
     }
 
     protected static function mergeSimilarShopsOffersAndSimilarCategoriesOffers(
-        $similarOffersFromShops,
-        $similarOffersFromShopCategories,
-        $limit
-    )
-    {
-        return \KC\Repository\Offer::mergeSimilarShopsOffersAndSimilarCategoriesOffers(
-            $similarOffersFromShops,
-            $similarOffersFromShopCategories,
-            $limit
-        );
+        $similarShopsOffers,
+        $similarCategoriesOffers
+    ) {
+        $shopsOffers = self::createShopsArrayAccordingToOfferHtml($similarShopsOffers);
+        $categoriesOffers = self::createCategoriesArrayAccordingToOfferHtml($similarCategoriesOffers);
+        $mergedOffers = array_merge($shopsOffers, $categoriesOffers);
+        return $mergedOffers;
     }
 
-    protected static function getOffersBySimilarShops($date, $limit, $shopId)
+    public static function createShopsArrayAccordingToOfferHtml($similarShopsOffers)
     {
-        return \KC\Repository\Offer::getOffersBySimilarShops($date, $limit, $shopId);
+        $newOffersOfRelatedShops = array();
+        foreach ($similarShopsOffers as $shopIndex => $shopOffer):
+            if (isset($shopOffer[0]['shopOffers'][0])) {
+                $categoryShops = $shopOffer[0]['shopOffers'][0];
+                unset($shopOffer[0]['shopOffers'][0]);
+                $shopOffer[0]['shopOffers'] = $shopOffer[0]['shopOffers'] + $categoryShops;
+            }
+            $newOffersOfRelatedShops[$shopIndex] = $shopOffer[0];
+        endforeach;
+        return $newOffersOfRelatedShops;
     }
 
-    protected static function getOffersBySimilarCategories($date, $limit, $shopId)
+    public static function createCategoriesArrayAccordingToOfferHtml($similarCategoriesOffers)
     {
-        return \KC\Repository\Offer::getOffersBySimilarCategories($date, $limit, $shopId);
+        $newOfferOfRelatedCategories = array();
+        foreach ($similarCategoriesOffers as $categoryOffer):
+            $newOfferOfRelatedCategories["'".$categoryOffer['id']."'"] = $categoryOffer;
+        endforeach;
+        return $newOfferOfRelatedCategories;
     }
 
-    protected static function getSlicedNumberOfShopSimilarOffers($offers, $limit)
+    protected function getOffersBySimilarShops($date, $limit)
     {
-        $uniqueOffers = self::removeDuplicateShopsOffers($offers);
+        return $this->offerRepository->getOffersBySimilarShops($date, $limit, $this->shopId);
+    }
+
+    protected function getOffersBySimilarCategories($date, $limit)
+    {
+        return $this->offerRepository->getOffersBySimilarCategories($date, $limit, $this->shopId);
+    }
+
+    protected function getSlicedNumberOfShopSimilarOffers($offers, $limit)
+    {
+        $uniqueOffers = $this->removeDuplicateShopsOffers($offers);
         $slicedOffers = array_slice($uniqueOffers, 0, $limit);
         return $slicedOffers;
     }
     
-    protected static function removeDuplicateShopsOffers($similarShopsOffers)
+    protected function removeDuplicateShopsOffers($similarShopsOffers)
     {
         $removeDuplicateShop = '';
         foreach ($similarShopsOffers as $offerIndex => $offer) {
@@ -87,4 +108,3 @@ class Application_Service_Offer_SimilarOffer extends Application_Service_Offer_O
         return $offersUnique;
     }
 }
-new Application_Service_Offer_SimilarOffer();

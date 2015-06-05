@@ -95,7 +95,7 @@ class StoreController extends Zend_Controller_Action
                 ),
                 ''
             );
-            $allLatestUpdatesInStoreKey = '4_shopLatestUpdates_'.$ShopList;
+            $allLatestUpdatesInStoreKey = '4_shopLatestUpdates_'.$shopList;
             $latestShopUpdates = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allLatestUpdatesInStoreKey,
                 array(
@@ -151,7 +151,7 @@ class StoreController extends Zend_Controller_Action
             $this->_redirect($urlToRedirect);
         }
 
-        $topThreeExpiredOfferKey = 'shop_topthreeexpiredoffers'.$ShopList;
+        $topThreeExpiredOfferKey = 'shop_topthreeexpiredoffers'.$shopList;
         $topThreeExpiredOffers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)$topThreeExpiredOfferKey,
             array(
@@ -192,14 +192,17 @@ class StoreController extends Zend_Controller_Action
                 );
         }
 
-
         $this->view->expiredOffers = $expiredOffersForBottom;
-        $this->view->similarShopsAndSimilarCategoriesOffers =
-        Application_Service_Offer_SimilarOffer::fetchSimilarShopOffers(
-            $shopId,
-            $shopList,
-            $shopInformation[0]['affliateProgram']
+        $similarShopsAndSimilarCategoriesOffersKey = 'shop_similarShopsAndSimilarCategoriesOffers'.$shopList;
+        $similarShopsAndSimilarCategoriesOffers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            (string)$similarShopsAndSimilarCategoriesOffersKey,
+            array(
+               'function' => 'Application_Service_Factory::similarOffers',
+               'parameters' => array($shopId, $shopInformation[0]['affliateProgram'])
+            ),
+            ''
         );
+        $this->view->similarShopsAndSimilarCategoriesOffers = $similarShopsAndSimilarCategoriesOffers;
         $offersAddedInShopKey = "offersAdded_".$shopId."_shop";
         $this->view->offersAddedInShop = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)$offersAddedInShopKey,
