@@ -161,9 +161,9 @@ class StoreController extends Zend_Controller_Action
             ''
         );
 
-        $expiredOffers = '';
+        $expiredOffersForBottom = '';
         if (!empty($topThreeExpiredOffers)) {
-            $expiredOffers = array_slice($topThreeExpiredOffers, 3, 10);
+            $expiredOffersForBottom = array_slice($topThreeExpiredOffers, 3, 10);
             $topThreeExpiredOffers = array_slice($topThreeExpiredOffers, 0, 3);
             $offers = $this->_helper->Store->mergeExpiredOffersWithLiveOffers($offers, $topThreeExpiredOffers);
         }
@@ -192,7 +192,7 @@ class StoreController extends Zend_Controller_Action
                 );
         }
 
-        $this->view->expiredOffers = $expiredOffers;
+        $this->view->expiredOffers = $expiredOffersForBottom;
 
         $similarShopsAndSimilarCategoriesOffersKey = 'shop_similarShopsAndSimilarCategoriesOffers'.$ShopList;
         $similarShopsAndSimilarCategoriesOffers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
