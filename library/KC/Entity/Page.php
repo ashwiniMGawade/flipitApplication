@@ -11,9 +11,9 @@ use Doctrine\ORM\Mapping AS ORM;
  *         @ORM\Index(name="pageHeaderImageId_foreign_key", columns={"pageHeaderImageId"})
  *     }
  * )
- * @ORM\DiscriminatorMap({"offer"="KC\Entity\OfferListPage","default"="KC\Entity\DefaultPage"})
- * @ORM\DiscriminatorColumn(name="pageType", length=10, type="string")
  * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="pagetype", length=10, type="string")
+ * @ORM\DiscriminatorMap({"offer"="KC\Entity\OfferListPage","default"="KC\Entity\DefaultPage"})
  */
 class Page
 {

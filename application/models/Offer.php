@@ -3017,7 +3017,6 @@ class Offer extends BaseOffer
                     $shopList = Doctrine_Query::create()
                             ->update('Offer o')
                             ->set('o.totalViewcount', $newtotal)
-                            ->set('o.popularityCount', "'".  $popularity ."'")
                             ->where('o.id = ?', $value['id'])
                             ->execute() ;
             }
@@ -3568,5 +3567,45 @@ class Offer extends BaseOffer
             ->where('id=' .$offerId)
             ->execute();
         return true;
+    }
+
+    public static function getOfferViewCountForLast3Days()
+    {
+        $dateFormat = 'Y-m-d';
+        $currentDate = date($dateFormat);
+        $past3Days = date($dateFormat, strtotime('-3 day' . $currentDate));
+        $viewCounts = Doctrine_Query::create()
+            ->select('o.id, viewcount.id')
+            ->from('Offer o')
+            ->leftJoin('o.viewcount viewcount')
+            ->where('viewcount.created_at BETWEEN "'.$past3Days.'" AND "'.$currentDate.'"')
+            ->fetchArray();
+        return $viewCounts;
+    }
+
+    public static function updateViewCountsForOffers($viewCounts)
+    {
+        self::updatePopularityCount(0);
+        if (!empty($viewCounts)) {
+            foreach ($viewCounts as $viewCountKey => $viewCountValue) {
+                if (!empty($viewCountValue['id'])) {
+                    self::updatePopularityCount(count($viewCountValue['viewcount']), $viewCountValue['id']);
+                }
+            }
+        }
+        return true;
+    }
+
+    public static function updatePopularityCount($count, $offerId = '')
+    {
+        $query = Doctrine_Query::create()
+            ->update('Offer')
+            ->set('popularityCount', $count);
+
+        if ($offerId != '') {
+            $query = $query->where('id=' .$offerId);
+        }
+        
+        $query->execute();
     }
 }

@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class ChainItem extends \KC\Entity\ChainItem
+class ChainItem extends \KC\Entity\User\ChainItem
 {
     public function saveChain($request, $locale)
     {
@@ -23,9 +23,9 @@ class ChainItem extends \KC\Entity\ChainItem
             if ($shopName && $website && $chainId) {
                 try {
                     $entityManagerUser  = \Zend_Registry::get('emUser');
-                    $chain = new \KC\Entity\ChainItem();
-                    $chain->website = $entityManagerUser->find('KC\Entity\Website', $website);
-                    $chain->chainItem = $entityManagerUser->find('KC\Entity\Chain', $chainId);
+                    $chain = new \KC\Entity\User\ChainItem();
+                    $chain->website = $entityManagerUser->find('KC\Entity\User\Website', $website);
+                    $chain->chainItem = $entityManagerUser->find('KC\Entity\User\Chain', $chainId);
                     $chain->shopName = $shopName;
                     $chain->permalink = $shopPermalink;
                     $chain->shopId = $shopId;
@@ -59,7 +59,7 @@ class ChainItem extends \KC\Entity\ChainItem
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
-            ->from('KC\Entity\ChainItem', 'c')
+            ->from('KC\Entity\User\ChainItem', 'c')
             ->leftJoin('c.website', 'w')
             ->where('c.chainItem ='.$params['id']);
         $request  = \DataTable_Helper::createSearchRequest(
@@ -84,7 +84,7 @@ class ChainItem extends \KC\Entity\ChainItem
             ->select(
                 'c.shopName as shopName,c.permalink,w.name as website,w.url as websiteUrl,c.locale as locale,w.id as websiteId'
             )
-            ->from('KC\Entity\ChainItem', 'c')
+            ->from('KC\Entity\User\ChainItem', 'c')
             ->leftJoin('c.website', 'w')
             ->where('c.id ='.$id);
         $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -95,7 +95,7 @@ class ChainItem extends \KC\Entity\ChainItem
     {
         try {
             $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\ChainItem', 'c')
+            $query = $queryBuilder->delete('KC\Entity\User\ChainItem', 'c')
                     ->where('c.id ='.$id)
                     ->getQuery();
             $query->execute();
@@ -112,7 +112,7 @@ class ChainItem extends \KC\Entity\ChainItem
             ->select(
                 'c.shopName as shopName,c.permalink,w.name as website,w.url as websiteUrl,c.locale as locale,w.id as websiteId'
             )
-            ->from('KC\Entity\ChainItem', 'c')
+            ->from('KC\Entity\User\ChainItem', 'c')
             ->leftJoin('c.website', 'w')
             ->where('c.chainItem ='.$id);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -122,7 +122,7 @@ class ChainItem extends \KC\Entity\ChainItem
     public function update($data = false, $shop)
     {
         $entityManagerUser  = \Zend_Registry::get('emUser');
-        $chain = new \KC\Entity\ChainItem();
+        $chain = new \KC\Entity\User\ChainItem();
         # if show chain is on then modify status based on hsop status
         if ($shop['showChains'] == 1) {
             if (isset($data['status'])) {
@@ -172,7 +172,7 @@ class ChainItem extends \KC\Entity\ChainItem
     public function updateVarnish($chainId = false)
     {
         if (! $chainId) {
-            $chainItem = new \KC\Entity\ChainItem();
+            $chainItem = new \KC\Entity\User\ChainItem();
             $chainId = $chainItem->__get('id');
         }
         $items = static::fetchAllChainItems($chainId);

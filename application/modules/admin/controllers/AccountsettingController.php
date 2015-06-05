@@ -165,7 +165,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             }
 
             FrontEnd_Helper_viewHelper::exceedMemoryLimitAndExcutionTime();
-            $topVouchercodes = \KC\Repository\Offer::getTopOffers(10);
+            $topVouchercodes = Application_Service_Factory::topOffers(10);
             $categoryflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularCategories_list');
             if ($categoryflag) {
                 $topCategories = array_slice(\FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);

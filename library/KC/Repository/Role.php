@@ -2,7 +2,7 @@
 
 namespace KC\Repository;
 
-class Role extends \KC\Entity\Role
+class Role extends \KC\Entity\User\Role
 {
 
     /**
@@ -47,10 +47,10 @@ class Role extends \KC\Entity\Role
 
     public function addUserRoles()
     {
-        $roles = KC\Entity\Role::createUserPermission(1);
+        $roles = KC\Entity\User\Role::createUserPermission(1);
         $entityManagerUser  = \Zend_Registry::get('emUser');
         foreach ($roles as $role) {
-            $userRole = new KC\Entity\Role();
+            $userRole = new KC\Entity\User\Role();
             $userRole->name = $role;
             $entityManagerUser->persist($roles);
             $entityManagerUser->flush();

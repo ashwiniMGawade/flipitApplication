@@ -173,11 +173,6 @@ class Offer
     protected $offline;
 
     /**
-     * @ORM\Column(type="integer", length=8, nullable=true)
-     */
-    protected $tilesId;
-
-    /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
     protected $shopExist;
@@ -188,7 +183,7 @@ class Offer
     protected $totalViewcount;
 
     /**
-     * @ORM\Column(type="decimal", length=16, nullable=true, scale=4)
+     * @ORM\Column(type="integer", length=11, nullable=true)
      */
     protected $popularityCount;
 
@@ -263,7 +258,7 @@ class Offer
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Visitor", inversedBy="offer")
      * @ORM\JoinTable(
-     *     name="favorite_offer",
+     *     name="favorite_offers",
      *     joinColumns={@ORM\JoinColumn(name="offerId", referencedColumnName="id", nullable=false)},
      *     inverseJoinColumns={@ORM\JoinColumn(name="visitorId", referencedColumnName="id", nullable=false)}
      * )

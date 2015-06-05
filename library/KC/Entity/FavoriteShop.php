@@ -4,7 +4,7 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="favorite_shop", indexes={@ORM\Index(name="fav_cascade", columns={"shop"})})
+ * @ORM\Table(name="favorite_shop")})
  */
 class FavoriteShop
 {

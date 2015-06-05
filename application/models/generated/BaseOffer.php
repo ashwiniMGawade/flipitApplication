@@ -8,7 +8,7 @@
  *
  * @property integer $id
  * @property integer $totalViewcount
- * @property decimal $popularityCount
+ * @property integer $popularityCount
  * @property string $title
  * @property enum $Visability
  * @property enum $discountType
@@ -62,10 +62,9 @@ abstract class BaseOffer extends Doctrine_Record
                 'length' => '20',
         ));
 
-       $this->hasColumn('popularityCount', 'decimal', 16, array(
-               'type' => 'decimal',
-               'length' => '16',
-               'scale' => 4
+       $this->hasColumn('popularityCount', 'integer', 20, array(
+               'type' => 'integer',
+               'length' => '20',
        ));
 
 
