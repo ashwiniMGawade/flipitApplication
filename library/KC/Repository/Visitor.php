@@ -50,7 +50,7 @@ class Visitor extends \KC\Entity\Visitor
         return $favouriteShopsStatus;
     }
 
-    public function updateLoginTime($visitorId)
+    public static function updateLoginTime($visitorId)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $visitor = $entityManagerLocale->find("\KC\Entity\Visitor", $visitorId);
