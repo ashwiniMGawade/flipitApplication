@@ -3596,7 +3596,7 @@ class Offer extends BaseOffer
         return true;
     }
 
-    public static function updatePopularityCount($count, $offerId)
+    public static function updatePopularityCount($count, $offerId = '')
     {
         $query = Doctrine_Query::create()
             ->update('Offer')
