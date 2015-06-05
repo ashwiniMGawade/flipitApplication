@@ -141,7 +141,10 @@ class Offer
      * @ORM\Column(type="integer", length=11, nullable=false)
      */
     protected $maxcode;
-
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=true)
+     */
+    protected $tilesId;
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
@@ -210,7 +213,6 @@ class Offer
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\OfferTiles", mappedBy="offer")
-     * @ORM\JoinColumn(name="tilesId", referencedColumnName="id", onDelete="restrict")
      */
     protected $offerTiles;
 
