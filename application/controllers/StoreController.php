@@ -185,7 +185,8 @@ class StoreController extends Zend_Controller_Action
         }
 
         $this->view->expiredOffers = $expiredOffers;
-        $this->view->similarShopsAndSimilarCategoriesOffers = Application_Service_Offer_SimilarOffer::fetchSimilarShopOffers(
+        $this->view->similarShopsAndSimilarCategoriesOffers =
+        Application_Service_Offer_SimilarOffer::fetchSimilarShopOffers(
             $shopId,
             $shopList,
             $shopInformation[0]['affliateProgram']
