@@ -8,7 +8,7 @@ class NocacheController extends Zend_Controller_Action
      */
     public function setAction()
     {
-        self::settingCookie(time() + Session_Helper_Session::getSessionTimeout());
+        self::settingCookie(time() + \Application_Service_Session_Timeout::getSessionTimeout());
         self::commonFunctionForSetUnsetCookie();
 
     }

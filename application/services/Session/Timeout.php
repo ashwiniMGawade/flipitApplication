@@ -1,5 +1,5 @@
 <?php
-class Session_Helper_Session
+class Application_Service_Session_Timeout
 {
     public static function getSessionTimeout()
     {

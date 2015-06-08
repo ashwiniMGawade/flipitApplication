@@ -37,7 +37,7 @@ class TransController extends Zend_Controller_Action
     public function startinlinetranslationAction()
     {
         // no varnish
-        setcookie('passCache', '1', time() + Session_Helper_Session::getSessionTimeout(), '/');
+        setcookie('passCache', '1', time() + \Application_Service_Session_Timeout::getSessionTimeout(), '/');
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
