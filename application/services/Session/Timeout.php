@@ -7,7 +7,7 @@ class Application_Service_Session_Timeout
         $frontControllerObject = $application->getOption('resources');
         $sessionTimeout = isset($frontControllerObject['frontController']['params']['sessionTimeout'])
             ? $frontControllerObject['frontController']['params']['sessionTimeout']
-            : 86400;
+            : 64800;
         return $sessionTimeout;
     }
 }
