@@ -20,6 +20,10 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
     {
         $this->moduleName = strtolower($request->getModuleName());
         $this->localeDirectoryName = strtolower($request->getParam('lang'));
+
+        if (strpos(HTTP_HOST, 'kortingscode.nl') !== false && $this->localeDirectoryName != '') {
+            throw new \Zend_Controller_Action_Exception('', 404);
+        }
         // print in case public keyword exists in url
         preg_match('/public/', REQUEST_URI, $matches, PREG_OFFSET_CAPTURE, 1);
 
