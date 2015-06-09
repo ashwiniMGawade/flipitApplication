@@ -1471,11 +1471,9 @@ class Offer Extends \KC\Entity\Offer
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s.name, s.id')
-                ->from('KC\Entity\Offer', 'o')
-                ->leftJoin('o.shopOffers', 's')
+                ->from('KC\Entity\Shop', 's')
                 ->where('s.deleted='.$flag)
                 ->andWhere("s.name LIKE '$keyword%'")
-                ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
                 ->orderBy('s.id', 'ASC')
                 ->groupBy('s.name')
                 ->setMaxResults(5);
