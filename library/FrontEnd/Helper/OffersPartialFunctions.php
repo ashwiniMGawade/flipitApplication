@@ -415,7 +415,7 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getTermAndConditionsLink($currentOffer, $termsAndConditions)
     {
         $termAndConditionLink ='';
-        if ($termsAndConditions != '' && $termsAndConditions != null) {
+        if (($termsAndConditions != '' && $termsAndConditions != null) || $currentOffer->userGenerated == 1) {
             $termAndConditionLink = '<a id="termAndConditionLink'.$currentOffer->id
             .'" onclick="showTermAndConditions('.$currentOffer->id.')" class="terms"
             href="javascript:void(0);">'

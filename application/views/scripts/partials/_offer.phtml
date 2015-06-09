@@ -173,7 +173,7 @@ foreach ($this->offers as $offer) {
     $offerBottomExtendedLink = '';
     $offerBottomViewAllShopsLink = '';
     if ($this->offersType != 'extendedOffer') {
-        if ($termsAndConditions != '') {
+        if ($termsAndConditions != '' || $offer->userGenerated == 1) {
             $offerBottomTermsAndConditionLink = $offerPartial->getTermAndConditionsLink(
                 $offer,
                 $termsAndConditions
