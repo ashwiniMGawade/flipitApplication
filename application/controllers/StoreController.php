@@ -161,7 +161,7 @@ class StoreController extends Zend_Controller_Action
             ''
         );
 
-        $expiredOffersForBottom = '';
+        $expiredOffersForBottom = array();
         if (!empty($topThreeExpiredOffers)) {
             $expiredOffersForBottom = $topThreeExpiredOffers;
             $topThreeExpiredOffers = array_slice($topThreeExpiredOffers, 0, 3);
