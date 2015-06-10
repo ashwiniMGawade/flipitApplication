@@ -141,7 +141,10 @@ class Offer
      * @ORM\Column(type="integer", length=11, nullable=false)
      */
     protected $maxcode;
-
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=true)
+     */
+    protected $tilesId;
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
@@ -173,11 +176,6 @@ class Offer
     protected $offline;
 
     /**
-     * @ORM\Column(type="integer", length=8, nullable=true)
-     */
-    protected $tilesId;
-
-    /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
     protected $shopExist;
@@ -188,7 +186,7 @@ class Offer
     protected $totalViewcount;
 
     /**
-     * @ORM\Column(type="decimal", length=16, nullable=true, scale=4)
+     * @ORM\Column(type="integer", length=11, nullable=true)
      */
     protected $popularityCount;
 
@@ -215,7 +213,6 @@ class Offer
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\OfferTiles", mappedBy="offer")
-     * @ORM\JoinColumn(name="tilesId", referencedColumnName="id", onDelete="restrict")
      */
     protected $offerTiles;
 

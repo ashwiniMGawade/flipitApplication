@@ -41,14 +41,11 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.textareaCount
 			<div class="mainpage-content-right">
 			<div class="mainpage-content-right-inner-left-other">
 				<?php
-
-					$httpPath = str_replace("admin.","",HTTP_PATH) ;
-					if (! preg_match('/(http\:\/\/www.)/',HTTP_PATH))
-					{
-						$httpPath = str_replace("http://","http://www.",$httpPath) ;
-					}
-				 ?>
-			<input name="fileUrl" readonly type="text" placeholder="" class="span3" value="<?php echo $httpPath .'public/images/upload/media/'.$this->data['fileurl'];?>">
+					$httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+					$siteUrl = LOCALE != '' ? 'http://'.$httpScheme.'.flipit.com/' : 'http://'.$httpScheme.'.kortingscode.nl/';
+					$locale = LOCALE == '' ? '' : LOCALE.'/';
+				?>
+			<input name="fileUrl" readonly type="text" placeholder="" class="span3" value="<?php echo $siteUrl .'public/'.$locale.'images/upload/media/'.$this->data['fileurl'];?>">
 			</div>
 			</div>
 		</div>

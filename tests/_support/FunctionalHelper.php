@@ -16,7 +16,7 @@ class FunctionalHelper extends \Codeception\Module
     public function databaseSwitch($databaseType = "")
     {
         \Codeception\Module\Doctrine2::$em = array();
-        $paths = array(APPLICATION_PATH . '/../library/KC/Entity');
+        $paths = array(APPLICATION_PATH . '/../library/KC/Entity/User');
         $isDevMode = true;
         $config = \Doctrine\ORM\Tools\Setup::createConfiguration($isDevMode);
         $driver = new AnnotationDriver(new AnnotationReader(), $paths);
@@ -25,15 +25,19 @@ class FunctionalHelper extends \Codeception\Module
         $config->setProxyDir(APPLICATION_PATH . '/../library/KC/Entity/Proxy');
         $config->setAutoGenerateProxyClasses(true);
         $config->setProxyNamespace('KC\Entity\Proxy');
-
         $connectionParamsLocale = array(
-            'driver'   => 'pdo_mysql',
-            'user'     => 'root',
-            'password' => 'password',
-            'dbname'   => 'flipit_test'.$databaseType,
+            'driver'   => 'pdo_sqlite',
+            'name'     => 'user',
+            'memory' => true,
         );
         $em = EntityManager::create($connectionParamsLocale, $config);
         \Codeception\Module\Doctrine2::$em = $em;
+        
+        $metaDataFactory = $em->getMetadataFactory();
+        $classes = $metaDataFactory->getAllMetadata();
+        $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
+        $tool->dropDatabase();
+        $tool->createSchema($classes);
         $em->getConnection()->beginTransaction();
     }
 }

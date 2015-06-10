@@ -117,7 +117,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $offerOption;
     }
 
-    public function getOfferDates($currentOffer, $daysTillOfferExpires)
+    public function getOfferDates($currentOffer, $daysTillOfferExpires, $expiredOffer = '')
     {
         $offerDates = '';
         $startDateFormat = LOCALE == 'us'
@@ -132,25 +132,31 @@ class FrontEnd_Helper_OffersPartialFunctions
         $endDateString = isset($endDateObject->date) ? $endDateObject->date : $endDateObject->format('Y-m-d');
         $startDate = new Zend_Date(strtotime($startDateString));
         $endDate = new Zend_Date(strtotime($endDateString));
-        if ($currentOffer->discountType == "CD") {
-            $offerDates .= FrontEnd_Helper_viewHelper::__translate('valid from');
-            $offerDates .= ' ';
-            $offerDates .= ucwords($startDate->get($startDateFormat));
-            $offerDates .= ' '.FrontEnd_Helper_viewHelper::__translate('t/m');
+        if (isset($expiredOffer) && $expiredOffer != '') {
+            $offerDates .= FrontEnd_Helper_viewHelper::__translate('expired on');
             $offerDates .= ' ';
             $offerDates .= ucwords($endDate->get($endDateFormat));
         } else {
-            $offerDates .= FrontEnd_Helper_viewHelper::__translate('valid from');
-            $offerDates .= ' ';
-            $offerDates .= ucwords($startDate->get($endDateFormat));
+            if ($currentOffer->discountType == "CD") {
+                $offerDates .= FrontEnd_Helper_viewHelper::__translate('valid from');
+                $offerDates .= ' ';
+                $offerDates .= ucwords($startDate->get($startDateFormat));
+                $offerDates .= ' '.FrontEnd_Helper_viewHelper::__translate('t/m');
+                $offerDates .= ' ';
+                $offerDates .= ucwords($endDate->get($endDateFormat));
+            } else {
+                $offerDates .= FrontEnd_Helper_viewHelper::__translate('valid from');
+                $offerDates .= ' ';
+                $offerDates .= ucwords($startDate->get($endDateFormat));
+            }
         }
-        
+   
         return $offerDates;
     }
     
-    public function getOfferOptionAndOfferDates($currentOffer, $daysTillOfferExpires)
+    public function getOfferOptionAndOfferDates($currentOffer, $daysTillOfferExpires, $expiredOffer = '')
     {
-        $offerDates = self::getOfferDates($currentOffer, $daysTillOfferExpires);
+        $offerDates = self::getOfferDates($currentOffer, $daysTillOfferExpires, $expiredOffer);
         return $offerDates;
     }
     public function getCssClassNameForOffer($currentOffer, $offerType)
@@ -160,7 +166,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $className;
     }
 
-    public function getOfferImage($currentOffer, $offersType)
+    public function getOfferImage($currentOffer, $offersType, $expired = '')
     {
         $offerImageDiv = '';
         if ($offersType == 'simple' || $offersType == 'extendedOffer') {
@@ -169,9 +175,9 @@ class FrontEnd_Helper_OffersPartialFunctions
             if ($currentOffer->userGenerated == 1 and $currentOffer->approved == '0') {
                 $offerDiscountImage = HTTP_PATH ."public/images/front_end/box_bg_orange_16.png";
                 $altAttributeText = 'Social code';
-                $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);
+                $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false, $expired);
             } else {
-                $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);
+                $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false, $expired);
             }
         } else {
             $offerDiscountImage = self::getShopLogoForOffer($currentOffer);
@@ -192,15 +198,16 @@ class FrontEnd_Helper_OffersPartialFunctions
             . $currentOffer->shopOffers['logo']['name'];
     }
     
-    public function getImageTag($offerDiscountImage, $altAttributeText, $shopCodeHolder)
+    public function getImageTag($offerDiscountImage, $altAttributeText, $shopCodeHolder, $expired = '')
     {
         $imageTagForOffer = '';
+        $grayScaleClass = isset($expired) && $expired != 'grayscale' ? : '';
         if ($shopCodeHolder) {
             $imageTag ='<img width="130" height="68" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'" 
-            title="'.$altAttributeText.'"/>';
+            title="'.$altAttributeText.'" class="'.$grayScaleClass.'"/>';
             $imageTagForOffer = '<div class="center"><div class="code-holder">' . $imageTag . '</div></div>';
         } else {
-            $imageTagForOffer ='<img class="small-code" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"
+            $imageTagForOffer ='<img class="small-code "'.$grayScaleClass.'" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"
             title="'.$altAttributeText.'"/>';
         }
         return $imageTagForOffer;
@@ -277,68 +284,63 @@ class FrontEnd_Helper_OffersPartialFunctions
             $headOpen = '<h3 class="'. $class .'">';
             $headClose = '</h3>';
         }
+        $imageClass = '';
         if ($offerImage == 'offerImage') {
+            $imageClass = 'code';
+        }
+        $visitorInformation = '';
+        if (Auth_VisitorAdapter::hasIdentity()) {
+            $visitorInformation = \KC\Repository\Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
+        }
+        if (empty($visitorInformation) && isset($currentOffer->Visability) && $currentOffer->Visability == 'MEM') {
             $offerLink =
-                '<div class="'.$class.'">
-                '.$offerAnchorTagContent.' </div>';
+                '<span class="'.$class.'">
+            '.$offerAnchorText.' </span>';
         } else {
-
-            $visitorInformation = '';
-            if (!empty(Auth_VisitorAdapter::getIdentity()->id)) {
-                $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
-            }
-            if (empty($visitorInformation) && isset($currentOffer->Visability) && $currentOffer->Visability == 'MEM') {
-                $offerLink =
-                    '<span class="'.$class.'">
-                '.$offerAnchorText.' </span>';
-            } else {
-                if ($currentOffer->discountType == "CD") {
-                    $onClick = $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
-                    $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id),
-                    ga('send', 'event', 'aff', '$offerBounceRate'),
-                    OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')";
-                    if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
-                        $offerLink ='<span class="'.$class.'">'.$offerAnchorText.' </span>';
-                    } else {
-                        $offerLink =
-                            '<a  id="'.$currentOffer->id.'"
-                            href="'.$urlToShow.'" vote="0" rel="nofollow" 
-                            target="_self" onClick="'.$onClick.'">
-                            <span class="'.$class.'">'.$offerAnchorText.'</span>';
-                        if ($class == 'offer-teaser-button kccode') {
-                            $offerLink .=
-                                '<span class="show-code">'.self::generateRandomCharactersForOfferTeaser(4).'</span>
-                                 <span class="blue-corner"></span>';
-                        }
-                        $offerLink .= '</a>';
-                    }
-                } else if ($currentOffer->discountType == "SL") {
-                    if ($class == "offer-teaser-button kccode") {
-                        $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
-                        $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
-                    }
-                    $onClick = "viewCounter('onclick', 'offer', $currentOffer->id),
-                    ga('send', 'event', 'aff', '$offerBounceRate')";
-                    $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
-                    $offerLink =
-                        '<a id="'.$currentOffer->id.'" class="'.$class.'" 
-                        href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
-                     '.$offerAnchorText.'</a>';
+            if ($currentOffer->discountType == "CD") {
+                $onClick = $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
+                $onClick .= "ga('send', 'event', 'aff', '$offerBounceRate'),
+                OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')";
+                if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
+                    $offerLink ='<span class="'.$class.'">'.$offerAnchorText.' </span>';
                 } else {
-                    if ($class == "offer-teaser-button kccode") {
-                        $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
-                        $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
-                    }
-                    $onClick =
-                        self::getUserIsLoggedInOrNot() == "true"
-                        ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permalink'].$popupLink."')"
-                        : HTTP_PATH_LOCALE."accountlogin";
-                    $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
                     $offerLink =
-                        '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
-                        alt = "'.$urlToShow.'" target="_blank" onclick = "'.$onClick.'" rel="nofollow">
-                        '.$offerAnchorText .'</a>';
+                        '<a  id="'.$currentOffer->id.'"
+                        href="'.$urlToShow.'" vote="0" rel="nofollow" 
+                        target="_self" onClick="'.$onClick.'">
+                        <span class="'.$class.'">'.$offerAnchorText.'</span>';
+                    if ($class == 'offer-teaser-button kccode') {
+                        $offerLink .=
+                            '<span class="show-code">'.self::generateRandomCharactersForOfferTeaser(4).'</span>
+                             <span class="blue-corner"></span>';
+                    }
+                    $offerLink .= '</a>';
                 }
+            } else if ($currentOffer->discountType == "SL") {
+                if ($class == "offer-teaser-button kccode") {
+                    $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
+                    $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
+                }
+                $onClick = "ga('send', 'event', 'aff', '$offerBounceRate')";
+                $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
+                $offerLink =
+                    '<a id="'.$currentOffer->id.'" class="'.$class.' '.$imageClass.'" 
+                    href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
+                 '.$offerAnchorText.'</a>';
+            } else {
+                if ($class == "offer-teaser-button kccode") {
+                    $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
+                    $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
+                }
+                $onClick =
+                    self::getUserIsLoggedInOrNot() == "true"
+                    ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permalink'].$popupLink."')"
+                    : HTTP_PATH_LOCALE."accountlogin";
+                $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
+                $offerLink =
+                    '<a id="'.$currentOffer->id.'" class="'.$class.' '.$imageClass.'" vote = "0" href= "'.$urlToShow.'" 
+                    alt = "'.$urlToShow.'" target="_blank" onclick = "'.$onClick.'" rel="nofollow">
+                    '.$offerAnchorText .'</a>';
             }
         }
         return $headOpen. $offerLink . $headClose;
@@ -371,7 +373,8 @@ class FrontEnd_Helper_OffersPartialFunctions
         $urlToShow,
         $offerBounceRate,
         $offerAnchorTagContent,
-        $type
+        $type,
+        $expired = ''
     ) {
         $redirectUrl = '';
         switch ($type){
@@ -398,7 +401,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $currentOffer,
                     $urlToShow,
                     $offerBounceRate,
-                    self::getOfferImage($currentOffer, $offerAnchorTagContent),
+                    self::getOfferImage($currentOffer, $offerAnchorTagContent, $expired),
                     self::getCssClassNameForOffer($currentOffer, $offerAnchorTagContent),
                     'offerImage'
                 );
@@ -412,7 +415,7 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getTermAndConditionsLink($currentOffer, $termsAndConditions)
     {
         $termAndConditionLink ='';
-        if ($termsAndConditions != '' && $termsAndConditions != null) {
+        if (($termsAndConditions != '' && $termsAndConditions != null) || $currentOffer->userGenerated == 1) {
             $termAndConditionLink = '<a id="termAndConditionLink'.$currentOffer->id
             .'" onclick="showTermAndConditions('.$currentOffer->id.')" class="terms"
             href="javascript:void(0);">'
@@ -623,5 +626,20 @@ class FrontEnd_Helper_OffersPartialFunctions
             }
         }
         return $offerOptionsWithPriorityClasses;
+    }
+
+    public static function getTotalViewCountOfOffer($viewCount)
+    {
+        $totalViewCount = '';
+        if (!empty($viewCount) && intval($viewCount) > 20) {
+            $totalViewCount = '<span class="used text-info">
+                <span class="text-over">'
+                .$viewCount
+                .' '
+                .FrontEnd_Helper_viewHelper::__translate('codes used')
+                .'</span>
+            </span>';
+        }
+        return $totalViewCount;
     }
 }

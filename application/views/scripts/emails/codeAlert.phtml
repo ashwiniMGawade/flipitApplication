@@ -1,10 +1,6 @@
 <?php
 $link = $this->httpPathLocale.FrontEnd_Helper_viewHelper::__link('link_top-20');
 $codeAlertSubject = !empty($this->mandrillNewsletterSubject) ? $this->mandrillNewsletterSubject : '';
-$utmParameters = $this->mailType != 'welcome'
-    ? '?utm_source=transactional&utm_medium=email&utm_campaign='.$codeAlertSubject : '';
-?>
-<?php
 $topOffer = (object) $this->codeAlert;
 $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
 $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($topOffer->endDate);
@@ -14,6 +10,9 @@ if( isset($topOffer->exclusiveCode) && $topOffer->exclusiveCode == 1) {
     $exclusiveCode = FrontEnd_Helper_viewHelper::__email('email_exclusive');
     $exclusiveImage = $this->httpPath."public/images/star.png";         
 }
+$utmParameters = $this->mailType != 'welcome'
+    ? '?popup='.$topOffer->id.'&utm_source=transactional&utm_medium=email&utm_campaign='
+    .$codeAlertSubject.'&type=code#'.$topOffer->id : '?popup='.$topOffer->id.'&type=code#'.$topOffer->id;
 ?>
 <tr>
     <td bgcolor="#ffffff">
@@ -21,7 +20,9 @@ if( isset($topOffer->exclusiveCode) && $topOffer->exclusiveCode == 1) {
             <tbody><tr>
                 <td bgcolor="#ea973d" align="center" 
                     style="padding:12px 0 11px; font:18px/18px Arial, Helvetica, sans-serif; color:#373736;">
-                    <span style="text-decoration:none; color:#ffffff;"><?php echo FrontEnd_Helper_viewHelper::__email('email_New Code Alert');?></span>
+                    <span style="text-decoration:none; color:#ffffff;">
+                        <?php echo FrontEnd_Helper_viewHelper::__email('email_New Code Alert');?>
+                    </span>
                 </td>
             </tr>
             <tr>

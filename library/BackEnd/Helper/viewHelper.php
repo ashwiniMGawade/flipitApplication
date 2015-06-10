@@ -818,4 +818,46 @@ class BackEnd_Helper_viewHelper
         $widgetCategories['newest-code'] = $this->zendTranslate->translate('backend_Newest code');
         return $widgetCategories;
     }
+
+    public static function clearTranslationCache()
+    {
+        $locale = new \Zend_Locale(Zend_Registry::get('Zend_Locale'));
+        $cache = new Application_Service_Translation_Cache();
+        $cache->clearCache($locale);
+    }
+
+    public static function getTopOffers($limit)
+    {
+        $topOffers = \KC\Repository\Offer::getTopCouponCodesForNewsletterCache($limit);
+        if (count($topOffers) < $limit) {
+            $totalViewCountOffersLimit = $limit - count($topOffers);
+            $voucherCodes = self::getOffersByType($totalViewCountOffersLimit);
+            $topOffers = self::setVoucherCodesToTopCodes($voucherCodes, $topOffers);
+        }
+        return $topOffers;
+    }
+
+    public static function getOffersByType($constraintLimit)
+    {
+        $topVoucherCodes = \KC\Repository\Offer::getOffersForNewsletterCache('totalViewCount', $constraintLimit);
+        if (count($topVoucherCodes) < $constraintLimit) {
+            $newestCodesLimit = $constraintLimit - count($topVoucherCodes);
+            $newestVoucherCodes = \KC\Repository\Offer::getOffersForNewsletterCache('newest', $newestCodesLimit);
+            $topVoucherCodes = $topVoucherCodes + $newestVoucherCodes;
+        }
+
+        return $topVoucherCodes;
+    }
+
+    public static function setVoucherCodesToTopCodes($voucherCodes, $topCouponCodes)
+    {
+        if (!empty($topCouponCodes)) {
+            foreach ($voucherCodes as $topVoucherCodeValue) {
+                $topCouponCodes[] =  $topVoucherCodeValue;
+            }
+        }
+
+        return $topCouponCodes;
+    }
+
 }

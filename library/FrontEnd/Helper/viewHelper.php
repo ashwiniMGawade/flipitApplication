@@ -43,9 +43,6 @@ EOD;
             case 'expired':
                 $shopCouponCodes = \KC\Repository\Offer::getExpiredOffers($type, $limit, $shopId);
                 break;
-            case 'similarstoresandsimilarcategoriesoffers':
-                $shopCouponCodes = \KC\Repository\Offer::similarStoresAndSimilarCategoriesOffers($type, $limit, $shopId);
-                break;
             case 'latestupdates':
                 $shopCouponCodes = \KC\Repository\Offer::getLatestUpdates($type, $limit, $shopId);
                 break;
@@ -337,7 +334,6 @@ EOD;
             case 'onclick':
                 if (\KC\Repository\ViewCount::getOfferClick($offerId, $clientIp) == 0) {
                     \KC\Repository\ViewCount::saveOfferClick($offerId, $clientIp);
-                    \KC\Repository\ViewCount::updateCacheValueForOfferViewCount($offerId);
                     $varnishObj = new \KC\Repository\Varnish();
                     $varnishObj->addUrl(HTTP_PATH_LOCALE . 'offer/offer-view-count?offerId='. $offerId);
                     $resultStatus = "true";

@@ -31,6 +31,7 @@ class TransController extends Zend_Controller_Action
             if (\Zend_Translate::hasCache()) {
                 \Zend_Translate::clearCache();
             }
+            \BackEnd_Helper_viewHelper::clearTranslationCache();
         }
     }
 

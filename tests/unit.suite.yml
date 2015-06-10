@@ -3,7 +3,7 @@
 # suite for unit (internal) tests.
 class_name: UnitTester
 modules:
-    enabled: [ZF1, Doctrine1, Asserts, UnitHelper]
+    enabled: [ZF1, Doctrine2, Asserts, UnitHelper]
     config:
-        Doctrine1:
-            cleanup: false
+        Doctrine2:
+            cleanup: true

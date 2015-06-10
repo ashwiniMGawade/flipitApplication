@@ -1,29 +1,19 @@
 <?php
-namespace KC\Entity;
+namespace KC\Entity\User;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="ip_addresses")
+ * @ORM\Table(name="ref_user_website")
  */
-class IpAddresses
+class refUserWebsite
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", length=11)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    protected $name;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    protected $ipaddress;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -36,9 +26,16 @@ class IpAddresses
     protected $updated_at;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\ManyToOne(targetEntity="KC\Entity\User\User", inversedBy="refUserWebsite")
+     * @ORM\JoinColumn(name="userId", referencedColumnName="id")
      */
-    protected $deleted;
+    protected $websiteUsers;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="KC\Entity\User\Website", inversedBy="websiteUsers")
+     * @ORM\JoinColumn(name="websiteId", referencedColumnName="id")
+     */
+    protected $refUsersWebsite;
 
     public function __get($property)
     {
@@ -49,5 +46,4 @@ class IpAddresses
     {
         $this->$property = $value;
     }
-    
 }

@@ -1,19 +1,24 @@
 <?php
-namespace KC\Entity;
+namespace KC\Entity\User;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="ref_user_website")
+ * @ORM\Table(name="chain", uniqueConstraints={@ORM\UniqueConstraint(name="chainname", columns={"name"})})
  */
-class refUserWebsite
+class Chain
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer", length=11)
+     * @ORM\Column(type="integer", length=8)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $name;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -25,17 +30,16 @@ class refUserWebsite
      */
     protected $updated_at;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\User", inversedBy="refUserWebsite")
-     * @ORM\JoinColumn(name="userId", referencedColumnName="id")
+     /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\User\ChainItem", mappedBy="chainItem")
      */
-    protected $websiteUsers;
+    protected $chainItem;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Website", inversedBy="websiteUsers")
-     * @ORM\JoinColumn(name="websiteId", referencedColumnName="id")
+     * 
+     * 
      */
-    protected $refUsersWebsite;
+    protected $website;
 
     public function __get($property)
     {

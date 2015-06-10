@@ -7,7 +7,7 @@
                     $redirectUrlToStore = LOCALE != '' ? HTTP_PATH_LOCALE : HTTP_PATH;  
     ?> 
     <li>
-        <a href="<?php echo $redirectUrlToStore.$topPopularOffer['shopOffers']['permaLink']; ?>">
+        <a href="<?php echo $redirectUrlToStore.$topPopularOffer['shopOffers']['permaLink'].'?popup='.$topPopularOffer['id'].'&type=code#'.$topPopularOffer['id']; ?>">
             <strong class="title"><?php echo $topPopularOffer['shopOffers']['name'].' '.$offerType; ?></strong>
             <?php echo $topPopularOffer['title'];?>
         </a>    

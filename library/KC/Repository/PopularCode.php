@@ -360,6 +360,7 @@ class PopularCode extends \KC\Entity\PopularCode
     {
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularOffersHome_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_popularShops_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsHome_list');

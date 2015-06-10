@@ -1,12 +1,12 @@
 <?php
-namespace KC\Entity;
+namespace KC\Entity\User;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="profile_image")
+ * @ORM\Table(name="role")
  */
-class ProfileImage
+class Role
 {
     /**
      * @ORM\Id
@@ -16,22 +16,12 @@ class ProfileImage
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=5, nullable=true)
-     */
-    protected $ext;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    protected $path;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $name;
 
     /**
-     * @ORM\Column(type="integer", length=1, nullable=true)
+     * @ORM\Column(type="integer", length=1, nullable=false)
      */
     protected $deleted;
 
@@ -46,14 +36,14 @@ class ProfileImage
     protected $updated_at;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\User", mappedBy="profileimage")
+     * @ORM\OneToMany(targetEntity="KC\Entity\User\Rights", mappedBy="role")
      */
-    protected $user;
+    protected $rights;
 
-    public function getId()
-    {
-        return $this->id;
-    }
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\User\User", mappedBy="users")
+     */
+    protected $roleid;
 
     public function __get($property)
     {

@@ -1,5 +1,5 @@
 <?php
-namespace KC\Entity;
+namespace KC\Entity\User;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
@@ -52,12 +52,12 @@ class Website
     protected $chain;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\ChainItem", mappedBy="website")
+     * @ORM\OneToMany(targetEntity="KC\Entity\User\ChainItem", mappedBy="website")
      */
     protected $chainItem;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\refUserWebsite", mappedBy="refUsersWebsite")
+     * @ORM\OneToMany(targetEntity="KC\Entity\User\refUserWebsite", mappedBy="refUsersWebsite")
      */
     protected $websiteUsers;
 

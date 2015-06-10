@@ -49,13 +49,13 @@ class OfferController extends Zend_Controller_Action
         );
         $offers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'20_topOffers_list',
-            (array)array('function' => '\KC\Repository\Offer::getTopOffers', 'parameters' => array(20)
+            (array)array('function' => 'Application_Service_Factory::topOffers', 'parameters' => array(20)
             ),
             ''
         );
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'10_popularShops_list',
-            (array)array('function' => '\KC\Repository\Shop::getAllPopularStores', 'parameters' => array(12)
+            (array)array('function' => '\KC\Repository\Shop::getAllPopularStores', 'parameters' => array(10)
             ),
             ''
         );
@@ -293,14 +293,6 @@ class OfferController extends Zend_Controller_Action
     {
         $this->_helper->layout()->disableLayout();
         $offerId = $this->getRequest()->getParam('offerId');
-        $cahceKey = 'viewCount_'.$offerId.'_text';
-        $this->view->offerViewCount = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            (string)$cahceKey,
-            (array)array(
-                'function' => '\KC\Repository\Offer::getViewCountByOfferId',
-                'parameters' => array($offerId)
-            ),
-            ''
-        );
+        $this->view->offerViewCount = \KC\Repository\Offer::getViewCountByOfferId($offerId);
     }
 }

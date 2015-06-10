@@ -45,13 +45,13 @@ class SearchController extends Zend_Controller_Action
         );
         $shopIds = "";
         $shopIds =$this->_helper->Search->getExcludedShopIdsBySearchedKeywords($searchedKeywords);
-        $shopsByShopIds = $this->_helper->Search->getshopsByExcludedShopIds($shopIds);
+        $shopsByShopIds = $this->_helper->Search->getshopsByExcludedShopIds($shopIds, 5);
         $popularShops = $this->_helper->Search->getPopularStores($searchedKeywords);
         $shopsForSearchPage = $this->_helper->Search->getStoresForSearchResults($shopsByShopIds, $popularShops);
         $popularStores = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             '10_popularShops_list',
             array('function' => '\KC\Repository\Shop::getAllPopularStores',
-                'parameters' => array(12)),
+                'parameters' => array(10)),
             true
         );
         $offersBySearchedKeywords = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
@@ -62,13 +62,21 @@ class SearchController extends Zend_Controller_Action
                 'parameters' => array($this->_getAllParams(), $shopIds, 12)),
             true
         );
+        $top10Offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            "10_popularOffersHome_list",
+            array('function' => 'KC\Repository\Offer::getTopOffers', 'parameters' => array(10)
+            ),
+            ''
+        );
 
         if (empty($offersBySearchedKeywords) || $searchedKeywords == '') {
             $this->view->popularStores = $popularStores;
             $this->view->offers = array();
+            $this->view->top10Offers = $top10Offers;
         } else {
             $this->view->popularStores = $shopsForSearchPage;
             $this->view->offers = $offersBySearchedKeywords;
+            $this->view->top10Offers = array();
         }
 
         $this->view->searchedKeyword = ($searchedKeywords !="" || $searchedKeywords != null) ? $searchedKeywords : '';

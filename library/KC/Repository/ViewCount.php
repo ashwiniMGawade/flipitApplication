@@ -79,31 +79,6 @@ class ViewCount extends \KC\Entity\ViewCount
         return true;
     }
 
-
-    public static function updateCacheValueForOfferViewCount($offerId)
-    {
-        $cahceKey = 'viewCount_'.$offerId.'_text';
-        $keyStatus = \FrontEnd_Helper_viewHelper::checkCacheStatusByKey($cahceKey);
-        if ($keyStatus) {
-            $offerViewCount = \KC\Repository\Offer::getViewCountByOfferId($offerId);
-            if (empty($offerViewCount)) {
-                $offerViewCount = array(
-                    'viewCount'=> '',
-                    'offsetType'=> ''
-                );
-            }
-            \FrontEnd_Helper_viewHelper::setInCache($cahceKey, $offerViewCount);
-        } else {
-            $offerViewCountFromCache = \FrontEnd_Helper_viewHelper::getFromCacheByKey($cahceKey);
-            $offerViewCount = array(
-                'viewCount'=> intval($offerViewCountFromCache['viewCount']) + 1,
-                'offsetType'=>$offerViewCountFromCache['offsetType']
-            );
-            \FrontEnd_Helper_viewHelper::setInCache($cahceKey, $offerViewCount);
-        }
-        return $offerViewCount;
-    }
-
     public static function getOfferForFrontEnd($offerType, $limit = 10)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();

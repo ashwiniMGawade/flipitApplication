@@ -330,10 +330,11 @@ class Offer extends BaseOffer
     public static function getTopOffers($limit)
     {
         $topCouponCodes = self::getTopCouponCodes(array(), $limit);
+
         if (count($topCouponCodes) < $limit) {
-            $newestCodesLimit = $limit - count($topCouponCodes);
-            $newestTopVouchercodes = self::getNewestOffers('newest', $newestCodesLimit);
-            foreach ($newestTopVouchercodes as $value) {
+            $totalViewCountOffersLimit = $limit - count($topCouponCodes);
+            $voucherCodes = self::getOffersByType($totalViewCountOffersLimit);
+            foreach ($voucherCodes as $value) {
                 $topCouponCodes[] = array(
                     'id'=> $value['shop']['id'],
                     'permalink' => $value['shop']['permalink'],
@@ -341,13 +342,28 @@ class Offer extends BaseOffer
                  );
             }
         }
+
         $topOffers = array();
         foreach ($topCouponCodes as $value) {
             $topOffers[] = $value['offer'];
         }
+
         return $topOffers;
     }
     
+    public static function getOffersByType($constraintLimit)
+    {
+        $topVoucherCodes = self::getOffers('totalViewCount', $constraintLimit);
+
+        if (count($topVoucherCodes) < $constraintLimit) {
+            $newestCodesLimit = $constraintLimit - count($topVoucherCodes);
+            $newestVoucherCodes = self::getOffers('newest', $newestCodesLimit);
+            $topVoucherCodes = $topVoucherCodes + $newestVoucherCodes;
+        }
+
+        return $topVoucherCodes;
+    }
+
     public static function getTopCouponCodes($shopCategories, $limit = 5)
     {
         $currentDate = date("Y-m-d H:i");
@@ -3017,7 +3033,6 @@ class Offer extends BaseOffer
                     $shopList = Doctrine_Query::create()
                             ->update('Offer o')
                             ->set('o.totalViewcount', $newtotal)
-                            ->set('o.popularityCount', "'".  $popularity ."'")
                             ->where('o.id = ?', $value['id'])
                             ->execute() ;
             }
@@ -3568,5 +3583,95 @@ class Offer extends BaseOffer
             ->where('id=' .$offerId)
             ->execute();
         return true;
+    }
+
+    public static function getOfferViewCountForLast3Days()
+    {
+        $dateFormat = 'Y-m-d';
+        $currentDate = date($dateFormat);
+        $past3Days = date($dateFormat, strtotime('-3 day' . $currentDate));
+        $viewCounts = Doctrine_Query::create()
+            ->select('o.id, viewcount.id')
+            ->from('Offer o')
+            ->leftJoin('o.viewcount viewcount')
+            ->where('viewcount.created_at BETWEEN "'.$past3Days.'" AND "'.$currentDate.'"')
+            ->fetchArray();
+        return $viewCounts;
+    }
+
+    public static function updateViewCountsForOffers($viewCounts)
+    {
+        self::updatePopularityCount(0);
+        if (!empty($viewCounts)) {
+            foreach ($viewCounts as $viewCountKey => $viewCountValue) {
+                if (!empty($viewCountValue['id'])) {
+                    self::updatePopularityCount(count($viewCountValue['viewcount']), $viewCountValue['id']);
+                }
+            }
+        }
+        return true;
+    }
+
+    public static function updatePopularityCount($count, $offerId = '')
+    {
+        $query = Doctrine_Query::create()
+            ->update('Offer')
+            ->set('popularityCount', $count);
+
+        if ($offerId != '') {
+            $query = $query->where('id=' .$offerId);
+        }
+        
+        $query->execute();
+    }
+
+    public static function getOffers($type, $limit, $homeSection = '')
+    {
+        $currentDate = date("Y-m-d H:i");
+        $newestCouponCodes = Doctrine_Query::create()
+            ->select(
+                's.id,s.name,
+                s.permaLink as permalink, s.permaLink, s.deepLink, s.deepLinkStatus, s.usergenratedcontent, s.refUrl,
+                s.actualUrl, terms.content, s.contentManagerName, s.contentManagerId,
+                o.id, o.Visability, o.title,o.authorId,
+                o.discountvalueType, o.exclusiveCode, o.extendedOffer, o.editorPicks, o.authorName,
+                o.discount,o.userGenerated, o.couponCode,o.couponCodeType, o.refOfferUrl, o.refUrl, o.extendedUrl,
+                o.discountType, o.startdate, o.endDate, o.updated_at as lastUpdate, o.nickname, o.approved,
+                img.id, img.path, img.name'
+            )
+            ->from('Offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('s.logo img')
+            ->leftJoin('o.termandcondition terms')
+            ->where('o.deleted = 0')
+            ->andWhere(
+                "(o.couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode c WHERE c.offerid = o.id
+                    and status=1)  > 0) or o.couponCodeType = 'GN'"
+            )
+            ->andWhere('s.deleted = 0')
+            ->andWhere('s.status = 1')
+            ->andWhere('o.discountType != "NW"')
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere('o.enddate > "'.$currentDate.'"')
+            ->andWhere('o.startdate <= "'.$currentDate.'"')
+            ->andWhere('o.Visability != "MEM"');
+        if ($type == 'UserGeneratedOffers') {
+            $newestCouponCodes->andWhere('o.userGenerated=1 and o.approved="0"');
+        } else {
+            $newestCouponCodes->andWhere('o.userGenerated=0');
+        }
+
+        if ($type == 'totalViewCount') {
+            $newestCouponCodes->andWhere('o.popularityCount != 0')
+                ->orderBy('o.popularityCount DESC');
+        } else {
+            $newestCouponCodes->orderBy('o.startDate DESC');
+        }
+
+        if ($homeSection!='') {
+            $newestCouponCodes->groupBy('s.id');
+        }
+        $newestCouponCodes = $newestCouponCodes->limit($limit)->fetchArray();
+        return $newestCouponCodes;
     }
 }

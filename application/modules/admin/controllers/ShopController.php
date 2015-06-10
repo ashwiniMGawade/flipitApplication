@@ -1139,7 +1139,7 @@ class Admin_ShopController extends Zend_Controller_Action
 
                                 if ($accountManager != 'None' && $accountManager != '') {
                                     $shopList->accountManagerName = $accountManager;
-                                    $repo = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\User');
+                                    $repo = \Zend_Registry::get('emUser')->getRepository('KC\Entity\User\User');
                                     $acName = $repo->findOneBy(array('firstName' => $accountManager));
                                     if ($acName) {
                                         $shopList->accoutManagerId = $acName->id;
@@ -1149,7 +1149,7 @@ class Admin_ShopController extends Zend_Controller_Action
 
                                 if ($editor != 'None' && $editor != '') {
                                         $shopList->contentManagerName = $editor;
-                                        $repo2 = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\User');
+                                        $repo2 = \Zend_Registry::get('emUser')->getRepository('KC\Entity\User\User');
                                         $cmName = $repo2->findOneBy(array('firstName' => $editor));
                                     if ($cmName) {
                                         $shopList->contentManagerId = $cmName->id;

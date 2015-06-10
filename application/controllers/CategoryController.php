@@ -50,6 +50,9 @@ class CategoryController extends Zend_Controller_Action
                 20,
                 9
             );
+            if ($this->_getAllParams()['page'] > $offersWithPagination->getPages()->last) {
+                throw new \Zend_Controller_Action_Exception('', 404);
+            }
             $this->view->offersWithPagination = $offersWithPagination;
             $this->view->categoryDetails = $categoryDetails;
             $this->view->offersType = 'offerWithPagenation';

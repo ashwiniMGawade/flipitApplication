@@ -136,18 +136,7 @@ class Offer Extends \KC\Entity\Offer
         $expiredOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $expiredOffers;
     }
-    public static function similarStoresAndSimilarCategoriesOffers($type, $limit, $shopId = 0)
-    {
-        $date = date("Y-m-d H:i");
-        $similarShopsOffers = self::getOffersBySimilarShops($date, $limit, $shopId);
-        $similarCategoriesOffers = self::getOffersBySimilarCategories($date, $limit, $shopId);
-        $similarShopsAndSimilarCategoriesOffers = self::mergeSimilarShopsOffersAndSimilarCategoriesOffers(
-            $similarShopsOffers,
-            $similarCategoriesOffers,
-            $limit
-        );
-        return $similarShopsAndSimilarCategoriesOffers;
-    }
+    
     public static function getOffersBySimilarShops($date, $limit, $shopId)
     {
         $similarShopsIds = self::getSimilarShopsIds($shopId);
@@ -174,9 +163,9 @@ class Offer Extends \KC\Entity\Offer
                 ->andWhere('o.shopOffers !='. $shopId)
                 ->andWhere('s.affliateProgram = 1')
                 ->andWhere($entityManagerUser->expr()->in('o.shopOffers', $similarShopsIds))
-                ->orderBy('o.startDate', 'DESC');
+                ->orderBy('o.totalViewcount', 'DESC');
             if ($limit!='') {
-                $query->setMaxResults($limit);
+                $query = $query->setMaxResults($limit);
             }
             $similarShopsOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         } else {
@@ -223,7 +212,7 @@ class Offer Extends \KC\Entity\Offer
             ->andWhere('o.userGenerated = 0')
             ->andWhere($entityManagerUser->expr()->in('c.categoryId', $commaSepratedCategroyIdValues))
             ->andWhere('o.shopOffers !='. $shopId)
-            ->orderBy('o.startDate', 'DESC')
+            ->orderBy('o.totalViewcount', 'DESC')
             ->setMaxResults($limit);
             $similarCategoriesOffer = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
@@ -265,47 +254,6 @@ class Offer Extends \KC\Entity\Offer
         return $relatedShops;
     }
 
-    public static function mergeSimilarShopsOffersAndSimilarCategoriesOffers(
-        $similarShopsOffers,
-        $similarCategoriesOffers,
-        $limit
-    ) {
-        $shopsOffers = self::createShopsArrayAccordingToOfferHtml($similarShopsOffers);
-        $categoriesOffers = self::createCategoriesArrayAccordingToOfferHtml($similarCategoriesOffers);
-        $mergedOffers = array_merge($shopsOffers, $categoriesOffers);
-        return self::sliceOffersByLimit($mergedOffers, $limit);
-    }
-
-    public static function createShopsArrayAccordingToOfferHtml($similarShopsOffers)
-    {
-        $NewOffersOfRelatedShops = array();
-        foreach ($similarShopsOffers as $shopOffer):
-            $NewOfferOfRelatedShops["'".$shopOffer[0]['id']."'"] = $shopOffer[0];
-        endforeach;
-        return $NewOffersOfRelatedShops;
-    }
-
-    public static function createCategoriesArrayAccordingToOfferHtml($similarCategoriesOffers)
-    {
-        $NewOfferOfRelatedCategories = array();
-        foreach ($similarCategoriesOffers as $categoryOffer):
-            $NewOfferOfRelatedCategories["'".$categoryOffer['id']."'"] = $categoryOffer;
-        endforeach;
-        return $NewOfferOfRelatedCategories;
-    }
-
-    public static function sliceOffersByLimit($mergedOffers, $limit)
-    {
-        $offers = array();
-        if (!empty($mergedOffers)) {
-            foreach($mergedOffers as $newOfShop):
-                $offers[] = $newOfShop;
-            endforeach;
-        }
-        $slicedOffers = array_slice($offers, 0, $limit);
-        return $slicedOffers;
-    }
-
     public static function getTopOffers($limit)
     {
         $topCouponCodes = self::getTopCouponCodes(array(), $limit);
@@ -333,7 +281,7 @@ class Offer Extends \KC\Entity\Offer
         $currentDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select(
-            'p,o,s,terms,img'
+            'p, o , s, img, terms'
         )
         ->from('KC\Entity\PopularCode', 'p')
         ->leftJoin('p.popularcode', 'o')
@@ -363,7 +311,6 @@ class Offer Extends \KC\Entity\Offer
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
         return $topCouponCodes;
     }
 
@@ -438,6 +385,8 @@ class Offer Extends \KC\Entity\Offer
         $key = '4_shopLatestUpdates'  . $shopId . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shop_expiredOffers'  . $shopId . '_list';
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'shop_topthreeexpiredoffers'  . $shopId . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $shophowtokey = '6_topOffersHowto'  . $shopId . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
@@ -1109,8 +1058,14 @@ class Offer Extends \KC\Entity\Offer
         return $OfferDetails;
     }
 
-    public static function getAllOfferOnShop($id, $limit = null, $getExclusiveOnly = false, $includingOffline = false, $visibility = false)
-    {
+    public static function getAllOfferOnShop(
+        $id,
+        $limit = null,
+        $getExclusiveOnly = false,
+        $includingOffline = false,
+        $visibility = false,
+        $expired = false
+    ) {
         $nowDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
@@ -1132,14 +1087,19 @@ class Offer Extends \KC\Entity\Offer
         
         $query->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
         ->andWhere('s.id ='. $id)
-        ->andWhere('s.deleted = 0')
-        ->andWhere('o.discountType !='.$entityManagerUser->expr()->literal('NW'))
-        ->orderBy('o.editorPicks', 'DESC')
-        ->addOrderBy('o.exclusiveCode', 'DESC')
-        ->addOrderBy('o.discountType', 'ASC')
-        ->addOrderBy('o.startDate', 'DESC')
-        ->addOrderBy('o.popularityCount', 'DESC')
-        ->addOrderBy('o.title', 'ASC');
+        ->andWhere('s.deleted = 0');
+
+        if ($expired == true) {
+            $query = $query
+                ->andWhere('o.endDate <='."'".$nowDate."'")
+                ->andWhere('o.discountType ='.$entityManagerUser->expr()->literal('CD'))
+                ->addOrderBy('o.endDate', 'DESC');
+        } else {
+            $query = $query
+                ->andWhere('o.discountType !='.$entityManagerUser->expr()->literal('NW'))
+                ->orderBy('o.discountType', 'ASC')
+                ->addOrderBy('o.totalViewcount', 'DESC');
+        }
 
         if ($getExclusiveOnly) {
             $query = $query->andWhere('o.exclusiveCode = 1');
@@ -1152,7 +1112,6 @@ class Offer Extends \KC\Entity\Offer
         if ($limit) {
             $query = $query->setMaxResults($limit);
         }
-
         $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $offers;
     }
@@ -1299,6 +1258,8 @@ class Offer Extends \KC\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_expiredOffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'shop_topthreeexpiredoffers'  . $u['shopId'] . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
@@ -1349,6 +1310,8 @@ class Offer Extends \KC\Entity\Offer
             $key = '4_shopLatestUpdates'  .$u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_expiredOffers'  . $u['shopId'] . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'shop_topthreeexpiredoffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'extendedTopOffer_of_'.$u['shopId'];
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -1454,6 +1417,8 @@ class Offer Extends \KC\Entity\Offer
 
             $key = 'shop_expiredOffers'  . $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'shop_topthreeexpiredoffers'  . $u['shopId'] . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'shop_similarShopsAndSimilarCategoriesOffers'. $u['shopId'] . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             
@@ -1506,11 +1471,9 @@ class Offer Extends \KC\Entity\Offer
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s.name, s.id')
-                ->from('KC\Entity\Offer', 'o')
-                ->leftJoin('o.shopOffers', 's')
+                ->from('KC\Entity\Shop', 's')
                 ->where('s.deleted='.$flag)
                 ->andWhere("s.name LIKE '$keyword%'")
-                ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
                 ->orderBy('s.id', 'ASC')
                 ->groupBy('s.name')
                 ->setMaxResults(5);
@@ -2279,7 +2242,6 @@ class Offer Extends \KC\Entity\Offer
                     $query = $queryBuilder
                         ->update('KC\Entity\Offer', 'o')
                         ->set('o.totalViewcount', $newtotal)
-                        ->set('o.popularityCount', "'".$popularity."'")
                         ->where('o.id ='.$value['id'])
                         ->getQuery();
                         $query->execute();
@@ -2956,7 +2918,8 @@ class Offer Extends \KC\Entity\Offer
 
             $key = 'shop_expiredOffers'  . intval($params['selctedshop']) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-                    
+            $key = 'shop_topthreeexpiredoffers'  . intval($params['selctedshop']) . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'offer_'.$offer_id.'_details';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'futurecode_'.intval($params['selctedshop']).'_shop';
@@ -3326,6 +3289,8 @@ class Offer Extends \KC\Entity\Offer
 
             $key = 'shop_expiredOffers'  .intval($params['selctedshop']) . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'shop_topthreeexpiredoffers'  . intval($params['selctedshop']) . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'offersAdded_'.intval($params['selctedshop']).'_shop';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'extendedTopOffer_of_'.intval($params['selctedshop']);
@@ -3379,16 +3344,9 @@ class Offer Extends \KC\Entity\Offer
 
     public static function getOfferDetailOnShop($id)
     {
-        $nowDate = date("Y-m-d H:i");
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select(
-                'o.id,o.authorId,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
-                o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,
-                o.endDate,o.refOfferUrl,o.couponCodeType, o.extendedUrl,l.*,t.*,s.id,s.name,s.permalink as permalink,
-                s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path,
-                img.name,vot.id as voteId,vot.vote'
-            )
+            ->select('o, s, l, t, img, terms, vot')
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->leftJoin('o.logo', 'l')
@@ -3397,10 +3355,9 @@ class Offer Extends \KC\Entity\Offer
             ->leftJoin('o.votes', 'vot')
             ->leftJoin('o.offerTiles', 't')
             ->where('o.deleted = 0')
-            ->andWhere('(o.userGenerated = 0 and o.approved = "0") or (o.userGenerated = 1 and o.approved = "1")')
             ->andWhere('s.deleted = 0')
-            ->andWhere('o.discountType != "NW"')
-            ->andWhere('o.id='.$id);
+            ->andWhere('o.id='.$id)
+            ->setMaxResults(1);
         $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $offers;
     }
@@ -3422,5 +3379,118 @@ class Offer Extends \KC\Entity\Offer
             ->orderBy('o.startDate', 'ASC');
         $futureOffersCount = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $futureOffersCount;
+    }
+
+    public static function getOffers($type, $limit, $homeSection = '')
+    {
+        $dateTimeFormat = 'Y-m-d H:i:s';
+        $currentDate = date($dateTimeFormat);
+        $past3Days = date($dateTimeFormat, strtotime('-3 day' . $currentDate));
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser->select(
+            's, o, img, terms'
+        )
+            ->from('KC\Entity\Offer', 'o')
+            ->leftJoin('o.shopOffers', 's')
+            ->leftJoin('s.logo', 'img')
+            ->leftJoin('o.offertermandcondition', 'terms')
+            ->setParameter(10, 0)
+            ->where('o.deleted = ?10')
+            ->andWhere(
+                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
+                cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
+            )
+            ->setParameter(8, 0)
+            ->andWhere('s.deleted = ?8')
+            ->setParameter(9, 1)
+            ->andWhere('s.status = ?9')
+            ->setParameter(2, 'CD')
+            ->andWhere('o.discountType = ?2')
+            ->setParameter(3, 'NW')
+            ->andWhere('o.discountType != ?3')
+            ->setParameter(5, 'MEM')
+            ->andWhere('o.Visability != ?5')
+            ->andWhere('o.endDate >'."'".$currentDate."'")
+            ->andWhere('o.startDate <='."'".$currentDate."'");
+        if ($type == 'UserGeneratedOffers') {
+            $query->andWhere('o.userGenerated=1 and o.approved="0"');
+        } else {
+            $query->andWhere('o.userGenerated=0');
+        }
+
+        if ($type == 'totalViewCount') {
+            $query->andWhere('o.popularityCount != 0')
+                ->orderBy('o.popularityCount', 'DESC');
+        } else {
+            $query->orderBy('o.startDate', 'DESC');
+        }
+
+        if ($homeSection != '') {
+            $query->groupBy('s.id');
+        }
+        $query = $query->setMaxResults($limit);
+        $newestCouponCodes = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $newestCouponCodes;
+    }
+
+    public static function getOffersForNewsletterCache($type, $limit)
+    {
+        $dateTimeFormat = 'Y-m-d H:i:s';
+        $currentDate = date($dateTimeFormat);
+        $past3Days = date($dateTimeFormat, strtotime('-3 day' . $currentDate));
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser->select('o.id')
+            ->from('KC\Entity\Offer', 'o')
+            ->setParameter(10, 0)
+            ->where('o.deleted = ?10')
+            ->andWhere(
+                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
+                cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
+            )
+            ->setParameter(2, 'CD')
+            ->andWhere('o.discountType = ?2')
+            ->setParameter(3, 'NW')
+            ->andWhere('o.discountType != ?3')
+            ->setParameter(5, 'MEM')
+            ->andWhere('o.Visability != ?5')
+            ->andWhere('o.userGenerated=0')
+            ->andWhere('o.endDate >'."'".$currentDate."'")
+            ->andWhere('o.startDate <='."'".$currentDate."'");
+
+        if ($type == 'totalViewCount') {
+            $query->andWhere('o.popularityCount != 0')
+                ->orderBy('o.popularityCount', 'DESC');
+        } else {
+            $query->orderBy('o.startDate', 'DESC');
+        }
+
+        $query = $query->setMaxResults($limit);
+        $newestCouponCodes = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $newestCouponCodes;
+    }
+
+    public static function getTopCouponCodesForNewsletterCache($limit)
+    {
+        $currentDate = date("Y-m-d H:i");
+        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $topCouponCodes = $entityManagerLocale->select('o.id')
+        ->from('KC\Entity\PopularCode', 'p')
+        ->leftJoin('p.popularcode', 'o')
+        ->where('o.deleted = 0')
+        ->andWhere(
+            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
+            cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
+        )
+        ->andWhere('o.offline = 0')
+        ->andWhere('o.endDate >'."'".$currentDate."'")
+        ->andWhere('o.startDate <='."'".$currentDate."'")
+        ->andWhere("o.discountType = 'CD'")
+        ->andWhere('o.userGenerated = 0')
+        ->andWhere("o.Visability != 'MEM'")
+        ->orderBy('p.position', 'ASC')
+        ->setMaxResults($limit)
+        ->getQuery()
+        ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $topCouponCodes;
     }
 }
