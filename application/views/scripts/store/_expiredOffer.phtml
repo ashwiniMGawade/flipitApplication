@@ -4,48 +4,51 @@ $expiredOffersPartialClass = new FrontEnd_Helper_ExpiredOffersPartialFunction();
 echo $expiredOffersPartialClass->getExpiredOffersHeader($this->shopName);?>
 <section class="section-module">
 <?php
-foreach ($this->expiredOffers as $offer) :
-    $offer = (object) $offer;
-    $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-    $shopUrl = $domainName.'out/shop/'.$offer->shopOffers['id'];
-    $target = $offer->shopOffers['affliateProgram'] == 0 ? '_self' : '_blank';
-    ?>
-    <div class="line">
-        <?php
-        if($offer->shopOffers['affliateProgram'] == 1) { ?>
-        <a href="<?php echo $shopUrl;?>"
-            rel="nofollow" target="<?php echo $target; ?>">
-        <?php
-        } else {
+if (!empty($this->expiredOffers)) {
+    foreach ($this->expiredOffers as $offer) :
+        $offer = (object) $offer;
+        $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
+        $shopUrl = $domainName.'out/shop/'.$offer->shopOffers['id'];
+        $target = $offer->shopOffers['affliateProgram'] == 0 ? '_self' : '_blank';
         ?>
-        <span class='replace'>
-        <?php 
-        }
-        ?>
-            <div class="holder">
-                <strong class="mark status"><?php echo  $this->translate('Expired'); ?></strong>
-                <div class="box">
-                    <span class="text">
-                    <?php 
-                    echo $offer->title=='' 
-                    ? $this->translate("Description not available right now..") 
-                    : $expiredOffersPartialClass->getOfferTitle($offer->title); ?>
-                    </span>
-                    <?php echo $expiredOffersPartialClass->getOfferCouponCode($offer->couponCode)?>
+        <div class="line">
+            <?php
+            if($offer->shopOffers['affliateProgram'] == 1) { ?>
+            <a href="<?php echo $shopUrl;?>"
+                rel="nofollow" target="<?php echo $target; ?>">
+            <?php
+            } else {
+            ?>
+            <span class='replace'>
+            <?php 
+            }
+            ?>
+                <div class="holder">
+                    <strong class="mark status"><?php echo  $this->translate('Expired'); ?></strong>
+                    <div class="box">
+                        <span class="text">
+                        <?php 
+                        echo $offer->title=='' 
+                        ? $this->translate("Description not available right now..") 
+                        : $expiredOffersPartialClass->getOfferTitle($offer->title); ?>
+                        </span>
+                        <?php echo $expiredOffersPartialClass->getOfferCouponCode($offer->couponCode)?>
+                    </div>
                 </div>
-            </div>
-            <span class="date"><?php echo $expiredOffersPartialClass->getExpiredOnDate($offer->endDate->format('Y-m-d'));?></span>
-        <?php
-        if($offer->shopOffers['affliateProgram'] == 1) { ?>
-        </a>
-        <?php
-        } else {
-        ?>
-        </span>
+                <span class="date"><?php echo $expiredOffersPartialClass->getExpiredOnDate($offer->endDate->format('Y-m-d'));?></span>
+            <?php
+            if($offer->shopOffers['affliateProgram'] == 1) { ?>
+            </a>
+            <?php
+            } else {
+            ?>
+            </span>
+            <?php 
+            }
+            ?>
+        </div>
         <?php 
-        }
-        ?>
-    </div>
-    <?php 
-endforeach;?>
+    endforeach;
+    }
+?>
 </section>
