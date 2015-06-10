@@ -77,6 +77,37 @@ class Category extends \KC\Entity\Category
         return self::changeDataAccordingToOfferHtml($categoryOffersList);
     }
 
+    public static function getCategoryVoucherCodesForNewsletterCache($categoryId, $limit)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $currentDateAndTime = date('Y-m-d 00:00:00');
+        $query = $queryBuilder
+        ->select("roc, o")
+        ->from("KC\Entity\RefOfferCategory", "roc")
+        ->leftJoin("roc.categories", "c")
+        ->leftJoin("roc.offers", "o")
+        ->where("roc.categories =".$categoryId)
+        ->andWhere("c.deleted = 0")
+        ->andWhere("c.status= 1")
+        ->andWhere("o.discountType=" . $queryBuilder->expr()->literal('CD'))
+        ->andWhere(
+            "(o.couponCodeType = 'UN' AND (
+            SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id AND cc.status=1)  > 0
+            ) or o.couponCodeType = 'GN'"
+        )
+        ->andWhere("o.deleted = 0")
+        ->andWhere("o.userGenerated = 0")
+        ->andWhere('o.endDate > '. $queryBuilder->expr()->literal($currentDateAndTime))
+        ->andWhere('o.startDate < '. $queryBuilder->expr()->literal($currentDateAndTime))
+        ->andWhere('o.discountType='. $queryBuilder->expr()->literal('CD'))
+        ->andWhere('o.Visability!='. $queryBuilder->expr()->literal('MEM'))
+        ->orderBy('o.exclusiveCode', 'DESC')
+        ->addOrderBy('o.startDate', 'DESC')
+        ->setMaxResults($limit);
+        $categoryOfferIds = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return self::changeDataAccordingToOfferHtml($categoryOfferIds);
+    }
+
     public static function changeDataAccordingToOfferHtml($categoryOffersList)
     {
         $categoryOffers = array();
@@ -89,7 +120,6 @@ class Category extends \KC\Entity\Category
     public static function getPopularCategories($categoriesLimit = 0, $pageName = '')
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $currentDateAndTime = date('Y-m-d 00:00:00');
         $popularCategories = $queryBuilder
             ->select('p, o, i')
             ->from('KC\Entity\PopularCategory', 'p')

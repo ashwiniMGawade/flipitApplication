@@ -1471,11 +1471,9 @@ class Offer Extends \KC\Entity\Offer
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s.name, s.id')
-                ->from('KC\Entity\Offer', 'o')
-                ->leftJoin('o.shopOffers', 's')
+                ->from('KC\Entity\Shop', 's')
                 ->where('s.deleted='.$flag)
                 ->andWhere("s.name LIKE '$keyword%'")
-                ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
                 ->orderBy('s.id', 'ASC')
                 ->groupBy('s.name')
                 ->setMaxResults(5);
@@ -3411,7 +3409,9 @@ class Offer Extends \KC\Entity\Offer
             ->setParameter(3, 'NW')
             ->andWhere('o.discountType != ?3')
             ->setParameter(5, 'MEM')
-            ->andWhere('o.Visability != ?5');
+            ->andWhere('o.Visability != ?5')
+            ->andWhere('o.endDate >'."'".$currentDate."'")
+            ->andWhere('o.startDate <='."'".$currentDate."'");
         if ($type == 'UserGeneratedOffers') {
             $query->andWhere('o.userGenerated=1 and o.approved="0"');
         } else {
@@ -3422,9 +3422,7 @@ class Offer Extends \KC\Entity\Offer
             $query->andWhere('o.popularityCount != 0')
                 ->orderBy('o.popularityCount', 'DESC');
         } else {
-            $query->andWhere('o.endDate >'."'".$currentDate."'")
-                ->andWhere('o.startDate <='."'".$currentDate."'")
-                ->orderBy('o.startDate', 'DESC');
+            $query->orderBy('o.startDate', 'DESC');
         }
 
         if ($homeSection != '') {
@@ -3433,5 +3431,66 @@ class Offer Extends \KC\Entity\Offer
         $query = $query->setMaxResults($limit);
         $newestCouponCodes = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $newestCouponCodes;
+    }
+
+    public static function getOffersForNewsletterCache($type, $limit)
+    {
+        $dateTimeFormat = 'Y-m-d H:i:s';
+        $currentDate = date($dateTimeFormat);
+        $past3Days = date($dateTimeFormat, strtotime('-3 day' . $currentDate));
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser->select('o.id')
+            ->from('KC\Entity\Offer', 'o')
+            ->setParameter(10, 0)
+            ->where('o.deleted = ?10')
+            ->andWhere(
+                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
+                cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
+            )
+            ->setParameter(2, 'CD')
+            ->andWhere('o.discountType = ?2')
+            ->setParameter(3, 'NW')
+            ->andWhere('o.discountType != ?3')
+            ->setParameter(5, 'MEM')
+            ->andWhere('o.Visability != ?5')
+            ->andWhere('o.userGenerated=0')
+            ->andWhere('o.endDate >'."'".$currentDate."'")
+            ->andWhere('o.startDate <='."'".$currentDate."'");
+
+        if ($type == 'totalViewCount') {
+            $query->andWhere('o.popularityCount != 0')
+                ->orderBy('o.popularityCount', 'DESC');
+        } else {
+            $query->orderBy('o.startDate', 'DESC');
+        }
+
+        $query = $query->setMaxResults($limit);
+        $newestCouponCodes = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $newestCouponCodes;
+    }
+
+    public static function getTopCouponCodesForNewsletterCache($limit)
+    {
+        $currentDate = date("Y-m-d H:i");
+        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $topCouponCodes = $entityManagerLocale->select('o.id')
+        ->from('KC\Entity\PopularCode', 'p')
+        ->leftJoin('p.popularcode', 'o')
+        ->where('o.deleted = 0')
+        ->andWhere(
+            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
+            cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
+        )
+        ->andWhere('o.offline = 0')
+        ->andWhere('o.endDate >'."'".$currentDate."'")
+        ->andWhere('o.startDate <='."'".$currentDate."'")
+        ->andWhere("o.discountType = 'CD'")
+        ->andWhere('o.userGenerated = 0')
+        ->andWhere("o.Visability != 'MEM'")
+        ->orderBy('p.position', 'ASC')
+        ->setMaxResults($limit)
+        ->getQuery()
+        ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $topCouponCodes;
     }
 }

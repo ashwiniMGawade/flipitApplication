@@ -199,16 +199,18 @@ class Admin_AuthController extends Zend_Controller_Action
                 Zend_Session::namespaceUnset('msg');
                 $email = $params["email"];
                 //check user by email from database
-                $result = \Auth_StaffAdapter::forgotPassword($email);
-                if ($result == true) {
+                $authStaffAdapter = new \Auth_StaffAdapter();
+                $result = $authStaffAdapter->forgotPassword($email);
+
+                if (!empty($result)) {
 
                     //generate new password
-                    $newPwd = \Auth_StaffAdapter::genRandomString(10);
-                    $setPass = Doctrine_Core::getTable('User')
-                    ->findOneBy("id", $result['id']);
-                    $setPass->password = $newPwd;
+                    $newPwd = $authStaffAdapter->genRandomString(10);
+                    $setPass = \Zend_Registry::get('emUser')->find('KC\Entity\User\User', $result['id']);
+                    $setPass->password = md5($newPwd);
                     //set new password in database
-                    $setPass->save();
+                    \Zend_Registry::get('emUser')->persist($setPass);
+                    \Zend_Registry::get('emUser')->flush();
                     //create view object
                     $html = new Zend_View();
                     $html->setScriptPath(APPLICATION_PATH. '/modules/admin/views/scripts/template/');

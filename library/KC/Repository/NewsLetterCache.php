@@ -10,10 +10,10 @@ class NewsLetterCache Extends \KC\Entity\newsLetterCache
         self::saveValueInDatebase('email_footer', $newLetterHeaderAndFooter[0]['email_footer']);
         $topCategory = \FrontEnd_Helper_viewHelper::gethomeSections('category', 1);
         self::saveValueInDatebase('top_category_id', $topCategory[0]['category']['id']);
-        $topOfferIds = implode(',', self::getOfferIds(Application_Service_Factory::topOffers(10)));
+        $topOfferIds = implode(',', self::getOfferIds(\BackEnd_Helper_viewHelper::getTopOffers(10)));
         self::saveValueInDatebase('top_offers_ids', $topOfferIds);
         $topCategoryOffersIds = implode(',', self::getOfferIds(
-            \KC\Repository\Category::getCategoryVoucherCodes($topCategory[0]['category']['id'], 3)
+            \KC\Repository\Category::getCategoryVoucherCodesForNewsletterCache($topCategory[0]['category']['id'], 3)
         ));
         self::saveValueInDatebase('top_category_offers_ids', $topCategoryOffersIds);
         return true;
@@ -88,7 +88,7 @@ class NewsLetterCache Extends \KC\Entity\newsLetterCache
         if ($offersExist) {
             $topVouchercodes = \KC\Repository\Offer::getOffersForNewsletter($topOffersIds);
         } else {
-            $topVouchercodes = Application_Service_Factory::topOffers(10);
+            $topVouchercodes = \Application_Service_Factory::topOffers(10);
         }
         return $topVouchercodes;
     }

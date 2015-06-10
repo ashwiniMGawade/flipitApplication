@@ -334,7 +334,6 @@ EOD;
             case 'onclick':
                 if (\KC\Repository\ViewCount::getOfferClick($offerId, $clientIp) == 0) {
                     \KC\Repository\ViewCount::saveOfferClick($offerId, $clientIp);
-                    \KC\Repository\ViewCount::updateCacheValueForOfferViewCount($offerId);
                     $varnishObj = new \KC\Repository\Varnish();
                     $varnishObj->addUrl(HTTP_PATH_LOCALE . 'offer/offer-view-count?offerId='. $offerId);
                     $resultStatus = "true";

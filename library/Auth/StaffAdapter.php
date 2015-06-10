@@ -4,7 +4,7 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
     protected $email = "";
     protected $password = "";
     
-    public function __construct($email, $password, $loginMode = null)
+    public function __construct($email = '', $password = '', $loginMode = null)
     {
         $this->email = \FrontEnd_Helper_viewHelper::sanitize($email);
         $this->password = \FrontEnd_Helper_viewHelper::sanitize($password);
@@ -72,10 +72,11 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
     public function forgotPassword($eMail)
     {
         $entityManagerUser = \Zend_Registry::get('emUser');
-        $repo = $entityManagerLocale->getRepository('KC\Entity\User\User');
+        $repo = $entityManagerUser->getRepository('KC\Entity\User\User');
         $result = $repo->findBy(array('email' => $eMail));
+
         if ($result) {
-            return array ('id' => $result ['id'], 'username' => $result ['firstName'] );
+            return array ('id' => $result[0]->id, 'username' => $result[0]->firstName );
         } else {
             return false;
         

@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     }
  * )
  * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="pagetype", length=10, type="string")
+ * @ORM\DiscriminatorColumn(name="pageType", length=10, type="string")
  * @ORM\DiscriminatorMap({"offer"="KC\Entity\OfferListPage","default"="KC\Entity\DefaultPage"})
  */
 class Page

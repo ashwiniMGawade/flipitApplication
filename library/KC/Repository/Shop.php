@@ -1356,8 +1356,10 @@ class Shop extends \KC\Entity\Shop
 
     public static function removeTargetKeyword($url)
     {
-        $refinedUrl = substr($url, 0, strpos($url, 'target'));
-        return trim($refinedUrl, '"');
+        $regex = '/https?\:\/\/[^\" ]+/i';
+        preg_match_all($regex, $url, $matches);
+        $refinedUrl = isset($matches[0]) && isset($matches[0][0]) ? $matches[0][0] : $url;
+        return $refinedUrl;
     }
 
     public function uploadImage($file, $path)

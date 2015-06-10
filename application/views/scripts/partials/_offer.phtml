@@ -79,7 +79,7 @@ foreach ($this->offers as $offer) {
                 <div class="text">
                     <ul class="meta-items">
                         <?php
-                        if ($offer->userGenerated == 0 && (isset($offer->discountType) && $offer->discountType == 'CD')) {
+                        if ($offer->userGenerated == 0 && (isset($offer->discountType) && $offer->discountType == 'CD') && $expiredOffer == '') {
                             echo $offerPartial->getVerifiedText();
                         }
                         ?>
@@ -91,6 +91,12 @@ foreach ($this->offers as $offer) {
                         echo $membersOnly.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires, $expiredOffer);
                         ?>
                         </li>
+                        <?php
+                        if ($expiredOffer != '') { ?>
+                        <li>
+                        <?php echo FrontEnd_Helper_viewHelper::__translate('This code is unfortunately expired. Often these code will still work'); ?>!
+                        </li>
+                        <?php } ?>
                     </ul>
                     <?php 
                     if ($offer->Visability == 'MEM') {
@@ -167,7 +173,7 @@ foreach ($this->offers as $offer) {
     $offerBottomExtendedLink = '';
     $offerBottomViewAllShopsLink = '';
     if ($this->offersType != 'extendedOffer') {
-        if ($termsAndConditions != '') {
+        if ($termsAndConditions != '' || $offer->userGenerated == 1) {
             $offerBottomTermsAndConditionLink = $offerPartial->getTermAndConditionsLink(
                 $offer,
                 $termsAndConditions
@@ -257,7 +263,9 @@ foreach ($this->offers as $offer) {
         <div class="offer-box" id="websiteOfferLink<?php echo $offer->id ;?>" <?php echo $style;?>>
             <hr class="alt2">
             <div class="offer">
-                <span><?php echo $this->translate('Grab this offer now:');?></span>
+                <span><?php echo $expiredOffer != '' 
+                    ? $this->translate('Go to the website')
+                    : $this->translate('Grab this offer now:');?></span>
                 <a target = "_blank" href="<?php echo $urlToShow;?>" rel= "nofollow">
                 <?php echo $this->translate('Open ');?>
                 <?php echo $offer->shopOffers['name']; ?>

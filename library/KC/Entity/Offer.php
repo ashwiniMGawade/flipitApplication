@@ -260,7 +260,7 @@ class Offer
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Visitor", inversedBy="offer")
      * @ORM\JoinTable(
-     *     name="favorite_offers",
+     *     name="favorite_offer",
      *     joinColumns={@ORM\JoinColumn(name="offerId", referencedColumnName="id", nullable=false)},
      *     inverseJoinColumns={@ORM\JoinColumn(name="visitorId", referencedColumnName="id", nullable=false)}
      * )
