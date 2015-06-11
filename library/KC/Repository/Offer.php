@@ -2836,22 +2836,22 @@ class Offer Extends \KC\Entity\Offer
             $saveOffer->shopOffers = $entityManagerUser->find('KC\Entity\Shop', $saveNewShop->__get('id'));
 
         }
-        try {    
+        try {
                 $entityManagerUser->persist($saveOffer);
                 $entityManagerUser->flush();
-            if (isset($params['couponCodeCheckbox'])) {
-                if (isset($params['selectedcategories'])) {
-                    foreach ($params['selectedcategories'] as $categories) {
-                        $offerCategories  = new \KC\Entity\RefOfferCategory();
-                        $offerCategories->created_at = new \DateTime('now');
-                        $offerCategories->updated_at = new \DateTime('now');
-                        $offerCategories->categories = $entityManagerUser->find('KC\Entity\Category', $categories);
-                        $offerCategories->offers = $entityManagerUser->find('KC\Entity\Offer', $saveOffer->getId());
-                        $entityManagerUser->persist($offerCategories);
-                        $entityManagerUser->flush();
-                    }
+
+            if (isset($params['selectedcategories'])) {
+                foreach ($params['selectedcategories'] as $categories) {
+                    $offerCategories  = new \KC\Entity\RefOfferCategory();
+                    $offerCategories->created_at = new \DateTime('now');
+                    $offerCategories->updated_at = new \DateTime('now');
+                    $offerCategories->categories = $entityManagerUser->find('KC\Entity\Category', $categories);
+                    $offerCategories->offers = $entityManagerUser->find('KC\Entity\Offer', $saveOffer->getId());
+                    $entityManagerUser->persist($offerCategories);
+                    $entityManagerUser->flush();
                 }
             }
+
 
             if (isset($params['attachedpages'])) {
                 foreach ($params['attachedpages'] as $pageId) {
@@ -2958,7 +2958,7 @@ class Offer Extends \KC\Entity\Offer
     }
 
     public function updateOffer($params)
-    {
+    {//echo "<pre>";print_r($params);die;
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
         $repo = $entityManagerLocale->getRepository('KC\Entity\Offer');
         $updateOffer = $repo->find($params['offerId']);
@@ -3225,24 +3225,22 @@ class Offer Extends \KC\Entity\Offer
             }
         }
 
-        if (isset($params['couponCodeCheckbox'])) {
-            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\RefOfferCategory', 'roc')
-            ->setParameter(1, $params['offerId'])
-            ->where('roc.offers = ?1')
-            ->getQuery();
-            $query->execute();
-            if (isset($params['selectedcategories'])) {
-                foreach ($params['selectedcategories'] as $categories) {
-                    $offerCategory  = new \KC\Entity\RefOfferCategory();
-                    $offerCategory->created_at = new \DateTime('now');
-                    $offerCategory->updated_at = new \DateTime('now');
-                    $offerCategory->categories = $entityManagerLocale->find('KC\Entity\Category', $categories);
-                    $offerCategory->offers = $entityManagerLocale->find('KC\Entity\Offer', $params['offerId']);
-                    $entityManagerLocale->persist($offerCategory);
-                    $entityManagerLocale->flush();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->delete('KC\Entity\RefOfferCategory', 'roc')
+        ->setParameter(1, $params['offerId'])
+        ->where('roc.offers = ?1')
+        ->getQuery();
+        $query->execute();
+        if (isset($params['selectedcategories'])) {
+            foreach ($params['selectedcategories'] as $categories) {
+                $offerCategory  = new \KC\Entity\RefOfferCategory();
+                $offerCategory->created_at = new \DateTime('now');
+                $offerCategory->updated_at = new \DateTime('now');
+                $offerCategory->categories = $entityManagerLocale->find('KC\Entity\Category', $categories);
+                $offerCategory->offers = $entityManagerLocale->find('KC\Entity\Offer', $params['offerId']);
+                $entityManagerLocale->persist($offerCategory);
+                $entityManagerLocale->flush();
 
-                }
             }
         }
 
