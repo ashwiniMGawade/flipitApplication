@@ -1,6 +1,7 @@
 <?php
 $this->minifyHeadScript()->appendFile("/public/js/front_end/home.js");
 $this->minifyHeadScript()->appendFile("/public/js/front_end/search.js");
+$this->partial('offer/_jsFileForOfferPartial.phtml');
 $homePageTopNewOffersCategoriesAndSpecialGuidesData = array(
     'topOffers'=>$this->topOffers,
     'newOffers'=>$this->newOffers,

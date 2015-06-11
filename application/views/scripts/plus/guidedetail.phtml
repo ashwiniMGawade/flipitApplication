@@ -1,4 +1,5 @@
-<?php 
+<?php
+$this->partial('offer/_jsFileForOfferPartial.phtml');
 $articleDetails = $this->articleDetails;
 $userDetails = $this->userDetails;
 $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/". $userDetails['slug'];
@@ -80,7 +81,7 @@ $articleImage = PUBLIC_PATH_CDN.$artcileImagePath.$artcileImageName;
             <?php echo $authorDetails. $savingGuides. $discussion;?>
         </div>
         <aside id="sidebar" class="col-md-4 col-sm-4">
-            <?php 
+            <?php
             $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
             $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
             echo $frontendSidebarHelper->sidebarWidgets('plus-page', $this);
