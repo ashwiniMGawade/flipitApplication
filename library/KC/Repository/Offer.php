@@ -1648,11 +1648,6 @@ class Offer Extends \KC\Entity\Offer
         $adapter = new \Zend_File_Transfer_Adapter_Http();
         $user_path = ROOT_PATH . $uploadPath;
         $img = $imgName;
-        if ($img) {
-            unlink($user_path . $img);
-            unlink($user_path . "thum_" . $img);
-            unlink($user_path . "thum_large" . $img);
-        }
         if (!file_exists($user_path)) {
             mkdir($user_path, 0776, true);
         }
