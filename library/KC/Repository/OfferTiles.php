@@ -13,7 +13,7 @@ class OfferTiles extends \KC\Entity\OfferTiles
             ->where('t.id = '.$params['forDelete']);
             $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         } else {
-            $data = new KC\Entity\OfferTiles();
+            $data = new \KC\Entity\OfferTiles();
         }
 
         $data->type = $params['hidtype'];
