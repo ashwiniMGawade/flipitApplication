@@ -583,18 +583,21 @@ function setFormData(data){
 		 }
 	}
 	}
-	if(data[0].discountType=='CD'){
-		jQuery("#couponCode").click();
-		jQuery('#couponCodeTxt').val(data[0].couponCode);
-		//$('#couponInfo').val(data[0].extendedFullDescription);
-
-		// Add class by Er.kundal for select catg of shop
+	if(data[0].discountType=='SL' || data[0].discountType=='PR' || data[0].discountType=='PA'){
 		var catCount = data.length;
 		for(var i=0 ; i< catCount ; i++ ){
 			// Add class by Er.kundal for select catg of shop
 			jQuery("#categoryBtn-"+data[i].categoryId).addClass('btn-primary');
 			jQuery("input#category-" + data[i].categoryId).attr('checked' , 'checked');
 		}
+	}	
+	if(data[0].discountType=='CD'){
+		jQuery("#couponCode").click();
+		jQuery('#couponCodeTxt').val(data[0].couponCode);
+		//$('#couponInfo').val(data[0].extendedFullDescription);
+
+		// Add class by Er.kundal for select catg of shop
+		
 		
 		if(data[0].discountvalueType=='1'){
 			 jQuery('#euro').addClass("btn-primary").siblings().removeClass("btn-primary");
