@@ -18,11 +18,11 @@ foreach ($this->offers as $offer) {
     $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
     $offerCounter++;
     $offer = (object) $offer;
-    $offerBounceRate = "/out/offer/".$offer->id;
     $expiredOffer = isset($offer->expiredOffer) ? $offer->expiredOffer : '';
+    $offerBounceRate = $expiredOffer != '' ? '/out/shop/'.$offer->shopOffers['id'] : "/out/offer/".$offer->id;
     $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
     $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires((array)$offer->endDate);
-    $urlToShow = $offerPartial->getUrlToShow($offer);
+    $urlToShow = $expiredOffer != '' ? HTTP_PATH_LOCALE.'out/shop/'.$offer->shopOffers['id'] : $offerPartial->getUrlToShow($offer);
     $offerTitle = FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offer->title);
     $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
     $userLoggedInOrNot = $offerPartial->getUserIsLoggedInOrNot();
@@ -48,7 +48,7 @@ foreach ($this->offers as $offer) {
         if ($offer->approved == '1') {
             $offerClass = "deal-offer " .$dayleftCss; 
             $offerHolderClass = "offer-holder";
-            $urlToShow = $offerPartial->getUrlToShow($offer);
+            $urlToShow = $expiredOffer != '' ? HTTP_PATH_LOCALE.'out/shop/'.$offer->shopOffers['id'] : $offerPartial->getUrlToShow($offer);
         }
         $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName($esiLocale);
         $defaultText = 
