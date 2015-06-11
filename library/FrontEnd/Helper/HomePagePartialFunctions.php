@@ -338,7 +338,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
             $offerExclusiveText,
             '',
             $leftPanelSelection,
-            $offer['id']
+            $offer
         );
     }
 
@@ -383,33 +383,34 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $offerTitle,
         $offerExclusiveText,
         $dynamicDivId = '',
-        $leftPanelSelection, 
-        $offerId = ''
+        $leftPanelSelection,
+        $offer = ''
     ) {
         $imageDimensions = 'width="84" height="42"';
         if ($dynamicDivId == 'saving-guides') {
             $imageDimensions = 'width="70"';
         }
-        $rightColumnContent = '<li> <div class="top-box">';
+        $offerShopPermalinkAnchor =  '<a href="'.HTTP_PATH_LOCALE.$shopPermalink.'" target="_blank" rel = "nofollow">';
+        if ($offer != '') {
+            $offerShopPermalinkAnchor = FrontEnd_Helper_viewHelper::getOfferPopupLink($offer);
+        }
+
+        $rightColumnContent = '<li>'.$offerShopPermalinkAnchor.'<div class="top-box">';
         if ($leftPanelSelection == 'topOffers') {
             $rightColumnContent .= ' 
                 <div class="logo-box '.$dynamicDivId.'">
                     <img '.$imageDimensions.' alt="' . $shopName .'" src="' . $shopImage .'" title="' . $shopName .'">
                 </div>';
         }
-        $offerRedirectUrl = $offerId != ''
-            ? HTTP_PATH_LOCALE.$shopPermalink.'?popup='.$offerId.'&type=code#'.$offerId
-            : HTTP_PATH_LOCALE.$shopPermalink;
         $rightColumnContent .= '
                 <div class="box">
                     <h3>
                        <span>'. $shopName .'</span>'.$offerExclusiveText.'
                     </h3>
-                    <a href="'.$offerRedirectUrl.'" target="_blank" rel = "nofollow">
                         <p class="sub-text">' . FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offerTitle) .'</p>
-                    </a>
                 </div>
             </div>
+            </a>
         </li>';
         return $rightColumnContent;
     }
