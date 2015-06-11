@@ -7,7 +7,9 @@
                     $redirectUrlToStore = LOCALE != '' ? HTTP_PATH_LOCALE : HTTP_PATH;  
     ?> 
     <li>
-        <a href="<?php echo $redirectUrlToStore.$topPopularOffer['shopOffers']['permaLink'].'?popup='.$topPopularOffer['id'].'&type=code#'.$topPopularOffer['id']; ?>">
+        <?php
+            echo $offerShopPermalinkAnchor = FrontEnd_Helper_viewHelper::getOfferPopupLink($topPopularOffer);
+        ?>    
             <strong class="title"><?php echo $topPopularOffer['shopOffers']['name'].' '.$offerType; ?></strong>
             <?php echo $topPopularOffer['title'];?>
         </a>    
