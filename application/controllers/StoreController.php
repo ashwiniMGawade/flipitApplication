@@ -162,19 +162,22 @@ class StoreController extends Zend_Controller_Action
         );
 
         $expiredOffersForBottom = array();
+        $offersInformation = $offers;
         if (!empty($topThreeExpiredOffers)) {
             $expiredOffersForBottom = $topThreeExpiredOffers;
             $topThreeExpiredOffers = array_slice($topThreeExpiredOffers, 0, 3);
-            $offers = $this->_helper->Store->mergeExpiredOffersWithLiveOffers($offers, $topThreeExpiredOffers);
+            $offersInformation = $shopInformation[0]['affliateProgram'] != 0
+                ? $this->_helper->Store->mergeExpiredOffersWithLiveOffers($offers, $topThreeExpiredOffers)
+                : $offers;
         }
         
         $this->view->currentStoreInformation = $shopInformation;
         $this->view->moneySavingGuideArticle = $moneySavingGuideArticle;
         $this->view->latestShopUpdates = $latestShopUpdates;
-        $this->view->offers = $offers;
+        $this->view->offers = $offersInformation;
         $this->view->sixShopReasons = $this->_helper->Store->changeIndexOfSixReasons($sixShopReasons);
 
-        if ($this->view->currentStoreInformation[0]['affliateProgram']==0 && count($this->view->offers) <=0) {
+        if ($this->view->currentStoreInformation[0]['affliateProgram']==0 && count($offers) <=0) {
             $offers = $this->_helper->Store->topStorePopularOffers($shopId, $offers);
             $this->view->topPopularOffers = $offers;
         }

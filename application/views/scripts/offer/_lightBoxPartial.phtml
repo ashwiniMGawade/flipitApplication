@@ -18,6 +18,9 @@
         codeBox.addClass("noflash");
     }
 </script>
+<?php
+$clickoutLink = isset($this->expiredOffer) && $this->expiredOffer != '' ? HTTP_PATH_LOCALE.'out/shop/'.$this->offer->shopOffers['id'] : $this->urlToShow;
+?>
 <div class="form">
     <form role="form">
         <input type="hidden" name="copiedText" id='copiedText'
@@ -33,7 +36,7 @@
                 </a>
             </div>
             <div id="bigtextPopupShopLink">                    
-                 <a href="<?php echo $this->urlToShow; ?>" class="btn blue btn-primary" target="_blank">
+                 <a href="<?php echo $clickoutLink; ?>" class="btn blue btn-primary" target="_blank">
                     <?php 
                     echo FrontEnd_Helper_viewHelper::__form('form_Open') . ' ' . $this->offer->shopOffers['name'].' ' .
                         FrontEnd_Helper_viewHelper::__form('form_New year sale code');
