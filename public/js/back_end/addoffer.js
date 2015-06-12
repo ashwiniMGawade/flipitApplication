@@ -465,8 +465,8 @@ function getShopDetail(value){
 					// if yes then disable submit button and ask check to accept term and conditions
 					if(data[0].strictConfirmation) {
 
-						jQuery("#addOfferBtn").addClass("disabled").attr('disabled','disabled');
-						jQuery("#saveAndAddnew").addClass("disabled").attr('disabled','disabled');
+						jQuery("#addOfferBtn, .secondButton").addClass("disabled").attr('disabled','disabled');
+						jQuery("#saveAndAddnew, .secondButton").addClass("disabled").attr('disabled','disabled');
 						jQuery(".strict-confirmation-alert").show();
 						jQuery('#enableSaveButtons').removeAttr('checked');
 
@@ -476,11 +476,11 @@ function getShopDetail(value){
 							if(data[0].strictConfirmation){
 
 								if(jQuery(this).is(':checked')){
-									jQuery("#addOfferBtn").removeClass("disabled").removeAttr('disabled','disabled');
-									jQuery("#saveAndAddnew").removeClass("disabled").removeAttr('disabled','disabled');
+									jQuery("#addOfferBtn, .secondButton").removeClass("disabled").removeAttr('disabled','disabled');
+									jQuery("#saveAndAddnew, .secondButton").removeClass("disabled").removeAttr('disabled','disabled');
 								} else{
-									jQuery("#addOfferBtn").addClass("disabled").attr('disabled','disabled');
-									jQuery("#saveAndAddnew").addClass("disabled").attr('disabled','disabled');
+									jQuery("#addOfferBtn, .secondButton").addClass("disabled").attr('disabled','disabled');
+									jQuery("#saveAndAddnew, .secondButton").addClass("disabled").attr('disabled','disabled');
 								}
 							}
 						});

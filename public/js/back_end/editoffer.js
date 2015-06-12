@@ -471,31 +471,6 @@ function setFormData(data){
 
 			 // check if selected shop has restrcited content or not
 			// if yes then disable submit button and ask check to accept term and conditions
-			if(data[0].strictConfirmation) {
-
-				jQuery("#updateOfferBtn").addClass("disabled").attr('disabled','disabled');
-				jQuery(".strict-confirmation-alert").show();
-				jQuery('#enableSaveButtons').removeAttr('checked');
-
-				// bind enable and disbale buttons event on checbox only when strcit confrimation is on 	
-				jQuery('#enableSaveButtons').click(function(){
-
-					if(data[0].strictConfirmation){
-
-						if(jQuery(this).is(':checked')){
-							jQuery("#updateOfferBtn").removeClass("disabled").removeAttr('disabled','disabled');
-						} else{
-							jQuery("#updateOfferBtn").addClass("disabled").attr('disabled','disabled');
-						}
-					}
-				});
-
-
-			} else{
-
-				jQuery("#addOfferBtn,#saveAndAddnew").removeClass("disabled").removeAttr('disabled','disabled');
-				jQuery(".strict-confirmation-alert").hide();
-			}
 	   }	 
 	}
 	
@@ -847,21 +822,20 @@ function getShopDetail(value){
 							
 							// check if selected shop has restrcited content or not
 							// if yes then disable submit button and ask check to accept term and conditions
-							if(data.strictConfirmation) {
-
-								jQuery("#updateOfferBtn").addClass("disabled").attr('disabled','disabled');
+							if(data[0].strictConfirmation) {
+								jQuery("#updateOfferBtn, .secondButton").addClass("disabled").attr('disabled','disabled');
 								jQuery(".strict-confirmation-alert").show();
 								jQuery('#enableSaveButtons').removeAttr('checked');
 
 								// bind enable and disbale buttons event on checbox only when strcit confrimation is on 	
 								jQuery('#enableSaveButtons').click(function(){
 
-									if(data.strictConfirmation){
+									if(data[0].strictConfirmation){
 
 										if(jQuery(this).is(':checked')){
-											jQuery("#updateOfferBtn").removeClass("disabled").removeAttr('disabled','disabled');
+											jQuery("#updateOfferBtn, .secondButton").removeClass("disabled").removeAttr('disabled','disabled');
 										} else{
-											jQuery("#updateOfferBtn").addClass("disabled").attr('disabled','disabled');
+											jQuery("#updateOfferBtn, .secondButton").addClass("disabled").attr('disabled','disabled');
 										}
 									}
 								});
