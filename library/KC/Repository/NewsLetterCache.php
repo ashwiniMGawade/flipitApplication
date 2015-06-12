@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class NewsLetterCache Extends \KC\Entity\newsLetterCache
+class NewsLetterCache Extends \KC\Entity\NewsLetterCache
 {
     public static function saveNewsLetterCacheContent()
     {
@@ -22,7 +22,7 @@ class NewsLetterCache Extends \KC\Entity\newsLetterCache
     public static function truncateNewsletterCacheTable()
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->delete('KC\Entity\newsLetterCache', 'nlc')
+        $query = $queryBuilder->delete('KC\Entity\NewsLetterCache', 'nlc')
                 ->where('nlc.id > 0')
                 ->getQuery();
         $query->execute();
@@ -41,7 +41,7 @@ class NewsLetterCache Extends \KC\Entity\newsLetterCache
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('nlc')
-            ->from('\KC\Entity\newsLetterCache', 'nlc');
+            ->from('\KC\Entity\NewsLetterCache', 'nlc');
         $getAllNewsLetterCache = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $allNewsLetterCacheContent = array();
         foreach ($getAllNewsLetterCache as $newsLetterCacheColumnValue) {
@@ -53,7 +53,7 @@ class NewsLetterCache Extends \KC\Entity\newsLetterCache
     protected static function saveValueInDatebase($newsLetterCacheColumnName, $newsLetterCacheColumnValue)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $newsLetterCache = new \KC\Entity\newsLetterCache();
+        $newsLetterCache = new \KC\Entity\NewsLetterCache();
         $newsLetterCache->name = $newsLetterCacheColumnName;
         $newsLetterCache->value = $newsLetterCacheColumnValue;
         $newsLetterCache->status = false;

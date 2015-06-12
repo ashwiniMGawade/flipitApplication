@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="news_letter_cache")
  */
-class newsLetterCache
+class NewsLetterCache
 {
     /**
      * @ORM\Id
