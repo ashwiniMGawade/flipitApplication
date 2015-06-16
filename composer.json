@@ -1,0 +1,10 @@
+{
+    "require": {
+        "zendframework/zendframework1": "1.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "core/"
+        }
+    }
+}
