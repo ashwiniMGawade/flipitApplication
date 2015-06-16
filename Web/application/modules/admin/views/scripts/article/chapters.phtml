@@ -1,0 +1,63 @@
+<script type="text/javascript">
+		CKEDITOR.replace( 'content_<?php echo $this->partialCounter ?>',
+		{
+			customConfig : 'config.js' ,  
+			toolbar :  'BasicToolbar'  
+		});
+</script>
+<?php //echo "<pre>"; print_r($this->partialCounter);?>
+			<div class="multidivchild" >
+				<div class="clear"></div>
+				<div class="mainpage-content-left">
+					<label><strong><?php echo $this->translate('Chapter') .' '.$this->partialCounter; ?></strong></label>
+				</div>
+				<div class="clear"></div>
+				
+				<div class="mainpage-content-line mb10">
+					<div class="mainpage-content-left">
+						<label><strong><?php echo $this->translate('Remove Tab'); ?></strong></label>
+					</div>
+					<div class="mainpage-content-right">
+						<div class="mainpage-content-right-inner-left-other">
+							<div data-toggle="buttons-checkbox" class="btn-group">
+								<button type="button" style="border-radius: 4px 4px 4px 4px;" 
+								name="remove_tab" rel="<?php echo $this->id; ?>" onclick="removechapterhtml(this)" class="btn "><?php echo $this->translate('Remove'); ?></button>
+								<p style="color:red; padding:5px; float:left; margin:0; font-size:13px;">&laquo; Alleen op klikken na opslaan van pagina.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="mainpage-content-line mb10">
+					<div class="mainpage-content-left">
+						<label><strong><?php echo $this->translate('Title'); ?></strong></label>
+					</div>
+					<div class="mainpage-content-right">
+						<div class="mainpage-content-right-inner-right-other"></div>
+						<div class="">
+							<input type="text" placeholder="Title" name="title[]" id="title_<?php echo $this->partialCounter ?>"
+								class="mbot" 
+								value="<?php echo isset($this->title) ? $this->title : '';?>">
+						</div>
+					</div>
+				</div>
+	
+				<div class="mainpage-content-line mb10">
+					<div class="mainpage-content-left">
+						<label><strong><?php echo $this->translate('Description'); ?></strong></label>
+					</div>
+					<div class="mainpage-content-right">
+						<div class="mainpage-content-line">
+							<div class="mainpage-content-line">
+								<div class="mainpage-content-right-inner-right-other"></div>
+								<div class="">
+									<textarea name="content[]"  class="ckeditor" id="content_<?php echo $this->partialCounter ?>"><?php echo isset($this->content) ? $this->content : '';?></textarea>
+								</div>
+							</div>
+						</div>	
+					</div>
+				</div>
+	
+			</div>	
+			
+		

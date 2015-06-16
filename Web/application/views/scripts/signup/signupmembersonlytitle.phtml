@@ -1,0 +1,15 @@
+<?php
+if (Auth_VisitorAdapter::hasIdentity()) :
+    $offer = (object) $this->offer[0];
+    $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
+    $urlToShow = $offerPartial->getUrlToShow($offer);
+    $offerBounceRate = "/out/offer/".$offer->id;
+    $offerTitle = FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offer->title);
+    echo $offerPartial->getCommonRedirectUrlForOffer(
+        $offer,
+        $urlToShow,
+        $offerBounceRate,
+        $offerTitle,
+        'offerTitle'
+    );
+endif;    

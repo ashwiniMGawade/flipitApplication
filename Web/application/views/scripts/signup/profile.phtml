@@ -1,0 +1,114 @@
+<?php
+$this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/profile.js");
+$this->minifyHeadLink()->prependStylesheet("/public/css/front_end/profile.css");
+$profileForm = $this->form;
+// Remove <dt> from label generation
+foreach ($profileForm->getElements() as $formElement) :
+    $formElement->getDecorator('label')->setOption('tag', null);
+endforeach;
+if($this->messageSuccess!='' || $this->messageError!='') : ?>
+    <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
+        <span class='glyphicon glyphicon-warning-sign'></span>
+        <strong><?php echo $this->messageSuccess!='' ? $this->messageSuccess : $this->messageError;?></strong>
+    </div>
+    <?php 
+endif;
+?>
+<section class="profile-box">
+    <?php 
+    $visitorFirstName = isset($this->firstName) ? $this->firstName : '';
+    echo FrontEnd_Helper_viewHelper::accountTabPanel($visitorFirstName);
+    ?>
+    <div class="section-holder">
+        <form id="profile" name="profile" method="POST" action="">
+            <div class="form-row">
+                <div class="row">
+                    <div class="col-lg-7 col-md-7 col-sm-7">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <?php 
+                                    echo $profileForm->firstName->renderLabel()
+                                    . $profileForm->firstName->renderViewHelper();
+                                    ?>
+                                </div>
+                                <div class="col-sm-6">
+                                    <?php 
+                                    echo $profileForm->lastName->renderLabel()
+                                    . $profileForm->lastName->renderViewHelper();
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <?php 
+                            echo $profileForm->emailAddress->renderLabel()
+                            . $profileForm->emailAddress->renderViewHelper();
+                            ?>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <span class="fake-select">
+                                        <?php 
+                                        echo $profileForm->gender->renderLabel()
+                                        . $profileForm->gender->renderViewHelper();
+                                        ?>
+                                    </span>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <?php echo $profileForm->dateOfBirth->renderLabel();?>
+                                    <div class="select-box">
+                                        <?php echo $profileForm->dateOfBirthDay->renderViewHelper();?>
+                                        <?php echo $profileForm->dateOfBirthMonth->renderViewHelper();?>
+                                        <?php echo $profileForm->dateOfBirthYear->renderViewHelper();?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-md-5 col-sm-5">
+                        <div class="form-group">
+                            <?php 
+                            echo $profileForm->password->renderLabel()
+                            . $profileForm->password->renderViewHelper();
+                            ?>
+                        </div>
+                        <div class="form-group">
+                            <?php 
+                            echo $profileForm->confirmPassword->renderLabel()
+                            . $profileForm->confirmPassword->renderViewHelper();
+                            ?>
+                        </div>
+                        <div class="form-group">
+                            <?php 
+                            echo $profileForm->postCode->renderLabel()
+                            . $profileForm->postCode->renderViewHelper();
+                            ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="note-box">
+                <h2><?php echo $this->translate('Email and Newsletter Settings:'); ?></h2>
+                <div class="form-group form-news-letter">
+                    <?php echo $profileForm->weeklyNewsLetter->renderViewHelper();?>
+                    <label for="checkbox">
+                        <strong><?php echo $this->translate('The Kortingscode.nl weekly newsletter');?></strong>
+                        <?php echo $this->translate('The newsletter is Kortingscode.nl almost every week improved the next time. Our ultimate goal: The user can provide with only shops in which you are truly interested in a personal discount list.');?>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <?php echo $profileForm->codealert->renderViewHelper();?>
+                    <label for="checkbox2"><strong><?php echo $this->translate('Code Alert Newsletters'); ?></strong> <?php echo $this->translate('Our code alerts promote only the best exclusive discounts - so keep your eyes peeled'); ?></label>
+                </div>
+            </div>
+            <?php 
+            echo $this->formSubmit(
+                'submit',
+                FrontEnd_Helper_viewHelper::__form('form_update your settings'),
+                array('class'=>'btn blue btn-lg btn-primary register-button', 'id'=>'register')
+            ) ?>
+        </form>
+    </div>
+</section>

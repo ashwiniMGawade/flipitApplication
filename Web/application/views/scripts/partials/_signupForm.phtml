@@ -1,0 +1,55 @@
+<?php
+if (!isset($_COOKIE['registered_user'])) {
+    if ($this->zendForm!='' && $this->zendForm!=null) {
+        $signUpForm = $this->partial(
+            'partials/_signupwidget.phtml',
+            array(
+                'signupFormWidgetType'=>$this->signupFormWidgetType,
+                'zendForm'=>$this->zendForm,
+                'codesWidget' => $this->codesWidget
+            )
+        );
+        
+        $visitorId = 0;
+        if (Auth_VisitorAdapter::hasIdentity()):
+            $visitorId = Auth_VisitorAdapter::getIdentity()->id;
+        endif;
+        $shopId = $this->shopId=='' ? 0 : $this->shopId;
+
+        $shopLogoOrDefaultImage = '<div class="ico-mail"></div>';
+        if ($shopId!=0) {
+            $shop = \KC\Repository\Shop::getShopLogoByShopId($shopId);
+            if($shop!='') {
+                $shopLogoImage = PUBLIC_PATH_CDN.ltrim($shop['path'], "/").'thum_medium_'. $shop['name'];
+                $shopLogoOrDefaultImage = '<img alt="' . $shop['permaLink']. '" src="'. $shopLogoImage .'" title="' . $shop['permaLink']. '">';
+            }
+        }
+
+        $showImage = true;
+        $holderStyle = '';
+        $blockClass = '';
+        if (isset($this->codesWidget) && $this->codesWidget == '1') {
+            $showImage = '';
+            $holderStyle = 'style="padding: 0;"';
+            $blockClass = 'block-form-background';
+        }
+
+        if (KC\Repository\Visitor::getFavoriteShopsForUser($visitorId, $shopId)==false):
+            if ($this->signupFormWidgetType== 'widgetWithinOffers') {?>
+                <div class="block block-form <?php echo $shopId==0 ? 'block-form-2' : ''.' '.$blockClass;?>">
+                    <div class="holder" <?php echo $holderStyle; ?>>
+                        <?php if ($showImage == true) { ?>
+                            <div class="<?php echo $this->shopId=='' ? 'ico-box' : 'icon'?>">
+                            <?php echo $shopLogoOrDefaultImage;?>
+                            </div>
+                        <?php } ?>
+                    <?php echo $signUpForm;?>
+                    </div>
+                </div>
+                <?php 
+            } else {
+                echo $signUpForm;
+            }
+        endif;
+    }
+}

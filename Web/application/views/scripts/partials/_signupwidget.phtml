@@ -1,0 +1,57 @@
+<div class="<?php echo $this->signupFormWidgetType== 'sidebarWidget' ? 'block block-2' : 'box' ;?>">
+<?php 
+$signUpPartial = new FrontEnd_Helper_SignUpPartialFunction();
+$signUpHeader= $signUpPartial->getSignUpWidgetHeader($this->signupFormWidgetType);
+
+if ($this->zendForm->submitButtonClassName == 'orange') {
+    echo $signUpHeader;
+}
+
+foreach ($this->zendForm->getElements() as $formElement) {
+    $formElement->getDecorator('label')->setOption('tag', null);
+}
+$memberOnlyFormAction = isset($this->formAction) && $this->formAction != '' 
+    ? $this->formAction
+    : '';
+?>
+<form action="<?php echo $memberOnlyFormAction; ?>" method="post" 
+class="<?php echo $this->zendForm->zendFormClassName !='' ? 'email-form form-inline' : 'form-signin newsletter '; ?>" 
+name="<?php echo $this->zendForm->zendFormName; ?>" id="<?php echo $this->zendForm->zendFormName; ?>">
+    <?php
+    if ($this->zendForm->submitButtonClassName != 'orange') {
+        if (!isset($this->codesWidget)) {
+            echo $signUpHeader.$this->zendForm->emailAddress->renderViewHelper();
+        } else {
+            echo $this->zendForm->emailAddress->renderViewHelper();
+        }
+    } else { ?>
+        <div class="form-group">
+            <?php echo $this->zendForm->emailAddress->renderViewHelper();?>
+        </div>
+        <?php
+    }
+    ?>
+    <?php echo $this->zendForm->shopId->renderViewHelper();
+        $memberOnly = isset($this->codesWidget) && $this->codesWidget == '1' 
+            ? ',setMembersonlyValue(),signUpMembersOnly("' . $this->zendForm->zendFormName .'")' 
+            : ',signUpNewsLetter("' . $this->zendForm->zendFormName .'")';
+    ?>
+    <?php echo $this->zendForm->membersOnly->renderViewHelper();?>
+    <?php echo $this->zendForm->formName->renderViewHelper();?>
+    <?php
+    $submitButtonText = isset($this->codesWidget) && $this->codesWidget == '1' 
+        ? FrontEnd_Helper_viewHelper::__form('form_Subscribe & get code') 
+        : FrontEnd_Helper_viewHelper::__form('form_signup_button');
+
+    echo $this->formSubmit(
+        'signupformbutton',
+        $submitButtonText,
+        array(
+            'class'=>'btn blue btn-lg btn-primary '.$this->zendForm->submitButtonClassName,
+            'id'=>'Login',
+            'onclick' => 'setHiddenFieldValue()'.$memberOnly
+        )
+    )
+    ?>
+</form>
+</div>

@@ -1,0 +1,71 @@
+<?php 
+$this->minifyHeadScript()->appendFile("/public/js/front_end/savingguides.js");
+$this->minifyHeadScript()->appendFile("/public/js/front_end/jquery.lazyload.js");
+$mostReadArticles = '';
+if (!empty($this->mostReadArticles)) {
+    $mostReadArticles =
+        $this->partial(
+            'partials/_mostReadArticles.phtml',
+            array('mostReadArticles'=>$this->mostReadArticles)
+        );
+} else {
+    $mostReadArticles = $this->translate("No Records Found");
+}
+
+$plusViewPath = 'plus/';
+$popularStores = '';
+if (!empty($this->popularStores)) :
+     $popularStores = $this->partial(
+         $plusViewPath.'_popularShopLogos.phtml',
+         array(
+            'popularStores' => $this->popularStores,
+            'headerText' => $this->translate('Popular Stores')
+        )
+     );
+endif;
+
+$pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
+$pageHeaderImage = $pageHeader->getCategoryOrPageHeaderImage($this->pageHeaderImage);
+LOCALE == '' ? $logoPlusCssClass = 'kc-text' : $logoPlusCssClass = 'flipit-text';
+?>
+<div class="banner-block">
+    <img class='image' src="<?php echo $pageHeaderImage;?>"
+    alt="<?php echo $this->pageTitle;?>" title="<?php echo $this->pageTitle;?>"/>
+    <div class="frame-image">
+        <div class="container">
+            <h1 class="<?php echo $logoPlusCssClass; ?>"><?php echo $this->translate('Flipit plus');?></h1>
+        </div>
+    </div>
+    <?php echo $mostReadArticles;?>
+</div>
+<main role="main" id="main">
+<?php
+$articleDetails = $this->allArticles;
+if (!empty($this->allArticles)) {
+    $articlesInformation = array_chunk($articleDetails, 8);
+    for ($articleCounter =0; $articleCounter < count($articlesInformation) ; $articleCounter++) { 
+        if ($articleCounter == 0) {?>
+            <div class="container">
+                <?php  
+                FrontEnd_Helper_MoneySavingGuidesPartialFunctions::
+                    getArticles($articlesInformation[$articleCounter]);
+                 ?>
+            </div>
+            <?php 
+            echo $popularStores;
+        } else {
+            ?>
+            <div class="container">
+            <?php 
+                FrontEnd_Helper_MoneySavingGuidesPartialFunctions::
+                    getArticles($articlesInformation[$articleCounter]);
+            ?>
+            </div>
+            <?php 
+        }
+    }
+} else {
+    echo $this->translate('No record Found');
+}    
+?>   
+</main>

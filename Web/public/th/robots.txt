@@ -1,0 +1,10 @@
+User-agent: *
+Disallow:/info/
+Disallow:/rssfeed/
+Disallow:/out/
+Disallow:/suchen/
+Disallow:/admin/
+
+Sitemap:http://www.flipit.com/de/sitemaps/sitemap_shops.xml
+Sitemap:http://www.flipit.com/de/sitemaps/sitemap_vorteil.xml
+Sitemap:http://www.flipit.com/de/sitemaps/sitemap_main.xml

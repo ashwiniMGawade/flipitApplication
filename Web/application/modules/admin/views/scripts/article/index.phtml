@@ -1,0 +1,77 @@
+<?php
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.dataTables.min.js");
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/dataTableComman.js");
+
+	$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/back_end/ckeditor/ckeditor.js" );
+	$this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
+
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+	$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+	$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+	$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/select2.css" );
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/articleList.js");
+	?>
+	<style>
+	ul.ui-autocomplete
+	{
+		float: right!important;
+		}
+	</style>
+	<?php echo $this->headTitle()->append('Articles List');?>
+     <div id="Article List">
+      <div class="wrap columns-2">
+                <div class='wrap columns-2'>
+          	<?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
+			<br><div class ="mainpage-content-colorbox success">
+			<?php if($this->messageSuccess!=''){?>
+			<span class="successserver"><?php echo $this->messageSuccess; ?>
+			</span>
+			<?php }if($this->messageError!=''){?>
+				<span class="errorserver"><?php echo $this->messageError; ?></span>
+			<?php } ?>
+			</div>
+			<?php }?>
+			</div>
+	   <h1 class="fl"><?php echo $this->translate('Articles');?><button class="btn ml10" onClick="window.location.href='<?php echo HTTP_PATH.'admin/article/createarticle';?>'"><?php echo $this->translate('Add New Article');?></button>
+         </h1>
+         
+         <a href="<?php echo HTTP_PATH;?>admin/article/trasharticle" class="red trash-link">
+         <?php $role =  Zend_Auth::getInstance()->getIdentity()->users->id;			
+          	if($role=='1' || $role=='2'){?>
+         		<strong><?php echo $this->translate('Trash');
+          	 }?>
+          	 	</strong>
+         </a>
+         
+         <div class="clear"></div>
+       	<p class="text-right"><a href=<?php echo HTTP_PATH."admin/article/exportarticlelist"?>>Export List</a></p>
+          	<form class="well form-search searchbarbox" name="searchform" id="searchform">
+              <div class="mainpage-content-searchbart">
+                    <div class="mainpage-content-right-searchbar">
+                    	<button class="btn btn-primary" type="button" id='searchByArticle'>
+                    	<?php echo $this->translate('Search');?>
+                    	</button>
+                    </div>
+                    <div class="mainpage-content-right-inner-left-searchbar">
+                    	<input type='hidden' id="searchArticles" name="searchArticles" style="width:99%;"/>
+                    </div>                        
+                </div>
+            </form>
+            <table class="table table-bordered table-striped" id="articleList">
+             	<thead>
+                  <tr>
+                  	<th><?php echo $this->translate('Article Name');?></th>
+                    <th><?php echo $this->translate('Published On');?></th>
+                    <th><?php echo $this->translate('Permalink');?></th>
+                    <th><?php echo $this->translate('Published');?></th>
+                    <th><?php echo $this->translate('Author');?></th>
+                    <th><?php echo $this->translate('Delete');?></th>
+                 </tr>
+                
+                </thead>
+             </table>
+        </div>
+       
+         
+   </div>

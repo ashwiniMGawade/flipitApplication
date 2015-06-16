@@ -1,0 +1,6088 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kortingscode.nl front\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-04-23 16:19+0530\n"
+"PO-Revision-Date: 2013-05-16 17:27+0530\n"
+"Last-Translator: Chetan <cbhopal@seasiaconsulting.com>\n"
+"Language-Team: KCteam <info@web-flight.nl>\n"
+"Language: Nederlands (NL_nl)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: translate\n"
+"X-Poedit-Basepath: C:\\wamp\\www\\kortingscode\\kortingscode.nl\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-SearchPath-0: application\\controllers\n"
+"X-Poedit-SearchPath-1: application\\views\n"
+"X-Poedit-SearchPath-2: library\\FrontEnd\\Helper\n"
+
+#: FreesignupController.php:19 FreesignupController.php:30
+#: FreesignupController.php:44 FreesignupController.php:84
+#: FreesignupController.php:108 LoginController.php:23 LoginController.php:64
+#: LoginController.php:74 LoginController.php:118 LoginController.php:129
+#: LoginController.php:164 LoginController.php:187 LoginController.php:202
+#, fuzzy
+msgid "Members Only "
+msgstr "Alleen voor leden!"
+
+#: FreesignupController.php:66
+#, fuzzy
+msgid "Welkom bij Kortingscode.nl"
+msgstr "Deel kortingscode.nl en"
+
+#: FreesignupController.php:139
+#, fuzzy
+msgid "Je hebt een account bij Kortingscode.nl reeds"
+msgstr "Ik heb geen Facebook en wil een Kortingscode.nl account:"
+
+#: LoginController.php:90
+#, fuzzy
+msgid "Beste Kortingscode.nl Bezoeker"
+msgstr "Deel kortingscode.nl en"
+
+#: LoginController.php:91
+msgid ""
+"Geen enkel probleem dat u uw wachtwoord heeft vergeten, via de volgende link "
+"kunt u deze opnieuw instellen:"
+msgstr ""
+
+#: LoginController.php:94
+msgid "Klik hier"
+msgstr ""
+
+#: LoginController.php:94
+msgid "Groetjes"
+msgstr ""
+
+#: LoginController.php:94
+#, fuzzy
+msgid "De redactie van Kortingscode.nl"
+msgstr "Deel een kortingscode"
+
+#: LoginController.php:100
+msgid "Kortingscode.nl Wachtwoord Wijziging"
+msgstr ""
+
+#: LoginController.php:141
+#, fuzzy
+msgid "Uw wachtwoord is gewijzigd."
+msgstr "Uw wachtwoord is gereset!"
+
+#: MyfavoriteController.php:185
+msgid "Please upload the valid file"
+msgstr "Upload aub wel het goede bestand"
+
+#: StoreController.php:113 StoreController.php:142
+msgid "No Record Found"
+msgstr "Oeps! Niet gevonden =("
+
+#: scripts/about/index.phtml:5
+msgid "About"
+msgstr "Over"
+
+#: scripts/about/index.phtml:36 Helper/viewHelper.php:782
+msgid "Join Us!"
+msgstr "Maak GRATIS een profiel aan!"
+
+#: scripts/about/index.phtml:38
+msgid ""
+"Spot deals, send them in! Gain access to members only Deals and receive all "
+"the prime vouchercodes!"
+msgstr ""
+"In sommige gevallen zijn de kortingscodes die onze Deal Spotters regelen "
+"alleen beschikbaar voor members. Maak daarom GRATIS een profiel aan en krijg "
+"toegang tot deze exclusieve kortingscodes!"
+
+#: scripts/about/index.phtml:40
+msgid "Wordt GRATIS Member!"
+msgstr "Meld je gratis aan!"
+
+#: scripts/about/index.phtml:55
+msgid "REDACTEURS"
+msgstr "De redactie"
+
+#: scripts/about/index.phtml:106
+msgid "...View Profile"
+msgstr "    Ga naar profiel"
+
+#: scripts/about/index.phtml:126 scripts/about/index.phtml:139
+#: scripts/plus/category.phtml:81
+#: scripts/plus/category.phtml:142
+#: scripts/plus/category.phtml:168
+#: scripts/plus/category.phtml:177
+#: scripts/plus/index.phtml:197 scripts/plus/index.phtml:221
+msgid "No Records Found"
+msgstr "Niets gevonden :("
+
+#: scripts/about/profile.phtml:4
+msgid "Profile"
+msgstr "Profiel"
+
+#: scripts/about/profile.phtml:50
+msgid "Interests:"
+msgstr "Interesses:"
+
+#: scripts/about/profile.phtml:74
+msgid "Vouchercodes"
+msgstr "populaire kortingscodes"
+
+#: scripts/about/profile.phtml:79
+msgid "Editor since"
+msgstr "Redacteur sinds "
+
+#: scripts/about/profile.phtml:79
+msgid "Days"
+msgstr "Dagen"
+
+#: scripts/about/profile.phtml:84
+msgid "Likes"
+msgstr "Vindt leuk:"
+
+#: scripts/about/profile.phtml:89
+msgid "Disikes"
+msgstr "Houdt niet van:"
+
+#: scripts/about/profile.phtml:112
+msgid "Most popular vouchercodes by this editor"
+msgstr "Onlangs geplaatste kortingscodes "
+
+#: scripts/about/profile.phtml:146
+#, fuzzy
+msgid "Favoriete winkels"
+msgstr "Favoriete winkels"
+
+#: scripts/about/profile.phtml:197
+msgid "Latest vouchercodes by this editor"
+msgstr "Meest recente kortingscodes van"
+
+#: scripts/about/profile.phtml:230
+msgid "Meest gelezen bespaar wijzers by this editor"
+msgstr "Meest gelezen pluss van deze redacteur"
+
+#: scripts/plus/category.phtml:7
+#: scripts/plus/guidedetail.phtml:14
+#: scripts/offer/deleteexpired.phtml:8 scripts/preview/articleinfo.phtml:9
+msgid "Bespaar Wijzer"
+msgstr "plus"
+
+#: scripts/plus/category.phtml:58
+#: scripts/plus/index.phtml:48
+msgid "Share Kortingscode.nl en maak kans op een waardebon t.w.v. &euro; 50!"
+msgstr ""
+"Tevreden met de nieuwe Kortingscode.nl? Like ons en maak kans op leuke "
+"prijzen =)"
+
+#: scripts/plus/category.phtml:75
+msgid "MEEST GELEZEN BESPAAR WIJZERS IN "
+msgstr "MEEST GELEZEN plusS VAN: "
+
+#: scripts/plus/category.phtml:97
+msgid "RELENVABTE KORTINGSCODE CATEGORIEEN"
+msgstr "RELEVANTE KORTINGSCODE CATEGORIE&Euml;N"
+
+#: scripts/plus/category.phtml:160
+#, fuzzy
+msgid "ALLE"
+msgstr "ALLE"
+
+#: scripts/plus/category.phtml:160
+msgid "BESPAAR WIJZERS"
+msgstr "plusS"
+
+#: scripts/plus/guidedetail.phtml:57
+#, fuzzy
+msgid "category :"
+msgstr "per categorie"
+
+#: scripts/plus/guidedetail.phtml:66
+#, fuzzy
+msgid "Categorie: "
+msgstr "Artikel categorieën"
+
+#: scripts/plus/guidedetail.phtml:69 scripts/index/index.phtml:440
+#, fuzzy
+msgid "pluss"
+msgstr "plus:"
+
+#: scripts/plus/guidedetail.phtml:128
+#: scripts/store/howtoguide.phtml:193
+msgid "Go To Chapter"
+msgstr "Spring naar hoofdstuk"
+
+#: scripts/plus/guidedetail.phtml:153
+msgid "Deel deze plus met vrienden!"
+msgstr "Deel deze plus met jouw vrienden!"
+
+#: scripts/plus/guidedetail.phtml:243
+#, fuzzy
+msgid " Oops This Page Does Not Exist"
+msgstr "Dit artikel bestaat niet"
+
+#: scripts/plus/index.phtml:65
+msgid "POPULAIR OP DIT MOMENT"
+msgstr "POPULAIR OP DIT MOMENT"
+
+#: scripts/plus/index.phtml:144
+msgid "CATEGORIEEN"
+msgstr "CATEGORIE&Euml;N"
+
+#: scripts/plus/index.phtml:214
+msgid "MEEST GELEZEN BESPAAR WIJZERS"
+msgstr "MEEST GELEZEN plusS"
+
+#: scripts/category/index.phtml:3 scripts/category/show.phtml:3
+#: scripts/error/error.phtml:3 scripts/store/howtoguide.phtml:30
+msgid "Categories"
+msgstr "Artikel categorieën"
+
+#: scripts/category/index.phtml:64 scripts/error/error.phtml:80
+#: scripts/login/member_offer.phtml:275 scripts/offer/index.phtml:35
+#: scripts/offer/popularoffer.phtml:30 scripts/category/index.phtml:72
+msgid "Gesorteerde lijsten"
+msgstr "Specials"
+
+#: scripts/category/show.phtml:77
+msgid "No record found."
+msgstr "Niet gevonden =("
+
+#: scripts/error/error.phtml:2
+#, fuzzy
+msgid "All Categories"
+msgstr "Alle Categorieen"
+
+#: scripts/error/error.phtml:129
+msgid "404 error - Page does not exist"
+msgstr "Error (404) - Pagina bestaat niet"
+
+#: scripts/error/error.phtml:157
+msgid "Sorry - De opgevraagde pagina bestaat helaas niet"
+msgstr ""
+
+#: scripts/error/error.phtml:158
+msgid "Wellicht helpt een van onderstaande links je verder:"
+msgstr ""
+
+#: scripts/error/error.phtml:160
+#, fuzzy
+msgid "Terug naar de vorige pagina"
+msgstr "Terug naar login"
+
+#: scripts/error/error.phtml:161
+msgid "Naar de homepage"
+msgstr ""
+
+#: scripts/error/error.phtml:162
+msgid "Naar veelgestelde vragen"
+msgstr ""
+
+#: scripts/error/error.phtml:164
+#, fuzzy
+msgid "Populair"
+msgstr "Populaire Winkels"
+
+#: scripts/error/error.phtml:166
+#, fuzzy
+msgid "Alle winkels"
+msgstr "Alle Winkels"
+
+#: scripts/error/error.phtml:167
+#, fuzzy
+msgid "Populaire Codes"
+msgstr "Populaire winkels"
+
+#: scripts/error/error.phtml:168
+#, fuzzy
+msgid "Nieuwe Codes"
+msgstr "Nieuwkomers"
+
+#: scripts/error/error.phtml:169
+#, fuzzy
+msgid "plus"
+msgstr "plus:"
+
+#: scripts/error/error.phtml:170
+#, fuzzy
+msgid "Categorie&euml;n"
+msgstr " delete (zin is al afgemaakt in eerder stuk)"
+
+#: scripts/freesignup/confirmemail.phtml:1
+#: scripts/freesignup/confirmemail.phtml:6
+msgid "Klik hier om je e-mail adres te bevestigen"
+msgstr ""
+
+#: scripts/freesignup/confirmemail.phtml:8
+msgid "Alvast bedankt"
+msgstr ""
+
+#: scripts/freesignup/confirmemail.phtml:10
+#, fuzzy
+msgid "Kortingscode.nl"
+msgstr "Kortingscode"
+
+#: scripts/freesignup/confirmemail.phtml:12
+msgid ""
+"Kortingscode.nl is een onderdeel van Imbull, Weteringschans 120, 1017XT "
+"Amsterdam - KvK# 34339618"
+msgstr ""
+
+#: scripts/freesignup/step1.phtml:4 scripts/freesignup/step3.phtml:4
+#: scripts/freesignup/step4.phtml:3 scripts/freesignup/step1.phtml:12
+#: scripts/freesignup/step1.phtml:19 scripts/freesignup/step2.phtml:7
+#: scripts/freesignup/step3.phtml:12 scripts/freesignup/step3.phtml:19
+#: scripts/freesignup/step4.phtml:12 scripts/freesignup/step4.phtml:19
+msgid "Email Adres"
+msgstr "E-mail adres"
+
+#: scripts/freesignup/step1.phtml:13 scripts/freesignup/step2.phtml:8
+#: scripts/freesignup/step3.phtml:13 scripts/freesignup/step4.phtml:13
+#, fuzzy
+msgid "Bevestiging Email Adres"
+msgstr "E-mail adres"
+
+#: scripts/freesignup/step1.phtml:14 scripts/freesignup/step1.phtml:20
+#: scripts/freesignup/step2.phtml:9 scripts/freesignup/step3.phtml:14
+#: scripts/freesignup/step3.phtml:20 scripts/freesignup/step4.phtml:14
+#: scripts/freesignup/step4.phtml:20
+msgid "Jouw laatste login:"
+msgstr ""
+
+#: scripts/freesignup/step1.phtml:15 scripts/freesignup/step1.phtml:21
+#: scripts/freesignup/step2.phtml:10 scripts/freesignup/step3.phtml:15
+#: scripts/freesignup/step3.phtml:21 scripts/freesignup/step4.phtml:15
+#: scripts/freesignup/step4.phtml:21
+msgid "Je bent nu klaar om te beginnen"
+msgstr ""
+
+#: scripts/freesignup/step1.phtml:27
+msgid ""
+"Schrijf je vandaag nog in en krijg gratis toegang tot exclusieve "
+"kortingscodes, win acties en blijf op de hoogte van alle aanbiedingen van "
+"jouw favoriete winkels."
+msgstr ""
+
+#: scripts/freesignup/step1.phtml:33
+#, fuzzy
+msgid "Voer uw e-mailadres in"
+msgstr "Voer uw e-mailadres"
+
+#: scripts/freesignup/step1.phtml:37
+#, fuzzy
+msgid "aanmelden"
+msgstr "Inloggen"
+
+#: scripts/freesignup/step1.phtml:41
+msgid "Heeft u al een account?"
+msgstr "Heb je al een profiel?"
+
+#: scripts/freesignup/step1.phtml:41
+msgid "Klik hier om in te loggen"
+msgstr ""
+
+#: scripts/freesignup/step2.phtml:2
+#, fuzzy
+msgid "Stap 2 van 4"
+msgstr "Stap 2  van 2"
+
+#: scripts/freesignup/step2.phtml:17
+msgid ""
+"Controleer je e-mail en bevestig jouw account door op de link te klikken."
+msgstr ""
+
+#: scripts/freesignup/step3.phtml:29
+msgid ""
+"Voer je gegevens in zodat wij jou de beste en meest relevante kortingscodes "
+"kunnen aanbieden."
+msgstr ""
+
+#: scripts/freesignup/step3.phtml:37
+#, fuzzy
+msgid "Voornaam:"
+msgstr "Voorwaarden"
+
+#: scripts/freesignup/step3.phtml:47
+#, fuzzy
+msgid "Achternaam:"
+msgstr "Achternaam?"
+
+#: scripts/freesignup/step3.phtml:57
+#, fuzzy
+msgid "Geslacht:"
+msgstr "Geslacht"
+
+#: scripts/freesignup/step3.phtml:59
+msgid "Vrouw"
+msgstr ""
+
+#: scripts/freesignup/step3.phtml:60
+#, fuzzy
+msgid "Man"
+msgstr "Mei"
+
+#: scripts/freesignup/step3.phtml:69
+#, fuzzy
+msgid "Geboortedatum:"
+msgstr "Vul Geboortedatum"
+
+#: scripts/freesignup/step3.phtml:72
+msgid "Dag"
+msgstr ""
+
+#: scripts/freesignup/step3.phtml:79
+msgid "Maand"
+msgstr ""
+
+#: scripts/freesignup/step3.phtml:87
+msgid "Jaar"
+msgstr ""
+
+#: scripts/freesignup/step3.phtml:109
+msgid "Postcode"
+msgstr "Postcode"
+
+#: scripts/freesignup/step3.phtml:119
+msgid "Gebruikersnaam"
+msgstr "Gebruikersnaam"
+
+#: scripts/freesignup/step3.phtml:131
+#, fuzzy
+msgid "Wachtwoord"
+msgstr "Nieuw wachtwoord"
+
+#: scripts/freesignup/step3.phtml:141
+#, fuzzy
+msgid "Bevestig Wachtwoord"
+msgstr "Bevestig nieuw wachtwoord"
+
+#: scripts/freesignup/step3.phtml:154
+msgid "bevestig"
+msgstr ""
+
+#: scripts/freesignup/step4.phtml:28 scripts/freesignup/step4.phtml:32
+msgid ""
+"De registratie is compleet! Bekijk de Members-Only kortingscodes, voeg je "
+"favoriete winkels toe en bovenal shop voortaan alleen nog maar met korting!"
+msgstr ""
+
+#: scripts/freesignup/step4.phtml:37
+msgid "Ga naar de members-only omgeving"
+msgstr ""
+
+#: scripts/helpsection/index.phtml:2
+msgid "FAQ"
+msgstr "Veelgestelde vragen"
+
+#: scripts/helpsection/index.phtml:3
+msgid "Helpsection"
+msgstr "Help"
+
+#: scripts/index/index.phtml:26
+msgid "Maak gebruik van GRATIS Exclusieve Kortingscodes, lees onze Besp!"
+msgstr "Tijd voor korting."
+
+#: scripts/index/index.phtml:31
+msgid "Maak direct een gratis account aan op de vernieuwde kortingscode.nl !"
+msgstr ""
+
+#: scripts/index/index.phtml:39
+msgid "Vind kortingscodes voor jouw favoriete winkels.."
+msgstr "Zoek op winkelnaam: Bol.com, Wehkamp, Zalando, etc."
+
+#: scripts/index/index.phtml:56
+msgid "Populaire Kortingscodes"
+msgstr "Top 10 Kortingscodes"
+
+#: scripts/index/index.phtml:107 scripts/index/index.phtml:184
+msgid "Exclusive"
+msgstr "Exclusief"
+
+#: scripts/index/index.phtml:126 scripts/index/index.phtml:439
+msgid "All"
+msgstr "Alle"
+
+#: scripts/index/index.phtml:127
+msgid "popular offers"
+msgstr "populaire kortingscodes"
+
+#: scripts/index/index.phtml:136
+msgid "Nieuwe Kortingscodes"
+msgstr "Nieuwe Kortingscodes"
+
+#: scripts/index/index.phtml:212 scripts/index/index.phtml:350
+#: scripts/offer/couponinfo.phtml:292 scripts/offer/couponinfo.phtml:505
+#: scripts/offer/couponinfo.phtml:726
+msgid "View all"
+msgstr "Bekijk alle"
+
+#: scripts/index/index.phtml:213
+msgid "Newest offers"
+msgstr "nieuwste kortingscodes"
+
+#: scripts/index/index.phtml:221
+msgid "Populaire Categorieen"
+msgstr "Populaire Categorie&euml;n"
+
+#: scripts/index/index.phtml:256 scripts/index/index.phtml:336
+#: scripts/offer/couponinfo.phtml:422 scripts/partials/offer.phtml:251
+#: scripts/store/relatedOffer.phtml:263
+msgid "kortingscodes"
+msgstr "kortingscodes"
+
+#: scripts/index/index.phtml:267
+msgid "All offers"
+msgstr "Alle Kortingscodes"
+
+#: scripts/index/index.phtml:268
+msgid "by category"
+msgstr "per categorie"
+
+#: scripts/index/index.phtml:288
+msgid "Speciale Overzichten"
+msgstr "Specials"
+
+#: scripts/index/index.phtml:351
+#, fuzzy
+msgid "Specials"
+msgstr "Special"
+
+#: scripts/index/index.phtml:359
+msgid "Populaire Bespaar Wijzers"
+msgstr "pluss"
+
+#: scripts/index/index.phtml:460 scripts/partials/_footerDynamic.phtml:23
+msgid "Welkom"
+msgstr "Welkom"
+
+#: scripts/index/index.phtml:461 scripts/partials/_footerDynamic.phtml:24
+msgid ""
+"Als lid van Kortingscode.nl krijg jij toegang tot exclusieve codes en acties!"
+msgstr ""
+
+#: scripts/index/index.phtml:483
+msgid "Onze Meest Populaire Winkels"
+msgstr "Winkels die je niet mag missen!"
+
+#: scripts/index/index.phtml:514
+msgid "Nieuwe Winkels"
+msgstr "Nieuwkomers"
+
+#: scripts/index/index.phtml:538
+msgid "Bekend van"
+msgstr "Bekend van"
+
+#: scripts/index/index.phtml:541
+#, fuzzy
+msgid "seenin"
+msgstr "Gespot in: "
+
+#: scripts/login/forgotpassword.phtml:16
+msgid "E-mail adres niet gevonden :("
+msgstr ""
+
+#: scripts/login/forgotpassword.phtml:17
+msgid ""
+"An Email has been sent to you please check and click on link recieved to "
+"reset the password .!"
+msgstr ""
+"Een e-mail is verstuurd naar het opgegeven e-mailadres. Klik op de "
+"aangegeven link en voer uw nieuwe wachtwoord in."
+
+#: scripts/login/forgotpassword.phtml:20
+msgid "Wachtwoord vergeten?"
+msgstr "Wachtwoord vergeten?"
+
+#: scripts/login/forgotpassword.phtml:22
+msgid ""
+"Vul hieronder het emailadres in waarmee je geregistreerd staat, je ontvangt "
+"dan automatisch een e-mail met daarin om een nieuw wachtwoord in te stellen."
+msgstr ""
+
+#: scripts/login/forgotpassword.phtml:30
+#, fuzzy
+msgid "Uw e-mailadres"
+msgstr "Voer uw e-mailadres"
+
+#: scripts/login/forgotpassword.phtml:35 scripts/login/resetpassword.phtml:34
+msgid "verstuur"
+msgstr "verstuur"
+
+#: scripts/login/index.phtml:19
+#, fuzzy
+msgid ""
+"Weet je het zeker? Deze inloggegevens staan niet in ons systeem! Probeer het "
+"alsjeblieft opnieuw.."
+msgstr ""
+"Deze inloggegevens staan niet in ons systeem! Probeer het alsjeblieft "
+"opnieuw.."
+
+#: scripts/login/index.phtml:22
+msgid ""
+"Log snel in want er worden dagelijks nieuwe Members-Only codes toegevoegd!"
+msgstr ""
+
+#: scripts/login/index.phtml:28
+#, fuzzy
+msgid "e-mailadres"
+msgstr "Voer uw e-mailadres"
+
+#: scripts/login/index.phtml:31 scripts/login/index.phtml:35
+msgid "Vergeten?"
+msgstr ""
+
+#: scripts/login/index.phtml:38 scripts/login/index.phtml:41
+#, fuzzy
+msgid "Heb je nog geen account? "
+msgstr "Heb je al een profiel?"
+
+#: scripts/login/index.phtml:41
+msgid "Klik hier om je te registreren"
+msgstr ""
+
+#: scripts/login/login_footer_member.phtml:2
+msgid "Wat zeggen onze fans?"
+msgstr ""
+
+#: scripts/login/login_footer_member.phtml:9
+msgid "Godelief"
+msgstr ""
+
+#: scripts/login/login_footer_member.phtml:10
+msgid "Gelukkige Huisvrouw"
+msgstr ""
+
+#: scripts/login/login_footer_member.phtml:13
+msgid ""
+"Altijd fijn om net even wat extra te besparen via de acties op kortingscode."
+"nl"
+msgstr ""
+
+#: scripts/login/login_footer_member.phtml:23
+msgid "Lennart"
+msgstr ""
+
+#: scripts/login/login_footer_member.phtml:24
+#, fuzzy
+msgid "Intercedent"
+msgstr "Internet "
+
+#: scripts/login/login_footer_member.phtml:27
+msgid "Dit jaar heb ik al voor 150 Euro bespaard op mijn online aankopen."
+msgstr ""
+
+#: scripts/login/login_footer_member.phtml:37
+msgid "Fleur"
+msgstr ""
+
+#: scripts/login/login_footer_member.phtml:38
+msgid "Marketeer"
+msgstr ""
+
+#: scripts/login/login_footer_member.phtml:42
+msgid ""
+"Elke dag even kijken of er nieuwe kortingen van de H&M en Asos beschikbaar "
+"zijn."
+msgstr ""
+
+#: scripts/login/member_offer.phtml:116
+msgid "Gedeeld door"
+msgstr "Gedeeld door"
+
+#: scripts/login/member_offer.phtml:120
+msgid "More"
+msgstr "Meer"
+
+#: scripts/login/member_offer.phtml:170 scripts/partials/offer.phtml:166
+#: scripts/store/offer.phtml:155 scripts/store/relatedOffer.phtml:181
+msgid "Members Only!"
+msgstr "Members Only!"
+
+#: scripts/login/member_offer.phtml:224 scripts/partials/offer.phtml:222
+#: scripts/store/offer.phtml:205 scripts/store/relatedOffer.phtml:235
+msgid "votes:"
+msgstr "stemmen:"
+
+#: scripts/login/member_offer.phtml:230 scripts/offer/offerdetail.phtml:131
+#: scripts/partials/offer.phtml:268 scripts/store/offer.phtml:288
+#: scripts/store/relatedOffer.phtml:281
+msgid "Verloopt op:"
+msgstr "Verloopt op:"
+
+#: scripts/login/redirecttosignup.phtml:6 Helper/viewHelper.php:547
+#, fuzzy
+msgid "Doe mee met kortingscode.nl"
+msgstr "Deel een kortingscode"
+
+#: scripts/login/redirecttosignup.phtml:12
+msgid "Krijg gratis toegang to exclusive Members-Only codes an kortingen!"
+msgstr ""
+
+#: scripts/login/redirecttosignup.phtml:19
+#, fuzzy
+msgid "Al members?"
+msgstr "Nog geen lid?"
+
+#: scripts/login/redirecttosignup.phtml:21
+#, fuzzy
+msgid "Inlogin"
+msgstr "Inloggen"
+
+#: scripts/login/resetpassword.phtml:15
+msgid "Uw wachtwoord is gereset!"
+msgstr "Uw wachtwoord is gereset!"
+
+#: scripts/login/resetpassword.phtml:16
+msgid "This link seems to be invalid or expired.."
+msgstr "Deze link lijkt niet meer te werken"
+
+#: scripts/login/resetpassword.phtml:18
+#, fuzzy
+msgid "Nieuw wachtwoord aanmaken"
+msgstr "Nieuw wachtwoord"
+
+#: scripts/login/resetpassword.phtml:20
+#, fuzzy
+msgid "Vul hieronder je nieuwe wachtwoord in:"
+msgstr "Maak een nieuw wachtwoord aan"
+
+#: scripts/login/sendemail.phtml:2
+msgid "E-mail verstuurd!"
+msgstr "E-mail = verstuurd! (bekijk ook je spamfolder!)"
+
+#: scripts/login/sendemail.phtml:3
+msgid ""
+"We hebben je een e-mail verstuurd. Volg de instructies om een nieuw "
+"wachtwoord aan te maken."
+msgstr ""
+"We hebben je een e-mail verstuurd. Volg de instructies om een nieuw "
+"wachtwoord aan te maken."
+
+#: scripts/login/sendemail.phtml:4
+msgid "Terug naar login"
+msgstr "Terug naar login"
+
+#: scripts/login/showprofilepage.phtml:9
+#: scripts/myfavorite/membercodes.phtml:2
+#, fuzzy
+msgid "Member only codes"
+msgstr "Members Only Kortingscodes"
+
+#: scripts/login/showprofilepage.phtml:23 scripts/myfavorite/profile.phtml:5
+msgid "Beste "
+msgstr ""
+
+#: scripts/login/showprofilepage.phtml:23 scripts/myfavorite/profile.phtml:5
+msgid " hoe is het ?"
+msgstr ""
+
+#: scripts/login/showprofilepage.phtml:25 scripts/myfavorite/profile.phtml:7
+msgid "Hier kun je je profiel aanpassen en je email instellingen wijzigen"
+msgstr "Jouw profielinstellingen en voorkeuren"
+
+#: scripts/login/showprofilepage.phtml:41 scripts/myfavorite/profile.phtml:22
+msgid "Select"
+msgstr "Selecteer"
+
+#: scripts/login/showprofilepage.phtml:42 scripts/myfavorite/profile.phtml:23
+msgid "Male"
+msgstr "Man"
+
+#: scripts/login/showprofilepage.phtml:43 scripts/myfavorite/profile.phtml:24
+msgid "Female"
+msgstr "Vrouw"
+
+#: scripts/login/showprofilepage.phtml:105 scripts/myfavorite/profile.phtml:86
+msgid "E-mail & Nieuwsbrief instellingen:"
+msgstr ""
+
+#: scripts/login/showprofilepage.phtml:108 scripts/myfavorite/profile.phtml:90
+#, fuzzy
+msgid "Dé Kortingscode.nl wekelijkse nieuwsbrief"
+msgstr "Onze Nieuwsbrief"
+
+#: scripts/login/showprofilepage.phtml:109 scripts/myfavorite/profile.phtml:91
+msgid ""
+"De nieuwsbrief van Kortingscode.nl wordt de komende tijd vrijwel elke week "
+"verbeterd. Ons uiteindelijke doel: De gebruiker een persoonlijke "
+"kortingsoverzicht kunnen bieden met alleen maar shops waarin jij echt "
+"geinteresseerd bent.  "
+msgstr ""
+
+#: scripts/myfavorite/favorite.phtml:3
+#, fuzzy
+msgid "Favorieten"
+msgstr "Cree&euml;r Favorieten"
+
+#: scripts/myfavorite/favorite.phtml:8
+msgid "Zoek op winkelnaam: Bol.com, Wehkamp, Zalando, etc."
+msgstr ""
+
+#: scripts/myfavorite/favorite.phtml:18
+msgid "Toevoegen"
+msgstr ""
+
+#: scripts/myfavorite/favorite.phtml:27
+#, fuzzy
+msgid "Cree&euml;r Favorieten"
+msgstr "Cree&euml;r Favorieten"
+
+#: scripts/myfavorite/favorite.phtml:39
+#, fuzzy
+msgid "verwijderen"
+msgstr "Adverteren"
+
+#: scripts/myfavorite/favorite.phtml:50
+#: scripts/myfavorite/getfavoriteoffer.phtml:5
+msgid "Kortingscodes, speciaal voor jouw geselecteerd"
+msgstr ""
+
+#: scripts/myfavorite/header.phtml:29
+#, fuzzy
+msgid "Upload Image"
+msgstr "Upload Logo"
+
+#: scripts/myfavorite/header.phtml:37
+msgid ""
+"Welkom terug&#33; Voeg een aantal van je favoriete winkels toe zodat je "
+"altijd op de hoogte blijft van de beste acties &#38; kortingscodes&#33;"
+msgstr ""
+
+#: scripts/myfavorite/leftpanel.phtml:17
+msgid "Persoonlijke deals"
+msgstr ""
+
+#: scripts/myfavorite/leftpanel.phtml:18
+#, fuzzy
+msgid "Members-Only codes"
+msgstr "Members Only Kortingscodes"
+
+#: scripts/myfavorite/leftpanel.phtml:19 scripts/partials/_header.phtml:18
+msgid "Mijn profiel"
+msgstr "Mijn profiel"
+
+#: scripts/myfavorite/membercodes.phtml:5
+#, fuzzy
+msgid "Jouw favorieten codes"
+msgstr "Mijn Favoriete Kortingscodes"
+
+#: scripts/offer/couponinfo.phtml:2 scripts/offer/index.phtml:3
+#: scripts/offer/popularoffer.phtml:2
+msgid "Offer"
+msgstr "Kortingscode"
+
+#: scripts/offer/couponinfo.phtml:5 scripts/offer/couponinfo.phtml:572
+#: scripts/store/relatedOffer.phtml:142
+#, fuzzy
+msgid "out"
+msgstr "Over"
+
+#: scripts/offer/couponinfo.phtml:6 scripts/offer/couponinfo.phtml:573
+#: scripts/store/relatedOffer.phtml:143 scripts/offer/couponinfo.phtml:52
+#: scripts/offer/couponinfo.phtml:150 scripts/offer/couponinfo.phtml:337
+#: scripts/offer/couponinfo.phtml:555
+msgid "Added"
+msgstr "Toegevoegd"
+
+#: scripts/offer/couponinfo.phtml:52 scripts/offer/couponinfo.phtml:150
+#: scripts/offer/couponinfo.phtml:337 scripts/offer/couponinfo.phtml:555
+msgid "Expires"
+msgstr "Verloopt vandaag!"
+
+#: scripts/offer/couponinfo.phtml:56 scripts/offer/couponinfo.phtml:154
+#: scripts/offer/couponinfo.phtml:341 scripts/offer/couponinfo.phtml:559
+#, fuzzy
+msgid " dagen geldig!"
+msgstr "dagen geldig!"
+
+#: scripts/offer/couponinfo.phtml:59 scripts/offer/couponinfo.phtml:157
+#: scripts/offer/couponinfo.phtml:344 scripts/offer/couponinfo.phtml:562
+#, fuzzy
+msgid " dag geldig!"
+msgstr "dagen geldig!"
+
+#: scripts/offer/couponinfo.phtml:62 scripts/offer/couponinfo.phtml:160
+#: scripts/offer/couponinfo.phtml:347 scripts/offer/couponinfo.phtml:565
+msgid "Expire Today"
+msgstr "Nog maar één dag geldig!"
+
+#: scripts/offer/couponinfo.phtml:103 scripts/offer/couponinfo.phtml:205
+#: scripts/offer/couponinfo.phtml:396 scripts/offer/couponinfo.phtml:622
+#: scripts/store/offer.phtml:221
+msgid "PAK DEZE AANBIEDING"
+msgstr "PAK CODE &#38; OPEN SITE"
+
+#: scripts/offer/couponinfo.phtml:228 scripts/offer/couponinfo.phtml:443
+#: scripts/offer/couponinfo.phtml:648
+msgid "Over deze kortingscode"
+msgstr "Over deze kortingscode"
+
+#: scripts/offer/couponinfo.phtml:238 scripts/offer/couponinfo.phtml:451
+#: scripts/offer/couponinfo.phtml:658 scripts/store/offer.phtml:245
+msgid "Voorwaarden"
+msgstr "Voorwaarden"
+
+#: scripts/offer/couponinfo.phtml:255 scripts/offer/couponinfo.phtml:471
+#: scripts/offer/couponinfo.phtml:679
+msgid "Op "
+msgstr ""
+
+#: scripts/offer/couponinfo.phtml:255 scripts/offer/couponinfo.phtml:471
+#: scripts/offer/couponinfo.phtml:681
+msgid " kan je de actie "
+msgstr ""
+
+#: scripts/offer/couponinfo.phtml:255 scripts/offer/couponinfo.phtml:471
+#: scripts/offer/couponinfo.phtml:683
+#, fuzzy
+msgid " gebruiken&#33;"
+msgstr "kortingscode gebruiken?"
+
+#: scripts/offer/couponinfo.phtml:268 scripts/offer/couponinfo.phtml:483
+#: scripts/offer/couponinfo.phtml:698
+msgid "Om jouw "
+msgstr ""
+
+#: scripts/offer/couponinfo.phtml:268 scripts/offer/couponinfo.phtml:483
+msgid ""
+"kortingscode te gebruiken moet je de code invoeren in het daarvoor bestemde "
+"vakje tijdens de bestelprocedure. "
+msgstr ""
+
+#: scripts/offer/couponinfo.phtml:269 scripts/offer/couponinfo.phtml:484
+#: scripts/offer/couponinfo.phtml:699
+msgid "Below is a screenshot to show you where it's done:"
+msgstr "Hier is een screenshot van de shop waar je de code moet invullen:"
+
+#: scripts/offer/couponinfo.phtml:272 scripts/offer/couponinfo.phtml:486
+#: scripts/offer/couponinfo.phtml:702
+msgid "Altijd op de hoogte blijven van "
+msgstr ""
+
+#: scripts/offer/couponinfo.phtml:272 scripts/offer/couponinfo.phtml:486
+#: scripts/offer/couponinfo.phtml:702
+msgid "kortingscodes&#63; Schrijf je dan in voor de"
+msgstr ""
+
+#: scripts/offer/couponinfo.phtml:272 scripts/offer/couponinfo.phtml:486
+#: scripts/offer/couponinfo.phtml:702
+#, fuzzy
+msgid "nieuwsbrief."
+msgstr " nieuws"
+
+#: scripts/offer/couponinfo.phtml:288 scripts/offer/couponinfo.phtml:501
+#: scripts/offer/couponinfo.phtml:722
+#, fuzzy
+msgid "Huidige Populaire Kortingscodes"
+msgstr "Top 10 Kortingscodes"
+
+#: scripts/offer/couponinfo.phtml:292 scripts/offer/couponinfo.phtml:505
+#: scripts/offer/couponinfo.phtml:726
+msgid "Vouchercodes 2012"
+msgstr "Kortingscodes 2013"
+
+#: scripts/offer/couponinfo.phtml:422
+msgid "Sorry, we hebben momenteel geen"
+msgstr "Sorry, we hebben momenteel geen"
+
+#: scripts/offer/couponinfo.phtml:423
+msgid "Ga naar de"
+msgstr "Ga naar de"
+
+#: scripts/offer/couponinfo.phtml:427
+msgid "website"
+msgstr "website"
+
+#: scripts/offer/couponinfo.phtml:698
+msgid ""
+" kortingscode te gebruiken moet je de code invoeren in het daarvoor bestemde "
+"vakje tijdens de bestelprocedure. "
+msgstr ""
+
+#: scripts/offer/deleteexpired.phtml:14
+#, fuzzy
+msgid "The Expired offers has been deleted Successfully!!!"
+msgstr "Excluded Keyword has been deleted successfully"
+
+#: scripts/offer/index.phtml:18 scripts/offer/popularoffer.phtml:17
+msgid "NIEUW"
+msgstr "NIEUW"
+
+#: scripts/offer/index.phtml:20
+msgid "POPULER"
+msgstr "POPULAIR"
+
+#: scripts/offer/offerdetail.phtml:37
+msgid "Cool, how much did you save?"
+msgstr "Leuk, hoeveel denk je te gaan besparen?"
+
+#: scripts/offer/offerdetail.phtml:51
+msgid "And i bought a ..."
+msgstr "Ik ga het volgende kopen ..."
+
+#: scripts/offer/offerdetail.phtml:58
+msgid "Share this deal"
+msgstr "Deel deze korting!"
+
+#: scripts/offer/offerdetail.phtml:69
+msgid "Thanks for the feedback!"
+msgstr "Bedankt voor de feedback!"
+
+#: scripts/offer/offerdetail.phtml:70
+msgid "Every vote helps other shoppers;"
+msgstr "Elke stemt helpt jouw mede shoppers"
+
+#: scripts/offer/offerdetail.phtml:110 scripts/offer/offerdetail.phtml:117
+#: scripts/offer/offerdetail.phtml:122 scripts/partials/offer.phtml:254
+#: scripts/partials/offer.phtml:259 scripts/store/offer.phtml:274
+#: scripts/store/offer.phtml:279 scripts/store/relatedOffer.phtml:267
+#: scripts/store/relatedOffer.phtml:272
+msgid "Nog maar"
+msgstr ""
+
+#: scripts/offer/offerdetail.phtml:111
+#, fuzzy
+msgid "dagen geldig"
+msgstr "dagen geldig!"
+
+#: scripts/offer/offerdetail.phtml:117 scripts/partials/offer.phtml:254
+#: scripts/store/offer.phtml:274 scripts/store/relatedOffer.phtml:267
+msgid "dagen geldig!"
+msgstr "dagen geldig!"
+
+#: scripts/offer/offerdetail.phtml:122 scripts/partials/offer.phtml:259
+#: scripts/store/offer.phtml:279 scripts/store/relatedOffer.phtml:272
+#, fuzzy
+msgid "dag geldig!"
+msgstr "dagen geldig!"
+
+#: scripts/offer/offerdetail.phtml:127 scripts/partials/offer.phtml:264
+#: scripts/store/offer.phtml:284 scripts/store/relatedOffer.phtml:277
+msgid "Expires today"
+msgstr "Verloopt vandaag!"
+
+#: scripts/offer/offerdetail.phtml:165
+msgid "Als de website niet geopend is, "
+msgstr ""
+
+#: scripts/offer/offerdetail.phtml:165
+msgid "Klik dan hier"
+msgstr ""
+
+#: scripts/offer/offerdetail.phtml:196
+msgid "ENTER CODE"
+msgstr "VOER CODE IN"
+
+#: scripts/offer/offerdetail.phtml:197
+msgid "AT CHECKOUT"
+msgstr "TIJDENS BESTELLING"
+
+#: scripts/offer/offerdetail.phtml:215
+msgid "Terms and Conditions"
+msgstr "Voorwaarden"
+
+#: scripts/offer/offerdetail.phtml:238
+msgid "Win een waardebon van &euro;50"
+msgstr ""
+"Tevreden met de nieuwe Kortingscode.nl? Like ons en maak kans op leuke "
+"prijzen!"
+
+#: scripts/offer/popularoffer.phtml:19
+#, fuzzy
+msgid "POPULAR"
+msgstr "POPULAIR"
+
+#: scripts/partials/offer.phtml:47 scripts/store/offer.phtml:49
+#: scripts/store/relatedOffer.phtml:54
+msgid "Member only Coupon Code,"
+msgstr "Members only kortingscode"
+
+#: scripts/partials/offer.phtml:47 scripts/store/offer.phtml:49
+#: scripts/store/relatedOffer.phtml:54
+msgid "Join us to see this Coupon!"
+msgstr "Meld je aan om deze code te kunnen zien"
+
+#: scripts/partials/offer.phtml:251 scripts/store/relatedOffer.phtml:263
+#: scripts/partials/_header.phtml:24 scripts/partials/_header.phtml:39
+msgid "Cookies"
+msgstr "Cookies"
+
+#: scripts/partials/_header.phtml:26 scripts/partials/_header.phtml:40
+msgid "News"
+msgstr "Nieuws"
+
+#: scripts/partials/_header.phtml:28
+msgid "Uitloggen"
+msgstr "Uitloggen"
+
+#: scripts/partials/_header.phtml:37
+msgid "Inschrijven"
+msgstr "Inschrijven"
+
+#: scripts/partials/_header.phtml:38 Helper/viewHelper.php:564
+#: Helper/viewHelper.php:596
+msgid "Inloggen"
+msgstr "Inloggen"
+
+#: scripts/partials/_headerSearch.phtml:220
+msgid "Find discount codes for your favorite stores"
+msgstr "Zoek op winkelnaam: Bol.com, Wehkamp, Zalando, etc."
+
+#: scripts/partials/_headerSearch.phtml:224
+msgid "Search"
+msgstr "Zoeken"
+
+#: scripts/preview/articleinfo.phtml:33
+msgid "Written by"
+msgstr "Geschreven door:"
+
+#: scripts/preview/articleinfo.phtml:64
+#, fuzzy
+msgid "Edited by"
+msgstr "Edit Media"
+
+#: scripts/preview/articleinfo.phtml:179
+#, fuzzy
+msgid "Oops This Page Does Not Exist"
+msgstr "Dit artikel bestaat niet"
+
+#: scripts/search/index.phtml:2
+msgid "Search Results"
+msgstr "Zoekresultaten"
+
+#: scripts/search/index.phtml:25
+#, fuzzy
+msgid "Winkels gerelateerd aan"
+msgstr "kortingscode gebruiken?"
+
+#: scripts/search/index.phtml:84
+#, fuzzy
+msgid "pluss gerelateerd aan"
+msgstr "pluss waar"
+
+#: scripts/search/index.phtml:109
+#, fuzzy
+msgid "kortingscodes gerelateerd aan"
+msgstr "kortingscode gebruiken?"
+
+#: scripts/search/index.phtml:126
+msgid ""
+"Sorry, we hebben geen kortingscode kunnen koppelen aan de zoekopdracht.."
+msgstr "Helaas, we kunnen geen kortingscodes koppelen aan deze zoekopdracht."
+
+#: scripts/search/index.phtml:127 scripts/search/index.phtml:177
+#: scripts/search/suggestion.phtml:59
+msgid ""
+"Het is aan te raden te zoeken op winkelnaam. Let daarbij goed op de spelling."
+msgstr ""
+"Probeer altijd te zoeken op winkelnaam. Let daarbij goed op de spelling."
+
+#: scripts/search/index.phtml:128 scripts/search/index.phtml:179
+#: scripts/search/suggestion.phtml:61
+msgid ""
+"Probeer de zoekopdracht nogmaals in een andere verwoording of navigeer door "
+msgstr "Maak opnieuw gebruik van de zoekbalk of navigeer via  "
+
+#: scripts/search/index.phtml:128 scripts/search/index.phtml:179
+#: scripts/search/suggestion.phtml:61
+#, fuzzy
+msgid "Winkels"
+msgstr " delete (zin is al afgemaakt in eerder stuk)"
+
+#: scripts/search/index.phtml:128 scripts/search/index.phtml:179
+#: scripts/search/suggestion.phtml:61
+#, fuzzy
+msgid "of"
+msgstr " delete (zin is al afgemaakt in eerder stuk)"
+
+#: scripts/search/index.phtml:128 scripts/search/index.phtml:179
+#: scripts/search/suggestion.phtml:61 scripts/search/index.phtml:155
+#: scripts/search/suggestion.phtml:37
+msgid "Our Suggestions"
+msgstr "Onze suggesties"
+
+#: scripts/search/index.phtml:174 scripts/search/suggestion.phtml:56
+msgid "Sorry, we hebben geen suggesties te linken naar het zoeken.."
+msgstr "Sorry, we hebben geen suggesties te linken naar het zoeken.."
+
+#: scripts/search/index.phtml:186 scripts/search/suggestion.phtml:17
+msgid "Zoek op winkelnaam en vind de beste kortingscodes!"
+msgstr ""
+
+#: scripts/store/howtoguide.phtml:28
+msgid "Sorry, we dont have any amazing "
+msgstr "Helaas! Op het moment hebben we geen"
+
+#: scripts/store/howtoguide.phtml:28
+msgid " offers right now!"
+msgstr "kortingen op dit moment!"
+
+#: scripts/store/howtoguide.phtml:29
+msgid "Check out the"
+msgstr "Bekijk de"
+
+#: scripts/store/howtoguide.phtml:29
+msgid " website"
+msgstr "website"
+
+#: scripts/store/howtoguide.phtml:29
+msgid ""
+"to see what direct offers are available. Our deal team are working hard to "
+"bring you more great discounts soon."
+msgstr ""
+"Kortingscode.nl werkt hard aan het tot stand brengen van meer kortingscodes "
+"voor deze shop!"
+
+#: scripts/store/howtoguide.phtml:30
+msgid ""
+"However, you might also like these vouchercodes we have selected for you! "
+"Dont forget to have a look at or"
+msgstr ""
+"Maaaar, hier een handig overzichtje van de op dit moment populairste "
+"kortingscodes van onze website!"
+
+#: scripts/store/howtoguide.phtml:30
+#, fuzzy
+msgid "or Stores overview."
+msgstr " "
+
+#: scripts/store/howtoguide.phtml:65
+msgid "out/shop/"
+msgstr "out/shop/"
+
+#: scripts/store/index.phtml:6
+msgid "ALL STORES"
+msgstr "ALLE WINKELS"
+
+#: scripts/store/index.phtml:106 scripts/store/index.phtml:123
+msgid "Exclusive deals"
+msgstr "Exclusieve aanbiedingen"
+
+#: scripts/store/index.phtml:108 scripts/store/index.phtml:125
+msgid "Hot Discounts"
+msgstr "Top kortingen"
+
+#: scripts/store/index.phtml:160
+msgid "Store Not Found !."
+msgstr "Winkel niet gevonden !"
+
+#: scripts/store/offer.phtml:130
+msgid "PAK DEZE AANBIEDING1"
+msgstr "PRINT DE KORTINGBON"
+
+#: scripts/store/offer.phtml:138
+msgid "PAK DEZE AANBIEDING2"
+msgstr "PAK DEZE AANBIEDING"
+
+#: scripts/store/offer.phtml:258
+#, fuzzy
+msgid "Meer over deze code"
+msgstr "Over deze kortingscode"
+
+#: scripts/store/offer.phtml:298
+msgid "Terms & Conditions"
+msgstr "Voorwaarden"
+
+#: scripts/store/offer.phtml:303
+msgid "Close"
+msgstr "Sluiten"
+
+#: scripts/store/storedetail.phtml:19 scripts/store/storedetail.phtml:32
+msgid "Sorry"
+msgstr "Helaas! We hebben momenteel geen"
+
+#: scripts/store/storedetail.phtml:33
+msgid "offers right now!"
+msgstr " kortingscodes! =("
+
+#: scripts/store/storedetail.phtml:34 scripts/store/storedetail.phtml:38
+msgid ""
+"website to see what direct offers are available. Our deal team are working "
+"hard to bring you more great discounts soon."
+msgstr ""
+"website om te zien welke kortingen nu actief zijn. Onze redactie doet hard "
+"zijn best om snel meer kortingen op deze pagina te krijgen!"
+
+#: scripts/store/storedetail.phtml:39 scripts/store/storedetail.phtml:41
+msgid "or"
+msgstr "of"
+
+#: scripts/store/storedetail.phtml:43
+msgid "Stores overview"
+msgstr "Winkel overzicht"
+
+#: scripts/store/storedetail.phtml:55 scripts/store/storedetail.phtml:57
+msgid "Similar vouchercodes we think you will like!"
+msgstr "Populaire kortingscodes die we voor jou hebben geselecteerd!"
+
+#: scripts/store/storedetail.phtml:111
+#, fuzzy
+msgid "Share the love!"
+msgstr "<em>Share the love! =) </em></strong>"
+
+#: scripts/store/storedetail.phtml:286
+msgid "Shopreview door"
+msgstr "Deals geverifieerd door"
+
+#: scripts/store/storedetail.phtml:335
+msgid "Hulp nodig met"
+msgstr "Hulp meet"
+
+#: scripts/store/storedetail.phtml:335
+msgid "Discount Codes 2012"
+msgstr " kortingscodes?"
+
+#: scripts/store/storedetail.phtml:338
+msgid "Hier laten wij"
+msgstr ""
+
+#: scripts/store/storedetail.phtml:338
+msgid "where to enter my Hotels.com code, or read our full"
+msgstr ""
+"eenvoudig zien hoe je de kortingscodes van deze shop kan verzilveren. Je kan "
+"natuurlijk ook onze uitgebreide"
+
+#: scripts/store/storedetail.phtml:338
+#, fuzzy
+msgid "kortingscode how to guide"
+msgstr "Kortingscode uploaden"
+
+#: scripts/store/storedetail.phtml:338
+msgid "lezen!"
+msgstr ""
+
+#: scripts/store/storedetail.phtml:345
+msgid "Het laatste "
+msgstr "Het laatste "
+
+#: scripts/store/storedetail.phtml:345
+msgid " nieuws"
+msgstr " nieuws"
+
+#: scripts/store/storedetail.phtml:360
+msgid "Alle pluspunten van"
+msgstr ""
+
+#: scripts/store/storedetail.phtml:360
+msgid "op een rij!"
+msgstr ""
+
+#: scripts/store/storedetail.phtml:364
+msgid "Betaal mogelijkheid: iDEAL"
+msgstr ""
+
+#: scripts/store/storedetail.phtml:368
+msgid "Thuiswinkel waarborg"
+msgstr ""
+
+#: scripts/store/storedetail.phtml:372
+#, fuzzy
+msgid "Toppartner Kortingscode.nl"
+msgstr "Deel kortingscode.nl en"
+
+#: scripts/store/storedetail.phtml:376
+msgid "Gratis retour"
+msgstr ""
+
+#: scripts/store/storedetail.phtml:380
+msgid "Afhalen in de winkel"
+msgstr ""
+
+#: scripts/store/storedetail.phtml:384
+msgid "Super partner"
+msgstr ""
+
+#: scripts/store/storedetail.phtml:388
+#, fuzzy
+msgid "Mobiele webshop"
+msgstr "Moneymaker?"
+
+#: scripts/store/storedetail.phtml:391
+msgid "Klantenservice:"
+msgstr ""
+
+#: scripts/store/storedetail.phtml:395
+#, fuzzy
+msgid "Top 50 Populairste Shops"
+msgstr "Populairste categorieen"
+
+#: scripts/store/storedetail.phtml:415
+msgid "Guides"
+msgstr "pluss waar"
+
+#: scripts/store/storedetail.phtml:415
+msgid "is mentioned in"
+msgstr "wellicht in wordt genoemd"
+
+#: scripts/store/storedetail.phtml:430
+msgid "Compairable codes in store"
+msgstr ""
+
+#: scripts/store/storedetail.phtml:446
+msgid "These offers from"
+msgstr "Helaas... Deze kortingscodes van"
+
+#: scripts/store/storedetail.phtml:446
+msgid "are expired"
+msgstr "heb je gemist =("
+
+#: scripts/store/storedetail.phtml:464
+msgid "Zo gebruik je de"
+msgstr ""
+
+#: scripts/store/storedetail.phtml:464
+#, fuzzy
+msgid "kortingscodes:"
+msgstr "kortingscodes"
+
+#: scripts/store/storedetail.phtml:466
+msgid ""
+"Click the green button to reveal the  code and open the retailer website in "
+"either a new tab or window, depending on your browser settings."
+msgstr "Klik op de knop om de code zichtbaar te maken."
+
+#: scripts/store/storedetail.phtml:467
+msgid ""
+"Buy something nice. Check you've met any terms and conditions then head to "
+"the checkout."
+msgstr ""
+"Bekijk goed of jouw gewenste aankoop voldoet aan de voorwaarden van deze "
+"actie!"
+
+#: scripts/store/storedetail.phtml:468
+msgid "Copy the code from our Site."
+msgstr ""
+"Kopieer de code van onze site (ALT + TAB is een handige manier om back). "
+"Plak de gekopieerde code in het vak aangegeven op de retailer terrein en "
+"voila!"
+
+#: Helper/viewHelper.php:23 Helper/viewHelper.php:44
+#, fuzzy
+msgid "Zoek winkels A-Z"
+msgstr "Alle winkels"
+
+#: Helper/viewHelper.php:29 Helper/viewHelper.php:294
+msgid "Win een scooter"
+msgstr ""
+
+#: Helper/viewHelper.php:295
+#, fuzzy
+msgid "Share Kortingscode.nl om kans te maken op deze VETTE prijs"
+msgstr "Deel Kortingscode.nl en maak kans op"
+
+#: Helper/viewHelper.php:315 Helper/viewHelper.php:347
+#, fuzzy
+msgid "Vul de code in"
+msgstr "Voer uw postcode in"
+
+#: Helper/viewHelper.php:322
+#, fuzzy
+msgid "DEEL DE KORTING"
+msgstr "KORTING"
+
+#: Helper/viewHelper.php:338
+msgid "Stuur een kortingscode op!"
+msgstr "Stuur een kortingscode op!"
+
+#: Helper/viewHelper.php:419
+#, fuzzy
+msgid "Populaire winkels"
+msgstr "Populaire winkels"
+
+#: Helper/viewHelper.php:457
+msgid "Sidebar categories title"
+msgstr "Categorie&#235;n"
+
+#: Helper/viewHelper.php:475
+msgid "Ga naar"
+msgstr "Ga naar"
+
+#: Helper/viewHelper.php:475
+msgid "Alle Categorieen"
+msgstr "Alle Categorieen"
+
+#: Helper/viewHelper.php:548
+msgid "Krijg gratis toegang tot exclusieve Members-Only codes en kortingen!"
+msgstr ""
+
+#: Helper/viewHelper.php:556 Helper/viewHelper.php:588
+msgid "Logout"
+msgstr "Uitloggen"
+
+#: Helper/viewHelper.php:564 Helper/viewHelper.php:596
+#, fuzzy
+msgid "Al member?"
+msgstr "Nog geen lid?"
+
+#: Helper/viewHelper.php:582
+msgid "Met één click nog meer voordeel!"
+msgstr ""
+
+#: Helper/viewHelper.php:583
+msgid ""
+"Geen goede kortingscode gevonden? Bekijk de Members-Only kortingscodes! "
+msgstr ""
+
+#: Helper/viewHelper.php:625
+#, fuzzy
+msgid "Populairste Editor"
+msgstr "Populairste categorieen"
+
+#: Helper/viewHelper.php:684
+#, fuzzy
+msgid "Most popular Fashion Guides"
+msgstr "Populairste kortingscodes"
+
+#: Helper/viewHelper.php:732
+msgid "Other Helpful Saving Tips"
+msgstr "Onze pluss"
+
+#: Helper/viewHelper.php:783
+#, fuzzy
+msgid ""
+"Spot deals, send them in, earn Flips and become the best Deal Hunter of the "
+"Universe!"
+msgstr ""
+"In sommige gevallen zijn de kortingscodes die onze Deal Spotters regelen "
+"alleen beschikbaar voor members. Maak daarom GRATIS een profiel aan en krijg "
+"toegang tot deze exclusieve kortingscodes!"
+
+#: Helper/viewHelper.php:788
+#, fuzzy
+msgid "Sign up!"
+msgstr "Registreer nu!"
+
+#: Helper/viewHelper.php:812
+#, fuzzy
+msgid "Gratis Inschrijven!"
+msgstr "Inschrijven"
+
+#: Helper/viewHelper.php:996
+msgid "Read More"
+msgstr "Lees meer"
+
+#: Helper/viewHelper.php:1009
+#, fuzzy
+msgid "Alle pluss"
+msgstr "plus"
+
+#~ msgid "Copy code again"
+#~ msgstr "asdfsafsa fnbsa fjsa fjas jf sad vasd gsdj gsd "
+
+#, fuzzy
+#~ msgid ""
+#~ "Copy the code from our site. Paste the copied code into the box indicated "
+#~ "on the retailer site and voila!"
+#~ msgstr ""
+#~ "Kopieer de code van onze website. (ALT + TAB is een handige optie) Plak "
+#~ "de code daarna in het zogenaamde kortingscode veld en besparen maar. =)"
+
+#, fuzzy
+#~ msgid "Laatste Stap"
+#~ msgstr "Jouw laatste login:"
+
+#~ msgid "Offers"
+#~ msgstr "Kortingscodes"
+
+#~ msgid "guides"
+#~ msgstr "pluss"
+
+#, fuzzy
+#~ msgid "Onze suggesties voor favorieten winkels"
+#~ msgstr "Zoek op winkelnaam: Bol.com, Wehkamp, Zalando, etc."
+
+#, fuzzy
+#~ msgid "Jouw geselecteerde favorieten"
+#~ msgstr "Cree&euml;r Favorieten"
+
+#~ msgid "Help With"
+#~ msgstr "Hulp nodig met"
+
+#, fuzzy
+#~ msgid "Stap 1 van 4"
+#~ msgstr "Stap 1 van 2"
+
+#, fuzzy
+#~ msgid "Stap 3 van 4"
+#~ msgstr "Stap 1 van 2"
+
+#, fuzzy
+#~ msgid "Stap 4 van 4"
+#~ msgstr "Stap 1 van 2"
+
+#~ msgid "Sign up now"
+#~ msgstr "Registreer nu!"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "Alle"
+#~ msgstr "Alle"
+
+#~ msgid "More similar promotional codes, discount codes and deals"
+#~ msgstr "Vergelijkbare kortingscodes"
+
+#~ msgid "This email already present in our database so please select another"
+#~ msgstr "Dit e-mailadres is al in gebruik. Gebruik een ander e-mail adres."
+
+#~ msgid "Your profile has been updated successfully"
+#~ msgstr "Update geslaagd! =)"
+
+#~ msgid "Your kortingscode successfully added"
+#~ msgstr ""
+#~ "Bedankt voor jouw toevoeging! We plaatsen de code indien mogelijk binnen "
+#~ "24 uur!"
+
+#~ msgid "ERROR:This shop not exist in our database.."
+#~ msgstr "Oeps! Deze shop bestaat niet in onze database :( "
+
+#~ msgid "This actiecode not present in our database"
+#~ msgstr "Oeps! Deze kortingscode is niet gevonden in onze Database =("
+
+#~ msgid "Congrats! we will send you a link on your email for registration."
+#~ msgstr "Yeaaaaah! =) We sturen nog een linkje voor de laatste bevestiging! "
+
+#~ msgid "Vandaag"
+#~ msgstr "Vandaag"
+
+#~ msgid "Wie schrijven de artikelen?"
+#~ msgstr "Wie schrijven deze artikelen?"
+
+#~ msgid ""
+#~ "Hoe wordt deze site\n"
+#~ "             \tgefinacieerd?"
+#~ msgstr ""
+#~ "Hoe werkt deze site\n"
+#~ "             \tnou precies?"
+
+#~ msgid "No record found"
+#~ msgstr "Niet gevonden =("
+
+#~ msgid "OMG!"
+#~ msgstr "OMG!"
+
+#~ msgid "I think I'm lost."
+#~ msgstr "Euh.. Ik denk dat ik verdwaald ben"
+
+#~ msgid "?#$!"
+#~ msgstr "?#$!"
+
+#~ msgid "404"
+#~ msgstr "404"
+
+#~ msgid "File not found, sorry."
+#~ msgstr "Pagina niet gevonden, onze excuses."
+
+#~ msgid "Looks like the file you are looking for is no longer available."
+#~ msgstr "Het lijkt erop dat dit bestand niet langer beschikbaar is."
+
+#~ msgid "Freesignup"
+#~ msgstr "Gratis registratie"
+
+#~ msgid "Je bent nog niet ingeload!"
+#~ msgstr "Je bent nog niet ingelogged!"
+
+#~ msgid "Om gebruik te maken van 'Mijn Favorieten' dien je te zijn ingelogd."
+#~ msgstr "Om gebruik te maken van 'Mijn Favorieten' dien je te zijn ingelogd."
+
+#~ msgid "Schrijf je GRATIS in!"
+#~ msgstr "Schrijf je GRATIS in!"
+
+#~ msgid ""
+#~ "Wordt eenvoudig member met je Facebook profiel. Heb je geen Facebook? "
+#~ "Maak dan handmatig een profiel aan!"
+#~ msgstr ""
+#~ "Wordt eenvoudig member met je Facebook profiel. Heb je geen Facebook? "
+#~ "Maak dan via de website een profiel aan. "
+
+#~ msgid "profiel maken"
+#~ msgstr "profiel aanmaken"
+
+#~ msgid "Members Only Kortingscodes"
+#~ msgstr "Members Only Kortingscodes"
+
+#~ msgid ""
+#~ "Met je profiel kun je wanneer je bent ingelogd <br />\n"
+#~ "                              ook gebruik maken van members only codes."
+#~ msgstr ""
+#~ "Met je profiel kun je wanneer je bent ingelogd <br />\n"
+#~ "                              ook gebruik maken van members only codes."
+
+#~ msgid "Schrijf artikelen"
+#~ msgstr "Schrijf artikelen"
+
+#~ msgid ""
+#~ "Help anderen geld besparen door artikelen <br />\n"
+#~ "                              te schrijven met tips en handigheidjes."
+#~ msgstr ""
+#~ "Help anderen geld besparen door artikelen <br />\n"
+#~ "                              te schrijven met tips en handigheidjes."
+
+#~ msgid "Exclusieve Deals"
+#~ msgstr "Exclusieve Kortingen"
+
+#~ msgid "Sommige deals zijn zo exclusief dat ze alleen"
+#~ msgstr "Sommige deals zijn zo exclusief dat ze alleen"
+
+#~ msgid "maar beschikbaar zijn voor bijvoorbeeld vrouwen."
+#~ msgstr "maar beschikbaar zijn voor bijvoorbeeld vrouwen."
+
+#~ msgid "Upload je eigen kortingscodes"
+#~ msgstr "Upload je eigen kortingscodes"
+
+#~ msgid ""
+#~ "Kortingscode gevonden die niet op \n"
+#~ "                                Kortingscode.nl staat? Upload deze en "
+#~ "deel \n"
+#~ "                              met anderen! Sharing = caring!"
+#~ msgstr ""
+#~ "Kortingscode gevonden die niet op \n"
+#~ "                                Kortingscode.nl staat? Upload deze en "
+#~ "deel \n"
+#~ "                              met anderen! Sharing = caring!"
+
+#~ msgid ""
+#~ "ommige deals zijn zo exclusief dat ze alleen <br />\n"
+#~ "                              maar beschikbaar zijn voor bijvoorbeeld "
+#~ "vrouwen."
+#~ msgstr ""
+#~ "Sommige deals zijn zo exclusief dat ze alleen <br />\n"
+#~ "                              maar beschikbaar zijn voor bijvoorbeeld "
+#~ "vrouwen."
+
+#, fuzzy
+#~ msgid "Click Me!"
+#~ msgstr "Klik hier"
+
+#~ msgid "Registreer"
+#~ msgstr "Registreer"
+
+#, fuzzy
+#~ msgid "Voor een gratis Kortingscode.nl account"
+#~ msgstr "Deel kortingscode.nl en"
+
+#, fuzzy
+#~ msgid "Vul je gegevens in"
+#~ msgstr "Vul je gegevens aan"
+
+#, fuzzy
+#~ msgid "Bewerk je profiel"
+#~ msgstr "Maak je profiel af"
+
+#, fuzzy
+#~ msgid "Jouw Account"
+#~ msgstr "Jouw profiel"
+
+#~ msgid "Informatie Stukje"
+#~ msgstr "Win leuke prijzen!"
+
+#~ msgid ""
+#~ "Vestibulum iaculis placerat eleifend. Sed sem et augue facilisis "
+#~ "fringilla. Curabitur eleifend gravida accumsan. Phasellus et purus "
+#~ "sapien. Morbi libero nisl, tincidunt in porta ac, dignissim pretium nisi."
+#~ msgstr ""
+#~ "Kortingscode.nl krijgt véééel inschrijvingen, voor deze inschrijvingen "
+#~ "willen wij iets terug geven! Daarom verloten wij regelmatig leuke prijzen "
+#~ "onder onze leden. Schrijf je in en maak kans op deze prijzen!"
+
+#~ msgid "INSCHRIJVEN"
+#~ msgstr "Inschrijven"
+
+#~ msgid ""
+#~ "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur "
+#~ "ridiculus mus."
+#~ msgstr ""
+#~ "Bedankt voor je registratie. Je hebt nu toegang tot alle Members Only "
+#~ "voordelen van Kortingscode.nl! "
+
+#~ msgid ""
+#~ "Nulla orci velit, mollis at ultrices quis, pellentesque a nulla Nulla "
+#~ "aliquam viverra nisi, sed condimentum turpis adipisc ing sit amet onec "
+#~ "sem ligula,."
+#~ msgstr ""
+#~ "Wij werken 24/7 om ervoor te zorgen dat onze website jou de beste en "
+#~ "meest exclusieve kortingscodes kan bieden! Je ontvangt wekelijks onze "
+#~ "nieuwsbrief met de meest populaire kortingscodes."
+
+#~ msgid "steps"
+#~ msgstr "stappen"
+
+#~ msgid "Profiel maken"
+#~ msgstr "Profiel maken"
+
+#~ msgid "Email"
+#~ msgstr "E-mail"
+
+#~ msgid "Password"
+#~ msgstr "Wachtwoord"
+
+#~ msgid "Confirm Password"
+#~ msgstr "Bevestig Wachtwoord"
+
+#~ msgid "First naam"
+#~ msgstr "Voornaam"
+
+#~ msgid "Last naam"
+#~ msgstr "Achternaam"
+
+#~ msgid "Geboren"
+#~ msgstr "Geboren"
+
+#~ msgid "Klik op de logo's waar jij graag kortingscodes voor wilt hebben"
+#~ msgstr "Klik op de winkels waar jij graag kortingscodes voor wilt hebben"
+
+#~ msgid ""
+#~ "Help ons om jou kortingscodes aan te bieden die jou interessren Kies de "
+#~ "winkels waar jij graag regelmatig korting krijgt!"
+#~ msgstr ""
+#~ "Help ons om jou kortingscodes aan te bieden die jou interesseren. Kies de "
+#~ "winkels waar jij graag regelmatig korting krijgt!"
+
+#~ msgid "Klaar!"
+#~ msgstr "Klaar!"
+
+#~ msgid ""
+#~ "Welkom! Je bent nu member van Kortingscode.nl. Je kunt nu inloggen met je "
+#~ "gebruikersnaam of e-mail adres. Met je profiel krijg je de beschikking "
+#~ "tot exclusieve members only codes en meer. Wekelijks ontvang je de "
+#~ "persoonlijke nieuwsbrief met exclusieve codes en de beste deals."
+#~ msgstr ""
+#~ "Welkom! Je bent nu member van Kortingscode.nl. Je kunt nu inloggen met je "
+#~ "gebruikersnaam of e-mail adres. Met je profiel krijg je de beschikking "
+#~ "tot exclusieve members only codes en meer. Wekelijks ontvang je de "
+#~ "persoonlijke nieuwsbrief met exclusieve codes en de beste deals."
+
+#~ msgid "<< Terug naar Kortingscode.nl"
+#~ msgstr "<< Terug naar Kortingscode.nl"
+
+#~ msgid "Maak je profiel compleet!"
+#~ msgstr "Maak je profiel compleet!"
+
+#~ msgid "offers"
+#~ msgstr "Kortingscodes"
+
+#~ msgid "VERSTUUR"
+#~ msgstr "Verstuur"
+
+#~ msgid "Lid welkom"
+#~ msgstr "Welkom!"
+
+#~ msgid "Member Welcome"
+#~ msgstr "Welkom!!"
+
+#~ msgid "Change photo"
+#~ msgstr "Verander foto"
+
+#~ msgid ""
+#~ "Welcome to your Kortingscode.nl profile. Add a store or restaurant to "
+#~ "your 'Favourites' and we'll keep this page updated with all their latest "
+#~ "voucher codes. You will see all the current vouchers of your favorite "
+#~ "stores on your profile and we will adjust our weekly newsletter to you "
+#~ "personal settings!"
+#~ msgstr ""
+#~ "Welkom op jouw Kortingscode.nl profiel. Voeg een winkel toe en krijg "
+#~ "updates van jouw favoriete winkels!  Wij passen de nieuwsbrief aan op "
+#~ "jouw persoonlijke instellingen. "
+
+#~ msgid ""
+#~ "Some the exclusive member only vouchers are only available through from "
+#~ "your personal profile. These codes can not be found on the frontpage!"
+#~ msgstr ""
+#~ "Sommige exclusieve codes zijn enkel toegankelijk via jouw persoonlijke "
+#~ "profiel. Deze codes kunnen niet op de homepage gevonden worden!"
+
+#~ msgid "Ga naar Mijn Favorieten"
+#~ msgstr "Ga naar Mijn Favorieten"
+
+#~ msgid "Profiel is "
+#~ msgstr "Dit profiel is"
+
+#~ msgid "% compleet"
+#~ msgstr "% compleet!"
+
+#~ msgid "Maak jouw profiel compleet"
+#~ msgstr "Maak jouw profiel compleet"
+
+#~ msgid "Vul je gegevens aan"
+#~ msgstr "Vul je gegevens aan"
+
+#~ msgid "Voeg meer winkels toe aan favorieten"
+#~ msgstr "Voeg meer winkels toe aan favorieten"
+
+#~ msgid "Deel kortingscode"
+#~ msgstr "Deel kortingscode"
+
+#~ msgid "Favorieten toevoegen / verwijderen"
+#~ msgstr "Favorieten toevoegen / verwijderen"
+
+#~ msgid "Suggesties:"
+#~ msgstr "Onze suggesties:"
+
+#~ msgid "Add"
+#~ msgstr "Toevoegen"
+
+#~ msgid "No suggesties found !"
+#~ msgstr "Geen suggesties gevonden!"
+
+#~ msgid "No winkel found !"
+#~ msgstr "Geen winkel gevonden!"
+
+#~ msgid "Add to favorites"
+#~ msgstr "Toevoegen aan favorieten"
+
+#~ msgid "EXCLUSIEVE MEMBERS ONLY KORTINGSCODES"
+#~ msgstr "EXCLUSIEVE MEMBERS ONLY KORTINGSCODES"
+
+#~ msgid "Lid profiel"
+#~ msgstr "Lid profiel"
+
+#~ msgid "Member Profiel"
+#~ msgstr "Profiel"
+
+#~ msgid "inloggen op uw account"
+#~ msgstr "inloggen op jouw account"
+
+#~ msgid "Nieuw wachtwoord"
+#~ msgstr "Nieuw wachtwoord"
+
+#~ msgid "Bevestig nieuw wachtwoord"
+#~ msgstr "Bevestig nieuw wachtwoord"
+
+#~ msgid "Kortingscode uploaden"
+#~ msgstr "Kortingscode uploaden"
+
+#~ msgid "Upload kortingscode"
+#~ msgstr "Upload kortingscode"
+
+#~ msgid "Kortingscode Delen"
+#~ msgstr "Kortingscode Delen"
+
+#~ msgid ""
+#~ "Wees onderdeel van de Kortingscode Community en deel codes! Sharing is "
+#~ "caring. Hoe meer \n"
+#~ "mensen kortingscodes delen, hoe groter de kans dat jij kortingscodes "
+#~ "tegenkomt waar jij iets aan hebt."
+#~ msgstr ""
+#~ "Wees onderdeel van de Kortingscode Community en deel codes! Sharing is "
+#~ "caring. Hoe meer \n"
+#~ "mensen kortingscodes delen, hoe groter de kans dat jij kortingscodes "
+#~ "tegenkomt waar jij iets aan hebt."
+
+#~ msgid "Winkel"
+#~ msgstr "Winkel"
+
+#~ msgid "Title"
+#~ msgstr "Titel"
+
+#~ msgid "Je vindt me in"
+#~ msgstr "Je vindt me in"
+
+#~ msgid "Exclusieve Members Only Kortingscodes"
+#~ msgstr "Exclusieve Members Only Kortingscodes"
+
+#~ msgid "Hmmm...problemen!"
+#~ msgstr "Hmmm...problemen!"
+
+#~ msgid ""
+#~ "Het e-mail adres dat je hebt opgegeven is niet bij ons bekend! Probeer "
+#~ "het alsjeblieft nog een keer.."
+#~ msgstr ""
+#~ "Het e-mail adres dat je hebt opgegeven is niet bij ons bekend! Probeer "
+#~ "het alsjeblieft nog een keer.."
+
+#~ msgid "Jouw email address"
+#~ msgstr "Jouw e-mail address"
+
+#~ msgid "<< Terug naar login"
+#~ msgstr "<< Terug naar login"
+
+#~ msgid "Quick Message"
+#~ msgstr "Snel bericht"
+
+#~ msgid ""
+#~ ". Hi. Many deals are short lived. So we put all the latest, plus deals, "
+#~ "guides & loopholes in the free, \n"
+#~ "              \t  spamless weekly email."
+#~ msgstr "Schrijf je in voor onze wekelijkse nieuwsbrief en "
+
+#, fuzzy
+#~ msgid "Ensure you don"
+#~ msgstr "Let op dat je niet"
+
+#~ msgid ". Join the 29m who get it emailed each week"
+#~ msgstr "Doe mee met duizenden anderen en krijg wekelijks een e-mail"
+
+#~ msgid "GET IT!"
+#~ msgstr "Pak ze!"
+
+#~ msgid "Last update"
+#~ msgstr "Laatste wijziging"
+
+#, fuzzy
+#~ msgid "KEY TIPS ON CHOOSING A CONTRACT"
+#~ msgstr "?"
+
+#, fuzzy
+#~ msgid ""
+#~ "Shorter is cheaper. Signing up for a 12-month contract often works out "
+#~ "cheaper overall, and gives you the freedom \n"
+#~ "                        to switch sooner, but will come with a hefty "
+#~ "upfront cost."
+#~ msgstr "?"
+
+#~ msgid ""
+#~ "Share Kortingscode.nl en maak kans op een <strong>waardebon t.w.v. &euro; "
+#~ "50!</strong>"
+#~ msgstr ""
+#~ "Deel Kortingscode.nl en maak kans op een <strong>waardebon t.w.v. &euro; "
+#~ "50!</strong>"
+
+#~ msgid "MIJN FAVORIETEN"
+#~ msgstr "MIJN FAVORIETEN"
+
+#~ msgid "Welkom "
+#~ msgstr "Welkom "
+
+#~ msgid ""
+#~ "! Dit zijn alle kortingen, webshops en Bespaar Wijzers die aansluiten op "
+#~ "jouw opgegeven interesses. Wil je jouw"
+#~ msgstr ""
+#~ "Dit zijn alle kortingen, webshops en pluss die aansluiten op "
+#~ "jouw opgegeven interesses. Wil je jouw"
+
+#~ msgid "persoonlijke voorkeuren en favorieten wijzigen? Ga dan naar jouw"
+#~ msgstr "persoonlijke voorkeuren en favorieten wijzigen? Ga dan naar jouw"
+
+#~ msgid "profielinstellingen."
+#~ msgstr "profielinstellingen."
+
+#~ msgid "offer"
+#~ msgstr "Kortingscode"
+
+#, fuzzy
+#~ msgid ""
+#~ "en kijk welke direct aanbiedingen zij nu beschikbaar hebben. Ons "
+#~ "kortingscodeteam\n"
+#~ "\t\t       \t                 is keihard bezig om nieuwe kortingscodes "
+#~ "voor je te regelen!"
+#~ msgstr ""
+#~ "en kijk welke direct aanbiedingen zij nu beschikbaar hebben. Onze "
+#~ "redactie\n"
+#~ "       \t               is keihard bezig om nieuwe kortingscodes voor je "
+#~ "te regelen!"
+
+#~ msgid "Populairste Kortingscodes"
+#~ msgstr "Meest Populaire Kortingscodes"
+
+#~ msgid "Zalando kortingscode"
+#~ msgstr "Zalando kortingscode"
+
+#~ msgid "voor 20% korting op alles"
+#~ msgstr "voor 20% korting op alles"
+
+#, fuzzy
+#~ msgid "Zalando"
+#~ msgstr " Zalando"
+
+#, fuzzy
+#~ msgid "Chantal"
+#~ msgstr " Chantal"
+
+#, fuzzy
+#~ msgid "IDAYPOSTER"
+#~ msgstr " IDAYPOSTER"
+
+#, fuzzy
+#~ msgid "05 dec 2012"
+#~ msgstr "05 dec 2012"
+
+#~ msgid "This coupon code is only valid if you don't"
+#~ msgstr "Deze kortingscode is enkel geldig"
+
+#~ msgid ""
+#~ "buy shoes and high heels. For now do you \n"
+#~ "                        want you please, the rules are on the book."
+#~ msgstr ""
+#~ "als je geen schonen of laarzen koopt \n"
+#~ "                        . Graag dus opletten bij uw bestelling"
+
+#~ msgid "Gedeeld door "
+#~ msgstr "Gedeeld door "
+
+#~ msgid "Win een waardebon van 50"
+#~ msgstr "Win een waardebon van 50"
+
+#~ msgid "maak kans op een"
+#~ msgstr "maak kans op een"
+
+#~ msgid "waardebon t.w.v. 50"
+#~ msgstr "waardebon t.w.v. 50"
+
+#~ msgid ""
+#~ "Jouw favoriete \n"
+#~ "                    winkels op deze lijst?"
+#~ msgstr ""
+#~ "Jouw favoriete \n"
+#~ "                    winkels op deze lijst?"
+
+#~ msgid "Populairste Categorieen"
+#~ msgstr "Populairste categorieen"
+
+#~ msgid "Fashion Kortingscodes"
+#~ msgstr "Fashion kortingscodes"
+
+#~ msgid "Visit Store"
+#~ msgstr "Bezoek Winkel"
+
+#, fuzzy
+#~ msgid "KORTINGSCODE.NL"
+#~ msgstr "KORTINGSCODE.NL"
+
+#~ msgid "Press Center"
+#~ msgstr "Voor de pers"
+
+#~ msgid "Press Links"
+#~ msgstr "Relevante Links"
+
+#~ msgid "Zoekresultaten voor"
+#~ msgstr "Zoekresultaten voor"
+
+#~ msgid "KORTINGSCODES"
+#~ msgstr "KORTINGSCODES"
+
+#~ msgid "Catgorieen"
+#~ msgstr "Categorieen"
+
+#~ msgid "Signup no more free"
+#~ msgstr "Registreren is niet meer gratis"
+
+#~ msgid "SignupNoMoreFree"
+#~ msgstr "Registreren is niet meer gratis"
+
+#~ msgid ""
+#~ "Vandaag zijn geen gratis accounts meer bescihikbaar. Ben je in het bezit "
+#~ "van een actiecode? Vul deze dan in en activeer je account."
+#~ msgstr ""
+#~ "Vandaag zijn er enkel nog gratis accounts via actiecodes beschikbaar. Ben "
+#~ "je in het bezit van een actiecode? Vul deze dan in en activeer je account."
+
+#~ msgid ""
+#~ "Heb je geen actiecode? Vul dna jouw e-mail adres in. Wij sturen je zodra "
+#~ "er weer gratis accounts beschikbaar zijn een e-mail met daarin een link\n"
+#~ "waarmee jij je gegarandeerd kunt inschrijven!"
+#~ msgstr ""
+#~ "Heb je geen actiecode voor een gratis account? Vraag er dan eentje via "
+#~ "Social media aan jouw vrienden en of kennissen. "
+
+#~ msgid " Door"
+#~ msgstr "Door"
+
+#~ msgid "Door"
+#~ msgstr "Door"
+
+#~ msgid "Door "
+#~ msgstr "Door"
+
+#~ msgid "Insert title here"
+#~ msgstr "Vul hier de titel in"
+
+#~ msgid "Sorry, we don't have any amazing "
+#~ msgstr "Helaas, we hebben geen"
+
+#, fuzzy
+#~ msgid "offers right now"
+#~ msgstr "aanbiedingen op dit moment =("
+
+#~ msgid ""
+#~ " website to see what direct offers are available. Our deal team are "
+#~ "working hard to bring you more great discounts soon."
+#~ msgstr ""
+#~ "heeft wellicht op de website nog leuke aanbiedingen of wellicht een sale "
+#~ "die wij nog niet gezien hebben!"
+
+#~ msgid "Add store to favorites"
+#~ msgstr "Toevoegen aan favorieten"
+
+#~ msgid "Store"
+#~ msgstr "Winkel"
+
+#, fuzzy
+#~ msgid "GUIDES MARKS & SPENCERS IS MENTIONED IN"
+#~ msgstr "plusS WAAR (shopnaam) IN VOORKOMT"
+
+#~ msgid "Help With "
+#~ msgstr "Hulp met"
+
+#, fuzzy
+#~ msgid "Marks & Spencer Discount Codes 2012"
+#~ msgstr "(shopnaam) Kortingscode 2012"
+
+#, fuzzy
+#~ msgid "Marks & Spencer Prootional Code"
+#~ msgstr "(Shopnaam) kortingscode"
+
+#~ msgid "help guide."
+#~ msgstr "How-To-Guide lezen!"
+
+#, fuzzy
+#~ msgid "HET LAATSTE MARKS & SPENCER NIEUWS"
+#~ msgstr "DE LAATSTE (SHOPNAAM) UPDATES:"
+
+#~ msgid "Visit the"
+#~ msgstr "Bezoek de"
+
+#, fuzzy
+#~ msgid "Marks & Spencer website!"
+#~ msgstr "(shopnaam) website"
+
+#, fuzzy
+#~ msgid "Cheap iPhones and Apple Deals"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid ""
+#~ "You can reclaim 1,000s on PPI yourself, easily, \n"
+#~ "                                for free. Don t hand 30% to a no-win no "
+#~ "fee..."
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "SIMILAR PROMOTIONAL CODES, DISCOUNT CODES AND DEALS"
+#~ msgstr "RELEVANTE KORTINGSCODES, SALES EN AANBIEDINGEN: "
+
+#~ msgid "EXPIRED OFFERS AND VOUCHER CODES"
+#~ msgstr "VERLOPEN AANBIEDINGEN EN KORTINGCODES:"
+
+#, fuzzy
+#~ msgid "Beste Gebruiker,"
+#~ msgstr "Hoe codes te gebruiken"
+
+#~ msgid "nog"
+#~ msgstr "nog"
+
+#, fuzzy
+#~ msgid "Verloopt op: "
+#~ msgstr "Verloopt op:"
+
+#, fuzzy
+#~ msgid "of "
+#~ msgstr " delete (zin is al afgemaakt in eerder stuk)"
+
+#~ msgid "Free Delivery"
+#~ msgstr "Gratis venzending"
+
+#~ msgid "Click on the following link, for update your account password.."
+#~ msgstr ""
+#~ "Klik op de volgende link om het wachtwoord van jouw account aan te passen"
+
+#~ msgid "In en om het Huis"
+#~ msgstr "In en om het het Huis"
+
+#~ msgid "een"
+#~ msgstr "een"
+
+#~ msgid "waardebon t.w.v. &euro;50"
+#~ msgstr "leuke prijzen!"
+
+#~ msgid "Show me "
+#~ msgstr "Hier laten wij "
+
+#, fuzzy
+#~ msgid "Promotional Code"
+#~ msgstr "Kortingscode"
+
+#, fuzzy
+#~ msgid "How to Use"
+#~ msgstr "How gebruik je een"
+
+#, fuzzy
+#~ msgid "Voucherscodes"
+#~ msgstr "populaire kortingscodes"
+
+#~ msgid "Met Actieve Voucher Codes!"
+#~ msgstr "Met actieve kortingscodes!"
+
+#, fuzzy
+#~ msgid "Email Not found!"
+#~ msgstr "Oeps! Winkel niet gevonden!"
+
+#~ msgid ""
+#~ "Vul hieronder je nieuwe wachtwoord in: Vul hieronder je nieuwe wachtwoord "
+#~ "in:Vul hieronder je nieuwe wachtwoord in:Vul hieronder je nieuwe "
+#~ "wachtwoord in:Vul hieronder je nieuwe wachtwoord in:"
+#~ msgstr "Vul hieronder je nieuwe wachtwoord in:"
+
+#~ msgid "Waar kan ik deze"
+#~ msgstr "Waar kan ik deze"
+
+#~ msgid "To use your"
+#~ msgstr "Om jouw"
+
+#~ msgid "discount code, copy the code into the box at the checkout."
+#~ msgstr ""
+#~ "kortingscode te gebruiken, kopieer de code naar het veld tijdens het "
+#~ "bestellen in de webshop. "
+
+#, fuzzy
+#~ msgid "Popular Kortingscodes"
+#~ msgstr "Top 10 Kortingscodes"
+
+#, fuzzy
+#~ msgid "CODE.nl"
+#~ msgstr "CODE.nl"
+
+#~ msgid "Hier kan je je inschrijven voor de nieuwsbrief van Kortingscode.nl"
+#~ msgstr "Jouw persoonlijke E-mail instellingen: "
+
+#, fuzzy
+#~ msgid "How to Use Zalando Voucherscodes"
+#~ msgstr "Hoe moet je (shopnaam) kortingscodes gebruiken?"
+
+#~ msgid "Offers waar"
+#~ msgstr "Kortingscodes waar "
+
+#~ msgid "Sorry, we dont have any amazing"
+#~ msgstr "Helaas! We hebben momenteel geen"
+
+#~ msgid ""
+#~ "Vul je e-mail adres in en klik op de link in de e-mail die we je "
+#~ "verzenden om een nieuw wachtwoord aan te maken."
+#~ msgstr ""
+#~ "Vul je e-mail adres in en klik op de link in de e-mail die we je "
+#~ "verzenden om een nieuw wachtwoord aan te maken."
+
+#~ msgid "Weet je het zeker?"
+#~ msgstr "Weet je het zeker?"
+
+#~ msgid "Your email address"
+#~ msgstr "Jouw e-mail adres"
+
+#~ msgid "Your Password"
+#~ msgstr "Jouw wachtwoord"
+
+#~ msgid "Forgot your password ?"
+#~ msgstr "Wachtwoord vergeten?"
+
+#~ msgid "SIGN IN"
+#~ msgstr "REGISTREREN"
+
+#~ msgid "Kies een nieuw wachtwoord en bevestig deze."
+#~ msgstr "Kies een nieuw wachtwoord en bevestig deze."
+
+#~ msgid "opslaan"
+#~ msgstr "opslaan"
+
+#~ msgid "Days Left"
+#~ msgstr "Dagen over"
+
+#~ msgid "Day Left"
+#~ msgstr "Dagen over"
+
+#~ msgid " Free Delivery"
+#~ msgstr "Gratis verzending"
+
+#, fuzzy
+#~ msgid " Delivery &euro;"
+#~ msgstr "bezorging €"
+
+#, fuzzy
+#~ msgid "Days Free Returns"
+#~ msgstr "Dagen gratis verzending"
+
+#, fuzzy
+#~ msgid "Codes"
+#~ msgstr "Codes-"
+
+#~ msgid " or"
+#~ msgstr "of"
+
+#~ msgid " Stores "
+#~ msgstr "Winkels"
+
+#~ msgid "overview."
+#~ msgstr "overzicht. "
+
+#, fuzzy
+#~ msgid "Guides "
+#~ msgstr "pluss"
+
+#~ msgid "Expired offers and voucher codes"
+#~ msgstr "Helaas... Deze kortingscodes zijn verlopen=("
+
+#~ msgid "Browse Vouchercodes"
+#~ msgstr "Alle kortingscodes"
+
+#~ msgid "Bekijk alle"
+#~ msgstr "Bekijk alle"
+
+#~ msgid "Guides where"
+#~ msgstr "pluss waar"
+
+#~ msgid "Guides Marks & Spencers is mentioned in"
+#~ msgstr "Lees deze pluss voor tips bij het online shoppen"
+
+#~ msgid "Network has been created successfully"
+#~ msgstr "Netwerk is succesvol tot stand gebracht"
+
+#~ msgid "Network details have been updated successfully"
+#~ msgstr "Netwerk details zijn met succes gewijzigd"
+
+#~ msgid "Network has been deleted successfully"
+#~ msgstr "Netwerk is verwijderd"
+
+#~ msgid "Article category has been created successfully"
+#~ msgstr "Hoppakee! Er is weer een artikel categorie toegevoegd"
+
+#~ msgid "Error: Your file size exceeded 2MB"
+#~ msgstr "Oeps! Het bestand is groter dan 2MB =("
+
+#~ msgid "Article category has been updated successfully"
+#~ msgstr "Artikel categorie is met succes gewijzigd"
+
+#~ msgid "Record has been deleted successfully."
+#~ msgstr "BAM! verwijderd"
+
+#~ msgid "Problem in your data."
+#~ msgstr "Euh.. Data probleempje"
+
+#~ msgid "Category Name"
+#~ msgstr "Naam Categorie"
+
+#~ msgid "Permalink"
+#~ msgstr "Permalink"
+
+#~ msgid "Meta title"
+#~ msgstr "Meta Title"
+
+#~ msgid "ArticleCategoryList.xlsx"
+#~ msgstr "ArticleCategoryList.xlsx"
+
+#~ msgid "The Article has been saved successfully"
+#~ msgstr "This artikel is met succes gewijzigd"
+
+#~ msgid "The Article has been updated successfully"
+#~ msgstr "Dit artikel is met succes upgedate"
+
+#~ msgid "Article Name"
+#~ msgstr "Naam Artikel"
+
+#~ msgid "Created"
+#~ msgstr "Gemaakt"
+
+#~ msgid "Published"
+#~ msgstr "Gepubliceerd"
+
+#~ msgid "Author"
+#~ msgstr "Auteur"
+
+#~ msgid "Yes"
+#~ msgstr "Ja"
+
+#~ msgid "No"
+#~ msgstr "Nee"
+
+#, fuzzy
+#~ msgid "ArticleList.xlsx"
+#~ msgstr "ArticleList.xlsx"
+
+#~ msgid "Record has been restored successfully."
+#~ msgstr "Record has been restored successfully."
+
+#~ msgid "Article has been moved to trash successfully"
+#~ msgstr "Article has been moved to trash successfully"
+
+#~ msgid "Problem in your data"
+#~ msgstr "Er is een probleem met deze data!"
+
+#~ msgid "Invalid username or password. Please try again."
+#~ msgstr "Foute gebruikersnaam of wachtwoord =( Probeer aub opnieuw!"
+
+#~ msgid "Your E-mail ID is not in our database"
+#~ msgstr "We hebben jouw E-mail ID niet in onze database kunnen vinden :("
+
+#~ msgid "Forgot password"
+#~ msgstr "Password vergeten?"
+
+#~ msgid "Category has been created successfully"
+#~ msgstr "De categorie is succesvol gecreëerd"
+
+#~ msgid "Category details have been updated successfully."
+#~ msgstr "Succes! Je hebt de categorie aangepast!"
+
+#~ msgid "Category has been deleted successfully"
+#~ msgstr "Je hebt de categorie succesvol verwijderd"
+
+#~ msgid "Category"
+#~ msgstr "Categorie"
+
+#~ msgid "Online"
+#~ msgstr "Online"
+
+#~ msgid "Email Lightbox has been updated successfully"
+#~ msgstr "De e-mail lightbox is succesvol aangepast!"
+
+#~ msgid "Footer has been updated successfully"
+#~ msgstr "De footer is succesvol aangepast!"
+
+#~ msgid "Changes has been saved successfully."
+#~ msgstr "Je wijzigingen zijn succesvol opgeslagen"
+
+#~ msgid "Media has been deleted successfully"
+#~ msgstr "De afbeelding/video is verwijderd"
+
+#~ msgid "Media has been updated successfully"
+#~ msgstr "De afbeelding/video is aangepast"
+
+#~ msgid "Offer has been updated successfully."
+#~ msgstr "Je hebt de actie succesvol aangepast!"
+
+#~ msgid "Offer has been added successfully."
+#~ msgstr "De actie is nu toegevoegd!"
+
+#~ msgid "Record has been moved to trash"
+#~ msgstr "Succesvol verplaatst naar de prullenbak!"
+
+#~ msgid "Shop"
+#~ msgstr "Winkel"
+
+#~ msgid "Type"
+#~ msgstr "Type"
+
+#~ msgid "Visibility"
+#~ msgstr "Zichtbaarheid"
+
+#~ msgid "Extended"
+#~ msgstr "Uitgeklapt"
+
+#~ msgid "Start"
+#~ msgstr "Start"
+
+#~ msgid "End"
+#~ msgstr "Eind"
+
+#~ msgid "Clickouts"
+#~ msgstr "Clickouts"
+
+#~ msgid "Coupon"
+#~ msgstr "Kortingscode"
+
+#~ msgid "Sale"
+#~ msgstr "Aanbieding"
+
+#~ msgid "Printable"
+#~ msgstr "Kortingsbon"
+
+#~ msgid "Default"
+#~ msgstr "Standaard"
+
+#~ msgid "Members"
+#~ msgstr "Leden"
+
+#, fuzzy
+#~ msgid "offerList.xlsx"
+#~ msgstr "offerList.xlsx"
+
+#~ msgid "Error: you can not add another footer page."
+#~ msgstr "OEN! Er kan niet nog een footer bij!"
+
+#~ msgid "Page has been updated successfully."
+#~ msgstr "Hoppakee: Pagina gewijzigd!"
+
+#~ msgid "Page has been created successfully."
+#~ msgstr "Hoppakee: Pagina aangemaakt!"
+
+#~ msgid "Page Title"
+#~ msgstr "Pagina Titel"
+
+#~ msgid "Locked"
+#~ msgstr "Gesloten"
+
+#, fuzzy
+#~ msgid "pageList.xlsx"
+#~ msgstr "pageList.xlsx"
+
+#~ msgid "Page has been moved to trash successfully"
+#~ msgstr "Pagina is succesvol verwijderd"
+
+#~ msgid "Redirect has been created successfully"
+#~ msgstr "Redirect aangemaakt"
+
+#~ msgid "Redirect has been updated successfully"
+#~ msgstr "Redirect gewijzigd"
+
+#~ msgid "Redirect has been deleted successfully"
+#~ msgstr "Redirect verwijderd"
+
+#~ msgid "Redirect To"
+#~ msgstr "Redirect naar:"
+
+#~ msgid "Excluded keyword has been created successfully"
+#~ msgstr "Excluded keyword has been created successfully"
+
+#~ msgid "Excluded Keyword has been updated successfully"
+#~ msgstr "Excluded Keyword has been updated successfully"
+
+#~ msgid "Excluded keywords"
+#~ msgstr "Excluded keywords"
+
+#~ msgid "Action"
+#~ msgstr "Actie"
+
+#~ msgid "The shop has been saved successfully"
+#~ msgstr "Deze shop is met succes opgeslagen!  Weer eentje erbij =)"
+
+#~ msgid "The shop has been updated successfully"
+#~ msgstr "Deze Shop is met succes upgedate!"
+
+#~ msgid "Shopname"
+#~ msgstr "Naam van de Shop"
+
+#~ msgid "Account manager"
+#~ msgstr "Account Manager"
+
+#~ msgid "Network"
+#~ msgstr "Aff Netwerk"
+
+#~ msgid "Offline since"
+#~ msgstr "Offline vanaf"
+
+#~ msgid "shopList.xlsx"
+#~ msgstr "shopList.xlsx"
+
+#~ msgid "User has been created successfully."
+#~ msgstr "Gebruiker is met succes aangemaakt"
+
+#~ msgid "File uploaded successfully."
+#~ msgstr "Bestand met succes upgeload! (Was hij niet te groot? Willem? =)"
+
+#~ msgid "User has been deleted successfully."
+#~ msgstr "BAM: Deze user is niet meer"
+
+#~ msgid "Name"
+#~ msgstr "Naam"
+
+#~ msgid "Role"
+#~ msgstr "Rol"
+
+#~ msgid "Entries"
+#~ msgstr "Invoer"
+
+#, fuzzy
+#~ msgid "UserList.xlsx"
+#~ msgstr "UserList.xlsx"
+
+#~ msgid "User has been restored successfully."
+#~ msgstr "De gebruiker bestaat weer!"
+
+#~ msgid "User has been deleted permanentally."
+#~ msgstr "Deze gebruiker is nu permanent verwijderd!"
+
+#~ msgid "You don't have permissions to edit this user."
+#~ msgstr "Je hebt geen toestemming deze gebruiker te bewerken :("
+
+#~ msgid "User details has been updated successfully."
+#~ msgstr "Gebruiker is succesvol aangepast"
+
+#~ msgid "Offer offline status has been updated"
+#~ msgstr "De actie staat weer online!"
+
+#~ msgid "The Vote has been deleted"
+#~ msgstr "Je hebt deze stem verwijderd"
+
+#~ msgid "Visitor has been deleted successfully."
+#~ msgstr "Bezoeker is nu verwijderd!"
+
+#, fuzzy
+#~ msgid "VisitorList.xlsx"
+#~ msgstr "VisitorList.xlsx"
+
+#~ msgid "Visitor has been restored successfully."
+#~ msgstr "Je hebt de bezoeker weer terug gezet!"
+
+#~ msgid "Visitor has been deleted Permanently."
+#~ msgstr "Deze bezoeker is permanent verwijderd!"
+
+#~ msgid "Visitor details has been updated successfully."
+#~ msgstr "De gegevens van deze bezoeker zijn aangepast!"
+
+#~ msgid "widget has been added successfully"
+#~ msgstr "Widget is succesvol toegevoegd!"
+
+#~ msgid "Widget has been updated successfully"
+#~ msgstr "Widget is succesvol aangepast!"
+
+#~ msgid "Widget has been deleted successfully"
+#~ msgstr "Je hebt de widget succesvol verwijderd"
+
+#~ msgid "Content"
+#~ msgstr "Content"
+
+#~ msgid "Create Offers"
+#~ msgstr "Nieuwe actie toevoegen"
+
+#~ msgid "Articles"
+#~ msgstr "Artikelen"
+
+#~ msgid "Create Article"
+#~ msgstr "Nieuw artikel toevoegen"
+
+#~ msgid "Article Categories"
+#~ msgstr "Artikel categorieën"
+
+#~ msgid "Shops"
+#~ msgstr "Winkels"
+
+#~ msgid "Create Shop"
+#~ msgstr "Nieuwe winkel toevoegen"
+
+#~ msgid "Affiliate Networks"
+#~ msgstr "Affiliate Netwerken"
+
+#~ msgid "Pages"
+#~ msgstr "Pagina's"
+
+#~ msgid "Create Page"
+#~ msgstr "Nieuwe pagina toevoegen"
+
+#~ msgid "Widgets"
+#~ msgstr "Widgets"
+
+#~ msgid "Media"
+#~ msgstr "Afbeeldingen / Video"
+
+#~ msgid "Add Widget"
+#~ msgstr "Nieuwe widget toevoegen"
+
+#~ msgid "Upload Media"
+#~ msgstr "Media uploaden"
+
+#~ msgid "Menus"
+#~ msgstr "Menu's"
+
+#~ msgid "Administration"
+#~ msgstr "Administratie"
+
+#~ msgid "Users"
+#~ msgstr "Gebruikers"
+
+#~ msgid "Create user"
+#~ msgstr "Nieuwe gebruiker toevoegen"
+
+#~ msgid "Your Profile"
+#~ msgstr "Jouw profiel"
+
+#~ msgid "Visitors"
+#~ msgstr "Bezoekers"
+
+#~ msgid "Template Settings"
+#~ msgstr "Template instellingen"
+
+#~ msgid "Home Page"
+#~ msgstr "Homepagina"
+
+#~ msgid "Account Settings"
+#~ msgstr "Account instellingen"
+
+#~ msgid "Footer"
+#~ msgstr "Footer"
+
+#~ msgid "User Generated Offers"
+#~ msgstr "User Generated Acties"
+
+#~ msgid "Searchbar"
+#~ msgstr "Zoekbalk"
+
+#~ msgid "Add Excluded Keyword"
+#~ msgstr "+ Uitgesloten keyword toevoegen"
+
+#~ msgid "Redirects"
+#~ msgstr "Redirects"
+
+#~ msgid "Add Redirect"
+#~ msgstr "+ Redirect toevoegen"
+
+#, fuzzy
+#~ msgid "Language File"
+#~ msgstr "Language File"
+
+#~ msgid "Email Lightbox"
+#~ msgstr "E-mail lightbox"
+
+#~ msgid "Statistics"
+#~ msgstr "Statistieken"
+
+#~ msgid "Emails"
+#~ msgstr "E-mails"
+
+#~ msgid "Reports"
+#~ msgstr "Rapportage"
+
+#~ msgid "Welcome"
+#~ msgstr "Welkom"
+
+#~ msgid "Create account settings"
+#~ msgstr "Instellingen voor gebruikersprofielen"
+
+#~ msgid "Max free accounts"
+#~ msgstr "Max. gratis profielen"
+
+#~ msgid "On"
+#~ msgstr "Aan"
+
+#~ msgid "Off"
+#~ msgstr "Uit"
+
+#, fuzzy
+#~ msgid "Accounts Left"
+#~ msgstr "Account instellingen"
+
+#~ msgid "Add stores to step 2 create account"
+#~ msgstr "Voorgestelde favoriete winkels bij aanmaken van gebruikersprofiel"
+
+#~ msgid "DELETE"
+#~ msgstr "Verwijderen"
+
+#~ msgid "ADD SHOP"
+#~ msgstr "+ Winkel toevoegen"
+
+#~ msgid "Codes for No more free logins"
+#~ msgstr "Actiecodes voor gratis gebruikersprofiel"
+
+#~ msgid "ADD CODE"
+#~ msgstr "+ Actiecode toevoegen"
+
+#~ msgid "Affiliate Network"
+#~ msgstr "Affiliate Netwerk"
+
+#~ msgid "Create network"
+#~ msgstr "Affiliate Netwerk toevoegen"
+
+#~ msgid "Cancel"
+#~ msgstr "Annuleren"
+
+#~ msgid "CREATE NETWORK"
+#~ msgstr "+ Netwerk toevoegen"
+
+#~ msgid "CANCEL"
+#~ msgstr "Annuleren"
+
+#~ msgid "Edit network"
+#~ msgstr "Affiliate Netwerk bewerken"
+
+#~ msgid "Edit Name"
+#~ msgstr "Naam bewerken"
+
+#~ msgid "Replace with"
+#~ msgstr "Netwerk vervangen met"
+
+#~ msgid "UPDATE NETWORK"
+#~ msgstr "Wijzigingen Opslaan"
+
+#~ msgid "Affilate Network"
+#~ msgstr "Affiliate Netwerk"
+
+#~ msgid "Add new network"
+#~ msgstr "Nieuw affiliate netwerk toevoegen"
+
+#~ msgid "id"
+#~ msgstr "id"
+
+#~ msgid "Description"
+#~ msgstr "Omschrijving"
+
+#~ msgid "Publish"
+#~ msgstr "Publiceren"
+
+#~ msgid "Save Draft"
+#~ msgstr "Opslaan als draft"
+
+#~ msgid "Preview"
+#~ msgstr "Preview"
+
+#~ msgid "Status:"
+#~ msgstr "Huidige status"
+
+#~ msgid "Draft"
+#~ msgstr "Draft"
+
+#~ msgid "Publish:"
+#~ msgstr "Publiceren"
+
+#~ msgid "immediately"
+#~ msgstr "direct"
+
+#~ msgid "Edit"
+#~ msgstr "Bewerken"
+
+#~ msgid "Article Attributes"
+#~ msgstr "Geschreven door"
+
+#~ msgid "Select Author"
+#~ msgstr "Selecteer gebruiker"
+
+#~ msgid "Related Stores"
+#~ msgstr "Gerelateerde winkels"
+
+#~ msgid "Add Store"
+#~ msgstr "+ Winkel"
+
+#~ msgid "Delete"
+#~ msgstr "Verwijderen"
+
+#~ msgid "Move Up"
+#~ msgstr "Omhoog"
+
+#~ msgid "Move Down"
+#~ msgstr "Omlaag"
+
+#~ msgid "Article title"
+#~ msgstr "Titel"
+
+#~ msgid "permalink"
+#~ msgstr "permalink"
+
+#~ msgid "Thumbnail"
+#~ msgstr "Afbeelding"
+
+#~ msgid ".jpg or .png file only (Size: 2MB, Ratio 0.75)"
+#~ msgstr ".jpg of .png (Max 2MB, Ratio 0,75:1))"
+
+#~ msgid "0 characters"
+#~ msgstr "0 Karakters"
+
+#~ msgid "Meta Description"
+#~ msgstr "Meta omschrijving"
+
+#~ msgid "Maximum Offers on Page"
+#~ msgstr "Max. aantal aanbiedingen op pagina"
+
+#~ msgid "Maximum Offer"
+#~ msgstr "Maximale aanbieding"
+
+#~ msgid "Offers Order"
+#~ msgstr "Volgorde Aanbiedingen"
+
+#~ msgid "Enable time contstraint"
+#~ msgstr "Enable time contstraint"
+
+#~ msgid "Posted within"
+#~ msgstr "Geplaatst tussen"
+
+#~ msgid "Expires in"
+#~ msgstr "Loopt af op"
+
+#~ msgid "Word constraint"
+#~ msgstr "Max. Woordhoeveelheid"
+
+#~ msgid "Awards"
+#~ msgstr "Awards"
+
+#~ msgid "Free shipping"
+#~ msgstr "Gratis Verzending"
+
+#~ msgid "Order today,delivred tomorrow"
+#~ msgstr "Bestel vandaag, morgen in huis"
+
+#~ msgid "Of clickouts"
+#~ msgstr "van de clickouts"
+
+#~ msgid "Show offer types"
+#~ msgstr "Laat soort aanbieding zien"
+
+#~ msgid "Regular"
+#~ msgstr "Regulier"
+
+#~ msgid "Editors pick"
+#~ msgstr "Favoriet van de redactie"
+
+#~ msgid "Exlusive"
+#~ msgstr "Exclusief"
+
+#~ msgid "Show as page when creating offers?"
+#~ msgstr "Laat als pagina zien wanneer men aanbiedingen aanmaakt?"
+
+#~ msgid "yes"
+#~ msgstr "Ja"
+
+#, fuzzy
+#~ msgid "Chapters"
+#~ msgstr "Karakters"
+
+#, fuzzy
+#~ msgid "+ Add another chapter"
+#~ msgstr "+ Voeg een nieuw tabje toe"
+
+#~ msgid "Edit Article"
+#~ msgstr "Artikel aanpassen"
+
+#~ msgid "Scheduled"
+#~ msgstr "Geplanned"
+
+#~ msgid "Published on:"
+#~ msgstr "Gepubliceerd op:"
+
+#~ msgid "Scheduled for:"
+#~ msgstr "Geplanned voor:"
+
+#~ msgid " immediately"
+#~ msgstr "nu"
+
+#~ msgid "Move to Trash"
+#~ msgstr "verplaats naar prullebak"
+
+#~ msgid "Related Categories"
+#~ msgstr "gerelateerde categorieen"
+
+#, fuzzy
+#~ msgid "Article ghghlogo"
+#~ msgstr "Artikel ???"
+
+#~ msgid "Add New Article"
+#~ msgstr "Voeg nieuw artikel toe"
+
+#~ msgid "Trash"
+#~ msgstr "Prullebak"
+
+#~ msgid "Trashed Articles"
+#~ msgstr "Geprullebakaliseerde Artikelen"
+
+#~ msgid "Restore"
+#~ msgstr "Herstel"
+
+#~ msgid "Article Category"
+#~ msgstr "Artikel categorie"
+
+#~ msgid "Create Article Category"
+#~ msgstr "Maak artikel categorie"
+
+#~ msgid "Meta Title"
+#~ msgstr "Meta Titel"
+
+#~ msgid "Category Icon"
+#~ msgstr "Categorie Icoon"
+
+#~ msgid "Upload .jpg or .png file only (Maximum file size: 2MB)"
+#~ msgstr ".jpg of .png < 2MB"
+
+#~ msgid "CREATE CATEGORY"
+#~ msgstr "Maak Categorie aan"
+
+#~ msgid "Edit Article Category"
+#~ msgstr "Edit: Artikel categorie"
+
+#~ msgid "Article Category logo"
+#~ msgstr "Logo: Artikel categorie"
+
+#~ msgid "SAVE CHANGES"
+#~ msgstr "Wijzigingen opslaan"
+
+#~ msgid "Forgot password?"
+#~ msgstr "Wachtwoord vergeten?"
+
+#~ msgid "REQUEST NEW PASSWORD"
+#~ msgstr "Vraag nieuw wachtwoord aan"
+
+#~ msgid "Back"
+#~ msgstr "Terug"
+
+#~ msgid "CMS LOGIN"
+#~ msgstr "IMBULL UBER ADVANCED CMS LOGIN"
+
+#~ msgid "Username"
+#~ msgstr "Gebruikersnaam"
+
+#~ msgid "LOGIN"
+#~ msgstr "Login"
+
+#~ msgid "Forgot Password?"
+#~ msgstr "Wachtwoord vergeten? (OEN!)"
+
+#~ msgid "Check your email address for a new password"
+#~ msgstr ""
+#~ "Bekijk je inbox voor een nieuw wachtwoord. (Ps. Kijk ook in de SPAM "
+#~ "folder! )"
+
+#~ msgid "BACK TO LOGIN"
+#~ msgstr "TERUG NAAR LOGIN"
+
+#~ msgid "Create Category"
+#~ msgstr "Maak Categorie aan"
+
+#~ msgid ".jpg or .png file only (Size: 2MB, Ratio: 1:1)"
+#~ msgstr ".jpg of .png! (Maxsize: 2MB, Ratio: 1:1)"
+
+#~ msgid "Edit Category"
+#~ msgstr "Pas Categorie Aan"
+
+#~ msgid "Edit Title"
+#~ msgstr "Pas Titel aan"
+
+#~ msgid "UPDATE CATEGORY"
+#~ msgstr "UPDATE CATEGORIE"
+
+#~ msgid "Categories List"
+#~ msgstr "Lijst met categorieen"
+
+#~ msgid "Add New Category"
+#~ msgstr "Voeg nieuwe categorie toe"
+
+#~ msgid "Export List"
+#~ msgstr "Export Lijst"
+
+#~ msgid "E-mail Lightbox"
+#~ msgstr "E-mail Lightbox"
+
+#~ msgid "Active"
+#~ msgstr "Actief"
+
+#~ msgid "Top footer"
+#~ msgstr "Top Footer"
+
+#~ msgid "Column1"
+#~ msgstr "Kolom 1"
+
+#~ msgid "Column2"
+#~ msgstr "Kolom 2"
+
+#~ msgid "Column3"
+#~ msgstr "Kolom 3"
+
+#~ msgid "Column4"
+#~ msgstr "Kolom 4"
+
+#~ msgid "Bottom footer"
+#~ msgstr "Bodem Footer"
+
+#~ msgid "EDIT FOOTER"
+#~ msgstr "EDIT FOOTER"
+
+#~ msgid "Welcome To Home page"
+#~ msgstr "Welkom Home!"
+
+#~ msgid "Homepage"
+#~ msgstr "Home"
+
+#~ msgid "SAVE & UPDATE"
+#~ msgstr "SAVE & UPDATE"
+
+#~ msgid "Popular Categories"
+#~ msgstr "Populaire categorieen"
+
+#~ msgid "Special List"
+#~ msgstr "Specials"
+
+#~ msgid "Money Saving Articles"
+#~ msgstr "plus"
+
+#~ msgid "As seen in"
+#~ msgstr "Gespot in: "
+
+#~ msgid "Content block 1"
+#~ msgstr "Content blok 1"
+
+#~ msgid "URL"
+#~ msgstr "URL"
+
+#~ msgid "Url"
+#~ msgstr "URL"
+
+#~ msgid "Tooltip"
+#~ msgstr "Tooltip"
+
+#~ msgid " Characters"
+#~ msgstr " Karakters"
+
+#~ msgid "Image"
+#~ msgstr "Plaatje"
+
+#~ msgid "Content block 2"
+#~ msgstr "Content blok 2"
+
+#~ msgid "Content block 3"
+#~ msgstr "Content blok 3"
+
+#~ msgid "Content block 4"
+#~ msgstr "Content blok 4"
+
+#~ msgid "Content block 5"
+#~ msgstr "Content blok 5"
+
+#~ msgid "Content block 6"
+#~ msgstr "Content blok 6"
+
+#~ msgid "Tab"
+#~ msgstr "Tab"
+
+#~ msgid "Remove Tab"
+#~ msgstr "Verwijder Tab"
+
+#~ msgid "Remove"
+#~ msgstr "Verwijder"
+
+#~ msgid "+ Add another tab"
+#~ msgstr "+ Voeg een nieuw tabje toe"
+
+#~ msgid "Upload New Media"
+#~ msgstr "Upload New Media"
+
+#~ msgid "Drop files here"
+#~ msgstr "Plaats hier je bestanden"
+
+#~ msgid "Select File"
+#~ msgstr "Select Bestand"
+
+#~ msgid "SAVE ALL CHANGES"
+#~ msgstr "SAVE ALLE VERANDERINGEN"
+
+#~ msgid "Title:"
+#~ msgstr "Titel: "
+
+#~ msgid "Alternate text:"
+#~ msgstr "Alternatieve tekst:"
+
+#~ msgid "Caption:"
+#~ msgstr "? Caption?"
+
+#~ msgid "File URL:"
+#~ msgstr "Bestands URL: "
+
+#~ msgid "SAVE"
+#~ msgstr "SAVE"
+
+#~ msgid "Media library"
+#~ msgstr "Media Bibliotheek"
+
+#~ msgid "Add New"
+#~ msgstr "Voeg Toe"
+
+#~ msgid "Id"
+#~ msgstr "ID"
+
+#~ msgid "Date"
+#~ msgstr "Datum"
+
+#~ msgid "Menu Beheer"
+#~ msgstr "Menu Beheer"
+
+#~ msgid "Main Menu"
+#~ msgstr "Hoofdmenu"
+
+#, fuzzy
+#~ msgid "Menu"
+#~ msgstr "Menu's"
+
+#~ msgid "Menu item"
+#~ msgstr "Menu item"
+
+#~ msgid "Label"
+#~ msgstr "Label"
+
+#~ msgid "Icon"
+#~ msgstr "Icoon"
+
+#~ msgid "Upload"
+#~ msgstr "Upload"
+
+#~ msgid "Sort"
+#~ msgstr "Sorteer"
+
+#~ msgid "Sub Menu"
+#~ msgstr "Submenu"
+
+#~ msgid "Create Offer"
+#~ msgstr "Maak Korting"
+
+#~ msgid "Pre-fill"
+#~ msgstr "Automatisch Invullen"
+
+#, fuzzy
+#~ msgid "From which shop?"
+#~ msgstr "Voor welke shop?"
+
+#, fuzzy
+#~ msgid "Existing Shop"
+#~ msgstr "Winkel aanpassen"
+
+#, fuzzy
+#~ msgid "Not Existing Shop"
+#~ msgstr "Winkel aanpassen"
+
+#~ msgid "Shop Name"
+#~ msgstr "Naam van de Shop"
+
+#~ msgid "Upload .jpg or .png file only (Maximum file size: 2MB, Ratio 2:01)"
+#~ msgstr ".jpg of .png < 2MB, Ratio 2:01"
+
+#~ msgid "For which shop?"
+#~ msgstr "Voor welke shop?"
+
+#~ msgid "Note from this shop:"
+#~ msgstr "Notitie van deze winkel:"
+
+#~ msgid "Type of Discount"
+#~ msgstr "Type korting"
+
+#~ msgid "Discount"
+#~ msgstr "Korting"
+
+#, fuzzy
+#~ msgid "&euro;"
+#~ msgstr "€"
+
+#~ msgid "Upload Offer (pdf or jpg)"
+#~ msgstr "Upload Aanbieding (pdf of jpg)"
+
+#~ msgid "Use Ref URL / URL"
+#~ msgstr "Gebruik Referrer URL"
+
+#~ msgid "Upload .jpg or .pdf file only (Maximum file size: 2MB)"
+#~ msgstr ".jpg of .png < 2MB"
+
+#~ msgid "Ref URL"
+#~ msgstr "Referrer URL"
+
+#~ msgid "+ ADD MORE NEWS"
+#~ msgstr "+ Voeg meer nieuws toe"
+
+#~ msgid "Deeplinking is"
+#~ msgstr "Deeplinking is"
+
+#~ msgid "Add More Terms"
+#~ msgstr "Voeg meer termen toe"
+
+#~ msgid "Start Date"
+#~ msgstr "Startdatum"
+
+#~ msgid "End Date"
+#~ msgstr "Einddatum"
+
+#~ msgid "Maximum codes"
+#~ msgstr "Maximum aantal codes"
+
+#~ msgid "Attach to pages"
+#~ msgstr "Voeg toe aan pagina's"
+
+#~ msgid "Extra options"
+#~ msgstr "Extra opties"
+
+#~ msgid "Extended offer"
+#~ msgstr "Uitgebreide aanbieding"
+
+#~ msgid "This account is important, etc"
+#~ msgstr "Deze account is belangrijk, etc"
+
+#~ msgid "Full info about the Coupon"
+#~ msgstr "Volledige informatie over deze code"
+
+#~ msgid "ADD OFFER"
+#~ msgstr "Aanbieding toevoegen"
+
+#~ msgid "Edit Offer"
+#~ msgstr "Aanbieding aanpassen"
+
+#~ msgid "Shop Logo"
+#~ msgstr "Shop Logo"
+
+#~ msgid "Shop logo"
+#~ msgstr "Shop Logo"
+
+#~ msgid "ADD MORE NEWS"
+#~ msgstr "Meer nieuws toevoegen"
+
+#~ msgid "EDIT OFFER"
+#~ msgstr "Aanbieding aanpassen"
+
+#~ msgid "Add New Offer"
+#~ msgstr "Nieuwe Aanbieding"
+
+#~ msgid "Search offer"
+#~ msgstr "Zoek aanbieding"
+
+#~ msgid "Search shop"
+#~ msgstr "Zoek winkel"
+
+#~ msgid "Trashed Offers"
+#~ msgstr "Verwijderde Aanbiedingen"
+
+#~ msgid "Default Page"
+#~ msgstr "Standaard Pagina"
+
+#~ msgid "Offer List Page"
+#~ msgstr "Pagina met lijst van Aanbiedingen"
+
+#~ msgid "Page Attributes"
+#~ msgstr "Pagina Attributen"
+
+#~ msgid "Template"
+#~ msgstr "Template"
+
+#~ msgid "Select Template"
+#~ msgstr "Selecteer Template"
+
+#~ msgid "Article categories"
+#~ msgstr "Artikel categorieen"
+
+#~ msgid "Lock Page"
+#~ msgstr "Sluit Pagina"
+
+#~ msgid "Sidebar"
+#~ msgstr "Sidebar"
+
+#~ msgid "Add Widgets"
+#~ msgstr "Widgets toevoegen"
+
+#~ msgid "Please select widget"
+#~ msgstr "Widget Toevoegen"
+
+#~ msgid "Page title"
+#~ msgstr "Pagina titel"
+
+#~ msgid ".jpg or .png file only (Size: 2MB, Ratio: 0.75)"
+#~ msgstr ".jpg of .png < 2MB, Ratio: 0,75"
+
+#~ msgid "Page Description"
+#~ msgstr "Pagina omschrijving"
+
+#~ msgid "Enable time constraint"
+#~ msgstr "Voeg maximale tijd toe"
+
+#~ msgid "Order today,delivered tomorrow"
+#~ msgstr "Bestel vandaag, morgen in huis"
+
+#~ msgid "Edit Page"
+#~ msgstr "Pagina aanpassen"
+
+#~ msgid "Update"
+#~ msgstr "Wijzigen"
+
+#~ msgid "Enable time Constraint"
+#~ msgstr "Voeg maximale tijd toe"
+
+#~ msgid "Word Constraint"
+#~ msgstr "Maximale woordlengte"
+
+#~ msgid "Add New Page"
+#~ msgstr "Voeg nieuwe pagina toe"
+
+#~ msgid "Trashed Pages"
+#~ msgstr "Verwijderde pagina's"
+
+#~ msgid "Trashed"
+#~ msgstr "Verwijderd"
+
+#~ msgid "Delete Permanently"
+#~ msgstr "Verwijder definitief"
+
+#~ msgid "Original URL"
+#~ msgstr "Originele URL"
+
+#~ msgid "Redirect to"
+#~ msgstr "Redirect naar"
+
+#~ msgid "CREATE"
+#~ msgstr "Maak"
+
+#~ msgid "Edit Redirect"
+#~ msgstr "Redirect aanpassen"
+
+#~ msgid "Redirect List"
+#~ msgstr "Redirect lijst"
+
+#~ msgid "Add New Redirect"
+#~ msgstr "Redirect toevoegen"
+
+#~ msgid "Redirect"
+#~ msgstr "Redirect"
+
+#, fuzzy
+#~ msgid "Add Redirect/Connect keyword in searchbar"
+#~ msgstr "Add Redirect / Connect keyword in searchbar"
+
+#~ msgid "Keyword"
+#~ msgstr "Keyword"
+
+#~ msgid "Connect"
+#~ msgstr "Connect"
+
+#~ msgid "Connect to"
+#~ msgstr "Connect met"
+
+#~ msgid "ADD STORE"
+#~ msgstr "Winkel Toevoegen"
+
+#, fuzzy
+#~ msgid "Edit Redirect/Connect keyword in searchbar"
+#~ msgstr "Edit Redirect/Connect keyword in searchbar"
+
+#~ msgid "Searchbar List"
+#~ msgstr "Searchbar Lijst"
+
+#~ msgid "Navigational URL"
+#~ msgstr "Navigatie URL"
+
+#~ msgid "Overwrite title"
+#~ msgstr "Overschrijf Titel"
+
+#~ msgid "Overwrite Title"
+#~ msgstr "Overschrijf Titel"
+
+#~ msgid "Shop Title"
+#~ msgstr "Shop Titel"
+
+#~ msgid "Sub-title"
+#~ msgstr "Subtitel"
+
+#~ msgid "Shop Sub-Title"
+#~ msgstr "Shop Subtitel"
+
+#~ msgid "Notes"
+#~ msgstr "Notitie"
+
+#~ msgid "Short note about the shop"
+#~ msgstr "Korte notitie over de winkel"
+
+#~ msgid "Account Manager"
+#~ msgstr "Account Manager"
+
+#~ msgid "None"
+#~ msgstr "Geen"
+
+#~ msgid "Editor"
+#~ msgstr "Redacteur"
+
+#~ msgid "Similar Shops"
+#~ msgstr "Soortgelijke Winkels"
+
+#~ msgid "Affiliate network"
+#~ msgstr "Affiliate Netwerk"
+
+#~ msgid "Deeplinking code"
+#~ msgstr "Code voor Deeplinking"
+
+#~ msgid "Deeplink URL"
+#~ msgstr "Deeplink URL"
+
+#~ msgid "Actual URL"
+#~ msgstr "Actuele URL"
+
+#~ msgid "Website Screenshot"
+#~ msgstr "Screenshot"
+
+#~ msgid " Upload .jpg or .png file only (Maximum file size: 2MB,Width:450px)"
+#~ msgstr ".jpg of .png < 2MB, Width:450px"
+
+#~ msgid "Shoptext"
+#~ msgstr "Shopomschrijving"
+
+#~ msgid "Small description about the shop"
+#~ msgstr "Korte omschrijving Winkel"
+
+#~ msgid "Always"
+#~ msgstr "Altijd"
+
+#~ msgid "Never"
+#~ msgstr "Nooit"
+
+#~ msgid "Orders starting at"
+#~ msgstr "Aanbiedingen starten op"
+
+#~ msgid "Delivery time"
+#~ msgstr "Besteldetails"
+
+#~ msgid "Return policy"
+#~ msgstr "Retourbeleid"
+
+#~ msgid "Views"
+#~ msgstr "Views"
+
+#~ msgid "Add a 'How to use the code'"
+#~ msgstr "Voeg een how-to-guide toe"
+
+#~ msgid "Upload main image lightbox"
+#~ msgstr "Upload main image how-to-guide (breedte ??)"
+
+#~ msgid "Upload .jpg or .png file only (Maximum file size: 2MB,width:300px)"
+#~ msgstr ".jpg of .png < 2MB, Width:300px"
+
+#, fuzzy
+#~ msgid "Upload second image lightbox"
+#~ msgstr "Upload tweede plaatje how-to-guide (breedte ??)"
+
+#~ msgid " Upload .jpg or .png file only (Maximum file size: 2MB,width:300px)"
+#~ msgstr ".jpg of .png < 2MB, Width:300px"
+
+#~ msgid "Select how to use page"
+#~ msgstr "Selecteer 'how to use' pagina"
+
+#~ msgid "PUBLISH SHOP"
+#~ msgstr "Publiceer Winkel"
+
+#~ msgid "Edit Shop"
+#~ msgstr "Winkel aanpassen"
+
+#~ msgid "Actual URL "
+#~ msgstr "Echte URL"
+
+#~ msgid "Upload .jpg or .png file only (Maximum file size: 2MB , Ratio 2:01)"
+#~ msgstr "Upload .jpg of .png (Max. Filesize: 2MB, Ratio 2:01)"
+
+#~ msgid "Shop screen shot"
+#~ msgstr "Screenshot winkel"
+
+#~ msgid "Upload .jpg or .png file only (Maximum file size: 2MB,Width:450px)"
+#~ msgstr "Upload .jpg of .png (Max. Filesize: 2MB, Width: 450px)"
+
+#~ msgid "Small description about the shop."
+#~ msgstr "Korte omschrijving van de winkel"
+
+#~ msgid "main image"
+#~ msgstr "Hoofdplaatje"
+
+#~ msgid "second image"
+#~ msgstr "tweede plaatje"
+
+#~ msgid "Add New Shop"
+#~ msgstr "Voeg winkel toe"
+
+#~ msgid "Shop name"
+#~ msgstr "Naam van de shop"
+
+#, fuzzy
+#~ msgid "PermaLink"
+#~ msgstr "Permalink"
+
+#~ msgid "Money Shop"
+#~ msgstr "Moneymaker"
+
+#~ msgid "Affiliate program"
+#~ msgstr "Affiliate programma"
+
+#~ msgid "Delete permanently"
+#~ msgstr "Verwijder definitief"
+
+#~ msgid "Hi"
+#~ msgstr "Hoi"
+
+#~ msgid "Your password has been reset as per your request on our website"
+#~ msgstr "Jouw wachtwoord is gereset door een aanvraag op de website"
+
+#~ msgid "Your new password is:"
+#~ msgstr "Jouw nieuwe wachtwoord is: "
+
+#~ msgid "Regards"
+#~ msgstr "Dank "
+
+#~ msgid "Kortingscode Team"
+#~ msgstr "Kortingscode team"
+
+#~ msgid " Working Days"
+#~ msgstr "Werkdagen"
+
+#~ msgid " Days Free Returns"
+#~ msgstr "Dagen gratis verzending"
+
+#, fuzzy
+#~ msgid " Codes "
+#~ msgstr " Codes- "
+
+#, fuzzy
+#~ msgid "where to enter my Hotels.com code, or read our full "
+#~ msgstr "waar moet ik mijn (shopnaam) code invoeren? lees onze volledige "
+
+#~ msgid " Promotional Code"
+#~ msgstr "Kortingscode"
+
+#~ msgid "&nbsp;help guide."
+#~ msgstr "how-to-guide"
+
+#~ msgid "Het laatste"
+#~ msgstr "Het laatste"
+
+#~ msgid "Add User"
+#~ msgstr "Gebruiker toevoegen"
+
+#~ msgid "Add New User"
+#~ msgstr "Gebruiker toevoegen"
+
+#~ msgid "First Name"
+#~ msgstr "Voornaam"
+
+#~ msgid "Last Name"
+#~ msgstr "Achternaam"
+
+#~ msgid "Re-type Password"
+#~ msgstr "Herhaal wachtwoord"
+
+#~ msgid "Access to website"
+#~ msgstr "Toegang tot de website"
+
+#~ msgid "Upload Avatar"
+#~ msgstr "Plaatje toevoegen"
+
+#~ msgid "Google+"
+#~ msgstr "Google+"
+
+#, fuzzy
+#~ msgid "https://plus.google/u/o/121213"
+#~ msgstr "https://plus.google.com/113493831438224635866"
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#, fuzzy
+#~ msgid "https://twitter.com/u/o/121213"
+#~ msgstr "http://twitter.com/codekorting"
+
+#~ msgid "Pinterest"
+#~ msgstr "Pinterest"
+
+#, fuzzy
+#~ msgid "https://pinterest.com/u/o/121213"
+#~ msgstr "https://pinterest.com/u/o/121213"
+
+#~ msgid "Rose"
+#~ msgstr "Rose"
+
+#~ msgid "Dislikes"
+#~ msgstr "Dislikes:"
+
+#~ msgid "Main Text"
+#~ msgstr "Hoofdtext"
+
+#~ msgid "Hello word !"
+#~ msgstr "Hallo wereld!"
+
+#~ msgid "Search by shop..."
+#~ msgstr "Zoek via winkel"
+
+#~ msgid "Interesting Categories"
+#~ msgstr "Interessante categorie"
+
+#~ msgid "CREATE PROFILE"
+#~ msgstr "Profiel aanmaken"
+
+#~ msgid "Edit User"
+#~ msgstr "Gebruiker aanpassen"
+
+#~ msgid "Change Password"
+#~ msgstr "Verander wachtwoord"
+
+#~ msgid "New Password"
+#~ msgstr "Nieuw wachtwoord"
+
+#~ msgid "Re-type New Password"
+#~ msgstr "Voeg wachtwoord opnieuw in"
+
+#~ msgid "UPDATE PROFILE"
+#~ msgstr "Profiel aanpassen"
+
+#~ msgid "Users List"
+#~ msgstr "Gebuikerslijst"
+
+#~ msgid "Edit Profile"
+#~ msgstr "Profiel aanpassen"
+
+#~ msgid "160px * 160px"
+#~ msgstr "160px * 160px"
+
+#~ msgid "Old Password"
+#~ msgstr "Oude wachtwoord"
+
+#~ msgid "Edit User Generated Offer"
+#~ msgstr "Aanpassen 'user generated' aanbieding"
+
+#~ msgid "Approved"
+#~ msgstr "Goedgekeurd"
+
+#~ msgid "Votes & Savings"
+#~ msgstr "Stemmen & Besparingen"
+
+#~ msgid "Vote"
+#~ msgstr "Stem"
+
+#~ msgid "Money Saved"
+#~ msgstr "Geld bespaard"
+
+#~ msgid "Product"
+#~ msgstr "Product"
+
+#~ msgid "Offline"
+#~ msgstr "Offline"
+
+#~ msgid "Visitor"
+#~ msgstr "Bezoeker"
+
+#~ msgid "Edit Visitor"
+#~ msgstr "Pas Bezoeker aan"
+
+#~ msgid "Favourite shops"
+#~ msgstr "Favoriete winkels"
+
+#~ msgid "EDIT PROFILE"
+#~ msgstr "Aanpassen Profiel"
+
+#~ msgid "DELETE VISITOR"
+#~ msgstr "Verwijzer Bezoeker"
+
+#~ msgid "Trash Visitor List"
+#~ msgstr "Verwijder Bezoekerslijst"
+
+#~ msgid "Create Widget"
+#~ msgstr "Nieuwe Widget"
+
+#~ msgid "CREATE WIDGET"
+#~ msgstr "Nieuwe Widget"
+
+#~ msgid "Edit Widget"
+#~ msgstr "Pas Widget Aan"
+
+#~ msgid "No server specified"
+#~ msgstr ""
+#~ "Er is geen server gespecificeerd! Waarschijnlijk heb je hier Kim voor "
+#~ "nodig! :)"
+
+#~ msgid "Error "
+#~ msgstr "Error. Er is iets fout gegaan. Misschien ben je nu ontslagen. :("
+
+#~ msgid "no login ID submitted"
+#~ msgstr "Je hebt geen login ID opgegeven!"
+
+#~ msgid "connection not established"
+#~ msgstr "Er kan helaas geen verbinding worden gemaakt!"
+
+#~ msgid "No password submitted"
+#~ msgstr "Je hebt geen wachtwoord ingevoerd!"
+
+#~ msgid "Authentication failed"
+#~ msgstr "Het is niet gelukt je authenticatie compleet te maken! :S"
+
+#~ msgid "No connection to server"
+#~ msgstr "Geen verbinding met de server. Kim misschien even bellen?"
+
+#~ msgid "No login ID submitted"
+#~ msgstr "Je hebt geen login ID opgegeven!"
+
+#~ msgid "No server banner"
+#~ msgstr "Geen server banner"
+
+#~ msgid "abort"
+#~ msgstr "Annuleren?"
+
+#~ msgid "apop authentication failed"
+#~ msgstr "Applicatie bevestiging mislukt"
+
+#~ msgid "Premature end of list"
+#~ msgstr "Te vroege eind van de lijst"
+
+#~ msgid "Empty command string"
+#~ msgstr "Empty command string"
+
+#~ msgid "connection does not exist"
+#~ msgstr "Verbinding bestaat niet"
+
+#~ msgid "No msg number submitted"
+#~ msgstr "No msg number submitted"
+
+#~ msgid "Command failed "
+#~ msgstr "Command failed "
+
+#~ msgid "Security error."
+#~ msgstr "Beveiligings Errors"
+
+#~ msgid "Generic error."
+#~ msgstr "Generieke Error"
+
+#~ msgid "IO error."
+#~ msgstr "IO error"
+
+#~ msgid "Image error."
+#~ msgstr "Image error"
+
+#~ msgid "HTTP Error."
+#~ msgstr "HTTP Error"
+
+#, fuzzy
+#~ msgid "media_dlg."
+#~ msgstr "media_dlg."
+
+#, fuzzy
+#~ msgid "paste.plaintext_mode_sticky"
+#~ msgstr "paste.plaintext_mode_sticky"
+
+#, fuzzy
+#~ msgid "paste.plaintext_mode"
+#~ msgstr "paste.plaintext_mode"
+
+#, fuzzy
+#~ msgid "advanced.path"
+#~ msgstr "advanced.path"
+
+#, fuzzy
+#~ msgid "advanced_dlg.charmap_usage"
+#~ msgstr "advanced_dlg.charmap_usage"
+
+#~ msgid "value"
+#~ msgstr "waarde"
+
+#~ msgid "some string"
+#~ msgstr "some string"
+
+#, fuzzy
+#~ msgid "this will get translated"
+#~ msgstr "dit zat vertaald worden"
+
+#, fuzzy
+#~ msgid "text"
+#~ msgstr "text"
+
+#, fuzzy
+#~ msgid "Hello World!\n"
+#~ msgstr "Hoi Wereld!"
+
+#, fuzzy
+#~ msgid "Hello %1"
+#~ msgstr "Hello %1"
+
+#, fuzzy
+#~ msgid "%d files deleted.\n"
+#~ msgstr "%d bestanden verwijderd.\n"
+
+#~ msgid " characters remaining"
+#~ msgstr " tekens over"
+
+#~ msgid "This field is required."
+#~ msgstr "Dit veld is verplicht"
+
+#~ msgid "This Email address has been registered already!"
+#~ msgstr "Dit e-mail adres is al bij ons gegeristreerd"
+
+#~ msgid "Please enter a valid email address."
+#~ msgstr "Vul aub geldig e-mailadres in"
+
+#~ msgid "Please enter a valid URL."
+#~ msgstr "Vul aub geldige URL in"
+
+#~ msgid "Please enter a valid date."
+#~ msgstr "Vul aub een geldige datum in"
+
+#~ msgid "Please enter a valid date (ISO)."
+#~ msgstr "Vul aub een geldige datum in (ISO)"
+
+#~ msgid "Please enter a valid number."
+#~ msgstr "Vul aub een geldig nummer in"
+
+#~ msgid "Please enter only digits."
+#~ msgstr "Vul aub alleen getallen in"
+
+#~ msgid "Please enter a valid credit card number."
+#~ msgstr "Vul aub een geldig creditcard nummer in"
+
+#~ msgid "Please enter the same value again."
+#~ msgstr "Vul aub de vorige waarde nogmaals in"
+
+#~ msgid "Please enter a value with a valid extension."
+#~ msgstr "Vul aub een geldige bestands extensie in"
+
+#~ msgid "Please enter no more than {0} characters."
+#~ msgstr "Vul aub niet meer dan {0} tekens in"
+
+#~ msgid "Please enter at least {0} characters."
+#~ msgstr "Vul aub tenminste {0} tekens in"
+
+#~ msgid "Please enter a value between {0} and {1} characters long."
+#~ msgstr "Vul aub een waarde tussn {0} en {1} karakters in"
+
+#~ msgid "Please enter a value between {0} and {1}."
+#~ msgstr "Vul aub een waarde in tussen {0} en {1}"
+
+#~ msgid "Please enter a value less than or equal to {0}."
+#~ msgstr "Vul aub een waarde in kleiner of even groot als {0}"
+
+#~ msgid "Please enter a value greater than or equal to {0}."
+#~ msgstr "Vul aub een waarde in groter of gelijk aan {0}"
+
+#~ msgid "Please enter your Username."
+#~ msgstr "Vul aub je gebruikersnaam in"
+
+#~ msgid "Please enter valid Username."
+#~ msgstr "Vul aub een geldige gebruikersnaam in"
+
+#~ msgid "Please enter your  password."
+#~ msgstr "Vul aub jouw wachtwoord in"
+
+#~ msgid "Please enter minimum 8 characters"
+#~ msgstr "Minimaal 8 tekens in"
+
+#~ msgid "Validating..."
+#~ msgstr "Controleren..."
+
+#, fuzzy
+#~ msgid ""
+#~ "<span class=\"help-inline focus success\" for=\"pwd\" generated=\"true\" "
+#~ "haserror=\"true\">Valid password.</span>"
+#~ msgstr ""
+#~ " <span class=\"help-inline focus success\" for=\"pwd\" generated=\"true\" "
+#~ "haserror=\"true\">Geldig wachtwoord.</span>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<span class=\"help-inline focus success\" for=\"pwd\" generated=\"true\" "
+#~ "haserror=\"true\">Valid UserName. </span>"
+#~ msgstr ""
+#~ " <span class=\"help-inline focus success\" for=\"pwd\" generated=\"true\" "
+#~ "haserror=\"true\">Geldige gebruikersnaam</span>"
+
+#~ msgid "Are you sure you want to delete this code? "
+#~ msgstr "Weet je zeker dat je deze code wilt verwijderen?"
+
+#~ msgid "Please select a code from list"
+#~ msgstr "Selecteer aub een code uit de lijst"
+
+#~ msgid "Please enter code"
+#~ msgstr "Vul aub een code in"
+
+#~ msgid "This code already exist, so please enter another"
+#~ msgstr "Deze code bestaat al, graag een andere toevoegen"
+
+#~ msgid "Are you sure you want to delete this shop?"
+#~ msgstr "Weet je zeker dat je deze shop wilt verwijderen?"
+
+#~ msgid "Please select a shop from list"
+#~ msgstr "Selecteer een winkel uit de lijst"
+
+#~ msgid "Please enter shop"
+#~ msgstr "Vul aub een winkel in"
+
+#~ msgid "This shop does not exist"
+#~ msgstr "Deze shop bestaat niet =("
+
+#~ msgid "saving...."
+#~ msgstr "saving...."
+
+#~ msgid "Not saved!, Registered accounts "
+#~ msgstr "Niet opgeslagen! Geregistreerde accounts"
+
+#~ msgid ", enter max. of "
+#~ msgstr ", vul een maximale hoeveelheid in. of"
+
+#~ msgid "saved"
+#~ msgstr "opgeslagen"
+
+#~ msgid "Please select an offer from list"
+#~ msgstr "Selecteer aub een aanbieding uit de lijst"
+
+#~ msgid ""
+#~ "Popular code list only show 25 records please delete one If you want to "
+#~ "add this popular code"
+#~ msgstr ""
+#~ "De lijst van Populaire codes kan maar 25 codes weergeven, delete er aub "
+#~ "een paar totdat dit er 25 zijn. "
+
+#~ msgid "Please select an offer"
+#~ msgstr "Selecteer aub een aanbieding"
+
+#~ msgid "Problem in your selection"
+#~ msgstr "Er is een probleem in jouw selectie"
+
+#~ msgid "Are you sure you want to delete this code?"
+#~ msgstr "Weet je zeker dat je deze code wilt verwijderen?"
+
+#~ msgid "Max free accounts looks great"
+#~ msgstr "Het maximaal aantal gratis accounts ziet er goed uit"
+
+#~ msgid "Enter numbers only"
+#~ msgstr "Voer aub alleen getallen in"
+
+#~ msgid "Please enter maximum account limit"
+#~ msgstr "Vul aub maximaal aantal gratis accounts in"
+
+#~ msgid "Please not enter more than 10 digits"
+#~ msgstr "Vul aub niet meer dan 10 tekens in"
+
+#~ msgid "Network name looks great"
+#~ msgstr "OK"
+
+#~ msgid "Please enter network name"
+#~ msgstr "Vul aub netwerknaam in"
+
+#~ msgid "Please enter atleast 2 characters"
+#~ msgstr "Vul tenminster 2 tekens in"
+
+#~ msgid "Article title looks great"
+#~ msgstr "OK"
+
+#~ msgid "Permalink looks great"
+#~ msgstr "OK"
+
+#~ msgid "Enter Article title"
+#~ msgstr "Titel van artikel"
+
+#~ msgid "Enter permalink"
+#~ msgstr "Voeg Permalink toe"
+
+#~ msgid " characters"
+#~ msgstr " Karakters"
+
+#~ msgid "Permalink already exists"
+#~ msgstr "Permalink bestaat al"
+
+#~ msgid "Please enter minimum 2 characters"
+#~ msgstr "Minimaal 2 tekens"
+
+#~ msgid "Please enter article title"
+#~ msgstr "Voer Titel toe"
+
+#~ msgid "Please enter Permalink"
+#~ msgstr "Voeg permalink toe"
+
+#~ msgid "Invalid Url"
+#~ msgstr "Foute URL"
+
+#~ msgid "Please upload only jpg or png image"
+#~ msgstr "Gebruik alleen png en jpg"
+
+#, fuzzy
+#~ msgid "<span class='success help-inline'>Valid file</span>"
+#~ msgstr " <span class='error help-inline'>geldig bestand</span>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<span class='error help-inline'>Please upload only jpg or png image</span>"
+#~ msgstr ""
+#~ " <span class='error help-inline'>Please upload alleen jpg of png "
+#~ "plaatjes</span>"
+
+#~ msgid "Are you sure you want to move this article to trash?"
+#~ msgstr ""
+#~ "Weet je zeker dat je dit artikel naar de prullebak wilt verplaatsen?"
+
+#~ msgid " word"
+#~ msgstr " Keyword"
+
+#~ msgid "Category title looks great"
+#~ msgstr "Categorie titel ziet er goed uit"
+
+#~ msgid "Valid Url"
+#~ msgstr "OK"
+
+#~ msgid "Meta title looks great"
+#~ msgstr "OK"
+
+#~ msgid "Valid file"
+#~ msgstr "OK"
+
+#~ msgid "Description looks great"
+#~ msgstr "OK"
+
+#~ msgid "Meta description looks great"
+#~ msgstr "OK"
+
+#~ msgid "Please enter valid Url"
+#~ msgstr "Vul aub een geldige URL in"
+
+#~ msgid "Please enter meta title"
+#~ msgstr "Vul aub Meta Titel in"
+
+#~ msgid "Please upload a icon"
+#~ msgstr "Upload Icoon aub"
+
+#~ msgid "Please enter description"
+#~ msgstr "Voeg omschrijving toe"
+
+#~ msgid "Please enter meta description"
+#~ msgstr "Vul aub Meta omschrijving in"
+
+#~ msgid "  characters"
+#~ msgstr "  Karakters"
+
+#~ msgid "Please enter at least 2 characters"
+#~ msgstr "Vul tenminster 2 karakters in"
+
+#~ msgid "Please type permalink"
+#~ msgstr "Vul aub Permalink in"
+
+#~ msgid "Please enter a meta title"
+#~ msgstr "Vul aub meta titel in"
+
+#~ msgid "Please select a category"
+#~ msgstr "Vul aub categorie in"
+
+#~ msgid "Are you sure you want to permanently delete this article category?"
+#~ msgstr ""
+#~ "Weet je zeker dat je deze artikel categorie wilt deleten? (kan "
+#~ "complicaties hebben)"
+
+#~ msgid "Please upload valid file"
+#~ msgstr "Upload een geldige file aub. "
+
+#~ msgid "<span class='error help-inline'>Please upload valid file</span>"
+#~ msgstr " <span class='error help-inline'>Please upload valid file</span>"
+
+#~ msgid "please wait, validating..."
+#~ msgstr ""
+#~ "Wacht aub, we zijn de Imbull kabouters zijn de boel aan het controleren..."
+
+#~ msgid "Title looks great."
+#~ msgstr "OK"
+
+#~ msgid "Alternate text looks great."
+#~ msgstr "OK"
+
+#~ msgid "Caption looks great."
+#~ msgstr "OK"
+
+#~ msgid "Description looks great."
+#~ msgstr "OK"
+
+#~ msgid "Please enter title."
+#~ msgstr "Voeg titel toe"
+
+#~ msgid "Please enter alternateText."
+#~ msgstr "Voeg aub alternatieve tekst toe"
+
+#, fuzzy
+#~ msgid "Please enter caption"
+#~ msgstr "Voeg \"Caption\" toe"
+
+#~ msgid "Name.."
+#~ msgstr "Naam..."
+
+#~ msgid "Alternate text"
+#~ msgstr "Alternatieve tekst"
+
+#~ msgid "Alternate text.."
+#~ msgstr "Alternatieve tekst..."
+
+#~ msgid "Caption"
+#~ msgstr "Caption"
+
+#~ msgid "Caption.."
+#~ msgstr "Caption.."
+
+#~ msgid "Description.."
+#~ msgstr "Omschrijving..."
+
+#~ msgid "File URL"
+#~ msgstr "Bestands URL"
+
+#~ msgid "Hide"
+#~ msgstr "Verberg"
+
+#~ msgid "Please enter title"
+#~ msgstr "Voeg Titel toe"
+
+#~ msgid "Please enter alternate text"
+#~ msgstr "Vul aub alternatieve tekst in"
+
+#~ msgid "Select a Shop"
+#~ msgstr "Selecteer een winkel"
+
+#, fuzzy
+#~ msgid "<span class='error help-inline'>Please upload jpg or pdf file</span>"
+#~ msgstr ""
+#~ " <span class='error help-inline'>Please upload jpg or pdf file</span>"
+
+#, fuzzy
+#~ msgid " at "
+#~ msgstr " op"
+
+#~ msgid "% at "
+#~ msgstr "% op"
+
+#~ msgid "At the value of "
+#~ msgstr "Kortingscode terwaarde van"
+
+#~ msgid "Characters Left: "
+#~ msgstr "Tekens over:"
+
+#~ msgid "Next Term"
+#~ msgstr "Vogende term"
+
+#~ msgid "Characters Left:"
+#~ msgstr "Tekens over:"
+
+#~ msgid "Title looks great"
+#~ msgstr "OK"
+
+#~ msgid "Full info looks great"
+#~ msgstr "OK"
+
+#~ msgid "Coupon code looks great"
+#~ msgstr "OK"
+
+#~ msgid "Valid url"
+#~ msgstr "Geldige URL"
+
+#~ msgid "Term and condition looks great"
+#~ msgstr "Voorwaarden zijn OK"
+
+#~ msgid "Valid permalink"
+#~ msgstr "Geldige permalink"
+
+#~ msgid "Shop looks great"
+#~ msgstr "OK"
+
+#~ msgid "Valid Discount Amount"
+#~ msgstr "Geldiige kortingshoeveelheid"
+
+#~ msgid "Max code looks great"
+#~ msgstr "OK"
+
+#~ msgid "Enter title"
+#~ msgstr "Titel invullen"
+
+#~ msgid "Enter meta description"
+#~ msgstr "Vul meta omschrijving in"
+
+#~ msgid "Enter full info"
+#~ msgstr "Vul volledige info in"
+
+#~ msgid "Enter coupon code"
+#~ msgstr "Vul kortingscode in"
+
+#~ msgid "Enter ref url"
+#~ msgstr "Ref URL invullen"
+
+#~ msgid "Enter term and condition"
+#~ msgstr "Vul voorwaarden in"
+
+#~ msgid "Select Shop"
+#~ msgstr "Selecteer winkel"
+
+#~ msgid "Please upload a file"
+#~ msgstr "Upload bestandaub"
+
+#~ msgid "Enter Discount Amount"
+#~ msgstr "Vul hoeveelheid korting aub in"
+
+#~ msgid "Enter max code"
+#~ msgstr "Vul maximale code in"
+
+#~ msgid "Please Select Shop"
+#~ msgstr "Selecteer winkel aub"
+
+#~ msgid "Please enter ref Url"
+#~ msgstr "Vul REF Url in "
+
+#~ msgid "Please enter permalink"
+#~ msgstr "Vul Permalink in"
+
+#~ msgid "Please enter coupon code"
+#~ msgstr "Vul Kortingscode in"
+
+#, fuzzy
+#~ msgid ""
+#~ "<span class='error help-inline'>Please upload only jpg or pdf file</span>"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid ""
+#~ "<span class='error help-inline'>End date should be greater than start "
+#~ "date</span>"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "<span class='error help-inline'></span>"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "<span class='success help-inline'>Valid</span>"
+#~ msgstr " "
+
+#~ msgid "Page title looks great"
+#~ msgstr "OK"
+
+#~ msgid "Enter page title"
+#~ msgstr "Vul pagina titel in"
+
+#~ msgid "Please enter page title"
+#~ msgstr "Vul aub pagina titel in"
+
+#~ msgid "Are you sure you want to move this page to trash?"
+#~ msgstr "Weet je zeker dat je deze pagina wilt verwijderen?"
+
+#, fuzzy
+#~ msgid ""
+#~ "<span class='error help-inline'>Start date must be equal to or greater "
+#~ "than current date</span>"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "<span class='success help-inline'>Valid date</span>"
+#~ msgstr " "
+
+#~ msgid "ok !"
+#~ msgstr "Ok!"
+
+#~ msgid "Enter Widget content"
+#~ msgstr "Vul content van de Widget in"
+
+#~ msgid "Are you sure you want to delete this widget permanently?"
+#~ msgstr "Weet je zeker dat je deze widget wilt verwijderen?"
+
+#~ msgid "No record found !"
+#~ msgstr "Niets gevonden =("
+
+#~ msgid "Are you sure you want to permanently delete this record?"
+#~ msgstr "Weet je zeker dat je dit bestand definitief wilt verwijderen?"
+
+#~ msgid "No record found!"
+#~ msgstr "Niets gevonden! =("
+
+#~ msgid "Shop name looks great"
+#~ msgstr "OK"
+
+#~ msgid "Subtitle looks great"
+#~ msgstr "OK"
+
+#~ msgid "Notes looks great"
+#~ msgstr "OK"
+
+#~ msgid "Overwrite title looks great"
+#~ msgstr "OK"
+
+#~ msgid "Overwrite subtitle looks great"
+#~ msgstr "OK"
+
+#~ msgid "Overwrite browser title looks great"
+#~ msgstr "OK"
+
+#~ msgid "Shop text looks great"
+#~ msgstr "OK"
+
+#~ msgid "Views looks great"
+#~ msgstr "Views zijn OK"
+
+#~ msgid "Enter shop name"
+#~ msgstr "Vul winkelnaam in"
+
+#~ msgid "Enter navigational Url"
+#~ msgstr "Vul navigatie URL in"
+
+#~ msgid "Enter subtitle"
+#~ msgstr "Subtitel invullen"
+
+#~ msgid "Enter notes"
+#~ msgstr "Vul notitie in"
+
+#~ msgid "Enter Url"
+#~ msgstr "Vul URL in"
+
+#~ msgid "Enter overwrite title"
+#~ msgstr "Vul 'overschrijftitel' in"
+
+#~ msgid "Enter overwrite subtitle"
+#~ msgstr "Vul 'overschrijf subtitel' in"
+
+#~ msgid "Enter overwrite browser title"
+#~ msgstr "Vul 'overschrijf browser titel' in"
+
+#~ msgid "Enter shop text"
+#~ msgstr "Vul Shop tekst in"
+
+#~ msgid "Enter views"
+#~ msgstr "Vul Views in"
+
+#~ msgid "Please enter shop name"
+#~ msgstr "Vul AUB naam vd shop in"
+
+#~ msgid "Please enter navigational Url"
+#~ msgstr "Vul AUB navigatie URL in"
+
+#~ msgid "Please enter subtitle"
+#~ msgstr "Vul aub subtitel in"
+
+#~ msgid "Please enter Url"
+#~ msgstr "Vul aub URL in"
+
+#~ msgid "Please enter numeric value"
+#~ msgstr "Vul aub hoeveelheid in (getal)"
+
+#~ msgid "January"
+#~ msgstr "Januari"
+
+#~ msgid "February"
+#~ msgstr "Februari"
+
+#~ msgid "March"
+#~ msgstr "Maart"
+
+#~ msgid "April"
+#~ msgstr "April"
+
+#~ msgid "June"
+#~ msgstr "Juni"
+
+#~ msgid "July"
+#~ msgstr "Juli"
+
+#~ msgid "August"
+#~ msgstr "Augustus"
+
+#~ msgid "September"
+#~ msgstr "September"
+
+#~ msgid "October"
+#~ msgstr "Oktober"
+
+#~ msgid "November"
+#~ msgstr "November"
+
+#~ msgid "December"
+#~ msgstr "December"
+
+#~ msgid " Kortingscodes "
+#~ msgstr " Kortingscodes"
+
+#, fuzzy
+#~ msgid " kortingscode en bespaar!"
+#~ msgstr " kortingscodes "
+
+#~ msgid "Actuele "
+#~ msgstr "Actuele"
+
+#, fuzzy
+#~ msgid " aanbiedingen & kortingscodes - "
+#~ msgstr "Upload je eigen kortingscodes"
+
+#~ msgid "Alternate text looks great"
+#~ msgstr "OK"
+
+#~ msgid "Caption looks great"
+#~ msgstr "OK"
+
+#~ msgid "Are you sure you want to delete this media permanently?"
+#~ msgstr "Weet je zeker dat je deze media wilt verwijderen?"
+
+#~ msgid "Delivery cost looks great"
+#~ msgstr "OK"
+
+#~ msgid "Delivery time looks great"
+#~ msgstr "OK"
+
+#~ msgid "Return policy looks great"
+#~ msgstr "OK"
+
+#~ msgid "Enter Delivery cost"
+#~ msgstr "Vul bezorgkosten in"
+
+#~ msgid "Enter Delivery time"
+#~ msgstr "Vul bezorgtijd in"
+
+#~ msgid "Enter Return policy"
+#~ msgstr "Vul Retourbeleid in"
+
+#~ msgid "Please select a page"
+#~ msgstr "Selecteer een pagina aub"
+
+#, fuzzy
+#~ msgid "aanbiedingen & kortingscodes -"
+#~ msgstr "Upload je eigen kortingscodes"
+
+#~ msgid "Enter network name"
+#~ msgstr "Vul naam van het netwerk in"
+
+#~ msgid "Select name"
+#~ msgstr "Selecteer Naam"
+
+#~ msgid "Are you sure you want to delete this network?"
+#~ msgstr "Weet je zeker dat je dit netwerk wilt verwijderen?"
+
+#~ msgid "News title"
+#~ msgstr "Nieuws Titel"
+
+#~ msgid "Ref.Url"
+#~ msgstr "Ref URL"
+
+#, fuzzy
+#~ msgid " Characters "
+#~ msgstr "Karakters"
+
+#, fuzzy
+#~ msgid " Characters Left: "
+#~ msgstr "Tekens over:"
+
+#~ msgid "Are you sure you want to move this offer to trash?"
+#~ msgstr "Weet je zeker dat je deze aanbieding wilt verwijderen?"
+
+#~ msgid "View Pdf"
+#~ msgstr "View PDF"
+
+#~ msgid "uploaded offer"
+#~ msgstr "Upgeloade aanbieding"
+
+#, fuzzy
+#~ msgid ""
+#~ "<span class='error help-inline'>Start date time must be equal to or "
+#~ "greater than current date time</span>"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid ""
+#~ "<span class='error help-inline'>End date time should be greater than "
+#~ "start date time</span>"
+#~ msgstr " "
+
+#~ msgid "Are you sure you want to delete this vote?"
+#~ msgstr "Weet je zeker dat je deze stem wilt verwijderen?"
+
+#~ msgid "First name looks great"
+#~ msgstr "OK"
+
+#~ msgid "Email looks great"
+#~ msgstr "OK"
+
+#~ msgid "Last name looks great"
+#~ msgstr "OK"
+
+#~ msgid "Gender looks great"
+#~ msgstr "OK"
+
+#~ msgid "Postal code looks great"
+#~ msgstr "OK"
+
+#~ msgid "ok ! good password"
+#~ msgstr "OK"
+
+#~ msgid "ok ! password match"
+#~ msgstr "Ok! wachtwoorden zijn gelijk"
+
+#~ msgid "Password matched"
+#~ msgstr "Wachtwoord = gelijk"
+
+#~ msgid "Old password matched!"
+#~ msgstr "Oud wachtwoord = gelijk"
+
+#~ msgid "Enter your first name"
+#~ msgstr "Vul je voornaam in"
+
+#, fuzzy
+#~ msgid "What &#39;s your email address?"
+#~ msgstr "Wat is jouw e-mail adres?"
+
+#~ msgid "Enter your last name"
+#~ msgstr "Vul je achternaam in"
+
+#~ msgid "Select gender"
+#~ msgstr "Selecteer geslacht"
+
+#~ msgid "Enter postal code"
+#~ msgstr "Postcode invullen"
+
+#~ msgid "Choose password!"
+#~ msgstr "Kies wachtwoord!"
+
+#~ msgid "Re-type password"
+#~ msgstr "Hertyp wachtwoord"
+
+#~ msgid "Enter old password to update password"
+#~ msgstr "Vul je oude wachtwoord in om deze te vernieuwen"
+
+#~ msgid "Choose new password"
+#~ msgstr "Kies nieuw wachtwoord"
+
+#~ msgid "Re-type new password"
+#~ msgstr "Re-type nieuw wachtwoord"
+
+#~ msgid "Please enter your email address"
+#~ msgstr "Vul je e-mailadres in"
+
+#~ msgid "Please enter valid email address"
+#~ msgstr "Vul aub een geldig e-mail adres in"
+
+#~ msgid "Please enter your first name"
+#~ msgstr "Vul aub je voornaam in"
+
+#~ msgid "First Name should be Alphabets"
+#~ msgstr "Je voornaam moet uit letter bestaan"
+
+#~ msgid "Please enter your last name"
+#~ msgstr "Vul aub je achternaam in"
+
+#~ msgid "Last Name should be Alphabets"
+#~ msgstr "Je achternaam moet enkel letter bevatten"
+
+#~ msgid "Please select gender"
+#~ msgstr "Selecteer geslacht aub"
+
+#~ msgid "Please enter postal code"
+#~ msgstr "Vul aub postcode in"
+
+#~ msgid "It should be minimum 3 characters"
+#~ msgstr "Dit zou tenminste 3 tekens moeten zijn. "
+
+#~ msgid "Please enter maximum 10  characters"
+#~ msgstr "Maximaal 10 tekens in."
+
+#~ msgid "Enter alpha numeric chracter"
+#~ msgstr "Vul enkel getallen in"
+
+#~ msgid "Please enter your new password"
+#~ msgstr "Vul aub je nieuwe wachtwoord in"
+
+#~ msgid "Please enter maximum 20  characters"
+#~ msgstr "Vul maximaal 20 tekens in"
+
+#~ msgid "Please enter same as new password"
+#~ msgstr "Vul aub hetzelfde als het nieuwe wachtwoord in"
+
+#~ msgid "Please re-type your new password"
+#~ msgstr "Vul aub je nieuwe wachtwoord in"
+
+#~ msgid "Are you sure you want to move this visitor to trash?"
+#~ msgstr ""
+#~ "Weet je zeker dat je deze bezoeker naar de prullebak wilt verplaatsen?"
+
+#, fuzzy
+#~ msgid "<span class='success'>Problem in your data</span>"
+#~ msgstr " "
+
+#~ msgid "Top footer looks great"
+#~ msgstr "OK"
+
+#~ msgid "Column1 looks great"
+#~ msgstr "OK"
+
+#~ msgid "Column2 looks great"
+#~ msgstr "OK"
+
+#~ msgid "Column3 looks great"
+#~ msgstr "OK"
+
+#~ msgid "Column4 looks great"
+#~ msgstr "OK"
+
+#~ msgid "Bottom footer looks great"
+#~ msgstr "OK"
+
+#~ msgid "Enter top footer"
+#~ msgstr "Vul Topfooter in"
+
+#~ msgid "Enter column1"
+#~ msgstr "Vul Kolom 1 in"
+
+#~ msgid "Enter column2"
+#~ msgstr "Vul Kolom 2 in"
+
+#~ msgid "Enter column3"
+#~ msgstr "Vul Kolom 3 in"
+
+#~ msgid "Enter column4"
+#~ msgstr "Vul Kolom 4 in"
+
+#~ msgid "Enter bottom footer"
+#~ msgstr "Vul Bodem footer in"
+
+#~ msgid "Please enter top footer"
+#~ msgstr "Vul topfooter in"
+
+#~ msgid "Please enter column1"
+#~ msgstr "Vul Kolom 1 in"
+
+#~ msgid "Please enter column2"
+#~ msgstr "Vul Kolom 2 in"
+
+#~ msgid "Please enter column3"
+#~ msgstr "Vul Kolom 3 in"
+
+#~ msgid "Please enter column4"
+#~ msgstr "Vul Kolom 4 in"
+
+#~ msgid "Please enter bottom footer"
+#~ msgstr "Vul beneden footer in"
+
+#, fuzzy
+#~ msgid "<font color='green'>Vaild Title</font>"
+#~ msgstr "<font color='green'>Geldige Titel</font>"
+
+#, fuzzy
+#~ msgid "dadasdasd"
+#~ msgstr "dadasdasd"
+
+#, fuzzy
+#~ msgid "Vaild url"
+#~ msgstr "Geldige URL"
+
+#~ msgid "Tooltip looks great"
+#~ msgstr "Tooptip ziet er goed uit"
+
+#~ msgid "enter title"
+#~ msgstr "Vul titel in"
+
+#~ msgid "Enter url"
+#~ msgstr "Vul URL in"
+
+#~ msgid "Enter tooltip"
+#~ msgstr "Vul Tooltip in"
+
+#~ msgid "You can not add more tab . Its limited"
+#~ msgstr "Je kan meer tabbladen toevoegen"
+
+#~ msgid "Tab has been deleted successfully"
+#~ msgstr "Tab is met succes verwijderd"
+
+#~ msgid "Tab can not delete"
+#~ msgstr "Deze Tab kan je niet verwijderen"
+
+#~ msgid "please enter title"
+#~ msgstr "Vul aub Titel in"
+
+#~ msgid "Please enter url"
+#~ msgstr "Vul aub URL in"
+
+#~ msgid "Invaild url"
+#~ msgstr "Ongeldige URL"
+
+#~ msgid "Please enter Url "
+#~ msgstr "Vul URL in"
+
+#, fuzzy
+#~ msgid "<span class='error '>Please upload only .jpg or .png file</span>"
+#~ msgstr "<span class='error '>Upload enkel .jpg of .png bestanden</span>"
+
+#~ msgid "Please select a Store from list"
+#~ msgstr "Selecteer aub een winkel uit de lijst"
+
+#~ msgid ""
+#~ "Popular Store list can have maximum 25 records, please delete one if you "
+#~ "want to add more popular Store"
+#~ msgstr ""
+#~ "Populaire winkels kunnen maximaal 25 winkels bevatten. Plz verwijder "
+#~ "enkele als je andere wilt toevoegen. "
+
+#~ msgid "Please select a Shop"
+#~ msgstr "Selecteer aub een winkel"
+
+#~ msgid "This store does not exist"
+#~ msgstr "Deze winkel bestaat niet"
+
+#~ msgid "Are you sure you want to delete this Store?"
+#~ msgstr "Weet je zeker dat je deze winkel wilt verwijderen?"
+
+#~ msgid ""
+#~ "Popular Voucher code list can have maximum 25 records, please delete one "
+#~ "if you want to add more popular voucher code"
+#~ msgstr "Max 25, graag verwijderen / aanpassen. "
+
+#~ msgid "This offer does not exist"
+#~ msgstr "Deze aanbieding bestaat niet"
+
+#~ msgid "Please select a Category from list"
+#~ msgstr "Selecteer aub een categorie van de lijst"
+
+#~ msgid ""
+#~ "Popular Categories list can have maximum 25 records, please delete one if "
+#~ "you want to add more popular Category"
+#~ msgstr "Max 25, graag verwijderen / aanpassen. "
+
+#~ msgid "Please select a Category"
+#~ msgstr "Selecteer aub een categorie"
+
+#~ msgid "This category does not exist"
+#~ msgstr "Deze categorie bestaat niet"
+
+#~ msgid "Are you sure you want to delete this Category?"
+#~ msgstr "Weet je zeker dat je deze categorie wilt verwijderen?"
+
+#~ msgid "Please select a Special offer from list"
+#~ msgstr "Selecteer aub een speciale aanbieding van de lijst"
+
+#~ msgid ""
+#~ "Special offer list can have maximum 25 records, please delete one if you "
+#~ "want to add more Special list"
+#~ msgstr "Max 25, graag verwijderen / aanpassen. "
+
+#~ msgid "Please select a Special offer"
+#~ msgstr "Selecteer aub een speciale aanbieding"
+
+#~ msgid "This special offer does not exist"
+#~ msgstr "Deze speciale aanbieding bestaat niet"
+
+#~ msgid "Are you sure you want to delete this Special offer?"
+#~ msgstr "Weet je zeker dat je deze speciale aanbieding wilt verwijderen?"
+
+#~ msgid "Please select an Article from list"
+#~ msgstr "Selecteer aub een artikel van de lijst"
+
+#~ msgid ""
+#~ "Article list can have maximum 25 records, please delete one if you want "
+#~ "to add more Articles"
+#~ msgstr "Max 25, graag verwijderen / aanpassen. "
+
+#~ msgid "Please select an Article"
+#~ msgstr "Selecteer"
+
+#~ msgid "Are you sure you want to delete this Article?"
+#~ msgstr "Weet je zeker dat je dit artikel wilt verwijderen?"
+
+#~ msgid "File size cannot exceed 2MB"
+#~ msgstr "File size kan niet groter zijn dan 2MB"
+
+#~ msgid "File is too small"
+#~ msgstr "Bestand is te klein"
+
+#~ msgid "File type not allowed"
+#~ msgstr "Bestandstype mag niet!"
+
+#~ msgid "Max number of files exceeded"
+#~ msgstr "Teveel bestanden!"
+
+#~ msgid "Uploaded bytes exceed file size"
+#~ msgstr "Uploaded bytes exceed file size"
+
+#~ msgid "Empty file upload result"
+#~ msgstr "Leeg bestand?"
+
+#~ msgid "Error"
+#~ msgstr "Error"
+
+#~ msgid "Enter your Username"
+#~ msgstr "Vul je gebuikersnaam in"
+
+#~ msgid "Enter your password"
+#~ msgstr "Vul je wachtwoord in"
+
+#~ msgid "Enter your Username/E-mail Address"
+#~ msgstr "Vul je gebruikersnaam / e-mailadres in"
+
+#~ msgid "Please enter your Username"
+#~ msgstr "Vul je gebruikersnaam in"
+
+#~ msgid "Please enter valid Username"
+#~ msgstr "Vul ene geldige gebruikersnaam in"
+
+#~ msgid "Please enter your  password"
+#~ msgstr "Vul je wachtwoord in"
+
+#~ msgid "Please enter your Username/E-mail Address"
+#~ msgstr "Vul aub je gebruikersnaam / e-mail adres in"
+
+#~ msgid "Please enter valid Username/E-mail Address"
+#~ msgstr "Vul aub geldige Gebruikersnaam / E-mailadres in"
+
+#~ msgid "Uploading..."
+#~ msgstr "Uploading..."
+
+#~ msgid "edit"
+#~ msgstr "wijzig"
+
+#~ msgid "Loading..."
+#~ msgstr "Aan t laden!"
+
+#~ msgid ""
+#~ "Popular code list can have maximum 25 records, please delete one if you "
+#~ "want to add more popular code"
+#~ msgstr "max 25 records. "
+
+#~ msgid "This offer already exists in the list"
+#~ msgstr "Deze aanbieding bestaat al in de lijst"
+
+#~ msgid "We will email you a confirmation"
+#~ msgstr "Wij e-mailen een confirmatie!"
+
+#~ msgid "ok!good password"
+#~ msgstr "OK"
+
+#~ msgid "Google+ URL looks great"
+#~ msgstr "OK"
+
+#~ msgid "Twitter URL looks great"
+#~ msgstr "OK"
+
+#~ msgid "Pinterest URL looks great"
+#~ msgstr "OK"
+
+#~ msgid "Likes looks great"
+#~ msgstr "OK"
+
+#~ msgid "Dislikes looks great"
+#~ msgstr "OK"
+
+#~ msgid "Main text looks great"
+#~ msgstr "OK"
+
+#~ msgid "Enter your last name."
+#~ msgstr "Vul je achternaam in"
+
+#~ msgid "Enter your google+ URL"
+#~ msgstr "Vul je Google+ URL in"
+
+#~ msgid "Enter your twitter URL "
+#~ msgstr "Vul je Twitter URL in"
+
+#~ msgid "Enter your pinterest URL"
+#~ msgstr "Vul je Pinterest URL in"
+
+#~ msgid "Enter your favorite things"
+#~ msgstr "Wat zijn jouw favoriete dinen? (likes)"
+
+#~ msgid "Enter your unfavorite things"
+#~ msgstr "Waar heb jij een hekel aan? (dislikes)"
+
+#~ msgid "Enter your main text"
+#~ msgstr "Wat is jouw hoofdtekst?"
+
+#~ msgid "Upload your profile picture"
+#~ msgstr "Upload jouw profielfoto"
+
+#~ msgid "Maximum image size is 2MB"
+#~ msgstr "Maximale grootte = 2 MB"
+
+#~ msgid "Please upload only *.jpg, *.gif, *.png files"
+#~ msgstr "Please upload alleen *.jpg, *.gif, of *.png bestanden"
+
+#~ msgid "please wait.."
+#~ msgstr "Even wachten..."
+
+#~ msgid "It should be minimum 8 characters"
+#~ msgstr "Mimimaal 8 karakters"
+
+#~ msgid "Old password don't matched"
+#~ msgstr "Geen match oude wachtwoord"
+
+#~ msgid "Please enter maximum 20 characters"
+#~ msgstr "Vul aub maximaal 20 karakters in"
+
+#~ msgid "Please enter the same value again"
+#~ msgstr "Vul aub dezelfde waarde weer in"
+
+#~ msgid "Please enter the valid twitter URL"
+#~ msgstr "Vul aub een geldige Twitter URL in"
+
+#~ msgid "Please enter the valid google+ URL"
+#~ msgstr "Vul aub de goede Google+ URL In"
+
+#~ msgid "Please enter the valid pinterest URL"
+#~ msgstr "Vul AUB een geldige Pinterest URL in"
+
+#~ msgid ""
+#~ "store list can have maximum 25 records, please delete one if you want to "
+#~ "add more store"
+#~ msgstr "Maximaal 25 records, graag aanpassen!"
+
+#~ msgid "Please select a store"
+#~ msgstr "Selecteer een winkel aub"
+
+#~ msgid "This store does not exists"
+#~ msgstr "Deze winkel bestaat niet"
+
+#~ msgid "This store already exists in the list"
+#~ msgstr "Deze winkel staat al in de lijst"
+
+#~ msgid "Please select a store from list"
+#~ msgstr "Selecteer een winkel uit de lijst aub"
+
+#~ msgid "Keyword looks great"
+#~ msgstr "Mooi zoekwoord, nicely done!"
+
+#~ msgid "Enter keyword"
+#~ msgstr "Vul zoekwoord in"
+
+#~ msgid "Enter valid url"
+#~ msgstr "Enter geldige URL"
+
+#~ msgid "Please enter keyword"
+#~ msgstr "Please enter keyword"
+
+#~ msgid "Please enter valid url"
+#~ msgstr "Please enter valid url"
+
+#~ msgid "Invalid url"
+#~ msgstr "Invalid url"
+
+#~ msgid "Are you sure you want to delete this excluded keyword permanently?"
+#~ msgstr "Are you sure you want to delete this excluded keyword permanently?"
+
+#~ msgid "Please select a shop"
+#~ msgstr "Selecteer een shop aub"
+
+#~ msgid "Are you sure you want to move this shop to trash?"
+#~ msgstr "Weet je zeker dat je deze shop wilt verwijderen?"
+
+#~ msgid "Are you sure you want to permanently delete this article?"
+#~ msgstr "Weet je zeker dat je dit artikel voor altijd wilt verwijderen?"
+
+#~ msgid "Are you sure you want to restore this article?"
+#~ msgstr "Weet je zeker dat je dit artikel wilt herstellen?"
+
+#~ msgid "Do you want to restore this record?"
+#~ msgstr "Do you want to restore this record?"
+
+#~ msgid "Are you sure you want to permanent delete this record?"
+#~ msgstr "Are you sure you want to permanent delete this record?"
+
+#~ msgid "Do you want to restore this visitor?"
+#~ msgstr "Do you want to restore this visitor?"
+
+#~ msgid "Are you sure you want to permanently delete this visitor?"
+#~ msgstr "Are you sure you want to permanently delete this visitor?"
+
+#~ msgid "Are you sure you want to permanently delete this offer?"
+#~ msgstr "Are you sure you want to permanently delete this offer?"
+
+#~ msgid "Are you sure you want to restore this offer?"
+#~ msgstr "Are you sure you want to restore this offer?"
+
+#~ msgid "Are you sure you want to permanently delete this page?"
+#~ msgstr "Are you sure you want to permanently delete this page?"
+
+#~ msgid "Are you sure you want to restore this page?"
+#~ msgstr "Are you sure you want to restore this page?"
+
+#~ msgid "Are you sure you want to restore this record?"
+#~ msgstr "Are you sure you want to restore this record?"
+
+#~ msgid "Are you sure you want to make this offer offline?"
+#~ msgstr "Are you sure you want to make this offer offline?"
+
+#~ msgid "Are you sure you want to make this offer online?"
+#~ msgstr "Are you sure you want to make this offer online?"
+
+#, fuzzy
+#~ msgid "<span class='"
+#~ msgstr "<span class='"
+
+#~ msgid "Valid Email"
+#~ msgstr "Geldige E-mail"
+
+#~ msgid "Email already exists"
+#~ msgstr "E-mailadres bestaat al"
+
+#~ msgid "Please enter your password"
+#~ msgstr "Vul aub uw wachtwoord in"
+
+#~ msgid "Please enter minimum 8  characters"
+#~ msgstr "Minimaal 8 karakters"
+
+#~ msgid "Please re-type your password"
+#~ msgstr "Vul uw wachtwoord opnieuw in"
+
+#~ msgid "Are you sure you want to move this record to trash?"
+#~ msgstr "Are you sure you want to move this record to trash?"
+
+#~ msgid " All"
+#~ msgstr "Alle"
+
+#~ msgid "Please enter your old password"
+#~ msgstr "Vul aub jouw oude wachtwoord in"
+
+#~ msgid "files"
+#~ msgstr "bestanden"
+
+#~ msgid "resizer"
+#~ msgstr "resizer"
+
+#~ msgid "left"
+#~ msgstr "links"
+
+#~ msgid "right"
+#~ msgstr "rechts"
+
+#~ msgid "toolbar"
+#~ msgstr "toolbar"
+
+#~ msgid "shadow"
+#~ msgstr "schaduw"
+
+#~ msgid "folders"
+#~ msgstr "mappen"
+
+#~ msgid "status"
+#~ msgstr "status"
+
+#~ msgid "Sorry guys, no record found!"
+#~ msgstr "Nooo, niets gevonden :("
+
+#~ msgid "Enter valid email address"
+#~ msgstr "Vul geldig e-mail adres in"
+
+#, fuzzy
+#~ msgid "<h2>You have already registered for Newsletter!</h2>"
+#~ msgstr "<h2>Je hebt je al ingeschreven voor de nieuwsbrief</h2>"
+
+#, fuzzy
+#~ msgid "<h2>You have been registered for Newsletter!</h2>"
+#~ msgstr "<h2>Je hebt je aangemeld voor de nieuwsbrief!! =)</h2>"
+
+#~ msgid "Click Here to create a profile!"
+#~ msgstr "Klik hier om een profiel aan te maken"
+
+#~ msgid "Store does not exist"
+#~ msgstr "Winkel bestaat niet"
+
+#~ msgid "Your offer has been added successfully !"
+#~ msgstr "Jouw kortingscode is succesvol toegevoegd =)"
+
+#~ msgid "Enter  email address"
+#~ msgstr "Vil je e-mail adres in"
+
+#~ msgid "E-mail ziet er geweldig uit"
+#~ msgstr "E-mail klopt! (Denken we)"
+
+#~ msgid "ok! goed wachtwoord"
+#~ msgstr "Ok! Wachtwoord voldoet aan onze eisen =)"
+
+#~ msgid "ok! wachtwoord wedstrijd"
+#~ msgstr "ok! wachtwoord wedstrijd"
+
+#, fuzzy
+#~ msgid "voornaam ziet er geweldig uit"
+#~ msgstr "OK"
+
+#, fuzzy
+#~ msgid "achternaam ziet er geweldig uit"
+#~ msgstr "OK"
+
+#, fuzzy
+#~ msgid "geslacht ziet er geweldig uit"
+#~ msgstr "Deze titel lijkt top!"
+
+#, fuzzy
+#~ msgid "dag ziet er geweldig uit"
+#~ msgstr "E-mail klopt! (Denken we)"
+
+#, fuzzy
+#~ msgid "maand ziet er geweldig uit"
+#~ msgstr "E-mail klopt! (Denken we)"
+
+#, fuzzy
+#~ msgid "jaar ziet er geweldig uit"
+#~ msgstr "OK"
+
+#, fuzzy
+#~ msgid "postcode er geweldig uit"
+#~ msgstr "OK"
+
+#~ msgid "Voer geldig e-mailadres"
+#~ msgstr "Voer geldig e-mailadres"
+
+#~ msgid "Kies wachtwoord!"
+#~ msgstr "Kies wachtwoord!"
+
+#~ msgid "Typ het wachtwoord opnieuw"
+#~ msgstr "Typ het wachtwoord opnieuw"
+
+#, fuzzy
+#~ msgid "alsjeblieft vul voornaam"
+#~ msgstr "Geef uw voornaam"
+
+#, fuzzy
+#~ msgid "alsjeblieft vul achternaam"
+#~ msgstr "Geef uw achternaam"
+
+#, fuzzy
+#~ msgid "alsjeblieft Voer postcode in"
+#~ msgstr "Voer uw postcode in"
+
+#~ msgid "Geldig E-mail"
+#~ msgstr "Geldig e-mail"
+
+#, fuzzy
+#~ msgid "Voer de voornaam in"
+#~ msgstr "Voer uw voornaam in"
+
+#, fuzzy
+#~ msgid "Vul minimaal 3 karakters"
+#~ msgstr "Minimaal 6 karakters"
+
+#, fuzzy
+#~ msgid "Vul maximaal 20 karakters"
+#~ msgstr "Minimaal 6 karakters"
+
+#, fuzzy
+#~ msgid "Voer de achternaam in"
+#~ msgstr "Achternaam?"
+
+#, fuzzy
+#~ msgid "Vul minimaal 3 tekens"
+#~ msgstr "Vul minimaal 8 tekens"
+
+#~ msgid "Vul maximaal 20 tekens"
+#~ msgstr "Vul maximaal 20 tekens"
+
+#, fuzzy
+#~ msgid "Selecteer geslacht"
+#~ msgstr "Selecteer Template"
+
+#, fuzzy
+#~ msgid "Selecteer dag"
+#~ msgstr "Selecteer geslacht"
+
+#, fuzzy
+#~ msgid "Selecteer maand"
+#~ msgstr "Selecteer geslacht"
+
+#, fuzzy
+#~ msgid "Selecteer jaar"
+#~ msgstr "Selecteer geslacht"
+
+#, fuzzy
+#~ msgid "Voer de juiste postcode"
+#~ msgstr "Voer uw postcode in"
+
+#~ msgid "Actiecode looks great"
+#~ msgstr "Actiecode ziet er top uit!"
+
+#~ msgid "Enter valid actiecode"
+#~ msgstr "Voeg geldige kortingscode in"
+
+#~ msgid "Please enter your actiecode"
+#~ msgstr "Voeg je kortingscode toe"
+
+#~ msgid "Voer een geldig e-mailadres"
+#~ msgstr "Voer een geldig e-mailadres in"
+
+#~ msgid "Vul minimaal 6 karakters"
+#~ msgstr "Minimaal 6 karakters"
+
+#~ msgid "E-mail bestaat al"
+#~ msgstr "E-mail bestaat al :("
+
+#~ msgid "Voer uw wachtwoord"
+#~ msgstr "Voer uw wachtwoord"
+
+#~ msgid "Vul minimaal 8 tekens"
+#~ msgstr "Vul minimaal 8 tekens"
+
+#~ msgid "typ hetzelfde wachtwoord"
+#~ msgstr "Herhaal wachtwoord"
+
+#~ msgid "Wachtwoord komt niet overeen"
+#~ msgstr "Wachtwoord komt niet overeen"
+
+#~ msgid "Gebruikersnaam ziet er geweldig uit"
+#~ msgstr "Gebruikersnaam ziet er geweldig uit"
+
+#~ msgid "Voornaam ziet er geweldig uit"
+#~ msgstr "OK"
+
+#~ msgid "Achternaam ziet er geweldig uit"
+#~ msgstr "OK"
+
+#~ msgid "Postcode ziet er geweldig uit"
+#~ msgstr "OK"
+
+#~ msgid "Geboortedatum ziet er geweldig uit"
+#~ msgstr "Geboortedatum ziet er geweldig uit =)"
+
+#~ msgid "Geef uw gebruikersnaam"
+#~ msgstr "Geef uw gebruikersnaam"
+
+#~ msgid "Geef uw voornaam"
+#~ msgstr "Geef uw voornaam"
+
+#~ msgid "Geef uw achternaam op"
+#~ msgstr "Geef uw achternaam"
+
+#~ msgid "Voer uw postcode in"
+#~ msgstr "Voer uw postcode in"
+
+#~ msgid "Voer Geboortedatum"
+#~ msgstr "Geboortedatum"
+
+#~ msgid "Voer uw gebruikersnaam in"
+#~ msgstr "Voer uw gebruikersnaam in"
+
+#~ msgid "Gebruikersnaam moet alfabetische"
+#~ msgstr "Gebruikersnaam moet alfabetische"
+
+#~ msgid "Voer uw voornaam in"
+#~ msgstr "Voer uw voornaam in"
+
+#~ msgid "Voornaam moet Alfabetisch"
+#~ msgstr "Alleen letters aub. "
+
+#~ msgid "Naam moet Alfabetisch"
+#~ msgstr "Alleen letters aub. "
+
+#~ msgid "Vul een geldig postcode in"
+#~ msgstr "Vul een geldige postcode in"
+
+#, fuzzy
+#~ msgid "Read More >>"
+#~ msgstr "Lees meer"
+
+#, fuzzy
+#~ msgid "Less More >>"
+#~ msgstr "Lees meer"
+
+#~ msgid "Less More"
+#~ msgstr "Lees meer"
+
+#~ msgid "Winkel ziet er geweldig uit"
+#~ msgstr "OK"
+
+#~ msgid "Titel ziet er geweldig uit"
+#~ msgstr "Deze titel lijkt top!"
+
+#~ msgid "Kortingscode ziet er geweldig uit"
+#~ msgstr "OK"
+
+#~ msgid "Selecteer geldig winkel"
+#~ msgstr "Selecteer een geldige winkel"
+
+#~ msgid "Voer geldige titel"
+#~ msgstr "OEN! Voer een geldige titel in =)"
+
+#~ msgid "Vul uw kortingscode"
+#~ msgstr "Vul uw kortingscode"
+
+#~ msgid "Maak een keuze geldig winkel"
+#~ msgstr "Kies een geldige winkel: "
+
+#~ msgid "Voer een geldige titel"
+#~ msgstr "Voer een geldige titel in"
+
+#~ msgid "Vul kortingscode"
+#~ msgstr "Vul kortingscode"
+
+#~ msgid "Article Description"
+#~ msgstr "Artikel omschrijving"
+
+#~ msgid "MOST POPULAR VOUCHERCODES BY THIS EDITOR"
+#~ msgstr "POPULAIRSTE CODES VAN DEZE DEAL GURU"
+
+#, fuzzy
+#~ msgid "Previous"
+#~ msgstr "Preview"
+
+#, fuzzy
+#~ msgid "Next"
+#~ msgstr "Vogende term"
+
+#~ msgid "View more"
+#~ msgstr "Bekijk meer"
+
+#~ msgid "User dashboard"
+#~ msgstr "Gebruikers Account"
+
+#, fuzzy
+#~ msgid "Door&nbsp;"
+#~ msgstr "Door "
+
+#, fuzzy
+#~ msgid "HI, Wouter Nout"
+#~ msgstr "Hoi, (voornaam) (achternaam)"
+
+#, fuzzy
+#~ msgid "Laatste login: 05 Juni 2012 09:42"
+#~ msgstr "Laatste login: (tijd nu)"
+
+#~ msgid "Ga naar profiel"
+#~ msgstr "Ga naar profiel"
+
+#~ msgid ""
+#~ "Welcome to your Kortingscode.nl profile. Add a store or restaurant to "
+#~ "your Favourites and we ll keep this \n"
+#~ "                            \t    page updated with all their latest "
+#~ "voucher codes. You will see all the current vouchers of your favorite "
+#~ "stores \n"
+#~ "                            \t    on your profile and we will adjust our "
+#~ "weekly newsletter to you personal settings!"
+#~ msgstr ""
+#~ "Welkom op jouw Kortingscode.nl profiel, hier vind je exclusieve 'members "
+#~ "only' codes en kan je via jouw  \n"
+#~ "                            \t    favoriete winkels jouw wekelijkse "
+#~ "nieuwsbrief precies zo laten maken als je zelf wilt =)"
+
+#~ msgid ""
+#~ "Some the exclusive member only vouchers are only available through from "
+#~ "your personal profile. These \n"
+#~ "                            \t    codes can not be found on the frontpage!"
+#~ msgstr ""
+#~ "Sommige codes zijn enkel beschikbaar via jouw persoonlijke profiel. Deze "
+#~ "codes zijn niet zichtbaar op \n"
+#~ "                            \t    de homepage of in de overzichten!"
+
+#~ msgid "Profiel is 75% compleet"
+#~ msgstr "Profiel is 75% compleet"
+
+#~ msgid "Upload een profielfoto"
+#~ msgstr "Upload een profielfoto"
+
+#~ msgid "Nodig je vrienden uit"
+#~ msgstr "Nodig je vrienden uit"
+
+#, fuzzy
+#~ msgid ""
+#~ "Zalando kortingscode<br />\n"
+#~ "voor 20% korting op alles"
+#~ msgstr ""
+#~ "Zalando kortingscode<br />\n"
+#~ "voor 20% korting op alles"
+
+#~ msgid "KORTINGSCODES VAN JOUW FAVORIETE WEBSHOPS"
+#~ msgstr "KORTINGSCODES VAN JOUW FAVORIETE WEBSHOPS"
+
+#~ msgid "kortings"
+#~ msgstr "kortings"
+
+#~ msgid "Kortingscodes"
+#~ msgstr "Kortingscodes"
+
+#~ msgid "Bijna verlopen Kortingscodes"
+#~ msgstr "Bijna verlopen Kortingscodes"
+
+#~ msgid "Gratis Bezorging Codes"
+#~ msgstr "Codes voor Gratis Verzending"
+
+#~ msgid "Kortingsbonnen"
+#~ msgstr "Kortingsbonnen"
+
+#~ msgid "Studenten Kortingen"
+#~ msgstr "Studenten kortingen"
+
+#~ msgid "Community"
+#~ msgstr "Community"
+
+#~ msgid "Help"
+#~ msgstr "Help"
+
+#~ msgid "Over ons"
+#~ msgstr "Over ons"
+
+#~ msgid "Contact"
+#~ msgstr "Contact"
+
+#~ msgid "Privacy"
+#~ msgstr "Privacy"
+
+#, fuzzy
+#~ msgid ""
+#~ "Ontvang de beste kortingen en <br />\n"
+#~ "\t\t\t\texclusieve acties in je inbox <br />"
+#~ msgstr ""
+#~ "Ontvang de beste kortingen en <br />\n"
+#~ "\t\t\t\texclusieve acties in je inbox <br />"
+
+#~ msgid ""
+#~ "We houden niet van spam dus versturen wij alleen <br />\n"
+#~ "                    emails als het echt nodig is."
+#~ msgstr ""
+#~ "We houden niet van spam dus versturen wij alleen <br />\n"
+#~ "                    e-mails als het echt nodig is."
+
+#~ msgid "Follow us on Twitter"
+#~ msgstr "Volg ons op Twitter"
+
+#~ msgid " Like us on Facebook"
+#~ msgstr " Like ons op Facebook"
+
+#~ msgid "Recommend us on Google+"
+#~ msgstr "Voeg ons toe op Google+"
+
+#~ msgid "Newsletter"
+#~ msgstr "Nieuwsbrief"
+
+#~ msgid " Subscribe to our RSS feeds"
+#~ msgstr "Meld je aan voor onze RSS feed"
+
+#~ msgid "VERLOPEN"
+#~ msgstr "VERLOPEN"
+
+#, fuzzy
+#~ msgid "Cockies"
+#~ msgstr "Cookies"
+
+#~ msgid ">> Bekijk alle"
+#~ msgstr ">> Bekijk alle"
+
+#~ msgid "Top"
+#~ msgstr "Top"
+
+#~ msgid "Coupons"
+#~ msgstr "Kortingscodes"
+
+#~ msgid "By:"
+#~ msgstr "Door:"
+
+#, fuzzy
+#~ msgid "How to Use a Marks & Spencer"
+#~ msgstr "Hoe gebruik je (shopnaam)"
+
+#~ msgid "Promotional code"
+#~ msgstr "Kortingscode"
+
+#, fuzzy
+#~ msgid "How to Use a Marks & Spencer Promotional code"
+#~ msgstr " "
+
+#~ msgid "Kortingscode.nl is simply said"
+#~ msgstr "Kortingscode.nl is simpel gezegd"
+
+#~ msgid "amazing! We love it"
+#~ msgstr "fantastisch! Wij zijn er dol op"
+
+#~ msgid "to My Favourites"
+#~ msgstr "naar mijn favorieten"
+
+#~ msgid " Free Delivery&nbsp;"
+#~ msgstr "Gratis verzending"
+
+#~ msgid "Delivery &euro;"
+#~ msgstr "Verzending €"
+
+#~ msgid "Reveal mAll"
+#~ msgstr "Laat ze allemaal zien"
+
+#, fuzzy
+#~ msgid "At the value of \\u20AC "
+#~ msgstr "Kortingscode met de waarde TEST44CODE4"
+
+#~ msgid " Korting & Actiecode"
+#~ msgstr " Korting & Actiecode"
+
+#~ msgid "Actieve "
+#~ msgstr "Actieve "
+
+#~ msgid " Codes & Kortingen -"
+#~ msgstr " Codes & Kortingen -"
+
+#~ msgid " kortingscodes - kortingscode.nl"
+#~ msgstr " kortingscodes - kortingscode.nl"
+
+#~ msgid " kortingscode&aanbiedingoverzicht"
+#~ msgstr "Overzicht van kortingscodes en aanbiedingen"
+
+#~ msgid "Like us on Facebook"
+#~ msgstr "Like ons op Facebook"
+
+#~ msgid "Kortings Code"
+#~ msgstr "Kortingscode"
+
+#~ msgid "HOME"
+#~ msgstr "HOME"
+
+#~ msgid "WINKELS"
+#~ msgstr "WINKELS"
+
+#~ msgid "COMMUNTIY"
+#~ msgstr "COMMUNITY"
+
+#~ msgid "BLOG"
+#~ msgstr "NIEUWS"
+
+#~ msgid "Financieel"
+#~ msgstr "Financieel"
+
+#~ msgid "Verzekeringen "
+#~ msgstr "Verzekeringen "
+
+#~ msgid "Energie "
+#~ msgstr "Energie "
+
+#~ msgid "Vakantie "
+#~ msgstr "Vakantie "
+
+#~ msgid "Winkelen "
+#~ msgstr "Winkelen "
+
+#~ msgid "Telefonie "
+#~ msgstr "Telefonie "
+
+#~ msgid "Zorgverzekering"
+#~ msgstr "Zorgverzekering"
+
+#, fuzzy
+#~ msgid "Besparen op zorgverzekering "
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "met een collectiviteitskorting"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Top10 aanvullende zorg- "
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "verzekeringen"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Eigen risico voor zorg<br />verzekeringen 2013"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Zijn zorgvergelijkers <br />wel onafhankelijk?"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Jongeren"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Korting op een iPhone <br />verzekering "
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Goedkope reisverzekeringen"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Zorgverzekeraars met <br />jongerenkorting"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Top10 studenten- <br />verzekeringen "
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Autoverzekering"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Hoe bouw ik no-claim <br />korting op?  "
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Welke autoverzekering is voor<br />Wmij het voordeligst?"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Bespaar op een jongeren <br />autoverzekering"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Besparen op zorgverzekering <br /> met een collectiviteitskorting "
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Top10 aanvullende zorg- <br />verzekeringen"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Eigen risico voor zorg- <br />verzekeringen 2013"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Top10 studenten- <br />verzekeringen"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Hoe bouw ik no-claim <br />korting op? "
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Welke autoverzekering is voor <br />mij het voordeligst? "
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Besparen op zorgverzekering <br /> met een collectiviteitskorting"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid ""
+#~ "\n"
+#~ "                                    Besparen op zorgverzekering <br />\n"
+#~ "                                    met een collectiviteitskorting"
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Eigen risico voor zorg- <br />verzekeringen 2013 "
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "Marks & Spencer Codes 2012"
+#~ msgstr "(Shopnaam) Kortingscodes 2012"
+
+#, fuzzy
+#~ msgid "An overview of all vouchers and couponcodes of Marks & Spencer"
+#~ msgstr ""
+#~ "Een overzicht van alle actuele aanbiedingen en kortingscode van (shopnaam)"
+
+#, fuzzy
+#~ msgid "Add Marks & Spencer to My Favourites"
+#~ msgstr "Voeg (shopnaam) toe aan Mijn Favorieten"
+
+#, fuzzy
+#~ msgid "Marks and Spencers"
+#~ msgstr "(shopnaam)"
+
+#, fuzzy
+#~ msgid ""
+#~ " had a free delivery codeyou can see this info. on the page of Marks & "
+#~ "spencer, Marks and Spencers delivery code over $50 in the online "
+#~ "webshop, \n"
+#~ "\t\t\tyou can see this info."
+#~ msgstr ""
+#~ "heeft een kortingscode voor gratis verzending, op de pagina van "
+#~ "(shopnaam) kan je meer informatie vinden over deze online shop. "
+
+#, fuzzy
+#~ msgid "Voucher codes from Marks & Spencers"
+#~ msgstr "Kortingscodes van (shopnaam)"
+
+#, fuzzy
+#~ msgid ""
+#~ " Marks and Spencers had a free delivery code if you spend over $50 in the "
+#~ "online webshop, you can see this info. on the pag, with this free "
+#~ "delivery code you can Marks and Spencers had a free delivery code if you "
+#~ "spend over $50. Marks and Spencers had a free delivery code if you spend "
+#~ "over $50<br /><br />\n"
+#~ "              \n"
+#~ "              \n"
+#~ "              \n"
+#~ "          Spencers had a free delivery code if you spend over $50. "
+#~ "Webshop, you can see this info. on the pag, with this free delivery code "
+#~ "you can. Marks and Spencers had a free delivery code if you spend over "
+#~ "$50. Marks and Spencers had a free delivery code if you spend over $50."
+#~ msgstr " "
+
+#~ msgid "Read more.."
+#~ msgstr "Lees meer.."
+
+#~ msgid "3 - 5 Working Days"
+#~ msgstr "3 tot 5 Werkdagen"
+
+#~ msgid "3 Codes - Reveal m All"
+#~ msgstr "3 Codes - Laat ze allemaal zien!"
+
+#~ msgid "Show me"
+#~ msgstr "Laat zien"
+
+#, fuzzy
+#~ msgid ""
+#~ "Marks & \n"
+#~ "Spencer Promotional Code"
+#~ msgstr ""
+#~ "(shopnaam) \n"
+#~ "kortingscode"
+
+#, fuzzy
+#~ msgid "Free Nominated Delivery on Orders over $150 at Marks & Spencer"
+#~ msgstr "Gratis verzending voor orders boven $150 bij (shopnaam)"
+
+#~ msgid ""
+#~ "Optional text you could add if you wish to the Marks & Spencer Shop "
+#~ "Updated feed You could also put in auto feeds."
+#~ msgstr "Optionele tekst die je kan toevoegen tot de (shopnaam)"
+
+#~ msgid "MORE SIMILAR PROMOTIONAL CODES, DISCOUNT CODES AND DEALS"
+#~ msgstr "MEER GELIJKE KORTINGSCODES & AANBIEDINGEN:"
+
+#~ msgid "Expired: 21 june 2012"
+#~ msgstr "Verlopen op 21 juni 2012"
+
+#, fuzzy
+#~ msgid ""
+#~ "Couponcode 12% discount on \n"
+#~ "orders if you also buy expensive \n"
+#~ "stuff."
+#~ msgstr ""
+#~ "Kortingscode voor 12% \n"
+#~ "als je ook dure spullen  \n"
+#~ "koopt."
+
+#~ msgid " Recommend us on Google+"
+#~ msgstr "Volg ons op Google+"
+
+#~ msgid "Subscribe to our RSS feeds"
+#~ msgstr "Meld je aan voor onze RSS feeds"
+
+#~ msgid "Disclaimer"
+#~ msgstr "Disclaimer"
+
+#~ msgid "In de media"
+#~ msgstr "In de media"
+
+#~ msgid "Top 50"
+#~ msgstr "Top 50"
+
+#~ msgid "Hyves"
+#~ msgstr "Hyves"
+
+#~ msgid "Facebook"
+#~ msgstr "Facebook"
+
+#~ msgid "RSS feed"
+#~ msgstr "RSS feed"
+
+#~ msgid "Alle categorieen"
+#~ msgstr "Alle categorieen"
+
+#~ msgid "0-9"
+#~ msgstr "0-9"
+
+#~ msgid "A"
+#~ msgstr "A"
+
+#~ msgid "B"
+#~ msgstr "B"
+
+#~ msgid "C"
+#~ msgstr "C"
+
+#~ msgid "D"
+#~ msgstr "D"
+
+#~ msgid "E"
+#~ msgstr "E"
+
+#~ msgid "F"
+#~ msgstr "F"
+
+#~ msgid "G"
+#~ msgstr "G"
+
+#~ msgid "H"
+#~ msgstr "H"
+
+#~ msgid "I"
+#~ msgstr "I"
+
+#~ msgid "J"
+#~ msgstr "J"
+
+#~ msgid "K"
+#~ msgstr "K"
+
+#~ msgid "L"
+#~ msgstr "L"
+
+#~ msgid "M"
+#~ msgstr "M"
+
+#~ msgid "N"
+#~ msgstr "N"
+
+#~ msgid "O"
+#~ msgstr "O"
+
+#~ msgid "P"
+#~ msgstr "P"
+
+#~ msgid "Q"
+#~ msgstr "Q"
+
+#~ msgid "R"
+#~ msgstr "R"
+
+#~ msgid "S"
+#~ msgstr "S"
+
+#~ msgid "T"
+#~ msgstr "T"
+
+#~ msgid "U"
+#~ msgstr "U"
+
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "W"
+#~ msgstr "W"
+
+#~ msgid "X"
+#~ msgstr "X"
+
+#~ msgid "Y"
+#~ msgstr "Y"
+
+#~ msgid "Z"
+#~ msgstr "Z"
+
+#~ msgid "SPECIALE OVERZICHTEN"
+#~ msgstr "SPECIALE OVERZICHTEN"
+
+#~ msgid "A Quarter Of "
+#~ msgstr "Een Kwart Van"
+
+#~ msgid "Share Kortingscode.nl en<br />maak kans op een<br />"
+#~ msgstr "Deel kortingscode.nl en<br />maak kans op een<br />"
+
+#~ msgid "LATEST VOUCHERCODES BY THIS EDITOR"
+#~ msgstr "LAATST TOEGEVOEGDE KORTINGSCODES VAN DEZE DEAL GURU"
+
+#~ msgid "MEEST GELEZEN BESPAAR WIJZERS BY THIS EDITOR "
+#~ msgstr "POPULAIRSTE plusS VAN DEZE DEAL GURU"
+
+#, fuzzy
+#~ msgid "Teams & Conditions"
+#~ msgstr "Voorwaarden"
+
+#~ msgid " website!"
+#~ msgstr "website!"
+
+#~ msgid "MIJN FAVORIETE KORTINGSCODES"
+#~ msgstr "MIJN FAVORIETE KORTINGSCODES"
+
+#, fuzzy
+#~ msgid "At the value of"
+#~ msgstr "Kortingscode terwaarde van"
+
+#~ msgid "POPULAIRE KORTINGSCODES"
+#~ msgstr "POPULAIRE KORTINGSCODES"
+
+#~ msgid "NIEUWE KORTINGSCODES"
+#~ msgstr "NIEUWE KORTINGSCODES"
+
+#~ msgid "POPULAIRE CATEGORIEEN"
+#~ msgstr "POPULAIRE CATEGORIEEN"
+
+#~ msgid "POPULAIRSTE BESPAAR WIJZERS"
+#~ msgstr "POPULAIRSTE plusS"
+
+#~ msgid "OUR MOST POPULAR STORES"
+#~ msgstr "ONZE POPULAIRSTE WINKELS"
+
+#~ msgid "Recently Added Stores"
+#~ msgstr "Recentelijk toegevoegde winkels"
+
+#~ msgid "AS SEEN IN"
+#~ msgstr "BEKEND VAN"
+
+#~ msgid "How-to-guide"
+#~ msgstr "How-to-guide"
+
+#~ msgid " >> View all"
+#~ msgstr ">> Bekijk ze allemaal"
+
+#~ msgid "How to guide one code"
+#~ msgstr "How-to-guide, één code"
+
+#~ msgid "How to guide two code"
+#~ msgstr "How-to-guide, twee codes"
+
+#~ msgid "How to guide no code"
+#~ msgstr "How-to-guide, geen code"
+
+#~ msgid "By: "
+#~ msgstr "Door:"
+
+#~ msgid "GUIDES"
+#~ msgstr "GUIDES"
+
+#~ msgid "IS MENTIONED IN"
+#~ msgstr "IS VERNOEMD IN"
+
+#~ msgid "GUIDES "
+#~ msgstr "HOW-TO-GUIDES"
+
+#~ msgid " IS MENTIONED IN"
+#~ msgstr "IS BEKEND VAN"
+
+#~ msgid "HET LAATSTE"
+#~ msgstr "HET LAATSTE"
+
+#~ msgid "NIEUWS"
+#~ msgstr "NIEUWS"
+
+#~ msgid "Ooooh nee...wat nu?"
+#~ msgstr "Ooooh nee...wat nu?"
+
+#~ msgid "Chetan"
+#~ msgstr "sdsjdd"
+
+# sdfsdfsdf
+#~ msgid "Sunny"
+#~ msgstr "sdfsdfsdf"
+
+#~ msgid "Patial"
+#~ msgstr "Patial"
+
+#, fuzzy
+#~ msgid "Singh"
+#~ msgstr "singh"
+
+#~ msgid "World"
+#~ msgstr "World"

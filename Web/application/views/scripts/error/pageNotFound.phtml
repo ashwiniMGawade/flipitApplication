@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title><?php echo $this->translate('404 error - Page does not exist');?></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <?php
+        require(APPLICATION_PATH.'/layouts/scripts/layout_css.phtml');
+        require(APPLICATION_PATH.'/layouts/scripts/layout_js.phtml');
+        $searchBoxCssClass = LOCALE == '' ? 'kortingscode' : '';
+        $this->minifyHeadScript()->appendFile("/public/js/front_end/search.js");
+        ?>
+    </head>
+<?php 
+
+$websiteLogo = 'flipit';
+$websiteUrl = 'http://www.flipit.com';
+$websiteName =  $this->translate('FlipIt');
+$localeHomePageUrl = $websiteUrl.'/'.LOCALE;
+if (LOCALE == '') {
+    $websiteLogo = 'kortingscode';
+    $websiteUrl = 'http://www.kortingscode.nl';
+    $websiteName = $this->translate('Kortingscode');
+    $localeHomePageUrl  = $websiteUrl;
+}
+?>
+    <body class="page404 click">
+        <?php echo FrontEnd_Helper_LayoutContent::loadGoogleTagManager(); ?>
+        <div class="bg-stretch">
+            <img src="<?php echo HTTP_PATH; ?>public/images/front_end/img-46.jpg" alt="" title="image"/>
+        </div>
+        <div id="wrapper">
+            <div class="w1">
+                <div class="wrapper-holder">
+                    <?php
+                    $localeViewPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/' ;
+
+                    $baseViewPath = new Zend_View();
+                    $baseViewPath->setBasePath(APPLICATION_PATH . '/views/');
+
+                    $partials = 'partials/';
+                    $localePartialPath = $localeViewPath . 'scripts/' . $partials;
+
+                    $localePartialViewPath = new Zend_View();
+                    $localePartialViewPath->setBasePath($localeViewPath);
+
+                    if(file_exists($localePartialPath .  '_header.phtml')) :
+                        echo $localePartialViewPath->render($partials.'_header.phtml');
+                    else:
+                        echo $baseViewPath->render($partials.'_header.phtml');
+                    endif;
+                    ?>
+                    <main role="main" id="main">
+                        <div class="container">
+                            <div class="section404">
+                                <strong class="logo <?php echo $websiteLogo; ?>">
+                                    <a href="<?php echo $localeHomePageUrl;?>">
+                                    <?php echo $websiteName; ?></a>
+                                </strong>
+                                <div class="row-block">
+                                    <div class="text-block">
+                                        <h1><?php echo $this->translate('Sorry, that page doesn’t exist');?>!</h1>
+                                        <p>
+                                        <?php 
+                                            echo $this->translate('Whoops, looks like you’ve made a little mistake').'. '
+                                            .$this->translate('No worries, return to our'); ?> 
+                                            <a href="<?php echo $localeHomePageUrl;?>">
+                                            <?php echo $this->translate('home page');?>
+                                            </a> <?php echo $this->translate('or search for other discounts');
+                                        ?>
+                                        </p>
+                                        <?php
+                                        if (HTTP_PATH != 'www.flipit.com' && $_SERVER['REQUEST_URI'] != '/') : ?>
+                                        <div class="slide search-box">
+                                            <form role="form" class="search-form">
+                                                <input 
+                                                placeholder="<?php echo FrontEnd_Helper_viewHelper::__form('form_Type in a Store e.g. Avis');?>"
+                                                class="form-control <?php echo $searchBoxCssClass;?>" 
+                                                id='searchFieldHeader' name='searchFieldHeader' type='text'/>
+                                                <input id='searchedKeyword' name='searchedKeyword' type='hidden'/>
+                                                    <a id="searchbuttonHeader" href="javascript:void(0);">
+                                                        <button type="submit" class="btn btn-default">
+                                                        	<span class="glyphicon glyphicon-search"></span>
+                                                        </button>
+                                                    </a>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sponsors-block">
+                                    <h2>
+                                    	<?php echo $this->translate('Flipit! Get ready to flip over a great deal&#33;');?>
+                                    </h2>
+                                    <ul>
+                                        <?php
+                                        foreach ($this->popularShops as $popularShop) : ?>
+                                        <li>
+                                            <a href="<?php echo HTTP_PATH_LOCALE.$popularShop['popularshops']['permaLink']; ?>">
+                                               <img width="90" height="45" alt="<?php echo $popularShop['popularshops']['name']; ?>"
+                                               src="<?php echo PUBLIC_PATH_CDN
+                                               .ltrim($popularShop['popularshops']['logo']['path'], '/')
+                                               .'thum_medium_'.$popularShop['popularshops']['logo']['name']; ?>" title="Shop Logo">
+                                            </a>
+                                        </li>
+                                        <?php
+                                        endforeach;
+                                        ?>
+                                    </ul>
+                                </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            <?php
+            if (HTTP_PATH != 'www.flipit.com' && $_SERVER['REQUEST_URI'] != '/') :
+            ?>
+            <footer id="footer">
+                <div class="container add-block">
+                    <strong class="logo <?php echo $websiteLogo; ?>">
+                        <a href="<?php echo $localeHomePageUrl;?>"><?php echo $websiteName; ?></a>
+                    </strong>
+                    <span class="copy">
+                    <?php echo $this->translate('Copyright &copy; 2009').'-'.date('Y').' '
+                    .$this->translate('Imbull BV'); ?>.
+                    </span>
+                </div>
+            </footer>
+            <?php endif; ?>
+            </div>
+        </div>
+<?php
+if (APPLICATION_ENV == 'development') {
+    $headScript =  $this->HeadScript();
+} else {
+    $headScript = $this->minifyHeadScript();
+}
+echo $headScript;
+?>
+    </body>
+</html>

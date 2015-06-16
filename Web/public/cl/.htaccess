@@ -1,0 +1,4 @@
+Options -Indexes
+ErrorDocument 403 /public/cl/403.php
+RewriteEngine on
+RewriteRule ^403.php$ http://www.flipit.com/cl [L,R=301]

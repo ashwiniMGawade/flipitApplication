@@ -1,0 +1,96 @@
+<?php
+$this->minifyHeadLink()->prependStylesheet("/public/css/front_end/register.css");
+echo $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/registration.js");
+$registerForm = $this->form;
+// Remove <dt> from label generation
+foreach ($registerForm->getElements() as $formElement) {
+    $formElement->getDecorator('label')->setOption('tag', null);
+}
+if($this->messageSuccess!='' || $this->messageError!='') : ?>
+    <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
+        <span class='glyphicon glyphicon-warning-sign'></span>
+        <strong><?php echo $this->messageSuccess!='' ? $this->messageSuccess : $this->messageError;?></strong>
+    </div>
+    <?php 
+endif;
+?>
+<section class="register-box pos-relative">
+<img src='<?php echo FrontEnd_Helper_viewHelper::getSinupImage();?>' title="SignUp Image"/>
+    <form id="registerForm" name="registerForm" method="POST" action="">
+        <fieldset>
+            <div class="row">
+                <div class="col-md-6 hide-testimonials">
+                 <?php  echo $this->testimonials[0]['testimonial1']; ?>
+                 <?php  echo $this->testimonials[0]['testimonial2']; ?>
+                 <?php  echo $this->testimonials[0]['testimonial3']; ?>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                            <?php 
+                            echo $registerForm->emailAddress->renderLabel()
+                            . $registerForm->emailAddress->renderViewHelper();
+                            ?>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                            <?php 
+                            echo $registerForm->password->renderLabel()
+                            . $registerForm->password->renderViewHelper();
+                            ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                            <?php 
+                            echo $registerForm->firstName->renderLabel()
+                            . $registerForm->firstName->renderViewHelper();?>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                            <?php 
+                            echo $registerForm->lastName->renderLabel()
+                            . $registerForm->lastName->renderViewHelper();
+                            ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">                      
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                            <?php 
+                            echo $registerForm->gender->renderLabel()
+                            . $registerForm->gender->renderViewHelper();
+                            ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                         <?php echo $registerForm->shopId->renderViewHelper();?>
+                         <?php 
+                         echo $this->formSubmit(
+                             'signup',
+                             FrontEnd_Helper_viewHelper::__form('form_Create account'),
+                             array('class'=>'btn blue btn-lg btn-primary', 'id'=>'register')
+                         ) ?>
+                    </div>
+                    <div class="form-group alt link-blue-buttom">
+                        <?php echo $this->translate('By creating an account, you accept our');?>
+                        <a class='link-blue' href="<?php echo HTTP_PATH_LOCALE; ?>info/<?php echo FrontEnd_Helper_viewHelper::__link('link_privacy-cookies'); ?>">
+                            <?php echo $this->translate('Privacy Policy');?>
+                        </a>
+                        <?php echo $this->translate('and our'); ?>
+                        <a class='link-blue' href="<?php echo HTTP_PATH_LOCALE; ?>info/<?php echo FrontEnd_Helper_viewHelper::__link('link_terms'); ?>">
+                            <?php echo $this->translate('Terms and Conditions');?>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</section>

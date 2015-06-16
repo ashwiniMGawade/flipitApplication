@@ -1,0 +1,91 @@
+<?php
+$this->partial('offer/_jsFileForOfferPartial.phtml');
+$articleDetails = $this->articleDetails;
+$userDetails = $this->userDetails;
+$profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/". $userDetails['slug'];
+$firstName = str_replace(' ', '', $userDetails['firstName']);
+$lastName = str_replace(' ', '', $userDetails['lastName']);
+$articleUpdatedAtDate = new Zend_Date($articleDetails['publishdate']['date']);
+$articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
+$plusViewPath = 'plus/';
+$discussion = $this->partial(
+    'partials/_discussion.phtml',
+    array('shopName' =>'','discussionComments' => $this->discussionComments)
+);
+$articleInformation = $this->partial(
+    $plusViewPath.'_articleInformation.phtml',
+        array(
+           'artcileDetails' => $articleDetails,
+           'userDetails' => $userDetails,
+           'profileLink' => $profileLink,
+           'firstName' => $firstName,
+           'lastName' => $lastName,
+           'articleUpdatedAtDate'=> $articleUpdatedAtDate
+        )
+);
+$authorDetails = '';
+if(!empty($userDetails)):
+$authorDetails = $this->partial(
+    $plusViewPath.'_authorDetails.phtml',
+        array(
+            'userDetails' => $userDetails,
+            'profileLink' => $profileLink
+        )
+);
+endif;
+
+$partialViewPath = 'partials/';
+$savingGuides = '';
+
+if(!empty($this->articlesRelatedToCurrentCategory)):
+    $savingGuides = $this->partial(
+        $partialViewPath.'_authorMostReadArticles.phtml', 
+        array(
+            "authorMostReadArticles"=>$this->articlesRelatedToCurrentCategory,
+            "moneySavingGuideHeader"=>$this->translate('Saving guides')
+        )
+    );
+endif;
+
+$recentlyAddedArticles = $this->partial(
+    $plusViewPath.'_recentlyAddedArticles.phtml',
+        array(
+            'recentlyAddedArticles' => $this->recentlyAddedArticles
+        )
+);
+$topPopularOffers = $this->partial(
+    $plusViewPath.'_topPopularOffers.phtml',
+        array(
+            'topPopularOffers' => $this->topPopularOffers,
+        )
+);
+$directChapterLinks = $this->partial(
+    $plusViewPath.'_directChapterLinks.phtml',
+        array(
+            'firstName' => $firstName,
+            'lastName' => $lastName,
+            'artcileDetails' => $articleDetails
+        )
+);
+$artcileImagePath = isset($articleDetails['articleImage']['path']) ? $articleDetails['articleImage']['path'] : '';
+$artcileImageName = isset($articleDetails['articleImage']['name']) ? $articleDetails['articleImage']['name'] : '';
+$articleImage = PUBLIC_PATH_CDN.$artcileImagePath.$artcileImageName;
+?>
+<main role="main" id="main" class="container">
+    <div class="banner-block">
+        <img class="image" width="1169" src="<?php echo $articleImage; ?>" alt="<?php echo $articleDetails['title'];?>" title="<?php echo $articleDetails['title'];?>">
+    </div>
+    <div class="row">
+        <div id="content" class="col-md-8 col-sm-8">
+            <?php echo $articleInformation; ?>
+            <?php echo $authorDetails. $savingGuides. $discussion;?>
+        </div>
+        <aside id="sidebar" class="col-md-4 col-sm-4">
+            <?php
+            $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+            $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+            echo $frontendSidebarHelper->sidebarWidgets('plus-page', $this);
+            ?>
+        </aside>    
+    </div>
+</main>

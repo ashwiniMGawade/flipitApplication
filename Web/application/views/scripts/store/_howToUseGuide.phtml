@@ -1,0 +1,29 @@
+<?php
+$domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
+$shopUrl = $this->shop['affliateProgram'] == '1' ? 
+    '<a href="'.$domainName.'out/shop/'.$this->shop['id'].'" rel="nofollow" target="_blank">'.$this->actualUrl.'</a>' :
+     $this->actualUrl;
+?>
+<ul class="add-info">
+<?php
+if ($this->shop['howToUse']):
+    ?>
+    <li class="question">
+        <h4><?php echo $this->translate('How to use code'); ?></h4>
+        <p>
+            <?php 
+            echo $this->translate('Read our full'); 
+            ?> 
+            <a href="<?php echo HTTP_PATH_LOCALE.$this->howToUseGuidePermalink; ?>#guide">
+            <?php echo $this->shop['name'].' '.$this->translate('Promotional Code'); ?></a>
+            <?php echo $this->translate('help guide'); ?>.
+        </p>
+    </li>
+    <?php
+endif;
+?>    
+    <li class="web">
+        <h4><?php echo $this->translate('Official website'); ?></h4>
+        <?php echo $shopUrl; ?>
+    </li>
+</ul>

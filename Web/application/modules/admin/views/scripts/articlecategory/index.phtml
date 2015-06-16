@@ -1,0 +1,68 @@
+<?php 
+	$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/back_end/ckeditor/ckeditor.js" );
+	//$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/back_end/ckeditor/config.js" );
+	$this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.dataTables.min.js");
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/dataTableComman.js");
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+	$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+	
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/articleCategoryList.js");
+	
+	?>
+	<?php echo $this->headTitle()->append('Article Categories List');?>
+	<script type="text/javascript">
+	//var CKEDITOR_BASEPATH = "<?php //echo PUBLIC_PATH . "js/back_end/ckeditor" ; ?>" ;
+	</script>
+         <div id="imbullbody">
+         	
+			
+      <div style="overflow: hidden;" id="imbullbody-content">
+          <div class="wrap columns-2">
+          <?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
+			<br><div class ="mainpage-content-colorbox success">
+			<?php if($this->messageSuccess!=''){?>
+			<span class="successserver"><?php echo $this->messageSuccess; ?>
+			</span>
+			<?php }if($this->messageError!=''){?>
+				<span class="errorserver"><?php echo $this->messageError; ?></span>
+			<?php } ?>
+			</div>
+			<?php }?>
+           <div id="widgetListdiv">
+         <h1>Article Categories<button class="btn ml10" onClick="window.location.href='<?php echo HTTP_PATH.'admin/articlecategory/addcategory';?>'">Add New Article Category</button></h1>
+          	
+            
+          	
+          	<p class="text-right"><a href=<?php echo HTTP_PATH."admin/articlecategory/exportarticlecategorylist"?>>Export List</a></p>
+          	<form class="well form-search searchbarbox" name="searchform" id="searchform">
+              <div class="mainpage-content-searchbart">
+                    <div class="mainpage-content-right-searchbar"><button class="btn btn-primary" type="button" id='searchByArticle'><?php echo $this->translate('Search');?></button></div>
+                    <div class="mainpage-content-right-inner-left-searchbar">
+                    <input type="text" placeholder="Search Article Category..." name="searchArtCategory" id="searchArtCategory" class="span3"></div>                        
+                </div>
+            </form>
+            
+            <table class="table table-bordered table-striped" id="articleCategoryList">
+                
+            	<thead>
+                  <tr>
+                  	<th><?php echo $this->translate('Category Name');?></th>
+                    <th><?php echo $this->translate('Permalink');?></th>
+                    <th><?php echo $this->translate('Meta title');?></th>
+                    <th><?php echo $this->translate('Delete');?></th>
+                 </tr>
+                  <input style="display: none; visibility: hidden;" type="checkbox" class="display-none" checked="checked" name="status" id="status" />
+                </thead>
+             </table>
+        </div>
+        <div class="clear"></div>
+      </div>
+      </div>
+      <!-- imbullbody-content -->
+      <div class="clear"></div>
+    </div>
+   
+         
+   

@@ -1,0 +1,10 @@
+<link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
+<?php
+if (APPLICATION_ENV == 'development') {
+    $lessCssPath = "/public/css/front_end/";
+    $this->headLink(array("rel"=>"stylesheet/less", 'href'=>$lessCssPath.'all.less'));
+    echo $this->headLink(array("rel"=>"stylesheet/less", 'href'=>$lessCssPath.'ie.less'));  
+} else {
+    echo $this->headLink()
+        ->prependStylesheet("/public/css/front_end/all.css");
+}

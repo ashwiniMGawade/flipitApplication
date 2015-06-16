@@ -1,0 +1,31 @@
+<?php 
+    if (!empty($this->newsLetterHeaderImage['path'])) {
+    ?>
+    <tr>
+        <td bgcolor="#0077cc">
+        <?php 
+        if (!empty($this->newsLetterHeaderImage['headerurl'])) {
+            ?>
+            <a target = "_blank" href="<?php echo $this->newsLetterHeaderImage['headerurl']; ?>">
+            <?php 
+        }
+        ?>
+        <img style="display: block" width='615'
+            alt="<?php echo urldecode($this->newsLetterHeaderImage['name']); ?>" 
+            title="<?php echo urldecode($this->newsLetterHeaderImage['name']); ?>" 
+            src="<?php echo $this->publicPathCdn
+            .$this->newsLetterHeaderImage['path']
+            .urldecode($this->newsLetterHeaderImage['name']);?>">
+        <?php 
+        if (!empty($this->newsLetterHeaderImage['headerurl'])) {
+            ?>
+            </a>
+            <?php 
+        }
+        ?>
+        </td>
+    </tr>
+    <tr><td height="5"></td></tr>
+    <?php 
+    } 
+?>

@@ -1,0 +1,12 @@
+User-agent: *
+Disallow: /info/
+Disallow: /rssfeed/
+Disallow: /out/
+Disallow: /link_zoeken/
+Disallow: /admin/
+Disallow: /au/accountlogin
+Disallow: /au/subscription
+
+Sitemap: http://www.flipit.com/public/au/sitemaps/Sitemap_coupons.xml
+Sitemap: http://www.flipit.com/public/au/sitemaps/Sitemap_coupons.xml
+Sitemap: http://www.flipit.com/public/au/sitemaps/Sitemap_Find.xml

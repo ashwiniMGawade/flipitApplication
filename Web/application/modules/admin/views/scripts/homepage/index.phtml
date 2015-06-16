@@ -1,0 +1,564 @@
+<?php
+$this->headTitle()->append($this->translate('Welcome To Home page'));
+$this->headMeta('keyword', 'Description');
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/home-page.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.textareaCounter.plugin.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.ui.widget.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.iframe-transport.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.fileupload.js");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css");
+?>
+<script type="text/javascript">
+var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" ;
+</script>
+<div class="wrap columns-2">
+	<div class='wrap columns-2'>
+		<?php if($this->messageSuccess!='' || $this->messageError!='' ){ ?>
+		<br>
+		<div class="mainpage-content-colorbox success">
+		<?php if($this->messageSuccess!=''){ ?>
+		<span class="successserver"><?php echo $this->messageSuccess; ?></span>
+		<?php }?>
+		<?php if($this->messageError!=''){?>
+		<span class="errorserver"><?php echo $this->messageError; ?></span>
+		<?php } ?>
+		</div>
+		<?php
+		}?>
+		</div>
+	<h1><?php echo $this->translate('Homepage'); ?><button
+			onclick="cancelHomePage();" class="btn ml10"><?php echo $this->translate('Cancel'); ?></button>
+	</h1>
+
+	<!-------------------- Start Email Settings locale basis -------------------->
+
+	<!-------------------- End Locale Settings -------------------->
+
+	<!-------------------- Start Popular Categories -------------------->
+
+	<div class="mainpage-content">
+	<h3>
+		<strong><?php echo $this->translate('Popular Categories'); ?></strong>
+	</h3>
+	<div id="poststuff" class="metabox-holder has-right-sidebar">
+
+		<!-- button div with searchbar -->
+		<div id="side-info-column" class="inner-sidebar-coupon">
+			<div id="side-sortables" class="meta-box-sortables ui-sortable">
+				<div class="coupon-sidebar-outer">
+
+					<!-- searchbar div -->
+					<div class="coupon-sidebar-heading">
+
+						<input placeholder="search Category" id='searchcatgTxt'
+							type="text" class="input-medium search-query">
+
+					</div>
+
+					<!-- coupon code move up -->
+					<div class="coupon-sidebar-content-box">
+						<button id='moveUpCategory' onClick='moveUpCategory();'
+							class="btn">MOVE UP</button>
+						<button id='addNewCategory' onClick='addNewCategory();'
+							class="btn">ADD NEW CATEGORY</button>
+					</div>
+					<!-- coupon code move down  -->
+					<div class="coupon-sidebar-content-box mb10">
+						<button id='moveDownCategory' onClick='moveDownCategory();'
+							class="btn">MOVE DOWN</button>
+						<button id='deleteCategory' onClick='deleteCategory();'
+							class="btn">DELETE</button>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+
+              <?php $catg = $this->category; ?>
+              <!-- display code div -->
+		<div id="post-body">
+			<div id="post-body-content-coupon">
+				<div class="top-coupon-list"
+					style="overflow: auto; height: 468px ! important;">
+					<ul id="mostCategories">
+                        <?php if($this->category!=null){
+
+                        	foreach ($this->category as $o){
+
+              					echo  "<li reltype='" . $o['type'] . "' relpos='" . $o['position'] . "' reloffer='" . $o['categoryId'] . "' id='" . $o['id'] . "' >" . $o['name'] ."</li>";
+
+              					}
+                         	} else {
+
+                         		echo  "<li id='noRecord'>No record found</li>";
+
+              				} ?>
+              			</ul>
+				</div>
+			</div>
+		</div>
+		<br class="clear">
+	</div>
+	<!-- /poststuff -->
+
+	<div class="clear"></div>
+	</div>
+	<!-------------------- End Popular Categories -------------------->
+
+
+	<!-------------------- Start Special List -------------------->
+<div class="mainpage-content">
+	<h3>
+		<strong><?php echo $this->translate('Special List'); ?></strong>
+	</h3>
+	<div id="poststuff" class="metabox-holder has-right-sidebar">
+
+		<!-- button div with searchbar -->
+		<div id="side-info-column" class="inner-sidebar-coupon">
+			<div id="side-sortables" class="meta-box-sortables ui-sortable">
+				<div class="coupon-sidebar-outer">
+
+					<!-- searchbar div -->
+					<div class="coupon-sidebar-heading">
+
+						<input placeholder="Search page" id='searchSpecialListTxt'
+							type="text" class="input-medium search-query">
+
+					</div>
+
+					<!-- coupon code move up -->
+					<div class="coupon-sidebar-content-box">
+						<button id='moveUpSpecialoffer' onClick='moveUpSpecialoffer();'
+							class="btn">MOVE UP</button>
+						<button id='addNewSpecialoffer' onClick='addNewSpecialoffer();'
+							class="btn">ADD NEW PAGE</button>
+					</div>
+					<!-- coupon code move down  -->
+					<div class="coupon-sidebar-content-box mb10">
+						<button id='moveDownSpecialoffer'
+							onClick='moveDownSpecialoffer();' class="btn">MOVE DOWN</button>
+						<button id='deleteSpecialoffer' onClick='deleteSpecialoffer();'
+							class="btn">DELETE</button>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+              <?php  $data = $this->Special; ?>
+              <!-- display code div -->
+		<div id="post-body">
+			<div id="post-body-content-coupon">
+				<div class="top-coupon-list"
+					style="overflow: auto; height: 196px ! important;">
+					<ul id='mostSpecialList'>
+                        <?php if($this->Speciallist!=null){
+
+                        	foreach ($this->Speciallist as $o){
+
+                        		echo  "<li reltype='" . $o['type'] . "' relpos='" . $o['position'] . "' reloffer='" . $o['specialpageId'] . "' id='" . $o['specialpageId'] . "' >" . $o['title'] ."</li>";
+
+                        		}
+                         	} else {
+                         		echo  "<li id='noRecord'>No record found</li>";
+              				}  ?>
+              			</ul>
+				</div>
+			</div>
+		</div>
+		<br class="clear">
+	</div>
+	<!-- /poststuff -->
+
+	<div class="clear"></div>
+	</div>
+	<!-------------------- End Special List -------------------->
+	<!-------------------- Start Money Saving Articles -------------------->
+<div class="mainpage-content">
+	<h3>
+		<strong><?php echo $this->translate('Money Saving Articles'); ?></strong>
+	</h3>
+	<div id="poststuff" class="metabox-holder has-right-sidebar">
+
+		<!-- button div with searchbar -->
+		<div id="side-info-column" class="inner-sidebar-coupon">
+			<div id="side-sortables" class="meta-box-sortables ui-sortable">
+				<div class="coupon-sidebar-outer">
+
+					<!-- searchbar div -->
+					<div class="coupon-sidebar-heading">
+
+						<input placeholder="search Articles" id='searchArticlesTxt'
+							type="text" class="input-medium search-query">
+
+					</div>
+
+					<!-- coupon code move up -->
+					<div class="coupon-sidebar-content-box">
+						<button id='moveUpSaving' onClick='moveUpSaving();' class="btn">MOVE
+							UP</button>
+						<button id='addNewSaving' onClick='addNewSaving();' class="btn">ADD
+							NEW Articles</button>
+					</div>
+					<!-- coupon code move down -->
+					<div class="coupon-sidebar-content-box mb10">
+						<button id='moveDownSaving' onClick='moveDownSaving();'
+							class="btn">MOVE DOWN</button>
+						<button id='deleteSaving' onClick='deleteSaving();' class="btn">DELETE</button>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+              <?php $data = $this->articles; ?>
+              <!-- display code div -->
+		<div id="post-body">
+			<div id="post-body-content-coupon">
+				<div class="top-coupon-list"
+					style="overflow: auto; height: 196px ! important;">
+					<ul id='mostArticles'>
+                        <?php if($this->articles!=null){
+
+                        	foreach ($this->articles as $o){
+
+              					echo  "<li reltype='" . $o['type'] . "' relpos='" . $o['position'] . "' reloffer='" . $o['moneysaving']['id'] . "' id='" . $o['id'] . "' >" . $o['moneysaving']['title'] ."</li>";
+
+              					}
+                         	} else {
+
+                         		echo  "<li id='noRecord'>No record found</li>";
+
+              				}  ?>
+              			</ul>
+				</div>
+			</div>
+		</div>
+		<br class="clear">
+	</div>
+	<!-- /poststuff -->
+	<br class="clear">
+</div>
+	<!-------------------- End Money Saving Articles -------------------->
+
+	<!-------------------- End Popular Stores -------------------->
+<div class="mainpage-content">
+<h3>
+		<strong><?php echo $this->translate('Popular Stores'); ?></strong>
+	</h3>
+
+	<div id="poststuff" class="metabox-holder has-right-sidebar">
+
+		<!-- button div with searchbar -->
+		<div id="side-info-column" class="inner-sidebar-coupon">
+			<div id="side-sortables" class="meta-box-sortables ui-sortable">
+				<div class="coupon-sidebar-outer">
+
+					<!-- searchbar div -->
+					<div class="coupon-sidebar-heading">
+
+						<input placeholder="search Stores" id='searchCouponTxt'
+							type="text" class="input-medium search-query">
+
+					</div>
+
+					<!-- coupon code move up -->
+					<div class="coupon-sidebar-content-box">
+						<button id='addNewShop' onClick='addNewShop();' class="btn">ADD
+							NEW STORE</button>
+					</div>
+					<!-- coupon code move down -->
+					<div class="coupon-sidebar-content-box mb10 image-loading-icon">
+						<button id='deleteOne' onClick='deleteOne();' class="btn">DELETE</button>
+					</div>
+
+				</div>
+
+
+			</div>
+		</div>
+              <?php
+              $data = $this->data;
+               // echo "<pre>";
+              //print_r($data);
+              //die();
+              	 //echo $c->id . "<br/>";
+
+              ?>
+              <!-- display code div -->
+		<div id="post-body">
+			<div id="post-body-content-coupon">
+				<div class="top-coupon-list"
+					style="overflow: auto; height: 585px ! important;">
+							<ul id="mostPopularCode">
+							<?php
+								if($this->data!=null){
+	                        	foreach ($this->data as $o){
+	              					echo  "<li class='ui-state-default' id='" . $o['id'] . "' reltype='" . $o['type'] . "' relpos='" . $o['position'] . "' reloffer='" . $o['shopId'] . "'>" . $o['name'] ."</li>";
+	              					}
+	                         	} else {
+	                         		echo  "<li id='noRecord'>No record found</li>";
+	              				}
+							?>
+							</ul>              			 
+				</div>
+			</div>
+		</div>
+		<br class="clear">
+	</div>
+</div>
+	<!-- /poststuffs -->
+
+<div class="mainpage-content">
+	<div class="mainpage-content-line header-image-cont">
+		<h3>
+			<strong><?php echo $this->translate('Homepage header Image'); ?></strong>
+		</h3>
+		<div class="mainpage-content-right-inner"></div>
+		<div class="mainpage-content-right-inner">
+			<div class='browse-container'>            
+				<?php if($this->locale['0']['homepagebanner_name'] != 'null' || $this->locale['0']['homepagebanner_name'] != '' ) { ?>
+				<img class='image-container' 
+				src="<?php echo PUBLIC_PATH_CDN. $this->locale['0']['homepagebanner_path'] .
+				$this->locale['0']['homepagebanner_name'] ?>">
+				<?php } ?>
+			</div>
+			<div class="mainpage-content-right-inner-left-other">
+			</div>
+			<div class="progress-file-detail hide">
+				<div>
+				<img alt="uploadig" src="http://www.flipit.com/public/images/back_end/ajax-loader-tran.gif">
+				<span id="selected-filename"></span>
+				</div>
+				<div class="progress progress-success progress-striped" id="progress">
+				<div class="bar" style="width: 99%;"></div>
+				</div>
+			</div>
+			<div class="mainpage-content-right-inner-right-other">
+				<span class="message help-inline success margin-bottom-tenpx"></span>
+			</div>
+			<?php if($this->locale['0']['homepagebanner_name'] == 'null' || $this->locale['0']['homepagebanner_name'] == '')
+			{ ?>
+			<input type="file"  id="homepageBanner" class="span3 margin-bottom-tenpx" name="homepageBanner" >
+			<?php } else { ?>
+			<button class="btn btn-primary" type="button" 
+			alt = "<?php echo $this->locale['0']['homepagebanner_name']; ?>" id="delete-header-image-btn">
+			<?php echo $this->translate("Delete Image");?>
+			</button>
+			<?php } ?>	
+			<button class="btn btn-primary hide" type="button" 
+			alt = "<?php echo $this->locale['0']['homepagebanner_name']; ?>" id="delete-header-image-btn"><?php echo $this->translate("Delete Image");?>
+			</button>
+			<button class="btn btn-primary hide" type="button" id="update-header-image-btn"><?php echo $this->translate("Update Image");?></button>
+
+			<div class="margin-bottom-tenpx">
+				<span class="help-inline" id="logo_file_message"><?php echo $this->translate("Image Size: 1600px x 690px (*.jpg or *.png file only)") . "&nbsp;" . $this->translate("Max filesize:") . "&nbsp;" . ini_get('upload_max_filesize'); ?>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+	 <div class="mainpage-content">
+		<form enctype="multipart/form-data" method="post" id="asSeenIn" name="asSeenIn">
+					<div class="mainpage-content-line mb10">
+						<div class="mainpage-content-left">
+							<h3>
+								<strong><?php echo $this->translate('As seen in'); ?></strong><br>
+							</h3>
+						</div>
+					</div>
+					<div class="clear"></div>
+
+					<div class="mainpage-content-line">
+						<div class="mainpage-content-left">
+							<label><?php echo $this->translate('Image'); ?></label>
+						</div>
+						<div class="mainpage-content-right">
+							<div class="mainpage-content-right-inner"></div>
+							<div class="mainpage-content-right-inner">
+									<div class="as_seen-content">
+										<?php   if( isset($this->seenIn[0]['logo']['type']) && count($this->seenIn[0]['logo']) >0 ){ ?>   	<img src="<?php echo PUBLIC_PATH_LOCALE.'images/upload/homepage/thum_'.$this->seenIn[0]['logo']['name'] ?>"> <?php } ?>
+										<div class="clear"></div>
+				                       <input type="file" onchange="checkFileType(event,'asSeenIn')" style="margin-top: 9px;" class="span3" name="image-1" >
+				                        <div class="mainpage-content-right-inner-right-other-as-seen"></div>
+				                        <div>
+				                        	<input type="text" placeholder="<?php echo $this->translate("ALT text")?>" name="alt-1"  value="<?php if(@$this->seenIn[0]['altText'] != ''){ echo @$this->seenIn[0]['altText']; } ?>"  class="span3">
+				                        </div>
+
+									</div>
+									<div class="as_seen-content">
+										<?php  if( isset($this->seenIn[1]['logo']['type']) && count($this->seenIn[1]['logo']) >0 ){ ?>   	<img src="<?php echo PUBLIC_PATH_LOCALE.'images/upload/homepage/thum_'.$this->seenIn[1]['logo']['name'] ?>"> <?php } ?>
+										<div class="clear"></div>
+				                        <input type="file" onchange="checkFileType(event,'asSeenIn')" style="margin-top: 9px;" class="span3" name="image-2" >
+				                        <div class="mainpage-content-right-inner-right-other-as-seen"></div>
+				                        <div>
+				                        		<input type="text" placeholder="<?php echo $this->translate("ALT text")?>" name="alt-2"  value="<?php if(@$this->seenIn[1]['altText'] != ''){ echo @$this->seenIn[1]['altText']; } ?>"  class="span3">
+				                        </div>
+									</div>
+									<div class="as_seen-content">
+										<?php   if( isset($this->seenIn[2]['logo']['type']) && count($this->seenIn[2]['logo']) >0 ){ ?>   	<img src="<?php echo PUBLIC_PATH_LOCALE.'images/upload/homepage/thum_'.$this->seenIn[2]['logo']['name'] ?>"> <?php } ?>
+										<div class="clear"></div>
+				                        <input type="file" onchange="checkFileType(event,'asSeenIn')" style="margin-top: 9px;" class="span3" name="image-3" >
+				                        <div class="mainpage-content-right-inner-right-other-as-seen"></div>
+				                        <div>
+				                        	<input type="text" placeholder="<?php echo $this->translate("ALT text")?>" name="alt-3"  value="<?php if(@$this->seenIn[2]['altText'] != ''){ echo @$this->seenIn[2]['altText']; } ?>" 	class="span3">
+				                        </div>
+									</div>
+									<div class="as_seen-content">
+										<?php   if( isset($this->seenIn[3]['logo']['type']) && count($this->seenIn[3]['logo']) >0 ){ ?>   	<img src="<?php echo PUBLIC_PATH_LOCALE.'images/upload/homepage/thum_'.$this->seenIn[3]['logo']['name'] ?>"> <?php } ?>
+										<div class="clear"></div>
+				                        <input type="file" onchange="checkFileType(event,'asSeenIn')" style="margin-top: 9px;" class="span3" name="image-4" >
+				                        <div class="mainpage-content-right-inner-right-other-as-seen"></div>
+				                        <div>
+				                     		  <input type="text" placeholder="<?php echo $this->translate("ALT text")?>" name="alt-4"  value="<?php if(@$this->seenIn[3]['altText'] != ''){ echo @$this->seenIn[3]['altText']; } ?>" 	class="span3">
+				                        </div>
+									</div>
+									 <div class="as_seen-content">
+										<?php   if( isset($this->seenIn[4]['logo']['type']) && count($this->seenIn[4]['logo']) >0 ){ ?>   	<img src="<?php echo PUBLIC_PATH_LOCALE.'images/upload/homepage/thum_'.$this->seenIn[4]['logo']['name'] ?>"> <?php } ?>
+										<div class="clear"></div>
+				                        <input type="file" onchange="checkFileType(event,'asSeenIn')" style="margin-top: 9px;" class="span3" name="image-5" >
+				                        <div class="mainpage-content-right-inner-right-other-as-seen"></div>
+				                        <div>
+				                        	<input type="text" placeholder="<?php echo $this->translate("ALT text")?>" name="alt-5"  value="<?php if(@$this->seenIn[4]['altText'] != ''){ echo @$this->seenIn[4]['altText']; } ?>" 	class="span3">
+				                        </div>
+									</div>
+									<div class="as_seen-content">
+										<?php   if( isset($this->seenIn[5]['logo']['type']) && count($this->seenIn[5]['logo']) >0 ){ ?>   	<img src="<?php echo PUBLIC_PATH_LOCALE.'images/upload/homepage/thum_'.$this->seenIn[5]['logo']['name'] ?>"> <?php } ?>
+										<div class="clear"></div>
+				                        <input type="file" onchange="checkFileType(event,'asSeenIn')" style="margin-top: 9px;" class="span3" name="image-6" >
+				                        <div class="mainpage-content-right-inner-right-other-as-seen"></div>
+				                        <div>
+											<input type="text" placeholder="<?php echo $this->translate("ALT text")?>" name="alt-6"  value="<?php if(@$this->seenIn[5]['altText'] != ''){ echo @$this->seenIn[5]['altText']; } ?>" 	class="span3">
+				                        </div>
+									</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="mainpage-content-colorbox">
+						<button id="updateseenIdButton" type="submit" class="btn btn-large btn-primary fl" value="asSeenIn" name="form">SAVE &amp; UPDATE</button>
+						<a onclick="cancelHomePage();" class="fl m10" href="javascript:;"><strong>CANCEL</strong></a>
+					</div>
+
+				</form>
+			</div>
+
+
+<?php if($this->rights['rights'] ==  1 ) : ?>
+	<div class="mainpage-content">
+		<form name="aboutForm" method="post">
+			<div class="mainpage-content-line mb10">
+				<div class="mainpage-content-left">
+					<h3>
+						<strong><?php echo $this->translate('About'); ?></strong>
+					</h3>
+				</div>
+				<div class="mainpage-content-right">&nbsp;</div>
+			</div>
+
+<div id="multidiv" >
+
+		<?php
+			/* echo "<pre>";
+			print_r($this->about);
+			echo "</pre>"; */
+			$about = $this->about;
+			for($a=0;$a<count($about);$a++){
+		?>
+		<div id="multidivchild_<?php echo $a+1; ?>" >
+			<div class="clear"></div>
+			<div class="mainpage-content-left">
+				<label><strong><?php echo $this->translate('Tab'); ?> <?php echo $a+1; ?></strong></label>
+			</div>
+			<div class="clear"></div>
+
+			<div class="mainpage-content-line mb10">
+				<div class="mainpage-content-left">
+					<label><strong><?php echo $this->translate('Remove Tab'); ?></strong></label>
+				</div>
+				<div class="mainpage-content-right">
+					<div class="mainpage-content-right-inner-left-other">
+						<div data-toggle="buttons-checkbox" class="btn-group">
+							<button type="button" style="border-radius: 4px 4px 4px 4px;"
+							name="remove_tab" onclick="removetab(<?php echo $this->about[$a]['id']; ?>)" class="btn "><?php echo $this->translate('Remove'); ?></button>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="mainpage-content-line mb10">
+				<div class="mainpage-content-left">
+					<label><strong><?php echo $this->translate('Active'); ?></strong></label>
+				</div>
+				<div class="mainpage-content-right">
+					<div class="mainpage-content-right-inner-left-other">
+						<div data-toggle="buttons-checkbox" class="btn-group">
+							<input type="checkbox" checked="checked" class="display-none"
+								name="status[]"
+								value="<?php if(isset($this->about[$a]['status'])) echo @$this->about[$a]['status'] ? 1 : 0 ; ?>">
+							<button type="button" style="border-radius: 4px 0 0 4px;"
+								name="on" onclick="changeStatus(this)"
+								class="btn <?php if(isset($this->about[$a]['status'])){ if(@$this->about[$a]['status'] == '1'){ echo  "btn-primary"; } else{ echo ""; } } ?>"><?php echo $this->translate('On'); ?></button>
+							<button type="button" name="off" onclick="changeStatus(this)"
+								class="btn <?php if(isset($this->about[$a]['status'])){ if(@$this->about[$a]['status'] == '0'){ echo  "btn-primary"; } else{ echo ""; } } ?>"><?php echo $this->translate('Off'); ?></button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="mainpage-content-line mb10">
+				<div class="mainpage-content-left">
+					<label><strong><?php echo $this->translate('Title'); ?></strong></label>
+				</div>
+				<div class="mainpage-content-right">
+					<div class="mainpage-content-right-inner-right-other"></div>
+					<div class="mainpage-content-right-inner-left-other">
+						<input type="text" placeholder="<?php echo $this->translate('Title'); ?>" name="title[]"
+							class="span3 mbot"
+							value="<?php echo @$about[$a]['title']; ?>">
+					</div>
+				</div>
+			</div>
+
+			<div class="mainpage-content-line mb10">
+				<div class="mainpage-content-left">
+					<label><strong><?php echo $this->translate('Description'); ?></strong></label>
+				</div>
+				<div class="mainpage-content-right">
+					<div class="mainpage-content-line">
+						<div class="mainpage-content-line">
+							<div class="mainpage-content-right-inner-right-other"></div>
+							<div class="mainpage-content-right-inner-left-other">
+								<textarea name="content[]"  class="ckeditor"><?php echo @$about[$a]['content']; ?></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<?php  } ?>
+		</div>
+		<div class="mainpage-content-colorbox">
+			<input type="hidden" name="comnno" id="comnno" value="<?php echo @count($about); ?>">
+				<button name="form" value="about"
+					class="btn btn-large btn-primary fl"><?php echo $this->translate('SAVE & UPDATE'); ?></button>
+				<a href="javascript:;" class="fl m10" onclick="cancelHomePage();"><strong><?php echo $this->translate('CANCEL'); ?></strong></a>
+				<a href="javascript:;" style="float:right;margin-top: 15px;" onclick="getabouthtml()"><strong><?php echo $this->translate('+ Add another tab'); ?></strong></a>
+			</div>
+		<div class="clear"></div>
+		</form>
+
+</div>
+<?php endif; ?>
+<!-- /poststuff -->
+</div>

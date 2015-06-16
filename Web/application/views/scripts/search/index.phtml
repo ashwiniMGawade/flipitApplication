@@ -1,0 +1,70 @@
+<?php 
+$searchString = FrontEnd_Helper_viewHelper::__form('form_Results for'). " " . $this->searchedKeyword;
+$pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
+echo $pageHeader->getCategoryOrPageHeader(
+    $searchString,
+    $pageHeader->getCategoryOrPageHeaderImage($this->pageHeaderImage)
+);
+$partialViewPath = 'partials/';
+if(!empty($this->offers)):
+    $offers = '<header class="heading-box">
+            <h2>'.$this->translate('Offers matching search results').'</h2>
+        </header>';
+    $offers .= $this->partial(
+        $partialViewPath. '_offer.phtml',
+        array(
+            'offers' => $this->offers,
+            'offersType'=>'searchedOffers',
+            'shopName' => '',
+            'shop' => '',
+            'zendForm'=>''
+        )
+    );
+else :
+    $offers = '<div class="message">
+                <div class="holder">
+                    <span class="ico-warning"></span>
+                    <span class="text">
+                        <span>'.$this->translate('Sorry, no vouchercodes found with the search input').'!</span>
+                    </span>
+                </div>
+            </div>';
+    $offers .= $this->partial(
+        $partialViewPath. '_offer.phtml',
+        array(
+            'offers' => $this->top10Offers,
+            'offersType'=>'searchedOffers',
+            'shopName' => '',
+            'shop' => '',
+            'zendForm'=>''
+        )
+    );
+endif;
+
+$popularStoreHeaderText = count($this->offers)  == 0
+    ? $this->translate('Popular Stores') 
+    : $this->translate('Stores matching search result'); 
+$popularStores = '';
+if(count($this->popularStores)){
+    $popularStores = $this->partial(
+        $partialViewPath .'_popular-stores.phtml',
+        array(
+           'popularStores' => $this->popularStores,
+           'headerText' => $popularStoreHeaderText
+        )
+    );
+}
+?>
+<div class="row">
+    <div id="content" class="col-md-8 col-sm-8">
+        <?php echo $popularStores.$offers; ?>
+    </div>
+    <aside id="sidebar" class="col-md-4 col-sm-4"> 
+        <?php 
+        $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+        $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+        echo $this->esi($this->locale.'signup/signupwidget?shopId='
+            .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
+        ?>
+    </aside>
+</div>

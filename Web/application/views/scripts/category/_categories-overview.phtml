@@ -1,0 +1,58 @@
+<?php
+foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
+    if($categoryWithSpecialPage['totalCoupons'] >= 4) {
+    $featuredCategoryClass = '';
+    $featuredCategorySpan = '';
+    if(isset($categoryWithSpecialPage['logo'])) {
+        $featuredCategorySpan = '<span class="label">'.$this->translate('special').'</span>';
+    }
+    $categoryImage = 
+    	isset($categoryWithSpecialPage['categoryicon']) 
+    	? $categoryWithSpecialPage['categoryicon'] 
+    	: $categoryWithSpecialPage['logo'];
+
+    if (
+        isset($categoryWithSpecialPage['featured_category']) 
+        && $categoryWithSpecialPage['featured_category'] != ''
+        && $categoryWithSpecialPage['featured_category'] != '0'
+    ) {
+        $featuredCategoryClass = "box-top";
+        $categoryImage =
+           isset($categoryWithSpecialPage['categoryFeaturedImage']) 
+           ? $categoryWithSpecialPage['categoryFeaturedImage'] 
+           : $categoryWithSpecialPage['categoryicon'];
+    }
+    
+    $categoryImageSource = '';
+    if(isset($categoryImage['path'])) { 
+        $categoryImageSource = PUBLIC_PATH_CDN.$categoryImage['path']."".$categoryImage['name'];
+    }
+    ?>
+    <article class="box <?php echo $featuredCategoryClass; ?>">
+        <?php 
+        $permalink =
+            isset($categoryWithSpecialPage['categoryicon']) 
+            ? FrontEnd_Helper_viewHelper::__link('link_categorieen').'/'. $categoryWithSpecialPage['permaLink'] 
+            : $categoryWithSpecialPage['permaLink'];
+        ?>
+        <a title='<?php echo $categoryWithSpecialPage['name'];?>' href="<?php echo HTTP_PATH_LOCALE .  $permalink?>">
+            <div class="image">
+                <img src ="<?php echo $categoryImageSource; ?>" alt="<?php echo $categoryWithSpecialPage['name'];?>" title="<?php echo $categoryWithSpecialPage['name'];?>" />
+            </div>
+            <div class="text-box">
+                <span class="num"><?php echo $categoryWithSpecialPage['totalCoupons']; ?></span>
+                <span><?php echo FrontEnd_Helper_viewHelper::__form('form_Coupons inside'); ?></span>
+            </div>
+            <div class="caption">
+                <?php echo $featuredCategorySpan; 
+                 $title = mb_strlen($categoryWithSpecialPage['name']) > 50 ?
+                    mb_substr($categoryWithSpecialPage['name'], 0, 50).'..' :
+                    $categoryWithSpecialPage['name'];
+                ?>
+                <strong><?php echo $title; ?></strong>
+            </div>
+        </a>
+    </article>
+    <?php
+}
+}

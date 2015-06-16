@@ -1,0 +1,88 @@
+<?php
+$websiteName = FrontEnd_Helper_viewHelper::getWebsiteName(LOCALE);
+$publicPath = HTTP_PATH.'public/images/front_end/';
+$logo = '';
+?>
+<table width="100%" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+        <td bgcolor="#0077cc">
+            <table width="600" align="center" bgcolor="#0077cc" cellpadding="0" cellspacing="0"
+                style="background:url(<?php
+            echo LOCALE != '' ? $publicPath.'emails/stamp_01.jpg' : $publicPath.'emails/stamp_01-kc.jpg';
+            ?>) no-repeat right bottom;">
+                <tr><td colspan="2" height="22"></td></tr>
+                <tr>
+                    <td width="205"></td>
+                    <td width="431">
+                    </td>
+                </tr>
+                <tr><td colspan="2" height="20"></td></tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td bgcolor="#ffffff" style="border:1px solid #e4e4e4; border-radius:5px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td style="padding:28px 10px 30px 29px; border-bottom:1px solid #eaeaea;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tbody><tr><td height="36"></td></tr>
+                        <tr>
+                            <td style="padding:0 0 21px; font:14px/17px Arial, Helvetica, sans-serif; color:#32383e;">
+                                <?php echo FrontEnd_Helper_viewHelper::__email('email_Dear KC/ Flipit admin,'); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 21px; font:14px/17px Arial, Helvetica, sans-serif; color:#32383e;">
+                            <?php 
+                                echo FrontEnd_Helper_viewHelper::__email(
+                                'email_The contact form is filled with the following data:'); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 21px; font:14px/17px Arial, Helvetica, sans-serif; color:#32383e;">
+                                <?php 
+                                        echo FrontEnd_Helper_viewHelper::__email('email_Visitor Name:').' '.$this->name; 
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 21px; font:14px/17px Arial, Helvetica, sans-serif; color:#32383e;">
+                                <?php 
+                                    echo FrontEnd_Helper_viewHelper::__email('email_From email:').' '.$this->email; 
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 21px; font:14px/17px Arial, Helvetica, sans-serif; color:#32383e;">
+                                <?php 
+                                    echo FrontEnd_Helper_viewHelper::__email('email_Subject:').' '.$this->subject; 
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 21px; font:14px/17px Arial, Helvetica, sans-serif; color:#32383e;">
+                                <?php 
+                                    echo FrontEnd_Helper_viewHelper::__email('email_Message:').' '.$this->message; 
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 21px; font:14px/17px Arial, Helvetica, sans-serif; color:#32383e;">
+                                <?php echo FrontEnd_Helper_viewHelper::__email('email_Have a great day,'); ?>
+                            </td>
+                        </tr>
+                         <tr>
+                            <td style="padding:0 0 21px; font:14px/17px Arial, Helvetica, sans-serif; color:#32383e;">
+                                <?php echo FrontEnd_Helper_viewHelper::__email('email_Tech team!'); ?>
+                            </td>
+                        </tr>
+                        <tr><td height="36"></td></tr>
+                        </tbody>
+                    </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>

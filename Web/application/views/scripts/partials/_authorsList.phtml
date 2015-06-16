@@ -1,0 +1,40 @@
+<div class="col-md-8 col-sm-8" id="content">
+    <section class="section">
+        <ul class="authors">
+<?php
+foreach ($this->authors as $author) :
+    $authorPicture = 
+    !empty($author['path'])
+    ? HTTP_PATH_CDN.ltrim($author['path'], "/")."thum_large_widget_"
+    .$author['name']
+    : '';
+    ?>
+            <li>
+                <a 
+                    href="<?php echo HTTP_PATH_LOCALE
+                    .FrontEnd_Helper_viewHelper::__link('link_redactie') .'/'
+                    . strtolower($author['slug']); ?>"
+                    style="height: 275px;" class="same-height-left">
+                    <h2>
+                        <?php 
+                            $authorName = FrontEnd_Helper_AuthorPartialFunctions::
+                                getAuthorName($author['firstName'], $author['lastName']);
+                            echo $authorName;
+                        ?>
+                    </h2>
+                    <img width="87" height="87"
+                    alt="<?php echo isset($author['name']) ? $author['name'] : '';?>" 
+                    src="<?php echo $authorPicture;?>" class="photo-image" title="<?php echo isset($author['name']) ? $author['name'] : '';?>" >
+                    <strong class="status"><?php echo $this->translate('deal spotter');?></strong>
+                    <span>
+                    <?php echo $author['popularKortingscode'];?><?php echo ' ' . $this->translate('offers');?>
+                    </span>
+                </a>
+            </li>
+    <?php 
+endforeach;
+?>
+        </ul>
+<?php echo $this->paginationControl($this->authors, 'Sliding', '/partials/_pagination.phtml');?>
+    </section>
+</div>

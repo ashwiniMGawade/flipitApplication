@@ -1,0 +1,67 @@
+<!-- start affiliate network list -->
+<?php 
+  $this->headTitle()->append($this->translate('Affilate Network'));
+  $u = Auth_StaffAdapter::getIdentity();
+  $role =  $u->users->id;
+  if($role=='1' || $role=='2')
+  {
+  $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.dataTables.min.js");
+  $this->headScript()->appendFile(PUBLIC_PATH . "/js/dataTableComman.js");
+  $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+  $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+  $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/back_end/affiliateJs.js" );
+?>
+<div id="affiliateNetworkList">
+   <div class="wrap columns-2">
+		
+		<?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
+		<br><div class ="mainpage-content-colorbox success">
+		<?php if($this->messageSuccess!=''){?>
+		<span class="success"><?php echo $this->messageSuccess; ?></span>
+		<?php }?>
+		<?php if($this->messageError!=''){?>
+		<span class="error"><?php echo $this->messageError; ?></span>
+		<?php } ?>
+		</div>
+		<?php 
+		}?> 
+		 
+       <h1><?php echo $this->translate('Affiliate Networks'); ?> 
+     <button class="btn ml10" id="" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/affiliate/addaffiliate'">
+     <?php echo $this->translate('Add new network'); ?>
+     </button>
+     </h1>
+     
+         <form class="well form-search searchbarbox" name="searchform" id="searchform" >
+           <div class="mainpage-content-searchbart" style="width: 100%; float:left;">
+            <div class="mainpage-content-right-searchbar">
+             <button type='button' class="btn btn-primary" id="searchByAff"><?php echo $this->translate('Search'); ?></button></div>
+              <div class="mainpage-content-right-inner-left-searchbar">
+                <input type="text" class="span3" placeholder="search" id="searchNetwork" name="searchNetwork">
+              </div>                        
+           </div>
+          </form>
+            
+         
+        <table class="table table-bordered table-striped" id="affiliateNetworkListTbl" cellpadding="0" cellspacing="0" >
+         <thead>
+	            <tr>
+	             	<th><?php echo $this->translate('id');?></th>
+	                <th style="width:500px!important"><?php echo $this->translate('Name');?></th>
+	                <th style="width:200px!important"><?php echo $this->translate('Subid ');?></th> 
+	            </tr>
+	        </thead>
+			    	
+    </table>
+    </div>
+    </div>
+ <!-- end affiliate network -->
+<?php 
+}
+?> 
+ 
+ 
+ 
+ 
+ 
+ 

@@ -1,0 +1,9 @@
+<body>
+<p><?php 
+	echo FrontEnd_Helper_viewHelper::__email('email_Hi') .' ' .$this->name; ?>,</p>
+<p><?php echo FrontEnd_Helper_viewHelper::__email('email_Your password has been reset as per your request on our website');?><?php echo $this->host; ?></p>
+<p><?php echo FrontEnd_Helper_viewHelper::__email('email_Your new password is:');?><strong><?php echo $this->pwd; ?></strong> </p>
+<br/>
+<p><?php echo FrontEnd_Helper_viewHelper::__email('email_Regards');?><br/><?php echo FrontEnd_Helper_viewHelper::__email('email_Kortingscode Team')?></p>
+
+</body>

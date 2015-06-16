@@ -1,0 +1,71 @@
+<?php
+ if ($this->pageCssClass == 'contact-page') {
+    $this->minifyHeadScript()->appendFile("/public/js/front_end/contactForm.js");?>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+<?php }
+if (isset($this->successMessage) && $this->successMessage!='') : ?>
+    <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
+        <span class='glyphicon glyphicon-warning-sign'></span>
+        <strong><?php echo $this->successMessage;?></strong>
+    </div>
+    <?php 
+endif;
+
+if ($this->pageMode == true) {
+    $partialsViewPath = 'partials/';
+    if ($this->pageCssClass == 'faq-page') {
+        $this->minifyHeadScript()->appendFile("/public/js/front_end/faq.js");
+        $pageContent =  stripslashes($this->page['content']);                  
+    } else {
+        $internalDivClass = $this->pageCssClass == 'contact-page' ? '' : 'inner-section-wrapper';
+        $pageContent =
+            '<div class="section">
+                <div class="'.$internalDivClass.'">'
+                    .stripslashes($this->page['content']) 
+                .'</div>
+            </div>';
+    }
+    if ($this->page['pageType'] == "offer") {
+        
+        if ($this->offercount > 0) {
+            $pageContent = $this->partial(
+                $partialsViewPath.'_offer.phtml',
+                array(
+                   'offers'=> $this->offersPaginator,
+                   'offersType'=>'offerPage',
+                   'shopName'=> '',
+                   'shop'=>'',
+                   'zendForm'=>$this->form,
+                   'widgetPosition'=>$this->widgetPosition
+               )
+            );
+        } else {
+            $pageContent ='<div class = "no-record">' . $this->translate('No record found') .'</div>';
+        }
+    }
+
+    $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+    $imagePath = isset($this->pageHeaderImage['path']) ? $this->pageHeaderImage['path'] : '';
+    $imageName = isset($this->pageHeaderImage['name']) ? $this->pageHeaderImage['name'] : '';
+    $pageImagePath = PUBLIC_PATH_CDN.$imagePath.$imageName;
+    $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
+    echo $pageHeader->getCategoryOrPageHeader($this->page['pageTitle'], $pageImagePath, 'info');?>
+    <div class="row">
+        <div id="content" class="col-md-8 col-sm-8">
+            <?php echo $pageContent; ?>
+        </div>
+        <aside class="col-md-4 col-sm-4" id="sidebar"> 
+            <?php
+            $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+            if ($this->pageCssClass == 'faq-page') {
+                echo $frontendSidebarHelper->sidebarWidgets('faq-pages', $this);
+            } else if ($this->page['pageType'] == "offer") {
+                echo $frontendSidebarHelper->sidebarWidgets('special-page', $this);
+            } else {
+                echo $frontendSidebarHelper->sidebarWidgets('info-pages', $this);
+            }
+            ?>  
+        </aside> 
+    </div>
+<?php 
+}

@@ -1,0 +1,28 @@
+<?php 
+$userDetails = $this->userDetails;
+$authorName = FrontEnd_Helper_AuthorPartialFunctions::
+    getAuthorName($userDetails['firstName'], $userDetails['lastName']);
+$profileLink = $this->profileLink;
+?>
+<section class="about-box">
+    <div class="photo">
+        <span class="name"><?php echo $authorName; ?></span>
+            <?php
+                $authorImage = HTTP_PATH_CDN . ltrim($userDetails['profileimage']['path'], "/")
+                .'thum_medium_'.$userDetails['profileimage']['name'];
+            ?>
+        <img width="120" height="120" alt="<?php echo $authorName; ?>" src="<?php echo $authorImage; ?>" title="<?php echo $authorName; ?>">
+    </div>
+    <div class="text-box">
+        <p>
+            <strong><?php echo $this->translate('About').' '.$authorName; ?></strong>, 
+            <?php echo strlen($userDetails['mainText']) >= 250 ? mb_substr($userDetails['mainText'], 0, 250).'...' :
+                $userDetails['mainText'];?>
+        </p>
+        <p>
+            <a href="<?php echo $profileLink; ?>">
+                <?php echo $this->translate('Read more about'). ' '.$authorName; ?>
+            </a>
+        </p>
+    </div>
+</section>

@@ -1,0 +1,6 @@
+<footer class="bottom">
+    <h2><?php echo $this->translate('Favorite stores of') . " " . $this->authorFirstName;?></h2>
+    <ul class="shops">
+    <?php echo FrontEnd_Helper_AuthorPartialFunctions::getShopLogos($this->authorFavouriteShops)?>
+    </ul>
+</footer>

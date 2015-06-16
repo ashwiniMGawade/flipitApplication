@@ -1,0 +1,30 @@
+
+<?php 
+ $this->headTitle()->append($this->translate('Add Chain'));
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/chain-list.js");
+ 
+?>
+
+<div class="wrap columns-2" id="addNewKeyword">
+   <h1><?php echo $this->translate('Add Chain'); ?><button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/chain'"><?php echo $this->translate('Cancel'); ?></button></h1>
+        <form method="POST"  name="addChainForm" id="addChainForm">
+           <div class="mainpage-content">
+               <div class="mainpage-content-line">
+                   <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Name'); ?></strong></label></div>
+                       <div class="mainpage-content-right">
+                         <div class="mainpage-content-right-inner-right-other" style="width:250px;"></div>
+                          <div class="mainpage-content-right-inner-left-other">
+                          <input type="text" class="span3" placeholder="<?php echo $this->translate('chain name'); ?>"  name="name" id="name" ></div>
+                          </div>
+                        </div>
+                        
+                  
+                </div>
+               <div class="mainpage-content-colorbox">
+            	<button type="submit" id="createKeyword" class="btn btn-large btn-primary fl"><?php echo $this->translate('CREATE'); ?></button>
+                <a href="javascript:void(0);" onclick="window.location.href='<?php echo HTTP_PATH ;?>admin/chain'" class="fl m10" ><strong><?php echo $this->translate('CANCEL'); ?></strong></a>
+            </div>
+            <!-- /poststuff -->
+            </form>
+</div>

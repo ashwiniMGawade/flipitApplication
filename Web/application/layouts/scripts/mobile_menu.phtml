@@ -1,0 +1,21 @@
+<nav class="nav-mobile">
+    <ul>
+        <li>
+            <ul>
+                <li>
+                    <a href="'. HTTP_PATH_LOCALE.'"><?php echo $this->translate('Home'); ?></a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <strong class="title"><?php echo $this->translate('Account') ;?></strong>
+            <?php
+            if(Auth_VisitorAdapter::hasIdentity()) :
+                echo $this->render('partials/_user_nav_logged_in.phtml');
+            else :
+                echo $this->render('partials/_user_nav.phtml');
+            endif;
+            ?>
+        </li>
+    </ul>
+</nav>

@@ -1,0 +1,48 @@
+<?php
+foreach ($this->storesInformation as $storesKey => $stores) :
+    if ($stores != null) :
+        $alphabetName = $storesKey =="abc" ? "0-9" : $storesKey;
+?>
+    <div class="block" id="<?php echo strtolower($alphabetName);?>">
+        <h3><?php echo $alphabetName;?></h3>
+        <div class="row">
+        <?php
+            $totolStoredAsPerKey = (count($this->storesInformation[$storesKey]) / 3);
+            $numberOfstores = array_chunk($this->storesInformation[$storesKey], $totolStoredAsPerKey + 1);
+            foreach ($numberOfstores as $storesIndex => $storeForOneDiv):
+        ?>
+            <div class="box col-md-4 col-sm-4">
+                <ul class="shop-name">
+        <?php
+                    foreach ($storeForOneDiv as $store):
+        ?>
+                        <li>
+                            <a href="<?php echo HTTP_PATH_LOCALE.$store['permaLink'];?>">
+                            <?php echo $store['name'];?>
+                            </a>
+                        </li>
+        <?php
+                    endforeach;
+        ?>    
+                </ul>
+        <?php        
+                if(count($numberOfstores) == ($storesIndex + 1 )) :
+        ?>        
+                    <a href="#" class="btn-top"><?php echo $this->translate('Back to top');?></a>
+        <?php
+                endif;
+        ?>    
+            </div>
+        <?php   
+            endforeach;
+        ?>    
+        </div>
+    </div>
+
+<?php    
+    endif;
+endforeach;
+?>
+<div class="scroll-to-top">
+</div>
+

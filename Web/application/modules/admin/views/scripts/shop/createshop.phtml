@@ -1,0 +1,924 @@
+<?php
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/datepicker.css");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/timepicker.css");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/create-shop.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.textareaCounter.plugin.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
+$this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/date.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-datepicker.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-timepicker.js");
+
+$howToIntroductionText = '';
+    $howToIntroductionText = $this->partial(
+        'shop/_how-to-introduction-text.phtml',
+        array('howToIntroductionText'=> '')
+    );
+?>
+<?php echo $this->headTitle()->append('Create Shop');?>
+<script type="text/javascript">
+        CKEDITOR.replace( 'content_1',
+        {
+            customConfig : 'config.js' ,  
+            toolbar :  'BasicToolbar'  
+        });
+</script>
+<div id="imbullbody-content" style="overflow: hidden;">
+       
+ 	<!-- Create shops Start -->
+    
+   <div id="createNewShop">        
+      
+      <div class="wrap columns-2">
+         
+          <h1><?php echo $this->translate('Create Shop'); ?><button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/shop'"><?php echo $this->translate('Cancel'); ?></button><button type="button" class="btn btn-primary ml10" id='prefillData'><?php echo $this->translate('Pre-fill'); ?></button></h1>
+
+      <form method="POST"  enctype=multipart/form-data name="createShop" id="createShop">
+
+            <div class="mainpage-content">
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Shop Name'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                              <input type="text" class="span3"  id="shopName" name="shopName" placeholder=<?php echo $this->translate('Shop Name'); ?> style="margin-bottom: 0;">
+                            <span id="shopNameLeft" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop Name length 0 characters'); ?></span>
+						</div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Navigational URL'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                    	<div class="mainpage-content-right-inner-left"><label id="navigationalSite"><?php echo $this->translate('http://www.kortingscode.nl/'); ?></label></div>
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-right-full">
+                        <input type="text" class="span3" placeholder="<?php echo $this->translate('Navigational URL'); ?>" name="shopNavUrl" id="shopNavUrl"></div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Overwrite title'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                        	<input type="text" class="span3 ignore" placeholder="<?php echo $this->translate('Overwrite Title'); ?>" name="shopOverwriteTitle" id="shopOverwriteTitle" style="margin-bottom: 0;">
+                        	<span id="shopOverwriteTitleLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
+                        </div>
+                    </div>    
+                </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta Description'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+	                        <textarea class="input-xlarge mbot bbot ignore" id="shopMetaDescription" name="shopMetaDescription" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"></textarea>
+                            <span id="metaTextLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Title'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+	                        <input type="text" class="span3 mbot bbot"  name="shopTitle" id="shopTitle" placeholder="<?php echo $this->translate('Shop Title'); ?>">
+	                   		<input type="text" id="shopTitleLeft" class="input-xlarge  btop word-count" value="<?php echo $this->translate('Shop title length 0 characters');?>" placeholder="<?php echo $this->translate('0 characters');?>" disabled="disabled">
+	                   		
+                        </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Sub-title'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                        
+                        	<input type="text" class="span3 mbot bbot" name="shopSubTitle" id="shopSubTitle" placeholder="<?php echo $this->translate('Shop Sub-Title'); ?>">
+                         	<input type="text" id="shopSubTitleLeft" class="input-xlarge  btop word-count" value="<?php echo $this->translate('Shop sub-title length 0 characters');?>"   placeholder="<?php echo $this->translate('0 characters');?>" disabled="disabled">
+                        </div>
+                    </div>
+                </div>
+				<div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Custom Header Text'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                        
+                        	<textarea class="input-xlarge mbot bbot ignore" id="shopCustomHeader" name="shopCustomHeader" placeholder="<?php echo $this->translate ( 'Custom Header Text' );?>" rows="3"></textarea>
+							<input type="text" disabled="disabled" value="<?php echo $this->translate('Shop custom header length 0 characters');?>" id="shopCustomHeaderLeft" class="input-xlarge disabled btop word-count">
+                   		</div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="mainpage-content">
+            	<div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Notes'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                        	
+                        	<textarea class="input-xlarge mbot bbot ignore" id="shopNotes" placeholder="<?php echo $this->translate('Short note about the shop'); ?>" rows="3" name="shopNotes" ></textarea>
+                    		<input type="text" class="input-xlarge disabled btop word-count"  id="shopNotesLeft" value="<?php echo $this->translate('Short note about the shop length 0 characters');?>" placeholder="Word Count: " disabled="disabled">
+                         </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Shop Editor Backend'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                           <select class="mainpage-content-right-select"  id="selecteditors" name="selecteditors" onChange="getMangerName($(this).find(':selected').text(),4)">
+                           	<option default="default" value=""><?php echo $this->translate('None'); ?></option>
+                            <?php for($i=0;$i<count($this->MangersList['editors']);$i++){?>
+                            <option value="<?php echo $this->MangersList['editors'][$i]['id'];?>"><?php echo ucfirst( $this->MangersList['editors'][$i]['fname']. " " . $this->MangersList['editors'][$i]['lname']);?></option>
+                            
+                            <?php }?>
+                          </select>
+                       </div>   
+                  </div>
+                </div>
+            </div>
+            
+            <div class="mainpage-content position-r">
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Category'); ?></strong></label></div>
+                    
+                    <div class="mainpage-content-right">
+                      <div class="category-error"></div>
+                      <div class="categories" style="position:relative;" name="category">
+             	 <?php  for($i = 0;  $i < count($this->categoryList) ; $i++ ){ ?>
+              	<div class="square-btn-offer">
+			              	<input type="checkbox" value="<?php echo $this->categoryList[$i][0]['id']; ?>" class="" name="selectedCategoryies[]" id="category-<?php echo $this->categoryList[$i][0]['id']; ?>" />
+			             	<?php  if(trim($this->categoryList[$i][0]['name'])!='') : 
+			             	
+			             	
+			             	$categoryIconPath = '';
+			             	
+			             	
+			             	$icons = $this->categoryList[$i][0]['categoryicon'];
+			             	
+			             	
+			             	# check an icon is available of not
+			             	if(file_exists(ROOT_PATH.$icons['path']."thum_medium_".$icons['name'])){
+			             		$categoryIconPath = PUBLIC_PATH_LOCALE.$icons['path']."thum_medium_".$icons['name'];
+			             	}else {
+			             		$categoryIconPath = HTTP_PATH ."public/images/NoImage/NoImage50x50.jpg";
+			             	}
+			             	
+			             	?>
+			                      	<button type="button" name="selectCategory" title="<?php echo $this->categoryList[$i][0]['name'];?>" class="btn square-btn" id="categoryBtn-<?php echo $this->categoryList[$i][0]['id'];?>" onClick="addCategory(event,'<?php echo $this->categoryList[$i][0]['id']; ?>')">
+		                      			<img onclick="$('#categoryBtn-<?php echo $this->categoryList[$i][0]['id'];?>').click();" alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
+			                      	</button>
+			                      	<div class="clear"></div>
+							        	 <span class="image-description-text">	  			   
+			            					 <?php echo strlen($this->categoryList[$i][0]['name']) < 20 ? $this->categoryList[$i][0]['name'] : substr($this->categoryList[$i][0]['name'],0,20).'..'; ?>			    
+					  					 </span>
+			                      	<?php endif; ?>
+			                      	
+			                      	</div>
+	                        <?php } ?> 
+                      </div>
+                  </div>
+                  
+                </div>
+            </div>
+            <br>
+            <div class="mainpage-content">
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><strong><?php echo $this->translate("add reasons to buy"); ?></strong></div>
+                    <div class="mainpage-content-right">
+                        <div class="btn-group" data-toggle="buttons-checkbox">
+                            <button type="button" class="btn" onClick="setOnOff(event,'reasons','on');$('#buyReasons').removeClass('display-none');"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button id="off" type="button" class="btn btn-primary default" onClick="setOnOff(event,'reasons','off');$('#buyReasons').addClass('display-none')"><?php echo $this->translate('No'); ?></button>
+                          </div>
+                    </div>          
+                </div>
+            </div>
+
+            <div class="mainpage-content" id = "buyReasons" style = "display:none;">
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("6 Reasons to Choose Shop");?></strong></label>
+                    </div>
+                </div>
+                <br/>
+                <div id="reasons">
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <input id="reasontitle1" class="span3 ignore" style="margin-bottom: 0;" type="text" placeholder="<?php echo $this->translate('Shop Reason Title');?>" name="reasontitle1">
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">      
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Sub-Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <textarea id="reasonsubtitle1" class="input-xlarge mbot bbot ignore" name="reasonsubtitle1" rows="3" placeholder="<?php echo $this->translate('Shop Reason Sub Title');?>"></textarea>
+                                <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
+                                <span id="reasonsubtitle1count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
+                            </div>
+                        </div>
+                    </div>    
+
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <input id="reasontitle2" class="span3 ignore" style="margin-bottom: 0;" type="text" placeholder="<?php echo $this->translate('Shop Reason Title');?>" name="reasontitle2">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">  
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Sub-Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <textarea id="reasonsubtitle2" class="input-xlarge mbot bbot ignore" name="reasonsubtitle2" rows="3" placeholder="<?php echo $this->translate('Shop Reason Sub Title');?>"></textarea>
+                                <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
+                                <span id="reasonsubtitle2count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-right">
+                            <div class="coupon-sidebar-content-box-shop mb10">
+                                <button class="btn down" id="addreason1" href="#" type="button"><?php echo $this->translate('Add More Reason');?></button>
+                                <button class="btn" href="#" type="button" id="deletereason"><?php echo $this->translate('Delete Reasons');?></button>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+                <div id="reasons3" style= "display:none;">
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <input id="reasontitle3" class="span3 ignore" style="margin-bottom: 0;" type="text" placeholder="<?php echo $this->translate('Shop Reason Title');?>" name="reasontitle3">
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line"> 
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Sub-Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <textarea id="reasonsubtitle3" class="input-xlarge mbot bbot ignore" name="reasonsubtitle3" rows="3" placeholder="<?php echo $this->translate('Shop Reason Sub Title');?>"></textarea>
+                                <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
+                                <span id="reasonsubtitle3count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <input id="reasontitle4" class="span3 ignore" style="margin-bottom: 0;" type="text" placeholder="<?php echo $this->translate('Shop Reason Title');?>" name="reasontitle4">
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line"> 
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Sub-Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <textarea id="reasonsubtitle4" class="input-xlarge mbot bbot ignore" name="reasonsubtitle4" rows="3" placeholder="<?php echo $this->translate('Shop Reason Sub Title');?>"></textarea>
+                                <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
+                                <span id="reasonsubtitle4count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-right">
+                            <div class="coupon-sidebar-content-box-shop mb10">
+                                <button class="btn down" id="addreason2" href="#" type="button"><?php echo $this->translate('Add More Reason');?></button>
+                                <button class="btn" href="#" type="button" id="deletereason1"><?php echo $this->translate('Delete Reasons');?></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="reasons4" style= "display:none;">
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <input id="reasontitle5" class="span3 ignore" style="margin-bottom: 0;" type="text" placeholder="<?php echo $this->translate('Shop Reason Title');?>" name="reasontitle5">
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line"> 
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Sub-Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <textarea id="reasonsubtitle5" class="input-xlarge mbot bbot ignore" name="reasonsubtitle5" rows="3" placeholder="<?php echo $this->translate('Shop Reason Sub Title');?>"></textarea>
+                                <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
+                                <span id="reasonsubtitle5count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <input id="reasontitle6" class="span3 ignore" style="margin-bottom: 0;" type="text" placeholder="<?php echo $this->translate('Shop Reason Title');?>" name="reasontitle6">
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line"> 
+                        <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate("Sub-Title");?></strong></label>
+                        </div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <textarea id="reasonsubtitle6" class="input-xlarge mbot bbot ignore" name="reasonsubtitle6" rows="3" placeholder="<?php echo $this->translate('Shop Reason Sub Title');?>"></textarea>
+                                <div class="charleft originalTextareaInfo" style="display: none; width: 669px;"></div>
+                                <span id="reasonsubtitle6count" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop reason sub title length 512 characters remaining');?></span>
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-right">
+                            <div class="coupon-sidebar-content-box-shop mb10">
+                                <button class="btn" href="#" type="button" onclick="deleteShopReason(,<?php echo $this->shopReasons[0]['shopid'];?>)" id="deletereason2"><?php echo $this->translate('Delete Reasons');?></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+
+            </div>
+
+             <div class="mainpage-content">
+            	<div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Similar Shops'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other-shop">
+                            <div style="overflow-y:scroll;min-height:159px;width:160px !important;" class="sidebar-content-box-left">
+                                <ul id="similarshopListul-li">                    
+                                </ul> 
+                            </div>      
+                             <input type="hidden" name="selectedShop" id="selectedShop" value="" />
+                             <input type="hidden" name="similarstoreord" id="similarstoreord" value="" />
+                              <div class="coupon-sidebar-outer-shop">
+                                <div class="coupon-sidebar-heading-shop">
+            	                    <input type="text" class="input-medium search-query" id="searchsimilarshop" style="width:295px !important;">
+                                </div>
+                                <div class="coupon-sidebar-content-box-shop mb10">
+                                    <button class="btn up" id="moveupBtnbutton" type="button" href="#">MOVE UP</button>
+                                    <button class="btn" type="button" href="#" id="addsimilarstorebtn" >ADD SIMILAR SHOP</button>
+                                </div>
+                                
+                                 <div class="coupon-sidebar-content-box-shop mb10">
+                                    <button class="btn down" id="movedownBtnbutton" href="#" type="button">MOVE DOWN</button>
+                                    <button class="btn" href="#" type="button" id="deletesimistorebtn">DELETE</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display similar shops");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onClick="setOnOff(event,'similarShops','on');" class="btn" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button onClick="setOnOff(event,'similarShops','off');" class="btn btn-primary default" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
+                            <input type="hidden" value="0" id="similarShops" name="similarShops" style="display:none;"> 
+                          </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Future Code");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onClick="setOnOff(event,'futurecode','on');" class="btn" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button onClick="setOnOff(event,'futurecode','off');" class="btn btn-primary default future-code-radius" type="button"><?php echo $this->translate('No'); ?></button>
+                            <input type="hidden" value="0" id="futurecode" name="futurecode" style="display:none;"> 
+                          </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left">
+                        <label>
+                            <strong><?php echo $this->translate('backend_Featured Text'); ?></strong>
+                        </label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input value="" type="text" class="span3"
+                                placeholder="<?php echo $this->translate('backend_Featured Text'); ?>" name="featuredtext">
+                        </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left">
+                        <label>
+                            <strong><?php echo $this->translate('backend_Featured Text Date'); ?></strong>
+                        </label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <div data-date-format="dd-mm-yyyy" data-date="<?php echo date('d-m-Y');?>" id="featuredDatePicker"
+                                class="input-append date">
+                                <input readonly="readonly" type="text"  value=""
+                                placeholder="<?php echo $this->translate('Sunday, April 1');?>"
+                                class="span2 ignore2 date-time-cusor-style" id="featuredtextdate"
+                                name="featuredtextdate">
+                                <span class="add-on"><i class="icon-th"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="mainpage-content">
+            	
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Affiliate network'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                           <select class="mainpage-content-right-select ignore" id="select01" name="shopAffiliateNetwork">
+                           	<option default="default" value=""><?php echo $this->translate('None'); ?></option>
+                           <?php for($i=0;$i<count($this->affiliateNetworkList);$i++){
+                             if(trim( $this->affiliateNetworkList[$i]['name'])!=''){
+                           	?>
+                            <option value="<?php echo $this->affiliateNetworkList[$i]['id']; ?>">
+                            <?php echo $this->affiliateNetworkList[$i]['name']; ?>
+                            </option>
+                            <?php }
+                           } ?>
+                          </select>
+                        </div>
+                  </div>
+                </div>
+  <?php /* <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Deeplinking code'); ?></strong></label></div>
+                    <div class="mainpage-content-right"><div class="mainpage-content-right-inner-left"><div class="btn-group" data-toggle="buttons-checkbox">
+                            <button type="button" class="btn" onClick="setOnOff(event,'deepLink','on')"><?php echo $this->translate('On'); ?></button>                     
+                            <button type="button" class="btn btn-primary default" onClick="setOnOff(event,'deepLink','off')"><?php echo $this->translate('Off'); ?></button>
+                          </div></div>
+                          <div class="mainpage-content-right-inner-right-other"></div>
+                          <div class="mainpage-content-right-inner-right-full"><input type="text" disabled="disabled" id = "shopDeepLinkUrl" name="shopDeepLinkUrl" class="span3" placeholder="<?php echo $this->translate('Deeplink URL'); ?>"></div></div>
+                </div>*/ ?>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Ref URL'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                        	<input type="text" class="span3" placeholder="<?php echo $this->translate('Ref URL'); ?>" name="shopRefUrl">
+                        </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Actual URL'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                        	<input type="text" class="span3" placeholder="<?php echo $this->translate('Actual URL'); ?>" name="shopActualUrl">
+                        </div>
+                     </div>
+                </div>  
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Money shop'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                    	<div class="btn-group" data-toggle="buttons-checkbox">
+                            <button type="button" class="btn btn-primary default" onClick="setOnOff(event,'affiliate','on')"><?php echo $this->translate('On'); ?></button>                     
+                            <button type="button" class="btn" onClick="setOnOff(event,'affiliate','off')"><?php echo $this->translate('Off'); ?></button>
+                          </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="mainpage-content">
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('Upload Logo'); ?></strong></label>
+                    </div>
+                    <div class="mainpage-content-right">
+                      	<div>
+                            <input data-max-size="2097152" type="file" name="logoFile"
+                            onchange="checkFileType(event)" class="ignore" />
+                        </div>
+                        <div>
+                        <?php echo $this->translate('Image Size: 300px x 150px (*.jpg or *.png file only)');?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          
+            <div class="mainpage-content">
+            	<div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Shoptext'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                        <textarea rows="3" id="shopDescription" name="shopDescription" placeholder="<?php echo $this->translate('Small description about the shop')?>" class="input-xlarge mbot bbot ignore word_count"></textarea>
+						<input type="text" class="input-xlarge disabled btop word-count"  id="shopDescription_count" disabled="disabled">
+                         <!--<textarea class="input-xlarge mbot bbot ignore"   id="shopDescription" name="shopDescription" placeholder="<?php //echo $this->translate('Small description about the shop.'); ?>" rows="3"></textarea>
+                         <input type="text" class="input-xlarge disabled btop word-count"  id="shopDescriptionLeft" value = "Characters Left: 150" placeholder="Word Count: 28" disabled="disabled">-->
+                         
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Allow user generated content");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onclick="usergenrated(event,'usergenrated','on')" class="btn" type="button"><?php echo $this->translate('On'); ?></button>                     
+                            <button onclick="usergenrated(event,'usergenrated','off')" class="btn btn-primary default" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('Off'); ?></button>
+                            <input type="checkbox" id="usergenratedchk" name="usergenratedchk" style="display:none;"> 
+                          </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display singup option");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                             <button type="button" class="btn" onClick="setOnOff(event,'signupOption','on');"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button type="button" class="btn btn-primary default" onClick="setOnOff(event,'signupOption','off');"><?php echo $this->translate('No'); ?></button> 
+                          </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Allow Discussions");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onclick="discussionCheck(event, 'on')" class="btn" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button onclick="discussionCheck(event, 'off')" class="btn btn-primary default" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
+                            <input type="checkbox" id="discussions" name="discussions" style="display:none;"> 
+                          </div>
+                    </div>
+                </div>
+                
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display chains");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                             <button type="button" class="btn" onClick="setOnOff(event,'showChains','on');"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button type="button" class="btn btn-primary default" onClick="setOnOff(event,'showChains','off');"><?php echo $this->translate('No'); ?></button> 
+                          </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php
+                         echo $this->translate("Strict Confirmation");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                             <button type="button" class="btn" onClick="setOnOff(event,'strictConfirmation','on');"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button type="button" class="btn btn-primary default" onClick="setOnOff(event,'strictConfirmation','off');"><?php echo $this->translate('No'); ?></button> 
+                          </div>
+                    </div>
+                </div>
+            </div>
+<!-- Start New changes Extra Shop properties --> 
+        <div class="mainpage-content">
+                
+            	<div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><strong><?php echo $this->translate("Extra options"); ?></strong></div>
+                    
+                    <div class="mainpage-content-right">
+                    	 <div class="mainpage-content-right-inner-left"><div data-toggle="buttons-checkbox" class="btn-group">
+                            <button class="btn" type="button" onClick="setOnOff(event,'displayExtraProperties','on'); $('div.extra-properties-btn-container,div.service-number-outer').removeClass('display-none');">On</button>                     
+                            <button class="btn btn-primary default" type="button" onClick="setOnOff(event,'displayExtraProperties','off'); $('div.extra-properties-btn-container,div.service-number-outer').addClass('display-none');">Off</button>
+                          </div></div>
+                          <div class="mainpage-content-right-inner-right-full">
+	                    	<div class="btn-group" data-toggle="buttons-checkbox">
+	                           <div class="extra-properties-btn-container display-none">
+		                            <button type="button" class="btn" onClick="setOnOff(event,'ideal','toggle-btn');"><?php echo $this->translate('Ideal'); ?></button>                     
+		                            <button type="button" class="btn" onClick="setOnOff(event,'qShops','toggle-btn');"><?php echo $this->translate('Qshops'); ?></button> 	
+		                            <button type="button" class="btn" onClick="setOnOff(event,'freeReturns','toggle-btn');"><?php echo $this->translate('Free returns'); ?></button>                     
+		                            <button type="button" class="btn" onClick="setOnOff(event,'pickupPoints','toggle-btn');"><?php echo $this->translate('Many pickup points'); ?></button>                     
+		                            <button type="button" class="btn" onClick="setOnOff(event,'mobileShop','toggle-btn');"><?php echo $this->translate('Mobile shop'); ?></button>                     
+		                            <button type="button" class="btn" onClick="setOnOff(event,'service','toggle-btn'); $('#serviceNumberContainer').hasClass('display-none') ?  $('#serviceNumberContainer').removeClass('display-none') :  $('#serviceNumberContainer').addClass('display-none') ; "><?php echo $this->translate('Service');?></button>                     
+	                           </div>
+	                          </div>
+	                              
+                          
+                          </div>
+                    </div>
+                               
+                </div>
+                <div class="service-number-outer">
+	                <div class="mainpage-content-right display-none" id="serviceNumberContainer">
+	                        <div class="mainpage-content-right-inner-right-other"></div>
+	                        <div class="mainpage-content-right-inner-left-other">
+	                        	<input type="text" class="span3"  placeholder="Phone number" maxlength="60" name="serviceNumber">
+	                        </div>
+	                     </div>
+	                </div>
+          </div>
+	<!--</div>-->   
+<!-- End New changes Extra Shop properties -->                
+            <div class="mainpage-content">
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('Light box first text'); ?></strong></label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" class="span3" 
+                            placeholder="<?php echo $this->translate('Light box first text'); ?>" 
+                            name="lightboxfirsttext">
+                        </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('Light box second text'); ?></strong></label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" class="span3"
+                            placeholder="<?php echo $this->translate('Light box second text'); ?>"
+                            name="lightboxsecondtext">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mainpage-content">
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php
+                         echo $this->translate("Show Shop Custom Text");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                             <button type="button" class="btn" onClick="setOnOff(event,'customText','on');">
+                             <?php echo $this->translate('Yes'); ?></button>                     
+                            <button type="button" class="btn btn-primary default" onClick="setOnOff(event,'customText','off');"><?php echo $this->translate('No'); ?></button>
+                            <input type="hidden" value="0" id="showcustomtext" name="showcustomtext" style="display:none;"> 
+                          </div>
+                    </div>
+                </div>
+                <div id="customText" class="mainpage-content-line mb10" style="display:none;">
+                    <div class="mainpage-content-left">
+                        <label>
+                            <strong><?php echo $this->translate('Shop Custom text'); ?></strong>
+                        </label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                        <textarea rows="3" id="shopCustomText" name="shopCustomText"
+                        placeholder="<?php echo $this->translate('Custom description about the shop')?>"
+                        class="input-xlarge mbot bbot ignore word_count"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div id="customtextposition" class="mainpage-content-line" style="display:none;">
+                    <div class="mainpage-content-left">
+                        <label>
+                            <strong><?php echo $this->translate('Custom text Under Offer number'); ?></strong>
+                        </label>
+                    </div>
+                    <div class="mainpage-content-right" >
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" class="span3" 
+                            placeholder="<?php echo $this->translate('Custom text Under Offer number'); ?>" 
+                            name="customtextposition" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div id="moreTextForShop" class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left">
+                        <label>
+                            <strong><?php echo $this->translate('More text for shop'); ?></strong>
+                        </label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                        <textarea rows="3" id="moretextforshop" name="moretextforshop"
+                            placeholder="<?php echo $this->translate('More text for shop')?>"
+                            class="input-xlarge mbot bbot ignore word_count"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+
+            <div class="mainpage-content">
+            	<div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><strong><?php echo $this->translate("Add a 'How to use the code'"); ?></strong></div>
+                    <div class="mainpage-content-right">
+                    	<div class="btn-group" data-toggle="buttons-checkbox">
+                            <button type="button" class="btn" onClick="setOnOff(event,'howtouse','on');$('#howToUseContent').removeClass('display-none');"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button type="button" class="btn btn-primary default" onClick="setOnOff(event,'howtouse','off');$('#howToUseContent').addClass('display-none')"><?php echo $this->translate('No'); ?></button>
+                          </div>
+                    </div>          
+                </div>
+            </div>
+
+            
+            <div class="mainpage-content display-none" id="howToUseContent">
+                <div class="mainpage-content-line oveflow-hidden">
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('Upload main image lightbox'); ?></strong></label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div>
+                            <input   data-max-size="2097152" type="file" class="input-file"  
+                            onchange="checkFileType(event)" name="smallLogoFile"/>
+                        </div>
+                        <div>
+                        <?php echo $this->translate('Image Size: min 300px (*.jpg or *.png file only)'); ?>
+                        </div>
+                    </div>                 
+                </div>
+                <div class="mainpage-content-line oveflow-hidden">
+                    <div class="mainpage-content-left">
+                        <label class="padddingLeft14">
+                            <strong><?php echo $this->translate('Upload second image lightbox'); ?></strong>
+                        </label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div>
+                            <input data-max-size="2097152" type="file" class="input-file" 
+                            onchange="checkFileType(event)" name="bigLogoFile" />
+                        </div>
+                        <div>
+                        <?php 
+                        echo $this->translate('Image Size: min 300px (*.jpg or *.png file only)'); 
+                        ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('Page Slug'); ?></strong></label>
+                    </div>
+                    <div class="mainpage-content-right">
+                         <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" name="howToPageSlug" id="howToPageSlug" class="span3"
+                                placeholder="<?php echo $this->translate('Page slug'); ?>"
+                                style="margin-bottom: 0;">
+                                <span id="howToPageSlugLeft" class="nobel disabled btop word-count shop-wordcount-width">
+                                <?php echo $this->translate('Page slug length 0 characters'); ?>
+                                </span>
+                        </div>
+                    </div>
+                </div>
+
+               	<div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Page title'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                    	 <div class="mainpage-content-right-inner-right-other"></div>
+                    	<div class="mainpage-content-right-inner-left-other">
+                    		<input type="text" name="pageTitle" id="pageTitle" class="span3" placeholder="<?php echo $this->translate('Page title'); ?>" style="margin-bottom: 0;">
+                            <span id="pageTitleLeft" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Page title length 0 characters'); ?></span>
+                    	</div>
+                    </div>
+                </div>
+                        
+                <div class="mainpage-content-line">
+                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Page Subtitle'); ?></strong></label></div>
+                     <div class="mainpage-content-right">
+                     	 <div class="mainpage-content-right-inner-right-other"></div>
+                     	<div class="mainpage-content-right-inner-left-other">
+                     		<input type="text" name="pageSubTitle" id="pageSubTitle" class="span3" placeholder="<?php echo $this->translate('Page Subtitle'); ?>" style="margin-bottom: 0;">
+                            <span id="pageSubTitleLeft" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Page sub title length 0 characters'); ?></span>
+                     	</div>
+                     </div>	
+                </div>
+
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('Page Sub Subtitle'); ?></strong></label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" name="pageSubSubTitle" id="pageSubSubTitle" class="span3" 
+                                placeholder="<?php echo $this->translate('Page Sub Subtitle'); ?>" 
+                                style="margin-bottom: 0;">
+                            <span id="pageSubSubTitleLeft" class="nobel disabled btop word-count shop-wordcount-width">
+                                <?php echo $this->translate('Page sub title length 0 characters'); ?>
+                            </span>
+                        </div>
+                    </div> 
+                </div>
+                <div class="mainpage-content-line">
+                   	 <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta title'); ?></strong></label></div>
+                     <div class="mainpage-content-right">
+                     	 <div class="mainpage-content-right-inner-right-other"></div>
+                     	<div class="mainpage-content-right-inner-left-other">
+		                     <input type="text" name="pagemetaTitle" id="pagemetaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot"/>
+                             <span id="pagemetaTitleLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
+						</div>	 
+					 </div>
+                </div>
+                <div class="mainpage-content-line">
+                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta Description'); ?></strong></label></div>
+                     <div class="mainpage-content-right">
+                     	 <div class="mainpage-content-right-inner-right-other"></div>
+                     	<div class="mainpage-content-right-inner-left-other">
+		                     <textarea class="input-xlarge mbot bbot" id="pagemetaDesc" name="pagemetaDesc" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"></textarea>
+                             <span id="pagemetaDescLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
+						</div>	 
+					 </div>
+                </div>
+                <?php echo $howToIntroductionText; ?>
+                <div class="mainpage-content">
+
+							<div class="mainpage-content-line mb10">
+								<div class="mainpage-content-left">
+									<h3>
+										<strong><?php echo $this->translate('Chapters'); ?></strong>
+									</h3>
+								</div>
+								<div class="mainpage-content-right">&nbsp;</div>
+							</div>
+									
+							<div id="multidiv" >   
+	                	 		<?php echo $this->partial('shop/chapters.phtml',array('partialCounter'=>1));?>
+	                	 	</div>
+							
+							<div class="mainpage-content-colorbox">
+								<a href="javascript:;" style="float:right;margin-top: 7px;" onclick="getchapterhtml(this)" rel='1'><strong><?php echo $this->translate('+ Add another chapter'); ?></strong></a>
+							</div>
+							<div class="clear"></div>
+				</div>
+	
+			</div>   
+                               
+            	 
+
+            <input type="hidden" name="browsedEl" id="browsedEl" />
+            <input type="hidden" name="logo_file_image" id="logo_file_image" />
+            <input type="hidden" name="small_logo_file_image" id="small_logo_file_image" />
+            <input type="hidden" name="big_logo_file_image" id="big_logo_file_image" />
+            <input type="hidden" name="accountManagerName" id="accountManagerName" value="" />
+            <input type="hidden" name="editorName" id="editorName" value="" />
+            <input type="hidden" name="deepLinkStatus" id="deepLinkStatus" value="0" />
+            <input type="hidden" name="affiliateProgStatus" id="affiliateProgStatus" value="1" />
+            <input type="hidden" name="howTouseStatus" id="howTouseStatus" value="0" />
+            <input type="hidden" name="signupOption" id=signupOption value="0" />
+            
+            <input type="hidden" name="showChains" id="showChains" value="0" />
+            <input type="hidden" name="strictConfirmation" id="strictConfirmation" value="0" />
+            
+            <!-- Extra shop hidden feilds -->
+            
+            <input type="hidden" name="displayExtraProperties" id="displayExtraProperties" value="0" />
+            
+            <input type="hidden" name="ideal" id="ideal" value="0" />
+            <input type="hidden" name="qShops" id="qShops" value="0" />
+            <input type="hidden" name="freeReturns" id="freeReturns" value="0" />
+            <input type="hidden" name="pickupPoints" id="pickupPoints" value="0" />
+            <input type="hidden" name="mobileShop" id="mobileShop" value="0" />
+            <input type="hidden" name="service" id="service" value="0" />
+            
+            <div class="mainpage-content-colorbox">
+
+            	<button id="publishShopButton" type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('PUBLISH SHOP'); ?></button>
+                <a class="fl m10" href="javascript:void(0);" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/shop'" ><strong><?php echo $this->translate('CANCEL'); ?></strong></a>
+
+            </div>
+            <!-- /poststuff -->
+            </form> 
+        </div>  
+      </div>   
+      </div>
+     <!-- Create shops End -->

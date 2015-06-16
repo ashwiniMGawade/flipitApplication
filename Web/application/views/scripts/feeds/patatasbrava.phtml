@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title><?php echo $this->translate('Kortingscode.nl');?></title>
+        <link href="<?php echo PUBLIC_PATH ?>css/feeds/style.css" rel="stylesheet" type="text/css" />
+    </head>
+<body>
+<div id="wrapper">
+    <header>
+        <div class="head-main">
+            <img src="<?php echo PUBLIC_PATH ?>images/front_end/feeds/flipit.png" alt="" title="flipit">
+        <h1 class="header-title"><?php echo $this->translate('Los 20 mejores cupones de Flipit, el portal internacional de descuentos más grande de la web.'); ?>
+        </h1>
+    </div>
+    </header>
+    <div class="content">
+        <h1 class="content-title"><?php echo $this->translate('Top 20 Cupones'); ?></h1>
+        <ul class="coupon">
+<?php
+$topPopularCouponCode = $this->topPopularCoupons;
+$offerNumber = 1;
+for ($couponCounter = 0; $couponCounter<count($topPopularCouponCode); $couponCounter++):
+    $couponImage = PUBLIC_PATH_CDN.ltrim($topPopularCouponCode[$couponCounter]['path'], "/") .'thum_large_'.$topPopularCouponCode[$couponCounter]['name'];
+        $couponContent = $topPopularCouponCode[$couponCounter]['title'];
+    ?>
+            <li>
+                <a href="<?php echo HTTP_PATH_LOCALE.$topPopularCouponCode[$couponCounter]['permaLink'];  ?>" class="coupon-image" target="_blank">
+                    <img  src="<?php  echo $couponImage; ?>" alt="<?php echo $topPopularCouponCode[$couponCounter]['shopName'];?>" width="224" height="99" title="<?php echo $topPopularCouponCode[$couponCounter]['shopName'];?>">
+                </a>
+                <div class="coupon-content">
+                    <h1 class="title">
+                    <a class="text-blue-link" target="_blank" href="<?php echo HTTP_PATH_LOCALE.$topPopularCouponCode[$couponCounter]['permaLink'];  ?>">
+    <?php
+    echo $couponContent;
+    ?>
+                    </a>
+                    </h1>
+                    <p class="date">
+                        <?php echo $this->translate('Añadido').':'.' '. date('d/m/Y', strtotime($topPopularCouponCode[$couponCounter]['startDate']->format('Y-m-d'))).','.' '.$this->translate('Expira').':'.' '.date('d/m/Y', strtotime($topPopularCouponCode[$couponCounter]['endDate']->format('Y-m-d'))); ?>
+                    </p>
+                    <span class="coupon-number">
+                        <a href="<?php echo HTTP_PATH_LOCALE.$topPopularCouponCode[$couponCounter]['permaLink'];  ?>" target="_blank">
+                            <p class="number">
+    <?php
+    echo $offerNumber;
+    ?>
+                            </p>
+                            <p class="coupon-text">
+    <?php
+    echo $this->translate('Canjear cupon descuento');
+        ?>
+                            </p>
+                        </a>
+                    </span> 
+                </div>
+            </li> 
+    <?php
+    $offerNumber++;
+endfor;
+?>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

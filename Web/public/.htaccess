@@ -1,0 +1,10 @@
+Options -Indexes
+ErrorDocument 403 /public/403.php
+RewriteEngine on
+RewriteRule ^403.php$ http://www.kortingscode.nl/ [L,R=301]
+
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.*$ - [NC,L]
+RewriteRule ^.*$ index.php [NC,L]

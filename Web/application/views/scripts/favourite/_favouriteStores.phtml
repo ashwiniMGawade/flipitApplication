@@ -1,0 +1,39 @@
+ <?php
+ foreach ($this->favouriteShops as $favouriteShop) :
+    $shopImage = PUBLIC_PATH_CDN.ltrim($favouriteShop['imgpath'], "/")
+        .  "thum_big_" . $favouriteShop['imgname'];
+    ?>   
+    <article class="box">
+        <div class="text-holder">
+            <a href="<?php echo $favouriteShop['permaLink'];?>" class="img-ico">
+                <img src="<?php echo $shopImage;?>" width="132" alt="<?php echo $favouriteShop['name'];?>" title="<?php echo $favouriteShop['name'];?>">
+            </a>
+            <div class="text">
+                <a href="<?php echo $favouriteShop['permaLink'];?>" class="link">
+                    <?php echo $favouriteShop['name'];?>
+                </a>
+                <p>
+                <?php if($favouriteShop['activeCount'] > 0):?>
+                    <a href="<?php echo $favouriteShop['permaLink'];?>" class="active-offer">
+                        <?php echo $favouriteShop['activeCount']. " " . $this->translate('active offers');?>
+                    </a>
+                <?php 
+                else: ?>
+                &nbsp;
+                <?php endif;?>
+                </p>
+                <a href='<?php echo HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='
+                . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') .'&shopId='
+                . base64_encode($favouriteShop['id']);?>'>
+                    <button class="pop btn btn-default" type="button">
+                        <em>
+                        <?php echo $this->translate('I LOVE THIS');?>
+                        </em>
+                        <strong><?php echo $this->translate('REMOVE');?></strong>
+                    </button>
+                </a>
+            </div>
+        </div>
+    </article>
+    <?php
+endforeach;

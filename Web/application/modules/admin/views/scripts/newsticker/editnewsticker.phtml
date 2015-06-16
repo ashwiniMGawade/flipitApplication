@@ -1,0 +1,121 @@
+<?php 
+echo $this->headTitle()->append('Edit Newsticker');
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/datepicker.css" );
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/back_end/bootstrap-combobox.css" );
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootstrap-typeahead.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-datepicker.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/date.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/newsticker.js");
+$date = $this->editNews[0]['startdate'];
+$dateForm =  $date->format('Y-m-d') ; 
+
+?>
+
+<div class="wrap columns-2">
+   <form name="createNewsticker" id="createNewstickerForm" name="createNewstickerForm" method="POST" enctype="multipart/form-data">
+      <h1>
+          	<?php echo $this->translate('Edit Newsticker');?>
+          	<button type="button" onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/newsticker'" href="#" class="btn ml10"><?php echo $this->translate('Cancel'); ?></button>
+          	<!--<button type="button" class="btn btn-primary ml10" id='prefillData'><?php //echo $this->translate('Pre-fill'); ?></button>-->
+       </h1>
+          <span id="shopDetailDiv">
+            <div class="mainpage-content" id="shopDiv">
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left" style="width: 14em;"><strong><?php echo $this->translate('For which shop?'); ?></strong></div>
+                    <div class="mainpage-content-right">
+                    	<div class="mainpage-content-right-inner-right-other"></div>
+                    	<div class="mainpage-content-right-inner-left-other" style="padding-bottom: 10px; margin-left: -42px;">
+                          <select style="display: none; width : 250px;" name="whichshop" class="combobox" id="whichshop">
+							  <option value=""></option>
+								<?php
+								for($i=0;$i<count($this->shopList);$i++){
+		     						if(trim($this->shopList[$i]['name'])!='')
+		     						{
+		     						  $shopname = substr($this->shopList[$i]['name'],0,70);
+
+		     						  if($this->shopList[$i]['id'] == $this->editNews[0]['shop']['id']){
+		     						  	$selected = "selected";
+		     						  }
+		     						  else{
+		     						  	$selected = "";
+		     						  }
+		     						  
+		     					?>
+		     						<option value="<?php echo $this->shopList[$i]['id']; ?>" <?php echo $selected;?> ><?php echo $shopname; ?></option>
+								<?php     
+		      						}
+		 						} 
+								?>
+							</select>
+							<?php if($this->editNews[0]['shop']['id'] !="" || $this->editNews[0]['shop']['id']!=null){?>
+	                       <input type="hidden" name="selctedshop" id="selctedshop" value="<?php echo $this->editNews[0]['shop']['id']?>"> 
+	                       <?php } else {?>
+	                       	<input type="hidden" name="selctedshop" id="selctedshop" value="">
+	                       	
+	                      <?php  }?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </span>  
+          
+         <div class="mainpage-content" id="mainnewsDiv">
+            	<span id="newsDiv">
+            	  
+            	    <div class="mainpage-content-line">
+                    <div class="mainpage-content-left" style="width: 14em;"><label><strong><?php echo $this->translate('Start Date'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                    	<div class="mainpage-content-right-inner-right-other dateValidationMessage1"></div>
+                    	
+	                        <div class="mainpage-content-right-inner-left-other" style="width: 269px ! important; margin-left: -47px;">
+	                        	<div data-date-format="dd-mm-yyyy" data-date="<?php echo date('d-m-Y');?>" id="dp3" class="input-append date">
+	                        		<input readonly="readonly" type="text"  style="width:120px !important;" value="<?php echo $dateForm;?>"  placeholder="Sunday, April 1" class="span2 ignore2" id="newsStartDate" name="newsStartDate">
+	                        			<span class="add-on"><i class="icon-th"></i></span>
+								</div>
+			                     
+	                        </div>
+                       </div>
+                    </div>
+                    
+            	  <div class="mainpage-content-right-inner-left"><label><strong><?php echo $this->translate('Title'); ?></strong></label></div>
+                          <div class="mainpage-content-right-inner-right-other"></div>
+                      	  <div class="mainpage-content-right-inner-right-full">
+                      	  <input type="text" name="newsTitle" placeholder="News title" class="span3" value="<?php echo $this->editNews[0]['title'] ?>">
+                      </div>
+                      
+                      <div class="mainpage-content-right-inner-left"><label><strong><?php echo $this->translate('Ref URL'); ?></strong></label></div>
+                          <div class="mainpage-content-right-inner-right-other"></div>
+                      	  <div class="mainpage-content-right-inner-right-full">
+                      	  
+                      	  <?php if($this->editNews[0]['linkstatus'] ==1) {?>
+                      	  <input type="text" name="newsrefUrl" id="newsrefUrl" placeholder="Ref.Url" value="<?php echo $this->editNews[0]['url'] ?>" class="span3 ignore" style="width:330px !important;">&nbsp;&nbsp;&nbsp;
+                      	  <?php } else { ?>
+                      	  <input type="text" name="newsrefUrl" id="newsrefUrl" disabled="disabled" placeholder="Ref.Url" value="" class="span3 ignore" style="width:330px !important;">&nbsp;&nbsp;&nbsp;
+                      	  <?php }?>
+                      	  
+	                     <?php echo $this->translate('Deeplinking is');?>
+                        <button <?php if($this->editNews[0]['linkstatus'] ==1){?> class="btn btn-primary" <?php } else{?> class="btn" <?php }?> id="newsdeepLinkOnbtn" name="newsdeepLinkOnbtn"  type="button" onclick="newschangelinkStatus(this)"><?php echo $this->translate('On');?></button>                   
+                        <button  <?php if($this->editNews[0]['linkstatus'] ==1){?> class="btn" <?php } else {?> class="btn btn-primary" <?php }?> id="newsdeepLinkoofbtn" name="newsdeepLinkoofbtn" style="border-radius: 0 4px 4px 0;" onclick="newschangelinkStatus(this)" class="btn mr10 btn-primary"  type="button"><?php echo $this->translate('Off');?></button>
+                        <?php if($this->editNews[0]['linkstatus'] ==1){?>
+  						<input type="checkbox" style="display:none;" id="newsdeepLinkStatus" value="1" name="newsdeepLinkStatus" checked="checked">
+  						<?php }else{?>
+  						<input type="checkbox" style="display:none;" id="newsdeepLinkStatus" value="1" name="newsdeepLinkStatus">
+  						<?php }?>
+                      </div> 
+                      
+                     <div class="mainpage-content-right-inner-left"><label><strong><?php echo $this->translate('Description'); ?></strong></label></div>
+                          <div class="mainpage-content-right-inner-right-other"></div>
+                      	  <div class="mainpage-content-right-inner-right-full">
+                      	  <textarea rows="4" cols="3" name="newsDescription" id="newsDescription"><?php echo $this->editNews[0]['content'];?></textarea>
+                      </div>   
+                  </span>
+          </div>
+		  <div class="mainpage-content-colorbox">
+            	<button id='addOfferBtn' type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('UPDATE NEWSTICKER'); ?></button>
+                <a href="<?php echo HTTP_PATH; ?>admin/newsticker" class="fl m10"><strong class="ml10"><?php echo $this->translate('CANCEL'); ?></strong></a>
+          </div>
+	</form>
+</div>

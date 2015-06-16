@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?php echo $this->translate('Kortingscode.nl');?></title>
+<link href="<?php echo PUBLIC_PATH ?>css/marktplaatsfeed/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <div class="area_left">
+    <?php
+      # check popular cods available or not
+      if($this->topCode):
+        $i = 1 ;
+        # render all popular codes
+        foreach ($this->topCode as $value) : 
+      ?>
+          <div class="leftbox">
+            <div class="number">
+              <div class="numberarea">
+                <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'offer number');"  href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shopOffers']['permaLink'];?>">
+                <?php echo $i ;?></a></div>
+              <div class="textkorting">
+                <h1>
+                                <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'shop title');"   class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE.$value['offer']['shopOffers']['permaLink'];  ?>"   >
+
+                                <?php
+                                  # trim shim shop title if its length is gretaer that 28 chras
+                                  if($value['offer']['shopOffers']['name']!='') if(mb_strlen($value['offer']['shopOffers']['name'], 'UTF-8') > 28){
+
+                                    echo mb_substr($value['offer']['shopOffers']['name'], 0,28,  'UTF-8')."...";
+
+                                  }else{  echo $value['offer']['shopOffers']['name'];  }?>
+                                </a>
+                                </h1>
+                <p>
+                   <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'offer title');"  href="<?php echo HTTP_PATH_LOCALE.$value['offer']['shopOffers']['permaLink'];  ?>">
+                                <?php 
+                                  # trim  shop title if its length is gretaer that 28 chras
+                                    if(mb_strlen($value['offer']['title'], 'UTF-8') > 68) {
+
+                                      echo mb_substr($value['offer']['title'], 0,68, 'UTF-8').'...';
+
+                                    } else { echo $value['offer']['title'];  }   ?>
+                            </a></p>
+                <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'offer button');" href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shopOffers']['permaLink'];  ?>" class="button"><?php echo $this->translate('Profiteer nu!')?></a>
+              </div>
+            </div>
+            <a target="_blank"></a>
+            <?php
+
+            # check an image is available or not
+                    
+            $img = PUBLIC_PATH_CDN.ltrim($value['offer']['shopOffers']['logo']['path'], "/") .'thum_big_'. $value['offer']['shopOffers']['logo']['name'];
+            ?>
+            <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'shop logo');" href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shopOffers']['permaLink'];  ?>" class="zalando"><img src="<?php echo $img; ?>" alt="<?php echo $this->translate($value['offer']['shopOffers']['name'])?>" title="<?php echo $this->translate($value['offer']['shopOffers']['name'])?>" />&nbsp;</a>
+          </div>
+   <?php    
+        $i ++   ;
+        endforeach;
+      endif;
+    ?>
+ 
+    </div>
+    <div class="area_right">
+      <div class="boxrt">
+        <h1><?php echo $this->translate('De 15 populairste kortingscodes');?></h1>
+        <p><?php echo $this->translate('Kortingscode.nl verzamelt de kortingscodes van alle grote webshops en maakt een selectie van de 15 populairste codes van dit moment. Profiteer nu en gebruik de unieke code!');?></p>
+      </div>
+      <div class="boxrt">
+        <h1><?php echo $this->translate('Sla uw slag bij uw favoriete webshop');?></h1>
+        <p><?php echo $this->translate('Marktplaats Aanbieding is altijd op zoek naar de beste deal voor de scherpste prijs. Met deze tijdelijke actie heeft u nu de unieke kans om extra voordelig uw slag te slaan bij uw favoriete webshop!');?></p>
+      </div>
+      <div class="boxrt">
+      <h1><?php echo $this->translate('Kortingscodes via Marktplaats Aanbiedingen'); ?></h1>
+      <p><span><?php echo $this->translate('Klik op  &#34;Profiteer nu&#34; bij de webshop van uw keuze'); ?></span><img src="<?php echo PUBLIC_PATH ?>images/marktplaatsfeed/icon1.png" alt="" title="image" /></p>
+      <div class="greyarrow"></div>
+      <p><span><?php echo $this->translate('Klik op &#34;Pak code &amp; open site&#34; op kortingscode.nl'); ?></span><img src="<?php echo PUBLIC_PATH ?>images/marktplaatsfeed/doc.png" alt="" title="feeds" /></p>
+      <div class="greyarrow"></div>
+      <p><span><?php echo $this->translate('Verzilver deze code bij de webshop'); ?></span><img src="<?php echo PUBLIC_PATH ?>images/marktplaatsfeed/hme.png" alt="" title="feeds" /></p>
+       </div>
+
+      
+      <div class="boxrt besparwijer-cont">
+         <h1><?php echo $this->translate('Populaire Categorieen'); ?></h1>
+          <?php
+          if(count($this->topCategories) >0):
+          
+        $category = $this->topCategories;
+            
+            for($c=0;$c<count($category);$c++) {
+
+                 ?>
+                   <div class="blog nonebdr">
+                        <div class="icontext popular-kortings-col1-text3">
+                            <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'category');" class="text-blue-link fl" href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_categorieen').'/'.$category[$c]['category']['permaLink'];  ?>" ><?php if(mb_strlen($category[$c]['category']['name'], 'UTF-8') > 30){  echo mb_substr($category[$c]['category']['name'], 0,30, 'UTF-8').'...'; }else{ echo $category[$c]['category']['name']; } ?>
+                                 </a><br />
+                            <span class="number-of-offers"><?php echo $category[$c]['total_coupons'];?> <?php echo $this->translate('kortingscodes') ?>
+                            </span>
+                        </div>
+                        <?php 
+                          # check an image is available or not
+                     $img = PUBLIC_PATH_CDN.$category[$c]['category']['categoryicon']['path']  .'thum_small_'. $category[$c]['category']['categoryicon']['name'];
+                
+                        ?>
+                        <img class="" src="<?php  echo $img ; ?>" alt="<?php echo $category[$c]['category']['name'];?>" title="<?php echo $category[$c]['category']['name'];?>"/>
+                    </div>
+              <?php } endif;?>
+      </div>
+    </div>
+  </div>
+    <script type='text/javascript'>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-17691171-4', 'kortingscode.nl');
+        ga('send', 'pageview');
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-17691171-1']);
+        _gaq.push(['_trackPageview']);
+        (function()
+        { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); }
+        )();
+    </script>
+</body>
+</html>

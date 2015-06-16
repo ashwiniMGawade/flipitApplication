@@ -1,0 +1,67 @@
+
+<?php 
+$this->headTitle()->append($this->translate('Add IP Address'));
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/ipaddresses.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css");
+
+$ipaddressForm = $this->form;
+foreach ($ipaddressForm->getElements() as $formElement) :
+    $formElement->getDecorator('label')->setOption('tag', null);
+endforeach;
+?>
+<div class="wrap columns-2">
+    <h1><?php echo $this->translate('Add IP Address'); ?>
+        <button class="btn ml10" type="button" 
+           onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/ipaddresses'">
+           <?php echo $this->translate('Cancel'); ?>
+        </button>
+    </h1>
+    <form method="POST" enctype=multipart/form-data name="addIpaddressForm" id="addIpaddressForm">
+        <div id="poststuff" class="metabox-holder has-right-sidebar">
+            <div id="post-body">
+               <div>
+                   <div class="mainpage-content">
+                       <div class="mainpage-content-line">
+                           <div class="mainpage-content-left">
+                                <label><strong><?php echo $this->translate('IP address holder name'); ?></strong></label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other wt-250"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <?php echo $ipaddressForm->name->renderViewHelper();?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line mt10">
+                            <div class="mainpage-content-left">
+                                <label><strong><?php echo $this->translate('IP Address'); ?></strong></label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other wt-250"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <?php echo $ipaddressForm->ipaddress->renderViewHelper();?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br class="clear">
+        </div>
+        <div class="mainpage-content-colorbox">
+            <?php 
+            echo $this->formSubmit(
+                'submit',
+                FrontEnd_Helper_viewHelper::__form('form_ADD'),
+                array('class'=>'btn btn-large btn-primary fl', 'id'=>'createIpaddress')
+            ) ?>
+            <a href="javascript:void(0);"
+                onclick="window.location.href='<?php echo HTTP_PATH ;?>admin/ipaddresses'" class="fl m10">
+                <strong><?php echo $this->translate('CANCEL'); ?></strong>
+            </a>
+        </div>
+    </form>
+</div>

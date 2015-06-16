@@ -1,0 +1,337 @@
+<?php $this->partial('offer/_jsFileForOfferPartial.phtml'); ?>
+<script type="text/javascript">
+    var domainName = "<?php echo HTTP_PATH; ?>";
+</script>
+<?php
+$class = "section";
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='Favourite' 
+    && zend_Controller_Front::getInstance()->getRequest()->getActionName()=='sharesocialcode') {
+    $class = "";
+}
+?>
+<section class="<?php echo $class; ?>">
+<?php
+$offerCounter = '';
+$visitorInformation = '';
+
+foreach ($this->offers as $offer) {
+    $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
+    $offerCounter++;
+    $offer = (object) $offer;
+    $expiredOffer = isset($offer->expiredOffer) ? $offer->expiredOffer : '';
+    $offerBounceRate = $expiredOffer != '' ? '/out/shop/'.$offer->shopOffers['id'] : "/out/offer/".$offer->id;
+    $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
+    $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires((array)$offer->endDate);
+    $urlToShow = $expiredOffer != '' ? HTTP_PATH_LOCALE.'out/shop/'.$offer->shopOffers['id'] : $offerPartial->getUrlToShow($offer);
+    $offerTitle = FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offer->title);
+    $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
+    $userLoggedInOrNot = $offerPartial->getUserIsLoggedInOrNot();
+    $couponCode = $offer->couponCode;
+    if (isset($offer->couponCodeType) && $offer->couponCodeType == 'UN') {
+         $couponCode = '';
+    }
+    $dayleftCss = '';
+    if (intval($daysTillOfferExpires) <= 1 || $expiredOffer != '') {
+        $dayleftCss = 'deal-less';
+    }
+    $defaultText = '';
+    $offerClass = "active " . $dayleftCss;
+    $offerHolderClass = "offer-holder";
+    if ($offer->exclusiveCode == '1') {
+        $orangeBlockClass = $expiredOffer != '' ? '' : 'orange-block';
+        $offerClass = $orangeBlockClass." deal-offer ". $dayleftCss;
+    }
+    if ($offer->userGenerated == '1') {
+        $offerClass = "";
+        $offerHolderClass = "";
+        $urlToShow = 'javascript:void(0);';
+        if ($offer->approved == '1') {
+            $offerClass = "deal-offer " .$dayleftCss; 
+            $offerHolderClass = "offer-holder";
+            $urlToShow = $expiredOffer != '' ? HTTP_PATH_LOCALE.'out/shop/'.$offer->shopOffers['id'] : $offerPartial->getUrlToShow($offer);
+        }
+        $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName($esiLocale);
+        $defaultText = 
+            FrontEnd_Helper_viewHelper::__translate('This code has been added by one of our users and not by the [websiteName] deal hunters');
+        $defaultText = str_replace('[websiteName]', $websiteName, $defaultText);
+    }
+
+    $expiredDealClass = '';
+    $imageGrayScaleClass = '';
+    if ($expiredOffer != '') {
+        $expiredDealClass = 'expired-deal';
+        $imageGrayScaleClass = 'grayscale';
+    }
+    ?>
+    <article class="block <?php echo $offerClass.' '.$expiredDealClass; ?>">
+        <div class="holder <?php echo $offerHolderClass; ?>" id="<?php echo $offer->id; ?>">
+    <?php 
+    echo $offerPartial->getCommonRedirectUrlForOffer(
+        $offer,
+        $urlToShow,
+        $offerBounceRate,
+        $this->offersType,
+        'offerImage',
+        $expiredOffer
+    );
+    ?>
+            <div class="box">
+                <div class="text">
+                    <ul class="meta-items">
+                        <?php
+                        if ($offer->userGenerated == 0 && (isset($offer->discountType) && $offer->discountType == 'CD') && $expiredOffer == '') {
+                            echo $offerPartial->getVerifiedText();
+                        }
+                        ?>
+                        <li>
+                        <?php
+                        $membersOnly = isset($offer->Visability) && $offer->Visability == 'MEM'
+                            ? '<span class="members-only-image"></span><span class="members-only">'.$this->translate("Members Only").'</span>'
+                            : '';
+                        echo $membersOnly.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires, $expiredOffer);
+                        ?>
+                        </li>
+                        <?php
+                        if ($expiredOffer != '') { ?>
+                        <li>
+                        <?php echo FrontEnd_Helper_viewHelper::__translate('This code is unfortunately expired. Often these code will still work'); ?>!
+                        </li>
+                        <?php } ?>
+                    </ul>
+                    <?php 
+                    if ($offer->Visability == 'MEM') {
+                        echo $this->esi($esiLocale.'signup/signupmembersonlytitle?shopId='.$offer->shopOffers['id']
+                            .'&signupFormWidgetType=widgetWithinOffers&offerId='.$offer->id.'&shopLogoOrDefaultImage=');
+                    } else {
+                        echo $offerPartial->getCommonRedirectUrlForOffer(
+                            $offer,
+                            $urlToShow,
+                            $offerBounceRate,
+                            $offerTitle,
+                            'offerTitle'
+                        ); 
+                    }
+                    ?>
+                </div>
+    <?php
+    $couponClass = isset($offer->discountType) && $offer->discountType != 'CD' ? 'btn-blue-wrapper' : '';
+    ?>
+                <div class="buttons offer-teaser-button-wrapper" id="offerButton<?php echo $offer->id ;?>">
+                    <div class="offer-teaser-button-wrapper-inner <?php echo $couponClass; ?>">
+    <?php
+    $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shopOffers['permaLink'];
+
+    if ($offer->Visability == 'MEM') {
+        echo $this->esi($esiLocale.'signup/signupwidgetcodes?shopId='.$offer->shopOffers['id']
+            .'&signupFormWidgetType=widgetWithinOffers&offerId='.$offer->id.'&shopLogoOrDefaultImage=');
+    } else {
+        echo $offerPartial->getCommonRedirectUrlForOffer(
+            $offer,
+            $urlToShow,
+            $offerBounceRate,
+            $permalink,
+            'mainOfferClickoutButton'
+        );
+ 
+    }
+    ?>              </div>
+                </div>
+                <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
+                    <strong class="code-value"><?php echo $couponCode;?></strong>
+                </div>
+            </div>
+    <?php
+    if ($this->offersType != 'extendedOffer') {
+        $style = '';
+    } else {
+        $style = 'style="display:block;"';
+    }
+
+    $offerBottomTextForExclusiveOrSocialOrEditor = '';
+    $offerBottomRecomendedLink = '';
+    if (intval($offer->editorPicks) == 1) {
+        $contentManagerId = isset($offer->shopOffers['contentManagerId']) ? $offer->shopOffers['contentManagerId'] : '';
+        $contentManagerId = !empty($this->shopOffers['contentManagerId'])
+            ? $this->shopOffers['contentManagerId'] 
+            : $contentManagerId;
+        $shopEditor = $offerPartial->getShopEditor($contentManagerId);
+        $offerBottomRecomendedLink = $offerPartial->getShopEditorHtml($shopEditor);
+        $offerBottomTextForExclusiveOrSocialOrEditor = isset($expiredOffer) && $expiredOffer != ''
+            ? ''
+            : $offerBottomRecomendedLink;
+    } else {
+        $offerBottomTextForExclusiveOrSocialOrEditor = $offerPartial->getOfferExclusiveOrSocial($offer);
+    }
+    $offerBottomDaysTillExpireText = '';
+    if ($daysTillOfferExpires <= 3) {
+        $offerBottomDaysTillExpireText = $offerPartial->getDaysTillExpire($daysTillOfferExpires);
+    }
+    if ($expiredOffer) {
+        $offerBottomDaysTillExpireText = '<time class="date text-info"><span class="text-over">'.FrontEnd_Helper_viewHelper::__translate('Expired').'</span></time>';
+    }
+    $offerBottomTermsAndConditionLink = '';
+    $offerBottomExtendedLink = '';
+    $offerBottomViewAllShopsLink = '';
+    if ($this->offersType != 'extendedOffer') {
+        if ($termsAndConditions != '' || $offer->userGenerated == 1) {
+            $offerBottomTermsAndConditionLink = $offerPartial->getTermAndConditionsLink(
+                $offer,
+                $termsAndConditions
+            );
+        }
+        $offerBottomExtendedLink =  $offerPartial->getExtendedOfferLink($offer);
+        if ($this->offersType != 'simple') {
+            $offerBottomViewAllShopsLink =  $offerPartial->getViewAllCodesLink(
+                $offer->shopOffers['name'],
+                $offer->shopOffers['permaLink']
+            );
+        }
+    } else {
+        $offerBottomViewAllShopsLink = $offerPartial->getViewAllCodesLink(
+            $offer->shopOffers['name'],
+            $offer->shopOffers['permaLink']
+        );
+    }
+    $combinedOfferBottomText = $offerBottomTermsAndConditionLink
+        .$offerBottomTextForExclusiveOrSocialOrEditor
+        .$offerBottomDaysTillExpireText
+        .$offerBottomViewAllShopsLink.$offerBottomExtendedLink;
+    if (!empty($combinedOfferBottomText)) {
+        ?>
+        <div class="info-area">
+            <?php echo $offerBottomTermsAndConditionLink;?>
+            <div class="info">
+               <ul>
+                    <?php
+                    $offerOptionsWithPriorityClasses = $offerPartial->getOffersOptionsByPriority(
+                        $offerBottomTextForExclusiveOrSocialOrEditor,
+                        $offerBottomDaysTillExpireText,
+                        $offerBottomViewAllShopsLink,
+                        $offerBottomExtendedLink
+                    ); 
+                    $offerBottomTextForExclusiveOrSocialOrEditor = 
+                        isset($offerOptionsWithPriorityClasses['offerBottomTextForExclusiveOrSocialOrEditor']) 
+                        ? $offerOptionsWithPriorityClasses['offerBottomTextForExclusiveOrSocialOrEditor'] 
+                        : '';
+                    $offerBottomDaysTillExpireText = 
+                        isset($offerOptionsWithPriorityClasses['offerBottomDaysTillExpireText']) 
+                        ? $offerOptionsWithPriorityClasses['offerBottomDaysTillExpireText'] 
+                        : '';
+                    $offerBottomViewAllShopsLink = 
+                        isset($offerOptionsWithPriorityClasses['offerBottomViewAllShopsLink']) 
+                        ? $offerOptionsWithPriorityClasses['offerBottomViewAllShopsLink'] 
+                        : '';
+                    $offerBottomExtendedLink = 
+                        isset($offerOptionsWithPriorityClasses['offerBottomExtendedLink']) 
+                        ? $offerOptionsWithPriorityClasses['offerBottomExtendedLink'] 
+                        : '';
+                    $numberOfCodeUsed = 
+                        isset($offerOptionsWithPriorityClasses['numberOfCodeUsed']) 
+                        ? $offerOptionsWithPriorityClasses['numberOfCodeUsed'] 
+                        : '';
+
+                    echo $offerBottomTextForExclusiveOrSocialOrEditor
+                        .$offerBottomDaysTillExpireText
+                        .$offerBottomViewAllShopsLink;
+                    $showUsedCode = false;
+                    if (empty($offerBottomDaysTillExpireText) || empty($offerBottomViewAllShopsLink)) {
+                        echo $offerBottomExtendedLink;
+                        if (empty($offerBottomExtendedLink)) {
+                           $showUsedCode = true;
+                        }
+                    } 
+                    if ((empty($offerBottomDaysTillExpireText) && empty($offerBottomViewAllShopsLink)) || $showUsedCode)
+                    {
+                        if ($offer->discountType == "CD") {
+                            if (!empty($numberOfCodeUsed)) {
+                                echo $numberOfCodeUsed;
+                                echo isset($expiredOffer) && $expiredOffer != ''
+                                    ? $offerPartial->getTotalViewCountOfOffer($offer->totalViewcount)
+                                    : $this->esi($esiLocale.'offer/offer-view-count?offerId='.$offer->id);
+                                echo "</li>";
+                            }
+                        }
+                    }
+                    ?>
+               </ul>
+            </div>
+        </div>
+        <?php 
+    }
+    ?>
+    </div>
+        <div class="offer-box" id="websiteOfferLink<?php echo $offer->id ;?>" <?php echo $style;?>>
+            <hr class="alt2">
+            <div class="offer">
+                <span><?php echo $expiredOffer != '' 
+                    ? $this->translate('Go to the website')
+                    : $this->translate('Grab this offer now:');?></span>
+                <a target = "_blank" href="<?php echo $urlToShow;?>" rel= "nofollow">
+                <?php echo $this->translate('Open ');?>
+                <?php echo $offer->shopOffers['name']; ?>
+                <?php echo $this->translate(' website');?>
+                </a>
+            </div>
+        </div>
+        <div class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
+            <div class='term-and-condition'>
+                <?php 
+                if (empty($defaultText)) {
+                    echo $this->translate('Terms &amp; Conditions');
+                } else {
+                    echo '<span class="social-term-font">' .$defaultText.'</span>';
+                }
+                ?>
+            </div>
+            <ol class="num-list">
+            <?php echo $termsAndConditions;?>
+            </ol>
+        </div>
+    </article>
+    <?php
+    $widgetPosition = !empty($this->widgetPosition) ? $this->widgetPosition : 1;
+    if (!empty($this->shopPage)) {
+        $showSignupOption = $this->showSignupOption;
+        if ($this->shop['affliateProgram'] == 1) {
+            $widgetPosition = $this->widgetPosition;
+        }
+    } else {
+        $showSignupOption = 1;
+    }
+    if ($offerCounter == $widgetPosition && $showSignupOption == 1 && $widgetPosition > 0) :
+        if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage'
+            || $this->offersType=='offerWithPagenation' || $this->offersType=='newestOffer'):
+            $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+            echo $this->esi($this->locale.'signup/signupwidgetlarge?shopId='.$this->currentStoreInformation[0]['id']
+                .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage=');
+        endif;
+    endif;
+    if ($this->offersType=='simple') {
+        if ($offer->shopOffers['showcustomtext'] == 1
+            && $offerCounter == $offer->shopOffers['customtextposition']) { ?>
+            <article class="block">
+                <div class="holder" style="">
+                    <?php echo $offer->shopOffers['customtext'];?>
+                </div>
+            </article>
+    <?php 
+        }
+    }
+}
+if ($this->offersType!='extendedOffer') {
+    if ($this->offersType == 'newestOffer'
+        || $this->offersType=='offerWithPagenation'
+        || $this->offersType=='offerPage') {
+        echo $this->paginationControl($this->offers, 'Sliding', '/partials/_pagination.phtml');
+    }
+    if (isset($this->pageType) && $this->pageType == 'howToGuide') {
+        $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
+        echo '<a class="link-box" href="'.$domainName.$offer->shopOffers['permaLink'].'">
+                <hr class="alt2">
+                '.$this->translate('View all voucher codes from').' '.$offer->shopOffers['name'].'
+            </a>';
+    }
+    ?>
+    </section>
+    <?php 
+}

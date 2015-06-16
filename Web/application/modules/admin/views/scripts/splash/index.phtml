@@ -1,0 +1,54 @@
+<?php 
+ $this->headMeta('keyword', 'Description');
+ $this->headTitle()->append($this->translate('Splash Offer management'));
+ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.dataTables.min.js" );
+ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/dataTableComman.js" );
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");   
+ $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+?>
+<div id="chainList">
+    <div class="wrap columns-2">
+        <?php
+        if ($this->messageSuccess!='' || $this->messageError!='' ) {?>
+	       <br>
+            <div class ="mainpage-content-colorbox success">
+		<?php if ($this->messageSuccess!='') {?>
+		    <span class="successserver"><?php echo $this->messageSuccess; ?></span>
+		<?php } if ($this->messageError!='') {?>
+		    <span class="errorserver"><?php echo $this->messageError; ?></span>
+		<?php } ?>
+		    </div>
+		<?php 
+		}?>
+        <h1 class="fl"><?php echo $this->translate('Current Splash Offer'); ?>
+        <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/splash/add-offer'"><?php echo $this->translate('Add New Offer'); ?>
+        </button>
+        </h1>
+        <div class="clear"></div>
+        <table class="table table-bordered table-striped"  cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                  <th><?php echo $this->translate('Active Offer Name'); ?></th>
+                  <th><?php echo $this->translate('Active Offer Locale'); ?></th>
+                  <th><?php echo $this->translate('Action'); ?></th>
+                </tr>
+            </thead>
+            <tr>
+                <?php if (!empty($this->currentOfferTitle)) { ?>
+                    <td><?php echo $this->currentOfferTitle; ?></td>
+                    <td><?php echo $this->currentOfferLocale; ?></td>
+                    <td>  
+                        <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/splash/delete-offer'"><?php echo $this->translate('Delete'); ?>
+                        </button>
+                    </td>
+                <?php } else { ?>
+                    <td><?php echo $this->translate('No Record Found');?></td> 
+                    <td><?php echo $this->translate('No Record Found');?></td>
+                    <td><?php echo $this->translate('No Record Found');?></td>
+                <?php } ?>    
+            </tr>
+        </table> 
+    </div>
+</div>
+        

@@ -1,0 +1,288 @@
+body {
+	background:#fff;
+	margin:0;
+	padding:0;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	color:#000000;
+}
+* {
+	margin:0px;
+	padding:0px;
+}
+img {
+	border:0 none;
+}
+.container {
+	width:980px;
+	margin:0 auto;
+}
+.yellowbox {
+	width:938px;
+	padding:20px;
+	margin:0px 0px 19px 0px;
+	float:left;
+	background:#fff8d7;
+	border:1px solid #b1c4df;
+}
+.yellowbox a {
+	width:348px;
+	height:78px;
+	line-height:78px;
+	display:inline-block;
+	text-align:center;
+	background:#FFF;	
+	border:1px solid #b1c4df;
+	text-decoration:none;
+}
+.yellowbox a img{
+	vertical-align:middle;
+}
+.yellowbox span {
+	float:right;
+	width:573px;
+	font-size:24px;
+	color:#333;
+	padding:10px 0px 0px 0px;
+}
+.area_left {
+	width:730px;
+	float:left;
+}
+.leftbox {
+	width:690px;
+	background:#f1f4f8;
+	border:1px solid #b1c4df;
+	padding:19px 20px;
+	float:left;
+	margin:0px 0px 19px 0px;
+}
+.zalando {
+	width:236px;
+	height:118px;
+	background:#FFF;
+	border:1px solid #b1c4df;
+	display:block;
+	line-height:100px;
+	text-align:center;
+	text-decoration:none;
+}
+.zalando img{
+	vertical-align:middle;
+}
+.number {
+	width:441px;
+	float:right;
+}
+.numberarea {
+	width:125px;
+	height:100px;
+	float:right;
+	background:url(../../images/marktplaatsfeed/numbg.png) no-repeat left top;
+	font-size:60px;
+	font-weight:bold;
+	color:#1a328a;
+	line-height:100px;
+	text-align:center;
+	font-family:"Arial Black", Gadget, sans-serif;
+	padding:0px 0px 0px 30px;
+	margin: 9px 0; 
+}
+.textkorting {
+	width:260px;
+	color:#333333;
+	float:left;
+}
+.textkorting:hover{
+	width:260px;
+	color:#1A328A;
+	float:left;
+}
+.textkorting h1 {
+	float:left;
+	font-size:18px;
+	font-weight:bold;
+	width:260px;
+}
+
+.textkorting a
+{
+	text-decoration: none;
+ 	color: #333333;
+}
+
+.numberarea  a
+{
+	text-decoration: none;
+	color: #1A328A;
+}
+
+.textkorting:hover a,
+.numberarea:hover a
+{
+	color:#1A328A;
+}
+.textkorting a:hover
+{
+	color:#1A328A;
+	
+}
+.textkorting p {
+	font-size:14px;
+	font-weight:normal;
+	padding:0px 0px 15px 0px;
+	float:left;
+	height: 35px;
+	line-height: 14.2pt;
+}
+.textkorting a.button {
+	color: #000000;
+	cursor: pointer;
+	float: left;
+	width:188px;
+	height:40px;
+	line-height:40px;
+	font-size:20px;
+	font-weight:bold;
+	color:#fff;
+	text-align:center;
+	text-decoration:none;
+	border:2px solid #da7519;
+	-webkit-box-shadow: inset 0px 0px 10px rgba(255,190,110,0.9);
+	-moz-box-shadow: inset 0px 0px 10px rgba(255,190,110,0.9);
+	box-shadow: inset 0px 0px 10px rgba(255,190,110,0.9);
+	background: #ffa432;
+	background: -moz-linear-gradient(top, #ffa432 0%, #ff8f27 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffa432), color-stop(100%, #ff8f27));
+	background: -webkit-linear-gradient(top, #ffa432 0%, #ff8f27 100%);
+	background: -o-linear-gradient(top, #ffa432 0%, #ff8f27 100%);
+	background: -ms-linear-gradient(top, #ffa432 0%, #ff8f27 100%);
+	background: linear-gradient(to bottom, #ffa432 0%, #ff8f27 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffa432', endColorstr='#ff8f27', GradientType=0 );
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
+}
+.textkorting a.button:hover {
+	
+	-webkit-box-shadow: 0px 3px 3px rgba(182,187,193,0.9);
+	-moz-box-shadow: 0px 3px 3px rgba(182,187,193,0.9);
+	box-shadow: 0px 3px 3px rgba(182,187,193,0.9);
+	color:#ffeca4;
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
+}
+.area_right {
+	width:230px;
+	float:right;
+}
+.boxrt {
+	width:188px;
+	float:left;
+	background:#fff8d7;
+	border:1px solid #b1c4df;
+	padding:20px;
+	margin:0px 0px 19px 0px;
+}
+.boxrt h1 {
+	width:188px;
+	float:left;
+	font-size:15px;
+	font-weight:bold;
+	color:#262626;
+	padding:0px 0px 19px 0px;
+	margin:0px 0px 18px 0px;
+	border-bottom: 1px solid #b1c4df;
+}
+.boxrt p {
+	width:188px;
+	float:left;
+	font-size:13px;
+	font-weight:normal;
+	color:#262626;
+}
+.boxrt p span {
+	width:114px;
+	float:left;
+}
+.boxrt p img {
+	float:right;
+}
+.greyarrow {
+	width:188px;
+	float:left;
+	text-align:right;
+	background:url(../../images/marktplaatsfeed/grey_arrow.png) no-repeat right;
+	height:24px;
+	margin:35px 0px;
+}
+
+.boxrt p a {
+	text-decoration:none;
+	color:#fe6600;
+}
+
+.blog
+{width:188px;
+	float:left;
+	border-bottom:1px dashed #b1c4df;
+	padding:16px 0px;
+	font-size:13px;}
+	
+	.blogtext
+	{
+		/*width:135px;*/
+		float:right;}
+		
+		.nonebdr
+		{
+			border-bottom: 0 none;}
+			
+			.icontext
+	{
+		width:148px;
+		float:right;
+		color:#fe6600;
+		font-size:13px;
+		font-weight:bold;
+		line-height:18px;}
+		.icontext a
+		{
+			text-decoration:none;
+			color:#fe6600;}
+		
+		.icontext span
+		{
+			font-size:12px;
+			font-weight:normal;
+			color:#262626;}
+.baspewizer img
+{
+	margin: 0 0 0 -15%;
+	height:50px;
+}
+
+.baspewizer a
+{
+	color: #000;
+	text-decoration: none;
+}
+
+.baspewizer a:hover {
+	color: #555;
+
+}
+.baspewizer  .besperwizer-image-cont
+{
+	margin: 3px 5px 0 0;
+    float: left;
+    overflow: hidden;
+    width: 50px;
+}
+.besparwijer-cont h1
+{
+	margin: 0px;
+}
+
+ 

@@ -1,0 +1,191 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: links_kortingscode\n"
+"POT-Creation-Date: 2013-04-16 16:16+0530\n"
+"PO-Revision-Date: 2013-04-16 12:47+0100\n"
+"Last-Translator: Chetan <cbhopal@seasiaconsulting.com>\n"
+"Language-Team: KC-Team <kortingscode@seasiaconsulting.com>\n"
+"Language: dutch\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-KeywordsList: __link\n"
+"X-Poedit-Basepath: C:\\wamp\\www\\kortingscode.nl\\kortingscode.nl\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: application/controllers\n"
+"X-Poedit-SearchPath-1: application/views\n"
+"X-Poedit-SearchPath-2: public/js/front_end\n"
+
+#: js/front_end/layout.js:151 js/front_end/layout.js:225
+#: js/front_end/layout.js:391 views/scripts/partials/_headerSearch.phtml:159
+#: views/scripts/partials/_headerSearch.phtml:196
+msgid "zoeken"
+msgstr "zoeken"
+
+#: js/front_end/layout.js:1188 js/front_end/layout.js:1194
+#: modules/admin/controllers/ShopController.php:813
+#: views/scripts/search/index.phtml:128 views/scripts/search/index.phtml:170
+#: views/scripts/search/suggestion.phtml:52 Helper/viewHelper.php:52
+msgid "alle-winkels"
+msgstr "alle-winkels"
+
+#: js/front_end/moneysaving.js:45
+msgid "inschrijven"
+msgstr "inschrijven"
+
+#: js/front_end/moneysaving.js:45
+msgid "stap1"
+msgstr "stap1"
+
+#: modules/admin/controllers/OfferController.php:872
+#: modules/admin/controllers/ShopController.php:811
+#: controllers/OfferController.php:26 views/scripts/index/index.phtml:205
+#: views/scripts/offer/index.phtml:18
+msgid "nieuw"
+msgstr "nieuw"
+
+#: modules/admin/controllers/OfferController.php:873
+#: modules/admin/controllers/ShopController.php:812
+#: controllers/OfferController.php:224 views/scripts/index/index.phtml:123
+#: views/scripts/offer/index.phtml:20 views/scripts/search/index.phtml:171
+#: views/scripts/search/suggestion.phtml:53
+msgid "populair"
+msgstr "populair"
+
+#: modules/admin/controllers/CategoryController.php:335
+#: controllers/CategoryController.php:64
+#: controllers/CategoryController.php:101
+#: views/scripts/store/howtoguide.phtml:30
+#: views/scripts/about/profile.phtml:54 views/scripts/index/index.phtml:245
+#: views/scripts/index/index.phtml:260 views/scripts/index/index.phtml:342
+#: views/scripts/category/index.phtml:44 views/scripts/search/index.phtml:128
+#: views/scripts/search/index.phtml:179
+#: views/scripts/search/suggestion.phtml:61 Helper/viewHelper.php:469
+#: Helper/viewHelper.php:470 Helper/viewHelper.php:475
+#: Helper/viewHelper.php:641
+msgid "categorieen"
+msgstr "categorieen"
+
+#: modules/admin/controllers/ArticlecategoryController.php:354
+#: modules/admin/controllers/ArticleController.php:598
+#: views/scripts/plus/index.phtml:158
+#: views/scripts/plus/guidedetail.phtml:60
+#: views/scripts/plus/guidedetail.phtml:62
+msgid "pluscat"
+msgstr "pluscat"
+
+#: modules/admin/controllers/UserController.php:954
+#: views/scripts/plus/guidedetail.phtml:42 models/User.php:962
+msgid "redactie"
+msgstr "redactie"
+
+#: controllers/plusController.php:19
+#: controllers/plusController.php:22
+#: controllers/plusController.php:98
+#: views/scripts/partials/mostReadAcls.phtml:22
+#: views/scripts/store/msArticle.phtml:31 views/scripts/index/index.phtml:380
+#: views/scripts/index/index.phtml:387 views/scripts/index/index.phtml:399
+#: views/scripts/index/index.phtml:431
+#: views/scripts/plus/index.phtml:78
+#: views/scripts/plus/index.phtml:170
+#: views/scripts/plus/guidedetail.phtml:69
+#: views/scripts/plus/guidedetail.phtml:166
+#: views/scripts/plus/guidedetail.phtml:170
+#: views/scripts/plus/guidedetail.phtml:190
+#: views/scripts/plus/guidedetail.phtml:194
+#: views/scripts/plus/readMoreCategory.phtml:19
+#: Helper/viewHelper.php:696 Helper/viewHelper.php:697
+#: Helper/viewHelper.php:744 Helper/viewHelper.php:747
+#: Helper/viewHelper.php:1009
+msgid "plus"
+msgstr "plus"
+
+#: controllers/OfferController.php:179 views/scripts/store/offer.phtml:258
+msgid "deals"
+msgstr "deals"
+
+#: controllers/FreesignupController.php:46
+#: controllers/FreesignupController.php:63
+#: controllers/FreesignupController.php:84
+#: controllers/MyfavoriteController.php:53
+#: views/scripts/partials/_header.phtml:37 views/scripts/about/index.phtml:40
+#: views/scripts/index/index.phtml:29 views/scripts/freesignup/step3.phtml:34
+#: views/scripts/freesignup/confirmemail.phtml:6
+#: views/scripts/freesignup/step1.phtml:29 views/scripts/login/index.phtml:41
+#: Helper/viewHelper.php:562 Helper/viewHelper.php:594
+#: Helper/viewHelper.php:787 Helper/viewHelper.php:811
+#: Helper/viewHelper.php:860
+msgid "stap2"
+msgstr "stap2"
+
+#: controllers/FreesignupController.php:63
+#: controllers/FreesignupController.php:84
+#: controllers/MyfavoriteController.php:53
+#: views/scripts/partials/_header.phtml:37 views/scripts/about/index.phtml:40
+#: views/scripts/login/index.phtml:41
+#: views/scripts/login/redirecttosignup.phtml:15 Helper/viewHelper.php:562
+#: Helper/viewHelper.php:594 Helper/viewHelper.php:787
+#: Helper/viewHelper.php:811 controllers/FreesignupController.php:130
+#: controllers/LoginController.php:85 controllers/LoginController.php:137
+#: controllers/LoginController.php:140 views/scripts/partials/_header.phtml:28
+#: views/scripts/partials/_header.phtml:38
+#: views/scripts/freesignup/step1.phtml:41 views/scripts/login/index.phtml:35
+#: views/scripts/login/redirecttosignup.phtml:19 Helper/viewHelper.php:554
+#: Helper/viewHelper.php:556 Helper/viewHelper.php:564
+#: Helper/viewHelper.php:586 Helper/viewHelper.php:588
+#: Helper/viewHelper.php:596
+msgid "login"
+msgstr "inloggen"
+
+#: controllers/StoreController.php:506
+msgid "how-to"
+msgstr "how-to"
+
+#: controllers/aboutController.php:26 views/scripts/about/index.phtml:70
+#: controllers/LoginController.php:48 views/scripts/partials/_header.phtml:17
+#: views/scripts/freesignup/step4.phtml:34 Helper/viewHelper.php:862
+msgid "mijn-favorieten"
+msgstr "mijn-favorieten"
+
+#: controllers/LoginController.php:85
+msgid "resetpassword"
+msgstr "resetwachtwoord"
+
+#: controllers/LoginController.php:140
+msgid "profiel"
+msgstr "profiel"
+
+#: layouts/scripts/layout.phtml:21 views/scripts/partials/_pagination.phtml:8
+#: views/scripts/partials/_header.phtml:26
+#: views/scripts/partials/_header.phtml:40
+msgid "nieuws"
+msgstr "nieuws"
+
+#: views/scripts/partials/_header.phtml:28 Helper/viewHelper.php:554
+#: Helper/viewHelper.php:556 Helper/viewHelper.php:586
+#: Helper/viewHelper.php:588
+msgid "logout"
+msgstr "logout"
+
+#: views/scripts/myfavorite/leftpanel.phtml:17
+#: views/scripts/myfavorite/leftpanel.phtml:18
+msgid "memberonlycodes"
+msgstr "membersonlycodes"
+
+#: views/scripts/myfavorite/leftpanel.phtml:19
+#: views/scripts/plus/category.phtml:117
+#: views/scripts/freesignup/step3.phtml:34
+msgid "compleet"
+msgstr "compleet"
+
+#: views/scripts/freesignup/confirmemail.phtml:6
+msgid "stap3"
+msgstr "stap3"
+
+#: views/scripts/login/index.phtml:35
+msgid "forgotpassword"
+msgstr "wachtwoordvergeten"
+
+#~ msgid "store"
+#~ msgstr "alle-winkels"

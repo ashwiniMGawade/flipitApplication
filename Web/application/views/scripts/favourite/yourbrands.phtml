@@ -1,0 +1,102 @@
+<?php
+$this->minifyHeadScript()->appendFile("/public/js/front_end/favoriteBrand.js");
+$favouriteViewPath = "favourite/";
+$recordNotFound = '<div class = "no-record txt-center brand-not-found">' . $this->translate('No record found') .'</div>'; 
+$popularShops = $recordNotFound;
+if(!empty($this->popularShops)) :
+    $popularShops = $this->partial(
+        $favouriteViewPath . '_popularStores.phtml',
+        array('popularShops' => $this->popularShops)
+    );
+endif;
+$favouriteShops = $recordNotFound; 
+if(!empty($this->favouriteShops)) :
+    $favouriteShops = $this->partial(
+        $favouriteViewPath . '_favouriteStores.phtml',
+            array('favouriteShops' => $this->favouriteShops)
+    );
+endif;
+$searchBrandForm = $this->form;
+// Remove <dt> from label generation
+foreach ($searchBrandForm->getElements() as $formElement) {
+    $formElement->getDecorator('label')->setOption('tag', null);
+}
+if($this->successMessage!='' || $this->errorMessage!='') : ?>
+    <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
+        <span class='glyphicon glyphicon-warning-sign'></span>
+        <strong><?php echo $this->successMessage!='' ? $this->successMessage : $this->errorMessage;?></strong>
+    </div>
+    <?php 
+endif;
+?>
+<div class="brands-page">
+    <section class="profile-box">
+        <?php 
+        $visitorFirstName = isset($this->userDetails['firstName']) ? $this->userDetails['firstName'] : '';
+        echo FrontEnd_Helper_viewHelper::accountTabPanel($visitorFirstName);
+        ?>
+        <div class="row">
+            <div id="content" class="col-sm-8">
+                <div class="section">
+                    <header class="heading">
+                        <div class="hold">
+                            <?php 
+                            if(!empty($this->favouriteShops)) :
+                                $messageWithAlreadyAddedBrand = 
+                                    $this->translate('You follow'). " " .count($this->favouriteShops) . " "
+                                    .$this->translate('brands already, that’s great.');
+                                $messageAddMore = $this->translate('Why not add some more?');
+                                $messageAddMoreSideBar = $this->translate('Why not you add some more?');
+                             else:
+                                $messageWithAlreadyAddedBrand = 
+                                    $this->translate("You have not follow any brand from brands list");
+                                $messageAddMore = $this->translate("Please seach and follow the brand");
+                                $messageAddMoreSideBar = $this->translate('Please seach and follow the more brand');
+                            endif;
+                            ?>
+                            <?php echo $messageWithAlreadyAddedBrand;?>
+                            <span class="mark-text"><?php echo $messageAddMore;?></span>
+                        </div>
+                        <div class="search-area">
+                            <form method="POST" role="form" class="search-form" id ="search-brand-form" >
+                                <a id="searchbuttonBrandHeader" href="javascript:void(0);">
+                                    <button type="submit" class="btn btn-default youroffers-search-btn">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                </a> 
+                                <?php
+                                $resetLink =
+                                HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
+                                ?>
+                                <a href="<?php echo $resetLink;?>">
+                                    <button type="button" class="btn btn-default youroffers-search-btn">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </a>   
+                                <div class="area">
+                                    <?php echo $searchBrandForm->searchBrand->renderViewHelper();
+                                        echo $searchBrandForm->searchedBrandKeyword->renderViewHelper();
+                                    ?>
+                                </div>
+                            </form>
+                        </div>
+                    </header>
+                    <div class="row row-area">
+                    <?php echo $popularShops;?>
+                    </div>
+                </div>
+            </div>
+            <aside id="sidebar" class="col-sm-4">
+                <article class="block white">
+                    <header class="heading">
+                        <?php echo $this->translate('Brands you already follow.');?>
+                        <span class="mark-text"><?php echo $messageAddMoreSideBar;?></span>
+                    </header>
+                    <div class="box-area">
+                    <?php echo $favouriteShops; ?>
+                    </div>
+                </article>
+            </aside>
+        </div>
+    </section>
+</div>

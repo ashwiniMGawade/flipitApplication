@@ -1,0 +1,705 @@
+<?php
+  echo $this->headTitle()->append('Release Notes');
+?>
+
+<div id="releaseNotes" class="wrap">
+
+	<h1>Release Notes</h1>
+
+	<h2>Version 1.22 - 10 Juni, 2014</h2>
+
+	<div><strong>Backend-end Feature:</strong></div>
+	<ul>
+	    <li>Visitor import - The visitor import can now be scheduled.</li>
+	</ul>
+
+	<div><strong>Backend-end bugs:</strong></div>
+	<ul>
+	    <li>Visitor send count - The count was no longer working.</li>
+	    <li>Send newsletter - the scheduled newsletter did not use the correct language files.</li>
+	</ul>
+
+	<hr>
+
+	<h2>Version 1.21.6 - 20 Mei, 2014</h2>
+
+	<div><strong>Front-end Feature:</strong></div>
+	<ul>
+	    <li>Robots.txt - Updated the robots for kc so the pages after login are no longer crawled.</li>
+	    <li>Rss feeds - Made the filename non translatable because it was confusing.</li>
+	    <li>Forgot password - Updated the template so popular offers are no longer shown.</li>
+	    <li>Forgot password - Updated the translation strings so they are manageable from the new email translation file.</li>
+	</ul>
+
+	<div><strong>Backend-end Feature:</strong></div>
+	<ul>
+	    <li>Visitor export - The export was getting to big to export to excel. We moved the format to csv which is working great.</li>
+	</ul>
+
+	<hr>
+
+	<h2>Version 1.21.5 - 7 Mei, 2014</h2>
+
+	<div><strong>Front-end Feature:</strong></div>
+	<ul>
+	    <li>Saving guides - Updated the savinguides overview so there is less push on the categories.</li>
+	    <li>Rss feeds - Added shoplogo to the feeds.</li>
+	</ul>
+
+	<hr>
+
+	<h2>Version 1.21.1 - 30 April, 2014</h2>
+
+	<div><strong>Front-end Feature:</strong></div>
+	<ul>
+	    <li>Saving guides - Removed the submenu.</li>
+	    <li>Inline translations - Made it possible to translate stings inline.</li>
+	</ul>
+
+	<hr>
+
+	<h2>Version 1.21 - 29 April, 2014</h2>
+
+	<div><strong>Front-end Feature:</strong></div>
+	<ul>
+	    <li>Signup - Updated the uniqueness check in the signup so that it's fast even in kc.nl</li>
+	    <li>Routes - Updated some routes for more consistency.</li>
+	    <li>Similar codes - On the shop page the similar codes now use the offer categories, list 10 offers when no offers are available and on nomoney shops the top10 is deleted.</li>
+	</ul>
+
+	<div><strong>Front-end bug:</strong></div>
+	<ul>
+	    <li>Newsletter - Made the date in the test the same as in the scheduled newsletter.</li>
+	</ul>
+
+	<div><strong>Backend-end Feature:</strong></div>
+	<ul>
+	    <li>Shop create/ update - Added a wysiwyg editor to the shop description field.</li>
+	    <li>Visitor profile - Made it possible to update the email address of vistors.</li>
+	</ul>
+
+	<div><strong>Back-end bug:</strong></div>
+	<ul>
+	    <li>Newsletter - Saving the scheduled newsletter is done on the selected date, not on 1-1-1970.</li>
+	    <li>Popular codes - Moving offers up and down no always works.</li>
+	</ul>
+
+	<hr>
+
+	<h2>Version 1.20.8 - 17 April, 2014</h2>
+
+	<div><strong>Front-end Feature:</strong></div>
+	<ul>
+	    <li>Feeds - created 3 new feeds. patatasbrava, casandosemgrana and divamoms.</li>
+	</ul>
+
+	<div><strong>Front-end bug:</strong></div>
+	<ul>
+	    <li>404 page - fixed that the layout was not properly rendered.</li>
+	    <li>Pagination 500 error - When trying to load a page which does not exist your bing redirected to the first page.</li>
+	    <li>Conversion tracking - Tracked the ip's with another tag. Now its working again.</li>
+	</ul>
+
+	<hr>
+
+	<h2>Version 1.20.6 - 14 April, 2014</h2>
+
+	<div><strong>Back-end Feature:</strong></div>
+	<ul>
+	    <li>RSS feeds - Deleted old files before generating a new so that the CDN is updated.</li>
+	</ul>
+
+	<hr>
+
+    <h2>Version 1.20.5 - 11 April, 2014</h2>
+
+	<div><strong>Back-end Feature:</strong></div>
+	<ul>
+	    <li>FHM feed - Created a new whitelabel feed which is validated by feedburner.</li>
+	</ul>
+
+	<hr>
+
+    <h2>Version 1.20.4 - 11 April, 2014</h2>
+
+	<div><strong>Back-end Feature:</strong></div>
+	<ul>
+	    <li>Newsletter - The newsletter is now being send in batches so mandrill can handle it.</li>
+	    <li>Newsletter - Schedule newsletter can now be deleted.</li>
+	</ul>
+
+	<hr>
+
+    <h2>Version 1.20.1 - 01 Mar, 2014</h2>
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+	    <li>Flipit.com - Hid top header bar on mobile.</li>
+	    <li>Extended offers - Showing other offers at all times.</li>
+	    <li>Blog - the news section is deleted from the platform.</li>
+	</ul>
+
+    <div><strong>Front-end bugs:</strong></div>
+	<ul>
+	    <li>Newsletter - The images are now loaded from the CDN.</li>
+	    <li>Newsletter - Imports can be done.</li>
+	</ul>
+
+	<div><strong>Back-end Bugs:</strong></div>
+	<ul>
+	    <li>Popular offers - Deleted offline offers from the top list.</li>
+	</ul>
+
+	<hr>
+
+    <h2>Version 1.20 - 31 Feb, 2014</h2>
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+	    <li>Migrated - We have migrated to an autoscaling environment so we can handle all the traffic in the world.</li>
+	    <li>CDN - all images are fetched from a CDN (content delivery network).</li>
+	    <li>Category lists - Number of coupons shown is increased to 54.</li>
+	    <li>Special list - Header is shown when no records can be found.</li>
+	    <li>Top20 - Added the add date just like in store offers.</li>
+	    <li>Members only - Made meta tags maintainable through the cms.</li>
+	</ul>
+
+    <div><strong>Front-end bugs:</strong></div>
+	<ul>
+	    <li>Printable coupon - The expiredate of a printable coupon is added.</li>
+	</ul>
+
+	<div><strong>Back-end features:</strong></div>
+	<ul>
+		<li>Critical shop warning - Strict validation can be added to shops.</li>
+		<li>Exports - Have been refactored to run in small batches.</li>
+		<li>Pass varnish - A button is created to pass varnish.</li>
+		<li>Delete Homepage images - Is possible to delete homepage images.</li>
+		<li>Menu - is editable by editors.</li>
+		<li>Offers - Added an extra search field and updated the columns.</li>
+	</ul>
+
+	<div><strong>Back-end bugs:</strong></div>
+	<ul>
+		<li>Click count - The correct numbers are being shown in both the offer overview as the export</li>
+	</ul>
+
+	<hr>
+
+	<h2>Version 1.19.1 - 19 Feb, 2014</h2>
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+	    <li>Category pages - Deleted title tags from the editor.</li>
+	    <li>Login - Header title has been made H1.</li>
+	    <li>Category overview - Made special list title H2.</li>
+	    <li>Shop page - Made link color black.</li>
+	</ul>
+
+	<div><strong>Front-end bugs:</strong></div>
+	<ul>
+		<li>Coupons - On click of the title the lightbox no longer opens. On coupons it does open.</li>
+	</ul>
+
+	<div><strong>Back-end features:</strong></div>
+	<ul>
+		<li>Offer create/edit - Made the note red, not the network.</li>
+	</ul>
+
+	<hr>
+
+	<h2>Version 1.19 - 13 Feb, 2014</h2>
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+	    <li>Offers - All offer titles are now links.</li>
+	    <li>Source - All json has been moved to external files.</li>
+	    <li>New offer style - Has been applied to nomoney overview and to shops when there are no offers.</li>
+	    <li>US date - The timestamp on special list offers is displayed correct.</li>
+	    <li>Xml feed - Created whitelist top 10 offers feed for o2.pl and grotal.com.</li>
+	</ul>
+
+    <div><strong>Front-end bugs:</strong></div>
+	<ul>
+	    <li>Search - In au search gave a 404. The reason is > no other keyword in the translation files can be the same as the link. So all other search translations must either be in CAPS or have extra words. Only the url "search" is allowed to be called search.</li>
+	    <li>/index - All /index pages are redirected to the homepage.</li>
+	</ul>
+
+	<div><strong>Back-end features:</strong></div>
+	<ul>
+		<li>The releasenotes are back!</li>
+		<li>Chains - Added search to the chain overview.</li>
+		<li>Create/ edit offer - Shop notes are not RED so nobody reads over them.</li>
+		<li>Security - Stripping all script tags from the CMS from all input fields.</li>
+		<li>Extended offers - Url's are checked on uniqueness.</li>
+	</ul>
+
+	<div><strong>Back-end bugs:</strong></div>
+	<ul>
+		<li>Global shop export - The export path was still set to the old public location. Because the file could not be written to that location is failed to save.</li>
+		<li>Shop delete - Shops can be deleted from trash.</li>
+		<li>Create/ edit offer/ newsticker - Create offer/ newsticker goes back to the overview.</li>
+		<li>Test newsletter - It is possible for editors to send a newsletter test.</li>
+	</ul>
+
+	<hr>
+
+	<h2>Version 1.13.2 - 3 Dec, 2013</h2>
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+	    <li>Coupons - Updated coupon code an image which is half see through.</li>
+	</ul>
+
+	<div><strong>Back-end features:</strong></div>
+	<ul>
+		<li>New countries - Added new countries kr ar ru hk sk nz cl ie mx cn.</li>
+		<li>Security - Made footer only editable for superadmins</li>
+		<li>Security - Stripping all script tags from the CMS from all input fields.</li>
+	</ul>
+
+	<div><strong>Back-end bugs:</strong></div>
+	<ul>
+		<li>Visitor export - Fixed unique email address check which created an error on import.</li>
+		<li>Widgets - widgets could no longer be added.</li>
+		<li>Printable discount image - was no longer possible to add printable discount images.</li>
+	</ul>
+
+	<hr>
+
+	<h2>Version 1.13.1 - 27 Nov, 2013</h2>
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+	    <li>KC - Updated the tracking code to include gender tracking.</li>
+	</ul>
+
+	<div><strong>Front-end bugs:</strong></div>
+	<ul>
+	    <li>Flipit - Search in PT and AT are working again.</li>
+	</ul>
+
+	<div><strong>Back-end bugs:</strong></div>
+	<ul>
+		<li>Visitor export - Fixed unique email address check which created an error on import.</li>
+	</ul>
+
+	<hr>
+
+	<!-- Release notes v1.13 -->
+	<h2>Version 1.13 - 26 Nov, 2013</h2>
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+		<li>Flipit home - Changed the intro text.</li>
+		<li>Shop page - Optimized the queries so big shops pages load up to 1000% faster.</li>
+		<li>Default routes - Made it possible to block default urls.</li>
+		<li>KC home - Changed the text on the home page.</li>
+		<li>KC home - Hid the background image on the home page.</li>
+		<li>Search - Made the predictive search lightning fast.</li>
+	</ul>
+
+	<div><strong>Front-end bug:</strong></div>
+	<ul>
+		<li>AT google analytics - There was an incorrect google analytics trackingcode being used in Flipit.com/at.</li>
+	</ul>
+
+	<div><strong>Back-end features:</strong></div>
+	<ul>
+		<li>Visitor import - Modified the visitor import to Melissa her standard.</li>
+		<li>Home page - Made header image manageable per locale.</li>
+	</ul>
+
+	<div><strong>Back-end bugs:</strong></div>
+	<ul>
+		<li>Editor account - Can now see other editors in the shop page.</li>
+		<li>Visitor export - fixed a locale bug so the visitor export runs again.</li>
+	</ul>
+
+	<hr>
+
+	<!-- Release notes v1.12.1 -->
+	<h2>Version 1.12.1 - 13 Nov, 2013</h2>
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+		<li>Form validations - Sanitized all data which is input in to forms. This is an extra layer of security.</li>
+	</ul>
+
+	<div><strong>Front-end bug:</strong></div>
+	<ul>
+		<li>Marktplaats feed - Sidebar utf-8 encoding was corrected.</li>
+	</ul>
+
+	<div><strong>Back-end bugs:</strong></div>
+	<ul>
+		<li>Login, Sometimes people land on kc in the backend while they do not have permissions.</li>
+	</ul>
+	<hr>
+
+	<!-- Release notes v1.12 -->
+	<h2>Version 1.12 - 12 Nov, 2013</h2>
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+		<li>Tracking - Modified google analitycs tracing codes so conversion tracking becomes possible for flipit.com/be and bounce rates are properly tracked.</li>
+		<li>Create account - Added an extra validation layer to make sure no faulty email addresses enter the DB.</li>
+		<li>Flipit home - Changed the background of some countries.</li>
+		<li>Offers - applied 7 translations for the exclusive label.</li>
+		<li>Marktplaats feed - Bol.com is excluded from the feeds.</li>
+		<li>Shop page</li>
+		<ul>
+			<li>Created a new option with shows similar shops under the offers.</li>
+			<li>Sorting on money alternatives is done on category first now.</li>
+		</ul>
+
+	</ul>
+
+	<div><strong>Front-end bugs:</strong></div>
+	<ul>
+		<li>Search results - Showing thumbnails of money saving guides.</li>
+		<li>Widget - Showing thumbnails of money saving guides.</li>
+		<li>Minify css/ js - Due to some reference urls in the minify links minifying did not work on flipit.com/be.</li>
+		<li>Codes on mobile - Mobile was having trouble with showing codes. Right now codes are no longer loaded with ajax.</li>
+	</ul>
+
+	<div><strong>Back-end features:</strong></div>
+	<ul>
+		<li>Create / edit shop, Added letter counters to different text fields.</li>
+		<li>Dashboard - Added a generation date.</li>
+		<li>Offer overview, added a new column which shows deeplink status.</li>
+		<li>ACL - Changed some preferences so editors can see homepage and footer settings as well.</li>
+		<li>Shop overview</li>
+		<ul>
+			<li>Deleted the visibility column.</li>
+			<li>Deleted account manager column.</li>
+			<li>Added allow discussion to the overview page.</li>
+			<li>Added display signup option.</li>
+		</ul>
+		<li>Create/ edit offer</li>
+		<ul>
+			<li>Added a button "open shop" which opens the store page in a new tab.</li>
+			<li>The text input box for voorwaarden is changed to a ck editor.</li>
+			<li>Change the mouse icon on hover of date and time fields.</li>
+		</ul>
+		<li>Create/ edit page/ article</li>
+		<ul>
+			<li>Add widget background is transparent.</li>
+			<li>Deleted the preview buttons.</li>
+		</ul>
+	</ul>
+
+	<div><strong>Back-end bugs:</strong></div>
+	<ul>
+		<li>Create offer - Made centerparks translatable.</li>
+	</ul>
+
+	<hr>
+
+	<!-- Release notes v1.11.1 -->
+	<h2>Version 1.11.2 - 28 Oct, 2013</h2>
+	<div><strong>Front-end bug:</strong></div>
+	<ul>
+		<li>Shop page - The code is being shown again on click of the blue button.</li>
+	</ul>
+
+	<hr>
+
+	<!-- Release notes v1.11.1 -->
+	<h2>Version 1.11.1 - 28 Oct, 2013</h2>
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+		<li>Marktplaats iframe - Updated the text according to marktplaats its requests.</li>
+	</ul>
+
+	<hr>
+
+	<!-- Release notes v1.11 -->
+	<h2>Version 1.11 - 28 Oct, 2013</h2>
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+		<li>Marktplaats iframe - Released the mobile version on <a href="http://www.kortingscode.nl/marktplaatsmobilefeed">kortingscode.nl/marktplaatsmobilefeed</a>.</li>
+		<li>Marktplaats iframe - Added the marktplaats feeds to the varnish refresh.</li>
+		<li>Flipit home - Added a H2 under the title.</li>
+		<li>Money saving guide  - Deleted fallback for thumbnails.</li>
+		<li>Social media logo - Made the flipit logo static for all locales instead of one logo per locale.</li>
+		<li>Homepage - Updated the layout of the signup block to become the same as the rest.</li>
+	</ul>
+
+	<div><strong>Front-end bugs:</strong></div>
+	<ul>
+		<li>? mark in title - Replaced all sting counts to make sure this does no longer happen.</li>
+		<li>Kortingscode home - fixed email validation when submitting on enter.</li>
+	</ul>
+
+	<div><strong>Back-end features:</strong></div>
+	<ul>
+		<li>Newsletter - added an email count when the email is send.</li>
+		<li>Newsletter - added error handling so the 500 error is never shown.</li>
+		<li>Shop export - created a global shop export.</li>
+		<li>Offer ref url - Increased the string length for ref url to 512 characters.</li>
+	</ul>
+
+	<div><strong>Back-end bugs:</strong></div>
+	<ul>
+		<li>Offers - When an offer is supposed to go live in the future it did not work.</li>
+		<li>Language files - On click of delete the mo files are deleted as well, not just the po file.</li>
+	</ul>
+
+	<hr>
+
+	<!-- Release notes v1.10.1 -->
+	<h2>Version 1.10.1 - 21 Oct, 2013</h2>
+
+	<div><strong>Back-end bugs:</strong></div>
+	<ul>
+		<li>Unique codes - Increased the allowed code length.</li>
+	</ul>
+
+
+	<hr>
+
+	<!-- Release notes v1.10 -->
+	<h2>Version 1.10 - 17 Oct, 2013</h2>
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+		<li>No money shop - when a no money shop does not have any offers an alternate view is served.</li>
+		<li>Marktplaats iframe - Released 2nd version of the marktplaats iframe.</li>
+		<li>Clickouts - all coupon codes are fetched through ajax which makes it impossible to crawl them.</li>
+		<li>Clickout popup - Link to external shop has a no follow attribute.</li>
+	</ul>
+
+	<div><strong>Front-end bugs:</strong></div>
+	<ul>
+		<li>Forgot password - Translations are properly fixed. Look in Back_js.po for the translation.</li>
+		<li>Search - searching for a store shows thumbnails again.</li>
+		<li>Search - url's can now be translated properly again.</li>
+	</ul>
+
+	<div><strong>Back-end features:</strong></div>
+	<ul>
+		<li>Newsletter - added e-mail referer to the emails which are being send.</li>
+	</ul>
+
+	<div><strong>Back-end bugs:</strong></div>
+	<ul>
+		<li>Language file - scan po files no longer returns empty values.</li>
+		<li>Store page - Added can be translated again.</li>
+		<li>Create/ edit offer - double click on category no longer makes the browser jump.</li>
+	</ul>
+
+
+	<hr>
+
+	<!-- Release notes v1.9 -->
+	<h2>Version 1.9.1 - 08 Oct, 2013</h2>
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+		<li>Marktplaats iframe - Released the first version of the marktplaats iframe.</li>
+		<li>My favorites - Added noindex, nofollow to the page when not loggedin.</li>
+	</ul>
+
+	<div><strong>Front-end bugs:</strong></div>
+	<ul>
+		<li>Login/ logout - user cookie is un-/set properly.</li>
+		<li>Members only codes - page is no longer cached which shows the correct name in.</li>
+		<li>404 page - updated the error controller with new exeptions so it always shows a 404 page when an asset is not found.</li>
+	</ul>
+
+	<div><strong>Back-end bugs:</strong></div>
+	<ul>
+		<li>Save offer - When a sale is selected it is no longer.</li>
+	</ul>
+
+
+	<hr>
+
+	<!-- Release notes v1.9 -->
+	<h2>Version 1.9 - 04 Oct, 2013</h2>
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+	        <li>Robots.txt - Updated with new urls.</li>
+	        <li>Redirects - Deleted redirects from reduc24.fr.</li>
+	        <li>My favorites - Not loggedin lightbox can now be closed and redirects to the homepage.</li>
+	        <li>Localisation - US date had been implemented on the store page.</li>
+	        <li>Editor profile - Added a property which shows the amount of offers that are added by this editor.</li>
+
+	</ul>
+
+	<div><strong>Back-end features:</strong></div>
+	<ul>
+		<li>Account settings</li>
+		<ul>
+			<li>Deleted free accounts part as it is not being used.</li>
+			<li>Deleted add stores to step 2.</li>
+			<li>Deleted codes for no more free logins.</li>
+		</ul>
+		<li>Homepage settings</li>
+		<ul>
+			<li>Redesigned the as seen in logo's upload part.</li>
+			<li>Deleted special block as it is not being used.</li>
+		</ul>
+		<li>Clickouts - Shop pages of the bigger shops had trouble loading due to the clickout count/ popularity. Clickouts are now counted in a separate table and counted once a day.</li>
+		<li>Language files - Added locale extension to the language files.</li>
+		<li>Money saving guides - Added a thumbnail option so small images can be uploaded separately.</li>
+		<li>Shop - Made category selection easier to record nice by placing the images of the category inside the button.</li>
+		<li>Offer - Made category selection easier to record nice by placing the images of the category inside the button.</li>
+		<li>Affiliate network - Sorting on id is possible now.</li>
+		<li>Editors - Added a field were the amount of placed offers can be inserted.</li>
+		<li>Visitors - Added new columns to the overview so the editor can get more information at a glance.</li>
+		<li>Shop overview - When setting a shop offline in the overview an offline since date is added.</li>
+		<li>Dashboard - Number of clickouts (k) is made smaller.</li>
+	</ul>
+
+	<div><strong>Back-end bugs:</strong></div>
+	<ul>
+		<li>Visitors - Trash was not showing imported visitors.</li>
+		<li>pluss pages - When a number was added after a plus url a non existant page was shown.</li>
+		<li>Media - Preview images were not showing in the preview mode of a media item.</li>
+	</ul>
+
+	<hr>
+
+	<!-- Release notes v1.8.3 -->
+	<h2>Version 1.8.3 - 02 Oct, 2013</h2>
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+		<li>Flipit.com landing page - Added links for the new countries.</li>
+		<li>Flipit.com landing page - Added new rel="alternates" for the new countries.</li>
+	</ul>
+
+	<hr>
+
+	<!-- Release notes v1.8.1 -->
+	<h2>Version 1.8.1 - 13 Sep, 2013</h2>
+	<div><strong>Front-end bugs:</strong></div>
+	<ul>
+		<li>Redirects - Are working again.</li>
+		<li>Shop - Shops which are set offline are responding with a 404 error code and no longer with a 500 error code.</li>
+	</ul>
+
+	<hr>
+
+	<!-- Release notes v1.8 -->
+	<h2>Version 1.8 "Clean the CMS" - 12 Sep, 2013</h2>
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+		<li>Shop page:</li>
+			<ul>
+				<li>Added alt tags to editor and link images.</li>
+				<li>Increased the number of expired codes to 12.</li>
+			</ul>
+		<li>Shop - hid offers of shops which are set offline</li>
+		<li>Money saving guide category - Deleted uppercase from all titles.</li>
+		<li>Home page - Deleted some whitespace on the homepage below the lists.</li>
+	</ul>
+
+	<div><strong>Back-end features:</strong></div>
+	<ul>
+		<li>Release notes:</li>
+			<ul>
+				<li>Created a new pages in the back-end which contains the release notes of the released versions.</li>
+				<li>Added current release and release date info to the left menu.</li>
+			</ul>
+		<li>Create/ edit offer:</li>
+			<ul>
+				<li>Deleted maximum codes as it is not being used.</li>
+				<li>Deleted the prefill button as it is not being used.</li>
+				<li>Deleted the discount options as they are not being used.</li>
+				<li>Extra options have none selected by default.</li>
+				<li>Validate if a shop is selected on offer save.</li>
+				<li>Deleted account manager from the shop info as it is not being used.</li>
+			</ul>
+		<li>Create/ edit shop:</li>
+			<ul>
+				<li>Added custom header field.</li>
+				<li>Made editor and category required as they are needed for the front-end.</li>
+				<li>Deleted account manager as it is not being used.</li>
+				<li>Made editor field required.</li>
+				<li>Extra options are off by default.</li>
+				<li>Deleted views from the form as they are not being used.</li>
+				<li>Deleted the deeplink functionality as it's not being used.</li>
+				<li>Added online/ offline toggle to the shop overview.</li>
+
+			</ul>
+		<li>Affiliate network:</li>
+			<ul>
+				<li>Placed multiple warnings when editing the subid.</li>
+				<li>Deleted the "delete" button from the overview.</li>
+				<li>Placed the subid in the overview</li>
+			</ul>
+		<li>Redirects:</li>
+			<ul>
+				<li>Added the redirect from url to the overview.</li>
+				<li>Importing redirects only appends entries and no longer overwrites.</li>
+			</ul>
+		<li>Widgets:</li>
+			<ul>
+				<li>Added Dynamic content column which shows if the content can be managed through the cms.</li>
+				<li>Dynamic widgets no longer have an editor in the edit page. Only the title can still be updated.</li>
+			</ul>
+		<li>Create/ edit media:</li>
+			<ul>
+				<li>Deleted capitation from the create/ edit forms.</li>
+				<li>Added alt fields to the create/ edit forms.</li>
+			</ul>
+		<li>CMS users - Deleted the invoer column as it is not being used.</li>
+		<li>Exports - Offer and visitor exports have been added to the export generator. This means that the export is generated once per day for Shops, Offers and Visitors.</li>
+		<li>Refresh varnish - A warning has been added so people understand better what happens when they click this button.</li>
+		<li>Admin menu - Deleted unused menu items.</li>
+		<li>Menu - Deleted the upload option.</li>
+
+	</ul>
+
+	<div><strong>Front-end bugs:</strong></div>
+	<ul>
+		<li>Extended offer page - There was a wrong link to the newsletter subscribe page in flipit.com. This is corrected.</li>
+		<li>Search - There where some cases where a shop was not found by the predictive search, this has been solved.</li>
+		<li>Money saving guide category page - Made Alle translatable.</li>
+		<li>Search bar - Connect and redirect functionality is working again.</li>
+	</ul>
+
+	<div><strong>Back-end bugs:</strong></div>
+	<ul>
+		<li>Menu - fixed the 500 error when adding a full url in the link field.</li>
+		<li>Search - When searching for a shop with an ' we no longer get an error both is shop overviews and in offer overviews.</li>
+		<li>Search - There where some cases where an offer was not found by the predictive search, this has been solved.</li>
+		<li>CMS users - When a profile is updated the value of showing that user in the front-end listing is no longer changed.</li>
+		<li>Edit visitor - Editing a visitor with special characters no longer returns a 500 error.</li>
+		<li>Create/ edit shop - When no category is selected the page scrolls up.</li>
+		<li>404 error page, Refactored the error controller so the 404 page always displays when a page or assent is not found.</li>
+		<li>Homepage tabs - Adding tabs to new locales is possible again.</li>
+	</ul>
+
+	<hr>
+
+	<!-- Release notes v1.7 -->
+	<h2>Version v1.7 - 21 Aug, 2013</h2>
+
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+		<li>How To Guides - Created a buttons back to the shop page.</li>
+		<li>Shop page - Disable the clickout under the logo and button for no money shops.</li>
+		<li>Shop - Modified the behavior when a shop is set offline. Currently a 404 is generated when a shop is set offline.</li>
+	</ul>
+
+	<div><strong>Back-end features:</strong></div>
+	<ul>
+		<li>Create/ edit of offer page - Set end date by default to the last day of the current month.</li>
+		<li>CMS users - Authors in the CMS should always have first and lastname show in selection fields.</li>
+		<li>CMS users - Deleted all restrictions on editors so everyone can work on his own account.</li>
+		<li>Pages - Created a new field to add custom headers to any page.</li>
+		<li>Newsletter - Imported new lists for Poland and Spain so those newsletters can be send every week.</li>
+	</ul>
+
+	<div><strong>Front-end bugs:</strong></div>
+	<ul>
+		<li>Shop page - Surrounded all the shop descriptions in paragraph tags.</li>
+		<li>Home page - Increased character limit for shop names in top lists</li>
+		<li>Favicon - modified deploy script so favicon stays in place.</li>
+	</ul>
+
+	<div><strong>Back-end bugs:</strong></div>
+	<ul>
+		<li>Money saving guides - Saving an article without an image attachment returns an error and deletes data.</li>
+		<li>Shop export - Corrected the author name in the shop export.</li>
+		<li>Create/ edit of all pages - Made link before permalink field translatable.</li>
+		<li>Newsletter - Modified the newsletter so images and clickouts work correctly for flipit locales.</li>
+	</ul>
+
+	<hr>
+
+	<div>Versions before the release of v1.7 are not documented in this format. For older version documetation revert to Imbull management.</h2>
+
+</div>

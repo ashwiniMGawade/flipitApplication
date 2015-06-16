@@ -1,0 +1,210 @@
+@import "custom-variables.less";
+@import "custom-mixins.less";
+.all-stores-page {
+	.popular-store-title{font-size:33px;}
+	.content-holder{
+		background:@white-color;
+		.border-radius;
+		border:1px solid #d8d8d8;
+		padding:0 0 44px;
+		margin:0 0 25px;
+		overflow:hidden;
+		.block{
+			font-size:14px;
+			line-height:18px;
+			border-top:1px solid @page-header-border-color;
+			padding:23px 29px;
+			&:after{.after}
+			h3{
+				font-size:33px;
+				line-height:36px;
+				margin:0 0 19px;
+			}
+			.shops{
+				padding:6px 0 8px;
+			}
+		}
+	}
+
+	.alphabet{
+		font-size:19px;
+		padding:35px 15px 34px;
+		margin:0;
+		list-style:none;
+		text-transform:uppercase;
+		line-height:22px;
+		text-align:center;
+		overflow:hidden;
+		li{
+			float:none;
+			display:inline-block;
+			vertical-align:top;
+			width:auto;
+			padding:0 6px 0 6px;
+			border-left:1px solid #ddd;
+			&:first-child{
+				border:none;
+				margin-left:0;
+			}
+			a{
+				color:@light-blue;
+				&:hover,
+				&:focus{
+					color:#e89438;
+					text-decoration: none;
+                    span{
+                        color:#e89438;
+                    }
+                }
+                span{
+                    font-size: 10px;
+                    vertical-align: top;
+                    color: #878a8d;
+                }
+            }
+        }
+        .active-search-alphabet {
+            a{
+                color:@text-color;
+                span{
+                    color:@text-color;
+                }
+            }
+        }
+    }
+
+	.shop-name{
+		margin:0 -20px 0 0;
+		padding:0;
+		list-style:none;
+		li{
+			margin:0 0 6px;
+			a{
+				color:@light-blue;
+				&:hover,
+				&:focus{color:@text-color;}
+			}
+		}
+	}
+	.btn-top{
+		display:inline-block;
+		vertical-align:top;
+		color:@grey-color;
+		&:after{
+			content:'';
+			display:inline-block;
+			vertical-align:middle;
+			background:url(../../images/sprite.png) no-repeat -203px -125px;
+			width: 12px;
+			height: 7px;
+			margin:0 0 0 5px;
+		}
+		&:hover,
+		&:focus{
+			color:#33383e;
+			&:after{
+				background-position:-203px -156px;
+			}
+		}
+	}
+}
+@media only screen and (max-width: 1199px){
+	.all-stores-page {
+		.content-holder{
+			.block{
+				font-size:13px;
+			}
+		}
+		.alphabet{
+			li{
+				border-left:none;
+				border-right:1px solid @page-header-border-color;
+				padding:0 5px 0 6px;
+				&:first-child{
+					padding-left:0;
+				}
+				&:last-child{
+					border:none;
+				}
+			}
+		}
+	}
+}
+@media only screen and (max-width: 979px){
+	.all-stores-page {
+		.content-holder{
+			.block{
+				padding:13px 15px;
+				h3{
+					font-size:25px;
+					line-height:28px;
+				}
+			}
+		}
+		.alphabet{
+			margin:0 -10px 0 0;
+			padding:35px 30px 34px;
+			li{
+				border:none;
+				margin:0 10px 10px 0;
+				padding:0;
+				text-align:center;
+			}
+		}
+	}
+}
+@media only screen and (max-width: 767px){
+	.all-stores-page {
+		.alphabet{
+			text-align:center;
+			padding:10px;
+			margin:0;
+		}
+		.content-holder{
+			padding:0;
+			margin:0 0 29px;
+			.block{
+				padding:10px;
+				.row{
+					margin:0 -10px;
+					border-top:1px solid #e8e8e8;
+				}
+				.box{
+					text-align:center;
+					padding:0;
+				}
+				h3{
+					font-size:25px;
+					line-height:28px;
+				}
+			}
+		}
+		.shop-name{
+			margin:0;
+			li{
+				margin:0;
+				border-bottom:1px solid #e8e8e8;
+				a{
+					display:block;
+					padding:15px;
+					text-align:center;
+				}
+			}
+		}
+		.btn-top{
+			margin:15px 0 5px;
+		}
+		.scroll-to-top {
+			position: fixed;
+			background:url(../../images/back-to-top.png) no-repeat;
+			cursor: pointer;
+			width:55px;
+			height: 55px;
+			bottom: 1em;
+			padding-right: 1em;
+			display: none;
+			z-index: 999;
+			margin: -5px 293px;
+		}
+	}
+}

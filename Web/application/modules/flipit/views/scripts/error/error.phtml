@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>404 error - Page does not exist</title>
+        <?php
+        if (APPLICATION_ENV == 'development') {
+            $lessCssPath = "/public/css/front_end/";
+            $this->headLink(array("rel"=>"stylesheet/less", 'href'=>$lessCssPath.'all.less'));
+            echo $this->headLink(array("rel"=>"stylesheet/less", 'href'=>$lessCssPath.'ie.less'));
+        } else {
+            echo $this->headLink()
+                ->prependStylesheet("/public/css/front_end/all.css");
+        }
+        ?>
+    </head>
+    <body class="page404">
+        <?php echo FrontEnd_Helper_LayoutContent::loadGoogleTagManager(); ?>
+        <div class="bg-stretch">
+            <img src="<?php echo HTTP_PATH; ?>public/images/front_end/img-46.jpg" alt="" />
+        </div>
+        <div id="wrapper">
+            <main role="main" id="main">
+                <div class="container">
+                    <div class="section404">
+                        <strong class="logo flipit"><a href="http://www.flipit.com">FlipIt</a></strong>
+                        <div class="row-block">
+                            <div class="text-block">
+                                <h1>Sorry, that page doesn’t exist&#33;</h1>
+                                <p>Whoops, looks like you’ve made a little mistake. No worries, return to our <a href="http://www.flipit.com/">homepage</a> or click back.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+<?php echo $this->render('partials/_js.phtml'); ?>
+    </body>
+</html>

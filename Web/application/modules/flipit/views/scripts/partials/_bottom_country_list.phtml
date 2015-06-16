@@ -1,0 +1,115 @@
+    <div class="down"></div>
+    <div class="countries">
+      <ul class="column">
+        <li class="continent">Europe</li>
+        <li><a href="http://www.flipit.com/be">Belgium | België</a></li>
+        <li><a href="http://www.flipit.com/fr">France</a></li>
+        <li><a href="http://www.flipit.com/de">Germany | Deutschland</a></li>
+        <li><a href="http://www.flipit.com/pl">Poland | Polska</a></li>
+        <li><a href="http://www.flipit.com/es">Spain | España</a></li>
+        <li><a href="http://www.flipit.com/ch">Switzerland | Schweiz</a></li>
+        <li><a href="http://www.kortingscode.nl">Netherlands | Nederland *</a></li>
+        <li><a href="http://www.flipit.com/at">Austria | Österreich</a></li>
+      </ul>
+      <ul class="column second-row">
+        <li><a href="http://www.flipit.com/dk">Denmark | Danmark</a></li>
+        <li class="disabled">Finland | Suomi</li>
+        <li><a href="http://www.flipit.com/it">Italy | Italia</a></li>
+        <li class="disabled">Norway | Norge</li>
+        <li><a href="http://www.flipit.com/se">Sweden | Sverige</a></li>
+        <li><a href="http://www.flipit.com/pt">Portugal</a></li>
+        <li class="disabled">Turkey | Türkiye</li>
+        <li class="disabled">United Kingdom</li>
+      </ul>
+      <ul class="column">
+        <li class="continent">Asia</li>
+        <li><a href="http://www.flipit.com/in">India</a></li>
+        <li><a href="http://www.flipit.com/id">Indonesia</a></li>
+        <li class="disabled">Japan | 日本</li>
+        <li><a href="http://www.flipit.com/my">Malaysia | Malasja</a></li>
+        <li><a href="http://www.flipit.com/sg">Singapore</a></li>
+      </ul>
+      <ul class="column">
+        <li class="continent">Africa</li>
+        <li class="disabled">South Africa</li>
+      </ul>
+      <ul class="column">
+        <li class="continent">Australia</li>
+        <li><a href="http://www.flipit.com/au">Australia</a></li>
+        <li><a href="http://www.flipit.com/nz">New Zealand</a></li> 
+      </ul>
+      <ul class="column">
+        <li class="continent">North and South America</li>
+        <li><a href="http://www.flipit.com/br">Brazil | Brasil</a></li>
+        <li><a href="http://www.flipit.com/ca">Canada</a></li>
+        <li><a href="http://www.flipit.com/us">United States</a></li>
+      </ul>
+      <ul class="comment">
+        <li><span>* = on local domain </span>| Grey countries are coming soon!</li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<footer id="social">
+
+<!-- Desktop footer -->
+  <div class="desktop">
+    <div class="container">
+      <?php  $url = HTTP_PATH; $title = $this->translate("");  ?>
+      <div class="socialcolumn">
+        <h2>Join our Adventure!</h2>
+        <p class="follow">And share our story:</p>
+      </div>
+      <div class="border"><img src="<?php echo HTTP_PATH;?>public/flipit/images/border.png" alt="" /></div>
+      <div class="fbcolumn">
+        <p class="follow"> Like us on Facebook </p>
+        <div class='flike-outer fb-share'>
+          <div id='fb-root'></div>
+          <div class='fb-like' data-href='<?php echo $url; ?>' data-send='false' data-layout='button_count' data-width='50' data-show-faces='false'>&nbsp;
+          </div>
+        </div>
+      </div>
+      <div class="border"><img src="<?php echo HTTP_PATH;?>public/flipit/images/border.png" alt="" /></div>
+      <div class="twittercolumn">
+        <p class="follow"> Tweet about Flipit.com </p>
+        <div class='flike-outer twitter-share'>
+          <a href='https://twitter.com/share' data-url='<?php echo $url; ?>' class='twitter-share-button'  data-lang='<?php echo LOCALE; ?>'></a>
+        </div>  
+      </div>
+      <div class="border"><img src="<?php echo HTTP_PATH;?>public/flipit/images/border.png" alt="" /></div>                
+      <div class="fbcolumn">
+          <p class="follow"> +1 Flipit.com on Google+ </p>
+        <div class='flike-outer gplus-share'>
+              <div class='g-plusone'  data-href='<?php echo $url; ?>' data-size='medium'></div>
+          </div> 
+      </div>
+    </div>
+  </div>
+
+<!-- Mobile footer -->
+  <div class="mobile">
+    <div class="container">
+      <?php  $url = HTTP_PATH; $title = $this->translate("");  ?>
+      <div class="socialcolumn">
+        <h2>Join our Adventure!</h2>
+        <p class="follow">And share our story</p>
+      </div>
+      <div class="border"><img src="<?php echo HTTP_PATH;?>public/flipit/images/border.png" alt="" /></div>
+        <div class='flike-outer fb-share'>
+          <div id='fb-root'></div>
+          <div class='fb-like' data-href='<?php echo $url; ?>' data-send='false' data-layout='button_count' data-width='50' data-show-faces='false'>&nbsp;
+          </div>
+        </div>
+        <div class='flike-outer twitter-share'>
+          <a href='https://twitter.com/share' data-url='<?php echo $url; ?>' class='twitter-share-button'  data-lang='<?php echo LOCALE; ?>'></a>
+        </div>  
+        <div class='flike-outer gplus-share'>
+          <div class='g-plusone'  data-href='<?php echo $url; ?>' data-size='medium'></div>
+        </div> 
+    </div>
+  </div>
+
+  <div class="change-way">
+    CHANGING THE WAY WE SAVE
+  </div>

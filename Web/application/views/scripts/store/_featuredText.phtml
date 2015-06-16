@@ -1,0 +1,12 @@
+<?php
+if (!empty($this->shopInfo['featuredtextdate'])) {
+    if ($this->shopInfo['featuredtextdate']->format('Y-m-d') >= date('Y-m-d')) { ?>
+        <div class="info-note">
+            <p>
+            <?php echo $this->shopInfo['featuredtext']; ?>
+            </p>
+        </div>
+    <?php
+    }
+}
+?>

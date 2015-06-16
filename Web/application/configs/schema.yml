@@ -1,0 +1,239 @@
+Offer:
+  actAs:
+    SoftDelete:
+      name: deleted
+      type: boolean
+    Timestampable:
+      created:
+        name: created_at
+      updated:
+        name: updated_at
+  columns:
+    id:
+      primary: true
+      type: integer(20)
+      notnull: true
+      autoincrement: true
+      comment: PK
+    title:
+      type: string(255)
+    Visability:
+      type: enum
+      values: [DE,MEM]
+      comment: DF for default and MEM for members only
+    discountType:
+      type: enum
+      values: [CD,SL,PA]
+      comment: CD -Code ,SL – Sale,PA – Printable
+    couponCode:
+      type: string(50)
+    refOfferUrl:
+      type: string(255)
+      comment: Ref. offer logo URL for printable discount type
+    refURL:
+      type: string(255)
+    startDate:
+      type: timestamp
+    endDate:
+      type: timestamp
+    exclusiveCode:
+      default: 0
+      type: boolean
+    editorPicks:
+      default: 0
+      type: boolean
+    extendedOffer:
+      default: 0
+      type: boolean
+    extendedTitle:
+      type: string(255)
+    extendedUrl:
+      type: string(255)
+    extendedMetaDescription:
+      type: string(1024)
+    extendedFullDescription:
+      type: blob
+    shopId:
+      type: integer(20)
+      comment: FK to shop.id
+    offerLogoId:
+      unique: true
+      type: integer(20)
+      comment: FK to image.id , Offer Logo  for printable discount type
+Category:
+  actAs:
+    SoftDelete:
+      name: deleted
+      type: boolean
+      options:
+        default: 0
+    Timestampable:
+      created:
+        name: created_at
+      updated:
+        name: updated_at
+  columns:
+    id:
+      primary: true
+      type: integer(20)
+      notnull: true
+      autoincrement: true
+      comment: PK
+    name:
+      type: string(100)
+    permaLink:
+      type: string(255)
+    metaDescription:
+      type: string(1024)
+    description:
+      type: blob
+    status:
+      type: boolean
+    categoryIconId:
+      unique: true
+      type: integer(20)
+      comment: FK to image.id
+PopularVouchercodes:
+  actAs:
+    SoftDelete:
+      name: deleted
+      type: boolean
+    Timestampable:
+      created:
+        name: created_at
+      updated:
+        name: updated_at
+  columns:
+    id:
+      primary: true
+      type: integer(20)
+      notnull: true
+      autoincrement: true
+      comment: PK
+    type:
+      type: enum
+      values: [MN , AT]
+      comment: AT – Automatic popularity, MN – Manual  popularity
+    position:
+      type: integer(20)
+      comment: Holds the shop position among popular offer list
+    status:
+      type: boolean
+    vaoucherofferId:
+      unique: true
+      type: integer(20)
+      comment: FK to offer.id
+  relations:
+    offer:
+      class: Offer
+      foreignAlias: vouchercodes
+      local: vaoucherofferId
+      foreign: id
+SpecialList:
+  actAs:
+    SoftDelete:
+      name: deleted
+      type: boolean
+    Timestampable:
+      created:
+        name: created_at
+      updated:
+        name: updated_at
+  columns:
+    id:
+      primary: true
+      type: integer(20)
+      notnull: true
+      autoincrement: true
+      comment: PK
+    type:
+      type: enum
+      values: [MN , AT]
+      comment: AT – Automatic popularity, MN – Manual  popularity
+    position:
+      type: integer(20)
+      comment: Holds the shop position among popular offer list
+    status:
+      type: boolean
+    specialOfferId :
+      unique: true
+      type: integer(20)
+      comment: FK to offer.id
+  relations:
+    offer:
+      class: Offer
+      foreignAlias: specialoffers
+      local: specialOfferId 
+      foreign: id
+SpecialList:
+  actAs:
+    SoftDelete:
+      name: deleted
+      type: boolean
+    Timestampable:
+      created:
+        name: created_at
+      updated:
+        name: updated_at
+  columns:
+    id:
+      primary: true
+      type: integer(20)
+      notnull: true
+      autoincrement: true
+      comment: PK
+    type:
+      type: enum
+      values: [MN , AT]
+      comment: AT – Automatic popularity, MN – Manual  popularity
+    position:
+      type: integer(20)
+      comment: Holds the shop position among popular offer list
+    status:
+      type: boolean
+    specialOfferId :
+      unique: true
+      type: integer(20)
+      comment: FK to offer.id
+  relations:
+    offer:
+      class: Offer
+      foreignAlias: specialoffers
+      local: specialOfferId 
+      foreign: id
+PopularCategory:
+  actAs:
+    SoftDelete:
+      name: deleted
+      type: boolean
+    Timestampable:
+      created:
+        name: created_at
+      updated:
+        name: updated_at
+  columns:
+    id:
+      primary: true
+      type: integer(20)
+      notnull: true
+      autoincrement: true
+      comment: PK
+    type:
+      type: enum
+      values: [MN , AT]
+      comment: AT – Automatic popularity, MN – Manual  popularity
+    position:
+      type: integer(20)
+      comment: Holds the shop position among popular category list
+    status:
+      type: boolean
+    categoryId :
+      unique: true
+      type: integer(20)
+      comment: FK to category.id
+  relations:
+    offer:
+      class: Category
+      foreignAlias: popularcategory
+      local: categoryId 
+      foreign: id 

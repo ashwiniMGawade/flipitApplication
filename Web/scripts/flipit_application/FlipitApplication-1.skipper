@@ -1,0 +1,1791 @@
+<?xml version="1.0"?>
+<skipper version="3.0.0.1104" name="FlipitApplication" mvc="Zend Framework" orm="Doctrine2" uuid="f8d77ed5-cdfa-45e5-b861-23918ccbc748">
+  <module name="Name of the project" import-format="Doctrine2Php" import-path="../KC" uuid="5eb3913c-5ab8-42de-a18d-1fe3a4066ea1">
+    <entity name="About" uuid="{02E72079-1640-48D7-B96B-EF9CDD4C9D99}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="4b87c5e9-c30b-402e-aaae-0d87c6956cd3"/>
+      <field name="title" type="string" size="100" default="NULL" uuid="4c176072-09a1-42a2-8e26-43e5759cfe22"/>
+      <field name="content" type="text" default="NULL" uuid="0c4dee99-4fec-4c8f-9442-23e592100c3b"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="ee9bd15a-e3a1-47cd-92bb-a2f66f8745fb"/>
+      <field name="created_at" type="datetime" required="true" uuid="93e062f7-2e18-4627-854e-40f642bdf247"/>
+      <field name="updated_at" type="datetime" required="true" uuid="77d8c20a-f868-4fbf-b23a-ed1380e5c61a"/>
+      <orm-attributes>
+        <attribute name="table">about</attribute>
+        <attribute name="export-file-name">About.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="Adminfavoriteshp" uuid="{BCDE8A34-4763-41EB-ADBE-72C4529E8B85}">
+      <field name="id" description="PK" type="integer" size="11" required="true" primary="true" auto-increment="true" uuid="b557446a-f5ca-4578-bc4f-60d955eedfc0"/>
+      <field name="userId" description="FK to user.id" type="integer" size="11" required="true" uuid="0c1a4486-d448-4a83-bc90-6382ebdf7056"/>
+      <field name="shopId" type="integer" size="8" uuid="88ab2005-6f54-4f57-b3ca-256d8aee6c0e"/>
+      <orm-attributes>
+        <attribute name="table">adminfavoriteshp</attribute>
+        <attribute name="export-file-name">Adminfavoriteshp.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Adminfavoriteshp" to="Shop" caption="Shop Adminfavoriteshp" owner-alias="adminfevoriteshops" inverse-alias="shops" uuid="f55fabc8-918f-4762-ac24-3e29efd7641a">
+      <association-field from="shopId" to="id"/>
+    </association>
+    <entity name="AffliateNetwork" uuid="{123CEBAB-6410-4A59-8FC6-FCCC8A2648EC}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="ee5432b6-dfa3-49ba-89f5-844830e7c1fc"/>
+      <field name="name" type="string" default="NULL" uuid="cb0e8951-e56c-4903-80b3-0902e37776e6"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="1154ac08-e7ec-4920-92bb-6a54b505b07d"/>
+      <field name="replacewithId" description="FK to affliate_network.id , Defines a network is merged or not" type="integer" size="8" default="NULL" auto-increment="true" uuid="0e98e96f-023f-4cab-963a-f56c9dcdc4a4"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="3f962258-a44c-44f8-9007-fae3e0f8a486"/>
+      <field name="created_at" type="datetime" required="true" uuid="9e1e7803-d7c6-4702-8e8b-5ef11026f302"/>
+      <field name="updated_at" type="datetime" required="true" uuid="75b567a7-057b-4622-8379-53128467c51d"/>
+      <field name="subId" type="string" default="NULL" uuid="043811d4-eb8b-46f4-9303-2c0445c21776"/>
+      <index name="replacewithid_idx">
+        <index-field name="replacewithId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">affliate_network</attribute>
+        <attribute name="export-file-name">AffliateNetwork.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="AffliateNetwork" to="AffliateNetwork" caption="affliate_network_replacewithid_affliate_network_id" owner-alias="affliate_network" inverse-alias="affliate_networks" uuid="{EEE3FFF0-42D1-44CE-BD65-F4D443AFAC92}">
+      <association-field from="replacewithId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="ArticleChapter" uuid="{DF31B05E-9F02-49CE-91E4-2AE301977DB9}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="1c6fb0f4-b7c9-4a53-a2fb-962d7fa98542"/>
+      <field name="title" type="string" default="NULL" uuid="20d38ab4-7000-4767-8564-81f0dd552d96"/>
+      <field name="content" type="text" default="NULL" auto-increment="true" uuid="67cdf592-3789-4af8-9dd9-9bd951aad773"/>
+      <field name="created_at" type="datetime" default="NULL" uuid="ac5a4743-84f6-419f-9ca2-cd0592dbe1e3"/>
+      <field name="updated_at" type="datetime" default="NULL" uuid="0e0a04e5-9bc9-4490-8a56-0ed6d3537cdd"/>
+      <field name="articleId" type="integer" size="8" uuid="74121c62-2182-43c0-b952-3f3292694299"/>
+      <orm-attributes>
+        <attribute name="table">article_chapter</attribute>
+        <attribute name="export-file-name">ArticleChapter.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="ArticleChapter" to="Articles" caption="Articles ArticleChapter" owner-alias="articleChapter" inverse-alias="article" uuid="9677f5b1-5a72-45e7-b329-322a9327ec42">
+      <association-field from="articleId" to="id"/>
+    </association>
+    <entity name="Articlecategory" uuid="{C11F68A0-F755-42D5-8B6A-2229291278B5}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="a25efa97-7f0c-4d80-86f0-3e6ef86d8071"/>
+      <field name="name" type="string" size="100" default="NULL" auto-increment="true" uuid="09f43bc3-7a32-4343-b99c-ee7c8aabc7b0"/>
+      <field name="permalink" type="string" size="255" default="NULL" uuid="ec56033f-bd3d-4260-84e0-74ee972035ca"/>
+      <field name="metatitle" type="string" default="NULL" uuid="f0b2401b-d627-4df9-ad6c-c6ecbdadb543"/>
+      <field name="metadescription" type="string" default="NULL" uuid="0f22fcb2-0f46-4e38-b5b8-41a14dda36e5"/>
+      <field name="description" type="text" default="NULL" uuid="5b1d1396-9b6b-40c6-bab1-a80f795f4617"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="8d7d8c2d-fce1-4893-bd6a-021de30cc433"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="fc594b5a-ca53-4a25-920c-2c92faaa1a64"/>
+      <field name="created_at" type="datetime" required="true" uuid="8fd108a1-c501-4215-8320-b50bfe7b9aaa"/>
+      <field name="updated_at" type="datetime" required="true" uuid="1104890d-07dd-4e1a-8eab-0e3b4838f1b7"/>
+      <field name="categorytitlecolor" type="string" required="true" uuid="7df0134b-c597-4c69-96a2-7f1acb2b776c"/>
+      <index name="categoryiconid" unique="true">
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="categoryiconid_idx"/>
+      <orm-attributes>
+        <attribute name="table">articlecategory</attribute>
+        <attribute name="export-file-name">Articlecategory.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="Articles" uuid="{24FB2AE8-5018-45E4-9F0B-FA4A339D9337}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="8eff8079-e055-4e4b-9884-c8117974a3b8"/>
+      <field name="title" type="string" size="255" default="NULL" uuid="135fec25-1919-44bf-aa9a-ab13952f8a00"/>
+      <field name="permalink" type="string" size="255" default="NULL" uuid="957ddd55-ec49-49b9-a97e-8dbc395f6d96"/>
+      <field name="metatitle" type="string" default="NULL" uuid="39bdb575-16e0-43f5-8f1c-f684dd743033"/>
+      <field name="metadescription" type="string" default="NULL" uuid="5cb136ed-4ccb-4eb7-b37a-b8e039323568"/>
+      <field name="content" type="string" default="NULL" uuid="dde5fddf-0233-435c-98a6-e6b0c039fb85"/>
+      <field name="publish" type="integer" size="1" required="true" uuid="d572f2b1-b41e-4e70-9ca9-b80097e6020b"/>
+      <field name="publishdate" type="datetime" required="true" uuid="78626931-135d-4793-9058-6336c9d8c42c"/>
+      <field name="authorid" type="integer" size="8" required="true" uuid="6ea1766d-77a7-4bc1-a389-0788e0079417"/>
+      <field name="authorname" type="string" size="255" default="NULL" uuid="b9aaf505-1eff-4917-b123-faa890d88b1a"/>
+      <field name="deleted" type="integer" size="1" required="true" uuid="8aa2a8a6-2e2e-40d8-a654-f748aee1da42"/>
+      <field name="created_at" type="datetime" required="true" uuid="8a86a539-2bbe-4d6d-9b70-8735ef86a5fd"/>
+      <field name="updated_at" type="datetime" required="true" uuid="0c2b36ca-0a04-4e21-a13a-c25f1119d048"/>
+      <field name="thumbnailsmallid" type="integer" size="8" default="NULL" uuid="3387ea5b-0d3d-4b1a-8a53-df9b946efac9"/>
+      <field name="articles_icon_id" type="integer" size="11" uuid="721a08c7-f7cb-432d-a671-cd436b96b881"/>
+      <field name="thumbnailsmallid2" type="integer" size="11" uuid="12c90482-7d2e-4bdb-9e60-da3862e359c8"/>
+      <index name="thumbnailid"/>
+      <orm-attributes>
+        <attribute name="table">articles</attribute>
+        <attribute name="export-file-name">Articles.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Articles" to="ArticlesIcon" caption="ArticlesIcon Articles" owner-alias="articles" inverse-alias="articleImage" uuid="d820325b-4e9d-4631-8cd1-db93da37e50b">
+      <association-field from="articles_icon_id" to="id"/>
+    </association>
+    <association from="Articles" to="ArticlesThumb" caption="ArticlesThumb Articles" owner-alias="articles" inverse-alias="thumbnail" uuid="d3ad6845-cc20-4308-9b60-34032ee12f1a">
+      <association-field from="thumbnailsmallid2" to="id"/>
+    </association>
+    <entity name="ArticleViewCount" uuid="{5C1DCCDB-C802-43C6-8452-DCBCE3F2CCE3}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="0ee0b197-db3a-4584-a29c-4f1c3ac67dfe"/>
+      <field name="onclick" type="integer" size="8" required="true" uuid="e75ec382-7b31-48e1-aabd-22e2bf0be24a"/>
+      <field name="onload" type="integer" size="8" default="NULL" uuid="2bd1e2aa-7369-4c71-97aa-bed835f063fa"/>
+      <field name="ip" type="string" size="255" default="NULL" uuid="849a2ade-113f-4231-980a-073a9aba85c5"/>
+      <field name="created_at" type="datetime" required="true" uuid="98198b43-cdf2-4eb1-b811-8ca6144fe3c0"/>
+      <field name="updated_at" type="datetime" required="true" uuid="af62da58-2dbc-4834-b730-647f8dbbedf1"/>
+      <field name="deleted" type="integer" size="11" default="'0'" required="true" uuid="0d8909d9-c87c-484c-99ea-004c577fba9f"/>
+      <field name="articleid" type="integer" size="8" uuid="d03e409e-19da-4b44-b801-b4c757c372b1"/>
+      <orm-attributes>
+        <attribute name="table">articleviewcount</attribute>
+        <attribute name="export-file-name">ArticleViewCount.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="ArticleViewCount" to="Articles" caption="Articles Articleviewcount" owner-alias="articleviewcount" inverse-alias="articles" uuid="0f0fca0d-3236-48fd-a3d9-a18272f7206f">
+      <association-field from="articleid" to="id"/>
+    </association>
+    <entity name="Category" uuid="{8712194F-EF54-4BB9-935F-E690F85E9139}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="740e3951-c917-4f11-b4af-c331f9a8fe97"/>
+      <field name="name" type="string" size="100" default="NULL" auto-increment="true" uuid="10a95b40-3876-47a6-9dd7-e112fc7685fc"/>
+      <field name="permaLink" type="string" size="255" default="NULL" uuid="59565f40-5693-4d3d-afb2-675c0d3264d9"/>
+      <field name="metatitle" type="string" default="NULL" uuid="85994c4a-55ac-48ee-8e72-ca7470a207d4"/>
+      <field name="metaDescription" type="string" default="NULL" uuid="8e4cf79c-5994-4ab0-ac51-035fd4b74738"/>
+      <field name="description" type="text" default="NULL" uuid="8173486d-f31b-474d-af5f-bf494aef17c8"/>
+      <field name="status" type="integer" size="1" default="NULL" auto-increment="true" uuid="aa8d74df-a074-455c-9fb4-f0c3de7fadcc"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="1179d7f9-aa02-48d6-8df3-d42ca9ac02f9"/>
+      <field name="created_at" type="datetime" required="true" uuid="8f718385-5de8-4fb4-ab78-8b100b6f8e33"/>
+      <field name="updated_at" type="datetime" required="true" uuid="3915403b-b3be-47aa-8b6b-eccd4b051154"/>
+      <field name="featured_category" type="integer" size="1" default="NULL" uuid="6ce36089-f864-4ada-aed5-52e1d97db0ee"/>
+      <field name="categoryIconId" type="integer" size="11" uuid="95826eb3-83ed-4a7d-8ca3-b831cae43dd4"/>
+      <field name="categoryIconId2" type="integer" size="11" uuid="f55a48b5-d204-42ca-9d2e-d440a831da4b"/>
+      <index name="categoryiconid" unique="true">
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="categoryiconid_idx"/>
+      <index name="name">
+        <index-field name="name"/>
+      </index>
+      <index name="name_2">
+        <index-field name="name"/>
+      </index>
+      <index name="name_3">
+        <index-field name="name"/>
+      </index>
+      <index name="name_4">
+        <index-field name="name"/>
+      </index>
+      <index name="name_5">
+        <index-field name="name"/>
+      </index>
+      <index name="name_6">
+        <index-field name="name"/>
+      </index>
+      <index name="name_7">
+        <index-field name="name"/>
+      </index>
+      <index name="name_8">
+        <index-field name="name"/>
+      </index>
+      <index name="name_9">
+        <index-field name="name"/>
+      </index>
+      <index name="name_10">
+        <index-field name="name"/>
+      </index>
+      <index name="categoryFeaturedImageId_foreign_key"/>
+      <index name="categoryHeaderImageId_foreign_key"/>
+      <orm-attributes>
+        <attribute name="table">category</attribute>
+        <attribute name="export-file-name">Category.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Category" to="CategoryIcon" caption="CategoryIcon Category" owner-alias="category" inverse-alias="categoryicon" uuid="1e48bd3f-cbfc-41b4-ba1f-4d19677b7079">
+      <association-field from="categoryIconId" to="id"/>
+    </association>
+    <association from="Category" to="ArticleCategoryIcon" caption="ArticleCategoryIcon Category" owner-alias="category" inverse-alias="articlecategoryicon" uuid="e3f851da-84d6-42f7-9340-851e327b0fc4">
+      <association-field from="categoryIconId2" to="id"/>
+    </association>
+    <entity name="Conversions" uuid="{55724A03-6EA1-4888-9464-81B707CD054A}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="b07472f3-c11a-4cad-8a33-fec4b2f63a8c"/>
+      <field name="IP" type="string" size="50" default="NULL" uuid="039d788b-b797-4a57-b6b5-1195a61c334d"/>
+      <field name="subid" type="string" size="50" default="NULL" uuid="aa4042f5-c698-4743-8885-b5957e2cad5c"/>
+      <field name="utma" type="string" size="255" default="NULL" uuid="691bb339-3ab0-4f3f-ae17-e855fce816f2"/>
+      <field name="utmz" type="string" size="255" default="NULL" uuid="d06ea301-61f7-4cf4-a905-852820a950bf"/>
+      <field name="utmv" type="string" size="255" default="NULL" uuid="17aa0621-79eb-4a2a-99a0-aa1b80f7ab63"/>
+      <field name="utmx" type="string" size="255" default="NULL" uuid="8e0f9c04-e2bf-4039-9565-c10e0da96874"/>
+      <field name="converted" type="integer" size="1" default="'0'" uuid="4c532692-7058-436d-b38f-80860d5922e2"/>
+      <field name="created_at" type="datetime" default="NULL" uuid="9cb61e92-ed27-4ce8-95a2-074d0572ffdb"/>
+      <field name="updated_at" type="datetime" default="NULL" uuid="ba47fb78-9106-4114-879d-6fcbba47ad12"/>
+      <field name="shopId" type="integer" size="8" uuid="0ef8e7ce-1d79-444d-b0a3-dce3956ac0ef"/>
+      <field name="visitorId" type="integer" size="8" uuid="7424a1b6-bd9d-4fac-b3a3-e3efe04825ce"/>
+      <field name="offerId" type="integer" size="8" uuid="5bf3061b-d195-4ee0-83a8-567758156001"/>
+      <index name="offer_conversion_idx">
+        <index-field name="converted"/>
+        <index-field name="IP"/>
+      </index>
+      <index name="shop_conversion_idx">
+        <index-field name="converted"/>
+        <index-field name="IP"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">conversions</attribute>
+        <attribute name="export-file-name">Conversions.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Conversions" to="Shop" caption="Shop Conversions" owner-alias="conversions" inverse-alias="shop" uuid="aa1f04d8-d7f2-4cae-912b-4fddfce218b3">
+      <association-field from="shopId" to="id"/>
+    </association>
+    <association from="Conversions" to="Visitor" caption="Visitor Conversions" owner-alias="conversions" inverse-alias="visitor" uuid="09dbb063-18d2-4cc5-813e-82284e2ebe2f">
+      <association-field from="visitorId" to="id"/>
+    </association>
+    <association from="Conversions" to="Offer" caption="Offer Conversions" owner-alias="conversions" inverse-alias="offer" uuid="cd2fbaea-9ba5-47f8-b301-8c81a3887dfa">
+      <association-field from="offerId" to="id"/>
+    </association>
+    <entity name="CouponCode" uuid="{588AB6CB-74FB-4883-82DE-FF85B94A2723}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="46efb864-9b8b-468c-ae75-bd0c33e0e8f1"/>
+      <field name="code" type="string" size="255" default="NULL" uuid="f6b15c56-d2e0-46a0-8142-c3cbffc48e18"/>
+      <field name="status" description="1-available ,0-used" type="integer" size="1" default="'1'" uuid="53706090-b255-4c69-93df-2fa5b1706192"/>
+      <field name="offerid" type="integer" size="8" uuid="78752d79-da21-40df-bc54-da211033525f"/>
+      <index name="couponcode_idx">
+        <index-field name="status"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">couponcode</attribute>
+        <attribute name="export-file-name">CouponCode.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="CouponCode" to="Offer" caption="Offer Couponcode" owner-alias="couponcode" inverse-alias="offer" uuid="b6c02f18-e7b2-45f8-ba5b-ea772609bf50">
+      <association-field from="offerid" to="id"/>
+    </association>
+    <entity name="Dashboard" uuid="{20C0A17B-902E-48DD-8DE3-EB5793CD9D0D}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="4159e21d-c5c3-45f4-a9fa-39b26cc1bee8"/>
+      <field name="message" type="string" default="NULL" uuid="1532d715-a136-4e64-9223-3bcfd8c50e59"/>
+      <field name="no_of_offers" type="integer" size="8" default="NULL" uuid="a8f11db8-983e-40b0-9ca0-61a123f45d06"/>
+      <field name="no_of_shops" type="integer" size="8" default="NULL" uuid="50e9440c-1289-4ff7-8c97-bacb48ee6499"/>
+      <field name="no_of_clickouts" type="integer" size="8" default="NULL" uuid="bd3e2c8e-51ac-49fc-984b-308d010c11ee"/>
+      <field name="no_of_subscribers" type="integer" size="8" default="NULL" uuid="7ae5c2f5-e366-4fb4-8f7c-2cf521e94efc"/>
+      <field name="total_no_of_offers" type="integer" size="8" default="NULL" uuid="5fa77854-1aef-492a-9769-8863d39fed30"/>
+      <field name="total_no_of_shops" type="integer" size="8" default="NULL" uuid="b48f47c7-e31c-450a-8ae0-65309577c671"/>
+      <field name="total_no_of_shops_online_code" type="integer" size="8" default="NULL" uuid="0f6f5e2a-e6b9-4db9-8ac6-33585130032e"/>
+      <field name="total_no_of_shops_online_code_lastweek" type="integer" size="8" default="NULL" uuid="4c5e3347-5160-4423-8782-a079192a5b9c"/>
+      <field name="total_no_members" type="integer" size="8" default="NULL" uuid="607ce6a2-de26-47ac-98ad-fcd303ed0a07"/>
+      <field name="deleted" type="integer" size="1" default="NULL" uuid="8d00156e-a9bb-439c-84cb-ca0fef0caf59"/>
+      <field name="created_at" type="datetime" default="NULL" uuid="110a16d4-e51a-452d-8f63-efc79728354d"/>
+      <field name="updated_at" type="datetime" default="NULL" uuid="9405cf20-b0f9-4f09-8560-b4ac87a8599d"/>
+      <field name="total_no_of_shops_online_code_thisweek" type="integer" size="11" default="'0'" required="true" uuid="45f73381-6a4e-43de-a5ef-3fc68de534cf"/>
+      <orm-attributes>
+        <attribute name="table">dashboard</attribute>
+        <attribute name="export-file-name">Dashboard.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="DisqusComments" uuid="{32F111C9-2D80-44A5-A140-1D90070BC83D}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="367a407e-57f2-4b4e-a379-980fd721ef21"/>
+      <field name="comment_id" type="integer" size="8" default="NULL" uuid="036d7d56-a769-4c4b-89e6-2ce107226eed"/>
+      <field name="message" type="string" size="255" default="NULL" uuid="9269cf90-2ce1-4d58-8ea1-81d70e109104"/>
+      <field name="page_title" type="string" size="255" default="NULL" uuid="00083132-6c0f-41d8-9e28-72a22d385506"/>
+      <field name="page_url" type="string" size="255" default="NULL" uuid="5d48a7e6-0625-4b42-81a0-5f22f0c9d1d5"/>
+      <field name="created_at" type="datetime" default="NULL" uuid="67ed38c2-baa9-4d83-8759-27a1e930ea8b"/>
+      <field name="author_name" type="string" size="255" default="NULL" uuid="21e62b63-01b0-4aa6-9e69-665ea2e0e96e"/>
+      <field name="author_profile_url" type="string" size="255" default="NULL" uuid="fa1c13c7-00c3-40be-9705-085d2a954016"/>
+      <field name="author_avtar" type="string" size="255" default="NULL" uuid="ea8a669f-7fe4-41b6-9808-83a528fcfbfd"/>
+      <index name="page_url_comments_idx">
+        <index-field name="page_url"/>
+      </index>
+      <index name="message_comments_idx">
+        <index-field name="message"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">disqus_comments</attribute>
+        <attribute name="export-file-name">DisqusComments.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="EmailLightBox" uuid="{724EC939-1631-4336-849B-BC664936F622}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="e4dad0b8-1d7b-4327-a200-341a4f60d6c6"/>
+      <field name="title" type="string" size="100" default="NULL" uuid="7f3229a6-9e86-4ad5-838d-1776da932aba"/>
+      <field name="content" type="text" default="NULL" uuid="ec5674e5-0191-42f6-9eca-044d25bc9cc9"/>
+      <field name="status" type="integer" size="1" default="'0'" uuid="5365b16f-ad29-46ae-919c-2541a27b91da"/>
+      <field name="created_at" type="datetime" required="true" uuid="d453b60c-6db0-4106-8129-c86424ec5f62"/>
+      <field name="updated_at" type="datetime" required="true" uuid="ea3c8be5-ea8d-44de-899f-ea2b3e0c9f41"/>
+      <orm-attributes>
+        <attribute name="table">email_light_box</attribute>
+        <attribute name="export-file-name">EmailLightBox.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="EmailSubscribe" uuid="{A72A1241-6090-45DD-9390-E1E8E67CBA45}">
+      <field name="id" type="integer" size="20" required="true" primary="true" auto-increment="true" uuid="00583230-ec4c-4029-87a3-c7949dca750a"/>
+      <field name="email" type="string" size="255" default="NULL" uuid="d07bae52-5ee2-429c-91a7-a2dbc4df5a62"/>
+      <field name="send" type="integer" size="20" uuid="cb7dba2f-2d09-4c0a-af27-d4b02d1bbf36"/>
+      <field name="deleted" type="integer" size="20" uuid="b5876aeb-dc87-4633-978e-2e2432945d07"/>
+      <field name="created_at" type="datetime" required="true" uuid="89330179-456a-4e1e-a180-0f73fb65a79a"/>
+      <field name="updated_at" type="datetime" required="true" uuid="7bd5d7c1-bc7f-4995-8b02-01a59bfeec20"/>
+      <orm-attributes>
+        <attribute name="table">email_subscribe</attribute>
+        <attribute name="export-file-name">EmailSubscribe.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="Emails" uuid="{756CF415-F185-47DE-9F6B-EFD73117D94A}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="690ab5c1-cc2c-424b-b2b0-3f19f9ba5814"/>
+      <field name="type" type="string" default="NULL" uuid="2fbc7447-0d3a-453f-8cf3-5fdd447a6970"/>
+      <field name="header" type="string" default="NULL" uuid="c59836b8-91bf-4840-882f-68e9ec760ba7"/>
+      <field name="body" type="string" default="NULL" uuid="1d08f71b-8ab5-46ea-9ce3-72a8248197a2"/>
+      <field name="footer" type="string" default="NULL" uuid="2f0eacf5-c0e4-40cf-b9bb-1b48942312aa"/>
+      <field name="schedule" type="string" default="NULL" uuid="cde84deb-605d-4195-b822-87dd1da84531"/>
+      <field name="test" type="string" default="NULL" uuid="21befafc-5bf9-443b-8d61-d674e21ad16c"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="fa15c6f1-9003-496c-af44-6cd3ddf0c1a7"/>
+      <field name="send_date" type="date" default="NULL" uuid="37424801-69ee-4440-aa31-0e7930715ed4"/>
+      <field name="deleted" type="integer" size="1" default="NULL" uuid="a1452eac-2da2-4a25-abbc-1df67faffa76"/>
+      <field name="created_at" type="datetime" default="NULL" uuid="f091b402-ac2d-43ef-bcc4-66715f8687fb"/>
+      <field name="updated_at" type="datetime" default="NULL" uuid="534fb0ea-15fe-4f52-b50e-b4c983117c2e"/>
+      <field name="send_counter" type="integer" size="8" default="NULL" uuid="9551d4c7-c18e-430e-8b13-70fdf8d3e88b"/>
+      <orm-attributes>
+        <attribute name="table">emails</attribute>
+        <attribute name="export-file-name">Emails.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="EmailSettings" uuid="{6CE256AA-47AE-491B-9F1A-51D4709ECAA5}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="d384f83f-fbb6-4e05-aa92-2ccc7a530ffa"/>
+      <field name="email" type="string" default="NULL" uuid="87682b87-f58b-49bc-bc3f-275741525200"/>
+      <field name="name" type="string" default="NULL" uuid="27d178c1-b1ab-4f03-a8e9-6ab11c6b34ff"/>
+      <field name="locale" type="string" default="NULL" uuid="a11b2113-e0f1-4bb1-b266-a82b00a5c3a7"/>
+      <field name="timezone" type="string" default="NULL" uuid="cab82ca8-2d00-4b85-96c1-30ef6e13fba0"/>
+      <field name="deleted" type="integer" size="1" default="NULL" uuid="04bf6561-bb13-48cb-a597-dae67a584712"/>
+      <field name="created_at" type="datetime" default="NULL" uuid="a92cf98a-0272-4084-bbba-d14a4e357d1b"/>
+      <field name="updated_at" type="datetime" default="NULL" uuid="d5fe8171-8cfe-459b-aca2-ff5833c6b247"/>
+      <orm-attributes>
+        <attribute name="table">emailsettings</attribute>
+        <attribute name="export-file-name">EmailSettings.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="ExcludedKeyword" uuid="{48A2018C-10DA-4507-B60C-75FECBA88531}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="41cac2fc-3f87-460e-a540-753144063afc"/>
+      <field name="keyword" type="string" size="255" default="NULL" uuid="81f8084d-9b07-43e0-87da-0179ea3964ed"/>
+      <field name="url" type="string" size="255" default="NULL" uuid="d77694b5-b8ec-4819-8990-5ac1ec305616"/>
+      <field name="action" type="integer" size="11" default="NULL" enum-values="'0','1'" uuid="00a85535-9081-4b7e-9751-4f1cec2d9ba6"/>
+      <field name="created_at" type="datetime" required="true" uuid="77f56b76-7c7a-4c9f-915f-cf5eef64083d"/>
+      <field name="updated_at" type="datetime" required="true" uuid="7c07fa11-0281-46bb-b82b-310dbb4a7586"/>
+      <orm-attributes>
+        <attribute name="table">excluded_keyword</attribute>
+        <attribute name="export-file-name">ExcludedKeyword.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="FavoriteOffer" uuid="{B23C9A63-0E02-4C14-B625-DA4986E6A3BC}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="b81bf975-1250-4f3f-9e0e-237b9d9c470f"/>
+      <field name="deleted" type="integer" size="1" required="true" uuid="b054d23d-b50f-46dc-a711-0321252a4302"/>
+      <field name="created_at" type="datetime" default="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" required="true" uuid="dba943f6-5a6a-439c-a87c-281a6602302c"/>
+      <field name="visitorId" type="integer" size="8" required="true" primary="true" uuid="1d8d1f7a-8831-4cf3-9919-a03183253e88"/>
+      <field name="offerId" type="integer" size="8" required="true" primary="true" uuid="43f15c82-4501-45bc-9983-f7ac57ec486d"/>
+      <orm-attributes>
+        <attribute name="table">favorite_offer</attribute>
+        <attribute name="export-file-name">FavoriteOffer.php</attribute>
+      </orm-attributes>
+    </entity>
+    <many-to-many mn-entity="FavoriteOffer" caption="Visitor to Offer" uuid="d1c31601-0ef7-413e-a08b-2c8347e02af0">
+      <many-to-many-entity name="Offer" owning-side="true" alias="offer" uuid="a9057be7-cd0c-44f8-9bc8-c43aa72092f3">
+        <many-to-many-field from="offerId" to="id"/>
+      </many-to-many-entity>
+      <many-to-many-entity name="Visitor" owning-side="false" alias="visitors" uuid="e62fc2af-9fec-47e8-a269-7ddd0c01ae4b">
+        <many-to-many-field from="visitorId" to="id"/>
+      </many-to-many-entity>
+    </many-to-many>
+    <entity name="FavoriteShop" uuid="{CC353541-D9A2-4951-B9EC-9C409201671B}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="525a75ec-5b67-480a-8b6f-73d22482bc76"/>
+      <field name="created_at" type="datetime" default="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" required="true" uuid="7b01ed52-2473-4e3a-81d0-f55e98e18eab"/>
+      <field name="deleted" type="integer" size="11" default="'0'" required="true" uuid="07aa58bb-8388-4a44-be86-40990cd9ade3"/>
+      <field name="visitorId" type="integer" size="8" required="true" primary="true" uuid="304f1913-8881-4b97-8155-408ba283bb8c"/>
+      <field name="shopId" type="integer" size="8" required="true" primary="true" uuid="b8df5260-140d-49cb-af65-e4eddc6dba02"/>
+      <index name="fav_cascade"/>
+      <orm-attributes>
+        <attribute name="table">favorite_shop</attribute>
+        <attribute name="export-file-name">FavoriteShop.php</attribute>
+      </orm-attributes>
+    </entity>
+    <many-to-many mn-entity="FavoriteShop" caption="Visitor to Shop" uuid="74f237f0-8dca-4ced-9218-ab3df15adb51">
+      <many-to-many-entity name="Shop" owning-side="true" alias="favoriteshops" uuid="b45f5621-62cd-4ee9-b94e-32ad759ce087">
+        <many-to-many-field from="shopId" to="id"/>
+      </many-to-many-entity>
+      <many-to-many-entity name="Visitor" owning-side="false" alias="visitors" uuid="ce66ce0b-0757-4e6a-9740-099a85faf351">
+        <many-to-many-field from="visitorId" to="id"/>
+      </many-to-many-entity>
+    </many-to-many>
+    <entity name="Footer" uuid="{33BE8E97-D05B-4EAB-8EF0-1BF069C542D8}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="3094ff90-d9ab-4ab0-8d6c-9cb040c5789c"/>
+      <field name="topFooter" type="string" default="NULL" uuid="ff218058-4784-440b-81a3-d15c36425d28"/>
+      <field name="middleColumn1" type="string" default="NULL" uuid="c770eb98-895e-492f-9428-c12c3a4cdabf"/>
+      <field name="middleColumn2" type="string" default="NULL" uuid="0481ddd4-3bfb-4b8c-a98b-d32d7420cc1f"/>
+      <field name="middleColumn3" type="string" default="NULL" uuid="9d6fc587-eeed-4734-982a-fd4cda2dfbcc"/>
+      <field name="middleColumn4" type="string" default="NULL" uuid="a938fee8-47ec-4086-9524-413c63126782"/>
+      <field name="bottomFooter" type="string" default="NULL" uuid="2c0c7787-d32c-47e1-9ec7-51a8d30a7e9b"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="a79aabe1-fc13-4fed-92b9-29865757cd19"/>
+      <field name="created_at" type="datetime" required="true" uuid="4fa6d9d8-1a2e-4efc-9cbc-de5deca3742a"/>
+      <field name="updated_at" type="datetime" required="true" uuid="070b70bf-9fdd-4a0f-b621-bbebcf810c70"/>
+      <orm-attributes>
+        <attribute name="table">footer</attribute>
+        <attribute name="export-file-name">Footer.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="Image" uuid="{2294F353-146D-4CAC-A218-4E76AE2019B1}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="aa47b9f8-ff71-45a2-868f-1165a088d281"/>
+      <field name="ext" type="string" size="5" default="NULL" uuid="793ab2ce-1a25-4e30-a9be-13eeb8b9f0ad"/>
+      <field name="type" type="string" size="10" default="NULL" uuid="c3f7bdab-99a8-463b-902d-244b93f56803"/>
+      <field name="path" type="string" size="255" default="NULL" uuid="e6ffd5b2-30c6-42d9-822a-a97940a3c9b6"/>
+      <field name="name" type="string" size="255" default="NULL" uuid="99a18ac6-39e2-4c87-8d37-ab14ac71dcc8"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="260b3052-e7b4-4b2b-bc56-e896b014705f"/>
+      <field name="created_at" type="datetime" required="true" uuid="03642c0a-64b7-4b63-8085-13f70f9cf556"/>
+      <field name="updated_at" type="datetime" required="true" uuid="1227248a-ee8a-4541-a7da-406e409b2ba0"/>
+      <index name="type_idx">
+        <index-field name="type"/>
+      </index>
+      <inheritance-parent discriminator-field="type" type="SINGLE_TABLE" uuid="4568c456-7fe1-4876-b487-764346dfdda1"/>
+      <orm-attributes>
+        <attribute name="table">image</attribute>
+        <attribute name="export-file-name">Image.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="Interestingcategory" uuid="{0E41DE14-96FB-4A27-A9A2-F4BE68023AAC}">
+      <field name="id" description="PK" type="integer" size="11" required="true" primary="true" auto-increment="true" uuid="18105945-78e2-4ba2-a269-4c74d1f39d99"/>
+      <field name="userId" description="FK to user.id" type="integer" size="11" required="true" uuid="5d880466-ce23-42de-80f9-409edea050bd"/>
+      <field name="categoryId" type="integer" size="8" uuid="921cad8d-2dbf-4561-829f-4643b070ad0e"/>
+      <orm-attributes>
+        <attribute name="table">interestingcategory</attribute>
+        <attribute name="export-file-name">Interestingcategory.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Interestingcategory" to="Category" caption="Category Interestingcategory" owner-alias="interestingcategory" inverse-alias="category" uuid="bfdd9516-4613-4e84-a8be-9c996ae4989a">
+      <association-field from="categoryId" to="id"/>
+    </association>
+    <entity name="LocaleSettings" uuid="{72537FAC-BC48-4F6C-9BF2-018C3C491C26}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="21ab646c-8a04-4ea1-9f4d-6563c68f61ec"/>
+      <field name="locale" type="string" size="10" default="NULL" uuid="b6b881b1-5766-4aaf-b61b-a38747604463"/>
+      <field name="timezone" type="string" size="255" default="NULL" uuid="205cb7ac-fd56-435f-943e-36880465b2db"/>
+      <orm-attributes>
+        <attribute name="table">locale_settings</attribute>
+        <attribute name="export-file-name">LocaleSettings.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="Mainmenu" uuid="{1D245D3D-5D55-4F0E-840B-82D535FE479B}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="1bea913f-07f2-4959-bdb7-42d917a67913"/>
+      <field name="name" type="string" size="255" default="NULL" uuid="64bfa368-50c6-439d-af67-751b749e0798"/>
+      <field name="parentId" type="integer" size="8" default="NULL" uuid="bbbc73f6-e1d3-486b-a845-bf7f139642c0"/>
+      <field name="root_id" type="integer" size="8" default="NULL" uuid="c61e7d41-cee4-4d43-afad-4742ef1e25db"/>
+      <field name="lft" type="integer" size="11" default="NULL" uuid="0f969832-a2a2-4a00-81ad-2a14278ec828"/>
+      <field name="rgt" type="integer" size="11" default="NULL" uuid="08bed3f6-5ef8-4446-b604-20d42bd611a9"/>
+      <field name="level" type="integer" size="2" default="NULL" uuid="2ef6689e-0a43-4757-95aa-19a622120b9a"/>
+      <field name="iconId" type="integer" size="8" default="NULL" uuid="f173edf0-64a0-41ec-8470-05a9b6757b8b"/>
+      <field name="url" type="string" size="255" default="NULL" uuid="8957655c-8e92-4a40-842d-05ab79342be7"/>
+      <field name="position" type="integer" size="11" default="'0'" required="true" uuid="e23b6a3a-f95c-4c5c-8162-d8afd7e2923d"/>
+      <orm-attributes>
+        <attribute name="table">mainmenu</attribute>
+        <attribute name="export-file-name">Mainmenu.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="Media" uuid="{1442674D-957C-44E0-A00C-388BB8A50977}">
+      <field name="id" type="integer" size="8" required="true" primary="true" uuid="f74242b6-49f8-4fcb-ac74-c9f4efa691b7"/>
+      <field name="name" type="string" size="100" default="NULL" uuid="6713e24d-9996-4026-9ee5-7405cb870aa5"/>
+      <field name="alternatetext" type="string" size="255" default="NULL" uuid="4a5941a5-8ed9-4198-a19c-30d2fddcbdb2"/>
+      <field name="caption" type="string" size="150" default="NULL" uuid="3cdd7064-8ca4-42d5-854e-bd31aa255b5c"/>
+      <field name="fileurl" type="string" size="255" default="NULL" uuid="a4be3437-3df3-4fd6-a6ec-9e1c328d8fc7"/>
+      <field name="authorName" type="string" size="255" default="NULL" uuid="1d3a4cd5-ac20-473d-8175-19f32186706b"/>
+      <field name="authorId" type="integer" size="11" required="true" uuid="a55fcc4c-1021-4475-9723-7e10b999c4f2"/>
+      <field name="description" type="string" default="NULL" uuid="dc4a7077-0a51-4c68-bd6d-382e480e06d7"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="1c16bb97-8f75-4a89-9877-1a786afaec25"/>
+      <field name="created_at" type="datetime" required="true" uuid="537acdef-a2d7-49e2-aad3-9f125f885593"/>
+      <field name="updated_at" type="datetime" required="true" uuid="2984243f-b01b-4f05-b36c-acb3362e515b"/>
+      <field name="media_image_id" type="integer" size="11" uuid="0a24de05-1b6f-4750-9dda-46fd7d8acc91"/>
+      <index name="mediaimageid_idx"/>
+      <orm-attributes>
+        <attribute name="table">media</attribute>
+        <attribute name="export-file-name">Media.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Media" to="MediaImage" caption="MediaImage Media" owner-alias="media" inverse-alias="mediaimage" uuid="c6d5e808-60d1-4071-a7f8-8b478c328399">
+      <association-field from="media_image_id" to="id"/>
+    </association>
+    <entity name="Menu" uuid="{E494873A-3753-47AC-909E-1CF78046AB85}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="27550b00-0e9b-4976-b995-5027a7b392d9"/>
+      <field name="name" type="string" size="255" default="NULL" uuid="7ceae95c-8ba7-432d-b654-f07515f9370e"/>
+      <field name="parentId" type="integer" size="8" default="NULL" uuid="4cf59c34-bd98-47a0-a89f-50974b793cc2"/>
+      <field name="root_id" type="integer" size="8" default="NULL" uuid="9697e23f-e268-4953-84f1-5371f8f2cf78"/>
+      <field name="lft" type="integer" size="11" default="NULL" uuid="480fdf58-73cb-488c-94d7-793d707c165c"/>
+      <field name="rgt" type="integer" size="11" default="NULL" uuid="cd0b0455-ce71-46c9-abf3-009182b2831f"/>
+      <field name="level" type="integer" size="2" default="NULL" uuid="196aadec-1050-4e4d-9b03-ee83abf68e61"/>
+      <field name="iconId" type="integer" size="8" default="NULL" uuid="29f040f8-b093-49f2-ae61-067dd5694e0e"/>
+      <field name="url" type="string" size="255" default="NULL" uuid="301132e6-6fff-4b48-81d7-40e75ab1621b"/>
+      <field name="position" type="integer" size="11" default="'0'" required="true" uuid="f9927871-7dc2-4af2-abc2-a18ad4a7fc03"/>
+      <orm-attributes>
+        <attribute name="table">menu</attribute>
+        <attribute name="export-file-name">Menu.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="MigrationVersion" uuid="{B9019580-8935-4642-A7D1-66334AD4190B}">
+      <field name="version" type="integer" size="11" default="NULL" uuid="13c4b9a2-e888-4e48-b4bd-af5faaa5141a"/>
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="b5329e49-3f68-45c4-b734-afc43cf107de"/>
+      <orm-attributes>
+        <attribute name="table">migration_version</attribute>
+        <attribute name="export-file-name">MigrationVersion.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="MoneySaving" uuid="{A96CBA2F-63BA-46FC-A565-0EE5FA067917}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="c4f85aba-27df-441b-a67f-2f8bd0096f21"/>
+      <field name="created_at" type="datetime" required="true" uuid="6f1bdf53-bdb9-4356-a619-098eb5339c55"/>
+      <field name="updated_at" type="datetime" required="true" uuid="f842b21a-4177-4ff7-91da-6ca815cc8942"/>
+      <field name="deleted" type="integer" size="11" default="'0'" required="true" uuid="eb70beb8-6e69-4e20-a07a-49b10115f368"/>
+      <field name="pageid" type="integer" size="8" uuid="cc6aaa50-ed0d-4e54-8458-e422717e1120"/>
+      <field name="categoryid" type="integer" size="8" uuid="6f9a93b0-a2c1-4f99-8bf6-3882170c7479"/>
+      <orm-attributes>
+        <attribute name="table">moneysaving</attribute>
+        <attribute name="export-file-name">MoneySaving.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="MoneySaving" to="Page" caption="Page Moneysaving" owner-alias="moneysaving" inverse-alias="page" uuid="c1a3eb4e-69a1-4978-bdab-d6158be1b715">
+      <association-field from="pageid" to="id"/>
+    </association>
+    <association from="MoneySaving" to="Articlecategory" caption="Articlecategory Moneysaving" owner-alias="moneysaving" inverse-alias="articlecategory" uuid="661565db-3480-4677-b5a3-4489cc13c68d">
+      <association-field from="categoryid" to="id"/>
+    </association>
+    <entity name="MoneysavingArticle" uuid="{177840F9-376A-4AD3-A79C-50048F35FE0F}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="cea4277a-7395-454c-97f7-1f8b72563bd7"/>
+      <field name="type" type="string" size="255" default="NULL" uuid="12f03056-097e-40fa-b835-bfbdbc3a5b72"/>
+      <field name="position" description="Holds the code position among popular code list" type="integer" size="8" default="NULL" uuid="f417bbf1-1aab-4bce-a08e-a8ed1954ecb7"/>
+      <field name="status" description="1 ? enable , 0 ? disable" type="integer" size="1" default="'0'" uuid="c176bb3d-9dc8-4e97-a589-ff1ad0d1f184"/>
+      <field name="articleId" description="FK to articles.id" type="integer" size="8" default="NULL" uuid="3f9ff1c4-8445-4b07-8729-e08225927e37"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="64e19bd5-696f-4880-9819-b78dc9d359ca"/>
+      <field name="created_at" type="datetime" required="true" uuid="053717b9-6706-4b47-9d77-3a12099507a7"/>
+      <field name="updated_at" type="datetime" required="true" uuid="4ff09d3a-f64d-4841-950f-cf63c93972c9"/>
+      <index name="articleid" unique="true">
+        <index-field name="articleId"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="articleid_idx">
+        <index-field name="articleId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">moneysaving_article</attribute>
+        <attribute name="export-file-name">MoneysavingArticle.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="MoneysavingArticle" to="Articles" caption="moneysaving_article_ibfk_1" owner-alias="articles" inverse-alias="moneysaving" uuid="{A6D23FA2-3F4C-4D84-9A3C-3BC82D9F7E35}">
+      <association-field from="articleId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="Newslettersub" uuid="{A6283039-7B14-4C73-B276-6DCADECF35E6}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="6e3974ee-7774-41a8-9bd2-f5b481aaf316"/>
+      <field name="email" type="string" size="255" required="true" uuid="c5272993-bd21-4132-8ae1-1eed4750f4f5"/>
+      <field name="deleted" type="integer" size="11" default="0" uuid="10955111-280c-418c-b81a-5a111465149f"/>
+      <field name="created_at" type="datetime" required="true" uuid="62ee32c0-2e9b-4ff2-9733-ae7f3915e929"/>
+      <field name="updated_at" type="datetime" required="true" uuid="1e26b53e-28da-4590-881f-fa0733f15d37"/>
+      <orm-attributes>
+        <attribute name="table">newslettersub</attribute>
+        <attribute name="export-file-name">Newslettersub.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="Offer" uuid="{C10F19BD-C513-4AA8-967C-7EA2FD26C65A}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="fecb4c72-177f-40bf-b3d5-a916c8858120"/>
+      <field name="title" type="string" size="255" default="NULL" required="true" uuid="541c7df8-4394-472d-ae90-8bd935d86bfb"/>
+      <field name="Visability" type="string" size="255" default="NULL" uuid="7421a878-b530-4aeb-bc38-ef3c52ba3ee7"/>
+      <field name="discountType" type="string" size="255" default="NULL" uuid="cab0feb5-024e-4519-826f-cc110bbc44e0"/>
+      <field name="couponCode" type="string" size="50" default="NULL" required="true" uuid="2e34e5d8-3cda-4321-84c0-edabeb765bdb"/>
+      <field name="refOfferUrl" type="string" default="NULL" uuid="24441817-9441-4cfc-a297-2a6f4fe68f2a"/>
+      <field name="refURL" type="string" default="NULL" uuid="6bdd8649-2fa5-4f3b-90ec-f6545457ae5f"/>
+      <field name="startDate" type="datetime" default="NULL" uuid="7e12817a-1004-4f17-a09c-e09ebefd432c"/>
+      <field name="endDate" type="datetime" default="NULL" uuid="26670703-56ea-4d7a-918b-88619cb196de"/>
+      <field name="exclusiveCode" type="integer" size="1" default="'0'" uuid="2a88b43b-e489-4aea-b781-ba6c250dd931"/>
+      <field name="editorPicks" type="integer" size="1" default="'0'" uuid="94699614-7503-4d85-a246-db77dd5afd22"/>
+      <field name="extendedOffer" type="integer" size="1" default="'0'" uuid="c679cfa3-f647-4adc-8bf2-48ec90c318a8"/>
+      <field name="extendedTitle" type="string" size="255" default="NULL" uuid="8419698d-8275-434f-acd7-c600ba8e04ed"/>
+      <field name="extendedUrl" type="string" size="255" default="NULL" uuid="c5afe866-7ecb-4bc5-aefe-ccfac91b494d"/>
+      <field name="extendedMetaDescription" type="string" default="NULL" uuid="757f691d-650a-4a42-b658-5e8d4aa7828e"/>
+      <field name="extendedFullDescription" type="text" default="NULL" uuid="8e1206a9-b7bf-4493-b3e2-4a8897f637b6"/>
+      <field name="discount" type="string" default="NULL" uuid="3d359517-32a6-47c0-a510-d9a7bfd1cee1"/>
+      <field name="discountvalueType" type="integer" size="11" default="NULL" enum-values="'0','1','2'" uuid="bdb84268-d126-4537-8744-49d0d2d04a93"/>
+      <field name="authorId" type="integer" size="8" default="NULL" uuid="355229fa-18d4-4049-bbb2-fd4f9e3a4530"/>
+      <field name="authorName" type="string" size="255" default="NULL" uuid="295f85da-40e7-4d4f-a4da-7c0649376a81"/>
+      <field name="shopId" description="FK to shop.id" type="integer" size="8" default="NULL" uuid="800307c9-9e0a-4c8b-a9d6-57dfafa1f8a4"/>
+      <field name="maxlimit" type="boolean" default="NULL" enum-values="'0','1'" uuid="28d335d9-c51b-4065-a9bc-c66d579c1faf"/>
+      <field name="maxcode" type="integer" size="11" required="true" uuid="8bc2ff3a-a5df-4725-ac0d-31536108d62a"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="c7f6683c-52f2-4534-a428-ff2ae1a7fb74"/>
+      <field name="created_at" type="datetime" required="true" uuid="31bd3ada-6a80-4af5-a47f-c76afd6deed9"/>
+      <field name="updated_at" type="datetime" required="true" uuid="74c42164-202e-4079-a624-1a7bbbccf6da"/>
+      <field name="userGenerated" type="integer" size="1" default="'0'" required="true" uuid="297810f9-23db-4077-b2b3-31618154ba73"/>
+      <field name="approved" type="boolean" default="'0'" enum-values="'0','1'" required="true" uuid="ba72444e-0c16-40b7-aa34-e52cf69e30a8"/>
+      <field name="offline" type="integer" size="11" default="'0'" required="true" uuid="e2a82257-ea43-4be8-b73a-f8dc680c8069"/>
+      <field name="tilesId" type="integer" size="8" default="NULL" uuid="d5d93924-51bc-4b85-b15f-3e6ea456706f"/>
+      <field name="shopExist" type="integer" size="1" default="NULL" uuid="14aa0dcf-5065-4de5-8cc6-e74e4b130005"/>
+      <field name="totalViewcount" type="integer" size="8" default="NULL" uuid="e1cd7793-2ead-47bf-9a59-2fac0c367b72"/>
+      <field name="popularityCount" type="decimal" size="16" default="NULL" uuid="53b2ad27-24ab-4a40-9415-68a7eef2d29e">
+        <orm-attributes>
+          <attribute name="scale">4</attribute>
+        </orm-attributes>
+      </field>
+      <field name="couponCodeType" description="GN-general ,UN-unique" type="string" size="255" default="'GN'" uuid="733f2d7e-6a39-446e-8af0-6fd82c949172"/>
+      <field name="offerLogoId" type="integer" size="11" unique="true" uuid="f1c36d3d-eed5-4c58-a070-c3d014f196cf"/>
+      <index name="offerlogoid" unique="true">
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="shopid_idx">
+        <index-field name="shopId"/>
+      </index>
+      <index name="ind_offer_shenex">
+        <index-field name="shopId"/>
+        <index-field name="endDate"/>
+        <index-field name="exclusiveCode"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">offer</attribute>
+        <attribute name="export-file-name">Offer.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Offer" to="Shop" caption="offer_shopid_shop_id" owner-alias="offer" inverse-alias="shopOffers" uuid="{29BF0807-E90E-46E2-8C0A-263D6736CFEA}">
+      <association-field from="shopId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="Offer" to="Logo" caption="Logo Offer" owner-alias="offer" inverse-alias="logo" uuid="3c89d1ea-edc1-4b71-acce-610f5ba19fdb">
+      <association-field from="offerLogoId" to="id"/>
+    </association>
+    <entity name="OfferNews" uuid="{0F672F06-8F7D-477E-94A3-DD8DE3277E6F}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="e55dbd97-2bfe-4732-b678-86f0c01ba702"/>
+      <field name="offerId" type="integer" size="8" default="NULL" uuid="ca5e889d-b4a1-4ded-99de-ae9bb416794e"/>
+      <field name="title" type="string" size="225" default="NULL" uuid="2e426b63-7435-42f2-87be-120af4f96d20"/>
+      <field name="url" type="string" size="225" default="NULL" uuid="12aa36a1-92fd-4fa8-8715-7e0792ccb309"/>
+      <field name="content" type="string" default="NULL" uuid="807eb616-185f-4b1a-b230-84dd68a1afa4"/>
+      <field name="linkstatus" type="string" size="255" default="NULL" uuid="90e8f271-f331-441f-9351-254033b46f78"/>
+      <field name="startdate" type="datetime" default="NULL" uuid="881043e2-28d0-41c5-84b9-77765eaf3940"/>
+      <field name="created_at" type="datetime" default="NULL" uuid="badee791-ac14-4a67-811e-f3c740536b85"/>
+      <field name="updated_at" type="datetime" default="NULL" uuid="74075fec-51f2-4e1e-8405-b675f4420cbd"/>
+      <field name="deleted" type="integer" size="1" default="NULL" uuid="582e063b-fc3f-4612-9bd6-1ea204550693"/>
+      <field name="shopId" type="integer" size="8" uuid="51607777-edb4-4a84-b52f-46e09616a80b"/>
+      <orm-attributes>
+        <attribute name="table">offer_news</attribute>
+        <attribute name="export-file-name">OfferNews.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="OfferNews" to="Shop" caption="Shop OfferNews" owner-alias="offerNews" inverse-alias="shop" uuid="fda41b41-f5b1-4015-b79f-dfdc424703a9">
+      <association-field from="shopId" to="id"/>
+    </association>
+    <entity name="OfferTiles" uuid="{4632681D-6396-4694-BC3E-F6679CCEC6B7}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="3715233d-b68e-4459-8dfe-b7e890fbbed0"/>
+      <field name="label" type="string" size="255" default="NULL" uuid="6b229680-a199-4393-a845-3dc87b9c38d1"/>
+      <field name="type" type="string" size="50" default="NULL" uuid="f662b803-930a-41d2-a534-e01168c31322"/>
+      <field name="ext" type="string" size="100" default="NULL" uuid="2fe06ee3-2528-4a93-b961-b3d153c828be"/>
+      <field name="path" type="string" size="255" default="NULL" uuid="4e2eada9-d870-4bf4-8649-6487b4564846"/>
+      <field name="name" type="string" size="255" default="NULL" uuid="e6d9ffcf-5ba4-4cc6-8f1d-7ff9433f030f"/>
+      <field name="position" type="integer" size="8" default="NULL" uuid="130c01e9-dc1b-4d86-ae31-d3807ec89ac0"/>
+      <field name="deleted" type="integer" size="1" default="NULL" uuid="b7f9bd49-2a50-47bf-ac05-64ef2598a36b"/>
+      <field name="created_at" type="datetime" default="NULL" uuid="aec4a1b2-e798-40b9-b6ca-6bb30fce11c0"/>
+      <field name="updated_at" type="datetime" default="NULL" uuid="c0f01564-ec44-465f-849a-4cde0e5b3410"/>
+      <field name="offerId" type="integer" size="8" uuid="2ab74f51-819d-476d-8431-6d6efae4f77b"/>
+      <orm-attributes>
+        <attribute name="table">offer_tiles</attribute>
+        <attribute name="export-file-name">OfferTiles.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="OfferTiles" to="Offer" caption="Offer OfferTiles" owner-alias="offerTiles" inverse-alias="offer" uuid="9a24abea-b3fb-47b9-b9de-2cf47cc98d10">
+      <association-field from="offerId" to="id"/>
+    </association>
+    <entity name="Page" uuid="{65201ACA-6B82-4138-9229-A571E68FA944}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="8d0089d9-aa91-4b7b-b3fa-e11746f12711"/>
+      <field name="pageType" type="string" size="10" default="NULL" uuid="5c061114-44ff-49f7-9456-af60e8e26d25"/>
+      <field name="pageTitle" type="string" size="255" default="NULL" uuid="6537fa0c-4b8d-4f60-b470-0c0b50ea8a89"/>
+      <field name="slug" type="string" size="255" default="NULL" uuid="81ab957c-b4d0-4748-a1ff-e25a77b9066c"/>
+      <field name="permaLink" type="string" size="255" default="NULL" uuid="95de3941-58c8-4dc8-a1e9-4e90bb7f8bfc"/>
+      <field name="metaTitle" type="string" default="NULL" uuid="171f4f34-bcca-4b5e-b5f0-c78ca1ecfdf6"/>
+      <field name="metaDescription" type="string" default="NULL" uuid="37b95e3e-7c88-40d7-8f90-2c2e584c2758"/>
+      <field name="content" type="text" default="NULL" uuid="59c31847-8535-47ef-bfe9-845b4a72f5a2"/>
+      <field name="publish" type="integer" size="1" default="NULL" uuid="2d0b9e49-0e3c-4be1-9520-27e48dcca5f9"/>
+      <field name="pageLock" type="integer" size="1" default="'0'" uuid="4111f004-b604-4e1b-aabb-2a3cb9c6f6de"/>
+      <field name="pageAttributeId" description="Fk to page_attribute.id" type="integer" size="8" default="NULL" uuid="9751369d-532c-4ff6-ac8b-d07adfb7770c"/>
+      <field name="contentManagerId" type="integer" size="8" required="true" uuid="b6e57462-8c9f-405b-990c-df3a276c9622"/>
+      <field name="contentManagerName" type="string" size="256" default="NULL" uuid="72fd3844-299d-4c91-b419-7dff9c9307bc"/>
+      <field name="enableTimeConstraint" type="integer" size="1" default="NULL" uuid="a68e3e29-93da-408d-a97a-041ba46a4b45"/>
+      <field name="timenumberOfDays" type="integer" size="8" default="NULL" uuid="92f07f16-4f5a-449d-bea2-b60c02c25607"/>
+      <field name="timeType" description="0 - no option selected" type="integer" size="8" default="NULL" uuid="f7e89e15-41e9-4a15-9c92-526832d328bf"/>
+      <field name="timeMaxOffer" type="integer" size="8" default="NULL" uuid="b071674d-fe1f-4d9a-bc49-b1e243993cf9"/>
+      <field name="timeOrder" type="integer" size="1" default="'0'" uuid="06711e88-846a-479c-9ed7-a8cef13e4290"/>
+      <field name="enableWordConstraint" type="integer" size="1" default="NULL" uuid="226b1863-ab15-4ed7-b6df-c3b720bfd071"/>
+      <field name="wordTitle" type="string" size="100" default="NULL" uuid="f729d668-2e19-4a78-9866-dd4d63dabc67"/>
+      <field name="wordMaxOffer" type="integer" size="8" default="NULL" uuid="4a83569c-65d0-49dd-98fa-9f4363f81432"/>
+      <field name="publishDate" type="datetime" required="true" uuid="578dc516-959c-46ae-a87a-2f699d9b75b1"/>
+      <field name="wordOrder" type="integer" size="1" default="NULL" uuid="f8938157-87e4-4caa-8ace-2afa953e9dc9"/>
+      <field name="awardConstratint" type="integer" size="1" default="NULL" uuid="45dd958a-0000-4696-a6b4-977821525867"/>
+      <field name="awardType" type="string" size="5" default="NULL" uuid="8627ab27-6e2c-4abd-8cb3-5abba99de4be"/>
+      <field name="awardMaxOffer" type="integer" size="8" default="NULL" uuid="0c954b03-6e8a-4f28-bd2d-2b36dd83d928"/>
+      <field name="awardOrder" type="integer" size="1" default="NULL" uuid="5bbab7a2-cfb9-4ea1-97f2-ec5a7619a3ab"/>
+      <field name="enableClickConstraint" type="integer" size="1" default="NULL" uuid="ca825143-128d-4946-a799-1b9058d8e9a0"/>
+      <field name="numberOfClicks" type="integer" size="8" default="NULL" uuid="56be70b9-e9e7-4233-9a5e-02ff3db17217"/>
+      <field name="clickMaxOffer" type="integer" size="8" default="NULL" uuid="6170182f-2beb-4f08-8ae5-628dd1260bbe"/>
+      <field name="clickOrder" type="integer" size="1" default="NULL" uuid="9ce37bc2-7aeb-4028-951b-b852423bcb7e"/>
+      <field name="maxOffers" type="integer" size="11" required="true" uuid="8e770802-dcc2-4d8f-977f-855920be1ac5"/>
+      <field name="oderOffers" type="integer" size="11" required="true" uuid="b2f9b1c3-9d5d-4f08-bffc-50425a9b315f"/>
+      <field name="couponRegular" type="integer" size="1" default="NULL" uuid="3612f116-dcef-4390-86e9-f308532fc989"/>
+      <field name="couponEditorPick" type="integer" size="1" default="NULL" uuid="f0ef6415-3949-4b8a-a8a3-07cc4d101923"/>
+      <field name="couponExclusive" type="integer" size="1" default="NULL" uuid="757ea1fd-1095-44a4-9dc3-35b6d1e71578"/>
+      <field name="saleRegular" type="integer" size="1" default="NULL" uuid="00dad13a-75bc-491f-9e3c-3d6c900ccdeb"/>
+      <field name="saleEditorPick" type="integer" size="1" default="NULL" uuid="1cec0d0c-13c4-48fe-a090-f276367adb0c"/>
+      <field name="saleExclusive" type="integer" size="1" default="NULL" uuid="98bd54c7-9d00-4c2c-9a00-9813d956fe19"/>
+      <field name="printableRegular" type="integer" size="1" default="NULL" uuid="f6de15d7-4588-4f1f-86fa-e0153e06b936"/>
+      <field name="printableEditorPick" type="integer" size="1" default="NULL" uuid="ec1b4a95-fe5d-48c2-8cde-9b07ab70d766"/>
+      <field name="printableExclusive" type="integer" size="1" default="NULL" uuid="4d6e9359-5080-40e7-aba6-fb2b725ad065"/>
+      <field name="showPage" description="Show as page when creating offers." type="integer" size="1" default="NULL" uuid="6aa00a8c-0770-4e04-9c1e-ea9481a148d4"/>
+      <field name="logoId" type="integer" size="8" default="NULL" uuid="7dd0ecfd-a25e-4c88-ac42-6df22a81b916"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="72b2d93b-1457-4cc3-8cc2-77133cb812a9"/>
+      <field name="created_at" type="datetime" required="true" uuid="9551f594-2314-4a50-ae55-f0b1d8b4bf74"/>
+      <field name="updated_at" type="datetime" required="true" uuid="b2934424-613b-416b-a9fb-712870c3d33b"/>
+      <field name="customHeader" type="string" default="NULL" uuid="78f99ba7-f987-4041-a84a-7b1ebf325022"/>
+      <field name="showsitemap" type="integer" size="1" default="'0'" required="true" uuid="2b9ac1ee-ca15-48ef-b5bb-e4f5d60259a5"/>
+      <field name="offersCount" type="integer" size="8" default="NULL" uuid="0d0edfba-7743-4232-85a2-256d3bbce866"/>
+      <field name="logo_id" type="integer" size="11" unique="true" uuid="d4ff33bf-b830-44b5-bd93-3a6b35eb8049"/>
+      <index name="pageattributeid_idx">
+        <index-field name="pageAttributeId"/>
+      </index>
+      <index name="pageHeaderImageId_foreign_key"/>
+      <orm-attributes>
+        <attribute name="table">page</attribute>
+        <attribute name="export-file-name">Page.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Page" to="PageAttribute" caption="page_pageattributeid_page_attribute_id" owner-alias="pageattribute" inverse-alias="page" uuid="{D7DB4EFC-4F69-4CA9-97CA-402160ED55F8}">
+      <association-field from="pageAttributeId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="Page" to="Logo" caption="Logo Page" owner-alias="page" inverse-alias="logo" uuid="35d8439d-1a25-445a-bc5b-61e2987ca784">
+      <association-field from="logo_id" to="id"/>
+    </association>
+    <entity name="PageAttribute" uuid="{D89686DC-C85E-4955-BA6C-89B424BEF139}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="8ee9e264-5e66-402d-9f10-b60d49204dcf"/>
+      <field name="name" type="string" size="255" default="NULL" uuid="d0d26e3c-0b7e-4cb2-9882-4d010a205b74"/>
+      <field name="deleted" type="integer" size="1" default="0" uuid="ad69b59a-e74e-44ad-8732-5c7b5be82250"/>
+      <field name="created_at" type="datetime" required="true" uuid="48f29b26-39b0-4e0e-9ac7-306f5592381c"/>
+      <field name="updated_at" type="datetime" required="true" uuid="c458f974-e430-4020-bbf6-40e70f35fcfc"/>
+      <orm-attributes>
+        <attribute name="table">page_attribute</attribute>
+        <attribute name="export-file-name">PageAttribute.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="PopularCategory" uuid="{207D8C23-5261-43F0-9D6B-B9617D15AB1A}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="2d3dd869-cc82-46a3-b6a3-e1f607c62ac4"/>
+      <field name="type" type="string" size="255" default="NULL" uuid="4b6e746d-8c50-46e2-bd27-f24817df41d9"/>
+      <field name="position" description="Holds the shop position among popular category list" type="integer" size="8" default="NULL" uuid="74d64a3a-c008-45a0-8c2e-489c904f0223"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="ae71ee04-371c-4fe9-ac46-42e2e764db7d"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="9211618a-6935-43b8-87c2-9640fe5375ec"/>
+      <field name="created_at" type="datetime" required="true" uuid="58fdade1-eb25-43dc-8559-81a95317e3f9"/>
+      <field name="updated_at" type="datetime" required="true" uuid="1aa35b37-89d3-47ba-8ad5-17995704d45f"/>
+      <field name="categoryId" type="integer" size="8" uuid="affc28e1-0857-4e3b-bd51-96804af8ab1d"/>
+      <orm-attributes>
+        <attribute name="table">popular_category</attribute>
+        <attribute name="export-file-name">PopularCategory.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="PopularCategory" to="Category" caption="Category PopularCategory" owner-alias="popularCategory" inverse-alias="category" uuid="abff03ea-bf6c-4a4e-944c-2507d7cee6da">
+      <association-field from="categoryId" to="id"/>
+    </association>
+    <entity name="PopularCode" uuid="{20A6C0DA-6C44-4DEC-877A-1D7A454EBEF6}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="39fc185e-15d6-4883-94a3-427fc6916e53"/>
+      <field name="type" type="string" size="255" default="NULL" uuid="fbd68e8e-6ffa-4fa2-aa4c-72e052ea3f10"/>
+      <field name="position" description="Holds the code position among popular code list" type="integer" size="8" default="NULL" uuid="943c305f-1a9b-400b-a600-27bfefcae75f"/>
+      <field name="status" description="1 ? enable , 0 ? disable" type="integer" size="1" default="'0'" uuid="81b1691f-754b-44d9-b3f1-17862a4c2693"/>
+      <field name="offerid" description="FK to offer.id" type="integer" size="8" default="NULL" uuid="ab475780-0f06-4bdb-a716-ef7c1f455d9f"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="6dba5aee-9ccf-4a9b-91d4-5a9693a1c89f"/>
+      <field name="created_at" type="datetime" required="true" uuid="b2c45ace-8d4d-474a-934d-303883578ee2"/>
+      <field name="updated_at" type="datetime" required="true" uuid="2dd50a3e-ea3d-4770-a4c6-22df3f9a7125"/>
+      <index name="offerid" unique="true">
+        <index-field name="offerid"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <orm-attributes>
+        <attribute name="table">popular_code</attribute>
+        <attribute name="export-file-name">PopularCode.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="PopularCode" to="Offer" caption="popular_code_offerid_offer_id" owner-alias="offer" inverse-alias="popularcode" uuid="{7A7F25AA-27D2-4A17-9BFC-C4238A3254E9}">
+      <association-field from="offerid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="PopularShop" uuid="{B279B551-7F3C-46BF-8A92-2DAABD3C5082}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="c1c900cd-31fb-4982-8ddd-101e6d1e4d62"/>
+      <field name="type" type="string" size="255" default="NULL" uuid="5dd816fb-b2b3-4108-bda0-c26b9990f03d"/>
+      <field name="position" type="integer" size="8" default="NULL" uuid="05c32fb4-275f-4977-9d61-ce6ae16c878a"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="d626bdbe-c5ac-4e18-9eb4-70e935d21329"/>
+      <field name="shopId" description="FK to image.id" type="integer" size="8" default="NULL" uuid="e8e63ec2-87a8-4dab-97aa-543b665f5465"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="3a671f3d-323d-4c61-9f72-0889e33bb3a0"/>
+      <field name="created_at" type="datetime" required="true" unique="true" uuid="724650ca-6b17-4b5e-b7a0-1ab6a83fb37f"/>
+      <field name="updated_at" type="datetime" required="true" uuid="ef78a0db-df5b-4072-967e-99c30432e966"/>
+      <index name="shopid" unique="true">
+        <index-field name="shopId"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="shopid_idx">
+        <index-field name="shopId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">popular_shop</attribute>
+        <attribute name="export-file-name">PopularShop.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="PopularShop" to="Shop" caption="popular_shop_shopid_shop_id" owner-alias="popularshop" inverse-alias="popularshops" uuid="{2EEC0FE0-CA93-4837-8D73-DC8838A1C3ED}">
+      <association-field from="shopId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="PopularVouchercodes" uuid="{9B7C13CD-50C6-44D8-BD2D-54B295C8DF24}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="5ce68334-c201-4d96-928f-28cbad981057"/>
+      <field name="type" type="string" size="255" default="NULL" uuid="fea52060-0cdf-4f0c-bffe-e564a39f89c7"/>
+      <field name="position" description="Holds the shop position among popular offer list" type="integer" size="8" default="NULL" uuid="7bab05e5-2874-445b-9fd4-5e80dae69cf1"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="53d63f29-100b-4870-b031-3691c60acb57"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="7d52906a-9f7c-4d55-95c7-59fe6b5bdca1"/>
+      <field name="created_at" type="datetime" required="true" uuid="c97cf873-698e-4ded-a3cb-871f758d757f"/>
+      <field name="updated_at" type="datetime" required="true" uuid="18a1ba51-5cdf-4979-ae7c-51bdcefc18c3"/>
+      <field name="vaoucherofferid" type="integer" size="8" uuid="93b3c6de-5d98-41a4-995c-2e3ecdd46782"/>
+      <orm-attributes>
+        <attribute name="table">popular_vouchercodes</attribute>
+        <attribute name="export-file-name">PopularVouchercodes.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="PopularVouchercodes" to="Offer" caption="Offer PopularVouchercodes" owner-alias="popularVouchercodes" inverse-alias="offer" uuid="dbf04ab8-ad43-4472-9f31-0779e2f08d3b">
+      <association-field from="vaoucherofferid" to="id"/>
+    </association>
+    <entity name="RefArticleCategory" uuid="{986796AD-C059-4930-8475-3956AF7B9199}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="cfcc8434-da3e-4c63-bb9e-642d157dbc98"/>
+      <field name="created_at" type="datetime" required="true" uuid="5d0ef52a-02e8-4aba-b325-2840f1f30671"/>
+      <field name="updated_at" type="datetime" required="true" uuid="f1a34d24-604f-47f9-b17c-23e48a5a5cbc"/>
+      <field name="relatedcategoryid" type="integer" size="8" required="true" primary="true" uuid="a0e20c58-7263-45be-adc4-691f0f665f55"/>
+      <field name="articlesid" type="integer" size="8" required="true" primary="true" uuid="9cdd865f-5d39-42e6-ade2-b4682fde9e3e"/>
+      <orm-attributes>
+        <attribute name="table">ref_article_category</attribute>
+        <attribute name="export-file-name">RefArticleCategory.php</attribute>
+      </orm-attributes>
+    </entity>
+    <many-to-many mn-entity="RefArticleCategory" caption="Category to Articles" uuid="e00b54bf-e0ff-49be-8889-282a57e722d7">
+      <many-to-many-entity name="Articles" owning-side="true" alias="articles" uuid="017540a2-9769-420f-8c74-eb676a50263b">
+        <many-to-many-field from="articlesid" to="id"/>
+      </many-to-many-entity>
+      <many-to-many-entity name="Category" owning-side="false" alias="category" uuid="293669c0-f908-4923-a6d2-71f769485d68">
+        <many-to-many-field from="relatedcategoryid" to="id"/>
+      </many-to-many-entity>
+    </many-to-many>
+    <entity name="RefArticleStore" uuid="{E1D4ACB8-B034-462F-A745-D0BD1E5FF8C7}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="0a8e5fef-1b27-4f90-b01f-20f82f0b82d7"/>
+      <field name="articleid" description="FK to article.id" type="integer" size="8" required="true" uuid="bac072b3-5dd7-49cb-85a6-4a2e478e26d1"/>
+      <field name="storeid" description="FK to shop.id" type="integer" size="8" required="true" uuid="72626b58-be8a-4e48-8a2e-e92a288e7f22"/>
+      <field name="created_at" type="datetime" required="true" uuid="57ace5a2-55ea-4461-9606-8bd9e23dab85"/>
+      <field name="updated_at" type="datetime" required="true" uuid="0969bcb2-e5bf-41be-b8b4-42a0338d96f2"/>
+      <index name="articleid">
+        <index-field name="articleid"/>
+      </index>
+      <index name="storeid">
+        <index-field name="storeid"/>
+      </index>
+      <index name="article_shop_id_idx">
+        <index-field name="articleid"/>
+        <index-field name="storeid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">ref_article_store</attribute>
+        <attribute name="export-file-name">RefArticleStore.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="RefArticleStore" to="Articles" caption="ref_article_store_ibfk_1" owner-alias="storearticles" inverse-alias="relatedstores" uuid="{C789D113-1B75-4E53-8287-1A6960734E3A}">
+      <association-field from="articleid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="RefArticleStore" to="Shop" caption="ref_article_store_ibfk_2" owner-alias="articlestore" inverse-alias="articleshops" uuid="{360598C1-E8C2-4E32-B19C-91B37261617F}">
+      <association-field from="storeid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="RefArticlecategoryRelatedcategory" uuid="{6FBBB38F-65FA-4239-A124-3637E8F01DD3}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="f90b86e2-f3b9-4a3a-aa72-f6c07f2d022b"/>
+      <field name="created_at" type="datetime" required="true" uuid="5ec8f99e-000b-437a-926b-39a50dbfc6d0"/>
+      <field name="updated_at" type="datetime" required="true" uuid="68405d9c-b79e-4363-9262-8ccf9e3807bd"/>
+      <field name="articlecategoryid" type="integer" size="8" required="true" primary="true" uuid="897205bc-c491-44ac-b3d1-027863bdb9a0"/>
+      <field name="relatedcategoryid" type="integer" size="8" required="true" primary="true" uuid="6fe89c5d-d330-4cd0-9b90-b7b7ca448380"/>
+      <orm-attributes>
+        <attribute name="table">ref_articlecategory_relatedcategory</attribute>
+        <attribute name="export-file-name">RefArticlecategoryRelatedcategory.php</attribute>
+      </orm-attributes>
+    </entity>
+    <many-to-many mn-entity="RefArticlecategoryRelatedcategory" caption="Articlecategory to Category" uuid="9dc309c2-6206-4165-ae20-8e54a3adb617">
+      <many-to-many-entity name="Category" owning-side="true" alias="category" uuid="d62bad59-d1bb-47e0-9ae8-ef64972cd4d4">
+        <many-to-many-field from="relatedcategoryid" to="id"/>
+      </many-to-many-entity>
+      <many-to-many-entity name="Articlecategory" owning-side="false" alias="articlecategory" uuid="1796556b-feeb-435e-8ee7-988c0137333b">
+        <many-to-many-field from="articlecategoryid" to="id"/>
+      </many-to-many-entity>
+    </many-to-many>
+    <entity name="RefExcludedkeywordShop" uuid="{D7AA25A2-EC47-4FBA-AAAA-13DF8A8E2B73}">
+      <field name="id" type="integer" size="11" required="true" primary="true" auto-increment="true" uuid="04de496e-b6fe-477c-9408-c09723e3bed5"/>
+      <field name="keywordname" type="string" size="256" default="NULL" uuid="91ffcb1e-143f-4dd6-ad0e-0c0e7332039f"/>
+      <field name="deleted" type="integer" size="1" default="0" uuid="c83f262c-6840-4a52-bbfc-ecc05758c308"/>
+      <field name="created_at" type="datetime" default="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" required="true" uuid="b2b8e2ab-150f-4442-b04c-e16e12d7fac0"/>
+      <field name="updated_at" type="datetime" default="'0000-00-00 00:00:00'" required="true" uuid="ff50b8d2-6d9b-4773-ad39-16b9a7442798"/>
+      <field name="shopid" type="integer" size="8" required="true" primary="true" uuid="42c58ea1-5146-4151-ab4f-07a0ea5b7a16"/>
+      <field name="keywordid" type="integer" size="8" required="true" primary="true" uuid="f6d37911-ce60-471f-a43d-af3d569e1893"/>
+      <orm-attributes>
+        <attribute name="table">ref_excludedkeyword_shop</attribute>
+        <attribute name="export-file-name">RefExcludedkeywordShop.php</attribute>
+      </orm-attributes>
+    </entity>
+    <many-to-many mn-entity="RefExcludedkeywordShop" caption="Shop to ExcludedKeyword" uuid="23819c7a-9e6b-4eea-a5c9-c0c4ff717aab">
+      <many-to-many-entity name="ExcludedKeyword" owning-side="true" alias="keywords" uuid="51f03319-67bc-4fb1-9871-5f045e87a16b">
+        <many-to-many-field from="keywordid" to="id"/>
+      </many-to-many-entity>
+      <many-to-many-entity name="Shop" owning-side="false" alias="shops" uuid="f13ffd60-2099-4d92-b750-76063500b344">
+        <many-to-many-field from="shopid" to="id"/>
+      </many-to-many-entity>
+    </many-to-many>
+    <entity name="RefOfferCategory" uuid="{E0482222-D7BC-4BE6-A3FB-8E1DBD019AF4}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="d7a2e2ed-0b4f-4dd5-9cda-8a27526e8e9c"/>
+      <field name="offerId" description="FK to offer.id" type="integer" size="8" required="true" uuid="18e8db42-6139-4e5d-95cf-68db913fd5a0"/>
+      <field name="categoryId" description="FK to category.id" type="integer" size="8" required="true" uuid="21c73d0e-f07f-4b83-8af8-9162b9396944"/>
+      <field name="created_at" type="datetime" required="true" uuid="8217d183-c6eb-4724-822e-d4b6863bd0da"/>
+      <field name="updated_at" type="datetime" required="true" uuid="4bcb5e9d-07a4-45d5-b7c9-11fd325d9c76"/>
+      <index name="offerid_idx">
+        <index-field name="offerId"/>
+      </index>
+      <index name="categoryid_idx">
+        <index-field name="categoryId"/>
+      </index>
+      <index name="offer_category_id_idx">
+        <index-field name="categoryId"/>
+        <index-field name="offerId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">ref_offer_category</attribute>
+        <attribute name="export-file-name">RefOfferCategory.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="RefOfferCategory" to="Category" caption="ref_offer_category_categoryid_category_id" owner-alias="categoryoffres" inverse-alias="offer" uuid="{5D8B69AE-2C63-4946-BD37-C9FFEE1218A4}">
+      <association-field from="categoryId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="RefOfferCategory" to="Offer" caption="ref_offer_category_offerid_offer_id" owner-alias="categoryoffres" inverse-alias="category" uuid="{8E56A65E-3CA7-4E03-BF8A-3548D01BFEEA}">
+      <association-field from="offerId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="RefOfferPage" uuid="{CDD29A8D-7AA4-4053-8DAD-69768A07549E}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="6f0ca095-5d74-451d-86a6-5b4b6332f45b"/>
+      <field name="pageId" description="FK to page.id" type="integer" size="8" required="true" uuid="a0d205b9-8e10-4cc3-9626-8be3b8f5de36"/>
+      <field name="offerId" description="FK to offer.id" type="integer" size="8" required="true" uuid="85a2b2fe-8e60-42d4-8ddc-48086a7a1754"/>
+      <field name="created_at" type="datetime" required="true" uuid="89190fe1-e2ff-479b-a28e-849403edb20a"/>
+      <field name="updated_at" type="datetime" required="true" uuid="70b161c7-78aa-4c34-9f1a-6ebf9f689061"/>
+      <index name="offerid_idx">
+        <index-field name="offerId"/>
+      </index>
+      <index name="pageid_idx">
+        <index-field name="pageId"/>
+      </index>
+      <index name="offer_page_id_idx">
+        <index-field name="pageId"/>
+        <index-field name="offerId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">ref_offer_page</attribute>
+        <attribute name="export-file-name">RefOfferPage.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="RefOfferPage" to="Offer" caption="ref_offer_page_offerid_offer_id" owner-alias="offers" inverse-alias="refoffers" uuid="{03D05B5E-155A-4BC9-9262-0D9BA2BF1B26}">
+      <association-field from="offerId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="RefOfferPage" to="Page" caption="ref_offer_page_pageid_page_id" owner-alias="pageoffers" inverse-alias="offers" uuid="{18DCA2D5-4E00-47BF-B140-F29BB8FF6DF3}">
+      <association-field from="pageId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="RefPageWidget" uuid="{D14D7C4E-A5F6-4579-9B01-746C2C8AB3AF}">
+      <field name="id" type="integer" size="8" required="true" auto-increment="true" uuid="cdd4c5d9-fb05-427a-9531-1962513d859c"/>
+      <field name="pageId" description="FK to page.id" type="integer" size="8" required="true" uuid="b62c6c5c-aa6d-4dae-b84e-64b3c35ba4c4"/>
+      <field name="widgetId" description="FK to widget.id" type="integer" size="8" required="true" uuid="5407af60-b16d-413b-89ff-53da5997af11"/>
+      <field name="stauts" description="if status true than widget is displayed on page" type="integer" size="1" default="'0'" uuid="58b7b7bc-3d9e-4f76-895d-c5590345a131"/>
+      <field name="position" description="display in which order" type="integer" size="8" default="NULL" uuid="8680ebc0-78e2-4fdd-8b8c-94f0ab563788"/>
+      <field name="created_at" type="datetime" required="true" uuid="38b432de-42d8-403c-bac6-346be785d8c2"/>
+      <field name="updated_at" type="datetime" required="true" uuid="57e0be0f-b574-4c89-8756-dced1d2c5f3b"/>
+      <index name="pageid_idx">
+        <index-field name="pageId"/>
+      </index>
+      <index name="widgetid_idx">
+        <index-field name="widgetId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">ref_page_widget</attribute>
+        <attribute name="export-file-name">RefPageWidget.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="RefPageWidget" to="Page" caption="ref_page_widget_pageid_page_id" owner-alias="pagewidget" inverse-alias="widget" uuid="{8458191E-4817-4E76-8CC8-23BCD097C8A8}">
+      <association-field from="pageId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="RefPageWidget" to="Widget" caption="ref_page_widget_widgetid_widget_id" owner-alias="Widget" inverse-alias="page" uuid="{4372D722-FC75-48AD-AA41-03E22C1AEE76}">
+      <association-field from="widgetId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="RefShopCategory" uuid="{4F640268-D642-4A2E-A8B4-7FAFEFBF407C}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="9ad99c6d-87b9-497f-b735-81236116c1ba"/>
+      <field name="shopId" description="FK to shop.id" type="integer" size="8" default="NULL" uuid="83237050-4464-4537-ab96-79671e7dbc62"/>
+      <field name="categoryId" description="FK to category.id" type="integer" size="8" default="NULL" uuid="a2d5a069-5982-42f7-8972-4a8380af239f"/>
+      <field name="created_at" type="datetime" required="true" uuid="90193b68-3853-48db-9d28-808a9486903a"/>
+      <field name="updated_at" type="datetime" required="true" uuid="74c7c21a-a6b1-48c9-984f-845f2ae64ba6"/>
+      <index name="shopid_idx">
+        <index-field name="shopId"/>
+      </index>
+      <index name="categoryid_idx">
+        <index-field name="categoryId"/>
+      </index>
+      <index name="shop_category_id_idx">
+        <index-field name="shopId"/>
+        <index-field name="categoryId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">ref_shop_category</attribute>
+        <attribute name="export-file-name">RefShopCategory.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="RefShopCategory" to="Category" caption="ref_shop_category_categoryid_category_id" owner-alias="shopcategory" inverse-alias="shop" uuid="{6F464B5B-AE07-425B-988E-818DA64DB431}">
+      <association-field from="categoryId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="RefShopCategory" to="Shop" caption="ref_shop_category_shopid_shop_id" owner-alias="categoryshops" inverse-alias="category" uuid="{5633B379-524F-4460-87ED-A9D4DE5522F9}">
+      <association-field from="shopId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="RefShopRelatedshop" uuid="{0710CE84-A6AC-4427-ABAC-1AD9E59212DB}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="b3c3b63a-93a3-410c-b5e7-59753916df21"/>
+      <field name="relatedshopId" description="related shop id forgien key to shop id" type="integer" size="8" required="true" uuid="76f9bfb8-d154-4856-9bbc-7c4f08803666"/>
+      <field name="position" type="integer" size="5" required="true" uuid="364da21a-5fd5-4145-81ac-070caf364e8d"/>
+      <field name="created_at" type="datetime" default="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" required="true" uuid="a76f3b38-15ad-46cc-85c8-73c0f4b05a81"/>
+      <field name="updated_at" type="datetime" default="'0000-00-00 00:00:00'" required="true" uuid="56efb8eb-cc7a-43e1-ab88-1b09f36f84b6"/>
+      <field name="shopId" type="integer" size="8" uuid="2dbf9132-a04a-467f-bc97-1b1d755af309"/>
+      <index name="shop_relatedshop_id_idx">
+        <index-field name="relatedshopId"/>
+      </index>
+      <index name="shop_relatedshop_idx">
+        <index-field name="relatedshopId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">ref_shop_relatedshop</attribute>
+        <attribute name="export-file-name">RefShopRelatedshop.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="RefShopRelatedshop" to="Shop" caption="Shop RefShopRelatedshop" owner-alias="relatedshops" inverse-alias="shop" uuid="25605aa6-3921-428c-bea6-d78385425f63">
+      <association-field from="shopId" to="id"/>
+    </association>
+    <entity name="RoutePermalink" uuid="{3A4FB4C0-C05D-4EA0-93C0-D7FCF2A0D47F}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="b35e4a8a-54a2-4ffc-808f-7bb48c1409e1"/>
+      <field name="permalink" type="string" size="255" required="true" uuid="b0603947-f8c9-42fb-9aba-1d10f33d9cbd"/>
+      <field name="type" type="string" size="255" required="true" uuid="4c537913-4151-4ccc-a765-e63a8ea59573"/>
+      <field name="exactlink" type="string" size="255" required="true" uuid="f5ec7b0b-209b-4e85-afba-fe1568b445e4"/>
+      <field name="created_at" type="datetime" required="true" uuid="90ea06ad-25de-415f-8823-75c327a97d59"/>
+      <field name="updated_at" type="datetime" required="true" uuid="441a22f6-766c-4cb7-a74c-5f4b861e1a9b"/>
+      <field name="deleted" type="integer" size="1" required="true" uuid="e66d95c6-3708-491b-9624-ead6c65f63b4"/>
+      <index name="permalink_idx">
+        <index-field name="permalink"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">route_permalink</attribute>
+        <attribute name="export-file-name">RoutePermalink.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="RouteRedirect" uuid="{9BA59AF6-80E3-4906-90E2-840B5E6B3AF7}">
+      <field name="orignalurl" type="string" default="NULL" uuid="1eccdb77-aaca-4b58-9727-d10ad64cea62"/>
+      <field name="redirectto" type="string" default="NULL" uuid="cb27d491-1931-4f94-878a-a5355276d994"/>
+      <field name="created_at" type="datetime" default="NULL" uuid="8e00b4e6-d0b1-4052-8fd1-a0369230ef6a"/>
+      <field name="updated_at" type="datetime" default="NULL" uuid="93c18584-dbfb-406d-8cfb-2dba66b01d87"/>
+      <field name="deleted" type="integer" size="1" default="NULL" uuid="e64a15f2-5fcd-4435-a736-095e1ea17d8c"/>
+      <field name="id" type="integer" size="12" required="true" unique="true" primary="true" auto-increment="true" uuid="67123bb1-435e-4bc4-85d1-644966cab2df"/>
+      <index name="orignalurl_idx">
+        <index-field name="orignalurl"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">route_redirect</attribute>
+        <attribute name="export-file-name">RouteRedirect.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="SeenIn" uuid="{7851E659-CFD5-49F6-9F14-5AB9EC4F3DEB}">
+      <field name="id" description="PK" type="integer" size="8" required="true" unique="true" primary="true" auto-increment="true" uuid="3a7510c9-8258-4417-b7ac-a6aa39ffdb58"/>
+      <field name="name" type="string" size="50" default="NULL" uuid="a8602dd3-9ee7-4b14-aff6-ab8f045db8dd"/>
+      <field name="url" type="string" size="255" default="NULL" uuid="b116fc1c-2c1a-417f-9533-422b7ca50f23"/>
+      <field name="toolltip" type="string" default="NULL" uuid="d74224a6-082c-4270-9ec1-11f19207e99f"/>
+      <field name="status" description="1 = enable , 0 = disable" type="integer" size="1" default="'1'" uuid="4e4f9a4e-3690-480b-866b-fcfc366a30a4"/>
+      <field name="created_at" type="datetime" required="true" uuid="f53b4cb7-f451-46a8-bb26-d28387a25b9a"/>
+      <field name="updated_at" type="datetime" required="true" uuid="e038b60a-fc18-4c93-a6c4-1b36c1810887"/>
+      <field name="altText" type="string" default="NULL" uuid="49865faa-9e6d-423a-a203-876a83904fa9"/>
+      <field name="logoId" type="integer" size="11" unique="true" uuid="da958f9b-3e40-4cc8-b8db-8b2b23fc2492"/>
+      <index name="logoid" unique="true">
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="logoid_idx"/>
+      <orm-attributes>
+        <attribute name="table">seen_in</attribute>
+        <attribute name="export-file-name">SeenIn.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="SeenIn" to="Logo" caption="Logo SeenIn" owner-alias="seenin" inverse-alias="logo" uuid="65b4489c-a692-4627-aeb0-0ac25102a6e1">
+      <association-field from="logoId" to="id"/>
+    </association>
+    <entity name="Settings" uuid="{18525071-0D88-406E-8EC2-B9B5CE2DA0B6}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="00c7889a-3d20-4021-b63a-c36903f80ba0"/>
+      <field name="name" type="string" size="255" default="NULL" uuid="b54860cf-e742-4f19-a9be-cb529032a563"/>
+      <field name="value" type="string" default="NULL" uuid="1e22d2d6-6909-4856-8910-4cfdd5951903"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="0c14cdd8-efee-4fa0-84a5-86702cf99939"/>
+      <field name="created_at" type="datetime" required="true" uuid="029b28b0-b0c6-4db3-bb21-f283932af8bc"/>
+      <field name="updated_at" type="datetime" required="true" uuid="7a1dcb62-dab4-4321-848a-a2bcd48cd31c"/>
+      <field name="deleted" type="integer" size="1" default="0" uuid="3eb2fa65-8c30-4d11-bc58-b4214e07ae08"/>
+      <index name="id" unique="true">
+        <index-field name="id"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <orm-attributes>
+        <attribute name="table">settings</attribute>
+        <attribute name="export-file-name">Settings.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="Shop" uuid="{6B5AA8BC-0DC5-4965-8CA4-9A0B52498B97}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="43e3b368-661f-49d0-ad7d-442b190ff354"/>
+      <field name="name" type="string" size="255" default="NULL" uuid="63b75605-0273-4420-860d-51ab24567ba9"/>
+      <field name="permaLink" type="string" size="255" default="NULL" unique="true" uuid="d1344336-23b8-4617-b853-955b540f2256"/>
+      <field name="metaDescription" type="string" default="NULL" uuid="aebeae87-8eae-4bbf-b3e2-4d944271fb1c"/>
+      <field name="usergenratedcontent" type="boolean" default="NULL" enum-values="'0','1'" required="true" uuid="de526467-850e-44a2-9ba2-5b9aaba2eebd"/>
+      <field name="notes" type="string" default="NULL" uuid="13f79621-c5b5-4f3e-aedb-9c25d0262006"/>
+      <field name="deepLink" type="string" size="255" default="NULL" uuid="0253ca47-b58a-4c3a-8677-58823a8a68ef"/>
+      <field name="deepLinkStatus" type="integer" size="1" default="NULL" uuid="6e16b3f7-7a06-4e8d-a2e3-288d7bb9ec6b"/>
+      <field name="refUrl" type="string" default="NULL" uuid="82d8150d-4f13-4818-bf8c-87ed338e5dde"/>
+      <field name="actualUrl" type="string" default="NULL" uuid="7c61bcec-8290-425e-ab5a-efc34304c686"/>
+      <field name="affliateProgram" type="integer" size="1" default="NULL" uuid="0db42dfa-d53f-4177-bc95-8e71062ddd24"/>
+      <field name="title" type="string" size="255" default="NULL" uuid="18d5dbb2-f4d1-4e49-a91b-006d1ee4329d"/>
+      <field name="subTitle" type="string" size="255" default="NULL" uuid="730be8cd-128b-4f10-95e6-8ee4ba212e4e"/>
+      <field name="overriteTitle" type="string" size="255" default="NULL" uuid="b02be2bc-73da-43bb-8c49-f848a085a88e"/>
+      <field name="overriteSubtitle" type="string" size="255" default="NULL" uuid="270af352-ebd7-4c26-a0d1-34e983246faf"/>
+      <field name="overriteBrowserTitle" type="string" size="255" default="NULL" uuid="b9cc7a1c-7d50-4e54-9138-bd020251d8c0"/>
+      <field name="shopText" type="text" default="NULL" uuid="b13391fc-e4f5-4d31-be00-c0cbf8ee89e8"/>
+      <field name="views" type="integer" size="8" default="NULL" uuid="e55eef2c-6744-43cc-91ba-683382157c05"/>
+      <field name="howToUse" type="integer" size="1" default="'0'" required="true" uuid="8d0ae969-e621-41fe-8de7-96fe0d6be8a2"/>
+      <field name="Deliverytime" type="string" size="255" default="NULL" uuid="4669f0c0-e856-4c8f-9cd5-e64f4a66b91b"/>
+      <field name="returnPolicy" type="string" size="255" default="NULL" uuid="ca9574c9-5b29-4308-bd5e-2f6732f245a4"/>
+      <field name="freeDelivery" type="integer" size="11" default="NULL" enum-values="'0','1','2','3'" uuid="5d16cd52-fa26-4bf0-b7be-000035bed161"/>
+      <field name="deliveryCost" type="string" size="255" default="NULL" uuid="c5edc09a-c282-476c-869a-f12fddc826b5"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="4d014790-70e1-4c25-aace-dd5d81be3d62"/>
+      <field name="offlineSicne" type="datetime" default="NULL" uuid="92ed02e9-6b00-4d22-a00b-7f8e027d56f8"/>
+      <field name="accoutManagerId" description="associated account manager id" type="integer" size="8" default="NULL" uuid="d07d2797-9696-4f6a-b104-e7fba146a4f2"/>
+      <field name="accountManagerName" type="string" size="255" default="NULL" uuid="a77a1100-8e3b-4339-827b-ad2421309fa1"/>
+      <field name="contentManagerId" description="associated content  manager id" type="integer" size="8" default="NULL" uuid="1d51c647-07f5-40e2-a5c2-9d59eb192e56"/>
+      <field name="contentManagerName" type="string" size="255" default="NULL" uuid="fe052830-dac0-4226-9c36-43243f362c16"/>
+      <field name="screenshotId" type="integer" size="8" required="true" uuid="1ca58e7e-4caa-40f0-ae0c-fe970ae8fe48"/>
+      <field name="affliateNetworkId" description="FK to affliate_network.id" type="integer" size="8" default="NULL" uuid="6417a8ee-cdf6-480c-a292-05e4de708393"/>
+      <field name="howtoUsepageId" type="integer" size="8" default="NULL" uuid="504b6d1a-9ac0-4ff2-8ca4-27c732ad6c13"/>
+      <field name="keywordlink" type="string" size="255" default="NULL" uuid="c2213cff-afc6-4b88-8f44-219f73e748cb"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="d18bcd01-d6cc-4697-bf5d-0cd26c49eaa9"/>
+      <field name="created_at" type="datetime" required="true" uuid="e63d16cc-c1db-45db-8f03-736b439d55a7"/>
+      <field name="updated_at" type="datetime" required="true" uuid="b6c4851a-e429-43e5-867c-0e4de5db053f"/>
+      <field name="howtoTitle" type="string" default="NULL" uuid="d983a81e-0f44-4443-93de-843629e3a6a0"/>
+      <field name="howtoSubtitle" type="string" default="NULL" uuid="4b2f21bd-4e7a-4c5a-8ba5-07d8e1940963"/>
+      <field name="howtoMetaTitle" type="string" default="NULL" uuid="9fe26f46-e860-4dfd-abad-158a0664a95f"/>
+      <field name="howtoMetaDescription" type="text" default="NULL" uuid="e1069954-8bb7-4153-99a1-dd78e706f0f0"/>
+      <field name="ideal" type="integer" size="1" default="NULL" uuid="71506023-8a83-4b34-9343-5e89e50ca889"/>
+      <field name="qShops" type="integer" size="1" default="NULL" uuid="9e1da385-6660-4ce2-9518-dea54c609cb0"/>
+      <field name="freeReturns" type="integer" size="1" default="NULL" uuid="18ea038c-c2d0-48b2-a6d9-fed2885f653c"/>
+      <field name="pickupPoints" type="integer" size="1" default="NULL" uuid="16a1bed7-0899-421c-a1d9-56668d7a8b40"/>
+      <field name="mobileShop" type="integer" size="1" default="NULL" uuid="5c6a2395-c3a2-4c23-bef3-05f8db60b088"/>
+      <field name="service" type="integer" size="1" default="NULL" uuid="cc86eac5-178c-473e-b739-9a7b64e3f8e3"/>
+      <field name="serviceNumber" type="string" default="NULL" uuid="81bda0d3-e7e9-4196-8ef1-6aeb40346da5"/>
+      <field name="discussions" type="integer" size="1" default="NULL" uuid="49078c61-fec3-419c-b44a-925ebf472204"/>
+      <field name="displayExtraProperties" type="integer" size="1" default="'1'" required="true" uuid="a49f1c8e-d53e-439a-9209-266878807133"/>
+      <field name="showSignupOption" type="integer" size="1" default="'0'" required="true" uuid="8da93767-3c75-4172-a763-41953a100dc3"/>
+      <field name="addtosearch" type="integer" size="1" default="'0'" required="true" uuid="d1d46162-acd8-4c06-b4ee-34b0759d45fb"/>
+      <field name="customHeader" type="string" default="NULL" uuid="d9f0e5e1-6c0c-407b-b55f-64b501b058e8"/>
+      <field name="totalViewcount" type="integer" size="8" default="NULL" uuid="b339112d-c666-4ea4-bc9f-3542fdc33238"/>
+      <field name="showSimliarShops" description="if true then displays same shops as well as shop related to same category" type="integer" size="1" default="'0'" required="true" uuid="69975659-5def-4a4c-9556-d0d4e2303d02"/>
+      <field name="showChains" type="integer" size="1" default="'0'" required="true" uuid="0b08c23d-8761-46e0-9453-5986731f8dac"/>
+      <field name="chainItemId" type="integer" size="8" default="NULL" uuid="59592dce-fd87-4c02-a3c4-c6ff4a7f5101"/>
+      <field name="chainId" type="integer" size="8" default="NULL" uuid="a750ff59-1944-4a32-b17d-ccdd45b3e20d"/>
+      <field name="strictConfirmation" type="integer" size="1" default="'0'" required="true" uuid="0711e227-79eb-4669-ad1e-658317cf9ff9"/>
+      <field name="howToIntroductionText" type="blob" default="NULL" uuid="95f753dc-82d2-4489-913c-cecfca8dc850"/>
+      <field name="brandingcss" type="string" default="NULL" uuid="0c54164d-d55d-4c14-9520-e5188313082f"/>
+      <field name="logoId" type="integer" size="11" unique="true" uuid="57d49022-39a6-4a0b-99e7-caed00ac3624"/>
+      <field name="howtoUseSmallImageId" type="integer" size="11" uuid="c9019cc9-f295-43ce-9dfc-85ee35d46df3"/>
+      <field name="howtoUseBigImageId" type="integer" size="11" uuid="2d089947-4692-4564-b2ca-91e510478a41"/>
+      <field name="screnshotId" type="integer" size="11" uuid="d9417c4a-0b6b-4260-9983-5d036edc49f6"/>
+      <index name="logoid" unique="true">
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="howtousesmallimageid" unique="true">
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="howtousebigimageid" unique="true">
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="affliatenetworkid_idx">
+        <index-field name="affliateNetworkId"/>
+      </index>
+      <index name="howtousepageid_idx">
+        <index-field name="howtoUsepageId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">shop</attribute>
+        <attribute name="export-file-name">Shop.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Shop" to="AffliateNetwork" caption="shop_affliatenetworkid_affliate_network_id" owner-alias="affliatenetwork" inverse-alias="affliatenetwork" uuid="{0496FFC8-6F52-4D8A-9EAC-6717A2C88F3A}">
+      <association-field from="affliateNetworkId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="Shop" to="Page" caption="shop_howtousepageid_page_id" owner-alias="pages" inverse-alias="shopPage" uuid="{53AFF6E0-4ACD-4335-B81C-5BE15F207506}">
+      <association-field from="howtoUsepageId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="Shop" to="Logo" caption="Logo Shop" owner-alias="shop" inverse-alias="logo" uuid="f9469148-5acb-418e-8d6e-23383b411989">
+      <association-field from="logoId" to="id"/>
+    </association>
+    <association from="Shop" to="HowToUseSmallImage" caption="HowToUseSmallImage Shop" owner-alias="shop" inverse-alias="howtousesmallimage" uuid="ce79e888-31e3-4040-91b3-994ba885b225">
+      <association-field from="howtoUseSmallImageId" to="id"/>
+    </association>
+    <association from="Shop" to="HowToUseBigImage" caption="HowToUseBigImage Shop" owner-alias="shop" inverse-alias="howtousebigimage" uuid="c63e735d-28cb-445a-9598-63cfb0ae2ec3">
+      <association-field from="howtoUseBigImageId" to="id"/>
+    </association>
+    <association from="Shop" to="WebsiteScrenshot" caption="WebsiteScrenshot Shop" owner-alias="shop" inverse-alias="screnshot" uuid="2da4d58d-fe6d-4d8f-bea8-5784406afe04">
+      <association-field from="screnshotId" to="id"/>
+    </association>
+    <entity name="ShopHowToChapter" uuid="{D2774238-3360-4AD1-BCEE-26D962B29A19}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="454fc23b-2790-486f-bacb-6fd249d908b7"/>
+      <field name="chapterTitle" type="string" default="NULL" uuid="348382fd-86a9-4be3-9d46-dcbf60aaff65"/>
+      <field name="chapterDescription" type="text" default="NULL" uuid="83a046df-e362-482e-a82b-a82d2833bd52"/>
+      <field name="created_at" type="datetime" default="NULL" uuid="9255459f-6dfa-408d-aca4-126c149d4b42"/>
+      <field name="updated_at" type="datetime" default="NULL" uuid="26c21340-3f66-4aac-8f8c-8f259e1d1048"/>
+      <field name="shopId" type="integer" size="8" uuid="f9a8bd59-b07f-4896-97cc-d1a052bbd1ac"/>
+      <orm-attributes>
+        <attribute name="table">shop_howto_chapter</attribute>
+        <attribute name="export-file-name">ShopHowToChapter.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="ShopHowToChapter" to="Shop" caption="Shop ShopHowtoChapter" owner-alias="howtochapter" inverse-alias="shop" uuid="8635299a-969d-4a4d-b2b2-81fb8a533cd3">
+      <association-field from="shopId" to="id"/>
+    </association>
+    <entity name="ShopViewCount" uuid="{9EC4BBB9-3AEC-4457-8771-2CF83BE05937}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="7d2c764b-150b-4e25-9678-4b3ae0489b67"/>
+      <field name="onclick" type="integer" size="8" default="NULL" uuid="edbbad82-c0e0-4b49-b462-719e057a9a96"/>
+      <field name="onload" type="integer" size="8" default="NULL" uuid="c64606cc-5650-4ba9-8fd7-7bd68939eb96"/>
+      <field name="ip" type="string" size="255" default="NULL" uuid="5d88a99b-fe3f-4606-ae8e-1b9e10fd0cab"/>
+      <field name="deleted" type="integer" size="1" default="NULL" uuid="46ce26c3-7fab-480c-b373-d0e706b55d9f"/>
+      <field name="created_at" type="datetime" default="NULL" uuid="e08137fb-d167-448e-8442-b846d82ad724"/>
+      <field name="updated_at" type="datetime" default="NULL" uuid="bf5fe03c-7804-4f0b-95da-5db567d644d8"/>
+      <field name="shopid" type="integer" size="8" uuid="ad304942-6c2c-404e-8f07-54e5f723812e"/>
+      <orm-attributes>
+        <attribute name="table">shopviewcount</attribute>
+        <attribute name="export-file-name">ShopViewCount.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="ShopViewCount" to="Shop" caption="Shop Shopviewcount" owner-alias="viewcount" inverse-alias="shop" uuid="40dcb0bc-0d0c-4660-92bc-04ffadf79131">
+      <association-field from="shopid" to="id"/>
+    </association>
+    <entity name="Signupcodes" uuid="{8230131C-31E9-4EB7-9A4B-86D70139F6B9}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="ca404454-e247-4140-bd6c-7c41c379cdbf"/>
+      <field name="entered_uid" type="integer" size="8" required="true" uuid="ced57854-e34b-4111-8afb-185cb295fc01"/>
+      <field name="code" type="string" size="255" default="NULL" uuid="6e50043c-5164-4f9a-9ed0-357fcc28ca04"/>
+      <field name="created_at" type="datetime" required="true" uuid="fe37d495-bc62-4116-b7cf-e067357d70ac"/>
+      <field name="updated_at" type="datetime" required="true" uuid="c8564a2a-1d92-4560-a5b4-091796c5bb3c"/>
+      <index name="code" unique="true">
+        <index-field name="code"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <orm-attributes>
+        <attribute name="table">signupcodes</attribute>
+        <attribute name="export-file-name">Signupcodes.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="Signupfavoriteshop" uuid="{3E098374-0E36-45FC-9815-56D673D52E5A}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="16aa4fa3-239f-4f29-b03e-50d5c7677ccb"/>
+      <field name="entered_uid" type="integer" size="8" required="true" uuid="a85612bf-58b8-4fcf-95f6-090900b0eb31"/>
+      <field name="store_id" description="FK to shop.id" type="integer" size="8" required="true" uuid="f56b7ba4-db3f-4a13-8827-fd3ebc462424"/>
+      <field name="created_at" type="datetime" required="true" uuid="4ac1781c-c518-4544-88dc-78de9aab601b"/>
+      <field name="updated_at" type="datetime" required="true" uuid="893d949e-656b-49dc-b53f-70ca43b8779a"/>
+      <index name="store_id" unique="true">
+        <index-field name="store_id"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <orm-attributes>
+        <attribute name="table">signupfavoriteshop</attribute>
+        <attribute name="export-file-name">Signupfavoriteshop.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Signupfavoriteshop" to="Shop" caption="signupfavoriteshop_ibfk_1" owner-alias="shop" inverse-alias="signupfavoriteshop" uuid="{6CB2E0B2-E1B2-472C-877B-50C665F84A2D}">
+      <association-field from="store_id" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="Signupmaxaccount" uuid="{4D305C77-7E78-474E-AA8A-1BB0008A8A5A}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="11c43d8d-23a8-49ab-b9ad-1694eb317460"/>
+      <field name="entered_uid" type="integer" size="20" required="true" uuid="14966727-4480-4ecc-9f48-219206265d17"/>
+      <field name="no_of_acc" type="string" size="255" default="NULL" uuid="d1d22268-ea31-4ab4-8b51-4cf7163ff02b"/>
+      <field name="status" type="integer" size="20" uuid="19b6876c-6a27-4be1-82f5-a23f11a29462"/>
+      <field name="created_at" type="datetime" required="true" uuid="047a9bdd-ba19-4bb1-ba85-450d0cf5a76a"/>
+      <field name="updated_at" type="datetime" required="true" uuid="af3ec124-5afb-4dce-a51b-3da545b94ffb"/>
+      <field name="email_confirmation" type="integer" size="1" default="'0'" uuid="0bc6f80f-661b-40db-b741-ea51439d48ff"/>
+      <field name="email_header" type="text" default="NULL" uuid="8a46ed8e-1778-4177-ad73-c82415fa370d"/>
+      <field name="email_footer" type="text" default="NULL" uuid="2448800a-11b1-4dc0-a1b8-bede7b104039"/>
+      <field name="max_account" type="integer" size="8" default="NULL" uuid="296607de-5a66-474c-a72f-68c084c963eb"/>
+      <field name="emailperlocale" type="string" uuid="ec9d3248-1bf5-4b00-aaa2-de1fd676e668"/>
+      <field name="sendername" type="string" size="255" default="''" uuid="dc8a99a2-8dcc-4560-9cb1-c670336d4c8e"/>
+      <field name="emailsubject" type="string" size="255" default="''" uuid="1824cddc-0255-454c-a0e6-d6491606773f"/>
+      <field name="testemail" type="string" size="255" default="''" uuid="59b1b9b9-e6f9-4ad7-9fc6-7286665b3a7f"/>
+      <field name="testimonial1" type="string" default="NULL" uuid="4f540baa-525d-41f9-abb9-b5437da233f6"/>
+      <field name="testimonial2" type="string" default="NULL" uuid="5de0a785-337d-4a07-acef-b1f51247fa30"/>
+      <field name="testimonial3" type="string" default="NULL" uuid="bc7c13bb-1a01-4184-80c2-f25e794f0666"/>
+      <field name="showtestimonial" type="integer" size="1" default="'0'" required="true" uuid="dc2229d8-23b5-4dcc-bb1e-6a641b3fd40a"/>
+      <field name="homepagebanner_name" type="string" size="255" default="NULL" uuid="73dad0f9-928e-4975-99c4-6d1b53f69b8c"/>
+      <field name="homepagebanner_path" type="string" size="255" default="NULL" uuid="01539cda-16e1-4bae-a29e-a6b725acd1fe"/>
+      <field name="homepage_widget_banner_name" type="string" size="255" default="NULL" uuid="94e5079f-c567-4447-af0c-bc56bf14089c"/>
+      <field name="homepage_widget_banner_path" type="string" size="255" default="NULL" uuid="a054067c-9369-425b-9c38-4291cfd4f2a5"/>
+      <field name="newletter_is_scheduled" description="1-scheduled ,0-manual" type="integer" size="1" default="'0'" uuid="8a8e78d3-f4de-4557-a4b0-5c863fe17072"/>
+      <field name="newletter_status" description="1-sent ,0-unsent, this is only used in case of scheduled newsletters" type="integer" size="1" default="'0'" uuid="e9af69e0-3ae1-4440-ad55-bda787eec769"/>
+      <field name="newletter_scheduled_time" description="newsletter scheduled timestamp" type="datetime" default="'2014-01-23 12:11:26'" uuid="83316658-d2c1-44ad-a992-f27939a04b8d"/>
+      <orm-attributes>
+        <attribute name="table">signupmaxaccount</attribute>
+        <attribute name="export-file-name">Signupmaxaccount.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="Special" uuid="{511AC56E-860A-4649-8219-3C98FE26C6FD}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="262e6b2c-c9f1-4892-be93-e7a6f1a3deca"/>
+      <field name="title" type="string" default="NULL" uuid="8821217b-ead8-4e74-bc0e-2fac527c6c0f"/>
+      <field name="description" type="text" default="NULL" uuid="e50ebf9a-b4ac-48d8-a3a2-6e6296a5ad5b"/>
+      <field name="status" type="integer" size="1" default="'1'" uuid="be6fd267-db1f-4601-bf39-e15f0565e871"/>
+      <field name="created_at" type="datetime" required="true" uuid="d87cfe68-118a-4d4b-a21f-2a14c381641b"/>
+      <field name="updated_at" type="datetime" required="true" uuid="682713f1-7fb7-4b90-b701-7594e994ab9a"/>
+      <orm-attributes>
+        <attribute name="table">special</attribute>
+        <attribute name="export-file-name">Special.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="SpecialList" uuid="{D132F5A9-BF1D-4906-B4B4-B1D584DD6F8C}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="de5ea6d1-8c3f-41e8-ba40-00a4117cf2b3"/>
+      <field name="type" type="string" size="255" default="NULL" uuid="776656d1-7b8e-4128-b384-5ca181ebd0dc"/>
+      <field name="position" description="Holds the shop position among popular offer list" type="integer" size="8" default="NULL" uuid="fa5e1aac-b0a4-4264-b8cd-c3958e5ba781"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="7da140f1-e7c1-4938-9309-512d60dcf3cc"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="2db0013f-203b-4d75-b912-66261ec6dad1"/>
+      <field name="created_at" type="datetime" required="true" uuid="1d7dc567-21e8-4e7a-9817-ce40a83a8e26"/>
+      <field name="updated_at" type="datetime" required="true" uuid="384942b9-c696-419e-b903-fa6534ddcba2"/>
+      <field name="specialpageId" type="integer" size="8" uuid="5425001c-ad99-4ee8-95f4-d07ea318b48a"/>
+      <orm-attributes>
+        <attribute name="table">special_list</attribute>
+        <attribute name="export-file-name">SpecialList.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="SpecialList" to="Page" caption="Page SpecialList" owner-alias="specialList" inverse-alias="page" uuid="fcc6bbfb-b041-4ac7-87de-3ce66f4a4ec9">
+      <association-field from="specialpageId" to="id"/>
+    </association>
+    <entity name="TermAndCondition" uuid="{9D33D8F0-8A4A-432A-8FA2-52BDE491EA0F}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="1765fceb-0522-463e-8861-39669111bc9f"/>
+      <field name="content" type="string" default="NULL" uuid="25c968ac-a893-4c32-8979-01fda8895c4e"/>
+      <field name="offerId" description="FK to offer.id" type="integer" size="8" default="NULL" uuid="c1f6c824-cbfd-468f-b746-3fc9d1cfab0c"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="03e667fe-2c7c-48b3-b40c-7fdac5f6de3f"/>
+      <field name="created_at" type="datetime" required="true" uuid="1dd0ee43-3183-4a90-a649-42f833fd9ff2"/>
+      <field name="updated_at" type="datetime" required="true" uuid="ac6f1ed9-cbcf-489e-9fc9-5d5aff989e7c"/>
+      <index name="offerid_idx">
+        <index-field name="offerId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">term_and_condition</attribute>
+        <attribute name="export-file-name">TermAndCondition.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="TermAndCondition" to="Offer" caption="term_and_condition_offerid_offer_id" owner-alias="offertermandcondition" inverse-alias="termandcondition" uuid="{C30A1AED-7CBF-49C5-8A24-BE4F51FF5666}">
+      <association-field from="offerId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="Translations" uuid="{85CCAB30-F941-4F74-B0D1-119E811AD6FD}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="4fffa7d8-9904-41d0-868a-340bd4e7aa7d"/>
+      <field name="translationKey" type="string" default="NULL" uuid="5536c34d-a09a-4063-a2e0-dac44ae91883"/>
+      <field name="translation" type="string" default="NULL" uuid="13d891d6-f68c-410b-ad95-e8e53c0a542d"/>
+      <field name="created_at" type="datetime" default="NULL" uuid="928f8d4e-300c-4649-8434-c6842d523739"/>
+      <field name="updated_at" type="datetime" default="NULL" uuid="e270f25a-0b4d-4909-930d-465340a5cf58"/>
+      <field name="deleted" type="integer" size="1" default="NULL" uuid="5f8d3961-c482-439c-a537-2773e0886b79"/>
+      <orm-attributes>
+        <attribute name="table">translations</attribute>
+        <attribute name="export-file-name">Translations.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="Varnish" uuid="{3A159224-CE99-44AC-81B3-1B2856A0689B}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="1a7889b0-350d-4ded-b0f1-753596050825"/>
+      <field name="url" type="string" default="NULL" uuid="5789b0f5-e006-4f9c-aa09-e7fe842a491e"/>
+      <field name="status" type="string" default="NULL" uuid="a7a95b78-acf4-4cee-8e34-02638401b853"/>
+      <field name="created_at" type="datetime" default="NULL" uuid="2e6ffbf8-d8ad-4083-8ccc-894ee988bb4d"/>
+      <field name="updated_at" type="datetime" default="NULL" uuid="573ed99c-d423-4d66-bd0a-51159033a96a"/>
+      <orm-attributes>
+        <attribute name="table">varnish</attribute>
+        <attribute name="export-file-name">Varnish.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="ViewCount" uuid="{80C90282-50B4-4F6F-A456-1124404540E5}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="e3560f6c-aea5-46a8-8f8a-a8a3e159af9d"/>
+      <field name="loadTime" type="integer" size="8" default="NULL" uuid="2e91536f-37e4-4975-8eb8-9f9c7d342cae"/>
+      <field name="onClick" type="integer" size="8" default="'0'" uuid="39f6b910-5204-4021-a0c4-215250071e4e"/>
+      <field name="onLoad" type="integer" size="8" default="'0'" uuid="b92f3181-cd67-488b-8cf7-2ddb01620311"/>
+      <field name="onHover" type="integer" size="8" default="NULL" uuid="3a908c74-0506-4c64-b53a-dd395daa1dca"/>
+      <field name="IP" type="string" size="255" default="NULL" uuid="01c8b76f-dd00-4181-b1ae-90f62c1f4675"/>
+      <field name="offerId" description="FK to offer.id" type="integer" size="8" default="NULL" uuid="91bb9533-9122-4bee-8a27-96234444bb03"/>
+      <field name="memberId" description="FK of member who view offer (used for future reference)" type="integer" size="8" default="NULL" uuid="b7c46df2-16b9-4c3b-8203-bca34d18641b"/>
+      <field name="created_at" type="datetime" required="true" uuid="81c04c1f-7c73-4f4a-9426-c4326b87f4df"/>
+      <field name="updated_at" type="datetime" required="true" uuid="a2ecae21-0f2d-45f5-aa54-58350bf663ba"/>
+      <field name="counted" type="integer" size="1" default="'0'" uuid="a2215c09-29af-4e54-b048-0a5794844ec4"/>
+      <index name="offerid_idx">
+        <index-field name="offerId"/>
+      </index>
+      <index name="offer_click_count_idx">
+        <index-field name="offerId"/>
+        <index-field name="onClick"/>
+        <index-field name="counted"/>
+      </index>
+      <index name="memberid_idx">
+        <index-field name="memberId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">view_count</attribute>
+        <attribute name="export-file-name">ViewCount.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="ViewCount" to="Offer" caption="view_count_offerid_offer_id" owner-alias="offerviewcount" inverse-alias="viewcount" uuid="{96669711-4915-4154-ACB1-5D7BBA64543B}">
+      <association-field from="offerId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="Visitor" uuid="{C6505F14-E260-4EA7-BFBB-841CF976FCF9}">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="97e6f016-a30e-493d-afe5-7be3ee44839a"/>
+      <field name="firstName" type="string" default="NULL" uuid="08b8a272-325f-4cd7-9692-ca0cac035796"/>
+      <field name="lastName" type="string" default="NULL" uuid="d26a9d0a-58f2-424a-9fc2-e43e89a34aba"/>
+      <field name="email" type="string" size="255" default="NULL" uuid="001db76e-6096-411d-91f6-024a667226e4"/>
+      <field name="username" type="string" size="255" default="NULL" uuid="b49db09c-c46d-46eb-9501-bf8b7167308f"/>
+      <field name="password" type="string" size="255" default="NULL" uuid="f5d169d7-e672-4b74-a9e9-24077c6192fb"/>
+      <field name="pwd" type="string" size="50" default="NULL" uuid="319e17c3-87da-4aa6-be18-7a5bd2368167"/>
+      <field name="status" type="integer" size="1" default="'1'" uuid="ab4cb318-508e-4670-a82d-de67bdc1397c"/>
+      <field name="imageId" description="FK to image.id" type="integer" size="8" default="NULL" uuid="af22ce1a-576f-43e4-894f-dfd909bf736e"/>
+      <field name="gender" type="integer" size="1" default="'0'" uuid="dd840b3c-411a-4b8d-ab80-f52da6b4c2ed"/>
+      <field name="dateOfBirth" type="date" default="NULL" uuid="0e3d4a2f-601f-4402-991d-22467ddb8136"/>
+      <field name="postalCode" type="string" size="50" default="NULL" uuid="207e16a5-6027-45b5-8f11-1a34f19d7845"/>
+      <field name="weeklyNewsLetter" type="integer" size="1" default="'0'" uuid="712165e3-b72c-4e93-9eab-24fddc7231cf"/>
+      <field name="fashionNewsLetter" type="integer" size="1" default="'0'" uuid="d58f5cc3-3866-480e-b713-b699762662ef"/>
+      <field name="travelNewsLetter" type="integer" size="1" default="'0'" uuid="0cb60ce6-1978-423f-bbe4-6efb107cd2ab"/>
+      <field name="codeAlert" type="integer" size="1" default="'0'" uuid="edc55182-4300-4ae0-a1fa-b94ba44cc888"/>
+      <field name="createdBy" description="FK to user.id" type="integer" size="8" default="NULL" uuid="7c81f01b-b681-4824-8bcc-79097713ae22"/>
+      <field name="deleted" type="integer" size="1" default="'0'" uuid="dd236160-cba7-4148-9c01-6c3a0fbc8d66"/>
+      <field name="currentLogIn" description="current login timestamp" type="datetime" uuid="f6a7b702-31b6-4a00-a83c-e4fafe88c470"/>
+      <field name="lastLogIn" description="last login timestamp" type="datetime" uuid="fec978db-e6b6-4e46-97f3-4a7589f76ca9"/>
+      <field name="created_at" type="datetime" required="true" uuid="ac9ac9b0-a3aa-4ac7-9408-f7e9d31ebe03"/>
+      <field name="updated_at" type="datetime" required="true" uuid="09600dbb-12e6-431b-a8f2-6e02a8695cb3"/>
+      <field name="interested" type="string" size="255" default="NULL" uuid="e307543f-6186-452d-bd82-559ae13f3bd2"/>
+      <field name="profile_img" type="string" size="255" default="NULL" uuid="ae9f1506-8997-4ffb-a308-99273f2d4436"/>
+      <field name="active_codeid" type="string" size="255" required="true" uuid="31af8ea4-2bf1-4dd9-b15d-ad0f30adb884"/>
+      <field name="active" type="integer" size="1" default="NULL" uuid="080470fa-18dc-4c47-9813-ca112098a496"/>
+      <field name="changepasswordrequest" type="integer" size="1" default="'1'" uuid="057bbefc-50d9-43cc-96f3-51170d5bdd38"/>
+      <field name="visitor_image_id" type="integer" size="11" uuid="7e13b61a-a4db-4b24-9364-17249676e0c2"/>
+      <index name="email" unique="true">
+        <index-field name="email"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="imageid_idx">
+        <index-field name="imageId"/>
+      </index>
+      <index name="createdby_idx">
+        <index-field name="createdBy"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">visitor</attribute>
+        <attribute name="export-file-name">Visitor.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Visitor" to="VisitorImage" caption="VisitorImage Visitor" owner-alias="visitor" inverse-alias="visitorimage" uuid="89e77356-c3b5-44e5-ab40-1fd599cdf0db">
+      <association-field from="visitor_image_id" to="id"/>
+    </association>
+    <entity name="VisitorKeyword" uuid="{A0ECA104-D730-45E9-A070-E61D877E0ABE}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="e08c4b63-e26f-4616-959e-c643b150b145"/>
+      <field name="keyword" type="string" size="255" default="NULL" uuid="c51af421-d3a3-4240-a4bd-7d3b8e9d3003"/>
+      <field name="visitorId" type="integer" size="8" uuid="7e00e8e2-e147-4d25-b6c6-739b0d7cfc66"/>
+      <orm-attributes>
+        <attribute name="table">visitor_keyword</attribute>
+        <attribute name="export-file-name">VisitorKeyword.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="VisitorKeyword" to="Visitor" caption="Visitor VisitorKeyword" owner-alias="visitorKeyword" inverse-alias="visitor" uuid="e66884f2-13d6-4d6b-8c3e-c76c5c036097">
+      <association-field from="visitorId" to="id"/>
+    </association>
+    <entity name="Votes" uuid="{247394E5-7393-4C48-93B9-E92CB1EAA75E}">
+      <field name="id" type="integer" size="11" required="true" primary="true" auto-increment="true" uuid="b111221c-a6ce-4ab9-8ebc-2c1de0442f1b"/>
+      <field name="ipAddress" type="string" size="200" default="NULL" uuid="76e8ad7b-2026-43e9-b345-17a563d65f08"/>
+      <field name="date" type="datetime" default="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" required="true" uuid="1692dc27-b0d1-41fb-9fe9-5df38d0b610a"/>
+      <field name="vote" type="string" size="200" default="NULL" uuid="fd59c39d-d58d-496e-89b5-7565db7335d5"/>
+      <field name="moneySaved" type="float" required="true" uuid="916d14b1-54e1-43f2-9a37-418c89740fc5"/>
+      <field name="product" type="string" size="255" default="NULL" uuid="e60e89e9-4899-4e66-ba8f-c616336246d7"/>
+      <field name="status" type="integer" size="11" default="'1'" required="true" uuid="1a440e42-2e18-4b00-a0ba-3804277c1939"/>
+      <field name="created_at" type="datetime" required="true" uuid="2e7119c4-27d1-45bc-9171-0d45e26f7cae"/>
+      <field name="updated_at" type="datetime" required="true" uuid="14ef46e8-2e41-4101-98c8-4b617b2a10e5"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="d6d23535-bc69-46c5-8c38-210a3cda8df8"/>
+      <field name="visitorId" type="integer" size="8" default="NULL" uuid="853e836a-7a10-4c74-9d89-b319597b9226"/>
+      <field name="offerId" type="integer" size="8" uuid="cf755c92-5761-4089-aef5-c3d9370ba1b4"/>
+      <orm-attributes>
+        <attribute name="table">votes</attribute>
+        <attribute name="export-file-name">Votes.php</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Votes" to="Offer" caption="Offer Votes" owner-alias="votes" inverse-alias="offer" uuid="0441da9d-bc6f-4519-b23c-406ff2490a00">
+      <association-field from="offerId" to="id"/>
+    </association>
+    <entity name="Widget" uuid="{A673E38B-41E5-4185-AD56-73CC45B25330}">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="274e813e-e321-4f2c-8bed-32e7800882a6"/>
+      <field name="title" type="string" default="NULL" uuid="4780c4c0-ba13-4993-bb54-1a97ec8d24ea"/>
+      <field name="slug" type="string" size="255" default="NULL" uuid="f2d8e93d-58cc-4844-ad6b-a3422182469c"/>
+      <field name="content" type="text" default="NULL" uuid="e2fea541-3356-4cd4-9b91-2db4288abfd0"/>
+      <field name="status" type="integer" size="1" default="'1'" required="true" uuid="08fb04e7-b89b-4e5a-bb4e-3b2326cffe07"/>
+      <field name="userDefined" type="integer" size="1" default="'0'" uuid="fc7e5cd0-aa7a-4331-8f4c-bbde2cd5bfd5"/>
+      <field name="showWithDefault" type="integer" size="1" default="'0'" uuid="2f985bbc-edda-40c9-b402-ae00b91efd9e"/>
+      <field name="created_at" type="datetime" required="true" uuid="ee45ce0c-33f6-44a4-ab80-8c90da779d90"/>
+      <field name="updated_at" type="datetime" required="true" uuid="72ad7e94-86c5-41a8-9af0-c548bd0930e1"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="c4de4e11-c020-4f3a-a57e-d4296a7e1fce"/>
+      <orm-attributes>
+        <attribute name="table">widget</attribute>
+        <attribute name="export-file-name">Widget.php</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="Logo" uuid="7ba935b3-2b67-4a00-9d01-4e2469b9f33d">
+      <field name="id" type="integer" size="11" required="true" unique="true" primary="true" auto-increment="true" uuid="22f29219-b5b5-42ac-8896-2a9c1fc258a8"/>
+      <inheritance-child derived-from="Image" discriminator-value="LG" caption="New inheritance" uuid="83ee9ff7-4501-40ca-89fd-2afb2b8b72ad"/>
+    </entity>
+    <entity name="HowToUseSmallImage" uuid="4e76e42a-885a-4f8b-a34d-c14b684d5f3c">
+      <field name="id" type="integer" size="11" required="true" unique="true" primary="true" auto-increment="true" uuid="8152fbd8-ec3f-4c55-a295-856e08d21df9"/>
+      <inheritance-child derived-from="Image" discriminator-value="HTUS" caption="New inheritance" uuid="9b7f4a06-b921-49e7-b57d-1dfeb6a4df64"/>
+    </entity>
+    <entity name="HowToUseBigImage" uuid="f2eb778c-0d40-4733-87f6-8a63d844689b">
+      <field name="id" type="integer" size="11" required="true" unique="true" primary="true" auto-increment="true" uuid="73690dd4-4bf4-4066-b2cc-3dcc1570df97"/>
+      <inheritance-child derived-from="Image" discriminator-value="HTUB" caption="New inheritance" uuid="84320c31-d97e-4388-871d-e4b26e8f1f9b"/>
+    </entity>
+    <entity name="MediaImage" uuid="3605deae-a71a-486c-8128-a07cb82bef99">
+      <field name="id" type="integer" size="11" required="true" unique="true" primary="true" auto-increment="true" uuid="518ddc1d-45f3-4bbe-a447-5d99100395c4"/>
+      <inheritance-child derived-from="Image" discriminator-value="MI" caption="New inheritance" uuid="e6a6b2c7-6b26-4742-b56c-6dc1d4f59ae3"/>
+    </entity>
+    <entity name="CategoryIcon" uuid="0887cecf-a4c7-43fa-94b1-e770bab2b02f">
+      <field name="id" type="integer" size="11" required="true" unique="true" primary="true" auto-increment="true" uuid="dcbe8953-2ae5-4201-ac85-68b1a7ecd3a9"/>
+      <inheritance-child derived-from="Image" discriminator-value="CATICON" caption="New inheritance" uuid="cd28b99c-afb2-4321-9f8d-bb739dc5fa27"/>
+    </entity>
+    <entity name="VisitorImage" uuid="11200333-9970-4551-9bae-de7e3aa4a3b9">
+      <field name="id" type="integer" size="11" required="true" unique="true" primary="true" auto-increment="true" uuid="1f2f65ae-df8f-4f1a-8b13-7e42389c2383"/>
+      <inheritance-child derived-from="Image" discriminator-value="VISITORPIC" caption="New inheritance" uuid="ec4a4a55-0dfa-4a3b-b0e2-fee5debb7ee6"/>
+    </entity>
+    <entity name="ArticleCategoryIcon" uuid="f8c41710-3c92-4dc7-96b8-3cdde1e5d4c3">
+      <field name="id" type="integer" size="11" required="true" unique="true" primary="true" auto-increment="true" uuid="4c7228ef-c7a7-4eba-a8c7-b8418bb853ef"/>
+      <inheritance-child derived-from="Image" discriminator-value="ARTCATICON" caption="New inheritance" uuid="5a403dac-be29-4dc0-9cfe-114f6bdf8c5b"/>
+    </entity>
+    <entity name="ArticlesIcon" uuid="543ba2e4-8593-4ad7-933a-6485e2020306">
+      <field name="id" type="integer" size="11" required="true" unique="true" primary="true" auto-increment="true" uuid="d809ec1a-5142-47b0-b613-ab0914610844"/>
+      <inheritance-child derived-from="Image" discriminator-value="ARTICON" caption="New inheritance" uuid="ef4cf707-eab6-4f31-925f-12f348dfed24"/>
+    </entity>
+    <entity name="ArticlesThumb" uuid="3c75e96c-0a92-4bbc-84b3-da9dce193f7a">
+      <field name="id" type="integer" size="11" required="true" unique="true" primary="true" auto-increment="true" uuid="d071074d-8ccc-4de3-a5aa-d73a5c90117b"/>
+      <inheritance-child derived-from="Image" discriminator-value="ARTTHUMB" caption="New inheritance" uuid="56059616-18bc-4ae2-a94d-aa7a900e813a"/>
+    </entity>
+    <entity name="WebsiteScrenshot" uuid="b43c0c9a-17ce-44c4-b64c-e5df4d16855a">
+      <field name="id" type="integer" size="11" required="true" unique="true" primary="true" auto-increment="true" uuid="db438c44-6e90-495e-8609-e602717b0aa8"/>
+      <inheritance-child derived-from="Image" discriminator-value="SCREENSHOT" caption="New inheritance" uuid="9aea3bd5-9b5b-46d1-8b8c-a7db80f4efa0"/>
+    </entity>
+    <orm-attributes>
+      <attribute name="file-suffix">without-suffix</attribute>
+      <attribute name="filename-format">entity-name-only</attribute>
+      <attribute name="namespace">KC\Entity</attribute>
+    </orm-attributes>
+  </module>
+  <visual-data>
+    <association uuid="0441da9d-bc6f-4519-b23c-406ff2490a00" color="4288059030"/>
+    <entity uuid="0887cecf-a4c7-43fa-94b1-e770bab2b02f" bg-color="4294967295" hdr-color="4292006610" position-x="22" position-y="832" size-x="0" size-x2="84" size-y="0" size-y2="31"/>
+    <association uuid="09dbb063-18d2-4cc5-813e-82284e2ebe2f" color="4288059030"/>
+    <association uuid="0f0fca0d-3236-48fd-a3d9-a18272f7206f" color="4288059030"/>
+    <entity uuid="11200333-9970-4551-9bae-de7e3aa4a3b9" bg-color="4294967295" hdr-color="4292006610" position-x="629" position-y="957" size-x="0" size-x2="84" size-y="0" size-y2="31"/>
+    <association uuid="1e48bd3f-cbfc-41b4-ba1f-4d19677b7079" color="4288059030"/>
+    <many-to-many-association uuid="23819c7a-9e6b-4eea-a5c9-c0c4ff717aab" color="4288059030"/>
+    <association uuid="25605aa6-3921-428c-bea6-d78385425f63" caption1-position-x="70" caption1-position-y="-2" center-position-x="0" center-position-y="0" color="4288059030"/>
+    <association uuid="2da4d58d-fe6d-4d8f-bea8-5784406afe04" color="4288059030"/>
+    <association uuid="35d8439d-1a25-445a-bc5b-61e2987ca784" color="4288059030"/>
+    <entity uuid="3605deae-a71a-486c-8128-a07cb82bef99" bg-color="4294967295" hdr-color="4292006610" position-x="576" position-y="650" size-x="0" size-x2="84" size-y="0" size-y2="31"/>
+    <entity uuid="3c75e96c-0a92-4bbc-84b3-da9dce193f7a" bg-color="4294967295" hdr-color="4292006610" position-x="42" position-y="610" size-x="0" size-x2="84" size-y="0" size-y2="31"/>
+    <association uuid="3c89d1ea-edc1-4b71-acce-610f5ba19fdb" color="4288059030"/>
+    <association uuid="40dcb0bc-0d0c-4660-92bc-04ffadf79131" color="4288059030"/>
+    <entity uuid="4e76e42a-885a-4f8b-a34d-c14b684d5f3c" bg-color="4294967295" hdr-color="4292006610" position-x="557" position-y="797" size-x="0" size-x2="107" size-y="0" size-y2="31"/>
+    <many-to-many-association-entity uuid="51f03319-67bc-4fb1-9871-5f045e87a16b" caption1-position-x="0" caption1-position-y="0" center-position-x="0" center-position-y="0"/>
+    <entity uuid="543ba2e4-8593-4ad7-933a-6485e2020306" bg-color="4294967295" hdr-color="4292006610" position-x="322" position-y="565" size-x="0" size-x2="84" size-y="0" size-y2="31"/>
+    <inheritance-child uuid="56059616-18bc-4ae2-a94d-aa7a900e813a" color="4288059030"/>
+    <inheritance-child uuid="5a403dac-be29-4dc0-9cfe-114f6bdf8c5b" color="4288059030"/>
+    <module uuid="5eb3913c-5ab8-42de-a18d-1fe3a4066ea1" bg-color="4294897635" position-x="50" position-y="50" size-x="259" size-x2="2165" size-y="0" size-y2="3523"/>
+    <association uuid="65b4489c-a692-4627-aeb0-0ac25102a6e1" color="4288059030"/>
+    <association uuid="661565db-3480-4677-b5a3-4489cc13c68d" color="4288059030"/>
+    <many-to-many-association uuid="74f237f0-8dca-4ced-9218-ab3df15adb51" color="4288059030"/>
+    <entity uuid="7ba935b3-2b67-4a00-9d01-4e2469b9f33d" bg-color="4294967295" hdr-color="4292006610" position-x="556" position-y="918" size-x="0" size-x2="84" size-y="0" size-y2="31"/>
+    <inheritance-child uuid="83ee9ff7-4501-40ca-89fd-2afb2b8b72ad" color="4288059030"/>
+    <inheritance-child uuid="84320c31-d97e-4388-871d-e4b26e8f1f9b" color="4288059030"/>
+    <association uuid="8635299a-969d-4a4d-b2b2-81fb8a533cd3" color="4288059030"/>
+    <association uuid="89e77356-c3b5-44e5-ab40-1fd599cdf0db" color="4288059030"/>
+    <association uuid="9677f5b1-5a72-45e7-b329-322a9327ec42" color="4288059030"/>
+    <association uuid="9a24abea-b3fb-47b9-b9de-2cf47cc98d10" color="4288059030"/>
+    <inheritance-child uuid="9aea3bd5-9b5b-46d1-8b8c-a7db80f4efa0" color="4288059030"/>
+    <inheritance-child uuid="9b7f4a06-b921-49e7-b57d-1dfeb6a4df64" color="4288059030"/>
+    <many-to-many-association uuid="9dc309c2-6206-4165-ae20-8e54a3adb617" color="4288059030"/>
+    <association uuid="aa1f04d8-d7f2-4cae-912b-4fddfce218b3" color="4288059030"/>
+    <association uuid="abff03ea-bf6c-4a4e-944c-2507d7cee6da" color="4288059030"/>
+    <entity uuid="b43c0c9a-17ce-44c4-b64c-e5df4d16855a" bg-color="4294967295" hdr-color="4292006610" position-x="149" position-y="609" size-x="0" size-x2="90" size-y="0" size-y2="31"/>
+    <association uuid="b6c02f18-e7b2-45f8-ba5b-ea772609bf50" color="4288059030"/>
+    <association uuid="bfdd9516-4613-4e84-a8be-9c996ae4989a" color="4288059030"/>
+    <association uuid="c1a3eb4e-69a1-4978-bdab-d6158be1b715" color="4288059030"/>
+    <association uuid="c63e735d-28cb-445a-9598-63cfb0ae2ec3" color="4288059030"/>
+    <association uuid="c6d5e808-60d1-4071-a7f8-8b478c328399" color="4288059030"/>
+    <inheritance-child uuid="cd28b99c-afb2-4321-9f8d-bb739dc5fa27" color="4288059030"/>
+    <association uuid="cd2fbaea-9ba5-47f8-b301-8c81a3887dfa" color="4288059030"/>
+    <association uuid="ce79e888-31e3-4040-91b3-994ba885b225" color="4288059030"/>
+    <many-to-many-association uuid="d1c31601-0ef7-413e-a08b-2c8347e02af0" color="4288059030"/>
+    <association uuid="d3ad6845-cc20-4308-9b60-34032ee12f1a" color="4288059030"/>
+    <association uuid="d820325b-4e9d-4631-8cd1-db93da37e50b" color="4288059030"/>
+    <association uuid="dbf04ab8-ad43-4472-9f31-0779e2f08d3b" caption1-position-x="2" caption1-position-y="15" center-position-x="0" center-position-y="0" color="4288059030"/>
+    <many-to-many-association uuid="e00b54bf-e0ff-49be-8889-282a57e722d7" color="4288059030"/>
+    <association uuid="e3f851da-84d6-42f7-9340-851e327b0fc4" color="4288059030"/>
+    <association uuid="e66884f2-13d6-4d6b-8c3e-c76c5c036097" color="4288059030"/>
+    <inheritance-child uuid="e6a6b2c7-6b26-4742-b56c-6dc1d4f59ae3" color="4288059030"/>
+    <inheritance-child uuid="ec4a4a55-0dfa-4a3b-b0e2-fee5debb7ee6" color="4288059030"/>
+    <inheritance-child uuid="ef4cf707-eab6-4f31-925f-12f348dfed24" color="4288059030"/>
+    <many-to-many-association-entity uuid="f13ffd60-2099-4d92-b750-76063500b344" caption1-position-x="0" caption1-position-y="-1" center-position-x="0" center-position-y="0"/>
+    <entity uuid="f2eb778c-0d40-4733-87f6-8a63d844689b" bg-color="4294967295" hdr-color="4292006610" position-x="543" position-y="732" size-x="0" size-x2="98" size-y="0" size-y2="31"/>
+    <association uuid="f55fabc8-918f-4762-ac24-3e29efd7641a" color="4288059030"/>
+    <entity uuid="f8c41710-3c92-4dc7-96b8-3cdde1e5d4c3" bg-color="4294967295" hdr-color="4292006610" position-x="-94" position-y="626" size-x="0" size-x2="97" size-y="0" size-y2="31"/>
+    <project uuid="f8d77ed5-cdfa-45e5-b861-23918ccbc748" size-x="300" size-x2="3172" size-y="0" size-y2="3623"/>
+    <association uuid="f9469148-5acb-418e-8d6e-23383b411989" color="4278255360"/>
+    <association uuid="fcc6bbfb-b041-4ac7-87de-3ce66f4a4ec9" color="4288059030"/>
+    <association uuid="fda41b41-f5b1-4015-b79f-dfdc424703a9" color="4288059030"/>
+    <entity uuid="{02E72079-1640-48D7-B96B-EF9CDD4C9D99}" bg-color="4294967295" hdr-color="4292006610" position-x="1256" position-y="248" size-x="0" size-x2="116" size-y="0" size-y2="101"/>
+    <association uuid="{03D05B5E-155A-4BC9-9262-0D9BA2BF1B26}" color="4278236368"/>
+    <association uuid="{0496FFC8-6F52-4D8A-9EAC-6717A2C88F3A}" color="4291261615"/>
+    <entity uuid="{0710CE84-A6AC-4427-ABAC-1AD9E59212DB}" bg-color="4294967295" hdr-color="4292006610" position-x="775" position-y="376" size-x="0" size-x2="129" size-y="0" size-y2="101"/>
+    <entity uuid="{0E41DE14-96FB-4A27-A9A2-F4BE68023AAC}" bg-color="4294967295" hdr-color="4292006610" position-x="522" position-y="3182" size-x="0" size-x2="117" size-y="0" size-y2="59"/>
+    <entity uuid="{0F672F06-8F7D-477E-94A3-DD8DE3277E6F}" bg-color="4294967295" hdr-color="4292006610" position-x="1324" position-y="619" size-x="0" size-x2="118" size-y="0" size-y2="171"/>
+    <entity uuid="{123CEBAB-6410-4A59-8FC6-FCCC8A2648EC}" bg-color="4294967295" hdr-color="4292006610" position-x="1035" position-y="918" size-x="0" size-x2="126" size-y="0" size-y2="129"/>
+    <entity uuid="{1442674D-957C-44E0-A00C-388BB8A50977}" bg-color="4294967295" hdr-color="4292006610" position-x="423" position-y="448" size-x="0" size-x2="130" size-y="0" size-y2="171"/>
+    <entity uuid="{177840F9-376A-4AD3-A79C-50048F35FE0F}" bg-color="4294967295" hdr-color="4292006610" position-x="47" position-y="2898" size-x="0" size-x2="116" size-y="0" size-y2="129"/>
+    <entity uuid="{18525071-0D88-406E-8EC2-B9B5CE2DA0B6}" bg-color="4294967295" hdr-color="4292006610" position-x="1103" position-y="259" size-x="0" size-x2="116" size-y="0" size-y2="115"/>
+    <association uuid="{18DCA2D5-4E00-47BF-B140-F29BB8FF6DF3}" color="4289243304"/>
+    <entity uuid="{1D245D3D-5D55-4F0E-840B-82D535FE479B}" bg-color="4294967295" hdr-color="4292006610" position-x="95" position-y="133" size-x="0" size-x2="109" size-y="0" size-y2="157"/>
+    <entity uuid="{207D8C23-5261-43F0-9D6B-B9617D15AB1A}" bg-color="4294967295" hdr-color="4292006610" position-x="519" position-y="3267" size-x="0" size-x2="117" size-y="0" size-y2="129"/>
+    <entity uuid="{20A6C0DA-6C44-4DEC-877A-1D7A454EBEF6}" bg-color="4294967295" hdr-color="4292006610" position-x="1328" position-y="2445" size-x="0" size-x2="116" size-y="0" size-y2="129"/>
+    <entity uuid="{20C0A17B-902E-48DD-8DE3-EB5793CD9D0D}" bg-color="4294967295" hdr-color="4292006610" position-x="250" position-y="18" size-x="0" size-x2="249" size-y="0" size-y2="227"/>
+    <entity uuid="{2294F353-146D-4CAC-A218-4E76AE2019B1}" bg-color="4294967295" hdr-color="4292006610" position-x="241" position-y="779" size-x="0" size-x2="116" size-y="0" size-y2="129"/>
+    <entity uuid="{247394E5-7393-4C48-93B9-E92CB1EAA75E}" bg-color="4294967295" hdr-color="4292006610" position-x="1278" position-y="1618" size-x="0" size-x2="118" size-y="0" size-y2="185"/>
+    <entity uuid="{24FB2AE8-5018-45E4-9F0B-FA4A339D9337}" bg-color="4294967295" hdr-color="4292006610" position-x="-79" position-y="3175" size-x="0" size-x2="142" size-y="0" size-y2="227"/>
+    <association uuid="{29BF0807-E90E-46E2-8C0A-263D6736CFEA}" caption1-position-x="5" caption1-position-y="-2" center-position-x="0" center-position-y="0" color="4289243304"/>
+    <association uuid="{2EEC0FE0-CA93-4837-8D73-DC8838A1C3ED}" color="4294218527"/>
+    <entity uuid="{32F111C9-2D80-44A5-A140-1D90070BC83D}" bg-color="4294967295" hdr-color="4292006610" position-x="270" position-y="283" size-x="0" size-x2="150" size-y="0" size-y2="143"/>
+    <entity uuid="{33BE8E97-D05B-4EAB-8EF0-1BF069C542D8}" bg-color="4294967295" hdr-color="4292006610" position-x="948" position-y="256" size-x="0" size-x2="119" size-y="0" size-y2="157"/>
+    <association uuid="{360598C1-E8C2-4E32-B19C-91B37261617F}" color="4291261615"/>
+    <entity uuid="{3A159224-CE99-44AC-81B3-1B2856A0689B}" bg-color="4294967295" hdr-color="4292006610" position-x="98" position-y="387" size-x="0" size-x2="116" size-y="0" size-y2="87"/>
+    <entity uuid="{3A4FB4C0-C05D-4EA0-93C0-D7FCF2A0D47F}" bg-color="4294967295" hdr-color="4292006610" position-x="-45" position-y="22" size-x="0" size-x2="118" size-y="0" size-y2="115"/>
+    <entity uuid="{3E098374-0E36-45FC-9815-56D673D52E5A}" bg-color="4294967295" hdr-color="4292006610" position-x="982" position-y="469" size-x="0" size-x2="121" size-y="0" size-y2="87"/>
+    <association uuid="{4372D722-FC75-48AD-AA41-03E22C1AEE76}" color="4284601169"/>
+    <entity uuid="{4632681D-6396-4694-BC3E-F6679CCEC6B7}" bg-color="4294967295" hdr-color="4292006610" position-x="1279" position-y="2095" size-x="0" size-x2="116" size-y="0" size-y2="171"/>
+    <entity uuid="{48A2018C-10DA-4507-B60C-75FECBA88531}" bg-color="4294967295" hdr-color="4292006610" position-x="1369" position-y="453" size-x="0" size-x2="116" size-y="0" size-y2="101"/>
+    <entity uuid="{4D305C77-7E78-474E-AA8A-1BB0008A8A5A}" bg-color="4294967295" hdr-color="4292006610" position-x="527" position-y="19" size-x="0" size-x2="213" size-y="0" size-y2="367"/>
+    <entity uuid="{4F640268-D642-4A2E-A8B4-7FAFEFBF407C}" bg-color="4294967295" hdr-color="4292006610" position-x="40" position-y="2447" size-x="0" size-x2="117" size-y="0" size-y2="87"/>
+    <entity uuid="{511AC56E-860A-4649-8219-3C98FE26C6FD}" bg-color="4294967295" hdr-color="4292006610" position-x="764" position-y="18" size-x="0" size-x2="116" size-y="0" size-y2="101"/>
+    <association uuid="{53AFF6E0-4ACD-4335-B81C-5BE15F207506}" color="4281230255"/>
+    <entity uuid="{55724A03-6EA1-4888-9464-81B707CD054A}" bg-color="4294967295" hdr-color="4292006610" position-x="1172" position-y="1027" size-x="0" size-x2="116" size-y="0" size-y2="199"/>
+    <association uuid="{5633B379-524F-4460-87ED-A9D4DE5522F9}" color="4294218527"/>
+    <entity uuid="{588AB6CB-74FB-4883-82DE-FF85B94A2723}" bg-color="4294967295" hdr-color="4292006610" position-x="1260" position-y="1836" size-x="0" size-x2="101" size-y="0" size-y2="73"/>
+    <entity uuid="{5C1DCCDB-C802-43C6-8452-DCBCE3F2CCE3}" bg-color="4294967295" hdr-color="4292006610" position-x="123" position-y="3064" size-x="0" size-x2="116" size-y="0" size-y2="129"/>
+    <association uuid="{5D8B69AE-2C63-4946-BD37-C9FFEE1218A4}" color="4287255714"/>
+    <entity uuid="{65201ACA-6B82-4138-9229-A571E68FA944}" bg-color="4294967295" hdr-color="4292006610" position-x="-62" position-y="1050" size-x="0" size-x2="169" size-y="0" size-y2="731"/>
+    <entity uuid="{6B5AA8BC-0DC5-4965-8CA4-9A0B52498B97}" bg-color="4294967295" hdr-color="4292006610" position-x="737" position-y="576" size-x="0" size-x2="171" size-y="0" size-y2="899"/>
+    <association uuid="{6CB2E0B2-E1B2-472C-877B-50C665F84A2D}" caption1-position-x="0" caption1-position-y="0" center-position-x="1" center-position-y="0" color="4278876221"/>
+    <entity uuid="{6CE256AA-47AE-491B-9F1A-51D4709ECAA5}" bg-color="4294967295" hdr-color="4292006610" position-x="1243" position-y="13" size-x="0" size-x2="116" size-y="0" size-y2="129"/>
+    <association uuid="{6F464B5B-AE07-425B-988E-818DA64DB431}" caption1-position-x="15" caption1-position-y="19" center-position-x="0" center-position-y="0" color="4291674923"/>
+    <entity uuid="{6FBBB38F-65FA-4239-A124-3637E8F01DD3}" bg-color="4294967295" hdr-color="4292006610" position-x="199" position-y="2636" size-x="0" size-x2="167" size-y="0" size-y2="102"/>
+    <entity uuid="{724EC939-1631-4336-849B-BC664936F622}" bg-color="4294967295" hdr-color="4292006610" position-x="943" position-y="139" size-x="0" size-x2="116" size-y="0" size-y2="101"/>
+    <entity uuid="{72537FAC-BC48-4F6C-9BF2-018C3C491C26}" bg-color="4294967295" hdr-color="4292006610" position-x="94" position-y="307" size-x="0" size-x2="115" size-y="0" size-y2="59"/>
+    <entity uuid="{756CF415-F185-47DE-9F6B-EFD73117D94A}" bg-color="4294967295" hdr-color="4292006610" position-x="756" position-y="148" size-x="0" size-x2="129" size-y="0" size-y2="199"/>
+    <entity uuid="{7851E659-CFD5-49F6-9F14-5AB9EC4F3DEB}" bg-color="4294967295" hdr-color="4292006610" position-x="404" position-y="873" size-x="0" size-x2="116" size-y="0" size-y2="143"/>
+    <association uuid="{7A7F25AA-27D2-4A17-9BFC-C4238A3254E9}" color="4291674923"/>
+    <entity uuid="{80C90282-50B4-4F6F-A456-1124404540E5}" bg-color="4294967295" hdr-color="4292006610" position-x="881" position-y="1715" size-x="0" size-x2="116" size-y="0" size-y2="171"/>
+    <entity uuid="{8230131C-31E9-4EB7-9A4B-86D70139F6B9}" bg-color="4294967295" hdr-color="4292006610" position-x="939" position-y="8" size-x="0" size-x2="121" size-y="0" size-y2="87"/>
+    <association uuid="{8458191E-4817-4E76-8CC8-23BCD097C8A8}" color="4278876221"/>
+    <entity uuid="{85CCAB30-F941-4F74-B0D1-119E811AD6FD}" bg-color="4294967295" hdr-color="4292006610" position-x="-45" position-y="145" size-x="0" size-x2="117" size-y="0" size-y2="101"/>
+    <entity uuid="{8712194F-EF54-4BB9-935F-E690F85E9139}" bg-color="4294967295" hdr-color="4292006610" position-x="306" position-y="3248" size-x="0" size-x2="181" size-y="0" size-y2="213"/>
+    <association uuid="{8E56A65E-3CA7-4E03-BF8A-3548D01BFEEA}" caption1-position-x="0" caption1-position-y="0" center-position-x="0" center-position-y="0" color="4281230255"/>
+    <association uuid="{96669711-4915-4154-ACB1-5D7BBA64543B}" caption1-position-x="0" caption1-position-y="0" center-position-x="0" center-position-y="19" color="4291674923"/>
+    <entity uuid="{986796AD-C059-4930-8475-3956AF7B9199}" bg-color="4294967295" hdr-color="4292006610" position-x="82" position-y="3363" size-x="0" size-x2="145" size-y="0" size-y2="102"/>
+    <entity uuid="{9B7C13CD-50C6-44D8-BD2D-54B295C8DF24}" bg-color="4294967295" hdr-color="4292006610" position-x="1176" position-y="2452" size-x="0" size-x2="140" size-y="0" size-y2="129"/>
+    <entity uuid="{9BA59AF6-80E3-4906-90E2-840B5E6B3AF7}" bg-color="4294967295" hdr-color="4292006610" position-x="94" position-y="22" size-x="0" size-x2="116" size-y="0" size-y2="101"/>
+    <entity uuid="{9D33D8F0-8A4A-432A-8FA2-52BDE491EA0F}" bg-color="4294967295" hdr-color="4292006610" position-x="1297" position-y="1950" size-x="0" size-x2="116" size-y="0" size-y2="101"/>
+    <entity uuid="{9EC4BBB9-3AEC-4457-8771-2CF83BE05937}" bg-color="4294967295" hdr-color="4292006610" position-x="584" position-y="437" size-x="0" size-x2="116" size-y="0" size-y2="129"/>
+    <entity uuid="{A0ECA104-D730-45E9-A070-E61D877E0ABE}" bg-color="4294967295" hdr-color="4292006610" position-x="1562" position-y="1327" size-x="0" size-x2="113" size-y="0" size-y2="59"/>
+    <entity uuid="{A6283039-7B14-4C73-B276-6DCADECF35E6}" bg-color="4294967295" hdr-color="4292006610" position-x="1095" position-y="6" size-x="0" size-x2="116" size-y="0" size-y2="87"/>
+    <entity uuid="{A673E38B-41E5-4185-AD56-73CC45B25330}" bg-color="4294967295" hdr-color="4292006610" position-x="221" position-y="1047" size-x="0" size-x2="139" size-y="0" size-y2="157"/>
+    <association uuid="{A6D23FA2-3F4C-4D84-9A3C-3BC82D9F7E35}" color="4281230255"/>
+    <entity uuid="{A72A1241-6090-45DD-9390-E1E8E67CBA45}" bg-color="4294967295" hdr-color="4292006610" position-x="1102" position-y="130" size-x="0" size-x2="116" size-y="0" size-y2="101"/>
+    <entity uuid="{A96CBA2F-63BA-46FC-A565-0EE5FA067917}" bg-color="4294967295" hdr-color="4292006610" position-x="185" position-y="2180" size-x="0" size-x2="117" size-y="0" size-y2="101"/>
+    <entity uuid="{B23C9A63-0E02-4C14-B625-DA4986E6A3BC}" bg-color="4294967295" hdr-color="4292006610" position-x="1410" position-y="1358" size-x="0" size-x2="114" size-y="0" size-y2="102"/>
+    <entity uuid="{B279B551-7F3C-46BF-8A92-2DAABD3C5082}" bg-color="4294967295" hdr-color="4292006610" position-x="481" position-y="1055" size-x="0" size-x2="116" size-y="0" size-y2="129"/>
+    <entity uuid="{B9019580-8935-4642-A7D1-66334AD4190B}" bg-color="4294967295" hdr-color="4292006610" position-x="1250" position-y="163" size-x="0" size-x2="108" size-y="0" size-y2="31"/>
+    <entity uuid="{BCDE8A34-4763-41EB-ADBE-72C4529E8B85}" bg-color="4294967295" hdr-color="4292006610" position-x="1022" position-y="1180" size-x="0" size-x2="103" size-y="0" size-y2="59"/>
+    <entity uuid="{C10F19BD-C513-4AA8-967C-7EA2FD26C65A}" bg-color="4294967295" hdr-color="4292006610" position-x="1080" position-y="1845" size-x="0" size-x2="161" size-y="0" size-y2="507"/>
+    <entity uuid="{C11F68A0-F755-42D5-8B6A-2229291278B5}" bg-color="4294967295" hdr-color="4292006610" position-x="225" position-y="2393" size-x="0" size-x2="134" size-y="0" size-y2="185"/>
+    <association uuid="{C30A1AED-7CBF-49C5-8A24-BE4F51FF5666}" color="4284601169"/>
+    <entity uuid="{C6505F14-E260-4EA7-BFBB-841CF976FCF9}" bg-color="4294967295" hdr-color="4292006610" position-x="1423" position-y="895" size-x="0" size-x2="173" size-y="0" size-y2="395"/>
+    <association uuid="{C789D113-1B75-4E53-8287-1A6960734E3A}" color="4289928996"/>
+    <entity uuid="{CC353541-D9A2-4951-B9EC-9C409201671B}" bg-color="4294967295" hdr-color="4292006610" position-x="1254" position-y="1253" size-x="0" size-x2="114" size-y="0" size-y2="102"/>
+    <entity uuid="{CDD29A8D-7AA4-4053-8DAD-69768A07549E}" bg-color="4294967295" hdr-color="4292006610" position-x="208" position-y="1541" size-x="0" size-x2="116" size-y="0" size-y2="87"/>
+    <entity uuid="{D132F5A9-BF1D-4906-B4B4-B1D584DD6F8C}" bg-color="4294967295" hdr-color="4292006610" position-x="-246" position-y="616" size-x="0" size-x2="130" size-y="0" size-y2="129"/>
+    <entity uuid="{D14D7C4E-A5F6-4579-9B01-746C2C8AB3AF}" bg-color="4294967295" hdr-color="4292006610" position-x="83" position-y="879" size-x="0" size-x2="116" size-y="0" size-y2="115"/>
+    <entity uuid="{D2774238-3360-4AD1-BCEE-26D962B29A19}" bg-color="4294967295" hdr-color="4292006610" position-x="1220" position-y="800" size-x="0" size-x2="129" size-y="0" size-y2="101"/>
+    <entity uuid="{D7AA25A2-EC47-4FBA-AAAA-13DF8A8E2B73}" bg-color="4294967295" hdr-color="4292006610" position-x="1126" position-y="553" size-x="0" size-x2="144" size-y="0" size-y2="130"/>
+    <association uuid="{D7DB4EFC-4F69-4CA9-97CA-402160ED55F8}" color="4284601169"/>
+    <entity uuid="{D89686DC-C85E-4955-BA6C-89B424BEF139}" bg-color="4294967295" hdr-color="4292006610" position-x="-160" position-y="490" size-x="0" size-x2="116" size-y="0" size-y2="87"/>
+    <entity uuid="{DF31B05E-9F02-49CE-91E4-2AE301977DB9}" bg-color="4294967295" hdr-color="4292006610" position-x="130" position-y="3202" size-x="0" size-x2="116" size-y="0" size-y2="101"/>
+    <entity uuid="{E0482222-D7BC-4BE6-A3FB-8E1DBD019AF4}" bg-color="4294967295" hdr-color="4292006610" position-x="850" position-y="3120" size-x="0" size-x2="117" size-y="0" size-y2="87"/>
+    <entity uuid="{E1D4ACB8-B034-462F-A745-D0BD1E5FF8C7}" bg-color="4294967295" hdr-color="4292006610" position-x="772" position-y="2816" size-x="0" size-x2="116" size-y="0" size-y2="87"/>
+    <entity uuid="{E494873A-3753-47AC-909E-1CF78046AB85}" bg-color="4294967295" hdr-color="4292006610" position-x="-49" position-y="268" size-x="0" size-x2="109" size-y="0" size-y2="157"/>
+    <association uuid="{EEE3FFF0-42D1-44CE-BD65-F4D443AFAC92}" caption1-position-x="0" caption1-position-y="0" center-position-x="0" center-position-y="-20" color="4289243304"/>
+  </visual-data>
+</skipper>

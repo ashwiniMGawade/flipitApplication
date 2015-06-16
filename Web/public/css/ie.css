@@ -1,0 +1,45 @@
+.pop {
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#f2f2f2', GradientType=0);
+}
+.pop:hover {
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
+}
+.btn.blue {
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#43a5e5', endColorstr='#2983c0', GradientType=0);
+}
+.btn.blue:hover {
+  filter: none;
+  background: #1a73bc;
+}
+.btn.btn-print {
+  min-width: 113px;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ec4dee', endColorstr='#c922cb', GradientType=0);
+}
+.btn.btn-print:hover {
+  filter: none;
+  background: #b91cbb;
+}
+.navigation {
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#434241', endColorstr='#353434', GradientType=1);
+}
+.tips-section .block a .image:after {
+  background: url(../images/mask.png);
+}
+.btn.orange {
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e9963e', endColorstr='#e2822b', GradientType=0);
+}
+.btn.orange:hover {
+  filter: none;
+  background: #da7e1b;
+}
+.btn.btn-code {
+  background: #e9963e url(../images/bg-btn.png);
+  filter: none;
+}
+.btn.btn-code:hover {
+  background: #e9963e url(../images/bg-btn-hover.png);
+  filter: none;
+}
+#sidebar .block.block-image .box {
+  background: #000;
+}

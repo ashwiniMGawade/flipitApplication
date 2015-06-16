@@ -1,0 +1,13 @@
+.search-outer-background {
+	background:url(../../images/front_end/hero-flipit.jpg) no-repeat scroll center top transparent;
+}
+.header-outer {
+	background:url(../../images/front_end/body-bg-grey.png) repeat-x;
+}
+.mid-home-inner {
+	background: none;
+	border-bottom:none;
+}
+.banner-text h1{
+	margin-top: 135px;
+}

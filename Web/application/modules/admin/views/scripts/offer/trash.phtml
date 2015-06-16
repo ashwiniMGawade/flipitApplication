@@ -1,0 +1,69 @@
+<?php 
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.dataTables.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/dataTableComman.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/trashOffer.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+?>
+<?php echo $this->headTitle()->append('Trashed Offers List');?>
+      <div style="overflow: hidden;" id="imbullbody-content">
+      <!-- offerList starts -->
+       <div id="offerList">
+        <div class="wrap columns-2">
+        <div class='wrap columns-2' id='offerList'>
+			<?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
+			<br><div class ="mainpage-content-colorbox success">
+			<?php if($this->messageSuccess!=''){?>
+			<span class="successserver"><?php echo $this->messageSuccess; ?></span>
+			<?php }?>
+			<?php if($this->messageError!=''){?>
+			<span class="errorserver"><?php echo $this->messageError; ?></span>
+			<?php } ?>
+			</div>
+			<?php 
+		}?>
+		</div>
+          <h1 class="fl"><?php echo $this->translate('Trashed Offers')?>
+          <button onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/offer'" class="btn ml10"><?php echo $this->translate('Cancel')?></button></h1>
+          	<div class="clear"></div>
+          	<div class="mainpage-content-colorbox">
+                <form class="form-search" id="searchform">
+                	<div class="fl">                   
+                        <input type="text" placeholder="<?php echo $this->translate('Search offer')?>" class="span3" id="searchOffer" name="searchOffer">
+                        <button type='button' onClick='searchByOffer();' id='searchOfferButton' value='searchOfferButton' class="btn btn-primary"><?php echo $this->translate('Search');?></button>
+                    </div>             	
+                    <div class="fl ml15"> 
+                        <select id='couponType' name='couponType'>
+                        	<option value=''>All</option>
+                            <option value='CD'>Coupon</option>
+                            <option value='SL'>Sale</option>
+                            <option value='PA'>Printable</option>
+                        </select>
+                    </div>                    
+                    <div class="mainpage-content-searchbart">
+                        <div class="mainpage-content-right-searchbar">
+                        <button type='button' onClick='searchByShop();' id='searchShopeButton' value='searchShopeButton' class="btn btn-primary"><?php echo $this->translate('Search');?></button></div>
+                        <div class="mainpage-content-right-inner-left-searchbar-other"><input type="text" placeholder="<?php echo $this->translate('Search shop')?>" class="span3" id="searchShop" name="searchShop"></div>
+                    </div>                         
+                </form>
+            </div>
+          	<table class="table table-bordered table-striped trashed-offer-list-table" id="offerListTable">
+                <thead>
+                  <tr>
+                    <th><?php echo $this->translate('Title');?></th>
+                    <th><?php echo $this->translate('Shop');?></th>
+                    <th><?php echo $this->translate('Type');?></th>
+                    <th><?php echo $this->translate('Deeplinking');?></th>
+                    <th><?php echo $this->translate('Extended');?></th>
+                    <th><?php echo $this->translate('Start');?></th>
+                    <th><?php echo $this->translate('End');?></th>
+                    <th><?php echo $this->translate('Restore');?></th>
+                    <th><?php echo $this->translate('Delete');?></th>
+                  </tr>
+                </thead>
+             </table>
+       </div>
+       <!-- offerList ends -->
+	</div>
+ </div>

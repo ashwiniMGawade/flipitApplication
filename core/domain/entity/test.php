@@ -1,6 +1,6 @@
 <?php
-namespace domain\entity;
-class test
+namespace domain\Entity;
+class Test
 {
     public static function showText($name)
     {

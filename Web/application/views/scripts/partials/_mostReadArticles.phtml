@@ -1,0 +1,81 @@
+<div class="slideshow-area">
+    <div class="container">
+        <div class="slideshow carousel slide" id="carousel-example-generic" data-ride="carousel">
+            <div class="mask carousel-inner">
+                <?php 
+                $carouselCounter = 0;
+                $carouselIndicators = '';
+                foreach ($this->mostReadArticles as $mostReadArticle) {
+                    if (
+                        !empty($mostReadArticle['articles']['featuredImage']['name'])
+                        && $mostReadArticle['articles']['featuredImageStatus'] == 1
+                    ) {
+                        $mostReadArticleImage = 
+                            !empty($mostReadArticle['articles']['featuredImage']['name'])
+                            ? PUBLIC_PATH_CDN
+                            .$mostReadArticle['articles']['featuredImage']['path'] 
+                            .$mostReadArticle['articles']['featuredImage']['name']
+                            : '';
+                    } else if (!empty($mostReadArticle['articles']['articleImage']['name'])) {        
+                        $mostReadArticleImage = 
+                            !empty($mostReadArticle['articles']['articleImage']['name'])
+                            ? PUBLIC_PATH_CDN
+                            .$mostReadArticle['articles']['articleImage']['path'] 
+                            .$mostReadArticle['articles']['articleImage']['name']
+                            : '';
+                    } else {
+                        $mostReadArticleImage = 
+                            !empty($mostReadArticle['articles']['thumbnail']['name'])
+                            ? PUBLIC_PATH_CDN
+                            .$mostReadArticle['articles']['thumbnail']['path'] 
+                            .$mostReadArticle['articles']['thumbnail']['name']
+                            : '';
+                    }
+
+                    $mostReadArticleTitle = mb_strlen($mostReadArticle['articles']['title']) > 50 ? 
+                                            mb_substr($mostReadArticle['articles']['title'], 0,50)
+                                            .'..' : $mostReadArticle['articles']['title'];
+                    $articleUpdatedAtDate = (object) $mostReadArticle['articles']['created_at'];
+                    $articleUpdatedAtDate = new Zend_Date($articleUpdatedAtDate->date);
+                    $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
+                    $activeClass = '';
+                    if($carouselCounter == 0) {
+                        $activeClass = 'active';
+                    }
+                    $carouselIndicators .= '<li data-target="#carousel-example-generic"
+                        data-slide-to="'.$carouselCounter.'"
+                        class="'.$activeClass.'">'.$carouselCounter.'</li>';
+                    ?>
+                    <div class="slide item <?php echo $activeClass;?>">
+                        <img class="visual" src="<?php echo $mostReadArticleImage;?>" width="450px"
+                            alt="<?php echo $mostReadArticleTitle;?>" title="<?php echo $mostReadArticleTitle;?>">
+                        <span class="category dark-pink"><?php echo $this->translate('Featured');?></span>
+                        <div class="text-holder">
+                            <div class="text-frame">
+                                <h2>
+                                    <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink()
+                                    .'/'.$mostReadArticle['articles']['permalink'];?>">
+                                        <?php echo $mostReadArticleTitle;?>
+                                    </a>
+                                </h2>
+                                <em class="date"><?php echo $articleUpdatedAtDate;?></em>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                    $carouselCounter++;
+                }
+                ?>
+            </div>
+            <a class="left carousel-control btn-prev" href="#carousel-example-generic" role="button" data-slide="prev">
+                <?php echo $this->translate('Prev');?>
+            </a>
+            <a class="btn-next right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                <?php echo $this->translate('Next');?>
+            </a>
+            <ul class="switcher-2 carousel-indicators">
+                <?php echo $carouselIndicators; ?>
+            </ul>
+        </div>
+    </div>
+</div>

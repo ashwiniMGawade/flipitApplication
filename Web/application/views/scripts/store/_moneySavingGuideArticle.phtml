@@ -1,0 +1,33 @@
+<?php $articleImage =
+    PUBLIC_PATH_CDN.ltrim($this->articleImage['path'], "/") . 'thum_article_medium_'. $this->articleImage['name']; 
+
+if ($this->partialCounter == 1) {
+    $shopName = $this->partialLoop()->view->currentStoreInformation[0]['name'];
+    ?>
+    <header class="heading-box text-advice">
+       <h2>
+       <?php echo $this->translate("General money saving advice &amp; tricks for shopping at"). " " . $shopName; ?>
+       </h2>
+    </header>
+   <?php
+} 
+?>
+<section class="tips-section">
+    <article class="block">
+        <a href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$this->permalink;?>"
+        title='<?php echo $this->title;?>'>
+            <div class="image">
+                <img id="<?php echo $this->articles['id']; ?>" alt="<?php echo $this->title;?>" 
+                    src="<?php echo $articleImage;?>" width="216" height="129" title="<?php echo $this->title;?>">
+            </div>
+            <div class="box">
+                <h2>
+                <?php echo $this->title; ?>
+                </h2>
+                <p>
+                <?php echo $this->content; ?>
+                </p>
+            </div>
+        </a>
+    </article>
+</section>    

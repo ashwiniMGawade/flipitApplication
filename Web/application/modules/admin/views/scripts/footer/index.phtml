@@ -1,0 +1,145 @@
+<!--  <br /><br />
+<div id="view-content">
+	<p>View script for controller <b>Footer</b> and script/action name <b>index</b></p>
+</div>-->
+<?php 
+	$this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.dataTables.min.js");
+	$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js" );
+	$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/ckeditor/config.js" );	
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/footer.js");
+    $this->headTitle()->append('Footer');
+   ?>
+<script type="text/javascript">
+
+var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" ;
+ 
+</script>    
+   
+
+		<div id="imbullbody">
+		<div style="overflow: hidden;" id="imbullbody-content">
+		<div class="wrap columns-2">
+		<?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
+		<br><div class ="mainpage-content-colorbox success">
+		<?php if($this->messageSuccess!=''){?>
+		<span class="success"><?php echo $this->messageSuccess; ?></span>
+		<?php }?>
+		<?php if($this->messageError!=''){?>
+		<span class="error"><?php echo $this->messageError; ?></span>
+		<?php } ?>
+		</div>
+		<?php 
+		}?> 
+		
+			<h1><?php echo $this->translate('Footer');?><input type="button"  Value='<?php echo $this->translate('Cancel'); ?>' class="btn ml10" onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/footer'" /></h1>
+			<form name="editFooter" id="editFooter" enctype="multipart/form-data"
+				method="post">
+				<div id="poststuff" class="metabox-holder has-right-sidebar">
+					<div id="post-body">
+						<div>
+							<div class="mainpage-content">
+							    <label class="footer-warning">
+							    	<strong>
+							    	    <?php echo $this->translate('Be sure you are working in the right country!'); ?>
+							    	</strong>
+							    </label>
+								<div class="mainpage-content-line">
+									<div class="mainpage-content-left">
+										<label><strong><?php echo $this->translate('Top footer'); ?></strong></label>
+									</div>
+									<div class="mainpage-content-right">
+										<div class="mainpage-content-right-inner-right-other"></div>
+										<div class="mainpage-content-right-inner-left-other">
+											<textarea name="topFooter"  id="topFooter"><?php echo  $this->footer ? $this->footer['topFooter'] : ""; ?></textarea>
+											
+										</div>
+									</div>
+								</div>
+								<div class="mainpage-content-line">
+									<div class="mainpage-content-left">
+										<label><strong><?php echo $this->translate('Column1'); ?></strong></label>
+									</div>
+									<div class="mainpage-content-right">
+										<div class="mainpage-content-right-inner-right-other"></div>
+										<div class="mainpage-content-right-inner-left-other">
+										<textarea name="column1"  id="column1"><?php echo  $this->footer ? $this->footer['middleColumn1'] : ""; ?></textarea>
+											
+										</div>
+									</div>
+								</div>
+								<div class="mainpage-content-line">
+									<div class="mainpage-content-left">
+										<label><strong><?php echo $this->translate('Column2'); ?></strong></label>
+									</div>
+									<div class="mainpage-content-right">
+										<div class="mainpage-content-right-inner-right-other"></div>
+										<div class="mainpage-content-right-inner-left-other">
+											<textarea rows="3" name="column2"
+												placeholder="Footer Second column" id="column2"
+												class="input-xlarge"><?php echo  $this->footer ? $this->footer['middleColumn2'] : ""; ?></textarea>
+										</div>
+									</div>
+								</div>
+								<div class="mainpage-content-line">
+									<div class="mainpage-content-left">
+										<label><strong><?php echo $this->translate('Column3'); ?></strong></label>
+									</div>
+									<div class="mainpage-content-right">
+										<div class="mainpage-content-right-inner-right-other"></div>
+										<div class="mainpage-content-right-inner-left-other">
+											<textarea rows="3" name="column3"
+												placeholder="Footer third column" id="column3"
+												class="input-xlarge"><?php echo  $this->footer ? $this->footer['middleColumn3'] : ""; ?></textarea>
+										</div>
+									</div>
+								</div>
+								<div class="mainpage-content-line">
+									<div class="mainpage-content-left">
+										<label><strong><?php echo $this->translate('Column4'); ?></strong></label>
+									</div>
+									<div class="mainpage-content-right">
+										<div class="mainpage-content-right-inner-right-other"></div>
+										<div class="mainpage-content-right-inner-left-other">
+											<textarea rows="3" name="column4"
+												placeholder="Footer fourth column" id="column4"
+												class="input-xlarge"><?php echo  $this->footer ? $this->footer['middleColumn4'] : ""; ?></textarea>
+										</div>
+									</div>
+								</div>
+								<div class="mainpage-content-line">
+									<div class="mainpage-content-left">
+										<label><strong><?php echo $this->translate('Bottom footer'); ?></strong></label>
+									</div>
+									<div class="mainpage-content-right">
+										<div class="mainpage-content-right-inner-right-other"></div>
+										<div class="mainpage-content-right-inner-left-other">
+											<textarea rows="3" name="bottomFooter"
+												placeholder="Footer fourth column" id="bottomFooter"
+												class="input-xlarge"><?php echo  $this->footer ? $this->footer['bottomFooter'] : ""; ?></textarea>
+											
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+					<br class="clear">
+				</div>
+				<div class="mainpage-content-colorbox">
+					<button id="updateFooterButton"
+						class="btn btn-large btn-primary fl"><?php echo $this->translate('EDIT FOOTER'); ?></button>
+					<a href="javascript:;" class="fl m10" onclick="cancelFooter();"><strong><?php echo $this->translate('CANCEL'); ?></strong></a>
+				</div>
+				<!-- /poststuff -->
+			</form>
+		
+	</div>
+	<!-- imbullbody-content -->
+	<div class="clear"></div>
+</div>
+</div>
+
+

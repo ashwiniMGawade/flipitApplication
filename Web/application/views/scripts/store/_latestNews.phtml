@@ -1,0 +1,45 @@
+<section class="block">
+    <h4>
+<?php echo $this->translate('Latest news about').' '.$this->partialLoop()->view->currentStoreInformation[0]['name'];?>
+    </h4>
+<?php 
+foreach ($this->latestShopUpdates as $latestShopUpdate) {
+    $latestShopUpdate = (object) $latestShopUpdate;
+    $newsStartDateObject = new Zend_Date($latestShopUpdate->created_at->format('Y-m-d'));
+    $newsStartDate = $newsStartDateObject->get(Zend_Date::DATE_LONG);
+    $httpStringPosition = 'http';
+
+    $content = '';
+    if ($latestShopUpdate->content!=""):
+        $content = $latestShopUpdate->content;
+    else:
+        $content = "No desc found";
+    endif;
+  
+    ?>
+    <div class="news-box">
+        <article class="box">
+            <em class="date"><?php echo $newsStartDate;?></em>
+            <h5><?php 
+    if ($latestShopUpdate->url!=null && $latestShopUpdate->url!='') :
+        ?>
+                <a href="
+        <?php
+        if (strpos($latestShopUpdate->url, $httpStringPosition) !== false) :
+            echo $latestShopUpdate->url;
+        else :
+            echo 'http://'.$latestShopUpdate->url;
+        endif;?>" target="_blank"><?php echo $latestShopUpdate->title;?>
+               </a>
+        <?php 
+    else :
+        echo $latestShopUpdate->title;
+    endif;?>
+            </h5>
+            <p>
+    <?php echo $content;?>
+            </p>
+        </article>
+    </div>
+<?php } ?>
+</section>

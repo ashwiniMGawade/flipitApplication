@@ -1,0 +1,49 @@
+<?php 
+ $this->headTitle()->append($this->translate('Chain management'));
+ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.dataTables.min.js" );
+ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/dataTableComman.js" );
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");   
+ $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+ $this->headMeta('keyword', 'Description');
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/chain-management.js");
+?>
+
+ <div id="searchbarlist">
+   <div class="wrap columns-2">
+			<?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
+			<br><div class ="mainpage-content-colorbox success">
+			<?php if($this->messageSuccess!=''){?>
+			<span class="successserver"><?php echo $this->messageSuccess; ?></span>
+			<?php }?>
+			<?php if($this->messageError!=''){?>
+			<span class="errorserver"><?php echo $this->messageError; ?></span>
+			<?php } ?>
+			</div>
+			<?php 
+			}?>
+	  
+    <h1 class="fl"><?php echo ucfirst($this->chain['name']);?>
+      <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/chain/add-shop/chain/<?php echo $this->chain['id']; ?>'"><?php echo $this->translate('Add New Shop'); ?>
+      </button>
+    </h1>
+        <a class="trash-link"  href='<?php echo HTTP_PATH ?>admin/chain'">
+        	<strong><?php echo $this->translate('Back'); ?></strong>
+        </a>
+      <div class="clear"></div>
+ 	  <input type="hidden" value="<?php echo $this->chain['id']; ?>" id="chainId" name="chainId"/>                        
+         <table class="table table-bordered table-striped" id="searchChainItemTable" cellpadding="0" cellspacing="0">
+          <thead>
+              <tr>
+                  <th><?php echo $this->translate('Shop Name'); ?></th>
+                  <th><?php echo $this->translate('Website'); ?></th>
+                   <th><?php echo $this->translate('Locale'); ?></th>
+                   <th><?php echo $this->translate('Status'); ?></th>
+                   <th><?php echo $this->translate('Delete'); ?></th>
+                </tr>
+             </thead>
+           </table> 
+ <!-- End code of list keywords -->
+ </div>
+ </div>
+        

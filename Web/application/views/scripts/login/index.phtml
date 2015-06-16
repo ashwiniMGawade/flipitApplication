@@ -1,0 +1,57 @@
+<?php
+$this->minifyHeadScript()->appendFile(HTTP_PATH. "public/js/front_end/login.js");
+$this->minifyHeadLink()->prependStylesheet("/public/css/front_end/login.css");
+$loginForm = $this->form;
+// Remove <dt> from label generation
+foreach ($loginForm->getElements() as $formElement) {
+    $formElement->getDecorator('label')->setOption('tag', null);
+}
+if($this->successMessage!='' || $this->errorMessage!='') : ?>
+    <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox alert-warning">
+        <span class='glyphicon glyphicon-warning-sign'></span>
+        <strong><?php echo $this->successMessage!='' ? $this->successMessage : $this->errorMessage;?></strong>
+    </div>
+    <?php 
+endif;
+$forgotPasswordLink =
+    HTTP_PATH_LOCALE .
+    FrontEnd_Helper_viewHelper::__link('link_login').'/'
+    .FrontEnd_Helper_viewHelper::__link('link_forgotpassword');
+?>
+<section class="login-box">
+    <h1><?php echo $this->translate('Welcome back, nice to see you again!');?></h1>
+    <form action="" method="post" class="login-form" name="login" id='login'>
+        <fieldset>
+            <div class="form-group">
+            <?php 
+            echo $loginForm->emailAddress->renderLabel()
+            . $loginForm->emailAddress->renderViewHelper();
+            ?>
+            </div>
+            <div class="form-group">
+                <div class="link">
+                    <?php echo $loginForm->password->renderLabel();?>
+                    <a href="<?php echo $forgotPasswordLink;?>"
+                        class="right">
+                        <?php echo $this->translate('Forgot password?');?>
+                    </a>
+                </div>
+                <?php echo $loginForm->password->renderViewHelper();?>
+            </div>
+            <div class="form-group">
+            <?php 
+            echo $this->formSubmit(
+                'submit',
+                FrontEnd_Helper_viewHelper::__form('form_Sign In'),
+                array('class'=>'btn blue btn-lg btn-primary', 'id'=>'login')
+            )
+            ?>
+                <div class="text"><?php echo $this->translate('No Account yet?');?>
+                    <a href="<?php echo HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven');?>">
+                        <?php echo $this->translate('Click here to register');?>
+                    </a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</section>

@@ -1,0 +1,119 @@
+.combobox-container {
+  margin-bottom: 0px;
+  *zoom: 1;
+  width:500px;
+}
+.combobox-container:before,
+.combobox-container:after {
+  display: table;
+  content: "";
+}
+.combobox-container:after {
+  clear: both;
+}
+.combobox-container .add-on {
+  float: left;
+  display: block;
+  width: auto;
+  min-width: 16px;
+  height: 18px;
+  margin-right: -1px;
+  padding: 4px 5px;
+  font-weight: normal;
+  line-height: 18px;
+  color: #999999;
+  text-align: center;
+  text-shadow: 0 1px 0 #ffffff;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 3px 0 0 3px;
+  -moz-border-radius: 3px 0 0 3px;
+  border-radius: 3px 0 0 3px;
+  cursor:pointer;
+}
+.combobox-container .active {
+  background-color: #a9dba9;
+  border-color: #46a546;
+}
+.combobox-container input,
+.combobox-container .uneditable-input {
+  float: left;
+  -webkit-border-radius: 3px 0 0 3px;
+  -moz-border-radius: 3px 0 0 3px;
+  border-radius: 3px 0 0 3px;
+}
+.combobox-container .uneditable-input {
+  border-left-color: #eee;
+  border-right-color: #ccc;
+}
+.combobox-container .add-on {
+  margin-right: 0;
+  margin-left: -1px;
+  -webkit-border-radius: 0 3px 3px 0;
+  -moz-border-radius: 0 3px 3px 0;
+  border-radius: 0 3px 3px 0;
+}
+.combobox-container input:first-child {
+  *margin-left: -160px;
+}
+.combobox-container input:first-child + .add-on {
+  *margin-left: -21px;
+}
+.combobox-container select {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  text-indent: -99999px;
+  *text-indent: 0;
+}
+
+.typeahead-long {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+
+/********select drop down********/
+
+.combobox-textbox{
+	width:200px;
+    height:22px;
+    padding-left:2px;
+}
+
+.typeahead{
+	flaot:left;
+    width:228px;
+	margin:0;
+	padding:0;
+	border:1px solid #f2f2f2;
+    display:none;
+
+}
+.typeahead li {
+    background-color: #FCFCFC;
+    list-style: none outside none;
+    text-decoration: none;
+}
+
+.typeahead li a {
+    background-color: #F6F6F6;
+    color: black;
+    display: block;
+    font-family: arial;
+    font-size: 13px;
+    line-height: 25px;
+    margin-bottom: 1px;
+    padding-left: 20px;
+    text-decoration: none;
+	cursor:pointer;
+    word-wrap:break-word;
+}
+
+.typeahead li a:hover{
+	background-color: #f2f2f2;
+}
+

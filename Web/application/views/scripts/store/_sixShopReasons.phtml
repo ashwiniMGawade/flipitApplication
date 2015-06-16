@@ -1,0 +1,35 @@
+ <section class="section six-reasons">
+    <header class="heading-box">
+        <h2>
+            <?php echo $this->translate('6 reasons to Kiesen for') . " " .
+            $this->shopName. " " . $this->translate('coupon code');
+            ?>
+        </h2>
+    </header>
+    <article class="block">
+        <div class="row">
+            <?php
+            for ($i=0; $i < count($this->reasons); $i++) {
+                if (!empty($this->reasons[$i][1]) && !empty($this->reasons[$i][0])) {
+                    if ($i%2==0 && $i!=0) {
+                        ?>
+                        </div>
+                        <div class="row">
+                        <?php
+                    }
+                    ?>
+                    <div class="col-md-6">
+                        <div class='col-md-2 six-reason-image'>
+                        </div>
+                        <div class='col-md-10 six-reason-text'>
+                            <strong><?php echo $this->reasons[$i][0];?></strong>
+                            <p><?php echo $this->reasons[$i][1];?></p>
+                        </div>
+                    </div>
+                    <?php
+                }    
+            }
+            ?>
+        </div>
+    </article>
+</section>

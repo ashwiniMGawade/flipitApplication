@@ -1,0 +1,263 @@
+<?php 
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/datepicker.css" );
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/timepicker.css" );
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/addArticle.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.textareaCounter.plugin.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-datepicker.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-timepicker.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
+$this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
+?>
+<?php echo $this->headTitle()->append('Create Article');?>
+<script type="text/javascript">
+
+var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" ;
+
+</script>
+
+<div class="wrap columns-2">
+         
+          <h1><?php echo $this->translate('Create Article'); ?><button type = "button" onClick="window.location.href='<?php echo HTTP_PATH;?>admin/article'" class="btn ml10" href="#"><?php echo $this->translate('Cancel'); ?></button></h1>
+           
+           <form id="addArticleform" name="addArticleform" enctype="multipart/form-data" method="POST" action="<?php echo HTTP_PATH;?>admin/article/createarticle">
+           <input type="checkbox" name="selectedpageType" value="1" id="selectedpageType" class="display-none">
+            <div class="metabox-holder has-right-sidebar" id="poststuff">
+              <div class="inner-sidebar" id="side-info-column">
+                <div class="meta-box-sortables ui-sortable" id="side-sortables">
+                  <div class="postbox " id="submitdiv">
+                    <div class="sidebar-heading">
+	                    <p><?php echo $this->translate('Publish'); ?></p>
+                    </div>
+                    <div class="sidebar-content-box">
+                        <button class="btn" type="submit" onClick="$('#savePage').val('draft')" href="#" id="saveDraftbtn" ><?php echo $this->translate('Save Draft'); ?></button>
+                    </div>
+                    <input type="hidden" name="savePagebtn" id="savePage" value="">
+                    <div class="sidebar-content-box">
+                        <?php echo $this->translate('Status:'); ?> <strong><?php echo $this->translate('Draft'); ?></strong>
+                    </div>
+                   <div class="sidebar-content-box">
+                        <?php echo $this->translate('Publish:'); ?> <strong><?php echo $this->translate('immediately'); ?> <a href="javascript:;" onClick="showPublishDate()" id="editpublishLink"><?php echo $this->translate('Edit'); ?></a></strong>
+                    <span id="publishlater" class="display-none">
+                    <input type="text" style="width:110px;margin-top:3px;" value="<?php echo date('d-m-Y');?>" placeholder="Publish Date"  id="publishDate" name="publishDate" class="span3">
+                    <input type="text" style="width:48px;margin-top:3px;" placeholder="HH" id="publishTimehh" name="publishTimehh" class="span3">
+                     </span>
+                     </div>
+                    <div class="sidebar-box-footer">
+                        <button onClick="$('#savePage').val('publish');" class="btn btn-primary fr" href="#" id="publishBtn"><?php echo $this->translate('Publish'); ?></button><a class="fr m5" href="<?php echo HTTP_PATH;?>admin/article" id="publishcancelBtn"><?php echo $this->translate('Cancel'); ?></a>
+                    </div>
+                  </div>
+                   <div class="postbox " id="submitdiv">
+                    <div class="sidebar-heading">
+	                    <p><?php echo $this->translate('Article Attributes');?></p>
+                    </div>
+                    <div class="sidebar-content-box">
+                        <p><?php echo $this->translate('Author'); ?></p>
+                        <select id="authorList" name="authorList" onchange="validateAuthor()">
+                            <option value=""><?php echo $this->translate('Select Author'); ?></option>
+                            <?php
+                             foreach($this->authorList as $author){ 
+                            	$fullName = $author['firstName']." ".$author['lastName'];
+                             	$fullName = substr($fullName, 0,15);
+                            ?>
+                            
+                             <option value="<?php  echo $author['id'];?>" title="<?php echo $author['firstName']." ".$author['lastName'];?>" <?php echo $author['id'] == Auth_StaffAdapter::getIdentity()->id ? 'selected = selected' : ''?>><?php echo $fullName; ?></option>	
+                             <?php     }  ?>
+                            </select>
+                            <input type='hidden' id="authorNameHidden" name="authorNameHidden" value="<?php echo Auth_StaffAdapter::getIdentity()->firstName ." " . Auth_StaffAdapter::getIdentity()->lastName ;?>">
+                    </div>
+               		<div class="mainpage-content-right" style="float:left;margin:-20px 0 6px 50px;"></div>
+                  
+                  </div> 
+                  
+                  <div class="postbox " id="submitdiv" style="height: 202px;">
+                    <div class="sidebar-heading">
+	                    <p><?php echo $this->translate('Categories');?></p>
+                    </div>
+                    <div class="sidebar-content-box" style="display:inline-block;">
+                    	<div class="sidebar-content-box-left" style="overflow-y:scroll;height:50px; width:222px;">
+                         <ul id="RelatedCategoryListul-li" style='margin: 0;'>
+                            <?php 
+                            $i=0;
+                           
+                             foreach ($this->articleCategory as $artCategory) {
+                            	
+                            		$class = 'grid-line1';
+                            		if($i%2 != 0){
+                            			$class = 'grid-line2';
+                            		}
+                            	
+                            		echo "<li class=".$class." value=".$artCategory['id']." type=".$i.">".ucfirst($artCategory['name'])."</li>";
+                            		$i++;
+                            	
+                            }
+                            ?>
+                             </ul> 
+                             <input type="hidden" id="selectedRelatedCategory" name="selectedRelatedCategory" value="">
+                       </div>
+                    	
+                    </div>
+               
+                  
+                  </div>
+                  
+                  <div class="postbox " id="submitdiv" style='height: 254px !important;'>
+                    <div class="sidebar-heading">
+	                    <p><?php echo $this->translate('Related Stores');?></p>
+                    </div>
+                    <div class="sidebar-content-box" style="display:inline-block;" >
+                    	<input type="text" id="selectStoreForArticle" name="selectStoreForArticle" value="" style='width : 225px;'>
+                    	<div class="sidebar-content-box-left" id='storesDiv' style="overflow-y:scroll;height:50px;">
+                    	
+                         <ul id="storeListul-li" style='margin: 0;'>
+                           
+                             </ul> 
+                             <input type="hidden" id="selectedRelatedStores" name="selectedRelatedStores" value="">
+                       </div>
+                    	<div class="sidebar-content-box-right">
+                            <button type = "button" class="btn addwidget" href="#"><?php echo $this->translate('Add Store'); ?></button>
+                            <button type = "button" class="btn deletewidget" href="#"><?php echo $this->translate('Delete'); ?></button>
+                            <button type = "button" class="btn up" href="#"><?php echo $this->translate('Move Up');?></button>
+                            <button type = "button" class="btn down" href="#"><?php echo $this->translate('Move Down'); ?></button>
+                        </div>
+                       
+                    </div>
+                  </div>
+                    <div class="postbox " id="submitdiv" style='height:86px !important;'>
+                        <div class="sidebar-heading">
+                            <p><?php echo $this->translate('Featured Image(yes/no)');?></p>
+                        </div>
+                        <div class="sidebar-content-box" style="display:inline-block;" >
+                            <div data-toggle="buttons-checkbox" class="btn-group ">
+                                <button type="button" class="btn" value="yes" onClick="featuredImageToggle(event);">
+                                    <?php echo $this->translate('Yes'); ?>
+                                </button>
+                                <button type="button" class="btn btn-primary" style="border-radius: 0 4px 4px 0;" 
+                                    value="no" onClick="featuredImageToggle(event);"><?php echo $this->translate('No'); ?>
+                                </button>
+                                <input type="hidden" value="0" name="featuredimagecheckbox" id="featuredimagecheckbox">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <div id="post-body">
+              	<div id="post-body-content">
+              		<div class="mainpage-content">
+                    	<div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Article title'); ?></strong></label></div>
+                            <div class="mainpage-content-right"><input type="text" name="articleTitle" id="articleTitle" class="" placeholder="<?php echo $this->translate('Article title'); ?>"></div>
+                        	<div class="mainpage-content-right" style="height : 20px;"></div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label>
+                                    <strong><?php echo $this->translate('Article plus overview title'); ?></strong>
+                                </label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <input type="text" name="plusTitle" id="plusTitle" class="" 
+                                    placeholder="<?php echo $this->translate('Article plus overview title'); ?>">
+                            </div>
+                        </div>
+						<div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Permalink'); ?></strong></label></div>
+                            <div class="mainpage-content-right"><div class="mainpage-content-right-inner-left"><label><?php echo $this->translate('http://www.kortingscode.nl/'); ?></label></div><div class="mainpage-content-right-inner-right"><input type="text" class="span3" name="articlepermalink" id="articlepermalink" placeholder="<?php echo $this->translate('permalink'); ?>"></div>
+                             <div class="mainpage-content-right" style="float:left;margin:-9px 0 6px 0; height : 20px; width : 511px;"></div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label><strong><?php echo $this->translate('Header image'); ?></strong></label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input type="file" onchange="checkFileType(event)" class="ignore"  
+                                     name="articleImage" id="articleImage">
+                                </div>
+                                <div>
+                                <?php echo $this->translate('Image size: 1170px x 285px (*.jpg or *.png file only)'); ?>
+                                </div>
+                            </div>
+                        </div>
+						<div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label>
+                                <strong><?php echo $this->translate('Thumbnail Small'); ?></strong></label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <div>
+                                    <input type="file" onchange="checkFileType(event)" class="ignore"   
+                                    name="articleImageSmall" id="articleImageSmall">
+                                </div>
+                                <div>
+                                <?php echo $this->translate('Image Size: 370px x 300px (*.jpg or *.png file only)');?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label>
+                                    <strong><?php echo $this->translate('Featured in header'); ?></strong>
+                                </label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <div>
+                                    <input type="file" onchange="checkFileType(event)" class="ignore"   
+                                        name="articleFeaturedImage" id="articleFeaturedImage">
+                                </div>
+                                <div>
+                                    <?php echo $this->translate('Image Size: 553px x 448px (*.jpg or *.png file only)');?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line" style='display: inline-block;'>
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta title'); ?></strong></label></div>
+                            <div class="mainpage-content-right">
+                            <input type="text" name="articlemetaTitle" id="articlemetaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore">
+                            <span id="metaTextLeft" class="disabled btop word-count nobel wordcount-width"></span>
+                            </div>
+                        </div>
+                      <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta Description'); ?></strong></label></div>
+                            <div class="mainpage-content-right">
+                            <textarea class="input-xlarge mbot bbot ignore" id="articlemetaDesc" name="articlemetaDesc" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"></textarea>
+                            <span id="metaDescriptionleft" class="disabled btop word-count nobel wordcount-width"></span>
+							
+                            </div>
+                        </div>
+                    </div>
+                	<!-- <textarea class="input-xlarge" name="pageDesc" id="pageDesc" placeholder="<?php //echo $this->translate('Article Description'); ?>" rows="3"></textarea>  -->
+                <br>
+           			<div class="mainpage-content">
+						<div class="mainpage-content-line mb10">
+								<div class="mainpage-content-left">
+									<h3>
+										<strong><?php echo $this->translate('Chapters'); ?></strong>
+									</h3>
+								</div>
+								<div class="mainpage-content-right">&nbsp;</div>
+							</div>
+									
+							<div id="multidiv" >   
+	                	 		<?php echo $this->partial('article/chapters.phtml',array('partialCounter'=>1));?>
+	                	 	</div>
+							
+							<div class="mainpage-content-colorbox">
+								<a href="javascript:;" style="float:right;margin-top: 7px;" onclick="getchapterhtml(this)" rel='1'><strong><?php echo $this->translate('+ Add another chapter'); ?></strong></a>
+							</div>
+							<div class="clear"></div>
+		
+	
+						</div>   
+                    </div>
+                </div>
+              </div>
+                <input type="hidden" name="pageId" id="pageId" value="" >
+                 <input type="hidden" name="isEdit" id="isEdit" value="0" >
+            </form>  
+              <br class="clear">
+</div>

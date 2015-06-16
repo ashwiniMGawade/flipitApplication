@@ -1,0 +1,96 @@
+<?php 
+	$this->headTitle()->append('E-mail lightbox');
+	$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/jquery.validate.js");
+	$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/back_end/email-light-box.js" );
+	$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js" );
+	$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
+	$this->headScript ()->appendFile (PUBLIC_PATH .  "/js/jquery.dataTables.min.js");
+	
+ $editLightBoxStatus = $this->retData['status'];
+ 
+?>
+
+<script type="text/javascript">
+
+	var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "/js/back_end/ckeditor" ; ?>" ;
+
+</script>
+
+<div id="imbullbody">
+<div style="overflow: hidden;" id="imbullbody-content">
+ <div class="wrap columns-2"> 
+		
+		<?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
+		<br><div class ="mainpage-content-colorbox success">
+		<?php if($this->messageSuccess!=''){?>
+		<span class="success"><?php echo $this->messageSuccess; ?></span>
+		<?php }?>
+		<?php if($this->messageError!=''){?>
+		<span class="error"><?php echo $this->messageError; ?></span>
+		<?php } ?>
+		</div>
+		<?php 
+		}?> 
+		
+		
+         <h1><?php echo $this->translate('E-mail Lightbox');?><input type="button"  Value='<?php echo $this->translate('Cancel'); ?>' class="btn ml10" onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/emaillightbox'" /></h1>
+           <form method="POST" enctype=multipart/form-data name="emailLightBoxForm" id="emailLightBoxForm" > 
+         	 <div id="poststuff" class="metabox-holder has-right-sidebar">
+               <div id="post-body">
+              	  <div>
+              	       <div class="mainpage-content">
+		                    <div class="mainpage-content-line mb10">
+		                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Active");?></strong></label></div>
+								<div class="mainpage-content-right">
+		                         <div data-toggle="buttons-checkbox" class="btn-group">
+									
+									<?php 
+                            
+                            		    if( $this->retData['status'] )
+                            		    {
+                            		   ?>
+                            		    <button type="button" onclick="changeStatus(event,'status','on')" class="btn btn-primary"><?php echo $this->translate("On") ; ?></button> 
+										
+		                              <button  style="border-radius: 0 4px 4px 0;" type="button" onclick="changeStatus(event,'status','off')" class="btn"><?php echo $this->translate("Off") ; ?></button>
+										
+								 <?php } else { ?>
+                            	
+									  <button type="button" class="btn" onClick="changeStatus(event,'status','on')" name="on"><?php echo $this->translate('On'); ?></button>  
+									
+                            		  <button type="button" style="border-radius: 0 4px 4px 0;" class="btn btn-primary" onClick="changeStatus(event,'status','off')"><?php echo $this->translate('Off'); ?></button>
+                            	
+                            	 <?php }?>
+									
+									<input type="hidden" name="status" id="status" value="<?php echo ( $this->retData['status'] ) ?  1 : 0 ; ?>" />
+									</div>
+		                        </div>           
+		                    </div>
+		                    </div>
+		                    <div class="mainpage-content">
+		                    	<div class="mainpage-content-line">
+		                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Title"); ?></strong></label></div>
+		                            <div class="mainpage-content-right">
+		                                <div class="mainpage-content-right-inner-right-other"></div>
+		                                <div class="mainpage-content-right-inner-left-other">
+		                                <input type="text" name="title" value="<?php echo $this->retData ? $this->retData['title'] : "";?>" placeholder="<?php echo $this->translate("Title") ; ?>" class="span3">
+		                                </div>                        
+		                            </div>
+		                        </div>
+		                    </div>
+		                    
+							<textarea name="content" id="content"><?php echo $this->retData ? $this->retData['content'] : "";?></textarea>
+		               </div>
+		      </div>
+              <br class="clear">
+         </div>
+         <br>
+     <div class="mainpage-content-colorbox">
+     <button class="btn btn-large btn-primary fl" id="updateEmailBox"><?php echo $this->translate('SAVE CHANGES');?>
+     </button>
+     <a href="javascript:;" onclick="cancel();" class="fl m10"><strong><?php echo $this->translate('CANCEL');?></strong></a>
+      </div><!-- /poststuff -->
+     </form> 
+     </div>
+	</div>
+	<div class="clear"></div>
+</div>

@@ -1,0 +1,47 @@
+<?php
+$partialViewPath = 'partials/';
+$pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
+echo $pageHeader->getTop20Header(
+    $this->pageTitle,
+    $this->subtitle,
+    $pageHeader->getCategoryOrPageHeaderImage($this->pageHeaderImage)
+);
+?>
+<div class="row">
+    <div id="content" class="col-md-8 col-sm-8">
+<?php 
+if(count($this->top20PopularOffers) > 0):
+    echo $this->partial(
+        $partialViewPath.'_offer.phtml',
+        array(
+            'offers' => $this->top20PopularOffers,
+            'offersType'=>'top20',
+            'shopName' =>'',
+            'shopId' =>'',
+            'zendForm'=>$this->form,
+            'widgetPosition'=>$this->widgetPosition
+        )
+    );
+endif;
+
+$popularStores = '';
+if (!empty($this->popularStores)) :
+     $popularStores = $this->partial(
+         $partialViewPath.'_popular-stores.phtml',
+         array(
+            'popularStores' => $this->popularStores,
+            'headerText' => $this->translate('Popular Stores')
+        )
+     );
+endif;
+echo $popularStores; ?>
+
+    </div>
+    <aside class="col-md-4 col-sm-4" id="sidebar">
+    <?php
+    $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+    $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+    echo $frontendSidebarHelper->sidebarWidgets('top-20', $this);
+    ?>
+    </aside>
+</div>

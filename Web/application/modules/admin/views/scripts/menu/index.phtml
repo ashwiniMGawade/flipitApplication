@@ -1,0 +1,116 @@
+<?php
+$this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.ui.widget.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.fileupload.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.fileupload-fp.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.fileupload-ui.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/menu.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/jquery-ui-1.8.16.custom.min.js");
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/locale.js");
+
+$controller = $this->controllerName;
+$action = $this->action;
+?>
+<div class="wrap columns-2">
+	<h1><?php echo $this->translate('Menu Beheer');?></h1>
+    <div id="poststuff" class="metabox-holder has-right-sidebar" >
+       <div id="post-body">
+       		<div>
+            	<div class="m-beheer-content">
+                	<div class="our_offering" >
+	                	<div class="top_navigation">
+	                        <ul>
+	                          	<li>
+                          			<a  id="subMenu" <?php if($controller=='menu'){?>class="selected_nav"<?php }?> href="<?php echo HTTP_PATH.'admin/menu'?>"><span id="ttt2" class="service_nav_over"><?php echo $this->translate('Menu');?> </span></a>
+                         		</li>
+                        	</ul>
+                      	</div>
+	                     <div class="offering_data_service" >
+	                        <div style="display: block; visibility: visible;" id="services">
+                             	<div class="m-beheer-lt">
+                                	<ul>
+                                    </ul>
+                                </div>
+                                <div class="m-beheer-rt">
+                                	<div class="m-beheer-rt-left"></div> 
+                                 	<div class="m-beheer-rt-right"></div>
+                                </div>
+		                     </div>
+		                 </div>
+	                </div>
+              </div>
+       </div>
+   </div>
+  <br class="clear">
+  </div>
+</div>
+
+<div class="modal display-none popup-width" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="wrap columns-2">
+         <form name="menuForm" id="menuForm" >
+          <div class="m-item-popup-hdr"><?php echo $this->translate('Menu item');?></div>
+            <div id="poststuff" class="metabox-holder has-right-sidebar">
+              <div id="post-body">
+              	   <div class="mainpage-content-line">
+                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Label');?></strong></label></div>
+                        <div class="mainpage-content-right-inner-right-other display-none"></div>
+                        <div class="mainpage-content-right">
+                          	<input type="text" placeholder="Label.." class="span3" name="label" id="label">                  
+                         </div>
+                    </div>
+                    
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Url');?></strong></label></div>
+                        <div class="mainpage-content-right-inner-right-other display-none"></div>
+                        <div class="mainpage-content-right">
+                            <input type="text" name="url" id="url" class="span3">
+                        </div>
+                     </div>                    
+                 
+                     <div class="mainpage-content-line">
+                         <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Sort');?></strong></label></div>
+                         <div class="mainpage-content-right-inner-right-other display-none"></div>
+                         <div class="mainpage-content-right">
+                             <input type="text" name="position" id="position" placeholder="1" class="span3">
+                        </div>
+                   </div>  
+              </div>
+              <br class="clear">
+            </div>
+            
+            <div class="m-item-popup-btm">
+            	<input type="hidden" id="hid" name="hid">
+            	<input type="hidden" id="roothid" name="roothid">
+            	<input type="hidden" id="hidimage" name="hidimage">
+            	<input type="hidden" id="imageid" name="imageid">
+            	<input type="hidden" id="hidimageorg" name="hidimageorg">
+            	<button id="submitButton" class="btn btn-large btn-primary fl" type="submit"><?php echo $this->translate('SAVE CHANGES');?></button> 
+               <button class="btn ml10 m5" data-dismiss="modal"><?php echo $this->translate('Cancel');?></button>
+           </div>
+      </form>
+   </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

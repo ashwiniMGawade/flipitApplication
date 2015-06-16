@@ -1,0 +1,66 @@
+<?php  $timeLeftTillSessionExpires = @$_SESSION['__ZF']['Zend_Auth']['ENT'] - time();  ?>
+<div class="update-nag">
+	<form method="post" class="websites-access-list" action="<?php echo HTTP_PATH. "admin" ?>">
+		<?php
+		$sessionNamespace = new Zend_Session_Namespace();
+		$lastLogin = Zend_Auth::getInstance()->getIdentity()->lastLogIn->format('H:i M dS Y');
+		?>
+	   <select class="fl-ie" onchange="localeSettingCMS(this);">
+	     <?php 
+	    	for($w=0;$w<count($sessionNamespace->settings['webaccess']);$w++){
+	       		$siteName = $sessionNamespace->settings['webaccess'][$w]['websitename'];
+	       	if ($siteName != '') {	
+	     ?>
+	     	<option value="<?php echo $siteName;?>" <?php echo isset($_COOKIE['site_name']) && $siteName == $_COOKIE['site_name'] ? 'selected=selected' : ''; ?>><?php echo $siteName; ?></option>
+	    
+	  <?php } }?>
+	  </select>
+	</form>
+<?php
+	if(LOCALE == '') {
+		
+		$refresLink = $this->translate("refresh") . " kc " . $this->translate("cache");
+	}else {
+		
+		$refresLink = $this->translate("refresh") . " ". LOCALE ." ". $this->translate("cache");
+	}
+	$httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+	$varnishCacheOnOff = isset($_COOKIE['passCache']) ? $this->translate("Varnish Cache Off") : $this->translate("Varnish Cache On");
+	$varnishSetPassCacheUrl = isset($_COOKIE['passCache']) ? "http://".$httpScheme.".kortingscode.nl/NoCache/unset" : "http://".$httpScheme.".kortingscode.nl/NoCache/set";
+?>
+    <a href='javascript:void(0)' onclick="showLightBox(<?php echo "'$refresLink'" ?>)" style="margin-left:10px;color:white;"><?php echo $refresLink ;?></a>
+    <a href='<?php echo $varnishSetPassCacheUrl; ?>' style="margin-left:10px;color:white;"><?php echo $varnishCacheOnOff ;?></a>
+    <span class="varnish-count"><?php
+    echo $this->translate('Varnish urls count:').' '.BackEnd_Helper_viewHelper::getVarnishUrlsCount();?></span>
+    <p class="toplinks-outer" style="width:480px;"><span class="text"><?php echo $this->translate('Welcome');?>,</span>
+    <a class="userFirstName" href="<?php echo HTTP_PATH;?>admin/user/profile">
+    <?php 
+		$firstName =  Zend_Auth::getInstance()->getIdentity()->firstName;
+					if( strlen( $firstName ) > 20 ) {
+            			$cut_text = substr( $firstName , 0, 10 ); //cut at 17 chars
+            			$end_text = $cut_text."..."; // add three dots
+            			$firstName =  sprintf( "<abbr title='%s'>%s</abbr>" , $firstName , $end_text);
+            		}
+            			
+            		echo $firstName ;
+            
+   ?></a> | &nbsp;&nbsp;<?php echo $this->translate('Last signed in');?>: <?php echo $lastLogin; ?>&nbsp;&nbsp; | <a href="<?php echo HTTP_PATH.'admin/Auth/logout';?>" class="logout" ><img src="<?php echo PUBLIC_PATH;?>images/back_end/lock.png" border="0" /><?php echo $this->translate('Logout');?></a></p>
+</div>
+
+<div class="modal display-none popup-width" id="myModalLightBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="wrap columns-2">
+        <div class="m-item-popup-hdr"><?php echo $this->translate('Clear Cache');?></div>
+            <div id="poststuff" class="metabox-holder has-right-sidebar">
+             	<div class="alert alert-error ml15">
+				  		<h4>Warning!</h4>
+				    	If you want to clear the cache and refresh the data then click on continue if not then click cancel
+   				 </div>
+             </div>
+            
+            <div class="m-item-popup-btm">
+            	<button onclick='refreshVarnish();' id="submitButton" class="btn btn-large btn-primary fl" type="button"><?php echo $this->translate('Continue');?></button> 
+               	<a class="red fl refreash-varnish-cancelLnk" data-dismiss="modal">
+               		<strong><?php echo $this->translate('Cancel');?></strong></a>
+           </div>
+   		</div>
+</div>

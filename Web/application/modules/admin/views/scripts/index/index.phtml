@@ -1,0 +1,115 @@
+<?php 
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
+$this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
+$this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/dashboard.js" );
+//var_dump($this->data);
+?>
+
+<div class="wrap">
+		<div class='wrap columns-2'>
+			<?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
+				<br><div class ="mainpage-content-colorbox success">
+			<?php if($this->messageSuccess!=''){?>
+				<span class="successserver"><?php echo $this->messageSuccess; ?></span>
+			<?php }?>
+			<?php if($this->messageError!=''){?>
+				<span class="errorserver"><?php echo $this->messageError; ?></span>
+			<?php } ?>
+				</div>
+			<?php 
+			}?>
+		</div>
+		
+	<div class="admin-text mb40">
+		<div class='border-div'>
+			<div contenteditable="true" class='admin-text-content' id="admin-text-content">
+			<?php 
+			echo $this->data['message']=='' 
+				? '<span class="errorMsg">' . $this->translate('Click here and write a message for employees.'). '</span>' 
+				: $this->data['message'];?>
+			</div>
+		</div>
+	</div>
+	<div class='huidige-stores mb25 fl'>
+
+		<h3>
+			<?php echo $this->translate('Scores of the last 7 days'); ?>
+			<span>&nbsp;&nbsp;(<?php echo $this->translate('Last updated at'); ?>&nbsp;<?php echo $this->data['updated_at']->format('H:i M jS Y'); ?>)
+			</span>
+		</h3>
+
+		<div class="dashboard-content fl">
+			<div class="dashboard-heading">
+				<h4><?php echo $this->translate('No. of offers created'); ?></h4>
+				<h4><?php echo $this->translate('No. of shops created'); ?></h4>
+				<h4><?php echo $this->translate('No. of clickouts'); ?></h4>
+				<h4><?php echo $this->translate('No. of new subscribers'); ?></h4>
+			</div>
+			<div class="dashboard-boxes">
+		         <div class="box-count">
+		         	<span class="grey-text"><?php echo KC\Repository\Dashboard::count_format($this->data['no_of_offers']);?></span>
+		         </div>	
+		         <div class="box-count">
+		         	<span class="grey-text"><?php echo KC\Repository\Dashboard::count_format($this->data['no_of_shops']);?></span>
+		         </div>	
+		         <div class="box-count">
+		         	<span class="grey-text"><?php echo KC\Repository\Dashboard::count_format($this->data['no_of_clickouts']);?></span>
+		         </div>	
+		         <div class="box-count">
+		         	<span class="grey-text"><?php echo KC\Repository\Dashboard::count_format($this->data['no_of_subscribers']);?></span>
+		         </div>	
+
+			</div>
+		</div>
+	</div>
+	
+	<div class="clear"></div>
+
+	<div class='huidige-stores mb25 fl'>
+
+		<h3>
+			<?php echo $this->translate('Totals scores within this locale'); ?>
+			<span>&nbsp;&nbsp;(<?php echo $this->translate('Last updated at'); ?>&nbsp;<?php echo $this->data['updated_at']->format('H:i M jS Y'); ?>)
+			</span>
+		</h3>
+
+		<div class="dashboard-content fl">
+			<div class="dashboard-heading">
+				<h4><?php echo $this->translate('Total offers currently online'); ?></h4>
+				<h4><?php echo $this->translate('Total number of online shops'); ?></h4>
+				<h4><?php echo $this->translate('Total number of shops with atleast 1 code online'); ?></h4>
+				<h4><?php echo $this->translate('Total number of members'); ?></h4>
+				<h4><?php echo $this->translate('Money Shop Ratio'); ?></h4>
+			</div>
+			<div class="dashboard-boxes">
+		         <div class="box-count">
+		         	<span class="grey-text"><?php echo KC\Repository\Dashboard::count_format($this->data['total_no_of_offers']);?></span>
+		         </div>	
+		         <div class="box-count">
+		         	<span class="grey-text"><?php echo KC\Repository\Dashboard::count_format($this->data['total_no_of_shops']);?></span>
+		         </div>	
+		         <div class="box-count">
+		         	<span class='divided-grey-text'><?php echo KC\Repository\Dashboard::count_format($this->data['total_no_of_shops_online_code']);?></span>
+		         	<span class='horizoantal-row'></span>
+		         	<div class='<?php echo $this->green_cls?>'>			         	
+			         	<?php
+			         	if(isset($this->prcnt[0]) && $this->prcnt[0] != 0) { ?>
+							<img src="<?php echo PUBLIC_PATH . '/images/'.$this->green_img.'.png'?>" alt="arrow"/>
+			         	<?php }
+			         	$percentNumber = isset($this->prcnt[0]) ? $this->prcnt[0].'<sup>.': '';
+			         	$percentDecimal = isset($this->prcnt[1]) ? $this->prcnt[1].'%</sup>': '';
+			         	 echo $percentNumber.$percentDecimal; ?>
+		         	</div>
+		        </div>	
+		        <div class="box-count">
+		         	<span class="grey-text"><?php echo KC\Repository\Dashboard::count_format($this->data['total_no_members']);?>
+		         	</span>
+		        </div>
+		        <div class="box-count">
+		         	<span class="grey-text"><?php echo KC\Repository\Dashboard::count_format($this->data['money_shop_ratio']).'<sup>%</sup>';?>
+		         	</span>
+		        </div>
+			</div>
+		</div>
+	</div>
+</div>

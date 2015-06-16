@@ -1,0 +1,71 @@
+<?php
+foreach ($this->favouriteShopsOffers as $favouriteShopsOffer) {
+    $shopImage = 
+        PUBLIC_PATH_CDN.ltrim($favouriteShopsOffer['shopOffers']['logo']['path'], "/")
+        . "thum_big_" . $favouriteShopsOffer['shopOffers']['logo']['name'];
+
+    $permaLink = isset($favouriteShopsOffer["shopOffers"]["permaLink"]) 
+        ?  $favouriteShopsOffer["shopOffers"]["permaLink"]
+        : $favouriteShopsOffer["shopOffers"]["permalink"];
+
+    $activeOffers = isset($favouriteShopsOffer['activeCount']) 
+        ? $favouriteShopsOffer['activeCount'] 
+        : KC\Repository\Shop::getActiveOffersCount($favouriteShopsOffer['shopOffers']['id']);
+
+    $activeOffers = isset($favouriteShopsOffer['activeCount']) 
+        ? $activeOffers 
+        : $activeOffers[0]['activeCount'];
+    $showFavouriteButton = true;
+    if(!empty($favouriteShopsOffer['shopOffers']['favoriteshops'])) {
+        foreach ($favouriteShopsOffer['shopOffers']['favoriteshops'] as $favouriteShops) {
+            if($favouriteShops['visitor']['id'] == Auth_VisitorAdapter::getIdentity()->id) {
+                $showFavouriteButton = false;
+            }
+        }
+    }
+    ?>
+    <article class="block col-sm-6">
+        <div class="holder">
+            <div>
+                <a href="<?php echo HTTP_PATH_LOCALE. $permaLink;?>"  
+                class="code code-2">
+                    <div class="center">
+                        <div class="code-holder">
+                            <img src="<?php echo $shopImage;?>" width="132"
+                            alt="<?php echo $favouriteShopsOffer['shopOffers']['name'];?>" title="<?php echo $favouriteShopsOffer['shopOffers']['name'];?>">
+                        </div>
+                    </div>
+                    <footer class="bottom"><?php echo $this->translate('code');?></footer>
+                </a>
+                <?php if($showFavouriteButton) { ?>
+                <a
+                href='<?php echo HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='
+                . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') ."/"
+                . FrontEnd_Helper_viewHelper::__link('link_memberonlycodes').'&shopId='
+                . base64_encode($favouriteShopsOffer['shopOffers']['id']);?>' class="pop btn btn-default">
+                    <span class="glyphicon red-heart glyphicon-heart"></span>
+                    <span class='follow-text'><?php echo $this->translate('FOLLOW');?></span>
+                </a>
+                <?php } ?>
+            </div>
+            <div class="box">
+                <div class="text">
+                    <a href="<?php echo HTTP_PATH_LOCALE. $permaLink;?>"  
+                    class="link">
+                    <?php echo $favouriteShopsOffer['title'];?>
+                    </a>
+                    <p>
+                        <?php 
+                        echo $this->translate('and'). " " . $activeOffers. " " 
+                        .$this->translate('other active codes for');
+                        ?>
+                        <a href="<?php echo HTTP_PATH_LOCALE. $permaLink;?>">
+                        <?php echo $favouriteShopsOffer['shopOffers']['name'];?>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </article>
+    <?php
+}

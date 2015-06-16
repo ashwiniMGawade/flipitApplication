@@ -1,0 +1,58 @@
+<?php
+$footer = FrontEnd_Helper_viewHelper::getFooterData();
+$signUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+	'footerLargeSignUpForm',
+	'SignUp',
+	'email-form form-inline',
+	'orange'
+);
+if (
+	zend_Controller_Front::getInstance()->getRequest()->isPost() 
+	&& zend_Controller_Front::getInstance()->getRequest()->getParam('formName')=='footerLargeSignUpForm') {
+    if ($signUpForm->isValid(zend_Controller_Front::getInstance()->getRequest()->getPost())) {
+        $signUpStep2Url = FrontEnd_Helper_SignUpPartialFunction::signUpRedirectLink($signUpForm);
+        header('location:'. $signUpStep2Url);
+    } else {
+        $signUpForm->highlightErrorElements();
+    }
+}
+?>
+<footer id="footer">
+<?php 
+if(zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='login'
+    && zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='signup'
+):
+?>
+    <div class="bottom-panel">
+        <div class="container" id ="footer-signup-form">
+            <?php 
+            $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+            echo $this->esi($this->locale.'signup/signupwidgetfooter?shopId='
+                .'&signupFormWidgetType=footerSignupForm&shopLogoOrDefaultImage=');
+            ?>
+        </div>
+    </div>
+<?php
+endif;
+?>
+    <div class="container bottom-nav">
+        <div class="row">
+            <?php echo $footer['middleColumn1'];?>
+            <?php echo FrontEnd_Helper_viewHelper::replaceStringVariable($footer['middleColumn2']);?>
+            <?php echo $footer['middleColumn3'];?>
+        </div>
+    </div>
+
+    <div class="container add-block">
+    <?php echo $footer['middleColumn4'];?>
+    <?php echo $footer['bottomFooter'];?>
+    </div>
+<?php
+if (APPLICATION_ENV == 'development') {
+    $headScript =  $this->HeadScript();
+} else {
+    $headScript = $this->minifyHeadScript();
+}
+echo $headScript;
+?>
+</footer>

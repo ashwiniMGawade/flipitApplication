@@ -1,0 +1,80 @@
+<?php
+$this->headTitle()->append('Code alert Settings');
+$this->headMeta('keyword', 'Description');
+$this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-timepicker.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/code-alert-settings.js");
+?>
+<div class="newsletter-setting-container wrap columns-2">
+    <div class='wrap columns-2'>
+        <?php if ($this->successMessage!='' || $this->errorMessage!='' ) { ?>
+            <br>
+            <div class ="mainpage-content-colorbox success">
+            <?php if ($this->successMessage!='') { ?>
+                <span class="successserver"><?php echo $this->successMessage; ?></span>
+            <?php }?>
+            <?php if ($this->errorMessage!=''){ ?>
+                <span class="errorserver"><?php echo $this->errorMessage; ?></span>
+            <?php } ?>
+            </div>
+        <?php
+        }
+        ?>
+    </div>
+    <h1><?php echo $this->translate('Code alert settings'); ?></h1>
+    <div class="mainpage-content">
+        <form name="speacialForm" method="post" id="speacialForm" action="">
+            <div class="mainpage-content-line mb10">
+                <div class="mainpage-content-left">
+                    <label><strong><?php echo $this->translate('Email Subject'); ?></strong></label>
+                </div>
+                <div class="mainpage-content-right">
+                    <div class="mainpage-content-right-inner-left-other">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div data-toggle="buttons-checkbox" class="mainpage-content-right-inner-left-other">
+                            <input type="text" value="<?php 
+                            echo !empty($this->codeAlertSettings[0]['email_subject']) 
+                                ? $this->codeAlertSettings[0]['email_subject'] : '';?>"
+                                placeholder=<?php echo $this->translate("Subject")?> 
+                                name="emailSubject" id="emailSubject" onblur="saveSenderEmail(this)"
+                                class="span3">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mainpage-content-line mb10">
+                <div class="mainpage-content-left">
+                    <label><strong><?php echo $this->translate('Email Header'); ?></strong></label>
+                </div>
+                <div class="mainpage-content-right">
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-right-inner-left-other">
+                            <div class="">
+                                <textarea name="emailHeader" id="emailHeader" 
+                                    class="" style="height:135px;"><?php 
+                                    echo !empty($this->codeAlertSettings[0]['email_header']) 
+                                        ? $this->codeAlertSettings[0]['email_header'] : '';
+                                    ?></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mainpage-content-line mb10">
+                <div class="mainpage-content-right">
+                    <div class="mainpage-content-right-inner-left-other">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button class="btn btn-primary" type="submit">
+                                <?php echo $this->translate('Submit') ?>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

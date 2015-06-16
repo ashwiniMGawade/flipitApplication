@@ -1,0 +1,370 @@
+<?php
+
+$this->headTitle()->append($this->translate('Edit Profile'));
+
+
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.ui.widget.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.iframe-transport.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.fileupload.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.fileupload-fp.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.fileupload-ui.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/profile.js");
+
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "/css/jquery-ui-1.8.16.custom.css" );
+
+//$userName = $this->profile->email;
+//print_r($userName); die;
+?>
+
+
+<div class="wrap columns-2">
+          <?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
+            <br><div class ="mainpage-content-colorbox success">
+            <?php if($this->messageSuccess!=''){?>
+            <span class="successserver"><?php echo $this->messageSuccess; ?>
+            </span>
+            <?php }if($this->messageError!=''){?>
+                <span class="errorserver"><?php echo $this->messageError; ?></span>
+            <?php } ?>
+            </div>
+            <?php }?>
+      <form name="userProfile" action="<?php echo HTTP_PATH; ?>admin/user/updateprofile" id='userProfile' method='POST' enctype="multipart/form-data">   
+            <h1><?php echo $this->translate('Edit Profile'); ?><button class="btn ml10 cancelButton" type="button"><?php echo $this->translate('Cancel'); ?></button></h1>
+                <input type="hidden" name='imageName' id='imageName' value="" />
+                <input type="hidden" name='userId' id='userId' value="<?php echo @$this->profile['id'] ;?>" />
+                <input type="hidden" name='pImageId' id='imageIdInEdit' value="<?php echo @$this->profile['profileImageId'];?>" />
+                <input type="hidden" name='prevImageName' id='prevImageName' value="<?php echo @$this->profile['profileimage']['name'] ;?>" />
+                <input type="hidden" name='pImageName' id='pImageName' value="<?php echo @$this->profile['profileimage']['name'] ;?>" />
+                <input type="hidden" name='id' id='id' value="<?php echo Auth_StaffAdapter::getIdentity()->id ;?>" />
+                <input type="hidden" name='selectedShopId' id='selectedShopId' value="" />
+                <input type="hidden" name='role' id='role' value="<?php echo  $this->profile['users']['id'];?>" />
+            <div id="poststuff" class="metabox-holder has-right-sidebar">
+              <div id="post-body">
+                <div>
+                    <div class="mainpage-content">
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Email'); ?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other"><input type="text" name="email" disabled="disabled" value="<?php echo @$this->profile['email'] ;?>" placeholder="<?php echo $this->translate('Email'); ?>" class="span3"></div>                        
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('First Name'); ?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other"><input type="text" id="firstName" name="firstName" value="<?php echo @$this->profile['firstName'] ;?>" placeholder="<?php echo $this->translate('First Name'); ?>" class="span3"></div>                        
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Last Name'); ?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other"><input type="text" id="lastName" name="lastName" value="<?php echo @$this->profile['lastName'] ;?>"  placeholder="<?php echo $this->translate('Last Name'); ?>" class="span3"></div>              
+                        </div>
+                        </div>
+                        
+                        <div class="mainpage-content-line" style="display:none">
+                          <div class="mainpage-content-right-inner-left-other"><input type="text" name="userName" id="userName" value="<?php echo @$this->profile['firstName'] ;?>"></div>                        
+                        </div>
+                        
+                    <?php      
+                     $userPicture = '';
+                     $avatarName = $this->translate('120px x 120px');
+                      if(isset($this->profile['profileimage']['name']) && $this->profile['profileimage']['name']!='') {
+                            $userPicture = HTTP_PATH_CDN. $this->profile['profileimage']['path']
+                            .$this->profile['profileimage']['name'];
+                            $avatarName = $this->profile['profileimage']['name'];
+                         }
+                      ?>
+                        
+                        <div class="mainpage-content-line mb10">
+                            <div class="mainpage-content-left">
+                                <label><strong><?php echo $this->translate('Upload Avatar'); ?></strong></label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <div class='browse-container'>    
+                                    <img class='image-container'  src ="<?php echo $userPicture; ?>" alt = "user Image" >
+                                </div>
+                                <div class="img-name" id="avtarName"><?php echo $avatarName; ?></div>
+                                <div>
+                                    <input  class="span3" type="file" name="imageName">
+                                </div>
+                              <div>
+                                <?php echo $this->translate('Image Size: 120px x 120px (*.jpg or *.png file only)');?>
+                              </div>
+                            </div>
+
+                        
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Name show in about listing'); ?></strong></label></div>
+                            <div class="mainpage-content-right control-group">
+                                <div class="mainpage-content-right-inner-right-other help-inline"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <div data-toggle="buttons-checkbox" class="btn-group">
+                                        <button type="button" id="btnYes"  name="btnYes" class="<?php if($this->profile['showInAboutListing']==1){echo "btn btn-primary";}else{echo "btn";}?>" onClick="aboutListNameStatus(event,'status','yes');"><?php echo $this->translate("Yes") ; ?></button>                     
+                                        <button type="button" id="btnNo" name="btnNo" class="<?php if($this->profile['showInAboutListing']==0){echo "btn btn-primary";}else{echo "btn";}?>" onClick="aboutListNameStatus(event,'status','no');" style="border-radius: 0 4px 4px 0;"><?php echo $this->translate("No") ; ?></button>
+                                        <input type="hidden" name="nameStatus" id="nameStatus" value="<?php echo $this->profile['showInAboutListing'] ? 1 : 0 ?>" />
+                                     </div>
+                                </div>                        
+                            </div>
+                        </div>
+                         
+                         <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Add Editor to Google plus rich snippets'); ?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div data-toggle="buttons-checkbox" class="btn-group">
+                                <button onclick="addToSearchResults(event,'on')" class="btn <?php if($this->profile['addtosearch']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                                <button style="border-radius:0 4px 4px 0" onclick="addToSearchResults(event,'off')" class="btn <?php if($this->profile['addtosearch']=='0'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('No'); ?></button>
+                                <input type="checkbox" id="addtosearch" <?php if($this->profile['addtosearch']=='1'){ echo 'checked'; }  ?>  name="addtosearch" style="display:none;"> 
+                            </div>
+                        </div>
+                          
+                            </div>
+                                    <div class="mainpage-content-line">
+                                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Google+'); ?></strong></label></div>
+                                    <div class="mainpage-content-right control-group">
+                                        <div class="mainpage-content-right-inner-right-other help-inline"></div>
+                                        <div class="mainpage-content-right-inner-left-other"><input  value = "<?php echo @$this->profile['google'];?>" type="text" name="google" id="google" placeholder="<?php echo $this->translate('https://plus.google/u/o/121213'); ?>" class="span3 ignore"></div>                        
+                                    </div>
+                                </div>
+                                
+                                    <div class="mainpage-content-line">
+                                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Twitter'); ?></strong></label></div>
+                                        <div class="mainpage-content-right control-group">
+                                            <div class="mainpage-content-right-inner-right-other help-inline"></div>
+                                            <div class="mainpage-content-right-inner-left-other"><input value = "<?php echo @$this->profile['twitter'];?>" type="text" name="twitter" id="twitter" placeholder="<?php echo $this->translate('https://twitter.com/u/o/121213'); ?>" class="span3 ignore"></div>                        
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mainpage-content-line">
+                                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Pinterest'); ?></strong></label></div>
+                                        <div class="mainpage-content-right control-group">
+                                            <div class="mainpage-content-right-inner-right-other help-inline"></div>
+                                            <div class="mainpage-content-right-inner-left-other"><input value = "<?php echo @$this->profile['pinterest'];?>" type="text"  name="pintrest" id="pintrest" placeholder="<?php echo $this->translate('https://pinterest.com/u/o/121213'); ?>" class="span3 ignore"></div>                        
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mainpage-content-line">
+                                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Likes'); ?></strong></label></div>
+                                        <div class="mainpage-content-right control-group">
+                                            <div class="mainpage-content-right-inner-right-other help-inline"></div>
+                                            <div class="mainpage-content-right-inner-left-other"><input  value = "<?php echo @$this->profile['likes'];?>" type="text"  name="likes" id="lines" placeholder="<?php echo $this->translate('Rose'); ?>" class="span3 ignore"></div>                        
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mainpage-content-line">
+                                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Dislikes'); ?></strong></label></div>
+                                        <div class="mainpage-content-right control-group">
+                                            <div class="mainpage-content-right-inner-right-other help-inline"></div>
+                                            <div class="mainpage-content-right-inner-left-other"><input value = "<?php echo @$this->profile['dislike'];?>" type="text" name="dislike" id="dislike" placeholder="<?php echo $this->translate('Rose'); ?>" class="span3 ignore"></div>                        
+                                        </div>
+                                    </div>
+                                    
+                                <div class="mainpage-content-line">
+                                <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Main Text'); ?></strong></label></div>
+                                <div class="mainpage-content-right">
+                                    <div class="mainpage-content-right-inner-right-other"></div>
+                                    <div class="mainpage-content-right-inner-left-other">
+                                        <textarea class="input-xlarge mbot bbot ignore" id="maintext" placeholder="<?php echo $this->translate('Hello word !'); ?>" rows="10" name="maintext" ><?php echo @$this->profile['mainText'];?></textarea>
+                                    </div>
+                                </div>
+                              </div>
+
+                            <div class="mainpage-content-line">
+                                <div class="mainpage-content-left">
+                                    <label>
+                                        <strong><?php echo $this->translate('Show Text'); ?></strong>
+                                    </label>
+                                </div>
+                                <div class="mainpage-content-right">
+                                    <div class="mainpage-content-right-inner-right-other"></div>
+                                    <div class="mainpage-content-right-inner-left-other">
+                                        <input type = "text" style="border-radius:4px 4px 4px 4px !important;" class="input-xlarge mbot bbot ignore" id="editortext" name="editortext" value = "<?php echo $this->profile['editorText'];?>" placeholder = "<?php echo $this->translate('Say Hello to Users');  ?>">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mainpage-content-line popularKortingscode">
+                                <div class="mainpage-content-left"><label><strong><?php echo $this->translate('populaire Kortingscodes'); ?></strong></label></div>
+                                <div class="mainpage-content-right control-group">
+                                    <div class="mainpage-content-right-inner-right-other help-inline"></div>
+                                    <div class="mainpage-content-right-inner-left-other"><input  value = "<?php echo @$this->profile['popularKortingscode'];?>" type="text" name="popularKortingscode" id="popularKortingscode" placeholder="<?php echo $this->translate('populaire kortingscodes'); ?>" class="span3"></div>                        
+                                </div>
+                            </div>
+
+                            <div class="mainpage-content-line">
+                                <div class="mainpage-content-left"><label><strong>
+                                <?php echo $this->translate('Country Locale'); ?></strong></label>
+                                </div>
+                                <div class="mainpage-content-right">
+                                    <div class="mainpage-content-right-inner-right-other"></div>
+                                    <div class="mainpage-content-right-inner-left-other">
+                                         <select name ="locale" id='locale' style='width:200px;'>
+                                             <option selected="selected" disabled="disabled" value="0">
+                                             <?php $this->translate("Select Country Locale"); ?></option>        
+                                                <?php
+                                                if ($this->countriesLocales):
+                                                    foreach ($this->countriesLocales as $localeName => $countryNameWithWebsite):
+                                                        $selected = $localeName == $this->profile['countryLocale'] ? 'selected' : '';
+                                                        echo "<option $selected  value=". $localeName .">". $countryNameWithWebsite ."</option>";
+                                                    endforeach;
+                                                endif;
+                                                ?>
+                                        </select>
+                                    </div>
+                              </div>
+                            </div>
+
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                 <br class="clear">
+              </div>
+              
+              
+            <div id='poststuff' class="mainpage-content metabox-holder has-right-sidebar">
+            <h3><strong>Favorite Stores</strong></h3>
+             <div id="side-info-column" class="inner-sidebar-coupon">
+                <div id="side-sortables" class="meta-box-sortables ui-sortable">
+                  <div class="coupon-sidebar-outer">
+                    <div class="coupon-sidebar-heading">
+                            <input autocomplete="off"  id='searchShopText' type="text" placeholder="<?php echo $this->translate('Search by shop...');?>" class="input-medium search-query">
+                    </div>
+                    <div class="coupon-sidebar-content-box mb10">
+                        <button type="button" id='deleteOne'  class="btn"><?php echo $this->translate('DELETE'); ?></button>
+                        <button type="button"  id='addNewStore'  class="btn btn-primary"><?php echo $this->translate('ADD SHOP'); ?></button>
+                    </div>
+                  
+                  </div>
+                  
+                  
+                </div>
+              </div>
+              <div id="post-body">
+              
+                <div id="post-body-content-coupon">
+                    <div class="scrol top-coupon-list">
+                        <ul id='favoriteStore'>
+                            <?php 
+                            $KeyArForHidden = '';
+                             if(count($this->favoritesShop) > 0) {
+                                $j=0;
+                                foreach ($this->favoritesShop as $store) {
+                                        if($store['sid']!='') {
+                                        $j++;
+                                        echo "<li rel='" . $store['sid'] ."' id='" . $store['sid'] ."' relstore='" . $store['name'] ."'>" . $store['name'] ."</li>";
+                                        if(count($this->favoritesShop)==$j){  
+                                            
+                                            $KeyArForHidden  .= $store['sid'];
+                                            
+                                        }else {
+                                            
+                                            $KeyArForHidden  .= $store['sid'] .",";
+                                        
+                                        }
+                                     } else {
+                                        
+                                        echo "<li id='0' >Add Store</li>";
+                                     }
+                                }
+                             } else {
+                                
+                                echo "<li id='0' >Add Store</li>";
+                             }
+                            ?>
+                         </ul>
+                     <input type="hidden" name='fevoriteStore' id='fevoriteStore' value="<?php echo $KeyArForHidden;?>" />
+                    </div>
+                </div>
+              </div>
+              <br class="clear">
+            </div>
+            <!-- interesting category panel -->
+           <div class="mainpage-content">
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Interesting Categories'); ?></strong></label></div>
+                    
+                    <div class="mainpage-content-right">
+                    <div class="" style="position:relative;">
+                         <?php   
+                        for($i = 0;  $i < count($this->categoryList) ; $i++){ ?>
+                        <?php 
+                        if(@in_array( $this->categoryList[$i]['id'] , $this->catArray ) )
+                            {
+                                $checked = 'checked="checked"' ;
+                            
+                            } else {
+                                
+                                $checked = '' ;
+                            }
+                            ?>
+                            <input type="checkbox" <?php echo $checked ;?> value="<?php echo $this->categoryList[$i]['id']; ?>" class="" name="selectedCategoryies[]" id="category-<?php echo $this->categoryList[$i]['id']; ?>" />
+                        <?php
+                            
+                           
+                               if(trim($this->categoryList[$i]['name'])!=''){ 
+                            ?>
+                            <button type="button" title="<?php echo $this->categoryList[$i]['name'];?>" class="btn square-btn <?php echo  @in_array( $this->categoryList[$i]['id'] , $this->catArray )  ? "btn-primary" : "" ?>" id="categoryBtn-<?php echo $this->categoryList[$i]['id'];?>" onClick="addCategory(event,'<?php echo $this->categoryList[$i]['id']; ?>')"><?php echo strlen($this->categoryList[$i]['name']) < 20 ? $this->categoryList[$i]['name'] : substr($this->categoryList[$i]['name'],0,20).'..'; ?></button>
+                            <?php }
+                              
+                              } ?>
+                      </div>
+                  </div>
+                  
+                </div>
+            </div>
+            <!-- end of panel for interesting category -->
+            
+            
+              
+              <div class="clear">
+                    <h1><?php echo $this->translate('Change Password'); ?></h1>
+              </div>
+            
+            
+            <div id="poststuff" class="metabox-holder has-right-sidebar">
+              <div id="post-body">
+                <div>
+                    <div class="mainpage-content">
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Old Password'); ?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other"><input type="password"   id="oldPassword" name="oldPassword" class="span3 passwordField"></div>                        
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('New Password'); ?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other"><input type="password"   id="newPassword" name="newPassword" placeholder="<?php echo $this->translate('New Password'); ?>" class="span3 passwordField"></div>                        
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line oveflow-hidden">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Re-type New Password'); ?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other"><input type="password"  id="confirmNewPassword" name="confirmNewPassword" placeholder="<?php echo $this->translate('Re-type New Password'); ?>" class="span3 passwordField"></div>                        
+                            </div>
+                        </div>          
+                        
+                    </div>
+                    
+                </div>
+              </div>
+              <br class="clear">
+            </div>
+            
+            
+            
+            <div class="mainpage-content-colorbox">
+                <button type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('UPDATE PROFILE'); ?></button>
+                <a href="javascript:void(0);" class="fl m10 cancelButton"><strong><?php echo $this->translate('CANCEL'); ?></strong></a>
+            </div>
+      </form>      
+</div>
