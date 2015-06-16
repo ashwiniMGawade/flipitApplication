@@ -1,6 +1,0 @@
-<?php
-if(Auth_VisitorAdapter::hasIdentity()) :
-	echo $this->render('partials/_user_nav_logged_in.phtml');
-else :
-	echo $this->render('partials/_user_nav.phtml');
-endif;

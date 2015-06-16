@@ -1,1 +1,0 @@
- var json = [] ;  var jsonData = {};  jsonData['frontend_js'] =json;  var gt = new Gettext({ 'domain' : 'frontend_js' , 'locale_data' : jsonData });

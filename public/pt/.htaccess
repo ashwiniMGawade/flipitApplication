@@ -1,4 +1,0 @@
-Options -Indexes
-ErrorDocument 403 /public/pt/403.php
-RewriteEngine on
-RewriteRule ^403.php$ http://www.flipit.com/pt [L,R=301]
