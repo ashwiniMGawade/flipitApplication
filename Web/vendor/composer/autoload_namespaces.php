@@ -7,5 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Zend_' => array($vendorDir . '/zendframework/zendframework1/library'),
-    '' => array($baseDir . '/../core'),
 );
