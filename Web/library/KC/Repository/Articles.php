@@ -11,7 +11,7 @@ class Articles extends \KC\Entity\Articles
         $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('COUNT(a)')
-            ->from('Core\Domain\Entity\Articles', 'a')
+            ->from('\KC\Entity\Articles', 'a')
             ->setParameter(1, '1')
             ->where('a.publish = ?1')
             ->setParameter(2, '0')

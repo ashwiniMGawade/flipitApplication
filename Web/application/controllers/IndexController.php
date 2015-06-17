@@ -21,8 +21,6 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-    	$a = KC\Repository\Articles::getAllArticlesCount();
-    	print_r($a);die;
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();
