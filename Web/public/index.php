@@ -43,7 +43,7 @@ require_once 'PHPExcel/PHPExcel.php';
 
 $requestUri = $_SERVER['REQUEST_URI'];
 if (preg_match('/admin/', $requestUri, $matches)) {
-    require_once APPLICATION_PATH.'/services/Ipaddress/Ipaddress.php';
+    //require_once APPLICATION_PATH.'/services/Ipaddress/Ipaddress.php';
 }
 
 // Create application, bootstrap, and run

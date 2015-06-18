@@ -11,6 +11,12 @@ class fixtures
 
     public function execute()
     {
+        $locale = new KC\Entity\LocaleSettings();
+        $locale->locale = 'nl_NL';
+        $locale->timezone = 'Europe/Amsterdam';
+        $this->entityManager->persist($locale);
+        $this->entityManager->flush();
+
         $image = new KC\Entity\User\ProfileImage();
         $image->ext = 'jpg';
         $image->path = 'images/upload/shop/';
@@ -47,6 +53,15 @@ class fixtures
         $user->created_at = new \DateTime('now');
         $user->updated_at = new \DateTime('now');
         $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        $ipaddress = new KC\Entity\User\IpAddresses();
+        $ipaddress->ipaddress = '192.168.56.1';
+        $ipaddress->name = 'test';
+        $ipaddress->deleted = 0;
+        $ipaddress->created_at = new \DateTime('now');
+        $ipaddress->updated_at = new \DateTime('now');
+        $this->entityManager->persist($ipaddress);
         $this->entityManager->flush();
 
         for ($i=1; $i < 5; $i++) {

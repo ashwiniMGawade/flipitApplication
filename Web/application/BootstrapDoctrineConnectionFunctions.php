@@ -17,6 +17,7 @@ class BootstrapDoctrineConnectionFunctions
             : EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);
         $localSiteDbConnection = strtolower(self::getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData));
         self::setEntityManagerForlocale($doctrineOptions[$localSiteDbConnection]['dsn'], $config);
+        echo APPLICATION_ENV;die;
         Zend_Registry::set('emUser', $emUser);
         BootstrapConstantsFunctions::constantsForLocaleAndTimezoneSetting();
         self::setDefaultTimezone();

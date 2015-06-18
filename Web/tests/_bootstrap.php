@@ -1,6 +1,6 @@
 <?php
 // This is global bootstrap for autoloading 
-define('APPLICATION_ENV', 'testing');
+/*define('APPLICATION_ENV', 'testing');
 defined('APPLICATION_PATH')
     || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
 require_once '_data/fixtures.php';
@@ -39,4 +39,4 @@ $tool->dropDatabase();
 $tool->createSchema($classes);
 $fixtures = new fixtures($em);
 $fixtures->execute();
-\Codeception\Util\Autoload::registerSuffix('Page', __DIR__.DIRECTORY_SEPARATOR.'_pages');
+\Codeception\Util\Autoload::registerSuffix('Page', __DIR__.DIRECTORY_SEPARATOR.'_pages');*/

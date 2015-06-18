@@ -6,11 +6,7 @@
 
 class_name: FunctionalTester
 modules:
-    enabled: [ZF1, Doctrine2, Filesystem, FunctionalHelper, PhpBrowser]
+    enabled: [ZF1, Filesystem, FunctionalHelper, PhpBrowser]
     config:
-        Doctrine2:
-            cleanup: true,
-            populate: true
         PhpBrowser:
-            url: 'http://www.flipit.com'
-            adminUsername: 'asdsadasdasdsad'
+            url: 'http://dev.kortingscode.nl'

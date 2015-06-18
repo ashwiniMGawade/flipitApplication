@@ -3,7 +3,7 @@ namespace FunctionalTester;
 
 class AdminSteps extends \FunctionalTester
 {
-    public function login()
+    /*public function login()
     {
         $config = \Codeception\Configuration::config();
         $I = $this;
@@ -47,5 +47,5 @@ class AdminSteps extends \FunctionalTester
         // $rights = new \Rights();
         // $rights->addRights();
         // $user->addUser($userParameters, 'test.png');
-    }
+    }*/
 }

@@ -13,7 +13,7 @@ modules:
         Db:
             dsn: 'mysql:host=localhost;dbname=flipit_test'
             user: 'root'
-            password: 'password'
+            password: 'root'
             dump: tests/_data/flipit_test.sql
 coverage:
     enabled: true

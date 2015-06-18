@@ -108,7 +108,7 @@ class Schema extends AbstractAsset
     {
         $tableName = $table->getFullQualifiedName($this->getName());
         if(isset($this->_tables[$tableName])) {
-            throw SchemaException::tableAlreadyExists($tableName);
+            //throw SchemaException::tableAlreadyExists($tableName);
         }
 
         $this->_tables[$tableName] = $table;

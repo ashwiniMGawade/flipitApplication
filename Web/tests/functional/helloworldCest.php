@@ -14,9 +14,8 @@ class helloworldCest
     // tests
     public function helloworldTest(FunctionalTester $I)
     {
-        $I->amOnPage('/admin/helloworld');
-        $I->canSee('hello world');
-        $I->canSee('Amit Kraj Rajbir');
-
+        //$I->initializeDb('Db', $I->flipitTestDb());
+        $I->amOnPage('http://dev.kortingscode.nl/');
+        $I->see('op');
     }
 }
