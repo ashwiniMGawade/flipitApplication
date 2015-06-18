@@ -3429,11 +3429,14 @@ div.wrap.newsletter-setting-container {
  }
 
  .strict-confirmation-alert input[type="checkbox"]{
-	margin:3px 5px 0 0;
+	margin:24px 5px 0 0;
 	vertical-align: top;
 	float: left;
  }
-
+ .strict-confirmation-text {
+ 	font-size: 18px;
+    margin: 20px 0 30px;
+ }
 .category-image{
 	width: 500px;
 	margin-right: 245px;
