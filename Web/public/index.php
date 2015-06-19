@@ -8,9 +8,9 @@ defined('APPLICATION_PATH')
 
 defined('LIBRARY_PATH')
         || define('LIBRARY_PATH', realpath(dirname(__FILE__) . '/../library'));
-
+        
 defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
- 
+defined('APPLICATION_ENV_FUNCTIONAL') || define('APPLICATION_ENV_FUNCTIONAL', 'testing_functional');
 // Sets the environment to testing for codeception
 if (isset($_SERVER['HTTP_USER_AGENT']) && ($_SERVER['HTTP_USER_AGENT'] == 'Symfony2 BrowserKit' || strpos($_SERVER['HTTP_USER_AGENT'], 'PhantomJS') == true)) {
     define('APPLICATION_ENV', 'testing');

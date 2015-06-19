@@ -1,7 +1,8 @@
 <?php
 // This is global bootstrap for autoloading 
+define('APPLICATION_ENV_FUNCTIONAL', 'testing_functional');
 defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', 'testing_functional');
+    || define('APPLICATION_ENV', 'testing');
 defined('APPLICATION_PATH')
     || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
 require_once realpath(dirname(__FILE__) . '/../_data/fixtures.php');
