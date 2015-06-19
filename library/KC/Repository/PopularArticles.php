@@ -112,4 +112,15 @@ class PopularArticles Extends \KC\Entity\PopularArticles
         }
         return true;
     }
+
+    public static function deletePopularArticles()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder
+            ->delete('KC\Entity\PopularArticles', 'p')
+            ->where('p.id > 0')
+            ->getQuery();
+            $query->execute();
+        return true;
+    }
 }

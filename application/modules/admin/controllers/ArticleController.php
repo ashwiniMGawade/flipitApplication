@@ -97,10 +97,13 @@ class Admin_ArticleController extends Zend_Controller_Action
 
             if ($result) {
 
-                $popularArticles = \KC\Repository\PopularArticles::getPopularArticles();
-                $changedArticlesDataForSorting = \KC\Repository\PopularArticles::changeArticlesDataForSorting($popularArticles);
-                \KC\Repository\PopularArticles::updateArticles($changedArticlesDataForSorting);
-                \KC\Repository\PopularArticles::savePopularArticle($result['articleId'], 1);
+                KC\Repository\PopularArticles::deletePopularArticles();
+                $allArticles = KC\Repository\Articles::getArticlesList();
+                $position = 1;
+                foreach ($allArticles as $article) {
+                    \KC\Repository\PopularArticles::savePopularArticle($article['id'], $position);
+                    $position++;
+                }
 
                 # update only when article is being published immedately or some time later
                 if (! $result['isDraft']) {
