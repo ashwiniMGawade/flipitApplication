@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class EmailSettings extends \KC\Entity\EmailSettings
+class EmailSettings extends \Core\Domain\Entity\EmailSettings
 {
     public static function getEmailSettingsContent()
     {

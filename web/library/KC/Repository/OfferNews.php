@@ -2,7 +2,7 @@
 
 namespace KC\Repository;
 
-class OfferNews extends \KC\Entity\OfferNews
+class OfferNews extends \Core\Domain\Entity\OfferNews
 {
     public static function saveNewsticker($params)
     {

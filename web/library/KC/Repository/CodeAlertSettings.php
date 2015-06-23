@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class CodeAlertSettings extends \KC\Entity\CodeAlertSettings
+class CodeAlertSettings extends \Core\Domain\Entity\CodeAlertSettings
 {
     public static function saveCodeAlertSettings($codeAlertEmailSubject, $codeAlertEmailHeader)
     {

@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class Robot Extends \KC\Entity\User\Robot
+class Robot extends \Core\Domain\Entity\User\Robot
 {
     public function getRobotTextFileInformation($websiteId = '')
     {

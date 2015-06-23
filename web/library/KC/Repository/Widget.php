@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Widget extends \KC\Entity\Widget
+class Widget extends \Core\Domain\Entity\Widget
 {
     public function addWidget($params)
     {

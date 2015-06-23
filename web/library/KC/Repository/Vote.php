@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Vote extends \KC\Entity\Votes
+class Vote extends \Core\Domain\Entity\Votes
 {
     public static function getofferVoteList($idOffer)
     {

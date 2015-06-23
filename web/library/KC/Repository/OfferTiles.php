@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class OfferTiles extends \KC\Entity\OfferTiles
+class OfferTiles extends \Core\Domain\Entity\OfferTiles
 {
     public static function addOfferTile($params, $ext = "")
     {

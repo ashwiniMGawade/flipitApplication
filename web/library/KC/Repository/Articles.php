@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Articles extends \KC\Entity\Articles
+class Articles extends \Core\Domain\Entity\Articles
 {
     ##############################################
     ####### REFACTORED CODE ######################

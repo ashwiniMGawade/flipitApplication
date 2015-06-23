@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Emails extends \KC\Entity\Emails
+class Emails extends \Core\Domain\Entity\Emails
 {
     public static function getAllEmailsContent($params)
     {

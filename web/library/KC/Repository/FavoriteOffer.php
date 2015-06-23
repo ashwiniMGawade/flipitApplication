@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class FavoriteOffer extends \KC\Entity\FavoriteOffer
+class FavoriteOffer extends \Core\Domain\Entity\FavoriteOffer
 {
    
 }

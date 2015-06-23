@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Signupcodes extends \KC\Entity\Signupcodes
+class Signupcodes extends \Core\Domain\Entity\Signupcodes
 {
     public static function getfreeCodelogin()
     {

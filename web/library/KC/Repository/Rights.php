@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Rights extends \KC\Entity\User\Rights
+class Rights extends \Core\Domain\Entity\User\Rights
 {
     public function addRights()
     {

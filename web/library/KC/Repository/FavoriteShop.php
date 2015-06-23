@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class FavoriteShop extends \KC\Entity\FavoriteShop
+class FavoriteShop extends \Core\Domain\Entity\FavoriteShop
 {
     ####################### refactored code ################
     public static function getVisitorsCountByFavoriteShopId($shopId)

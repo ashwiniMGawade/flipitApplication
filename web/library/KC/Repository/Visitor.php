@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Visitor extends \KC\Entity\Visitor
+class Visitor extends \Core\Domain\Entity\Visitor
 {
     const SUCCESS = "200";
     public $currentLocale = null;

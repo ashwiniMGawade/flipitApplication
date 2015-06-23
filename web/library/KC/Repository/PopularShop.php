@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class PopularShop Extends \KC\Entity\PopularShop
+class PopularShop extends \Core\Domain\Entity\PopularShop
 {
     public static function searchTopTenshop($keyword, $flag)
     {

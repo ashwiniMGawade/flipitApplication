@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class About Extends \KC\Entity\About
+class About extends \Core\Domain\Entity\About
 {
     #####################################################
     ############ REFECTORED CODE ########################

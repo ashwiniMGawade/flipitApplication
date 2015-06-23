@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class MoneysavingArticle Extends \KC\Entity\MoneysavingArticle
+class MoneysavingArticle extends \Core\Domain\Entity\MoneysavingArticle
 {
     public static function searchTopTenSaving($keyword, $flag)
     {

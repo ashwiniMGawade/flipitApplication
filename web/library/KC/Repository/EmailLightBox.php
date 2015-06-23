@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class EmailLightBox extends \KC\Entity\EmailLightBox
+class EmailLightBox extends \Core\Domain\Entity\EmailLightBox
 {
     
     public static function getLigthBoxContent()

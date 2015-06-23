@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Category extends \KC\Entity\Category
+class Category extends \Core\Domain\Entity\Category
 {
     #####################################################
     ############# REFACORED CODE ########################

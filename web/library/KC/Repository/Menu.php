@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Menu extends \KC\Entity\Menu
+class Menu extends \Core\Domain\Entity\Menu
 {
     ######################## Refactored #############################
     public static function replaceBespaarwijzerWithPlus()

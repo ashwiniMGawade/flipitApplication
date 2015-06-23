@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class CategoriesOffers extends \KC\Entity\CategoriesOffers
+class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
 {
     public static function getCategoryOffersByCategoryIdForFrontEnd($categoryId)
     {

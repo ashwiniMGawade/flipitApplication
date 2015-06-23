@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class DisqusComments extends \KC\Entity\DisqusComments
+class DisqusComments extends \Core\Domain\Entity\DisqusComments
 {
     public static function getPageUrlBasedDisqusComments($pageUrl)
     {

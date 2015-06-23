@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class EmailSubscribe extends \KC\Entity\EmailSubscribe
+class EmailSubscribe extends \Core\Domain\Entity\EmailSubscribe
 {
     public static function add_emailsubscriber($email)
     {

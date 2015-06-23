@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class AffliateNetwork extends \KC\Entity\AffliateNetwork
+class AffliateNetwork extends \Core\Domain\Entity\AffliateNetwork
 {
     public function addNewnetwork($params)
     {

@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Footer extends \KC\Entity\Footer
+class Footer extends \Core\Domain\Entity\Footer
 {
     public static function getFooterContent()
     {

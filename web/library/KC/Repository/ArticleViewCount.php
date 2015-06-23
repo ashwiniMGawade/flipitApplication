@@ -2,7 +2,7 @@
 
 namespace KC\Repository;
 
-class ArticleViewCount extends \KC\Entity\ArticleViewCount
+class ArticleViewCount extends \Core\Domain\Entity\ArticleViewCount
 {
 
     ##########################################

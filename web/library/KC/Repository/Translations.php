@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class Translations Extends \KC\Entity\Translations
+class Translations extends \Core\Domain\Entity\Translations
 {
     public static function getAllDatabaseTranslations()
     {

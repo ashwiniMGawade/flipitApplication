@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class CodeAlertQueue Extends \KC\Entity\CodeAlertQueue
+class CodeAlertQueue extends \Core\Domain\Entity\CodeAlertQueue
 {
     public static function saveCodeAlertQueue($shopId, $offerId)
     {

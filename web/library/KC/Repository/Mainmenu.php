@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Mainmenu extends \KC\Entity\Mainmenu
+class Mainmenu extends \Core\Domain\Entity\Mainmenu
 {
     public static function insertOne($params)
     {

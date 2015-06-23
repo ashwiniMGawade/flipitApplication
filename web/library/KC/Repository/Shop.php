@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Shop extends \KC\Entity\Shop
+class Shop extends \Core\Domain\Entity\Shop
 {
 
      ##################################################################################

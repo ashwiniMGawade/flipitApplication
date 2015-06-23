@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Splash extends \KC\Entity\User\Splash
+class Splash extends \Core\Domain\Entity\User\Splash
 {
     public function getSplashInformation()
     {

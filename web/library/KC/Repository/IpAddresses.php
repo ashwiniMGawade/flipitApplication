@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class IpAddresses Extends \KC\Entity\User\IpAddresses
+class IpAddresses extends \Core\Domain\Entity\User\IpAddresses
 {
     public static function getAllIpaddresses($params)
     {

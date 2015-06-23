@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class PopularArticles Extends \KC\Entity\PopularArticles
+class PopularArticles extends \Core\Domain\Entity\PopularArticles
 {
     public static function clearCacheOfArticles()
     {

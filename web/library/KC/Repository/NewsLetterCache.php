@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class NewsLetterCache Extends \KC\Entity\newsLetterCache
+class NewsLetterCache extends \Core\Domain\Entity\newsLetterCache
 {
     public static function saveNewsLetterCacheContent()
     {

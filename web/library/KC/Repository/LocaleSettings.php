@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class LocaleSettings extends \KC\Entity\LocaleSettings
+class LocaleSettings extends \Core\Domain\Entity\LocaleSettings
 {
 
     public function __contruct($connectionName = "")

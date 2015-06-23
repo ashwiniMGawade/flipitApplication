@@ -2,7 +2,7 @@
 
 namespace KC\Repository;
 
-class SpecialPagesOffers extends \KC\Entity\SpecialPagesOffers
+class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
 {
     public static function getSpecialPageOffersByPageIdForFrontEnd($pageId, $pageType = '')
     {

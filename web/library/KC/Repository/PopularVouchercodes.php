@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class PopularVouchercodes Extends \KC\Entity\PopularVouchercodes
+class PopularVouchercodes extends \Core\Domain\Entity\PopularVouchercodes
 {
     public static function searchTopTenOffer($keyword, $flag)
     {

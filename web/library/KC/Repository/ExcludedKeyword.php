@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class ExcludedKeyword extends \KC\Entity\ExcludedKeyword
+class ExcludedKeyword extends \Core\Domain\Entity\ExcludedKeyword
 {
     ##############################################################################
     ################## REFACTORED CODE ###########################################

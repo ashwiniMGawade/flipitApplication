@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class SeenIn Extends \KC\Entity\SeenIn
+class SeenIn extends \Core\Domain\Entity\SeenIn
 {
     #####################################################
     ######### REFACTORED CODE #########

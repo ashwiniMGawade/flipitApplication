@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class RouteRedirect extends \KC\Entity\RouteRedirect
+class RouteRedirect extends \Core\Domain\Entity\RouteRedirect
 {
     public static function getRoute($orignalurl)
     {

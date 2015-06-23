@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class PageWidgets extends \KC\Entity\PageWidgets
+class PageWidgets extends \Core\Domain\Entity\PageWidgets
 {
     public static function getWidgetsByType($widgetsType)
     {

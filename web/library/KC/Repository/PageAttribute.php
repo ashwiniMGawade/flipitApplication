@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class PageAttribute Extends \KC\Entity\PageAttribute
+class PageAttribute extends \Core\Domain\Entity\PageAttribute
 {
     #########################################################
     ############### REFACTORED CODE         ##################

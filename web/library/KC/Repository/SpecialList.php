@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class SpecialList extends \KC\Entity\SpecialList
+class SpecialList extends \Core\Domain\Entity\SpecialList
 {
     public static function getSpecialPages($limit = '')
     {

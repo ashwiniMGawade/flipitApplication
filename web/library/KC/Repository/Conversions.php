@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Conversions extends \KC\Entity\Conversions
+class Conversions extends \Core\Domain\Entity\Conversions
 {
     public static function getConversionInformationById($id)
     {

@@ -2,7 +2,7 @@
 
 namespace KC\Repository;
 
-class Varnish extends \KC\Entity\Varnish
+class Varnish extends \Core\Domain\Entity\Varnish
 {
     public function __contruct($connectionName = false)
     {

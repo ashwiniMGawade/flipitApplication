@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class CodeAlertVisitors Extends \KC\Entity\CodeAlertVisitors
+class CodeAlertVisitors extends \Core\Domain\Entity\CodeAlertVisitors
 {
     public static function getVisitorsToRemoveInCodeAlert($visitorId, $offerId)
     {

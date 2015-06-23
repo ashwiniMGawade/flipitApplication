@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Logo extends \KC\Entity\Logo
+class Logo extends \Core\Domain\Entity\Logo
 {
     public static function getPageLogo($logoId)
     {

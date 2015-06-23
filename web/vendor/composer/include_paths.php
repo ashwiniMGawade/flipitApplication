@@ -7,5 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     $vendorDir . '/zendframework/zendframework1/library',
-    $vendorDir . '/phpunit/php-text-template',
 );

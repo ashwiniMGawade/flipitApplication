@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Website extends \KC\Entity\User\Website
+class Website extends \Core\Domain\Entity\User\Website
 {
     public static function getAllWebsites()
     {

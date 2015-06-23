@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class MoneySaving Extends \KC\Entity\MoneySaving
+class MoneySaving extends \Core\Domain\Entity\MoneySaving
 {
     public static function getMostReadArticles($limit, $userId = "")
     {

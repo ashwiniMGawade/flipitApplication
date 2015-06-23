@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class ChainItem extends \KC\Entity\User\ChainItem
+class ChainItem extends \Core\Domain\Entity\User\ChainItem
 {
     public function saveChain($request, $locale)
     {

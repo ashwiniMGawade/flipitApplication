@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class EditorWidget Extends \KC\Entity\EditorWidget
+class EditorWidget extends \Core\Domain\Entity\EditorWidget
 {
     public static function addEditorWidgetData($parameters)
     {

@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class RoutePermalink extends \KC\Entity\RoutePermalink
+class RoutePermalink extends \Core\Domain\Entity\RoutePermalink
 {
     public static function getRoute($permalink)
     {

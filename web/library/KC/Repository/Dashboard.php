@@ -2,7 +2,7 @@
 
 namespace KC\Repository;
 
-class Dashboard extends \KC\Entity\Dashboard
+class Dashboard extends \Core\Domain\Entity\Dashboard
 {
 
     public static function amountOfOffersCreatedLastWeek()

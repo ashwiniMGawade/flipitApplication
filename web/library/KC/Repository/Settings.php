@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class Settings Extends \KC\Entity\Settings
+class Settings extends \Core\Domain\Entity\Settings
 {
     const EMAIL_LIGHT_BOX = "email_light_box";
     const FOOTER = "footer";

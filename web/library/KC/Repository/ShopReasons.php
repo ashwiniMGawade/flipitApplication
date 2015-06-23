@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class ShopReasons Extends \KC\Entity\ShopReasons
+class ShopReasons extends \Core\Domain\Entity\ShopReasons
 {
     public static function saveReasons($reasons, $shopId)
     {

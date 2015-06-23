@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Chain extends \KC\Entity\User\Chain
+class Chain extends \Core\Domain\Entity\User\Chain
 {
     ######### refactored code #################
     public static function updateChainItemLocale($newLocale, $oldLocale)

@@ -2,7 +2,7 @@
 
 namespace KC\Repository;
 
-class PopularCode extends \KC\Entity\PopularCode
+class PopularCode extends \Core\Domain\Entity\PopularCode
 {
     public static function deleteExpiredPopularCode($date, $flagForCache)
     {

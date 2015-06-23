@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class User extends \KC\Entity\User\User
+class User extends \Core\Domain\Entity\User\User
 {
 
     ##########################################################

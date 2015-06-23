@@ -2,7 +2,7 @@
 
 namespace KC\Repository;
 
-class Role extends \KC\Entity\User\Role
+class Role extends \Core\Domain\Entity\User\Role
 {
 
     /**

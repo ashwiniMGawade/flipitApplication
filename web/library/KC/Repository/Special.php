@@ -2,7 +2,7 @@
 
 namespace KC\Repository;
 
-class Special Extends \KC\Entity\Special
+class Special extends \Core\Domain\Entity\Special
 {
     public static function getSpecialContent()
     {

@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class GlobalExportPassword extends \KC\Entity\User\GlobalExportPassword
+class GlobalExportPassword extends \Core\Domain\Entity\User\GlobalExportPassword
 {
     public static function savePasswordForExportDownloads($type)
     {

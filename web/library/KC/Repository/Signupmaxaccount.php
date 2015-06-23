@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
+class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
 {
     #################################################################
     #################### REFACTORED CODE ##############################

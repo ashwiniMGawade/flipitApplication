@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class CouponCode extends \KC\Entity\CouponCode
+class CouponCode extends \Core\Domain\Entity\CouponCode
 {
     public static function returnAvailableCoupon($id, $pageType = '')
     {

@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class Offer Extends \KC\Entity\Offer
+class Offer extends \Core\Domain\Entity\Offer
 {
     ##################################################################################
     ################## REFACTORED CODE ###############################################

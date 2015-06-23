@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Media extends \KC\Entity\Media
+class Media extends \Core\Domain\Entity\Media
 {
     public function con()
     {

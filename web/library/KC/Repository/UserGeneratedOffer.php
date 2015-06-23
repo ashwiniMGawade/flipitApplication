@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class UserGeneratedOffer extends \KC\Entity\Offer
+class UserGeneratedOffer extends \Core\Domain\Entity\Offer
 {
     public static function getOffersList($parameters)
     {

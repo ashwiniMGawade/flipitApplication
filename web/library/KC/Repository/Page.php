@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class Page Extends \KC\Entity\Page
+class Page extends \Core\Domain\Entity\Page
 {
     #####################################################
     ############ REFECTORED CODE ########################

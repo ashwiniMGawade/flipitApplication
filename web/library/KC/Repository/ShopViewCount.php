@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class ShopViewCount extends \KC\Entity\ShopViewCount
+class ShopViewCount extends \Core\Domain\Entity\ShopViewCount
 {
     ##########################################
     ########### REFACTORED CODE ##############

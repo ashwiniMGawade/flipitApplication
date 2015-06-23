@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class ViewCount extends \KC\Entity\ViewCount
+class ViewCount extends \Core\Domain\Entity\ViewCount
 {
     public static function getOfferClick($offerId, $clientIp)
     {

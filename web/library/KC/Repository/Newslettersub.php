@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Newslettersub extends \KC\Entity\Newslettersub
+class Newslettersub extends \Core\Domain\Entity\Newslettersub
 {
     public static function checkDuplicateUser($email)
     {

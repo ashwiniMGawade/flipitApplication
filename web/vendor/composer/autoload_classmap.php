@@ -485,7 +485,7 @@ return array(
     'SebastianBergmann\\Version' => $vendorDir . '/sebastian/version/src/Version.php',
     'SessionNotCreatedException' => $vendorDir . '/facebook/webdriver/lib/WebDriverExceptions.php',
     'StaleElementReferenceException' => $vendorDir . '/facebook/webdriver/lib/WebDriverExceptions.php',
-    'Text_Template' => $vendorDir . '/phpunit/php-text-template/Text/Template.php',
+    'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
     'TimeOutException' => $vendorDir . '/facebook/webdriver/lib/WebDriverExceptions.php',
     'URLChecker' => $vendorDir . '/facebook/webdriver/lib/net/URLChecker.php',
     'UnableToSetCookieException' => $vendorDir . '/facebook/webdriver/lib/WebDriverExceptions.php',

@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Signupfavoriteshop extends \KC\Entity\Signupfavoriteshop
+class Signupfavoriteshop extends \Core\Domain\Entity\Signupfavoriteshop
 {
     public static function getalladdstore()
     {

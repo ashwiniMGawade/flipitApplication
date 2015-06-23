@@ -2,7 +2,7 @@
 
 namespace KC\Repository;
 
-class PopularCategory extends \KC\Entity\PopularCategory
+class PopularCategory extends \Core\Domain\Entity\PopularCategory
 {
     public static function searchTopTenPopulerCategory($status = "", $keyword, $flag)
     {

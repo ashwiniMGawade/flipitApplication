@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class WidgetLocation Extends \KC\Entity\WidgetLocation
+class WidgetLocation extends \Core\Domain\Entity\WidgetLocation
 {
     public static function saveOrUpdateWidgetLocation($parameters)
     {

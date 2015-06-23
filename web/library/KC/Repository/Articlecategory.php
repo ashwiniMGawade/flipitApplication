@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Articlecategory extends \KC\Entity\Articlecategory
+class Articlecategory extends \Core\Domain\Entity\Articlecategory
 {
     ####################### Refactored ##############################
 

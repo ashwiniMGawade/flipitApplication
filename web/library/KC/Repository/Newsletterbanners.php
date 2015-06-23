@@ -1,6 +1,6 @@
 <?php
 namespace KC\Repository;
-class Newsletterbanners extends \KC\Entity\NewsLetterBanners
+class Newsletterbanners extends \Core\Domain\Entity\NewsLetterBanners
 {
     public static function getHeaderOrFooterImage($imageType)
     {
