@@ -209,6 +209,7 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
     echo $discussion;
     echo $moneySavingGuide;
     echo $expiredOffers;
+    echo $this->partial($storeViewPartialPath.'_popup_typeform.phtml');
     ?> 
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4">
