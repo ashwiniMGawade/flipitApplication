@@ -42,6 +42,7 @@ class ExcludedKeyword extends \Core\Domain\Entity\ExcludedKeyword
                 $relKeyWords->shops = $entityManagerLocale->find('\Core\Domain\Entity\ExcludedKeyword', $data->id);
                 $relKeyWords->keywords = $entityManagerLocale->find('\Core\Domain\Entity\Shop', $sp);
                 $relKeyWords->keywordname = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['keyword']);
+                $relKeyWords->deleted = 0;
                 $relKeyWords->created_at = new \DateTime('now');
                 $relKeyWords->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($relKeyWords);

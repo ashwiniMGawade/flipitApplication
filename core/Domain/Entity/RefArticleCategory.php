@@ -38,7 +38,7 @@ class RefArticleCategory
     protected $articles;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Articlecategory", inversedBy="refArticleCategory")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\ArticleCategory", inversedBy="refArticleCategory")
      * @ORM\JoinColumn(name="relatedcategoryid", referencedColumnName="id")
      */
     protected $articlecategory;

@@ -37,7 +37,7 @@ class MoneySaving
     protected $page;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Articlecategory", inversedBy="moneysaving")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\ArticleCategory", inversedBy="moneysaving")
      * @ORM\JoinColumn(name="categoryid", referencedColumnName="id")
      */
     protected $articlecategory;
