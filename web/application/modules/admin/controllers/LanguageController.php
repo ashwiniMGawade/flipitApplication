@@ -89,7 +89,6 @@ class Admin_LanguageController extends Zend_Controller_Action
 
 
             $result = self::uploadImage($_FILES['files']);
-            \BackEnd_Helper_viewHelper::clearTranslationCache();
             die;
         }
     }
@@ -106,7 +105,7 @@ class Admin_LanguageController extends Zend_Controller_Action
             @unlink($user_path . $img);
         }
         if (!file_exists($user_path))
-            mkdir($user_path ,776, true);
+            mkdir($user_path, 0775, true);
         $adapter->setDestination(ROOT_PATH . $uploadPath);
         $adapter->addValidator('Extension', false, array('po,mo', true));
         $files = $adapter->getFileInfo();
@@ -138,10 +137,11 @@ class Admin_LanguageController extends Zend_Controller_Action
                 $flash->addMessage(array('error' => $message));
 
             }
-                echo Zend_Json::encode(
-                        array("fileName" => $data, "sttaus" => $status,
-                                "msg" => $msg, "displayFileName" => $info['name'],
-                                "path" => "$uploadPath" ));
+            echo Zend_Json::encode(
+                    array("fileName" => $data, "sttaus" => $status,
+                            "msg" => $msg, "displayFileName" => $info['name'],
+                            "path" => "$uploadPath" ));
+            \BackEnd_Helper_viewHelper::clearTranslationCache();
             die();
         }
 
