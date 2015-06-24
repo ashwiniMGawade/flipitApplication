@@ -14,57 +14,13 @@ class updateDashboard
 
     public function __construct()
     {
-    ini_set('memory_limit', '-1');
+        require_once 'ConstantForMigration.php';
+        require_once('CommonMigrationFunctions.php');
 
-    set_time_limit(0);
-    /*
-    $domain1 = $_SERVER['HOSTNAME'];
-    $domain = 'http://www.'.$domain1;
-    */
+        CommonMigrationFunctions::setTimeAndMemoryLimit();
 
-    // Define path to application directory
-    defined('APPLICATION_PATH')
-    || define('APPLICATION_PATH',
-            dirname(dirname(__FILE__)));
-
-    defined('LIBRARY_PATH')
-    || define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
-
-    defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine1');
-
-    // Define application environment
-    defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV',
-            (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
-                    : 'production'));
-
-
-    //Ensure library/ is on include_path
-    set_include_path(
-            implode(PATH_SEPARATOR,
-                    array(realpath(APPLICATION_PATH . '/../library'),
-                            get_include_path(),)));
-        set_include_path(
-                implode(PATH_SEPARATOR,
-                        array(realpath(DOCTRINE_PATH), get_include_path(),)));
-
-        /** Zend_Application */
-
-        //echo LIBRARY_PATH;
-        //echo DOCTRINE_PATH;
-        //die;
-        require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper-v1.php');
-        require_once (LIBRARY_PATH . '/Zend/Application.php');
-        require_once(DOCTRINE_PATH . '/Doctrine.php');
-
-        // Create application, bootstrap, and run
-        $application = new Zend_Application(APPLICATION_ENV,
-                APPLICATION_PATH . '/configs/application.ini');
-
-        $connections = $application->getOption('doctrine');
-        spl_autoload_register(array('Doctrine', 'autoload'));
-
-        $manager = Doctrine_Manager::getInstance();
+        $connections = CommonMigrationFunctions::getAllConnectionStrings();
+        $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
 
         $imbull = $connections['imbull'];
 
