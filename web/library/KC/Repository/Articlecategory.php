@@ -34,7 +34,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('ac.permalink,a.permalink')
-            ->from('\KC\Entity\Articlecategory', 'ac')
+            ->from('\Core\Domain\Entity\Articlecategory', 'ac')
              ->leftJoin("ac.articles", "a")
             ->where("ac.id=". $id);
         $getRouteLink = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -226,7 +226,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-        ->from('KC\Entity\Articlecategory', 'cat')
+        ->from('\Core\Domain\Entity\Articlecategory', 'cat')
         ->where('cat.deleted = 0')
         ->andWhere($queryBuilder->expr()->like("cat.name", $queryBuilder->expr()->literal($srh.'%')));
         $request  = \DataTable_Helper::createSearchRequest(
@@ -247,7 +247,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
-        ->from('KC\Entity\Articlecategory', 'cat')
+        ->from('\Core\Domain\Entity\Articlecategory', 'cat')
         ->where('cat.deleted = 0');
         $request  = \DataTable_Helper::createSearchRequest(
             array(),
@@ -268,7 +268,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('c.name as name')
-            ->from('\KC\Entity\Articlecategory', 'c')
+            ->from('\Core\Domain\Entity\Articlecategory', 'c')
             ->where('c.deleted = 0')
             ->andWhere($queryBuilder->expr()->like('c.name', $queryBuilder->expr()->literal($keyword.'%')))
             ->orderBy("c.name", "ASC")
@@ -329,7 +329,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
             
             $queryBuilder = $entityManagerLocale->createQueryBuilder();
             $query = $queryBuilder->select('a')
-                ->from('\KC\Entity\Articlecategory', 'a')
+                ->from('\Core\Domain\Entity\Articlecategory', 'a')
                 ->where('a.id ='.$edit->id);
             $getPage = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             if (!empty($getPage[0]['permalink'])) {
@@ -355,7 +355,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
                 foreach ($params['selectedCategoryies'] as $relatedCategory) {
                     $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
                     $query = $queryBuilder->select('rf')
-                        ->from('KC\Entity\RefArticlecategoryRelatedcategory', 'rf')
+                        ->from('\Core\Domain\Entity\RefArticlecategoryRelatedcategory', 'rf')
                         ->where("rf.category=" .$relatedCategory)
                         ->andWhere("rf.articlecategory=" . $params['id']);
                     $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -395,7 +395,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
         } else {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->select('artcat, icon, related, articlecategory')
-                ->from('\KC\Entity\Articlecategory', 'artcat')
+                ->from('\Core\Domain\Entity\Articlecategory', 'artcat')
                 ->leftJoin('artcat.ArtCatIcon', "icon")
                 ->leftJoin('artcat.refArticlecategoryRelatedcategory', 'related')
                 ->leftJoin('related.category', 'articlecategory')
@@ -444,7 +444,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('cat.id,cat.name,cat.permalink,cat.metatitle')
-            ->from('KC\Entity\Articlecategory', 'cat')
+            ->from('\Core\Domain\Entity\Articlecategory', 'cat')
             ->where("cat.deleted= 0")
             ->orderBy("cat.id", "DESC");
         $categoryList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -456,7 +456,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('c.name, c.metatitle,c.permalink, c.metadescription,c.description, ai.path, ai.name')
-            ->from('KC\Entity\Articlecategory', 'c')
+            ->from('\Core\Domain\Entity\Articlecategory', 'c')
             ->leftJoin("c.ArtCatIcon", "ai")
             ->where("c.deleted=0")
             ->andWhere("c.permaLink = '".$catid."'");
@@ -468,7 +468,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('p.id')
-            ->from('KC\Entity\MoneySaving', 'ms')
+            ->from('\Core\Domain\Entity\MoneySaving', 'ms')
             ->leftJoin('ms.page', 'p')
             ->where('ms.articlecategory='. $catId);
         $pageIdList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

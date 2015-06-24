@@ -37,7 +37,7 @@ class ArticleChapter
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Articles", inversedBy="articleChapter")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Articles", inversedBy="articleChapter")
      * @ORM\JoinColumn(name="articleId", referencedColumnName="id")
      */
     protected $article;

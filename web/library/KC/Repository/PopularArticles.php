@@ -58,7 +58,7 @@ class PopularArticles extends \Core\Domain\Entity\PopularArticles
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('p.position')
-            ->from('KC\Entity\PopularArticles', 'p')
+            ->from('\Core\Domain\Entity\PopularArticles', 'p')
             ->orderBy('p.position', 'DESC')
             ->setMaxResults(1);
         $maxPosition = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

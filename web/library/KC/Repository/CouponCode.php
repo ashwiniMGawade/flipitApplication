@@ -8,7 +8,7 @@ class CouponCode extends \Core\Domain\Entity\CouponCode
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $availableCoupon = $queryBuilder
         ->select('c.code')
-        ->from('KC\Entity\CouponCode', 'c')
+        ->from('\Core\Domain\Entity\CouponCode', 'c')
         ->where("c.offer = " . $id)
         ->andWhere('c.status=1')
         ->setMaxResults(1)
@@ -29,7 +29,7 @@ class CouponCode extends \Core\Domain\Entity\CouponCode
 
         $totalAvailCode  = \Zend_Registry::get('emLocale')->createQueryBuilder()
             ->select('count(cc.id) as couponcount')
-            ->from('KC\Entity\CouponCode', 'cc')
+            ->from('\Core\Domain\Entity\CouponCode', 'cc')
             ->where("cc.offer = " . $id)
             ->andWhere('cc.status=1')
             ->getQuery()
@@ -65,7 +65,7 @@ class CouponCode extends \Core\Domain\Entity\CouponCode
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $codeList = $queryBuilder
             ->select('c.code,c.status')
-            ->from('KC\Entity\CouponCode', 'c')
+            ->from('\Core\Domain\Entity\CouponCode', 'c')
             ->where("c.offer = ". $id)
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -77,7 +77,7 @@ class CouponCode extends \Core\Domain\Entity\CouponCode
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $data = $queryBuilder
             ->select('count(c.id) as total')
-            ->from('KC\Entity\CouponCode', 'c')
+            ->from('\Core\Domain\Entity\CouponCode', 'c')
             ->addSelect(
                 "(SELECT count(cc.status) FROM \KC\Entity\CouponCode cc WHERE cc.offer = c.offer and cc.status = 0) as used"
             )
@@ -95,7 +95,7 @@ class CouponCode extends \Core\Domain\Entity\CouponCode
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $availableCoupon = $queryBuilder
             ->select('c')
-            ->from('KC\Entity\CouponCode', 'c')
+            ->from('\Core\Domain\Entity\CouponCode', 'c')
             ->where("c.offer = " . $offerId)
             ->andWhere('c.code ='. $queryBuilder->expr()->literal($code))
             ->setMaxResults(1)

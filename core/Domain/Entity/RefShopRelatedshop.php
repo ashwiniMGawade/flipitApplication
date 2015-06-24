@@ -42,7 +42,7 @@ class RefShopRelatedshop
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="relatedshops")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Shop", inversedBy="relatedshops")
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id")
      */
     protected $shop;

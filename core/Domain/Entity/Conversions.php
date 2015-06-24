@@ -67,19 +67,19 @@ class Conversions
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="conversions")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Shop", inversedBy="conversions")
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id")
      */
     protected $shop;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Visitor", inversedBy="conversions")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Visitor", inversedBy="conversions")
      * @ORM\JoinColumn(name="visitorId", referencedColumnName="id")
      */
     protected $visitor;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="conversions")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Offer", inversedBy="conversions")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id")
      */
     protected $offer;

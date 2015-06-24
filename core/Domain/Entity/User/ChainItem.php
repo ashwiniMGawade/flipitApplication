@@ -54,13 +54,13 @@ class ChainItem
     protected $shopId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\User\Chain", inversedBy="chainItem")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\User\Chain", inversedBy="chainItem")
      * @ORM\JoinColumn(name="chainId", referencedColumnName="id")
      */
     protected $chainItem;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\User\Website", inversedBy="chainItem")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\User\Website", inversedBy="chainItem")
      * @ORM\JoinColumn(name="websiteId", referencedColumnName="id")
      */
     protected $website;

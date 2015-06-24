@@ -84,52 +84,52 @@ class Category
     protected $featured_category;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Interestingcategory", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Interestingcategory", mappedBy="category")
      */
     protected $interestingcategory;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\PopularCategory", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\PopularCategory", mappedBy="category")
      */
     protected $popularCategory;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\RefArticlecategoryRelatedcategory", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\RefArticlecategoryRelatedcategory", mappedBy="category")
      */
     protected $refArticlecategoryRelatedcategory;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\RefOfferCategory", mappedBy="categories")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\RefOfferCategory", mappedBy="categories")
      */
     protected $categoryoffres;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\RefShopCategory", mappedBy="shop")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\RefShopCategory", mappedBy="shop")
      */
 
     protected $shopcategory;
     
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\CategoriesOffers", mappedBy="categories")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\CategoriesOffers", mappedBy="categories")
      */
     protected $categoriesOffers;
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\ImageCategoryIcon", inversedBy="category")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\ImageCategoryIcon", inversedBy="category")
      * @ORM\JoinColumn(name="categoryiconid", referencedColumnName="id")
      */
     protected $categoryicon;
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\ImageCategoryIcon", inversedBy="categoryfeatured")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\ImageCategoryIcon", inversedBy="categoryfeatured")
      * @ORM\JoinColumn(name="categoryFeaturedImageId", referencedColumnName="id")
      */
     protected $categoryFeaturedImage;
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\ImageCategoryIcon", inversedBy="categoryheader")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\ImageCategoryIcon", inversedBy="categoryheader")
      * @ORM\JoinColumn(name="categoryHeaderImageId", referencedColumnName="id")
      */
     protected $categoryHeaderImage;
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\Articlecategory", inversedBy="category")
+     * @ORM\ManyToMany(targetEntity="Core\Domain\Entity\Articlecategory", inversedBy="category")
      * @ORM\JoinTable(
      *     name="ref_articlecategory_relatedcategory",
      *     joinColumns={@ORM\JoinColumn(name="relatedcategoryid", referencedColumnName="id", nullable=false)},

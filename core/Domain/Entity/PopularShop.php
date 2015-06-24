@@ -50,7 +50,7 @@ class PopularShop
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="popularshop")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Shop", inversedBy="popularshop")
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id", onDelete="restrict")
      */
     protected $popularshops;

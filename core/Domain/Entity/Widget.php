@@ -66,12 +66,12 @@ class Widget
     protected $deleted;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\RefPageWidget", mappedBy="page")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\RefPageWidget", mappedBy="page")
      */
     protected $Widget;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\PageWidgets", mappedBy="widget")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\PageWidgets", mappedBy="widget")
      */
     protected $pageWidgets;
 

@@ -33,13 +33,13 @@ class RefOfferPage
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="offers")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Offer", inversedBy="offers")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     protected $refoffers;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Page", inversedBy="pageoffers")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Page", inversedBy="pageoffers")
      * @ORM\JoinColumn(name="pageId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     protected $offers;

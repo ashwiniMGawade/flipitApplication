@@ -58,7 +58,7 @@ class WidgetLocation extends \Core\Domain\Entity\WidgetLocation
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder
             ->select('wl.id, wl.position')
-            ->from('\KC\Entity\WidgetLocation', 'wl')
+            ->from('\Core\Domain\Entity\WidgetLocation', 'wl')
             ->where($queryBuilder->expr()->eq('wl.relatedid', $relatedId))
             ->setMaxResults(1);
         $existInDatabase = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -71,7 +71,7 @@ class WidgetLocation extends \Core\Domain\Entity\WidgetLocation
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder
             ->select('wl.id, wl.position')
-            ->from('\KC\Entity\WidgetLocation', 'wl')
+            ->from('\Core\Domain\Entity\WidgetLocation', 'wl')
             ->where($queryBuilder->expr()->eq('wl.location', $queryBuilder->expr()->literal($widgetLocation)))
             ->andWhere($queryBuilder->expr()->eq('wl.pagetype', $queryBuilder->expr()->literal($pageType)))
             ->setMaxResults(1);

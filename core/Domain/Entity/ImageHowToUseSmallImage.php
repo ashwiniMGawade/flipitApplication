@@ -5,10 +5,10 @@ use Doctrine\ORM\Mapping AS ORM;
 /**
  * @ORM\Entity
  */
-class ImageHowToUseSmallImage extends \KC\Entity\Image
+class ImageHowToUseSmallImage extends \Core\Domain\Entity\Image
 {
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Shop", mappedBy="howtousesmallimage")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Shop", mappedBy="howtousesmallimage")
      */
     protected $shop;
 

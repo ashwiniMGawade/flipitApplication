@@ -39,13 +39,13 @@ class RefPageWidget
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Page", inversedBy="pagewidget")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Page", inversedBy="pagewidget")
      * @ORM\JoinColumn(name="pageId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     protected $widget;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Widget", inversedBy="Widget")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Widget", inversedBy="Widget")
      * @ORM\JoinColumn(name="widgetid", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     protected $page;

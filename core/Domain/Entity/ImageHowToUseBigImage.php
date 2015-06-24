@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class ImageHowToUseBigImage extends \KC\Entity\Image
+class ImageHowToUseBigImage extends \Core\Domain\Entity\Image
 {
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Shop", mappedBy="howtousebigimage")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Shop", mappedBy="howtousebigimage")
      */
     protected $shop;
 

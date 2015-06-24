@@ -14,7 +14,7 @@ class User extends \Core\Domain\Entity\User\User
             'u.firstName, u.lastName, u.slug, u.mainText, u.showInAboutListing,
             u.popularKortingscode, pi.name, pi.path'
         )
-            ->from('\KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->leftJoin("u.profileimage", "pi")
             ->leftJoin('u.refUserWebsite', 'rf')
             ->leftJoin('rf.refUsersWebsite', 'w')
@@ -32,7 +32,7 @@ class User extends \Core\Domain\Entity\User\User
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u.id')
-            ->from('\KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->setParameter(1, $slug)
             ->where('u.slug = ?1');
         $userDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -44,7 +44,7 @@ class User extends \Core\Domain\Entity\User\User
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u, w.id, pi.name, pi.path')
             ->addSelect('DATE_DIFF(CURRENT_DATE(), u.created_at) as sinceDays')
-            ->from('\KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->leftJoin("u.profileimage", "pi")
             ->leftJoin('u.refUserWebsite', 'rf')
             ->leftJoin('rf.refUsersWebsite', 'w')
@@ -64,7 +64,7 @@ class User extends \Core\Domain\Entity\User\User
     {
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('a,s.id as sid,s.name as name,s.permaLink as permalink, img')
-            ->from('KC\Entity\Adminfavoriteshp', 'a')
+            ->from('\Core\Domain\Entity\Adminfavoriteshp', 'a')
             ->leftJoin("a.shops", "s")
             ->leftJoin('s.logo', 'img')
             ->setParameter(1, $userId)
@@ -83,7 +83,7 @@ class User extends \Core\Domain\Entity\User\User
         $query = $queryBuilder->select(
             'u, pi'
         )
-            ->from('\KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->leftJoin("u.profileimage", "pi")
             ->setParameter(1, $userId)
             ->where('u.id = ?1');
@@ -97,7 +97,7 @@ class User extends \Core\Domain\Entity\User\User
         $query = $queryBuilder->select(
             'u, pi'
         )
-            ->from('\KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->leftJoin("u.profileimage", "pi")
             ->setParameter(1, $userId)
             ->where('u.id = ?1');
@@ -119,14 +119,14 @@ class User extends \Core\Domain\Entity\User\User
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         switch ($roleId) {
             case '1':
-                $Q = $queryBuilder->select('w')->from('\KC\Entity\User\Website', 'w');
+                $Q = $queryBuilder->select('w')->from('\Core\Domain\Entity\User\Website', 'w');
                 break;
             case '2':
             case '3':
             case '4':
             case '5':
                  $Q= $queryBuilder->select('u, refW, w')
-                    ->from('KC\Entity\User\User', 'u')
+                    ->from('\Core\Domain\Entity\User\User', 'u')
                     ->leftJoin('u.refUserWebsite', 'refW')
                     ->leftJoin('refW.refUsersWebsite', 'w')
                     ->setParameter(1, $userId)
@@ -265,7 +265,7 @@ class User extends \Core\Domain\Entity\User\User
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u')
-            ->from('KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->setParameter(1, $email)
             ->where('u.email = ?1')
             ->setParameter(2, '0')
@@ -553,7 +553,7 @@ class User extends \Core\Domain\Entity\User\User
                 } else if ($flag==1) {
                     $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
                     $query = $queryBuilder->select('o.id')
-                        ->from('\KC\Entity\Offer', 'o')
+                        ->from('\Core\Domain\Entity\Offer', 'o')
                         ->where('o.authorId=' . $id);
                     $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                     if (count($offers) > 0) {
@@ -573,7 +573,7 @@ class User extends \Core\Domain\Entity\User\User
    
                     $pageQueryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
                     $query = $pageQueryBuilder->select('pg.id')
-                        ->from('\KC\Entity\Page', 'pg')
+                        ->from('\Core\Domain\Entity\Page', 'pg')
                         ->where('pg.contentManagerId=' . $id);
                     $page = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                    
@@ -595,7 +595,7 @@ class User extends \Core\Domain\Entity\User\User
 
                     $articleQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
                     $query = $articleQueryBuilder->select('art.id')
-                        ->from('\KC\Entity\Articles', 'art')
+                        ->from('\Core\Domain\Entity\Articles', 'art')
                         ->where('art.authorid=' . $id);
                     $art = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -617,7 +617,7 @@ class User extends \Core\Domain\Entity\User\User
 
                     $shopsQueryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
                     $query = $shopsQueryBuilder->select('shop.id, shop.name')
-                        ->from('\KC\Entity\Shop', 'shop')
+                        ->from('\Core\Domain\Entity\Shop', 'shop')
                         ->where('shop.contentManagerId=' . $id);
                     $shops = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         
@@ -647,7 +647,7 @@ class User extends \Core\Domain\Entity\User\User
         $entityManagerUser  = \Zend_Registry::get('emUser');
         $queryBuilder  = $entityManagerUser->createQueryBuilder();
         $query = $queryBuilder->select('u.id')
-            ->from('\KC\Entity\User\UserSession', 'u')
+            ->from('\Core\Domain\Entity\User\UserSession', 'u')
             ->orderBy('u.id', 'DESC')
             ->setMaxResults(1);
         $q = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -669,7 +669,7 @@ class User extends \Core\Domain\Entity\User\User
         //return $data =  Doctrine::getTable("Role")->findAll()->toArray();
         $queryBuilder  = $entityManagerUser->createQueryBuilder();
         $query = $queryBuilder->select('r')
-            ->from('KC\Entity\User\Role', 'r')
+            ->from('\Core\Domain\Entity\User\Role', 'r')
             ->setParameter(1, \Auth_StaffAdapter::getIdentity()->users->id)
             ->where('r.id >= ?1');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -696,7 +696,7 @@ class User extends \Core\Domain\Entity\User\User
         $entityManagerUser  = \Zend_Registry::get('emUser');
         $queryBuilder  = $entityManagerUser->createQueryBuilder();
         $query = $queryBuilder->select('u.id, u.firstName as fname,u.lastName as lname, r.id as role')
-            ->from('\KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->leftJoin('u.refUserWebsite', 'rf')
             ->leftJoin('rf.refUsersWebsite', 'w')
             ->leftJoin("u.users", "r")
@@ -717,7 +717,7 @@ class User extends \Core\Domain\Entity\User\User
         $entityManagerUser  = \Zend_Registry::get('emUser');
         $queryBuilder  = $entityManagerUser->createQueryBuilder();
         $query = $queryBuilder->select('u.firstName as firstName')
-            ->from('\KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->leftJoin("u.users", "r")
             ->where('u.deleted ='. $for)
             ->andWhere('r.id >='. \Auth_StaffAdapter::getIdentity()->users->id)
@@ -743,7 +743,7 @@ class User extends \Core\Domain\Entity\User\User
         $srh = $params['searchtext'];
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $qb = $queryBuilder
-            ->from('KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->leftJoin("u.users", "r")
             ->leftJoin('u.profileimage', 'p')
             ->where('u.deleted = 0')
@@ -777,7 +777,7 @@ class User extends \Core\Domain\Entity\User\User
         $srh = $params['searchtext'];
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $qb = $queryBuilder
-            ->from('KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->leftJoin("u.users", "r")
             ->leftJoin('u.profileimage', 'p')
             ->where('u.deleted = 1')
@@ -810,7 +810,7 @@ class User extends \Core\Domain\Entity\User\User
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
             ->select('u.id,u.firstName as fname,u.lastName as lname')
-            ->from('\KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->leftJoin('u.refUserWebsite', 'rf')
             ->leftJoin('rf.refUsersWebsite', 'w')
             ->where($queryBuilder->expr()->eq('u.deleted', '0'))
@@ -826,7 +826,7 @@ class User extends \Core\Domain\Entity\User\User
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('s')
-            ->from('KC\Entity\Shop', 's')
+            ->from('\Core\Domain\Entity\Shop', 's')
             ->where($queryBuilder->expr()->eq('s.name', $name))
             ->setMaxResults(1);
         $Shop = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -860,7 +860,7 @@ class User extends \Core\Domain\Entity\User\User
         $SP = $selctedshop!='' ? $selctedshop: 0;
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s.name as name,s.id as id')
-            ->from('\KC\Entity\Shop', 's')
+            ->from('\Core\Domain\Entity\Shop', 's')
             ->where($queryBuilder->expr()->eq('s.deleted', '0'))
             ->andWhere($queryBuilder->expr()->like('s.name', $queryBuilder->expr()->literal($keyword . '%')))
             ->andWhere($queryBuilder->expr()->notIn('s.id', $SP))
@@ -890,7 +890,7 @@ class User extends \Core\Domain\Entity\User\User
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('o, c')
-            ->from('KC\Entity\Interestingcategory', 'o')
+            ->from('\Core\Domain\Entity\Interestingcategory', 'o')
             ->leftJoin('o.category', 'c')
             ->where("o.userId=".$id);
         $userFevoriteCat = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -902,14 +902,14 @@ class User extends \Core\Domain\Entity\User\User
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('Count(o.id) as MaxOffers, o.authorId, o.authorName')
-            ->from('\KC\Entity\Offer', 'o')
+            ->from('\Core\Domain\Entity\Offer', 'o')
             ->groupBy("o.authorName")
             ->orderBy('MaxOffers', 'DESC');
         $Userdata = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u, rf, w, pi')
-            ->from('\KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->leftJoin('u.refUserWebsite', 'rf')
             ->leftJoin('rf.refUsersWebsite', 'w')
             ->leftJoin("u.profileimage", "pi")
@@ -923,7 +923,7 @@ class User extends \Core\Domain\Entity\User\User
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u, rf, w, pi')
-            ->from('\KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->leftJoin('u.refUserWebsite', 'rf')
             ->leftJoin('rf.refUsersWebsite', 'w')
             ->leftJoin("u.profileimage", "pi")
@@ -936,7 +936,7 @@ class User extends \Core\Domain\Entity\User\User
     {
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('c.name, c.permaLink, ic.id')
-            ->from('\KC\Entity\Interestingcategory', 'ic')
+            ->from('\Core\Domain\Entity\Interestingcategory', 'ic')
             ->leftJoin("ic.category", "c")
             ->where($queryBuilder->expr()->eq('ic.userId', $uId))
             ->andWhere($queryBuilder->expr()->eq('c.deleted', '0'));
@@ -950,7 +950,7 @@ class User extends \Core\Domain\Entity\User\User
         if (intval($id) > 0) {
             $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
             $query = $queryBuilder->select('u.slug')
-                ->from('\KC\Entity\User\User', 'u')
+                ->from('\Core\Domain\Entity\User\User', 'u')
                 ->leftJoin("u.profileimage", "pi")
                 ->where($queryBuilder->expr()->eq('u.id', $id));
             $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -966,7 +966,7 @@ class User extends \Core\Domain\Entity\User\User
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u.slug')
-            ->from('\KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->leftJoin('u.refUserWebsite', 'rf')
             ->leftJoin('rf.refUsersWebsite', 'w')
             ->where($queryBuilder->expr()->eq('u.deleted', '0'))
@@ -980,7 +980,7 @@ class User extends \Core\Domain\Entity\User\User
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u.firstName, u.lastName')
-            ->from('\KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->where($queryBuilder->expr()->eq('u.id', $uId));
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (!empty($data)) {
@@ -995,7 +995,7 @@ class User extends \Core\Domain\Entity\User\User
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u.id, u.firstName, u.lastName, u.deleted')
-            ->from('\KC\Entity\User\User', 'u');
+            ->from('\Core\Domain\Entity\User\User', 'u');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }

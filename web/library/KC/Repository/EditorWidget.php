@@ -46,7 +46,7 @@ class EditorWidget extends \Core\Domain\Entity\EditorWidget
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
             ->select('ew')
-            ->from('KC\Entity\EditorWidget', 'ew')
+            ->from('\Core\Domain\Entity\EditorWidget', 'ew')
             ->where('ew.type ='.$entityManagerLocale->expr()->literal($pageType));
         $editorWidgetData = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $editorWidgetData;

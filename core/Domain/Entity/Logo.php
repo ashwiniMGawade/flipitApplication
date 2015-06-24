@@ -5,30 +5,30 @@ use Doctrine\ORM\Mapping AS ORM;
 /**
  * @ORM\Entity
  */
-class Logo extends \KC\Entity\Image
+class Logo extends \Core\Domain\Entity\Image
 {
     /**
-     * @ORM\OneToOne(targetEntity="KC\Entity\Offer", mappedBy="logo")
+     * @ORM\OneToOne(targetEntity="Core\Domain\Entity\Offer", mappedBy="logo")
      */
     protected $offer;
 
     /**
-     * @ORM\OneToOne(targetEntity="KC\Entity\Page", mappedBy="logo")
+     * @ORM\OneToOne(targetEntity="Core\Domain\Entity\Page", mappedBy="logo")
      */
     protected $page;
 
     /**
-     * @ORM\OneToOne(targetEntity="KC\Entity\SeenIn", mappedBy="logo")
+     * @ORM\OneToOne(targetEntity="Core\Domain\Entity\SeenIn", mappedBy="logo")
      */
     protected $seenin;
 
     /**
-     * @ORM\OneToOne(targetEntity="KC\Entity\Shop", mappedBy="logo")
+     * @ORM\OneToOne(targetEntity="Core\Domain\Entity\Shop", mappedBy="logo")
      */
     protected $shop;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Page", mappedBy="homepageimage")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Page", mappedBy="homepageimage")
      */
     protected $homepageimage;
 

@@ -55,7 +55,7 @@ class ExcludedKeyword extends \Core\Domain\Entity\ExcludedKeyword
     public static function getKeywordList($params)
     {
         $request  = \DataTable_Helper::createSearchRequest($params, array('id','keyword', 'action', 'created_at'));
-        $qb = \Zend_Registry::get('emLocale')->createQueryBuilder()->from('KC\Entity\ExcludedKeyword', 'e');
+        $qb = \Zend_Registry::get('emLocale')->createQueryBuilder()->from('\Core\Domain\Entity\ExcludedKeyword', 'e');
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
             ->setQueryBuilder($qb)

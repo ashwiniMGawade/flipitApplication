@@ -17,7 +17,7 @@ class PopularVouchercodes extends \Core\Domain\Entity\PopularVouchercodes
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('p')
-        ->from('KC\Entity\PopularCode', 'p')
+        ->from('\Core\Domain\Entity\PopularCode', 'p')
         ->leftJoin('p.popularcode', 'offer')
         ->where('offer.deleted = 0')
         ->andWhere('offer.offline = 0')
@@ -34,7 +34,7 @@ class PopularVouchercodes extends \Core\Domain\Entity\PopularVouchercodes
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('p.id,o.title,p.type,p.position,o.id as offerId')
-        ->from('KC\Entity\PopularVouchercodes', 'p')
+        ->from('\Core\Domain\Entity\PopularVouchercodes', 'p')
         ->leftJoin('p.offer', 'o')
         ->orderBy('p.position', 'ASC');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -48,7 +48,7 @@ class PopularVouchercodes extends \Core\Domain\Entity\PopularVouchercodes
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('o')
-        ->from('KC\Entity\Offer', 'o')
+        ->from('\Core\Domain\Entity\Offer', 'o')
         ->where('o.title = '."'".$title."'")
         ->setmaxResults(1);
         $Offer = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -60,7 +60,7 @@ class PopularVouchercodes extends \Core\Domain\Entity\PopularVouchercodes
             //check offer exist or not
             $query = $queryBuilder
             ->select('px')
-            ->from('KC\Entity\PopularVouchercodes', 'px')
+            ->from('\Core\Domain\Entity\PopularVouchercodes', 'px')
             ->leftJoin('px.offer', 'offer')
             ->where('offer.id ='.$Offer[0]['id']);
             $pc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -71,7 +71,7 @@ class PopularVouchercodes extends \Core\Domain\Entity\PopularVouchercodes
                 //find last postion  from database
                 $query = $queryBuilder
                 ->select('p.position')
-                ->from('KC\Entity\PopularVouchercodes', 'p')
+                ->from('\Core\Domain\Entity\PopularVouchercodes', 'p')
                 ->orderBy('p.position', 'DESC')
                 ->setMaxResults(1);
                 $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -130,7 +130,7 @@ class PopularVouchercodes extends \Core\Domain\Entity\PopularVouchercodes
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('p.id,o.title,o.couponCode as couponcode,o.exclusiveCode as exclusivecode,o.discount,o.discountvalueType,s.id as shopId, s.name as shopName,s.permaLink,l.path,l.name,p.type,p.position')
-        ->from('KC\Entity\PopularVouchercodes', 'p')
+        ->from('\Core\Domain\Entity\PopularVouchercodes', 'p')
         ->leftJoin('p.offer', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('s.logo', 'l')
@@ -149,7 +149,7 @@ class PopularVouchercodes extends \Core\Domain\Entity\PopularVouchercodes
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('o.title,o.Visability,o.couponCodeType,o.discountType,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.startDate as startdate,o.endDate as enddate,o.discountvalueType,s.name as shopName,s.permaLink,s.views,l.name, l.path')
-        ->from('KC\Entity\Offer', 'o')
+        ->from('\Core\Domain\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('s.logo', 'l')
         ->setParameter(1, "MEM")
@@ -175,7 +175,7 @@ class PopularVouchercodes extends \Core\Domain\Entity\PopularVouchercodes
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('p.id,p.type,p.position,p.specialOfferId,o.title,o.Visability,o.discountType,o.exclusiveCode,o.discount,o.discountvalueType,s.name as shopName,s.permaLink,s.views,c.name,c.permaLink,i.name, i.path')
-        ->from('KC\Entity\SpecialList', 'p')
+        ->from('\Core\Domain\Entity\SpecialList', 'p')
         ->leftJoin('p.offer', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('o.categoryoffres', 'category')
@@ -195,7 +195,7 @@ class PopularVouchercodes extends \Core\Domain\Entity\PopularVouchercodes
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('p')
-        ->from('KC\Entity\PopularVouchercodes', 'p')
+        ->from('\Core\Domain\Entity\PopularVouchercodes', 'p')
         ->where('p.position = '.$pos);
         $PrevPc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         //change position of prev element with current
@@ -227,7 +227,7 @@ class PopularVouchercodes extends \Core\Domain\Entity\PopularVouchercodes
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('p')
-        ->from('KC\Entity\PopularVouchercodes', 'p')
+        ->from('\Core\Domain\Entity\PopularVouchercodes', 'p')
         ->where('p.position = '.$pos);
         $PrevPc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         //change position of next element with current

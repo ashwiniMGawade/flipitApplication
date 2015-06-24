@@ -50,7 +50,7 @@ class MoneysavingArticle
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Articles", inversedBy="articles")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Articles", inversedBy="articles")
      * @ORM\JoinColumn(name="articleId", referencedColumnName="id", onDelete="restrict")
      */
     protected $moneysaving;

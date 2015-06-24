@@ -8,7 +8,7 @@ class Vote extends \Core\Domain\Entity\Votes
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v')
-            ->from('KC\Entity\Votes', 'v')
+            ->from('\Core\Domain\Entity\Votes', 'v')
             ->setParameter(1, $entityManagerLocale->find('KC\Entity\Offer', $idOffer))
             ->where('v.offer = ?1')
             ->setParameter(2, '0')
@@ -50,7 +50,7 @@ class Vote extends \Core\Domain\Entity\Votes
         $idOffer = $params['id'];
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('v')
-            ->from('KC\Entity\Votes', 'v')
+            ->from('\Core\Domain\Entity\Votes', 'v')
             ->setParameter(1, $entityManagerLocale->find('KC\Entity\Offer', $idOffer))
             ->where('v.offer = ?1')
             ->setParameter(2, '0')
@@ -82,7 +82,7 @@ class Vote extends \Core\Domain\Entity\Votes
 
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('count(v) as cnt')
-            ->from('KC\Entity\Votes', 'v')
+            ->from('\Core\Domain\Entity\Votes', 'v')
             ->setParameter(1, $entityManagerLocale->find('KC\Entity\Offer', $idOffer))
             ->where('v.offer = ?1')
             ->setParameter(2, '0')
@@ -93,7 +93,7 @@ class Vote extends \Core\Domain\Entity\Votes
 
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('count(v) as cnt')
-            ->from('KC\Entity\Votes', 'v')
+            ->from('\Core\Domain\Entity\Votes', 'v')
             ->setParameter(1, $entityManagerLocale->find('KC\Entity\Offer', $idOffer))
             ->where('v.offer = ?1')
             ->setParameter(2, '0')
@@ -141,7 +141,7 @@ class Vote extends \Core\Domain\Entity\Votes
         # check for previous vote from same ip
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('vt.id')
-            ->from('KC\Entity\Votes', 'vt')
+            ->from('\Core\Domain\Entity\Votes', 'vt')
             ->setParameter(1, $entityManagerLocale->find('KC\Entity\Offer', $offer))
             ->where('vt.offer = ?1')
             ->setParameter(2, '0')

@@ -7,7 +7,7 @@ class Website extends \Core\Domain\Entity\User\Website
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('w.id, w.name, w.status')
-            ->from('KC\Entity\User\Website', 'w')
+            ->from('\Core\Domain\Entity\User\Website', 'w')
             ->setParameter(1, '0')
             ->where('w.deleted = ?1');
         $websites = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -19,7 +19,7 @@ class Website extends \Core\Domain\Entity\User\Website
         $websiteId =  \FrontEnd_Helper_viewHelper::sanitize($websiteId);
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('w.id, w.name, w.url, w.chain')
-            ->from('KC\Entity\User\Website', 'w')
+            ->from('\Core\Domain\Entity\User\Website', 'w')
             ->setParameter(1, '0')
             ->where('w.deleted = ?1');
 
@@ -48,7 +48,7 @@ class Website extends \Core\Domain\Entity\User\Website
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('w.status')
-            ->from('KC\Entity\User\Website', 'w')
+            ->from('\Core\Domain\Entity\User\Website', 'w')
             ->setParameter(1, $websiteName)
             ->where('w.name = ?1');
         $localeStatus = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

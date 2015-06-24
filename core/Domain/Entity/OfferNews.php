@@ -61,7 +61,7 @@ class OfferNews
     protected $deleted;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="offerNews")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Shop", inversedBy="offerNews")
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id")
      */
     protected $shop;

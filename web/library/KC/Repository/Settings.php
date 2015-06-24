@@ -21,7 +21,7 @@ class Settings extends \Core\Domain\Entity\Settings
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s.name,s.value')
-            ->from('KC\Entity\Settings', 's')
+            ->from('\Core\Domain\Entity\Settings', 's')
             ->setParameter(1, $settingsName.'%')
             ->where($queryBuilder->expr()->like('s.name', '?1'));
         $aboutPageSettings = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -32,7 +32,7 @@ class Settings extends \Core\Domain\Entity\Settings
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s.value')
-            ->from('KC\Entity\Settings', 's')
+            ->from('\Core\Domain\Entity\Settings', 's')
             ->where($queryBuilder->expr()->eq('s.name', $queryBuilder->expr()->literal($sendersFieldName)));
         $emailSettings = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return !empty($emailSettings) ? $emailSettings[0]['value'] : '';
@@ -97,7 +97,7 @@ class Settings extends \Core\Domain\Entity\Settings
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s')
-            ->from('KC\Entity\Settings', 's');
+            ->from('\Core\Domain\Entity\Settings', 's');
         $getAll = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $data = array() ;
         foreach ($getAll as $val) {

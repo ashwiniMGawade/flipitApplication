@@ -10,7 +10,7 @@ class Footer extends \Core\Domain\Entity\Footer
             # create object of previous data
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->select('f')
-                    ->from('KC\Entity\Footer', 'f')
+                    ->from('\Core\Domain\Entity\Footer', 'f')
                     ->where('f.id = '.$retVal);
             $footer = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             return $footer ;
@@ -66,7 +66,7 @@ class Footer extends \Core\Domain\Entity\Footer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('f.id,f.topFooter,f.middleColumn1,f.middleColumn2, f.middleColumn3, f.middleColumn4, f.bottomFooter')
-        ->from('KC\Entity\Footer', 'f')
+        ->from('\Core\Domain\Entity\Footer', 'f')
         ->where('f.deleted = 0')
         ->setMaxResults(1);
         $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

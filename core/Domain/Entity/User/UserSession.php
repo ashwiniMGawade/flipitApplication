@@ -30,7 +30,7 @@ class UserSession
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\User\User", inversedBy="user")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\User\User", inversedBy="user")
      * @ORM\JoinColumn(name="userId", referencedColumnName="id")
      */
     protected $usersession;

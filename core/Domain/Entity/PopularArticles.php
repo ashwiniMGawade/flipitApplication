@@ -36,7 +36,7 @@ class PopularArticles
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Articles", inversedBy="populararticles")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Articles", inversedBy="populararticles")
      * @ORM\JoinColumn(name="articleId", referencedColumnName="id")
      */
     protected $articles;

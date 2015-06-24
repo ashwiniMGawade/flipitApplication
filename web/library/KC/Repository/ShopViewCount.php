@@ -11,7 +11,7 @@ class ShopViewCount extends \Core\Domain\Entity\ShopViewCount
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $shopClick = $queryBuilder
             ->select('count(sv) as ShopViewCountExists')
-            ->from('KC\Entity\ShopViewCount', 'sv')
+            ->from('\Core\Domain\Entity\ShopViewCount', 'sv')
             ->where('sv.deleted=0')
             ->andWhere('sv.onclick!=0')
             ->andWhere('sv.shop='.$shopId)
@@ -43,7 +43,7 @@ class ShopViewCount extends \Core\Domain\Entity\ShopViewCount
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $shopOnload = $queryBuilder
             ->select('count(sv) as ShopViewCountExists')
-            ->from('KC\Entity\ShopViewCount', 'sv')
+            ->from('\Core\Domain\Entity\ShopViewCount', 'sv')
             ->where('sv.deleted=0')
             ->andWhere('sv.onload!=0')
             ->andWhere('sv.shop='.$shopId)
@@ -87,7 +87,7 @@ class ShopViewCount extends \Core\Domain\Entity\ShopViewCount
         if (!empty($offers)) {
             $dataOffer = $queryBuilder
                 ->select("count(v) as amountclicks")
-                ->from('KC\Entity\ViewCount', 'v')
+                ->from('\Core\Domain\Entity\ViewCount', 'v')
                 ->where($queryBuilder->expr()->in('v.viewcount', $offers[0]))
                 ->andWhere($queryBuilder->expr()->eq('v.onClick', 1))
                 ->andWhere(
@@ -109,7 +109,7 @@ class ShopViewCount extends \Core\Domain\Entity\ShopViewCount
 
         $data = \Zend_Registry::get('emLocale')->createQueryBuilder()
             ->select("count(s) as amountclicks")
-            ->from('KC\Entity\ShopViewCount', 's')
+            ->from('\Core\Domain\Entity\ShopViewCount', 's')
             ->where('s.deleted = 0')
             ->where('s.shop = '.$shopId)
             ->andWhere(
@@ -159,7 +159,7 @@ class ShopViewCount extends \Core\Domain\Entity\ShopViewCount
         
         $data = \Zend_Registry::get('emLocale')->createQueryBuilder()
             ->select("count(s) as counts")
-            ->from('KC\Entity\ShopViewCount', 's')
+            ->from('\Core\Domain\Entity\ShopViewCount', 's')
             ->where('s.deleted = 0')
             ->andWhere('s.shop = '.$shopId)
             ->getQuery()
@@ -176,7 +176,7 @@ class ShopViewCount extends \Core\Domain\Entity\ShopViewCount
         $date = date($format);
         $allOffers = $queryBuilder
             ->select('o.id,o.totalViewcount as clicks')
-            ->from('KC\Entity\Offer', 'o')
+            ->from('\Core\Domain\Entity\Offer', 'o')
             ->where('o.deleted = 0')
             ->andWhere($queryBuilder->expr()->eq('o.shopOffers', $queryBuilder->expr()->literal($shopId)))
             ->andWhere($queryBuilder->expr()->gt('o.endDate', $queryBuilder->expr()->literal($date)))
@@ -206,7 +206,7 @@ class ShopViewCount extends \Core\Domain\Entity\ShopViewCount
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $data = $queryBuilder
            ->select('s.totalviewcount as clicks')
-           ->from('KC\Entity\Shop', 's')
+           ->from('\Core\Domain\Entity\Shop', 's')
            ->where('s.deleted = 0')
            ->andWhere('s.id = '.$shopId)
            ->getQuery()

@@ -82,7 +82,7 @@ class Varnish extends \Core\Domain\Entity\Varnish
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v.id')
-            ->from('KC\Entity\Varnish', 'v')
+            ->from('\Core\Domain\Entity\Varnish', 'v')
             ->where($queryBuilder->expr()->eq('v.url', $queryBuilder->expr()->literal(rtrim($url, '/'))))
             ->andWhere("v.status = 'queue'")
             ->andWhere(
@@ -98,7 +98,7 @@ class Varnish extends \Core\Domain\Entity\Varnish
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('count(v.id) as Vcount')
-            ->from('KC\Entity\Varnish', 'v');
+            ->from('\Core\Domain\Entity\Varnish', 'v');
         $varnishUrlsCount = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return !empty($varnishUrlsCount) ? $varnishUrlsCount[0]['Vcount'] : 0;
     }
@@ -109,7 +109,7 @@ class Varnish extends \Core\Domain\Entity\Varnish
         $currentTime = FrontEnd_Helper_viewHelper::convertCurrentTimeToServerTime();
         $refreshUrls = $queryBuilder
             ->select('v')
-            ->from('KC\Entity\Varnish', 'v')
+            ->from('\Core\Domain\Entity\Varnish', 'v')
             ->andWhere(
                 $queryBuilder->expr()->lte('v.refresh_time', $queryBuilder->expr()->literal($currentTime))
             )

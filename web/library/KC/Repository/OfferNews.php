@@ -98,7 +98,7 @@ class OfferNews extends \Core\Domain\Entity\OfferNews
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $data  = $queryBuilder->select("s,on")
-                ->from('KC\Entity\OfferNews', 'on')
+                ->from('\Core\Domain\Entity\OfferNews', 'on')
                 ->leftJoin("on.shop", "s")
                 ->where("on.id= ". $id)
                 ->getQuery()

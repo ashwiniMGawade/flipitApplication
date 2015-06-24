@@ -37,7 +37,7 @@ class PopularCategory extends \Core\Domain\Entity\PopularCategory
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $data = $queryBuilder
             ->select('p.id,o.name,p.type,p.position,IDENTITY(p.category) as categoryId')
-            ->from('KC\Entity\PopularCategory', 'p')
+            ->from('\Core\Domain\Entity\PopularCategory', 'p')
             ->leftJoin('p.category', 'o')
             ->where('o.deleted=0')
             ->orderBy('p.position', 'ASC')
@@ -53,7 +53,7 @@ class PopularCategory extends \Core\Domain\Entity\PopularCategory
         $title = addslashes($title);
         $catg = $queryBuilder
             ->select('c')
-            ->from('KC\Entity\Category', 'c')
+            ->from('\Core\Domain\Entity\Category', 'c')
             ->where($queryBuilder->expr()->eq('c.name', $queryBuilder->expr()->literal($title)))
             ->setMaxResults(1)
             ->getQuery()
@@ -72,7 +72,7 @@ class PopularCategory extends \Core\Domain\Entity\PopularCategory
                 //find last postion  from database
                 $data = $queryBuilder
                     ->select('p.position')
-                    ->from('KC\Entity\PopularCategory', 'p')
+                    ->from('\Core\Domain\Entity\PopularCategory', 'p')
                     ->orderBy('p.position', 'DESC')
                     ->setMaxResults(1)
                     ->getQuery()

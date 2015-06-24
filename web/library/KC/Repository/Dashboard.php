@@ -69,7 +69,7 @@ class Dashboard extends \Core\Domain\Entity\Dashboard
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('d')
-            ->from('\KC\Entity\Dashboard', 'd');
+            ->from('\Core\Domain\Entity\Dashboard', 'd');
         $getData = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $getData;
 
@@ -85,7 +85,7 @@ class Dashboard extends \Core\Domain\Entity\Dashboard
         try {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->select('d.'.$name)
-                ->from('\KC\Entity\Dashboard', 'd');
+                ->from('\Core\Domain\Entity\Dashboard', 'd');
             $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             return $data[$name];
 
@@ -113,7 +113,7 @@ class Dashboard extends \Core\Domain\Entity\Dashboard
     ) {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('d')
-            ->from('\KC\Entity\Dashboard', 'd');
+            ->from('\Core\Domain\Entity\Dashboard', 'd');
         $checkData = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (empty($checkData)) {
             $dashboardAdd = new \KC\Entity\Dashboard();

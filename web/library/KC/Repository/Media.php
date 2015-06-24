@@ -522,7 +522,7 @@ class Media extends \Core\Domain\Entity\Media
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         if ($id) {
             $sel = $queryBuilder->select('m, mi')
-            ->from('KC\Entity\Media', 'm')
+            ->from('\Core\Domain\Entity\Media', 'm')
             ->leftJoin('m.mediaimage', 'mi')
             ->where("m.id=". $id)
             ->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

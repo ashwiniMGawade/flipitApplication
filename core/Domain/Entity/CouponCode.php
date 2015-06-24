@@ -26,7 +26,7 @@ class CouponCode
     protected $status;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="couponcode")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Offer", inversedBy="couponcode")
      * @ORM\JoinColumn(name="offerid", referencedColumnName="id")
      */
     protected $offer;

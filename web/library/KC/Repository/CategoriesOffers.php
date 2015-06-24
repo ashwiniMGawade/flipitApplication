@@ -8,7 +8,7 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
         $currentDate = date("Y-m-d H:i");
         $query = $queryBuilder
             ->select('op, o, s, l')
-            ->from('KC\Entity\CategoriesOffers', 'op')
+            ->from('\Core\Domain\Entity\CategoriesOffers', 'op')
             ->leftJoin('op.offers', 'o')
             ->andWhere(
                 "(o.couponCodeType = 'UN' AND (SELECT count(cc.id) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and o.status=1)  > 0)
@@ -47,7 +47,7 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->select('o, p, s, l, c')
-                ->from('KC\Entity\CategoriesOffers', 'p')
+                ->from('\Core\Domain\Entity\CategoriesOffers', 'p')
                 ->leftJoin('p.offers', 'o')
                 ->leftJoin('o.shopOffers', 's')
                 ->leftJoin('s.logo', 'l')
@@ -97,7 +97,7 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->select('o')
-                ->from('KC\Entity\Offer', 'o')
+                ->from('\Core\Domain\Entity\Offer', 'o')
                 ->where('o.id=' . $offerId)
                 ->setMaxResults(1);
             $offer = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -112,7 +112,7 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
             $specialPageOffersQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $specialPageOffersQueryBuilder
                 ->select('sl')
-                ->from('KC\Entity\CategoriesOffers', 'sl')
+                ->from('\Core\Domain\Entity\CategoriesOffers', 'sl')
                 ->where('sl.offers =' . $offerId)
                 ->andWhere('sl.categories =' .$categoryId);
             $categoryOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -126,7 +126,7 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
             $categoryOffersPositionQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $categoryOffersPositionQueryBuilder
                 ->select('p.position')
-                ->from('KC\Entity\CategoriesOffers', 'p')
+                ->from('\Core\Domain\Entity\CategoriesOffers', 'p')
                 ->where('p.categories=' .$categoryId)
                 ->orderBy('p.position', 'DESC')
                 ->setMaxResults(1);
@@ -170,7 +170,7 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
             $queryBuilderSelect = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilderSelect
                 ->select('catoffer')
-                ->from('KC\Entity\CategoriesOffers', 'catoffer')
+                ->from('\Core\Domain\Entity\CategoriesOffers', 'catoffer')
                 ->where('catoffer.categories='. $categoryId)
                 ->orderBy('catoffer.position', 'ASC');
             $newOffersList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -248,7 +248,7 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('p')
-            ->from('KC\Entity\CategoriesOffers', 'p')
+            ->from('\Core\Domain\Entity\CategoriesOffers', 'p')
             ->where('p.deleted = 0')
             ->orderBy('p.position ASC');
         $categoryOffersDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

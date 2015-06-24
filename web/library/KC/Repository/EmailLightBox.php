@@ -11,7 +11,7 @@ class EmailLightBox extends \Core\Domain\Entity\EmailLightBox
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->select('e')
-                ->from('KC\Entity\EmailLightBox', 'e')
+                ->from('\Core\Domain\Entity\EmailLightBox', 'e')
                 ->where('e.id='. $retVal);
             $lightBox = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             return $lightBox[0];

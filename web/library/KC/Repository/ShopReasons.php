@@ -30,7 +30,7 @@ class ShopReasons extends \Core\Domain\Entity\ShopReasons
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('s')
-            ->from('KC\Entity\ShopReasons', 's')
+            ->from('\Core\Domain\Entity\ShopReasons', 's')
             ->where('s.shopid = '.$shopId);
         $shopReasons = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopReasons;

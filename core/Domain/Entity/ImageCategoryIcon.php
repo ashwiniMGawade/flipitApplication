@@ -9,7 +9,7 @@ use \Doctrine\Common\Collections\ArrayCollection;
 /**
  * @ORM\Entity
  */
-class ImageCategoryIcon extends \KC\Entity\Image
+class ImageCategoryIcon extends \Core\Domain\Entity\Image
 {
     
     public function __construct()
@@ -17,15 +17,15 @@ class ImageCategoryIcon extends \KC\Entity\Image
         $this->category = new ArrayCollection();
     }
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Category", mappedBy="categoryicon")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Category", mappedBy="categoryicon")
      */
     protected $category;
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Category", mappedBy="categoryFeaturedImage")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Category", mappedBy="categoryFeaturedImage")
      */
     protected $categoryfeatured;
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Category", mappedBy="categoryHeaderImage")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Category", mappedBy="categoryHeaderImage")
      */
     protected $categoryheader;
 

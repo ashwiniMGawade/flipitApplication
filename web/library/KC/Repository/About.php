@@ -20,7 +20,7 @@ class About extends \Core\Domain\Entity\About
             }
             $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $entityManagerUser->select('about')
-            ->from('KC\Entity\About', 'about')
+            ->from('\Core\Domain\Entity\About', 'about')
             ->setParameter(1, $aboutStatus)
             ->where($entityManagerUser->expr()->in('about.status', '?1'))
             ->setParameter(2, $aboutPageContentIds)

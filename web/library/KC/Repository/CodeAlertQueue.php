@@ -40,7 +40,7 @@ class CodeAlertQueue extends \Core\Domain\Entity\CodeAlertQueue
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('c.shopId')
-        ->from('KC\Entity\CodeAlertQueue', 'c');
+        ->from('\Core\Domain\Entity\CodeAlertQueue', 'c');
         $codeAlertShopIds = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         $visitorsCount = 0;
@@ -48,7 +48,7 @@ class CodeAlertQueue extends \Core\Domain\Entity\CodeAlertQueue
             $queryBuilderfavouriteShopCount = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilderfavouriteShopCount
                 ->select('count(fs.id)')
-                ->from('KC\Entity\FavoriteShop', 'fs')
+                ->from('\Core\Domain\Entity\FavoriteShop', 'fs')
                 ->where('fs.shopId = '.$codeAlertShopId['shopId']);
             $favouriteShopCount = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -75,7 +75,7 @@ class CodeAlertQueue extends \Core\Domain\Entity\CodeAlertQueue
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('c.offerId,c.shopId')
-            ->from('KC\Entity\CodeAlertQueue', 'c')
+            ->from('\Core\Domain\Entity\CodeAlertQueue', 'c')
             ->where('c.deleted = 0');
         $codeAlertOfferIds = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $offers =  array();

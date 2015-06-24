@@ -12,7 +12,7 @@ class ChainItem extends \Core\Domain\Entity\User\ChainItem
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('s')
-            ->from('KC\Entity\Shop', 's')
+            ->from('\Core\Domain\Entity\Shop', 's')
             ->where('s.id ='.$shopId);
         $shop = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if ($shop[0]['id'] > 0) {
@@ -59,7 +59,7 @@ class ChainItem extends \Core\Domain\Entity\User\ChainItem
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
-            ->from('KC\Entity\User\ChainItem', 'c')
+            ->from('\Core\Domain\Entity\User\ChainItem', 'c')
             ->leftJoin('c.website', 'w')
             ->where('c.chainItem ='.$params['id']);
         $request  = \DataTable_Helper::createSearchRequest(
@@ -84,7 +84,7 @@ class ChainItem extends \Core\Domain\Entity\User\ChainItem
             ->select(
                 'c.shopName as shopName,c.permalink,w.name as website,w.url as websiteUrl,c.locale as locale,w.id as websiteId'
             )
-            ->from('KC\Entity\User\ChainItem', 'c')
+            ->from('\Core\Domain\Entity\User\ChainItem', 'c')
             ->leftJoin('c.website', 'w')
             ->where('c.id ='.$id);
         $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -112,7 +112,7 @@ class ChainItem extends \Core\Domain\Entity\User\ChainItem
             ->select(
                 'c.shopName as shopName,c.permalink,w.name as website,w.url as websiteUrl,c.locale as locale,w.id as websiteId'
             )
-            ->from('KC\Entity\User\ChainItem', 'c')
+            ->from('\Core\Domain\Entity\User\ChainItem', 'c')
             ->leftJoin('c.website', 'w')
             ->where('c.chainItem ='.$id);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

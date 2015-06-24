@@ -9,7 +9,7 @@ class Page extends \Core\Domain\Entity\Page
         $currentDate = date('Y-m-d 00:00:00');
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale->select('page, attr, pagewidget, himg')
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->leftJoin('page.pagewidget', 'pagewidget')
             ->leftJoin('page.page', 'attr')
             ->leftJoin('page.pageHeaderImageId', 'himg')
@@ -35,7 +35,7 @@ class Page extends \Core\Domain\Entity\Page
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
             ->select('homepageimage.path, homepageimage.name')
-            ->from('KC\Entity\Page', 'p')
+            ->from('\Core\Domain\Entity\Page', 'p')
             ->leftJoin("p.homepageimage", "homepageimage")
             ->where('p.permalink ='."'".$permalink."'")
             ->andWhere('p.deleted = 0');
@@ -51,14 +51,14 @@ class Page extends \Core\Domain\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page, img, himg')
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->leftJoin('page.logo', 'img')
             ->leftJoin('page.pageHeaderImageId', 'himg')
             ->where('page.permalink ='."'".\FrontEnd_Helper_viewHelper::sanitize($permalink)."'")
             ->andWhere('page.publish = 1')
             ->andWhere('page.pageLock = 0')
             ->andWhere('page.deleted = 0');
-        $pageDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $pageDetails = $query->getQuery()->getSQL(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageDetails;
     }
 
@@ -66,7 +66,7 @@ class Page extends \Core\Domain\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page, img')
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->leftJoin('page.logo', 'img')
             ->where('page INSTANCE OF KC\Entity\OfferListPage')
             ->andWhere('page.deleted = 0');
@@ -79,7 +79,7 @@ class Page extends \Core\Domain\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page')
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, $entityManagerUser->expr()->literal(\FrontEnd_Helper_viewHelper::sanitize($permalink)))
             ->where('page.permalink = ?1')
             ->setParameter(2, 0)
@@ -93,7 +93,7 @@ class Page extends \Core\Domain\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page.content, page.pageTitle')
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, $entityManagerUser->expr()->literal(\FrontEnd_Helper_viewHelper::sanitize($permalink)))
             ->where('page.permalink = ?1')
             ->setParameter(2, 0)
@@ -155,7 +155,7 @@ class Page extends \Core\Domain\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page.id, page.pageTitle as pagetitle')
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->where('page INSTANCE OF KC\Entity\OfferListPage')
             ->setParameter(2, 0)
             ->andWhere('page.deleted = ?2')
@@ -170,7 +170,7 @@ class Page extends \Core\Domain\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page.id, page.pageTitle')
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, 1)
             ->where('page.showPage = ?1')
             ->setParameter(2, 0)
@@ -196,7 +196,7 @@ class Page extends \Core\Domain\Entity\Page
 
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, 0)
             ->where('page.deleted = ?1');
         if ($srhPage != '') {
@@ -244,7 +244,7 @@ class Page extends \Core\Domain\Entity\Page
 
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page.pageTitle, page.created_at, page.updated_at, page.contentManagerName')
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, 1)
             ->where('page.deleted = ?1')
             ->setParameter(2, $srhPage.'%')
@@ -263,7 +263,7 @@ class Page extends \Core\Domain\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page')
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, $tempid)
             ->where('page.pageattributeid = ?1')
             ->setParameter(2, 0)
@@ -278,7 +278,7 @@ class Page extends \Core\Domain\Entity\Page
         $query = $entityManagerUser->select(
             'p, w.title as widgetTtitle, w.id as widgetId, logo, pageHeaderImage, homepageimage, pa'
         )
-            ->from('KC\Entity\Page', 'p')
+            ->from('\Core\Domain\Entity\Page', 'p')
             ->leftJoin('p.logo', 'logo')
             ->leftJoin('p.pageHeaderImageId', 'pageHeaderImage')
             ->leftJoin("p.homepageimage", "homepageimage")
@@ -295,7 +295,7 @@ class Page extends \Core\Domain\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page')
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, 0)
             ->where('page.deleted = ?1')
             ->orderBy('page.id DESC');
@@ -355,7 +355,7 @@ class Page extends \Core\Domain\Entity\Page
         if ($id) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->select('rpw')
-                ->from('KC\Entity\RefPageWidget', 'rpw')
+                ->from('\Core\Domain\Entity\RefPageWidget', 'rpw')
                 ->setParameter(1, $id)
                 ->where('rpw.widget = ?1');
             $refPageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -368,12 +368,12 @@ class Page extends \Core\Domain\Entity\Page
             }
            
             $query = $queryBuilder->select('page')
-                ->from('KC\Entity\Page', 'page')
+                ->from('\Core\Domain\Entity\Page', 'page')
                 ->setParameter(1, $id)
                 ->where('page.id = ?1');
             $pageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             $query = $queryBuilder->select('routePermalink')
-                ->from('KC\Entity\RoutePermalink', 'routePermalink')
+                ->from('\Core\Domain\Entity\RoutePermalink', 'routePermalink')
                 ->setParameter(1, $pageDetails[0]['permalink'])
                 ->where('routePermalink.permalink = ?1');
             $routePermalinkDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -405,7 +405,7 @@ class Page extends \Core\Domain\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page.pageTitle')
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, $type)
             ->where('page.deleted = ?1')
             ->andWhere("page.pageTitle LIKE '$keyword%'");
@@ -422,7 +422,7 @@ class Page extends \Core\Domain\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page')
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, $id)
             ->where('page.id = ?1')
             ->setParameter(2, 0)
@@ -435,7 +435,7 @@ class Page extends \Core\Domain\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page')
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, $id)
             ->where('page.pageattributeid = ?1')
             ->setParameter(2, 0)
@@ -460,7 +460,7 @@ class Page extends \Core\Domain\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page.content, page.pageTitle')
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, $slug)
             ->where('page.slug = ?1')
             ->setParameter(2, 0)
@@ -473,7 +473,7 @@ class Page extends \Core\Domain\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page')
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, 15)
             ->where('page.pageattributeid = ?1')
             ->setParameter(2, 0)
@@ -487,7 +487,7 @@ class Page extends \Core\Domain\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page.id, attribute')
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->leftJoin('page.pageattribute attribute')
             ->setParameter(1, $slug)
             ->where('page.slug = ?1')
@@ -504,7 +504,7 @@ class Page extends \Core\Domain\Entity\Page
             'page.id, page.permalink, page.pageTitle,
             page.metatitle, page.metadescription'
         )
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, $id)
             ->where('page.pageattributeid = ?1')
             ->setParameter(2, 0)
@@ -520,7 +520,7 @@ class Page extends \Core\Domain\Entity\Page
         $query = $entityManagerUser->select(
             'page.id, page.permalink'
         )
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, $id)
             ->where('page.pageattributeid = ?1')
             ->setParameter(2, 0)
@@ -536,7 +536,7 @@ class Page extends \Core\Domain\Entity\Page
         $query = $entityManagerUser->select(
             'page.id, page.permalink, page.pageTitle, page.pageType, page.metadescription, logo.path, logo.name'
         )
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->leftJoin('page.logo logo')
             ->setParameter(1, 'page INSTANCE OF KC\Entity\OfferListPage')
             ->where('page.pageType = ?1')
@@ -553,7 +553,7 @@ class Page extends \Core\Domain\Entity\Page
         $query = $entityManagerUser->select(
             'page.id, page.permalink'
         )
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, 1)
             ->where('page.publish = ?1')
             ->setParameter(2, 0)
@@ -1093,14 +1093,14 @@ class Page extends \Core\Domain\Entity\Page
 
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page')
-            ->from('KC\Entity\Page', 'page')
+            ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, $pageid)
             ->where('page.id = ?1');
         $getPage = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         if (!empty($getPage[0]['permaLink'])) {
             $query = $entityManagerUser->select('page')
-                ->from('KC\Entity\RoutePermalink', 'routePermalink')
+                ->from('\Core\Domain\Entity\RoutePermalink', 'routePermalink')
                 ->setParameter(1, $getPage[0]['permaLink'])
                 ->where('routePermalink.permalink = ?1')
                 ->setParameter(2, 'PG')

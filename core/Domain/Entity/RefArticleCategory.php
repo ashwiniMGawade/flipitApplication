@@ -32,13 +32,13 @@ class RefArticleCategory
     protected $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Articles", inversedBy="refArticleCategory")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Articles", inversedBy="refArticleCategory")
      * @ORM\JoinColumn(name="articleid", referencedColumnName="id")
      */
     protected $articles;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Articlecategory", inversedBy="refArticleCategory")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Articlecategory", inversedBy="refArticleCategory")
      * @ORM\JoinColumn(name="relatedcategoryid", referencedColumnName="id")
      */
     protected $articlecategory;

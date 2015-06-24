@@ -8,7 +8,7 @@ class GlobalExportPassword extends \Core\Domain\Entity\User\GlobalExportPassword
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
             ->select('g.id')
-            ->from('KC\Entity\User\GlobalExportPassword', 'g')
+            ->from('\Core\Domain\Entity\User\GlobalExportPassword', 'g')
             ->where($queryBuilder->expr()->eq('g.exportType', $queryBuilder->expr()->literal($type)));
         $globalExportInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -36,7 +36,7 @@ class GlobalExportPassword extends \Core\Domain\Entity\User\GlobalExportPassword
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
             ->select('g.password')
-            ->from('KC\Entity\User\GlobalExportPassword', 'g')
+            ->from('\Core\Domain\Entity\User\GlobalExportPassword', 'g')
             ->where($queryBuilder->expr()->eq('g.exportType', $queryBuilder->expr()->literal($type)));
         $globalExportInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -53,7 +53,7 @@ class GlobalExportPassword extends \Core\Domain\Entity\User\GlobalExportPassword
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
             ->select('g.password')
-            ->from('KC\Entity\User\GlobalExportPassword', 'g')
+            ->from('\Core\Domain\Entity\User\GlobalExportPassword', 'g')
             ->where($queryBuilder->expr()->eq('g.exportType', $queryBuilder->expr()->literal($type)))
             ->andWhere($queryBuilder->expr()->eq('g.password', $queryBuilder->expr()->literal($password)));
         $globalExportInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

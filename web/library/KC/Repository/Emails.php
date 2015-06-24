@@ -7,7 +7,7 @@ class Emails extends \Core\Domain\Entity\Emails
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $qb = $queryBuilder
-            ->from('KC\Entity\Emails', 'e')
+            ->from('\Core\Domain\Entity\Emails', 'e')
             ->where("e.deleted='0'");
 
         $request  = \DataTable_Helper::createSearchRequest(
@@ -31,7 +31,7 @@ class Emails extends \Core\Domain\Entity\Emails
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('e.header, e.footer, e.body')
-            ->from('KC\Entity\Emails', 'e')
+            ->from('\Core\Domain\Entity\Emails', 'e')
             ->where("e.deleted= 0")
             ->andWhere("e.id=". $id);
         $templatedata = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

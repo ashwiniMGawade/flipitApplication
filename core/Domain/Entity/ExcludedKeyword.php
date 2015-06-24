@@ -41,7 +41,7 @@ class ExcludedKeyword
     protected $updated_at;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\RefExcludedkeywordShop", mappedBy="shops")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\RefExcludedkeywordShop", mappedBy="shops")
      */
     protected $keywords;
 

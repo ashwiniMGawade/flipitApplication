@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * )
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="pageType", length=10, type="string")
- * @ORM\DiscriminatorMap({"offer"="KC\Entity\OfferListPage","default"="KC\Entity\DefaultPage"})
+ * @ORM\DiscriminatorMap({"offer"="Core\Domain\Entity\OfferListPage","default"="Core\Domain\Entity\DefaultPage"})
  */
 class Page
 {
@@ -256,7 +256,7 @@ class Page
     protected $subtitle;
     
     /**
-     * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="page")
+     * @ORM\OneToOne(targetEntity="Core\Domain\Entity\Logo", inversedBy="page")
      * @ORM\JoinColumn(name="pageHeaderImageId", referencedColumnName="id", unique=true)
      */
     protected $pageHeaderImageId;
@@ -271,49 +271,49 @@ class Page
     protected $showinmobilemenu;
 
     /**
-     * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="page")
+     * @ORM\OneToOne(targetEntity="Core\Domain\Entity\Logo", inversedBy="page")
      * @ORM\JoinColumn(name="logoid", referencedColumnName="id", unique=true)
      */
     protected $logo;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\MoneySaving", mappedBy="page")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\MoneySaving", mappedBy="page")
      */
     protected $moneysaving;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\RefOfferPage", mappedBy="offers")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\RefOfferPage", mappedBy="offers")
      */
     protected $pageoffers;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\RefPageWidget", mappedBy="widget")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\RefPageWidget", mappedBy="widget")
      */
     protected $pagewidget;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Shop", mappedBy="shopPage")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Shop", mappedBy="shopPage")
      */
     protected $pages;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\SpecialList", mappedBy="page")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\SpecialList", mappedBy="page")
      */
     protected $specialList;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\PageAttribute", inversedBy="pageattribute")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\PageAttribute", inversedBy="pageattribute")
      * @ORM\JoinColumn(name="pageAttributeId", referencedColumnName="id", onDelete="restrict")
      */
     protected $page;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\SpecialPagesOffers", mappedBy="pages")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\SpecialPagesOffers", mappedBy="pages")
      */
     protected $specialPagesOffers;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Logo", inversedBy="homepageimage")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Logo", inversedBy="homepageimage")
      * @ORM\JoinColumn(name="pageHomeImageId", referencedColumnName="id")
      */
     protected $homepageimage;

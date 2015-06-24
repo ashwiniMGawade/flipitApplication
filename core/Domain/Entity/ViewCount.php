@@ -68,7 +68,7 @@ class ViewCount
     protected $counted = 0;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="offerviewcount")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Offer", inversedBy="offerviewcount")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id", onDelete="restrict")
      */
     protected $viewcount;

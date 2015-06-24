@@ -196,69 +196,69 @@ class Offer
     protected $couponCodeType = "GN";
 
     /**
-     * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="offer")
+     * @ORM\OneToOne(targetEntity="Core\Domain\Entity\Logo", inversedBy="offer")
      * @ORM\JoinColumn(name="offerLogoId", referencedColumnName="id", unique=true)
      */
     protected $logo;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Conversions", mappedBy="offer")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Conversions", mappedBy="offer")
      */
     protected $conversions;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\CouponCode", mappedBy="offer")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\CouponCode", mappedBy="offer")
      */
     protected $couponcode;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\OfferTiles", mappedBy="offer")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\OfferTiles", mappedBy="offer")
      */
     protected $offerTiles;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\PopularCode", mappedBy="popularcode")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\PopularCode", mappedBy="popularcode")
      */
     protected $offer;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\PopularVouchercodes", mappedBy="offer")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\PopularVouchercodes", mappedBy="offer")
      */
     protected $popularVouchercodes;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\RefOfferCategory", mappedBy="offers")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\RefOfferCategory", mappedBy="offers")
      */
     protected $categoryoffres;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\RefOfferPage", mappedBy="refoffers")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\RefOfferPage", mappedBy="refoffers")
      */
     protected $offers;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\TermAndCondition", mappedBy="termandcondition")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\TermAndCondition", mappedBy="termandcondition")
      */
     protected $offertermandcondition;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\ViewCount", mappedBy="viewcount")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\ViewCount", mappedBy="viewcount")
      */
     protected $offerviewcount;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Votes", mappedBy="offer")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Votes", mappedBy="offer")
      */
     protected $votes;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="offer")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Shop", inversedBy="offer")
      * @ORM\JoinColumn(name="shopid", referencedColumnName="id", onDelete="restrict")
      */
     protected $shopOffers;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\Visitor", inversedBy="offer")
+     * @ORM\ManyToMany(targetEntity="Core\Domain\Entity\Visitor", inversedBy="offer")
      * @ORM\JoinTable(
      *     name="favorite_offer",
      *     joinColumns={@ORM\JoinColumn(name="offerId", referencedColumnName="id", nullable=false)},
@@ -268,17 +268,17 @@ class Offer
     protected $visitors;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\FavoriteOffer", mappedBy="offer")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\FavoriteOffer", mappedBy="offer")
      */
     protected $favoriteOffer;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\SpecialPagesOffers", mappedBy="offers")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\SpecialPagesOffers", mappedBy="offers")
      */
     protected $specialPagesOffers;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\CategoriesOffers", mappedBy="offers")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\CategoriesOffers", mappedBy="offers")
      */
     protected $categoriesOffers;
 

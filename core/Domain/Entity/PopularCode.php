@@ -46,7 +46,7 @@ class PopularCode
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="offer")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Offer", inversedBy="offer")
      * @ORM\JoinColumn(name="offerid", referencedColumnName="id", onDelete="restrict")
      */
     protected $popularcode;

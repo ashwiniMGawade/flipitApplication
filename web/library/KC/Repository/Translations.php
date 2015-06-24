@@ -7,7 +7,7 @@ class Translations extends \Core\Domain\Entity\Translations
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('translations')
-        ->from('KC\Entity\Translations', 'translations')
+        ->from('\Core\Domain\Entity\Translations', 'translations')
         ->where('translations.deleted = 0');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
@@ -67,7 +67,7 @@ class Translations extends \Core\Domain\Entity\Translations
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('t')
-        ->from('KC\Entity\Translations', 't')
+        ->from('\Core\Domain\Entity\Translations', 't')
         ->where("t.translationKey = '".$translation['translationKey']."'");
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;

@@ -7,7 +7,7 @@ class DisqusComments extends \Core\Domain\Entity\DisqusComments
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
             ->select('d, dt')
-            ->from('KC\Entity\DisqusThread', 'd')
+            ->from('\Core\Domain\Entity\DisqusThread', 'd')
             ->leftJoin('d.disqusComments', 'dt')
             ->where('d.link like '."'%".$pageUrl."%'");
         $commentInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -32,7 +32,7 @@ class DisqusComments extends \Core\Domain\Entity\DisqusComments
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $commentMaxCreatedDate = $entityManagerLocale
             ->select('max(created) as max')
-            ->from('KC\Entity\DisqusComments', 'd');
+            ->from('\Core\Domain\Entity\DisqusComments', 'd');
         $commentMaxCreatedDate = $commentMaxCreatedDate->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $commentMaxCreatedDate;
     }
@@ -43,7 +43,7 @@ class DisqusComments extends \Core\Domain\Entity\DisqusComments
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $commentThreadIds = $entityManagerLocale
             ->select('c.thread_id')
-            ->from('KC\Entity\DisqusComments', 'c')
+            ->from('\Core\Domain\Entity\DisqusComments', 'c')
             ->where("(SELECT count(dt.id) from KC\Entity\DisqusThread dt where dt.id = c.thread_id) = 0");
         $commentThreadIds = $commentThreadIds->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         foreach ($commentThreadIds as $commentThreadId) {

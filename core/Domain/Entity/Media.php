@@ -66,7 +66,7 @@ class Media
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\MediaImage", inversedBy="media")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\MediaImage", inversedBy="media")
      * @ORM\JoinColumn(name="mediaimageid", referencedColumnName="id")
      */
     protected $mediaimage;

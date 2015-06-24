@@ -9,7 +9,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $popIds = $entityManagerLocale
             ->select('offer.id as popularcode, p.position')
-            ->from('KC\Entity\PopularCode', 'p')
+            ->from('\Core\Domain\Entity\PopularCode', 'p')
             ->leftJoin('p.popularcode offer')
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -17,7 +17,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         foreach($popIds as $popId):
             $popIdsToDelete = $entityManagerLocale
                 ->select('o.id')
-                ->from('KC\Entity\Offer', 'o')
+                ->from('\Core\Domain\Entity\Offer', 'o')
                 ->where('o.id ='.$popId['popularcode'])
                 ->andWhere('o.endDate <'."'".$date."'")
                 ->getQuery()
@@ -37,7 +37,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $data = $queryBuilder
             ->select('o.title as title')
-            ->from('KC\Entity\Offer', 'o')
+            ->from('\Core\Domain\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->where('o.deleted=0')
             ->andWhere('s.deleted = 0')
@@ -64,7 +64,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('o.title as title, o.id as id, o.userGenerated')
-            ->from('KC\Entity\Offer', 'o')
+            ->from('\Core\Domain\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->where('o.deleted = 0')
             ->andWhere('s.deleted = 0')
@@ -91,7 +91,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $data = $queryBuilder
             ->select('p.id,o.title, p.type, p.position,o.id as offerId')
-            ->from('KC\Entity\PopularCode', 'p')
+            ->from('\Core\Domain\Entity\PopularCode', 'p')
             ->leftJoin('p.popularcode', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->where('o.deleted = 0')
@@ -113,7 +113,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $data = $queryBuilder
             ->select('o.title, o.id as offerId, o.couponCodeType,o.extendedOffer,o.startDate,o.endDate,o.extendedUrl,o.couponCode as couponcode ,o.exclusiveCode as exclusivecode ,o.discount,o.discountvalueType,s.name as shopName, s.id as shopId, s.permaLink,l.path,l.name, p.type, p.position')
-            ->from('KC\Entity\PopularCode', 'p')
+            ->from('\Core\Domain\Entity\PopularCode', 'p')
             ->leftJoin('p.popularcode', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->leftJoin('s.logo', 'l')
@@ -145,7 +145,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $data = $queryBuilder
             ->select('p,o,s,l')
-            ->from('KC\Entity\PopularCode', 'p')
+            ->from('\Core\Domain\Entity\PopularCode', 'p')
             ->leftJoin('p.popularcode', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->leftJoin('s.logo', 'l')
@@ -179,7 +179,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $offer = $queryBuilder
             ->select('o')
-            ->from('KC\Entity\Offer', 'o')
+            ->from('\Core\Domain\Entity\Offer', 'o')
             ->where('o.id =' . $id)
             ->setMaxResults(1)
             ->getQuery()
@@ -199,7 +199,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
             $queryBuilderPopularCode = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $pc = $queryBuilderPopularCode
                 ->select('pc')
-                ->from('KC\Entity\PopularCode', 'pc')
+                ->from('\Core\Domain\Entity\PopularCode', 'pc')
                 ->where('pc.popularcode =' . $id)
                 ->getQuery()
                 ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -211,7 +211,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
                 $queryBuilderPosition = \Zend_Registry::get('emLocale')->createQueryBuilder();
                 $data = $queryBuilderPosition
                     ->select('p.position')
-                    ->from('KC\Entity\PopularCode', 'p')
+                    ->from('\Core\Domain\Entity\PopularCode', 'p')
                     ->orderBy('p.position', 'DESC')
                     ->setMaxResults(1)
                     ->getQuery()
@@ -253,7 +253,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
             $queryBuilderPopularOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $offerDetail = $queryBuilderPopularOffer
                 ->select('offer.id')
-                ->from('KC\Entity\PopularCode', 'pcode')
+                ->from('\Core\Domain\Entity\PopularCode', 'pcode')
                 ->leftJoin('pcode.popularcode', 'offer')
                 ->where('pcode.id=' . $id)
                 ->setMaxResults(1)
@@ -284,7 +284,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $newOfferList = $queryBuilder
                 ->select('popularcode')
-                ->from('KC\Entity\PopularCode', 'popularcode')
+                ->from('\Core\Domain\Entity\PopularCode', 'popularcode')
                 ->getQuery()
                 ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             $newPos = 1;

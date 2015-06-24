@@ -61,7 +61,7 @@ class Mainmenu
     protected $position;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="mainmenu")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Image", inversedBy="mainmenu")
      * @ORM\JoinColumn(name="iconId", referencedColumnName="id")
      */
     protected $mainMenuIcon;

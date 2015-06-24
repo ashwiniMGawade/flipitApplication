@@ -46,7 +46,7 @@ class PopularVouchercodes
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="popularVouchercodes")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Offer", inversedBy="popularVouchercodes")
      * @ORM\JoinColumn(name="vaoucherofferid", referencedColumnName="id")
      */
     protected $offer;

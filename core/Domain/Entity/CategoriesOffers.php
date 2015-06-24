@@ -36,13 +36,13 @@ class CategoriesOffers
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="categoriesOffers")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Offer", inversedBy="categoriesOffers")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id")
      */
     protected $offers;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Category", inversedBy="categoriesOffers")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Category", inversedBy="categoriesOffers")
      * @ORM\JoinColumn(name="categoryId", referencedColumnName="id")
      */
     protected $categories;

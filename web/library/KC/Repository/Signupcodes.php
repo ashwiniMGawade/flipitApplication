@@ -8,7 +8,7 @@ class Signupcodes extends \Core\Domain\Entity\Signupcodes
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('p.id, p.entered_uid, p.code,p.created_at')
-            ->from('\KC\Entity\Signupcodes', 'p')
+            ->from('\Core\Domain\Entity\Signupcodes', 'p')
             ->orderBy('p.code', 'ASC');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
@@ -45,7 +45,7 @@ class Signupcodes extends \Core\Domain\Entity\Signupcodes
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->select('p.id')
-                ->from('\KC\Entity\Signupcodes', 'p')
+                ->from('\Core\Domain\Entity\Signupcodes', 'p')
                 ->where('code=' . "'$txt'");
             $pc = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 

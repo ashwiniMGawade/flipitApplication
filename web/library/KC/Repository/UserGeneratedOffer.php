@@ -10,7 +10,7 @@ class UserGeneratedOffer extends \Core\Domain\Entity\Offer
         $searchCoupon = @$parameters["shopCoupon"]!='undefined' ? @$parameters["shopCoupon"] : '';
         $deletedStatus = $parameters['flag'];
         $getOffersQuery = $queryBuilder
-            ->from('KC\Entity\Offer', 'o')
+            ->from('\Core\Domain\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->where('o.deleted ='. $deletedStatus)
             ->andWhere("o.userGenerated = 1")

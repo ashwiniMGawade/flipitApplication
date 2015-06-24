@@ -33,13 +33,13 @@ class RefOfferCategory
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Category", inversedBy="categoryoffres")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Category", inversedBy="categoryoffres")
      * @ORM\JoinColumn(name="categoryId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     protected $categories;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="categoryoffres")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Offer", inversedBy="categoryoffres")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     protected $offers;

@@ -21,7 +21,7 @@ class VisitorKeyword
     protected $keyword;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Visitor", inversedBy="visitorKeyword")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Visitor", inversedBy="visitorKeyword")
      * @ORM\JoinColumn(name="visitorId", referencedColumnName="id")
      */
     protected $visitor;

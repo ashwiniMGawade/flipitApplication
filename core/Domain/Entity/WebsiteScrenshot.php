@@ -5,10 +5,10 @@ use Doctrine\ORM\Mapping AS ORM;
 /**
  * @ORM\Entity
  */
-class WebsiteScrenshot extends \KC\Entity\Image
+class WebsiteScrenshot extends \Core\Domain\Entity\Image
 {
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Shop", mappedBy="screnshot")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Shop", mappedBy="screnshot")
      */
     protected $shop;
 

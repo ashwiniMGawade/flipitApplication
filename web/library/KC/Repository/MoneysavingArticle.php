@@ -18,7 +18,7 @@ class MoneysavingArticle extends \Core\Domain\Entity\MoneysavingArticle
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
         ->select('o.title as title')
-        ->from('KC\Entity\Articles', 'o')
+        ->from('\Core\Domain\Entity\Articles', 'o')
         ->where('o.deleted = '.$flag)
         ->andWhere("o.title LIKE '$keyword%'")
         ->setParameter(1, $codevalues)
@@ -34,7 +34,7 @@ class MoneysavingArticle extends \Core\Domain\Entity\MoneysavingArticle
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
         ->select('p,o')
-        ->from('KC\Entity\MoneysavingArticle', 'p')
+        ->from('\Core\Domain\Entity\MoneysavingArticle', 'p')
         ->leftJoin('p.moneysaving', 'o')
         ->orderBy('p.position', 'ASC');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -47,7 +47,7 @@ class MoneysavingArticle extends \Core\Domain\Entity\MoneysavingArticle
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('a')
-        ->from('KC\Entity\Articles', 'a')
+        ->from('\Core\Domain\Entity\Articles', 'a')
         ->where('a.title =' ."'".$title."'")
         ->setMaxResults(1);
         $article = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -57,7 +57,7 @@ class MoneysavingArticle extends \Core\Domain\Entity\MoneysavingArticle
             $queryBuilderArticle = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilderArticle
             ->select('m')
-            ->from('KC\Entity\MoneysavingArticle', 'm')
+            ->from('\Core\Domain\Entity\MoneysavingArticle', 'm')
             ->where('m.moneysaving =' .$article[0]['id']);
             $pc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -67,7 +67,7 @@ class MoneysavingArticle extends \Core\Domain\Entity\MoneysavingArticle
                 $queryBuilderPosition = \Zend_Registry::get('emLocale')->createQueryBuilder();
                 $query = $queryBuilderPosition
                 ->select('p.position')
-                ->from('KC\Entity\MoneysavingArticle', 'p')
+                ->from('\Core\Domain\Entity\MoneysavingArticle', 'p')
                 ->orderBy('p.position', 'DESC')
                 ->setMaxResults(1);
                 $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -133,7 +133,7 @@ class MoneysavingArticle extends \Core\Domain\Entity\MoneysavingArticle
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('p')
-            ->from('KC\Entity\MoneysavingArticle', 'p')
+            ->from('\Core\Domain\Entity\MoneysavingArticle', 'p')
             ->where('p.position = '.$pos);
         $PrevPc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -163,7 +163,7 @@ class MoneysavingArticle extends \Core\Domain\Entity\MoneysavingArticle
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('p')
-            ->from('KC\Entity\MoneysavingArticle', 'p')
+            ->from('\Core\Domain\Entity\MoneysavingArticle', 'p')
             ->where('p.position = '.$pos);
         $PrevPc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -192,7 +192,7 @@ class MoneysavingArticle extends \Core\Domain\Entity\MoneysavingArticle
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
         ->select('p,o,a')
-        ->from('KC\Entity\MoneysavingArticle', 'p')
+        ->from('\Core\Domain\Entity\MoneysavingArticle', 'p')
         ->leftJoin('p.moneysaving', 'o')
         ->leftJoin('o.articleImage', 'a')
         ->setMaxResults($flag)
@@ -206,7 +206,7 @@ class MoneysavingArticle extends \Core\Domain\Entity\MoneysavingArticle
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
         ->select('a.authorid')
-        ->from('KC\Entity\Articles', 'a')
+        ->from('\Core\Domain\Entity\Articles', 'a')
         ->where('a.id = '.$artId);
         $userId = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $userId;

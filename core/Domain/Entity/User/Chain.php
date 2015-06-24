@@ -31,7 +31,7 @@ class Chain
     protected $updated_at;
 
      /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\User\ChainItem", mappedBy="chainItem")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\User\ChainItem", mappedBy="chainItem")
      */
     protected $chainItem;
 

@@ -46,7 +46,7 @@ class ArticleViewCount
     protected $deleted;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Articles", inversedBy="articleviewcount")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Articles", inversedBy="articleviewcount")
      * @ORM\JoinColumn(name="articleid", referencedColumnName="id")
      */
     protected $articles;

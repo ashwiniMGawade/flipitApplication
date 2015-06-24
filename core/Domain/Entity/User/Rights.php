@@ -41,7 +41,7 @@ class Rights
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\User\Role", inversedBy="rights")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\User\Role", inversedBy="rights")
      * @ORM\JoinColumn(name="roleId", referencedColumnName="id")
      */
     protected $role;

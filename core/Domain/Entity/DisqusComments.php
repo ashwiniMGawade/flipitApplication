@@ -24,7 +24,7 @@ class DisqusComments
 
     /**
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="KC\Entity\DisqusThread", inversedBy="disqusComments")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\DisqusThread", inversedBy="disqusComments")
      * @ORM\JoinColumn(name="thread_id", referencedColumnName="id")
      */
     protected $disqusThread;

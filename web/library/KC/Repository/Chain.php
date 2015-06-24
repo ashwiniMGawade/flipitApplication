@@ -42,7 +42,7 @@ class Chain extends \Core\Domain\Entity\User\Chain
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
 
         $query = $queryBuilder
-            ->from('KC\Entity\User\Chain', 'c')
+            ->from('\Core\Domain\Entity\User\Chain', 'c')
             ->where("c.name LIKE '$srh%'");
         $request  = \DataTable_Helper::createSearchRequest(
             $params,
@@ -84,7 +84,7 @@ class Chain extends \Core\Domain\Entity\User\Chain
         try {
             $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
             $query = $queryBuilder->select('c')
-            ->from('KC\Entity\User\Chain', 'c')
+            ->from('\Core\Domain\Entity\User\Chain', 'c')
             ->where("c.id=" . $id);
             $chainDetail = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             return $chainDetail;
@@ -98,7 +98,7 @@ class Chain extends \Core\Domain\Entity\User\Chain
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
         ->select('c.name as name')
-        ->from('KC\Entity\User\Chain', 'c')
+        ->from('\Core\Domain\Entity\User\Chain', 'c')
         ->where("c.name LIKE '$keyword%'")
         ->orderBy('c.name', 'ASC')
         ->setMaxResults(5);
@@ -111,7 +111,7 @@ class Chain extends \Core\Domain\Entity\User\Chain
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
             ->select("ci.id")
-            ->from('KC\Entity\User\ChainItem', 'c')
+            ->from('\Core\Domain\Entity\User\ChainItem', 'c')
             ->leftJoin('c.chainItem', 'ci')
             ->where('c.id = '.$chainItemId);
         $chainItem = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -123,7 +123,7 @@ class Chain extends \Core\Domain\Entity\User\Chain
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
             ->select("c.name,ci.shopName,ci.permalink,w.name,w.url,ci.locale as locale,ci.shopId as shopId,w.chain")
-            ->from('KC\Entity\User\Chain', 'c')
+            ->from('\Core\Domain\Entity\User\Chain', 'c')
             ->leftJoin('c.chainItem', 'ci')
             ->leftJoin('ci.website', 'w')
             ->where("ci.chainItem =".$chainItem['id'])

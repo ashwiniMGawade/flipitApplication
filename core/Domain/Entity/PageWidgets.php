@@ -41,7 +41,7 @@ class PageWidgets
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Widget", inversedBy="pageWidgets")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Widget", inversedBy="pageWidgets")
      * @ORM\JoinColumn(name="widgetId", referencedColumnName="id")
      */
     protected $widget;

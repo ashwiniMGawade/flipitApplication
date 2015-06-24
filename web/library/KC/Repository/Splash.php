@@ -8,7 +8,7 @@ class Splash extends \Core\Domain\Entity\User\Splash
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
             ->select('s')
-            ->from('\KC\Entity\User\Splash', 's');
+            ->from('\Core\Domain\Entity\User\Splash', 's');
         $splashInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $splashInformation;
     }

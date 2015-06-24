@@ -61,7 +61,7 @@ class OfferTiles
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="offerTiles")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Offer", inversedBy="offerTiles")
      * @ORM\JoinColumn(name="id", referencedColumnName="tilesId")
      */
     protected $offer;

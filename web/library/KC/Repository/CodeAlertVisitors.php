@@ -7,7 +7,7 @@ class CodeAlertVisitors extends \Core\Domain\Entity\CodeAlertVisitors
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('c.visitorId')
-            ->from('KC\Entity\CodeAlertVisitors', 'c')
+            ->from('\Core\Domain\Entity\CodeAlertVisitors', 'c')
             ->where('c.offerId = '.$offerId)
             ->andWhere('c.visitorId = '.$visitorId);
         $visitors = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

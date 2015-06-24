@@ -36,7 +36,7 @@ class ShopHowToChapter
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="howtochapter")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Shop", inversedBy="howtochapter")
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id")
      */
     protected $shop;

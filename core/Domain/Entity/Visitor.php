@@ -150,38 +150,38 @@ class Visitor
     protected $code_alert_send_date;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Conversions", mappedBy="visitor")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Conversions", mappedBy="visitor")
      */
     protected $conversions;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\VisitorKeyword", mappedBy="visitor")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\VisitorKeyword", mappedBy="visitor")
      */
     protected $visitorKeyword;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\VisitorImage", inversedBy="visitor")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\VisitorImage", inversedBy="visitor")
      * @ORM\JoinColumn(name="imageid", referencedColumnName="id")
      */
     protected $visitorimage;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\Offer", mappedBy="visitors")
+     * @ORM\ManyToMany(targetEntity="Core\Domain\Entity\Offer", mappedBy="visitors")
      */
     protected $offer;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\Shop", mappedBy="visitors")
+     * @ORM\ManyToMany(targetEntity="Core\Domain\Entity\Shop", mappedBy="visitors")
      */
     protected $favoriteshops;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\FavoriteOffer", mappedBy="visitor")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\FavoriteOffer", mappedBy="visitor")
      */
     protected $favoriteOffer;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\FavoriteShop", mappedBy="visitor")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\FavoriteShop", mappedBy="visitor")
      */
     protected $favoritevisitorshops;
 

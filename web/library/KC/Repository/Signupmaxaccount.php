@@ -17,7 +17,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('signupmaxaccount.locale')
-            ->from('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+            ->from('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->setParameter(1, 1)
             ->where('signupmaxaccount.id = ?1');
         $localName = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -30,7 +30,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
             'signupmaxaccount.homepagebanner_path, signupmaxaccount.homepagebanner_name,
             signupmaxaccount.homepage_widget_banner_path, signupmaxaccount.homepage_widget_banner_name'
         )
-            ->from('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+            ->from('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->setParameter(1, 1)
             ->where('signupmaxaccount.id = ?1');
         $hoemPageImages = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -43,7 +43,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
             'signupmaxaccount.testemail, signupmaxaccount.showtestimonial,
             signupmaxaccount.testimonial1, signupmaxaccount.testimonial2, signupmaxaccount.testimonial3'
         )
-            ->from('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+            ->from('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->setParameter(1, 1)
             ->where('signupmaxaccount.id = ?1');
         $testimonials = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -53,7 +53,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale->select('signupmaxaccount.emailperlocale')
-            ->from('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+            ->from('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->setParameter(1, 1)
             ->where('signupmaxaccount.id = ?1');
         $email = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -189,7 +189,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('signupmaxaccount')
-            ->from('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+            ->from('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->setParameter(1, 1)
             ->where('signupmaxaccount.id = ?1');
         $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -225,7 +225,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
               p.newsletter_sent_time, p.newletter_scheduled_time
               '.$localeTimezoneValues
           )
-          ->from('KC\Entity\Signupmaxaccount', 'p')
+          ->from('\Core\Domain\Entity\Signupmaxaccount', 'p')
           ->where('p.id = 1');
         $allMaxAccounts = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $allMaxAccounts;
@@ -234,7 +234,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('signupmaxaccount.emailperlocale, signupmaxaccount.id')
-            ->from('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+            ->from('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->setParameter(1, 1)
             ->where('signupmaxaccount.id = ?1');
         $emailMaxAccounts = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -256,7 +256,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('signupmaxaccount.status')
-            ->from('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+            ->from('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->setParameter(1, 1)
             ->where('signupmaxaccount.id = ?1');
         $status = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -275,7 +275,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('signupmaxaccount')
-            ->from('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+            ->from('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->setParameter(1, 1)
             ->where('signupmaxaccount.id = ?1');
         $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -298,7 +298,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
         $status = false;
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('p.id,p.email_confirmation')
-        ->from('KC\Entity\Signupmaxaccount', 'p')
+        ->from('\Core\Domain\Entity\Signupmaxaccount', 'p')
         ->setParameter(1, 1)
         ->where('p.id = ?1');
         $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -327,7 +327,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('p.id,p.email_header,p.email_footer')
-        ->from('KC\Entity\Signupmaxaccount', 'p')
+        ->from('\Core\Domain\Entity\Signupmaxaccount', 'p')
         ->setMaxResults(1);
         $emailHeaderFooter = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return  $emailHeaderFooter;
@@ -336,7 +336,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('p')
-        ->from('KC\Entity\Signupmaxaccount', 'p')
+        ->from('\Core\Domain\Entity\Signupmaxaccount', 'p')
         ->setParameter(1, 1)
         ->where('p.id = ?1');
         $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -362,7 +362,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
             if ($result['status'] == '200') {
                 $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
                 $query = $entityManagerUser->select('s.homepagebanner_name, s.homepagebanner_path')
-                    ->from('KC\Entity\Signupmaxaccount', 's')
+                    ->from('\Core\Domain\Entity\Signupmaxaccount', 's')
                     ->setParameter(1, 1)
                     ->where('s.id = ?1');
                 $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -408,7 +408,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
             if ($result['status'] == '200') {
                 $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
                 $query = $entityManagerUser->select('s')
-                    ->from('KC\Entity\Signupmaxaccount', 's')
+                    ->from('\Core\Domain\Entity\Signupmaxaccount', 's')
                     ->setParameter(1, 1)
                     ->where('s.id = ?1');
                 $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -505,7 +505,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
                 try {
                     $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
                     $getNewsletterDetail = $queryBuilder->select('p')
-                      ->from('KC\Entity\Signupmaxaccount', 'p')
+                      ->from('\Core\Domain\Entity\Signupmaxaccount', 'p')
                       ->where('p.id = 1')
                       ->getQuery()
                       ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -551,7 +551,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $newsletterSentTime = $queryBuilder->select('p.newsletter_sent_time')
-            ->from('KC\Entity\Signupmaxaccount', 'p')
+            ->from('\Core\Domain\Entity\Signupmaxaccount', 'p')
             ->where('p.id = 1')
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

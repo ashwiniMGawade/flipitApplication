@@ -55,7 +55,7 @@ class SeenIn
     protected $altText;
 
     /**
-     * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="seenin")
+     * @ORM\OneToOne(targetEntity="Core\Domain\Entity\Logo", inversedBy="seenin")
      * @ORM\JoinColumn(name="logoId", referencedColumnName="id", unique=true)
      */
     protected $logo;

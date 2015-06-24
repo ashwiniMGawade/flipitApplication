@@ -17,7 +17,7 @@ class PopularShop extends \Core\Domain\Entity\PopularShop
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('o.name as name')
-            ->from('KC\Entity\Shop', 'o')
+            ->from('\Core\Domain\Entity\Shop', 'o')
             ->where('o.deleted ='.$flag)
             ->andWhere('o.status = 1')
             ->andWhere("o.name LIKE '$keyword%'")
@@ -34,7 +34,7 @@ class PopularShop extends \Core\Domain\Entity\PopularShop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('p.id,s.name,p.type,p.position,s.id as shopId')
-        ->from('KC\Entity\PopularShop', 'p')
+        ->from('\Core\Domain\Entity\PopularShop', 'p')
         ->leftJoin('p.popularshops', 's')
         ->orderBy('p.position', 'ASC');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -48,7 +48,7 @@ class PopularShop extends \Core\Domain\Entity\PopularShop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('s')
-        ->from('KC\Entity\Shop', 's')
+        ->from('\Core\Domain\Entity\Shop', 's')
         ->where('s.name = '."'".$title."'")
         ->andWhere('s.status = 1')
         ->andWhere('s.deleted = 0')
@@ -61,7 +61,7 @@ class PopularShop extends \Core\Domain\Entity\PopularShop
             $queryBuildershopId = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuildershopId
             ->select('px')
-            ->from('KC\Entity\PopularShop', 'px')
+            ->from('\Core\Domain\Entity\PopularShop', 'px')
             ->leftJoin('px.popularshops', 'ps')
             ->where('ps.id ='.$shop[0]['id']);
             $pc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -73,7 +73,7 @@ class PopularShop extends \Core\Domain\Entity\PopularShop
                 $queryBuilderPosition = \Zend_Registry::get('emLocale')->createQueryBuilder();
                 $query = $queryBuilderPosition
                 ->select('p.position')
-                ->from('KC\Entity\PopularShop', 'p')
+                ->from('\Core\Domain\Entity\PopularShop', 'p')
                 ->orderBy('p.position', 'DESC')
                 ->setMaxResults(1);
                 $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -128,7 +128,7 @@ class PopularShop extends \Core\Domain\Entity\PopularShop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('ps')
-        ->from('KC\Entity\PopularShop', 'ps')
+        ->from('\Core\Domain\Entity\PopularShop', 'ps')
         ->where('ps.position = '.$pos);
         $PrevPc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $pid = @$PrevPc[0]['id'];
@@ -158,7 +158,7 @@ class PopularShop extends \Core\Domain\Entity\PopularShop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('ps')
-        ->from('KC\Entity\PopularShop', 'ps')
+        ->from('\Core\Domain\Entity\PopularShop', 'ps')
         ->where('ps.position = '.$pos);
         $PrevPc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $pid = @$PrevPc[0]['id'];
@@ -221,7 +221,7 @@ class PopularShop extends \Core\Domain\Entity\PopularShop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('v.id,o.id as offerId')
-        ->from('KC\Entity\ViewCount', 'v')
+        ->from('\Core\Domain\Entity\ViewCount', 'v')
         ->leftJoin('v.viewcount', 'o')
         ->where('v.updated_at <='."'".$nowDate."'")
         ->andWhere('v.updated_at >='."'".$past4Days."'")
@@ -233,7 +233,7 @@ class PopularShop extends \Core\Domain\Entity\PopularShop
         //get last position id from database
         $query = $queryBuilder
         ->select('p.position')
-        ->from('KC\Entity\PopularCode', 'p')
+        ->from('\Core\Domain\Entity\PopularCode', 'p')
         ->orderBy('p.position', 'DESC')
         ->setMaxResults(1);
         $lastPostionOffer = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -246,7 +246,7 @@ class PopularShop extends \Core\Domain\Entity\PopularShop
         //get all existing popular code from database
         $query = $queryBuilder
         ->select('pc.id,offer.id as offerId,pc.type,pc.position')
-        ->from('KC\Entity\PopularCode', 'pc')
+        ->from('\Core\Domain\Entity\PopularCode', 'pc')
         ->leftJoin('pc.popularcode', 'offer')
         ->orderBy('pc.position');
         $allExistingOffer = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -296,7 +296,7 @@ class PopularShop extends \Core\Domain\Entity\PopularShop
         foreach ($newArray as $p) {
             $query = $queryBuilder
             ->select('pcode')
-            ->from('KC\Entity\PopularCode', 'pcode')
+            ->from('\Core\Domain\Entity\PopularCode', 'pcode')
             ->where('pcode.popularcode ='.$p['offerId']);
             $pc = $query->getQuery()->getResult();
             if (sizeof($pc) > 0) {

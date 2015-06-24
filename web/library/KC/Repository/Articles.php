@@ -11,7 +11,7 @@ class Articles extends \Core\Domain\Entity\Articles
         $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('COUNT(a)')
-            ->from('\KC\Entity\Articles', 'a')
+            ->from('\Core\Domain\Entity\Articles', 'a')
             ->setParameter(1, '1')
             ->where('a.publish = ?1')
             ->setParameter(2, '0')
@@ -26,7 +26,7 @@ class Articles extends \Core\Domain\Entity\Articles
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('p, o, a, chap')
-            ->from('\KC\Entity\MoneysavingArticle', 'p')
+            ->from('\Core\Domain\Entity\MoneysavingArticle', 'p')
             ->leftJoin('p.moneysaving', 'o')
             ->leftJoin('o.thumbnail', 'a')
             ->leftJoin('o.articleChapter', 'chap')
@@ -43,7 +43,7 @@ class Articles extends \Core\Domain\Entity\Articles
         $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('a, stores, related, category, chapter, artimg, shops, thum')
-            ->from('KC\Entity\Articles', 'a')
+            ->from('\Core\Domain\Entity\Articles', 'a')
             ->leftJoin('a.storearticles', 'stores')
             ->leftJoin('a.category', 'related')
             ->leftJoin('related.refArticlecategoryRelatedcategory', 'category')
@@ -67,7 +67,7 @@ class Articles extends \Core\Domain\Entity\Articles
         $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('p, a, stores, related, category, chapter, artimg, thumb, articlefeaturedimage')
-            ->from('KC\Entity\PopularArticles', 'p')
+            ->from('\Core\Domain\Entity\PopularArticles', 'p')
             ->leftJoin('p.articles', 'a')
             ->leftJoin('a.storearticles', 'stores')
             ->leftJoin('a.category', 'related')
@@ -108,7 +108,7 @@ class Articles extends \Core\Domain\Entity\Articles
         $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('p, a, artimg, thumb, featuredImage')
-            ->from('KC\Entity\PopularArticles', 'p')
+            ->from('\Core\Domain\Entity\PopularArticles', 'p')
             ->leftJoin('p.articles', 'a')
             ->leftJoin('a.articleImage', 'artimg')
             ->leftJoin('a.thumbnail', 'thumb')
@@ -127,7 +127,7 @@ class Articles extends \Core\Domain\Entity\Articles
         $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('a')
-            ->from('KC\Entity\Articles', 'a')
+            ->from('\Core\Domain\Entity\Articles', 'a')
             ->setParameter(1, '1')
             ->where('a.publish = ?1')
             ->setParameter(2, '0')
@@ -143,7 +143,7 @@ class Articles extends \Core\Domain\Entity\Articles
         $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('a.id, a.title')
-            ->from('KC\Entity\Articles', 'a')
+            ->from('\Core\Domain\Entity\Articles', 'a')
             ->where('a.publish = 1')
             ->andWhere('a.deleted= 0')
             ->andWhere($queryBuilder->expr()->lte("a.publishdate", $queryBuilder->expr()->literal($currentDateTime)))
@@ -163,7 +163,7 @@ class Articles extends \Core\Domain\Entity\Articles
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('user.id, user.firstName, user.lastName')
-            ->from('\KC\Entity\User\User', 'user')
+            ->from('\Core\Domain\Entity\User\User', 'user')
             ->leftJoin('user.refUserWebsite', 'rf')
             ->leftJoin('rf.refUsersWebsite', 'w')
             ->where('user.deleted = 0')
@@ -177,7 +177,7 @@ class Articles extends \Core\Domain\Entity\Articles
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s.name as name,s.id as id')
-            ->from('\KC\Entity\Shop', 's')
+            ->from('\Core\Domain\Entity\Shop', 's')
             ->setParameter(1, '0')
             ->where('s.deleted = ?1')
             ->setParameter(2, $keyword.'%')
@@ -193,7 +193,7 @@ class Articles extends \Core\Domain\Entity\Articles
         $flag = $params['flag'] ;
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $qb = $queryBuilder
-            ->from('KC\Entity\Articles', 'art')
+            ->from('\Core\Domain\Entity\Articles', 'art')
             ->where('art.deleted ='. $flag)
             ->andWhere($queryBuilder->expr()->like('art.title', $queryBuilder->expr()->literal($srh.'%')));
         $request  = \DataTable_Helper::createSearchRequest(
@@ -225,7 +225,7 @@ class Articles extends \Core\Domain\Entity\Articles
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $qb = $queryBuilder
-            ->from('KC\Entity\Articles', 'art')
+            ->from('\Core\Domain\Entity\Articles', 'art')
             ->where('art.deleted ='. $flag)
             ->andWhere($queryBuilder->expr()->like('art.title', $queryBuilder->expr()->literal($srh.'%')));
 
@@ -255,7 +255,7 @@ class Articles extends \Core\Domain\Entity\Articles
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('a, stores, related, category, chapter, artimg, shops, articlefeaturedimage, thum')
-            ->from('KC\Entity\Articles', 'a')
+            ->from('\Core\Domain\Entity\Articles', 'a')
             ->leftJoin('a.storearticles', 'stores')
             ->leftJoin('a.refArticleCategory', 'related')
             ->leftJoin('related.articlecategory', 'category')
@@ -279,7 +279,7 @@ class Articles extends \Core\Domain\Entity\Articles
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('a')
-            ->from('\KC\Entity\Articles', 'a')
+            ->from('\Core\Domain\Entity\Articles', 'a')
             ->setParameter(1, $type)
             ->where('a.deleted = ?1')
             ->setParameter(2, $keyword.'%')
@@ -606,7 +606,7 @@ class Articles extends \Core\Domain\Entity\Articles
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('a')
-            ->from('\KC\Entity\Articles', 'a')
+            ->from('\Core\Domain\Entity\Articles', 'a')
             ->where('a.id ='.$params['id']);
         $getcategory = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
        
@@ -614,7 +614,7 @@ class Articles extends \Core\Domain\Entity\Articles
             $entityManagerLocale = \Zend_Registry::get('emLocale');
             $queryBuilder = $entityManagerLocale->createQueryBuilder();
             $query = $queryBuilder->select('r')
-                ->from('\KC\Entity\RoutePermalink', 'r')
+                ->from('\Core\Domain\Entity\RoutePermalink', 'r')
                 ->where('r.permalink ='.$queryBuilder->expr()->literal($getcategory[0]['permalink']))
                 ->andWhere('r.type ='. $queryBuilder->expr()->literal("ART"));
             $getRouteLink = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -759,7 +759,7 @@ class Articles extends \Core\Domain\Entity\Articles
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('a.title, a.id')
-            ->from('\KC\Entity\Articles', 'a')
+            ->from('\Core\Domain\Entity\Articles', 'a')
             ->where('a.deleted ='. $flag)
             ->andWhere($queryBuilder->expr()->like('a.title', $queryBuilder->expr()->literal($keyword.'%')))
             ->orderBy("a.title", "ASC")
@@ -796,7 +796,7 @@ class Articles extends \Core\Domain\Entity\Articles
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('art.id,art.title,art.created_at,art.publish,art.authorname')
-            ->from('\KC\Entity\Articles', 'art')
+            ->from('\Core\Domain\Entity\Articles', 'art')
             ->where('art.deleted = 0')
             ->orderBy("art.id", "DESC");
         $articleList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -828,7 +828,7 @@ class Articles extends \Core\Domain\Entity\Articles
             $entityManagerLocale = \Zend_Registry::get('emLocale');
             $queryBuilder = $entityManagerLocale->createQueryBuilder();
             $query = $queryBuilder->select('s.id, s.permaLink')
-                ->from('\KC\Entity\Articles', 'a')
+                ->from('\Core\Domain\Entity\Articles', 'a')
                 ->leftJoin('a.storearticles', 'artStore')
                 ->leftJoin('artStore.articleshops', 's')
                 ->where('a.id ='. $id);
@@ -893,7 +893,7 @@ class Articles extends \Core\Domain\Entity\Articles
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder
             ->select('a, img')
-            ->from('\KC\Entity\Articles', 'a')
+            ->from('\Core\Domain\Entity\Articles', 'a')
             ->leftJoin('a.articleImage', 'img')
             ->where('a.deleted='. $flag)
             ->andWhere("a.title LIKE '%$keyword%' or a.content LIKE '%$keyword%'")
@@ -908,7 +908,7 @@ class Articles extends \Core\Domain\Entity\Articles
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('a, img')
-            ->from('\KC\Entity\Articles', 'a')
+            ->from('\Core\Domain\Entity\Articles', 'a')
             ->leftJoin('a.articleImage', 'img')
             ->where('a.deleted= 0')
             ->setMaxResults(5);
@@ -921,7 +921,7 @@ class Articles extends \Core\Domain\Entity\Articles
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('a, img')
-            ->from('\KC\Entity\Articles', 'a')
+            ->from('\Core\Domain\Entity\Articles', 'a')
             ->leftJoin('a.thumbnail', 'img')
             ->where('a.deleted= 0')
             ->setMaxResults(5);
@@ -944,7 +944,7 @@ class Articles extends \Core\Domain\Entity\Articles
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('a, c, artStore, s')
-            ->from('\KC\Entity\Articles', 'a')
+            ->from('\Core\Domain\Entity\Articles', 'a')
             ->leftJoin('a.storearticles', 'artStore')
             ->leftJoin('artStore.articleshops', 's')
             ->leftJoin('a.category', 'c')
@@ -982,7 +982,7 @@ class Articles extends \Core\Domain\Entity\Articles
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('a.id')
-            ->from('\KC\Entity\Articles', 'a')
+            ->from('\Core\Domain\Entity\Articles', 'a')
             ->orderBy("a.id", "DESC")
             ->setMaxResults(1);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

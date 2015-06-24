@@ -7,7 +7,7 @@ class Robot extends \Core\Domain\Entity\User\Robot
         $entityManagerUser = \Zend_Registry::get('emUser')->createQueryBuilder();
             $query = $entityManagerUser
             ->select('r')
-            ->from('KC\Entity\User\Robot', 'r')
+            ->from('\Core\Domain\Entity\User\Robot', 'r')
             ->where('r.id = '.$websiteId);
         $robotsTextFileInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $robotsTextFileInformation;

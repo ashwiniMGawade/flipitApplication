@@ -34,7 +34,7 @@ class Signupfavoriteshop
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="shop")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Shop", inversedBy="shop")
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     protected $signupfavoriteshop;

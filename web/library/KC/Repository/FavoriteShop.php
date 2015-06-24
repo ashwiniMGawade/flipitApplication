@@ -9,7 +9,7 @@ class FavoriteShop extends \Core\Domain\Entity\FavoriteShop
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('v.id as visitorId, s.id as shopId')
-            ->from('\KC\Entity\FavoriteShop', 'p')
+            ->from('\Core\Domain\Entity\FavoriteShop', 'p')
             ->leftJoin("p.visitor", 'v')
             ->leftJoin("p.shop", 's')
             ->leftJoin("s.logo", 'l')
@@ -28,7 +28,7 @@ class FavoriteShop extends \Core\Domain\Entity\FavoriteShop
     {
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('fv')
-            ->from('\KC\Entity\FavoriteShop', 'fv')
+            ->from('\Core\Domain\Entity\FavoriteShop', 'fv')
             ->where('fv.visitor ='. \Auth_VisitorAdapter::getIdentity()->id);
         $visitorFavouriteShops = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                
@@ -196,7 +196,7 @@ class FavoriteShop extends \Core\Domain\Entity\FavoriteShop
 
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s')
-            ->from('\KC\Entity\Shop', 's')
+            ->from('\Core\Domain\Entity\Shop', 's')
             ->where('s.id ='. $shopid);
         $shop = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         
@@ -223,7 +223,7 @@ class FavoriteShop extends \Core\Domain\Entity\FavoriteShop
     {
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('o')
-            ->from('\KC\Entity\Offer', 'o')
+            ->from('\Core\Domain\Entity\Offer', 'o')
             ->where('o.authorId ='. $id);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -239,7 +239,7 @@ class FavoriteShop extends \Core\Domain\Entity\FavoriteShop
     {
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v')
-            ->from('\KC\Entity\FavoriteShop', 'v')
+            ->from('\Core\Domain\Entity\FavoriteShop', 'v')
             ->where('v.visitor ='. $id);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -265,7 +265,7 @@ class FavoriteShop extends \Core\Domain\Entity\FavoriteShop
     {
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s')
-            ->from('\KC\Entity\Shop', 's')
+            ->from('\Core\Domain\Entity\Shop', 's')
             ->where('s.id ='. $shopid);
         $shop = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 

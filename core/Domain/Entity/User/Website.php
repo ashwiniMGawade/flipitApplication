@@ -52,12 +52,12 @@ class Website
     protected $chain;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\User\ChainItem", mappedBy="website")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\User\ChainItem", mappedBy="website")
      */
     protected $chainItem;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\User\refUserWebsite", mappedBy="refUsersWebsite")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\User\refUserWebsite", mappedBy="refUsersWebsite")
      */
     protected $websiteUsers;
 

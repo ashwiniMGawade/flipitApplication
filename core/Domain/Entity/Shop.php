@@ -342,91 +342,91 @@ class Shop
     protected $featuredtextdate;
 
     /**
-     * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="shop")
+     * @ORM\OneToOne(targetEntity="Core\Domain\Entity\Logo", inversedBy="shop")
      * @ORM\JoinColumn(name="logoId", referencedColumnName="id", unique=true)
      */
     protected $logo;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Adminfavoriteshp", mappedBy="shops")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Adminfavoriteshp", mappedBy="shops")
      */
     protected $adminfevoriteshops;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Conversions", mappedBy="shop")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Conversions", mappedBy="shop")
      */
     protected $conversions;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Offer", mappedBy="shopOffers")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Offer", mappedBy="shopOffers")
      */
     protected $offer;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\OfferNews", mappedBy="shop")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\OfferNews", mappedBy="shop")
      */
     protected $offerNews;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\PopularShop", mappedBy="popularshops")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\PopularShop", mappedBy="popularshops")
      */
     protected $popularshop;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\RefArticleStore", mappedBy="articleshops")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\RefArticleStore", mappedBy="articleshops")
      */
     protected $articlestore;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\RefExcludedkeywordShop", mappedBy="keywords")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\RefExcludedkeywordShop", mappedBy="keywords")
      */
     protected $shopsofKeyword;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\RefShopCategory", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\RefShopCategory", mappedBy="category")
      */
     protected $categoryshops;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\RefShopRelatedshop", mappedBy="shop")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\RefShopRelatedshop", mappedBy="shop")
      */
     protected $relatedshops;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\ShopHowToChapter", mappedBy="shop")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\ShopHowToChapter", mappedBy="shop")
      */
     protected $howtochapter;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\ShopViewCount", mappedBy="shop")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\ShopViewCount", mappedBy="shop")
      */
     protected $viewcount;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Signupfavoriteshop", mappedBy="signupfavoriteshop")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Signupfavoriteshop", mappedBy="signupfavoriteshop")
      */
     protected $shop;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\AffliateNetwork", inversedBy="affliatenetwork")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\AffliateNetwork", inversedBy="affliatenetwork")
      * @ORM\JoinColumn(name="affliateNetworkId", referencedColumnName="id", onDelete="restrict")
      */
     protected $affliatenetwork;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Page", inversedBy="pages")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Page", inversedBy="pages")
      * @ORM\JoinColumn(name="howtoUsepageId", referencedColumnName="id", onDelete="restrict")
      */
     protected $shopPage;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\ImageHowToUseSmallImage", inversedBy="shop")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\ImageHowToUseSmallImage", inversedBy="shop")
      * @ORM\JoinColumn(name="howtoUseSmallImageId", referencedColumnName="id")
      */
     protected $howtousesmallimage;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\ImageHowToUseBigImage", inversedBy="shop")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\ImageHowToUseBigImage", inversedBy="shop")
      * @ORM\JoinColumn(name="howtoUseBigImageId", referencedColumnName="id")
      */
     protected $howtousebigimage;
@@ -434,7 +434,7 @@ class Shop
  
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\Visitor", inversedBy="favoriteshops")
+     * @ORM\ManyToMany(targetEntity="Core\Domain\Entity\Visitor", inversedBy="favoriteshops")
      * @ORM\JoinTable(
      *     name="favorite_shop",
      *     joinColumns={@ORM\JoinColumn(name="shopId", referencedColumnName="id", nullable=false)},
@@ -444,12 +444,12 @@ class Shop
     protected $visitors;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\ExcludedKeyword", mappedBy="shops")
+     * @ORM\ManyToMany(targetEntity="Core\Domain\Entity\ExcludedKeyword", mappedBy="shops")
      */
     protected $keywords;
     
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\FavoriteShop", mappedBy="shop")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\FavoriteShop", mappedBy="shop")
      */
     protected $favoriteshops;
 

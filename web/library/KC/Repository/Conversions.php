@@ -138,7 +138,7 @@ class Conversions extends \Core\Domain\Entity\Conversions
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $conversionInfo = $queryBuilder
             ->select('count(c.id) as exist, c.id')
-            ->from('KC\Entity\Conversions', 'c');
+            ->from('\Core\Domain\Entity\Conversions', 'c');
         if ($clickoutType === 'offer') {
             $conversionInfo = $conversionInfo->where($queryBuilder->expr()->eq('c.offer', $id));
         } else {

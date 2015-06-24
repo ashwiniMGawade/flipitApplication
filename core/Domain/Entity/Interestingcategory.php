@@ -21,7 +21,7 @@ class Interestingcategory
     protected $userId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Category", inversedBy="interestingcategory")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Category", inversedBy="interestingcategory")
      * @ORM\JoinColumn(name="categoryId", referencedColumnName="id")
      */
     protected $category;

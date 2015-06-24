@@ -41,7 +41,7 @@ class NewsLetterCache extends \Core\Domain\Entity\newsLetterCache
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('nlc')
-            ->from('\KC\Entity\newsLetterCache', 'nlc');
+            ->from('\Core\Domain\Entity\newsLetterCache', 'nlc');
         $getAllNewsLetterCache = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $allNewsLetterCacheContent = array();
         foreach ($getAllNewsLetterCache as $newsLetterCacheColumnValue) {

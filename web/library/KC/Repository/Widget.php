@@ -26,7 +26,7 @@ class Widget extends \Core\Domain\Entity\Widget
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('w')
-            ->from('KC\Entity\Widget', 'w')
+            ->from('\Core\Domain\Entity\Widget', 'w')
             ->where('w.userDefined = 0')
             ->andWhere('w.deleted = 0')
             ->andWhere('w.status = 1');
@@ -38,7 +38,7 @@ class Widget extends \Core\Domain\Entity\Widget
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('w')
-            ->from('KC\Entity\Widget', 'w')
+            ->from('\Core\Domain\Entity\Widget', 'w')
             ->andWhere('w.deleted = 0')
             ->andWhere('w.status = 1');
         if (!empty($widgetsIds)) {
@@ -79,7 +79,7 @@ class Widget extends \Core\Domain\Entity\Widget
         $srh = @$params["searchText"] != 'undefined' ? @$params["searchText"] : '';
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->from('KC\Entity\Widget', 'widget')
+            ->from('\Core\Domain\Entity\Widget', 'widget')
             ->where('widget.deleted = 0')
             ->andWhere(
                 $queryBuilder->expr()->like('widget.title', $queryBuilder->expr()->literal($srh.'%'))
@@ -102,7 +102,7 @@ class Widget extends \Core\Domain\Entity\Widget
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('w')
-            ->from('KC\Entity\Widget', 'w')
+            ->from('\Core\Domain\Entity\Widget', 'w')
             ->andWhere(
                 $queryBuilder->expr()->like('w.title', $queryBuilder->expr()->literal($keyword.'%'))
             )
@@ -116,7 +116,7 @@ class Widget extends \Core\Domain\Entity\Widget
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('w')
-            ->from('KC\Entity\Widget', 'w')
+            ->from('\Core\Domain\Entity\Widget', 'w')
             ->setParameter(1, $id)
             ->where('w.id = ?1');
         $widgetInformation = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -166,7 +166,7 @@ class Widget extends \Core\Domain\Entity\Widget
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('p.permalink')
-            ->from('KC\Entity\Page', 'p')
+            ->from('\Core\Domain\Entity\Page', 'p')
             ->andWhere('p.deleted = 0');
         $pages = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $pageUrls = array();

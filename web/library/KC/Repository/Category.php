@@ -11,7 +11,7 @@ class Category extends \Core\Domain\Entity\Category
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('c')
-            ->from('KC\Entity\Category', 'c')
+            ->from('\Core\Domain\Entity\Category', 'c')
             ->setParameter(1, $categoryId)
             ->where('c.id = ?1');
         $category = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -23,7 +23,7 @@ class Category extends \Core\Domain\Entity\Category
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
              ->select("c.id, c.name, c.permalink")
-            ->from('KC\Entity\Category', 'c')
+            ->from('\Core\Domain\Entity\Category', 'c')
             ->where("c.id = " . $id);
         $category = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $category;
@@ -122,7 +122,7 @@ class Category extends \Core\Domain\Entity\Category
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $popularCategories = $queryBuilder
             ->select('p, o, i')
-            ->from('KC\Entity\PopularCategory', 'p')
+            ->from('\Core\Domain\Entity\PopularCategory', 'p')
             ->leftJoin('p.category', 'o')
             ->leftJoin('o.categoryicon', 'i')
             ->where('o.deleted=0')
@@ -139,7 +139,7 @@ class Category extends \Core\Domain\Entity\Category
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $categoryDetails = $queryBuilder
         ->select("c, i, categoryfeaturedimage, categoryheaderimage")
-        ->from('KC\Entity\Category', 'c')
+        ->from('\Core\Domain\Entity\Category', 'c')
         ->LeftJoin("c.categoryicon", "i")
         ->LeftJoin("c.categoryFeaturedImage", "categoryfeaturedimage")
         ->LeftJoin("c.categoryHeaderImage", "categoryheaderimage")
@@ -365,7 +365,7 @@ class Category extends \Core\Domain\Entity\Category
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         return $queryBuilder
             ->select('rp')
-            ->from('KC\Entity\RoutePermalink', 'rp')
+            ->from('\Core\Domain\Entity\RoutePermalink', 'rp')
             ->where("rp.permalink = '".$categoryInfo[0]['permaLink']."'")
             ->andWhere("rp.type = 'CAT'")
             ->getQuery()
@@ -377,7 +377,7 @@ class Category extends \Core\Domain\Entity\Category
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         return $queryBuilder
             ->select('c')
-            ->from('KC\Entity\Category', 'c')
+            ->from('\Core\Domain\Entity\Category', 'c')
             ->where('c.id = '.$categoryId)
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -447,7 +447,7 @@ class Category extends \Core\Domain\Entity\Category
                 categoryfeaturedimage.path as categoryfeaturedpath, categoryheaderimage.name as categoryheaderimagename,
                 categoryheaderimage.path as categoryheaderimagepath"
             )
-            ->from('KC\Entity\Category', 'c')
+            ->from('\Core\Domain\Entity\Category', 'c')
             ->LeftJoin("c.categoryicon", "i")
             ->LeftJoin("c.categoryFeaturedImage", "categoryfeaturedimage")
             ->LeftJoin("c.categoryHeaderImage", "categoryheaderimage")
@@ -620,7 +620,7 @@ class Category extends \Core\Domain\Entity\Category
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $data = $queryBuilder
             ->select('count(o) as total,o.authorName,o.authorId')
-            ->from('KC\Entity\Offer', 'o')
+            ->from('\Core\Domain\Entity\Offer', 'o')
             ->groupBy('o.authorId')
             ->where('o.deleted=0')
             ->orderBy('total', 'DESC')
@@ -640,7 +640,7 @@ class Category extends \Core\Domain\Entity\Category
                 'av.id, IDENTITY(av.articles) as articleid, (sum(av.onclick)) as pop, a.title,a.content,
                 a.permalink, a.authorname, a.authorid, a.publishdate, ai.path, ai.name'
             )
-            ->from('KC\Entity\ArticleViewCount', 'av')
+            ->from('\Core\Domain\Entity\ArticleViewCount', 'av')
             ->leftJoin('av.articles', 'a')
             ->innerJoin('a.articleImage', 'ai')
             ->where('a.deleted=0')
@@ -655,7 +655,7 @@ class Category extends \Core\Domain\Entity\Category
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $data  = $queryBuilder->select("c.id,c.permaLink, ac.permalink as articlecategoryPermalink")
-                ->from('KC\Entity\Category', 'c')
+                ->from('\Core\Domain\Entity\Category', 'c')
                 ->leftJoin("c.articlecategory", "ac")
                 ->where("c.id=".$id)
                 ->getQuery()

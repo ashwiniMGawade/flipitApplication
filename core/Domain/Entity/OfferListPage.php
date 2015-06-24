@@ -5,7 +5,7 @@ use Doctrine\ORM\Mapping AS ORM;
 /**
  * @ORM\Entity
  */
-class OfferListPage extends \KC\Entity\Page
+class OfferListPage extends \Core\Domain\Entity\Page
 {
     public function __get($property)
     {

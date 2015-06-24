@@ -46,7 +46,7 @@ class ProfileImage
     protected $updated_at;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\User\User", mappedBy="profileimage")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\User\User", mappedBy="profileimage")
      */
     protected $user;
 

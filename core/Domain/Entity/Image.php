@@ -9,17 +9,17 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\DiscriminatorColumn(name="type", length=10, type="string")
  * @ORM\DiscriminatorMap(
  *     {
- *     "LG"="KC\Entity\Logo",
- *     "HTUS"="KC\Entity\ImageHowToUseSmallImage",
- *     "HTUB"="KC\Entity\ImageHowToUseBigImage",
- *     "MI"="KC\Entity\MediaImage",
- *     "CATICON"="KC\Entity\ImageCategoryIcon",
- *     "VISITORPIC"="KC\Entity\VisitorImage",
- *     "ARTCATICON"="KC\Entity\ImageArticleCategoryIcon",
- *     "ARTICON"="KC\Entity\ImageArticlesIcon",
- *     "ARTTHUMB"="KC\Entity\ImageArticlesThumb",
- *     "SCREENSHOT"="KC\Entity\WebsiteScrenshot",
- *     "ARTFEATIMG"="KC\Entity\ImageArticleFeaturedImage"
+ *     "LG"="Core\Domain\Entity\Logo",
+ *     "HTUS"="Core\Domain\Entity\ImageHowToUseSmallImage",
+ *     "HTUB"="Core\Domain\Entity\ImageHowToUseBigImage",
+ *     "MI"="Core\Domain\Entity\MediaImage",
+ *     "CATICON"="Core\Domain\Entity\ImageCategoryIcon",
+ *     "VISITORPIC"="Core\Domain\Entity\VisitorImage",
+ *     "ARTCATICON"="Core\Domain\Entity\ImageArticleCategoryIcon",
+ *     "ARTICON"="Core\Domain\Entity\ImageArticlesIcon",
+ *     "ARTTHUMB"="Core\Domain\Entity\ImageArticlesThumb",
+ *     "SCREENSHOT"="Core\Domain\Entity\WebsiteScrenshot",
+ *     "ARTFEATIMG"="Core\Domain\Entity\ImageArticleFeaturedImage"
  * }
  * )
  */
@@ -63,12 +63,12 @@ class Image
     protected $updated_at;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Menu", mappedBy="menuIcon")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Menu", mappedBy="menuIcon")
      */
     protected $menu;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Mainmenu", mappedBy="mainMenuIcon")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Mainmenu", mappedBy="mainMenuIcon")
      */
     protected $mainmenu;
 

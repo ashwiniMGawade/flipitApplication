@@ -8,7 +8,7 @@ class RouteRedirect extends \Core\Domain\Entity\RouteRedirect
         $orignalurl= trim($orignalurl, '/');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('route')
-            ->from('KC\Entity\RouteRedirect', 'route')
+            ->from('\Core\Domain\Entity\RouteRedirect', 'route')
             ->setParameter(1, \FrontEnd_Helper_viewHelper::sanitize($orignalurl))
             ->where('route.orignalurl = ?1');
         $routeRedirectInfo = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -19,7 +19,7 @@ class RouteRedirect extends \Core\Domain\Entity\RouteRedirect
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('route.orignalurl')
-            ->from('KC\Entity\RouteRedirect', 'route')
+            ->from('\Core\Domain\Entity\RouteRedirect', 'route')
             ->setParameter(1, $redirectto)
             ->where('route.redirectto = ?1')
             ->setParameter(2, '0')
@@ -45,7 +45,7 @@ class RouteRedirect extends \Core\Domain\Entity\RouteRedirect
     public static function getRedirect($params)
     {
         $request  = \DataTable_Helper::createSearchRequest($params, array('id','orignalurl', 'redirectto', 'created_at'));
-        $qb = \Zend_Registry::get('emLocale')->createQueryBuilder()->from('KC\Entity\RouteRedirect', 'p');
+        $qb = \Zend_Registry::get('emLocale')->createQueryBuilder()->from('\Core\Domain\Entity\RouteRedirect', 'p');
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
             ->setQueryBuilder($qb)
@@ -63,7 +63,7 @@ class RouteRedirect extends \Core\Domain\Entity\RouteRedirect
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('route')
-            ->from('KC\Entity\RouteRedirect', 'route')
+            ->from('\Core\Domain\Entity\RouteRedirect', 'route')
             ->setParameter(1, $id)
             ->where('route.id = ?1');
         $routeRedirectInfo = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -86,7 +86,7 @@ class RouteRedirect extends \Core\Domain\Entity\RouteRedirect
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('route')
-            ->from('KC\Entity\RouteRedirect', 'route')
+            ->from('\Core\Domain\Entity\RouteRedirect', 'route')
             ->orderBy('route.id', 'DESC');
         $routeRedirectList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $routeRedirectList;

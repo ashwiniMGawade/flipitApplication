@@ -31,13 +31,13 @@ class FavoriteShop
     protected $code_alert_send_date;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="favoriteshops")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Shop", inversedBy="favoriteshops")
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id")
      */
     protected $shop;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Visitor", inversedBy="favoritevisitorshops")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Visitor", inversedBy="favoritevisitorshops")
      * @ORM\JoinColumn(name="visitorId", referencedColumnName="id")
      */
     protected $visitor;

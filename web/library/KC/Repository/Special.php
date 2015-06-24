@@ -11,7 +11,7 @@ class Special extends \Core\Domain\Entity\Special
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->select('p')
-                ->from('KC\Entity\Special', 'p')
+                ->from('\Core\Domain\Entity\Special', 'p')
                 ->where('p.id="'.$retVal.'"');
             $special = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             return $special ;

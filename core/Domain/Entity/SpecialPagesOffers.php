@@ -36,13 +36,13 @@ class SpecialPagesOffers
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="specialPagesOffers")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Offer", inversedBy="specialPagesOffers")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id")
      */
     protected $offers;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Page", inversedBy="specialPagesOffers")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Page", inversedBy="specialPagesOffers")
      * @ORM\JoinColumn(name="pageId", referencedColumnName="id")
      */
     protected $pages;

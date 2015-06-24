@@ -9,7 +9,7 @@ class OfferTiles extends \Core\Domain\Entity\OfferTiles
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
             ->select('t')
-            ->from('KC\Entity\OfferTiles', 't')
+            ->from('\Core\Domain\Entity\OfferTiles', 't')
             ->where('t.id = '.$params['forDelete']);
             $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         } else {
@@ -35,7 +35,7 @@ class OfferTiles extends \Core\Domain\Entity\OfferTiles
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
             ->select('t')
-            ->from('KC\Entity\OfferTiles', 't')
+            ->from('\Core\Domain\Entity\OfferTiles', 't')
             ->where('t.id ='.$TileId);
             $oneTile = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
@@ -58,7 +58,7 @@ class OfferTiles extends \Core\Domain\Entity\OfferTiles
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('t.id, t.label, t.type, t.ext, t.path, t.name, t.position')
-        ->from('KC\Entity\OfferTiles', 't');
+        ->from('\Core\Domain\Entity\OfferTiles', 't');
         $allTile = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $Ar = array();
         foreach ($allTile as $t) {

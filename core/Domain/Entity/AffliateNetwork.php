@@ -46,17 +46,17 @@ class AffliateNetwork
     protected $subId;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\AffliateNetwork", mappedBy="affliate_networks")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\AffliateNetwork", mappedBy="affliate_networks")
      */
     protected $affliate_network;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Shop", mappedBy="affliatenetwork")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Shop", mappedBy="affliatenetwork")
      */
     protected $affliatenetwork;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\AffliateNetwork", inversedBy="affliate_network")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\AffliateNetwork", inversedBy="affliate_network")
      * @ORM\JoinColumn(name="replacewithId", referencedColumnName="id", onDelete="restrict")
      */
     protected $affliate_networks;

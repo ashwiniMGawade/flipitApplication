@@ -36,7 +36,7 @@ class TermAndCondition
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="offertermandcondition")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Offer", inversedBy="offertermandcondition")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id", onDelete="restrict")
      */
     protected $termandcondition;

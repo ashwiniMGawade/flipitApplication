@@ -31,13 +31,13 @@ class MoneySaving
     protected $deleted;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Page", inversedBy="moneysaving")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Page", inversedBy="moneysaving")
      * @ORM\JoinColumn(name="pageid", referencedColumnName="id")
      */
     protected $page;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Articlecategory", inversedBy="moneysaving")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Articlecategory", inversedBy="moneysaving")
      * @ORM\JoinColumn(name="categoryid", referencedColumnName="id")
      */
     protected $articlecategory;

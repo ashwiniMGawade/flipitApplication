@@ -5,6 +5,6 @@ use Doctrine\ORM\Mapping AS ORM;
 /**
  * @ORM\Entity
  */
-class ImageArticleFeaturedImage extends \KC\Entity\Image
+class ImageArticleFeaturedImage extends \Core\Domain\Entity\Image
 {
 }

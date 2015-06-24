@@ -148,23 +148,23 @@ class User
     protected $editorText;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\User\UserSession", mappedBy="usersession")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\User\UserSession", mappedBy="usersession")
      */
     protected $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\User\refUserWebsite", mappedBy="websiteUsers", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\User\refUserWebsite", mappedBy="websiteUsers", cascade={"persist", "remove"})
      */
     protected $refUserWebsite;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\User\ProfileImage", inversedBy="user")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\User\ProfileImage", inversedBy="user")
      * @ORM\JoinColumn(name="profileImageId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     protected $profileimage;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\User\Role", inversedBy="roleid")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\User\Role", inversedBy="roleid")
      * @ORM\JoinColumn(name="roleId", referencedColumnName="id", onDelete="restrict")
      */
     protected $users;
@@ -218,7 +218,7 @@ class User
     public function updateLoginTime($id)
     {
         $entityManagerUser = \Zend_Registry::get('emUser');
-        $user = $entityManagerUser->find('KC\Entity\User\User', $id);
+        $user = $entityManagerUser->find('Core\Domain\Entity\User\User', $id);
         if ($user->currentLogIn == '0000-00-00 00:00:00') {
             $user->currentLogIn = new \DateTime('now');
         }
@@ -235,7 +235,7 @@ class User
             
             $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
             $query = $queryBuilder->select('u, r')
-                ->from('KC\Entity\User\User', 'u')
+                ->from('Core\Domain\Entity\User\User', 'u')
                 ->leftJoin('u.users', 'r')
                 ->where($queryBuilder->expr()->eq('u.id', $this->id));
             $role = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -247,7 +247,7 @@ class User
 
             $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
             $query = $queryBuilder->select('u, r, rt')
-                ->from('KC\Entity\User\User', 'u')
+                ->from('Core\Domain\Entity\User\User', 'u')
                 ->leftJoin('u.users', 'r')
                 ->leftJoin('r.rights', 'rt')
                 ->where($queryBuilder->expr()->eq('u.id', $this->id));
@@ -267,7 +267,7 @@ class User
             $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
             $query = $queryBuilder
                 ->select('w.id as websiteid, u.id, w.name, w.created_at, w.updated_at, w.url')
-                ->from('KC\Entity\User\User', 'u')
+                ->from('Core\Domain\Entity\User\User', 'u')
                 ->leftJoin('u.refUserWebsite', 'rf')
                 ->leftJoin('rf.refUsersWebsite', 'w')
                 ->where($queryBuilder->expr()->eq('u.id', $this->id));
@@ -283,7 +283,7 @@ class User
                 
                 $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
                 $query = $queryBuilder->select('w.name')
-                    ->from('KC\Entity\User\Website', 'w')
+                    ->from('Core\Domain\Entity\User\Website', 'w')
                     ->where($queryBuilder->expr()->eq('w.id', $perm['webaccess'][$i]['websiteid']))
                     ->andWhere($queryBuilder->expr()->eq('w.status', $queryBuilder->expr()->literal('online')))
                     ->orderBy('w.name', 'ASC');

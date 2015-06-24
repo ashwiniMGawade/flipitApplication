@@ -18,7 +18,7 @@ class PageAttribute extends \Core\Domain\Entity\PageAttribute
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('p.id')
-            ->from('KC\Entity\pageAttribute', 'p')
+            ->from('\Core\Domain\Entity\pageAttribute', 'p')
             ->where('p.name="'.$attributeName.'"');
         $pageAttribute = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return isset($pageAttribute['id']) ? (int) $pageAttribute['id'] : 0;
@@ -60,7 +60,7 @@ class PageAttribute extends \Core\Domain\Entity\PageAttribute
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('p')
-            ->from('KC\Entity\pageAttribute', 'p');
+            ->from('\Core\Domain\Entity\pageAttribute', 'p');
         $attrList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return  $attrList;
     }
@@ -70,7 +70,7 @@ class PageAttribute extends \Core\Domain\Entity\PageAttribute
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('p.id')
-            ->from('KC\Entity\pageAttribute', 'p')
+            ->from('\Core\Domain\Entity\pageAttribute', 'p')
             ->where('p.name="'.$name.'"');
         $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return  $data['id'];

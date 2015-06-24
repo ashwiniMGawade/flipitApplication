@@ -5,10 +5,10 @@ use Doctrine\ORM\Mapping AS ORM;
 /**
  * @ORM\Entity
  */
-class ImageArticlesThumb extends \KC\Entity\Image
+class ImageArticlesThumb extends \Core\Domain\Entity\Image
 {
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Articles", mappedBy="thumbnail")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Articles", mappedBy="thumbnail")
      */
     protected $articles;
     

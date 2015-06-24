@@ -36,12 +36,12 @@ class Role
     protected $updated_at;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\User\Rights", mappedBy="role")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\User\Rights", mappedBy="role")
      */
     protected $rights;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\User\User", mappedBy="users")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\User\User", mappedBy="users")
      */
     protected $roleid;
 

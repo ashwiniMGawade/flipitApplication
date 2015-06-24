@@ -33,13 +33,13 @@ class RefArticleStore
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Articles", inversedBy="storearticles")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Articles", inversedBy="storearticles")
      * @ORM\JoinColumn(name="articleid", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     protected $relatedstores;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="articlestore")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Shop", inversedBy="articlestore")
      * @ORM\JoinColumn(name="storeid", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     protected $articleshops;

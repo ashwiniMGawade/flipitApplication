@@ -36,13 +36,13 @@ class RefExcludedkeywordShop
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\ExcludedKeyword", inversedBy="keywords")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\ExcludedKeyword", inversedBy="keywords")
      * @ORM\JoinColumn(name="keywordid", referencedColumnName="id")
      */
     protected $shops;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="shopsofKeyword")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Shop", inversedBy="shopsofKeyword")
      * @ORM\JoinColumn(name="shopid", referencedColumnName="id")
      */
     protected $keywords;

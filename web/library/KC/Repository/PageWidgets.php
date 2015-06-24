@@ -8,7 +8,7 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('sw, w')
-            ->from('KC\Entity\pageWidgets', 'sw')
+            ->from('\Core\Domain\Entity\pageWidgets', 'sw')
             ->leftJoin('sw.widget', 'w')
             ->where($queryBuilder->expr()->eq('sw.widget_type', $queryBuilder->expr()->literal($widgetsType)))
             ->andWhere('w.status= 1')
@@ -53,7 +53,7 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->select('w')
-                ->from('KC\Entity\Widget', 'w')
+                ->from('\Core\Domain\Entity\Widget', 'w')
                 ->where('w.id=' . $widgetId)
                 ->setMaxResults(1);
             $widget = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -68,7 +68,7 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->select('sw')
-                ->from('KC\Entity\pageWidgets', 'sw')
+                ->from('\Core\Domain\Entity\pageWidgets', 'sw')
                 ->where('sw.widget=' . $widgetId)
                 ->andWhere('sw.widget_type=' . $queryBuilder->expr()->literal($widgetsType));
             $pageWidgets = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -82,7 +82,7 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->select('p.position')
-                ->from('KC\Entity\pageWidgets', 'p')
+                ->from('\Core\Domain\Entity\pageWidgets', 'p')
                 ->where('p.widget_type =' .$queryBuilder->expr()->literal($widgetsType))
                 ->orderBy('p.position', 'DESC')
                 ->setMaxResults(1);
@@ -129,7 +129,7 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->select('spo')
-                ->from('KC\Entity\pageWidgets', 'spo')
+                ->from('\Core\Domain\Entity\pageWidgets', 'spo')
                 ->where('spo.widget_type='. $queryBuilder->expr()->literal($widgetsType))
                 ->orderBy('spo.position', 'ASC');
             $newWidgetsList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

@@ -9,7 +9,7 @@ class ViewCount extends \Core\Domain\Entity\ViewCount
         $offerClick = $queryBuilder
             ->select('count(v.id) as countExists')
             ->addSelect("(SELECT  click.id FROM KC\Entity\ViewCount click WHERE click.id = v.id) as clickId")
-            ->from('KC\Entity\ViewCount', 'v')
+            ->from('\Core\Domain\Entity\ViewCount', 'v')
             ->where('v.onClick!=0')
             ->andWhere('v.viewcount='.$offerId)
             ->andWhere('v.IP='.$clientIp)
@@ -23,7 +23,7 @@ class ViewCount extends \Core\Domain\Entity\ViewCount
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('count(v.id) as viewCount')
-            ->from('KC\Entity\ViewCount', 'v')
+            ->from('\Core\Domain\Entity\ViewCount', 'v')
             ->where(
                 $queryBuilder->expr()->between(
                     'v.created_at',
@@ -56,7 +56,7 @@ class ViewCount extends \Core\Domain\Entity\ViewCount
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $offerOnload = $queryBuilder
             ->select('count(v.id) as countExists')
-            ->from('KC\Entity\ViewCount', 'v')
+            ->from('\Core\Domain\Entity\ViewCount', 'v')
             ->where('v.onLoad!=0')
             ->andWhere('v.viewcount='.$offerId)
             ->andWhere('v.IP='.$clientIp)
@@ -98,7 +98,7 @@ class ViewCount extends \Core\Domain\Entity\ViewCount
                     o.authorName, IDENTITY(o.shopOffers) as shopid, IDENTITY(o.logo) as offerlogoid,
                     o.userGenerated, o.approved,img'
                 )
-                ->from('KC\Entity\ViewCount', 'vc')
+                ->from('\Core\Domain\Entity\ViewCount', 'vc')
                 ->leftJoin('vc.viewcount', 'o')
                 ->leftJoin('o.logo', 'img')
                 ->where('vc.updated_at <=' . "'$nowDate' AND vc.updated_at >=". "'$past4Days'")
@@ -126,7 +126,7 @@ class ViewCount extends \Core\Domain\Entity\ViewCount
                 'v.id,IDENTITY(v.viewcount) as offerId,
                 ((sum(v.onClick)) / (DATE_DIFF(CURRENT_TIMESTAMP(),o.startDate))) as pop, o.startDate as startdate'
             )
-            ->from('KC\Entity\ViewCount', 'v')
+            ->from('\Core\Domain\Entity\ViewCount', 'v')
             ->where(
                 'v.updated_at <=' . "'$nowDate' AND v.updated_at >="
                 . "'$past4Days'"
@@ -139,7 +139,7 @@ class ViewCount extends \Core\Domain\Entity\ViewCount
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $lastPostionOffer = \Zend_Registry::get('emLocale')->createQueryBuilder()
             ->select('p.position')
-            ->from('KC\Entity\PopularCode', 'p')
+            ->from('\Core\Domain\Entity\PopularCode', 'p')
             ->orderBy('p.position', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
@@ -152,7 +152,7 @@ class ViewCount extends \Core\Domain\Entity\ViewCount
 
         $allExistingOffer = \Zend_Registry::get('emLocale')->createQueryBuilder()
             ->select('p.id,o.id as offerId,p.type,p.position')
-            ->from('KC\Entity\PopularCode', 'p')
+            ->from('\Core\Domain\Entity\PopularCode', 'p')
             ->leftJoin('p.popularcode', 'o')
             ->orderBy('p.position')
             ->getQuery()
@@ -232,7 +232,7 @@ class ViewCount extends \Core\Domain\Entity\ViewCount
                 o.authorName, IDENTITY(o.shopOffers) as shopid, IDENTITY(o.logo) as offerlogoid,
                 o.userGenerated, o.approved,img.id, img.path, img.name'
             )
-            ->from('KC\Entity\PopularCode', 'p')
+            ->from('\Core\Domain\Entity\PopularCode', 'p')
             ->leftJoin('p.popularcode', 'o')
             ->leftJoin('o.logo', 'img')
             ->orderBy('p.position', 'ASC')
@@ -246,7 +246,7 @@ class ViewCount extends \Core\Domain\Entity\ViewCount
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         return  $queryBuilder
             ->select("v.id, v.memberId")
-            ->from('KC\Entity\ViewCount', 'v')
+            ->from('\Core\Domain\Entity\ViewCount', 'v')
             ->where("v.IP = ". $ip)
             ->andWhere("v.viewcount = ". $offerId)
             ->andWhere("v.onClick = 1")
@@ -262,7 +262,7 @@ class ViewCount extends \Core\Domain\Entity\ViewCount
         $past7Days = date($format, strtotime('-7 day' . $date));
         $data = $queryBuilder
             ->select("count(v.id) as amountclickouts")
-            ->from('KC\Entity\ViewCount', 'v')
+            ->from('\Core\Domain\Entity\ViewCount', 'v')
             ->where(
                 $queryBuilder->expr()->between(
                     'v.created_at',

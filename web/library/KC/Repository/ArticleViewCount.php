@@ -13,7 +13,7 @@ class ArticleViewCount extends \Core\Domain\Entity\ArticleViewCount
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $articleClick = $queryBuilder
             ->select('count(avc) as exist')
-            ->from('KC\Entity\ArticleViewCount', 'avc')
+            ->from('\Core\Domain\Entity\ArticleViewCount', 'avc')
             ->where('avc.deleted=0')
             ->andWhere('avc.onclick!=0')
             ->andWhere($queryBuilder->expr()->eq('IDENTITY(avc.articles)', $queryBuilder->expr()->literal($articleId)))
@@ -43,7 +43,7 @@ class ArticleViewCount extends \Core\Domain\Entity\ArticleViewCount
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $articleOnLoad = $queryBuilder
             ->select('count(avc) as exist')
-            ->from('KC\Entity\ArticleViewCount', 'avc')
+            ->from('\Core\Domain\Entity\ArticleViewCount', 'avc')
             ->where('avc.deleted=0')
             ->andWhere('avc.onload!=0')
             ->andWhere($queryBuilder->expr()->eq('IDENTITY(avc.articles)', $queryBuilder->expr()->literal($articleId)))
@@ -81,7 +81,7 @@ class ArticleViewCount extends \Core\Domain\Entity\ArticleViewCount
         $past4Days = date($format, strtotime('-4 day' . $date));
         $nowDate = $date;
         $papularArticle = $queryBuilder->select('av.id, IDENTITY(av.articles) as articleid, ((sum(av.onclick)) / (DATE_DIFF(CURRENT_TIMESTAMP(),a.publishdate))) as pop, a.publishdate')
-            ->from('KC\Entity\ArticleViewCount', 'av')
+            ->from('\Core\Domain\Entity\ArticleViewCount', 'av')
             ->leftJoin('av.articles', 'a')
             ->where('av.updated_at <=' . "'$nowDate' AND av.updated_at >="."'$past4Days'")
             ->groupBy('av.articles')

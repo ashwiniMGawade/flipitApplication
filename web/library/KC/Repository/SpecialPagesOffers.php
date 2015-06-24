@@ -10,7 +10,7 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
         $currentDate = date("Y-m-d H:i");
         $query = $queryBuilder
             ->select('op, o, terms, s, l')
-            ->from('KC\Entity\SpecialPagesOffers', 'op')
+            ->from('\Core\Domain\Entity\SpecialPagesOffers', 'op')
             ->leftJoin('op.offers', 'o')
             ->leftJoin('o.offertermandcondition', 'terms')
             ->andWhere(
@@ -53,7 +53,7 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('o,p,s,l,page')
-            ->from('KC\Entity\SpecialPagesOffers', 'p')
+            ->from('\Core\Domain\Entity\SpecialPagesOffers', 'p')
             ->leftJoin('p.offers', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->leftJoin('s.logo', 'l')
@@ -103,7 +103,7 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->select('o')
-                ->from('KC\Entity\Offer', 'o')
+                ->from('\Core\Domain\Entity\Offer', 'o')
                 ->where('o.id=' . $offerId)
                 ->setMaxResults(1);
             $offer = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -118,7 +118,7 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
             $specialPageOffersQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $specialPageOffersQueryBuilder
                 ->select('sl')
-                ->from('KC\Entity\SpecialPagesOffers', 'sl')
+                ->from('\Core\Domain\Entity\SpecialPagesOffers', 'sl')
                 ->where('sl.offers=' . $offerId)
                 ->andWhere('sl.pages=' .$pageId);
             $specialPageOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -132,7 +132,7 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
             $specialPageOffersPositionQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $specialPageOffersPositionQueryBuilder
                 ->select('p.position')
-                ->from('KC\Entity\SpecialPagesOffers', 'p')
+                ->from('\Core\Domain\Entity\SpecialPagesOffers', 'p')
                 ->where('p.pages=' .$pageId)
                 ->orderBy('p.position', 'DESC')
                 ->setMaxResults(1);
@@ -176,7 +176,7 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
             $queryBuilderSelect = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilderSelect
                 ->select('spo')
-                ->from('KC\Entity\SpecialPagesOffers', 'spo')
+                ->from('\Core\Domain\Entity\SpecialPagesOffers', 'spo')
                 ->where('spo.pages='. $pageId)
                 ->orderBy('spo.position', 'ASC');
             $newOffersList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -250,7 +250,7 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('p')
-            ->from('KC\Entity\SpecialPagesOffers', 'p')
+            ->from('\Core\Domain\Entity\SpecialPagesOffers', 'p')
             ->where('p.deleted = 0')
             ->orderBy('p.position ASC');
         $specialPageOffersDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

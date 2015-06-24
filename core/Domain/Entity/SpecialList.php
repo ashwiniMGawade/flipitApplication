@@ -46,7 +46,7 @@ class SpecialList
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Page", inversedBy="specialList")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Page", inversedBy="specialList")
      * @ORM\JoinColumn(name="specialpageId", referencedColumnName="id")
      */
     protected $page;

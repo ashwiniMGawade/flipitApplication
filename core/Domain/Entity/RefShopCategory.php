@@ -43,13 +43,13 @@ class RefShopCategory
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Category", inversedBy="shopcategory")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Category", inversedBy="shopcategory")
      * @ORM\JoinColumn(name="categoryId", referencedColumnName="id", onDelete="restrict")
      */
     protected $shop;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="categoryshops")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Shop", inversedBy="categoryshops")
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id", onDelete="restrict")
      */
     protected $category;

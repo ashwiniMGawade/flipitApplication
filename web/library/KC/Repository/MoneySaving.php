@@ -9,7 +9,7 @@ class MoneySaving extends \Core\Domain\Entity\MoneySaving
         ->select(
             'chap, av, a, at, ai, afi, sum(av.onload) as pop'
         )
-        ->from('KC\Entity\ArticleViewCount', 'av')
+        ->from('\Core\Domain\Entity\ArticleViewCount', 'av')
         ->leftJoin('av.articles', 'a')
         ->leftJoin('a.thumbnail', 'at')
         ->leftJoin('a.featuredImage', 'afi')
@@ -36,7 +36,7 @@ class MoneySaving extends \Core\Domain\Entity\MoneySaving
                 'DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname, a.updated_at,
                 a.created_at, a.publishdate, ai.path as thumbnailpath, ai.name as thumbnailname,aai.path as articleimagepath, aai.name as articleimagename, ac.name, ac.categorytitlecolor'
             )
-            ->from('KC\Entity\Articles', 'a')
+            ->from('\Core\Domain\Entity\Articles', 'a')
             ->leftJoin('a.thumbnail', 'ai')
             ->leftJoin('a.articleImage', 'aai')
             ->leftJoin('a.category', 'ac')
@@ -56,7 +56,7 @@ class MoneySaving extends \Core\Domain\Entity\MoneySaving
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('p,m,r,a,ac')
-            ->from('KC\Entity\Page', 'p')
+            ->from('\Core\Domain\Entity\Page', 'p')
             ->leftJoin('p.moneysaving', 'm')
             ->leftJoin('m.articlecategory', 'ac')
             ->leftJoin('ac.refArticleCategory', 'r')
@@ -83,7 +83,7 @@ class MoneySaving extends \Core\Domain\Entity\MoneySaving
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('ac.id, ac.name, ac.categorytitlecolor')
-        ->from('KC\Entity\Articlecategory', 'ac')
+        ->from('\Core\Domain\Entity\Articlecategory', 'ac')
         ->where('ac.deleted=0');
         $allArticleCategoryDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $allArticleCategoryDetails;
@@ -120,7 +120,7 @@ class MoneySaving extends \Core\Domain\Entity\MoneySaving
             ->select(
                 'chap, a, ai, aai, ac'
             )
-            ->from('KC\Entity\Articles', 'a')
+            ->from('\Core\Domain\Entity\Articles', 'a')
             ->leftJoin('a.thumbnail', 'ai')
             ->leftJoin('a.articleImage', 'aai')
             ->leftJoin('a.refArticleCategory', 'r')
@@ -152,7 +152,7 @@ class MoneySaving extends \Core\Domain\Entity\MoneySaving
         $currentDateTime = date('Y-m-d 00:00:00');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('a, ai, at, rs, chap')
-        ->from('\KC\Entity\Articles', 'a')
+        ->from('\Core\Domain\Entity\Articles', 'a')
         ->leftJoin('a.articleImage', 'ai')
         ->leftJoin('a.thumbnail', 'at')
         ->leftJoin('a.storearticles', 'rs')
@@ -174,7 +174,7 @@ class MoneySaving extends \Core\Domain\Entity\MoneySaving
                 'p, chap, a, ai,aai,
                 ac'
             )
-            ->from('\KC\Entity\PopularArticles', 'p')
+            ->from('\Core\Domain\Entity\PopularArticles', 'p')
             ->leftJoin('p.articles', 'a')
             ->leftJoin('a.thumbnail', 'ai')
             ->leftJoin('a.articleImage', 'aai')

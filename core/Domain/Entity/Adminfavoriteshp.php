@@ -21,7 +21,7 @@ class Adminfavoriteshp
     protected $userId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="adminfevoriteshops")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Shop", inversedBy="adminfevoriteshops")
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id")
      */
     protected $shops;

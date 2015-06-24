@@ -6,7 +6,7 @@ class IpAddresses extends \Core\Domain\Entity\User\IpAddresses
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
-            ->from('KC\Entity\User\IpAddresses', 'ipa');
+            ->from('\Core\Domain\Entity\User\IpAddresses', 'ipa');
 
         $request  = \DataTable_Helper::createSearchRequest($params, array('name', 'ipaddress', 'created_at'));
 
@@ -54,7 +54,7 @@ class IpAddresses extends \Core\Domain\Entity\User\IpAddresses
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('ips')
-            ->from('\KC\Entity\User\IpAddresses', 'ips')
+            ->from('\Core\Domain\Entity\User\IpAddresses', 'ips')
             ->where("ips.id =".\FrontEnd_Helper_viewHelper::sanitize($id));
         $ipAddress = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $ipAddress;
@@ -64,7 +64,7 @@ class IpAddresses extends \Core\Domain\Entity\User\IpAddresses
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('ipaddress')
-            ->from('\KC\Entity\User\IpAddresses', 'ipaddress');
+            ->from('\Core\Domain\Entity\User\IpAddresses', 'ipaddress');
         $ipAddressesList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $ipAddressesList;
     }

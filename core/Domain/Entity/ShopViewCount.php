@@ -46,7 +46,7 @@ class ShopViewCount
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="viewcount")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Shop", inversedBy="viewcount")
      * @ORM\JoinColumn(name="shopid", referencedColumnName="id")
      */
     protected $shop;

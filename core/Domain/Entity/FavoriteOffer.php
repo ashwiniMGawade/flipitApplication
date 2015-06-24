@@ -26,13 +26,13 @@ class FavoriteOffer
     protected $created_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Visitor", inversedBy="favoriteOffer")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Visitor", inversedBy="favoriteOffer")
      * @ORM\JoinColumn(name="visitorId", referencedColumnName="id")
      */
     protected $visitor;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="favoriteOffer")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Offer", inversedBy="favoriteOffer")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id")
      */
     protected $offer;

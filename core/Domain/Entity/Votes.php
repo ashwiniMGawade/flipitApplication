@@ -66,7 +66,7 @@ class Votes
     protected $visitorId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="votes")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Offer", inversedBy="votes")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id")
      */
     protected $offer;

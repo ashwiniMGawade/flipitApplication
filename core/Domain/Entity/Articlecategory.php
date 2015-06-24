@@ -70,33 +70,33 @@ class Articlecategory
     protected $categorytitlecolor;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\MoneySaving", mappedBy="articlecategory")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\MoneySaving", mappedBy="articlecategory")
      */
     protected $moneysaving;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\RefArticleCategory", mappedBy="articlecategory")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\RefArticleCategory", mappedBy="articlecategory")
      */
     protected $refArticleCategory;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\ImageArticleCategoryIcon", inversedBy="articlecategory")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\ImageArticleCategoryIcon", inversedBy="articlecategory")
      * @ORM\JoinColumn(name="categoryiconid", referencedColumnName="id")
      */
     protected $ArtCatIcon;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\RefArticlecategoryRelatedcategory", mappedBy="articlecategory")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\RefArticlecategoryRelatedcategory", mappedBy="articlecategory")
      */
     protected $refArticlecategoryRelatedcategory;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\Category", mappedBy="articlecategory")
+     * @ORM\ManyToMany(targetEntity="Core\Domain\Entity\Category", mappedBy="articlecategory")
      */
     protected $category;
 
     /**
-    * @ORM\ManyToMany(targetEntity="KC\Entity\Articles", mappedBy="category")
+    * @ORM\ManyToMany(targetEntity="Core\Domain\Entity\Articles", mappedBy="category")
     */
     protected $articles;
 

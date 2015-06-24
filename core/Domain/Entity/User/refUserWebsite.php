@@ -26,13 +26,13 @@ class refUserWebsite
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\User\User", inversedBy="refUserWebsite")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\User\User", inversedBy="refUserWebsite")
      * @ORM\JoinColumn(name="userId", referencedColumnName="id")
      */
     protected $websiteUsers;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\User\Website", inversedBy="websiteUsers")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\User\Website", inversedBy="websiteUsers")
      * @ORM\JoinColumn(name="websiteId", referencedColumnName="id")
      */
     protected $refUsersWebsite;

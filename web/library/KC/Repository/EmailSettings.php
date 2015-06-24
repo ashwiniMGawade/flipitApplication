@@ -8,7 +8,7 @@ class EmailSettings extends \Core\Domain\Entity\EmailSettings
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('es.email, es.name, es.locale, es.timezone, es.id')
-        ->from('KC\Entity\EmailSettings', 'es');
+        ->from('\Core\Domain\Entity\EmailSettings', 'es');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }

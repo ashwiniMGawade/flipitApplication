@@ -27,7 +27,7 @@ class LocaleSettings extends \Core\Domain\Entity\LocaleSettings
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('locale')
-            ->from('KC\Entity\LocaleSettings', 'locale');
+            ->from('\Core\Domain\Entity\LocaleSettings', 'locale');
         $localeInfo = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $localeInfo;
     }

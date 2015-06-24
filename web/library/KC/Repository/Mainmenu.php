@@ -98,7 +98,7 @@ class Mainmenu extends \Core\Domain\Entity\Mainmenu
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('menu')
-            ->from('KC\Entity\Mainmenu', 'menu')
+            ->from('\Core\Domain\Entity\Mainmenu', 'menu')
             ->orderBy('menu.position', 'ASC');
         $menuList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $menuList;
@@ -108,7 +108,7 @@ class Mainmenu extends \Core\Domain\Entity\Mainmenu
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('menu')
-            ->from('KC\Entity\Mainmenu', 'menu')
+            ->from('\Core\Domain\Entity\Mainmenu', 'menu')
             ->where('menu.level = 0')
             ->orderBy('menu.position', 'ASC');
         $menuList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -119,7 +119,7 @@ class Mainmenu extends \Core\Domain\Entity\Mainmenu
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('m, i.path, i.name')
-            ->from('KC\Entity\Mainmenu', 'm')
+            ->from('\Core\Domain\Entity\Mainmenu', 'm')
             ->leftJoin("m.menuIcon", "i")
             ->where('m.id ='. $id);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -176,7 +176,7 @@ class Mainmenu extends \Core\Domain\Entity\Mainmenu
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('m')
-            ->from('KC\Entity\Mainmenu', 'm')
+            ->from('\Core\Domain\Entity\Mainmenu', 'm')
             ->where('m.root_id =' . $id)
             ->addOrderBy('m.position', 'ASC');
         $menuList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -188,7 +188,7 @@ class Mainmenu extends \Core\Domain\Entity\Mainmenu
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('m, MIN(m.position)')
-            ->from('KC\Entity\Mainmenu', 'm')
+            ->from('\Core\Domain\Entity\Mainmenu', 'm')
             ->where('m.level = 0');
         $menuList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $menuList;
@@ -198,7 +198,7 @@ class Mainmenu extends \Core\Domain\Entity\Mainmenu
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('m')
-            ->from('KC\Entity\Mainmenu', 'm')
+            ->from('\Core\Domain\Entity\Mainmenu', 'm')
             ->where('m.parentId =' . $id)
             ->addOrderBy('m.position', 'ASC');
         $menuList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -209,7 +209,7 @@ class Mainmenu extends \Core\Domain\Entity\Mainmenu
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('m')
-            ->from('KC\Entity\Mainmenu', 'm')
+            ->from('\Core\Domain\Entity\Mainmenu', 'm')
             ->where('m.parentId =' . $id)
             ->addOrderBy('m.position', 'ASC');
         $menuList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

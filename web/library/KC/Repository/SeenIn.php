@@ -12,7 +12,7 @@ class SeenIn extends \Core\Domain\Entity\SeenIn
         if ($seeInContentNames) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->select('s,l')
-            ->from('KC\Entity\SeenIn', 's')
+            ->from('\Core\Domain\Entity\SeenIn', 's')
             ->leftJoin('s.logo', 'l')
             ->setParameter(1, $seeInContentNames)
             ->where($queryBuilder->expr()->in('s.id', '?1'));

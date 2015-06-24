@@ -17,14 +17,14 @@ class Visitor extends \Core\Domain\Entity\Visitor
             $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->select('v')
-                ->from('\KC\Entity\Visitor', 'v')
+                ->from('\Core\Domain\Entity\Visitor', 'v')
                 ->where('v.id ='. $visitorId);
             $visitorInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         } else {
             $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->select('v')
-                ->from('KC\Entity\Visitor', 'v')
+                ->from('\Core\Domain\Entity\Visitor', 'v')
                 ->where('v.email ='. $queryBuilder->expr()->literal($emailAddress));
             $visitorInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
@@ -160,7 +160,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
     {
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v, i')
-            ->from('\KC\Entity\Visitor', 'v')
+            ->from('\Core\Domain\Entity\Visitor', 'v')
             ->leftJoin('v.visitorimage', 'i')
             ->where('v.id ='. $visitorId)
             ->andWhere('v.deleted = 0');
@@ -173,7 +173,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('v.firstName')
-            ->from('KC\Entity\Visitor', 'v')
+            ->from('\Core\Domain\Entity\Visitor', 'v')
             ->where('v.id='.$visitorId);
         $userDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $userDetails;
@@ -183,7 +183,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
     {
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v')
-            ->from('\KC\Entity\Visitor', 'v');
+            ->from('\Core\Domain\Entity\Visitor', 'v');
         if (!ctype_digit($visitorEmail)) {
             $query = $query->where("v.email=".$queryBuilder->expr()->literal($visitorEmail));
         } else {
@@ -270,7 +270,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
             "(SELECT COUNT(active) FROM \KC\Entity\Offer active WHERE
             (active.shopOffers = s.id AND active.endDate >= '$currentDate' AND active.deleted=0)) as activeCount"
         )
-        ->from('\KC\Entity\Offer', 'o')
+        ->from('\Core\Domain\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('s.favoriteshops', 'fv')
         ->leftJoin('fv.visitor', 'v')
@@ -452,7 +452,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
         $keyword = \FrontEnd_Helper_viewHelper::sanitize($keyword);
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v.firstName')
-            ->from('\KC\Entity\Visitor', 'v')
+            ->from('\Core\Domain\Entity\Visitor', 'v')
             ->where($queryBuilder->expr()->like('v.firstName', $queryBuilder->expr()->literal($keyword.'%')))
             ->andWhere('v.deleted ='. $for)
             ->orderBy("v.firstName", "ASC")
@@ -466,7 +466,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
         $keyword =  \FrontEnd_Helper_viewHelper::sanitize($keyword);
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v.email')
-            ->from('\KC\Entity\Visitor', 'v')
+            ->from('\Core\Domain\Entity\Visitor', 'v')
             ->where($queryBuilder->expr()->like('v.email', $queryBuilder->expr()->literal($keyword.'%')))
             ->andWhere('v.deleted ='. $for)
             ->orderBy("v.email", "ASC")
@@ -483,7 +483,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $qb = $queryBuilder
-            ->from('KC\Entity\Visitor', 'v')
+            ->from('\Core\Domain\Entity\Visitor', 'v')
             ->leftJoin('v.visitorimage', 'p')
             ->where("v.deleted=".$params['for']);
 
@@ -522,7 +522,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v, fs, fvs, k')
-            ->from('\KC\Entity\Visitor', 'v')
+            ->from('\Core\Domain\Entity\Visitor', 'v')
             ->leftJoin("v.favoritevisitorshops", "fs")
             ->leftJoin("fs.shop", "fvs")
             ->leftJoin("v.visitorKeyword", "k")
@@ -605,7 +605,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
        
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v')
-            ->from('\KC\Entity\Visitor', 'v')
+            ->from('\Core\Domain\Entity\Visitor', 'v')
             ->where('v.id ='. $userid);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
        
@@ -621,7 +621,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v')
-            ->from('\KC\Entity\Visitor', 'v')
+            ->from('\Core\Domain\Entity\Visitor', 'v')
             ->where('v.id ='. $userid);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data[0]['profile_img'];
@@ -632,7 +632,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
         
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v')
-            ->from('\KC\Entity\Visitor', 'v')
+            ->from('\Core\Domain\Entity\Visitor', 'v')
             ->where('v.id ='. $id);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -665,7 +665,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v')
-            ->from('\KC\Entity\Visitor', 'v')
+            ->from('\Core\Domain\Entity\Visitor', 'v')
             ->where('v.active_codeid = 0')
             ->orderBy("v.id", "DESC");
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -698,7 +698,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('count(v.id) as amountsubs')
-            ->from('\KC\Entity\Visitor', 'v')
+            ->from('\Core\Domain\Entity\Visitor', 'v')
             ->where('v.created_at BETWEEN "'.$past7Days.'" AND "'.$date.'"');
         $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -713,7 +713,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('count(v.id) as amountsubs')
-            ->from('\KC\Entity\Visitor', 'v')
+            ->from('\Core\Domain\Entity\Visitor', 'v')
             ->where('v.active_codeid = 0');
         $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
@@ -723,7 +723,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v.email,v.password,v.firstName,v.lastName,k.keyword')
-            ->from('\KC\Entity\Visitor', 'v')
+            ->from('\Core\Domain\Entity\Visitor', 'v')
             ->leftJoin("v.visitorKeyword k")
             ->where('v.status = 1')
             ->andWhere('v.active = 1');
@@ -756,7 +756,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v.code_alert_send_date')
-            ->from('\KC\Entity\Visitor', 'v')
+            ->from('\Core\Domain\Entity\Visitor', 'v')
             ->where('v.id='. \FrontEnd_Helper_viewHelper::sanitize($visitorId));
         $codeAlertSendDate = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return !empty($codeAlertSendDate) ?  $codeAlertSendDate[0]['code_alert_send_date'] : 0;

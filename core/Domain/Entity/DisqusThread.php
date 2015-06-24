@@ -30,7 +30,7 @@ class DisqusThread
     protected $created;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\DisqusComments", mappedBy="disqusThread")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\DisqusComments", mappedBy="disqusThread")
      */
     protected $disqusComments;
 

@@ -36,7 +36,7 @@ class PageAttribute
     protected $updated_at;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Page", mappedBy="page")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Page", mappedBy="page")
      */
     protected $pageattribute;
 

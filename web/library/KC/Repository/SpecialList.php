@@ -10,7 +10,7 @@ class SpecialList extends \Core\Domain\Entity\SpecialList
         $query = $queryBuilder->select('sp, p, l')
             ->addSelect("(SELECT count(roc) FROM KC\Entity\RefOfferPage roc LEFT JOIN roc.refoffers off LEFT JOIN off.shopOffers s  WHERE roc.offers = sp.page and off.deleted = 0 and s.deleted = 0 and off.endDate >'".$currentDateAndTime."' and off.startDate <= '".$currentDateAndTime."'  and off.discountType='CD'  and off.Visability!='MEM') as totalCoupons")
             ->addSelect("(SELECT count(roc1) FROM KC\Entity\RefOfferPage roc1 LEFT JOIN roc1.refoffers off1 LEFT JOIN off1.shopOffers s1  WHERE roc1.offers = sp.page and off1.deleted = 0 and s1.deleted = 0 and off1.endDate >'".$currentDateAndTime."' and off1.startDate <= '".$currentDateAndTime."' and off1.Visability!='MEM') as totalOffers")
-            ->from('KC\Entity\SpecialList', 'sp')
+            ->from('\Core\Domain\Entity\SpecialList', 'sp')
             ->leftJoin('sp.page', 'p')
             ->leftJoin('p.logo', 'l')
             ->where('p.deleted = 0')
@@ -29,7 +29,7 @@ class SpecialList extends \Core\Domain\Entity\SpecialList
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('p, sp, l')
-            ->from('KC\Entity\SpecialList', 'sp')
+            ->from('\Core\Domain\Entity\SpecialList', 'sp')
             ->leftJoin('sp.page', 'p')
             ->leftJoin('p.logo', 'l')
             ->where('p.deleted = 0')
@@ -68,7 +68,7 @@ class SpecialList extends \Core\Domain\Entity\SpecialList
  
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('p.pageTitle as title')
-            ->from('KC\Entity\Page', 'p')
+            ->from('\Core\Domain\Entity\Page', 'p')
             ->where('p.deleted = 0')
             ->andWhere("p INSTANCE OF KC\Entity\OfferListPage")
             ->setParameter(1, $keyword."%")
@@ -84,7 +84,7 @@ class SpecialList extends \Core\Domain\Entity\SpecialList
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('sp.type,sp.position,IDENTITY(sp.page) as specialpageId,p.pageTitle as title')
-            ->from('KC\Entity\SpecialList', 'sp')
+            ->from('\Core\Domain\Entity\SpecialList', 'sp')
             ->leftJoin('sp.page', 'p')
             ->orderBy('sp.position', 'ASC');
         $specialPage = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -97,7 +97,7 @@ class SpecialList extends \Core\Domain\Entity\SpecialList
         $entityManager = \Zend_Registry::get('emLocale');
         $title = addslashes($title);
         $query = $queryBuilder->select('p')
-            ->from('KC\Entity\Page', 'p')
+            ->from('\Core\Domain\Entity\Page', 'p')
             ->where('p.pageTitle ='."'".$title."'")
             ->setMaxResults(1);
         $page = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -110,7 +110,7 @@ class SpecialList extends \Core\Domain\Entity\SpecialList
             } else {
                 $flag = '1';
                 $query = $queryBuilder->select('sp.position')
-                    ->from('KC\Entity\SpecialList', 'sp')
+                    ->from('\Core\Domain\Entity\SpecialList', 'sp')
                     ->orderBy('sp.position', 'DESC')
                     ->setMaxResults(1);
                 $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -168,7 +168,7 @@ class SpecialList extends \Core\Domain\Entity\SpecialList
         $pos = (intval($position) - 1);
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('p')
-            ->from('KC\Entity\SpecialList', 'p')
+            ->from('\Core\Domain\Entity\SpecialList', 'p')
             ->where('p.position ='.$pos);
             
         $PrevPc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -197,7 +197,7 @@ class SpecialList extends \Core\Domain\Entity\SpecialList
         $pos = (intval($position) + 1);
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('p')
-            ->from('KC\Entity\SpecialList', 'p')
+            ->from('\Core\Domain\Entity\SpecialList', 'p')
             ->where('p.position ='.$pos);
         $PrevPc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
