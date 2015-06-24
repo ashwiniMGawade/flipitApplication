@@ -1,53 +1,11 @@
 <?php
-// Define path to application directory
-defined('APPLICATION_PATH')
-|| define('APPLICATION_PATH',
-        dirname(dirname(__FILE__)));
+require_once 'ConstantForMigration.php';
+require_once('CommonMigrationFunctions.php');
 
-defined('PUBLIC_PATH')
-|| define('PUBLIC_PATH',
-        dirname(dirname(dirname(__FILE__)))."/public");
+CommonMigrationFunctions::setTimeAndMemoryLimit();
 
-defined('LIBRARY_PATH')
-|| define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
-
-defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine1');
-
-// Define application environment
-defined('APPLICATION_ENV')
-|| define('APPLICATION_ENV',
-        (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
-                : 'production'));
-
-
-//Ensure library/ is on include_path
-set_include_path(
-        implode(PATH_SEPARATOR,
-                array(realpath(APPLICATION_PATH . '/../library'),
-                        get_include_path(),)));
-set_include_path(
-        implode(PATH_SEPARATOR,
-                array(realpath(DOCTRINE_PATH), get_include_path(),)));
-
-/** Zend_Application */
-
-//echo LIBRARY_PATH;
-//echo DOCTRINE_PATH;
-//die;
-require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper-v1.php');
-require_once (LIBRARY_PATH . '/Zend/Application.php');
-require_once(DOCTRINE_PATH . '/Doctrine.php');
-
-// Create application, bootstrap, and run
-$application = new Zend_Application(APPLICATION_ENV,
-        APPLICATION_PATH . '/configs/application.ini');
-
-$connections = $application->getOption('doctrine');
-
-spl_autoload_register(array('Doctrine', 'autoload'));
-
-$manager = Doctrine_Manager::getInstance();
-
+$connections = CommonMigrationFunctions::getAllConnectionStrings();
+$manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
 $DMC = Doctrine_Manager::connection($connections['dsn'], 'doctrine_site');
 
 spl_autoload_register(array('Doctrine', 'modelsAutoload'));
