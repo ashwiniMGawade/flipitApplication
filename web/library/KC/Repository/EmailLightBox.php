@@ -26,11 +26,11 @@ class EmailLightBox extends \Core\Domain\Entity\EmailLightBox
         # check if it has integer id of email light box
         if ($retVal) {
             # create object of previous data
-            $lightBox = $entityManagerLocale->find('KC\Entity\EmailLightBox', $retVal);
+            $lightBox = $entityManagerLocale->find('\Core\Domain\Entity\EmailLightBox', $retVal);
             $lightBox->created_at = $lightBox->created_at;
         } else {
             # new object
-            $lightBox = new \KC\Entity\EmailLightBox();
+            $lightBox = new \Core\Domain\Entity\EmailLightBox();
             $lightBox->created_at = new \DateTime('now');
         }
         if (isset( $params['status'])) {
@@ -65,7 +65,7 @@ class EmailLightBox extends \Core\Domain\Entity\EmailLightBox
     public static function newLightBboxSetting($id)
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $setting = new \KC\Entity\Settings();
+        $setting = new \Core\Domain\Entity\Settings();
         $setting->name = Settings::EMAIL_LIGHT_BOX;
         $setting->value = $id;
         $setting->created_at = new \DateTime('now');
@@ -80,7 +80,7 @@ class EmailLightBox extends \Core\Domain\Entity\EmailLightBox
     {
         $status = $params['status'] == 'offline' ? '0' : '1';
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->update('KC\Entity\EmailLightBox', 'e')
+        $query = $queryBuilder->update('\Core\Domain\Entity\EmailLightBox', 'e')
             ->set('e.status', $status)
             ->where('e.id=', $params['id'])
             ->getQuery();

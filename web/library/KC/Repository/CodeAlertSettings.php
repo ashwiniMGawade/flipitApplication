@@ -8,13 +8,13 @@ class CodeAlertSettings extends \Core\Domain\Entity\CodeAlertSettings
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('c')
-            ->from("KC\Entity\CodeAlertSettings", 'c')
+            ->from("\Core\Domain\Entity\CodeAlertSettings", 'c')
             ->where('c.id = 1');
         $codeAlertInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             
         if (empty($codeAlertInformation)) {
             $entityManagerLocale  = \Zend_Registry::get('emLocale');
-            $codeAlertQueue = new \KC\Entity\CodeAlertSettings();
+            $codeAlertQueue = new \Core\Domain\Entity\CodeAlertSettings();
             $codeAlertQueue->email_subject = $codeAlertEmailSubject;
             $codeAlertQueue->email_header = $codeAlertEmailHeader;
             $entityManagerLocale->persist($codeAlertQueue);
@@ -23,7 +23,7 @@ class CodeAlertSettings extends \Core\Domain\Entity\CodeAlertSettings
         
         $queryBuilderUpdate = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilderUpdate
-            ->update('KC\Entity\CodeAlertSettings', 'cs')
+            ->update('\Core\Domain\Entity\CodeAlertSettings', 'cs')
             ->set('cs.email_subject', "'".$codeAlertEmailSubject."'")
             ->set('cs.email_header', "'".$codeAlertEmailHeader."'")
             ->where('cs.id = 1')
@@ -38,13 +38,13 @@ class CodeAlertSettings extends \Core\Domain\Entity\CodeAlertSettings
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('c')
-            ->from("KC\Entity\CodeAlertSettings", 'c')
+            ->from("\Core\Domain\Entity\CodeAlertSettings", 'c')
             ->where('c.id = 1');
         $codeAlertInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             
         if (empty($codeAlertInformation)) {
             $entityManagerLocale  = \Zend_Registry::get('emLocale');
-            $codeAlertQueue = new \KC\Entity\CodeAlertSettings();
+            $codeAlertQueue = new \Core\Domain\Entity\CodeAlertSettings();
             $codeAlertQueue->email_header = $codeAlertSettingsParameters['val'];
             $entityManagerLocale->persist($codeAlertQueue);
             $entityManagerLocale->flush();
@@ -52,7 +52,7 @@ class CodeAlertSettings extends \Core\Domain\Entity\CodeAlertSettings
 
         $queryBuilderUpdate = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilderUpdate
-            ->update('KC\Entity\CodeAlertSettings', 'cs')
+            ->update('\Core\Domain\Entity\CodeAlertSettings', 'cs')
             ->set('cs.email_header', "'".$codeAlertSettingsParameters['data']."'")
             ->where('cs.id = 1')
             ->getQuery()
@@ -66,7 +66,7 @@ class CodeAlertSettings extends \Core\Domain\Entity\CodeAlertSettings
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('c')
-            ->from("KC\Entity\CodeAlertSettings", 'c')
+            ->from("\Core\Domain\Entity\CodeAlertSettings", 'c')
             ->where('c.id = 1');
         $codeAlertInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $codeAlertInformation;

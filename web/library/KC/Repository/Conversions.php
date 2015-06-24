@@ -16,14 +16,14 @@ class Conversions extends \Core\Domain\Entity\Conversions
 
             if (!empty($offerOrShopId) && $offerOrShopId[0]['offerId'] != '') {
                 $conversionInfo = $queryBuilder->select('c,o,s,cat,category')
-                    ->from("KC\Entity\Conversions", "c")
+                    ->from("\Core\Domain\Entity\Conversions", "c")
                     ->leftJoin("c.offer", "o")
                     ->leftJoin("o.shopOffers", "s")
                     ->leftJoin("o.categoryoffres", "cat")
                     ->leftJoin('cat.categories', 'category');
             } else {
                 $conversionInfo = $queryBuilder->select('c,s,cat,category')
-                    ->from("KC\Entity\Conversions", "c")
+                    ->from("\Core\Domain\Entity\Conversions", "c")
                     ->leftJoin("c.shop", "s")
                     ->leftJoin("s.categoryshops", "cat")
                     ->leftJoin("cat.shop", "category");
@@ -101,7 +101,7 @@ class Conversions extends \Core\Domain\Entity\Conversions
         if (is_numeric($id)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $conversionInfo = $queryBuilder->select('IDENTITY(c.shop) as shopId, IDENTITY(c.offer) as offerId')
-                ->from("KC\Entity\Conversions", "c")
+                ->from("\Core\Domain\Entity\Conversions", "c")
                 ->where('c.id = '. $id)
                 ->getQuery()
                 ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -155,12 +155,12 @@ class Conversions extends \Core\Domain\Entity\Conversions
     private static function addNewConversion($id, $clientIP, $clickoutType)
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $conversion = new \KC\Entity\Conversions();
+        $conversion = new \Core\Domain\Entity\Conversions();
 
         if ($clickoutType === 'offer') {
-            $conversion->offer = \Zend_Registry::get('emLocale')->find('KC\Entity\Offer', $id);
+            $conversion->offer = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Offer', $id);
         } else {
-            $conversion->shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $id);
+            $conversion->shop = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Shop', $id);
         }
         
         $conversion->IP = $clientIP;

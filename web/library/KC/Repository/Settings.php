@@ -43,14 +43,14 @@ class Settings extends \Core\Domain\Entity\Settings
         $getSettings = self::getEmailSettings($sendersFieldName);
         if (!empty($getSettings)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->update('KC\Entity\Settings', 's')
+            $query = $queryBuilder->update('\Core\Domain\Entity\Settings', 's')
                 ->set("s.value", $queryBuilder->expr()->literal($sendersValue))
                 ->where($queryBuilder->expr()->eq('s.name', $queryBuilder->expr()->literal($sendersFieldName)))
                 ->getQuery();
             $query->execute();
         } else {
             $entityManagerLocale  = \Zend_Registry::get('emLocale');
-            $setting = new \KC\Entity\Settings();
+            $setting = new \Core\Domain\Entity\Settings();
             $setting->name = $sendersFieldName;
             $setting->value = $sendersValue;
             $setting->created_at = new \DateTime('now');
@@ -69,7 +69,7 @@ class Settings extends \Core\Domain\Entity\Settings
     public static function getSettings($name)
     {
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
-        $repo = $entityManagerLocale->getRepository('KC\Entity\Settings');
+        $repo = $entityManagerLocale->getRepository('\Core\Domain\Entity\Settings');
         $menu = $repo->findOneBy(array('name' => $name));
         if ($menu) {
             return $menu->value;
@@ -82,7 +82,7 @@ class Settings extends \Core\Domain\Entity\Settings
     {
         if ($id) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\Settings', 's')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\Settings', 's')
             ->where('s.value = '.$id)
             ->getQuery();
             $query->execute();
@@ -109,7 +109,7 @@ class Settings extends \Core\Domain\Entity\Settings
     public static function setSettings($name, $value)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->update('KC\Entity\Settings', 's')
+        $query = $queryBuilder->update('\Core\Domain\Entity\Settings', 's')
             ->set("s.value", $queryBuilder->expr()->literal($value))
             ->setParameter(1, $queryBuilder->expr()->literal($name))
             ->where('s.name', '?1')

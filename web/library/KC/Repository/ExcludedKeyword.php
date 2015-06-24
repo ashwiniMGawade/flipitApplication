@@ -11,7 +11,7 @@ class ExcludedKeyword extends \Core\Domain\Entity\ExcludedKeyword
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $excludedKeywords = $queryBuilder
             ->select("k,es,s")
-            ->from("KC\Entity\ExcludedKeyword", "k")
+            ->from("\Core\Domain\Entity\ExcludedKeyword", "k")
             ->leftJoin('k.keywords', 'es')
             ->leftJoin('es.keywords', 's')
             ->where($queryBuilder->expr()->eq('k.keyword', $queryBuilder->expr()->literal($keywordForSearch)))
@@ -26,7 +26,7 @@ class ExcludedKeyword extends \Core\Domain\Entity\ExcludedKeyword
     public static function addKeywords($params)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $data = new \KC\Entity\ExcludedKeyword();
+        $data = new \Core\Domain\Entity\ExcludedKeyword();
         $data->keyword = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['keyword']);
         $data->action = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['actionType']);
         $data->url = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['redirectTo']);
@@ -38,9 +38,9 @@ class ExcludedKeyword extends \Core\Domain\Entity\ExcludedKeyword
         if ($params['actionType'] == 1) {
             $splitedVal = explode(',', $params['selectedShopForSearchbar']);
             foreach ($splitedVal as $sp) {
-                $relKeyWords =  new \KC\Entity\RefExcludedkeywordShop();
-                $relKeyWords->shops = $entityManagerLocale->find('\KC\Entity\ExcludedKeyword', $data->id);
-                $relKeyWords->keywords = $entityManagerLocale->find('\KC\Entity\Shop', $sp);
+                $relKeyWords =  new \Core\Domain\Entity\RefExcludedkeywordShop();
+                $relKeyWords->shops = $entityManagerLocale->find('\Core\Domain\Entity\ExcludedKeyword', $data->id);
+                $relKeyWords->keywords = $entityManagerLocale->find('\Core\Domain\Entity\Shop', $sp);
                 $relKeyWords->keywordname = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['keyword']);
                 $relKeyWords->created_at = new \DateTime('now');
                 $relKeyWords->updated_at = new \DateTime('now');
@@ -75,7 +75,7 @@ class ExcludedKeyword extends \Core\Domain\Entity\ExcludedKeyword
                 "k.id, k.keyword, k.url, k.action, k.created_at, k.updated_at,
                 es.id as keywordid,s.id as sid , s.name as name"
             )
-            ->from("KC\Entity\ExcludedKeyword", "k")
+            ->from("\Core\Domain\Entity\ExcludedKeyword", "k")
             ->leftJoin('k.keywords', 'es')
             ->leftJoin('es.keywords', 's')
             ->where("k.id =".$id);
@@ -86,7 +86,7 @@ class ExcludedKeyword extends \Core\Domain\Entity\ExcludedKeyword
     public static function updateKeyword($params)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $data = \Zend_Registry::get('emLocale')->find('\KC\Entity\ExcludedKeyword', $params['id']);
+        $data = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\ExcludedKeyword', $params['id']);
         $data->keyword = \BackEnd_Helper_viewHelper::stripSlashesFromString($params["keyword"]);
         $data->action = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['actionType']);
 
@@ -102,15 +102,15 @@ class ExcludedKeyword extends \Core\Domain\Entity\ExcludedKeyword
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         if ($params['actionType'] == 1) {
             $splitedVal = explode(',', $params['selectedShopForSearchbar']);
-            $del = $queryBuilder->delete('KC\Entity\RefExcludedkeywordShop', 'res')
+            $del = $queryBuilder->delete('\Core\Domain\Entity\RefExcludedkeywordShop', 'res')
                 ->where('res.shops='.$params['id'])
                 ->getQuery()
                 ->execute();
             foreach ($splitedVal as $sp) {
                 if ($sp != '') {
-                    $relKeyWords =  new \KC\Entity\RefExcludedkeywordShop();
-                    $relKeyWords->shops = $entityManagerLocale->find('\KC\Entity\ExcludedKeyword', $data->id);
-                    $relKeyWords->keywords = $entityManagerLocale->find('\KC\Entity\Shop', $sp);
+                    $relKeyWords =  new \Core\Domain\Entity\RefExcludedkeywordShop();
+                    $relKeyWords->shops = $entityManagerLocale->find('\Core\Domain\Entity\ExcludedKeyword', $data->id);
+                    $relKeyWords->keywords = $entityManagerLocale->find('\Core\Domain\Entity\Shop', $sp);
                     $relKeyWords->keywordname = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['keyword']);
                     $relKeyWords->created_at = new \DateTime('now');
                     $relKeyWords->updated_at = new \DateTime('now');
@@ -121,7 +121,7 @@ class ExcludedKeyword extends \Core\Domain\Entity\ExcludedKeyword
             }
         } else {
             $queryBuilder
-                ->delete('KC\Entity\RefExcludedkeywordShop', 'rs')
+                ->delete('\Core\Domain\Entity\RefExcludedkeywordShop', 'rs')
                 ->where('rs.shops='.$params['id'])
                 ->getQuery()
                 ->execute();
@@ -134,7 +134,7 @@ class ExcludedKeyword extends \Core\Domain\Entity\ExcludedKeyword
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $keywordList = $queryBuilder
             ->select('e')
-            ->from("KC\Entity\ExcludedKeyword", "e")
+            ->from("\Core\Domain\Entity\ExcludedKeyword", "e")
             ->orderBy("e.id", "DESC")
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -144,8 +144,8 @@ class ExcludedKeyword extends \Core\Domain\Entity\ExcludedKeyword
     public static function deleteKeyword($id)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $searchbarDel = \Zend_Registry::get('emLocale')->find('\KC\Entity\ExcludedKeyword', $id);
-        $q = $queryBuilder->delete('KC\Entity\ExcludedKeyword', 'e')
+        $searchbarDel = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\ExcludedKeyword', $id);
+        $q = $queryBuilder->delete('\Core\Domain\Entity\ExcludedKeyword', 'e')
             ->where("e.id=" . $id)
             ->getQuery()
             ->execute();
@@ -156,7 +156,7 @@ class ExcludedKeyword extends \Core\Domain\Entity\ExcludedKeyword
         $SP = $selectedShop!='' ? $selectedShop: 0;
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $data = $queryBuilder->select('s.name as name,s.id as id')
-            ->from("KC\Entity\Shop", "s")
+            ->from("\Core\Domain\Entity\Shop", "s")
             ->where('s.deleted=0')
             ->andWhere($queryBuilder->expr()->notIn('s.id', $SP))
             ->andWhere($queryBuilder->expr()->like('s.name', $queryBuilder->expr()->literal($keyword . '%')))
@@ -170,7 +170,7 @@ class ExcludedKeyword extends \Core\Domain\Entity\ExcludedKeyword
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $Shop = $queryBuilder->select('s.id')
-                ->from("KC\Entity\Shop", "s")
+                ->from("\Core\Domain\Entity\Shop", "s")
                 ->where('s.id ='.$id);
         $flag = 0;
         if (!empty($Shop)) {
@@ -184,7 +184,7 @@ class ExcludedKeyword extends \Core\Domain\Entity\ExcludedKeyword
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $keywordList = $queryBuilder
             ->select('e.keyword as keyword')
-            ->from("KC\Entity\ExcludedKeyword", "e")
+            ->from("\Core\Domain\Entity\ExcludedKeyword", "e")
             ->where("e.action = 0")
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

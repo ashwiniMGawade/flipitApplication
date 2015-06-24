@@ -57,7 +57,7 @@ class FavoriteShop extends \Core\Domain\Entity\FavoriteShop
             
             $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->select('s.name as name,s.id as id,fav.store_id')
-            ->from("\KC\Entity\Signupfavoriteshop", "fav")
+            ->from("\Core\Domain\Entity\Signupfavoriteshop", "fav")
             ->leftJoin('fav.signupfavoriteshop', 's')
             ->where('s.deleted=' . $flag)
             ->andWhere("s.status= 1")
@@ -72,7 +72,7 @@ class FavoriteShop extends \Core\Domain\Entity\FavoriteShop
             
             $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->select('s.name as name,s.id as id,fav.store_id')
-            ->from("\KC\Entity\Signupfavoriteshop", "fav")
+            ->from("\Core\Domain\Entity\Signupfavoriteshop", "fav")
             ->leftJoin('fav.signupfavoriteshop', 's')
             ->where('s.deleted=' . $flag)
             ->andWhere("s.status= 1")
@@ -91,7 +91,7 @@ class FavoriteShop extends \Core\Domain\Entity\FavoriteShop
         if ($id) {
             //delete particular code from list
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\FavoriteShop', 'fv')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\FavoriteShop', 'fv')
                     ->where("fv.id=" .$id)
                     ->getQuery()->execute();
         }
@@ -102,7 +102,7 @@ class FavoriteShop extends \Core\Domain\Entity\FavoriteShop
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('p, s.name, s.id as shopId, l.path,l.name as imageName,v.id as visitorId')
-        ->from("\KC\Entity\FavoriteShop", "p")
+        ->from("\Core\Domain\Entity\FavoriteShop", "p")
         ->leftJoin('p.visitor', 'v')
         ->leftJoin('p.shop', 's')
         ->leftJoin('s.logo", "l')
@@ -119,7 +119,7 @@ class FavoriteShop extends \Core\Domain\Entity\FavoriteShop
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s.name as name,s.id as id')
-        ->from("\KC\Entity\Shop", "s")
+        ->from("\Core\Domain\Entity\Shop", "s")
         ->where('s.deleted='. $flag)
         ->andWhere("s.status= 1")
         ->andWhere($queryBuilder->expr()->like('s.name', $queryBuilder->expr()->literal($keyword.'%')))
@@ -152,7 +152,7 @@ class FavoriteShop extends \Core\Domain\Entity\FavoriteShop
         
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->select('s.name as name,s.id as id')
-                ->from("\KC\Entity\Shop", "s")
+                ->from("\Core\Domain\Entity\Shop", "s")
                 ->where('s.deleted='. $flag)
                 ->andWhere("s.status= 1")
                 ->andWhere($queryBuilder->expr()->like('s.name', $queryBuilder->expr()->literal($keyword.'%')))
@@ -170,7 +170,7 @@ class FavoriteShop extends \Core\Domain\Entity\FavoriteShop
 
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->select('s.name as name,s.id as id')
-                ->from("\KC\Entity\Shop", "s")
+                ->from("\Core\Domain\Entity\Shop", "s")
                 ->where('s.deleted='. $flag)
                 ->andWhere("s.status= 1")
                 ->andWhere($queryBuilder->expr()->like('s.name', $queryBuilder->expr()->literal($keyword.'%')))
@@ -186,9 +186,9 @@ class FavoriteShop extends \Core\Domain\Entity\FavoriteShop
     public static function addshop($userid, $shopid)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $pc = new \KC\Entity\FavoriteShop();
-        $pc->visitor = $entityManagerLocale->find('\KC\Entity\Visitor', $userid);
-        $pc->shop = $entityManagerLocale->find('\KC\Entity\Shop', $shopid);
+        $pc = new \Core\Domain\Entity\FavoriteShop();
+        $pc->visitor = $entityManagerLocale->find('\Core\Domain\Entity\Visitor', $userid);
+        $pc->shop = $entityManagerLocale->find('\Core\Domain\Entity\Shop', $shopid);
         $pc->deleted = 0;
         $pc->created_at = new \DateTime('now');
         $entityManagerLocale->persist($pc);
@@ -270,7 +270,7 @@ class FavoriteShop extends \Core\Domain\Entity\FavoriteShop
         $shop = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->delete("\KC\Entity\FavoriteShop", "fv")
+        $query = $queryBuilder->delete("\Core\Domain\Entity\FavoriteShop", "fv")
             ->where('fv.visitor='.$userid)
             ->andWhere('fv.shop='.$shopid)->execute();
 
@@ -294,7 +294,7 @@ class FavoriteShop extends \Core\Domain\Entity\FavoriteShop
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('p')
-            ->from("\KC\Entity\FavoriteShop", "p")
+            ->from("\Core\Domain\Entity\FavoriteShop", "p")
             ->leftJoin('p.visitor', 'v')
             ->leftJoin('p.shop', 's')
             ->leftJoin('s.logo', 'l')

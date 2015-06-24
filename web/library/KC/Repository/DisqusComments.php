@@ -18,7 +18,7 @@ class DisqusComments extends \Core\Domain\Entity\DisqusComments
     public static function saveComments($comments)
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $comments  = new KC\Entity\DisqusComments();
+        $comments  = new \Core\Domain\Entity\DisqusComments();
         $comments->id = $post->id;
         $comments->author_name = $post->author->name;
         $comments->comment = $post->raw_message;
@@ -44,7 +44,7 @@ class DisqusComments extends \Core\Domain\Entity\DisqusComments
         $commentThreadIds = $entityManagerLocale
             ->select('c.thread_id')
             ->from('\Core\Domain\Entity\DisqusComments', 'c')
-            ->where("(SELECT count(dt.id) from KC\Entity\DisqusThread dt where dt.id = c.thread_id) = 0");
+            ->where("(SELECT count(dt.id) from \Core\Domain\Entity\DisqusThread dt where dt.id = c.thread_id) = 0");
         $commentThreadIds = $commentThreadIds->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         foreach ($commentThreadIds as $commentThreadId) {
             $unknownThreads[] = $commentThreadId['thread_id'];

@@ -25,9 +25,9 @@ class IpAddresses extends \Core\Domain\Entity\User\IpAddresses
     {
         $entityManagerUser = \Zend_Registry::get('emUser');
         if (isset($params['id'])) {
-            $ipaddress = $entityManagerUser->find('KC\Entity\User\IpAddresses', \FrontEnd_Helper_viewHelper::sanitize($params['id']));
+            $ipaddress = $entityManagerUser->find('\Core\Domain\Entity\User\IpAddresses', \FrontEnd_Helper_viewHelper::sanitize($params['id']));
         } else {
-            $ipaddress = new \KC\Entity\User\IpAddresses();
+            $ipaddress = new \Core\Domain\Entity\User\IpAddresses();
         }
         $ipaddress->name = \FrontEnd_Helper_viewHelper::sanitize($params['name']);
         $ipaddress->ipaddress = \FrontEnd_Helper_viewHelper::sanitize($params['ipaddress']);
@@ -42,7 +42,7 @@ class IpAddresses extends \Core\Domain\Entity\User\IpAddresses
     public static function deleteIpaddress($id)
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\User\IpAddresses', 'ipAddresses')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\User\IpAddresses', 'ipAddresses')
                 ->setParameter(1, \FrontEnd_Helper_viewHelper::sanitize($id))
                 ->where('ipAddresses.id = ?1')
                 ->getQuery();

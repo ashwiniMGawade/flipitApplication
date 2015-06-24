@@ -25,8 +25,8 @@ class ArticleViewCount extends \Core\Domain\Entity\ArticleViewCount
 
     public static function saveArticleClick($articleId, $clientIp)
     {
-        $articleViewCount  = new \KC\Entity\ArticleViewCount();
-        $articleViewCount->articles = \Zend_Registry::get('emLocale')->find('KC\Entity\Articles', $articleId);
+        $articleViewCount  = new \Core\Domain\Entity\ArticleViewCount();
+        $articleViewCount->articles = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Articles', $articleId);
         $articleViewCount->onclick = 1;
         $articleViewCount->ip = $clientIp;
         $articleViewCount->onload = 0;
@@ -55,8 +55,8 @@ class ArticleViewCount extends \Core\Domain\Entity\ArticleViewCount
 
     public static function saveArticleOnLoad($articleId, $clientIp)
     {
-        $articleViewCount  = new \KC\Entity\ArticleViewCount();
-        $articleViewCount->articles = \Zend_Registry::get('emLocale')->find('KC\Entity\Articles', $articleId);
+        $articleViewCount  = new \Core\Domain\Entity\ArticleViewCount();
+        $articleViewCount->articles = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Articles', $articleId);
         $articleViewCount->onclick = 1;
         $articleViewCount->ip = $clientIp;
         $articleViewCount->onload = 0;

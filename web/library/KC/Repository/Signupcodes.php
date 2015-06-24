@@ -18,7 +18,7 @@ class Signupcodes extends \Core\Domain\Entity\Signupcodes
     {
         if ($id) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\Signupcodes', 'sc')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\Signupcodes', 'sc')
                 ->where("sc.id=" .$id)
                 ->getQuery()->execute();
 
@@ -29,7 +29,7 @@ class Signupcodes extends \Core\Domain\Entity\Signupcodes
     public static function addcode($codetext, $userid)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $code = new \KC\Entity\Signupcodes();
+        $code = new \Core\Domain\Entity\Signupcodes();
         $code->entered_uid = $userid;
         $code->code = "$codetext";
         $code->created_at = new \DateTime('now');

@@ -18,13 +18,13 @@ class Robot extends \Core\Domain\Entity\User\Robot
         $robotFileContentExistsOrNot = self::getRobotTextFileInformation($robotWebsiteId);
         $entityManagerUser = \Zend_Registry::get('emUser')->createQueryBuilder();
         if (!empty($robotFileContentExistsOrNot)) {
-            $robot =  \Zend_Registry::get('emUser')->find('KC\Entity\User\Robot', $robotWebsiteId);
+            $robot =  \Zend_Registry::get('emUser')->find('\Core\Domain\Entity\User\Robot', $robotWebsiteId);
             $robot->content = $robotsTextFileContent;
             $robot->updated_at = new \DateTime('now');
             \Zend_Registry::get('emUser')->persist($robot);
             \Zend_Registry::get('emUser')->flush();
         } else {
-            $robot = new KC\Entity\User\Robot();
+            $robot = new \Core\Domain\Entity\User\Robot();
             $robot->website = $robotWebsiteId == 1 ? 'Flipit' : 'Kortingscode';
             $robot->content = mysqli_real_escape_string(
                 \FrontEnd_Helper_viewHelper::getDbConnectionDetails(),

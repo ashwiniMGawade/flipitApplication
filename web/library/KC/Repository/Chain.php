@@ -7,7 +7,7 @@ class Chain extends \Core\Domain\Entity\User\Chain
     public static function updateChainItemLocale($newLocale, $oldLocale)
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $query = $queryBuilder->update('KC\Entity\User\ChainItem', 'c')
+        $query = $queryBuilder->update('\Core\Domain\Entity\User\ChainItem', 'c')
                 ->set("c.locale", $queryBuilder->expr()->literal($newLocale))
                 ->setParameter(1, $queryBuilder->expr()->literal($oldLocale))
                 ->where('c.locale = ?1')
@@ -22,7 +22,7 @@ class Chain extends \Core\Domain\Entity\User\Chain
         if ($name) {
             try {
                 $entityManagerUser  = \Zend_Registry::get('emUser');
-                $chain = new \KC\Entity\User\Chain();
+                $chain = new \Core\Domain\Entity\User\Chain();
                 $chain->name = $name ;
                 $chain->created_at = new \DateTime('now');
                 $chain->updated_at = new \DateTime('now');
@@ -53,7 +53,7 @@ class Chain extends \Core\Domain\Entity\User\Chain
             ->setQueryBuilder($query)
             ->add('number', 'c.id as id')
             ->add('text', 'c.name as name')
-            ->add('number', '(SELECT count(ci.id) FROM KC\Entity\User\ChainItem ci WHERE ci.chainItem = c.id) as totalShops');
+            ->add('number', '(SELECT count(ci.id) FROM \Core\Domain\Entity\User\ChainItem ci WHERE ci.chainItem = c.id) as totalShops');
         $list = $builder->getTable()->getResponseArray();
         return $list;
     }
@@ -62,7 +62,7 @@ class Chain extends \Core\Domain\Entity\User\Chain
     {
         try {
             $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\User\Chain', 'c')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\User\Chain', 'c')
                     ->where("c.id=" . $id)
                     ->getQuery();
             $query->execute();
@@ -74,7 +74,7 @@ class Chain extends \Core\Domain\Entity\User\Chain
 
     public function preDelete($event)
     {
-        $chainItem = new \KC\Entity\User\ChainItem();
+        $chainItem = new \Core\Domain\Entity\User\ChainItem();
         $chainItem->updateVarnish($chainItem->__get('id'));
         $chainItem->free(true);
     }

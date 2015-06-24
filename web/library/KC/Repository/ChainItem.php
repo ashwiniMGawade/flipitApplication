@@ -23,9 +23,9 @@ class ChainItem extends \Core\Domain\Entity\User\ChainItem
             if ($shopName && $website && $chainId) {
                 try {
                     $entityManagerUser  = \Zend_Registry::get('emUser');
-                    $chain = new \KC\Entity\User\ChainItem();
-                    $chain->website = $entityManagerUser->find('KC\Entity\User\Website', $website);
-                    $chain->chainItem = $entityManagerUser->find('KC\Entity\User\Chain', $chainId);
+                    $chain = new \Core\Domain\Entity\User\ChainItem();
+                    $chain->website = $entityManagerUser->find('\Core\Domain\Entity\User\Website', $website);
+                    $chain->chainItem = $entityManagerUser->find('\Core\Domain\Entity\User\Chain', $chainId);
                     $chain->shopName = $shopName;
                     $chain->permalink = $shopPermalink;
                     $chain->shopId = $shopId;
@@ -95,7 +95,7 @@ class ChainItem extends \Core\Domain\Entity\User\ChainItem
     {
         try {
             $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\User\ChainItem', 'c')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\User\ChainItem', 'c')
                     ->where('c.id ='.$id)
                     ->getQuery();
             $query->execute();
@@ -122,7 +122,7 @@ class ChainItem extends \Core\Domain\Entity\User\ChainItem
     public function update($data = false, $shop)
     {
         $entityManagerUser  = \Zend_Registry::get('emUser');
-        $chain = new \KC\Entity\User\ChainItem();
+        $chain = new \Core\Domain\Entity\User\ChainItem();
         # if show chain is on then modify status based on hsop status
         if ($shop['showChains'] == 1) {
             if (isset($data['status'])) {
@@ -172,7 +172,7 @@ class ChainItem extends \Core\Domain\Entity\User\ChainItem
     public function updateVarnish($chainId = false)
     {
         if (! $chainId) {
-            $chainItem = new \KC\Entity\User\ChainItem();
+            $chainItem = new \Core\Domain\Entity\User\ChainItem();
             $chainId = $chainItem->__get('id');
         }
         $items = static::fetchAllChainItems($chainId);

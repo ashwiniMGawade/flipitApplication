@@ -7,7 +7,7 @@ class Mainmenu extends \Core\Domain\Entity\Mainmenu
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         if ($params['hidimage']!='') {
-            $image = new \KC\Entity\Image();
+            $image = new \Core\Domain\Entity\Image();
             $image->path = $params['hidimage'];
             $image->name = $params['hidimageorg'];
             $image->type = 'menuIcon';
@@ -17,7 +17,7 @@ class Mainmenu extends \Core\Domain\Entity\Mainmenu
             $entityManagerLocale->persist($image);
             $entityManagerLocale->flush();
         }
-        $menu = new \KC\Entity\mainmenu();
+        $menu = new \Core\Domain\Entity\mainmenu();
         $menu->name = $params['label'];
         $menu->url = $params['url'];
         if ($params['position']!='') {
@@ -41,7 +41,7 @@ class Mainmenu extends \Core\Domain\Entity\Mainmenu
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         if ($params['hidimage']!='') {
-            $image = new \KC\Entity\Image();
+            $image = new \Core\Domain\Entity\Image();
             $image->path = $params['hidimage'];
             $image->name = $params['hidimageorg'];
             $image->type = 'menuIcon';
@@ -52,7 +52,7 @@ class Mainmenu extends \Core\Domain\Entity\Mainmenu
             $entityManagerLocale->flush();
         }
 
-        $child1 = new \KC\Entity\Mainmenu();
+        $child1 = new \Core\Domain\Entity\Mainmenu();
         $child1->name = $params['label'];
         $child1->url = $params['url'];
         $child1->position = $params['position'];
@@ -75,7 +75,7 @@ class Mainmenu extends \Core\Domain\Entity\Mainmenu
     public static function deleteOne()
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $repo = $entityManagerLocale->getRepository('KC\Entity\Mainmenu');
+        $repo = $entityManagerLocale->getRepository('\Core\Domain\Entity\Mainmenu');
         $menu = $repo->findOneBy(array('Name' =>  'Child menu 1'));
         $entityManagerLocale->remove($menu);
         $entityManagerLocale->flush();
@@ -84,7 +84,7 @@ class Mainmenu extends \Core\Domain\Entity\Mainmenu
 
     public static function moveOne()
     {
-        $menu       = new \KC\Entity\Mainmenu();
+        $menu       = new \Core\Domain\Entity\Mainmenu();
         $menu->name = 'Root menu 2';
         $menu->deleted = 0;
         $menu->created_at = new \DateTime('now');
@@ -138,7 +138,7 @@ class Mainmenu extends \Core\Domain\Entity\Mainmenu
 
         if ($params['imageid']!='') {
             $imageid = $params['imageid'];
-            $image =  $entityManagerLocale->find('KC\Entity\Image', $params['imageid']);
+            $image =  $entityManagerLocale->find('\Core\Domain\Entity\Image', $params['imageid']);
             $image->path = $params['hidimage'];
             $image->name = $params['hidimageorg'];
             $image->deleted = $image->deleted;
@@ -149,7 +149,7 @@ class Mainmenu extends \Core\Domain\Entity\Mainmenu
         }
 
         if ($params['imageid']=='' && $params['hidimage']!='') {
-            $image = new KC\Entity\Image();
+            $image = new \Core\Domain\Entity\Image();
             $image->path = '"'.$params['hidimage'].'"';
             $image->name = '"'.$params['hidimageorg'].'"';
             $image->type = 'menuIcon';
@@ -161,7 +161,7 @@ class Mainmenu extends \Core\Domain\Entity\Mainmenu
             $imageid = $image->id;
         }
 
-        $menu =  $entityManagerLocale->find('KC\Entity\Mainmenu', $params['hid']);
+        $menu =  $entityManagerLocale->find('\Core\Domain\Entity\Mainmenu', $params['hid']);
         $menu->name = \BackEnd_Helper_viewHelper::stripSlashesFromString(htmlentities($params['label'], ENT_QUOTES, 'UTF-8'));
         $menu->url = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['url']);
         $menu->position = $position;
@@ -219,19 +219,19 @@ class Mainmenu extends \Core\Domain\Entity\Mainmenu
     public static function deleteMenuRecord($params)
     {
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
-        $menu =  $entityManagerLocale->find('KC\Entity\Mainmenu', $params['id']);
+        $menu =  $entityManagerLocale->find('\Core\Domain\Entity\Mainmenu', $params['id']);
         $entityManagerLocale->remove($menu);
         $entityManagerLocale->flush();
 
         if ($params['parentId']==0 || $params['parentId']==null) {
-            $repo = $entityManagerLocale->getRepository('KC\Entity\Mainmenu');
+            $repo = $entityManagerLocale->getRepository('\Core\Domain\Entity\Mainmenu');
             $menu = $repo->findOneBy(array('root_id' => @$params['id']));
             $entityManagerLocale->remove($menu);
             $entityManagerLocale->flush();
         }
 
         if ($params['parentId']!=0 && $params['parentId']!=null) {
-            $repo = $entityManagerLocale->getRepository('KC\Entity\Mainmenu');
+            $repo = $entityManagerLocale->getRepository('\Core\Domain\Entity\Mainmenu');
             $menu = $repo->findOneBy(array('parentId' => @$params['id']));
             $entityManagerLocale->remove($menu);
             $entityManagerLocale->flush();

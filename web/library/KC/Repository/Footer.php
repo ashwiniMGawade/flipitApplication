@@ -32,7 +32,7 @@ class Footer extends \Core\Domain\Entity\Footer
     public static function newFooterSetting($id)
     {
         $entityManagerUser  = \Zend_Registry::get('emLocale');
-        $settings =  new \KC\Entity\Settings();
+        $settings =  new \Core\Domain\Entity\Settings();
         $settings->name =  \KC\Repository\Settings::FOOTER;
         $settings->value = $id ;
         $entityManagerUser->persist($settings);
@@ -45,7 +45,7 @@ class Footer extends \Core\Domain\Entity\Footer
     {
         
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $repo = $entityManagerLocale->getRepository('KC\Entity\Footer');
+        $repo = $entityManagerLocale->getRepository('\Core\Domain\Entity\Footer');
         $footer = $repo->find(2);
         $footer->topFooter = \BackEnd_Helper_viewHelper::removeScriptTag($params['topFooter']);
         $footer->middleColumn1 = \BackEnd_Helper_viewHelper::removeScriptTag($params['column1']);

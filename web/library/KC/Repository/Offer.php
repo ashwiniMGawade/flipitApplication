@@ -146,7 +146,7 @@ class Offer extends \Core\Domain\Entity\Offer
                 ->select('o, s, terms, c, img')
                 ->from('\Core\Domain\Entity\Offer', 'o')
                 ->addSelect(
-                    "(SELECT count(cc.id) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status=1) as totalAvailableCodes"
+                    "(SELECT count(cc.id) FROM \Core\Domain\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status=1) as totalAvailableCodes"
                 )
                 ->leftJoin('o.shopOffers', 's')
                 ->leftJoin('o.offertermandcondition', 'terms')
@@ -290,7 +290,7 @@ class Offer extends \Core\Domain\Entity\Offer
         ->leftJoin('o.offertermandcondition', 'terms')
         ->where('o.deleted = 0')
         ->andWhere(
-            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
+            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM \Core\Domain\Entity\CouponCode cc WHERE
             cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
         )
         ->andWhere('s.deleted = 0')
@@ -328,7 +328,7 @@ class Offer extends \Core\Domain\Entity\Offer
             ->setParameter(10, 0)
             ->where('o.deleted = ?10')
             ->andWhere(
-                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
+                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM \Core\Domain\Entity\CouponCode cc WHERE
                 cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
             )
             ->setParameter(8, 0)
@@ -433,7 +433,7 @@ class Offer extends \Core\Domain\Entity\Offer
         ->leftJoin('op.refoffers', 'o')
         ->leftJoin('o.offers', 'p')
         ->andWhere(
-            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status=1)  > 0)
+            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id) FROM \Core\Domain\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status=1)  > 0)
             or o.couponCodeType = 'GN'"
         )
         ->leftJoin('o.shopOffers', 's')
@@ -479,7 +479,7 @@ class Offer extends \Core\Domain\Entity\Offer
         ->from('\Core\Domain\Entity\Offer', 'o')
         ->leftJoin('o.logo', 'ologo')
         ->andWhere(
-            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id 
+            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id) FROM \Core\Domain\Entity\CouponCode cc WHERE cc.offer = o.id 
                 and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
         )
         ->leftJoin('o.shopOffers', 's')
@@ -1129,7 +1129,7 @@ class Offer extends \Core\Domain\Entity\Offer
                 ->where('o.deleted = 0')
                 ->andWhere(
                     "(o.couponCodeType = 'UN' AND (
-                        SELECT count(c.id)  FROM KC\Entity\CouponCode c WHERE c.offer = o.id and c.status=1)  > 0
+                        SELECT count(c.id)  FROM \Core\Domain\Entity\CouponCode c WHERE c.offer = o.id and c.status=1)  > 0
                     ) or o.couponCodeType = 'GN'"
                 )
                 ->andWhere('s.deleted = 0')
@@ -1177,7 +1177,7 @@ class Offer extends \Core\Domain\Entity\Offer
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
             ->select('o.id')
-            ->from("KC\Entity\Offer", "o")
+            ->from("\Core\Domain\Entity\Offer", "o")
             ->where("o.Visability ='MEM'")
             ->andWhere("o.id =".$offerId);
         $offerVisiblity = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -1275,7 +1275,7 @@ class Offer extends \Core\Domain\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_widget5_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_widget6_list');
-            $entityManagerUser->update('KC\Entity\Offer', 'od')
+            $entityManagerUser->update('\Core\Domain\Entity\Offer', 'od')
             ->set('od.deleted', 1)
             ->where('od.id ='.$id)
             ->getQuery()->execute();
@@ -1340,27 +1340,27 @@ class Offer extends \Core\Domain\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
 
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\RefOfferCategory', 'w')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\RefOfferCategory', 'w')
                     ->where("w.offers=" . $id)
                     ->getQuery();
             $query->execute();
-            $query = $queryBuilder->delete('KC\Entity\TermAndCondition', 't')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\TermAndCondition', 't')
                     ->where("t.termandcondition=" . $id)
                     ->getQuery();
             $query->execute();
-            $query = $queryBuilder->delete('KC\Entity\PopularCode', 'pc')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\PopularCode', 'pc')
                     ->where("pc.popularcode=" . $id)
                     ->getQuery();
             $query->execute();
-            $query = $queryBuilder->delete('KC\Entity\RefOfferPage', 'ro')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\RefOfferPage', 'ro')
                     ->where("ro.refoffers=" . $id)
                     ->getQuery();
             $query->execute();
-            $query = $queryBuilder->delete('KC\Entity\ViewCount', 'v')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\ViewCount', 'v')
                     ->where("v.viewcount=" . $id)
                     ->getQuery();
             $query->execute();
-            $query = $queryBuilder->delete('KC\Entity\OfferNews', 'n')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\OfferNews', 'n')
                     ->where("n.offerId=" . $id)
                     ->getQuery();
             $query->execute();
@@ -1369,7 +1369,7 @@ class Offer extends \Core\Domain\Entity\Offer
             $key = 'all_widget6_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            $query = $queryBuilder->delete('KC\Entity\Offer', 'od')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\Offer', 'od')
                     ->where("od.id=" . $id)
                     ->getQuery();
             $query->execute();
@@ -1431,7 +1431,7 @@ class Offer extends \Core\Domain\Entity\Offer
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
            
-            $query = $queryBuilder->update('KC\Entity\Offer', 'od')
+            $query = $queryBuilder->update('\Core\Domain\Entity\Offer', 'od')
                 ->set('od.deleted', 0)
                 ->where('od.id='.$id)
                 ->getQuery();
@@ -1497,7 +1497,7 @@ class Offer extends \Core\Domain\Entity\Offer
     public static function addkortingscode($title, $shopid, $kortingscode, $desc, $userid, $uname)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $pc = new KC\Entity\Offer();
+        $pc = new \Core\Domain\Entity\Offer();
         $pc->shopId =$shopid;
         $pc->title =\BackEnd_Helper_viewHelper::stripSlashesFromString($title);
         $pc->couponCode =\BackEnd_Helper_viewHelper::stripSlashesFromString($kortingscode);
@@ -1528,7 +1528,7 @@ class Offer extends \Core\Domain\Entity\Offer
                 ->from('\Core\Domain\Entity\Offer', 'o')
                 ->leftJoin('o.shopOffers', 's')
                 ->leftJoin('o.offertermandcondition', 'term')
-                ->addSelect("(SELECT COUNT(v.id) FROM KC\Entity\ViewCount v WHERE v.viewcount = o.id) as Count")
+                ->addSelect("(SELECT COUNT(v.id) FROM \Core\Domain\Entity\ViewCount v WHERE v.viewcount = o.id) as Count")
                 ->where("o.deleted=0")
                 ->andWhere("o.userGenerated=0")
                 ->orderBy("o.id", "DESC");
@@ -1569,8 +1569,8 @@ class Offer extends \Core\Domain\Entity\Offer
         }
         $query = $query->leftJoin('s.offerNews', 'news')
         ->leftJoin('o.offerTiles', 't')
-        ->addSelect("(SELECT count(cc.status) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status = 0) as used")
-        ->addSelect("(SELECT count(ccc.status) FROM KC\Entity\CouponCode ccc WHERE ccc.offer = o.id and ccc.status = 1) as available")
+        ->addSelect("(SELECT count(cc.status) FROM \Core\Domain\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status = 0) as used")
+        ->addSelect("(SELECT count(ccc.status) FROM \Core\Domain\Entity\CouponCode ccc WHERE ccc.offer = o.id and ccc.status = 1) as available")
         ->andWhere("o.id =".$offerId);
         $offerDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $offerDetails;
@@ -1861,7 +1861,7 @@ class Offer extends \Core\Domain\Entity\Offer
             ->leftJoin('o.offertermandcondition', 'terms')
             ->where('o.deleted = 0')
             ->andWhere(
-                "(o.couponCodeType = 'UN' AND (SELECT count(c.id)  FROM KC\Entity\CouponCode c WHERE c.offer = o.id and c.status=1)  > 0) 
+                "(o.couponCodeType = 'UN' AND (SELECT count(c.id)  FROM \Core\Domain\Entity\CouponCode c WHERE c.offer = o.id and c.status=1)  > 0) 
                 or o.couponCodeType = 'GN'"
             )
             ->andWhere("o.userGenerated = 0")
@@ -2121,7 +2121,7 @@ class Offer extends \Core\Domain\Entity\Offer
         ->leftJoin('o.offerTiles', 't')
         ->where('o.deleted = 0')
         ->andWhere(
-            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status=1)  > 0)
+            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM \Core\Domain\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status=1)  > 0)
              or o.couponCodeType = 'GN'"
         )
         ->setParameter(10, $queryBuilder->expr()->literal($shopCategories))
@@ -2226,7 +2226,7 @@ class Offer extends \Core\Domain\Entity\Offer
             )
             ->from('\Core\Domain\Entity\Offer', 'o')
             ->addSelect(
-                "(SELECT  sum(v.onClick) as click FROM KC\Entity\ViewCount v WHERE v.viewcount = o.id and v.counted=0)
+                "(SELECT  sum(v.onClick) as click FROM \Core\Domain\Entity\ViewCount v WHERE v.viewcount = o.id and v.counted=0)
                 as clicks"
             );
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -2240,7 +2240,7 @@ class Offer extends \Core\Domain\Entity\Offer
                     $diff = (int) $dDiff->days ;
                     $popularity = round($newtotal / ($diff > 0 ? $diff : 1 ), 4);
                     $query = $queryBuilder
-                        ->update('KC\Entity\Offer', 'o')
+                        ->update('\Core\Domain\Entity\Offer', 'o')
                         ->set('o.totalViewcount', $newtotal)
                         ->where('o.id ='.$value['id'])
                         ->getQuery();
@@ -2593,7 +2593,7 @@ class Offer extends \Core\Domain\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('count(*) as total')
-        ->from("KC\Entity\FavoriteShop")
+        ->from("\Core\Domain\Entity\FavoriteShop")
         ->where('shopId='.$shopId);
         $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if ($data[0]['total']>0) {
@@ -2608,7 +2608,7 @@ class Offer extends \Core\Domain\Entity\Offer
         $entityManagerUser  = \Zend_Registry::get('emLocale');
         $userid = \Auth_VisitorAdapter::getIdentity()->id;
         if ($flag=='1' || $flag==1) {
-            $fvshop = new KC\Entity\FavoriteShop();
+            $fvshop = new \Core\Domain\Entity\FavoriteShop();
             $fvshop->shopId = $sid;
             $fvshop->visitorId = $userid;
             $entityManagerUser->persist($fvshop);
@@ -2624,7 +2624,7 @@ class Offer extends \Core\Domain\Entity\Offer
             return 1;
         } else {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\FavoriteShop', 'fs')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\FavoriteShop', 'fs')
             ->where("fs.shopId=" . $sid)
             ->andWhere('fs.visitorId='.$userid)
             ->getQuery();
@@ -2643,14 +2643,14 @@ class Offer extends \Core\Domain\Entity\Offer
 
     public function saveOffer($params)
     {
-        $saveOffer = new \KC\Entity\Offer();
+        $saveOffer = new \Core\Domain\Entity\Offer();
         $entityManagerUser  = \Zend_Registry::get('emLocale');
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
             if (isset($params['defaultoffercheckbox'])) {
                 $saveOffer->Visability = 'DE';
                 if ($params['selctedshop']!='') {
                     if (intval($params['selctedshop']) > 0) {
-                        $saveOffer->shopOffers = $entityManagerUser->find('KC\Entity\Shop', $params['selctedshop']);
+                        $saveOffer->shopOffers = $entityManagerUser->find('\Core\Domain\Entity\Shop', $params['selctedshop']);
                     } else {
                         return array('result' => true , 'errType' => 'shop' );
                     }
@@ -2662,7 +2662,7 @@ class Offer extends \Core\Domain\Entity\Offer
         } else {
 
             if (intval($params['selctedshop']) > 0) {
-                $saveOffer->shopOffers =  $entityManagerUser->find('KC\Entity\Shop', $params['selctedshop']);
+                $saveOffer->shopOffers =  $entityManagerUser->find('\Core\Domain\Entity\Shop', $params['selctedshop']);
             } else {
                 return array('result' => true , 'errType' => 'shop' );
             }
@@ -2695,7 +2695,7 @@ class Offer extends \Core\Domain\Entity\Offer
                 }
                 if (@$matches[1]) {
 
-                    $offerImage  = new KC\Entity\Image();
+                    $offerImage  = new \Core\Domain\Entity\Image();
                     $offerImage->ext = $ext;
                     $offerImage->path ='images/upload/offer/';
                     $offerImage->name = $fileName;
@@ -2783,7 +2783,7 @@ class Offer extends \Core\Domain\Entity\Offer
         if (isset($params['memberonlycheckbox']) && isset($params['existingShopCheckbox'])) {
 
             if (intval($params['selctedshop']) > 0) {
-                $saveOffer->shopOffers = $entityManagerUser->find('KC\Entity\Shop', $params['selctedshop']);
+                $saveOffer->shopOffers = $entityManagerUser->find('\Core\Domain\Entity\Shop', $params['selctedshop']);
             } else {
                 return array('result' => true , 'errType' => 'shop' );
             }
@@ -2796,7 +2796,7 @@ class Offer extends \Core\Domain\Entity\Offer
         }
 
         if (isset($params['memberonlycheckbox']) && isset($params['notExistingShopCheckbox'])) {
-            $saveNewShop = new \KC\Entity\Shop();
+            $saveNewShop = new \Core\Domain\Entity\Shop();
             $saveNewShop->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
             $saveNewShop->permaLink = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
             $saveNewShop->status = 1;
@@ -2814,7 +2814,7 @@ class Offer extends \Core\Domain\Entity\Offer
             if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
 
                 $fileName = self::uploadShopLogo('logoFile');
-                $shopImage  = new \KC\Entity\Image();
+                $shopImage  = new \Core\Domain\Entity\Image();
                 $shopImage->ext =   \BackEnd_Helper_viewHelper::stripSlashesFromString(
                     \BackEnd_Helper_viewHelper::getImageExtension($fileName)
                 );
@@ -2833,7 +2833,7 @@ class Offer extends \Core\Domain\Entity\Offer
             $saveNewShop->logo = $shopImage->getId();
             $entityManagerUser->persist($saveNewShop);
             $entityManagerUser->flush();
-            $saveOffer->shopOffers = $entityManagerUser->find('KC\Entity\Shop', $saveNewShop->__get('id'));
+            $saveOffer->shopOffers = $entityManagerUser->find('\Core\Domain\Entity\Shop', $saveNewShop->__get('id'));
 
         }
         try {
@@ -2842,11 +2842,11 @@ class Offer extends \Core\Domain\Entity\Offer
 
             if (isset($params['selectedcategories'])) {
                 foreach ($params['selectedcategories'] as $categories) {
-                    $offerCategories  = new \KC\Entity\RefOfferCategory();
+                    $offerCategories  = new \Core\Domain\Entity\RefOfferCategory();
                     $offerCategories->created_at = new \DateTime('now');
                     $offerCategories->updated_at = new \DateTime('now');
-                    $offerCategories->categories = $entityManagerUser->find('KC\Entity\Category', $categories);
-                    $offerCategories->offers = $entityManagerUser->find('KC\Entity\Offer', $saveOffer->getId());
+                    $offerCategories->categories = $entityManagerUser->find('\Core\Domain\Entity\Category', $categories);
+                    $offerCategories->offers = $entityManagerUser->find('\Core\Domain\Entity\Offer', $saveOffer->getId());
                     $entityManagerUser->persist($offerCategories);
                     $entityManagerUser->flush();
                 }
@@ -2855,21 +2855,21 @@ class Offer extends \Core\Domain\Entity\Offer
 
             if (isset($params['attachedpages'])) {
                 foreach ($params['attachedpages'] as $pageId) {
-                    $offerPage  = new \KC\Entity\RefOfferPage();
+                    $offerPage  = new \Core\Domain\Entity\RefOfferPage();
                     $offerPage->created_at = new \DateTime('now');
                     $offerPage->updated_at = new \DateTime('now');
-                    $offerPage->offers = $entityManagerUser->find('KC\Entity\Page', $pageId);
-                    $offerPage->refoffers = $entityManagerUser->find('KC\Entity\Offer', $saveOffer->getId());
+                    $offerPage->offers = $entityManagerUser->find('\Core\Domain\Entity\Page', $pageId);
+                    $offerPage->refoffers = $entityManagerUser->find('\Core\Domain\Entity\Offer', $saveOffer->getId());
                     $entityManagerUser->persist($offerPage);
                     $entityManagerUser->flush();
                 }
             }
 
             if (trim($params['termsAndcondition'])!='') {
-                $offerTerms  = new \KC\Entity\TermAndCondition();
+                $offerTerms  = new \Core\Domain\Entity\TermAndCondition();
                 $offerTerms->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['termsAndcondition']);
                 $offerTerms->deleted = 0;
-                $offerTerms->termandcondition = $entityManagerUser->find('KC\Entity\Offer', $saveOffer->getId());
+                $offerTerms->termandcondition = $entityManagerUser->find('\Core\Domain\Entity\Offer', $saveOffer->getId());
                 $offerTerms->created_at = new \DateTime('now');
                 $offerTerms->updated_at = new \DateTime('now');
                 $entityManagerUser->persist($offerTerms);
@@ -2879,7 +2879,7 @@ class Offer extends \Core\Domain\Entity\Offer
             if (isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news") {
                 $newstitleloop = @$params['newsTitle'];
                 for ($n=0; $n<count($newstitleloop); $n++) {
-                    $savenews = new \KC\Entity\OfferNews();
+                    $savenews = new \Core\Domain\Entity\OfferNews();
                     $savenews->shop = @$params['selctedshop'];
                     $savenews->offerId = @$lId;
                     $savenews->title = @$newstitleloop[$n] != "" ?
@@ -2960,21 +2960,21 @@ class Offer extends \Core\Domain\Entity\Offer
     public function updateOffer($params)
     {//echo "<pre>";print_r($params);die;
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $repo = $entityManagerLocale->getRepository('KC\Entity\Offer');
+        $repo = $entityManagerLocale->getRepository('\Core\Domain\Entity\Offer');
         $updateOffer = $repo->find($params['offerId']);
        
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
             if (isset($params['defaultoffercheckbox'])) {
                 $updateOffer->Visability = 'DE';
                 if ($params['selctedshop']!='') {
-                    $updateOffer->shopOffers =  $entityManagerLocale->find('KC\Entity\Shop', $params['selctedshop']);
+                    $updateOffer->shopOffers =  $entityManagerLocale->find('\Core\Domain\Entity\Shop', $params['selctedshop']);
                 }
             } else {
                 $updateOffer->Visability = 'MEM';
                 $updateOffer->shopOffers = null;
             }
         } else {
-            $updateOffer->shopOffers =  $entityManagerLocale->find('KC\Entity\Shop', $params['selctedshop']);
+            $updateOffer->shopOffers =  $entityManagerLocale->find('\Core\Domain\Entity\Shop', $params['selctedshop']);
         }
         if (intval($params['offerImageSelect']) > 0) {
             $updateOffer->tilesId =  $params['offerImageSelect'] ;
@@ -3027,7 +3027,7 @@ class Offer extends \Core\Domain\Entity\Offer
                     return false;
                 }
                 if (@$matches[1]) {
-                    $offerImage  = new \KC\Entity\Image();
+                    $offerImage  = new \Core\Domain\Entity\Image();
                     $offerImage->ext = $ext;
                     $offerImage->path ='images/upload/offer/';
                     $offerImage->name = $fileName;
@@ -3126,11 +3126,11 @@ class Offer extends \Core\Domain\Entity\Offer
             }
            
         } else {
-            $updateRouteLink = new \KC\Entity\RoutePermalink();
+            $updateRouteLink = new \Core\Domain\Entity\RoutePermalink();
         }
 
         if (isset($params['memberonlycheckbox']) && isset($params['existingShopCheckbox'])) {
-            $updateOffer->shopOffers =  $entityManagerLocale->find('KC\Entity\Shop', $params['selctedshop']);
+            $updateOffer->shopOffers =  $entityManagerLocale->find('\Core\Domain\Entity\Shop', $params['selctedshop']);
         }
         if (isset($params['fromWhichShop']) && $params['fromWhichShop']== 0) {
             $updateOffer->shopExist = 0;
@@ -3138,7 +3138,7 @@ class Offer extends \Core\Domain\Entity\Offer
             $updateOffer->shopExist = 1;
         }
         if (isset($params['memberonlycheckbox']) && isset($params['notExistingShopCheckbox'])) {
-            $saveNewShop = new \KC\Entity\Shop();
+            $saveNewShop = new \Core\Domain\Entity\Shop();
             $saveNewShop->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
             $saveNewShop->permaLink = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
             $saveNewShop->status = 1;
@@ -3158,7 +3158,7 @@ class Offer extends \Core\Domain\Entity\Offer
             if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
 
                 $fileName = self::uploadShopLogo('logoFile');
-                $shopImage  = new \KC\Entity\Image();
+                $shopImage  = new \Core\Domain\Entity\Image();
                 $shopImage->ext =   \BackEnd_Helper_viewHelper::stripSlashesFromString(
                     \BackEnd_Helper_viewHelper::getImageExtension($fileName)
                 );
@@ -3176,7 +3176,7 @@ class Offer extends \Core\Domain\Entity\Offer
             $saveNewShop->logoId = $shopImage->getId();
             $entityManagerLocale->persist($saveNewShop);
             $entityManagerLocale->flush();
-            $updateOffer->shopOffers = $entityManagerLocale->find('KC\Entity\Shop', $saveNewShop->__get('id'));
+            $updateOffer->shopOffers = $entityManagerLocale->find('\Core\Domain\Entity\Shop', $saveNewShop->__get('id'));
 
         }
         $updateOffer->deleted = 0;
@@ -3189,17 +3189,17 @@ class Offer extends \Core\Domain\Entity\Offer
         $entityManagerLocale->flush();     // New code Ends
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->delete('KC\Entity\TermAndCondition', 'tc')
+        $query = $queryBuilder->delete('\Core\Domain\Entity\TermAndCondition', 'tc')
             ->setParameter(1, $params['offerId'])
             ->where('tc.termandcondition = ?1')
             ->getQuery();
         $query->execute();
 
         if (trim($params['termsAndcondition'])!='') {
-            $offerTerms  = new \KC\Entity\TermAndCondition();
+            $offerTerms  = new \Core\Domain\Entity\TermAndCondition();
             $offerTerms->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['termsAndcondition']);
             $offerTerms->deleted = 0;
-            $offerTerms->termandcondition = $entityManagerLocale->find('KC\Entity\Offer', $params['offerId']);
+            $offerTerms->termandcondition = $entityManagerLocale->find('\Core\Domain\Entity\Offer', $params['offerId']);
             $offerTerms->created_at = new \DateTime('now');
             $offerTerms->updated_at = new \DateTime('now');
             $entityManagerLocale->persist($offerTerms);
@@ -3207,7 +3207,7 @@ class Offer extends \Core\Domain\Entity\Offer
         }
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->delete('KC\Entity\RefOfferPage', 'rop')
+        $query = $queryBuilder->delete('\Core\Domain\Entity\RefOfferPage', 'rop')
             ->setParameter(1, $params['offerId'])
             ->where('rop.refoffers = ?1')
             ->getQuery();
@@ -3215,29 +3215,29 @@ class Offer extends \Core\Domain\Entity\Offer
 
         if (isset($params['attachedpages'])) {
             foreach ($params['attachedpages'] as $pageId) {
-                $offerPage  = new \KC\Entity\RefOfferPage();
+                $offerPage  = new \Core\Domain\Entity\RefOfferPage();
                 $offerPage->created_at = new \DateTime('now');
                 $offerPage->updated_at = new \DateTime('now');
-                $offerPage->offers = $entityManagerLocale->find('KC\Entity\Page', $pageId);
-                $offerPage->refoffers = $entityManagerLocale->find('KC\Entity\Offer', $params['offerId']);
+                $offerPage->offers = $entityManagerLocale->find('\Core\Domain\Entity\Page', $pageId);
+                $offerPage->refoffers = $entityManagerLocale->find('\Core\Domain\Entity\Offer', $params['offerId']);
                 $entityManagerLocale->persist($offerPage);
                 $entityManagerLocale->flush();
             }
         }
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->delete('KC\Entity\RefOfferCategory', 'roc')
+        $query = $queryBuilder->delete('\Core\Domain\Entity\RefOfferCategory', 'roc')
         ->setParameter(1, $params['offerId'])
         ->where('roc.offers = ?1')
         ->getQuery();
         $query->execute();
         if (isset($params['selectedcategories'])) {
             foreach ($params['selectedcategories'] as $categories) {
-                $offerCategory  = new \KC\Entity\RefOfferCategory();
+                $offerCategory  = new \Core\Domain\Entity\RefOfferCategory();
                 $offerCategory->created_at = new \DateTime('now');
                 $offerCategory->updated_at = new \DateTime('now');
-                $offerCategory->categories = $entityManagerLocale->find('KC\Entity\Category', $categories);
-                $offerCategory->offers = $entityManagerLocale->find('KC\Entity\Offer', $params['offerId']);
+                $offerCategory->categories = $entityManagerLocale->find('\Core\Domain\Entity\Category', $categories);
+                $offerCategory->offers = $entityManagerLocale->find('\Core\Domain\Entity\Offer', $params['offerId']);
                 $entityManagerLocale->persist($offerCategory);
                 $entityManagerLocale->flush();
 
@@ -3248,15 +3248,15 @@ class Offer extends \Core\Domain\Entity\Offer
             $lId = $params['offerId'];
             $offerId = @$params['offerId'];
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\OfferNews', 'n')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\OfferNews', 'n')
             ->where('n.offerId=' . $offerId)
             ->getQuery();
             $query->execute();
             if (isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news") {
                 $newsloop = @$params['newsTitle'];
                 for ($n=0; $n<count($newsloop); $n++) {
-                    $savenews = new \KC\Entity\OfferNews();
-                    $savenews->shop = @$entityManagerLocale->find('KC\Entity\Shop', $params['selctedshop']);
+                    $savenews = new \Core\Domain\Entity\OfferNews();
+                    $savenews->shop = @$entityManagerLocale->find('\Core\Domain\Entity\Shop', $params['selctedshop']);
                     $savenews->offerId = @$offerId;
                     $savenews->title = @$newsloop[$n] != "" ?
                              \BackEnd_Helper_viewHelper::stripSlashesFromString($newsloop[$n]) : "";
@@ -3395,7 +3395,7 @@ class Offer extends \Core\Domain\Entity\Offer
             ->setParameter(10, 0)
             ->where('o.deleted = ?10')
             ->andWhere(
-                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
+                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM \Core\Domain\Entity\CouponCode cc WHERE
                 cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
             )
             ->setParameter(8, 0)
@@ -3442,7 +3442,7 @@ class Offer extends \Core\Domain\Entity\Offer
             ->setParameter(10, 0)
             ->where('o.deleted = ?10')
             ->andWhere(
-                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
+                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM \Core\Domain\Entity\CouponCode cc WHERE
                 cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
             )
             ->setParameter(2, 'CD')
@@ -3476,7 +3476,7 @@ class Offer extends \Core\Domain\Entity\Offer
         ->leftJoin('p.popularcode', 'o')
         ->where('o.deleted = 0')
         ->andWhere(
-            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
+            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM \Core\Domain\Entity\CouponCode cc WHERE
             cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
         )
         ->andWhere('o.offline = 0')

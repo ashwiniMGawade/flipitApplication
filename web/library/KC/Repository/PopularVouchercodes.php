@@ -82,9 +82,9 @@ class PopularVouchercodes extends \Core\Domain\Entity\PopularVouchercodes
                     $NewPos = 1;
                 }               //add new offer if not exist in datbase
                 $entityManagerLocale  = \Zend_Registry::get('emLocale');
-                $pc = new \KC\Entity\PopularVouchercodes();
+                $pc = new \Core\Domain\Entity\PopularVouchercodes();
                 $pc->type = 'MN';
-                $pc->vaoucherofferId = $entityManagerLocale->find('KC\Entity\Offer', $Offer[0]['id']);
+                $pc->vaoucherofferId = $entityManagerLocale->find('\Core\Domain\Entity\Offer', $Offer[0]['id']);
                 $pc->position = (intval($NewPos) + 1);
                 $pc->deleted = 0;
                 $pc->created_at = new \DateTime('now');
@@ -106,12 +106,12 @@ class PopularVouchercodes extends \Core\Domain\Entity\PopularVouchercodes
         if ($id) {
             //delete popular code from list
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\PopularVouchercodes', 'p')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\PopularVouchercodes', 'p')
                 ->where("p.id=" . $id)
                 ->getQuery()->execute();
 
             //change position by 1 of each below element
-            $queryBuilder->update('KC\Entity\PopularVouchercodes', 'pvc')
+            $queryBuilder->update('\Core\Domain\Entity\PopularVouchercodes', 'pvc')
                 ->set('pvc.position', 'pvc.position - 1')
                 ->where('pvc.position > '.$position)
                 ->getQuery()->execute();
@@ -156,7 +156,7 @@ class PopularVouchercodes extends \Core\Domain\Entity\PopularVouchercodes
         ->where('o.Visability!= ?1')
         ->setParameter(2, "CD")
         ->andWhere('o.discountType = ?2')
-        ->andWhere("(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'")
+        ->andWhere("(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM \Core\Domain\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'")
         ->andWhere('s.status = 1')
         ->andWhere('o.deleted = 0')
         ->andWhere("o.userGenerated = 0")
@@ -202,12 +202,12 @@ class PopularVouchercodes extends \Core\Domain\Entity\PopularVouchercodes
         //$flag =  1;
         if (count($PrevPc) > 0) {
             //$flag =2;
-            $queryBuilder->update('KC\Entity\PopularVouchercodes', 'pvc')
+            $queryBuilder->update('\Core\Domain\Entity\PopularVouchercodes', 'pvc')
             ->set('pvc.position', $position)
             ->where('pvc.id = '.$PrevPc[0]['id'])
             ->getQuery()->execute();
             //change position of current element with postition + 1
-            $queryBuilder->update('KC\Entity\PopularVouchercodes', 'pvcodes')
+            $queryBuilder->update('\Core\Domain\Entity\PopularVouchercodes', 'pvcodes')
                 ->set('pvcodes.position', $pos)
                 ->where('pvcodes.id = '.$id)
                 ->getQuery()->execute();
@@ -232,12 +232,12 @@ class PopularVouchercodes extends \Core\Domain\Entity\PopularVouchercodes
         $PrevPc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         //change position of next element with current
         if (count($PrevPc) > 0) {
-            $queryBuilder->update('KC\Entity\PopularVouchercodes', 'pvc')
+            $queryBuilder->update('\Core\Domain\Entity\PopularVouchercodes', 'pvc')
             ->set('pvc.position', $position)
             ->where('pvc.id = '.$PrevPc[0]['id'])
             ->getQuery()->execute();
             //change position of current element with postition - 1
-            $queryBuilder->update('KC\Entity\PopularVouchercodes', 'pvcodes')
+            $queryBuilder->update('\Core\Domain\Entity\PopularVouchercodes', 'pvcodes')
             ->set('pvcodes.position', $pos)
             ->where('pvcodes.id = '.$id)
             ->getQuery()->execute();

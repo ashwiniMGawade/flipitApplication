@@ -8,8 +8,8 @@ class SpecialList extends \Core\Domain\Entity\SpecialList
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDateAndTime = date('Y-m-d H:i:s');
         $query = $queryBuilder->select('sp, p, l')
-            ->addSelect("(SELECT count(roc) FROM KC\Entity\RefOfferPage roc LEFT JOIN roc.refoffers off LEFT JOIN off.shopOffers s  WHERE roc.offers = sp.page and off.deleted = 0 and s.deleted = 0 and off.endDate >'".$currentDateAndTime."' and off.startDate <= '".$currentDateAndTime."'  and off.discountType='CD'  and off.Visability!='MEM') as totalCoupons")
-            ->addSelect("(SELECT count(roc1) FROM KC\Entity\RefOfferPage roc1 LEFT JOIN roc1.refoffers off1 LEFT JOIN off1.shopOffers s1  WHERE roc1.offers = sp.page and off1.deleted = 0 and s1.deleted = 0 and off1.endDate >'".$currentDateAndTime."' and off1.startDate <= '".$currentDateAndTime."' and off1.Visability!='MEM') as totalOffers")
+            ->addSelect("(SELECT count(roc) FROM \Core\Domain\Entity\RefOfferPage roc LEFT JOIN roc.refoffers off LEFT JOIN off.shopOffers s  WHERE roc.offers = sp.page and off.deleted = 0 and s.deleted = 0 and off.endDate >'".$currentDateAndTime."' and off.startDate <= '".$currentDateAndTime."'  and off.discountType='CD'  and off.Visability!='MEM') as totalCoupons")
+            ->addSelect("(SELECT count(roc1) FROM \Core\Domain\Entity\RefOfferPage roc1 LEFT JOIN roc1.refoffers off1 LEFT JOIN off1.shopOffers s1  WHERE roc1.offers = sp.page and off1.deleted = 0 and s1.deleted = 0 and off1.endDate >'".$currentDateAndTime."' and off1.startDate <= '".$currentDateAndTime."' and off1.Visability!='MEM') as totalOffers")
             ->from('\Core\Domain\Entity\SpecialList', 'sp')
             ->leftJoin('sp.page', 'p')
             ->leftJoin('p.logo', 'l')
@@ -44,7 +44,7 @@ class SpecialList extends \Core\Domain\Entity\SpecialList
         if (!empty($specialPageId)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
-                ->update('KC\Entity\SpecialList', 'sl')
+                ->update('\Core\Domain\Entity\SpecialList', 'sl')
                 ->set('sl.total_offers', $totalOffers)
                 ->set('sl.total_coupons', $totalCoupons)
                 ->where('sl.page ='.$specialPageId)
@@ -70,7 +70,7 @@ class SpecialList extends \Core\Domain\Entity\SpecialList
         $query = $queryBuilder->select('p.pageTitle as title')
             ->from('\Core\Domain\Entity\Page', 'p')
             ->where('p.deleted = 0')
-            ->andWhere("p INSTANCE OF KC\Entity\OfferListPage")
+            ->andWhere("p INSTANCE OF \Core\Domain\Entity\OfferListPage")
             ->setParameter(1, $keyword."%")
             ->andWhere($queryBuilder->expr()->like('p.pageTitle', '?1'))
             ->setParameter(2, $codevalues)
@@ -103,7 +103,7 @@ class SpecialList extends \Core\Domain\Entity\SpecialList
         $page = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $flag = '2';
         if (sizeof($page) > 0) {
-            $pc = $entityManager->getRepository('KC\Entity\SpecialList')
+            $pc = $entityManager->getRepository('\Core\Domain\Entity\SpecialList')
                 ->findBy(array('page' => $page[0]['id']));
 
             if (sizeof($pc) > 0) {
@@ -119,10 +119,10 @@ class SpecialList extends \Core\Domain\Entity\SpecialList
                 } else {
                     $NewPos = 1;
                 }
-                $pc = new \KC\Entity\SpecialList();
+                $pc = new \Core\Domain\Entity\SpecialList();
                 $pc->type = 'MN';
                 $pc->status = '1';
-                $pc->page = $entityManager->find('KC\Entity\Page', $page[0]['id']);
+                $pc->page = $entityManager->find('\Core\Domain\Entity\Page', $page[0]['id']);
                 $pc->position = (intval($NewPos) + 1);
                 $pc->deleted = 0;
                 $pc->total_offers = 0;
@@ -144,14 +144,14 @@ class SpecialList extends \Core\Domain\Entity\SpecialList
     {
         if ($id) {
             $queryBuilderDelete = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilderDelete->delete('KC\Entity\SpecialList', 's')
+            $query = $queryBuilderDelete->delete('\Core\Domain\Entity\SpecialList', 's')
                 ->where('s.page ='.$id)
                 ->getQuery();
             $query->execute();
 
             $entityManagerLocale  =\Zend_Registry::get('emLocale');
             $queryBuilder = $entityManagerLocale->createQueryBuilder();
-            $query = $queryBuilder->update('KC\Entity\SpecialList', 'p')
+            $query = $queryBuilder->update('\Core\Domain\Entity\SpecialList', 'p')
                 ->set('p.position', $queryBuilder->expr()->literal('p.position -1'))
                 ->setParameter(1, $position)
                 ->add('where', $queryBuilder->expr()->gt('p.position', '?1'))
@@ -175,14 +175,14 @@ class SpecialList extends \Core\Domain\Entity\SpecialList
         if (!empty($PrevPc)) {
             $queryBuilderUpdate = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilderUpdate
-                ->update('KC\Entity\SpecialList', 'sp')
+                ->update('\Core\Domain\Entity\SpecialList', 'sp')
                 ->set('sp.position', $position)
                 ->where('sp.id = '.$PrevPc[0]['id'])
                 ->getQuery()->execute();
            
             $queryBuilderNewposition = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilderNewposition
-                ->update('KC\Entity\SpecialList', 'spl')
+                ->update('\Core\Domain\Entity\SpecialList', 'spl')
                 ->set('spl.position', $pos)
                 ->where('spl.page = '.$id)
                 ->getQuery()->execute();
@@ -204,13 +204,13 @@ class SpecialList extends \Core\Domain\Entity\SpecialList
         if (!empty($PrevPc)) {
             $queryBuilderUpdate = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilderUpdate
-                ->update('KC\Entity\SpecialList', 'sp')
+                ->update('\Core\Domain\Entity\SpecialList', 'sp')
                 ->set('sp.position', $position)
                 ->where('sp.id = '.$PrevPc[0]['id'])
                 ->getQuery()->execute();
             $queryBuilderNewposition = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilderNewposition
-                ->update('KC\Entity\SpecialList', 'spl')
+                ->update('\Core\Domain\Entity\SpecialList', 'spl')
                 ->set('spl.position', $pos)
                 ->where('spl.page = '.$id)
                 ->getQuery()->execute();

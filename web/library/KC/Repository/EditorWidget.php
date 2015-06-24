@@ -7,7 +7,7 @@ class EditorWidget extends \Core\Domain\Entity\EditorWidget
         $editorWidgetData = self::getEditorWidgetData($parameters['type']);
         if (empty($editorWidgetData)) {
             $entityManagerLocale = \Zend_Registry::get('emLocale');
-            $editorWidget = new \KC\Entity\EditorWidget();
+            $editorWidget = new \Core\Domain\Entity\EditorWidget();
             $editorWidget->type = \FrontEnd_Helper_viewHelper::sanitize($parameters['type']);
             $editorWidget->description = \FrontEnd_Helper_viewHelper::sanitize($parameters['description']);
             $editorWidget->subtitle = \FrontEnd_Helper_viewHelper::sanitize($parameters['subtitle']);
@@ -30,7 +30,7 @@ class EditorWidget extends \Core\Domain\Entity\EditorWidget
         if (!empty($parameters['selecteditors'])) {
             $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $entityManagerLocale
-                ->update('KC\Entity\EditorWidget', 'ew')
+                ->update('\Core\Domain\Entity\EditorWidget', 'ew')
                 ->set('ew.editorId', $parameters['selecteditors'])
                 ->set('ew.description', $entityManagerLocale->expr()->literal($parameters['description']))
                 ->set('ew.subtitle', $entityManagerLocale->expr()->literal($parameters['subtitle']))

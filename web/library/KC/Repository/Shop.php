@@ -67,7 +67,7 @@ class Shop extends \Core\Domain\Entity\Shop
         ->select('s.id, s.name, s.permaLink, img.path as imgpath, img.name as imgname')
         ->from('\Core\Domain\Entity\PopularShop', 'p')
         ->addSelect(
-            "(SELECT COUNT(active.id) FROM KC\Entity\Offer active WHERE
+            "(SELECT COUNT(active.id) FROM \Core\Domain\Entity\Offer active WHERE
             (active.shopOffers = s.id AND active.endDate >= '$currentDate' 
                 AND active.deleted = 0
             )
@@ -154,12 +154,12 @@ class Shop extends \Core\Domain\Entity\Shop
         $query = $queryBuilder->select('p, s, img')
             ->from('\Core\Domain\Entity\PopularShop', 'p')
             /*->addSelect(
-                "(SELECT COUNT(exclusive) FROM KC\Entity\Offer exclusive WHERE exclusive.shopOffers = s.id AND
+                "(SELECT COUNT(exclusive) FROM \Core\Domain\Entity\Offer exclusive WHERE exclusive.shopOffers = s.id AND
                 (o.exclusiveCode =1 AND exclusive.endDate > '$currentDate')) as exclusiveCount"
             )
-            ->addSelect("(SELECT COUNT(pc) FROM KC\Entity\PopularCode pc WHERE pc.popularcode = o.id ) as popularCount")
+            ->addSelect("(SELECT COUNT(pc) FROM \Core\Domain\Entity\PopularCode pc WHERE pc.popularcode = o.id ) as popularCount")
             ->addSelect(
-                "(SELECT COUNT(active) FROM KC\Entity\Offer active WHERE
+                "(SELECT COUNT(active) FROM \Core\Domain\Entity\Offer active WHERE
                 (active.shopOffers = s.id AND active.endDate >= '$currentDate' 
                     AND active.deleted = 0
                 )
@@ -260,10 +260,10 @@ class Shop extends \Core\Domain\Entity\Shop
         $query = $queryBuilder->select('o.id,s.id, s.name, s.permaLink')
         ->from('\Core\Domain\Entity\Shop', 's')
         ->addSelect(
-            "(SELECT COUNT(exclusive) FROM KC\Entity\Offer exclusive WHERE exclusive.shopOffers = s.id AND
+            "(SELECT COUNT(exclusive) FROM \Core\Domain\Entity\Offer exclusive WHERE exclusive.shopOffers = s.id AND
                 (o.exclusiveCode=1 AND o.endDate > '$currentDateAndTime')) as exclusiveCount"
         )
-        ->addSelect("(SELECT COUNT(p.id) FROM KC\Entity\PopularCode p WHERE p.popularcode = o.id ) as popularCount")
+        ->addSelect("(SELECT COUNT(p.id) FROM \Core\Domain\Entity\PopularCode p WHERE p.popularcode = o.id ) as popularCount")
         ->leftJoin('s.offer', 'o')
         ->leftJoin('s.logo', 'img')
         ->where('s.deleted= 0')
@@ -381,7 +381,7 @@ class Shop extends \Core\Domain\Entity\Shop
             ->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal("%". $searchedKeyword."%")));
         if ($fromPage!='') {
             $query = $query->addSelect(
-                "(SELECT COUNT(active.id) FROM KC\Entity\Offer active WHERE
+                "(SELECT COUNT(active.id) FROM \Core\Domain\Entity\Offer active WHERE
                 (active.shopOffers = s.id AND active.endDate >= '$currentDate' 
                     AND active.deleted = 0 AND active.discountType = 'CD'
                 )
@@ -407,16 +407,16 @@ class Shop extends \Core\Domain\Entity\Shop
                 ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
             if ($favouriteShops) {
-                $queryBuilder->delete('KC\Entity\FavoriteShop', 'fs')
+                $queryBuilder->delete('\Core\Domain\Entity\FavoriteShop', 'fs')
                     ->where("fs.shop =" . $shopId)
                     ->andWhere('fs.visitor ='.$visitorId)
                     ->getQuery()
                     ->execute();
                 $addedStatus = 1;
             } else {
-                $favouriteShops = new \KC\Entity\FavoriteShop();
-                $favouriteShops->visitor = \Zend_Registry::get('emLocale')->find('KC\Entity\Visitor', $visitorId);
-                $favouriteShops->shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $shopId);
+                $favouriteShops = new \Core\Domain\Entity\FavoriteShop();
+                $favouriteShops->visitor = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Visitor', $visitorId);
+                $favouriteShops->shop = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Shop', $shopId);
                 $favouriteShops->deleted = 0;
                 $favouriteShops->created_at = new \DateTime('now');
                 $favouriteShops->updated_at = new \DateTime('now');
@@ -424,7 +424,7 @@ class Shop extends \Core\Domain\Entity\Shop
                 \Zend_Registry::get('emLocale')->flush();
             }
         
-            $shopName = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $shopId);
+            $shopName = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Shop', $shopId);
             $cacheKeyShopDetails = 'shopDetails_'  . $shopId . '_list';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);
             $cacheKeyOfferDetails = 'offerDetails_'  . $shopId . '_list';
@@ -451,7 +451,7 @@ class Shop extends \Core\Domain\Entity\Shop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDate = date('Y-m-d 00:00:00');
         $acitveOfferCount = $queryBuilder->select('count(o.id) as activeCount')
-            ->from("KC\Entity\Shop", "s")
+            ->from("\Core\Domain\Entity\Shop", "s")
             ->leftJoin('s.offer', 'o')
             ->where('s.id='.$shopId)
             ->andWhere('o.endDate >'."'".$currentDate."'")
@@ -465,7 +465,7 @@ class Shop extends \Core\Domain\Entity\Shop
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $shop = $queryBuilder->select('s.name')
-            ->from("KC\Entity\Shop", "s")
+            ->from("\Core\Domain\Entity\Shop", "s")
             ->where('s.id='.$shopId)
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -490,7 +490,7 @@ class Shop extends \Core\Domain\Entity\Shop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $shopsInformation = $queryBuilder
             ->select('s.permaLink, img.path, img.name, s.name as shopName')
-            ->from("KC\Entity\Shop", "s")
+            ->from("\Core\Domain\Entity\Shop", "s")
             ->leftJoin("s.logo", "img")
             ->where('s.deleted = 0')
             ->andWhere("s.id =".$shopId)
@@ -516,7 +516,7 @@ class Shop extends \Core\Domain\Entity\Shop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $shop = $queryBuilder
             ->select('s.id')
-            ->from("KC\Entity\Shop", "s")
+            ->from("\Core\Domain\Entity\Shop", "s")
             ->where('s.permaLink='."'$permalink'")
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -528,7 +528,7 @@ class Shop extends \Core\Domain\Entity\Shop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $relatedShopsIds = $queryBuilder
             ->select('s.id, rf.relatedshopId')
-            ->from("KC\Entity\Shop", "s")
+            ->from("\Core\Domain\Entity\Shop", "s")
             ->leftJoin("s.relatedshops", "rf")
             ->where("s.id =".$id)
             ->andWhere('s.status = 1')
@@ -552,7 +552,7 @@ class Shop extends \Core\Domain\Entity\Shop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $shopIds = $queryBuilder
             ->select('s.id')
-            ->from("KC\Entity\Shop", "s")
+            ->from("\Core\Domain\Entity\Shop", "s")
             ->where('s.deleted = 0')
             ->andWhere('s.status = 1')
             ->getQuery()
@@ -594,7 +594,7 @@ class Shop extends \Core\Domain\Entity\Shop
     public static function updateShopViewedIds($commaSepratedShopIds, $shopId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $queryBuilder->update('KC\Entity\Shop', 's')
+        $queryBuilder->update('\Core\Domain\Entity\Shop', 's')
         ->set('s.shopsViewedIds', "'$commaSepratedShopIds'")
         ->where('s.id ='.$shopId)
         ->getQuery()->execute();
@@ -605,7 +605,7 @@ class Shop extends \Core\Domain\Entity\Shop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $shopAlsoViewedIds = $queryBuilder
             ->select('s.shopsViewedIds')
-            ->from("KC\Entity\Shop", "s")
+            ->from("\Core\Domain\Entity\Shop", "s")
             ->where('s.id ='.$shopId)
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -620,7 +620,7 @@ class Shop extends \Core\Domain\Entity\Shop
     public static function addChain($chainItemId, $shopId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $queryBuilder->update('KC\Entity\Shop', 's')
+        $queryBuilder->update('\Core\Domain\Entity\Shop', 's')
         ->set('s.chainItemId', $chainItemId)
         ->where('s.id ='.$shopId)
         ->getQuery()->execute();
@@ -630,7 +630,7 @@ class Shop extends \Core\Domain\Entity\Shop
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         return $queryBuilder->select('s.name,s.permaLink,s.id')
-            ->from("KC\Entity\Shop", "s")
+            ->from("\Core\Domain\Entity\Shop", "s")
             ->where('s.deleted ='. 0)
             ->andWhere("s.status=1")
             ->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal($keyword."%")))
@@ -645,7 +645,7 @@ class Shop extends \Core\Domain\Entity\Shop
         $flag = @$params['flag'];
 
         $shopList = $queryBuilder
-            ->from("KC\Entity\Shop", "s")
+            ->from("\Core\Domain\Entity\Shop", "s")
             ->leftJoin('s.affliatenetwork', 'a')
             ->where('s.deleted = '. $flag);
         if (!empty($srh)) {
@@ -686,7 +686,7 @@ class Shop extends \Core\Domain\Entity\Shop
         $flag = @$params['flag'];
 
         $shopList = $queryBuilder
-            ->from("KC\Entity\Shop", "s")
+            ->from("\Core\Domain\Entity\Shop", "s")
             ->leftJoin('s.affliatenetwork', 'a')
             ->where('s.deleted = '. $flag);
         if (!empty($srh)) {
@@ -712,7 +712,7 @@ class Shop extends \Core\Domain\Entity\Shop
     public static function moveToTrash($id)
     {
         if ($id) {
-            $u =  \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $id);
+            $u =  \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Shop', $id);
             $u->deleted = 1;
             \Zend_Registry::get('emLocale')->persist($u);
             \Zend_Registry::get('emLocale')->flush();
@@ -748,17 +748,17 @@ class Shop extends \Core\Domain\Entity\Shop
             $shopInfo = (object) $shopInfo;
             if ($shopInfo->deleted == 1) {
                 $refShopCategoryQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $query = $refShopCategoryQueryBuilder->delete('KC\Entity\refShopCategory', 'r')
+                $query = $refShopCategoryQueryBuilder->delete('\Core\Domain\Entity\refShopCategory', 'r')
                     ->where("r.category=" . $id)
                     ->getQuery()->execute();
 
                 $PopularShopQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $query = $PopularShopQueryBuilder->delete('KC\Entity\PopularShop', 'p')
+                $query = $PopularShopQueryBuilder->delete('\Core\Domain\Entity\PopularShop', 'p')
                     ->where("p.popularshops=" . $id)
                     ->getQuery()->execute();
 
                 $RefArticleStoreQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $query = $RefArticleStoreQueryBuilder->delete('KC\Entity\RefArticleStore', 'rp')
+                $query = $RefArticleStoreQueryBuilder->delete('\Core\Domain\Entity\RefArticleStore', 'rp')
                     ->where("rp.articleshops=" . $id)
                     ->getQuery()->execute();
 
@@ -774,12 +774,12 @@ class Shop extends \Core\Domain\Entity\Shop
                 }
 
                 $OfferNewsQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $query = $OfferNewsQueryBuilder->delete('KC\Entity\OfferNews', 'ofn')
+                $query = $OfferNewsQueryBuilder->delete('\Core\Domain\Entity\OfferNews', 'ofn')
                     ->where("ofn.shop=" . $id)
                     ->getQuery()->execute();
 
                 $RoutePermalinkQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $query = $RoutePermalinkQueryBuilder->delete('KC\Entity\RoutePermalink', 'route')
+                $query = $RoutePermalinkQueryBuilder->delete('\Core\Domain\Entity\RoutePermalink', 'route')
                     ->where($queryBuilder->expr()->eq("route.permalink", $queryBuilder->expr()->literal($shopInfo->permaLink)))
                     ->getQuery()->execute();
                
@@ -804,7 +804,7 @@ class Shop extends \Core\Domain\Entity\Shop
                 # update chain if shop is associated with chain
                 if ($shopInfo->chainItemId) {
                     $RoutePermalinkQueryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-                    $query = $RoutePermalinkQueryBuilder->delete('KC\Entity\User\ChainItem', 'ct')
+                    $query = $RoutePermalinkQueryBuilder->delete('\Core\Domain\Entity\User\ChainItem', 'ct')
                         ->where("ct.chainItem=" . $shopInfo->chainId)
                         ->where("ct.shopId=" . $shopInfo->id)
                         ->getQuery()->execute();
@@ -828,7 +828,7 @@ class Shop extends \Core\Domain\Entity\Shop
             }
 
             $shopQueryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $shopQueryBuilder->delete('KC\Entity\Shop', 's')
+            $query = $shopQueryBuilder->delete('\Core\Domain\Entity\Shop', 's')
                 ->where("s.id=" . $id)
                 ->getQuery()->execute();
             return true;
@@ -841,7 +841,7 @@ class Shop extends \Core\Domain\Entity\Shop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
 
         if ($id) {
-            $shop =  \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $id);
+            $shop =  \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Shop', $id);
             $shop->deleted = 0;
             \Zend_Registry::get('emLocale')->persist($shop);
             \Zend_Registry::get('emLocale')->flush();
@@ -897,11 +897,11 @@ class Shop extends \Core\Domain\Entity\Shop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         if (!empty($shopDetail['id'])) {
             $shopInfo = \Zend_Registry::get('emLocale')
-                ->getRepository('KC\Entity\Shop')
+                ->getRepository('\Core\Domain\Entity\Shop')
                 ->find($shopDetail['id']);
             $shopInfo->created_at = $shopInfo->created_at;
         } else {
-            $shopInfo = new \Kc\Entity\Shop();
+            $shopInfo = new \Core\Domain\Entity\Shop();
             $shopInfo->created_at = new \DateTime('now');
         }
         $shopInfo->deleted = 0;
@@ -1038,7 +1038,7 @@ class Shop extends \Core\Domain\Entity\Shop
 
         if ($shopDetail['shopAffiliateNetwork'] != 0) {
             $shopInfo->affliatenetwork = \Zend_Registry::get('emLocale')
-                ->getRepository('KC\Entity\AffliateNetwork')
+                ->getRepository('\Core\Domain\Entity\AffliateNetwork')
                 ->find(
                     \BackEnd_Helper_viewHelper::stripSlashesFromString(
                         $shopDetail['shopAffiliateNetwork']
@@ -1065,7 +1065,7 @@ class Shop extends \Core\Domain\Entity\Shop
                     $ext = \BackEnd_Helper_viewHelper::getImageExtension(
                         $result['fileName']
                     );
-                    $howtousesmallimage =  new \KC\Entity\ImageHowToUseSmallImage();
+                    $howtousesmallimage =  new \Core\Domain\Entity\ImageHowToUseSmallImage();
                     $howtousesmallimage->ext = $ext;
                     $howtousesmallimage->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
                     $howtousesmallimage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
@@ -1075,7 +1075,7 @@ class Shop extends \Core\Domain\Entity\Shop
                     \Zend_Registry::get('emLocale')->persist($howtousesmallimage);
                     \Zend_Registry::get('emLocale')->flush();
                     $shopInfo->howtousesmallimage = \Zend_Registry::get('emLocale')
-                        ->getRepository('KC\Entity\ImageHowToUseSmallImage')
+                        ->getRepository('\Core\Domain\Entity\ImageHowToUseSmallImage')
                         ->find($howtousesmallimage->id);
                 } else {
                     return false;
@@ -1094,7 +1094,7 @@ class Shop extends \Core\Domain\Entity\Shop
                     $ext = \BackEnd_Helper_viewHelper::getImageExtension(
                         $result['fileName']
                     );
-                    $howtousebigimage =  new \KC\Entity\ImageHowToUseBigImage();
+                    $howtousebigimage =  new \Core\Domain\Entity\ImageHowToUseBigImage();
                     $howtousebigimage->ext = $ext;
                     $howtousebigimage->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
                     $howtousebigimage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
@@ -1104,7 +1104,7 @@ class Shop extends \Core\Domain\Entity\Shop
                     \Zend_Registry::get('emLocale')->persist($howtousebigimage);
                     \Zend_Registry::get('emLocale')->flush();
                     $shopInfo->howtousebigimage = \Zend_Registry::get('emLocale')
-                        ->getRepository('KC\Entity\ImageHowToUseBigImage')
+                        ->getRepository('\Core\Domain\Entity\ImageHowToUseBigImage')
                         ->find($howtousebigimage->id);
                 } else {
                     return false;
@@ -1123,7 +1123,7 @@ class Shop extends \Core\Domain\Entity\Shop
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension(
                     $result['fileName']
                 );
-                $logo =  new \KC\Entity\Logo();
+                $logo =  new \Core\Domain\Entity\Logo();
                 $logo->ext = $ext;
                 $logo->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
                 $logo->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
@@ -1133,7 +1133,7 @@ class Shop extends \Core\Domain\Entity\Shop
                 \Zend_Registry::get('emLocale')->persist($logo);
                 \Zend_Registry::get('emLocale')->flush();
                 $shopInfo->logo = \Zend_Registry::get('emLocale')
-                    ->getRepository('KC\Entity\Logo')
+                    ->getRepository('\Core\Domain\Entity\Logo')
                     ->find($logo->id);
             } else {
                 return false;
@@ -1193,16 +1193,16 @@ class Shop extends \Core\Domain\Entity\Shop
             if (!empty($shopDetail['selectedCategoryies'])) {
                 if (!empty($shopDetail['id'])) {
                     $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                    $query = $queryBuilder->delete('KC\Entity\RefShopCategory', 'rf')
+                    $query = $queryBuilder->delete('\Core\Domain\Entity\RefShopCategory', 'rf')
                         ->where("rf.shopId=" . $shopDetail['id'])
                         ->getQuery()->execute();
                 }
                 foreach ($shopDetail['selectedCategoryies'] as $key => $categories) {
-                    $refShopCategory = new \KC\Entity\RefShopCategory();
+                    $refShopCategory = new \Core\Domain\Entity\RefShopCategory();
                     $refShopCategory->created_at = new \DateTime('now');
                     $refShopCategory->updated_at = new \DateTime('now');
-                    $refShopCategory->category = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $shopInfo->id);
-                    $refShopCategory->shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Category', $categories);
+                    $refShopCategory->category = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Shop', $shopInfo->id);
+                    $refShopCategory->shop = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Category', $categories);
                     \Zend_Registry::get('emLocale')->persist($refShopCategory);
                     \Zend_Registry::get('emLocale')->flush();
                 }
@@ -1277,15 +1277,15 @@ class Shop extends \Core\Domain\Entity\Shop
                 $i = 1;
                 if (!empty($shopDetail['id'])) {
                     $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                    $query = $queryBuilder->delete('KC\Entity\RefShopRelatedshop', 'rsrs')
+                    $query = $queryBuilder->delete('\Core\Domain\Entity\RefShopRelatedshop', 'rsrs')
                         ->where("rsrs.shop=" . $shopDetail['id'])
                         ->getQuery()->execute();
                 }
                 foreach ($similarstoreordArray as $shop) {
                     if ($shop!='') {
-                        $relateshopObj = new \KC\Entity\RefShopRelatedshop();
+                        $relateshopObj = new \Core\Domain\Entity\RefShopRelatedshop();
                         $relateshopObj->shop = \Zend_Registry::get('emLocale')
-                            ->getRepository('KC\Entity\Shop')
+                            ->getRepository('\Core\Domain\Entity\Shop')
                             ->find($shopInfo->id);
                         $relateshopObj->relatedshopId = $shop;
                         $relateshopObj->position = $i;
@@ -1299,15 +1299,15 @@ class Shop extends \Core\Domain\Entity\Shop
             }
             if (!empty($shopDetail['title']) && !empty($shopDetail['content'])) {
                 $delChapters = $queryBuilder
-                    ->delete("KC\Entity\ShopHowToChapter", "sh")
+                    ->delete("\Core\Domain\Entity\ShopHowToChapter", "sh")
                     ->where("sh.shop = ".$shopInfo->id)
                     ->getQuery()
                     ->execute();
                 foreach ($shopDetail['title'] as $key => $title) {
                     if (!empty($shopDetail['title'][$key]) && !empty($shopDetail['content'][$key])) {
-                        $chapter = new \KC\Entity\ShopHowToChapter();
+                        $chapter = new \Core\Domain\Entity\ShopHowToChapter();
                         $chapter->shop = \Zend_Registry::get('emLocale')
-                            ->getRepository('KC\Entity\Shop')
+                            ->getRepository('\Core\Domain\Entity\Shop')
                             ->find($shopInfo->id);
                         $chapter->chapterTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['title'][$key]);
                         $chapter->chapterDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['content'][$key]) ;
@@ -1339,7 +1339,7 @@ class Shop extends \Core\Domain\Entity\Shop
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $shopInfo->id);
                 if ($shopInfo->chainItemId) {
                     $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-                    $query = $queryBuilder->update('KC\Entity\User\ChainItem', 'ct')
+                    $query = $queryBuilder->update('\Core\Domain\Entity\User\ChainItem', 'ct')
                         ->set('ct.shopName', $queryBuilder->expr()->literal($shopInfo->name))
                         ->set('ct.permalink', $queryBuilder->expr()->literal($shopInfo->permaLink))
                         ->set('ct.status', $queryBuilder->expr()->literal($shopInfo->status))
@@ -1441,8 +1441,8 @@ class Shop extends \Core\Domain\Entity\Shop
             ->from('\Core\Domain\Entity\Shop', 's')
             ->leftJoin('s.affliatenetwork', 'a')
             ->leftJoin("s.categoryshops", "c")
-            ->addSelect("(SELECT con.updated_at FROM KC\Entity\OfferNews  con  WHERE con.shopId = s.id order by con.updated_at Desc LIMIT 1) as newsTickerTime")
-            ->addSelect("(SELECT o.updated_at FROM KC\Entity\Offer o WHERE o.shopId = s.id and o.deleted = 0 order by o.updated_at Desc LIMIT 1) as offerTime")
+            ->addSelect("(SELECT con.updated_at FROM \Core\Domain\Entity\OfferNews  con  WHERE con.shopId = s.id order by con.updated_at Desc LIMIT 1) as newsTickerTime")
+            ->addSelect("(SELECT o.updated_at FROM \Core\Domain\Entity\Offer o WHERE o.shopId = s.id and o.deleted = 0 order by o.updated_at Desc LIMIT 1) as offerTime")
             ->leftJoin("s.relatedshops", "rs")
             ->where("s.deleted=0")
             ->orderBy("s.id", "DESC")
@@ -1512,13 +1512,13 @@ class Shop extends \Core\Domain\Entity\Shop
         $nowDate = date('Y-m-d 00:00:00');
         $data = $queryBuilder->select('s.id')
             ->from('\Core\Domain\Entity\Shop', 's')
-            ->addSelect("(SELECT sum(v.onclick) as pop FROM KC\Entity\ShopViewCount v WHERE v.shop = s.id ) as clicks")
+            ->addSelect("(SELECT sum(v.onclick) as pop FROM \Core\Domain\Entity\ShopViewCount v WHERE v.shop = s.id ) as clicks")
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         foreach ($data as $value) {
             if ($value['clicks']) {
-                $shopList = $queryBuilder->update('KC\Entity\Shop', 's')
+                $shopList = $queryBuilder->update('\Core\Domain\Entity\Shop', 's')
                     ->set('s.totalViewcount', $queryBuilder->expr()->literal($value['clicks']))
                     ->where('s.id = ?1')
                     ->setParameter(1, $value['id'])
@@ -1629,7 +1629,7 @@ class Shop extends \Core\Domain\Entity\Shop
     public static function deletechapters($id)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $data = $queryBuilder->delete('KC\Entity\ShopHowToChapter', 's')
+        $data = $queryBuilder->delete('\Core\Domain\Entity\ShopHowToChapter', 's')
             ->where('s.id ='.$id)
             ->getQuery()
             ->execute();
@@ -1744,7 +1744,7 @@ class Shop extends \Core\Domain\Entity\Shop
         $shopDetail = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $params['id']);
+        $shop = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Shop', $params['id']);
         $shop->status = $status;
         $shop->offlineSicne = $date;
         $entityManagerLocale->persist($shop);
@@ -1923,7 +1923,7 @@ class Shop extends \Core\Domain\Entity\Shop
         if ($shopId!='') {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->select('s.id')
-                ->from("KC\Entity\Shop", "s")
+                ->from("\Core\Domain\Entity\Shop", "s")
                 ->where('s.id='.$shopId)
                 ->andWhere('s.status = 1');
             $Q = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -1944,7 +1944,7 @@ class Shop extends \Core\Domain\Entity\Shop
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s.brandingcss')
-            ->from("KC\Entity\Shop", "s")
+            ->from("\Core\Domain\Entity\Shop", "s")
             ->where('s.id='.$shopID);
         $brandingCss = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return (!empty($brandingCss[0]['brandingcss'])) ? unserialize($brandingCss[0]['brandingcss']) : null;

@@ -36,7 +36,7 @@ $platform->registerDoctrineTypeMapping('enum', 'string');
 
 $config = new \Doctrine\ORM\Configuration();
 $config->setProxyDir(APPLICATION_PATH . '/../KC/Entity/proxy');
-$config->setProxyNamespace('KC\Entity\Proxy');
+$config->setProxyNamespace('\Core\Domain\Entity\Proxy');
 
 // Auto generate proxies for development
 $config->setAutoGenerateProxyClasses(true);

@@ -476,7 +476,7 @@ class Media extends \Core\Domain\Entity\Media
         if ($opt=='insert') {
             $authorName = null;
             $authorId = null;
-            $image = new \KC\Entity\MediaImage();
+            $image = new \Core\Domain\Entity\MediaImage();
 
             if ($fileNameUrl) {
                 $image->path = $fileNameUrl;
@@ -489,11 +489,11 @@ class Media extends \Core\Domain\Entity\Media
                 \Zend_Registry::get('emLocale')->flush();
             }
 
-            $media = new \KC\Entity\Media();
+            $media = new \Core\Domain\Entity\Media();
             $media->name = $fileNameUrl;
             $media->fileurl = $fileNameUrl;
             $media->mediaimage = \Zend_Registry::get('emLocale')
-                ->getRepository('KC\Entity\MediaImage')
+                ->getRepository('\Core\Domain\Entity\MediaImage')
                 ->find($image->id);
             $media->authorName = \Zend_Auth::getInstance()->getIdentity()->firstName;
             $media->authorId = \Zend_Auth::getInstance()->getIdentity()->id;
@@ -513,7 +513,7 @@ class Media extends \Core\Domain\Entity\Media
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $mediaList = $queryBuilder
             ->select('m')
-            ->from("KC\Entity\Media", "m");
+            ->from("\Core\Domain\Entity\Media", "m");
         return $mediaList;
     }
 
@@ -527,14 +527,14 @@ class Media extends \Core\Domain\Entity\Media
             ->where("m.id=". $id)
             ->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-            $del = $queryBuilder->delete('KC\Entity\Media', 'm')
+            $del = $queryBuilder->delete('\Core\Domain\Entity\Media', 'm')
                 ->where('m.id=' . $id)
                 ->getQuery()
                 ->execute();
 
             if (!empty($sel['mediaimage']['id'])) {
-                $media = \Zend_Registry::get('emLocale')->find('KC\Entity\Media', $id);
-                $del1 = $queryBuilder->delete('KC\Entity\Image', 'i')
+                $media = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Media', $id);
+                $del1 = $queryBuilder->delete('\Core\Domain\Entity\Image', 'i')
                 ->where('i.id=' . $sel['mediaimage']['id'])
                 ->getQuery()
                 ->execute();
@@ -555,11 +555,11 @@ class Media extends \Core\Domain\Entity\Media
         if ($id) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $u = \Zend_Registry::get('emLocale')
-                ->getRepository('KC\Entity\Media')
+                ->getRepository('\Core\Domain\Entity\Media')
                 ->find($id);
             $mediaList = $queryBuilder
             ->select("m")
-            ->from("KC\Entity\Media", "m")
+            ->from("\Core\Domain\Entity\Media", "m")
             ->leftJoin('m.mediaimage', 'mi')
             ->where('mi.id='.$id)
             ->orderBy("m.id", "DESC");
@@ -574,7 +574,7 @@ class Media extends \Core\Domain\Entity\Media
             if ($params['name']) {
                 $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
                 echo $data = $queryBuilder
-                ->update('KC\Entity\Media', 'm')
+                ->update('\Core\Domain\Entity\Media', 'm')
                 ->set(
                     'm.name',
                     $queryBuilder->expr()->literal(
@@ -613,7 +613,7 @@ class Media extends \Core\Domain\Entity\Media
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $queryBuilder
-            ->update('KC\Entity\Media', 'm')
+            ->update('\Core\Domain\Entity\Media', 'm')
             ->set(
                 'm.name',
                 $queryBuilder->expr()->literal(

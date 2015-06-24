@@ -6,9 +6,9 @@ class OfferNews extends \Core\Domain\Entity\OfferNews
 {
     public static function saveNewsticker($params)
     {
-        $savenews = new \KC\Entity\OfferNews();
+        $savenews = new \Core\Domain\Entity\OfferNews();
         $savenews->shop = \Zend_Registry::get('emLocale')
-            ->getRepository('KC\Entity\Shop')
+            ->getRepository('\Core\Domain\Entity\Shop')
             ->find($params['selctedshop']);
         $savenews->title = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['newsTitle']);
         $savenews->url = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['newsrefUrl']);
@@ -29,7 +29,7 @@ class OfferNews extends \Core\Domain\Entity\OfferNews
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $newstickerList =  $queryBuilder
-            ->from("KC\Entity\OfferNews", "n")
+            ->from("\Core\Domain\Entity\OfferNews", "n")
             ->leftJoin("n.shop", "s")
             ->where("n.deleted = 0");
         $request = \DataTable_Helper::createSearchRequest($params, array());
@@ -49,7 +49,7 @@ class OfferNews extends \Core\Domain\Entity\OfferNews
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $del1 = $queryBuilder
-           ->delete("KC\Entity\OfferNews", "n")
+           ->delete("\Core\Domain\Entity\OfferNews", "n")
            ->where("n.id=" . $id)
            ->getQuery()
            ->execute();
@@ -61,7 +61,7 @@ class OfferNews extends \Core\Domain\Entity\OfferNews
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $data = $queryBuilder->select("n,s")
-            ->from("KC\Entity\OfferNews", "n")
+            ->from("\Core\Domain\Entity\OfferNews", "n")
             ->LeftJoin("n.shop", "s")
             ->where("n.id = ". $id)
             ->andWhere('n.deleted=0')
@@ -73,10 +73,10 @@ class OfferNews extends \Core\Domain\Entity\OfferNews
     public static function updateNewsticker($params)
     {
             $data = \Zend_Registry::get('emLocale')
-                ->getRepository('KC\Entity\OfferNews')
+                ->getRepository('\Core\Domain\Entity\OfferNews')
                 ->find($params['id']);
             $data->shop = \Zend_Registry::get('emLocale')
-                ->getRepository('KC\Entity\Shop')
+                ->getRepository('\Core\Domain\Entity\Shop')
                 ->find($params['selctedshop']);
             $data->offerId = null;
             $data->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['newsTitle']);
@@ -116,7 +116,7 @@ class OfferNews extends \Core\Domain\Entity\OfferNews
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query  = $queryBuilder
             ->select('n.id as id, n.title as title, n.startdate, s.name, s.id as shopId, n.linkstatus, n.url, n.content')
-            ->from("KC\Entity\OfferNews", "n")
+            ->from("\Core\Domain\Entity\OfferNews", "n")
             ->leftJoin("n.shop", "s")
             ->where("n.deleted = 0")
             ->orderBy("n.title", "ASC");

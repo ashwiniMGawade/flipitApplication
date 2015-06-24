@@ -55,9 +55,9 @@ class BackEnd_Helper_importOffersExcel
                     $startDate = date('Y-m-d', strtotime($offerStartDate));
                     $endDate = date('Y-m-d', strtotime($offerEndDate));
                     if ($endDate >= $currentDate) {
-                        $offerList = new \KC\Entity\Offer();
+                        $offerList = new \Core\Domain\Entity\Offer();
                         $offerList->title = $offerTitle;
-                        $offerList->shopOffers = $entityManagerLocale->find('KC\Entity\Shop', $shopId);
+                        $offerList->shopOffers = $entityManagerLocale->find('\Core\Domain\Entity\Shop', $shopId);
                         $offerList->discountType = !empty($offerCouponCode) ? 'CD' : 'SL';
                         $offerList->Visability = !empty($offerVisibility) ? 'DE' : 'MEM';
                         $offerList->extendedOffer = 0;

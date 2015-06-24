@@ -7,7 +7,7 @@ class Newsletterbanners extends \Core\Domain\Entity\NewsLetterBanners
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
             ->select('s.name, s.path, s.headerurl, s.footerurl, s.imagetype')
-            ->from("KC\Entity\NewsLetterBanners", "s")
+            ->from("\Core\Domain\Entity\NewsLetterBanners", "s")
             ->where('s.imagetype ='.$entityManagerLocale->expr()->literal($imageType));
         $existedNewsLetterImage = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (!empty($existedNewsLetterImage)) {
@@ -22,7 +22,7 @@ class Newsletterbanners extends \Core\Domain\Entity\NewsLetterBanners
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
             ->select($columnName)
-            ->from("KC\Entity\NewsLetterBanners", "s")
+            ->from("\Core\Domain\Entity\NewsLetterBanners", "s")
             ->where('s.imagetype ='.$entityManagerLocale->expr()->literal($imageType));
         $existedNewsLetterImageUrl = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (!empty($existedNewsLetterImageUrl)) {
@@ -51,7 +51,7 @@ class Newsletterbanners extends \Core\Domain\Entity\NewsLetterBanners
     public static function updateNewsLetterBannerUrl($updatedColumnName, $value, $imageType)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $entityManagerLocale->update('KC\Entity\NewsLetterBanners', 's')
+        $entityManagerLocale->update('\Core\Domain\Entity\NewsLetterBanners', 's')
         ->set($updatedColumnName, $entityManagerLocale->expr()->literal($value))
         ->where('s.imagetype ='.$entityManagerLocale->expr()->literal($imageType))
         ->getQuery()->execute();
@@ -60,7 +60,7 @@ class Newsletterbanners extends \Core\Domain\Entity\NewsLetterBanners
 
     public static function saveNewsLetterBannerUrl($columnName, $value, $imageType)
     {
-        $newsLetterImageUrl = new KC\Entity\NewsLetterBanners();
+        $newsLetterImageUrl = new \Core\Domain\Entity\NewsLetterBanners();
         $newsLetterImageUrl->$columnName = $value;
         $newsLetterImageUrl->imagetype = $imageType;
         $newsLetterImageUrl->deleted = 0;
@@ -98,7 +98,7 @@ class Newsletterbanners extends \Core\Domain\Entity\NewsLetterBanners
 
     public static function saveNewsletterImages($uploadedImage, $imageType)
     {
-        $newsLetterHeaderImage = new \KC\Entity\NewsLetterBanners();
+        $newsLetterHeaderImage = new \Core\Domain\Entity\NewsLetterBanners();
         $newsLetterHeaderImage->name = urlencode($uploadedImage['fileName']);
         $newsLetterHeaderImage->path = $uploadedImage['path'];
         $newsLetterHeaderImage->imagetype = $imageType;
@@ -113,7 +113,7 @@ class Newsletterbanners extends \Core\Domain\Entity\NewsLetterBanners
     public static function updateNewsletterBanners($uploadedImage, $imageType)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $entityManagerLocale->update('KC\Entity\NewsLetterBanners', 'n')
+        $entityManagerLocale->update('\Core\Domain\Entity\NewsLetterBanners', 'n')
             ->set('n.name', $entityManagerLocale->expr()->literal(urlencode($uploadedImage['fileName'])))
             ->set('n.path', $entityManagerLocale->expr()->literal($uploadedImage['path']))
             ->set('n.footerurl', $entityManagerLocale->expr()->literal($uploadedImage['footerurl']))
@@ -163,7 +163,7 @@ class Newsletterbanners extends \Core\Domain\Entity\NewsLetterBanners
     public static function deleteNewsletterImages($imageType)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $entityManagerLocale->update('KC\Entity\NewsLetterBanners', 'n')
+        $entityManagerLocale->update('\Core\Domain\Entity\NewsLetterBanners', 'n')
             ->set('n.name', $entityManagerLocale->expr()->literal(''))
             ->set('n.path', $entityManagerLocale->expr()->literal(''))
             ->where('n.imagetype ='.$entityManagerLocale->expr()->literal($imageType))

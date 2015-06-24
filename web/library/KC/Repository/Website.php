@@ -36,7 +36,7 @@ class Website extends \Core\Domain\Entity\User\Website
     public static function setLocaleStatus($localeStatus, $websiteName)
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $query = $queryBuilder->update('KC\Entity\User\Website', 'w')
+        $query = $queryBuilder->update('\Core\Domain\Entity\User\Website', 'w')
                 ->set('w.status', $queryBuilder->expr()->literal($localeStatus))
                 ->where($queryBuilder->expr()->eq('w.name', $queryBuilder->expr()->literal($websiteName)))
                 ->getQuery();
@@ -58,7 +58,7 @@ class Website extends \Core\Domain\Entity\User\Website
     public static function saveChain($chain, $websiteName)
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $query = $queryBuilder->update('KC\Entity\User\Website', 'w')
+        $query = $queryBuilder->update('\Core\Domain\Entity\User\Website', 'w')
                 ->set('w.chain', $queryBuilder->expr()->literal($chain))
                 ->where($queryBuilder->expr()->eq('w.name', $queryBuilder->expr()->literal($websiteName)))
                 ->getQuery();

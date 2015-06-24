@@ -11,7 +11,7 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
             ->from('\Core\Domain\Entity\CategoriesOffers', 'op')
             ->leftJoin('op.offers', 'o')
             ->andWhere(
-                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and o.status=1)  > 0)
+                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id) FROM \Core\Domain\Entity\CouponCode cc WHERE cc.offer = o.id and o.status=1)  > 0)
                 or o.couponCodeType = 'GN'"
             )
             ->leftJoin('o.shopOffers', 's')
@@ -138,9 +138,9 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
     public static function saveCategoryOffers($offerId, $categoryId, $newPosition)
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $categoryOffer = new \KC\Entity\CategoriesOffers();
-        $categoryOffer->offers = $entityManagerLocale->find('KC\Entity\Offer', $offerId);
-        $categoryOffer->categories = $entityManagerLocale->find('KC\Entity\Category', $categoryId);
+        $categoryOffer = new \Core\Domain\Entity\CategoriesOffers();
+        $categoryOffer->offers = $entityManagerLocale->find('\Core\Domain\Entity\Offer', $offerId);
+        $categoryOffer->categories = $entityManagerLocale->find('\Core\Domain\Entity\Category', $categoryId);
         $categoryOffer->position = (intval($newPosition) + 1);
         $categoryOffer->deleted = 0;
         $categoryOffer->created_at = new \DateTime('now');
@@ -155,7 +155,7 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
         if (!empty($id)) {
             $queryBuilderDelete = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilderDelete
-                ->delete('KC\Entity\CategoriesOffers', 'spl')
+                ->delete('\Core\Domain\Entity\CategoriesOffers', 'spl')
                 ->where('spl.id ='.$id)
                 ->getQuery();
             $query->execute();
@@ -183,7 +183,7 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
         if (isset($newOffer['id'])) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
-                ->update('KC\Entity\CategoriesOffers', 'p')
+                ->update('\Core\Domain\Entity\CategoriesOffers', 'p')
                 ->set('p.position', $newPosition)
                 ->where('p.id = '.$newOffer['id'])
                 ->getQuery();
@@ -214,7 +214,7 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
         if (!empty($categoryId)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
-                ->delete('KC\Entity\CategoriesOffers', 'spl')
+                ->delete('\Core\Domain\Entity\CategoriesOffers', 'spl')
                 ->where('spl.categories ='.$categoryId)
                 ->getQuery();
             $query->execute();
@@ -229,9 +229,9 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
         $i = 1;
         foreach ($offerIds as $offerId) {
             $entityManagerLocale  = \Zend_Registry::get('emLocale');
-            $categoryOffer = new \KC\Entity\CategoriesOffers();
-            $categoryOffer->offers = $entityManagerLocale->find('KC\Entity\Offer', $offerId);
-            $categoryOffer->categories = $entityManagerLocale->find('KC\Entity\Category', $categoryId);
+            $categoryOffer = new \Core\Domain\Entity\CategoriesOffers();
+            $categoryOffer->offers = $entityManagerLocale->find('\Core\Domain\Entity\Offer', $offerId);
+            $categoryOffer->categories = $entityManagerLocale->find('\Core\Domain\Entity\Category', $categoryId);
             $categoryOffer->position = $i;
             $categoryOffer->deleted = 0;
             $categoryOffer->created_at = new \DateTime('now');

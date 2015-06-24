@@ -539,7 +539,7 @@ class Admin_PageController extends Zend_Controller_Action
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
             ->select('rp.permalink, rp.exactlink')
-            ->from('KC\Entity\RoutePermalink', 'rp')
+            ->from('\Core\Domain\Entity\RoutePermalink', 'rp')
             ->where("rp.permalink = '".urlencode($url)."'");
         $rp = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if ($id!='') {

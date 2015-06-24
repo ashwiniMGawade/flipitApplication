@@ -151,7 +151,7 @@ class User extends \Core\Domain\Entity\User\User
 
     public function addUser($params, $imageName)
     {
-        $addUser = new \KC\Entity\User\User();
+        $addUser = new \Core\Domain\Entity\User\User();
         $entityManagerUser  = \Zend_Registry::get('emUser');
 
         $addtosearch = '0';
@@ -187,7 +187,7 @@ class User extends \Core\Domain\Entity\User\User
             );
         }
 
-        $addUser->users = $entityManagerUser->find('KC\Entity\User\Role', \BackEnd_Helper_viewHelper::stripSlashesFromString($params['role']));
+        $addUser->users = $entityManagerUser->find('\Core\Domain\Entity\User\Role', \BackEnd_Helper_viewHelper::stripSlashesFromString($params['role']));
         $addUser->showInAboutListing = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['nameStatus']);
         $addUser->addtosearch = $addtosearch;
         $addUser->google = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['google']);
@@ -207,7 +207,7 @@ class User extends \Core\Domain\Entity\User\User
         preg_match($pattern, $imageName, $matches);
         if (@$matches[1]) {
             $ext =  \BackEnd_Helper_viewHelper::getImageExtension($imageName);
-            $pImage  = new \KC\Entity\User\ProfileImage();
+            $pImage  = new \Core\Domain\Entity\User\ProfileImage();
             $pImage->ext = $ext;
             $pImage->created_at = new \DateTime('now');
             $pImage->updated_at = new \DateTime('now');
@@ -216,18 +216,18 @@ class User extends \Core\Domain\Entity\User\User
             $pImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($imageName);
             $entityManagerUser->persist($pImage);
             $entityManagerUser->flush();
-            $addUser->profileImageId =  $entityManagerUser->find('KC\Entity\User\ProfileImage', $pImage->getId());
+            $addUser->profileImageId =  $entityManagerUser->find('\Core\Domain\Entity\User\ProfileImage', $pImage->getId());
         }
 
         $entityManagerUser->persist($addUser);
         $entityManagerUser->flush();
         if (isset($params['websites'])) {
             foreach ($params['websites'] as $web) {
-                $website = new \KC\Entity\User\refUserWebsite();
+                $website = new \Core\Domain\Entity\User\refUserWebsite();
                 $website->created_at = new \DateTime('now');
                 $website->updated_at = new \DateTime('now');
-                $website->refUsersWebsite = $entityManagerUser->find('KC\Entity\User\Website', $web);
-                $website->websiteUsers = $entityManagerUser->find('KC\Entity\User\User', $addUser->getId());
+                $website->refUsersWebsite = $entityManagerUser->find('\Core\Domain\Entity\User\Website', $web);
+                $website->websiteUsers = $entityManagerUser->find('\Core\Domain\Entity\User\User', $addUser->getId());
                 $entityManagerUser->persist($website);
                 $entityManagerUser->flush();
             }
@@ -236,8 +236,8 @@ class User extends \Core\Domain\Entity\User\User
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
         if (isset($params['selectedCategoryies'])) {
             foreach ($params['selectedCategoryies'] as $categories) {
-                $cat = new \KC\Entity\Interestingcategory();
-                $cat->category  = $entityManagerLocale->find('KC\Entity\Category', $categories);
+                $cat = new \Core\Domain\Entity\Interestingcategory();
+                $cat->category  = $entityManagerLocale->find('\Core\Domain\Entity\Category', $categories);
                 $cat->userId = $addUser->getId();
                 $entityManagerLocale->persist($cat);
                 $entityManagerLocale->flush();
@@ -247,8 +247,8 @@ class User extends \Core\Domain\Entity\User\User
         if (!empty($params['fevoriteStore'])) {
             $splitStore  =explode(",", $params['fevoriteStore']);
             foreach ($splitStore as $str) {
-                $store = new  \KC\Entity\Adminfavoriteshp();
-                $store->shops  = $entityManagerLocale->find('KC\Entity\Shop', $str);
+                $store = new  \Core\Domain\Entity\Adminfavoriteshp();
+                $store->shops  = $entityManagerLocale->find('\Core\Domain\Entity\Shop', $str);
                 $store->userId = $addUser->getId();
                 $entityManagerLocale->persist($store);
                 $entityManagerLocale->flush();
@@ -326,7 +326,7 @@ class User extends \Core\Domain\Entity\User\User
         
         $entityManagerUser  = \Zend_Registry::get('emUser');
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
-        $repo = $entityManagerUser->getRepository('KC\Entity\User\User');
+        $repo = $entityManagerUser->getRepository('\Core\Domain\Entity\User\User');
         $updateUser = $repo->find($params['id']);
 
         $addtosearch = 0;
@@ -343,7 +343,7 @@ class User extends \Core\Domain\Entity\User\User
 
         $updateUser->firstName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['firstName']);
         $updateUser->lastName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
-        $updateUser->users =  $entityManagerUser->find('KC\Entity\User\Role', $params['role']);
+        $updateUser->users =  $entityManagerUser->find('\Core\Domain\Entity\User\Role', $params['role']);
         $updateUser->showInAboutListing = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['nameStatus']);
         $updateUser->addtosearch =$addtosearch;
         $updateUser->google = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['google']);
@@ -366,9 +366,9 @@ class User extends \Core\Domain\Entity\User\User
             if (@$matches[1]) {
                 $ext =  \BackEnd_Helper_viewHelper::getImageExtension($imageName);
                 if (intval($params['pImageId']) > 0) {
-                    $pImage = $entityManagerUser->find('KC\Entity\User\ProfileImage', $params['pImageId']);
+                    $pImage = $entityManagerUser->find('\Core\Domain\Entity\User\ProfileImage', $params['pImageId']);
                 } else {
-                    $pImage  = new \KC\Entity\User\ProfileImage();
+                    $pImage  = new \Core\Domain\Entity\User\ProfileImage();
                     $pImage->created_at = new \DateTime('now');
                     $pImage->updated_at = new \DateTime('now');
                     $pImage->deleted = '0';
@@ -378,7 +378,7 @@ class User extends \Core\Domain\Entity\User\User
                 $pImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($imageName);
                 $entityManagerUser->persist($pImage);
                 $entityManagerUser->flush();
-                $updateUser->profileimage =  $entityManagerUser->find('KC\Entity\User\ProfileImage', $pImage->getId());
+                $updateUser->profileimage =  $entityManagerUser->find('\Core\Domain\Entity\User\ProfileImage', $pImage->getId());
             }
         }
 
@@ -402,23 +402,23 @@ class User extends \Core\Domain\Entity\User\User
             if ($params['id'] != \Auth_StaffAdapter::getIdentity()->id) {
 
                 if (isset($params['role'])) {
-                    $updateUser->users =  $entityManagerUser->find('KC\Entity\User\Role', $params['role']);
+                    $updateUser->users =  $entityManagerUser->find('\Core\Domain\Entity\User\Role', $params['role']);
                 }
 
                 $updateUser->createdBy = \Auth_StaffAdapter::getIdentity()->id;
                
                 $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-                $query = $queryBuilder->delete('KC\Entity\User\refUserWebsite', 'rf')
+                $query = $queryBuilder->delete('\Core\Domain\Entity\User\refUserWebsite', 'rf')
                     ->where("rf.websiteUsers=" . $params['id'])
                     ->getQuery()->execute();
 
                 if (isset($params['websites'])) {
                     foreach ($params['websites'] as $web) {
-                        $website = new \KC\Entity\User\refUserWebsite();
+                        $website = new \Core\Domain\Entity\User\refUserWebsite();
                         $website->created_at = new \DateTime('now');
                         $website->updated_at = new \DateTime('now');
-                        $website->refUsersWebsite = $entityManagerUser->find('KC\Entity\User\Website', $web);
-                        $website->websiteUsers = $entityManagerUser->find('KC\Entity\User\User', $params['id']);
+                        $website->refUsersWebsite = $entityManagerUser->find('\Core\Domain\Entity\User\Website', $web);
+                        $website->websiteUsers = $entityManagerUser->find('\Core\Domain\Entity\User\User', $params['id']);
                         $entityManagerUser->persist($website);
                         $entityManagerUser->flush();
                     }
@@ -453,13 +453,13 @@ class User extends \Core\Domain\Entity\User\User
 
         if (isset($params['selectedCategoryies'])) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\Interestingcategory', 'i')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\Interestingcategory', 'i')
                 ->where("i.userId=" . $updateUser->getId())
                 ->getQuery()->execute();
 
             foreach ($params['selectedCategoryies'] as $categories) {
-                $cat = new \KC\Entity\Interestingcategory();
-                $cat->category  = $entityManagerLocale->find('KC\Entity\Category', $categories);
+                $cat = new \Core\Domain\Entity\Interestingcategory();
+                $cat->category  = $entityManagerLocale->find('\Core\Domain\Entity\Category', $categories);
                 $cat->userId = $updateUser->getId();
                 $entityManagerLocale->persist($cat);
                 $entityManagerLocale->flush();
@@ -468,14 +468,14 @@ class User extends \Core\Domain\Entity\User\User
         
         if (!empty($params['fevoriteStore'])) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\Adminfavoriteshp', 'i')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\Adminfavoriteshp', 'i')
                 ->where("i.userId=" . $updateUser->getId())
                 ->getQuery()->execute();
 
             $splitStore = explode(",", $params['fevoriteStore']);
             foreach ($splitStore as $str) {
-                $store = new  \KC\Entity\Adminfavoriteshp();
-                $store->shops  = $entityManagerLocale->find('KC\Entity\Shop', $str);
+                $store = new  \Core\Domain\Entity\Adminfavoriteshp();
+                $store->shops  = $entityManagerLocale->find('\Core\Domain\Entity\Shop', $str);
                 $store->userId = $updateUser->getId();
                 $entityManagerLocale->persist($store);
                 $entityManagerLocale->flush();
@@ -525,28 +525,28 @@ class User extends \Core\Domain\Entity\User\User
 
                 if ($flag==0) {
                     \Zend_Registry::get('emLocale')->createQueryBuilder()
-                        ->update('KC\Entity\Offer', 'o')
+                        ->update('\Core\Domain\Entity\Offer', 'o')
                         ->set('o.authorName', "'$fullName'")
                         ->where('o.authorId ='.$id)
                         ->getQuery()->execute();
 
                     \Zend_Registry::get('emLocale')
-                        ->createQueryBuilder()->update('KC\Entity\Page', 'p')
+                        ->createQueryBuilder()->update('\Core\Domain\Entity\Page', 'p')
                         ->set('p.contentManagerName', "'$fullName'")
                         ->where('p.contentManagerId ='.$id)
                         ->getQuery()->execute();
 
-                    \Zend_Registry::get('emLocale')->createQueryBuilder()->update('KC\Entity\Articles', 'a')
+                    \Zend_Registry::get('emLocale')->createQueryBuilder()->update('\Core\Domain\Entity\Articles', 'a')
                         ->set('a.authorname', "'$fullName'")
                         ->where('a.authorid ='.$id)
                         ->getQuery()->execute();
 
-                    \Zend_Registry::get('emLocale')->createQueryBuilder()->update('KC\Entity\Shop', 's')
+                    \Zend_Registry::get('emLocale')->createQueryBuilder()->update('\Core\Domain\Entity\Shop', 's')
                         ->set('s.accountManagerName', "'$fullName'")
                         ->where('s.accoutManagerId ='.$id)
                         ->getQuery()->execute();
 
-                    \Zend_Registry::get('emLocale')->createQueryBuilder()->update('KC\Entity\Shop', 'sh')
+                    \Zend_Registry::get('emLocale')->createQueryBuilder()->update('\Core\Domain\Entity\Shop', 'sh')
                         ->set('sh.contentManagerName', "'$fullName'")
                         ->where('sh.contentManagerId ='.$id)
                         ->getQuery()->execute();
@@ -564,7 +564,7 @@ class User extends \Core\Domain\Entity\User\User
                             endforeach;
                         endif;
                         $offerQueryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                        $query= $offerQueryBuilder->update('\KC\Entity\Offer', 'uo')
+                        $query= $offerQueryBuilder->update('\Core\Domain\Entity\Offer', 'uo')
                             ->set('uo.authorName', $offerQueryBuilder->expr()->literal($fullName))
                             ->set('uo.authorId', 0)
                             ->where($offerQueryBuilder->expr()->in('uo.id', $ids));
@@ -586,7 +586,7 @@ class User extends \Core\Domain\Entity\User\User
                         endif;
 
                         $pagesQueryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                        $query= $pagesQueryBuilder->update('\KC\Entity\Page', 'page')
+                        $query= $pagesQueryBuilder->update('\Core\Domain\Entity\Page', 'page')
                             ->set('page.contentManagerName', "'$fullName'")
                             ->set('page.contentManagerId', 0)
                             ->where($entityManagerUser->expr()->in('page.id', $ids));
@@ -608,7 +608,7 @@ class User extends \Core\Domain\Entity\User\User
                         endif;
 
                         $articlesQueryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                        $query= $articlesQueryBuilder->update('\KC\Entity\Articles', 'article')
+                        $query= $articlesQueryBuilder->update('\Core\Domain\Entity\Articles', 'article')
                             ->set('article.authorname', "'$fullName'")
                             ->set('article.authorid', 0)
                             ->where($entityManagerUser->expr()->in('article.id', $ids));
@@ -630,7 +630,7 @@ class User extends \Core\Domain\Entity\User\User
                         endif;
 
                         $shopQueryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                        $query= $shopQueryBuilder->update('\KC\Entity\Shop', 'shp')
+                        $query= $shopQueryBuilder->update('\Core\Domain\Entity\Shop', 'shp')
                             ->set('shp.contentManagerName', "'$fullName'")
                             ->set('shp.contentManagerId', 0)
                             ->where($shopQueryBuilder->expr()->in('shp.id', $ids));
@@ -655,7 +655,7 @@ class User extends \Core\Domain\Entity\User\User
         if (count($q) > 0) {
             $id = $q[0]['id'] + 1 ;
         }
-        $usersession = new KC\Entity\User\UserSession();
+        $usersession = new \Core\Domain\Entity\User\UserSession();
         $usersession->id = $id;
         $usersession->userId = $uId;
         $usersession->sessionId = $token;
@@ -833,14 +833,14 @@ class User extends \Core\Domain\Entity\User\User
 
         if (sizeof($Shop) > 0) {
             //check store exist or not
-            $repo = $entityManagerLocale->getRepository('KC\Entity\Adminfavoriteshop');
+            $repo = $entityManagerLocale->getRepository('\Core\Domain\Entity\Adminfavoriteshop');
             $pc = $repo->findOneBy(array('shopId' => $Shop[0]['id']));
             if (sizeof($pc) > 0) {
                 $flag = '2';
             } else {
                 $flag = '1';
                 //add new store if not exist in datbase
-                $pc = new KC\Entity\Adminfavoriteshop();
+                $pc = new \Core\Domain\Entity\Adminfavoriteshop();
                 $pc->shopId = $Shop[0]['id'];
                 $pc->userId = Auth_StaffAdapter::getIdentity()->id;//get current user(admin) id
                 $entityManagerLocale->persist($pc);
@@ -874,7 +874,7 @@ class User extends \Core\Domain\Entity\User\User
     {
         //$Shop = Doctrine_query::create()->from('Shop')
         //->where('name=' . "'$name'")->limit(1)->fetchArray();
-        $Shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $name);
+        $Shop = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Shop', $name);
        
         $flag = 0;
         if ($Shop) {
@@ -1003,7 +1003,7 @@ class User extends \Core\Domain\Entity\User\User
     public function updatePassword($params = null)
     {
         $entityManagerUser  = \Zend_Registry::get('emUser');
-        $repo = $entityManagerUser->getRepository('KC\Entity\User\User');
+        $repo = $entityManagerUser->getRepository('\Core\Domain\Entity\User\User');
         $updateUser = $repo->find($params['id']);
         
         if ($updateUser->validatePassword($params['curPassword'])) {

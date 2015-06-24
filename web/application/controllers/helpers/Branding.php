@@ -66,7 +66,7 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
         }
 
         if (empty($_POST['preview'])) {
-            $shop =  \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $_POST['shop_id']);
+            $shop =  \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Shop', $_POST['shop_id']);
             if (empty($_POST['reset'])) {
                 $shop->brandingcss =  serialize($session->data);
                 $redirectUrl = self::stop();

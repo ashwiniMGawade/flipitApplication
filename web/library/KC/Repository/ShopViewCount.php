@@ -23,9 +23,9 @@ class ShopViewCount extends \Core\Domain\Entity\ShopViewCount
 
     public static function getSaveShopClick($shopId, $clientIp)
     {
-        $shopClick  = new \KC\Entity\ShopViewCount();
+        $shopClick  = new \Core\Domain\Entity\ShopViewCount();
         $shopClick->shop = \Zend_Registry::get('emLocale')
-            ->getRepository('KC\Entity\Shop')
+            ->getRepository('\Core\Domain\Entity\Shop')
             ->find($shopId);
         $shopClick->onclick = 1;
         $shopClick->onload = 0;
@@ -55,9 +55,9 @@ class ShopViewCount extends \Core\Domain\Entity\ShopViewCount
 
     public static function getSaveShopOnload($shopId, $clientIp)
     {
-        $shopOnLoad  = new \KC\Entity\ShopViewCount();
+        $shopOnLoad  = new \Core\Domain\Entity\ShopViewCount();
         $shopOnLoad->shop = \Zend_Registry::get('emLocale')
-            ->getRepository('KC\Entity\Shop')
+            ->getRepository('\Core\Domain\Entity\Shop')
             ->find($shopId);
         $shopOnLoad->onload = 1;
         $shopOnLoad->onclick = 0;
@@ -143,7 +143,7 @@ class ShopViewCount extends \Core\Domain\Entity\ShopViewCount
         if (!empty($offers)) {
             $dataOffer = $queryBuilder
                 ->select("count(v) as amountclicks")
-                ->from("KC\Entity\ViewCount", "v")
+                ->from("\Core\Domain\Entity\ViewCount", "v")
                 ->where($queryBuilder->expr()->in('v.viewcount', $offers))
                 ->andWhere($queryBuilder->expr()->eq('v.onClick', 1))
                 ->getQuery()

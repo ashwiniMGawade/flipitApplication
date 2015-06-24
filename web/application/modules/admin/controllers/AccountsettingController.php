@@ -263,22 +263,22 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         switch ($this->getRequest()->getParam('name')){
             case 'senderEmail':
-                $queryBuilder ->update('KC\Entity\Signupmaxaccount', 'sa')
+                $queryBuilder ->update('\Core\Domain\Entity\Signupmaxaccount', 'sa')
                 ->set('sa.emailperlocale', "'".$val."'")
                 ->getQuery()->execute();
                 break;
             case 'senderName':
-                $queryBuilder ->update('KC\Entity\Signupmaxaccount', 'sm')
+                $queryBuilder ->update('\Core\Domain\Entity\Signupmaxaccount', 'sm')
                 ->set('sm.sendername', "'".$val."'")
                 ->getQuery()->execute();
                 break;
             case 'emailSubject':
-                $queryBuilder ->update('KC\Entity\Signupmaxaccount', 'su')
+                $queryBuilder ->update('\Core\Domain\Entity\Signupmaxaccount', 'su')
                 ->set('su.emailsubject', "'".$val."'")
                 ->getQuery()->execute();
                 break;
             case 'testEmail':
-                $queryBuilder ->update('KC\Entity\Signupmaxaccount', 'sx')
+                $queryBuilder ->update('\Core\Domain\Entity\Signupmaxaccount', 'sx')
                 ->set('sx.testemail', "'".$val."'")
                 ->getQuery()->execute();
                 break;
@@ -297,22 +297,22 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         switch ($this->getRequest()->getParam('type')){
             case 'testimonial1':
-                $queryBuilder ->update('KC\Entity\Signupmaxaccount', 'sa')
+                $queryBuilder ->update('\Core\Domain\Entity\Signupmaxaccount', 'sa')
                 ->set('sa.testimonial1', "'".$content."'")
                 ->getQuery()->execute();
                 break;
             case 'testimonial2':
-                $queryBuilder ->update('KC\Entity\Signupmaxaccount', 'sm')
+                $queryBuilder ->update('\Core\Domain\Entity\Signupmaxaccount', 'sm')
                 ->set('sm.testimonial2', "'".$content."'")
                 ->getQuery()->execute();
                 break;
             case 'testimonial3':
-                $queryBuilder ->update('KC\Entity\Signupmaxaccount', 'su')
+                $queryBuilder ->update('\Core\Domain\Entity\Signupmaxaccount', 'su')
                 ->set('su.testimonial3', "'".$content."'")
                 ->getQuery()->execute();
                 break;
             case 'showTestimonial':
-                $queryBuilder ->update('KC\Entity\Signupmaxaccount', 'sx')
+                $queryBuilder ->update('\Core\Domain\Entity\Signupmaxaccount', 'sx')
                 ->set('sx.showTestimonial', "'".$content."'")
                 ->getQuery()->execute();
                 break;
@@ -330,7 +330,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('count(v.id) as recepients')
-        ->from('KC\Entity\Visitor', 'v')
+        ->from('\Core\Domain\Entity\Visitor', 'v')
         ->where('v.status = 1')
         ->andWhere('v.active = 1')
         ->andWhere('v.weeklyNewsLetter = 1');

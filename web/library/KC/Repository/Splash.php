@@ -16,19 +16,19 @@ class Splash extends \Core\Domain\Entity\User\Splash
     public function deleteSplashoffer()
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $query = $queryBuilder->delete('\KC\Entity\User\Splash', 's')->getQuery()->execute();
+        $query = $queryBuilder->delete('\Core\Domain\Entity\User\Splash', 's')->getQuery()->execute();
         return true;
     }
 
     public function getOfferById($offerId)
     {
-        $offer = \Zend_Registry::get('emLocale')->find('\KC\Entity\Offer', $offerId);
+        $offer = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Offer', $offerId);
         return $offer;
     }
 
     public function saveSplashOffer($offerId, $locale)
     {
-        $splashObject = new \KC\Entity\User\Splash();
+        $splashObject = new \Core\Domain\Entity\User\Splash();
         $splashObject->id = 1;
         $splashObject->offerId = $offerId;
         $splashObject->locale = $locale;

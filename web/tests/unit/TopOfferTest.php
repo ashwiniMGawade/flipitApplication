@@ -39,12 +39,12 @@ class TopOfferTest extends \Codeception\TestCase\Test
         $entityManager = \Codeception\Module\Doctrine2::$em;
         for ($i=1; $i <= $count; $i++) {
             $this->tester->persistEntity(
-                new KC\Entity\PopularCode(),
+                new \Core\Domain\Entity\PopularCode(),
                 array(
                     'type' => 'MN',
                     'position' => $i,
                     'status' => 1,
-                    'popularcode' => $entityManager->find('KC\Entity\Offer', $i),
+                    'popularcode' => $entityManager->find('\Core\Domain\Entity\Offer', $i),
                     'deleted' => 0,
                     'created_at' => new \DateTime('now'),
                     'updated_at' => new \DateTime('now'),

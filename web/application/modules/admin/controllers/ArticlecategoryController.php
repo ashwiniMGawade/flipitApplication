@@ -293,7 +293,7 @@ class Admin_ArticlecategoryController extends Zend_Controller_Action
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('p')
-            ->from('\KC\Entity\RoutePermalink', 'p')
+            ->from('\Core\Domain\Entity\RoutePermalink', 'p')
             ->where('p.permalink ='.  $queryBuilder->expr()->literal($url));
         $rp = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 

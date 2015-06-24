@@ -24,7 +24,7 @@ class FunctionalHelper extends \Codeception\Module
         $config->setMetadataDriverImpl($driver);
         $config->setProxyDir(APPLICATION_PATH . '/../library/KC/Entity/Proxy');
         $config->setAutoGenerateProxyClasses(true);
-        $config->setProxyNamespace('KC\Entity\Proxy');
+        $config->setProxyNamespace('\Core\Domain\Entity\Proxy');
         $connectionParamsLocale = array(
             'driver'   => 'pdo_sqlite',
             'name'     => 'user',

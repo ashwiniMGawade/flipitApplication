@@ -7,7 +7,7 @@ class Menu extends \Core\Domain\Entity\Menu
     public static function replaceBespaarwijzerWithPlus()
     {
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
-        $menu =  $entityManagerLocale->find('KC\Entity\Menu', 46);
+        $menu =  $entityManagerLocale->find('\Core\Domain\Entity\Menu', 46);
         $menu->name = 'plus';
         $menu->url = 'plus';
         $entityManagerLocale->persist($menu);
@@ -18,7 +18,7 @@ class Menu extends \Core\Domain\Entity\Menu
     public static function deleteUnusedMenus()
     {
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
-        $query = $entityManagerLocale->createQuery('DELETE FROM KC\Entity\Menu m WHERE m.level > ?1');
+        $query = $entityManagerLocale->createQuery('DELETE FROM \Core\Domain\Entity\Menu m WHERE m.level > ?1');
         $query->setParameter(1, 0);
         $query->execute();
         return true;
@@ -29,7 +29,7 @@ class Menu extends \Core\Domain\Entity\Menu
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         if ($params['hidimage']!='') {
-            $image = new \KC\Entity\Image();
+            $image = new \Core\Domain\Entity\Image();
             $image->path = $params['hidimage'];
             $image->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['hidimageorg']);
             $image->type = 'menuIcon';
@@ -40,7 +40,7 @@ class Menu extends \Core\Domain\Entity\Menu
             $entityManagerLocale->flush();
         }
 
-        $menu = new \KC\Entity\Menu();
+        $menu = new \Core\Domain\Entity\Menu();
         $menu->name = \BackEnd_Helper_viewHelper::stripSlashesFromString(htmlentities($params['label'], ENT_QUOTES, 'UTF-8'));
         $menu->url = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['url']);
         $menu->parentId = 0;
@@ -59,14 +59,14 @@ class Menu extends \Core\Domain\Entity\Menu
         $entityManagerLocale->persist($menu);
         $entityManagerLocale->flush();
 
-        $repo = $entityManagerLocale->getRepository('KC\Entity\Menu');
+        $repo = $entityManagerLocale->getRepository('\Core\Domain\Entity\Menu');
         $updateMenu = $repo->find($menu->id);
         $updateMenu->root_id = $menu->id;
         $entityManagerLocale->persist($menu);
         $entityManagerLocale->flush();
 
         if ($params['url']!='') {
-            $repo = $entityManagerLocale->getRepository('KC\Entity\RoutePermalink');
+            $repo = $entityManagerLocale->getRepository('\Core\Domain\Entity\RoutePermalink');
             $getRecord = $repo->findOneBy(array('exactlink' => $params['url']));
             if (!empty($getRecord)) {
                 $entityManagerLocale->remove($getRecord);
@@ -74,7 +74,7 @@ class Menu extends \Core\Domain\Entity\Menu
             }
             
             $entityManagerLocale = \Zend_Registry::get('emLocale');
-            $route = new \KC\Entity\RoutePermalink();
+            $route = new \Core\Domain\Entity\RoutePermalink();
             $route->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['url']);
             $route->type = 'PG';
             $route->created_at = new \DateTime('now');
@@ -91,7 +91,7 @@ class Menu extends \Core\Domain\Entity\Menu
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         if ($params['hidimage']!='') {
-            $image = new \KC\Entity\Image();
+            $image = new \Core\Domain\Entity\Image();
             $image->path = $params['hidimage'];
             $image->name = $params['hidimageorg'];
             $image->type = 'menuIcon';
@@ -102,7 +102,7 @@ class Menu extends \Core\Domain\Entity\Menu
             $entityManagerLocale->flush();
         }
 
-        $child1 = new \KC\Entity\Menu();
+        $child1 = new \Core\Domain\Entity\Menu();
         $child1->name = \BackEnd_Helper_viewHelper::stripSlashesFromString(
             htmlentities($params['label'], ENT_QUOTES, 'UTF-8')
         );
@@ -126,7 +126,7 @@ class Menu extends \Core\Domain\Entity\Menu
     public static function deleteOne()
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $repo = $entityManagerLocale->getRepository('KC\Entity\Menu');
+        $repo = $entityManagerLocale->getRepository('\Core\Domain\Entity\Menu');
         $menu = $repo->findOneBy(array('Name' =>  'Child menu 1'));
         $entityManagerLocale->remove($menu);
         $entityManagerLocale->flush();
@@ -177,7 +177,7 @@ class Menu extends \Core\Domain\Entity\Menu
         $imageid = null;
         if ($params['imageid']!= 0) {
             $imageid = $params['imageid'];
-            $image =  $entityManagerLocale->find('KC\Entity\Image', $params['imageid']);
+            $image =  $entityManagerLocale->find('\Core\Domain\Entity\Image', $params['imageid']);
             $image->path = $params['hidimage'];
             $image->name = $params['hidimageorg'];
             $image->deleted = $image->deleted;
@@ -188,7 +188,7 @@ class Menu extends \Core\Domain\Entity\Menu
         }
 
         if ($params['imageid']=='' && $params['hidimage']!='') {
-            $image = new KC\Entity\Image();
+            $image = new \Core\Domain\Entity\Image();
             $image->path = '"'.$params['hidimage'].'"';
             $image->name = '"'.$params['hidimageorg'].'"';
             $image->type = 'menuIcon';
@@ -200,7 +200,7 @@ class Menu extends \Core\Domain\Entity\Menu
             $imageid = $image->id;
         }
 
-        $menu =  $entityManagerLocale->find('KC\Entity\Menu', $params['hid']);
+        $menu =  $entityManagerLocale->find('\Core\Domain\Entity\Menu', $params['hid']);
         $menu->name = \BackEnd_Helper_viewHelper::stripSlashesFromString(htmlentities($params['label'], ENT_QUOTES, 'UTF-8'));
         $menu->url = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['url']);
         $menu->position = $position;
@@ -235,19 +235,19 @@ class Menu extends \Core\Domain\Entity\Menu
     public static function deleteMenuRecord($params)
     {
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
-        $menu =  $entityManagerLocale->find('KC\Entity\Menu', $params['id']);
+        $menu =  $entityManagerLocale->find('\Core\Domain\Entity\Menu', $params['id']);
         $entityManagerLocale->remove($menu);
         $entityManagerLocale->flush();
         if ($params['parentId']==0 || $params['parentId']==null) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\Menu', 'm')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\Menu', 'm')
                 ->where("m.root_id=" .$params['id'])
                 ->getQuery()->execute();
         }
 
         if ($params['parentId']!=0 && $params['parentId']!=null) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\Menu', 'm')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\Menu', 'm')
                     ->where("m.parentId=" .$params['id'])
                     ->getQuery()->execute();
         }
@@ -257,7 +257,7 @@ class Menu extends \Core\Domain\Entity\Menu
     public static function deleteAllMenuRecord()
     {
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
-        $menu =  $entityManagerLocale->getRepository('KC\Entity\Menu');
+        $menu =  $entityManagerLocale->getRepository('\Core\Domain\Entity\Menu');
         $entityManagerLocale->remove($menu);
         $entityManagerLocale->flush();
         return true;

@@ -22,7 +22,7 @@ class NewsLetterCache extends \Core\Domain\Entity\newsLetterCache
     public static function truncateNewsletterCacheTable()
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->delete('KC\Entity\newsLetterCache', 'nlc')
+        $query = $queryBuilder->delete('\Core\Domain\Entity\newsLetterCache', 'nlc')
                 ->where('nlc.id > 0')
                 ->getQuery();
         $query->execute();
@@ -53,7 +53,7 @@ class NewsLetterCache extends \Core\Domain\Entity\newsLetterCache
     protected static function saveValueInDatebase($newsLetterCacheColumnName, $newsLetterCacheColumnValue)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $newsLetterCache = new \KC\Entity\newsLetterCache();
+        $newsLetterCache = new \Core\Domain\Entity\newsLetterCache();
         $newsLetterCache->name = $newsLetterCacheColumnName;
         $newsLetterCache->value = $newsLetterCacheColumnValue;
         $newsLetterCache->status = false;

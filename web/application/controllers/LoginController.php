@@ -327,7 +327,7 @@ class LoginController extends Zend_Controller_Action
             $visitorsId = !empty($visitorsId) ? $visitorsId['id'] : '';
             if (isset($visitorsId) && $visitorsId != '') {
                 $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $queryBuilder->delete("KC\Entity\FavoriteShop", "fv")
+                $queryBuilder->delete("\Core\Domain\Entity\FavoriteShop", "fv")
                     ->where('fv.visitor='.$visitorsId)
                     ->andWhere('fv.shop='.base64_decode($this->getRequest()->getParam("shopid")))
                     ->getQuery()
@@ -336,7 +336,7 @@ class LoginController extends Zend_Controller_Action
         } else {
             $message = \FrontEnd_Helper_viewHelper::__translate('You are successfully unsubscribed to our newsletter');
             $newsletterQueryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $newsletterQueryBuilder->update('KC\Entity\Visitor', 'v')
+            $newsletterQueryBuilder->update('\Core\Domain\Entity\Visitor', 'v')
                 ->set('v.weeklyNewsLetter', 0)
                 ->where($newsletterQueryBuilder->expr()->eq("v.email", $newsletterQueryBuilder->expr()->literal($username)))
                 ->getQuery()->execute();

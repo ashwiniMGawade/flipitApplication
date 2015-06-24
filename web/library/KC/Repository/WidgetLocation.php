@@ -17,7 +17,7 @@ class WidgetLocation extends \Core\Domain\Entity\WidgetLocation
         if (!empty($widgetLocationId)) {
             $saveWidgetLocation = self::findWidgetById($widgetLocationId);
         } else {
-            $saveWidgetLocation = new \KC\Entity\WidgetLocation();
+            $saveWidgetLocation = new \Core\Domain\Entity\WidgetLocation();
             $saveWidgetLocation->created_at = new \DateTime('now');
             $saveWidgetLocation->deleted = false;
             $saveWidgetLocation->widgettype = 'signup';
@@ -34,7 +34,7 @@ class WidgetLocation extends \Core\Domain\Entity\WidgetLocation
     public static function findWidgetById($widgetLocationId)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        return $entityManagerLocale->find('KC\Entity\WidgetLocation', $widgetLocationId);
+        return $entityManagerLocale->find('\Core\Domain\Entity\WidgetLocation', $widgetLocationId);
     }
 
     public static function validateWidgetLocation($pageType, $widgetLocation, $relatedId)

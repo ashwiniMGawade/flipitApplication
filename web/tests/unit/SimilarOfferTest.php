@@ -46,11 +46,11 @@ class SimilarOfferTest extends \Codeception\TestCase\Test
         $entityManager = \Codeception\Module\Doctrine2::$em;
         for ($i=1; $i <= $count; $i++) {
             $this->tester->persistEntity(
-                new KC\Entity\RefShopRelatedshop(),
+                new \Core\Domain\Entity\RefShopRelatedshop(),
                 array(
                     'relatedshopId' => $i + 1,
                     'position' => $i,
-                    'shop' => $entityManager->find('KC\Entity\Shop', 1),
+                    'shop' => $entityManager->find('\Core\Domain\Entity\Shop', 1),
                     'created_at' => new \DateTime('now'),
                     'updated_at' => new \DateTime('now'),
                 )

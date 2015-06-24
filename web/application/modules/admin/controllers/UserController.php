@@ -256,11 +256,11 @@ class Admin_UserController extends Zend_Controller_Action
         $entityManagerUser  = \Zend_Registry::get('emUser');
         $id = $this->getRequest()->getParam('id');
         if ($id && $id != \Auth_StaffAdapter::getIdentity()->id) {
-            $uDel = $entityManagerUser->find('KC\Entity\User\User', $id);
+            $uDel = $entityManagerUser->find('\Core\Domain\Entity\User\User', $id);
             $uDel->deleted = true;
             $entityManagerUser->persist($uDel);
             $entityManagerUser->flush();
-            $User = new KC\Entity\User();
+            $User = new \Core\Domain\Entity\User();
             //$User->updateInDatabase($id, null, 0);
             $userPermlink = $uDel->__get('slug');
             //self::updateVarnish($userPermlink);
@@ -486,12 +486,12 @@ class Admin_UserController extends Zend_Controller_Action
         if ($id) {
             $entityManagerUser  = \Zend_Registry::get('emUser');
             $uRes  = $entityManagerUser->createQueryBuilder()
-                ->update('KC\Entity\User\User', 'u')
+                ->update('\Core\Domain\Entity\User\User', 'u')
                 ->set('u.deleted', "0")
                 ->where('u.id ='.$id)
                 ->getQuery()->execute();
 
-            $fU = \Zend_Registry::get('emUser')->find('KC\Entity\User\User', $id);
+            $fU = \Zend_Registry::get('emUser')->find('\Core\Domain\Entity\User\User', $id);
             $fullName = $fU->firstName . " " . $fU->lastName;
             $User = new \KC\Repository\User();
             $User->updateInDatabase($id, $fullName, 0);
@@ -528,18 +528,18 @@ class Admin_UserController extends Zend_Controller_Action
             $entityManagerUser  = \Zend_Registry::get('emUser');
             $User = new \KC\Repository\User();
             $User->updateInDatabase($id, null, 1);
-            $u = \Zend_Registry::get('emUser')->find('KC\Entity\User\User', $id);
+            $u = \Zend_Registry::get('emUser')->find('\Core\Domain\Entity\User\User', $id);
             $del1 =\Zend_Registry::get('emUser')->createQueryBuilder()
-                ->delete('KC\Entity\User\refUserWebsite', 'r')
+                ->delete('\Core\Domain\Entity\User\refUserWebsite', 'r')
                 ->where('r.websiteUsers ='.$id)
                 ->getQuery()->execute();
             $del = \Zend_Registry::get('emUser')->createQueryBuilder()
-                ->delete('KC\Entity\User\User', 'u')
+                ->delete('\Core\Domain\Entity\User\User', 'u')
                 ->where('u.id ='.$id)
                 ->getQuery()->execute();
             if ((intval($u->profileimage->id)) > 0) {
                 $del = \Zend_Registry::get('emUser')->createQueryBuilder()
-                    ->delete('KC\Entity\User\ProfileImage', 'i')
+                    ->delete('\Core\Domain\Entity\User\ProfileImage', 'i')
                     ->where('i.id ='. $u->profileimage->id)
                     ->getQuery()->execute();
             }
@@ -636,7 +636,7 @@ class Admin_UserController extends Zend_Controller_Action
             $u = \Auth_StaffAdapter::getIdentity();
             $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
             $query = $queryBuilder->select('u, rf, w, pi, r')
-                ->from('\KC\Entity\User\User', 'u')
+                ->from('\Core\Domain\Entity\User\User', 'u')
                 ->leftJoin("u.profileimage", "pi")
                 ->leftJoin("u.users", "r")
                 ->leftJoin('u.refUserWebsite', 'rf')
@@ -702,7 +702,7 @@ class Admin_UserController extends Zend_Controller_Action
                 }
 
                 $entityManagerUser  = \Zend_Registry::get('emUser');
-                $repo = $entityManagerUser->getRepository('KC\Entity\User\User');
+                $repo = $entityManagerUser->getRepository('\Core\Domain\Entity\User\User');
                 $user = $repo->find($params['id']);
                 $user->firstName = $params['firstName'];
                 $user->lastName = $params['lastName'];
@@ -752,7 +752,7 @@ class Admin_UserController extends Zend_Controller_Action
         $isValid = "Old password don't matched" ;
         if (intval($params['id']) > 0) {
             $entityManagerUser  =\Zend_Registry::get('emUser');
-            $user = $entityManagerUser->find('KC\Entity\User\User', $params['id']);
+            $user = $entityManagerUser->find('\Core\Domain\Entity\User\User', $params['id']);
             $isValid = $user->validatePassword($params['oldPassword']);
         }
         echo Zend_Json::encode($isValid);
@@ -801,7 +801,7 @@ class Admin_UserController extends Zend_Controller_Action
         //die();
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u, rf, w, pi, r')
-            ->from('\KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->leftJoin("u.profileimage", "pi")
             ->leftJoin("u.users", "r")
             ->leftJoin('u.refUserWebsite', 'rf')
@@ -835,7 +835,7 @@ class Admin_UserController extends Zend_Controller_Action
                 }
 
                 $entityManagerUser  = \Zend_Registry::get('emUser');
-                $repo = $entityManagerUser->getRepository('KC\Entity\User\User');
+                $repo = $entityManagerUser->getRepository('\Core\Domain\Entity\User\User');
                 $user = $repo->find($params['id']);
                 $user->firstName = $params['firstName'];
                 $user->lastName = $params['lastName'];

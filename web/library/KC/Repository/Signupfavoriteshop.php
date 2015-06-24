@@ -8,7 +8,7 @@ class Signupfavoriteshop extends \Core\Domain\Entity\Signupfavoriteshop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('p.id,p.entered_uid,p.created_at,s.name,s.id as shopId,l.path,l.name as image')
-        ->from("\KC\Entity\Signupfavoriteshop", "p")
+        ->from("\Core\Domain\Entity\Signupfavoriteshop", "p")
         ->leftJoin('p.signupfavoriteshop', 's')
         ->leftJoin('s.logo', 'l')
         ->where("p.signupfavoriteshop = s.id")
@@ -22,7 +22,7 @@ class Signupfavoriteshop extends \Core\Domain\Entity\Signupfavoriteshop
     {
         if ($id) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\Signupfavoriteshop', 'sc')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\Signupfavoriteshop', 'sc')
                 ->where("sc.id=" .$id)
                 ->getQuery()->execute();
 
@@ -34,7 +34,7 @@ class Signupfavoriteshop extends \Core\Domain\Entity\Signupfavoriteshop
     {
         if ($codetext) {
             $entityManagerLocale = \Zend_Registry::get('emLocale');
-            $code = new \KC\Entity\AccountsettingCode();
+            $code = new \Core\Domain\Entity\AccountsettingCode();
             $code->entered_uid = 2;
             $code->code = "$codetext";
             $code->created_at = new \DateTime('now');
@@ -49,9 +49,9 @@ class Signupfavoriteshop extends \Core\Domain\Entity\Signupfavoriteshop
     public static function addshop($name, $userid, $shopid)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $pc = new \KC\Entity\Signupfavoriteshop();
+        $pc = new \Core\Domain\Entity\Signupfavoriteshop();
         $pc->entered_uid = $userid;
-        $pc->signupfavoriteshop = $entityManagerLocale->find('KC\Entity\Shop', $shopid);
+        $pc->signupfavoriteshop = $entityManagerLocale->find('\Core\Domain\Entity\Shop', $shopid);
         $pc->created_at = new \DateTime('now');
         $pc->updated_at = new \DateTime('now');
        
@@ -63,7 +63,7 @@ class Signupfavoriteshop extends \Core\Domain\Entity\Signupfavoriteshop
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->select('p')
-                ->from("\KC\Entity\Signupfavoriteshop", "p")
+                ->from("\Core\Domain\Entity\Signupfavoriteshop", "p")
                 ->where("p.id =". $pc->id);
             $flag = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -75,7 +75,7 @@ class Signupfavoriteshop extends \Core\Domain\Entity\Signupfavoriteshop
 
     public static function searchTopTenShops($keyword, $flag)
     {
-        $lastdata = \KC\Entity\Signupfavoriteshop::getalladdstore();
+        $lastdata = \Core\Domain\Entity\Signupfavoriteshop::getalladdstore();
         if (sizeof($lastdata) > 0) {
             for ($i=0; $i<sizeof($lastdata); $i++) {
                 $shopdata[$i] = $lastdata[$i]['store_id'];

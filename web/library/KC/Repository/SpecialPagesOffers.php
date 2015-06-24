@@ -14,7 +14,7 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
             ->leftJoin('op.offers', 'o')
             ->leftJoin('o.offertermandcondition', 'terms')
             ->andWhere(
-                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and o.status=1)  > 0)
+                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id) FROM \Core\Domain\Entity\CouponCode cc WHERE cc.offer = o.id and o.status=1)  > 0)
                 or o.couponCodeType = 'GN'"
             )
             ->leftJoin('o.shopOffers', 's')
@@ -144,9 +144,9 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
     public static function saveSpecialPageOffers($offerId, $pageId, $newPosition)
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $specialPageOffer = new \KC\Entity\SpecialPagesOffers();
-        $specialPageOffer->offers = $entityManagerLocale->find('KC\Entity\Offer', $offerId);
-        $specialPageOffer->pages = $entityManagerLocale->find('KC\Entity\Page', $pageId);
+        $specialPageOffer = new \Core\Domain\Entity\SpecialPagesOffers();
+        $specialPageOffer->offers = $entityManagerLocale->find('\Core\Domain\Entity\Offer', $offerId);
+        $specialPageOffer->pages = $entityManagerLocale->find('\Core\Domain\Entity\Page', $pageId);
         $specialPageOffer->position = (intval($newPosition) + 1);
         $specialPageOffer->deleted = 0;
         $specialPageOffer->created_at = new \DateTime('now');
@@ -161,7 +161,7 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
         if (!empty($id)) {
             $queryBuilderDelete = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilderDelete
-                ->delete('KC\Entity\SpecialPagesOffers', 'spl')
+                ->delete('\Core\Domain\Entity\SpecialPagesOffers', 'spl')
                 ->where('spl.id ='.$id)
                 ->getQuery();
             $query->execute();
@@ -189,7 +189,7 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
         if (isset($newOffer['id'])) {
             $queryBuilderSpecialPage = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilderSpecialPage
-                ->update('KC\Entity\SpecialPagesOffers', 'p')
+                ->update('\Core\Domain\Entity\SpecialPagesOffers', 'p')
                 ->set('p.position', $newPosition)
                 ->where('p.id = '.$newOffer['id'])
                 ->getQuery();
@@ -222,7 +222,7 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
         if (!empty($offerIds)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
-                ->delete('KC\Entity\SpecialPagesOffers', 'spl')
+                ->delete('\Core\Domain\Entity\SpecialPagesOffers', 'spl')
                 ->where('spl.pages ='.$pageId)
                 ->getQuery();
             $query->execute();
@@ -230,9 +230,9 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
             $i = 1;
             foreach ($offerIds as $offerId) {
                 $entityManagerLocale  = \Zend_Registry::get('emLocale');
-                $specialPageOffer = new \KC\Entity\SpecialPagesOffers();
-                $specialPageOffer->offers = $entityManagerLocale->find('KC\Entity\Offer', $offerId);
-                $specialPageOffer->pages = $entityManagerLocale->find('KC\Entity\Page', $pageId);
+                $specialPageOffer = new \Core\Domain\Entity\SpecialPagesOffers();
+                $specialPageOffer->offers = $entityManagerLocale->find('\Core\Domain\Entity\Offer', $offerId);
+                $specialPageOffer->pages = $entityManagerLocale->find('\Core\Domain\Entity\Page', $pageId);
                 $specialPageOffer->position = $i;
                 $specialPageOffer->deleted = 0;
                 $specialPageOffer->created_at = new \DateTime('now');

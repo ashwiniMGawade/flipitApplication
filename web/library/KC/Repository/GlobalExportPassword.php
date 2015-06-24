@@ -14,13 +14,13 @@ class GlobalExportPassword extends \Core\Domain\Entity\User\GlobalExportPassword
 
         if (!empty($globalExportInformation)) {
             $queryBuilderUpdate = \Zend_Registry::get('emUser')->createQueryBuilder();
-            $queryBuilderUpdate->update('KC\Entity\User\GlobalExportPassword', 'gep')
+            $queryBuilderUpdate->update('\Core\Domain\Entity\User\GlobalExportPassword', 'gep')
             ->set('gep.password', mt_rand())
             ->where('gep.id ='.$globalExportInformation[0]['id'])
             ->getQuery()->execute();
         } else {
             $entityManagerLocale  = \Zend_Registry::get('emUser');
-            $globalExportPassword = new \KC\Entity\User\GlobalExportPassword();
+            $globalExportPassword = new \Core\Domain\Entity\User\GlobalExportPassword();
             $globalExportPassword->password = mt_rand();
             $globalExportPassword->exportType = $type;
             $globalExportPassword->created_at = new \DateTime('now');

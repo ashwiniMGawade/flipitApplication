@@ -42,7 +42,7 @@ class UserGeneratedOffer extends \Core\Domain\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $offers = $queryBuilder
             ->select('o.title as title')
-            ->from("KC\Entity\Offer", "o")
+            ->from("\Core\Domain\Entity\Offer", "o")
             ->where($queryBuilder->expr()->eq('o.deleted', $queryBuilder->expr()->literal($flag)))
             ->andWhere('o.offline = 0')
             ->andWhere($queryBuilder->expr()->like('o.title', $queryBuilder->expr()->literal($keyword.'%')))
@@ -59,7 +59,7 @@ class UserGeneratedOffer extends \Core\Domain\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $shops = $queryBuilder
             ->select('o.id,s.name as name')
-            ->from("KC\Entity\Offer", "o")
+            ->from("\Core\Domain\Entity\Offer", "o")
             ->leftJoin('o.shopOffers', 's')
             ->where('o.deleted = '.$flag)
             ->andWhere('s.status = 1')
@@ -78,7 +78,7 @@ class UserGeneratedOffer extends \Core\Domain\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $coupons = $queryBuilder
             ->select('o.title as title, o.id, o.couponCode')
-            ->from("KC\Entity\Offer", "o")
+            ->from("\Core\Domain\Entity\Offer", "o")
             ->where('o.deleted = '.$flag)
             ->andWhere($queryBuilder->expr()->like('o.couponCode', $queryBuilder->expr()->literal($keyword.'%')))
             ->andWhere("(o.userGenerated=1 and o.approved='0')")
@@ -94,7 +94,7 @@ class UserGeneratedOffer extends \Core\Domain\Entity\Offer
     public static function saveApprovedStatus($offerId, $status)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $offer = $entityManagerLocale->find('\KC\Entity\Offer', $offerId);
+        $offer = $entityManagerLocale->find('\Core\Domain\Entity\Offer', $offerId);
         if (!empty($status)) {
             $offer->approved = '1';
             $authorId = \KC\Repository\Offer::getAuthorId($offerId);
@@ -114,8 +114,8 @@ class UserGeneratedOffer extends \Core\Domain\Entity\Offer
     public static function addOffer($socialParameters)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $offer  = new \KC\Entity\Offer();
-        $offer->shopOffers =  $entityManagerLocale->find('KC\Entity\Shop', Shop::checkShop(\FrontEnd_Helper_viewHelper::sanitize($socialParameters['shops'])));
+        $offer  = new \Core\Domain\Entity\Offer();
+        $offer->shopOffers =  $entityManagerLocale->find('\Core\Domain\Entity\Shop', Shop::checkShop(\FrontEnd_Helper_viewHelper::sanitize($socialParameters['shops'])));
         $offer->couponCode = \FrontEnd_Helper_viewHelper::sanitize($socialParameters['code']);
         $offer->endDate = new \DateTime(\FrontEnd_Helper_viewHelper::sanitize($socialParameters['expireDate']));
         $offer->startDate =  new \DateTime('now');
@@ -148,10 +148,10 @@ class UserGeneratedOffer extends \Core\Domain\Entity\Offer
         $entityManagerLocale->flush();
         if ($offer->id) {
             $entityManagerLocale = \Zend_Registry::get('emLocale');
-            $offerTerms  = new \KC\Entity\TermAndCondition();
+            $offerTerms  = new \Core\Domain\Entity\TermAndCondition();
             $offerTerms->content = \FrontEnd_Helper_viewHelper::sanitize($socialParameters['offerDetails']);
             $offerTerms->deleted = 0;
-            $offerTerms->termandcondition = $entityManagerLocale->find('KC\Entity\Offer', $offer->id);
+            $offerTerms->termandcondition = $entityManagerLocale->find('\Core\Domain\Entity\Offer', $offer->id);
             $offerTerms->created_at = new \DateTime('now');
             $offerTerms->updated_at = new \DateTime('now');
             $entityManagerLocale->persist($offerTerms);

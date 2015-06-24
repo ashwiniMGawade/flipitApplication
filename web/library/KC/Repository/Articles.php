@@ -91,7 +91,7 @@ class Articles extends \Core\Domain\Entity\Articles
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select("p, a, chapter")
-            ->from("KC\Entity\PopularArticles", "p")
+            ->from("\Core\Domain\Entity\PopularArticles", "p")
             ->leftJoin("p.articles", "a")
             ->leftJoin('a.articleChapter', 'chapter')
             ->where("a.publish = 1")
@@ -302,7 +302,7 @@ class Articles extends \Core\Domain\Entity\Articles
         $isDraft = true  ;
         $storeIds = explode(',', $params['selectedRelatedStores']);
         $relatedIds = explode(',', $params['selectedRelatedCategory']);
-        $data = new \KC\Entity\Articles();
+        $data = new \Core\Domain\Entity\Articles();
         $data->deleted = 0;
         $data->created_at = new \DateTime('now');
         $data->updated_at = new \DateTime('now');
@@ -321,7 +321,7 @@ class Articles extends \Core\Domain\Entity\Articles
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension(
                     @$result['fileName']
                 );
-                $articleImage = new \KC\Entity\ImageArticlesIcon();
+                $articleImage = new \Core\Domain\Entity\ImageArticlesIcon();
                 $articleImage->ext = @$ext;
                 $articleImage->path = @$result['path'];
                 $articleImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
@@ -330,7 +330,7 @@ class Articles extends \Core\Domain\Entity\Articles
                 $articleImage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($articleImage);
                 $entityManagerLocale->flush();
-                $data->articleImage = $entityManagerLocale->find('\KC\Entity\ImageArticlesIcon', $articleImage->id);
+                $data->articleImage = $entityManagerLocale->find('\Core\Domain\Entity\ImageArticlesIcon', $articleImage->id);
             } else {
                 return false;
             }
@@ -345,7 +345,7 @@ class Articles extends \Core\Domain\Entity\Articles
                     @$artThumbnail['fileName']
                 );
 
-                $articleThumb = new \KC\Entity\ImageArticlesThumb();
+                $articleThumb = new \Core\Domain\Entity\ImageArticlesThumb();
                 $articleThumb->ext = @$ext;
                 $articleThumb->path = @\BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['path']);
                 $articleThumb->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['fileName']);
@@ -354,7 +354,7 @@ class Articles extends \Core\Domain\Entity\Articles
                 $articleThumb->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($articleThumb);
                 $entityManagerLocale->flush();
-                $data->thumbnail = $entityManagerLocale->find('\KC\Entity\ImageArticlesThumb', $articleThumb->id);
+                $data->thumbnail = $entityManagerLocale->find('\Core\Domain\Entity\ImageArticlesThumb', $articleThumb->id);
             } else {
                 return false;
             }
@@ -368,7 +368,7 @@ class Articles extends \Core\Domain\Entity\Articles
                     $articleFeaturedImage['fileName']
                 );
 
-                $articlesFeaturedImage = new \KC\Entity\ImageArticleFeaturedImage();
+                $articlesFeaturedImage = new \Core\Domain\Entity\ImageArticleFeaturedImage();
                 $articlesFeaturedImage->ext = @$ext;
                 $articlesFeaturedImage->path =
                     @\BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['path']);
@@ -380,7 +380,7 @@ class Articles extends \Core\Domain\Entity\Articles
                 $entityManagerLocale->persist($articlesFeaturedImage);
                 $entityManagerLocale->flush();
                 $data->featuredImage = $entityManagerLocale->find(
-                    '\KC\Entity\ImageArticleFeaturedImage',
+                    '\Core\Domain\Entity\ImageArticleFeaturedImage',
                     $articlesFeaturedImage->id
                 );
             } else {
@@ -423,8 +423,8 @@ class Articles extends \Core\Domain\Entity\Articles
             if (!empty($params['title']) && !empty($params['content'])) {
                 foreach ($params['title'] as $key => $title) {
                     if (!empty($params['title'][$key]) && !empty($params['content'][$key])) {
-                        $chapter = new \KC\Entity\ArticleChapter();
-                        $chapter->article = $entityManagerLocale->find('\KC\Entity\Articles', $articleId);
+                        $chapter = new \Core\Domain\Entity\ArticleChapter();
+                        $chapter->article = $entityManagerLocale->find('\Core\Domain\Entity\Articles', $articleId);
                         $chapter->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['title'][$key]);
                         $chapter->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['content'][$key]);
                         $chapter->created_at = new \DateTime('now');
@@ -437,9 +437,9 @@ class Articles extends \Core\Domain\Entity\Articles
 
             if ($storeIds[0] != "") {
                 foreach ($storeIds as $storeid) {
-                    $relatedstores = new \KC\Entity\RefArticleStore();
-                    $relatedstores->relatedstores = $entityManagerLocale->find('\KC\Entity\Articles', $articleId);
-                    $relatedstores->articleshops = $entityManagerLocale->find('\KC\Entity\Shop', $articleId);
+                    $relatedstores = new \Core\Domain\Entity\RefArticleStore();
+                    $relatedstores->relatedstores = $entityManagerLocale->find('\Core\Domain\Entity\Articles', $articleId);
+                    $relatedstores->articleshops = $entityManagerLocale->find('\Core\Domain\Entity\Shop', $articleId);
                     $relatedstores->created_at = new \DateTime('now');
                     $relatedstores->updated_at = new \DateTime('now');
                     $entityManagerLocale->persist($relatedstores);
@@ -452,10 +452,10 @@ class Articles extends \Core\Domain\Entity\Articles
 
             if ($relatedIds[0] != "") {
                 foreach ($relatedIds as $relatedid) {
-                    $relatedcategories = new \KC\Entity\RefArticleCategory();
-                    $relatedcategories->articles = $entityManagerLocale->find('\KC\Entity\Articles', $articleId);
+                    $relatedcategories = new \Core\Domain\Entity\RefArticleCategory();
+                    $relatedcategories->articles = $entityManagerLocale->find('\Core\Domain\Entity\Articles', $articleId);
                     $relatedcategories->articlecategory = $entityManagerLocale->find(
-                        '\KC\Entity\Articlecategory',
+                        '\Core\Domain\Entity\Articlecategory',
                         $relatedid
                     );
                     $relatedcategories->created_at = new \DateTime('now');
@@ -485,7 +485,7 @@ class Articles extends \Core\Domain\Entity\Articles
         $storeIds = explode(',', $params['selectedRelatedStores']);
         $relatedIds = explode(',', $params['selectedRelatedCategory']);
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $data = $entityManagerLocale->find('\KC\Entity\Articles', $params['id']);
+        $data = $entityManagerLocale->find('\Core\Domain\Entity\Articles', $params['id']);
         $data->deleted = $data->__get('deleted');
         $data->created_at = $data->__get('updated_at');
         $data->updated_at = new \DateTime('now');
@@ -502,7 +502,7 @@ class Articles extends \Core\Domain\Entity\Articles
             $result = self::uploadImage('articleImage');
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension(@$result['fileName']);
-                $articleImage = $entityManagerLocale->find('\KC\Entity\ImageArticlesIcon', $data->articleImage->id);
+                $articleImage = $entityManagerLocale->find('\Core\Domain\Entity\ImageArticlesIcon', $data->articleImage->id);
                 $articleImage->ext = @$ext;
                 $articleImage->path = @$result['path'];
                 $articleImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
@@ -511,7 +511,7 @@ class Articles extends \Core\Domain\Entity\Articles
                 $articleImage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($articleImage);
                 $entityManagerLocale->flush();
-                $data->articleImage = $entityManagerLocale->find('\KC\Entity\ImageArticlesIcon', $articleImage->id);
+                $data->articleImage = $entityManagerLocale->find('\Core\Domain\Entity\ImageArticlesIcon', $articleImage->id);
 
             } else {
                 return false;
@@ -522,7 +522,7 @@ class Articles extends \Core\Domain\Entity\Articles
             $artThumbnail = self::uploadImage('articleImageSmall');
             if (@$artThumbnail['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension(@$artThumbnail['fileName']);
-                $articleThumb = $entityManagerLocale->find('\KC\Entity\ImageArticlesThumb', $data->thumbnail->id);
+                $articleThumb = $entityManagerLocale->find('\Core\Domain\Entity\ImageArticlesThumb', $data->thumbnail->id);
                 $articleThumb->ext = @$ext;
                 $articleThumb->path = @\BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['path']);
                 $articleThumb->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['fileName']);
@@ -531,7 +531,7 @@ class Articles extends \Core\Domain\Entity\Articles
                 $articleThumb->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($articleThumb);
                 $entityManagerLocale->flush();
-                $data->thumbnail = $entityManagerLocale->find('\KC\Entity\ImageArticlesThumb', $articleThumb->id);
+                $data->thumbnail = $entityManagerLocale->find('\Core\Domain\Entity\ImageArticlesThumb', $articleThumb->id);
             } else {
                 return false;
             }
@@ -545,7 +545,7 @@ class Articles extends \Core\Domain\Entity\Articles
                     $articleFeaturedImage['fileName']
                 );
 
-                $articlesFeaturedImage = new \KC\Entity\ImageArticleFeaturedImage();
+                $articlesFeaturedImage = new \Core\Domain\Entity\ImageArticleFeaturedImage();
                 $articlesFeaturedImage->ext = $ext;
                 $articlesFeaturedImage->path =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['path']);
@@ -557,7 +557,7 @@ class Articles extends \Core\Domain\Entity\Articles
                 $entityManagerLocale->persist($articlesFeaturedImage);
                 $entityManagerLocale->flush();
                 $data->featuredImage = $entityManagerLocale->find(
-                    '\KC\Entity\ImageArticleFeaturedImage',
+                    '\Core\Domain\Entity\ImageArticleFeaturedImage',
                     $articlesFeaturedImage->id
                 );
             } else {
@@ -619,7 +619,7 @@ class Articles extends \Core\Domain\Entity\Articles
                 ->andWhere('r.type ='. $queryBuilder->expr()->literal("ART"));
             $getRouteLink = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         } else {
-            $updateRouteLink = new KC\Entity\RoutePermalink();
+            $updateRouteLink = new \Core\Domain\Entity\RoutePermalink();
         }
         try
         {
@@ -632,14 +632,14 @@ class Articles extends \Core\Domain\Entity\Articles
 
             if ($storeIds[0] != "") {
                 $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $query = $queryBuilder->delete('KC\Entity\RefArticleStore', 'rf')
+                $query = $queryBuilder->delete('\Core\Domain\Entity\RefArticleStore', 'rf')
                     ->where("rf.relatedstores=" .$params['id'])
                     ->getQuery()->execute();
 
                 foreach ($storeIds as $storeid) {
-                    $relatedstores = new \KC\Entity\RefArticleStore();
-                    $relatedstores->relatedstores = $entityManagerLocale->find('\KC\Entity\Articles', $params['id']);
-                    $relatedstores->articleshops = $entityManagerLocale->find('\KC\Entity\Shop', $storeid);
+                    $relatedstores = new \Core\Domain\Entity\RefArticleStore();
+                    $relatedstores->relatedstores = $entityManagerLocale->find('\Core\Domain\Entity\Articles', $params['id']);
+                    $relatedstores->articleshops = $entityManagerLocale->find('\Core\Domain\Entity\Shop', $storeid);
                     $relatedstores->created_at = new \DateTime('now');
                     $relatedstores->updated_at = new \DateTime('now');
                     $entityManagerLocale->persist($relatedstores);
@@ -652,15 +652,15 @@ class Articles extends \Core\Domain\Entity\Articles
 
             if ($relatedIds[0] != "") {
                 $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $query = $queryBuilder->delete('KC\Entity\RefArticleCategory', 'rf')
+                $query = $queryBuilder->delete('\Core\Domain\Entity\RefArticleCategory', 'rf')
                     ->where("rf.articles=" .$params['id'])
                     ->getQuery()->execute();
 
                 foreach ($relatedIds as $relatedid) {
-                    $relatedcategories = new \KC\Entity\RefArticleCategory();
-                    $relatedcategories->articles = $entityManagerLocale->find('\KC\Entity\Articles', $params['id']);
+                    $relatedcategories = new \Core\Domain\Entity\RefArticleCategory();
+                    $relatedcategories->articles = $entityManagerLocale->find('\Core\Domain\Entity\Articles', $params['id']);
                     $relatedcategories->articlecategory = $entityManagerLocale->find(
-                        '\KC\Entity\Articlecategory',
+                        '\Core\Domain\Entity\Articlecategory',
                         $relatedid
                     );
                     $relatedcategories->created_at = new \DateTime('now');
@@ -672,13 +672,13 @@ class Articles extends \Core\Domain\Entity\Articles
 
             if (!empty($params['title']) && !empty($params['content'])) {
                 $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $query = $queryBuilder->delete('KC\Entity\ArticleChapter', 'rf')
+                $query = $queryBuilder->delete('\Core\Domain\Entity\ArticleChapter', 'rf')
                     ->where("rf.article=" .$params['id'])
                     ->getQuery()->execute();
                 foreach ($params['title'] as $key => $title) {
                     if (!empty($params['title'][$key]) && !empty($params['content'][$key])) {
-                        $chapter = new \KC\Entity\ArticleChapter();
-                        $chapter->article = $entityManagerLocale->find('\KC\Entity\Articles', $params['id']);
+                        $chapter = new \Core\Domain\Entity\ArticleChapter();
+                        $chapter->article = $entityManagerLocale->find('\Core\Domain\Entity\Articles', $params['id']);
                         $chapter->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['title'][$key]);
                         $chapter->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['content'][$key]);
                         $chapter->created_at = new \DateTime('now');
@@ -772,7 +772,7 @@ class Articles extends \Core\Domain\Entity\Articles
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('DISTINCT(p.id)')
-        ->from("\KC\Entity\Articles", "a")
+        ->from("\Core\Domain\Entity\Articles", "a")
         ->leftJoin('a.category', 'artcat')
         ->leftJoin("artcat.moneysaving", 'ms')
         ->leftJoin("ms.page", 'p')
@@ -785,7 +785,7 @@ class Articles extends \Core\Domain\Entity\Articles
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('artcat.id')
-        ->from("\KC\Entity\Articles", "a")
+        ->from("\Core\Domain\Entity\Articles", "a")
         ->leftJoin('a.category', 'artcat')
         ->where('a.id='. $artId);
         $pageIdList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -808,7 +808,7 @@ class Articles extends \Core\Domain\Entity\Articles
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-        $query= $queryBuilder->update('\KC\Entity\Articles', 'a')
+        $query= $queryBuilder->update('\Core\Domain\Entity\Articles', 'a')
             ->set('a.deleted', '2')
             ->where('a.id=' . $id);
         $query->getQuery()->execute();
@@ -843,7 +843,7 @@ class Articles extends \Core\Domain\Entity\Articles
             endforeach;
 
             $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-            $query= $queryBuilder->update('\KC\Entity\Articles', 'a')
+            $query= $queryBuilder->update('\Core\Domain\Entity\Articles', 'a')
                 ->set('a.deleted', '0')
                 ->where('a.id=' . $id);
             $query->getQuery()->execute();
@@ -870,7 +870,7 @@ class Articles extends \Core\Domain\Entity\Articles
         if ($id) {
             $entityManagerLocale = \Zend_Registry::get('emLocale');
             $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-            $query= $queryBuilder->update('\KC\Entity\Articles', 'a')
+            $query= $queryBuilder->update('\Core\Domain\Entity\Articles', 'a')
                 ->set('a.deleted', '1')
                 ->where('a.id=' . $id);
             $query->getQuery()->execute();
@@ -933,7 +933,7 @@ class Articles extends \Core\Domain\Entity\Articles
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
-        $query = $queryBuilder->delete('\KC\Entity\ArticleChapter', 'a')
+        $query = $queryBuilder->delete('\Core\Domain\Entity\ArticleChapter', 'a')
             ->where('a.id=' . $id);
         $data = $query->getQuery()->execute();
         return $data;

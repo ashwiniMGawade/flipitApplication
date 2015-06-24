@@ -139,7 +139,7 @@ class MoneySaving extends \Core\Domain\Entity\MoneySaving
     public static function delartCategories($pageid)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->delete('KC\Entity\MoneySaving', 'ms')
+        $query = $queryBuilder->delete('\Core\Domain\Entity\MoneySaving', 'ms')
             ->setParameter(1, $pageId)
             ->where('ms.page = ?1')
             ->getQuery();

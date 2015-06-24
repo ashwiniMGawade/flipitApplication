@@ -116,7 +116,7 @@ class Dashboard extends \Core\Domain\Entity\Dashboard
             ->from('\Core\Domain\Entity\Dashboard', 'd');
         $checkData = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (empty($checkData)) {
-            $dashboardAdd = new \KC\Entity\Dashboard();
+            $dashboardAdd = new \Core\Domain\Entity\Dashboard();
             $dashboardAdd->id = 1;
             $dashboardAdd->no_of_offers = $noOfOffers;
             $dashboardAdd->no_of_shops = $noOfShops;
@@ -136,7 +136,7 @@ class Dashboard extends \Core\Domain\Entity\Dashboard
 
         } else {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->update('\KC\Entity\Dashboard')
+            $query = $queryBuilder->update('\Core\Domain\Entity\Dashboard')
                 ->set('no_of_offers', $noOfOffers)
                 ->set('no_of_shops', $noOfShops)
                 ->set('no_of_clickouts', $noOfClickouts)

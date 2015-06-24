@@ -6,7 +6,7 @@ class Widget extends \Core\Domain\Entity\Widget
     public function addWidget($params)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $widget = new \KC\Entity\Widget();
+        $widget = new \Core\Domain\Entity\Widget();
         $widget->title = \FrontEnd_Helper_viewHelper::sanitize(
             \BackEnd_Helper_viewHelper::stripSlashesFromString($params ['title'])
         );
@@ -54,7 +54,7 @@ class Widget extends \Core\Domain\Entity\Widget
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         if ($params['state'] == 'online') {
-            $query = $queryBuilder->update('KC\Entity\Widget', 'widget')
+            $query = $queryBuilder->update('\Core\Domain\Entity\Widget', 'widget')
             ->set('widget.status', 1)
             ->where('widget.id = '.$params['id'])
             ->getQuery();
@@ -62,7 +62,7 @@ class Widget extends \Core\Domain\Entity\Widget
             return $params['id'];
         }
         if ($params['state'] == 'offline') {
-            $query = $queryBuilder->update('KC\Entity\Widget', 'widget')
+            $query = $queryBuilder->update('\Core\Domain\Entity\Widget', 'widget')
             ->set('widget.status', 0)
             ->where('widget.id = '.$params['id'])
             ->getQuery();
@@ -129,7 +129,7 @@ class Widget extends \Core\Domain\Entity\Widget
     {
         $content = addslashes($parameters['content']);
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->update('KC\Entity\Widget', 'w')
+        $query = $queryBuilder->update('\Core\Domain\Entity\Widget', 'w')
             ->set(
                 'w.title',
                 $queryBuilder->expr()->literal(\BackEnd_Helper_viewHelper::stripSlashesFromString($parameters['title']))
@@ -150,7 +150,7 @@ class Widget extends \Core\Domain\Entity\Widget
     {
         if ($id) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\Widget', 'w')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\Widget', 'w')
             ->setParameter(1, $id)
             ->where('w.id = ?1')
             ->getQuery();

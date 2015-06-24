@@ -34,7 +34,7 @@ class LocaleSettings extends \Core\Domain\Entity\LocaleSettings
 
     public static function getLocaleSettingsById()
     {
-        $localeSettings = \Zend_Registry::get('emLocale')->find('KC\Entity\LocaleSettings', 1);
+        $localeSettings = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\LocaleSettings', 1);
         return $localeSettings;
     }
 
@@ -51,7 +51,7 @@ class LocaleSettings extends \Core\Domain\Entity\LocaleSettings
             return;
         } else {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->update('KC\Entity\LocaleSettings', 'ls')
+            $query = $queryBuilder->update('\Core\Domain\Entity\LocaleSettings', 'ls')
                     ->set('ls.timezone', $queryBuilder->expr()->literal($timezone))
                     ->setParameter(1, 1)
                     ->where('ls.id = ?1')
@@ -73,7 +73,7 @@ class LocaleSettings extends \Core\Domain\Entity\LocaleSettings
             return;
         }
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->update('KC\Entity\LocaleSettings', 'ls')
+        $query = $queryBuilder->update('\Core\Domain\Entity\LocaleSettings', 'ls')
                 ->set('ls.locale', $queryBuilder->expr()->literal($locale))
                 ->setParameter(1, 1)
                 ->where('ls.id = ?1')

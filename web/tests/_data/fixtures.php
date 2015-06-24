@@ -11,13 +11,13 @@ class fixtures
 
     public function execute()
     {
-        $locale = new KC\Entity\LocaleSettings();
+        $locale = new \Core\Domain\Entity\LocaleSettings();
         $locale->locale = 'nl_NL';
         $locale->timezone = 'Europe/Amsterdam';
         $this->entityManager->persist($locale);
         $this->entityManager->flush();
 
-        $image = new KC\Entity\User\ProfileImage();
+        $image = new \Core\Domain\Entity\User\ProfileImage();
         $image->ext = 'jpg';
         $image->path = 'images/upload/shop/';
         $image->name = '1409026126_Jellyfish.jpg';
@@ -27,7 +27,7 @@ class fixtures
         $this->entityManager->persist($image);
         $this->entityManager->flush();
 
-        $role = new KC\Entity\User\Role();
+        $role = new \Core\Domain\Entity\User\Role();
         $role->id = '4';
         $role->name = 'test';
         $role->deleted = 0;
@@ -36,7 +36,7 @@ class fixtures
         $this->entityManager->persist($role);
         $this->entityManager->flush();
 
-        $user = new KC\Entity\User\User();
+        $user = new \Core\Domain\Entity\User\User();
         $user->firstname = 'test';
         $user->lastname = 'user';
         $user->email = 'test@flipit.com';
@@ -55,7 +55,7 @@ class fixtures
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $ipaddress = new KC\Entity\User\IpAddresses();
+        $ipaddress = new \Core\Domain\Entity\User\IpAddresses();
         $ipaddress->ipaddress = '192.168.56.1';
         $ipaddress->name = 'test';
         $ipaddress->deleted = 0;
@@ -65,7 +65,7 @@ class fixtures
         $this->entityManager->flush();
 
         for ($i=1; $i < 5; $i++) {
-            $category = new KC\Entity\Category();
+            $category = new \Core\Domain\Entity\Category();
             $category->name = 'test cat'.$i;
             $category->permalink = 'test-cat'.$i;
             $category->deleted = 0;
@@ -75,7 +75,7 @@ class fixtures
             $this->entityManager->flush();
         }
 
-        $image = new KC\Entity\Logo();
+        $image = new \Core\Domain\Entity\Logo();
         $image->ext = 'jpg';
         $image->path = 'images/upload/shop/';
         $image->name = '1409026126_Jellyfish.jpg';
@@ -85,7 +85,7 @@ class fixtures
         $this->entityManager->persist($image);
         $this->entityManager->flush();
 
-        $image = new KC\Entity\Logo();
+        $image = new \Core\Domain\Entity\Logo();
         $image->ext = 'jpg';
         $image->path = 'images/upload/shop/';
         $image->name = '1409026126_Jellyfish.jpg';
@@ -96,7 +96,7 @@ class fixtures
         $this->entityManager->flush();
 
         for ($i=1; $i <= 20; $i++) {
-            $shop = new KC\Entity\Shop();
+            $shop = new \Core\Domain\Entity\Shop();
             $shop->name = 'acceptance shop'.$i;
             $shop->permalink = 'acceptance-shop'.$i;
             $shop->title = 'acceptance shop title'.$i;
@@ -128,7 +128,7 @@ class fixtures
         }
 
         for ($i=21; $i <= 40; $i++) {
-            $shop = new KC\Entity\Shop();
+            $shop = new \Core\Domain\Entity\Shop();
             $shop->name = 'acceptance shop'.$i;
             $shop->permalink = 'acceptance-shop'.$i;
             $shop->title = 'acceptance shop title'.$i;
@@ -160,9 +160,9 @@ class fixtures
         }
 
         for ($i=1; $i < 5; $i++) {
-            $refShopCategory = new KC\Entity\RefShopCategory();
-            $refShopCategory->category = $this->entityManager->find('KC\Entity\Shop', $i);
-            $refShopCategory->shop = $this->entityManager->find('KC\Entity\Category', 2);
+            $refShopCategory = new \Core\Domain\Entity\RefShopCategory();
+            $refShopCategory->category = $this->entityManager->find('\Core\Domain\Entity\Shop', $i);
+            $refShopCategory->shop = $this->entityManager->find('\Core\Domain\Entity\Category', 2);
             $refShopCategory->deleted = 0;
             $refShopCategory->created_at = new \DateTime('now');
             $refShopCategory->updated_at = new \DateTime('now');
@@ -170,7 +170,7 @@ class fixtures
             $this->entityManager->flush();
         }
         
-        $routePermalink = new KC\Entity\RoutePermalink();
+        $routePermalink = new \Core\Domain\Entity\RoutePermalink();
         $routePermalink->permalink = 'acceptance-shop';
         $routePermalink->type = 'SHP';
         $routePermalink->exactlink = 'store/storedetail/id/1';
@@ -180,7 +180,7 @@ class fixtures
         $this->entityManager->persist($routePermalink);
         $this->entityManager->flush();
 
-        $routePermalink = new KC\Entity\RoutePermalink();
+        $routePermalink = new \Core\Domain\Entity\RoutePermalink();
         $routePermalink->permalink = 'how-to/acceptance-shop';
         $routePermalink->type = 'SHP';
         $routePermalink->exactlink = 'store/howtoguide/shopid/1';
@@ -199,8 +199,8 @@ class fixtures
         $pastDate = $pastDate->format('Y-m-d H:i:s');
 
         for ($i=1; $i <= 20; $i++) {
-            $offer = new KC\Entity\Offer();
-            $offer->shopOffers = $this->entityManager->find('KC\Entity\Shop', $i);
+            $offer = new \Core\Domain\Entity\Offer();
+            $offer->shopOffers = $this->entityManager->find('\Core\Domain\Entity\Shop', $i);
             $offer->couponCode = 'CD';
             $offer->title = 'test offer'.$i;
             $offer->Visability = 'DE';
@@ -222,7 +222,7 @@ class fixtures
             $this->entityManager->flush();
         }
 
-        $offerTiles = new KC\Entity\OfferTiles();
+        $offerTiles = new \Core\Domain\Entity\OfferTiles();
         $offerTiles->label = 'test';
         $offerTiles->type = 'CD';
         $offerTiles->ext = 'png';
@@ -234,14 +234,14 @@ class fixtures
         $this->entityManager->persist($offerTiles);
         $this->entityManager->flush();
 
-        // $offersTile = $this->entityManager->find('KC\Entity\Offer', 1);
+        // $offersTile = $this->entityManager->find('\Core\Domain\Entity\Offer', 1);
         // $offersTile->offerTiles = $offerTiles;
         // $this->entityManager->persist($offersTile);
         // $this->entityManager->flush();
 
-        $offerTiles = new KC\Entity\RefOfferCategory();
+        $offerTiles = new \Core\Domain\Entity\RefOfferCategory();
         $offerTiles->offers = $offer;
-        $offerTiles->categories = $this->entityManager->find('KC\Entity\Category', 1);
+        $offerTiles->categories = $this->entityManager->find('\Core\Domain\Entity\Category', 1);
         $offerTiles->deleted = 0;
         $offerTiles->created_at = new \DateTime('now');
         $offerTiles->updated_at = new \DateTime('now');

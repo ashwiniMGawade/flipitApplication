@@ -72,7 +72,7 @@ class Admin_ArticleController extends Zend_Controller_Action
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('cat')
-            ->from('\KC\Entity\Articlecategory', 'cat')
+            ->from('\Core\Domain\Entity\Articlecategory', 'cat')
             ->where('cat.deleted= 0')
             ->orderBy('cat.name', 'ASC');
 
@@ -152,7 +152,7 @@ class Admin_ArticleController extends Zend_Controller_Action
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('cat')
-            ->from('\KC\Entity\Articlecategory', 'cat')
+            ->from('\Core\Domain\Entity\Articlecategory', 'cat')
             ->where('cat.deleted= 0')
             ->orderBy('cat.name', 'ASC');
 
@@ -315,7 +315,7 @@ class Admin_ArticleController extends Zend_Controller_Action
 
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->select('a')
-                ->from('\KC\Entity\Articles', 'a')
+                ->from('\Core\Domain\Entity\Articles', 'a')
                 ->where('a.permalink ='.  $queryBuilder->expr()->literal(urlencode($url)))
                 ->andWhere('a.id ='. $id);
             $rp = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -324,7 +324,7 @@ class Admin_ArticleController extends Zend_Controller_Action
 
                 $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
                 $query = $queryBuilder->select('a')
-                    ->from('\KC\Entity\Articles', 'a')
+                    ->from('\Core\Domain\Entity\Articles', 'a')
                     ->where('a.permalink ='.  $queryBuilder->expr()->literal(urlencode($url)));
                 $rp = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                 if (empty($rp)) {
@@ -351,7 +351,7 @@ class Admin_ArticleController extends Zend_Controller_Action
 
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->select('a')
-                ->from('\KC\Entity\Articles', 'a')
+                ->from('\Core\Domain\Entity\Articles', 'a')
                 ->where('a.permalink ='.  $queryBuilder->expr()->literal(urlencode($url)));
             $rp = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
            

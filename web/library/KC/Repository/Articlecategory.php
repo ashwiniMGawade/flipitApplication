@@ -16,7 +16,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->delete('KC\Entity\Articlecategory', 'rf')
+            ->delete('\Core\Domain\Entity\Articlecategory', 'rf')
             ->getQuery()
             ->execute();
     }
@@ -24,7 +24,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->delete('KC\Entity\RefArticlecategoryRelatedcategory', 'rf')
+            ->delete('\Core\Domain\Entity\RefArticlecategoryRelatedcategory', 'rf')
             ->getQuery()
             ->execute();
     }
@@ -57,7 +57,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
     public function addcategory($params)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $artCategory = new \KC\Entity\Articlecategory();
+        $artCategory = new \Core\Domain\Entity\Articlecategory();
         $artCategory->name = strtolower(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['categoryName']));
         $artCategory->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['permaLink']);
         $artCategory->metatitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['metaTitle']);
@@ -70,7 +70,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
         if ($_FILES['categoryIconNameHidden']['name']!=null) {
             $result = self::uploadImage('categoryIconNameHidden');
             if ($result['status'] == '200') {
-                $articleCategoryIcon = new \KC\Entity\ImageArticleCategoryIcon();
+                $articleCategoryIcon = new \Core\Domain\Entity\ImageArticleCategoryIcon();
                 $categoryImageExtension = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
                 $articleCategoryIcon->ext = $categoryImageExtension;
                 $articleCategoryIcon->path = $result['path'];
@@ -81,7 +81,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
                 $entityManagerLocale->persist($articleCategoryIcon);
                 $entityManagerLocale->flush();
                 $artCategory->ArtCatIcon = $entityManagerLocale->find(
-                    'KC\Entity\ImageArticleCategoryIcon',
+                    '\Core\Domain\Entity\ImageArticleCategoryIcon',
                     $articleCategoryIcon->id
                 );
             } else {
@@ -94,12 +94,12 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
             $categoryId = $artCategory->id;
 
             foreach ($params['selectedCategoryies'] as $relatedCategory) {
-                $refRelatedCategory = new \KC\Entity\RefArticlecategoryRelatedcategory();
+                $refRelatedCategory = new \Core\Domain\Entity\RefArticlecategoryRelatedcategory();
                 $refRelatedCategory->articlecategory = $entityManagerLocale->find(
-                    'KC\Entity\Articlecategory',
+                    '\Core\Domain\Entity\Articlecategory',
                     $categoryId
                 );
-                $refRelatedCategory->category = $entityManagerLocale->find('KC\Entity\Category', $relatedCategory);
+                $refRelatedCategory->category = $entityManagerLocale->find('\Core\Domain\Entity\Category', $relatedCategory);
                 $refRelatedCategory->deleted = 0;
                 $refRelatedCategory->created_at = new \DateTime('now');
                 $refRelatedCategory->updated_at = new \DateTime('now');
@@ -283,7 +283,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
         if ($type == 'post') {
 
             $entityManagerLocale = \Zend_Registry::get('emLocale');
-            $edit = $entityManagerLocale->find('\KC\Entity\Articlecategory', $params['id']);
+            $edit = $entityManagerLocale->find('\Core\Domain\Entity\Articlecategory', $params['id']);
 
             $edit->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['categoryName']);
             $edit->permalink =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['permaLink']);
@@ -305,7 +305,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
                     );
 
                     $articleCategoryIcon = $entityManagerLocale->find(
-                        'KC\Entity\ImageArticleCategoryIcon',
+                        '\Core\Domain\Entity\ImageArticleCategoryIcon',
                         $edit->ArtCatIcon->id
                     );
                     $categoryImageExtension = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
@@ -318,7 +318,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
                     $entityManagerLocale->persist($articleCategoryIcon);
                     $entityManagerLocale->flush();
                     $artCategory->ArtCatIcon = $entityManagerLocale->find(
-                        'KC\Entity\ImageArticleCategoryIcon',
+                        '\Core\Domain\Entity\ImageArticleCategoryIcon',
                         $articleCategoryIcon->id
                     );
 
@@ -333,7 +333,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
                 ->where('a.id ='.$edit->id);
             $getPage = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             if (!empty($getPage[0]['permalink'])) {
-                $repo = $entityManagerLocale->getRepository('KC\Entity\RoutePermalink');
+                $repo = $entityManagerLocale->getRepository('\Core\Domain\Entity\RoutePermalink');
                 $updateRouteLink = $repo->findBy(array('permalink' =>  $getPage[0]['permalink']));
                 
             } else {
@@ -348,7 +348,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
                 $entityManagerLocale->flush();
 
                 $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $query = $queryBuilder->delete('KC\Entity\RefArticlecategoryRelatedcategory', 'rf')
+                $query = $queryBuilder->delete('\Core\Domain\Entity\RefArticlecategoryRelatedcategory', 'rf')
                     ->where("rf.articlecategory=" . $params['id'])
                     ->getQuery()->execute();
 
@@ -361,12 +361,12 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
                     $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
                     if (sizeof($data) == 0) {
-                        $refRelatedCategory = new \KC\Entity\RefArticlecategoryRelatedcategory();
+                        $refRelatedCategory = new \Core\Domain\Entity\RefArticlecategoryRelatedcategory();
                         $refRelatedCategory->articlecategory = $entityManagerLocale->find(
-                            'KC\Entity\Articlecategory',
+                            '\Core\Domain\Entity\Articlecategory',
                             $params['id']
                         );
-                        $refRelatedCategory->category = $entityManagerLocale->find('KC\Entity\Category', $relatedCategory);
+                        $refRelatedCategory->category = $entityManagerLocale->find('\Core\Domain\Entity\Category', $relatedCategory);
                         $refRelatedCategory->deleted = 0;
                         $refRelatedCategory->created_at = new \DateTime('now');
                         $refRelatedCategory->updated_at = new \DateTime('now');
@@ -409,12 +409,12 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
     {
         if ($id) {
                 $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $query = $queryBuilder->delete('KC\Entity\RefArticlecategoryRelatedcategory', 'rf')
+                $query = $queryBuilder->delete('\Core\Domain\Entity\RefArticlecategoryRelatedcategory', 'rf')
                     ->where("rf.articlecategory=" .$id)
                     ->getQuery()->execute();
 
                 $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $query = $queryBuilder->delete('KC\Entity\Articlecategory', 'rf')
+                $query = $queryBuilder->delete('\Core\Domain\Entity\Articlecategory', 'rf')
                     ->where("rf.id=" .$id)
                     ->getQuery()->execute();
         } else {

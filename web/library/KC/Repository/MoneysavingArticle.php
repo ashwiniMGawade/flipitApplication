@@ -79,10 +79,10 @@ class MoneysavingArticle extends \Core\Domain\Entity\MoneysavingArticle
                 }
 
                 $entityManagerLocale  = \Zend_Registry::get('emLocale');
-                $moneySavingArticle = new \KC\Entity\MoneysavingArticle();
+                $moneySavingArticle = new \Core\Domain\Entity\MoneysavingArticle();
                 $moneySavingArticle->type = 'MN';
                 $moneySavingArticle->moneysaving = $entityManagerLocale->find(
-                    'KC\Entity\Articles',
+                    '\Core\Domain\Entity\Articles',
                     $article[0]['id']
                 );
                 $moneySavingArticle->position = (intval($NewPos));
@@ -108,11 +108,11 @@ class MoneysavingArticle extends \Core\Domain\Entity\MoneysavingArticle
     {
         if ($id) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\MoneysavingArticle', 'm')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\MoneysavingArticle', 'm')
                 ->where('m.id ='.$id)
                 ->getQuery();
             $query->execute();
-            $queryBuilder->update('KC\Entity\MoneysavingArticle', 'p')
+            $queryBuilder->update('\Core\Domain\Entity\MoneysavingArticle', 'p')
                 ->set('p.position', 'p.position -1')
                 ->where('p.position >' . $position)
                 ->getQuery()->execute();
@@ -139,14 +139,14 @@ class MoneysavingArticle extends \Core\Domain\Entity\MoneysavingArticle
 
         if (count($PrevPc) > 0) {
             $queryBuilderPreviousPosition = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $queryBuilderPreviousPosition->update('KC\Entity\MoneysavingArticle', 'm')
+            $queryBuilderPreviousPosition->update('\Core\Domain\Entity\MoneysavingArticle', 'm')
                 ->set('m.position', $position)
                 ->where('m.id = ' . $PrevPc[0]['id'])
                 ->getQuery()->execute();
 
             //change position of current element with postition + 1
             $queryBuilderNewPosition = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $queryBuilderNewPosition->update('KC\Entity\MoneysavingArticle', 'msa')
+            $queryBuilderNewPosition->update('\Core\Domain\Entity\MoneysavingArticle', 'msa')
                 ->set('msa.position', $pos)
                 ->where('msa.id = ' . $id)
                 ->getQuery()->execute();
@@ -170,14 +170,14 @@ class MoneysavingArticle extends \Core\Domain\Entity\MoneysavingArticle
         //change position of next element with current
         if (count($PrevPc) > 0) {
             $queryBuilderPreviousPosition = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $queryBuilderPreviousPosition->update('KC\Entity\MoneysavingArticle', 'm')
+            $queryBuilderPreviousPosition->update('\Core\Domain\Entity\MoneysavingArticle', 'm')
                 ->set('m.position', $position)
                 ->where('m.id = '.$PrevPc[0]['id'])
                 ->getQuery()->execute();
 
             //change position of current element with postition - 1
             $queryBuilderNewPosition = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $queryBuilderNewPosition->update('KC\Entity\MoneysavingArticle', 'msa')
+            $queryBuilderNewPosition->update('\Core\Domain\Entity\MoneysavingArticle', 'msa')
                 ->set('msa.position', $pos)
                 ->where('msa.id = ' . $id)
                 ->getQuery()->execute();

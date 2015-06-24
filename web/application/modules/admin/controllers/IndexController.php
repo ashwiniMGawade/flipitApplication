@@ -64,7 +64,7 @@ class Admin_IndexController extends Zend_Controller_Action
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('d')
-            ->from('KC\Entity\Dashboard', 'd');
+            ->from('\Core\Domain\Entity\Dashboard', 'd');
         $checkDataExist = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (count($checkDataExist) == 0) {
             $entityManagerLocale  = \Zend_Registry::get('emLocale');
@@ -75,7 +75,7 @@ class Admin_IndexController extends Zend_Controller_Action
             $entityManagerLocale->flush();
         } else {
             $entityManagerLocale  = \Zend_Registry::get('emLocale');
-            $saveMessage = $entityManagerLocale->find('KC\Entity\Dashboard', 1);
+            $saveMessage = $entityManagerLocale->find('\Core\Domain\Entity\Dashboard', 1);
             $saveMessage->message = trim($text);
             \Zend_Registry::get('emLocale')->persist($saveMessage);
             \Zend_Registry::get('emLocale')->flush();

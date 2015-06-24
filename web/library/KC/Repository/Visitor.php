@@ -37,7 +37,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
         if ($shopId!=0) {
             $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->select("fv.id")
-                ->from("\KC\Entity\FavoriteShop", "fv")
+                ->from("\Core\Domain\Entity\FavoriteShop", "fv")
                 ->where('fv.visitor='.$visitorId)
                 ->andWhere('fv.shop='.$shopId);
             $favoriteShops = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -53,7 +53,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
     public static function updateLoginTime($visitorId)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $visitor = $entityManagerLocale->find("\KC\Entity\Visitor", $visitorId);
+        $visitor = $entityManagerLocale->find("\Core\Domain\Entity\Visitor", $visitorId);
 
         if ($visitor->currentLogIn=='0000-00-00 00:00:00') {
             $visitor->currentLogIn = new \DateTime('now');
@@ -71,11 +71,11 @@ class Visitor extends \Core\Domain\Entity\Visitor
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         if (\Auth_VisitorAdapter::hasIdentity()) {
             $visitorId = \Auth_VisitorAdapter::getIdentity()->id;
-            $visitor = \Zend_Registry::get('emLocale')->find("\KC\Entity\Visitor", $visitorId);
+            $visitor = \Zend_Registry::get('emLocale')->find("\Core\Domain\Entity\Visitor", $visitorId);
             $visitor->weeklyNewsLetter = $visitorInformation['weeklyNewsLetter'];
             $visitor->codeAlert = $visitorInformation['codealert'];
         } else {
-            $visitor = new \KC\Entity\Visitor();
+            $visitor = new \Core\Domain\Entity\Visitor();
             $visitor->weeklyNewsLetter = '1';
             $visitor->codeAlert = '1';
             $visitor->travelNewsLetter = '0';
@@ -130,7 +130,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-        $query = $queryBuilder->update('\KC\Entity\Visitor', 'v')
+        $query = $queryBuilder->update('\Core\Domain\Entity\Visitor', 'v')
             ->set('v.changepasswordrequest', $changePasswordStatus)
             ->where('v.id=' . \FrontEnd_Helper_viewHelper::sanitize($visitorId));
         $query->getQuery()->execute();
@@ -139,7 +139,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
     public static function updateVisitorPassword($visitorId, $password)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $visitor  = $entityManagerLocale->find('\KC\Entity\Visitor', \FrontEnd_Helper_viewHelper::sanitize($visitorId));
+        $visitor  = $entityManagerLocale->find('\Core\Domain\Entity\Visitor', \FrontEnd_Helper_viewHelper::sanitize($visitorId));
         if ($visitor) {
             $visitor->password = \FrontEnd_Helper_viewHelper::sanitize(md5($password));
             $entityManagerLocale->persist($visitor);
@@ -153,7 +153,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
     public static function getVisitorDetails($visitorId)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        return $entityManagerLocale->find('\KC\Entity\Visitor', $visitorId);
+        return $entityManagerLocale->find('\Core\Domain\Entity\Visitor', $visitorId);
     }
 
     public static function getUserDetails($visitorId)
@@ -197,7 +197,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
     {
         $visitorConrmationStatus = false;
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $visitor = $entityManagerLocale->find('\KC\Entity\Visitor', $visitorId);
+        $visitor = $entityManagerLocale->find('\Core\Domain\Entity\Visitor', $visitorId);
         if ($visitor->active==false) {
             $visitor->active  = true;
 
@@ -230,7 +230,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-        $query= $queryBuilder->update('\KC\Entity\Visitor', 'v')
+        $query= $queryBuilder->update('\Core\Domain\Entity\Visitor', 'v')
             ->set('active', 0)
             ->where("email = '".$email."'");
         $query->getQuery()->execute();
@@ -247,10 +247,10 @@ class Visitor extends \Core\Domain\Entity\Visitor
             l.path as imgpath, l.name as imgname"
         )
         ->addSelect(
-            "(SELECT COUNT(active.id) FROM \KC\Entity\Offer active WHERE
+            "(SELECT COUNT(active.id) FROM \Core\Domain\Entity\Offer active WHERE
             (active.shopOffers = s.id AND active.endDate >= '$currentDate' AND active.deleted=0)) as activeCount"
         )
-        ->from("\KC\Entity\FavoriteShop", "fv")
+        ->from("\Core\Domain\Entity\FavoriteShop", "fv")
         ->leftJoin("fv.shop", "s")
         ->leftJoin('s.logo', 'l')
         ->where('fv.visitor='.$visitorId);
@@ -267,7 +267,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
             'fv,s,o,l,v'
         )
         ->addSelect(
-            "(SELECT COUNT(active) FROM \KC\Entity\Offer active WHERE
+            "(SELECT COUNT(active) FROM \Core\Domain\Entity\Offer active WHERE
             (active.shopOffers = s.id AND active.endDate >= '$currentDate' AND active.deleted=0)) as activeCount"
         )
         ->from('\Core\Domain\Entity\Offer', 'o')
@@ -316,7 +316,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
     {
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select("fv, s, l")
-            ->from("\KC\Entity\FavoriteShop", "fv")
+            ->from("\Core\Domain\Entity\FavoriteShop", "fv")
             ->leftJoin("fv.shop", "s")
             ->leftJoin('s.logo', 'l')
             ->where('fv.visitor='. \FrontEnd_Helper_viewHelper::sanitize($visitorId));
@@ -353,7 +353,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
 
         $dateOfBirth = new \DateTime($dob);
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $visitor = $entityManagerLocale->find('\KC\Entity\Visitor', $id);
+        $visitor = $entityManagerLocale->find('\Core\Domain\Entity\Visitor', $id);
 
         $visitor->firstName = \FrontEnd_Helper_viewHelper::sanitize($params['firstName']);
         $visitor->lastName = \FrontEnd_Helper_viewHelper::sanitize($params['lastName']);
@@ -403,7 +403,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
         }
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->delete('KC\Entity\VisitorKeyword', 'kw')
+        $query = $queryBuilder->delete('\Core\Domain\Entity\VisitorKeyword', 'kw')
             ->where("kw.visitor=" .$params['id'])
             ->getQuery()->execute();
 
@@ -411,9 +411,9 @@ class Visitor extends \Core\Domain\Entity\Visitor
         if (!empty($params['visitorKeywords']) && count($params['visitorKeywords']) > 0) {
             # set visitor  keywords
             foreach ($params['visitorKeywords'] as $keyword) {
-                $keywordObj = new \KC\Entity\VisitorKeyword();
+                $keywordObj = new \Core\Domain\Entity\VisitorKeyword();
                 $keywordObj->keyword = \FrontEnd_Helper_viewHelper::sanitize($keyword);
-                $keywordObj->visitor = $entityManagerLocale->find('\KC\Entity\Visitor', $params['id']);
+                $keywordObj->visitor = $entityManagerLocale->find('\Core\Domain\Entity\Visitor', $params['id']);
                 $entityManagerLocale->persist($keywordObj);
                 $entityManagerLocale->flush();
             }
@@ -538,7 +538,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
                 if ($params['visitorId']) {
                     $u = Doctrine_Core::getTable("FavoriteShop")->find($params['visitorId']);
                     $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                    $query = $queryBuilder->delete('KC\Entity\FavoriteShop', 'fv')
+                    $query = $queryBuilder->delete('\Core\Domain\Entity\FavoriteShop', 'fv')
                         ->where('fv.visitor='.$params['visitorId'])
                         ->andWhere('fv.shop='.@$params['shops'][$i])
                         ->getQuery()->execute();
@@ -554,7 +554,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
     {
        
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $visitor = $entityManagerLocale->find('\KC\Entity\Visitor', $userid);
+        $visitor = $entityManagerLocale->find('\Core\Domain\Entity\Visitor', $userid);
 
         $visitor->firstName = $params['fname'];
         $visitor->lastName = $params['lname'];
@@ -594,7 +594,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-        $query = $queryBuilder->update('\KC\Entity\Visitor', 'v')
+        $query = $queryBuilder->update('\Core\Domain\Entity\Visitor', 'v')
             ->set('v.profile_img', $changePasswordStatus)
             ->where('v.id=' . $userid);
         $query->getQuery()->execute();
@@ -743,7 +743,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
             foreach ($visitorIds as $visitorIdValue) {
                 $entityManagerLocale = \Zend_Registry::get('emLocale');
                 $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-                $query = $queryBuilder->update('\KC\Entity\Visitor', 'v')
+                $query = $queryBuilder->update('\Core\Domain\Entity\Visitor', 'v')
                     ->set('v.code_alert_send_date', "'".  date('Y-m-d 00:00:00') ."'")
                     ->where('v.id='. \FrontEnd_Helper_viewHelper::sanitize($visitorIdValue));
                 $query->getQuery()->execute();

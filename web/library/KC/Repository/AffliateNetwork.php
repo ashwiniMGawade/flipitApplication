@@ -5,7 +5,7 @@ class AffliateNetwork extends \Core\Domain\Entity\AffliateNetwork
 {
     public function addNewnetwork($params)
     {
-        $data = new \KC\Entity\AffliateNetwork();
+        $data = new \Core\Domain\Entity\AffliateNetwork();
         $data->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['addNetworkText']);
         $data->subId = $params['subId'];
         $data->status = '1';
@@ -25,7 +25,7 @@ class AffliateNetwork extends \Core\Domain\Entity\AffliateNetwork
         $delVal = isset($params['off']) ?  $params['off'] : '0, 1';
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $networkList = $queryBuilder->select("a")
-            ->from("KC\Entity\AffliateNetwork", "a")
+            ->from("\Core\Domain\Entity\AffliateNetwork", "a")
             ->where($queryBuilder->expr()->like("a.name", $queryBuilder->expr()->literal($srh."%")))
             ->andWhere("a.deleted = 0")
             ->andWhere($queryBuilder->expr()->in('a.status', $delVal))
@@ -45,7 +45,7 @@ class AffliateNetwork extends \Core\Domain\Entity\AffliateNetwork
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $data = $queryBuilder->select('a.name as name')
-            ->from("KC\Entity\AffliateNetwork", "a")
+            ->from("\Core\Domain\Entity\AffliateNetwork", "a")
             ->where('a.deleted=0')
             ->andWhere('a.status=1')
             ->andWhere($queryBuilder->expr()->like("a.name", $queryBuilder->expr()->literal($keyword."%")))
@@ -61,7 +61,7 @@ class AffliateNetwork extends \Core\Domain\Entity\AffliateNetwork
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $status = $params['status']=='offline' ? '0' : '1';
-        $q = $queryBuilder->update("KC\Entity\AffliateNetwork", "a")
+        $q = $queryBuilder->update("\Core\Domain\Entity\AffliateNetwork", "a")
             ->set('a.status', $status)
             ->where('a.id='. $params['id'])
             ->getQuery()
@@ -72,7 +72,7 @@ class AffliateNetwork extends \Core\Domain\Entity\AffliateNetwork
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $data = $queryBuilder->select("a")
-            ->from("KC\Entity\AffliateNetwork", "a")
+            ->from("\Core\Domain\Entity\AffliateNetwork", "a")
             ->where("a.id = ". $id)
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -82,7 +82,7 @@ class AffliateNetwork extends \Core\Domain\Entity\AffliateNetwork
     public static function updateNetwork($params)
     {
         self::replaceNetwork($params);
-        $data = \Zend_Registry::get('emLocale')->find('KC\Entity\AffliateNetwork', $params['id']);
+        $data = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\AffliateNetwork', $params['id']);
         $data->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($params["addNetworkText"]);
 
         if (isset($params["subId"])) {
@@ -98,7 +98,7 @@ class AffliateNetwork extends \Core\Domain\Entity\AffliateNetwork
     public static function deleteNetwork($params)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $q = $queryBuilder->update('KC\Entity\AffliateNetwork', 'a')
+        $q = $queryBuilder->update('\Core\Domain\Entity\AffliateNetwork', 'a')
             ->set('a.deleted', 1)
             ->where('a.id='. $params['id'])
             ->getQuery()
@@ -110,7 +110,7 @@ class AffliateNetwork extends \Core\Domain\Entity\AffliateNetwork
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $networkList = $queryBuilder->select('a.name as name ,a.id, a.status as status ,IDENTITY(a.affliate_networks) as replaceWithId')
-            ->from("KC\Entity\AffliateNetwork", "a")
+            ->from("\Core\Domain\Entity\AffliateNetwork", "a")
             ->Where("a.deleted = 0")
             ->andWhere('a.id!='. $params['id'])
             ->andWhere("a.affliate_networks IS NULL")
@@ -125,7 +125,7 @@ class AffliateNetwork extends \Core\Domain\Entity\AffliateNetwork
     {
         if (intval($params['selectNetworkList'] > 0)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $q = $queryBuilder->update('KC\Entity\AffliateNetwork', 'a')
+            $q = $queryBuilder->update('\Core\Domain\Entity\AffliateNetwork', 'a')
                 ->set('a.affliate_networks', $params['selectNetworkList'])
                 ->where('a.id= '. $params['networkUpdatedId'])
                 ->getQuery()

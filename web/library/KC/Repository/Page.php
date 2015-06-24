@@ -68,7 +68,7 @@ class Page extends \Core\Domain\Entity\Page
         $query = $entityManagerUser->select('page, img')
             ->from('\Core\Domain\Entity\Page', 'page')
             ->leftJoin('page.logo', 'img')
-            ->where('page INSTANCE OF KC\Entity\OfferListPage')
+            ->where('page INSTANCE OF \Core\Domain\Entity\OfferListPage')
             ->andWhere('page.deleted = 0');
         $specialListPages = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $specialListPages;
@@ -105,7 +105,7 @@ class Page extends \Core\Domain\Entity\Page
     public static function updatePageAttributeId()
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->update('KC\Entity\Page', 'page');
+        $query = $queryBuilder->update('\Core\Domain\Entity\Page', 'page');
         for ($i = 1; $i <= 3; $i++) {
                 $query->set('page.pageattributeid', $i)->getQuery();
             if ($i == 1) {
@@ -127,7 +127,7 @@ class Page extends \Core\Domain\Entity\Page
     public static function replaceToPlusPage()
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->update('KC\Entity\Page', 'page')
+        $query = $queryBuilder->update('\Core\Domain\Entity\Page', 'page')
             ->set('page.permalink', 'plus')
             ->setParameter(1, 66)
             ->where('page.id = ?1')
@@ -139,7 +139,7 @@ class Page extends \Core\Domain\Entity\Page
     public static function addSpecialPagesOffersCount($spcialPageId, $offersCount)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->update('KC\Entity\Page', 'page')
+        $query = $queryBuilder->update('\Core\Domain\Entity\Page', 'page')
             ->set('page.offersCount', $offersCount)
             ->setParameter(1, $spcialPageId)
             ->where('page.id = ?1')
@@ -156,7 +156,7 @@ class Page extends \Core\Domain\Entity\Page
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page.id, page.pageTitle as pagetitle')
             ->from('\Core\Domain\Entity\Page', 'page')
-            ->where('page INSTANCE OF KC\Entity\OfferListPage')
+            ->where('page INSTANCE OF \Core\Domain\Entity\OfferListPage')
             ->setParameter(2, 0)
             ->andWhere('page.deleted = ?2')
             ->setParameter(3, 1)
@@ -209,9 +209,9 @@ class Page extends \Core\Domain\Entity\Page
 
         if (trim($params['searchType'])!= 'undefined') {
             if ($params['searchType'] == 'offer') {
-                $query->andWhere('page INSTANCE OF KC\Entity\OfferListPage');
+                $query->andWhere('page INSTANCE OF \Core\Domain\Entity\OfferListPage');
             } else if ($params['searchType'] == 'default') {
-                $query->andWhere('page INSTANCE OF KC\Entity\DefaultPage');
+                $query->andWhere('page INSTANCE OF \Core\Domain\Entity\DefaultPage');
             }
         }
         
@@ -307,14 +307,14 @@ class Page extends \Core\Domain\Entity\Page
     {
         if ($id) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->update('KC\Entity\Page', 'page')
+            $query = $queryBuilder->update('\Core\Domain\Entity\Page', 'page')
             ->set('page.deleted', 0)
             ->setParameter(1, $id)
             ->where('page.id = ?1')
             ->getQuery();
             $query->execute();
-            $u = $queryBuilder->find('KC\Entity\Page', $id);
-            $query = $queryBuilder->update('KC\Entity\RoutePermalink', 'routePermalink')
+            $u = $queryBuilder->find('\Core\Domain\Entity\Page', $id);
+            $query = $queryBuilder->update('\Core\Domain\Entity\RoutePermalink', 'routePermalink')
             ->set('routePermalink.deleted', 0)
             ->setParameter(1, $u->permalink)
             ->where('routePermalink.permalink = ?1')
@@ -332,14 +332,14 @@ class Page extends \Core\Domain\Entity\Page
     public static function deletepage($id)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->update('KC\Entity\Page', 'page')
+        $query = $queryBuilder->update('\Core\Domain\Entity\Page', 'page')
             ->set('page.deleted', 2)
             ->setParameter(1, $id)
             ->where('page.id = ?1')
             ->getQuery();
         $query->execute();
-        $u = $queryBuilder->find('KC\Entity\Page', $id);
-        $query = $queryBuilder->delete('KC\Entity\RoutePermalink', 'routePermalink')
+        $u = $queryBuilder->find('\Core\Domain\Entity\Page', $id);
+        $query = $queryBuilder->delete('\Core\Domain\Entity\RoutePermalink', 'routePermalink')
             ->setParameter(1, $u->permalink)
             ->where('routePermalink.permalink = ?1')
             ->getQuery();
@@ -360,7 +360,7 @@ class Page extends \Core\Domain\Entity\Page
                 ->where('rpw.widget = ?1');
             $refPageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             if (!empty($refPageDetails)) {
-                $query = $queryBuilder->delete('KC\Entity\RefPageWidget', 'rpw')
+                $query = $queryBuilder->delete('\Core\Domain\Entity\RefPageWidget', 'rpw')
                     ->setParameter(1, $id)
                     ->where('rpw.widget = ?1')
                     ->getQuery();
@@ -378,14 +378,14 @@ class Page extends \Core\Domain\Entity\Page
                 ->where('routePermalink.permalink = ?1');
             $routePermalinkDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             if (!empty($routePermalinkDetails)) {
-                $query = $queryBuilder->delete('KC\Entity\RoutePermalink', 'routePermalink')
+                $query = $queryBuilder->delete('\Core\Domain\Entity\RoutePermalink', 'routePermalink')
                     ->setParameter(1, $pageDetails[0]['permalink'])
                     ->where('routePermalink.permalink = ?1')
                     ->getQuery();
                 $query->execute();
             }
 
-            $query = $queryBuilder->delete('KC\Entity\Page', 'page')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\Page', 'page')
                 ->setParameter(1, $id)
                 ->where('page.id = ?1')
                 ->getQuery();
@@ -447,7 +447,7 @@ class Page extends \Core\Domain\Entity\Page
     public function deletePageImage($params)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->update('KC\Entity\Page', 'page')
+        $query = $queryBuilder->update('\Core\Domain\Entity\Page', 'page')
             ->set('page.logoId', 0)
             ->setParameter(1, $params['pageId'])
             ->where('page.id = ?1')
@@ -538,7 +538,7 @@ class Page extends \Core\Domain\Entity\Page
         )
             ->from('\Core\Domain\Entity\Page', 'page')
             ->leftJoin('page.logo logo')
-            ->setParameter(1, 'page INSTANCE OF KC\Entity\OfferListPage')
+            ->setParameter(1, 'page INSTANCE OF \Core\Domain\Entity\OfferListPage')
             ->where('page.pageType = ?1')
             ->setParameter(2, 0)
             ->andWhere('page.deleted = ?2')
@@ -628,9 +628,9 @@ class Page extends \Core\Domain\Entity\Page
     public function savePage($params)
     {
         if (isset($params['selectedpageType'])) {
-            $savePage = new \KC\Entity\OfferListPage();
+            $savePage = new \Core\Domain\Entity\OfferListPage();
         } else {
-            $savePage = new \KC\Entity\DefaultPage();
+            $savePage = new \Core\Domain\Entity\DefaultPage();
         }
         
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
@@ -710,7 +710,7 @@ class Page extends \Core\Domain\Entity\Page
             $result = self::uploadImage('logoFile');
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $pageImage  = new \KC\Entity\Logo();
+                $pageImage  = new \Core\Domain\Entity\Logo();
                 $pageImage->ext = $ext;
                 $pageImage->path = $result['path'];
                 $pageImage->name = $result['fileName'];
@@ -719,7 +719,7 @@ class Page extends \Core\Domain\Entity\Page
                 $pageImage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($pageImage);
                 $entityManagerLocale->flush();
-                $savePage->logo = $entityManagerLocale->find('KC\Entity\Logo', $pageImage->getId());
+                $savePage->logo = $entityManagerLocale->find('\Core\Domain\Entity\Logo', $pageImage->getId());
             } else {
                 return false;
             }
@@ -728,7 +728,7 @@ class Page extends \Core\Domain\Entity\Page
             $result = self::uploadImage('headerFile');
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $pageImage  = new \KC\Entity\Logo();
+                $pageImage  = new \Core\Domain\Entity\Logo();
                 $pageImage->ext = $ext;
                 $pageImage->path = $result['path'];
                 $pageImage->name = $result['fileName'];
@@ -737,7 +737,7 @@ class Page extends \Core\Domain\Entity\Page
                 $pageImage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($pageImage);
                 $entityManagerLocale->flush();
-                $savePage->pageHeaderImageId = $entityManagerLocale->find('KC\Entity\Logo', $pageImage->getId());
+                $savePage->pageHeaderImageId = $entityManagerLocale->find('\Core\Domain\Entity\Logo', $pageImage->getId());
             } else {
                 return false;
             }
@@ -748,7 +748,7 @@ class Page extends \Core\Domain\Entity\Page
             $savePage->homepageimage = $savePage->homepageimage;
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $homepageimage  = new \KC\Entity\Logo();
+                $homepageimage  = new \Core\Domain\Entity\Logo();
                 $homepageimage->ext = $ext;
                 $homepageimage->path = $result['path'];
                 $homepageimage->name = $result['fileName'];
@@ -757,7 +757,7 @@ class Page extends \Core\Domain\Entity\Page
                 $homepageimage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($homepageimage);
                 $entityManagerLocale->flush();
-                $savePage->homepageimage = $entityManagerLocale->find('KC\Entity\Logo', $homepageimage->getId());
+                $savePage->homepageimage = $entityManagerLocale->find('\Core\Domain\Entity\Logo', $homepageimage->getId());
             } else {
                 return false;
             }
@@ -791,7 +791,7 @@ class Page extends \Core\Domain\Entity\Page
         ? $savePage->showinmobilemenu = 1 : $savePage->showinmobilemenu = 0;
 
         if (trim($params['pageTemplate'])!='') {
-            $savePage->page = $entityManagerLocale->find('KC\Entity\PageAttribute', $params['pageTemplate']);
+            $savePage->page = $entityManagerLocale->find('\Core\Domain\Entity\PageAttribute', $params['pageTemplate']);
         }
        
         $savePage->contentManagerId = \Auth_StaffAdapter::getIdentity()->id;
@@ -814,13 +814,13 @@ class Page extends \Core\Domain\Entity\Page
             $i=0;
             foreach ($selectedWidgets as $widget) {
                 if (trim($widget)!='') {
-                    $pageWidget  = new \KC\Entity\RefPageWidget();
+                    $pageWidget  = new \Core\Domain\Entity\RefPageWidget();
                     $pageWidget->created_at = new \DateTime('now');
                     $pageWidget->updated_at = new \DateTime('now');
                     $pageWidget->stauts = 1;
                     $pageWidget->position = $i;
-                    $pageWidget->page = $entityManagerLocale->find('KC\Entity\Widget', $widget);
-                    $pageWidget->widget = $entityManagerLocale->find('KC\Entity\Page', $savePage->getId());
+                    $pageWidget->page = $entityManagerLocale->find('\Core\Domain\Entity\Widget', $widget);
+                    $pageWidget->widget = $entityManagerLocale->find('\Core\Domain\Entity\Page', $savePage->getId());
                     $entityManagerLocale->persist($pageWidget);
                     $entityManagerLocale->flush();
                 }
@@ -833,7 +833,7 @@ class Page extends \Core\Domain\Entity\Page
                 $varnishObj = new \KC\Repository\Varnish();
                 $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink);
             }
-            $route = new \KC\Entity\RoutePermalink();
+            $route = new \Core\Domain\Entity\RoutePermalink();
             $route->permalink = $params['pagepermalink'];
             $route->type = 'PG';
             $route->exactlink = $params['pagepermalink'];
@@ -899,9 +899,9 @@ class Page extends \Core\Domain\Entity\Page
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
 
         if (isset($params['selectedpageType'])) {
-            $repo = $entityManagerLocale->getRepository('KC\Entity\OfferListPage');
+            $repo = $entityManagerLocale->getRepository('\Core\Domain\Entity\OfferListPage');
         } else {
-            $repo = $entityManagerLocale->getRepository('KC\Entity\DefaultPage');
+            $repo = $entityManagerLocale->getRepository('\Core\Domain\Entity\DefaultPage');
         }
 
         $updatePage = $repo->find($params['pageId']);
@@ -1001,7 +1001,7 @@ class Page extends \Core\Domain\Entity\Page
             $result = self::uploadImage('logoFile');
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $pageImage  = new \KC\Entity\Logo();
+                $pageImage  = new \Core\Domain\Entity\Logo();
                 $pageImage->ext = $ext;
                 $pageImage->path = $result['path'];
                 $pageImage->name = $result['fileName'];
@@ -1010,7 +1010,7 @@ class Page extends \Core\Domain\Entity\Page
                 $pageImage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($pageImage);
                 $entityManagerLocale->flush();
-                $updatePage->logo = $entityManagerLocale->find('KC\Entity\Logo', $pageImage->getId());
+                $updatePage->logo = $entityManagerLocale->find('\Core\Domain\Entity\Logo', $pageImage->getId());
             } else {
                 return false;
             }
@@ -1020,7 +1020,7 @@ class Page extends \Core\Domain\Entity\Page
             $result = self::uploadImage('headerFile');
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $pageImage  = new \KC\Entity\Logo();
+                $pageImage  = new \Core\Domain\Entity\Logo();
                 $pageImage->ext = $ext;
                 $pageImage->path = $result['path'];
                 $pageImage->name = $result['fileName'];
@@ -1029,7 +1029,7 @@ class Page extends \Core\Domain\Entity\Page
                 $pageImage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($pageImage);
                 $entityManagerLocale->flush();
-                $updatePage->pageHeaderImageId =  $entityManagerLocale->find('KC\Entity\Logo', $pageImage->getId());
+                $updatePage->pageHeaderImageId =  $entityManagerLocale->find('\Core\Domain\Entity\Logo', $pageImage->getId());
             } else {
                 return false;
             }
@@ -1039,7 +1039,7 @@ class Page extends \Core\Domain\Entity\Page
             $result = self::uploadImage('homepageFile');
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $homepageimage  = new \KC\Entity\Logo();
+                $homepageimage  = new \Core\Domain\Entity\Logo();
                 $homepageimage->ext = $ext;
                 $homepageimage->path = $result['path'];
                 $homepageimage->name = $result['fileName'];
@@ -1048,7 +1048,7 @@ class Page extends \Core\Domain\Entity\Page
                 $homepageimage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($homepageimage);
                 $entityManagerLocale->flush();
-                $updatePage->homepageimage = $entityManagerLocale->find('KC\Entity\Logo', $homepageimage->getId());
+                $updatePage->homepageimage = $entityManagerLocale->find('\Core\Domain\Entity\Logo', $homepageimage->getId());
             } else {
                 return false;
             }
@@ -1079,7 +1079,7 @@ class Page extends \Core\Domain\Entity\Page
             ? $updatePage->showsitemap = 1 : $updatePage->showsitemap = 0;
 
         if (trim($params['pageTemplate'])!='') {
-            $updatePage->page = $entityManagerLocale->find('KC\Entity\PageAttribute', $params['pageTemplate']);
+            $updatePage->page = $entityManagerLocale->find('\Core\Domain\Entity\PageAttribute', $params['pageTemplate']);
         } else {
             $updatePage->page = NULL;
         }
@@ -1134,7 +1134,7 @@ class Page extends \Core\Domain\Entity\Page
             $permalink = $params['pagepermalink'];
 
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\RefPageWidget', 'rpw')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\RefPageWidget', 'rpw')
             ->setParameter(1, $pageId)
             ->where('rpw.widget = ?1')
             ->getQuery();
@@ -1144,13 +1144,13 @@ class Page extends \Core\Domain\Entity\Page
             $i=0;
             foreach ($selectedWidgets as $widget) {
                 if (trim($widget)!='') {
-                    $pageWidget  = new \KC\Entity\RefPageWidget();
+                    $pageWidget  = new \Core\Domain\Entity\RefPageWidget();
                     $pageWidget->created_at = new \DateTime('now');
                     $pageWidget->updated_at = new \DateTime('now');
                     $pageWidget->stauts = 1;
                     $pageWidget->position = $i;
-                    $pageWidget->page = $entityManagerLocale->find('KC\Entity\Widget', $widget);
-                    $pageWidget->widget = $entityManagerLocale->find('KC\Entity\Page', $pageId);
+                    $pageWidget->page = $entityManagerLocale->find('\Core\Domain\Entity\Widget', $widget);
+                    $pageWidget->widget = $entityManagerLocale->find('\Core\Domain\Entity\Page', $pageId);
                     $entityManagerLocale->persist($pageWidget);
                     $entityManagerLocale->flush();
                 }
@@ -1169,7 +1169,7 @@ class Page extends \Core\Domain\Entity\Page
             }
             if (!empty($getRouteLink)) {
 
-                $query = $entityManagerUser->update('KC\Entity\RoutePermalink', 'routePermalink')
+                $query = $entityManagerUser->update('\Core\Domain\Entity\RoutePermalink', 'routePermalink')
                     ->set('routePermalink.permalink', "'".$params['pagepermalink']."'")
                     ->set('routePermalink.type', 'PG')
                     ->set('routePermalink.exactlink', "'".$params['pagepermalink']."'");

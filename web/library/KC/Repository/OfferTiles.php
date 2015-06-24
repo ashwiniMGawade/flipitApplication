@@ -13,7 +13,7 @@ class OfferTiles extends \Core\Domain\Entity\OfferTiles
             ->where('t.id = '.$params['forDelete']);
             $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         } else {
-            $data = new KC\Entity\OfferTiles();
+            $data = new \Core\Domain\Entity\OfferTiles();
         }
 
         $data->type = $params['hidtype'];
@@ -46,7 +46,7 @@ class OfferTiles extends \Core\Domain\Entity\OfferTiles
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-        ->delete('KC\Entity\OfferTiles', 't')
+        ->delete('\Core\Domain\Entity\OfferTiles', 't')
         ->where('t.id = '.@$params['id'])
         ->getQuery();
         $query->execute();

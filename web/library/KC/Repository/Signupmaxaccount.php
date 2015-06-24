@@ -62,7 +62,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     public static function alterSignupMaxAccountTable()
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $signupmaxaccount = new KC\Entity\Signupmaxaccount();
+        $signupmaxaccount = new \Core\Domain\Entity\Signupmaxaccount();
         $fields = $signupmaxaccount->findOneBy(array('field' => 'locale', 'field' => 'timezone'));
         $entityManagerLocale->remove($fields);
         $entityManagerLocale->flush();
@@ -194,13 +194,13 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
             ->where('signupmaxaccount.id = ?1');
         $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (empty($getRecord)) {
-            $data = new KC\Entity\Signupmaxaccount();
+            $data = new \Core\Domain\Entity\Signupmaxaccount();
             $data->id = 1;
             $data->status = '';
             \Zend_Registry::get('emLocale')->persist($data);
             \Zend_Registry::get('emLocale')->flush();
         }
-        $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+        $query = $entityManagerUser->update('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->set('signupmaxaccount.status', $value)
             ->setParameter(1, 1)
             ->where('signupmaxaccount.id = ?1')
@@ -243,7 +243,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     public static function updatemaxlimit($maxlimit, $userid)
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+        $query = $entityManagerUser->update('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->set('signupmaxaccount.entered_uid', $userid)
             ->set('signupmaxaccount.no_of_acc', $maxlimit)
             ->set('signupmaxaccount.max_account', $maxlimit)
@@ -264,7 +264,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     }
     public static function updatecount($maxlimit, $status)
     {
-        $query = $queryBuilder->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+        $query = $queryBuilder->update('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->set('signupmaxaccount.no_of_acc', $maxlimit)
             ->setParameter(1, 1)
             ->where('signupmaxaccount.id = ?1')
@@ -280,13 +280,13 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
             ->where('signupmaxaccount.id = ?1');
         $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (empty($getRecord)) {
-            $data = new KC\Entity\Signupmaxaccount();
+            $data = new \Core\Domain\Entity\Signupmaxaccount();
             $data->id = 1;
             $data->status = '';
             \Zend_Registry::get('emLocale')->persist($data);
             \Zend_Registry::get('emLocale')->flush();
         }
-        $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+        $query = $entityManagerUser->update('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->set('signupmaxaccount.email_confirmation', $value)
             ->setParameter(1, 1)
             ->where('signupmaxaccount.id = ?1')
@@ -309,7 +309,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     }
     public static function updateHeaderContent($value)
     {
-        $data = \Zend_Registry::get('emLocale')->find('KC\Entity\Signupmaxaccount', 1);
+        $data = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Signupmaxaccount', 1);
         $data->id = 1;
         $data->email_header = $value;
         \Zend_Registry::get('emLocale')->persist($data);
@@ -317,7 +317,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     }
     public static function updateFooterContent($value)
     {
-        $data = \Zend_Registry::get('emLocale')->find('KC\Entity\Signupmaxaccount', 1);
+        $data = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Signupmaxaccount', 1);
         $data->id = 1;
         $data->email_footer = $value;
         \Zend_Registry::get('emLocale')->persist($data);
@@ -341,14 +341,14 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
         ->where('p.id = ?1');
         $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (empty($getRecord)) {
-            $data = new KC\Entity\Signupmaxaccount();
+            $data = new \Core\Domain\Entity\Signupmaxaccount();
             $data->id = 1;
             $data->emailperlocale = $email ;
             \Zend_Registry::get('emLocale')->persist($data);
             \Zend_Registry::get('emLocale')->flush();
             return ;
         }
-        $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+        $query = $entityManagerUser->update('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->set('signupmaxaccount.emailperlocale', "'". $email . "'")
             ->setParameter(1, 1)
             ->where('signupmaxaccount.id = ?1')
@@ -367,7 +367,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
                     ->where('s.id = ?1');
                 $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                 if (empty($getRecord)) {
-                    $data = new KC\Entity\Signupmaxaccount();
+                    $data = new \Core\Domain\Entity\Signupmaxaccount();
                     $data->id = 1;
                     $data->status = '';
                     \Zend_Registry::get('emLocale')->persist($data);
@@ -379,7 +379,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
                     @unlink(ROOT_PATH. $filePath . $fileName);
                     @unlink(ROOT_PATH. $filePath . $result['cmsFilename_prefix'] . $fileName);
                 }
-                $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+                $query = $entityManagerUser->update('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
                     ->set('signupmaxaccount.homepagebanner_name', "'". $result['fileName'] . "'")
                     ->set('signupmaxaccount.homepagebanner_path', "'". $result['path'] . "'")
                     ->setParameter(1, 1)
@@ -393,7 +393,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     public static function deleteHeaderImage($params)
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+        $query = $entityManagerUser->update('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
                     ->set('signupmaxaccount.homepagebanner_name', $entityManagerUser->expr()->literal(''))
                     ->setParameter(1, 1)
                     ->where('signupmaxaccount.id = ?1')
@@ -413,7 +413,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
                     ->where('s.id = ?1');
                 $getRecord = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                 if (empty($getRecord)) {
-                    $data = new KC\Entity\Signupmaxaccount();
+                    $data = new \Core\Domain\Entity\Signupmaxaccount();
                     $data->id = 1;
                     $data->status = '';
                     \Zend_Registry::get('emLocale')->persist($data);
@@ -424,7 +424,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
                     # delete previous header image
                     @unlink(ROOT_PATH. $filePath . $fileName);
                 }
-                $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+                $query = $entityManagerUser->update('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
                     ->set('signupmaxaccount.homepage_widget_banner_name', '?', $result['fileName'])
                     ->set('signupmaxaccount.homepage_widget_banner_path', '?', $result['path'])
                     ->setParameter(1, 1)
@@ -437,7 +437,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     }
     public static function deleteWidgetImage($params)
     {
-        $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+        $query = $entityManagerUser->update('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
                     ->set('signupmaxaccount.homepage_widget_banner_name', '?', 'null')
                     ->setParameter(1, 1)
                     ->where('signupmaxaccount.id = ?1')
@@ -568,7 +568,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     protected static function saveNewsletterScheduled($newsLetterScheduledDateTime)
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $signupMaxAccount = new \KC\Entity\Signupmaxaccount();
+        $signupMaxAccount = new \Core\Domain\Entity\Signupmaxaccount();
         $signupMaxAccount->id = 1;
         $signupMaxAccount->newletter_is_scheduled = 1;
         $signupMaxAccount->newletter_scheduled_time = $newsLetterScheduledDateTime;
@@ -582,7 +582,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     protected static function updateNewsletterScheduled($newsLetterScheduledDateTime)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $queryBuilder->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+        $queryBuilder->update('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->set('signupmaxaccount.newletter_scheduled_time', $queryBuilder->expr()->literal($newsLetterScheduledDateTime))
             ->set('signupmaxaccount.newletter_is_scheduled', 1)
             ->where('signupmaxaccount.id=1')
@@ -594,7 +594,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     public static function disableNewsletterSchedulingStatus()
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $queryBuilder->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+        $queryBuilder->update('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->set('signupmaxaccount.newletter_scheduled_time', $queryBuilder->expr()->literal(''))
             ->set('signupmaxaccount.newletter_is_scheduled', 0)
             ->where('signupmaxaccount.id = 1')
@@ -607,7 +607,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     {
         $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $queryBuilder->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
+        $queryBuilder->update('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->set('signupmaxaccount.newletter_scheduled_time', '')
             ->set('signupmaxaccount.newletter_is_scheduled', 0)
             ->set('signupmaxaccount.newsletter_sent_time', $queryBuilder->expr()->literal($currentDate))

@@ -16,7 +16,7 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
         
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u, r')
-            ->from('\KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->leftJoin('u.users', 'r')
             ->setParameter(1, $this->email)
             ->where('u.email = ?1')
@@ -40,7 +40,7 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
     {
         if (Zend_Auth::getInstance()->hasIdentity()) {
             $u = Zend_Auth::getInstance()->getIdentity();
-            $member = \Zend_Registry::get('emUser')->find('\KC\Entity\User\User', $u->id);
+            $member = \Zend_Registry::get('emUser')->find('\Core\Domain\Entity\User\User', $u->id);
             if ($member) {
                 return true;
             }
@@ -54,7 +54,7 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
             $u = Zend_Auth::getInstance()->getIdentity();
             $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
             $query = $queryBuilder->select('u, r')
-                ->from('KC\Entity\User\User', 'u')
+                ->from('\Core\Domain\Entity\User\User', 'u')
                 ->leftJoin('u.users', 'r')
                 ->setParameter(1, $u->id)
                 ->where('u.id = ?1');
@@ -72,7 +72,7 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
     public function forgotPassword($eMail)
     {
         $entityManagerUser = \Zend_Registry::get('emUser');
-        $repo = $entityManagerUser->getRepository('KC\Entity\User\User');
+        $repo = $entityManagerUser->getRepository('\Core\Domain\Entity\User\User');
         $result = $repo->findBy(array('email' => $eMail));
 
         if ($result) {
@@ -96,12 +96,12 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
     public function checkToken($token)
     {
         $entityManagerUser = \Zend_Registry::get('emUser');
-        $repo = $entityManagerLocale->getRepository('KC\Entity\User\UserSession');
+        $repo = $entityManagerLocale->getRepository('\Core\Domain\Entity\User\UserSession');
         $Obj = $repo->findBy(array('sessionid' => $token));
 
         $queryBuilder  = $entityManagerUser->createQueryBuilder();
         $query = $queryBuilder->select('u')
-            ->from('\KC\Entity\User\User', 'u')
+            ->from('\Core\Domain\Entity\User\User', 'u')
             ->leftJoin('u.usersession', 'us')
             ->setParameter(1, $token)
             ->where('us.sessionId = ?1');
@@ -112,9 +112,9 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
                 $auth = Zend_Auth::getInstance();
                 $result = $auth->authenticate($data_adapter);
                 if (Auth_StaffAdapter::hasIdentity()) {
-                    $Obj = new KC\Entity\User();
+                    $Obj = new \Core\Domain\Entity\User();
                     $Obj->updateLoginTime(Auth_StaffAdapter::getIdentity()->id);
-                    $Obj = $entityManagerUser->find('KC\Entity\User\User', Auth_StaffAdapter::getIdentity()->id);
+                    $Obj = $entityManagerUser->find('\Core\Domain\Entity\User\User', Auth_StaffAdapter::getIdentity()->id);
                     $user = new Zend_Session_Namespace('user');
                     $user->user_data = $Obj;
                     //$user->setExpirationSeconds(10);

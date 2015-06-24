@@ -98,7 +98,7 @@ class Admin_AuthController extends Zend_Controller_Action
                 //create object of user class
                 $timeSeconds = \Application_Service_Session_Timeout::getSessionTimeout();
                
-                $Obj = Zend_Registry::get('emUser')->find('KC\Entity\User\User', \Auth_StaffAdapter::getIdentity()->id);
+                $Obj = Zend_Registry::get('emUser')->find('\Core\Domain\Entity\User\User', \Auth_StaffAdapter::getIdentity()->id);
 
                 $Obj->updateLoginTime(\Auth_StaffAdapter::getIdentity()->id);
                 $user = new Zend_Session_Namespace('user');
@@ -206,7 +206,7 @@ class Admin_AuthController extends Zend_Controller_Action
 
                     //generate new password
                     $newPwd = $authStaffAdapter->genRandomString(10);
-                    $setPass = \Zend_Registry::get('emUser')->find('KC\Entity\User\User', $result['id']);
+                    $setPass = \Zend_Registry::get('emUser')->find('\Core\Domain\Entity\User\User', $result['id']);
                     $setPass->password = md5($newPwd);
                     //set new password in database
                     \Zend_Registry::get('emUser')->persist($setPass);
@@ -285,7 +285,7 @@ class Admin_AuthController extends Zend_Controller_Action
             $params['id'] = $id;
             # call used password update function
             $entityManagerUser  = \Zend_Registry::get('emUser');
-            $repo = $entityManagerUser->getRepository('KC\Entity\User\User');
+            $repo = $entityManagerUser->getRepository('\Core\Domain\Entity\User\User');
             $user = new \KC\Repository\User();
             $result = $user->updatePassword($params);
 

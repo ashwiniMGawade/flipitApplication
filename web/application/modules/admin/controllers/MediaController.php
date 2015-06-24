@@ -105,7 +105,7 @@ class Admin_MediaController extends Zend_Controller_Action
         if (intval($id) > 0) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $data = $queryBuilder->select('m')
-                ->from('KC\Entity\Media', 'm')
+                ->from('\Core\Domain\Entity\Media', 'm')
                 ->where("m.id = " . $id)
                 ->getQuery()
                 ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

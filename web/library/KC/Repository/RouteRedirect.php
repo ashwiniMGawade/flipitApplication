@@ -30,7 +30,7 @@ class RouteRedirect extends \Core\Domain\Entity\RouteRedirect
 
     public static function addRedirect($params)
     {
-        $routeRedirect = new \KC\Entity\RouteRedirect();
+        $routeRedirect = new \Core\Domain\Entity\RouteRedirect();
         $routeRedirect->orignalurl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['orignalurl']);
         $routeRedirect->redirectto = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['redirectto']);
         $routeRedirect->deleted = 0;
@@ -73,7 +73,7 @@ class RouteRedirect extends \Core\Domain\Entity\RouteRedirect
     public static function updateRedirect($params)
     {
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
-        $routeRedirect =  $entityManagerLocale->find('KC\Entity\RouteRedirect', $params['id']);
+        $routeRedirect =  $entityManagerLocale->find('\Core\Domain\Entity\RouteRedirect', $params['id']);
         $routeRedirect->orignalurl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['orignalurl']);
         $routeRedirect->redirectto = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['redirectto']);
         $routeRedirect->updated_at = new \DateTime('now');
@@ -95,7 +95,7 @@ class RouteRedirect extends \Core\Domain\Entity\RouteRedirect
     public static function deleteRedirect($id)
     {
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
-        $routeRedirect =  $entityManagerLocale->find('KC\Entity\RouteRedirect', $id);
+        $routeRedirect =  $entityManagerLocale->find('\Core\Domain\Entity\RouteRedirect', $id);
         $entityManagerLocale->remove($routeRedirect);
         $entityManagerLocale->flush();
         return true;

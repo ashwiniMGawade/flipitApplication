@@ -15,7 +15,7 @@ class PopularArticles extends \Core\Domain\Entity\PopularArticles
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select("p.id, a.id as articleId, a.title, p.position")
-            ->from("KC\Entity\PopularArticles", "p")
+            ->from("\Core\Domain\Entity\PopularArticles", "p")
             ->leftJoin("p.articles", "a")
             ->where("a.publish = 1")
             ->andWhere("a.deleted= 0")
@@ -30,7 +30,7 @@ class PopularArticles extends \Core\Domain\Entity\PopularArticles
         if (!empty($articleIds)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
-            ->delete('KC\Entity\PopularArticles', 'p')
+            ->delete('\Core\Domain\Entity\PopularArticles', 'p')
             ->where('p.id > 0')
             ->getQuery();
             $query->execute();
@@ -73,8 +73,8 @@ class PopularArticles extends \Core\Domain\Entity\PopularArticles
     public static function savePopularArticle($articleId, $position)
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $popularArticle = new \KC\Entity\PopularArticles();
-        $popularArticle->articles = $entityManagerLocale->find('KC\Entity\Articles', $articleId);
+        $popularArticle = new \Core\Domain\Entity\PopularArticles();
+        $popularArticle->articles = $entityManagerLocale->find('\Core\Domain\Entity\Articles', $articleId);
         $popularArticle->position = $position;
         $popularArticle->deleted = 0;
         $popularArticle->created_at = new \DateTime('now');
@@ -89,7 +89,7 @@ class PopularArticles extends \Core\Domain\Entity\PopularArticles
         foreach ($changedArticlesDataForSorting as $id) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
-            ->update('KC\Entity\PopularArticles', 'p')
+            ->update('\Core\Domain\Entity\PopularArticles', 'p')
             ->set('p.position', $id)
             ->where('p.articles=' .$id)
             ->getQuery();
@@ -117,7 +117,7 @@ class PopularArticles extends \Core\Domain\Entity\PopularArticles
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
-            ->delete('KC\Entity\PopularArticles', 'p')
+            ->delete('\Core\Domain\Entity\PopularArticles', 'p')
             ->where('p.id > 0')
             ->getQuery();
             $query->execute();

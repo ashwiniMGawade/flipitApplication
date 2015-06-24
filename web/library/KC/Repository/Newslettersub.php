@@ -6,14 +6,14 @@ class Newslettersub extends \Core\Domain\Entity\Newslettersub
     public static function checkDuplicateUser($email)
     {
         $cnt  = \Zend_Registry::get('emLocale')
-            ->getRepository('KC\Entity\Newslettersub')
+            ->getRepository('\Core\Domain\Entity\Newslettersub')
             ->findBy(array('email' => $email));
         return count($cnt->id);
     }
 
     public static function registerUser($email)
     {
-        $cnt  = new \KC\Entity\Newslettersub();
+        $cnt  = new \Core\Domain\Entity\Newslettersub();
         $cnt->email = $email;
         $cnt->deleted = 0;
         $cnt->created_at = new \DateTime('now');

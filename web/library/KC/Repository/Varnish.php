@@ -18,7 +18,7 @@ class Varnish extends \Core\Domain\Entity\Varnish
         $validateRefreshTime = empty($refreshTime) ? $currentTime->format('Y-m-d h:i:s') : $refreshTime;
         $existedRecord = self::checkQueuedUrl($url, $validateRefreshTime);
         if (empty($existedRecord)) {
-            $varnish = new \KC\Entity\Varnish();
+            $varnish = new \Core\Domain\Entity\Varnish();
             $varnish->url = rtrim($url, '/');
             $varnish->status = 'queue';
             $varnish->created_at = new \DateTime('now');
@@ -62,9 +62,9 @@ class Varnish extends \Core\Domain\Entity\Varnish
 
     private function processed($id)
     {
-        $page = \Zend_Registry::get('emLocale')->find('KC\Entity\Varnish', $id);
+        $page = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Varnish', $id);
         if (!empty($page)) {
-            $varnish = \Zend_Registry::get('emLocale')->find('KC\Entity\Varnish', $id);
+            $varnish = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Varnish', $id);
             $varnish->status = 'processed';
             $entityManagerLocale->persist($varnish);
             $entityManagerLocale->flush();
@@ -73,7 +73,7 @@ class Varnish extends \Core\Domain\Entity\Varnish
 
     private function removeFromQueue($id)
     {
-        $varnish = \Zend_Registry::get('emLocale')->find('KC\Entity\Varnish', $id);
+        $varnish = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Varnish', $id);
         $entityManagerLocale->remove($varnish);
         $entityManagerLocale->flush();
     }

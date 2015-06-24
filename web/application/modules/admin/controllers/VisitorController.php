@@ -73,15 +73,15 @@ class Admin_VisitorController extends Zend_Controller_Action
         $visitorId = $this->getRequest()->getParam('id');
         if ($visitorId) {
             $entityManagerLocale = \Zend_Registry::get('emLocale');
-            $visitorInformation = $entityManagerLocale->find('\KC\Entity\Visitor', $visitorId);
+            $visitorInformation = $entityManagerLocale->find('\Core\Domain\Entity\Visitor', $visitorId);
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\Visitor', 'v')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\Visitor', 'v')
                 ->where("v.id=" .$visitorId)
                 ->getQuery()->execute();
 
             if (!empty($visitorInformation->imageId) && (intval($visitorInformation->imageId)) > 0) {
                 $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $query = $queryBuilder->delete('KC\Entity\VisitorImage', 'i')
+                $query = $queryBuilder->delete('\Core\Domain\Entity\VisitorImage', 'i')
                 ->where("i.id=" .$visitorInformation->imageId)
                 ->getQuery()->execute();
             }

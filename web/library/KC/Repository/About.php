@@ -43,7 +43,7 @@ class About extends \Core\Domain\Entity\About
     {
         if ($id) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\About', 'about')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\About', 'about')
                 ->setParameter(1, $id)
                 ->where('about.id = ?1')
                 ->getQuery();
@@ -62,7 +62,7 @@ class About extends \Core\Domain\Entity\About
     public static function newAboutSetting($id, $name)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $settings =  new \KC\Entity\Settings();
+        $settings =  new \Core\Domain\Entity\Settings();
 
         //$settings->name =  constant(  "Settings::" . $name ) ;
         $settings->name = $name;
@@ -88,11 +88,11 @@ class About extends \Core\Domain\Entity\About
 
                 # create object of previous data
                 $entityManagerLocale  =\Zend_Registry::get('emLocale');
-                $about =  $entityManagerLocale->find('KC\Entity\About', $retVal);
+                $about =  $entityManagerLocale->find('\Core\Domain\Entity\About', $retVal);
             } else {
 
                 # new object
-                $about = new \KC\Entity\About();
+                $about = new \Core\Domain\Entity\About();
             }
             $about->title = @$params['title'][$a] ?
                                 \BackEnd_Helper_viewHelper::stripSlashesFromString($params['title'][$a]) : null;

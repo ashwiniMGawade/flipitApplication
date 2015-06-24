@@ -20,7 +20,7 @@ class CouponCode extends \Core\Domain\Entity\CouponCode
     public static function updateCodeStatus($id, $code, $status = 0)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $queryBuilder->update('KC\Entity\CouponCode', 'c')
+        $queryBuilder->update('\Core\Domain\Entity\CouponCode', 'c')
             ->set('c.status', $status)
             ->where("c.code = '" . $code ."'")
             ->andWhere('c.offer ='.  $id)
@@ -79,10 +79,10 @@ class CouponCode extends \Core\Domain\Entity\CouponCode
             ->select('count(c.id) as total')
             ->from('\Core\Domain\Entity\CouponCode', 'c')
             ->addSelect(
-                "(SELECT count(cc.status) FROM \KC\Entity\CouponCode cc WHERE cc.offer = c.offer and cc.status = 0) as used"
+                "(SELECT count(cc.status) FROM \Core\Domain\Entity\CouponCode cc WHERE cc.offer = c.offer and cc.status = 0) as used"
             )
             ->addSelect(
-                "(SELECT count(ccc.status) FROM \KC\Entity\CouponCode ccc WHERE ccc.offer = c.offer and ccc.status = 1) as available"
+                "(SELECT count(ccc.status) FROM \Core\Domain\Entity\CouponCode ccc WHERE ccc.offer = c.offer and ccc.status = 1) as available"
             )
             ->where("c.offer = " . $id)
             ->getQuery()
@@ -107,7 +107,7 @@ class CouponCode extends \Core\Domain\Entity\CouponCode
     public static function updateCouponCode($newStaus, $code, $offerId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $queryBuilder->update('KC\Entity\CouponCode', 'c')
+        $queryBuilder->update('\Core\Domain\Entity\CouponCode', 'c')
             ->set('c.status', $newStaus)
             ->where("c.code = '" . $code ."'")
             ->andWhere('c.offer ='.  $offerId)
@@ -118,10 +118,10 @@ class CouponCode extends \Core\Domain\Entity\CouponCode
 
     public static function saveCouponCode($newStaus, $code, $offerId)
     {
-        $couponCode = new \KC\Entity\CouponCode();
+        $couponCode = new \Core\Domain\Entity\CouponCode();
         $couponCode->code = $code;
         $couponCode->status = $newStaus;
-        $couponCode->offer = \Zend_Registry::get('emLocale')->find('KC\Entity\Offer', $offerId);
+        $couponCode->offer = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Offer', $offerId);
         \Zend_Registry::get('emLocale')->persist($couponCode);
         \Zend_Registry::get('emLocale')->flush();
         return true;
@@ -130,7 +130,7 @@ class CouponCode extends \Core\Domain\Entity\CouponCode
     public static function deleteCouponCode($offerId, $codesArray)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->delete('KC\Entity\CouponCode', 'c')
+        $query = $queryBuilder->delete('\Core\Domain\Entity\CouponCode', 'c')
             ->where("c.offer=" . $offerId)
             ->andWhere($queryBuilder->expr()->notIn('c.code', $codesArray))
             ->getQuery();

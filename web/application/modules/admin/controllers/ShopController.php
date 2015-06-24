@@ -274,7 +274,7 @@ class Admin_ShopController extends Zend_Controller_Action
         $url = strtolower($url);
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $rp = $queryBuilder->select("r")
-            ->from("KC\Entity\RoutePermalink", "r")
+            ->from("\Core\Domain\Entity\RoutePermalink", "r")
             ->where("r.permalink = '".urlencode($url)."'")
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -403,7 +403,7 @@ class Admin_ShopController extends Zend_Controller_Action
         if (intval($id) > 0) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $data = $queryBuilder->select('s, c, sl, bl, chapter, sp, pg, logo, af')
-                ->from('KC\Entity\Shop', 's')
+                ->from('\Core\Domain\Entity\Shop', 's')
                 ->leftJoin("s.categoryshops", "c")
                 ->leftJoin("s.howtousesmallimage", "sl")
                 ->leftJoin("s.howtousebigimage", "bl")
@@ -998,10 +998,10 @@ class Admin_ShopController extends Zend_Controller_Action
                 $result = @$RouteRedirectObj->uploadExcel($_FILES['excelFile']['name']);
                 if ($result['status'] == 200) {
                     $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                    // $queryBuilder->delete('\KC\Entity\RouteRedirect', 'rr')
+                    // $queryBuilder->delete('\Core\Domain\Entity\RouteRedirect', 'rr')
                     // ->where("w.offers=" . $id)
                     // ->getQuery();
-                    //Doctrine_Query::create()->delete('\KC\Entity\RouteRedirect')->execute();
+                    //Doctrine_Query::create()->delete('\Core\Domain\Entity\RouteRedirect')->execute();
                     $spl = explode('/', HTTP_PATH);
                     $path = $spl[0].'//' . $spl[2];
                     $excelFilePath = $result['path'];
@@ -1082,7 +1082,7 @@ class Admin_ShopController extends Zend_Controller_Action
                             # FIND SHOP BY NAME FROM DATABSE
                             $query = $queryBuilder
                                 ->select('s.id as shopId, o.extendedUrl')
-                                ->from('KC\Entity\Shop', 's')
+                                ->from('\Core\Domain\Entity\Shop', 's')
                                 ->where('s.name = '.$name);
                             $shopList = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                             
@@ -1090,7 +1090,7 @@ class Admin_ShopController extends Zend_Controller_Action
                             if (empty($shopList)) {
                                 # ADD SHOPS DATA IN DATABASE IF SHOP NOT EXIST IN DATABASE
                                 if (strtolower($name)!='shop name(must be filled)') {
-                                    $shopList = new \KC\Entity\Shop();
+                                    $shopList = new \Core\Domain\Entity\Shop();
                                     $shopList->name = BackEnd_Helper_viewHelper::stripSlashesFromString($name);
                                     $shopList->status = false;
                                 }
@@ -1139,7 +1139,7 @@ class Admin_ShopController extends Zend_Controller_Action
 
                                 if ($accountManager != 'None' && $accountManager != '') {
                                     $shopList->accountManagerName = $accountManager;
-                                    $repo = \Zend_Registry::get('emUser')->getRepository('KC\Entity\User\User');
+                                    $repo = \Zend_Registry::get('emUser')->getRepository('\Core\Domain\Entity\User\User');
                                     $acName = $repo->findOneBy(array('firstName' => $accountManager));
                                     if ($acName) {
                                         $shopList->accoutManagerId = $acName->id;
@@ -1149,7 +1149,7 @@ class Admin_ShopController extends Zend_Controller_Action
 
                                 if ($editor != 'None' && $editor != '') {
                                         $shopList->contentManagerName = $editor;
-                                        $repo2 = \Zend_Registry::get('emUser')->getRepository('KC\Entity\User\User');
+                                        $repo2 = \Zend_Registry::get('emUser')->getRepository('\Core\Domain\Entity\User\User');
                                         $cmName = $repo2->findOneBy(array('firstName' => $editor));
                                     if ($cmName) {
                                         $shopList->contentManagerId = $cmName->id;
@@ -1158,7 +1158,7 @@ class Admin_ShopController extends Zend_Controller_Action
                                 }
 
                                 if ($affiliateNetwork!='None' && $affiliateNetwork!='') {
-                                    $repo3 = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\AffliateNetwork');
+                                    $repo3 = \Zend_Registry::get('emLocale')->getRepository('\Core\Domain\Entity\AffliateNetwork');
                                     $afNetwork = $repo3->findOneBy(array('name' => $affiliateNetwork));
                                     if ($afNetwork) {
                                         $shopList->affliateNetworkId = $afNetwork->id;
@@ -1225,7 +1225,7 @@ class Admin_ShopController extends Zend_Controller_Action
                                         BackEnd_Helper_viewHelper :: resizeImageFromFolder($originalpath, 234, 117, $thumbpath, $ext);
                                         $thumbpath = $pathToUpload . "thum_expired_" . $newName;
                                         BackEnd_Helper_viewHelper :: resizeImageFromFolder($originalpath, 100, 50, $thumbpath, $ext);
-                                        $logo =  new \KC\Entity\Logo();
+                                        $logo =  new \Core\Domain\Entity\Logo();
                                         $logo->ext = $ext;
                                         $logo->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($pathUpload);
                                         $logo->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($newName);
@@ -1235,7 +1235,7 @@ class Admin_ShopController extends Zend_Controller_Action
                                         \Zend_Registry::get('emLocale')->persist($logo);
                                         \Zend_Registry::get('emLocale')->flush();
                                         $shopList->logo = \Zend_Registry::get('emLocale')
-                                            ->getRepository('KC\Entity\Logo')
+                                            ->getRepository('\Core\Domain\Entity\Logo')
                                             ->find($logo->id);
                                     } else {
                                         echo $logo." This is an Invalid image";
@@ -1251,22 +1251,22 @@ class Admin_ShopController extends Zend_Controller_Action
                                     $splitCat  = explode(',', $category);
                                     if (!empty($shopList->id)) {
                                         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                                        $query = $queryBuilder->delete('KC\Entity\RefShopCategory', 'rf')
+                                        $query = $queryBuilder->delete('\Core\Domain\Entity\RefShopCategory', 'rf')
                                             ->where("rf.shopId=" . $shopDetail['id'])
                                             ->getQuery()->execute();
                                     }
                                     foreach ($splitCat as $key => $categories) {
-                                        $refShopCategory = new \KC\Entity\RefShopCategory();
+                                        $refShopCategory = new \Core\Domain\Entity\RefShopCategory();
                                         $refShopCategory->created_at = new \DateTime('now');
                                         $refShopCategory->updated_at = new \DateTime('now');
-                                        $refShopCategory->category = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $shopList->id);
-                                        $refShopCategory->shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Category', $categories);
+                                        $refShopCategory->category = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Shop', $shopList->id);
+                                        $refShopCategory->shop = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Category', $categories);
                                         \Zend_Registry::get('emLocale')->persist($refShopCategory);
                                         \Zend_Registry::get('emLocale')->flush();
                                     }
                                     # NEW CATEGORY PENDIGN
                                 }
-                                $repo = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\RoutePermalink');
+                                $repo = \Zend_Registry::get('emLocale')->getRepository('\Core\Domain\Entity\RoutePermalink');
                                 $pr = $repo->findOneBy(array('permalink' => $permalink));
                                 if ($pr) {
                                     $pr->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($permalink);
@@ -1291,15 +1291,15 @@ class Admin_ShopController extends Zend_Controller_Action
                                     $i = 1;
                                     if (!empty($shopDetail['id'])) {
                                         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                                        $query = $queryBuilder->delete('KC\Entity\RefShopRelatedshop', 'rsrs')
+                                        $query = $queryBuilder->delete('\Core\Domain\Entity\RefShopRelatedshop', 'rsrs')
                                             ->where("rsrs.shop=" . $shopDetail['id'])
                                             ->getQuery()->execute();
                                     }
                                     foreach ($similarstoreordArray as $shop) {
                                         if ($shop!='') {
-                                            $relateshopObj = new \KC\Entity\RefShopRelatedshop();
+                                            $relateshopObj = new \Core\Domain\Entity\RefShopRelatedshop();
                                             $relateshopObj->shop = \Zend_Registry::get('emLocale')
-                                                ->getRepository('KC\Entity\Shop')
+                                                ->getRepository('\Core\Domain\Entity\Shop')
                                                 ->find($shopList->id);
                                             $relateshopObj->relatedshopId = $shop;
                                             $relateshopObj->position = $i;

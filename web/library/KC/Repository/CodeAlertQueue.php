@@ -11,14 +11,14 @@ class CodeAlertQueue extends \Core\Domain\Entity\CodeAlertQueue
                 $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
                 $query = $queryBuilder
                 ->select('c')
-                ->from("KC\Entity\CodeAlertQueue", 'c')
+                ->from("\Core\Domain\Entity\CodeAlertQueue", 'c')
                 ->where($queryBuilder->expr()->eq('c.offerId', $queryBuilder->expr()->literal($offerId)))
                 ->andWhere('c.deleted = 0');
                 $codeAlertInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
                 if (empty($codeAlertInformation)) {
                     $entityManagerLocale  = \Zend_Registry::get('emLocale');
-                    $codeAlertQueue = new \KC\Entity\CodeAlertQueue();
+                    $codeAlertQueue = new \Core\Domain\Entity\CodeAlertQueue();
                     $codeAlertQueue->offerId = $offerId;
                     $codeAlertQueue->shopId = $shopId;
                     $codeAlertQueue->deleted = 0;
@@ -63,7 +63,7 @@ class CodeAlertQueue extends \Core\Domain\Entity\CodeAlertQueue
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->delete('KC\Entity\CodeAlertQueue', 'c')
+            ->delete('\Core\Domain\Entity\CodeAlertQueue', 'c')
             ->where('c.offerId ='.$codeAlertId)
             ->getQuery();
         $query->execute();
@@ -100,7 +100,7 @@ class CodeAlertQueue extends \Core\Domain\Entity\CodeAlertQueue
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('c')
-        ->from("KC\Entity\CodeAlertQueue", "c")
+        ->from("\Core\Domain\Entity\CodeAlertQueue", "c")
         ->where($queryBuilder->expr()->like('c.offerId', $queryBuilder->expr()->literal($searchText.'%')))
         ->orderBy("c.id", "DESC");
         $deletedStatus = isset($sentCodes) && $sentCodes != '' ? 1 : 0;
@@ -127,10 +127,10 @@ class CodeAlertQueue extends \Core\Domain\Entity\CodeAlertQueue
         if (!empty($offerIds)) {
             $queryBuilderOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $offerDetails = $queryBuilderOffer
-                ->from("KC\Entity\Offer", "o")
+                ->from("\Core\Domain\Entity\Offer", "o")
                  ->leftJoin('o.shopOffers', 's')
                 ->addSelect(
-                    "(SELECT count(fs.id) FROM KC\Entity\FavoriteShop fs LEFT JOIN fs.visitor vs 
+                    "(SELECT count(fs.id) FROM \Core\Domain\Entity\FavoriteShop fs LEFT JOIN fs.visitor vs 
                     WHERE fs.shop = s.id AND vs.id = fs.visitor AND vs.codeAlert = 1) as visitors"
                 )
                 ->where("o.userGenerated = 0");
@@ -155,7 +155,7 @@ class CodeAlertQueue extends \Core\Domain\Entity\CodeAlertQueue
     public static function clearCodeAlertQueueByOfferId($offerId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $queryBuilder->update('KC\Entity\CodeAlertQueue', 'c')
+        $queryBuilder->update('\Core\Domain\Entity\CodeAlertQueue', 'c')
             ->set('c.deleted', 1)
             ->where("c.offerId=".$offerId)
             ->getQuery()->execute();

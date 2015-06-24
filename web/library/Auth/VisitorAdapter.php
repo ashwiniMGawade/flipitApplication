@@ -14,7 +14,7 @@ class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface {
         $queryBuilder = Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('u')
-            ->from("\KC\Entity\Visitor", "u")
+            ->from("\Core\Domain\Entity\Visitor", "u")
             ->where("u.email="."'".$this->email."'")
             ->andWhere('u.active = 1')
             ->andWhere("u.deleted = 0");
@@ -35,7 +35,7 @@ class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface {
         $visitoSession = new Zend_Auth_Storage_Session('front_login');
         if ($visitoSession->read()) {
             $visitor = $visitoSession->read();
-            $visitorDetails = Zend_Registry::get('emLocale')->find('\KC\Entity\Visitor', $visitor->id);
+            $visitorDetails = Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Visitor', $visitor->id);
             if ($visitorDetails) {
                 return true;
             }
@@ -48,7 +48,7 @@ class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface {
         $visitoSession = new Zend_Auth_Storage_Session('front_login');
         if ($visitoSession->read()) {
             $visitor = $visitoSession->read();
-            $visitorDetails = Zend_Registry::get('emLocale')->find('\KC\Entity\Visitor', $visitor->id);
+            $visitorDetails = Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Visitor', $visitor->id);
             return $visitorDetails;
         }
         return false;

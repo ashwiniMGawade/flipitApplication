@@ -94,10 +94,10 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
     public static function savePageWidget($widgetId, $widgetsType, $newPosition)
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $pageWidgets = new \KC\Entity\pageWidgets();
+        $pageWidgets = new \Core\Domain\Entity\pageWidgets();
         $pageWidgets->widget_type = \FrontEnd_Helper_viewHelper::sanitize($widgetsType);
         $pageWidgets->widget = $entityManagerLocale->find(
-            'KC\Entity\Widget',
+            '\Core\Domain\Entity\Widget',
             \FrontEnd_Helper_viewHelper::sanitize($widgetId)
         );
         $pageWidgets->position = \FrontEnd_Helper_viewHelper::sanitize((intval($newPosition) + 1));
@@ -114,7 +114,7 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
         if (!empty($id)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
-                ->delete('KC\Entity\pageWidgets', 'spl')
+                ->delete('\Core\Domain\Entity\pageWidgets', 'spl')
                 ->where('spl.id ='.$id)
                 ->getQuery();
             $query->execute();
@@ -142,7 +142,7 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
         if (isset($newWidget['id'])) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
-                ->update('KC\Entity\pageWidgets', 'p')
+                ->update('\Core\Domain\Entity\pageWidgets', 'p')
                 ->set('p.position', \FrontEnd_Helper_viewHelper::sanitize($newPosition))
                 ->where('p.id = '.$newWidget['id'])
                 ->getQuery();
@@ -183,7 +183,7 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->delete('KC\Entity\PageWidgets', 'spl')
+            ->delete('\Core\Domain\Entity\PageWidgets', 'spl')
             ->where('spl.widget_type ='.$queryBuilder->expr()->literal($widgetType))
             ->getQuery();
         $query->execute();

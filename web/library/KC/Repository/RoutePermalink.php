@@ -55,7 +55,7 @@ class RoutePermalink extends \Core\Domain\Entity\RoutePermalink
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->update('KC\Entity\RoutePermalink', 'p')
+            ->update('\Core\Domain\Entity\RoutePermalink', 'p')
             ->set('p.permalink', $queryBuilder->expr()->literal($permalink))
             ->set('p.type', $queryBuilder->expr()->literal('SHP'))
             ->set('p.exactlink', $queryBuilder->expr()->literal($exactlink))
@@ -68,7 +68,7 @@ class RoutePermalink extends \Core\Domain\Entity\RoutePermalink
 
     public static function saveRoutePermalink($permalink, $exactlink)
     {
-        $routePermalink = new \KC\Entity\RoutePermalink();
+        $routePermalink = new \Core\Domain\Entity\RoutePermalink();
         $routePermalink->permalink = $permalink;
         $routePermalink->type = 'SHP';
         $routePermalink->exactlink = $exactlink;

@@ -20,14 +20,14 @@ class CodeAlertVisitors extends \Core\Domain\Entity\CodeAlertVisitors
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->select('c')
-                ->from("KC\Entity\CodeAlertVisitors", 'c')
+                ->from("\Core\Domain\Entity\CodeAlertVisitors", 'c')
                 ->where('c.offerId = '.$offerId);
             $codeAlertInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             if (empty($codeAlertInformation)) {
                 $visitorIds = explode(',', $visitorIds);
                 foreach ($visitorIds as $visitorValue) {
                     $entityManagerLocale  = \Zend_Registry::get('emLocale');
-                    $codeAlertQueue = new \KC\Entity\CodeAlertVisitors();
+                    $codeAlertQueue = new \Core\Domain\Entity\CodeAlertVisitors();
                     $codeAlertQueue->offerId = $offerId;
                     $codeAlertQueue->visitorId = $visitorValue;
                     $entityManagerLocale->persist($codeAlertQueue);

@@ -42,7 +42,7 @@ class Translations extends \Core\Domain\Entity\Translations
         $existingTranslation = self::getExistingTranslation($translationsAfterRemovingTags);
         if (!empty($existingTranslation[0]['id'])) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $queryBuilder->update('KC\Entity\Translations', 't')
+            $queryBuilder->update('\Core\Domain\Entity\Translations', 't')
                 ->set(
                     't.translation',
                     "'".$translationsAfterRemovingTags[(string)\Zend_Registry::get('Zend_Locale')]."'"
@@ -51,7 +51,7 @@ class Translations extends \Core\Domain\Entity\Translations
                 ->getQuery()->execute();
         } else {
             $entityManagerLocale  = \Zend_Registry::get('emLocale');
-            $translation = new \KC\Entity\Translations();
+            $translation = new \Core\Domain\Entity\Translations();
             $translation->translationKey = $translationsAfterRemovingTags['translationKey'];
             $translation->translation = $translationsAfterRemovingTags[(string) \Zend_Registry::get('Zend_Locale')];
             $translation->deleted = 0;

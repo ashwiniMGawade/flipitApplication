@@ -8,7 +8,7 @@ class ViewCount extends \Core\Domain\Entity\ViewCount
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $offerClick = $queryBuilder
             ->select('count(v.id) as countExists')
-            ->addSelect("(SELECT  click.id FROM KC\Entity\ViewCount click WHERE click.id = v.id) as clickId")
+            ->addSelect("(SELECT  click.id FROM \Core\Domain\Entity\ViewCount click WHERE click.id = v.id) as clickId")
             ->from('\Core\Domain\Entity\ViewCount', 'v')
             ->where('v.onClick!=0')
             ->andWhere('v.viewcount='.$offerId)
@@ -39,8 +39,8 @@ class ViewCount extends \Core\Domain\Entity\ViewCount
 
     public static function saveOfferClick($offerId, $clientIp)
     {
-        $offerClick  = new \KC\Entity\ViewCount();
-        $offerClick->viewcount = \Zend_Registry::get('emLocale')->find('KC\Entity\Offer', $offerId);
+        $offerClick  = new \Core\Domain\Entity\ViewCount();
+        $offerClick->viewcount = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Offer', $offerId);
         $offerClick->onClick = 1;
         $offerClick->onLoad = 0;
         $offerClick->IP = $clientIp;
@@ -67,8 +67,8 @@ class ViewCount extends \Core\Domain\Entity\ViewCount
 
     public static function saveOfferOnload($offerId, $clientIp)
     {
-        $offerOnload  = new \KC\Entity\ViewCount();
-        $offerOnload->viewcount = \Zend_Registry::get('emLocale')->find('KC\Entity\Offer', $offerId);
+        $offerOnload  = new \Core\Domain\Entity\ViewCount();
+        $offerOnload->viewcount = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Offer', $offerId);
         $offerOnload->onLoad = 1;
         $offerOnload->onClick = 0;
         $offerOnload->IP = $clientIp;
@@ -203,13 +203,13 @@ class ViewCount extends \Core\Domain\Entity\ViewCount
 
         foreach ($newArray as $p) {
             $pc = \Zend_Registry::get('emLocale')
-                ->getRepository('KC\Entity\PopularCode')
+                ->getRepository('\Core\Domain\Entity\PopularCode')
                 ->findBy(array('popularcode' => $p['offerId']));
             if (sizeof($pc) > 0) {
             } else {
-                $pc = new \KC\Entity\PopularCode();
+                $pc = new \Core\Domain\Entity\PopularCode();
                 $pc->type = 'AT';
-                $pc->popularcode = \Zend_Registry::get('emLocale')->find('KC\Entity\Offer', $p['offerId']);
+                $pc->popularcode = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Offer', $p['offerId']);
                 $pc->position = $p['position'];
                 $pc->deleted = 0;
                 $pc->created_at = new \DateTime('now');
@@ -280,7 +280,7 @@ class ViewCount extends \Core\Domain\Entity\ViewCount
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->update('KC\Entity\ViewCount', 'v')
+            ->update('\Core\Domain\Entity\ViewCount', 'v')
             ->set('v.counted', 1)
             ->where('v.counted = 0');
 

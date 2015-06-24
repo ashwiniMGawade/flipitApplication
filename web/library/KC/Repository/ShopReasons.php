@@ -6,13 +6,13 @@ class ShopReasons extends \Core\Domain\Entity\ShopReasons
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->delete('KC\Entity\ShopReasons', 's')
+            ->delete('\Core\Domain\Entity\ShopReasons', 's')
             ->where('s.shopid ='.$shopId)
             ->getQuery();
         $query->execute();
         foreach ($reasons as $key => $reason) {
             $entityManagerLocale  = \Zend_Registry::get('emLocale');
-            $ShopReasons  = new \KC\Entity\ShopReasons();
+            $ShopReasons  = new \Core\Domain\Entity\ShopReasons();
             if ($key != '') {
                 $ShopReasons->fieldname = $key;
                 $ShopReasons->fieldvalue =  $reason;
@@ -40,7 +40,7 @@ class ShopReasons extends \Core\Domain\Entity\ShopReasons
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->delete('KC\Entity\ShopReasons', 's')
+            ->delete('\Core\Domain\Entity\ShopReasons', 's')
             ->where('s.fieldname ="'.$firstFieldName.'"')
             ->andWhere('s.shopid = '.$shopId)
             ->getQuery();
@@ -48,7 +48,7 @@ class ShopReasons extends \Core\Domain\Entity\ShopReasons
         
         $queryBuilderSecond = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilderSecond
-            ->delete('KC\Entity\ShopReasons', 's')
+            ->delete('\Core\Domain\Entity\ShopReasons', 's')
             ->where('s.fieldname ="'.$secondFieldName.'"')
             ->andWhere('s.shopid = '.$shopId)
             ->getQuery();

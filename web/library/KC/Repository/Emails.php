@@ -43,7 +43,7 @@ class Emails extends \Core\Domain\Entity\Emails
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->update("\KC\Entity\Emails", "e")
+            ->update("\Core\Domain\Entity\Emails", "e")
            ->set('e.header', "'$data'")
            ->where('e.id=' . $id);
         $query->getQuery()->execute();
@@ -52,7 +52,7 @@ class Emails extends \Core\Domain\Entity\Emails
     public static function updateFooterContent($data, $id)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->update("\KC\Entity\Emails", "e")
+        $query = $queryBuilder->update("\Core\Domain\Entity\Emails", "e")
            ->set('e.footer', "'$data'")
            ->where('e.id=' . $id);
         $query->getQuery()->execute();
@@ -62,7 +62,7 @@ class Emails extends \Core\Domain\Entity\Emails
     public static function updateBodyContent($data, $id)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->update("\KC\Entity\Emails", "e")
+        $query = $queryBuilder->update("\Core\Domain\Entity\Emails", "e")
            ->set('e.body', "'$data'")
            ->where('e.id=' . $id);
         $query->getQuery()->execute();
@@ -73,7 +73,7 @@ class Emails extends \Core\Domain\Entity\Emails
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select("e.id")
-            ->from("\KC\Entity\Emails", "e")
+            ->from("\Core\Domain\Entity\Emails", "e")
             ->where("e.deleted='0'")
             ->andWhere("e.type='".$type."'");
         $id = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -84,7 +84,7 @@ class Emails extends \Core\Domain\Entity\Emails
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select("e.send_counter")
-            ->from("\KC\Entity\Emails", "e")
+            ->from("\Core\Domain\Entity\Emails", "e")
             ->where("e.deleted='0'")
             ->andWhere("e.id=".$id);
         $count = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -95,7 +95,7 @@ class Emails extends \Core\Domain\Entity\Emails
     {
         $date = new Zend_Date();
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->update("\KC\Entity\Emails", "e")
+        $query = $queryBuilder->update("\Core\Domain\Entity\Emails", "e")
             ->set('send_counter', "'$count'")
             ->set('send_date', "'$date'")
             ->where('id=' . $id);

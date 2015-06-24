@@ -20,7 +20,7 @@ class PopularCategory extends \Core\Domain\Entity\PopularCategory
 
         $data = $queryBuilder
             ->select('o')
-            ->from("KC\Entity\Category", "o")
+            ->from("\Core\Domain\Entity\Category", "o")
             ->where($queryBuilder->expr()->eq('o.deleted', $queryBuilder->expr()->literal($flag)))
             ->andWhere($queryBuilder->expr()->eq('o.status', $queryBuilder->expr()->literal($status)))
             ->andWhere($queryBuilder->expr()->like('o.name', $queryBuilder->expr()->literal($keyword.'%')))
@@ -63,7 +63,7 @@ class PopularCategory extends \Core\Domain\Entity\PopularCategory
         if (sizeof($catg) > 0) {
             //check offer exist or not
             $pc = \Zend_Registry::get('emLocale')
-            ->getRepository('KC\Entity\PopularCategory')
+            ->getRepository('\Core\Domain\Entity\PopularCategory')
             ->findOneBy(array('category' => $catg[0]['id']));
 
             if (sizeof($pc) > 0) {
@@ -83,10 +83,10 @@ class PopularCategory extends \Core\Domain\Entity\PopularCategory
                     $NewPos = 1;
                 }
 
-                $pc = new \KC\Entity\PopularCategory();
+                $pc = new \Core\Domain\Entity\PopularCategory();
                 $pc->type = 'MN';
                 $pc->category = \Zend_Registry::get('emLocale')
-                    ->getRepository('KC\Entity\Category')
+                    ->getRepository('\Core\Domain\Entity\Category')
                     ->find($catg[0]['id']);
                 $pc->position = (intval($NewPos) + 1);
                 $pc->deleted = 0;
@@ -110,13 +110,13 @@ class PopularCategory extends \Core\Domain\Entity\PopularCategory
         if ($id) {
             //delete popular code from list
             $pc = $queryBuilder
-                ->delete('KC\Entity\PopularCategory', 'pc')
+                ->delete('\Core\Domain\Entity\PopularCategory', 'pc')
                 ->where('pc.id=' . $id)
                 ->getQuery()
                 ->execute();
             //change position by 1 of each below element
             $q = $queryBuilder
-                ->update('KC\Entity\PopularCategory', 'p')
+                ->update('\Core\Domain\Entity\PopularCategory', 'p')
                 ->set('p.position', 'p.position -1')
                 ->where('p.position >' . $position)
                 ->getQuery()
@@ -134,14 +134,14 @@ class PopularCategory extends \Core\Domain\Entity\PopularCategory
         $pos = (intval($position) - 1);
         //find prev element from database based of current
         $PrevPc = \Zend_Registry::get('emLocale')
-            ->getRepository('KC\Entity\PopularCategory')
+            ->getRepository('\Core\Domain\Entity\PopularCategory')
             ->findOneBy(array('position' => $pos));
         //change position of prev element with current
         //$flag =  1;
         if (count($PrevPc) > 0) {
             //$flag =2;
             $changePrevPc = \Zend_Registry::get('emLocale')
-                ->getRepository('KC\Entity\PopularCategory')
+                ->getRepository('\Core\Domain\Entity\PopularCategory')
                 ->find($PrevPc->id);
             $changePrevPc->position = $position;
             $changePrevPc->deleted = 0;
@@ -151,7 +151,7 @@ class PopularCategory extends \Core\Domain\Entity\PopularCategory
             \Zend_Registry::get('emLocale')->flush();
             //change position of current element with postition + 1
             $pc = \Zend_Registry::get('emLocale')
-                ->getRepository('KC\Entity\PopularCategory')
+                ->getRepository('\Core\Domain\Entity\PopularCategory')
                 ->find($id);
             $pc->position = $pos;
             $pc->deleted = 0;
@@ -171,12 +171,12 @@ class PopularCategory extends \Core\Domain\Entity\PopularCategory
         $pos = (intval($position) + 1);
         //find next element from database based of current
         $PrevPc = \Zend_Registry::get('emLocale')
-            ->getRepository('KC\Entity\PopularCategory')
+            ->getRepository('\Core\Domain\Entity\PopularCategory')
             ->findOneBy(array('position' => $pos));
         //change position of next element with current
         if (count($PrevPc) > 0) {
             $changePrevPc = \Zend_Registry::get('emLocale')
-                ->getRepository('KC\Entity\PopularCategory')
+                ->getRepository('\Core\Domain\Entity\PopularCategory')
                 ->find($PrevPc->id);
             $changePrevPc->position = $position;
             $changePrevPc->deleted = 0;
@@ -186,7 +186,7 @@ class PopularCategory extends \Core\Domain\Entity\PopularCategory
             \Zend_Registry::get('emLocale')->flush();
             //change position of current element with postition - 1
             $pc = \Zend_Registry::get('emLocale')
-                ->getRepository('KC\Entity\PopularCategory')
+                ->getRepository('\Core\Domain\Entity\PopularCategory')
                 ->find($id);
             $pc->position = $pos;
             $pc->deleted = 0;

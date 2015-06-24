@@ -9,7 +9,7 @@ class Vote extends \Core\Domain\Entity\Votes
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v')
             ->from('\Core\Domain\Entity\Votes', 'v')
-            ->setParameter(1, $entityManagerLocale->find('KC\Entity\Offer', $idOffer))
+            ->setParameter(1, $entityManagerLocale->find('\Core\Domain\Entity\Offer', $idOffer))
             ->where('v.offer = ?1')
             ->setParameter(2, '0')
             ->andWhere('v.deleted = ?2')
@@ -34,7 +34,7 @@ class Vote extends \Core\Domain\Entity\Votes
             $u->execute(); */
 
             $entityManagerLocale  =\Zend_Registry::get('emLocale');
-            $v =  $entityManagerLocale->find('KC\Entity\Votes', $id);
+            $v =  $entityManagerLocale->find('\Core\Domain\Entity\Votes', $id);
             $entityManagerLocale->remove($v);
             $entityManagerLocale->flush();
 
@@ -51,7 +51,7 @@ class Vote extends \Core\Domain\Entity\Votes
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('v')
             ->from('\Core\Domain\Entity\Votes', 'v')
-            ->setParameter(1, $entityManagerLocale->find('KC\Entity\Offer', $idOffer))
+            ->setParameter(1, $entityManagerLocale->find('\Core\Domain\Entity\Offer', $idOffer))
             ->where('v.offer = ?1')
             ->setParameter(2, '0')
             ->andWhere('v.deleted = ?2')
@@ -62,8 +62,8 @@ class Vote extends \Core\Domain\Entity\Votes
         if (count($offerVotesList) > 0) {
             self::deleteVote($offerVotesList[0]['id']);
         }
-        $vote  = new \KC\Entity\Votes();
-        $vote->offer = $entityManagerLocale->find('KC\Entity\Offer', $params['id']);
+        $vote  = new \Core\Domain\Entity\Votes();
+        $vote->offer = $entityManagerLocale->find('\Core\Domain\Entity\Offer', $params['id']);
         if ($params['vote']=='1') {
             $vote->vote = 'positive';
         } else {
@@ -83,7 +83,7 @@ class Vote extends \Core\Domain\Entity\Votes
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('count(v) as cnt')
             ->from('\Core\Domain\Entity\Votes', 'v')
-            ->setParameter(1, $entityManagerLocale->find('KC\Entity\Offer', $idOffer))
+            ->setParameter(1, $entityManagerLocale->find('\Core\Domain\Entity\Offer', $idOffer))
             ->where('v.offer = ?1')
             ->setParameter(2, '0')
             ->andWhere('v.deleted = ?2')
@@ -94,7 +94,7 @@ class Vote extends \Core\Domain\Entity\Votes
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('count(v) as cnt')
             ->from('\Core\Domain\Entity\Votes', 'v')
-            ->setParameter(1, $entityManagerLocale->find('KC\Entity\Offer', $idOffer))
+            ->setParameter(1, $entityManagerLocale->find('\Core\Domain\Entity\Offer', $idOffer))
             ->where('v.offer = ?1')
             ->setParameter(2, '0')
             ->andWhere('v.deleted = ?2')
@@ -116,7 +116,7 @@ class Vote extends \Core\Domain\Entity\Votes
     public function addfeedback($params)
     {
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
-        $v = $entityManagerLocale->find('KC\Entity\Votes', $params['id']);
+        $v = $entityManagerLocale->find('\Core\Domain\Entity\Votes', $params['id']);
         $v->moneySaved = $params['amount'];
         $v->product = $params['product'];
         $entityManagerLocale->persist($v);
@@ -142,7 +142,7 @@ class Vote extends \Core\Domain\Entity\Votes
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('vt.id')
             ->from('\Core\Domain\Entity\Votes', 'vt')
-            ->setParameter(1, $entityManagerLocale->find('KC\Entity\Offer', $offer))
+            ->setParameter(1, $entityManagerLocale->find('\Core\Domain\Entity\Offer', $offer))
             ->where('vt.offer = ?1')
             ->setParameter(2, '0')
             ->andWhere('vt.deleted = ?2')
@@ -151,8 +151,8 @@ class Vote extends \Core\Domain\Entity\Votes
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (empty($data)) {
             # save vote for an offer
-            $cnt  = new \KC\Entity\Votes();
-            $cnt->offer =  $entityManagerLocale->find('KC\Entity\Offer', $offer);
+            $cnt  = new \Core\Domain\Entity\Votes();
+            $cnt->offer =  $entityManagerLocale->find('\Core\Domain\Entity\Offer', $offer);
             $cnt->visitorId = Auth_VisitorAdapter::getIdentity()->id;
             $cnt->vote = $vote;
             $cnt->created_at = new \DateTime('now');

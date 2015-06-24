@@ -84,9 +84,9 @@ class PopularShop extends \Core\Domain\Entity\PopularShop
                 }
                 //add new offer if not exist in datbase
                 $entityManagerLocale  = \Zend_Registry::get('emLocale');
-                $pc = new \KC\Entity\PopularShop();
+                $pc = new \Core\Domain\Entity\PopularShop();
                 $pc->type = 'MN';
-                $pc->popularshops = $entityManagerLocale->find('KC\Entity\Shop', $shop[0]['id']);
+                $pc->popularshops = $entityManagerLocale->find('\Core\Domain\Entity\Shop', $shop[0]['id']);
                 $pc->position = (intval($NewPos));
                 $pc->deleted = 0;
                 $pc->status = 1;
@@ -111,7 +111,7 @@ class PopularShop extends \Core\Domain\Entity\PopularShop
     {
         if ($id) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\PopularShop', 'p')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\PopularShop', 'p')
                 ->where("p.id=" . $id)
                 ->getQuery()->execute();
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
@@ -133,12 +133,12 @@ class PopularShop extends \Core\Domain\Entity\PopularShop
         $PrevPc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $pid = @$PrevPc[0]['id'];
         if ($pid) {
-            $queryBuilder->update('KC\Entity\PopularShop', 'p')
+            $queryBuilder->update('\Core\Domain\Entity\PopularShop', 'p')
                     ->set('p.position', $position)
                     ->where('p.id = '.$pid)
                     ->getQuery()->execute();
             //change position of current element with postition + 1
-            $queryBuilder->update('KC\Entity\PopularShop', 'pshop')
+            $queryBuilder->update('\Core\Domain\Entity\PopularShop', 'pshop')
                     ->set('pshop.position', $pos)
                     ->where('pshop.id = '.$id)
                     ->getQuery()->execute();
@@ -164,12 +164,12 @@ class PopularShop extends \Core\Domain\Entity\PopularShop
         $pid = @$PrevPc[0]['id'];
         //change position of next element with current
         if ($pid) {
-            $queryBuilder->update('KC\Entity\PopularShop', 'p')
+            $queryBuilder->update('\Core\Domain\Entity\PopularShop', 'p')
                     ->set('p.position', $position)
                     ->where('p.id = '.$pid)
                     ->getQuery()->execute();
             //change position of current element with postition + 1
-            $queryBuilder->update('KC\Entity\PopularShop', 'pshop')
+            $queryBuilder->update('\Core\Domain\Entity\PopularShop', 'pshop')
                     ->set('pshop.position', $pos)
                     ->where('pshop.id = '.$id)
                     ->getQuery()->execute();
@@ -187,14 +187,14 @@ class PopularShop extends \Core\Domain\Entity\PopularShop
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         if (!empty($shopId)) {
-            $query = $queryBuilder->delete('KC\Entity\PopularShop', 'p')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\PopularShop', 'p')
                 ->where('p.id > 0')
                 ->getQuery()->execute();
             $shopId = explode(',', $shopId);
             $i = 1;
             foreach ($shopId as $shopIdValue) {
-                $popularShop = new \KC\Entity\PopularShop();
-                $popularShop->popularshops = $entityManagerLocale->find('KC\Entity\Shop', $shopIdValue);
+                $popularShop = new \Core\Domain\Entity\PopularShop();
+                $popularShop->popularshops = $entityManagerLocale->find('\Core\Domain\Entity\Shop', $shopIdValue);
                 $popularShop->position = $i;
                 $popularShop->type = "MN";
                 $popularShop->deleted = 0;
@@ -302,7 +302,7 @@ class PopularShop extends \Core\Domain\Entity\PopularShop
             if (sizeof($pc) > 0) {
             } else {
                 $entityManagerLocale  = \Zend_Registry::get('emLocale');
-                $pc = new \KC\Entity\PopularCode();
+                $pc = new \Core\Domain\Entity\PopularCode();
                 $pc->type = 'AT';
                 $pc->popularcode = $p['offerId'];
                 $pc->position = $p['position'];

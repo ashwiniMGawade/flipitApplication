@@ -119,7 +119,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
             ->leftJoin('s.logo', 'l')
             ->where('o.deleted = 0')
             ->andWhere(
-                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
+                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM \Core\Domain\Entity\CouponCode cc WHERE
                 cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
             )
             ->andWhere('s.deleted = 0')
@@ -152,7 +152,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
             ->leftJoin('o.offertermandcondition', 'term')
             ->where('o.deleted =0')
             ->andWhere(
-                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
+                "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM \Core\Domain\Entity\CouponCode cc WHERE
                 cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
             )
             ->andWhere('s.deleted=0')
@@ -189,7 +189,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         if (sizeof($offer) > 0) {
             $queryBuilderOffer = \Zend_Registry::get('emLocale')
                 ->createQueryBuilder()
-                ->update('KC\Entity\Offer', 'o')
+                ->update('\Core\Domain\Entity\Offer', 'o')
                 ->set('o.editorPicks', '1')
                 ->where('o.id = '.$id)
                 ->getQuery()
@@ -222,9 +222,9 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
                     $NewPos =  0 ;
                 }
                 $entityManagerLocale  = \Zend_Registry::get('emLocale');
-                $pc = new \KC\Entity\PopularCode();
+                $pc = new \Core\Domain\Entity\PopularCode();
                 $pc->type = 'MN';
-                $pc->popularcode = $entityManagerLocale->find('KC\Entity\Offer', $id);
+                $pc->popularcode = $entityManagerLocale->find('\Core\Domain\Entity\Offer', $id);
                 $pc->position = (intval($NewPos) + 1);
                 $pc->deleted = 0;
                 $pc->status = 1;
@@ -262,20 +262,20 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
 
             $queryBuilderOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $queryBuilderOffer
-                ->update('KC\Entity\Offer', 'o')
+                ->update('\Core\Domain\Entity\Offer', 'o')
                 ->set('o.editorPicks', '0')
                 ->where('o.id = '.$offerDetail[0]['id'])
                 ->getQuery()
                 ->execute();
 
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\PopularCode', 's')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\PopularCode', 's')
                 ->where('s.id ='.$id)
                 ->getQuery()
                 ->execute();
 
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $queryBuilder ->update('KC\Entity\PopularCode', 'pc')
+            $queryBuilder ->update('\Core\Domain\Entity\PopularCode', 'pc')
                 ->set('pc.position', $queryBuilder->expr()->literal('pc.position -1'))
                 ->where('pc.position > '.$position)
                 ->getQuery()
@@ -291,7 +291,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
 
             foreach ($newOfferList as $newOffer) {
                 $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $queryBuilder ->update('KC\Entity\PopularCode', 'popularCode')
+                $queryBuilder ->update('\Core\Domain\Entity\PopularCode', 'popularCode')
                     ->set('popularCode.position', $newPos)
                     ->where('popularCode.id ='.$newOffer['id'])
                     ->getQuery()->execute();
@@ -309,14 +309,14 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         if ($id) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
-                ->delete('KC\Entity\PopularCode', 's')
+                ->delete('\Core\Domain\Entity\PopularCode', 's')
                 ->where('s.id ='.$id)
                 ->getQuery()
                 ->execute();
 
             if ($flagForCache==true) {
                 $queryBuilder
-                    ->update('KC\Entity\PopularCode', 'pc')
+                    ->update('\Core\Domain\Entity\PopularCode', 'pc')
                     ->set('pc.position', 'pc.position -1')
                     ->where('pc.position > '.$position)
                     ->getQuery()
@@ -332,7 +332,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         if (!empty($offerId)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
-                ->delete('KC\Entity\PopularCode', 's')
+                ->delete('\Core\Domain\Entity\PopularCode', 's')
                 ->where('s.id > 0')
                 ->getQuery()
                 ->execute();
@@ -340,8 +340,8 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
             $i = 1;
             foreach ($offerId as $offerIdValue) {
                 $entityManagerLocale  = \Zend_Registry::get('emLocale');
-                $popularCode = new \KC\Entity\PopularCode();
-                $popularCode->popularcode = $entityManagerLocale->find('KC\Entity\Offer', $offerIdValue);
+                $popularCode = new \Core\Domain\Entity\PopularCode();
+                $popularCode->popularcode = $entityManagerLocale->find('\Core\Domain\Entity\Offer', $offerIdValue);
                 $popularCode->position = $i;
                 $popularCode->type = "MN";
                 $popularCode->status = 1;

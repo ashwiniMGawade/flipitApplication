@@ -27,12 +27,12 @@ class Special extends \Core\Domain\Entity\Special
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
         if ($retVal) {
             # create object of previous data
-            $special = $entityManagerLocale->find("\KC\Entity\Special", $retVal);
+            $special = $entityManagerLocale->find("\Core\Domain\Entity\Special", $retVal);
             $special->created_at = $special->created_at;
             $special->updated_at = new \DateTime('now');
         } else {
             # new object
-            $special = new \KC\Entity\Special();
+            $special = new \Core\Domain\Entity\Special();
             $special->created_at = new \DateTime('now');
             $special->updated_at = new \DateTime('now');
         }
@@ -57,7 +57,7 @@ class Special extends \Core\Domain\Entity\Special
     public static function newSpecialSetting($id)
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $settings =  new \KC\Entity\Settings();
+        $settings =  new \Core\Domain\Entity\Settings();
         $settings->name =  \KC\Repository\Settings::SPECIAL;
         $settings->value = $id ;
         $settings->created_at = new \DateTime('now');

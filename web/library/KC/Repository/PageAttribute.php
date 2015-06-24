@@ -27,7 +27,7 @@ class PageAttribute extends \Core\Domain\Entity\PageAttribute
     public static function insertPageAttributes()
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $pageAttributeObject  = new \KC\Entity\PageAttribute();
+        $pageAttributeObject  = new \Core\Domain\Entity\PageAttribute();
         for ($i = 0; $i<3; $i++) {
             if ($i == 0) {
                 $name = "contact";

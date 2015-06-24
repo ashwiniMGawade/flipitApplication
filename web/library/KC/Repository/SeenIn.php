@@ -44,10 +44,10 @@ class SeenIn extends \Core\Domain\Entity\SeenIn
             # check if it has integer id of footer
             if ($retVal) {
                 # create object of previous data
-                $seenIn =  \Zend_Registry::get('emLocale')->find('KC\Entity\SeenIn', $retVal);
+                $seenIn =  \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\SeenIn', $retVal);
             } else {
                 # new object
-                $seenIn = new \KC\Entity\SeenIn();
+                $seenIn = new \Core\Domain\Entity\SeenIn();
             }
             $seenIn->altText = @$params['alt-'. $i] ?  $params['alt-'. $i] : null;
             if (isset($_FILES['image-'.$i])) {
@@ -55,7 +55,7 @@ class SeenIn extends \Core\Domain\Entity\SeenIn
                 if ($result['status'] == '200') {
                     $viewHelper = new \BackEnd_Helper_viewHelper();
                     $ext = $viewHelper->getImageExtension($result['fileName']);
-                    $seenInImage  = new \KC\Entity\Logo();
+                    $seenInImage  = new \Core\Domain\Entity\Logo();
                     $seenInImage->ext = @$ext;
                     $seenInImage->path = @$result['path'];
                     $seenInImage->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString(
@@ -66,7 +66,7 @@ class SeenIn extends \Core\Domain\Entity\SeenIn
                     $seenInImage->updated_at = new \DateTime('now');
                     $entityManagerLocale->persist($seenInImage);
                     $entityManagerLocale->flush();
-                    $seenIn->logo =  $entityManagerLocale->find('KC\Entity\Logo', $seenInImage->getId());
+                    $seenIn->logo =  $entityManagerLocale->find('\Core\Domain\Entity\Logo', $seenInImage->getId());
                 }
             }
             $seenIn->status =  0;
@@ -89,7 +89,7 @@ class SeenIn extends \Core\Domain\Entity\SeenIn
     public static function newSeenInSetting($id, $name)
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        $settings =  new KC\Entity\Settings();
+        $settings =  new \Core\Domain\Entity\Settings();
         $settings->name =  constant("Settings::" . $name);
         $settings->value = $id;
         $entityManagerLocale->persist($settings);
