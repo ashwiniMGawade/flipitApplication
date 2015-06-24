@@ -58,7 +58,7 @@ class Page extends \Core\Domain\Entity\Page
             ->andWhere('page.publish = 1')
             ->andWhere('page.pageLock = 0')
             ->andWhere('page.deleted = 0');
-        $pageDetails = $query->getQuery()->getSQL(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $pageDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageDetails;
     }
 

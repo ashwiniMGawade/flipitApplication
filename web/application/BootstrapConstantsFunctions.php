@@ -24,7 +24,7 @@ class BootstrapConstantsFunctions
         if (APPLICATION_ENV == 'testing') {
             defined('CACHE_DIRECTORY_PATH') || define('CACHE_DIRECTORY_PATH', $cacheDirectoryPath);
         } else {
-            defined('CACHE_DIRECTORY_PATH') || define('CACHE_DIRECTORY_PATH', './tmp/');
+            defined('CACHE_DIRECTORY_PATH') || define('CACHE_DIRECTORY_PATH', '/tmp/');
         }
     }
 
