@@ -44,12 +44,11 @@ class BootstrapDoctrineConnectionFunctions
         if (APPLICATION_ENV == 'development') {
             $cache = null;
             $isDevMode = true;
-            $proxyPath = '/../../core/Domain/Entity/Proxy';
         }
         $config = Setup::createConfiguration($isDevMode, $proxyPath, $cache);
         $config->setProxyNamespace('Proxy');
 
-        $paths = array('/../../core/Domain/Entity', '/../../core/Domain/Entity/User');
+        $paths = array('/../../core/Domain/Entity', APPLICATION_PATH . '/../../core/Domain/Entity/User');
         $driver = new AnnotationDriver(new AnnotationReader(), $paths);
         AnnotationRegistry::registerLoader('class_exists');
         $config->setMetadataDriverImpl($driver);
