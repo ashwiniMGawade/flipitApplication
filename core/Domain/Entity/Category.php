@@ -129,7 +129,7 @@ class Category
      */
     protected $categoryHeaderImage;
     /**
-     * @ORM\ManyToMany(targetEntity="Core\Domain\Entity\Articlecategory", inversedBy="category")
+     * @ORM\ManyToMany(targetEntity="Core\Domain\Entity\ArticleCategory", inversedBy="category")
      * @ORM\JoinTable(
      *     name="ref_articlecategory_relatedcategory",
      *     joinColumns={@ORM\JoinColumn(name="relatedcategoryid", referencedColumnName="id", nullable=false)},

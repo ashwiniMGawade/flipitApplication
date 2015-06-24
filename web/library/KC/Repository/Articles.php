@@ -703,7 +703,7 @@ class Articles extends \Core\Domain\Entity\Articles
         $rootPath = ROOT_PATH . $uploadPath;
         $files = $adapter->getFileInfo($file);
         if (!file_exists($rootPath)) {
-            mkdir($rootPath, 776, true);
+            mkdir($rootPath, 0775, true);
         }
         $adapter->setDestination($rootPath);
         $adapter->addValidator('Extension', false, array('jpg,jpeg,png', true));

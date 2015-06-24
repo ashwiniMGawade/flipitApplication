@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *
  * )
  */
-class Articlecategory
+class ArticleCategory
 {
     /**
      * @ORM\Id

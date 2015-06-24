@@ -127,7 +127,7 @@ class Articles
     protected $thumbnail;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Core\Domain\Entity\Articlecategory", inversedBy="articles")
+     * @ORM\ManyToMany(targetEntity="Core\Domain\Entity\ArticleCategory", inversedBy="articles")
      * @ORM\JoinTable(
      *     name="ref_article_category",
      *     joinColumns={@ORM\JoinColumn(name="articleid", referencedColumnName="id", nullable=false)},
