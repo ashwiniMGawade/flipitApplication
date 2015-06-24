@@ -61,8 +61,28 @@ defined('PUBLIC_PATH')
                 )
             )."/public/"
         );
-require_once(LIBRARY_PATH.'/PHPExcel/PHPExcel.php');
 require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper-v1.php');
 require_once(LIBRARY_PATH.'/BackEnd/Helper/MandrillHelper-v1.php');
-require_once (LIBRARY_PATH . '/Zend/Application.php');
 require_once(DOCTRINE_PATH . '/Doctrine.php');
+
+
+//Ensure library/ is on include_path
+set_include_path(
+    implode(
+        PATH_SEPARATOR,
+        array(
+            realpath(APPLICATION_PATH . '/../library'),
+            realpath(APPLICATION_PATH . '/../vendor/zendframework/zendframework1/library')
+        )
+    )
+);
+set_include_path(
+    implode(
+        PATH_SEPARATOR,
+        array(realpath(DOCTRINE_PATH), get_include_path())
+    )
+);
+require_once realpath(APPLICATION_PATH . '/../vendor/autoload.php');
+/** Zend_Application */
+require_once 'Zend/Application.php';
+require_once 'PHPExcel/PHPExcel.php';
