@@ -162,6 +162,59 @@
 		}
 	}
 	.section.section-author{margin:0 0 28px;}
+    .alt-list {
+	    list-style:none;
+	    margin:0 0 28px;
+	    padding:0;
+	    font-size:12px;
+	    line-height:15px;
+	    border:1px solid #e5e5e5;
+	    counter-reset:section;
+	    > li {
+	        border-top:1px solid #c6c6c6;
+	        background:#fafafa;
+	        counter-increment:section;
+	        position:relative;
+	        &:first-child {border:0;}
+	        &:before {
+	            content:counter(section)".";
+	            position:absolute;
+	            left:0;
+	            top:18px;
+	            width:35px;
+	            text-align:right;
+	            font-weight:bold;
+	            color:#0077cc;
+	            font-size:15px;
+	            line-height:17px;
+	        }
+	        > a {
+	            display:block;
+	            text-decoration:none;
+	            color:#878a8d;
+	            min-height:76px;
+	            padding:18px 10px 14px 40px;
+	            &:hover {background:#f2f2f2;}
+	        }
+	    }
+	    p {margin:0;}
+	    .title {
+	        display:block;
+	        color:#0077cc;
+	        font-size:15px;
+	        line-height:17px;
+	        display:block;
+	        margin:0 0 3px;
+	        font-weight:bold;
+	        mark {
+	            font-weight:normal;
+	            background:none;
+	            color:#de8c17;
+	            font-style:italic;
+	            font-size:13px;
+	        }
+	    }
+    }
 }
 @media only screen and (max-width: 1199px){
 	.author-page {
