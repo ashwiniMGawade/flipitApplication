@@ -132,6 +132,45 @@
 /public/us/rss/*
 /public/za/rss/*
 
+# detach json files from git commits
+/public/js/front_end/json/*
+/public/ar/js/front_end/json/*
+/public/at/js/front_end/json/*
+/public/au/js/front_end/json/*
+/public/be/js/front_end/json/*
+/public/br/js/front_end/json/*
+/public/ca/js/front_end/json/*
+/public/ch/js/front_end/json/*
+/public/cl/js/front_end/json/*
+/public/cn/js/front_end/json/*
+/public/de/js/front_end/json/*
+/public/dk/js/front_end/json/*
+/public/es/js/front_end/json/*
+/public/fi/js/front_end/json/*
+/public/fr/js/front_end/json/*
+/public/hk/js/front_end/json/*
+/public/id/js/front_end/json/*
+/public/ie/js/front_end/json/*
+/public/in/js/front_end/json/*
+/public/it/js/front_end/json/*
+/public/jp/js/front_end/json/*
+/public/kr/js/front_end/json/*
+/public/mx/js/front_end/json/*
+/public/my/js/front_end/json/*
+/public/no/js/front_end/json/*
+/public/nz/js/front_end/json/*
+/public/pl/js/front_end/json/*
+/public/pt/js/front_end/json/*
+/public/ru/js/front_end/json/*
+/public/se/js/front_end/json/*
+/public/sg/js/front_end/json/*
+/public/sk/js/front_end/json/*
+/public/th/js/front_end/json/*
+/public/tr/js/front_end/json/*
+/public/uk/js/front_end/json/*
+/public/us/js/front_end/json/*
+/public/za/js/front_end/json/*
+
 # detach sitemaps files from git commits
 /public/sitemaps/*
 /public/ar/sitemaps/*
