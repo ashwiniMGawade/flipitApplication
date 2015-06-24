@@ -223,3 +223,12 @@ tests/_log/
 tests/_output/*
 !application/migration/emptyOffer.xlsx
 /library/KC/Entity/Proxy
+
+# Managed by Composer
+/bin/*
+!bin/console
+!bin/symfony_requirements
+vendor/
+
+# Composer PHAR
+/composer.phar
