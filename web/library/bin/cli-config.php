@@ -16,7 +16,7 @@ defined('APPLICATION_ENV') ||
     define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV'): 'production'));
 
 // Get Memcached settings from application.ini
-require_once '/../../vendor/zendframework/zendframework1/library/Zend/Config/Ini.php';
+require_once realpath('../vendor/autoload.php');
 $config = new Zend_Config_Ini('../application/configs/application.ini', APPLICATION_ENV);
 $memcacheEndpoint = $config->resources->frontController->params->memcache;
 $splitMemcacheValues = explode(':', $memcacheEndpoint);
@@ -31,26 +31,12 @@ $proxyPath = null;
 if (APPLICATION_ENV == 'development') {
     $cache = null;
     $isDevMode = true;
-    $proxyPath = APPLICATION_PATH . '/../library/KC/Entity/Proxy';
 }
 
 $config = Setup::createConfiguration($isDevMode, $proxyPath, $cache);
 
-$paths = array('../library/KC/Entity');
+$paths = array('../../core/Domain/Entity', '../../core/Domain/Entity/User');
 $driver = new AnnotationDriver(new AnnotationReader(), $paths);
 AnnotationRegistry::registerLoader('class_exists');
 $config->setProxyNamespace('Proxy');
 $config->setMetadataDriverImpl($driver);
-
-$dsn = array(
-    'host' => 'localhost',
-    'driver' => 'pdo_mysql',
-    'user' => 'root',
-    'password' =>
-    'root', 'dbname' => 'flipit_in'
-);
-$em = EntityManager::create($dsn, $config);
-$helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
-    'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection()),
-    'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em)
-));
