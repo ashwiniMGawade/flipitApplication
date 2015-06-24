@@ -26,7 +26,7 @@ class RefArticlecategoryRelatedcategory
     protected $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Articlecategory", inversedBy="refArticlecategoryRelatedcategory")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\ArticleCategory", inversedBy="refArticlecategoryRelatedcategory")
      * @ORM\JoinColumn(name="articlecategoryid", referencedColumnName="id")
      */
     protected $articlecategory;

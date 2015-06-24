@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping AS ORM;
 class ImageArticleCategoryIcon extends \Core\Domain\Entity\Image
 {
     /**
-     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Articlecategory", mappedBy="ArtCatIcon")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\ArticleCategory", mappedBy="ArtCatIcon")
      */
     protected $articlecategory;
     
