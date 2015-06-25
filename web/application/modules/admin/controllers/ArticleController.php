@@ -72,7 +72,7 @@ class Admin_ArticleController extends Zend_Controller_Action
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('cat')
-            ->from('\Core\Domain\Entity\Articlecategory', 'cat')
+            ->from('\Core\Domain\Entity\ArticleCategory', 'cat')
             ->where('cat.deleted= 0')
             ->orderBy('cat.name', 'ASC');
 
@@ -152,7 +152,7 @@ class Admin_ArticleController extends Zend_Controller_Action
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('cat')
-            ->from('\Core\Domain\Entity\Articlecategory', 'cat')
+            ->from('\Core\Domain\Entity\ArticleCategory', 'cat')
             ->where('cat.deleted= 0')
             ->orderBy('cat.name', 'ASC');
 
