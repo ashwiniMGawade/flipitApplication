@@ -48,7 +48,7 @@ class Admin_ArticlecategoryController extends Zend_Controller_Action
         $this->view->categoryList = $categoryList['aaData'] ;
 
         if ($this->getRequest()->isPost()) {
-            $save = new KC\Repository\Articlecategory();
+            $save = new KC\Repository\ArticleCategory();
             $result = $save->addcategory($this->getRequest()->getParams());
             $flash = $this->_helper->getHelper('FlashMessenger');
 
@@ -73,7 +73,7 @@ class Admin_ArticlecategoryController extends Zend_Controller_Action
 
     public function getcategoriesAction()
     {
-        $getList = new \KC\Repository\Articlecategory();
+        $getList = new \KC\Repository\ArticleCategory();
         $list = $getList->getCategoryList($this->getRequest()->getParams());
         echo Zend_Json::encode($list);
         die;
@@ -83,7 +83,7 @@ class Admin_ArticlecategoryController extends Zend_Controller_Action
     {
         $srh = $this->getRequest()->getParam('keyword');
         $flag = $this->getRequest()->getParam('flag');
-        $data = KC\Repository\Articlecategory::searchKeyword($srh, $flag);
+        $data = KC\Repository\ArticleCategory::searchKeyword($srh, $flag);
         $ar = array();
         if (sizeof($data) > 0) {
             foreach ($data as $d) {
@@ -110,10 +110,10 @@ class Admin_ArticlecategoryController extends Zend_Controller_Action
 
         $this->view->categoryList = $categoryList['aaData'] ;
 
-        $data = new \KC\Repository\Articlecategory();
+        $data = new \KC\Repository\ArticleCategory();
 
         $id = $this->getRequest()->getParam('id');
-        $varnishUrls = \KC\Repository\Articlecategory::getAllUrls($id);
+        $varnishUrls = \KC\Repository\ArticleCategory::getAllUrls($id);
         if ($this->getRequest()->isPost()) {
             $result = $data->editCategory($this->getRequest()->getParams(), 'post');
             $flash = $this->_helper->getHelper('FlashMessenger');
@@ -145,7 +145,7 @@ class Admin_ArticlecategoryController extends Zend_Controller_Action
         self::updateVarnish($id);
 
 
-        $deletePermanent = \KC\Repository\Articlecategory::permanentDeleteArticleCategory($id);
+        $deletePermanent = \KC\Repository\ArticleCategory::permanentDeleteArticleCategory($id);
         $flash = $this->_helper->getHelper('FlashMessenger');
         if (intval($deletePermanent) > 0) {
 
@@ -171,7 +171,7 @@ class Admin_ArticlecategoryController extends Zend_Controller_Action
     public function exportarticlecategorylistAction()
     {
         // get all shop from database
-        $data = \KC\Repository\Articlecategory::exportarticlecategorylist();
+        $data = \KC\Repository\ArticleCategory::exportarticlecategorylist();
 
         // create object of phpExcel
         $objPHPExcel = new PHPExcel();
@@ -355,7 +355,7 @@ class Admin_ArticlecategoryController extends Zend_Controller_Action
         $varnishObj = new \KC\Repository\Varnish();
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . strtolower('plus'));
         # get all the urls related to this Articlecategory
-        $varnishUrls = \KC\Repository\Articlecategory::getAllUrls($id);
+        $varnishUrls = \KC\Repository\ArticleCategory::getAllUrls($id);
 
         # check $varnishUrls has atleast one
         if (isset($varnishUrls) && count($varnishUrls) > 0) {
