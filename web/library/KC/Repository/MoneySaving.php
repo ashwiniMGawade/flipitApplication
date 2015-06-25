@@ -83,7 +83,7 @@ class MoneySaving extends \Core\Domain\Entity\MoneySaving
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('ac.id, ac.name, ac.categorytitlecolor')
-        ->from('\Core\Domain\Entity\Articlecategory', 'ac')
+        ->from('\Core\Domain\Entity\ArticleCategory', 'ac')
         ->where('ac.deleted=0');
         $allArticleCategoryDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $allArticleCategoryDetails;
