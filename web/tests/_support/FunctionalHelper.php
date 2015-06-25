@@ -13,31 +13,28 @@ use \Doctrine\ORM\Tools\SchemaTool;
 
 class FunctionalHelper extends \Codeception\Module
 {
-    public function databaseSwitch($databaseType = "")
+    public function initializeDb($moduleName, $database)
     {
-        \Codeception\Module\Doctrine2::$em = array();
-        $paths = array(APPLICATION_PATH . '/../library/KC/Entity/User');
-        $isDevMode = true;
-        $config = \Doctrine\ORM\Tools\Setup::createConfiguration($isDevMode);
-        $driver = new AnnotationDriver(new AnnotationReader(), $paths);
-        AnnotationRegistry::registerLoader('class_exists');
-        $config->setMetadataDriverImpl($driver);
-        $config->setProxyDir(APPLICATION_PATH . '/../library/KC/Entity/Proxy');
-        $config->setAutoGenerateProxyClasses(true);
-        $config->setProxyNamespace('\Core\Domain\Entity\Proxy');
-        $connectionParamsLocale = array(
-            'driver'   => 'pdo_sqlite',
-            'name'     => 'user',
-            'memory' => true,
+        $db = $this->getModule($moduleName);
+        $db->_reconfigure($database);
+        $db->_initialize();
+    }
+
+    public function flipitTestDb()
+    {
+        return array(
+            'dsn' => 'mysql:host=localhost;dbname=flipit_test',
+            'dump' => '/tests/_data/flipit_test.sql',
+            'cleanup' => true,
         );
-        $em = EntityManager::create($connectionParamsLocale, $config);
-        \Codeception\Module\Doctrine2::$em = $em;
-        
-        $metaDataFactory = $em->getMetadataFactory();
-        $classes = $metaDataFactory->getAllMetadata();
-        $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
-        $tool->dropDatabase();
-        $tool->createSchema($classes);
-        $em->getConnection()->beginTransaction();
+    }
+
+    public function flipitTestUserDb()
+    {
+        return array(
+            'dsn' => 'mysql:host=localhost;dbname=flipit_test_user',
+            'dump' => '/tests/_data/flipit_test_user.sql',
+            'cleanup' => true,
+        );
     }
 }

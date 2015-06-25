@@ -21,12 +21,19 @@ use \Doctrine\Common\Annotations\AnnotationReader;
 use \Doctrine\Common\Annotations\AnnotationRegistry;
 use \Doctrine\ORM\Tools\SchemaTool;
 
-$paths = array(APPLICATION_PATH . '/../library/KC/Entity');
-$isDevMode = false;
+$paths = array(APPLICATION_PATH . '/../../core/Domain/Entity');
+$isDevMode = true;
 $config = \Doctrine\ORM\Tools\Setup::createConfiguration($isDevMode);
 $driver = new AnnotationDriver(new AnnotationReader(), $paths);
 AnnotationRegistry::registerLoader('class_exists');
 $config->setMetadataDriverImpl($driver);
+$connectionParamsUser = array(
+    'driver'      => 'pdo_mysql',
+    'user'        => 'root',
+    'password' => 'root',
+    'dbname'   => 'flipit_test_user',
+    'host'	=> "localhost",
+);
 $connectionParamsLocale = array(
     'driver'      => 'pdo_mysql',
     'user'        => 'root',
@@ -35,12 +42,8 @@ $connectionParamsLocale = array(
     'host'	=> "localhost",
 );
 $em = EntityManager::create($connectionParamsLocale, $config);
-\Codeception\Module\Doctrine2::$em = $em;
-/*$metaDataFactory = $em->getMetadataFactory();
-$classes = $metaDataFactory->getAllMetadata();
-$tool = new \Doctrine\ORM\Tools\SchemaTool($em);
-$tool->dropDatabase();
-$tool->createSchema($classes);
-$fixtures = new fixtures($em);
-$fixtures->execute();*/
+$es = EntityManager::create($connectionParamsUser, $config);
+$fixtures = new fixtures($em, $es);
+$fixtures->execute();
 \Codeception\Util\Autoload::registerSuffix('Steps', __DIR__.DIRECTORY_SEPARATOR.'_steps');
+\Codeception\Util\Autoload::registerSuffix('Page', __DIR__.DIRECTORY_SEPARATOR.'/../_pages');

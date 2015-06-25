@@ -9,11 +9,12 @@ modules:
     enabled: [ZF1, Filesystem, FunctionalHelper, PhpBrowser, Db]
     config:
         PhpBrowser:
-            url: 'http://dev.kortingscode.nl'
+            url: 'http://dev.flipit.com/'
         Db:
             user: 'root'
-            password: ''
-            dsn: 'mysql:host=localhost;dbname=testdb'
-            dump: 'tests/_data/dump.sql'
-            populate: true
+            password: 'root'
+            dsn: 'mysql:host=localhost;dbname=flipit_test'
+            dump: 'tests/_data/flipit_test.sql'
+            pulate: true
+            repulate: true
             cleanup: false

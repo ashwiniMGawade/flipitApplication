@@ -1,5 +1,5 @@
 <?php
-/*namespace admin;
+namespace admin;
 use \FunctionalTester;
 
 class codealertCest
@@ -15,7 +15,7 @@ class codealertCest
 
     public function codealert(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-        $I->amOnPage('dev.flipit.com/in');
+        $I->amOnPage('http://dev.flipit.com/in');
         $I->see('login');
         $I = new FunctionalTester\AdminSteps($scenario);
         $I->login();
@@ -45,4 +45,4 @@ class codealertCest
         $I->seeInField('#emailSubject', 'email subject');
         $I->seeInField('#emailHeader', 'email header');
     }
-}*/
+}

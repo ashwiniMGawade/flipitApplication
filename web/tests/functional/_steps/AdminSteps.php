@@ -3,10 +3,11 @@ namespace FunctionalTester;
 
 class AdminSteps extends \FunctionalTester
 {
-    /*public function login()
+    public function login()
     {
         $config = \Codeception\Configuration::config();
         $I = $this;
+        $I->initializeDb('Db', $I->flipitTestUserDb());
         $this->addUser();
         $I->amOnPage(\LoginPage::$URL);
         $I->fillField(\LoginPage::$usernameField, 'test@flipit.com');
@@ -40,12 +41,13 @@ class AdminSteps extends \FunctionalTester
             'editortext' => '',
             'popularKortingscode' => '0'
         );
-        // $user = new \User();
-        // $user->truncateTables();
-        // $role = new \Role();
-        // $role->addUserRoles();
-        // $rights = new \Rights();
-        // $rights->addRights();
-        // $user->addUser($userParameters, 'test.png');
-    }*/
+        /*$user = new \KC\Repository\User();
+        //$user->truncateTables();
+        $role = new \KC\Repository\Role();
+        $role->addUserRoles();
+        $rights = new \KC\Repository\Rights();
+        $rights->addRights();
+        $user->addUser($userParameters, 'test.png');
+        //die('Hello');*/
+    }
 }

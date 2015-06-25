@@ -3,14 +3,20 @@
 class fixtures
 {
     protected $entityManager = '';
-
-    public function __construct($entityManager)
+    protected $entityManagerUser = '';
+    public function __construct($entityManager, $entityManagerUser = '')
     {
         $this->entityManager = $entityManager;
+        $this->entityManagerUser = $entityManager;
+        if (!empty($entityManagerUser)) {
+            $this->entityManagerUser = $entityManagerUser;
+        }
     }
 
     public function execute()
     {
+        //$user = new \KC\Repository\User();
+        //$user->truncateTables();
         $locale = new \Core\Domain\Entity\LocaleSettings();
         $locale->locale = 'nl_NL';
         $locale->timezone = 'Europe/Amsterdam';
@@ -24,8 +30,8 @@ class fixtures
         $image->deleted = 0;
         $image->created_at = new \DateTime('now');
         $image->updated_at = new \DateTime('now');
-        $this->entityManager->persist($image);
-        $this->entityManager->flush();
+        $this->entityManagerUser->persist($image);
+        $this->entityManagerUser->flush();
 
         $role = new \Core\Domain\Entity\User\Role();
         $role->id = '4';
@@ -33,9 +39,8 @@ class fixtures
         $role->deleted = 0;
         $role->created_at = new \DateTime('now');
         $role->updated_at = new \DateTime('now');
-        $this->entityManager->persist($role);
-        $this->entityManager->flush();
-
+        $this->entityManagerUser->persist($role);
+        $this->entityManagerUser->flush();
         $user = new \Core\Domain\Entity\User\User();
         $user->firstname = 'test';
         $user->lastname = 'user';
@@ -52,8 +57,8 @@ class fixtures
         $user->lastLogIn = new \DateTime('now');
         $user->created_at = new \DateTime('now');
         $user->updated_at = new \DateTime('now');
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+        $this->entityManagerUser->persist($user);
+        $this->entityManagerUser->flush();
 
         $ipaddress = new \Core\Domain\Entity\User\IpAddresses();
         $ipaddress->ipaddress = '192.168.56.1';
@@ -61,8 +66,8 @@ class fixtures
         $ipaddress->deleted = 0;
         $ipaddress->created_at = new \DateTime('now');
         $ipaddress->updated_at = new \DateTime('now');
-        $this->entityManager->persist($ipaddress);
-        $this->entityManager->flush();
+        $this->entityManagerUser->persist($ipaddress);
+        $this->entityManagerUser->flush();
 
         for ($i=1; $i < 5; $i++) {
             $category = new \Core\Domain\Entity\Category();
@@ -123,6 +128,10 @@ class fixtures
             $shop->showSimliarShops = 0;
             $shop->showChains = 0;
             $shop->strictConfirmation = 0;
+            $shop->screenshotId = 1;
+            $shop->showcustomtext = 'test';
+            $shop->customtext = 'test';
+            $shop->customtextposition = '1';
             $this->entityManager->persist($shop);
             $this->entityManager->flush();
         }
@@ -155,6 +164,10 @@ class fixtures
             $shop->showSimliarShops = 0;
             $shop->showChains = 0;
             $shop->strictConfirmation = 0;
+            $shop->screenshotId = 1;
+            $shop->showcustomtext = 'test';
+            $shop->customtext = 'test';
+            $shop->customtextposition = '1';
             $this->entityManager->persist($shop);
             $this->entityManager->flush();
         }
@@ -239,13 +252,13 @@ class fixtures
         // $this->entityManager->persist($offersTile);
         // $this->entityManager->flush();
 
-        $offerTiles = new \Core\Domain\Entity\RefOfferCategory();
+        /*$offerTiles = new \Core\Domain\Entity\RefOfferCategory();
         $offerTiles->offers = $offer;
-        $offerTiles->categories = $this->entityManager->find('\Core\Domain\Entity\Category', 1);
+        $offerTiles->categories = $this->entityManager->find('\Core\Domain\Entity\Category', 45);
         $offerTiles->deleted = 0;
         $offerTiles->created_at = new \DateTime('now');
         $offerTiles->updated_at = new \DateTime('now');
         $this->entityManager->persist($offerTiles);
-        $this->entityManager->flush();
+        $this->entityManager->flush();*/
     }
 }
