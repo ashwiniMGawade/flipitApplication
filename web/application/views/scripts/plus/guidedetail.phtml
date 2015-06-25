@@ -1,5 +1,10 @@
 <?php
 $this->partial('offer/_jsFileForOfferPartial.phtml');
+?>
+<script type="text/javascript">
+    var domainName = "<?php echo HTTP_PATH; ?>";
+</script>
+<?php
 $articleDetails = $this->articleDetails;
 $userDetails = $this->userDetails;
 $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/". $userDetails['slug'];
