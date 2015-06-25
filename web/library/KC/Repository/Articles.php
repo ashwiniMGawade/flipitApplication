@@ -455,7 +455,7 @@ class Articles extends \Core\Domain\Entity\Articles
                     $relatedcategories = new \Core\Domain\Entity\RefArticleCategory();
                     $relatedcategories->articles = $entityManagerLocale->find('\Core\Domain\Entity\Articles', $articleId);
                     $relatedcategories->articlecategory = $entityManagerLocale->find(
-                        '\Core\Domain\Entity\Articlecategory',
+                        '\Core\Domain\Entity\ArticleCategory',
                         $relatedid
                     );
                     $relatedcategories->created_at = new \DateTime('now');
@@ -660,7 +660,7 @@ class Articles extends \Core\Domain\Entity\Articles
                     $relatedcategories = new \Core\Domain\Entity\RefArticleCategory();
                     $relatedcategories->articles = $entityManagerLocale->find('\Core\Domain\Entity\Articles', $params['id']);
                     $relatedcategories->articlecategory = $entityManagerLocale->find(
-                        '\Core\Domain\Entity\Articlecategory',
+                        '\Core\Domain\Entity\ArticleCategory',
                         $relatedid
                     );
                     $relatedcategories->created_at = new \DateTime('now');
