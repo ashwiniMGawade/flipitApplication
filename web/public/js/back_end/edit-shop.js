@@ -103,9 +103,6 @@ $(document).ready(init);
 
 function init()
 {
-	if ($('#reasontitle1').val() == '' &&  $('#reasontitle2').val() == '' ) {
-		$('#buyReasons').hide();
-	}
 
 	if ($('#reasons3').css('display') == 'block') {
 		$('#addreason1').hide();
