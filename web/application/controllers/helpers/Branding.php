@@ -106,6 +106,14 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
         $defaultStyles['store_sub_title']['css-property']               = 'color';
         $defaultStyles['store_sub_title']['value']                      = '#878a8d';
 
+        $defaultStyles['store_coupons_used']['css-selector']            = '.couponUsed';
+        $defaultStyles['store_coupons_used']['css-property']            = 'color';
+        $defaultStyles['store_coupons_used']['value']                   = '#949597';
+
+        $defaultStyles['store_total_coupons']['css-selector']          = '.couponsCount';
+        $defaultStyles['store_total_coupons']['css-property']           = 'color';
+        $defaultStyles['store_total_coupons']['value']                  = '#949597';
+
         $defaultStyles['newsletter_background_color']['css-selector']   = '.section .block-form .holder';
         $defaultStyles['newsletter_background_color']['css-property']   = 'background-color';
         $defaultStyles['newsletter_background_color']['value']          = '#f6f6f6';
