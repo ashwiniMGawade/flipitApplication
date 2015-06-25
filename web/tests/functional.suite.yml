@@ -6,7 +6,14 @@
 
 class_name: FunctionalTester
 modules:
-    enabled: [ZF1, Filesystem, FunctionalHelper, PhpBrowser]
+    enabled: [ZF1, Filesystem, FunctionalHelper, PhpBrowser, Db]
     config:
         PhpBrowser:
             url: 'http://dev.kortingscode.nl'
+        Db:
+            user: 'root'
+            password: ''
+            dsn: 'mysql:host=localhost;dbname=testdb'
+            dump: 'tests/_data/dump.sql'
+            populate: true
+            cleanup: false

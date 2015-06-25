@@ -21,7 +21,6 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        echo Core\Persistence\Database\Service\DatabaseConnection::getDsn();die;
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();

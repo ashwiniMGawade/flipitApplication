@@ -12,17 +12,19 @@ class BootstrapDoctrineConnectionFunctions
         $application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
         $frontControllerObject = $application->getOption('resources');
         $config = self::setMemcachedAndProxyClasses($frontControllerObject);
+        $userDSN = Core\Persistence\Database\Service\DatabaseConnection::getDsn('imbull');
         if (APPLICATION_ENV == 'testing') {
             if (APPLICATION_ENV_FUNCTIONAL == 'testing_functional') {
-                $emUser = EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);
+                $emUser = EntityManager::create(self::getDatabaseCredentials($userDSN), $config);
             } else {
                 $emUser = \Codeception\Module\Doctrine2::$em;
             }
         } else {
-            $emUser = EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);
+            $emUser = EntityManager::create(self::getDatabaseCredentials($userDSN), $config);
         }
         $localSiteDbConnection = strtolower(self::getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData));
-        self::setEntityManagerForlocale($doctrineOptions[$localSiteDbConnection]['dsn'], $config);
+        $localeDSN = Core\Persistence\Database\Service\DatabaseConnection::getDsn($localSiteDbConnection);
+        self::setEntityManagerForlocale($localeDSN, $config);
         Zend_Registry::set('emUser', $emUser);
         BootstrapConstantsFunctions::constantsForLocaleAndTimezoneSetting();
         self::setDefaultTimezone();

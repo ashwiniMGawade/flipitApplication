@@ -15,7 +15,7 @@ class helloworldCest
     public function helloworldTest(FunctionalTester $I)
     {
         //$I->initializeDb('Db', $I->flipitTestDb());
-        $I->amOnPage('http://dev.kortingscode.nl/');
+        $I->amOnPage('http://dev.kortingscode.nl');
         $I->see('op');
     }
 }
