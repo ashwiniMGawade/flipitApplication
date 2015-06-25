@@ -7,11 +7,11 @@ class AdminSteps extends \FunctionalTester
     {
         $config = \Codeception\Configuration::config();
         $I = $this;
-        $I->initializeDb('Db', $I->flipitTestUserDb());
+        //$I->initializeDb('Db', $I->flipitTestUserDb());
         $this->addUser();
         $I->amOnPage(\LoginPage::$URL);
         $I->fillField(\LoginPage::$usernameField, 'test@flipit.com');
-        $I->fillField(\LoginPage::$passwordField, 'Mind@123');
+        $I->fillField(\LoginPage::$passwordField, 'password');
         $I->click(\LoginPage::$formSubmitButton);
     }
 
@@ -27,8 +27,8 @@ class AdminSteps extends \FunctionalTester
             'lastName' => 'user',
             'email' => 'test@flipit.com',
             'password' => 'Mind@123',
-            'status' => '1',
-            'role' => '1',
+            'status' => 1,
+            'role' => 1,
             'slug' => 'test-user',
             'imageName' => 'test.png',
             'locale' => '',

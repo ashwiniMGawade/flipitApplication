@@ -34,18 +34,19 @@ class fixtures
         $this->entityManagerUser->flush();
 
         $role = new \Core\Domain\Entity\User\Role();
-        $role->id = '4';
+        $role->id = 4;
         $role->name = 'test';
         $role->deleted = 0;
         $role->created_at = new \DateTime('now');
         $role->updated_at = new \DateTime('now');
         $this->entityManagerUser->persist($role);
         $this->entityManagerUser->flush();
+
         $user = new \Core\Domain\Entity\User\User();
-        $user->firstname = 'test';
-        $user->lastname = 'user';
-        $user->email = 'test@flipit.com';
-        $user->password = md5('password');
+        $user->firstName = 'test';
+        $user->lastName = 'user';
+        $user->email = 'test1@flipit.com';
+        $user->password = md5('Mind@123');
         $user->status = 1;
         $user->roleid = '4';
         $user->slug = 'test-user';
@@ -53,11 +54,30 @@ class fixtures
         $user->deleted = 0;
         $user->addtosearch = 0;
         $user->profileimage = $image ;
+        $user->passwordChangeTime = new \DateTime('2015-09-17');
         $user->currentLogIn = new \DateTime('now');
         $user->lastLogIn = new \DateTime('now');
         $user->created_at = new \DateTime('now');
         $user->updated_at = new \DateTime('now');
         $this->entityManagerUser->persist($user);
+        $this->entityManagerUser->flush();
+
+        $w = new \Core\Domain\Entity\User\Website();
+        $w->name = 'kortingscode.nl';
+        $w->url = 'http://www.kortingscode.nl';
+        $w->status = 'online';
+        $w->created_at = new \DateTime('now');
+        $w->updated_at = new \DateTime('now');
+        $w->deleted = 0;
+        $this->entityManagerUser->persist($w);
+        $this->entityManagerUser->flush();
+
+        $website = new \Core\Domain\Entity\User\refUserWebsite();
+        $website->created_at = new \DateTime('now');
+        $website->updated_at = new \DateTime('now');
+        $website->refUsersWebsite = $this->entityManagerUser->find('\Core\Domain\Entity\User\Website', 39);
+        $website->websiteUsers = $this->entityManagerUser->find('\Core\Domain\Entity\User\User', 354);
+        $this->entityManagerUser->persist($website);
         $this->entityManagerUser->flush();
 
         $ipaddress = new \Core\Domain\Entity\User\IpAddresses();
