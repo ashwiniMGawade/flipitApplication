@@ -2,6 +2,11 @@
 $this->minifyHeadScript()->appendFile("/public/js/front_end/home.js");
 $this->minifyHeadScript()->appendFile("/public/js/front_end/search.js");
 $this->partial('offer/_jsFileForOfferPartial.phtml');
+?>
+<script type="text/javascript">
+    var domainName = "<?php echo HTTP_PATH; ?>";
+</script>
+<?php
 $homePageTopNewOffersCategoriesAndSpecialGuidesData = array(
     'topOffers'=>$this->topOffers,
     'newOffers'=>$this->newOffers,
