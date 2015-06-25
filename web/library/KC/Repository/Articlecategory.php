@@ -1,7 +1,7 @@
 <?php
 namespace KC\Repository;
 
-class Articlecategory extends \Core\Domain\Entity\Articlecategory
+class ArticleCategory extends \Core\Domain\Entity\ArticleCategory
 {
     ####################### Refactored ##############################
 
@@ -16,7 +16,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->delete('\Core\Domain\Entity\Articlecategory', 'rf')
+            ->delete('\Core\Domain\Entity\ArticleCategory', 'rf')
             ->getQuery()
             ->execute();
     }
@@ -34,7 +34,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('ac.permalink,a.permalink')
-            ->from('\Core\Domain\Entity\Articlecategory', 'ac')
+            ->from('\Core\Domain\Entity\ArticleCategory', 'ac')
              ->leftJoin("ac.articles", "a")
             ->where("ac.id=". $id);
         $getRouteLink = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -57,7 +57,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
     public function addcategory($params)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $artCategory = new \Core\Domain\Entity\Articlecategory();
+        $artCategory = new \Core\Domain\Entity\ArticleCategory();
         $artCategory->name = strtolower(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['categoryName']));
         $artCategory->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['permaLink']);
         $artCategory->metatitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['metaTitle']);
@@ -96,7 +96,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
             foreach ($params['selectedCategoryies'] as $relatedCategory) {
                 $refRelatedCategory = new \Core\Domain\Entity\RefArticlecategoryRelatedcategory();
                 $refRelatedCategory->articlecategory = $entityManagerLocale->find(
-                    '\Core\Domain\Entity\Articlecategory',
+                    '\Core\Domain\Entity\ArticleCategory',
                     $categoryId
                 );
                 $refRelatedCategory->category = $entityManagerLocale->find('\Core\Domain\Entity\Category', $relatedCategory);
@@ -226,7 +226,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-        ->from('\Core\Domain\Entity\Articlecategory', 'cat')
+        ->from('\Core\Domain\Entity\ArticleCategory', 'cat')
         ->where('cat.deleted = 0')
         ->andWhere($queryBuilder->expr()->like("cat.name", $queryBuilder->expr()->literal($srh.'%')));
         $request  = \DataTable_Helper::createSearchRequest(
@@ -247,7 +247,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
-        ->from('\Core\Domain\Entity\Articlecategory', 'cat')
+        ->from('\Core\Domain\Entity\ArticleCategory', 'cat')
         ->where('cat.deleted = 0');
         $request  = \DataTable_Helper::createSearchRequest(
             array(),
@@ -268,7 +268,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('c.name as name')
-            ->from('\Core\Domain\Entity\Articlecategory', 'c')
+            ->from('\Core\Domain\Entity\ArticleCategory', 'c')
             ->where('c.deleted = 0')
             ->andWhere($queryBuilder->expr()->like('c.name', $queryBuilder->expr()->literal($keyword.'%')))
             ->orderBy("c.name", "ASC")
@@ -283,7 +283,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
         if ($type == 'post') {
 
             $entityManagerLocale = \Zend_Registry::get('emLocale');
-            $edit = $entityManagerLocale->find('\Core\Domain\Entity\Articlecategory', $params['id']);
+            $edit = $entityManagerLocale->find('\Core\Domain\Entity\ArticleCategory', $params['id']);
 
             $edit->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['categoryName']);
             $edit->permalink =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['permaLink']);
@@ -329,7 +329,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
             
             $queryBuilder = $entityManagerLocale->createQueryBuilder();
             $query = $queryBuilder->select('a')
-                ->from('\Core\Domain\Entity\Articlecategory', 'a')
+                ->from('\Core\Domain\Entity\ArticleCategory', 'a')
                 ->where('a.id ='.$edit->id);
             $getPage = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             if (!empty($getPage[0]['permalink'])) {
@@ -363,7 +363,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
                     if (sizeof($data) == 0) {
                         $refRelatedCategory = new \Core\Domain\Entity\RefArticlecategoryRelatedcategory();
                         $refRelatedCategory->articlecategory = $entityManagerLocale->find(
-                            '\Core\Domain\Entity\Articlecategory',
+                            '\Core\Domain\Entity\ArticleCategory',
                             $params['id']
                         );
                         $refRelatedCategory->category = $entityManagerLocale->find('\Core\Domain\Entity\Category', $relatedCategory);
@@ -395,7 +395,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
         } else {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->select('artcat, icon, related, articlecategory')
-                ->from('\Core\Domain\Entity\Articlecategory', 'artcat')
+                ->from('\Core\Domain\Entity\ArticleCategory', 'artcat')
                 ->leftJoin('artcat.ArtCatIcon', "icon")
                 ->leftJoin('artcat.refArticlecategoryRelatedcategory', 'related')
                 ->leftJoin('related.category', 'articlecategory')
@@ -414,7 +414,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
                     ->getQuery()->execute();
 
                 $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $query = $queryBuilder->delete('\Core\Domain\Entity\Articlecategory', 'rf')
+                $query = $queryBuilder->delete('\Core\Domain\Entity\ArticleCategory', 'rf')
                     ->where("rf.id=" .$id)
                     ->getQuery()->execute();
         } else {
@@ -444,7 +444,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('cat.id,cat.name,cat.permalink,cat.metatitle')
-            ->from('\Core\Domain\Entity\Articlecategory', 'cat')
+            ->from('\Core\Domain\Entity\ArticleCategory', 'cat')
             ->where("cat.deleted= 0")
             ->orderBy("cat.id", "DESC");
         $categoryList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -456,7 +456,7 @@ class Articlecategory extends \Core\Domain\Entity\Articlecategory
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('c.name, c.metatitle,c.permalink, c.metadescription,c.description, ai.path, ai.name')
-            ->from('\Core\Domain\Entity\Articlecategory', 'c')
+            ->from('\Core\Domain\Entity\ArticleCategory', 'c')
             ->leftJoin("c.ArtCatIcon", "ai")
             ->where("c.deleted=0")
             ->andWhere("c.permaLink = '".$catid."'");

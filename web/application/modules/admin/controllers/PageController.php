@@ -93,7 +93,7 @@ class Admin_PageController extends Zend_Controller_Action
         $this->view->widgetList = KC\Repository\Widget::getUserDefinedWidgetList();
         $this->view->widgetListUserDefined = KC\Repository\Widget::getUserDefinedwidgetList();
 
-        $artcatg = KC\Repository\Articlecategory:: getartCategories();
+        $artcatg = KC\Repository\ArticleCategory:: getartCategories();
         $this->view->artcategory = $artcatg['aaData'];
 
         if (\Auth_StaffAdapter::hasIdentity()) {
