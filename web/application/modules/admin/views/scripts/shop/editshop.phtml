@@ -44,6 +44,12 @@ echo $this->headTitle()->append('Edit Shop');?>
                 <?php 
                 $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
                 $host = $httpScheme.'.kortingscode.nl';
+                if (isset($_COOKIE['site_name']))
+                {
+                  $_COOKIE['site_name'] = $_COOKIE['site_name'];
+                } else {
+                  $_COOKIE['site_name'] = 'kortingscode.nl';
+                }
                 if ($_COOKIE['site_name'] != 'kortingscode.nl') 
                 {
                     $host = $httpScheme.'.flipit.com/admin';

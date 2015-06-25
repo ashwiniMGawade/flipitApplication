@@ -40,6 +40,16 @@ if (
                         <td><label for="<?php echo $item; ?>">Store sub title</label></td>
                         <td class="color_select"><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
                     </tr>
+                    <?php $item = 'store_coupons_used'; ?>
+                    <tr>
+                        <td><label for="<?php echo $item; ?>">Store Coupons Used</label></td>
+                        <td class="color_select"><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
+                    </tr>
+                    <?php $item = 'store_total_coupons'; ?>
+                    <tr>
+                        <td><label for="<?php echo $item; ?>">Store Total Coupons</label></td>
+                        <td class="color_select"><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
+                    </tr>
                     <?php $item = 'newsletter_background_color'; ?>
                     <tr>
                         <td><label for="<?php echo $item; ?>">Newsletter background</label></td>
