@@ -48,7 +48,7 @@ class fixtures
         $user->email = 'test1@flipit.com';
         $user->password = md5('Mind@123');
         $user->status = 1;
-        $user->roleid = '4';
+        $user->roleid = $role->__get('id');
         $user->slug = 'test-user';
         $user->mainText = 'test';
         $user->deleted = 0;
@@ -75,8 +75,8 @@ class fixtures
         $website = new \Core\Domain\Entity\User\refUserWebsite();
         $website->created_at = new \DateTime('now');
         $website->updated_at = new \DateTime('now');
-        $website->refUsersWebsite = $this->entityManagerUser->find('\Core\Domain\Entity\User\Website', 39);
-        $website->websiteUsers = $this->entityManagerUser->find('\Core\Domain\Entity\User\User', 354);
+        $website->refUsersWebsite = $this->entityManagerUser->find('\Core\Domain\Entity\User\Website', $w->__get('id'));
+        $website->websiteUsers = $this->entityManagerUser->find('\Core\Domain\Entity\User\User', $user->__get('id'));
         $this->entityManagerUser->persist($website);
         $this->entityManagerUser->flush();
 
