@@ -91,6 +91,10 @@ class OfferController extends Zend_Controller_Action
             'extended_'.\FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($extendedUrl).'_couponDetails',
             array('function' => '\KC\Repository\Offer::getCouponDetails', 'parameters' => array($extendedUrl))
         );
+        
+        if (count($couponDetails)== 0) {
+            throw new \Zend_Controller_Action_Exception('', 404);
+        }
         $shopList = $couponDetails[0]['shopOffers']['id'].'_list';
         $allShopDetailKey = 'offerDetails_'.$shopList;
         $shopInformation = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
@@ -114,9 +118,6 @@ class OfferController extends Zend_Controller_Action
             )
         );
 
-        if (count($couponDetails)== 0) {
-            throw new \Zend_Controller_Action_Exception('', 404);
-        }
 
         $topOfferFromStore = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'extendedTopOffer_of_'.$couponDetails[0]['shopOffers']['id'],
