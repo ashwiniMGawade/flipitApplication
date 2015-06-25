@@ -87,15 +87,14 @@ class Shop extends \Core\Domain\Entity\Shop
     {
         $similarShops = self::getSimilarShopsByShopId($shopId, $numberOfShops);
         if (empty($similarShops)) {
-            $similarShops = array();
-            return $similarShops;
+            $similarShops = self::getSimilarShopsBySimilarCategories($shopId, $numberOfShops);
         } else {
             if (count($similarShops) < $numberOfShops) {
                 $topCategoryShops = self::getSimilarShopsBySimilarCategories($shopId, $numberOfShops);
                 $similarShops = self::removeDuplicateShops($similarShops, $topCategoryShops, $numberOfShops);
             }
-            return array_slice($similarShops, 0, 10);
         }
+        return array_slice($similarShops, 0, 10);
     }
 
     public static function getSimilarShopsByShopId($shopId, $numberOfShops = 10)
@@ -114,11 +113,11 @@ class Shop extends \Core\Domain\Entity\Shop
             ->leftJoin('s.categoryshops', 'c')
             ->leftJoin('c.shop', 'cc');
         $similarShopsBySimilarCategories = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        $topCategoryShops = self::getTopCategorySimilarShops($similarShopsBySimilarCategories);
+        $topCategoryShops = self::getTopCategorySimilarShops($similarShopsBySimilarCategories, $numberOfShops);
         return $topCategoryShops;
     }
 
-    public static function getTopCategorySimilarShops($similarShopsBySimilarCategories)
+    public static function getTopCategorySimilarShops($similarShopsBySimilarCategories, $numberOfShops)
     {
         $topCategory = array_slice($similarShopsBySimilarCategories, 0, 1);
         $topCategoryId = $topCategory[0]['categoryId'];
@@ -131,7 +130,8 @@ class Shop extends \Core\Domain\Entity\Shop
             ->leftJoin('s.logo', 'img')
             ->where('c.id ='.$topCategoryId)
             ->andWhere('s.status = 1')
-            ->andWhere('s.deleted = 0');
+            ->andWhere('s.deleted = 0')
+            ->setMaxResults($numberOfShops);
         $relatedCategoryShops = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $relatedCategoryShops;
     }
