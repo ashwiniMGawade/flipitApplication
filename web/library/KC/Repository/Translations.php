@@ -64,11 +64,13 @@ class Translations extends \Core\Domain\Entity\Translations
 
     public function getExistingTranslation($translation)
     {
+        $translationKeyAfterRemovingSpecialCharacter =
+                \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($translation['translationKey']);
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('t')
         ->from('\Core\Domain\Entity\Translations', 't')
-        ->where("t.translationKey = '".$translation['translationKey']."'");
+        ->where("t.translationKey = '".$translationKeyAfterRemovingSpecialCharacter."'");
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }
