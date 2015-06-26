@@ -3,14 +3,14 @@ namespace FunctionalTester;
 
 class AdminSteps extends \FunctionalTester
 {
-    /*public function login()
+    public function login()
     {
-        $config = \Codeception\Configuration::config();
         $I = $this;
+        $config = \Codeception\Configuration::config();
         $this->addUser();
         $I->amOnPage(\LoginPage::$URL);
         $I->fillField(\LoginPage::$usernameField, 'test@flipit.com');
-        $I->fillField(\LoginPage::$passwordField, 'Mind@123');
+        $I->fillField(\LoginPage::$passwordField, 'password');
         $I->click(\LoginPage::$formSubmitButton);
     }
 
@@ -26,8 +26,8 @@ class AdminSteps extends \FunctionalTester
             'lastName' => 'user',
             'email' => 'test@flipit.com',
             'password' => 'Mind@123',
-            'status' => '1',
-            'role' => '1',
+            'status' => 1,
+            'role' => 1,
             'slug' => 'test-user',
             'imageName' => 'test.png',
             'locale' => '',
@@ -40,12 +40,13 @@ class AdminSteps extends \FunctionalTester
             'editortext' => '',
             'popularKortingscode' => '0'
         );
-        // $user = new \User();
-        // $user->truncateTables();
-        // $role = new \Role();
-        // $role->addUserRoles();
-        // $rights = new \Rights();
-        // $rights->addRights();
-        // $user->addUser($userParameters, 'test.png');
-    }*/
+        /*$user = new \KC\Repository\User();
+        //$user->truncateTables();
+        $role = new \KC\Repository\Role();
+        $role->addUserRoles();
+        $rights = new \KC\Repository\Rights();
+        $rights->addRights();
+        $user->addUser($userParameters, 'test.png');
+        //die('Hello');*/
+    }
 }

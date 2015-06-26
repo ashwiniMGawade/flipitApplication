@@ -1,5 +1,5 @@
 <?php
-/*namespace admin;
+namespace admin;
 
 use \FunctionalTester;
 
@@ -68,4 +68,4 @@ class localeSettingsCest
         );
         $test = $I->grabFromRepository('\Core\Domain\Entity\User\Website', 'url', array('name' => 'test'));
     }
-}*/
+}

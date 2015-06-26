@@ -6,7 +6,15 @@
 
 class_name: FunctionalTester
 modules:
-    enabled: [ZF1, Filesystem, FunctionalHelper, PhpBrowser]
+    enabled: [ZF1, Filesystem, FunctionalHelper, PhpBrowser, Db]
     config:
         PhpBrowser:
-            url: 'http://dev.kortingscode.nl'
+            url: 'http://dev.flipit.com/'
+        Db:
+            user: 'root'
+            password: 'root'
+            dsn: 'mysql:host=localhost;dbname=flipit_test'
+            dump: 'tests/_data/flipit_test.sql'
+            populate: true
+            cleanup: false
+            repopulate: false

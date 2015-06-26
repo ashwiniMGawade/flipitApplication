@@ -1,5 +1,5 @@
 <?php
-/*namespace admin;
+namespace admin;
 use \FunctionalTester;
 
 class emailSettingsCest
@@ -40,4 +40,4 @@ class emailSettingsCest
         $I->fillField('#senderName', $senderName);
         $I->click('button[type=submit]');
     }
-}*/
+}
