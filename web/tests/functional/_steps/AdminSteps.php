@@ -5,9 +5,8 @@ class AdminSteps extends \FunctionalTester
 {
     public function login()
     {
-        $config = \Codeception\Configuration::config();
         $I = $this;
-        //$I->initializeDb('Db', $I->flipitTestUserDb());
+        $config = \Codeception\Configuration::config();
         $this->addUser();
         $I->amOnPage(\LoginPage::$URL);
         $I->fillField(\LoginPage::$usernameField, 'test@flipit.com');

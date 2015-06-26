@@ -15,8 +15,6 @@ class fixtures
 
     public function execute()
     {
-        //$user = new \KC\Repository\User();
-        //$user->truncateTables();
         $locale = new \Core\Domain\Entity\LocaleSettings();
         $locale->locale = 'nl_NL';
         $locale->timezone = 'Europe/Amsterdam';
@@ -34,8 +32,7 @@ class fixtures
         $this->entityManagerUser->flush();
 
         $role = new \Core\Domain\Entity\User\Role();
-        $role->id = 4;
-        $role->name = 'test';
+        $role->name = 'administration';
         $role->deleted = 0;
         $role->created_at = new \DateTime('now');
         $role->updated_at = new \DateTime('now');
@@ -45,10 +42,10 @@ class fixtures
         $user = new \Core\Domain\Entity\User\User();
         $user->firstName = 'test';
         $user->lastName = 'user';
-        $user->email = 'test1@flipit.com';
-        $user->password = md5('Mind@123');
+        $user->email = 'test@flipit.com';
+        $user->password = md5('password');
         $user->status = 1;
-        $user->roleid = $role->__get('id');
+        $user->users = $this->entityManagerUser->find('\Core\Domain\Entity\User\Role', $role->__get('id'));
         $user->slug = 'test-user';
         $user->mainText = 'test';
         $user->deleted = 0;
@@ -60,6 +57,16 @@ class fixtures
         $user->created_at = new \DateTime('now');
         $user->updated_at = new \DateTime('now');
         $this->entityManagerUser->persist($user);
+        $this->entityManagerUser->flush();
+
+        $rights = new \Core\Domain\Entity\User\Rights();
+        $rights->name = 'administration';
+        $rights->rights = 1;
+        $rights->description = 'test desc';
+        $rights->role = $this->entityManagerUser->find('\Core\Domain\Entity\User\Role', $role->__get('id'));
+        $rights->created_at = new \DateTime('now');
+        $rights->updated_at = new \DateTime('now');
+        $this->entityManagerUser->persist($rights);
         $this->entityManagerUser->flush();
 
         $w = new \Core\Domain\Entity\User\Website();

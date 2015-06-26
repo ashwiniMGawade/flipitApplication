@@ -23,18 +23,32 @@ class FunctionalHelper extends \Codeception\Module
     public function flipitTestDb()
     {
         return array(
+            'user' => 'root',
+            'password' => 'root',
             'dsn' => 'mysql:host=localhost;dbname=flipit_test',
             'dump' => '/tests/_data/flipit_test.sql',
-            'cleanup' => true,
+            'populate' => true,
+            'cleanup' => false,
+            'repopulate' => false,
         );
     }
 
     public function flipitTestUserDb()
     {
         return array(
+            'user' => 'root',
+            'password' => 'root',
             'dsn' => 'mysql:host=localhost;dbname=flipit_test_user',
             'dump' => '/tests/_data/flipit_test_user.sql',
+            'populate' => true,
             'cleanup' => true,
+            'repopulate' => false,
         );
+    }
+
+    public function _afterSuite()
+    {
+        $this->initializeDb('Db', $this->flipitTestUserDb());
+        $this->initializeDb('Db', $this->flipitTestDb());
     }
 }
