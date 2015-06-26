@@ -76,7 +76,10 @@ function affilateValidation(){
 					addNetworkText : {
 						 required : true,
 						 minlength : 2
-						}
+						},
+					subId : {
+                        required : true
+                    }
 				},
 				
 				messages : {

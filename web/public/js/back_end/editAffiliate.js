@@ -180,6 +180,35 @@ $.validator.setDefaults({
 
 });
 
+function editExtendedSubid()
+{
+    bootbox.confirm(__("Are you sure you want to edit Extended subid of this network?"),__('No'),__('Yes'),function(r)
+    {
+        if(r){
+            $("input[name=extendedSubid]").data('prev-data' , $("input[name=extendedSubid]").val());
+            $("input[name=extendedSubid]").removeAttr('disabled');
+            $(".warningContainer").removeClass('hide');
+            $(".extendedSubidEdit-lnk").hide();
+            $(".extendedSubidCancel-lnk").show();
+        }else {
+            $("input[name=extendedSubid]").attr('disabled' ,'disabled');
+            $(".warningContainer").addClass('hide');
+        }
+      });
+    
+}
+
+function cancelEditExtendedSubid()
+{
+    $("input[name=extendedSubid]").parent('div').removeClass('success')
+    .prev("div").addClass('focus').removeClass('success').find('span.help-inline').html('');
+    $("input[name=extendedSubid]").val( $("input[name=extendedSubid]").data('prev-data'));
+    $(".extendedSubidEdit-lnk").show();
+    $(".extendedSubidCancel-lnk").hide();
+    $("input[name=extendedSubid]").attr('disabled' ,'disabled');
+    $(".warningContainer").addClass('hide');
+}
+
 /**
  * delete network while edit
  * @author blal

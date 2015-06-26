@@ -67,6 +67,21 @@
                                 </div>                        
                             </div>
                         </div>
+                    <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                            <label><strong><?php echo $this->translate('Extended Network Subid'); ?></strong></label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-left">
+                                    <a class="eidt-subid-lnk extendedSubidEdit-lnk" href="javascript:void(0);" onclick="editExtendedSubid();" ><?php echo $this->translate('Edit');?></a>
+                                    <a class="eidt-subid-lnk extendedSubidCancel-lnk" style="display:none;" href="javascript:void(0);" onclick="cancelEditExtendedSubid();" ><?php echo $this->translate('Cancel edit');?></a>
+                                    </div>
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                               <div class="mainpage-content-right-inner-right-small">
+                                <input type="text" disabled="disabled" class="span3" placeholder="<?php echo $this->translate('Extended Subid');?>" name="extendedSubid" value="<?php echo $this->editNetwork[0]['extendedSubid']; ?>">
+                                </div>                        
+                            </div>
+                        </div>
                     </div>
                     <div class="mainpage-content">
                     	<div class="mainpage-content-line">
