@@ -21,7 +21,7 @@ use \Doctrine\Common\Annotations\AnnotationReader;
 use \Doctrine\Common\Annotations\AnnotationRegistry;
 use \Doctrine\ORM\Tools\SchemaTool;
 
-$paths = array(APPLICATION_PATH . '/../library/KC/Entity');
+$paths = array(APPLICATION_PATH . '/../../core/Domain/Entity');
 $isDevMode = true;
 $config = \Doctrine\ORM\Tools\Setup::createConfiguration($isDevMode);
 $driver = new AnnotationDriver(new AnnotationReader(), $paths);

@@ -47,12 +47,15 @@ class Role extends \Core\Domain\Entity\User\Role
 
     public function addUserRoles()
     {
-        $roles = \Core\Domain\Entity\User\Role::createUserPermission(1);
+        $roles = self::createUserPermission(1);
         $entityManagerUser  = \Zend_Registry::get('emUser');
         foreach ($roles as $role) {
             $userRole = new \Core\Domain\Entity\User\Role();
             $userRole->name = $role;
-            $entityManagerUser->persist($roles);
+            $userRole->deleted = 0;
+            $userRole->created_at = new \DateTime('now');
+            $userRole->updated_at = new \DateTime('now');
+            $entityManagerUser->persist($userRole);
             $entityManagerUser->flush();
         }
         return true;

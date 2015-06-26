@@ -3,10 +3,14 @@
 class fixtures
 {
     protected $entityManager = '';
-
-    public function __construct($entityManager)
+    protected $entityManagerUser = '';
+    public function __construct($entityManager, $entityManagerUser = '')
     {
         $this->entityManager = $entityManager;
+        $this->entityManagerUser = $entityManager;
+        if (!empty($entityManagerUser)) {
+            $this->entityManagerUser = $entityManagerUser;
+        }
     }
 
     public function execute()
@@ -24,36 +28,64 @@ class fixtures
         $image->deleted = 0;
         $image->created_at = new \DateTime('now');
         $image->updated_at = new \DateTime('now');
-        $this->entityManager->persist($image);
-        $this->entityManager->flush();
+        $this->entityManagerUser->persist($image);
+        $this->entityManagerUser->flush();
 
         $role = new \Core\Domain\Entity\User\Role();
-        $role->id = '4';
-        $role->name = 'test';
+        $role->name = 'administration';
         $role->deleted = 0;
         $role->created_at = new \DateTime('now');
         $role->updated_at = new \DateTime('now');
-        $this->entityManager->persist($role);
-        $this->entityManager->flush();
+        $this->entityManagerUser->persist($role);
+        $this->entityManagerUser->flush();
 
         $user = new \Core\Domain\Entity\User\User();
-        $user->firstname = 'test';
-        $user->lastname = 'user';
+        $user->firstName = 'test';
+        $user->lastName = 'user';
         $user->email = 'test@flipit.com';
         $user->password = md5('password');
         $user->status = 1;
-        $user->roleid = '4';
+        $user->users = $this->entityManagerUser->find('\Core\Domain\Entity\User\Role', $role->__get('id'));
         $user->slug = 'test-user';
         $user->mainText = 'test';
         $user->deleted = 0;
         $user->addtosearch = 0;
         $user->profileimage = $image ;
+        $user->passwordChangeTime = new \DateTime('2015-09-17');
         $user->currentLogIn = new \DateTime('now');
         $user->lastLogIn = new \DateTime('now');
         $user->created_at = new \DateTime('now');
         $user->updated_at = new \DateTime('now');
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+        $this->entityManagerUser->persist($user);
+        $this->entityManagerUser->flush();
+
+        $rights = new \Core\Domain\Entity\User\Rights();
+        $rights->name = 'administration';
+        $rights->rights = 1;
+        $rights->description = 'test desc';
+        $rights->role = $this->entityManagerUser->find('\Core\Domain\Entity\User\Role', $role->__get('id'));
+        $rights->created_at = new \DateTime('now');
+        $rights->updated_at = new \DateTime('now');
+        $this->entityManagerUser->persist($rights);
+        $this->entityManagerUser->flush();
+
+        $w = new \Core\Domain\Entity\User\Website();
+        $w->name = 'kortingscode.nl';
+        $w->url = 'http://www.kortingscode.nl';
+        $w->status = 'online';
+        $w->created_at = new \DateTime('now');
+        $w->updated_at = new \DateTime('now');
+        $w->deleted = 0;
+        $this->entityManagerUser->persist($w);
+        $this->entityManagerUser->flush();
+
+        $website = new \Core\Domain\Entity\User\refUserWebsite();
+        $website->created_at = new \DateTime('now');
+        $website->updated_at = new \DateTime('now');
+        $website->refUsersWebsite = $this->entityManagerUser->find('\Core\Domain\Entity\User\Website', $w->__get('id'));
+        $website->websiteUsers = $this->entityManagerUser->find('\Core\Domain\Entity\User\User', $user->__get('id'));
+        $this->entityManagerUser->persist($website);
+        $this->entityManagerUser->flush();
 
         $ipaddress = new \Core\Domain\Entity\User\IpAddresses();
         $ipaddress->ipaddress = '192.168.56.1';
@@ -61,8 +93,8 @@ class fixtures
         $ipaddress->deleted = 0;
         $ipaddress->created_at = new \DateTime('now');
         $ipaddress->updated_at = new \DateTime('now');
-        $this->entityManager->persist($ipaddress);
-        $this->entityManager->flush();
+        $this->entityManagerUser->persist($ipaddress);
+        $this->entityManagerUser->flush();
 
         for ($i=1; $i < 5; $i++) {
             $category = new \Core\Domain\Entity\Category();
@@ -123,6 +155,10 @@ class fixtures
             $shop->showSimliarShops = 0;
             $shop->showChains = 0;
             $shop->strictConfirmation = 0;
+            $shop->screenshotId = 1;
+            $shop->showcustomtext = 'test';
+            $shop->customtext = 'test';
+            $shop->customtextposition = '1';
             $this->entityManager->persist($shop);
             $this->entityManager->flush();
         }
@@ -155,6 +191,10 @@ class fixtures
             $shop->showSimliarShops = 0;
             $shop->showChains = 0;
             $shop->strictConfirmation = 0;
+            $shop->screenshotId = 1;
+            $shop->showcustomtext = 'test';
+            $shop->customtext = 'test';
+            $shop->customtextposition = '1';
             $this->entityManager->persist($shop);
             $this->entityManager->flush();
         }
@@ -239,13 +279,13 @@ class fixtures
         // $this->entityManager->persist($offersTile);
         // $this->entityManager->flush();
 
-        $offerTiles = new \Core\Domain\Entity\RefOfferCategory();
+        /*$offerTiles = new \Core\Domain\Entity\RefOfferCategory();
         $offerTiles->offers = $offer;
-        $offerTiles->categories = $this->entityManager->find('\Core\Domain\Entity\Category', 1);
+        $offerTiles->categories = $this->entityManager->find('\Core\Domain\Entity\Category', 45);
         $offerTiles->deleted = 0;
         $offerTiles->created_at = new \DateTime('now');
         $offerTiles->updated_at = new \DateTime('now');
         $this->entityManager->persist($offerTiles);
-        $this->entityManager->flush();
+        $this->entityManager->flush();*/
     }
 }
