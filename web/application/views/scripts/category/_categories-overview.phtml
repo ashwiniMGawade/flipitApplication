@@ -27,6 +27,8 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
     if(isset($categoryImage['path'])) { 
         $categoryImageSource = PUBLIC_PATH_CDN.$categoryImage['path']."".$categoryImage['name'];
     }
+    $imageHeight = !empty($categoryImage['height']) ? $categoryImage['height'] : '175';
+    $imageWidth = !empty($categoryImage['width']) ? $categoryImage['width'] : '175';
     ?>
     <article class="box <?php echo $featuredCategoryClass; ?>">
         <?php 
@@ -37,7 +39,7 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
         ?>
         <a title='<?php echo $categoryWithSpecialPage['name'];?>' href="<?php echo HTTP_PATH_LOCALE .  $permalink?>">
             <div class="image">
-                <img src ="<?php echo $categoryImageSource; ?>" alt="<?php echo $categoryWithSpecialPage['name'];?>" title="<?php echo $categoryWithSpecialPage['name'];?>" />
+                <img src ="<?php echo $categoryImageSource; ?>" alt="<?php echo $categoryWithSpecialPage['name'];?>" title="<?php echo $categoryWithSpecialPage['name'];?>" height="<?php echo $imageHeight; ?>" width="<?php echo $imageWidth; ?>" />
             </div>
             <div class="text-box">
                 <span class="num"><?php echo $categoryWithSpecialPage['totalCoupons']; ?></span>
