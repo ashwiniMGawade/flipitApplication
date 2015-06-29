@@ -1,6 +1,7 @@
 {
     "require": {
-        "slim/slim": "^2.6"
+        "slim/slim": "^2.6",
+        "codeception/codeception": "*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "2.0.*@dev"

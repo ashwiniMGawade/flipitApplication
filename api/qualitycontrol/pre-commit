@@ -30,12 +30,20 @@ done
 if [ "$FILES" != "" ]
 then
 	echo "Running Code Sniffer..."
-	$PROJECT/$FLIPIT_APPLICATION/$API/vendor/bin/phpcs --standard=PSR2 --standard=PSR4 --standard=ruleset.xml --encoding=utf-8  -n -p $FILES
+	$PROJECT/$FLIPIT_APPLICATION/$API/vendor/bin/phpcs --standard=$PROJECT/$FLIPIT_APPLICATION/$API/qualitycontrol/ruleset.xml --encoding=utf-8  -n -p $FILES
 	if [ $? != 0 ]
 	then
 		echo "Fix the error before commit."
 		exit 1
 	fi
+fi
+
+echo "Running Unit Tests..."
+$PROJECT/$FLIPIT_APPLICATION/$API/vendor/bin/codecept run unit
+if [ $? != 0 ]
+then
+	echo "Fix the error before commit."
+	exit 1
 fi
 
 exit $?
