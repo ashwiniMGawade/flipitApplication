@@ -448,6 +448,18 @@ $secret = base64_encode($code);
         </div> 
         <div id="offerOption" style = "display:none;">                  
             <div class="mainpage-content">
+                <div class="row-fluid">
+                        <div class="span2 mb10">
+                            <label><strong><?php echo $this->translate('Offer Position'); ?></strong></label>
+                        </div>
+                        <div class="span10">
+                            <div data-toggle="buttons-checkbox" class="btn-group">
+                                <input type="text" name="offerPosition" id="offerPosition" 
+                                    placeholder="<?php echo $this->translate('backend_offer position');?>" 
+                                    class="input-small mbot bbot ignore span3"/>
+                              </div>
+                        </div>
+                    </div>
                 <div class="row-fluid" id="visibiliyDiv">
                     <div class="span2 mb10">
                         <label><strong><?php echo $this->translate('Visibility'); ?></strong></label>
@@ -614,7 +626,7 @@ $secret = base64_encode($code);
                     </div>
                     <div class="span10">
                         <div data-toggle="buttons-checkbox" class="btn-group ">
-                            <input type="checkbox" name="exclusivecheckbox" id="exclusivecheckbox" 
+                            <input id='exclusivebtn' type="checkbox" name="exclusivecheckbox" id="exclusivecheckbox" 
                                 value="1" style="display:none;" />
                             <input type="checkbox" name="editorpickcheckbox" id="editorpickcheckbox" 
                                 value="2" style="display:none;"  />
