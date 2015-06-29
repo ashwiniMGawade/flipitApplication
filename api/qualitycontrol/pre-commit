@@ -46,12 +46,12 @@ then
 	fi
 fi
 
-#echo "Running Unit Tests..."
-#$PROJECT/$FLIPIT_APPLICATION/$API/vendor/bin/codecept run unit
-#if [ $? != 0 ]
-#then
-#	echo "Fix the error before commit."
-#	exit 1
-#fi
+echo "Running Unit Tests..."
+$PROJECT/$FLIPIT_APPLICATION/$API/vendor/bin/codecept run --config=$PROJECT/$FLIPIT_APPLICATION/$API/codeception.yml unit
+if [ $? != 0 ]
+then
+	echo "Fix the error before commit."
+	exit 1
+fi
 
 exit $?
