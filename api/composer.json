@@ -1,7 +1,8 @@
 {
     "require": {
         "slim/slim": "^2.6",
-        "codeception/codeception": "*"
+        "codeception/codeception": "*",
+        "codeception/c3": "2.*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "2.0.*@dev",
@@ -9,7 +10,11 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "bash qualitycontrol/setup.sh"
+            "bash qualitycontrol/setup.sh",
+            "Codeception\\c3\\Installer::copyC3ToRoot"
+        ],
+        "post-update-cmd": [
+            "Codeception\\c3\\Installer::copyC3ToRoot"
         ]
     },
     "config": {

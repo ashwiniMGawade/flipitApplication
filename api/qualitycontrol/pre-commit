@@ -54,4 +54,6 @@ then
 	exit 1
 fi
 
+#$PROJECT/$FLIPIT_APPLICATION/$API/vendor/bin/codecept run --config=$PROJECT/$FLIPIT_APPLICATION/$API/codeception.yml --coverage
+
 exit $?
