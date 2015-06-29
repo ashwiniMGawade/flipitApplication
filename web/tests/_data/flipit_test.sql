@@ -62,12 +62,13 @@ CREATE TABLE IF NOT EXISTS `affliate_network` (
   `status` tinyint(1) DEFAULT NULL,
   `replacewithid` bigint(20) DEFAULT NULL COMMENT 'FK to affliate_network.id , Defines a network is merged or not',
   `subId` text,
+  `extendedSubid` text,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `replacewithid_idx` (`replacewithid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=30 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -542,6 +543,8 @@ CREATE TABLE IF NOT EXISTS `image` (
   `type` varchar(10) DEFAULT NULL,
   `path` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
+  `width` integer(11) DEFAULT NULL,
+  `height` integer(11) DEFAULT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -786,7 +789,7 @@ CREATE TABLE IF NOT EXISTS `offer` (
   UNIQUE KEY `offerlogoid` (`offerlogoid`),
   KEY `shopid_idx` (`shopid`),
   KEY `offerlogoid_idx` (`offerlogoid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13117 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1351,7 +1354,7 @@ CREATE TABLE IF NOT EXISTS `shop` (
   KEY `logoid_idx` (`logoid`),
   KEY `affliatenetworkid_idx` (`affliatenetworkid`),
   KEY `howtousepageid_idx` (`howtousepageid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1113 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 

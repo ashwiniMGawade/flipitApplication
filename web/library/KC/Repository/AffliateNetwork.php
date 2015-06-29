@@ -37,7 +37,8 @@ class AffliateNetwork extends \Core\Domain\Entity\AffliateNetwork
             ->setQueryBuilder($networkList)
             ->add('number', 'a.id')
             ->add('text', 'a.name')
-            ->add('text', 'a.subId');
+            ->add('text', 'a.subId')
+            ->add('text', 'a.extendedSubid');
         $list = $builder->getTable()->getResponseArray();
         return $list;
     }

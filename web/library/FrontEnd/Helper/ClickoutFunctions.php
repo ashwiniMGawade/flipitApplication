@@ -11,7 +11,7 @@ class FrontEnd_Helper_ClickoutFunctions
     public $shopPermalink;
 
     public function __construct($offerId, $shopId)
-    {
+    {echo $offerId;die;
         if (isset($offerId)) {
             $this->offerId = $offerId;
             $shopInfo = \KC\Repository\Offer::getShopInfoByOfferId($this->offerId);

@@ -112,16 +112,8 @@ class fixtures
         $image->path = 'images/upload/shop/';
         $image->name = '1409026126_Jellyfish.jpg';
         $image->deleted = 0;
-        $image->created_at = new \DateTime('now');
-        $image->updated_at = new \DateTime('now');
-        $this->entityManager->persist($image);
-        $this->entityManager->flush();
-
-        $image = new \Core\Domain\Entity\Logo();
-        $image->ext = 'jpg';
-        $image->path = 'images/upload/shop/';
-        $image->name = '1409026126_Jellyfish.jpg';
-        $image->deleted = 0;
+        $image->width = '';
+        $image->height = '';
         $image->created_at = new \DateTime('now');
         $image->updated_at = new \DateTime('now');
         $this->entityManager->persist($image);
@@ -159,6 +151,7 @@ class fixtures
             $shop->showcustomtext = 'test';
             $shop->customtext = 'test';
             $shop->customtextposition = '1';
+            $shop->affliatenetwork = $this->entityManager->find('\Core\Domain\Entity\AffliateNetwork', 1);
             $this->entityManager->persist($shop);
             $this->entityManager->flush();
         }
@@ -272,6 +265,38 @@ class fixtures
         $offerTiles->created_at = new \DateTime('now');
         $offerTiles->updated_at = new \DateTime('now');
         $this->entityManager->persist($offerTiles);
+        $this->entityManager->flush();
+
+        $affiliateNetwork = new \Core\Domain\Entity\AffliateNetwork();
+        $affiliateNetwork->name = 'zanox';
+        $affiliateNetwork->status = 1;
+        $affiliateNetwork->deleted = 0;
+        $affiliateNetwork->subId = 'zpar0=[[A2ASUBID]]&zpar1=[[GOOGLEANALYTICSTRACKINCID]]';
+        $affiliateNetwork->extendedSubid = '1234';
+        $affiliateNetwork->affliate_networks = $this->entityManager->find('\Core\Domain\Entity\AffliateNetwork', 1);
+        $affiliateNetwork->affliatenetwork = $this->entityManager->find('\Core\Domain\Entity\Shop', 1);
+        $affiliateNetwork->created_at = new \DateTime('now');
+        $affiliateNetwork->updated_at = new \DateTime('now');
+        $this->entityManager->persist($affiliateNetwork);
+        $this->entityManager->flush();
+
+        $dashboard = new \Core\Domain\Entity\Dashboard();
+        $dashboard->message = 'zanox';
+        $dashboard->no_of_offers = 1;
+        $dashboard->no_of_shops = 0;
+        $dashboard->no_of_clickouts = 33;
+        $dashboard->no_of_subscribers = 21;
+        $dashboard->total_no_of_offers = 321;
+        $dashboard->total_no_of_shops = 2;
+        $dashboard->total_no_of_shops_online_code = 12;
+        $dashboard->total_no_of_shops_online_code_lastweek = 12;
+        $dashboard->total_no_members = 321;
+        $dashboard->total_no_of_shops_online_code_thisweek = 1;
+        $dashboard->money_shop_ratio = 10;
+        $dashboard->deleted = 0;
+        $dashboard->created_at = new \DateTime('now');
+        $dashboard->updated_at = new \DateTime('now');
+        $this->entityManager->persist($dashboard);
         $this->entityManager->flush();
 
         // $offersTile = $this->entityManager->find('\Core\Domain\Entity\Offer', 1);
