@@ -94,7 +94,6 @@ class FrontEnd_Helper_ClickoutFunctions
                 $stringPattern = isset($explodedNetworkSubid[0]) ? $explodedNetworkSubid[0] : '';
                 $subid = isset($explodedNetworkSubid[1]) ? $explodedNetworkSubid[1] : '';
             } else {
-                $subid = "&" . $network['affliatenetwork']['subId'];
                 $subid = "&" . $networkSubId;
             }
         }
