@@ -4,11 +4,15 @@
         "codeception/codeception": "*"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "2.0.*@dev"
+        "squizlabs/php_codesniffer": "2.0.*@dev",
+        "phpmd/phpmd" : "@stable"
     },
     "scripts": {
         "post-install-cmd": [
             "bash qualitycontrol/setup.sh"
         ]
+    },
+    "config": {
+        "bin-dir": "bin"
     }
 }
