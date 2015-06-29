@@ -1,20 +1,9 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env bash
  
-# borrowed from gitpro book http://git-scm.com/book/en/Customizing-Git-An-Example-Git-Enforced-Policy
-message_file = ARGV[0]
-message = File.read(message_file)
+COMMIT_REGEX='[A-Z][A-Z_0-9]+-[0-9]+'
+ERROR_MSG="Aborting commit. Your commit message is missing a JIRA Issue number"
  
-$regex = /^(?!#)(.*?)([A-Z0-9]+-\d+)/
- 
-if !$regex.match(message)
-  head = File.read("./.git/HEAD")
-  branch = $regex.match(head)
-  tag_exists = $regex.match(message)
-  if (branch && branch.length == 3 && !tag_exists)
-    File.open(message_file, "w") {|f| f.write(branch[2] + ": " + message) }
-    exit 0
-  end
- 
-  puts "[ERROR] Your message is missing JIRA issue tag"
-  exit 1
-end
+if ! grep -iqE "$COMMIT_REGEX" "$1"; then
+    echo "$ERROR_MSG" >&2
+    exit 1
+fi
