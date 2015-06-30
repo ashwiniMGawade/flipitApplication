@@ -24,15 +24,17 @@ class ExtendedNetworkSubIdTest extends \Codeception\TestCase\Test
 
     public function testSavedExtendedSubId()
     {
-        $networkInformation = $this->getNetworkInformation();
+        $id = $this->persistExtendedNetworkSubId();
+        $networkInformation = $this->getNetworkInformation($id);
         $this->tester->assertEquals('1234', $networkInformation[0]['extendedSubid']);
     }
 
     private function persistExtendedNetworkSubId()
     {
         $entityManager = \Codeception\Module\Doctrine2::$em;
+        $obj = new \Core\Domain\Entity\AffliateNetwork();
         $this->tester->persistEntity(
-            new \Core\Domain\Entity\AffliateNetwork(),
+            $obj,
             array(
                 'name' => 'zanox',
                 'status' => 1,
@@ -45,12 +47,13 @@ class ExtendedNetworkSubIdTest extends \Codeception\TestCase\Test
                 'updated_at' => new \DateTime('now'),
             )
         );
+        return $obj->__get('id');
     }
 
-    private function getNetworkInformation()
+    private function getNetworkInformation($id)
     {
         $affiliateNetworkRepository = new KC\Repository\AffliateNetwork;
-        $networkData = $affiliateNetworkRepository->getNetworkForEdit(1);
+        $networkData = $affiliateNetworkRepository->getNetworkForEdit($id);
         return $networkData;
     }
     
