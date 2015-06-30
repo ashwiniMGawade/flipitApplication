@@ -1,0 +1,11 @@
+{
+	"name": "flipitApplication/core",
+    "license": "proprietary",
+    "type": "project",
+    "require": {
+        "codeception/codeception": "*"
+    },
+     "config": {
+        "bin-dir": "bin"
+    }
+}
