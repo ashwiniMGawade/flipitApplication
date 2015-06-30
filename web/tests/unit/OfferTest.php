@@ -1,7 +1,7 @@
 <?php
 use Codeception\Util\Stub;
 
-class createOfferTest extends \Codeception\TestCase\Test
+class OfferTest extends \Codeception\TestCase\Test
 {
     /**
      * @var \UnitTester
