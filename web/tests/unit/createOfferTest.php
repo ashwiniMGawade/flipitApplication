@@ -19,16 +19,23 @@ class createOfferTest extends \Codeception\TestCase\Test
     public function testCreateOffer()
     {
         $this->persistCreateOffer();
-        $this->tester->assertEquals('functional test', 'functional test');
+        $this->tester->seeInRepository('\Core\Domain\Entity\Offer', ['title' => 'functional test']);
     }
 
     private function persistCreateOffer()
     {
+        $futureDate = new \DateTime();
+        $futureDate->modify('+1 week');
+        $futureDate = $futureDate->format('Y-m-d H:i:s');
+        $pastDate = new \DateTime();
+        $pastDate->modify('-1 week');
+        $pastDate = $pastDate->format('Y-m-d H:i:s');
         $entityManager = \Codeception\Module\Doctrine2::$em;
+        $obj = new \Core\Domain\Entity\Offer();
         $this->tester->persistEntity(
-            new \Core\Domain\Entity\Offer(),
+            $obj,
             array(
-                'shopOffers'=> $this->entityManager->find('\Core\Domain\Entity\Shop', 1),
+                'shopOffers'=> $entityManager->find('\Core\Domain\Entity\Shop', 1),
                 'couponCode'=> 'CD',
                 'title'=> 'functional test',
                 'Visability'=> 'DE',
@@ -49,5 +56,20 @@ class createOfferTest extends \Codeception\TestCase\Test
                 'offer_position'=>1
             )
         );
+        return $obj->__get('id');
+    }
+
+    public function testGetOffer()
+    {
+        $id = $this->persistCreateOffer();
+        $offer = $this->getOffer($id);
+        $this->tester->assertEquals('functional test', $offer[0][0]['title']);
+        $this->tester->assertEquals('acceptance shop1', $offer[0][0]['shopOffers']['name']);
+    }
+
+    private function getOffer($offerId)
+    {
+        $offer = KC\Repository\Offer::getOfferInfo($offerId);
+        return $offer;
     }
 }
