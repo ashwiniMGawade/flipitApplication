@@ -16,41 +16,42 @@ class ExtendedNetworkSubIdTest extends \Codeception\TestCase\Test
     {
     }
 
-    public function testOfferClickoutUrl()
+    public function testInsertExtendedSubId()
     {
-        $offerId = 1;
-        echo $conversionId = $this->getConversionId($offerId, 'offer');die;
-        echo $redirectUrl = $this->getClickoutInformation($offerId, 'offer', $conversionId);die;
-        $this->tester->assertEquals(3, count($similarOffers));
-        $this->tester->assertEquals('test offer2', $similarOffers[0]['title']);
-        $this->tester->assertEquals('acceptance shop2', $similarOffers[0]['shopOffers']['name']);
+        $this->persistExtendedNetworkSubId();
+        $this->tester->seeInRepository('\Core\Domain\Entity\AffliateNetwork', ['extendedSubid'=>1234]);
     }
 
-    /*public function testShopClickoutUrl()
+    public function testSavedExtendedSubId()
     {
-        $shopId = 1;
-        $conversionId = $this->getConversionId($shopId, 'shop');
-        $redirectUrl = $this->getClickoutInformation($shopId, 'shop', , $conversionId);
-        $this->tester->assertEquals(5, count($similarOffers));
-        $this->tester->assertEquals('test offer2', $similarOffers[0]['title']);
-        $this->tester->assertEquals('acceptance shop2', $similarOffers[0]['shopOffers']['name']);
-    }*/
-
-    public function getConversionId($offerId, $type)
-    {
-        $conversionId = \KC\Repository\Conversions::addConversion($offerId, $type);
-        return $conversionId;
+        $networkInformation = $this->getNetworkInformation();
+        $this->tester->assertEquals('1234', $networkInformation[0]['extendedSubid']);
     }
 
-    public function getClickoutInformation($id, $type, $conversionId)
-    {echo $id;die;
-        if ($type == 'offer') {
-            $clickout = new FrontEnd_Helper_ClickoutFunctions($id, null);
-        } else {
-            $clickout = new FrontEnd_Helper_ClickoutFunctions(null, $id);
-        }
-        $redirectUrl = $clickout->getCloakLink($type, $conversionId);
-        return $redirectUrl;
+    private function persistExtendedNetworkSubId()
+    {
+        $entityManager = \Codeception\Module\Doctrine2::$em;
+        $this->tester->persistEntity(
+            new \Core\Domain\Entity\AffliateNetwork(),
+            array(
+                'name' => 'zanox',
+                'status' => 1,
+                'deleted' => 0,
+                'subId' => 'zpar0=[[A2ASUBID]]&zpar1=[[GOOGLEANALYTICSTRACKINCID]]',
+                'extendedSubid' => 1234,
+                'affliate_networks' => $entityManager->find('\Core\Domain\Entity\AffliateNetwork', 1),
+                'affliatenetwork' => $entityManager->find('\Core\Domain\Entity\Shop', 1),
+                'created_at' => new \DateTime('now'),
+                'updated_at' => new \DateTime('now'),
+            )
+        );
     }
 
+    private function getNetworkInformation()
+    {
+        $affiliateNetworkRepository = new KC\Repository\AffliateNetwork;
+        $networkData = $affiliateNetworkRepository->getNetworkForEdit(1);
+        return $networkData;
+    }
+    
 }
