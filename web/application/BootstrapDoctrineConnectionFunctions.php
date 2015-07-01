@@ -13,16 +13,7 @@ class BootstrapDoctrineConnectionFunctions
         $frontControllerObject = $application->getOption('resources');
         $config = self::setMemcachedAndProxyClasses($frontControllerObject);
         $userDSN = Core\Persistence\Database\Service\DatabaseConnection::getDsn('imbull');
-        if (APPLICATION_ENV == 'testing') {
-            if (APPLICATION_ENV_FUNCTIONAL == 'testing_functional') {
-                $userDSN = Core\Persistence\Database\Service\DatabaseConnection::getDsn('user');
-                $emUser = EntityManager::create(self::getDatabaseCredentials($userDSN), $config);
-            } else {
-                $emUser = \Codeception\Module\Doctrine2::$em;
-            }
-        } else {
-            $emUser = EntityManager::create(self::getDatabaseCredentials($userDSN), $config);
-        }
+        $emUser = EntityManager::create(self::getDatabaseCredentials($userDSN), $config);
         $localSiteDbConnection = strtolower(self::getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData));
         $localeDSN = Core\Persistence\Database\Service\DatabaseConnection::getDsn($localSiteDbConnection);
         self::setEntityManagerForlocale($localeDSN, $config);
@@ -44,7 +35,7 @@ class BootstrapDoctrineConnectionFunctions
         $cache->setMemcached($memcache);
         $isDevMode = false;
         $proxyPath = null;
-        if (APPLICATION_ENV == 'development') {
+        if (APPLICATION_ENV === 'development' || APPLICATION_ENV === 'testing') {
             $cache = null;
             $isDevMode = true;
         }
@@ -61,17 +52,7 @@ class BootstrapDoctrineConnectionFunctions
     public static function setEntityManagerForlocale($dsn, $config)
     {
         $databaseConnectionCredentials = self::getDatabaseCredentials($dsn);
-        if (APPLICATION_ENV == 'testing') {
-            if (APPLICATION_ENV_FUNCTIONAL == 'testing_functional') {
-                $localeDSN = Core\Persistence\Database\Service\DatabaseConnection::getDsn('test');
-                $databaseConnectionCredentials = self::getDatabaseCredentials($localeDSN);
-                $emLocale = EntityManager::create($databaseConnectionCredentials, $config);
-            } else {
-                $emLocale =  \Codeception\Module\Doctrine2::$em;
-            }
-        } else {
-            $emLocale =  EntityManager::create($databaseConnectionCredentials, $config);
-        }
+        $emLocale =  EntityManager::create($databaseConnectionCredentials, $config);
         Zend_Registry::set('emLocale', $emLocale);
     }
 
