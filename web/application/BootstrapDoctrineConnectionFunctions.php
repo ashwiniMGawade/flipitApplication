@@ -17,7 +17,6 @@ class BootstrapDoctrineConnectionFunctions
             if (APPLICATION_ENV_FUNCTIONAL == 'testing_functional') {
                 $userDSN = Core\Persistence\Database\Service\DatabaseConnection::getDsn('user');
                 $emUser = EntityManager::create(self::getDatabaseCredentials($userDSN), $config);
-                //$moduleDirectoryName = 'test';
             } else {
                 $emUser = \Codeception\Module\Doctrine2::$em;
             }
@@ -26,7 +25,6 @@ class BootstrapDoctrineConnectionFunctions
         }
         $localSiteDbConnection = strtolower(self::getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData));
         $localeDSN = Core\Persistence\Database\Service\DatabaseConnection::getDsn($localSiteDbConnection);
-        //echo $localeDSN; die;
         self::setEntityManagerForlocale($localeDSN, $config);
         Zend_Registry::set('emUser', $emUser);
         BootstrapConstantsFunctions::constantsForLocaleAndTimezoneSetting();

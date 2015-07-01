@@ -1,6 +1,6 @@
 <?php
 // This is global bootstrap for autoloading 
-define('APPLICATION_ENV_FUNCTIONAL', 'testing_unit');
+define('APPLICATION_ENV_FUNCTIONAL', 'testing_functional');
 defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', 'testing');
 defined('APPLICATION_PATH')
