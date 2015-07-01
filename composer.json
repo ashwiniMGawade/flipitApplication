@@ -16,6 +16,7 @@
             "Codeception\\c3\\Installer::copyC3ToRoot"
         ],
         "post-update-cmd": [
+            "bash qualitycontrol/setup.sh",
             "Codeception\\c3\\Installer::copyC3ToRoot"
         ]
     },
