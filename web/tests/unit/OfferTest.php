@@ -72,4 +72,17 @@ class OfferTest extends \Codeception\TestCase\Test
         $offer = KC\Repository\Offer::getOfferInfo($offerId);
         return $offer;
     }
+
+    public function testShopOffers()
+    {
+        $this->persistCreateOffer();
+        $offers = $this->getShopOffers(1);
+        $this->tester->assertEquals('functional test', $offers[0]['title']);
+    }
+
+    private function getShopOffers($shopId)
+    {
+        $offers = KC\Repository\Offer::getAllOfferOnShop($shopId);
+        return $offers;
+    }
 }

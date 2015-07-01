@@ -1113,7 +1113,33 @@ class Offer extends \Core\Domain\Entity\Offer
             $query = $query->setMaxResults($limit);
         }
         $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $offers = self::orderOfferByOfferPosition($offers);
         return $offers;
+    }
+
+    public static function orderOfferByOfferPosition($offers)
+    {
+        $offerWithPosition =  array();
+        $offerWithoughtPosition =  array();
+        foreach ($offers as $key => $offer) {
+            if (!empty($offer['offer_position'])) {
+                $offerWithPosition[] = $offer;
+            } else {
+                $offerWithoughtPosition[] = $offer;
+            }
+        }
+        $offerWithPosition = self::sortOfferByPosition($offerWithPosition);
+        return array_merge($offerWithPosition, $offerWithoughtPosition);
+    }
+
+    public static function sortOfferByPosition($offerWithPosition)
+    {
+        $sort = array();
+        foreach ($offerWithPosition as $k => $v) {
+            $sort['offer_position'][$k] = $v['offer_position'];
+        }
+        array_multisort($sort['offer_position'], SORT_ASC, $offerWithPosition);
+        return $offerWithPosition;
     }
 
     public static function getCommonNewestOffers($type, $limit, $shopId = 0, $userId = "")
