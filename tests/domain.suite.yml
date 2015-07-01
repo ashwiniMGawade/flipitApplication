@@ -1,0 +1,4 @@
+class_name: DomainTester
+modules:
+    enabled:
+        - \Helper\Domain

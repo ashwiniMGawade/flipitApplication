@@ -4,14 +4,15 @@
     "type": "project",
     "require": {
         "zendframework/zendframework1": "1.*",
-        "codeception/codeception": "2.0.15",
+        "codeception/codeception": "*",
         "symfony/console": "^2.7",
         "slim/slim": "^2.6"
     },
     "autoload": {
         "psr-4": {
             "Core\\": "core/",
-            "Command\\": "cli/Command/"
+            "Command\\": "cli/Command/",
+            "Tests\\": "tests/"
         }
     },
     "config": {

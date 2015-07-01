@@ -1,0 +1,14 @@
+class_name: WebTester
+modules:
+    enabled:
+        - \Helper\Web
+        - ZF1
+        - Filesystem
+        - PhpBrowser
+    config:
+        ZF1:
+            app_path: web/application
+            lib_path: web/library
+            config: web/application/configs/application.ini
+        PhpBrowser:
+            url: 'http://dev.flipit.com/'
