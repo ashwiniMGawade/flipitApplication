@@ -1113,11 +1113,11 @@ class Offer extends \Core\Domain\Entity\Offer
             $query = $query->setMaxResults($limit);
         }
         $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        $offers = self::orderOfferByOfferPosition($offers);
-        return $offers;
+        $sortedOffers = self::orderOffersByOfferPosition($offers);
+        return $sortedOffers;
     }
 
-    public static function orderOfferByOfferPosition($offers)
+    public static function orderOffersByOfferPosition($offers)
     {
         $offerWithPosition =  array();
         $offerWithoughtPosition =  array();
@@ -1135,8 +1135,8 @@ class Offer extends \Core\Domain\Entity\Offer
     public static function sortOfferByPosition($offerWithPosition)
     {
         $sort = array();
-        foreach ($offerWithPosition as $k => $v) {
-            $sort['offer_position'][$k] = $v['offer_position'];
+        foreach ($offerWithPosition as $keyIndex => $offer) {
+            $sort['offer_position'][$keyIndex] = $offer['offer_position'];
         }
         array_multisort($sort['offer_position'], SORT_ASC, $offerWithPosition);
         return $offerWithPosition;
