@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 PROJECT=`php -r "echo dirname(dirname(dirname(dirname(dirname(realpath('$0'))))));"`
 FLIPIT_APPLICATION="flipit_application"
