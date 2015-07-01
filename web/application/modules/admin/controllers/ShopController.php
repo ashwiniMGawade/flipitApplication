@@ -1154,4 +1154,17 @@ class Admin_ShopController extends Zend_Controller_Action
             $this->view->partialCounter = $count;
         }
     }
+
+    public function shopExcelQueueAction()
+    {
+        $params = $this->_getAllParams();
+        $excelInformation = \KC\Repository\ShopExcelInformation::getExcelInfo($params);
+        echo Zend_Json::encode($excelInformation);
+        die;
+    }
+
+    public function shopExcelLogAction()
+    {
+        
+    }
 }
