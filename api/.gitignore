@@ -1,6 +1,2 @@
-.idea
 tests/_output/*
 vendor/*
-composer.lock
-tests/_output/*
-c3.php
