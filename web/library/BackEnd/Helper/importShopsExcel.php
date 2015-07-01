@@ -7,7 +7,8 @@ class BackEnd_Helper_importShopsExcel
         $objPHPExcel = $objReader->load($excelFile);
         $worksheet = $objPHPExcel->getActiveSheet();
         $excelData = array();
-        $shopsCounter = 0;
+        $shopsPassCounter = 0;
+        $shopsFailCounter = 0;
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         foreach ($worksheet->getRowIterator() as $row) {
             $cellIterator = $row->getCellIterator();
@@ -94,13 +95,15 @@ class BackEnd_Helper_importShopsExcel
                     }
                     $shopList->deleted = 0;
                     $shopList->updated_at = new \DateTime('now');
-                    $shopsCounter++;
+                    $shopsPassCounter++;
                     $entityManagerLocale->persist($shopList);
                     $entityManagerLocale->flush();
+                } else {
+                    $shopsFailCounter++;
                 }
             }
             unlink($excelFile);
         }
-        return $shopsCounter;
+        return $shopsPassCounter;
     }
 }

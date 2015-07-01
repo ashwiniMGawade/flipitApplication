@@ -2,13 +2,64 @@
 namespace KC\Repository;
 class ShopExcelInformation extends \Core\Domain\Entity\ShopExcelInformation
 {
-$entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $entityManagerUser->select('about')
-            ->from('\Core\Domain\Entity\About', 'about')
-            ->setParameter(1, $aboutStatus)
-            ->where($entityManagerUser->expr()->in('about.status', '?1'))
-            ->setParameter(2, $aboutPageContentIds)
-            ->andWhere($entityManagerUser->expr()->in('about.id', '?2'));
-            $aboutContent = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            return $aboutContent;
+    public static function getExcelInfo($shopExcelParameters, $type = '')
+    {
+        $searchText = isset($shopExcelParameters["SearchText"]) && $shopExcelParameters["SearchText"] != 'undefined'
+            ? $shopExcelParameters["SearchText"] : '';
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $excelInformation = $queryBuilder
+            ->from("\Core\Domain\Entity\ShopExcelInformation", "sei")
+            ->where("sei.deleted = 0");
+        if ($type == '') {
+            $excelInformation = $excelInformation
+                ->andWhere('sei.passCount = 0')
+                ->andWhere('sei.failCount = 0');
+        } else {
+            $excelInformation = $excelInformation->andWhere('sei.totalShopsCount = 0');
+        }
+        $request  = \DataTable_Helper::createSearchRequest(
+            $shopExcelParameters,
+            array()
+        );
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
+        $builder
+        ->setQueryBuilder($excelInformation)
+        ->add('number', 'sei.id')
+        ->add('text', 'sei.created_at')
+        ->add('number', 'sei.totalShopsCount')
+        ->add('number', 'sei.passCount')
+        ->add('number', 'sei.failCount')
+        ->add('text', 'sei.updated_at')
+        ->add('text', 'sei.userName');
+        $excelImportInformation = $builder->getTable()->getResponseArray();
+        return $excelImportInformation;
+    }
+
+    public static function moveCodeAlertToTrash($shopExcelId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->update('\Core\Domain\Entity\ShopExcelInformation', 'c')
+            ->set('c.deleted', 1)
+            ->where('c.id ='.$shopExcelId)
+            ->getQuery();
+        $query->execute();
+        return true;
+    }
+
+    public static function saveShopExcelData($totalShopsCount, $userName, $passcount = '', $failCount = '')
+    {
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
+        $excelData = new \Core\Domain\Entity\ShopExcelInformation();
+        $excelData->totalShopsCount = $totalShopsCount;
+        $excelData->userName = $userName;
+        $excelData->passCount = $passcount;
+        $excelData->failCount = $failCount;
+        $excelData->deleted = 0;
+        $excelData->created_at = new \DateTime('now');
+        $excelData->updated_at = new \DateTime('now');
+        $entityManagerLocale->persist($excelData);
+        $entityManagerLocale->flush();
+        return true;
+    }
 }

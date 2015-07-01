@@ -990,7 +990,6 @@ class Admin_ShopController extends Zend_Controller_Action
 
     public function importshopsAction()
     {
-        
         ini_set('max_execution_time', 115200);
         $params = $this->_getAllParams();
         if ($this->getRequest()->isPost()) {
@@ -1001,7 +1000,13 @@ class Admin_ShopController extends Zend_Controller_Action
                     $excelFilePath = $uploadResult['path'];
                     $excelFile = $excelFilePath.$uploadResult['fileName'];
                     chmod($excelFile, 0775);
-                    $message = $this->view->translate('backend_Shops Excel has been imported Successfully!!');
+                    $userDetail = Zend_Auth::getInstance()->getIdentity();
+                    $userName = $userDetail->firstName;
+                    $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+                    $objPHPExcel = $objReader->load($excelFile);
+                    $totalShops = $objPHPExcel->setActiveSheetIndex(0)->getHighestRow();
+                    \KC\Repository\ShopExcelInformation::saveShopExcelData($totalShops, $userName);
+                    $message = $this->view->translate($totalShops.' Shops data has been imported Successfully!!');
                     $flashMessage->addMessage(array('success' => $message));
                     $message = $flashMessage->getMessages();
                     $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
@@ -1157,14 +1162,50 @@ class Admin_ShopController extends Zend_Controller_Action
 
     public function shopExcelQueueAction()
     {
+        $this->getFlashMessage();
+    }
+
+    public function shopExcelLogAction()
+    {
+        $this->getFlashMessage();
+    }
+
+    public function getShopExcelQueueAction()
+    {
         $params = $this->_getAllParams();
         $excelInformation = \KC\Repository\ShopExcelInformation::getExcelInfo($params);
         echo Zend_Json::encode($excelInformation);
         die;
     }
 
-    public function shopExcelLogAction()
+    public function moveExcelInformationToTrashAction()
     {
-        
+        $deleted = KC\Repository\ShopExcelInformation::moveCodeAlertToTrash($this->_getParam('id'));
+        if ($deleted) {
+            $flash = $this->_helper->getHelper('FlashMessenger');
+            $message = $this->view->translate('Shop Excel Information has been deleted');
+            $flash->addMessage(array('success' => $message));
+        } else {
+            $message = $this->view->translate('Problem in your data.');
+            $flash->addMessage(array('error' => $message));
+        }
+        echo \Zend_Json::encode($deleted);
+        die();
+    }
+
+    public function getFlashMessage()
+    {
+        /*$message = $this->flashMessenger->getMessages();
+        $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] : '';
+        $this->view->errorMessage = isset($message[0]['error']) ? $message[0]['error'] : '';
+        return $this;*/
+    }
+
+    public function getShopExcelLogAction()
+    {
+       $params = $this->_getAllParams();
+        $excelInformation = \KC\Repository\ShopExcelInformation::getExcelInfo($params, 'log');
+        echo Zend_Json::encode($excelInformation);
+        die;
     }
 }
