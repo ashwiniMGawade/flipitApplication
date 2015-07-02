@@ -1,9 +1,12 @@
 {
-    "name": "flipitApplication",
+    "name": "imbull/flipit_application",
     "license": "proprietary",
     "type": "project",
     "require": {
+        "zendframework/zendframework1": "1.*",
         "codeception/codeception": "*",
+        "symfony/console": "^2.7",
+        "slim/slim": "^2.6",
         "codeception/c3": "2.*"
     },
     "require-dev": {
@@ -19,6 +22,13 @@
             "bash qualitycontrol/setup.sh",
             "Codeception\\c3\\Installer::copyC3ToRoot"
         ]
+    },
+    "autoload": {
+        "psr-4": {
+            "Core\\": "core/",
+            "Command\\": "cli/Command/",
+            "Tests\\": "tests/"
+        }
     },
     "config": {
         "bin-dir": "bin"
