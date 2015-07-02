@@ -13,6 +13,7 @@ class ShopExcelInformation extends \Core\Domain\Entity\ShopExcelInformation
         if ($type == '') {
             $excelInformation = $excelInformation
                 ->andWhere('sei.passCount = 0')
+                ->andWhere('sei.filename <> 0')
                 ->andWhere('sei.failCount = 0');
         } else {
             $excelInformation = $excelInformation->andWhere('sei.totalShopsCount = 0');
@@ -47,7 +48,7 @@ class ShopExcelInformation extends \Core\Domain\Entity\ShopExcelInformation
         return true;
     }
 
-    public static function saveShopExcelData($totalShopsCount, $userName, $passcount = '', $failCount = '')
+    public static function saveShopExcelData($totalShopsCount, $userName, $fileName, $passcount = '', $failCount = '')
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $excelData = new \Core\Domain\Entity\ShopExcelInformation();
@@ -55,11 +56,27 @@ class ShopExcelInformation extends \Core\Domain\Entity\ShopExcelInformation
         $excelData->userName = $userName;
         $excelData->passCount = $passcount;
         $excelData->failCount = $failCount;
+        $excelData->filename = $fileName;
         $excelData->deleted = 0;
         $excelData->created_at = new \DateTime('now');
         $excelData->updated_at = new \DateTime('now');
         $entityManagerLocale->persist($excelData);
         $entityManagerLocale->flush();
         return true;
+    }
+
+    public static function checkExistingShopFile()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('sei')
+            ->from("\Core\Domain\Entity\ShopExcelInformation", "sei")
+            ->where("sei.deleted = 0")
+            ->andWhere("sei.passCount = 0")
+            ->andWhere("sei.failCount = 0")
+            ->andWhere("sei.filename <> 0")
+            ->andWhere("sei.totalShopsCount <> 0");
+        $excelInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return empty($excelInformation) ? true : false;
     }
 }

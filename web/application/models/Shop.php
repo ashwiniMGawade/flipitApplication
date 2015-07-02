@@ -881,7 +881,7 @@ class Shop extends BaseShop
 
  
     public function CreateNewShop($shopDetail)
-    {
+    {echo "<pre>";print_r($shopDetail);die;
         $this->name = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopName']);
         $this->permaLink = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
         $this->metaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopMetaDescription']);

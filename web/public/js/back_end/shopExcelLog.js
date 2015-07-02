@@ -80,6 +80,17 @@ function getImportedExcelDetail(iSearchText,iStart,iSortCol,iSortDir){
                     },
                     "bSearchable" : false,
                     "bSortable" : true
+                },
+                {
+                    "fnRender" : function(obj) {
+                        var tag = "";
+                        if(obj.aData){
+                            tag = obj.aData.userName;
+                        } 
+                        return tag; 
+                    },
+                    "bSearchable" : false,
+                    "bSortable" : true
                 }
             ],
             "fnPreDrawCallback": function( oSettings ) {

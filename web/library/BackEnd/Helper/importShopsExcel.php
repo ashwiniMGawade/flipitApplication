@@ -1,5 +1,5 @@
 <?php
-class BackEnd_Helper_importShopsExcel
+class BackEnd_Helper_ImportShopsExcel
 {
     public static function importExcelShops($excelFile)
     {
@@ -16,63 +16,136 @@ class BackEnd_Helper_importShopsExcel
                 $excelData[$cell->getRow()][$cell->getColumn()] = $cell->getCalculatedValue();
             }
             $shopName = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['A']);
-            $shopNavigationUrl = FrontEnd_Helper_viewHelper::sanitize($data[$cell->getRow()]['B']);
-            $moneyShop = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['C']);
-            $shopOnline = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['D']);
-            $overwriteTitle = FrontEnd_Helper_viewHelper::sanitize($data[$cell->getRow()]['E']);
-            $metaDescription = FrontEnd_Helper_viewHelper::sanitize($data[$cell->getRow()]['F']);
-            $allowUserGeneratedContent = FrontEnd_Helper_viewHelper::sanitize($data[$cell->getRow()]['G']);
-            $allowDiscussions = FrontEnd_Helper_viewHelper::sanitize($data[$cell->getRow()]['H']);
-            $shopTitle = FrontEnd_Helper_viewHelper::sanitize($data[$cell->getRow()]['I']);
-            $shopSubTitle = FrontEnd_Helper_viewHelper::sanitize($data[$cell->getRow()]['J']);
-            $shopNotes = FrontEnd_Helper_viewHelper::sanitize($data[$cell->getRow()]['K']);
-            $shopRefURL = FrontEnd_Helper_viewHelper::sanitize($data[$cell->getRow()]['L']);
-            $actualURL = FrontEnd_Helper_viewHelper::sanitize($data[$cell->getRow()]['M']);
-            $shopText = FrontEnd_Helper_viewHelper::sanitize($data[$cell->getRow()]['N']);
-            $displaySignupOptions = FrontEnd_Helper_viewHelper::sanitize($data[$cell->getRow()]['O']);
-            $displaySimilarShops = FrontEnd_Helper_viewHelper::sanitize($data[$cell->getRow()]['P']);
+            $moneyShop = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['B']);
+            $shopOnline = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['C']);
+            $overwriteTitle = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['D']);
+            $metaDescription = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['E']);
+            $allowUserGeneratedContent = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['F']);
+            $allowDiscussions = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['G']);
+            $shopTitle = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['H']);
+            $shopSubTitle = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['I']);
+            $shopNotes = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['J']);
+            $shopRefURL = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['K']);
+            $actualURL = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['L']);
+            $shopText = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['M']);
+            $displaySignupOptions = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['N']);
+            $displaySimilarShops = FrontEnd_Helper_viewHelper::sanitize($excelData[$cell->getRow()]['O']);
             if (
                 (!empty($shopName)
                     && $shopName != 'Shop Name | Text | Required'
                 )
-                && (
-                    !empty($shopNavigationUrl) && $shopNavigationUrl != 'Navigational URL | URL| Required'
-                )
             ) {
-                $shopId = KC\Repository\Shop::getShopIdByShopName($shopName);
+                $shopId = Shop::getShopIdByShopName($shopName);
                 if (!empty($shopId)) {
+
+                    if ($overwriteTitle !='') {
+                        $overriteTitle = $overwriteTitle;
+                    }
+                    if ($metaDescription !='') {
+                        $metaDescription = $metaDescription;
+                    }
+                    if ($allowUserGeneratedContent !='') {
+                        if ($allowUserGeneratedContent == 1) {
+                            $usergenratedcontent = 1;
+                        } else {
+                            $usergenratedcontent = 0;
+                        }
+                    }
+                    if ($allowDiscussions !='') {
+                        if ($allowDiscussions == 1) {
+                            $discussions = 1;
+                        } else {
+                            $discussions = 0;
+                        }
+                    }
+                    if ($shopTitle !='') {
+                        $title = $shopTitle;
+                    }
+                    if ($shopSubTitle !='') {
+                        $subTitle = $shopSubTitle;
+                    }
+                    if ($shopNotes !='') {
+                        $notes = $shopNotes;
+                    }
+                    if ($shopRefURL !='') {
+                        $refUrl = $shopRefURL;
+                    }
+                    if ($actualURL != '') {
+                        $actualUrl = $actualURL;
+                    }
+                    if ($moneyShop != '') {
+                        if ($moneyShop == 0) {
+                            $affliateProgram = 0;
+                        } else {
+                            $affliateProgram = 1;
+                        }
+                    }
+                    if ($shopOnline != '') {
+                        if ($shopOnline == 1) {
+                            $status = 1;
+                            $offlineSicne = null;
+                        } else {
+                            $status = 0;
+                            $offlineSicne = new \DateTime('now');
+                        }
+                    } else {
+                        $status = 1;
+                    }
+                    if ($shopText != "") {
+                        $shopText = $shopText;
+                    }
+                    if ($displaySignupOptions != '') {
+                        if ($displaySignupOptions == 1) {
+                            $showsignupoption = 1;
+                        } else {
+                            $showsignupoption = 0;
+                        }
+                    }
+                    if ($displaySimilarShops != '') {
+                        if ($displaySimilarShops == 1) {
+                            $showSimliarShops = 1;
+                        } else {
+                            $showSimliarShops = 0;
+                        }
+                    }
+                    $created_at = date('Y-m-d H:i:s');
+                    $updated_at = date('Y-m-d H:i:s');
+                    $deletd = 0;
+                    $screenshotid = 0;
                     $shopData = array(
-                        'shopName'=>$shopName,
-                        'shopNavigationUrl'=>$shopNavigationUrl,
-                        'moneyShop'=>$moneyShop,
-                        'shopOnline'=>$shopOnline,
-                        'overwriteTitle'=>$overwriteTitle,
-                        'metaDescription'=>$metaDescription,
-                        'allowUserGeneratedContent'=>$allowUserGeneratedContent,
-                        'allowDiscussions'=>$allowDiscussions,
-                        'shopTitle'=>$shopTitle,
-                        'shopSubTitle'=>$shopSubTitle,
-                        'shopNotes'=>$shopNotes,
-                        'shopRefURL'=>$shopRefURL,
-                        'actualURL'=>$actualURL,
-                        'shopText'=>$shopText,
-                        'displaySignupOptions'=>$displaySignupOptions,
-                        'displaySimilarShops'=>$displaySimilarShops
+                        'name'=> $shopName,
+                        'affliateProgram'=> $moneyShop == '' ? 1 : intval($moneyShop),
+                        'shopOnline'=> $shopOnline,
+                        'overriteTitle'=> $overwriteTitle != '',
+                        'metaDescription'=> $metaDescription,
+                        'usergenratedcontent'=> $allowUserGeneratedContent == 0 ? 0 : 1,
+                        'discussions'=> $allowDiscussions == 0 ? 0 : 1,
+                        'title'=> $shopTitle,
+                        'subTitle'=> $shopSubTitle,
+                        'notes'=> $shopNotes,
+                        'refUrl'=> $shopRefURL,
+                        'actualUrl'=> $actualURL,
+                        'shopText'=> $shopText,
+                        'showsignupoption'=> $displaySignupOptions == '' ? 0 : $displaySignupOptions,
+                        'showSimliarShops'=> $displaySimilarShops == '' ? 0 : $displaySimilarShops,
+                        'screenshotid'=> 0,
+                        
                     );
-                    self::updateShopData($shopId, $shoData);
+                    self::updateShopData($shopId, $shopData);
                     $shopsPassCounter++;
                 } else {
                     $shopsFailCounter++;
                 }
             }
-            unlink($excelFile);
         }
+        unlink($excelFile);
         return array('passCount'=>$shopsPassCounter, 'failCount'=>$shopsFailCounter);
     }
 
     public static function updateShopData($shopId, $shopData)
-    {
-        $entityManagerLocale = \Zend_Registry::get('emLocale');
+    {   $shop = new Shop();
+        $shopId = $shop->CreateNewShop($shopData);
+        /*$entityManagerLocale = \Zend_Registry::get('emLocale');
         $shopList = \Zend_Registry::get('emLocale')
             ->getRepository('KC\Entity\Shop')
             ->find($shopId);
@@ -127,7 +200,7 @@ class BackEnd_Helper_importShopsExcel
         $shopList->deleted = 0;
         $shopList->updated_at = new \DateTime('now');
         $entityManagerLocale->persist($shopList);
-        $entityManagerLocale->flush();
+        $entityManagerLocale->flush();*/
         return true;
     }
 }

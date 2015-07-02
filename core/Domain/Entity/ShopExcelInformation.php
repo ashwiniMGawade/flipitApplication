@@ -50,6 +50,11 @@ class ShopExcelInformation
      */
     protected $userName;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $filename;
+
     public function __get($property)
     {
         return $this->$property;
