@@ -142,24 +142,24 @@ class DatabaseHelper {
         return $this;
     }
 
-    public function restart()
+    public function restart($databaseName)
     {
-        $this->dropDatabase();
-        $this->createDatabase();
+        $this->dropDatabase($databaseName);
+        $this->createDatabase($databaseName);
 
         return $this;
     }
 
-    public function dropDatabase()
+    public function dropDatabase($databaseName)
     {
-        $this->pdo()->exec("DROP DATABASE IF EXISTS flipit_test");
+        $this->pdo()->exec("DROP DATABASE IF EXISTS `${databaseName}`");
 
         return $this;
     }
 
-    public function createDatabase()
+    public function createDatabase($databaseName)
     {
-        $this->pdo()->exec("CREATE DATABASE flipit_test");
+        $this->pdo()->exec("CREATE DATABASE IF NOT EXISTS `${databaseName}`");
 
         return $this;
     }
