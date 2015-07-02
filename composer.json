@@ -6,7 +6,22 @@
         "zendframework/zendframework1": "1.*",
         "codeception/codeception": "*",
         "symfony/console": "^2.7",
-        "slim/slim": "^2.6"
+        "slim/slim": "^2.6",
+        "codeception/c3": "2.*"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "2.0.*@dev",
+        "phpmd/phpmd" : "@stable"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "bash qualitycontrol/setup.sh",
+            "Codeception\\c3\\Installer::copyC3ToRoot"
+        ],
+        "post-update-cmd": [
+            "bash qualitycontrol/setup.sh",
+            "Codeception\\c3\\Installer::copyC3ToRoot"
+        ]
     },
     "autoload": {
         "psr-4": {
