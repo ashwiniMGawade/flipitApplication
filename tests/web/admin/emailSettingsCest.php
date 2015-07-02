@@ -1,8 +1,9 @@
 <?php
 namespace admin;
+
 use \WebTester;
 
-class emailSettingsCest
+class EmailSettingsCest
 {
     public function _before()
     {
@@ -25,19 +26,5 @@ class emailSettingsCest
         $I->amOnPage('/admin/email/email-settings');
         $I->seeInField('#senderEmail', 'kim@web-flight.nl');
         $I->seeInField('#senderName', 'kim');
-    }
-
-    protected function emailSettingsValidation($I)
-    {
-        $this->fillForm($I, 'kim@web-flight.nl', 'Kim');
-        $I->canSee('Sender email is valid.');
-        //$I->canSee('Sender name is valid.');
-    }
-
-    protected function fillForm($I, $senderEmail, $senderName)
-    {
-        $I->fillField('#senderEmail', $senderEmail);
-        $I->fillField('#senderName', $senderName);
-        $I->click('button[type=submit]');
     }
 }
