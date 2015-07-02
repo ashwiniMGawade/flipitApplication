@@ -12,3 +12,4 @@ settings:
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
+        - \Tests\WebDatabaseHelperExtention
