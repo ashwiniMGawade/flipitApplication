@@ -9,7 +9,6 @@ class BackEnd_Helper_importShopsExcel
         $excelData = array();
         $shopsPassCounter = 0;
         $shopsFailCounter = 0;
-        $entityManagerLocale = \Zend_Registry::get('emLocale');
         foreach ($worksheet->getRowIterator() as $row) {
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
@@ -42,68 +41,93 @@ class BackEnd_Helper_importShopsExcel
             ) {
                 $shopId = KC\Repository\Shop::getShopIdByShopName($shopName);
                 if (!empty($shopId)) {
-                    $shopList = \Zend_Registry::get('emLocale')
-                        ->getRepository('KC\Entity\Shop')
-                        ->find($shopId);
-                    $shopList->created_at = $shopList->created_at;
-                    $shopList->name = $shopName;
-                    $shopList->permaLink = $shopNavigationUrl;
-
-                    if ($overwriteTitle !='') {
-                        $shopList->overriteTitle = $overwriteTitle;
-                    }
-                    if ($metaDescription !='') {
-                        $shopList->metaDescription = $metaDescription;
-                    }
-                    if ($allowUserGeneratedContent !='') {
-                        $shopList->usergenratedcontent = $allowUserGeneratedContent = 0 ? 0 : 1;
-                    }
-                    if ($allowDiscussions !='') {
-                        $shopList->discussions = $allowDiscussions = 0 ? 0 : 1;
-                    }
-                    if ($shopTitle !='') {
-                        $shopList->title = $shopTitle;
-                    }
-                    if ($shopSubTitle !='') {
-                        $shopList->subTitle = $shopSubTitle;
-                    }
-                    if ($shopNotes !='') {
-                        $shopList->notes = $shopNotes;
-                    }
-                    if ($shopRefURL !='') {
-                        $shopList->refUrl = $shopRefURL;
-                    }
-                    if ($actualURL != '') {
-                        $shopList->actualUrl = $actualURL;
-                    }
-                    if ($moneyShop != '') {
-                        $shopList->affliateProgram = $moneyShop = 0 ? false : true;
-                    }
-                    if (!empty($shopOnline)) {
-                        if ($shopOnline == 1) {
-                            $shopList->status = 1;
-                            $shopList->offlineSicne = null;
-                        } else {
-                            $shopList->status = 0;
-                            $shopList->offlineSicne = new \DateTime('now');
-                        }
-                    } else {
-                        $shopList->status = 1;
-                    }
-                    if ($shopText != "") {
-                        $shopList->shopText = $shopText;
-                    }
-                    $shopList->deleted = 0;
-                    $shopList->updated_at = new \DateTime('now');
+                    $shopData = array(
+                        'shopName'=>$shopName,
+                        'shopNavigationUrl'=>$shopNavigationUrl,
+                        'moneyShop'=>$moneyShop,
+                        'shopOnline'=>$shopOnline,
+                        'overwriteTitle'=>$overwriteTitle,
+                        'metaDescription'=>$metaDescription,
+                        'allowUserGeneratedContent'=>$allowUserGeneratedContent,
+                        'allowDiscussions'=>$allowDiscussions,
+                        'shopTitle'=>$shopTitle,
+                        'shopSubTitle'=>$shopSubTitle,
+                        'shopNotes'=>$shopNotes,
+                        'shopRefURL'=>$shopRefURL,
+                        'actualURL'=>$actualURL,
+                        'shopText'=>$shopText,
+                        'displaySignupOptions'=>$displaySignupOptions,
+                        'displaySimilarShops'=>$displaySimilarShops
+                    );
+                    self::updateShopData($shopId, $shoData);
                     $shopsPassCounter++;
-                    $entityManagerLocale->persist($shopList);
-                    $entityManagerLocale->flush();
                 } else {
                     $shopsFailCounter++;
                 }
             }
             unlink($excelFile);
         }
-        return $shopsPassCounter;
+        return array('passCount'=>$shopsPassCounter, 'failCount'=>$shopsFailCounter);
+    }
+
+    public static function updateShopData($shopId, $shopData)
+    {
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
+        $shopList = \Zend_Registry::get('emLocale')
+            ->getRepository('KC\Entity\Shop')
+            ->find($shopId);
+        $shopList->created_at = $shopList->created_at;
+        $shopList->name = $shopData['shopName'];
+        $shopList->permaLink = $shopData['shopNavigationUrl'];
+
+        if ($overwriteTitle !='') {
+            $shopList->overriteTitle = $shopData['overwriteTitle'];
+        }
+        if ($metaDescription !='') {
+            $shopList->metaDescription = $shopData['metaDescription'];
+        }
+        if ($allowUserGeneratedContent !='') {
+            $shopList->usergenratedcontent = $shopData['allowUserGeneratedContent'] == 0 ? 0 : 1;
+        }
+        if ($allowDiscussions !='') {
+            $shopList->discussions = $shopData['allowDiscussions'] == 0 ? 0 : 1;
+        }
+        if ($shopTitle !='') {
+            $shopList->title = $shopData['shopTitle'];
+        }
+        if ($shopSubTitle !='') {
+            $shopList->subTitle = $shopData['shopSubTitle'];
+        }
+        if ($shopNotes !='') {
+            $shopList->notes = $shopData['shopNotes'];
+        }
+        if ($shopRefURL !='') {
+            $shopList->refUrl = $shopData['shopRefURL'];
+        }
+        if ($actualURL != '') {
+            $shopList->actualUrl = $shopData['actualURL'];
+        }
+        if ($moneyShop != '') {
+            $shopList->affliateProgram = $shopData['moneyShop']== 0 ? false : true;
+        }
+        if (!empty($shopOnline)) {
+            if ($shopOnline == 1) {
+                $shopList->status = 1;
+                $shopList->offlineSicne = null;
+            } else {
+                $shopList->status = 0;
+                $shopList->offlineSicne = new \DateTime('now');
+            }
+        } else {
+            $shopList->status = 1;
+        }
+        if ($shopText != "") {
+            $shopList->shopText = $shopData['shopText'];
+        }
+        $shopList->deleted = 0;
+        $shopList->updated_at = new \DateTime('now');
+        $entityManagerLocale->persist($shopList);
+        $entityManagerLocale->flush();
+        return true;
     }
 }
