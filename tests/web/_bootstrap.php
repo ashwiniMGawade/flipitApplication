@@ -5,24 +5,25 @@ require_once APPLICATION_PATH.'/../library/Doctrine/Common/ClassLoader.php';
 
 // Cleaning the Db's
 $applicationConfig = parse_ini_file(__DIR__."/../../web/application/configs/application.ini");
-$flipitSiteDsn = $applicationConfig['doctrine.en.dsn'];
-$flipitUserDsn = $applicationConfig['doctrine.imbull'];
+$flipitSiteDsn = $applicationConfig['doctrine.test.dsn'];
+$flipitUserDsn = $applicationConfig['doctrine.user.dsn'];
 
 // Get the Db's credentials in the loop.
 // DBname, host, user, pass, dumppath
 // $sqlDumpPath = 'tests/_data/flipit_test.sql';
 
+$fixture = new \Tests\DatabaseHelper;
+$a = $fixture->getDatabaseCredentials($flipitSiteDsn, 'tests/_data/flipit_test.sql');
+$b = $fixture->getDatabaseCredentials($flipitUserDsn, 'tests/_data/flipit_test_user.sql');
+$databases = array_merge($a, $b);
+//print_r($databases); die;
 foreach ($databases as $database) {
-    $fixture = new \Tests\DatabaseHelper;
     $fixture->connect('mysql:host=' . $database['host'] . ';', $database['username'], $database['password'])->restart($database['name']);
     $fixture->connect('mysql:host=' . $database['host'] . ';dbname=' . $database['name'], $database['username'], $database['password']);
 
-    if (file_exists($database['sqlDumpPath']))
-    {
+    if (file_exists($database['sqlDumpPath'])) {
         $fixture->load(file_get_contents($database['sqlDumpPath']));
-    }
-    else
-    {
+    } else {
         throw new Exception("Sql dump can't be found", 1);
     }
 }
