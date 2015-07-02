@@ -47,13 +47,11 @@ then
 fi
 
 echo "Running Unit Tests..."
-$PROJECT/$FLIPIT_APPLICATION/bin/codecept run --config=$PROJECT/$FLIPIT_APPLICATION/codeception.yml unit
+$PROJECT/$FLIPIT_APPLICATION/bin/codecept run --config=$PROJECT/$FLIPIT_APPLICATION/codeception.yml domain --coverage
 if [ $? != 0 ]
 then
 	echo "Fix the error before commit."
 	exit 1
 fi
-
-#$PROJECT/$FLIPIT_APPLICATION/bin/codecept run --config=$PROJECT/$FLIPIT_APPLICATION/codeception.yml --coverage
 
 exit $?

@@ -14,11 +14,9 @@ class BootstrapDoctrineConnectionFunctions
         $application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
         $frontControllerObject = $application->getOption('resources');
         $config = self::setMemcachedAndProxyClasses($frontControllerObject);
-        $userDSN = Core\Persistence\Database\Service\DatabaseConnection::getDsn('imbull');
-        $emUser = EntityManager::create(self::getDatabaseCredentials($userDSN), $config);
+        $emUser = EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);
         $localSiteDbConnection = strtolower(self::getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData));
-        $localeDSN = Core\Persistence\Database\Service\DatabaseConnection::getDsn($localSiteDbConnection);
-        self::setEntityManagerForlocale($localeDSN, $config);
+        self::setEntityManagerForlocale($doctrineOptions[$localSiteDbConnection]['dsn'], $config);
         Zend_Registry::set('emUser', $emUser);
         BootstrapConstantsFunctions::constantsForLocaleAndTimezoneSetting();
         self::setDefaultTimezone();
