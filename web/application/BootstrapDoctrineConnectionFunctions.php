@@ -1,10 +1,12 @@
 <?php
+
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\ORM\Tools\Setup;
+
 class BootstrapDoctrineConnectionFunctions
 {
     public static function doctrineConnections($doctrineOptions, $moduleDirectoryName, $localeCookieData)
