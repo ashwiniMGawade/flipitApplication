@@ -43,7 +43,16 @@ $connectionParamsLocale = array(
 );
 $em = EntityManager::create($connectionParamsLocale, $config);
 $es = EntityManager::create($connectionParamsUser, $config);
+
+\Codeception\Module\Doctrine2::$es = $es;
+$metaDataFactory = $es->getMetadataFactory();
+$classes = $metaDataFactory->getAllMetadata();
+$tool = new \Doctrine\ORM\Tools\SchemaTool($es);
+$tool->dropDatabase();
+$tool->createSchema($classes);
+
 $fixtures = new fixtures($em, $es);
 $fixtures->execute();
+
 \Codeception\Util\Autoload::registerSuffix('Steps', __DIR__.DIRECTORY_SEPARATOR.'_steps');
 \Codeception\Util\Autoload::registerSuffix('Page', __DIR__.DIRECTORY_SEPARATOR.'/../_pages');

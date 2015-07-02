@@ -20,5 +20,4 @@ modules:
             dsn: 'mysql:host=localhost;dbname=flipit_test'
             dump: 'tests/_data/flipit_test.sql'
             populate: true
-            cleanup: false
             repopulate: false

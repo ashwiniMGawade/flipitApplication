@@ -28,8 +28,8 @@ class FunctionalHelper extends \Codeception\Module
             'dsn' => 'mysql:host=localhost;dbname=flipit_test',
             'dump' => '/tests/_data/flipit_test.sql',
             'populate' => true,
-            'cleanup' => false,
-            'repopulate' => false,
+            'cleanup' => true,
+            'repopulate' => true,
         );
     }
 
@@ -42,7 +42,7 @@ class FunctionalHelper extends \Codeception\Module
             'dump' => '/tests/_data/flipit_test_user.sql',
             'populate' => true,
             'cleanup' => true,
-            'repopulate' => false,
+            'repopulate' => true,
         );
     }
 
