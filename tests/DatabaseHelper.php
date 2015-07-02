@@ -163,4 +163,25 @@ class DatabaseHelper {
 
         return $this;
     }
+
+    public function getDatabaseCredentials($doctrineOptions, $dumpPath)
+    {
+        $splitDbName = explode('/', $doctrineOptions);
+        $splitDbUserName = explode(':', $splitDbName[2]);
+        $splitDbPassword = explode('@', $splitDbUserName[1]);
+        $splitHostName = explode('@', $splitDbUserName[1]);
+        $dbPassword = $splitDbPassword[0];
+        $dbUserName = $splitDbUserName[0];
+        $dbName = $splitDbName[3];
+        $hostName = isset($splitHostName[1]) ? $splitHostName[1] : 'localhost';
+        $dsn[] = array(
+            'host'     => $hostName,
+            'driver'   => 'pdo_mysql',
+            'username'     => $dbUserName,
+            'password' => $dbPassword,
+            'name'   => $dbName,
+            'sqlDumpPath' => $dumpPath
+        );
+        return $dsn;
+    }
 }
