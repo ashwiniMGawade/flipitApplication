@@ -1,11 +1,16 @@
 <?php
 namespace Helper;
 
-// here you can define custom actions
-// all public methods declared in helper class will be available in $I
-
+/**
+ * here you can define custom actions
+ * all public methods declared in helper class will be available in $I
+ */
 class Web extends \Codeception\Module
 {
+    /**
+     * This function is run before every web test to rest the Databases.
+     * @param  \Codeception\TestCase $test 
+     */
     public function _before(\Codeception\TestCase $test)
     {
         $databaseHelper = new \Tests\WebDatabaseHelper;
@@ -17,9 +22,9 @@ class Web extends \Codeception\Module
         $databases[] = $databaseHelper->getDatabaseCredentials($applicationConfig['imbull']);
 
         foreach ($databases as $database) {
-            
+
             $sqlDumpPath = 'tests/_data/' . $database['dbname'] . '.sql';
-            
+
             // Drop and create database
             $databaseHelper
                 ->connect('mysql:host=' . $database['host'] . ';', $database['user'], $database['password'])
