@@ -30,7 +30,24 @@ class ShopImportExcelTest extends \Codeception\TestCase\Test
 
     private function updateShop($shopId)
     {
-
+        $shopData = array(
+            'shopName'=>'test123',
+            'shopNavigationUrl'=>'test',
+            'moneyShop'=>false,
+            'shopOnline'=>1,
+            'overwriteTitle'=>'asdasd',
+            'metaDescription'=>'asdasd',
+            'allowUserGeneratedContent'=>0,
+            'allowDiscussions'=>0,
+            'shopTitle'=>'sasas',
+            'shopSubTitle'=>'sdfsdfsdf',
+            'shopNotes'=>'sdfsdfsdf',
+            'shopRefURL'=>'http://www.google.com',
+            'actualURL'=>'http://www.google.com',
+            'shopText'=>'sdasdasd',
+            'displaySignupOptions'=>0,
+            'displaySimilarShops'=>0
+        );
         BackEnd_Helper_importShopsExcel::updateShopData($shopId, $shopData);
         return true;
     }
