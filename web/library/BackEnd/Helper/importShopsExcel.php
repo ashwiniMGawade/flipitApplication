@@ -37,12 +37,13 @@ class BackEnd_Helper_ImportShopsExcel
             ) {
                 $shopId = Shop::getShopIdByShopName($shopName);
                 if (!empty($shopId)) {
+                    $shopData = array();
 
                     if ($overwriteTitle !='') {
-                        $overriteTitle = $overwriteTitle;
+                        $shopData['overriteTitle'] = $overwriteTitle;
                     }
                     if ($metaDescription !='') {
-                        $metaDescription = $metaDescription;
+                        $shopData['metaDescription'] = $metaDescription;
                     }
                     if ($allowUserGeneratedContent !='') {
                         if ($allowUserGeneratedContent == 1) {
@@ -50,6 +51,7 @@ class BackEnd_Helper_ImportShopsExcel
                         } else {
                             $usergenratedcontent = 0;
                         }
+                        $shopData['usergenratedcontent'] = $usergenratedcontent;
                     }
                     if ($allowDiscussions !='') {
                         if ($allowDiscussions == 1) {
@@ -57,21 +59,22 @@ class BackEnd_Helper_ImportShopsExcel
                         } else {
                             $discussions = 0;
                         }
+                        $shopData['discussions'] = $discussions;
                     }
                     if ($shopTitle !='') {
-                        $title = $shopTitle;
+                        $shopData['title'] = $shopTitle;
                     }
                     if ($shopSubTitle !='') {
-                        $subTitle = $shopSubTitle;
+                        $shopData['subTitle'] = $shopSubTitle;
                     }
                     if ($shopNotes !='') {
-                        $notes = $shopNotes;
+                        $shopData['notes'] = $shopNotes;
                     }
                     if ($shopRefURL !='') {
-                        $refUrl = $shopRefURL;
+                        $shopData['refUrl'] = $shopRefURL;
                     }
                     if ($actualURL != '') {
-                        $actualUrl = $actualURL;
+                        $shopData['actualUrl'] = $actualURL;
                     }
                     if ($moneyShop != '') {
                         if ($moneyShop == 0) {
@@ -79,6 +82,7 @@ class BackEnd_Helper_ImportShopsExcel
                         } else {
                             $affliateProgram = 1;
                         }
+                        $shopData['affliateProgram'] = $affliateProgram;
                     }
                     if ($shopOnline != '') {
                         if ($shopOnline == 1) {
@@ -88,11 +92,11 @@ class BackEnd_Helper_ImportShopsExcel
                             $status = 0;
                             $offlineSicne = new \DateTime('now');
                         }
-                    } else {
-                        $status = 1;
+                        $shopData['offlineSicne'] = $offlineSicne;
+                        $shopData['status'] = $status;
                     }
                     if ($shopText != "") {
-                        $shopText = $shopText;
+                        $shopData['shopText'] = $shopText;
                     }
                     if ($displaySignupOptions != '') {
                         if ($displaySignupOptions == 1) {
@@ -100,6 +104,7 @@ class BackEnd_Helper_ImportShopsExcel
                         } else {
                             $showsignupoption = 0;
                         }
+                        $shopData['showsignupoption'] = $showsignupoption;
                     }
                     if ($displaySimilarShops != '') {
                         if ($displaySimilarShops == 1) {
@@ -107,31 +112,12 @@ class BackEnd_Helper_ImportShopsExcel
                         } else {
                             $showSimliarShops = 0;
                         }
+                        $shopData['showSimliarShops'] = $showSimliarShops;
                     }
-                    $created_at = date('Y-m-d H:i:s');
-                    $updated_at = date('Y-m-d H:i:s');
-                    $deletd = 0;
-                    $screenshotid = 0;
-                    $shopData = array(
-                        'name'=> $shopName,
-                        'affliateProgram'=> $moneyShop == '' ? 1 : intval($moneyShop),
-                        'shopOnline'=> $shopOnline,
-                        'overriteTitle'=> $overwriteTitle != '',
-                        'metaDescription'=> $metaDescription,
-                        'usergenratedcontent'=> $allowUserGeneratedContent == 0 ? 0 : 1,
-                        'discussions'=> $allowDiscussions == 0 ? 0 : 1,
-                        'title'=> $shopTitle,
-                        'subTitle'=> $shopSubTitle,
-                        'notes'=> $shopNotes,
-                        'refUrl'=> $shopRefURL,
-                        'actualUrl'=> $actualURL,
-                        'shopText'=> $shopText,
-                        'showsignupoption'=> $displaySignupOptions == '' ? 0 : $displaySignupOptions,
-                        'showSimliarShops'=> $displaySimilarShops == '' ? 0 : $displaySimilarShops,
-                        'screenshotid'=> 0,
-                        
-                    );
-                    self::updateShopData($shopId, $shopData);
+                    $shopData['updated_at'] = date('Y-m-d H:i:s');
+                    $shopData['deleted'] = 0;
+                    $shopData['screenshotid'] = 0;
+                    Shop::updateShopFromExcelData($shopData, $shopId);
                     $shopsPassCounter++;
                 } else {
                     $shopsFailCounter++;
@@ -140,67 +126,5 @@ class BackEnd_Helper_ImportShopsExcel
         }
         unlink($excelFile);
         return array('passCount'=>$shopsPassCounter, 'failCount'=>$shopsFailCounter);
-    }
-
-    public static function updateShopData($shopId, $shopData)
-    {   $shop = new Shop();
-        $shopId = $shop->CreateNewShop($shopData);
-        /*$entityManagerLocale = \Zend_Registry::get('emLocale');
-        $shopList = \Zend_Registry::get('emLocale')
-            ->getRepository('KC\Entity\Shop')
-            ->find($shopId);
-        $shopList->created_at = $shopList->created_at;
-        $shopList->name = $shopData['shopName'];
-        $shopList->permaLink = $shopData['shopNavigationUrl'];
-
-        if ($overwriteTitle !='') {
-            $shopList->overriteTitle = $shopData['overwriteTitle'];
-        }
-        if ($metaDescription !='') {
-            $shopList->metaDescription = $shopData['metaDescription'];
-        }
-        if ($allowUserGeneratedContent !='') {
-            $shopList->usergenratedcontent = $shopData['allowUserGeneratedContent'] == 0 ? 0 : 1;
-        }
-        if ($allowDiscussions !='') {
-            $shopList->discussions = $shopData['allowDiscussions'] == 0 ? 0 : 1;
-        }
-        if ($shopTitle !='') {
-            $shopList->title = $shopData['shopTitle'];
-        }
-        if ($shopSubTitle !='') {
-            $shopList->subTitle = $shopData['shopSubTitle'];
-        }
-        if ($shopNotes !='') {
-            $shopList->notes = $shopData['shopNotes'];
-        }
-        if ($shopRefURL !='') {
-            $shopList->refUrl = $shopData['shopRefURL'];
-        }
-        if ($actualURL != '') {
-            $shopList->actualUrl = $shopData['actualURL'];
-        }
-        if ($moneyShop != '') {
-            $shopList->affliateProgram = $shopData['moneyShop']== 0 ? false : true;
-        }
-        if (!empty($shopOnline)) {
-            if ($shopOnline == 1) {
-                $shopList->status = 1;
-                $shopList->offlineSicne = null;
-            } else {
-                $shopList->status = 0;
-                $shopList->offlineSicne = new \DateTime('now');
-            }
-        } else {
-            $shopList->status = 1;
-        }
-        if ($shopText != "") {
-            $shopList->shopText = $shopData['shopText'];
-        }
-        $shopList->deleted = 0;
-        $shopList->updated_at = new \DateTime('now');
-        $entityManagerLocale->persist($shopList);
-        $entityManagerLocale->flush();*/
-        return true;
     }
 }

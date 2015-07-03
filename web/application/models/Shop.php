@@ -881,7 +881,7 @@ class Shop extends BaseShop
 
  
     public function CreateNewShop($shopDetail)
-    {echo "<pre>";print_r($shopDetail);die;
+    {
         $this->name = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopName']);
         $this->permaLink = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
         $this->metaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopMetaDescription']);
@@ -2214,6 +2214,18 @@ public static function getShopDetail($shopId)
                 ->set('code_alert_send_date', "'".  date('Y-m-d 00:00:00') ."'")
                 ->where('id='. $shopId)
                 ->execute();
+        }
+        return true;
+    }
+
+    public static function updateShopFromExcelData($shopDetail, $shopId)
+    {
+        if (!empty($shopDetail)) {
+            $query = Doctrine_Query::create()->update('Shop');
+            foreach ($shopDetail as $key => $value) {
+                $query = $query->set($key, "'".$value."'");
+            }
+            $query = $query->where('id='. $shopId)->execute();
         }
         return true;
     }

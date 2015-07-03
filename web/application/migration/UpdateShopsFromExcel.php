@@ -11,11 +11,11 @@ class UpdateShopsFromExcel
         $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
         $imbull = $connections['imbull'];
         echo CommonMigrationFunctions::showProgressMessage(
-            'get all articles data from databases of all locales'
+            'update shop data from excel'
         );
 
         foreach ($connections as $key => $connection) {
-            if ($key == 'en') {
+            if ($key != 'imbull') {
                 try {
                     $this->updateShopsInformation($connection['dsn'], $key);
                 } catch (Exception $e) {
