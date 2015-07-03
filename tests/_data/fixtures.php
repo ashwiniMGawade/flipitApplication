@@ -45,7 +45,7 @@ class fixtures
         $user->email = 'test@flipit.com';
         $user->password = md5('password');
         $user->status = 1;
-        $user->users = $this->entityManagerUser->find('\Core\Domain\Entity\User\Role', $role->__get('id'));
+        $user->users = $this->entityManagerUser->find('\Core\Domain\Entity\User\Role', 1);
         $user->slug = 'test-user';
         $user->mainText = 'test';
         $user->deleted = 0;
@@ -62,8 +62,8 @@ class fixtures
         $rights = new \Core\Domain\Entity\User\Rights();
         $rights->name = 'administration';
         $rights->rights = 1;
-        $rights->description = 'test desc';
-        $rights->role = $this->entityManagerUser->find('\Core\Domain\Entity\User\Role', $role->__get('id'));
+        $rights->description = 'everyone';
+        $rights->role = $this->entityManagerUser->find('\Core\Domain\Entity\User\Role', 1);
         $rights->created_at = new \DateTime('now');
         $rights->updated_at = new \DateTime('now');
         $this->entityManagerUser->persist($rights);

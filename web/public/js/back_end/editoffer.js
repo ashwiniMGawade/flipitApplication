@@ -676,7 +676,9 @@ function setFormData(data){
 	 	jQuery('#addofferTitle').val(data[0].title);
 	 	jQuery('#metaTextLeft').val(__("Offer title length ") + parseInt(data[0].title.length) + __(" characters"));
 	}
-
+	if (data[0].offer_position != undefined || data[0].offer_position != null) {
+	 	jQuery('#offerPosition').val(data[0].offer_position);
+	}
 	 jQuery('#offerRefUrl').val(data[0].refURL);
 	 if(data[0].refURL){
 		 jQuery('#deepLinkOnbtn').click(); 

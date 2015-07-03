@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 28, 2015 at 10:56 AM
--- Server version: 5.5.41-0ubuntu0.14.04.1
--- PHP Version: 5.5.9-1ubuntu4.7
+-- Generation Time: Jun 29, 2015 at 12:53 PM
+-- Server version: 5.5.43-0ubuntu0.14.04.1
+-- PHP Version: 5.5.9-1ubuntu4.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `flipit_test_user`
+-- Database: `kortingscode_user`
 --
 
 -- --------------------------------------------------------
@@ -87,7 +87,11 @@ CREATE TABLE IF NOT EXISTS `ip_addresses` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
+<<<<<<< HEAD
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+=======
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
+>>>>>>> feature/KC-6537_Admin_want_to_add_sticky_functionality
 
 -- --------------------------------------------------------
 
@@ -114,7 +118,11 @@ CREATE TABLE IF NOT EXISTS `profile_image` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
+<<<<<<< HEAD
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+=======
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=374 ;
+>>>>>>> feature/KC-6537_Admin_want_to_add_sticky_functionality
 
 -- --------------------------------------------------------
 
@@ -131,7 +139,11 @@ CREATE TABLE IF NOT EXISTS `ref_user_website` (
   PRIMARY KEY (`id`),
   KEY `userid_idx` (`userid`),
   KEY `websiteid_idx` (`websiteid`)
+<<<<<<< HEAD
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+=======
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5673 ;
+>>>>>>> feature/KC-6537_Admin_want_to_add_sticky_functionality
 
 -- --------------------------------------------------------
 
@@ -149,7 +161,11 @@ CREATE TABLE IF NOT EXISTS `rights` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `roleid_idx` (`roleid`)
+<<<<<<< HEAD
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+=======
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
+>>>>>>> feature/KC-6537_Admin_want_to_add_sticky_functionality
 
 -- --------------------------------------------------------
 
@@ -196,7 +212,11 @@ CREATE TABLE IF NOT EXISTS `splash` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
+<<<<<<< HEAD
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+=======
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+>>>>>>> feature/KC-6537_Admin_want_to_add_sticky_functionality
 
 -- --------------------------------------------------------
 
@@ -236,7 +256,11 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `email` (`email`),
   KEY `roleid_idx` (`roleid`),
   KEY `profileimageid_idx` (`profileimageid`)
+<<<<<<< HEAD
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+=======
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=364 ;
+>>>>>>> feature/KC-6537_Admin_want_to_add_sticky_functionality
 
 -- --------------------------------------------------------
 
