@@ -46,6 +46,11 @@ class AffliateNetwork
     protected $subId;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $extendedSubid;
+
+    /**
      * @ORM\OneToMany(targetEntity="Core\Domain\Entity\AffliateNetwork", mappedBy="affliate_networks")
      */
     protected $affliate_network;

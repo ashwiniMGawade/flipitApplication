@@ -49,6 +49,15 @@ abstract class BaseAffliateNetwork extends Doctrine_Record
              'comment' => 'FK to affliate_network.id , Defines a network is merged or not',
              'length' => '20',
              ));
+        $this->hasColumn(
+            'extendedSubid',
+            'string',
+            512,
+            array(
+                'type' => 'string',
+                'length' => '512'
+            )
+        );
     }
 
     public function setUp()

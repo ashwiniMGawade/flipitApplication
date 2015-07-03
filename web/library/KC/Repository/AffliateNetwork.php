@@ -8,6 +8,7 @@ class AffliateNetwork extends \Core\Domain\Entity\AffliateNetwork
         $data = new \Core\Domain\Entity\AffliateNetwork();
         $data->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['addNetworkText']);
         $data->subId = $params['subId'];
+        $data->extendedSubid = $params['extendedSubid'];
         $data->status = '1';
         $data->deleted = '0';
         $data->created_at = new \DateTime('now');
@@ -36,7 +37,8 @@ class AffliateNetwork extends \Core\Domain\Entity\AffliateNetwork
             ->setQueryBuilder($networkList)
             ->add('number', 'a.id')
             ->add('text', 'a.name')
-            ->add('text', 'a.subId');
+            ->add('text', 'a.subId')
+            ->add('text', 'a.extendedSubid');
         $list = $builder->getTable()->getResponseArray();
         return $list;
     }
@@ -89,6 +91,9 @@ class AffliateNetwork extends \Core\Domain\Entity\AffliateNetwork
             $data->subId = \BackEnd_Helper_viewHelper::stripSlashesFromString($params["subId"]);
         }
 
+        if (isset($params["extendedSubid"])) {
+            $data->extendedSubid = \BackEnd_Helper_viewHelper::stripSlashesFromString($params["extendedSubid"]);
+        }
         $data->updated_at = new \DateTime('now');
         \Zend_Registry::get('emLocale')->persist($data);
         \Zend_Registry::get('emLocale')->flush();
