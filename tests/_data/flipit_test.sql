@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: flipit_test
 -- ------------------------------------------------------
--- Server version	5.5.43-0ubuntu0.14.04.1
+-- Server version 5.5.43-0ubuntu0.14.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -80,12 +80,10 @@ CREATE TABLE `affliate_network` (
   `status` tinyint(1) DEFAULT NULL,
   `replacewithid` bigint(20) DEFAULT NULL COMMENT 'FK to affliate_network.id , Defines a network is merged or not',
   `subId` text,
-  `extendedSubid` text,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-<<<<<<< HEAD:tests/_data/flipit_test.sql
   KEY `replacewithid_idx` (`replacewithid`),
   CONSTRAINT `affliate_network_replacewithid_affliate_network_id` FOREIGN KEY (`replacewithid`) REFERENCES `affliate_network` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
@@ -121,10 +119,6 @@ CREATE TABLE `article_chapter` (
 --
 -- Dumping data for table `article_chapter`
 --
-=======
-  KEY `replacewithid_idx` (`replacewithid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
->>>>>>> feature/extend_affiliate_network_subid:web/tests/_data/flipit_test.sql
 
 LOCK TABLES `article_chapter` WRITE;
 /*!40000 ALTER TABLE `article_chapter` DISABLE KEYS */;
@@ -847,8 +841,6 @@ CREATE TABLE `image` (
   `type` varchar(10) DEFAULT NULL,
   `path` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `width` integer(11) DEFAULT NULL,
-  `height` integer(11) DEFAULT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -1227,16 +1219,12 @@ CREATE TABLE `offer` (
   UNIQUE KEY `offerlogoid` (`offerlogoid`),
   KEY `shopid_idx` (`shopid`),
   KEY `offerlogoid_idx` (`offerlogoid`)
-<<<<<<< HEAD:tests/_data/flipit_test.sql
 ) ENGINE=InnoDB AUTO_INCREMENT=13591 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `offer`
 --
-=======
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
->>>>>>> feature/extend_affiliate_network_subid:web/tests/_data/flipit_test.sql
 
 LOCK TABLES `offer` WRITE;
 /*!40000 ALTER TABLE `offer` DISABLE KEYS */;
@@ -2062,16 +2050,12 @@ CREATE TABLE `shop` (
   KEY `logoid_idx` (`logoid`),
   KEY `affliatenetworkid_idx` (`affliatenetworkid`),
   KEY `howtousepageid_idx` (`howtousepageid`)
-<<<<<<< HEAD:tests/_data/flipit_test.sql
 ) ENGINE=InnoDB AUTO_INCREMENT=1112 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `shop`
 --
-=======
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
->>>>>>> feature/extend_affiliate_network_subid:web/tests/_data/flipit_test.sql
 
 LOCK TABLES `shop` WRITE;
 /*!40000 ALTER TABLE `shop` DISABLE KEYS */;

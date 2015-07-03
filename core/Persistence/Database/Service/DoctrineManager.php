@@ -12,12 +12,6 @@ class DoctrineManager
 	protected $localeEntityManger;
 	protected $userEntityManger;
 	
-	/**
-	*   Use this is Repository
-	*
-	*   $config = new \Core\Persistence\Database\Service\DoctrineLoad();
-	*   $queryBuilder = $config->getLocaleEntityManger()->createQueryBuilder();
-	*/
 	public function __construct()
 	{
 		$config = new AppConfig();
