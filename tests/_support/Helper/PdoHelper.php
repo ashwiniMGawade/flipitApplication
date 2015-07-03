@@ -1,34 +1,10 @@
 <?php 
 
-namespace Tests;
+namespace Helper;
 
-class WebDatabaseHelper
+class PdoHelper
 {
-
     protected $_pdo;
-
-    /**
-     * Get Db credentials from the dsn of the application.ini
-     * @param string $applicationDsn
-     */
-    public function getDatabaseCredentials($applicationDsn)
-    {
-        $splitDbName = explode('/', $applicationDsn);
-        $splitDbUserName = explode(':', $splitDbName[2]);
-        $splitDbPassword = explode('@', $splitDbUserName[1]);
-        $splitHostName = explode('@', $splitDbUserName[1]);
-        $dbPassword = $splitDbPassword[0];
-        $dbUserName = $splitDbUserName[0];
-        $dbName = $splitDbName[3];
-        $hostName = isset($splitHostName[1]) ? $splitHostName[1] : 'localhost';
-        return array(
-            'host'     => $hostName,
-            'driver'   => 'pdo_mysql',
-            'user'     => $dbUserName,
-            'password' => $dbPassword,
-            'dbname'   => $dbName,
-        );
-    }
 
     /**
      * Connect to a database, using PDO dsn, username and password
