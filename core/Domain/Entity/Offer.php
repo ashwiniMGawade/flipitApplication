@@ -282,6 +282,11 @@ class Offer
      */
     protected $categoriesOffers;
 
+    /**
+     * @ORM\Column(type="integer", length=1, nullable=true)
+     */
+    protected $offer_position;
+
     public function __get($property)
     {
         return $this->$property;

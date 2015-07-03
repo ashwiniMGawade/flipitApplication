@@ -66,13 +66,15 @@ class FrontEnd_Helper_ClickoutFunctions
 
         if (isset($network['affliatenetwork'])) {
             if (!empty($network['affliatenetwork']['subId'])) {
-                $networkInformation = self::getExplodedSubidWithPattern($network);
-                $stringPattern = $networkInformation['stringPattern'];
-                $gaCookie = isset($_COOKIE['_ga']) ? $_COOKIE['_ga'] : 'notAvailable';
-
-                $subid = str_replace('A2ASUBID', $conversionId, $networkInformation['subid']);
-                $subid = str_replace('GOOGLEANALYTICSTRACKINCID', $gaCookie, $subid);
+                $networkInformation = self::getExplodedSubidWithPattern($network['affliatenetwork']['subId']);
+            } elseif (!empty($network['affliatenetwork']['extendedSubid'])) {
+                $networkInformation = self::getExplodedSubidWithPattern($network['affliatenetwork']['extendedSubid']);
             }
+
+            $stringPattern = $networkInformation['stringPattern'];
+            $gaCookie = isset($_COOKIE['_ga']) ? $_COOKIE['_ga'] : 'notAvailable';
+            $subid = str_replace('A2ASUBID', $conversionId, $networkInformation['subid']);
+            $subid = str_replace('GOOGLEANALYTICSTRACKINCID', $gaCookie, $subid);
         }
 
         $networkInfo = array(
@@ -82,18 +84,17 @@ class FrontEnd_Helper_ClickoutFunctions
         return $networkInfo;
     }
 
-    public static function getExplodedSubidWithPattern($network)
+    public static function getExplodedSubidWithPattern($networkSubId)
     {
         $subid = "" ;
         $stringPattern = "";
-
-        if (!empty($network['affliatenetwork']['subId'])) {
-            if (strpos($network['affliatenetwork']['subId'], "|") !== false) {
-                $explodedNetworkSubid = explode("|", $network['affliatenetwork']['subId']);
+        if (!empty($networkSubId)) {
+            if (strpos($networkSubId, "|") !== false) {
+                $explodedNetworkSubid = explode("|", $networkSubId);
                 $stringPattern = isset($explodedNetworkSubid[0]) ? $explodedNetworkSubid[0] : '';
                 $subid = isset($explodedNetworkSubid[1]) ? $explodedNetworkSubid[1] : '';
             } else {
-                $subid = "&" . $network['affliatenetwork']['subId'];
+                $subid = "&" . $networkSubId;
             }
         }
         $networkInfo = array(
