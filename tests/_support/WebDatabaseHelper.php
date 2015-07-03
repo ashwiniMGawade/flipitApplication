@@ -1,10 +1,34 @@
-<?php
+<?php 
 
 namespace Tests;
 
-class DatabaseHelper {
+class WebDatabaseHelper
+{
 
     protected $_pdo;
+
+    /**
+     * Get Db credentials from the dsn of the application.ini
+     * @param string $applicationDsn
+     */
+    public function getDatabaseCredentials($applicationDsn)
+    {
+        $splitDbName = explode('/', $applicationDsn);
+        $splitDbUserName = explode(':', $splitDbName[2]);
+        $splitDbPassword = explode('@', $splitDbUserName[1]);
+        $splitHostName = explode('@', $splitDbUserName[1]);
+        $dbPassword = $splitDbPassword[0];
+        $dbUserName = $splitDbUserName[0];
+        $dbName = $splitDbName[3];
+        $hostName = isset($splitHostName[1]) ? $splitHostName[1] : 'localhost';
+        return array(
+            'host'     => $hostName,
+            'driver'   => 'pdo_mysql',
+            'user'     => $dbUserName,
+            'password' => $dbPassword,
+            'dbname'   => $dbName,
+        );
+    }
 
     /**
      * Connect to a database, using PDO dsn, username and password
@@ -13,7 +37,7 @@ class DatabaseHelper {
      * @param  string $password 
      * @return Fixture           $this
      */
-    public function connect($dsn, $username = NULL, $password = NULL)
+    public function connect($dsn, $username = null, $password = null)
     {
         $this->_pdo = new \PDO($dsn, $username, $password);
         $this->_pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
@@ -25,10 +49,9 @@ class DatabaseHelper {
      * @param  PDO $pdo 
      * @return PDO|Fixture      
      */
-    public function pdo(\PDO $pdo = NULL)
+    public function pdo(\PDO $pdo = null)
     {
-        if ($pdo !== NULL)
-        {
+        if ($pdo !== null) {
             $this->_pdo = $pdo;
             return $this;
         }
@@ -39,7 +62,7 @@ class DatabaseHelper {
      * Return an array with all the table names
      * @return array 
      */
-    public function list_tables()
+    public function listTables()
     {
         return $this->pdo()->query('SHOW TABLES')->fetchAll(\PDO::FETCH_COLUMN);
     }
@@ -60,10 +83,9 @@ class DatabaseHelper {
      * Truncate all tables
      * @return Fixture $this
      */
-    public function truncate_all()
+    public function truncateAll()
     {
-        foreach ($this->list_tables() as $table)
-        {
+        foreach ($this->list_tables() as $table) {
             $this->truncate($table);
         }
 
@@ -95,17 +117,14 @@ class DatabaseHelper {
 
         $sql = '';
 
-        foreach ($this->list_tables() as $table)
-        {
+        foreach ($this->list_tables() as $table) {
             $query = $pdo->query("SELECT * FROM `{$table}`");
 
-            while ($row = $query->fetch(\PDO::FETCH_NUM)) 
-            {
+            while ($row = $query->fetch(\PDO::FETCH_NUM)) {
                 $values = array();
 
-                foreach ($row as $column) 
-                {
-                    $values[] = is_null($column) ? 'NULL' : $pdo->quote($column);
+                foreach ($row as $column) {
+                    $values[] = is_null($column) ? 'null' : $pdo->quote($column);
                 }
 
                 $sql .= "INSERT INTO `{$table}` VALUES (".join(',', $values). ");\n";
@@ -120,10 +139,9 @@ class DatabaseHelper {
      * @param  array $files 
      * @return Fixture        $this
      */
-    public function execute_import_files(array $files)
+    public function executeImportFiles(array $files)
     {
-        foreach ($files as $file) 
-        {
+        foreach ($files as $file) {
             include $file;
         }
         return $this;
@@ -162,26 +180,5 @@ class DatabaseHelper {
         $this->pdo()->exec("CREATE DATABASE IF NOT EXISTS `${databaseName}`");
 
         return $this;
-    }
-
-    public function getDatabaseCredentials($doctrineOptions, $dumpPath)
-    {
-        $splitDbName = explode('/', $doctrineOptions);
-        $splitDbUserName = explode(':', $splitDbName[2]);
-        $splitDbPassword = explode('@', $splitDbUserName[1]);
-        $splitHostName = explode('@', $splitDbUserName[1]);
-        $dbPassword = $splitDbPassword[0];
-        $dbUserName = $splitDbUserName[0];
-        $dbName = $splitDbName[3];
-        $hostName = isset($splitHostName[1]) ? $splitHostName[1] : 'localhost';
-        $dsn[] = array(
-            'host'     => $hostName,
-            'driver'   => 'pdo_mysql',
-            'username'     => $dbUserName,
-            'password' => $dbPassword,
-            'name'   => $dbName,
-            'sqlDumpPath' => $dumpPath
-        );
-        return $dsn;
     }
 }
