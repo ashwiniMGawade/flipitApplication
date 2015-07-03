@@ -13,7 +13,7 @@ class AppConfig
     public function getConfigs()
     {
         $this->locale  =  $this->locale != '' ? $this->locale : 'en';
-        $dbName = $this->locale == 'en' ? 'flipit_in' : 'flipit_'.$this->locale;
+        $dbName = $this->locale == 'en' ? 'kortingscode_site' : 'flipit_'.$this->locale;
         if ($this->env == 'development') {
             return $this->getDevelopmentConfig($dbName);
         } else if ($this->env = 'testing') {
