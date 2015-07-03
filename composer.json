@@ -30,7 +30,8 @@
         "psr-4": {
             "Core\\": "core/",
             "Command\\": "cli/Command/",
-            "Tests\\": "tests/"
+            "Tests\\": "tests/",
+            "Config\\": "config/"
         }
     },
     "config": {
