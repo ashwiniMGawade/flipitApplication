@@ -7,7 +7,7 @@ use \Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use \Doctrine\Common\Annotations\AnnotationReader;
 use \Doctrine\Common\Annotations\AnnotationRegistry;
 
-class DoctrineLoad 
+class DoctrineLoad
 {
     protected $localeEntityManger;
     protected $userEntityManger;

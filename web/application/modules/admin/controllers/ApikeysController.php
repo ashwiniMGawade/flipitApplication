@@ -1,4 +1,5 @@
 <?php
+use Core\Domain\Factory\FactoryAdministrator;
 
 class Admin_ApikeysController extends Zend_Controller_Action
 {
@@ -33,64 +34,13 @@ class Admin_ApikeysController extends Zend_Controller_Action
     public function getapikeysAction()
     {
         $params = $this->_getAllParams();
-        $Ipaddresses = \KC\Repository\IpAddresses::getAllIpaddresses($params);
-        echo Zend_Json::encode($Ipaddresses);
+        $ApiKeys = FactoryAdministrator::getsApikeys()->execute($params);
+        echo Zend_Json::encode($ApiKeys);
         die();
     }
 
-    // public function addapikeysAction()
-    // {
-    //     $params = $this->_getAllParams();
-    //     $apiKeysForm = new Application_Form_ApiKeys();
-    //     $this->view->form = $apiKeysForm;
-    //     if ($this->getRequest()->isPost()) {
-    //         if ($apiKeysForm->isValid($this->getRequest()->getPost())) {
-    //             $savedApiKey = KC\Repository\IpAddresses::addIpaddress($params);
-    //             $flash = $this->_helper->getHelper('FlashMessenger');
-    //             $message = $this->view->translate('API Key has been created successfully');
-    //             $flash->addMessage(array('success' => $message));
-    //             $this->_redirect(HTTP_PATH . 'admin/apikeys');
-    //         } else {
-    //             $apiKeysForm->highlightErrorElements();
-    //         }
-    //     }
-
-    // }
-
-    // public function editipaddressAction()
-    // {
-    //     $ipAddressId = $this->getRequest()->getParam('id');
-    //     $qstring = $_SERVER['QUERY_STRING'];
-    //     $apiKeysForm = new Application_Form_IpAddress();
-    //     $apiKeysForm->getElement('id')->setValue($ipAddressId);
-    //     $apiKeysForm->getElement('qString')->setValue($qstring);
-    //     $this->view->form = $apiKeysForm;
-    //     if ($ipAddressId > 0) {
-    //         $ipAddressForEdit = \KC\Repository\IpAddresses::getIpaddressForEdit($ipAddressId);
-    //         $apiKeysForm->getElement('name')->setValue($ipAddressForEdit[0]['name']);
-    //         $apiKeysForm->getElement('ipaddress')->setValue($ipAddressForEdit[0]['ipaddress']);
-    //     }
-    //     if ($this->getRequest()->isPost()) {
-    //         if ($apiKeysForm->isValid($this->getRequest()->getPost())) {
-    //             $params = $this->getRequest()->getParams();
-    //             $ipAddressForEdit = \KC\Repository\IpAddresses::addIpaddress($params);
-    //             $flash = $this->_helper->getHelper('FlashMessenger');
-    //             $message = $this->view->translate('IP address has been updated successfully');
-    //             $flash->addMessage(array('success' => $message));
-    //             $this->_redirect(HTTP_PATH.'admin/ipaddresses#'.$params['qString']);
-    //         } else {
-    //             $apiKeysForm->highlightErrorElements();
-    //         }
-    //     }
-    // }
-
-    // public function deleteipaddressAction()
-    // {
-    //     $ipAddressId = $this->getRequest()->getParam('id');
-    //     \KC\Repository\IpAddresses::deleteIpaddress($ipAddressId);
-    //     $flash = $this->_helper->getHelper('FlashMessenger');
-    //     $message = $this->view->translate('IP address has been deleted successfully');
-    //     $flash->addMessage(array('success' => $message));
-    //     exit();
-    // }
+    public function createapikeyAction()
+    {
+        
+    }
 }
