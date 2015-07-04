@@ -11,6 +11,6 @@ class PageRepository extends BaseRepository implements PageRepositoryInterface
 
     public function __construct($em)
     {
-        $this->em = $em->getLocaleEntityManger();
+        $this->em = $em;
     }
 }
