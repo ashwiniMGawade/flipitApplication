@@ -1,5 +1,5 @@
 <?php
-namespace admin;
+namespace Admin;
 
 use \WebTester;
 
