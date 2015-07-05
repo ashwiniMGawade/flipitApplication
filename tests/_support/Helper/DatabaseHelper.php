@@ -9,8 +9,9 @@ class DatabaseHelper
 
     public function __construct()
     {
-        $this->siteConfig = $this->getDatabaseCredentials("mysql://root:root@localhost/flipit_test");
-        $this->userConfig = $this->getDatabaseCredentials("mysql://root:root@localhost/flipit_test_user");
+        $config = new \Zend_Config_Ini(__DIR__."/../../../web/application/configs/application.ini", 'testing');
+        $this->siteConfig = $this->getDatabaseCredentials($config->doctrine->en->dsn);
+        $this->userConfig = $this->getDatabaseCredentials($config->doctrine->imbull);
     }
 
     public function haveInDatabasePDOSite($table, $arr)
