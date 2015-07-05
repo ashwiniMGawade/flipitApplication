@@ -136,6 +136,27 @@ class PdoHelper
         return $this;
     }
 
+    public function insertInToDb($table, array $arr)
+    {
+        if (!is_array($arr) || !count($arr)) {
+            throw new \Exception("pdoInsert needs an array to insert", 1);
+        }
+
+        foreach ($arr as $rec) {
+            if (!is_array($rec)) {
+                $rec = $arr;
+            }
+            $bind = ':'.implode(',:', array_keys($rec));
+            $sql  = 'insert into '.$table.'('.implode(',', array_keys($rec)).') values ('.$bind.')';
+            $stmt = $this->pdo()->prepare($sql);
+
+            $stmt->execute(array_combine(explode(',', $bind), array_values($rec)));
+            if ($rec == $arr) {
+                break;
+            }
+        }
+    }
+
     public function restart($databaseName)
     {
         $this->dropDatabase($databaseName);

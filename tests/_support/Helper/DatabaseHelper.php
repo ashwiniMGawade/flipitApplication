@@ -4,35 +4,78 @@ namespace Helper;
 
 class DatabaseHelper
 {
-    public function databaseSetup()
+    protected $siteConfig;
+    protected $userConfig;
+
+    public function __construct()
     {
-        $databaseHelper = new PdoHelper;
+        $this->siteConfig = $this->getDatabaseCredentials("mysql://root:root@localhost/flipit_test");
+        $this->userConfig = $this->getDatabaseCredentials("mysql://root:root@localhost/flipit_test_user");
+    }
 
-        $application = new \Zend_Application(APPLICATION_ENV, __DIR__."/../../../web/application/configs/application.ini");
-        $applicationConfig = $application->getOption('doctrine');
+    public function haveInDatabasePDOSite($table, $arr)
+    {
+        $this->insertInToDb($this->siteConfig, $table, $arr);
+    }
 
-        $databases[] = $this->getDatabaseCredentials($applicationConfig['en']['dsn']);
-        $databases[] = $this->getDatabaseCredentials($applicationConfig['imbull']);
+    public function haveInDatabasePDOUser($table, $arr)
+    {
+        $this->insertInToDb($this->siteConfig, $table, $arr);
+    }
 
-        foreach ($databases as $database) {
+    public function siteDatabaseSetup()
+    {
+        $this->databaseSetup($this->siteConfig);
+    }
 
-            $sqlDumpPath = 'tests/_data/' . $database['dbname'] . '.sql';
+    public function userDatabaseSetup()
+    {
+        $this->databaseSetup($this->userConfig);
+    }
 
-            // Drop and create database
-            $databaseHelper
-                ->connect('mysql:host=' . $database['host'] . ';', $database['user'], $database['password'])
-                ->restart($database['dbname']);
+    private function insertInToDb($config, $table, $arr)
+    {
+        $pdoHelper = new PdoHelper;
+        $pdoHelper
+            ->connect(
+                'mysql:host=' . $config['host'] . ';dbname=' . $config['dbname'],
+                $config['user'],
+                $config['password']
+            )
+            ->insertInToDb($table, $arr);
+    }
 
-            // Connect with the Database and import schema
-            $databaseHelper
-                ->connect('mysql:host=' . $database['host'] . ';dbname=' . $database['dbname'], $database['user'], $database['password']);
+    private function databaseSetup($config)
+    {
+        $verifiedSqlDumpPath = $this->getSqlDump($config['dbname']);
 
-            if (file_exists($sqlDumpPath)) {
-                $databaseHelper
-                    ->load(file_get_contents($sqlDumpPath));
-            } else {
-                throw new \Exception("Sql dump can't be found. Looking for this file: " . $sqlDumpPath, 1);
-            }
+        $pdoHelper = new PdoHelper;
+
+        $pdoHelper
+            ->connect(
+                'mysql:host=' . $config['host'] . ';',
+                $config['user'],
+                $config['password']
+            )
+            ->restart($config['dbname']);
+
+        $pdoHelper
+            ->connect(
+                'mysql:host=' . $config['host'] . ';dbname=' . $config['dbname'],
+                $config['user'],
+                $config['password']
+            )
+            ->load(file_get_contents($verifiedSqlDumpPath));
+    }
+
+    private function getSqlDump($databaseName)
+    {
+        $sqlDumpPath = 'tests/_data/' . $databaseName . '.sql';
+
+        if (file_exists($sqlDumpPath)) {
+            return $sqlDumpPath;
+        } else {
+            throw new \Exception("Sql dump can't be found. Looking for this file: " . $sqlDumpPath, 1);
         }
     }
 
@@ -58,4 +101,5 @@ class DatabaseHelper
             'dbname'   => $dbName,
         );
     }
+
 }

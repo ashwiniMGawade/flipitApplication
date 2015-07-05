@@ -14,6 +14,48 @@ class Web extends \Codeception\Module
     public function _before()
     {
         $databaseHelper = new DatabaseHelper;
-        $databaseHelper->databaseSetup();
+        $databaseHelper->siteDatabaseSetup();
+        $databaseHelper->userDatabaseSetup();
     }
+
+    public function haveInDatabasePDOSite($table, $arr)
+    {
+        $databaseHelper = new DatabaseHelper;
+        $databaseHelper->haveInDatabasePDOSite($table, $arr);
+    }
+
+    public function haveInDatabasePDOUser($table, $arr)
+    {
+        $databaseHelper = new DatabaseHelper;
+        $databaseHelper->haveInDatabasePDOUser($table, $arr);
+    }
+
+    // public function initializeDb($moduleName, $database)
+    // {
+    //     $db = $this->getModule($moduleName);
+    //     $db->_reconfigure($database);
+    //     $db->_initialize();
+    // }
+
+    // public function flipitTestDb()
+    // {
+    //     return array(
+    //         'dsn' => 'mysql:host=localhost;dbname=flipit_test',
+    //         'dump' => 'tests/_data/flipit_test.sql',
+    //         'user' => 'root',
+    //         'password' => 'root',
+    //         'cleanup' => false
+    //     );
+    // }
+
+    // public function flipitTestUserDb()
+    // {
+    //     return array(
+    //         'dsn' => 'mysql:host=localhost;dbname=flipit_test_user',
+    //         'dump' => 'tests/_data/flipit_test_user.sql',
+    //         'user' => 'root',
+    //         'password' => 'root',
+    //         'cleanup' => false
+    //     );
+    // }
 }
