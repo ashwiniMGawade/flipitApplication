@@ -2,3 +2,12 @@ class_name: DomainTester
 modules:
     enabled:
         - \Helper\Domain
+coverage:
+    enabled: true
+    include:
+        - core/*
+    exclude:
+        - core/Domain/Entity/*
+        - core/Domain/Repository/*
+        - core/Domain/Factory/*
+        - core/Persistence/*
