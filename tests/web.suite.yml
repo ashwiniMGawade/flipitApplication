@@ -2,13 +2,26 @@ class_name: WebTester
 modules:
     enabled:
         - \Helper\Web
-        - ZF1
-        - Filesystem
-        - PhpBrowser
+        - WebDriver
+        # - Db
+        # - ZF1
+        # - PhpBrowser
     config:
-        ZF1:
-            app_path: web/application
-            lib_path: web/library
-            config: web/application/configs/application.ini
-        PhpBrowser:
+        # ZF1:
+        #     app_path: web/application
+        #     lib_path: web/library
+        #     config: web/application/configs/application.ini
+        # PhpBrowser:
+            # url: 'http://dev.flipit.com/'
+        WebDriver:
             url: 'http://dev.flipit.com/'
+            browser: phantomjs
+            window_size: 1280x720
+            capabilities:
+                phantomjs.cli.args: ['--ignore-ssl-errors=true']
+        # Db:
+        #     cleanup: false
+        #     user: root
+        #     password: root
+        #     dsn: mysql:host=localhost;dbname=flipit_test
+        #     dump: /tests/_data/flipit_test.sql
