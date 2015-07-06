@@ -8,6 +8,6 @@ class RepositoryFactory
 {
     public static function page()
     {
-        return new PageRepository(DoctrineManager::getLocaleEntityManger());
+        return new PageRepository(DoctrineManager::getLocaleEntityManager());
     }
 }
