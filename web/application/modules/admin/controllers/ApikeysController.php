@@ -1,5 +1,5 @@
 <?php
-use Core\Domain\Factory\FactoryAdministrator;
+use Core\Domain\Factory\AdministratorFactory;
 
 class Admin_ApikeysController extends Zend_Controller_Action
 {
@@ -33,14 +33,28 @@ class Admin_ApikeysController extends Zend_Controller_Action
 
     public function getapikeysAction()
     {
-        $params = $this->_getAllParams();
-        $ApiKeys = FactoryAdministrator::getsApikeys()->execute($params);
-        echo Zend_Json::encode($ApiKeys);
-        die();
+        $apiKeys = AdministratorFactory::getApiKeys()->execute();
+        $apiKeys = $this->toArray($apiKeys);
+        echo Zend_Json::encode($apiKeys);
+        exit;
     }
 
-    public function createapikeyAction()
+    private function toArray($apiKeys)
     {
-        
+        $aaData = array();
+        foreach ($apiKeys as $apiKey) {
+            $aaData[] = array(
+                'id' => $apiKey->__get('id'),
+                'apiKey' => $apiKey->__get('api_key'),
+                'createdAt' => $apiKey->__get('created_at')
+            );
+        }
+        $returnData = array(
+            "sEcho" => "1",
+            "aaData" => $aaData,
+            "iTotalRecords" => 20,
+            "iTotalDisplayRecords" => 20
+        );
+        return $returnData;
     }
 }
