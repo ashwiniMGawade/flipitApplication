@@ -2,7 +2,7 @@
 namespace Core\Domain\Factory;
 
 use Core\Domain\Usecase\Admin\GetsApiKeyListing;
-use Core\Domain\Factory\FactoryRepository;
+use Core\Persistence\Factory\FactoryRepository;
 
 class FactoryAdministrator
 {
