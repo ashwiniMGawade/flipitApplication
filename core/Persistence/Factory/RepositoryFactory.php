@@ -9,11 +9,11 @@ class RepositoryFactory
 {
     public static function page()
     {
-        return new PageRepository((new DoctrineManager)->getLocaleEntityManger());
+        return new PageRepository((new DoctrineManager)->getLocaleEntityManager());
     }
 
     public static function apiKeys()
     {
-        return new ApiKeyRepository((new DoctrineManager)->getUserEntityManger());
+        return new ApiKeyRepository((new DoctrineManager)->getUserEntityManager());
     }
 }
