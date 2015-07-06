@@ -3,12 +3,17 @@ namespace Core\Persistence\Factory;
 
 use \Core\Persistence\Database\Service\DoctrineManager;
 use \Core\Persistence\Database\Repository\PageRepository;
+use \Core\Persistence\Database\Repository\ApiKeyRepository;
 
 class RepositoryFactory
 {
     public static function page()
     {
-        $doctrineManager = new DoctrineManager();
-        return new PageRepository($doctrineManager->getLocaleEntityManager());
+        return new PageRepository((new DoctrineManager)->getLocaleEntityManger());
+    }
+
+    public static function apiKeys()
+    {
+        return new ApiKeyRepository((new DoctrineManager)->getUserEntityManger());
     }
 }
