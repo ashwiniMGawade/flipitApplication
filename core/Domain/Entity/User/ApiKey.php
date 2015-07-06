@@ -25,17 +25,12 @@ class ApiKey
      * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\User\User", inversedBy="api_keys")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    protected $user;
+    protected $user_id;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $created_at;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $updated_at;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)

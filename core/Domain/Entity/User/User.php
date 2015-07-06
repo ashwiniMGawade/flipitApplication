@@ -169,6 +169,11 @@ class User
      */
     protected $users;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\User\ApiKey", mappedBy="user")
+     */
+    protected $apiKeys;
+
     public function __get($property)
     {
         return $this->$property;
