@@ -8,8 +8,8 @@
   $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.dataTables.min.js");
   $this->headScript()->appendFile(PUBLIC_PATH . "/js/dataTableComman.js");
   $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
-  $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
-  $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/back_end/affiliateJs.js" );
+  $this->headLink()->appendStylesheet(PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css");
+  $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/affiliateJs.js");
 ?>
 <div id="affiliateNetworkList">
    <div class="wrap columns-2">
@@ -27,7 +27,7 @@
 		}?> 
 		 
        <h1><?php echo $this->translate('Affiliate Networks'); ?> 
-     <button class="btn ml10" id="" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/affiliate/addaffiliate'">
+     <button class="btn ml10" id="createNetwork" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/affiliate/addaffiliate'">
      <?php echo $this->translate('Add new network'); ?>
      </button>
      </h1>
@@ -48,7 +48,8 @@
 	            <tr>
 	             	<th><?php echo $this->translate('id');?></th>
 	                <th style="width:500px!important"><?php echo $this->translate('Name');?></th>
-	                <th style="width:200px!important"><?php echo $this->translate('Subid ');?></th> 
+	                <th style="width:200px!important"><?php echo $this->translate('Subid ');?></th>
+                  <th style="width:200px!important"><?php echo $this->translate('ExtendedSubid ');?></th>
 	            </tr>
 	        </thead>
 			    	

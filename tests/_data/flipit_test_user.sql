@@ -127,7 +127,8 @@ CREATE TABLE `ip_addresses` (
 
 LOCK TABLES `ip_addresses` WRITE;
 /*!40000 ALTER TABLE `ip_addresses` DISABLE KEYS */;
-INSERT INTO `ip_addresses` VALUES (17,'test','192.168.56.1',0,'2015-07-02 13:35:28','2015-07-02 13:35:28');
+INSERT INTO `ip_addresses` VALUES (17,'phpbrowser test','192.168.56.1',0,'2015-07-02 13:35:28','2015-07-02 13:35:28');
+INSERT INTO `ip_addresses` VALUES (18,'phantomjs test','192.168.56.102',0,'2015-07-02 13:35:28','2015-07-02 13:35:28');
 /*!40000 ALTER TABLE `ip_addresses` ENABLE KEYS */;
 UNLOCK TABLES;
 

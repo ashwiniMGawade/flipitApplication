@@ -76,7 +76,10 @@ function affilateValidation(){
 					addNetworkText : {
 						 required : true,
 						 minlength : 2
-						}
+						},
+					subId : {
+                        required : true
+                    }
 				},
 				
 				messages : {
@@ -85,7 +88,7 @@ function affilateValidation(){
 					      minlength : __("Please enter atleast 2 characters")
 					},
 					subId : {
-						  required : __("Please enter network subid"),	
+						  required : __("Please enter network subid")	
 					}
 				},
 				onfocusin : function(element) {

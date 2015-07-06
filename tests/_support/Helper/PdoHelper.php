@@ -1,34 +1,10 @@
 <?php 
 
-namespace Tests;
+namespace Helper;
 
-class WebDatabaseHelper
+class PdoHelper
 {
-
     protected $_pdo;
-
-    /**
-     * Get Db credentials from the dsn of the application.ini
-     * @param string $applicationDsn
-     */
-    public function getDatabaseCredentials($applicationDsn)
-    {
-        $splitDbName = explode('/', $applicationDsn);
-        $splitDbUserName = explode(':', $splitDbName[2]);
-        $splitDbPassword = explode('@', $splitDbUserName[1]);
-        $splitHostName = explode('@', $splitDbUserName[1]);
-        $dbPassword = $splitDbPassword[0];
-        $dbUserName = $splitDbUserName[0];
-        $dbName = $splitDbName[3];
-        $hostName = isset($splitHostName[1]) ? $splitHostName[1] : 'localhost';
-        return array(
-            'host'     => $hostName,
-            'driver'   => 'pdo_mysql',
-            'user'     => $dbUserName,
-            'password' => $dbPassword,
-            'dbname'   => $dbName,
-        );
-    }
 
     /**
      * Connect to a database, using PDO dsn, username and password
@@ -158,6 +134,27 @@ class WebDatabaseHelper
         $this->pdo()->exec('FLUSH TABLES');
 
         return $this;
+    }
+
+    public function insertInToDb($table, array $arr)
+    {
+        if (!is_array($arr) || !count($arr)) {
+            throw new \Exception("pdoInsert needs an array to insert", 1);
+        }
+
+        foreach ($arr as $rec) {
+            if (!is_array($rec)) {
+                $rec = $arr;
+            }
+            $bind = ':'.implode(',:', array_keys($rec));
+            $sql  = 'insert into '.$table.'('.implode(',', array_keys($rec)).') values ('.$bind.')';
+            $stmt = $this->pdo()->prepare($sql);
+
+            $stmt->execute(array_combine(explode(',', $bind), array_values($rec)));
+            if ($rec == $arr) {
+                break;
+            }
+        }
     }
 
     public function restart($databaseName)

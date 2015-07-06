@@ -516,6 +516,9 @@ class UnitOfWork implements PropertyChangedListener
             if ($class->isCollectionValuedAssociation($name) && $value !== null && ! ($value instanceof PersistentCollection)) {
                 // If $value is not a Collection then use an ArrayCollection.
                 if ( ! $value instanceof Collection) {
+                    if (!is_array($value)) {   
+                        $value = array($value);
+                    }
                     $value = new ArrayCollection($value);
                 }
 

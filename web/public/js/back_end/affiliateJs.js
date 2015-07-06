@@ -118,6 +118,17 @@ function getNetWorkList(iSearchText,iStart,iSortCol,iSortDir) {
 									"bSortable" : true,
 									'sWidth' : '500px'
 									
+								},
+								{
+									"fnRender" : function(obj) {
+										
+										var tag = '<p editId="' + obj.aData.id + '" class="colorAsLink word-wrap-without-margin-network"><a href="javascript:void(0);">'  +  (obj.aData.extendedSubid ? obj.aData.extendedSubid : '' )    + '</a></p>';									    return tag;
+									 
+									},
+									"bSearchable" : true,
+									"bSortable" : true,
+									'sWidth' : '500px'
+									
 								}],
 								
 								"fnInitComplete" : function(obj) {

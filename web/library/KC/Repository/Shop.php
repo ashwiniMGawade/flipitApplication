@@ -255,30 +255,13 @@ class Shop extends \Core\Domain\Entity\Shop
                 $nextCharacter = $endCharacter;
             }
         }
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $currentDateAndTime = date('Y-m-d 00:00:00');
-        $query = $queryBuilder->select('o.id,s.id, s.name, s.permaLink')
-        ->from('\Core\Domain\Entity\Shop', 's')
-        ->addSelect(
-            "(SELECT COUNT(exclusive) FROM \Core\Domain\Entity\Offer exclusive WHERE exclusive.shopOffers = s.id AND
-                (o.exclusiveCode=1 AND o.endDate > '$currentDateAndTime')) as exclusiveCount"
-        )
-        ->addSelect("(SELECT COUNT(p.id) FROM \Core\Domain\Entity\PopularCode p WHERE p.popularcode = o.id ) as popularCount")
-        ->leftJoin('s.offer', 'o')
-        ->leftJoin('s.logo', 'img')
-        ->where('s.deleted= 0')
-        ->andWhere('s.status= 1')
-        ->andWhere(
-            $queryBuilder->expr()->between(
-                "s.name",
-                $queryBuilder->expr()->literal($startCharacter),
-                $queryBuilder->expr()->literal($nextCharacter)
-            )
-        );
-        
-        $query->orderBy('s.name');
-        $storeInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
- 
+        $storeInformation = self::getStoresForRange($startCharacter, $nextCharacter);
+
+        if ($endCharacter=='z') {
+            $storeInformationEndCharacter = self::getStoresForRange("", $nextCharacter);
+            $storeInformation = array_merge($storeInformation, $storeInformationEndCharacter);
+        }
+
         $storesForFrontend =array();
         foreach ($storeInformation as $store) {
             if ($store['name']!='' && $store['name']!=null) {
@@ -298,6 +281,44 @@ class Shop extends \Core\Domain\Entity\Shop
             }
         }
         return $storesForFrontend;
+    }
+
+    public static function getStoresForRange($startCharacter, $nextCharacter)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $currentDateAndTime = date('Y-m-d 00:00:00');
+        $query = $queryBuilder->select('o.id,s.id, s.name, s.permaLink')
+            ->from('\Core\Domain\Entity\Shop', 's')
+            ->addSelect(
+                "(SELECT COUNT(exclusive) FROM \Core\Domain\Entity\Offer exclusive WHERE exclusive.shopOffers = s.id AND
+                    (o.exclusiveCode=1 AND o.endDate > '$currentDateAndTime')) as exclusiveCount"
+            )
+            ->addSelect("(SELECT COUNT(p.id) FROM \Core\Domain\Entity\PopularCode p WHERE p.popularcode = o.id ) as popularCount")
+            ->leftJoin('s.offer', 'o')
+            ->leftJoin('s.logo', 'img')
+            ->where('s.deleted= 0')
+            ->andWhere('s.status= 1');
+
+        if ($startCharacter != '') {
+            $query = $query->andWhere(
+                $queryBuilder->expr()->between(
+                    "s.name",
+                    $queryBuilder->expr()->literal($startCharacter),
+                    $queryBuilder->expr()->literal($nextCharacter)
+                )
+            );
+        } else {
+            $query = $query->andWhere(
+                $queryBuilder->expr()->like(
+                    "s.name",
+                    $queryBuilder->expr()->literal($nextCharacter."%")
+                )
+            );
+        }
+        
+        $query->orderBy('s.name');
+        $storeInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $storeInformation;
     }
 
     public static function getAllPopularStores($limit)

@@ -11,35 +11,51 @@ class Web extends \Codeception\Module
      * This function is run before every web test to rest the Databases.
      * @param  \Codeception\TestCase $test 
      */
-    public function _before(\Codeception\TestCase $test)
+    public function _before()
     {
-        $databaseHelper = new \Tests\WebDatabaseHelper;
-
-        $application = new \Zend_Application(APPLICATION_ENV, __DIR__."/../../../web/application/configs/application.ini");
-        $applicationConfig = $application->getOption('doctrine');
-
-        $databases[] = $databaseHelper->getDatabaseCredentials($applicationConfig['en']['dsn']);
-        $databases[] = $databaseHelper->getDatabaseCredentials($applicationConfig['imbull']);
-
-        foreach ($databases as $database) {
-
-            $sqlDumpPath = 'tests/_data/' . $database['dbname'] . '.sql';
-
-            // Drop and create database
-            $databaseHelper
-                ->connect('mysql:host=' . $database['host'] . ';', $database['user'], $database['password'])
-                ->restart($database['dbname']);
-
-            // Connect with the Database and import schema
-            $databaseHelper
-                ->connect('mysql:host=' . $database['host'] . ';dbname=' . $database['dbname'], $database['user'], $database['password']);
-
-            if (file_exists($sqlDumpPath)) {
-                $databaseHelper
-                    ->load(file_get_contents($sqlDumpPath));
-            } else {
-                throw new \Exception("Sql dump can't be found. Looking for this file: " . $sqlDumpPath, 1);
-            }
-        }
+        $databaseHelper = new DatabaseHelper;
+        $databaseHelper->siteDatabaseSetup();
+        $databaseHelper->userDatabaseSetup();
     }
+
+    public function haveInDatabasePDOSite($table, $arr)
+    {
+        $databaseHelper = new DatabaseHelper;
+        $databaseHelper->haveInDatabasePDOSite($table, $arr);
+    }
+
+    public function haveInDatabasePDOUser($table, $arr)
+    {
+        $databaseHelper = new DatabaseHelper;
+        $databaseHelper->haveInDatabasePDOUser($table, $arr);
+    }
+
+    // public function initializeDb($moduleName, $database)
+    // {
+    //     $db = $this->getModule($moduleName);
+    //     $db->_reconfigure($database);
+    //     $db->_initialize();
+    // }
+
+    // public function flipitTestDb()
+    // {
+    //     return array(
+    //         'dsn' => 'mysql:host=localhost;dbname=flipit_test',
+    //         'dump' => 'tests/_data/flipit_test.sql',
+    //         'user' => 'root',
+    //         'password' => 'root',
+    //         'cleanup' => false
+    //     );
+    // }
+
+    // public function flipitTestUserDb()
+    // {
+    //     return array(
+    //         'dsn' => 'mysql:host=localhost;dbname=flipit_test_user',
+    //         'dump' => 'tests/_data/flipit_test_user.sql',
+    //         'user' => 'root',
+    //         'password' => 'root',
+    //         'cleanup' => false
+    //     );
+    // }
 }
