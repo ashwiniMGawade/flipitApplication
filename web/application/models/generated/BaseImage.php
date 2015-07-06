@@ -93,6 +93,26 @@ abstract class BaseImage extends Doctrine_Record
                     'type' => 'SCREENSHOT',
              )
          ));
+        $this->hasColumn(
+           'height',
+            'integer',
+            10,
+            array(
+                'type' => 'ineteger',
+                'length' => '10'
+            )
+        );
+
+        $this->hasColumn(
+            'width',
+            'integer',
+            10,
+            array(
+                'type' => 'ineteger',
+                'length' => '10'
+
+            )
+        );
     }
 
     public function setUp()
