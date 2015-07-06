@@ -3,7 +3,7 @@ namespace Core\Domain\Usecase\Admin;
 
 use Core\Domain\Repository\ApiKeyRepositoryInterface;
 
-class GetsApiKeyListing
+class GetApiKeyListingUsecase
 {
     private $apiKeyRepository;
 
@@ -14,6 +14,6 @@ class GetsApiKeyListing
 
     public function execute()
     {
-        return $this->apiKeyRepository->getAll();
+        return $this->apiKeyRepository->findAll('\Core\Domain\Entity\User\ApiKey');
     }
 }
