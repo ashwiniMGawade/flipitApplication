@@ -8,6 +8,7 @@ class RepositoryFactory
 {
     public static function page()
     {
-        return new PageRepository(DoctrineManager::getLocaleEntityManager());
+        $doctrineManager = new DoctrineManager();
+        return new PageRepository($doctrineManager->getLocaleEntityManager());
     }
 }

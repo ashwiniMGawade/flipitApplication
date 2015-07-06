@@ -35,12 +35,12 @@ class DoctrineManager
         $this->userEntityManger = EntityManager::create($connection['connections']['user'], $config);
     }
 
-    public static function getUserEntityManager()
+    public function getUserEntityManager()
     {
         return $this->userEntityManger;
     }
 
-    public static function getLocaleEntityManager()
+    public function getLocaleEntityManager()
     {
         return $this->localeEntityManger;
     }
