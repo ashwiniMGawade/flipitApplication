@@ -42,7 +42,13 @@ class Admin_ApikeysController extends Zend_Controller_Action
     public function addapikeyAction()
     {
         $user = Auth_StaffAdapter::getIdentity();
-        AdministratorFactory::addApiKey()->execute($user);
+        $entityValues = array(
+            'api_key' => AdministratorFactory::apiKey()->generate(),
+            'user' => $user,
+            'created_at' => new \DateTime(),
+            'deleted' => 0
+        );
+        AdministratorFactory::createApiKey()->execute($entityValues);
         exit;
     }
 
