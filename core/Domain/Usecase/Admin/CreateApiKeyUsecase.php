@@ -1,36 +1,45 @@
 <?php
 namespace Core\Domain\Usecase\Admin;
 
-use Core\Domain\Repository\ApiKeyRepositoryInterface;
-use Core\Domain\Entity\User\ApiKey;
+use \Core\Domain\Repository\ApiKeyRepositoryInterface;
+use \Core\Domain\Entity\User\ApiKey;
 
+/**
+ * Class CreateApiKeyUsecase
+ *
+ * @package Core\Domain\Usecase\Admin
+ */
 class CreateApiKeyUsecase
 {
+    /**
+     * @var \Core\Domain\Repository\ApiKeyRepositoryInterface
+     */
     private $apiKeyRepository;
 
+    /**
+     * @param \Core\Domain\Repository\ApiKeyRepositoryInterface $apiKeyRepository
+     */
     public function __construct(ApiKeyRepositoryInterface $apiKeyRepository)
     {
         $this->apiKeyRepository = $apiKeyRepository;
     }
 
-    public function execute($user)
+    /**
+     * @param $properties
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public function execute($properties)
     {
-        $apiKey = new ApiKey();
-        $apiKey->__set('api_key', $this->generateApiKey());
-        $apiKey->__set('user_id', $user);
-        $apiKey->__set('created_at', new \DateTime());
-        $apiKey->__set('deleted', 0);
-        return $this->apiKeyRepository->persist($apiKey);
-    }
-
-    private function generateApiKey($length = 32)
-    {
-        $apiKey = '';
-        $allowedCharacters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_';
-        $charactersLength = strlen($allowedCharacters);
-        for ($i = 0; $i < $length; $i++) {
-            $apiKey .= $allowedCharacters[rand(0, $charactersLength - 1)];
+        if (empty($properties)) {
+            throw new \Exception('The Properties cannot be empty');
         }
-        return $apiKey;
+        $apiKey = new ApiKey();
+        $apiKey->__set('api_key', $properties['api_key']);
+        $apiKey->__set('user_id', $properties['user']);
+        $apiKey->__set('created_at', $properties['created_at']);
+        $apiKey->__set('deleted', $properties['deleted']);
+        return $this->apiKeyRepository->persist($apiKey);
     }
 }
