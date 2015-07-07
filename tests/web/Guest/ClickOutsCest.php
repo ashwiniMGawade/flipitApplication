@@ -12,66 +12,68 @@ class ClickOutsCest
     {
     }
 
-    // public function sidebarClickout(WebTester $I, \Codeception\Scenario $scenario)
-    // {
-    //     // $this->unlinkFilesFromTmp();
-    //     $I = new WebTester($scenario);
-    //     $this->createShop($I);
-    //     $this->commonClickouts($I, '.web a');
-    // }
+   /* public function sidebarClickout(WebTester $I, \Codeception\Scenario $scenario)
+    {
+        $I = new WebTester($scenario);
+        $this->createShop($I);
+        $this->createDashboard($I);
+        $this->commonClickouts($I, '.web a');
+    }*/
 
-    // public function headerLinkClickout(WebTester $I, \Codeception\Scenario $scenario)
-    // {
-    //     // $this->unlinkFilesFromTmp();
-    //     $I = new WebTester($scenario);
-    //     $this->createShop($I);
-    //     $this->commonClickouts($I, '.header-block-2 .box');
-    // }
+   /* public function headerLinkClickout(WebTester $I, \Codeception\Scenario $scenario)
+    {
+        $I = new WebTester($scenario);
+        $this->commonClickouts($I, '.header-block-2 .radiusImg');
+    }
 
-    // public function headerImageClickout(WebTester $I, \Codeception\Scenario $scenario)
-    // {
-    //     // $this->unlinkFilesFromTmp();
-    //     $I->wait(10);
-    //     $I = new WebTester($scenario);
-    //     $this->createShop($I);
-    //     $this->commonClickouts($I, '.icon a');
-    // }
-    // public function couponCodeClickout(WebTester $I, \Codeception\Scenario $scenario)
-    // {
-    //     // $this->unlinkFilesFromTmp();
-    //     $I = new WebTester($scenario);
-    //     $this->createShop($I);
-    //     $this->createOffer($I, 'CD', 'couponCode', '2', 'coupon code offer');
-    //     $this->switchOfferClickouts('couponCode', '.buttons a:first-child', '', $I);
-    // }
+    public function headerImageClickout(WebTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wait(10);
+        $I = new WebTester($scenario);
+        $this->commonClickouts($I, '.offer-holder a');
+    }
+
+    public function titleClickout(WebTester $I, \Codeception\Scenario $scenario)
+    {
+        $I->wait(5);
+        $I = new WebTester($scenario);
+        $this->commonClickouts($I, '.clickout-title a');
+    }*/
+
+    public function couponCodeClickout(WebTester $I, \Codeception\Scenario $scenario)
+    {
+        $I = new WebTester($scenario);
+        $this->createOffer($I, 'CD', 'couponCode', '2', 'coupon code offer');
+        $this->switchOfferClickouts('couponCode', '.buttons a:first-child', '', $I);
+    }
     
-    // public function saleClickout(WebTester $I, \Codeception\Scenario $scenario)
-    // {
-    //     // $this->unlinkFilesFromTmp();
-    //     $I = new WebTester($scenario);
-    //     $this->createShop($I);
-    //     $this->createOffer($I, 'SL', 'sale', '1', 'sale offer');
-    //     $this->switchOfferClickouts('sale', '.buttons a:first-child', '.clickout-title a', $I);
-    // }
+    /*public function saleClickout(WebTester $I, \Codeception\Scenario $scenario)
+    {
+        $I = new WebTester($scenario);
+        $this->createShop($I);
+        $this->createDashboard($I);
+        $this->createOffer($I, 'SL', 'sale', '1', 'sale offer');
+        $this->switchOfferClickouts('sale', '.buttons a:first-child', '.clickout-title a', $I);
+    }
  
-    // public function expiredClickout(WebTester $I, \Codeception\Scenario $scenario)
-    // {
-    //     // $this->unlinkFilesFromTmp();
-    //     $I = new WebTester($scenario);
-    //     $this->createShop($I);
-    //     $this->createOffer($I, 'CD', 'couponCode', '2', 'expired offer');
-    //     $this->switchOfferClickouts('expired', '', '.line a', $I);
-    // }
+    public function expiredClickout(WebTester $I, \Codeception\Scenario $scenario)
+    {
+        $I = new WebTester($scenario);
+        $this->createShop($I);
+        $this->createDashboard($I);
+        $this->createOffer($I, 'CD', 'couponCode', '2', 'expired offer');
+        $this->switchOfferClickouts('expired', '', '.line a', $I);
+    }
 
-    // public function printableClickout(WebTester $I, \Codeception\Scenario $scenario)
-    // {
-    //     // $this->unlinkFilesFromTmp();
-    //     $I = new WebTester($scenario);
-    //     $this->createShop($I);
-    //     $this->createOffer($I, 'PA', 'printable', '0', 'printable offer');
-    //     $this->switchOfferClickouts('printable', '.buttons a:first-child', '.clickout-title a', $I);
-    // }
-
+    public function printableClickout(WebTester $I, \Codeception\Scenario $scenario)
+    {
+        $I = new WebTester($scenario);
+        $this->createShop($I);
+        $this->createDashboard($I);
+        $this->createOffer($I, 'PA', 'printable', '0', 'printable offer');
+        $this->switchOfferClickouts('printable', '.buttons a:first-child', '.clickout-title a', $I);
+    }
+*/
     protected function createOffer($I, $codeType, $codeTilesType, $discountvalueType, $title)
     {
         $I->haveInDatabase(
@@ -116,9 +118,28 @@ class ClickOutsCest
         );
     }
 
+    protected function createDashboard($I)
+    {
+        $I->haveInDatabasePDOSite(
+            'dashboard',
+            array(
+                'message' => 'jpg',
+                'no_of_offers' => 12,
+                'no_of_shops' => 3,
+                'no_of_clickouts' => 321,
+                'no_of_subscribers' => 0,
+                'total_no_of_offers'=> 123,
+                'total_no_of_shops'=> 22,
+                'total_no_of_shops_online_code'=> 33,
+                'total_no_of_shops_online_code_lastweek'=> 33,
+                'total_no_members'=>33
+            )
+        );
+    }
+
     protected function createShop($I)
     {
-        // $I->initializeDb('Db', $I->flipitTestUserDb());
+       /* $I->initializeDb('Db', $I->flipitTestUserDb());
 
         $I->haveInDatabasePDOUser(
             'user',
@@ -133,7 +154,7 @@ class ClickOutsCest
             )
         );
         
-        // $I->initializeDb('Db', $I->flipitTestDb());
+        $I->initializeDb('Db', $I->flipitTestDb());*/
 
         $I->haveInDatabasePDOSite(
             'category',
@@ -210,7 +231,7 @@ class ClickOutsCest
 
     protected function commonClickouts($I, $cssClassName)
     {
-        $I->amOnPage('/acceptance-shop');
+        $I->amOnPage('in/paytm');
         $I->click($cssClassName);
         $I->switchToWindow();
         $I->seeInCurrentUrl('/');
@@ -266,10 +287,5 @@ class ClickOutsCest
             $webdriver->switchTo()->window($last_window);
         });
         $I->wait(10);
-    }
-
-    protected function unlinkFilesFromTmp()
-    {
-        array_map('unlink', glob(dirname(dirname(dirname(__FILE__)))."/public/tmp/*"));
     }
 }
