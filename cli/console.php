@@ -2,7 +2,7 @@
 <?php
 
 set_time_limit(0);
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console;
 use Doctrine\DBAL\Migrations\Tools\Console\Command as MigrationsCommand;
@@ -20,5 +20,5 @@ $cli->add(new MigrationsCommand\LatestCommand());
 $cli->add(new MigrationsCommand\MigrateCommand());
 $cli->add(new MigrationsCommand\StatusCommand());
 $cli->add(new MigrationsCommand\VersionCommand());
-$cli->add(new GreetCommand());
+$cli->add(new Command\GreetCommand());
 $cli->run();
