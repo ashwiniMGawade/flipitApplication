@@ -1,6 +1,6 @@
 <?php
 
-require 'vendor/slim/slim/Slim/Slim.php';
+require '../vendor/slim/slim/Slim/Slim.php';
 
 \Slim\Slim::registerAutoloader();
 
@@ -16,9 +16,11 @@ $app = new \Slim\Slim();
 
 $app->contentType("application/json");
 
-$app->get( '/', function () {
-    	echo "Welcome to Slim Framework";
-	}
+$app->get(
+    '/',
+    function () {
+        echo json_encode(array("msg"=>"Welcome to Slim Framework"));
+    }
 );
 
 $app->run();
