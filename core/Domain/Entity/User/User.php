@@ -170,7 +170,7 @@ class User
     protected $users;
 
     /**
-     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\User\ApiKey", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\User\ApiKey", mappedBy="user_id")
      */
     protected $apiKeys;
 
@@ -183,12 +183,12 @@ class User
     {
         $this->$property = $value;
     }
-    
+
     public function getId()
     {
         return $this->id;
     }
-    
+
     public function validatePassword($passwordToBeVerified)
     {
         if ($this->password == md5($passwordToBeVerified)) {
@@ -205,7 +205,7 @@ class User
         }
         return true ;
     }
-   
+
     public function validateEmail($emailToBeVerified)
     {
         if ($this->email == ($emailToBeVerified)) {
@@ -237,14 +237,14 @@ class User
     {
         if (intval($this->id) > 0) {
             $perm = $genralPermission =  array();
-            
+
             $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
             $query = $queryBuilder->select('u, r')
                 ->from('Core\Domain\Entity\User\User', 'u')
                 ->leftJoin('u.users', 'r')
                 ->where($queryBuilder->expr()->eq('u.id', $this->id));
             $role = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-          
+
             $perm['roles'] = $role[0]['users'];
 
             unset($perm['roles']['created_at']);
@@ -268,7 +268,7 @@ class User
                 $perm['rights'][$perm['rights'][$i]['name']]= $perm['rights'][$i];
                 unset($perm['rights'][$i]);
             }
-            
+
             $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
             $query = $queryBuilder
                 ->select('w.id as websiteid, u.id, w.name, w.created_at, w.updated_at, w.url')
@@ -285,7 +285,7 @@ class User
                 unset($perm['webaccess'][$i]['id']);
                 unset($perm['webaccess'][$i]['created_at']);
                 unset($perm['webaccess'][$i]['updated_at']);
-                
+
                 $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
                 $query = $queryBuilder->select('w.name')
                     ->from('Core\Domain\Entity\User\Website', 'w')
@@ -293,7 +293,7 @@ class User
                     ->andWhere($queryBuilder->expr()->eq('w.status', $queryBuilder->expr()->literal('online')))
                     ->orderBy('w.name', 'ASC');
                 $q = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-                
+
                 $perm['webaccess'][$i]['websitename'] = $q['0']['name'];
             }
              # rearange websites based on website name and keep kortingscode at same place

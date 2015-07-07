@@ -22,7 +22,7 @@ class ApiKey
     protected $api_key;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\User\User", inversedBy="api_keys")
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\User\User", inversedBy="apiKeys", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user_id;
