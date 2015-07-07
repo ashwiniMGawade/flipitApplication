@@ -10,14 +10,6 @@ class GetShopsUsecaseTest extends \Codeception\TestCase\Test
      */
     protected $tester;
 
-    protected function _before()
-    {
-    }
-
-    protected function _after()
-    {
-    }
-
     public function testGetShopUsecase()
     {
         $id = 2;

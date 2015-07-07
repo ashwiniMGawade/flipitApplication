@@ -190,7 +190,7 @@
                "type":"string",
                "example":""
             },
-            "accountManager":{
+            "accountManagerName":{
                "type":"string",
                "description":"Exact name 'first name'",
                "example":""
@@ -209,16 +209,16 @@
                "description":"",
                "example":""
             },
-            "deeplinkstatus":{
+            "deepLinkStatus":{
                "type":"int",
                "description":"Deeplink code (Yes/No)",
                "enum":[1,0]
             },
-            "refurl":{
+            "refUrl":{
                "type":"string",
                "description":"Ref Url(Page slug)"
             },
-            "actualurl":{
+            "actualUrl":{
                "type":"string",
                "description":"Actual Url",
                "example":"http://www.test.com"
