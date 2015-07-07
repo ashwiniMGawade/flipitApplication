@@ -70,6 +70,16 @@ endif;
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">                      
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                            <?php echo $registerForm->subscribeNewsLetter->renderViewHelper();?>
+                            <?php echo $this->translate('Subscribe to newsletter'); ?>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                          <?php echo $registerForm->shopId->renderViewHelper();?>
                          <?php 
@@ -79,6 +89,7 @@ endif;
                              array('class'=>'btn blue btn-lg btn-primary', 'id'=>'register')
                          ) ?>
                     </div>
+                    
                     <div class="form-group alt link-blue-buttom">
                         <?php echo $this->translate('By creating an account, you accept our');?>
                         <a class='link-blue' href="<?php echo HTTP_PATH_LOCALE; ?>info/<?php echo FrontEnd_Helper_viewHelper::__link('link_privacy-cookies'); ?>">

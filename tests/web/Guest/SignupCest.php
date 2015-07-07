@@ -16,8 +16,9 @@ class SignupCest
     {
         $I->wantTo('Signup in this site');
         $I->amOnPage('/in');
-        $I->canSee('Flipit.com');
-        $I->amOnPage('/in/subscription');
+        $I->wait(5);
+        $I->canSee('Sign up');
+        $I->click('Sign up');
         $I->canSee('Subscribe to newsletter');
     }
 }

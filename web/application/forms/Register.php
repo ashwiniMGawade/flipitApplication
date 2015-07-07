@@ -44,6 +44,8 @@ class Application_Form_Register extends Application_Form_Base
         $vistorGender->setLabel(FrontEnd_Helper_viewHelper::__form('form_Gender'));
         $vistorGender->addMultiOptions(array('M'=>'Male', 'F'=>'Female'));
 
+        $subscribeNewsLetter = new Zend_Form_Element_Checkbox('subscribeNewsLetter');
+        
         $shopIdHiddenField =  new Zend_Form_Element_Hidden('shopId');
         $this->addElements(
             array(
@@ -52,7 +54,8 @@ class Application_Form_Register extends Application_Form_Base
                 $vistorFirstName,
                 $vistorLastName,
                 $vistorGender,
-                $shopIdHiddenField
+                $shopIdHiddenField,
+                $subscribeNewsLetter
             )
         );
 
