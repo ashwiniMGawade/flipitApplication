@@ -3,17 +3,14 @@
    "info":{
       "description":"Welcome to Flipit API store",
       "version":"1.0.0",
-      "title":"Flipit API",
-      "contact":{
-         "email":"test@flipit.lcl"
-      }
+      "title":"Flipit API"
    },
    "host":"api.flipit.lcl",
-   "basePath":"/v2",
+   "basePath":"/v1",
    "tags":[
       {
-         "name":"offer",
-         "description":"Everything about offers",
+         "name":"shop",
+         "description":"Everything about shops",
          "externalDocs":{
             "description":"Find out more",
             "url":"http://test.io"
@@ -24,287 +21,221 @@
       "http"
    ],
    "paths":{
-      "/offer":{
+      "/shop":{
          "post":{
             "tags":[
-               "offer"
+               "shop"
             ],
-            "summary":"Add a new offer",
+            "summary":"Add a new shop",
             "description":"",
-            "operationId":"addOffer",
+            "operationId":"addshop",
             "consumes":[
-               "application/json",
-               "application/xml"
+               "application/json"
             ],
             "produces":[
-               "application/xml",
                "application/json"
             ],
             "parameters":[
                {
                   "in":"body",
                   "name":"body",
-                  "description":"Offer object that needs to be added to the store",
+                  "description":"Shop object that needs to be insert",
                   "required":true,
                   "schema":{
-                     "$ref":"#/definitions/Offer"
+                     "$ref":"#/definitions/shop"
                   }
-               }
-            ],
-            "responses":{
-               "405":{
-                  "description":"Invalid input"
-               }
-            },
-            "security":[
-               {
-                  "offerstore_auth":[
-                     "write:offers",
-                     "read:offers"
-                  ]
-               }
-            ]
-         },
-         "put":{
-            "tags":[
-               "offer"
-            ],
-            "summary":"Update an existing offer",
-            "description":"",
-            "operationId":"updateOffer",
-            "consumes":[
-               "application/json",
-               "application/xml"
-            ],
-            "produces":[
-               "application/xml",
-               "application/json"
-            ],
-            "parameters":[
-               {
-                  "in":"body",
-                  "name":"body",
-                  "description":"Offer object that needs to be added to the store",
-                  "required":true,
-                  "schema":{
-                     "$ref":"#/definitions/Offer"
-                  }
-               }
-            ],
-            "responses":{
-               "400":{
-                  "description":"Invalid ID supplied"
-               },
-               "404":{
-                  "description":"Offer not found"
-               },
-               "405":{
-                  "description":"Validation exception"
-               }
-            },
-            "security":[
-               {
-                  "offerstore_auth":[
-                     "write:offers",
-                     "read:offers"
-                  ]
-               }
-            ]
-         }
-      },
-      
-      "/offer/{offerId}":{
-         "get":{
-            "tags":[
-               "offer"
-            ],
-            "summary":"Find offer by ID",
-            "description":"Returns a single offer",
-            "operationId":"getofferById",
-            "produces":[
-               "application/xml",
-               "application/json"
-            ],
-            "parameters":[
-               {
-                  "name":"offerId",
-                  "in":"path",
-                  "description":"ID of offer to return",
-                  "required":true,
-                  "type":"integer",
-                  "format":"int64"
                }
             ],
             "responses":{
                "200":{
-                  "description":"successful operation",
-                  "schema":{
-                     "$ref":"#/definitions/offer"
-                  }
+                  "description":"Request was successful"
                },
-               "400":{
-                  "description":"Invalid ID supplied"
-               },
-               "404":{
-                  "description":"offer not found"
+               "405":{
+                  "description":"Invalid input"
                }
-            },
-            "security":[
-               {
-                  "api_key":[
-
-                  ]
-               }
-            ]
-         },
-         "delete":{
+            }
+         }
+      },
+      
+      "/shop/{shopId}":{
+         "put":{
             "tags":[
-               "offer"
+               "shop"
             ],
-            "summary":"Deletes a offer",
+            "summary":"Update an existing shop",
             "description":"",
-            "operationId":"deleteoffer",
+            "operationId":"updateshop",
+            "consumes":[
+               "application/json"
+            ],
             "produces":[
-               "application/xml",
                "application/json"
             ],
             "parameters":[
                {
-                  "name":"api_key",
-                  "in":"header",
-                  "required":false,
-                  "type":"string"
-               },
-               {
-                  "name":"offerId",
-                  "in":"path",
-                  "description":"offer id to delete",
+                  "in":"body",
+                  "name":"body",
+                  "description":"Shop object that needs to be update",
                   "required":true,
-                  "type":"integer",
-                  "format":"int64"
+                  "schema":{
+                     "$ref":"#/definitions/shop"
+                  }
                }
             ],
             "responses":{
+               "200":{
+                  "description":"Request was successful"
+               },
                "400":{
-                  "description":"Invalid offer value"
+                  "description":"Invalid shop_id supplied"
+               },
+               "404":{
+                  "description":"Shop not found"
+               },
+               "405":{
+                  "description":"Invalid input"
                }
-            },
-            "security":[
-               {
-                  "offerstore_auth":[
-                     "write:offers",
-                     "read:offers"
-                  ]
+            }
+         },
+         "get":{
+            "tags":[
+               "shop"
+            ],
+            "summary":"Find shop by ID",
+            "description":"Returns a single shop",
+            "operationId":"getshopById",
+            "produces":[
+               "application/json"
+            ],
+            "responses":{
+               "200":{
+                  "description":"Request was successful"
+               },
+               "400":{
+                  "description":"Invalid shop_id supplied"
+               },
+               "404":{
+                  "description":"Shop not found"
                }
-            ]
+            }
+         },
+         "delete":{
+            "tags":[
+               "shop"
+            ],
+            "summary":"Deletes a shop",
+            "description":"",
+            "operationId":"deleteshop",
+            "produces":[
+               "application/json"
+            ],
+            "responses":{
+               "200":{
+                  "description":"Request was successful"
+               },
+               "400":{
+                  "description":"Invalid shop_id supplied"
+               },
+               "404":{
+                  "description":"Shop not found"
+               }
+            }
          }
       }
      
    },
-   "securityDefinitions":{
-      "offerstore_auth":{
-         "type":"oauth2",
-         "authorizationUrl":"http://api.flipit.com/oauth/dialog",
-         "flow":"implicit",
-         "scopes":{
-            "write:offers":"modify offers in your account",
-            "read:offers":"read your offers"
-         }
-      },
-      "api_key":{
-         "type":"apiKey",
-         "name":"api_key",
-         "in":"header"
-      }
-   },
    "definitions":{
-      "Order":{
-         "type":"object",
-         "properties":{
-            "id":{
-               "type":"integer",
-               "format":"int64"
-            },
-            "offerId":{
-               "type":"integer",
-               "format":"int64"
-            },
-            "quantity":{
-               "type":"integer",
-               "format":"int32"
-            },
-            "shipDate":{
-               "type":"string",
-               "format":"date-time"
-            },
-            "status":{
-               "type":"string",
-               "description":"Order Status",
-               "enum":[
-                  "placed",
-                  "approved",
-                  "delivered"
-               ]
-            },
-            "complete":{
-               "type":"boolean",
-               "default":false
-            }
-         },
-         "xml":{
-            "name":"Order"
-         }
-      },
-      "offer":{
+      "shop":{
          "type":"object",
          "required":[
             "name",
-            "photoUrls"
+            "navigationUrl"
          ],
          "properties":{
-            "id":{
-               "type":"integer",
-               "format":"int64"
-            },
-            "category":{
-               "$ref":"#/definitions/Category"
-            },
             "name":{
                "type":"string",
                "example":"doggie"
             },
-            "photoUrls":{
-               "type":"array",
-               "xml":{
-                  "name":"photoUrl",
-                  "wrapped":true
-               },
-               "items":{
-                  "type":"string"
-               }
-            },
-            "tags":{
-               "type":"array",
-               "xml":{
-                  "name":"tag",
-                  "wrapped":true
-               },
-               "items":{
-                  "$ref":"#/definitions/Tag"
-               }
-            },
-            "status":{
+            "navigationUrl":{
                "type":"string",
-               "description":"offer status in the store",
-               "enum":[
-                  "available",
-                  "pending",
-                  "sold"
-               ]
-            }
-         },
-         "xml":{
-            "name":"offer"
+               "example":"http://flipit.com/in/ebay"
+            },
+            "overriteTitle":{
+               "type":"string",
+               "example":""
+            },
+            "metaDescritption":{
+               "type":"string",
+               "example":""
+            },
+            "allowusergeneratedcontent":{
+               "type":"int",
+               "description":"Allow user generated content",
+               "enum":[1,0]
+            },
+            "discussions":{
+               "type":"int",
+               "description":"Allow discussions",
+               "enum":[1,0]
+            },
+            "title":{
+               "type":"string",
+               "example":""
+            },
+            "subTitle":{
+               "type":"string",
+               "example":""
+            },
+            "notes":{
+               "type":"string",
+               "example":""
+            },
+            "accountManager":{
+               "type":"string",
+               "description":"Exact name 'first name'",
+               "example":""
+            },
+            "editor":{
+               "type":"string",
+               "description":"Exact name 'first name'",
+               "example":""
+            },
+            "category":{
+               "type":"int",
+               "example":""
+            },
+            "affilliate_network":{
+               "type":"string",
+               "description":"",
+               "example":""
+            },
+            "deeplinkstatus":{
+               "type":"int",
+               "description":"Deeplink code (Yes/No)",
+               "enum":[1,0]
+            },
+            "refurl":{
+               "type":"string",
+               "description":"Ref Url(Page slug)"
+            },
+            "actualurl":{
+               "type":"string",
+               "description":"Actual Url",
+               "example":"http://www.test.com"
+            },
+            "moneyShop":{
+               "type":"int",
+               "enum":[1,0]
+            },
+            "shopLogo":{
+               "type":"string"
+            },
+            "website_screenshot":{
+               "type":"string"
+            },
+            "shoptext":{
+               "type":"string"
+            }       
          }
       },
       "ApiResponse":{
