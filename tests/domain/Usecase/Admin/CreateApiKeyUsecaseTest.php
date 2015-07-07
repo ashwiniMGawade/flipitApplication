@@ -35,8 +35,8 @@ class CreateApiKeyUsecaseTest extends \Codeception\TestCase\Test
         $apiKeyRepository
             ->expects($this->once())
             ->method('persist')
-            ->with($this->isInstanceOf('\Core\Domain\Entity\User\ApiKey'))
-            ->with($this->equalTo());
+            ->with($this->isInstanceOf('\Core\Domain\Entity\User\ApiKey'));
+            //->with($this->equalTo());
         return $apiKeyRepository;
     }
 }
