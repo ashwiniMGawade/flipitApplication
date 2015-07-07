@@ -18,7 +18,7 @@ function getApiKeyList(iStart,iSortCol,iSortDir) {
         "bFilter" : false,
         "bServerSide" : true,
         "iDisplayStart" : iStart,
-        "iDisplayLength" : 100,
+        "iDisplayLength" : 10,
         "oLanguage": {
               "sInfo": "<b>_START_-_END_</b> of <b>_TOTAL_</b>"
         },
@@ -51,5 +51,15 @@ function getApiKeyList(iStart,iSortCol,iSortDir) {
             },
             "bSortable" : false
         }]
+    });
+}
+
+function addApiKey()
+{
+    $.ajax({
+        type : "GET",
+        url : HOST_PATH+"admin/apikeys/addapikey",
+    }).done(function() {
+        // window.location = HOST_PATH + 'admin/apikeys';
     });
 }

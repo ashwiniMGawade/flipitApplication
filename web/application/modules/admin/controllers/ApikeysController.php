@@ -39,6 +39,13 @@ class Admin_ApikeysController extends Zend_Controller_Action
         exit;
     }
 
+    public function addapikeyAction()
+    {
+        $user = Auth_StaffAdapter::getIdentity();
+        AdministratorFactory::addApiKey()->execute($user);
+        exit;
+    }
+
     private function toArray($apiKeys)
     {
         $aaData = array();
@@ -52,7 +59,7 @@ class Admin_ApikeysController extends Zend_Controller_Action
         $returnData = array(
             "sEcho" => "1",
             "aaData" => $aaData,
-            "iTotalRecords" => 20,
+            "iTotalRecords" => count($aaData),
             "iTotalDisplayRecords" => 20
         );
         return $returnData;
