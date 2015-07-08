@@ -12,7 +12,7 @@ class ClickOutsCest
     {
     }
 
-   /* public function sidebarClickout(WebTester $I, \Codeception\Scenario $scenario)
+    /*public function sidebarClickout(WebTester $I, \Codeception\Scenario $scenario)
     {
         $I = new WebTester($scenario);
         $this->createShop($I);
@@ -20,7 +20,7 @@ class ClickOutsCest
         $this->commonClickouts($I, '.web a');
     }*/
 
-   /* public function headerLinkClickout(WebTester $I, \Codeception\Scenario $scenario)
+    public function headerLinkClickout(WebTester $I, \Codeception\Scenario $scenario)
     {
         $I = new WebTester($scenario);
         $this->commonClickouts($I, '.header-block-2 .radiusImg');
@@ -38,42 +38,40 @@ class ClickOutsCest
         $I->wait(5);
         $I = new WebTester($scenario);
         $this->commonClickouts($I, '.clickout-title a');
-    }*/
+    }
 
-    public function couponCodeClickout(WebTester $I, \Codeception\Scenario $scenario)
+    /*public function couponCodeClickout(WebTester $I, \Codeception\Scenario $scenario)
     {
         $I = new WebTester($scenario);
         $this->createOffer($I, 'CD', 'couponCode', '2', 'coupon code offer');
-        $this->switchOfferClickouts('couponCode', '.buttons a:first-child', '', $I);
-    }
+        $this->switchOfferClickouts('couponCode', '.offer-teaser-button-wrapper-inner a', '', $I);
+    }*/
     
-    /*public function saleClickout(WebTester $I, \Codeception\Scenario $scenario)
+    public function saleClickout(WebTester $I, \Codeception\Scenario $scenario)
     {
         $I = new WebTester($scenario);
-        $this->createShop($I);
-        $this->createDashboard($I);
-        $this->createOffer($I, 'SL', 'sale', '1', 'sale offer');
-        $this->switchOfferClickouts('sale', '.buttons a:first-child', '.clickout-title a', $I);
+        //$this->createOffer($I, 'SL', 'sale', '1', 'sale offer');
+        $this->switchOfferClickouts('sale', '.btn-blue-wrapper a', '', $I);
     }
  
     public function expiredClickout(WebTester $I, \Codeception\Scenario $scenario)
     {
         $I = new WebTester($scenario);
-        $this->createShop($I);
-        $this->createDashboard($I);
-        $this->createOffer($I, 'CD', 'couponCode', '2', 'expired offer');
-        $this->switchOfferClickouts('expired', '', '.line a', $I);
+        //$this->createShop($I);
+       // $this->createDashboard($I);
+       // $this->createOffer($I, 'CD', 'couponCode', '2', 'expired offer');
+        $this->switchOfferClickouts('expired', '.line a', '', $I);
     }
 
     public function printableClickout(WebTester $I, \Codeception\Scenario $scenario)
     {
         $I = new WebTester($scenario);
-        $this->createShop($I);
-        $this->createDashboard($I);
-        $this->createOffer($I, 'PA', 'printable', '0', 'printable offer');
-        $this->switchOfferClickouts('printable', '.buttons a:first-child', '.clickout-title a', $I);
+       // $this->createShop($I);
+       // $this->createDashboard($I);
+        //$this->createOffer($I, 'PA', 'printable', '0', 'printable offer');
+        $this->switchOfferClickouts('printable', '.buttons a:first-child', '', $I);
     }
-*/
+
     protected function createOffer($I, $codeType, $codeTilesType, $discountvalueType, $title)
     {
         $I->haveInDatabase(
@@ -242,33 +240,23 @@ class ClickOutsCest
         switch ($codeType) {
             case 'couponCode':
                 $this->commonOfferClickouts($tagName, $I);
-                $I->canSeeInPageSource('id="code-lightbox"');
-                $I->canSeeInPageSource('id="code-button"');
+                $I->canSeeInPageSource('id="code-hint"');
+                $I->canSeeInPageSource('class="bigtext-line0"');
                 break;
             case 'sale':
                 $this->commonOfferClickouts($tagName, $I);
                 $I->seeInCurrentUrl('/');
                 $I->wait(5);
-                $I->amOnPage('/acceptance-shop');
-                $I->click($cssClassName);
-                $I->wait(5);
-                $I->seeInCurrentUrl('/');
-                $I->wait(5);
+                $I->amOnPage('in/paytm');
                 break;
             case 'printable':
-                $I->amOnPage('/acceptance-shop');
+                $I->amOnPage('in/paytm');
                 $I->click($tagName);
                 $I->seeInCurrentUrl('/');
-                $I->wait(5);
-                $I->amOnPage('/acceptance-shop');
-                $I->click($cssClassName);
-                $I->wait(5);
-                $I->seeInCurrentUrl('/');
-                $I->wait(5);
                 break;
             case 'expired':
-                $I->amOnPage('/acceptance-shop');
-                $I->click($cssClassName);
+                $I->amOnPage('in/paytm');
+                $I->click($tagName);
                 $I->switchToWindow();
                 break;
             default:
@@ -278,7 +266,7 @@ class ClickOutsCest
 
     protected function commonOfferClickouts($tagName, $I)
     {
-        $I->amOnPage('/acceptance-shop');
+        $I->amOnPage('in/paytm');
         $I->wait(5);
         $I->click($tagName);
         $I->executeInSelenium(function (\Webdriver $webdriver) {
