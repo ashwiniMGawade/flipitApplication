@@ -8,7 +8,8 @@
         "slim/slim": "^2.6",
         "doctrine/dbal": "2.5.1",
         "doctrine/common": "2.4.2",
-        "doctrine/orm": "2.4.2"
+        "doctrine/orm": "2.4.2",
+        "akrabat/rka-slim-controller": "^2.0"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "2.0.*@dev",
@@ -32,7 +33,8 @@
             "Command\\": "cli/Command/",
             "Tests\\": "tests/",
             "Config\\": "config/",
-            "Zend\\": "vendor/zendframework/zendframework1/library/Zend/"
+            "Zend\\": "vendor/zendframework/zendframework1/library/Zend/",
+            "ApiApp\\": "api/App/"
         }
     },
     "config": {
