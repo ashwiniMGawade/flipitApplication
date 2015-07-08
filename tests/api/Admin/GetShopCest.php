@@ -18,12 +18,21 @@ class GetShopCest
     public function testGetShopWithoutId(ApiTester $I)
     {
         $I->wantTo('Get a shop without an ID.');
-        $I->sendGet('/shop/0');
+        $I->sendGet('/shop/');
+        $I->seeResponseCodeIs(404);
     }
 
     public function testGetShopWithStringId(ApiTester $I)
     {
         $I->wantTo('Get a shop with an ID as string.');
         $I->sendGet('/shop/test');
+        $I->seeResponseCodeIs(404);
+    }
+
+    public function testGetShopWithInvalidId(ApiTester $I)
+    {
+        $I->wantTo('Get a shop with invalid ID.');
+        $I->sendGet('/shop/0');
+        $I->seeResponseCodeIs(404);
     }
 }
