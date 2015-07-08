@@ -1,11 +1,13 @@
-
 <?php 
- $this->headTitle()->append($this->translate('Import Excel for redirects'));
- $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
- $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/importshops.js");
- $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
- $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
- $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+$this->headTitle()->append($this->translate('Import Excel for redirects'));
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/importshops.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.dataTables.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/dataTableComman.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/shopExcelQueue.js");
 ?>
 <div class='wrap columns-2'>
     <?php 
@@ -25,7 +27,8 @@
     }?>
 </div>
 <div class="wrap columns-2" id="addNewKeyword">
-   <h1><?php echo $this->translate('Import Excel for shops'); ?><button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/shop'"><?php echo $this->translate('Cancel'); ?></button></h1>
+   <h1><?php echo $this->translate('Import Excel for shops'); ?><button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/shop'"><?php echo $this->translate('Cancel'); ?></button>
+   <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/shop/shop-excel-log'"><?php echo $this->translate('Excel Log'); ?></button></h1>
       <form method="POST" enctype="multipart/form-data" name="addShopsForm" id="addShopsForm">
         <div id="poststuff" class="metabox-holder has-right-sidebar">
         <div id="post-body">
@@ -48,4 +51,36 @@
             <a href="<?php echo HTTP_PATH ;?>admin/shop/empty-xlx" class="fl m10" ><strong><?php echo $this->translate('Download empty xlsx'); ?></strong></a>
          </div>
     </form>
+</div>
+<div id="imbullbody-content" style="overflow: hidden;">
+    <div id="codeAlertListdiv">
+        <div class="wrap columns-2">
+            <div class='wrap columns-2'>
+                <?php if ($this->successMessage != '' || $this->errorMessage != '') { ?>
+                <br>
+                <div class ="mainpage-content-colorbox success">
+                <?php if ($this->successMessage != '') { ?>
+                    <span class="successserver"><?php echo $this->successMessage; ?></span>
+                <?php } ?>
+                <?php if ($this->errorMessage != '') { ?>
+                    <span class="errorserver"><?php echo $this->errorMessage; ?></span>
+                <?php } ?>
+                </div>
+                <?php } ?>
+            </div>
+            <h1 class="fl"><?php echo $this->translate('backend_Queued Shop Excel Import Information'); ?></h1> 
+            <div class="clear"></div>
+            <table  class="table table-bordered table-striped" id="shopExcelListTable" style="position:relative;">
+                <thead>
+                    <tr>
+                        <th style="display:none;"><?php echo $this->translate('Id'); ?></th>
+                        <th><?php echo $this->translate('backend_Created At'); ?></th>
+                        <th><?php echo $this->translate('backend_Total Shops Count'); ?></th>
+                        <th><?php echo $this->translate('backend_Uploaded By'); ?></th>
+                        <th><?php echo $this->translate('backend_Delete'); ?></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
 </div>
