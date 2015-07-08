@@ -166,9 +166,9 @@ function deleteRecord(id) {
         type : "post",
         success : function(data) {
             if (data != null) {
-                window.location = HOST_PATH + "admin/shop/shop-excel-queue";
+                window.location = HOST_PATH + "admin/shop/importshops";
             } else {
-                window.location = HOST_PATH + 'admin/email/shop-excel-queue';
+                window.location = HOST_PATH + 'admin/email/importshops';
             } 
         }
     }); 

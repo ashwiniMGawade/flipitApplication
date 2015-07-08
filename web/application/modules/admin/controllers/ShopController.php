@@ -1169,11 +1169,6 @@ class Admin_ShopController extends Zend_Controller_Action
         }
     }
 
-    public function shopExcelQueueAction()
-    {
-        $this->getFlashMessage();
-    }
-
     public function shopExcelLogAction()
     {
         $this->getFlashMessage();
