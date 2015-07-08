@@ -67,7 +67,8 @@ class BackEnd_Helper_importOffersExcel
                         $offerList->authorName = !empty($offerAuthorName) ? $offerAuthorName : 'Arthur Goldman';
                         $offerList->couponCode = !empty($offerCouponCode) ? $offerCouponCode : '';
                         $offerList->exclusiveCode = $offerExclusive == 1 ? 1 : 0;
-                        $offerList->editorPicks = $offerEditorPick == 1 ? 1 : 0;
+                        $editorPickValue = $offerEditorPick == 1 ? 1 : 0;
+                        $offerList->editorPicks = $offerList->exclusiveCode == 1 ? 0 : $editorPickValue;
                         $offerList->userGenerated = 0;
                         $offerList->offline = 0;
                         $offerList->created_at = new \DateTime('now');
