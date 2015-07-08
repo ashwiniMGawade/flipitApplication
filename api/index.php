@@ -1,6 +1,6 @@
 <?php
 
-putenv("APPLICATION_ENV=development");
+include '../c3.php';
 
 require_once '../vendor/autoload.php';
 
@@ -17,7 +17,7 @@ $app->group(
             '/:id',
             function ($id) use ($app) {
                 $shop = \Core\Domain\Factory\AdministratorFactory::getShop()->execute($id);
-                if (false == is_object($shop)) {
+                if (false === is_object($shop)) {
                     echo json_encode(array("msg"=>"Shop not found"));
                     $app->response->setStatus(404);
                 } else {
@@ -38,6 +38,7 @@ $app->group(
                         'screenshotId'			=> $shop->__get('screenshotId'),
                         'shopText'				=> $shop->__get('shopText'),
                     );
+                    $app->response->setStatus(200);
                     echo json_encode($shopData);
                 }
             }

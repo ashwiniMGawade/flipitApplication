@@ -5,3 +5,9 @@ modules:
         - REST:
             depends: PhpBrowser
             url: 'http://api.dev.flipit.com/'
+coverage:
+    enabled: true
+    include:
+        - api/*
+    exclude:
+        - api/documentation/*
