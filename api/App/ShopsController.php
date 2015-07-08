@@ -3,12 +3,12 @@ namespace ApiApp;
 
 use \ApiApp\ApiBaseController;
 
-class ShopController extends ApiBaseController
+class ShopsController extends ApiBaseController
 {
     public function getShop($id)
     {
         $this->app->contentType("application/json");
-        
+
         $shop = \Core\Domain\Factory\AdministratorFactory::getShop()->execute($id);
         if (false === is_object($shop)) {
             echo json_encode(array("msg"=>"Shop not found"));
