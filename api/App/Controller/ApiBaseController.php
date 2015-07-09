@@ -1,5 +1,5 @@
 <?php
-namespace ApiApp;
+namespace Api\Controller;
 
 class ApiBaseController
 {

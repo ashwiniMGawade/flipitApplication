@@ -1,7 +1,7 @@
 <?php
-namespace ApiApp;
+namespace Api\Controller;
 
-use \ApiApp\ApiBaseController;
+use \Api\Controller\ApiBaseController;
 
 class ShopsController extends ApiBaseController
 {

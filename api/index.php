@@ -6,7 +6,7 @@ require_once '../vendor/autoload.php';
 
 $app = new \RKA\Slim();
 
-$app->get('/shops/:id', 'ApiApp\ShopsController:getShop');
+$app->get('/shops/:id', 'Api\Controller\ShopsController:getShop');
 
 $app->get(
     '/',

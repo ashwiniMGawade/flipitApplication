@@ -34,7 +34,7 @@
             "Tests\\": "tests/",
             "Config\\": "config/",
             "Zend\\": "vendor/zendframework/zendframework1/library/Zend/",
-            "ApiApp\\": "api/App/"
+            "Api\\": "api/App/"
         }
     },
     "config": {
