@@ -1,10 +1,14 @@
 <?php
 namespace Core\Domain\Factory;
 
-use Core\Domain\Service\ApiKeyGenerator;
-use Core\Domain\Usecase\Admin\GetApiKeyListingUsecase;
-use Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
-use Core\Persistence\Factory\RepositoryFactory;
+use \Core\Domain\Service\ApiKeyGenerator;
+use \Core\Domain\Service\Validator;
+use \Core\Domain\Usecase\Admin\GetApiKeyListingUsecase;
+use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
+use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
+use \Core\Domain\Usecase\Admin\DeleteApiKeyUsecase;
+use \Core\Domain\Validator\ApiKeyValidator;
+use \Core\Persistence\Factory\RepositoryFactory;
 
 /**
  * Class AdministratorFactory
@@ -26,14 +30,26 @@ class AdministratorFactory
      */
     public static function createApiKey()
     {
-        return new CreateApiKeyUsecase(RepositoryFactory::apiKeys());
+        return new CreateApiKeyUsecase();
     }
 
     /**
-     * @return \Core\Domain\Service\ApiKeyGenerator
+     * @return \Core\Domain\Usecase\Admin\AddApiKeyUsecase
      */
-    public static function apiKey()
+    public static function addApiKey()
     {
-        return new ApiKeyGenerator();
+        return new AddApiKeyUsecase(
+            RepositoryFactory::apiKeys(),
+            new ApiKeyValidator(new Validator()),
+            new ApiKeyGenerator()
+        );
+    }
+
+    /**
+     * @return \Core\Domain\Usecase\Admin\DeleteApiKeyUsecase
+     */
+    public static function deleteApiKey()
+    {
+        return new DeleteApiKeyUsecase(RepositoryFactory::apiKeys());
     }
 }
