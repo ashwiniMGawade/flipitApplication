@@ -4,6 +4,11 @@ namespace Usecase\Admin;
 use \Core\Domain\Usecase\Admin\GetApiKeyListingUsecase;
 use \Core\Domain\Repository\ApiKeyRepositoryInterface;
 
+/**
+ * Class GetApiKeyListingUsecaseTest
+ *
+ * @package Usecase\Admin
+ */
 class GetApiKeyListingUsecaseTest extends \Codeception\TestCase\Test
 {
     /**
@@ -11,14 +16,9 @@ class GetApiKeyListingUsecaseTest extends \Codeception\TestCase\Test
      */
     protected $tester;
 
-    protected function _before()
-    {
-    }
-
-    protected function _after()
-    {
-    }
-
+    /**
+     *
+     */
     public function testGetApiKeyListingUsecase()
     {
         $apiKeyRepository = $this->createApiKeyRepositoryMock();
@@ -26,14 +26,13 @@ class GetApiKeyListingUsecaseTest extends \Codeception\TestCase\Test
         $GetApiKeyListing->execute();
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function createApiKeyRepositoryMock()
     {
-        $apiKeyRepository = $this->getMockBuilder('\Core\Domain\Repository\ApiKeyRepositoryInterface')
-                                    ->getMock();
-
-        $apiKeyRepository->expects($this->once())
-                            ->method('findAll');
-
+        $apiKeyRepository = $this->getMockBuilder('\Core\Domain\Repository\ApiKeyRepositoryInterface')->getMock();
+        $apiKeyRepository->expects($this->once())->method('findBy');
         return $apiKeyRepository;
     }
 }
