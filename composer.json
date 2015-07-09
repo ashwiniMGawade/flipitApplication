@@ -31,7 +31,8 @@
             "Core\\": "core/",
             "Command\\": "cli/Command/",
             "Tests\\": "tests/",
-            "Config\\": "config/"
+            "Config\\": "config/",
+            "Zend\\": "vendor/zendframework/zendframework1/library/Zend/"
         }
     },
     "config": {

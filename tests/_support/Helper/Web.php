@@ -16,6 +16,8 @@ class Web extends \Codeception\Module
         $databaseHelper = new DatabaseHelper;
         $databaseHelper->siteDatabaseSetup();
         $databaseHelper->userDatabaseSetup();
+        $fixturesHelper = new FixturesHelper();
+        $fixturesHelper->execute($this);
     }
 
     public function haveInDatabasePDOSite($table, $arr)

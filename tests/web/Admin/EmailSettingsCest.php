@@ -1,5 +1,5 @@
 <?php
-namespace Admin;
+/*namespace Admin;
 
 use \WebTester;
 
@@ -27,4 +27,4 @@ class EmailSettingsCest
         $I->seeInField('#senderEmail', 'kim@web-flight.nl');
         $I->seeInField('#senderName', 'kim');
     }
-}
+}*/
