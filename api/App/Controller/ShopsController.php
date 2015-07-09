@@ -35,4 +35,9 @@ class ShopsController extends ApiBaseController
             echo json_encode($shopData);
         }
     }
+
+    /*public function createShop()
+    {
+        print_r($_REQUEST);
+    }*/
 }
