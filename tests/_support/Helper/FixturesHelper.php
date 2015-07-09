@@ -155,5 +155,22 @@ class FixturesHelper
                 'total_no_members'=>33
             )
         );
+
+        $I->haveInDatabasePDOSite(
+            'page',
+            array(
+                'pagetype' => 'default',
+                'pagetitle' => 'page',
+                'permalink' => 'inschrijven',
+                'metatitle' => 'inschrijven',
+                'metadescription' => 'inschrijven',
+                'content' => '',
+                'publish'=>1,
+                'pageattributeid'=>1,
+                'contentManagerId'=>1,
+                'contentManagerName'=>'test',
+                'pageHeaderImageId'=>1
+            )
+        );
     }
 }
