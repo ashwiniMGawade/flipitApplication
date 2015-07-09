@@ -6,12 +6,11 @@ class ApiBaseController
     protected $app;
     protected $request;
     protected $response;
-    const ERROR_UNSUPPORTED_MEDIA_TYPE = 415;
+    const RESPONSE_STATUS_UNSUPPORTED_MEDIA_TYPE = 415;
 
     public function init()
     {
-        if (self::ERROR_UNSUPPORTED_MEDIA_TYPE == $this->app->response->getStatus())
-        {
+        if (self::RESPONSE_STATUS_UNSUPPORTED_MEDIA_TYPE == $this->app->response->getStatus()) {
             echo json_encode(array('error'=>'Media Type must be application/json for POST, PUT, PATCH'));
             $this->app->stop();
         }

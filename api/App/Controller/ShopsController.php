@@ -31,13 +31,19 @@ class ShopsController extends ApiBaseController
                 'screenshotId'          => $shop->__get('screenshotId'),
                 'shopText'              => $shop->__get('shopText'),
             );
-            $this->app->response->setStatus(200);
-            echo json_encode($shopData);
+            $shop = new \Nocarrier\Hal('/shops/'.$id, $shopData);
+            echo $shop->asJson();
         }
     }
 
     /*public function createShop()
     {
         print_r($_REQUEST);
-    }*/
+    }
+
+    public function updateShop()
+    {
+    
+    }
+    */
 }

@@ -13,7 +13,8 @@
         "slim/extras": "*",
         "slim/middleware": "*",
         "monolog/monolog": "*",
-        "flynsarmy/slim-monolog": "*"
+        "flynsarmy/slim-monolog": "*",
+        "nocarrier/hal": "^0.9.11"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "2.0.*@dev",
