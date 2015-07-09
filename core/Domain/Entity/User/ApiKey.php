@@ -46,4 +46,76 @@ class ApiKey
     {
         $this->$property = $value;
     }
+
+    /**
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiKey()
+    {
+        return $this->api_key;
+    }
+
+    /**
+     * @param $value
+     */
+    public function setApiKey($value)
+    {
+        $this->api_key = $value;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @param $value
+     */
+    public function setUserId($value)
+    {
+        $this->user_id = $value;
+    }
+
+    /**
+     * @return \datetime
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * @param $value
+     */
+    public function setCreatedAt($value)
+    {
+        $this->created_at = $value;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * @param $value
+     */
+    public function setDeleted($value)
+    {
+        $this->deleted = $value;
+    }
 }
