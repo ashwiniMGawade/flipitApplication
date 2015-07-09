@@ -16,14 +16,13 @@ function getApiKeyList(iStart,iSortCol,iSortDir) {
     .dataTable({
         "bLengthChange" : false,
         "bFilter" : false,
-        "bServerSide" : true,
         "iDisplayStart" : iStart,
-        "iDisplayLength" : 10,
+        "iDisplayLength" : 15,
         "oLanguage": {
               "sInfo": "<b>_START_-_END_</b> of <b>_TOTAL_</b>"
         },
         "sPaginationType" : "bootstrap",
-        "sAjaxSource" : HOST_PATH+"admin/apikeys/getapikeys",
+        "sAjaxSource" : HOST_PATH+"admin/apikeys/get",
         "aoColumns" : [{
             "fnRender" : function(obj){
                 return id = obj.aData.id;
@@ -47,7 +46,9 @@ function getApiKeyList(iStart,iSortCol,iSortDir) {
         },
         {
             "fnRender" : function(obj) {
-                return "<a href='javascript:void(0);'>" + __('Delete') + "</a>";
+                return "<a href='javascript:void(0);'" + "onclick='deleteApiKey(" + obj.aData.id  + ")' >"
+                        + __('Delete') +
+                        "</a>";
             },
             "bSortable" : false
         }]
@@ -58,8 +59,25 @@ function addApiKey()
 {
     $.ajax({
         type : "GET",
-        url : HOST_PATH+"admin/apikeys/addapikey",
+        url : HOST_PATH+"admin/apikeys/create"
     }).done(function() {
-        // window.location = HOST_PATH + 'admin/apikeys';
+        window.location = HOST_PATH + 'admin/apikeys';
+    });
+}
+
+function deleteApiKey(id) {
+    bootbox.confirm("Are you sure you want to delete this Api Key?",'No','Yes',function(r) {
+        if (!r) {
+            return false;
+        } else {
+            addOverLay();
+            $.ajax({
+                type : "POST",
+                url : HOST_PATH+"admin/apikeys/delete",
+                data : "id="+id
+            }).done(function(msg) {
+                window.location = HOST_PATH + 'admin/apikeys';
+            });
+        }
     });
 }

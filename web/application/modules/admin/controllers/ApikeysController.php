@@ -1,5 +1,5 @@
 <?php
-use Core\Domain\Factory\AdministratorFactory;
+use \Core\Domain\Factory\AdministratorFactory;
 
 class Admin_ApikeysController extends Zend_Controller_Action
 {
@@ -31,35 +31,47 @@ class Admin_ApikeysController extends Zend_Controller_Action
         $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
     }
 
-    public function getapikeysAction()
+    public function getAction()
     {
         $apiKeys = AdministratorFactory::getApiKeys()->execute();
-        $apiKeys = $this->toArray($apiKeys);
+        $apiKeys = $this->prepareData($apiKeys);
         echo Zend_Json::encode($apiKeys);
         exit;
     }
 
-    public function addapikeyAction()
+    public function createAction()
     {
         $user = Auth_StaffAdapter::getIdentity();
-        $entityValues = array(
-            'api_key' => AdministratorFactory::apiKey()->generate(),
-            'user' => $user,
-            'created_at' => new \DateTime(),
-            'deleted' => 0
-        );
-        AdministratorFactory::createApiKey()->execute($entityValues);
+        $apiKey = AdministratorFactory::createApiKey()->execute();
+        try {
+            AdministratorFactory::addApiKey()->execute($apiKey, $user);
+            $flash = $this->_helper->getHelper('FlashMessenger');
+            $message = $this->view->translate('Api Key has been successfully Added');
+            $flash->addMessage(array('success' => $message));
+        } catch (Exception $exception) {
+            $this->createAction();
+        }
         exit;
     }
 
-    private function toArray($apiKeys)
+    public function deleteAction()
+    {
+        $apiKeyId = $this->getRequest()->getParam('id');
+        AdministratorFactory::deleteApiKey()->execute(FrontEnd_Helper_viewHelper::sanitize($apiKeyId));
+        $flash = $this->_helper->getHelper('FlashMessenger');
+        $message = $this->view->translate('Api Key has been deleted successfully');
+        $flash->addMessage(array('success' => $message));
+        exit();
+    }
+
+    private function prepareData($apiKeys)
     {
         $aaData = array();
         foreach ($apiKeys as $apiKey) {
             $aaData[] = array(
-                'id' => $apiKey->__get('id'),
-                'apiKey' => $apiKey->__get('api_key'),
-                'createdAt' => $apiKey->__get('created_at')
+                'id' => $apiKey->getId(),
+                'apiKey' => $apiKey->getApiKey(),
+                'createdAt' => $apiKey->getCreatedAt()
             );
         }
         $returnData = array(
