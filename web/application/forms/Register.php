@@ -47,7 +47,6 @@ class Application_Form_Register extends Application_Form_Base
         $subscribeNewsLetter = new Zend_Form_Element_Checkbox('subscribeNewsLetter');
         $subscribeNewsLetter->setRequired(true);
         $subscribeNewsLetter->setUncheckedValue(null);
-        $subscribeNewsLetter->setValue(true);
     
         $shopIdHiddenField =  new Zend_Form_Element_Hidden('shopId');
         $this->addElements(
