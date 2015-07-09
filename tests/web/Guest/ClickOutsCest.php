@@ -12,7 +12,7 @@ class ClickOutsCest
     {
     }
 
-    /*public function headerImageClickout(WebTester $I, \Codeception\Scenario $scenario)
+    public function headerImageClickout(WebTester $I, \Codeception\Scenario $scenario)
     {
         $I = new WebTester($scenario);
         $this->commonClickouts($I, 'a.store-header-link');
@@ -52,17 +52,20 @@ class ClickOutsCest
     {
         $I = new WebTester($scenario);
         $this->switchOfferClickouts('printable', 'Bekijk de kortingsbon', $I);
-    }*/
+    }
 
     public function sidebarClickout(WebTester $I, \Codeception\Scenario $scenario)
     {
         $I = new WebTester($scenario);
-        $this->commonClickouts($I, '.web a');
+        $this->commonClickouts($I, '.web a', 'sidebar');
     }
 
-    protected function commonClickouts($I, $cssClassName)
+    protected function commonClickouts($I, $cssClassName, $location = '')
     {
         $I->amOnPage('acceptance-shop');
+        if ($location == 'sidebar') {
+            $I->canSee($cssClassName);
+        }
         $I->click($cssClassName);
         $I->switchToWindow();
         $I->seeInCurrentUrl('/');
