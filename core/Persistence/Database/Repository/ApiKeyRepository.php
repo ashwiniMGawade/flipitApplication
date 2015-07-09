@@ -17,5 +17,6 @@ class ApiKeyRepository extends BaseRepository implements ApiKeyRepositoryInterfa
     {
         $this->em->merge($entity);
         $this->em->flush();
+        return $entity;
     }
 }
