@@ -94,12 +94,6 @@ class FixturesHelper
             )
         );
 
-        $futureDate = new \DateTime();
-        $futureDate->modify('+1 week');
-        $futureDate = $futureDate->format('Y-m-d H:i:s');
-        $pastDate = new \DateTime();
-        $pastDate->modify('-1 week');
-        $pastDate = $pastDate->format('Y-m-d H:i:s');
         $endDate = date('Y-m-d H:i:s', time() + (60 * 60 * 24 * -7));
         $I->haveInDatabasePDOSite(
             'offer',
@@ -107,7 +101,7 @@ class FixturesHelper
                 'shopid' => '1',
                 'couponcode' => 'test',
                 'tilesId' => '1',
-                'title' => 'Topa',
+                'title' => 'coupon code',
                 'created_at' => date('Y-m-d H:i:s', time() + (60 * 60 * 24 * -7)),
                 'updated_at' => date('Y-m-d H:i:s', time() + (60 * 60 * 24 * -7)),
                 'visability' => 'DE',
@@ -118,6 +112,46 @@ class FixturesHelper
                 'shopexist' => 1,
                 'couponcodetype' => 'GN',
                 'discountvalueType' => 'coupon code offer'
+            )
+        );
+
+        $I->haveInDatabasePDOSite(
+            'offer',
+            array(
+                'shopid' => '1',
+                'couponcode' => '',
+                'tilesId' => '1',
+                'title' => 'sale',
+                'created_at' => date('Y-m-d H:i:s', time() + (60 * 60 * 24 * -7)),
+                'updated_at' => date('Y-m-d H:i:s', time() + (60 * 60 * 24 * -7)),
+                'visability' => 'DE',
+                'discounttype' => 'SL',
+                'startdate' => date('Y-m-d H:i:s', time() + (60 * 60 * 24 * -7)),
+                'enddate' => date('Y-m-d H:i:s', time() + (60 * 60 * 24 * +7)),
+                'authorId' => 1,
+                'shopexist' => 1,
+                'couponcodetype' => 'GN',
+                'discountvalueType' => 'sale offer'
+            )
+        );
+
+        $I->haveInDatabasePDOSite(
+            'offer',
+            array(
+                'shopid' => '1',
+                'couponcode' => '',
+                'tilesId' => '1',
+                'title' => 'Printable',
+                'created_at' => date('Y-m-d H:i:s', time() + (60 * 60 * 24 * -7)),
+                'updated_at' => date('Y-m-d H:i:s', time() + (60 * 60 * 24 * -7)),
+                'visability' => 'DE',
+                'discounttype' => 'PR',
+                'startdate' => date('Y-m-d H:i:s', time() + (60 * 60 * 24 * -7)),
+                'enddate' => date('Y-m-d H:i:s', time() + (60 * 60 * 24 * +7)),
+                'authorId' => 1,
+                'shopexist' => 1,
+                'couponcodetype' => 'GN',
+                'discountvalueType' => 'printable offer'
             )
         );
 
