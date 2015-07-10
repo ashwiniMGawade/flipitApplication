@@ -23,20 +23,17 @@ class OfferCest
         $I->canSee('Add New Offer');
         $I->click('Add New Offer');
         $I->canSeeInCurrentUrl('offer/addoffer');
-        //$I->wait(10);
         $this->fillForm($I);
-       // $I->canSee('De actie is successvoltoegevoegd!');
     }
 
     protected function fillForm($I)
     {
         $I->click('Select a Shop');
         $I->canSee('acceptance shop');
-        $I->click('a.select2-choice');
+        $I->click('li.select2-highlighted');
+        $I->wait(5);
         $I->fillField('#addofferTitle', 'functional test');
         $I->fillField('#couponCodeTxt', 'FUN234');
         $I->click('.liimg');
-        $I->click('#optionsOnbtn');
-        $I->click('#saveAndAddnew');
     }
 }
