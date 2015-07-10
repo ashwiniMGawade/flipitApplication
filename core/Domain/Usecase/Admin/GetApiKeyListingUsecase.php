@@ -1,7 +1,7 @@
 <?php
 namespace Core\Domain\Usecase\Admin;
 
-use Core\Domain\Repository\ApiKeyRepositoryInterface;
+use \Core\Domain\Repository\ApiKeyRepositoryInterface;
 
 /**
  * Class GetApiKeyListingUsecase

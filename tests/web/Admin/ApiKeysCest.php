@@ -17,9 +17,7 @@ class ApiKeysCest
     {
         $I = new WebTester\AdminSteps($scenario);
         $I->login();
-        $I->click('API Keys');
-        $I->see('Add new API Key');
-        $I->canSeeElement('button');
+        $I->amOnPage('/admin/apikeys');
         $I->click('Add new API Key');
     }
 }
