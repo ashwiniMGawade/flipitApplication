@@ -76,7 +76,7 @@ class ClickOutsCest
         switch ($codeType) {
             case 'couponCode':
                 $this->commonOfferClickouts($cssClassName, $I);
-                $I->canSee('Press Ctrl + C to copy the code');
+                $I->canSee('test');
                 break;
             case 'sale':
                 $this->commonOfferClickouts($cssClassName, $I);
@@ -98,11 +98,6 @@ class ClickOutsCest
     {
         $I->amOnPage('acceptance-shop');
         $I->click($cssClassName);
-        $I->executeInSelenium(function (\Webdriver $webdriver) {
-            $handles=$webdriver->getWindowHandles();
-            $last_window = end($handles);
-            $webdriver->switchTo()->window($last_window);
-        });
         $I->wait(10);
     }
 }
