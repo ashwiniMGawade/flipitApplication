@@ -53,23 +53,29 @@ class AddApiKeyUsecase
         if (!$user->getId()) {
             throw new \Exception('Invalid User');
         }
-        $apiKey->setApiKey($this->keyGenerator->generate(32));
+
         $apiKey->setUserId($user);
         $apiKey->setCreatedAt(new \DateTime());
         $apiKey->setDeleted(0);
+        $apiKey->setApiKey($this->generateUniqueApiKey());
 
         $validationResult = $this->apiKeyValidator->validate($apiKey);
         if ($validationResult !== true) {
             return $validationResult;
         }
+        return $this->apiKeyRepository->persist($apiKey);
+    }
 
+    private function generateUniqueApiKey($length = 32)
+    {
+        $key = $this->keyGenerator->generate($length);
         $keyExists = $this->apiKeyRepository->findBy(
             '\Core\Domain\Entity\User\ApiKey',
-            array('api_key' => $apiKey->getApiKey())
+            array('api_key' => $key)
         );
         if (count($keyExists)) {
-            throw new \Exception('Api Key already in use');
+            $this->generateUniqueApiKey();
         }
-        return $this->apiKeyRepository->persist($apiKey);
+        return $key;
     }
 }

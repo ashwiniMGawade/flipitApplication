@@ -22,7 +22,7 @@ class AddApiKeyUsecaseTest extends \Codeception\TestCase\Test
     /**
      * @throws \Exception
      */
-    public function testCreateApiKeyWithInvalidUser()
+    public function testThrowsAnExceptionWhenTryingToCreateApiKeyWithInvalidUser()
     {
         $this->setExpectedException('Exception', 'Invalid User');
         $apiKeyRepository = $this->createApiKeyRepositoryMock();
@@ -35,10 +35,25 @@ class AddApiKeyUsecaseTest extends \Codeception\TestCase\Test
         )->execute(new ApiKey(), new User());
     }
 
+    public function testReturnsErrorWhenTryingToCreateApiKeyWithInvalidParameters()
+    {
+        $user = $this->createUserMock();
+        $apiKeyRepository = $this->createApiKeyRepositoryMock();
+        $apiKeyValidator = $this->createApiKeyValidatorMock(false);
+        $this->assertFalse(
+            (new AddApiKeyUsecase(
+                $apiKeyRepository,
+                $apiKeyValidator,
+                new KeyGenerator()
+            )
+            )->execute(new ApiKey(), $user)
+        );
+    }
+
     /**
      * @throws \Exception
      */
-    public function testCreateApiKeyWithValidParametersAndUniqueApiKey()
+    public function testGenerateUniqueApiKeyMethodIsCalledJustOnceWhenTheGeneratedApiKeyIsUnique()
     {
         $user = $this->createUserMock();
         $apiKeyRepository = $this->createApiKeyRepositoryWithFindByMethodMock(array());
@@ -54,9 +69,8 @@ class AddApiKeyUsecaseTest extends \Codeception\TestCase\Test
     /**
      * @throws \Exception
      */
-    public function testCreateApiKeyWithVAlidaParamsAndDuplicateApiKey()
+    public function testGenerateUniqueApiKeyMethodCallsItselfTillAnUniqueApiKeyIsGenerated()
     {
-        $this->setExpectedException('Exception', 'Api Key already in use');
         $user = $this->createUserMock();
         $apiKeyRepository = $this->createApiKeyRepositoryWithFindByMethodMock(array('API_KEY_ALREADY_EXISTS'));
         $apiKeyValidator = $this->createApiKeyValidatorMock(true);
@@ -102,9 +116,9 @@ class AddApiKeyUsecaseTest extends \Codeception\TestCase\Test
     {
         $apiKeyRepository = $this->createApiKeyRepositoryMock();
         $apiKeyRepository
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('findBy')
-            ->willReturn($returns);
+            ->willReturnOnConsecutiveCalls($returns, true);
         return $apiKeyRepository;
     }
 
