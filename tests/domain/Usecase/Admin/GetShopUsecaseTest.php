@@ -19,12 +19,12 @@ class GetShopsUsecaseTest extends \Codeception\TestCase\Test
 
     private function shopRepositoryMock()
     {
-        $pageRepositoryMock = $this
+        $shopRepositoryMock = $this
             ->getMock('\Core\Domain\Repository\ShopRepositoryInterface');
-        $pageRepositoryMock
+        $shopRepositoryMock
             ->expects($this->once())
             ->method('find')
             ->with($this->equalTo('\Core\Domain\Entity\Shop'), $this->equalTo(2));
-        return $pageRepositoryMock;
+        return $shopRepositoryMock;
     }
 }
