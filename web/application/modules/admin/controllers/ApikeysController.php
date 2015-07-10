@@ -1,5 +1,5 @@
 <?php
-use \Core\Domain\Factory\AdministratorFactory;
+use \Core\Domain\Factory\AdminFactory;
 
 class Admin_ApikeysController extends Zend_Controller_Action
 {
@@ -33,7 +33,7 @@ class Admin_ApikeysController extends Zend_Controller_Action
 
     public function getAction()
     {
-        $apiKeys = AdministratorFactory::getApiKeys()->execute();
+        $apiKeys = AdminFactory::getApiKeys()->execute();
         $apiKeys = $this->prepareData($apiKeys);
         echo Zend_Json::encode($apiKeys);
         exit;
@@ -42,9 +42,9 @@ class Admin_ApikeysController extends Zend_Controller_Action
     public function createAction()
     {
         $user = Auth_StaffAdapter::getIdentity();
-        $apiKey = AdministratorFactory::createApiKey()->execute();
+        $apiKey = AdminFactory::createApiKey()->execute();
         try {
-            AdministratorFactory::addApiKey()->execute($apiKey, $user);
+            AdminFactory::addApiKey()->execute($apiKey, $user);
             $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate('Api Key has been successfully Added');
             $flash->addMessage(array('success' => $message));
@@ -57,7 +57,7 @@ class Admin_ApikeysController extends Zend_Controller_Action
     public function deleteAction()
     {
         $apiKeyId = $this->getRequest()->getParam('id');
-        AdministratorFactory::deleteApiKey()->execute(FrontEnd_Helper_viewHelper::sanitize($apiKeyId));
+        AdminFactory::deleteApiKey()->execute(FrontEnd_Helper_viewHelper::sanitize($apiKeyId));
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $this->view->translate('Api Key has been deleted successfully');
         $flash->addMessage(array('success' => $message));
