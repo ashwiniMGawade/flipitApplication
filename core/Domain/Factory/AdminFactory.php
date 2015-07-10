@@ -1,7 +1,7 @@
 <?php
 namespace Core\Domain\Factory;
 
-use \Core\Domain\Service\ApiKeyGenerator;
+use \Core\Domain\Service\KeyGenerator;
 use \Core\Domain\Service\Validator;
 use \Core\Domain\Usecase\Admin\GetApiKeyListingUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
@@ -27,7 +27,7 @@ class AdminFactory
         return new AddApiKeyUsecase(
             RepositoryFactory::apiKeys(),
             new ApiKeyValidator(new Validator()),
-            new ApiKeyGenerator()
+            new KeyGenerator()
         );
     }
 

@@ -4,7 +4,7 @@ namespace Core\Domain\Usecase\Admin;
 use \Core\Domain\Entity\User\User;
 use \Core\Domain\Repository\ApiKeyRepositoryInterface;
 use \Core\Domain\Entity\User\ApiKey;
-use \Core\Domain\Service\ApiKeyGenerator;
+use \Core\Domain\Service\KeyGenerator;
 use \Core\Domain\Validator\ApiKeyValidator;
 
 /**
@@ -25,9 +25,9 @@ class AddApiKeyUsecase
     protected $apiKeyValidator;
 
     /**
-     * @var \Core\Domain\Service\ApiKeyGenerator
+     * @var \Core\Domain\Service\KeyGenerator
      */
-    protected $apiKeyGenerator;
+    protected $keyGenerator;
 
     /**
      * @param \Core\Domain\Repository\ApiKeyRepositoryInterface $apiKeyRepository
@@ -35,11 +35,11 @@ class AddApiKeyUsecase
     public function __construct(
         ApiKeyRepositoryInterface $apiKeyRepository,
         ApiKeyValidator $apiKeyValidator,
-        ApiKeyGenerator $apiKeyGenerator
+        KeyGenerator $keyGenerator
     ) {
         $this->apiKeyRepository = $apiKeyRepository;
         $this->apiKeyValidator = $apiKeyValidator;
-        $this->apiKeyGenerator = $apiKeyGenerator;
+        $this->keyGenerator = $keyGenerator;
     }
 
     /**
@@ -53,7 +53,7 @@ class AddApiKeyUsecase
         if (!$user->getId()) {
             throw new \Exception('Invalid User');
         }
-        $apiKey->setApiKey($this->apiKeyGenerator->generate(32));
+        $apiKey->setApiKey($this->keyGenerator->generate(32));
         $apiKey->setUserId($user);
         $apiKey->setCreatedAt(new \DateTime());
         $apiKey->setDeleted(0);

@@ -1,7 +1,6 @@
 <?php
 namespace Service;
 
-
 use Core\Domain\Service\KeyGenerator;
 
 class KeyGeneratorTest extends \Codeception\TestCase\Test
@@ -13,7 +12,7 @@ class KeyGeneratorTest extends \Codeception\TestCase\Test
 
     public function testThrowsAnExceptionWhenLengthIsLessThan8AndGreaterThan65()
     {
-        $this->setExpectedException('Exception', 'The API Key length must be between 8 and 64 characters');
+        $this->setExpectedException('Exception', 'The key length must be between 8 and 64 characters');
         ((new KeyGenerator())->generate(6));
         ((new KeyGenerator())->generate(null));
         ((new KeyGenerator())->generate(66));

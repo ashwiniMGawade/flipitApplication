@@ -3,7 +3,7 @@ namespace Usecase\Admin;
 
 use \Core\Domain\Entity\User\ApiKey;
 use \Core\Domain\Entity\User\User;
-use \Core\Domain\Service\ApiKeyGenerator;
+use \Core\Domain\Service\KeyGenerator;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
 use \Core\Domain\Validator\ApiKeyValidator;
 
@@ -30,7 +30,7 @@ class AddApiKeyUsecaseTest extends \Codeception\TestCase\Test
         (new AddApiKeyUsecase(
             $apiKeyRepository,
             new ApiKeyValidator($validatorInterface),
-            new ApiKeyGenerator()
+            new KeyGenerator()
         )
         )->execute(new ApiKey(), new User());
     }
@@ -46,7 +46,7 @@ class AddApiKeyUsecaseTest extends \Codeception\TestCase\Test
         (new AddApiKeyUsecase(
             $apiKeyRepository,
             $apiKeyValidator,
-            new ApiKeyGenerator()
+            new KeyGenerator()
         )
         )->execute(new ApiKey(), $user);
     }
@@ -63,7 +63,7 @@ class AddApiKeyUsecaseTest extends \Codeception\TestCase\Test
         (new AddApiKeyUsecase(
             $apiKeyRepository,
             $apiKeyValidator,
-            new ApiKeyGenerator()
+            new KeyGenerator()
         )
         )->execute(new ApiKey(), $user);
     }
@@ -79,7 +79,7 @@ class AddApiKeyUsecaseTest extends \Codeception\TestCase\Test
         (new AddApiKeyUsecase(
             $apiKeyRepository,
             $apiKeyValidator,
-            new ApiKeyGenerator()
+            new KeyGenerator()
         )
         )->execute(new ApiKey(), $user);
     }
