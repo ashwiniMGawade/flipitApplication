@@ -41,15 +41,16 @@ class Admin_ApikeysController extends Zend_Controller_Action
 
     public function createAction()
     {
+        $flash = $this->_helper->getHelper('FlashMessenger');
         $user = Auth_StaffAdapter::getIdentity();
         $apiKey = AdminFactory::createApiKey()->execute();
         try {
             AdminFactory::addApiKey()->execute($apiKey, $user);
-            $flash = $this->_helper->getHelper('FlashMessenger');
-            $message = $this->view->translate('Api Key has been successfully Added');
+            $message = $this->view->translate('Api Key has been successfully added');
             $flash->addMessage(array('success' => $message));
         } catch (Exception $exception) {
-            $this->createAction();
+            $message = $this->view->translate($exception->getMessage());
+            $flash->addMessage(array('error' => $message));
         }
         exit;
     }
