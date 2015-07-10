@@ -30,8 +30,10 @@ class DeleteApiKeyUsecase
      */
     public function execute($id)
     {
+        if (!is_int($id)) {
+            return('Invalid Id');
+        }
         $apiKey = $this->apiKeyRepository->find('\Core\Domain\Entity\User\ApiKey', $id);
-
         $apiKey->setDeleted(1);
         return $this->apiKeyRepository->persist($apiKey);
     }
