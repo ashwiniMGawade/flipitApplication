@@ -212,6 +212,7 @@
 
 # Numerous always-ignore extensions
 *.csv
+*.xlsx
 *.xls
 *.diff
 *.err
