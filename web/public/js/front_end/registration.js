@@ -47,6 +47,9 @@ function validateRegistration() {
                 required: true,
                 minlength : 1,
                 maxlength :20
+            },
+            subscribeNewsLetter: {
+                required: true
             }
         },
         messages : {
@@ -68,6 +71,9 @@ function validateRegistration() {
                   required: '',
                   minlength : '',
                   maxlength: ''
+              },
+              subscribeNewsLetter: {
+                  required: ''
               }
         },
         onfocusin : function(element) {

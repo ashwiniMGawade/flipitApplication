@@ -1,24 +1,18 @@
 <?php
 
-require 'vendor/slim/slim/Slim/Slim.php';
+include '../c3.php';
 
-\Slim\Slim::registerAutoloader();
+require_once '../vendor/autoload.php';
 
+$app = new \RKA\Slim();
 
+$app->get('/shops/:id', 'Api\Controller\ShopsController:getShop');
 
-/*use Core\Domain\Entity;
-$offerEntity = new Offer();
-print_r($offerEntity); die;*/
-
-
-
-$app = new \Slim\Slim();
-
-$app->contentType("application/json");
-
-$app->get( '/', function () {
-    	echo "Welcome to Slim Framework";
-	}
+$app->get(
+    '/',
+    function () {
+        echo json_encode(array("msg"=>"Welcome to Slim Framework"));
+    }
 );
 
 $app->run();
