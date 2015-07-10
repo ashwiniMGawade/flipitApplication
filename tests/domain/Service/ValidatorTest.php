@@ -24,7 +24,7 @@ class ValidatorTest extends \Codeception\TestCase\Test
         $this->setExpectedException('Exception', 'Unexpected Parameter types');
         (new Validator())->validate('Entity', 'Constraint');
         (new Validator())->validate('Entity', array());
-        (new Validator())->validate(new ApiKey(), 'Constraint');
+        (new Validator())->validate(new \stdClass(), 'Constraint');
     }
 
     /**
@@ -32,7 +32,7 @@ class ValidatorTest extends \Codeception\TestCase\Test
      */
     public function testValidateMethodWithValidParameters()
     {
-        (new Validator())->validate(new ApiKey(), array());
+        (new Validator())->validate(new \stdClass(), array());
     }
 
     /**
@@ -49,7 +49,13 @@ class ValidatorTest extends \Codeception\TestCase\Test
                 $validator->notNull()
             )
         );
-        $this->assertArrayHasKey('api_key', (new Validator())->validate($apiKey, $rules));
+        $expected = array(
+            "api_key" => array(
+                'This value should not be blank.'
+            )
+        );
+        $response = (new Validator())->validate($apiKey, $rules);
+        $this->assertEquals($expected, $response);
     }
 
     /**
@@ -66,7 +72,13 @@ class ValidatorTest extends \Codeception\TestCase\Test
                 $validator->length(array('min' => 32, 'max' => 32))
             )
         );
-        $this->assertArrayHasKey('api_key', (new Validator())->validate($apiKey, $rules));
+        $expected = array(
+            "api_key" => array(
+                'This value should have exactly 32 characters.'
+            )
+        );
+        $response = (new Validator())->validate($apiKey, $rules);
+        $this->assertEquals($expected, $response);
     }
 
     /**
@@ -83,6 +95,12 @@ class ValidatorTest extends \Codeception\TestCase\Test
                 $validator->type(array('type' => 'object'))
             )
         );
-        $this->assertArrayHasKey('user_id', (new Validator())->validate($apiKey, $rules));
+        $expected = array(
+            "user_id" => array(
+                'This value should be of type object.'
+            )
+        );
+        $response = (new Validator())->validate($apiKey, $rules);
+        $this->assertEquals($expected, $response);
     }
 }

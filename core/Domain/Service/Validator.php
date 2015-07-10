@@ -42,9 +42,13 @@ class Validator implements ValidatorInterface
             $error[$propertyName] = $this->validator->validate($entity->$propertyName, $propertyConstraints);
         }
         foreach ($error as $property => $violationList) {
+            unset($error[$property]);
             if (!$violationList->count()) {
-                unset($error[$property]);
                 continue;
+            } else {
+                foreach ($violationList as $violation) {
+                    $error[$property][] = $violation->getMessage();
+                }
             }
         }
         return (count($error)) ? $error : true;
