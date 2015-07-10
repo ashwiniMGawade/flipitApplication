@@ -6,6 +6,5 @@ vendor/
 # Composer PHAR
 /composer.phar
 tests/_output/*
-tests/_support/*
 
 c3.php

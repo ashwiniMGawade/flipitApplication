@@ -5,23 +5,19 @@
       "version":"1.0.0",
       "title":"Flipit API"
    },
-   "host":"api.flipit.lcl",
-   "basePath":"/v1",
+   "host":"api.dev.flipit.com",
+   "basePath":"",
    "tags":[
       {
          "name":"shop",
-         "description":"Everything about shops",
-         "externalDocs":{
-            "description":"Find out more",
-            "url":"http://test.io"
-         }
+         "description":"Everything about shops"
       }
    ],
    "schemes":[
       "http"
    ],
    "paths":{
-      "/shop":{
+      "/shops":{
          "post":{
             "tags":[
                "shop"
@@ -57,7 +53,7 @@
          }
       },
       
-      "/shop/{shopId}":{
+      "/shops/{shopId}":{
          "put":{
             "tags":[
                "shop"
@@ -104,12 +100,28 @@
             "produces":[
                "application/json"
             ],
+             "parameters":[
+                 {
+                     "in":"path",
+                     "name":"shopId",
+                     "description":"Shop object that needs to be update",
+                     "required":true,
+                     "type":"integer",
+                     "format":"int64"
+                 }
+             ],
             "responses":{
                "200":{
-                  "description":"Request was successful"
+                  "description":"Request was successful",
+                  "schema":{
+                     "$ref":"#/definitions/shop"
+                  }
                },
                "404":{
                   "description":"Shop not found"
+               },
+               "400":{
+                  "description":"Invalid shop Id"
                }
             }
          },

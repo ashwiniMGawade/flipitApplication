@@ -1,4 +1,0 @@
-[2015-07-09 12:22:01] .ERROR: #File:/var/www/flipit_application/api/App/Controller/ShopsController.php;#Line:34;#msg:Undefined variable: testt [] []
-[2015-07-09 12:23:04] .ERROR: #File:/var/www/flipit_application/api/App/Controller/ShopsController.php;#Line:34;#msg:Undefined variable: testt [] []
-[2015-07-09 12:29:28] .ERROR: #File:/var/www/flipit_application/api/App/Controller/ShopsController.php;#Line:34;#msg:Undefined variable: testt [] []
-[2015-07-09 12:29:41] .ERROR: #File:/var/www/flipit_application/api/App/Controller/ShopsController.php;#Line:34;#msg:Undefined variable: testt [] []

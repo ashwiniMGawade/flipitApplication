@@ -1,5 +1,7 @@
 <?php
-
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+    header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+}
 include '../c3.php';
 
 require_once '../vendor/autoload.php';

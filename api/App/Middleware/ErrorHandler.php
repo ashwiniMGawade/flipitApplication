@@ -26,7 +26,9 @@ class ErrorHandler extends \Slim\Middleware
                     'file'      => $e->getFile(),
                     'line'      => $e->getLine(),
                 );
- 
+                if (is_numeric($error['code'])) {
+                    $this->app->response->setStatus($error['code']);
+                }
                 // Graceful error data for production mode
                 if ('production' === getenv('APPLICATION_ENV')) {
                     $error['message'] = 'There was an internal error';

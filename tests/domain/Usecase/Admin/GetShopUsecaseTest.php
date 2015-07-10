@@ -12,19 +12,29 @@ class GetShopsUsecaseTest extends \Codeception\TestCase\Test
 
     public function testGetShopUsecase()
     {
-        $id = 2;
-        $shop = new GetShopUsecase($this->shopRepositoryMock());
-        $shop->execute($id);
-    }
-
-    private function shopRepositoryMock()
-    {
-        $shopRepositoryMock = $this
-            ->getMock('\Core\Domain\Repository\ShopRepositoryInterface');
+        $id = 1;
+        $shopRepositoryMock = $this->createShopRepositoryMock();
         $shopRepositoryMock
             ->expects($this->once())
             ->method('find')
-            ->with($this->equalTo('\Core\Domain\Entity\Shop'), $this->equalTo(2));
-        return $shopRepositoryMock;
+            ->with($this->equalTo('\Core\Domain\Entity\Shop'), $this->equalTo(1));
+        $this->setExpectedException('Exception', 'Shop not found');
+        $shopUsecase = new GetShopUsecase($shopRepositoryMock);
+        $shopUsecase->execute($id);
+    }
+
+    public function testGetShopUsecaseWithInvalidId()
+    {
+        $id = 'invalid';
+        $shopRepositoryMock = $this->createShopRepositoryMock();
+        $this->setExpectedException('Exception', 'Invalid shop Id');
+        $shopUsecase = new GetShopUsecase($shopRepositoryMock);
+        $shopUsecase->execute($id);
+    }
+
+    private function createShopRepositoryMock()
+    {
+        $shopRepository = $this->getMockBuilder('\Core\Domain\Repository\ShopRepositoryInterface')->getMock();
+        return $shopRepository;
     }
 }

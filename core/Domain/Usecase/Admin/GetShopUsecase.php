@@ -14,6 +14,15 @@ class GetShopUsecase
 
     public function execute($id)
     {
-        return $this->shopRepository->find('\Core\Domain\Entity\Shop', $id);
+        if (is_null($id) || !is_numeric($id)) {
+            throw new \Exception('Invalid shop Id', 404);
+        }
+        
+        $shop = $this->shopRepository->find('\Core\Domain\Entity\Shop', $id);
+
+        if (false === is_object($shop)) {
+            throw new \Exception('Shop not found', 400);
+        }
+        return $shop;
     }
 }
