@@ -2,9 +2,9 @@
 namespace Service;
 
 
-use Core\Domain\Service\ApiKeyGenerator;
+use Core\Domain\Service\KeyGenerator;
 
-class ApiKeyGeneratorTest extends \Codeception\TestCase\Test
+class KeyGeneratorTest extends \Codeception\TestCase\Test
 {
     /**
      * @var \DomainTester
@@ -14,20 +14,20 @@ class ApiKeyGeneratorTest extends \Codeception\TestCase\Test
     public function testThrowsAnExceptionWhenLengthIsLessThan8AndGreaterThan65()
     {
         $this->setExpectedException('Exception', 'The API Key length must be between 8 and 64 characters');
-        ((new ApiKeyGenerator())->generate(6));
-        ((new ApiKeyGenerator())->generate(null));
-        ((new ApiKeyGenerator())->generate(66));
+        ((new KeyGenerator())->generate(6));
+        ((new KeyGenerator())->generate(null));
+        ((new KeyGenerator())->generate(66));
     }
 
     public function testDefaultApiKeyLengthIsEqualTo32WhenLengthIsNotPassed()
     {
-        $apiKey = (new ApiKeyGenerator())->generate();
+        $apiKey = (new KeyGenerator())->generate();
         $this->assertEquals(32, strlen($apiKey));
     }
 
     public function testApiKeyLengthIsEqualToTheParameterValueWhenValidParameterIsPassed()
     {
-        $apiKey = (new ApiKeyGenerator())->generate(34);
+        $apiKey = (new KeyGenerator())->generate(34);
         $this->assertEquals(34, strlen($apiKey));
     }
 }
