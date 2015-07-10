@@ -2,6 +2,7 @@
 namespace Usecase\Admin;
 
 use \Core\Domain\Usecase\Admin\GetApiKeyListingUsecase;
+use \Core\Domain\Repository\ApiKeyRepositoryInterface;
 
 /**
  * Class GetApiKeyListingUsecaseTest
@@ -31,8 +32,7 @@ class GetApiKeyListingUsecaseTest extends \Codeception\TestCase\Test
     private function createApiKeyRepositoryMock()
     {
         $apiKeyRepository = $this->getMockBuilder('\Core\Domain\Repository\ApiKeyRepositoryInterface')->getMock();
-        $apiKeyRepository->expects($this->once())
-                         ->method('findBy');
+        $apiKeyRepository->expects($this->once())->method('findBy');
         return $apiKeyRepository;
     }
 }
