@@ -8,3 +8,4 @@ vendor/
 tests/_output/*
 
 c3.php
+api/logs/*
