@@ -7,22 +7,17 @@
 ?>
 <div id="searchbarlist">
    <div class="wrap columns-2">
-    <?php 
-    if($this->messageSuccess!='' || $this->messageError!='' ) {?>
-        <br>
-        <div class ="mainpage-content-colorbox success">
-            <?php if($this->messageSuccess!='') {?>
-                <span class="success"><?php echo $this->messageSuccess; ?></span>
-                <?php 
-            }?>
-            <?php if($this->messageError!='') 
-                {?>
-                <span class="error"><?php echo $this->messageError; ?></span>
-                <?php 
-            } ?>
-        </div>
-        <?php 
-    }?>
+       <?php if ($this->messageSuccess != '' || $this->messageError != '') : ?>
+           <br>
+           <div class="mainpage-content-colorbox success">
+               <?php if ($this->messageSuccess != '') : ?>
+                   <span class="success"><?php echo $this->messageSuccess; ?></span>
+               <?php endif; ?>
+               <?php if ($this->messageError != '') : ?>
+                   <span class="error"><?php echo $this->messageError; ?></span>
+               <?php endif; ?>
+           </div>
+       <?php endif; ?>
     
         <h1 class="fl"><?php echo $this->translate('API Keys'); ?>
             <button class="btn ml10" type="button" onClick="addApiKey()">
