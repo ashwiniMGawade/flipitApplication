@@ -291,22 +291,4 @@ class Admin_VisitorController extends Zend_Controller_Action
                 ->setHeader('Cache-Control', 'max-age=0')
                 ->setBody(file_get_contents($fileName));
     }
-
-    public function exportXlxAction()
-    {
-        # set fiel and its trnslattions
-        $locale = LOCALE == '' ? "-NL" : "-".strtoupper(LOCALE);
-        $visitorFile = UPLOAD_EXCEL_PATH . "visitorList".$locale.".csv";
-        $fileName =  $this->view->translate($visitorFile);
-        $this->_helper->layout()->disableLayout();
-        $this->_helper->viewRenderer->setNoRender(true);
-        # set reponse headers and body
-        $this->getResponse()
-        ->setHeader('Content-Disposition', 'attachment;filename=' . basename($fileName))
-        ->setHeader('Content-type', 'text/csv')
-        ->setHeader('Cache-Control', 'max-age=0')
-        ->setHeader('Pragma', 'no-cache')
-        ->setHeader('Expires', '0')
-        ->setBody(file_get_contents($fileName));
-    }
 }
