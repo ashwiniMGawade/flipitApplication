@@ -39,7 +39,7 @@ class UpdateShopsFromExcel
         $excelData = ShopExcelInformation::getExcelData();
         if (!empty($excelData)) {
             $folderPath = $key == 'en' ? UPLOAD_DATA_FOLDER_EXCEL_PATH.'excels/'
-                : UPLOAD_DATA_FOLDER_EXCEL_PATH.$key.'excels/';
+                : UPLOAD_DATA_FOLDER_EXCEL_PATH.$key.'/excels/';
             $fileName = $excelData['fileName'];
             $excelFile = $folderPath.$fileName;
             $updatedInformation = BackEnd_Helper_ImportShopsExcel::importExcelShops($excelFile);
