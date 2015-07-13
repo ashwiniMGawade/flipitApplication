@@ -59,14 +59,13 @@ class Admin_ApikeysController extends Zend_Controller_Action
     {
         $flash = $this->_helper->getHelper('FlashMessenger');
         $apiKeyId = $this->getRequest()->getParam('id');
-        if (is_int($apiKeyId) && $apiKeyId > 0) {
-            AdminFactory::deleteApiKey()->execute(FrontEnd_Helper_viewHelper::sanitize($apiKeyId));
-            $message = $this->view->translate('Api Key has been deleted successfully');
-            $flash->addMessage(array('success' => $message));
-        } else {
+        if (!$apiKeyId) {
             $message = $this->view->translate('Invalid Id');
             $flash->addMessage(array('error' => $message));
         }
+        AdminFactory::deleteApiKey()->execute((int) FrontEnd_Helper_viewHelper::sanitize($apiKeyId));
+        $message = $this->view->translate('Api Key has been deleted successfully');
+        $flash->addMessage(array('success' => $message));
         exit();
     }
 
