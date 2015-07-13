@@ -32,7 +32,17 @@ class ValidatorTest extends \Codeception\TestCase\Test
      */
     public function testValidateMethodWithValidParameters()
     {
-        (new Validator())->validate(new \stdClass(), array());
+        $apiKey = new ApiKey();
+        $apiKey->__set('api_key', 'CjhPh4@^dhsUXcysL^3EzMKqTzNorw@g');
+
+        $validator = new Validator();
+        $rules = array(
+            'api_key' => array(
+                $validator->notNull()
+            )
+        );
+
+        (new Validator())->validate($apiKey, $rules);
     }
 
     /**
@@ -46,7 +56,8 @@ class ValidatorTest extends \Codeception\TestCase\Test
         $validator = new Validator();
         $rules = array(
             'api_key' => array(
-                $validator->notNull()
+                $validator->notNull(),
+                $validator->length(array('min' => 32, 'max' => 32))
             )
         );
         $expected = array(
@@ -98,6 +109,26 @@ class ValidatorTest extends \Codeception\TestCase\Test
         $expected = array(
             "user_id" => array(
                 'This value should be of type object.'
+            )
+        );
+        $response = (new Validator())->validate($apiKey, $rules);
+        $this->assertEquals($expected, $response);
+    }
+
+    public function testValidatorReturnsViolationForPropertyNotEqualsDateTime()
+    {
+        $apiKey = new ApiKey();
+        $apiKey->__set('created_at', 123);
+
+        $validator = new Validator();
+        $rules = array(
+            'created_at' => array(
+                $validator->dateTime()
+            )
+        );
+        $expected = array(
+            "created_at" => array(
+                'This value is not a valid datetime.'
             )
         );
         $response = (new Validator())->validate($apiKey, $rules);
