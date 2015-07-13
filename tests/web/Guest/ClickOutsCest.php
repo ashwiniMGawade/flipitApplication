@@ -54,18 +54,9 @@ class ClickOutsCest
         $this->switchOfferClickouts('printable', 'Bekijk de kortingsbon', $I);
     }
 
-    public function sidebarClickout(WebTester $I, \Codeception\Scenario $scenario)
-    {
-        $I = new WebTester($scenario);
-        $this->commonClickouts($I, '.web a', 'sidebar');
-    }
-
-    protected function commonClickouts($I, $cssClassName, $location = '')
+    protected function commonClickouts($I, $cssClassName)
     {
         $I->amOnPage('acceptance-shop');
-        if ($location == 'sidebar') {
-            $I->canSee($cssClassName);
-        }
         $I->click($cssClassName);
         $I->switchToWindow();
         $I->seeInCurrentUrl('/');
