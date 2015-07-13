@@ -17,7 +17,7 @@ function getApiKeyList(iStart,iSortCol,iSortDir) {
         "bLengthChange" : false,
         "bFilter" : false,
         "iDisplayStart" : iStart,
-        "iDisplayLength" : 15,
+        "iDisplayLength" : 20,
         "oLanguage": {
               "sInfo": "<b>_START_-_END_</b> of <b>_TOTAL_</b>"
         },
@@ -29,10 +29,10 @@ function getApiKeyList(iStart,iSortCol,iSortDir) {
             },
             "bVisible": false,
             "sType": 'numeric'
-         },
-         {
+        },
+        {
             "fnRender" : function(obj) {
-                if(obj.aData.apiKey != null) {  
+                if(obj.aData.apiKey != null) {
                     return '<p>' + obj.aData.apiKey +'</p>';
                 }
             }

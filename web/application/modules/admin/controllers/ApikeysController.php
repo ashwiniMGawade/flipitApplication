@@ -35,7 +35,8 @@ class Admin_ApikeysController extends Zend_Controller_Action
     {
         $apiKeys = AdminFactory::getApiKeys()->execute();
         $apiKeys = $this->prepareData($apiKeys);
-        echo Zend_Json::encode($apiKeys);
+        $response = \DataTable_Helper::createResponse($apiKeys);
+        echo Zend_Json::encode($response);
         exit;
     }
 
@@ -71,20 +72,14 @@ class Admin_ApikeysController extends Zend_Controller_Action
 
     private function prepareData($apiKeys)
     {
-        $aaData = array();
+        $returnData = array();
         foreach ($apiKeys as $apiKey) {
-            $aaData[] = array(
+            $returnData[] = array(
                 'id' => $apiKey->getId(),
                 'apiKey' => $apiKey->getApiKey(),
                 'createdAt' => $apiKey->getCreatedAt()
             );
         }
-        $returnData = array(
-            "sEcho" => "1",
-            "aaData" => $aaData,
-            "iTotalRecords" => count($aaData),
-            "iTotalDisplayRecords" => 20
-        );
         return $returnData;
     }
 }
