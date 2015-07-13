@@ -35,7 +35,7 @@ class VisitorImport
         $manager = CommonMigrationFunctions::loadDoctrineModels();
 
         $localePath               = ($keyIn == 'en') ? '' : $keyIn.'/';
-        $pathToExcelImportFolder  = UPLOAD_DATA_FOLDER_EXCEL_PATH . strtolower($localePath) . 'excels/import/';
+        $pathToExcelImportFolder  = UPLOAD_DATA_FOLDER_EXCEL_PATH . strtolower($localePath) . 'excels/';
         
         foreach (glob($pathToExcelImportFolder."*.xlsx") as $xlsxDocument) {
             
@@ -64,7 +64,7 @@ class VisitorImport
 
                     $email      = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['A']);
                     
-                    if(filter_var($email, FILTER_VALIDATE_EMAIL)){                        
+                    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
                         $firstName  = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['B']);
                         $lastName   = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['C']);
                         $gender     =

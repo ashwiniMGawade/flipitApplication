@@ -14,7 +14,7 @@ class CodeAlertCest
     {
     }
 
-    public function codealert(WebTester $I, \Codeception\Scenario $scenario)
+    /*public function codealert(WebTester $I, \Codeception\Scenario $scenario)
     {
         $I = new WebTester\AdminSteps($scenario);
         $I->login();
@@ -24,7 +24,7 @@ class CodeAlertCest
         $I->canSee('Queued code alerts');
         $I->canSee('Code title');
         $I->canSee('Recipients count');
-    }
+    }*/
 
     // public function codeAlertSettings(WebTester $I, \Codeception\Scenario $scenario)
     // {

@@ -990,50 +990,55 @@ class Admin_ShopController extends Zend_Controller_Action
 
     public function importshopsAction()
     {
-        ini_set('max_execution_time', 115200);
-        $params = $this->_getAllParams();
-        if ($this->getRequest()->isPost()) {
-            $flashMessage = $this->_helper->getHelper('FlashMessenger');
-            $status = \KC\Repository\ShopExcelInformation::checkExistingShopFile();
-            if ($status) {
-                if (isset($_FILES['excelFile']['name']) && $_FILES['excelFile']['name'] != '') {
-                    $uploadResult = BackEnd_Helper_viewHelper::uploadExcel($_FILES['excelFile']['name'], false, 'shop');
-                    if ($uploadResult['status'] == 200) {
-                        $excelFilePath = $uploadResult['path'];
-                        $fileName = $uploadResult['fileName'];
-                        $excelFile = $excelFilePath.$fileName;
-                        chmod($excelFile, 0775);
-                        $userDetail = Zend_Auth::getInstance()->getIdentity();
-                        $userName = $userDetail->firstName;
-                        $objReader = PHPExcel_IOFactory::createReader('Excel2007');
-                        $objPHPExcel = $objReader->load($excelFile);
-                        $totalShops = $objPHPExcel->setActiveSheetIndex(0)->getHighestRow();
-                        \KC\Repository\ShopExcelInformation::saveShopExcelData($totalShops, $userName, $fileName);
-                        $message = $this->view->translate($totalShops.' Shops data has been imported Successfully!!');
-                        $flashMessage->addMessage(array('success' => $message));
-                        $message = $flashMessage->getMessages();
-                        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
+        $role = Zend_Auth::getInstance()->getIdentity()->users->id;
+        if ($role == 1) {
+            ini_set('max_execution_time', 115200);
+            $params = $this->_getAllParams();
+            if ($this->getRequest()->isPost()) {
+                $flashMessage = $this->_helper->getHelper('FlashMessenger');
+                $status = \KC\Repository\ShopExcelInformation::checkExistingShopFile();
+                if ($status) {
+                    if (isset($_FILES['excelFile']['name']) && $_FILES['excelFile']['name'] != '') {
+                        $uploadResult = BackEnd_Helper_viewHelper::uploadExcel($_FILES['excelFile']['name'], false, 'shop');
+                        if ($uploadResult['status'] == 200) {
+                            $excelFilePath = $uploadResult['path'];
+                            $fileName = $uploadResult['fileName'];
+                            $excelFile = $excelFilePath.$fileName;
+                            chmod($excelFile, 0775);
+                            $userDetail = Zend_Auth::getInstance()->getIdentity();
+                            $userName = $userDetail->firstName;
+                            $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+                            $objPHPExcel = $objReader->load($excelFile);
+                            $totalShops = $objPHPExcel->setActiveSheetIndex(0)->getHighestRow();
+                            \KC\Repository\ShopExcelInformation::saveShopExcelData($totalShops, $userName, $fileName);
+                            $message = $this->view->translate($totalShops.' Shops data has been imported Successfully!!');
+                            $flashMessage->addMessage(array('success' => $message));
+                            $message = $flashMessage->getMessages();
+                            $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
+                        } else {
+                            $message = $this->view->translate('backend_Problem in your Data!!');
+                            $flashMessage->addMessage(array('error' => $message));
+                            $message = $flashMessage->getMessages();
+                            $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
+                        }
                     } else {
-                        $message = $this->view->translate('backend_Problem in your Data!!');
+                        $message = $this->view->translate('backend_Problem in your file size!!');
                         $flashMessage->addMessage(array('error' => $message));
                         $message = $flashMessage->getMessages();
                         $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
                     }
                 } else {
-                    $message = $this->view->translate('backend_Problem in your file size!!');
+                    $message = $this->view->translate('backend_Shop Excel is already there to update!!');
                     $flashMessage->addMessage(array('error' => $message));
                     $message = $flashMessage->getMessages();
                     $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
                 }
-            } else {
-                $message = $this->view->translate('backend_Shop Excel is already there to update!!');
-                $flashMessage->addMessage(array('error' => $message));
-                $message = $flashMessage->getMessages();
-                $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
             }
+            $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success']: '';
+            $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
+        } else {
+            $this->_redirect('/admin/shop');
         }
-        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success']: '';
-        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
     }
 
     public function emptyXlxAction()
@@ -1167,11 +1172,6 @@ class Admin_ShopController extends Zend_Controller_Action
             $count = $this->getRequest()->getParam('partialCounter');
             $this->view->partialCounter = $count;
         }
-    }
-
-    public function shopExcelQueueAction()
-    {
-        $this->getFlashMessage();
     }
 
     public function shopExcelLogAction()

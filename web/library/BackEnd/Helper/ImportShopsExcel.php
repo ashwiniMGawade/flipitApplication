@@ -90,7 +90,7 @@ class BackEnd_Helper_ImportShopsExcel
                             $offlineSicne = null;
                         } else {
                             $status = 0;
-                            $offlineSicne = new \DateTime('now');
+                            $offlineSicne = date('Y-m-d H:i:s');
                         }
                         $shopData['offlineSicne'] = $offlineSicne;
                         $shopData['status'] = $status;
