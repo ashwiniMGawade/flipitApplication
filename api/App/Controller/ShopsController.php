@@ -29,5 +29,6 @@ class ShopsController extends ApiBaseController
         );
         $shop = new Hal('/shops/'.$id, $shopData);
         echo $shop->asJson();
+        exit;
     }
 }
