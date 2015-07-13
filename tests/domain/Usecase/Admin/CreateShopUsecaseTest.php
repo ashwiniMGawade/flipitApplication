@@ -1,6 +1,8 @@
 <?php
 namespace Usecase\Admin;
 
+use \Core\Domain\Usecase\Admin\CreateShopUsecase;
+
 class CreateShopUsecaseTest extends \Codeception\TestCase\Test
 {
     /**
@@ -10,13 +12,13 @@ class CreateShopUsecaseTest extends \Codeception\TestCase\Test
 
     public function testCreateShopUsecase()
     {
-        $createShopUsecase = new \Core\Domain\Usecase\Admin\CreateShopUsecase($this->shopRepositoryMock());
-        $createShopUsecase->execute(new \Core\Domain\Entity\Shop());
+        $createShopUsecase = new CreateShopUsecase($this->shopRepositoryMock());
+        $createShopUsecase->execute();
     }
 
     private function shopRepositoryMock()
     {
-        $pageRepositoryMock = $this->getMock('\Core\Domain\Repository\ShopRepositoryInterface');
-        return $pageRepositoryMock;
+        $shopRepositoryMock = $this->getMock('\Core\Domain\Repository\ShopRepositoryInterface');
+        return $shopRepositoryMock;
     }
 }

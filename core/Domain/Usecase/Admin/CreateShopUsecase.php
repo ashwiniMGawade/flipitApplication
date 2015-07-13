@@ -13,8 +13,8 @@ class CreateShopUsecase
         $this->shopRepository = $shopRepository;
     }
 
-    public function execute(Shop $shop)
+    public function execute()
     {
-
+        $shop = new Shop();
     }
 }

@@ -21,6 +21,7 @@ class GetShopCest
         $I->sendGet('/shops/');
         $I->seeResponseCodeIs(404);
         $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(['message' => 'Not found']);
     }
 
     public function testGetShopWithStringId(ApiTester $I)
@@ -29,6 +30,7 @@ class GetShopCest
         $I->sendGet('/shops/test');
         $I->seeResponseCodeIs(400);
         $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(['message' => 'Invalid shop Id']);
     }
 
     public function testGetShopWithInvalidId(ApiTester $I)
@@ -37,5 +39,6 @@ class GetShopCest
         $I->sendGet('/shops/0');
         $I->seeResponseCodeIs(404);
         $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(['message' => 'Shop not found']);
     }
 }
