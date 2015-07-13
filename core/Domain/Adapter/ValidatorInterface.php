@@ -17,13 +17,6 @@ interface ValidatorInterface
     public function validate($entity, $constraint);
 
     /**
-     * @param array $options
-     *
-     * @return mixed
-     */
-    public function collection($options = array());
-
-    /**
      * @return mixed
      */
     public function notNull();

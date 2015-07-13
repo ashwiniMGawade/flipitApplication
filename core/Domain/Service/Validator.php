@@ -55,16 +55,6 @@ class Validator implements ValidatorInterface
     }
 
     /**
-     * @param array $options
-     *
-     * @return \Symfony\Component\Validator\Constraints\Collection
-     */
-    public function collection($options = array())
-    {
-        return new Assert\Collection($options);
-    }
-
-    /**
      * @return \Symfony\Component\Validator\Constraints\NotBlank
      */
     public function notNull()
