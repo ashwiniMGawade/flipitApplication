@@ -7,10 +7,10 @@ use \Core\Domain\Entity\Shop;
 
 class ShopRepository extends BaseRepository implements ShopRepositoryInterface
 {
-    protected $em;
-
-    public function __construct($em)
+    public function persist($entity)
     {
-        $this->em = $em;
+        $this->em->merge($entity);
+        $this->em->flush();
+        return $entity;
     }
 }
