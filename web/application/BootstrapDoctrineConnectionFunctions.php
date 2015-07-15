@@ -1,10 +1,12 @@
 <?php
+
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\ORM\Tools\Setup;
+
 class BootstrapDoctrineConnectionFunctions
 {
     public static function doctrineConnections($doctrineOptions, $moduleDirectoryName, $localeCookieData)
@@ -12,22 +14,9 @@ class BootstrapDoctrineConnectionFunctions
         $application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
         $frontControllerObject = $application->getOption('resources');
         $config = self::setMemcachedAndProxyClasses($frontControllerObject);
-        $userDSN = Core\Persistence\Database\Service\DatabaseConnection::getDsn('imbull');
-        if (APPLICATION_ENV == 'testing') {
-            if (APPLICATION_ENV_FUNCTIONAL == 'testing_functional') {
-                $userDSN = Core\Persistence\Database\Service\DatabaseConnection::getDsn('user');
-                $emUser = EntityManager::create(self::getDatabaseCredentials($userDSN), $config);
-                //$moduleDirectoryName = 'test';
-            } else {
-                $emUser = \Codeception\Module\Doctrine2::$em;
-            }
-        } else {
-            $emUser = EntityManager::create(self::getDatabaseCredentials($userDSN), $config);
-        }
+        $emUser = EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);
         $localSiteDbConnection = strtolower(self::getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData));
-        $localeDSN = Core\Persistence\Database\Service\DatabaseConnection::getDsn($localSiteDbConnection);
-        //echo $localeDSN; die;
-        self::setEntityManagerForlocale($localeDSN, $config);
+        self::setEntityManagerForlocale($doctrineOptions[$localSiteDbConnection]['dsn'], $config);
         Zend_Registry::set('emUser', $emUser);
         BootstrapConstantsFunctions::constantsForLocaleAndTimezoneSetting();
         self::setDefaultTimezone();
@@ -46,7 +35,7 @@ class BootstrapDoctrineConnectionFunctions
         $cache->setMemcached($memcache);
         $isDevMode = false;
         $proxyPath = null;
-        if (APPLICATION_ENV == 'development') {
+        if (APPLICATION_ENV === 'development' || APPLICATION_ENV === 'testing') {
             $cache = null;
             $isDevMode = true;
         }
@@ -63,17 +52,7 @@ class BootstrapDoctrineConnectionFunctions
     public static function setEntityManagerForlocale($dsn, $config)
     {
         $databaseConnectionCredentials = self::getDatabaseCredentials($dsn);
-        if (APPLICATION_ENV == 'testing') {
-            if (APPLICATION_ENV_FUNCTIONAL == 'testing_functional') {
-                $localeDSN = Core\Persistence\Database\Service\DatabaseConnection::getDsn('test');
-                $databaseConnectionCredentials = self::getDatabaseCredentials($localeDSN);
-                $emLocale = EntityManager::create($databaseConnectionCredentials, $config);
-            } else {
-                $emLocale =  \Codeception\Module\Doctrine2::$em;
-            }
-        } else {
-            $emLocale =  EntityManager::create($databaseConnectionCredentials, $config);
-        }
+        $emLocale =  EntityManager::create($databaseConnectionCredentials, $config);
         Zend_Registry::set('emLocale', $emLocale);
     }
 

@@ -67,7 +67,7 @@ class CreateShopsJSON
         $fileName = "shops.js";
 
         if(!file_exists($pathToDir))
-            mkdir($pathToDir, 776, TRUE);
+            mkdir($pathToDir, 0775, TRUE);
 
         $pathToJSONFile = $pathToDir . $fileName ;
 

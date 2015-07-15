@@ -101,10 +101,9 @@ class RouteRedirect extends \Core\Domain\Entity\RouteRedirect
         return true;
     }
 
-    public function uploadExcel($file, $import = false)
+    public static function uploadExcel($file, $import = false)
     {
-        $uploadResponse = \BackEnd_Helper_viewHelper::uploadExcel($file, $import = false, $type = '');
+        $uploadResponse = \BackEnd_Helper_viewHelper::uploadExcel($file, $import, $type = '');
         return $uploadResponse;
-
     }
 }

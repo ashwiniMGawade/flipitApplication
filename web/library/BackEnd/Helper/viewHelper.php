@@ -771,12 +771,10 @@ class BackEnd_Helper_viewHelper
         $adapter->setDestination($rootPath);
         $adapter->addValidator('Extension', false, array('xlsx', true));
         $adapter->addValidator('Size', false, array('min' => $minimumUploadLimit, 'max' => $maximumUploadLimit));
-        $files = $adapter->getFileInfo($file);
         $fileName = $adapter->getFileName($file, false);
         $newFileName = time() . "_" . $fileName;
         $changedFilePath = $rootPath . $newFileName;
-        $adapter
-        ->addFilter(
+        $adapter->addFilter(
             new \Zend_Filter_File_Rename(
                 array(
                     'target' => $changedFilePath,
@@ -787,7 +785,6 @@ class BackEnd_Helper_viewHelper
             $file
         );
         $adapter->receive($file);
-        $messages = $adapter->getMessages();
         if ($adapter->isValid($newFileName)) {
             return array(
                 "fileName" => $newFileName,

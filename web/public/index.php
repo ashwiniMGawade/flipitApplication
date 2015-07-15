@@ -1,16 +1,13 @@
 <?php
 
-defined('APPLICATION_PATH')
-    || define(
-        'APPLICATION_PATH',
-        realpath(dirname(__FILE__) . '/../application')
-    );
+defined('APPLICATION_PATH') || 
+    define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
 
 defined('LIBRARY_PATH')
         || define('LIBRARY_PATH', realpath(dirname(__FILE__) . '/../library'));
         
 defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
-defined('APPLICATION_ENV_FUNCTIONAL') || define('APPLICATION_ENV_FUNCTIONAL', 'testing_functional');
+
 // Sets the environment to testing for codeception
 if (isset($_SERVER['HTTP_USER_AGENT']) && ($_SERVER['HTTP_USER_AGENT'] == 'Symfony2 BrowserKit' || strpos($_SERVER['HTTP_USER_AGENT'], 'PhantomJS') == true)) {
     define('APPLICATION_ENV', 'testing');
@@ -26,7 +23,7 @@ set_include_path(
         PATH_SEPARATOR,
         array(
             realpath(APPLICATION_PATH . '/../library'),
-            realpath(APPLICATION_PATH . '/../vendor/zendframework/zendframework1/library')
+            realpath(APPLICATION_PATH . '/../../vendor/zendframework/zendframework1/library')
         )
     )
 );
@@ -36,14 +33,14 @@ set_include_path(
         array(realpath(DOCTRINE_PATH), get_include_path())
     )
 );
-require_once realpath(APPLICATION_PATH . '/../vendor/autoload.php');
+require_once realpath(APPLICATION_PATH . '/../../vendor/autoload.php');
 /** Zend_Application */
 require_once 'Zend/Application.php';
 require_once 'PHPExcel/PHPExcel.php';
 
 $requestUri = $_SERVER['REQUEST_URI'];
 if (preg_match('/admin/', $requestUri, $matches)) {
-    //require_once APPLICATION_PATH.'/services/Ipaddress/Ipaddress.php';
+    require_once APPLICATION_PATH.'/services/Ipaddress/Ipaddress.php';
 }
 
 // Create application, bootstrap, and run

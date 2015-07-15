@@ -82,7 +82,7 @@ set_include_path(
         array(realpath(DOCTRINE_PATH), get_include_path())
     )
 );
-require_once realpath(APPLICATION_PATH . '/../vendor/autoload.php');
+require_once realpath(APPLICATION_PATH . '/../../vendor/autoload.php');
 /** Zend_Application */
 require_once 'Zend/Application.php';
 require_once 'PHPExcel/PHPExcel.php';

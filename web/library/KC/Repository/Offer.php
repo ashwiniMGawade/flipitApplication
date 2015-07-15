@@ -1113,6 +1113,28 @@ class Offer extends \Core\Domain\Entity\Offer
             $query = $query->setMaxResults($limit);
         }
         $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $sortedOffers = self::orderOffersByOfferPosition($offers);
+        return $sortedOffers;
+    }
+
+    public static function orderOffersByOfferPosition($offers)
+    {
+        $offerWithPosition =  array();
+        foreach ($offers as $key => $offer) {
+            if ($offer['offer_position'] && $offer['offer_position'] > 0) {
+                $offerWithPosition = self::moveElement($offers, $key, ($offer['offer_position'] - 1));
+            }
+        }
+        if (empty($offerWithPosition)) {
+            $offerWithPosition = $offers;
+        }
+        return $offerWithPosition;
+    }
+
+    public static function moveElement($offers, $currentPosition, $newPosition)
+    {
+        $genereateNewPosition = array_splice($offers, $currentPosition, 1);
+        array_splice($offers, $newPosition, 0, $genereateNewPosition);
         return $offers;
     }
 
@@ -1542,7 +1564,7 @@ class Offer extends \Core\Domain\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select(
-            'o.title, o.id, o.Visability, o.shopExist,o.discountType,
+            'o.title, o.id, o.Visability, o.shopExist,o.discountType, o.offer_position,
             o.couponCode, o.extendedOffer, o.editorPicks, o.userGenerated, o.couponCodeType, s.name as shopName,
             s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,o.extendedTitle, o.extendedoffertitle,
             o.extendedMetaDescription,
@@ -2713,7 +2735,7 @@ class Offer extends \Core\Domain\Entity\Offer
         }
 
         $saveOffer->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['addofferTitle']);
-
+        $saveOffer->offer_position = \FrontEnd_Helper_viewHelper::sanitize($params['offerPosition']);
         if (isset($params['deepLinkStatus'])) {
             $saveOffer->refURL =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerRefUrl']);
         
@@ -3044,6 +3066,7 @@ class Offer extends \Core\Domain\Entity\Offer
             }
         }
         $updateOffer->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['addofferTitle']);
+        $updateOffer->offer_position = \FrontEnd_Helper_viewHelper::sanitize($params['offerPosition']);
         if (isset($params['deepLinkStatus'])) {
             $updateOffer->refURL =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerRefUrl']);
         } else {

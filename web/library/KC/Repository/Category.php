@@ -330,6 +330,13 @@ class Category extends \Core\Domain\Entity\Category
         if (isset($categoryIconFileName) && $categoryIconFileName != '') {
             $uploadedImage = self::uploadImage($categoryIconName);
             if ($uploadedImage['status'] == '200') {
+                if ($imageType == 'thumb') {
+                    $imageHeight = 175;
+                    $imageWidth = 175;
+                } else {
+                    $imageHeight = 304;
+                    $imageWidth = 1170;
+                }
                 $categoryIcon =  new \Core\Domain\Entity\ImageCategoryIcon();
                 $categoryIcon->ext = \BackEnd_Helper_viewHelper::getImageExtension($uploadedImage['fileName']);
                 $categoryIcon->path = $uploadedImage['path'];
@@ -337,6 +344,8 @@ class Category extends \Core\Domain\Entity\Category
                 $categoryIcon->deleted = 0;
                 $categoryIcon->created_at = new \DateTime('now');
                 $categoryIcon->updated_at = new \DateTime('now');
+                $categoryIcon->height = $imageHeight;
+                $categoryIcon->width =  $imageWidth;
                 \Zend_Registry::get('emLocale')->persist($categoryIcon);
                 \Zend_Registry::get('emLocale')->flush();
                 return $categoryIcon->id;

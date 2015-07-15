@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+ 
+COMMIT_REGEX='[A-Z][A-Z_0-9]+-[0-9]+'
+ERROR_MSG="Aborting commit. Your commit message is missing a JIRA Issue number"
+ 
+if ! grep -iqE "$COMMIT_REGEX" "$1"; then
+	tput setaf 1;
+    echo "$ERROR_MSG" >&2
+    tput sgr0
+    exit 1
+fi

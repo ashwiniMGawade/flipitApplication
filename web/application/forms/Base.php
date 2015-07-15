@@ -21,6 +21,12 @@ class Application_Form_Base extends Zend_Form
                 } elseif ($element->isValid($elementValue)) {
                     $element->setAttrib('class', 'input-success form-control');
                 }
+            } else if ($element->getType() == 'Zend_Form_Element_Checkbox') {
+                if ($element->hasErrors()) {
+                    $element->setAttrib('class', 'input-error');
+                } elseif ($element->isValid($elementValue)) {
+                    $element->setAttrib('class', 'input-success');
+                }
             }
         }
     }
