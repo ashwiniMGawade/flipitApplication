@@ -9,22 +9,25 @@ class ShopsController extends ApiBaseController
 {
     public function getShop($id)
     {
+
         $shop = AdministratorFactory::getShop()->execute($id);
+        $affliateNetwork = $shop->getAffliatenetwork();
+
+        //print_r($shop->getCategoryshops()->__get('shop')); die;
         $shopData = array(
             'name'                  => $shop->getName(),
             'overriteTitle'         => $shop->getOverriteTitle(),
             'metaDescription'       => $shop->getMetaDescription(),
-            'usergenratedcontent'   => $shop->getUsergenratedcontent(),
-            'discussions'           => $shop->getDiscussions(),
+            'usergenratedcontent'   => $shop->getUsergenratedcontent()?'Yes':'No',
+            'discussions'           => $shop->getDiscussions()?'Yes':'No',
             'title'                 => $shop->getTitle(),
             'subTitle'              => $shop->getSubTitle(),
             'notes'                 => $shop->getNotes(),
             'accountManagerName'    => $shop->getAccountManagerName(),
-            'deepLinkStatus'        => $shop->getDeepLinkStatus(),
+            'affilliate_network'    => is_object($affliateNetwork)?$affliateNetwork->__get('name'):'',
+            'deepLinkStatus'        => $shop->getDeepLinkStatus()?'Yes':'No',
             'refUrl'                => $shop->getRefUrl(),
             'actualUrl'             => $shop->getActualUrl(),
-            'logo'                  => $shop->getLogo(),
-            'screenshotId'          => $shop->getScreenshotId(),
             'shopText'              => $shop->getShopText(),
         );
         $shop = new Hal('/shops/'.$id, $shopData);
