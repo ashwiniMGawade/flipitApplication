@@ -35,6 +35,6 @@ class DeleteApiKeyUsecase
         }
         $apiKey = $this->apiKeyRepository->find('\Core\Domain\Entity\User\ApiKey', $id);
         $apiKey->setDeleted(1);
-        return $this->apiKeyRepository->persist($apiKey);
+        return $this->apiKeyRepository->save($apiKey);
     }
 }

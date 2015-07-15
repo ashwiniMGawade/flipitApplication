@@ -42,7 +42,7 @@ class DeleteApiKeyUsecaseTest extends \Codeception\TestCase\Test
             ->willReturn($returns);
         $apiKeyRepository
             ->expects($this->once())
-            ->method('persist')
+            ->method('save')
             ->willReturn($returns);
         return $apiKeyRepository;
     }

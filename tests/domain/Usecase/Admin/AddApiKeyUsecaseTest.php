@@ -88,7 +88,7 @@ class AddApiKeyUsecaseTest extends \Codeception\TestCase\Test
     public function testPersistApiKey()
     {
         $user = $this->createUserMock();
-        $apiKeyRepository = $this->createApiKeyRepositoryWithPersistMethodMock();
+        $apiKeyRepository = $this->createApiKeyRepositoryWithSaveMethodMock();
         $apiKeyValidator = $this->createApiKeyValidatorMock(true);
         (new AddApiKeyUsecase(
             $apiKeyRepository,
@@ -125,12 +125,12 @@ class AddApiKeyUsecaseTest extends \Codeception\TestCase\Test
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function createApiKeyRepositoryWithPersistMethodMock()
+    private function createApiKeyRepositoryWithSaveMethodMock()
     {
         $apiKeyRepository = $this->createApiKeyRepositoryMock();
         $apiKeyRepository
             ->expects($this->once())
-            ->method('persist');
+            ->method('save');
         return $apiKeyRepository;
     }
 

@@ -63,7 +63,7 @@ class AddApiKeyUsecase
         if ($validationResult !== true) {
             return $validationResult;
         }
-        return $this->apiKeyRepository->persist($apiKey);
+        return $this->apiKeyRepository->save($apiKey);
     }
 
     private function generateUniqueApiKey($length = 32)
