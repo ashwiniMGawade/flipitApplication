@@ -35,7 +35,7 @@ class VisitorImport
         $manager = CommonMigrationFunctions::loadDoctrineModels();
 
         $localePath               = ($keyIn == 'en') ? '' : $keyIn.'/';
-        $pathToExcelImportFolder  = UPLOAD_DATA_FOLDER_EXCEL_PATH . strtolower($localePath) . 'excels/';
+        $pathToExcelImportFolder  = UPLOAD_DATA_FOLDER_EXCEL_PATH . strtolower($localePath) . 'excels/import/';
         
         foreach (glob($pathToExcelImportFolder."*.xlsx") as $xlsxDocument) {
             
