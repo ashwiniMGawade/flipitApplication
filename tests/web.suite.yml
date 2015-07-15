@@ -14,7 +14,7 @@ modules:
         # PhpBrowser:
             # url: 'http://dev.flipit.com/'
         WebDriver:
-            url: 'http://dev.flipit.com/'
+            url: 'http://dev.kortingscode.nl'
             browser: phantomjs
             window_size: 1280x720
             capabilities:
