@@ -14,13 +14,9 @@ class GetShopsUsecaseTest extends \Codeception\TestCase\Test
     public function testGetShopUsecaseWithIdNotExist()
     {
         $id = 0;
-        $shopRepositoryMock = $this->createShopRepositoryMock();
-        $shopRepositoryMock
-            ->expects($this->once())
-            ->method('find')
-            ->with($this->equalTo('\Core\Domain\Entity\Shop'), $this->equalTo(0));
-        $this->setExpectedException('Exception', 'Shop not found');
+        $shopRepositoryMock = $this->createShopRepositoryWithFindMethodMock($id, 0);
         $shopUsecase = new GetShopUsecase($shopRepositoryMock);
+        $this->setExpectedException('Exception', 'Shop not found');
         $shopUsecase->execute($id);
     }
 
@@ -28,13 +24,8 @@ class GetShopsUsecaseTest extends \Codeception\TestCase\Test
     {
         $id = 1;
         $shop = new Shop();
-        $shop->__set('id', 1);
-        $shopRepositoryMock = $this->createShopRepositoryMock();
-        $shopRepositoryMock
-            ->expects($this->once())
-            ->method('find')
-            ->with($this->equalTo('\Core\Domain\Entity\Shop'), $this->equalTo(1))
-            ->willReturn($shop);
+        $shop->__set('id', $id);
+        $shopRepositoryMock = $this->createShopRepositoryWithFindMethodMock($id, $shop);
         $shopUsecase = new GetShopUsecase($shopRepositoryMock);
         $shopUsecase->execute($id);
     }
@@ -52,5 +43,16 @@ class GetShopsUsecaseTest extends \Codeception\TestCase\Test
     {
         $shopRepository = $this->getMockBuilder('\Core\Domain\Repository\ShopRepositoryInterface')->getMock();
         return $shopRepository;
+    }
+
+    private function createShopRepositoryWithFindMethodMock($id, $returns)
+    {
+        $shopRepositoryMock = $this->createShopRepositoryMock();
+        $shopRepositoryMock
+            ->expects($this->once())
+            ->method('find')
+            ->with($this->equalTo('\Core\Domain\Entity\Shop'), $this->equalTo($id))
+            ->willReturn($returns);
+        return $shopRepositoryMock;
     }
 }
