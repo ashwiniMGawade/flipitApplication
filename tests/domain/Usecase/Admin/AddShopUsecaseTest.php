@@ -4,32 +4,35 @@ namespace Usecase\Admin;
 use \Core\Domain\Entity\Shop;
 use \Core\Domain\Entity\AffliateNetwork;
 use \Core\Domain\Usecase\Admin\AddShopUsecase;
+use \Core\Domain\Validator\ShopValidator;
 
-class CreateShopUsecaseTest extends \Codeception\TestCase\Test
+class AddShopUsecaseTest extends \Codeception\TestCase\Test
 {
-    /**
-     * @var \DomainTester
-     */
+
     protected $tester;
 
-    public function testCreateShopWithInvalidAffiliateNetwork()
+    public function testCreateShopWithInvalidAffliateNetworkParam()
     {
         $params = array(
-            'affliateNetwork' => new AffliateNetwork()
+            'affliateNetwork'   => new AffliateNetwork(),
         );
         $this->setExpectedException('Exception', 'Invalid affiliate network');
-        $shopRepository = $this->shopRepositoryMock();
+        $shopRepository     = $this->shopRepositoryMock();
+        $validatorInterface = $this->createValidatorInterfaceMock();
         (new AddShopUsecase(
-            $shopRepository
+            $shopRepository,
+            new ShopValidator($validatorInterface)
         )
         )->execute(new Shop(), $params);
     }
 
-    public function testCreateShopWithoutAffiliateNetwork()
+    public function testCreateShopWithoutParams()
     {
         $shopRepository = $this->shopRepositoryMock();
+        $shopValidator = $this->createShopValidatorMock(true);
         (new AddShopUsecase(
-            $shopRepository
+            $shopRepository,
+            $shopValidator
         )
         )->execute(new Shop());
     }
@@ -38,5 +41,23 @@ class CreateShopUsecaseTest extends \Codeception\TestCase\Test
     {
         $shopRepositoryMock = $this->getMock('\Core\Domain\Repository\ShopRepositoryInterface');
         return $shopRepositoryMock;
+    }
+
+    private function createValidatorInterfaceMock()
+    {
+        $mockValidatorInterface = $this->getMock('\Core\Domain\Adapter\ValidatorInterface');
+        return $mockValidatorInterface;
+    }
+
+    private function createShopValidatorMock($returns)
+    {
+        $mockShopValidator = $this->getMockBuilder('\Core\Domain\Validator\ShopValidator')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mockShopValidator->expects($this->once())
+            ->method('validate')
+            ->with($this->isInstanceOf('\Core\Domain\Entity\Shop'))
+            ->willReturn($returns);
+        return $mockShopValidator;
     }
 }
