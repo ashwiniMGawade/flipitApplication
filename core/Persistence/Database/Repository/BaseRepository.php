@@ -32,4 +32,11 @@ class BaseRepository implements BaseRepositoryInterface
     {
         return $this->em->getRepository($entity)->findBy($conditions);
     }
+
+    public function save($entity)
+    {
+        $this->em->merge($entity);
+        $this->em->flush();
+        return $entity;
+    }
 }

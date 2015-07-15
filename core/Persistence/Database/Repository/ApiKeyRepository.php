@@ -10,13 +10,4 @@ use Core\Domain\Repository\ApiKeyRepositoryInterface;
  */
 class ApiKeyRepository extends BaseRepository implements ApiKeyRepositoryInterface
 {
-    /**
-     * @param $entity
-     */
-    public function persist($entity)
-    {
-        $this->em->merge($entity);
-        $this->em->flush();
-        return $entity;
-    }
 }
