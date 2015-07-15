@@ -5,7 +5,7 @@ use \WebTester;
 
 class OfferCest
 {
-    public function _before(WebTester $I, \Codeception\Scenario $scenario)
+    /*public function _before(WebTester $I, \Codeception\Scenario $scenario)
     {
         $I = new WebTester\AdminSteps($scenario);
         $I->login();
@@ -35,5 +35,5 @@ class OfferCest
         $I->fillField('#addofferTitle', 'functional test');
         $I->fillField('#couponCodeTxt', 'FUN234');
         $I->click('.liimg');
-    }
+    }*/
 }

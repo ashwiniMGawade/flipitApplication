@@ -62,7 +62,7 @@ class CreateTranslationJSON
 
 
         if(!file_exists($pathToDir))
-            mkdir($pathToDir, 0776, TRUE);
+            mkdir($pathToDir, 0775, TRUE);
 
         $pathToJSONFile = $pathToDir . $fileName ;
 
