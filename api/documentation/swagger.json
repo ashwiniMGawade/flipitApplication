@@ -35,7 +35,7 @@
                {
                   "in":"body",
                   "name":"body",
-                  "description":"Shop object that needs to be insert",
+                  "description":"Shop that needs to be insert",
                   "required":true,
                   "schema":{
                      "$ref":"#/definitions/shop"
@@ -71,7 +71,7 @@
                {
                   "in":"body",
                   "name":"body",
-                  "description":"Shop object that needs to be update",
+                  "description":"Shop that needs to be update",
                   "required":true,
                   "schema":{
                      "$ref":"#/definitions/shop"
@@ -104,7 +104,7 @@
                  {
                      "in":"path",
                      "name":"shopId",
-                     "description":"Shop object that needs to be update",
+                     "description":"Shop that needs to be update",
                      "required":true,
                      "type":"integer",
                      "format":"int64"
