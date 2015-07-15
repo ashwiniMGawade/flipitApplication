@@ -30,7 +30,7 @@ class Varnish extends BaseVarnish
         }
     }
 
-    private function getEc2InstanceIpAddresses()
+    private function getIpAddressesOfAllProductionVarnishServers()
     {
         $ec2Client = Ec2Client::factory(
             array(
@@ -49,12 +49,15 @@ class Varnish extends BaseVarnish
                 )
             ))
         );
-        $reservations = $result['Reservations'];
+
         $ipAddresses = array();
-        foreach ($reservations as $reservation) {
-            $instances = $reservation['Instances'];
-            foreach ($instances as $instance) {
-                $ipAddresses[] = $instance['PrivateIpAddress'];
+        if (isset($result['Reservations'])) {
+            $reservations = $result['Reservations'];
+            foreach ($reservations as $reservation) {
+                $instances = $reservation['Instances'];
+                foreach ($instances as $instance) {
+                    $ipAddresses[] = $instance['PrivateIpAddress'];
+                }
             }
         }
         return $ipAddresses;
@@ -62,21 +65,22 @@ class Varnish extends BaseVarnish
 
     private function refreshVarnish($url)
     {
-        $ipAddresses = $this->getEc2InstanceIpAddresses();
-        if (!empty($ipAddresses)) {
-            foreach ($ipAddresses as $ipAddress) {
-                $curl = curl_init(rtrim($url, '/'));
-                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "REFRESH");
-                curl_setopt($curl, CURLOPT_NOBODY, true);
-                curl_setopt($curl, CURLOPT_INTERFACE, $ipAddress);
-                curl_exec($curl);
-                if (!curl_errno($curl)) {
-                    $info = curl_getinfo($curl);
-                    echo "URL: " . $info['url'] . "\n";
-                    echo "Time: " . $info['total_time'] . "\n\n";
-                }
-                curl_close($curl);
+        $ipAddresses = $this->getIpAddressesOfAllProductionVarnishServers();
+        if (empty($ipAddresses)) {
+            throw new \Exception('Could not get Ip Addresses of the Varnish Production Server.');
+        }
+        foreach ($ipAddresses as $ipAddress) {
+            $curl = curl_init(rtrim($url, '/'));
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "REFRESH");
+            curl_setopt($curl, CURLOPT_NOBODY, true);
+            curl_setopt($curl, CURLOPT_INTERFACE, $ipAddress);
+            curl_exec($curl);
+            if (!curl_errno($curl)) {
+                $info = curl_getinfo($curl);
+                echo "URL: " . $info['url'] . "\n";
+                echo "Time: " . $info['total_time'] . "\n\n";
             }
+            curl_close($curl);
         }
     }
 
