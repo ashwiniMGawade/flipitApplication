@@ -8,4 +8,5 @@ interface BaseRepositoryInterface
     public function find($entity, $id);
     public function findAll($entity);
     public function findBy($entity, array $conditions);
+    public function save($entity);
 }

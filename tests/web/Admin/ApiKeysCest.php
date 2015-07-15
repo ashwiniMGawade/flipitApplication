@@ -19,5 +19,12 @@ class ApiKeysCest
         $I->login();
         $I->amOnPage('/admin/apikeys');
         $I->click('Add new API Key');
+        $I->wait(3);
+        $I->see('Api Key has been successfully added');
+        $I->click('Delete');
+        $I->wait(1);
+        $I->click('Yes');
+        $I->wait(3);
+        $I->see('Api Key has been deleted successfully');
     }
 }
