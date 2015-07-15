@@ -1,0 +1,7 @@
+# Managed by Composer
+/bin/*
+vendor/
+
+# Composer PHAR
+/composer.phar
+tests/_output/*

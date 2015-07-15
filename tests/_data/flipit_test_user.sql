@@ -434,6 +434,17 @@ LOCK TABLES `website` WRITE;
 INSERT INTO `website` VALUES (39,'kortingscode.nl','http://www.kortingscode.nl','2015-07-02 13:35:28','2015-07-02 13:35:28',0,'online',NULL);
 /*!40000 ALTER TABLE `website` ENABLE KEYS */;
 UNLOCK TABLES;
+
+CREATE TABLE IF NOT EXISTS `api_keys` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `api_key` varchar(32) NOT NULL,
+  `deleted` tinyint(1) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -445,3 +456,4 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2015-07-02 16:07:08
+

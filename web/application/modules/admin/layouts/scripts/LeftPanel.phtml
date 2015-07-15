@@ -251,10 +251,19 @@
                    </ul>
                   </div>
                 </div>
-              </li>
+            </li>
             <?php 
             } 
             ?>
+
+        <li class="menu-icon-user <?php echo $controller == 'apikeys' ? 'imbull-has-current-submenu' : 'imbull-not-current-submenu' ?>" id="menu-posts">
+			<div class="imbull-menu-image">
+                <a href="<?php echo HTTP_PATH?>admin/apikeys"><br></a>
+            </div>
+            <a href="<?php echo HTTP_PATH?>admin/apikeys" class="imbull-has-current-submenu menu-top menu-icon-user" tabindex="1">
+                <?php echo $this->translate('API Keys');?>
+            </a>
+        </li>    
 
           <li  <?php if($controller == 'user' && $action == 'profile') {?>class="imbull-has-submenu  menu-top menu-icon-profile imbull-has-current-submenu current"<?php } else { ?>class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" <?php }?>id="menu-links">
 

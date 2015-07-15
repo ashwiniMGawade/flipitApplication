@@ -14,7 +14,8 @@
         "slim/middleware": "*",
         "monolog/monolog": "*",
         "flynsarmy/slim-monolog": "*",
-        "nocarrier/hal": "^0.9.11"
+        "nocarrier/hal": "^0.9.11",
+        "symfony/validator": "^2.7"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "2.0.*@dev",

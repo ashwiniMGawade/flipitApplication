@@ -14,9 +14,10 @@ class AppConfig
     {
         $this->locale  =  $this->locale != '' ? $this->locale : 'en';
         $dbName = $this->locale == 'en' ? 'kortingscode_site' : 'flipit_'.$this->locale;
-        if ($this->env == 'development') {
+
+        if ($this->env === 'development') {
             return $this->getDevelopmentConfig($dbName);
-        } else if ($this->env = 'testing') {
+        } elseif ($this->env === 'testing') {
             return $this->getTestingConfig();
         } else {
             return $this->getProductionConfig($dbName);
@@ -64,14 +65,14 @@ class AppConfig
                 'user' => array(
                     'driver'   => 'pdo_mysql',
                     'host'     => 'localhost',
-                    'dbname'   => 'flipt_test',
+                    'dbname'   => 'flipit_test_user',
                     'user'     => 'root',
                     'password' => 'root',
                 ),
                 'site' => array(
                     'driver'   => 'pdo_mysql',
                     'host'     => 'localhost',
-                    'dbname'   => 'flipit_test_user',
+                    'dbname'   => 'flipit_test',
                     'user'     => 'root',
                     'password' => 'root',
                 ),
