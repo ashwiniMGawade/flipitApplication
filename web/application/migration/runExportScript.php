@@ -4,7 +4,7 @@
 require 'offerExportScript.php';
 
 # run visitor export script
-require 'visitorExportScript.php';
+//require 'visitorExportScript.php';
 
 #run global shop  export script
 require 'globalShopExportScript.php';
