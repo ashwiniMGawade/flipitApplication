@@ -24,6 +24,7 @@ class generateOfferFeeds
 
     public function __construct($method)
     {
+        $this->_method = $method;
         require_once 'ConstantForMigration.php';
         require_once('CommonMigrationFunctions.php');
         CommonMigrationFunctions::setTimeAndMemoryLimit();

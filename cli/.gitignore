@@ -1,8 +1,0 @@
-# Managed by Composer
-/bin/*
-!bin/console
-!bin/symfony_requirements
-vendor/
-
-# Composer PHAR
-/composer.phar

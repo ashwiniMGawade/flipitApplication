@@ -61,6 +61,17 @@ class Image
      * @ORM\Column(type="datetime", nullable=false)
      */
     protected $updated_at;
+    
+    /**
+     * @ORM\Column(type="integer", length=10, nullable=true)
+     */
+    protected $width;
+
+    /**
+     * @ORM\Column(type="integer", length=10, nullable=true)
+     */
+    protected $height;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Core\Domain\Entity\Menu", mappedBy="menuIcon")

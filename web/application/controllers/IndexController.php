@@ -62,9 +62,7 @@ class IndexController extends Zend_Controller_Action
             $this->view->categoriesOffers = $this->_helper->Index->categoriesOffers($topCategories);
             $specialListPages = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_specialPagesHome_list",
-                array('function' => 'KC\Repository\SpecialList::getSpecialPagesIds', 'parameters' => array()
-                ),
-                ''
+                array('function' => 'KC\Repository\SpecialList::getSpecialPagesIds', 'parameters' => array())
             );
             $this->view->specialListPages = $specialListPages;
             $specialListCountKey ="all_specialPages_count";

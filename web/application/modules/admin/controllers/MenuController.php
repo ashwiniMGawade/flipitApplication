@@ -204,10 +204,10 @@ class Admin_MenuController extends Zend_Controller_Action
         $params = $this->_getAllParams();
         //print_r($params);die;
         if ($params['hid']=='') {
-            $mainmenu = \KC\Repository\mainmenu::insertOne($params);
+            $mainmenu = \KC\Repository\Mainmenu::insertOne($params);
             echo Zend_Json::encode($mainmenu);
         } else {
-            $mainmenu = \KC\Repository\mainmenu::insertNode($params);
+            $mainmenu = \KC\Repository\Mainmenu::insertNode($params);
             echo Zend_Json::encode($mainmenu);
         }
         die();
@@ -219,7 +219,7 @@ class Admin_MenuController extends Zend_Controller_Action
     */
     public function listmainmenuAction()
     {
-        $mainmenu = \KC\Repository\mainmenu::getmenuList();
+        $mainmenu = \KC\Repository\Mainmenu::getmenuList();
         //print_r($menu);die;
         echo Zend_Json::encode($mainmenu);
         die();
@@ -231,7 +231,7 @@ class Admin_MenuController extends Zend_Controller_Action
     public function getmainrecordAction()
     {
         $params = $this->getRequest()->getParam('id');
-        $mainmenu = \KC\Repository\mainmenu::getmenuRecord($params);
+        $mainmenu = \KC\Repository\Mainmenu::getmenuRecord($params);
         //echo "<pre>";
         //  print_r($mainmenu);die;
         echo Zend_Json::encode($mainmenu);
@@ -246,7 +246,7 @@ class Admin_MenuController extends Zend_Controller_Action
         $params = $this->_getAllParams();
 
         // print_r($params);die;
-        $mainmenu = \KC\Repository\mainmenu::editmenuRecord($params);
+        $mainmenu = \KC\Repository\Mainmenu::editmenuRecord($params);
         echo Zend_Json::encode($mainmenu);
         die();
     }
@@ -254,7 +254,7 @@ class Admin_MenuController extends Zend_Controller_Action
     public function getrtmainmenuAction()
     {
         $params = $this->getRequest()->getParam('id');
-        $menu = \KC\Repository\mainmenu::getrtmainmenuRecord($params);
+        $menu = \KC\Repository\Mainmenu::getrtmainmenuRecord($params);
         //$menu = mainmenu::getSecondLevel($params);
         //print_r($menu);die;
         echo Zend_Json::encode($menu);
@@ -262,7 +262,7 @@ class Admin_MenuController extends Zend_Controller_Action
     }
     public function getmainidAction()
     {
-        $menu = \KC\Repository\mainmenu::getmainhighposition();
+        $menu = \KC\Repository\Mainmenu::getmainhighposition();
         echo Zend_Json::encode($menu);
         die();
 
@@ -271,7 +271,7 @@ class Admin_MenuController extends Zend_Controller_Action
     {
         $params = $this->getRequest()->getParam('id');
         //$menu = mainmenu::getrtmainmenuRecord($params);
-        $menu = \KC\Repository\mainmenu::getThirdLevel($params);
+        $menu = \KC\Repository\Mainmenu::getThirdLevel($params);
         //print_r($menu);die;
           echo Zend_Json::encode($menu);
         die();
@@ -284,7 +284,7 @@ class Admin_MenuController extends Zend_Controller_Action
     public function deletemenuAction()
     {
         $params = $this->_getAllParams();
-        $menu = \KC\Repository\menu::deleteMenuRecord($params);
+        $menu = \KC\Repository\Menu::deleteMenuRecord($params);
         echo Zend_Json::encode($menu);
         die();
     }
@@ -296,7 +296,7 @@ class Admin_MenuController extends Zend_Controller_Action
     public function deletemainmenuAction()
     {
         $params = $this->_getAllParams();
-        $menu = \KC\Repository\mainmenu::deleteMenuRecord($params);
+        $menu = \KC\Repository\Mainmenu::deleteMenuRecord($params);
         echo Zend_Json::encode($menu);
         die();
     }

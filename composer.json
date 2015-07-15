@@ -1,0 +1,43 @@
+{
+    "name": "imbull/flipit_application",
+    "license": "proprietary",
+    "type": "project",
+    "require": {
+        "zendframework/zendframework1": "1.*",
+        "symfony/console": "^2.7",
+        "slim/slim": "^2.6",
+        "doctrine/dbal": "2.5.1",
+        "doctrine/common": "2.4.2",
+        "doctrine/orm": "2.4.2",
+        "akrabat/rka-slim-controller": "^2.0"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "2.0.*@dev",
+        "phpmd/phpmd" : "@stable",
+        "codeception/c3": "2.*",
+        "codeception/codeception": "*"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "bash qualitycontrol/setup.sh",
+            "Codeception\\c3\\Installer::copyC3ToRoot"
+        ],
+        "post-update-cmd": [
+            "bash qualitycontrol/setup.sh",
+            "Codeception\\c3\\Installer::copyC3ToRoot"
+        ]
+    },
+    "autoload": {
+        "psr-4": {
+            "Core\\": "core/",
+            "Command\\": "cli/Command/",
+            "Tests\\": "tests/",
+            "Config\\": "config/",
+            "Zend\\": "vendor/zendframework/zendframework1/library/Zend/",
+            "Api\\": "api/App/"
+        }
+    },
+    "config": {
+        "bin-dir": "bin"
+    }
+}

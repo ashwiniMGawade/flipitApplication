@@ -2217,4 +2217,16 @@ public static function getShopDetail($shopId)
         }
         return true;
     }
+
+    public static function updateShopFromExcelData($shopDetail, $shopId)
+    {
+        if (!empty($shopDetail)) {
+            $query = Doctrine_Query::create()->update('Shop');
+            foreach ($shopDetail as $key => $value) {
+                $query = $query->set($key, "'".$value."'");
+            }
+            $query = $query->where('id='. $shopId)->execute();
+        }
+        return true;
+    }
 }
