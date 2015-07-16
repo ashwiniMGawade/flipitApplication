@@ -68,9 +68,31 @@ class Varnish extends BaseVarnish
         return $ipAddresses;
     }
 
+    private function getCachedIpAddressesOfAllProductionVarnishServers()
+    {
+        $cache = new Application_Service_Cache_FileCache();
+        $cacheId = 'productionVarnishIpAddresses';
+        $currentTime = strtotime("now");
+        $ttl = strtotime("+15 minutes");
+
+        if ($cache->contains($cacheId)) {
+            $ipAddressesCache = unserialize($cache->fetch($cacheId));
+            if ($ipAddressesCache['ttl'] > $currentTime) {
+                return $ipAddressesCache['ipAddresses'];
+            }
+        }
+
+        $ipAddresses = $this->getIpAddressesOfAllProductionVarnishServers();
+        $ipAddressesCache['ttl'] = $ttl;
+        $ipAddressesCache['ipAddresses'] = $ipAddresses;
+        $cache->save($cacheId, serialize($ipAddressesCache));
+
+        return $ipAddressesCache['ipAddresses'];
+    }
+
     private function refreshVarnish($url)
     {
-        $ipAddresses = $this->getIpAddressesOfAllProductionVarnishServers();
+        $ipAddresses = $this->getCachedIpAddressesOfAllProductionVarnishServers();
         if (empty($ipAddresses)) {
             throw new \Exception('Could not get Ip Addresses of the Varnish Production Server.');
         }
