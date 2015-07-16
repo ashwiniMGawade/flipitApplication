@@ -5,6 +5,7 @@ use \Core\Persistence\Database\Service\DoctrineManager;
 use \Core\Persistence\Database\Repository\PageRepository;
 use \Core\Persistence\Database\Repository\ShopRepository;
 use \Core\Persistence\Database\Repository\ApiKeyRepository;
+use \Core\Persistence\Database\Repository\AffliateNetworkRepository;
 
 class RepositoryFactory
 {
@@ -21,5 +22,10 @@ class RepositoryFactory
     public static function apiKeys()
     {
         return new ApiKeyRepository((new DoctrineManager)->getUserEntityManager());
+    }
+
+    public static function affliateNetwork()
+    {
+        return new AffliateNetworkRepository((new DoctrineManager)->getLocaleEntityManager());
     }
 }

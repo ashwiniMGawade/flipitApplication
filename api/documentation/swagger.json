@@ -159,7 +159,7 @@
                "type":"string",
                "example":"doggie"
             },
-            "navigationUrl":{
+            "permaLink":{
                "type":"string",
                "example":"http://flipit.com/in/ebay"
             },
@@ -171,7 +171,7 @@
                "type":"string",
                "example":""
             },
-            "allowusergeneratedcontent":{
+            "usergenratedcontent":{
                "type":"int",
                "description":"Allow user generated content",
                "enum":[1,0]
@@ -198,15 +198,6 @@
                "description":"Exact name 'first name'",
                "example":""
             },
-            "editor":{
-               "type":"string",
-               "description":"Exact name 'first name'",
-               "example":""
-            },
-            "category":{
-               "type":"int",
-               "example":""
-            },
             "affilliate_network":{
                "type":"string",
                "description":"",
@@ -225,16 +216,6 @@
                "type":"string",
                "description":"Actual Url",
                "example":"http://www.test.com"
-            },
-            "moneyShop":{
-               "type":"int",
-               "enum":[1,0]
-            },
-            "shopLogo":{
-               "type":"string"
-            },
-            "website_screenshot":{
-               "type":"string"
             },
             "shoptext":{
                "type":"string"

@@ -89,4 +89,12 @@ class Validator implements ValidatorInterface
     {
         return new Assert\DateTime();
     }
+
+    /**
+     * @return \Symfony\Component\Validator\Constraints\DateTime
+     */
+    public function notBlank()
+    {
+        return new Assert\NotBlank();
+    }
 }

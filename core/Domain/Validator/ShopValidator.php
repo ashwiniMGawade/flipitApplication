@@ -24,6 +24,7 @@ class ShopValidator
         $rules = array(
             'name' => array(
                 $this->validator->notNull(),
+                $this->validator->notBlank(),
                 $this->validator->length(array( 'max' => 255 ))
             ),
             'permaLink' => array(
