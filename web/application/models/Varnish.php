@@ -99,8 +99,10 @@ class Varnish extends BaseVarnish
 
         foreach ($ipAddresses as $ipAddress) {
             $parsedUrl = parse_url($url);
-            $parsedPath = isset($parsedUrl['path']) ? $parsedUrl['path'] : '/';
-            $curl = curl_init($parsedUrl['scheme'] . "://" . $ipAddress . $parsedPath);
+            $path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '/';
+            $query = isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : '';
+            $fragment = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
+            $curl = curl_init($parsedUrl['scheme'] . "://" . $ipAddress . $path . $query . $fragment);
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "REFRESH");
             curl_setopt($curl, CURLOPT_NOBODY, true);
             curl_setopt($curl, CURLOPT_HTTPHEADER, array('Host: ' . $parsedUrl['host']));
