@@ -58,9 +58,9 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
             # add action as new case which needs to be viewed by other users
             switch(strtolower($this->view->action)) {
-                case 'emailcontent':
                 case 'mandrill':
                 break;
+                case 'emailcontent':
                 default:
                     if ($this->_settings['system manager']['rights'] != '1') {
                         $this->_redirect('/admin/auth/index');
