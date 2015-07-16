@@ -32,20 +32,25 @@ class Varnish extends BaseVarnish
 
     private function getIpAddressesOfAllProductionVarnishServers()
     {
-        $ec2Client = Ec2Client::factory(
-            array(
-                'key'    => 'AKIAIYSHHZL73F2VVZWA',
-                'secret' => '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',
-                'region' => 'eu-west-1',
-                'version'=> '2015-04-15'
-            )
-        );
+        $ec2Client = Ec2Client::factory(array(
+            'region'   => 'eu-west-1',
+            'credentials' => array(
+                'key'      => 'AKIAIYSHHZL73F2VVZWA',
+                'secret'   => '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'
+            ),
+            'version' => 'latest',
+            // 'debug'   => true
+        ));
 
         $result = $ec2Client->DescribeInstances(
             array('Filters' => array(
                 array(
                     'Name' => 'tag:aws:autoscaling:groupName',
                     'Values' => array('flipit-production-VarnishAutoscalingGroup-11QGPT21DBMSP')
+                ),
+                array(
+                    'Name' => 'instance-state-name',
+                    'Values' => array('running')
                 )
             ))
         );
@@ -69,11 +74,14 @@ class Varnish extends BaseVarnish
         if (empty($ipAddresses)) {
             throw new \Exception('Could not get Ip Addresses of the Varnish Production Server.');
         }
+
         foreach ($ipAddresses as $ipAddress) {
-            $curl = curl_init(rtrim($url, '/'));
+            $parsedUrl = parse_url($url);
+            $parsedPath = isset($parsedUrl['path']) ? $parsedUrl['path'] : '/';
+            $curl = curl_init($parsedUrl['scheme'] . "://" . $ipAddress . $parsedPath);
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "REFRESH");
             curl_setopt($curl, CURLOPT_NOBODY, true);
-            curl_setopt($curl, CURLOPT_INTERFACE, $ipAddress);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Host: ' . $parsedUrl['host']));
             curl_exec($curl);
             if (!curl_errno($curl)) {
                 $info = curl_getinfo($curl);
