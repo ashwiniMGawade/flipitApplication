@@ -69,6 +69,14 @@
             ],
             "parameters":[
                {
+                     "in":"path",
+                     "name":"shopId",
+                     "description":"Shop Id that needs to be update",
+                     "required":true,
+                     "type":"integer",
+                     "format":"int64"
+               },
+               {
                   "in":"body",
                   "name":"body",
                   "description":"Shop that needs to be update",
@@ -100,11 +108,11 @@
             "produces":[
                "application/json"
             ],
-             "parameters":[
+            "parameters":[
                  {
                      "in":"path",
                      "name":"shopId",
-                     "description":"Shop that needs to be update",
+                     "description":"Shop that needs to be fetched",
                      "required":true,
                      "type":"integer",
                      "format":"int64"
@@ -135,14 +143,27 @@
             "produces":[
                "application/json"
             ],
-            "responses":{
-               "200":{
-                  "description":"Request was successful"
-               },
-               "404":{
-                  "description":"Shop not found"
-               }
-            }
+            "parameters":[
+                 {
+                     "in":"path",
+                     "name":"shopId",
+                     "description":"Shop that needs to be deleted",
+                     "required":true,
+                     "type":"integer",
+                     "format":"int64"
+                 }
+             ],
+             "responses":{
+                 "200":{
+                     "description":"Request was successful"
+                 },
+                 "404":{
+                     "description":"Shop not found"
+                 },
+                 "400":{
+                     "description":"Invalid shop Id"
+                 }
+             }
          }
       }
      

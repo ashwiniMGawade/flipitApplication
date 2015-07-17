@@ -6,6 +6,8 @@ use \Core\Domain\Usecase\Admin\GetApiKeyListingUsecase;
 use \Core\Domain\Usecase\Admin\GetShopUsecase;
 use \Core\Domain\Usecase\Admin\CreateShopUsecase;
 use \Core\Domain\Usecase\Admin\AddShopUsecase;
+use \Core\Domain\Usecase\Admin\UpdateShopUsecase;
+use \Core\Domain\Usecase\Admin\DeleteShopUsecase;
 use \Core\Persistence\Factory\RepositoryFactory;
 use \Core\Domain\Validator\ShopValidator;
 
@@ -33,5 +35,19 @@ class AdministratorFactory
             new ShopValidator(new Validator()),
             RepositoryFactory::affliateNetwork()
         );
+    }
+
+    public static function updateShop()
+    {
+        return new UpdateShopUsecase(
+            RepositoryFactory::shop(),
+            new ShopValidator(new Validator()),
+            RepositoryFactory::affliateNetwork()
+        );
+    }
+
+    public static function deleteShop()
+    {
+        return new DeleteShopUsecase(RepositoryFactory::shop());
     }
 }

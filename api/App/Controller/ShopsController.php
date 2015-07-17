@@ -17,14 +17,38 @@ class ShopsController extends ApiBaseController
 
     public function createShop()
     {
-        $shop = AdministratorFactory::createShop()->execute();
-        $params = json_decode($this->app->request->getBody(),true);
+        $shop = AdministratorFactory::createShop()->execute();print_r($_REQUEST); die;
+        //$params = json_decode($this->app->request->getBody(),true);
+        $params = json_decode($_POST['body'],true);
         $result = AdministratorFactory::addShop()->execute($shop, $params);
         if ( is_array($result) && !empty($result)) {
             $this->app->response->setStatus(405);
             echo json_encode($result);
+            return;
         }
         echo $this->generateShopJsonData($result);
+        exit;
+    }
+
+    public function updateShop($id)
+    {
+        $shop = AdministratorFactory::getShop()->execute($id);
+        //$params = json_decode($this->app->request->getBody(),true);
+        $params = json_decode($_REQUEST['body'],true);
+        $result = AdministratorFactory::updateShop()->execute($shop, $params);
+        if ( is_array($result) && !empty($result)) {
+            $this->app->response->setStatus(405);
+            echo json_encode($result);
+            return;
+        }
+        echo $this->generateShopJsonData($result);
+        exit;
+    }
+
+    public function deleteShop($id)
+    {
+        $shop = AdministratorFactory::deleteShop()->execute($id);
+        echo json_encode(array('msg'=>'Shop deleted successfully.'));
         exit;
     }
 

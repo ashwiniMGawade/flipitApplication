@@ -7,7 +7,7 @@ use \Core\Domain\Repository\ShopRepositoryInterface;
 use \Core\Domain\Repository\AffliateNetworkRepositoryInterface;
 use \Core\Domain\Validator\ShopValidator;
 
-class AddShopUsecase
+class UpdateShopUsecase
 {
     protected $shopRepository;
 
@@ -74,19 +74,7 @@ class AddShopUsecase
             $shop->setShopText($params['shopText']);
         }
 
-        $shop->setCreatedAt(new \DateTime('now'));
-        $shop->setDeleted(0);
         $shop->setUpdatedAt(new \DateTime('now'));
-        $shop->setAddtosearch(0);
-        $shop->setScreenshotId(1);
-        $shop->setHowToUse(1);
-        $shop->setDisplayExtraProperties(1);
-        $shop->setShowSignupOption(0);
-        $shop->setAddtosearch(0);
-        $shop->setShowSimliarShops(0);
-        $shop->setShowChains(0);
-        $shop->setStrictConfirmation(0);
-        $shop->setShowcustomtext(0);
 
         $validationResult = $this->shopValidator->validate($shop);
 

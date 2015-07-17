@@ -3,15 +3,15 @@ namespace Usecase\Admin;
 
 use \Core\Domain\Entity\Shop;
 use \Core\Domain\Entity\AffliateNetwork;
-use \Core\Domain\Usecase\Admin\AddShopUsecase;
+use \Core\Domain\Usecase\Admin\UpdateShopUsecase;
 use \Core\Domain\Validator\ShopValidator;
 
-class AddShopUsecaseTest extends \Codeception\TestCase\Test
+class UpdateShopUsecaseTest extends \Codeception\TestCase\Test
 {
 
     protected $tester;
 
-    public function testCreateShopWithInvalidAffliateNetworkParam()
+    public function testUpdateShopWithInvalidAffliateNetworkParam()
     {
         $params = array(
             'affliateNetwork'   => 'Invalid Aff',
@@ -20,7 +20,7 @@ class AddShopUsecaseTest extends \Codeception\TestCase\Test
         $shopRepository     = $this->shopRepositoryMock();
         $affliateNetworkRepositoryMock = $this->affliateNetworkRepositoryMock();
         $validatorInterface = $this->createValidatorInterfaceMock();
-        (new AddShopUsecase(
+        (new UpdateShopUsecase(
             $shopRepository,
             new ShopValidator($validatorInterface),
             $affliateNetworkRepositoryMock
@@ -28,12 +28,12 @@ class AddShopUsecaseTest extends \Codeception\TestCase\Test
         )->execute(new Shop(), $params);
     }
 
-    public function testCreateShopWithoutParams()
+    public function testUpdateShopWithoutParams()
     {
         $shopRepository = $this->shopRepositoryMock();
         $shopValidator = $this->createShopValidatorMock(true);
         $affliateNetworkRepositoryMock = $this->affliateNetworkRepositoryMock();
-        (new AddShopUsecase(
+        (new UpdateShopUsecase(
             $shopRepository,
             $shopValidator,
             $affliateNetworkRepositoryMock
@@ -41,7 +41,7 @@ class AddShopUsecaseTest extends \Codeception\TestCase\Test
         )->execute(new Shop());
     }
 
-    public function testCreateShopWithInvalidParam()
+    public function testUpdateShopWithInvalidParam()
     {
         $params = array(
             'name'              => ''
@@ -49,7 +49,7 @@ class AddShopUsecaseTest extends \Codeception\TestCase\Test
         $shopRepository     = $this->shopRepositoryMock();
         $affliateNetworkRepositoryMock = $this->affliateNetworkRepositoryMock();
         $shopValidatory = $this->createShopValidatorMock(array());
-        (new AddShopUsecase(
+        (new UpdateShopUsecase(
             $shopRepository,
             $shopValidatory,
             $affliateNetworkRepositoryMock
@@ -57,7 +57,7 @@ class AddShopUsecaseTest extends \Codeception\TestCase\Test
         )->execute(new Shop(), $params);
     }
 
-    public function testCreateShopWithValidParams()
+    public function testUpdateShopWithValidParams()
     {
         $params = array(
             'name'                  => 'Mock',
@@ -80,7 +80,7 @@ class AddShopUsecaseTest extends \Codeception\TestCase\Test
         $shopRepository = $this->shopRepositoryMock();
         $shopValidator = $this->createShopValidatorMock(true);
         $affliateNetworkRepositoryMock = $this->createAffliateNetworkRepositoryWithFindByMethodMock();
-        (new AddShopUsecase(
+        (new UpdateShopUsecase(
             $shopRepository,
             $shopValidator,
             $affliateNetworkRepositoryMock
