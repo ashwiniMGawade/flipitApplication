@@ -3,9 +3,9 @@ namespace Admin;
 
 use \ApiTester;
 
-class CreateShopCest
+class UpdateShopCest
 {
-    public function testCreateShop(ApiTester $I)
+    public function testUpdateShop(ApiTester $I)
     {
         $params = array(
             'name'                  => 'Mock',
@@ -18,14 +18,13 @@ class CreateShopCest
             'subTitle'              => 'Mock',
             'notes'                 => 'Mock',
             'accountManagerName'    => 'Mock',
-            'affliateNetwork'       => 'Affilinet',
             'deepLinkStatus'        => 1,
             'refUrl'                => 'Mock',
             'actualUrl'             => 'Mock',
             'shopText'              => 'Mock',
         );
-        $I->haveInDatabasePDOSite('affliate_network', array('name'=>'Affilinet'));
-        $I->wantTo('Create shop');
+        $I->haveInDatabasePDOSite('shop', $params);
+        $I->wantTo('Update shop');
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/shops', json_encode($params));
         $I->seeResponseCodeIs(200);
@@ -33,12 +32,12 @@ class CreateShopCest
         $I->seeResponseContainsJson(array('name' => 'Mock'));
     }
 
-    public function testCreateShopWithInvalidParams(ApiTester $I)
+    public function testUpdateShopWithInvalidParams(ApiTester $I)
     {
         $params = array(
             'name'                  => ''
         );
-        $I->wantTo('Create shop with invalid data');
+        $I->wantTo('Update shop with invalid data');
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/shops', json_encode($params));
         $I->seeResponseCodeIs(405);

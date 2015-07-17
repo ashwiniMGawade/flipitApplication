@@ -8,8 +8,7 @@ class DeleteShopCest
     public function testDeleteShop(ApiTester $I)
     {
         $I->wantTo('Delete shop by ID');
-        $I->sendDelete('/shops/203');
-        // Add API key validation case here
+        $I->sendDelete('/shops/1');
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
     }
