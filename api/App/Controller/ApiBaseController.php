@@ -11,8 +11,7 @@ class ApiBaseController
     public function init()
     {
         if (self::RESPONSE_STATUS_UNSUPPORTED_MEDIA_TYPE === $this->app->response->getStatus()) {
-            echo json_encode(array('error'=>'Media Type must be application/json for POST, PUT, PATCH'));
-            $this->app->stop();
+            $this->app->halt(RESPONSE_STATUS_UNSUPPORTED_MEDIA_TYPE);
         }
     }
 

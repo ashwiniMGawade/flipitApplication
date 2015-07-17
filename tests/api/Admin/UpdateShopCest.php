@@ -26,7 +26,7 @@ class UpdateShopCest
         $I->haveInDatabasePDOSite('shop', $params);
         $I->wantTo('Update shop');
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST('/shops', json_encode($params));
+        $I->sendPUT('/shops/1', json_encode($params));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson(array('name' => 'Mock'));
@@ -39,9 +39,20 @@ class UpdateShopCest
         );
         $I->wantTo('Update shop with invalid data');
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST('/shops', json_encode($params));
+        $I->sendPUT('/shops/1', json_encode($params));
         $I->seeResponseCodeIs(405);
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson(array('name' => array('This value should not be blank.')));
+    }
+
+    public function testUpdateShopWithInvalidContentType(ApiTester $I)
+    {
+        $params = array(
+            'name'                  => ''
+        );
+        $I->wantTo('Update shop with invalid content type');
+        $I->haveHttpHeader('Content-Type', 'application/text');
+        $I->sendPUT('/shops/1', json_encode($params));
+        $I->seeResponseCodeIs(415);
     }
 }
