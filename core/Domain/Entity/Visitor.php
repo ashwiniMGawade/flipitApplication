@@ -185,6 +185,26 @@ class Visitor
      */
     protected $favoritevisitorshops;
 
+    /**
+     * @ORM\Column(type="integer", length=20, nullable=true)
+     */
+    protected $mailClickCount;
+
+    /**
+     * @ORM\Column(type="integer", length=20, nullable=true)
+     */
+    protected $mailOpenCount;
+
+    /**
+     * @ORM\Column(type="integer", length=20, nullable=true)
+     */
+    protected $mailHardBounceCount;
+
+    /**
+     * @ORM\Column(type="integer", length=20, nullable=true)
+     */
+    protected $mailSoftBounceCount;
+
     public function __get($property)
     {
         return $this->$property;
