@@ -5,7 +5,7 @@ use \ApiTester;
 
 class CreateShopCest
 {
-    public function testCreateShop(ApiTester $I)
+    public function testCreateShopWithValidParameters(ApiTester $I)
     {
         $params = array(
             'name'                  => 'Mock',

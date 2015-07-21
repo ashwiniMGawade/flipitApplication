@@ -11,7 +11,7 @@ class DeleteShopUsecaseTest extends \Codeception\TestCase\Test
      */
     protected $tester;
 
-    public function testDeleteShopUsecaseWithIdNotExist()
+    public function testDeleteShopUsecaseWhenShopIdDoesNotExist()
     {
         $id = 0;
         $shopRepositoryMock = $this->createShopRepositoryWithFindMethodMock($id, 0);
@@ -20,11 +20,11 @@ class DeleteShopUsecaseTest extends \Codeception\TestCase\Test
         $shopUsecase->execute($id);
     }
 
-    public function testDeleteShopUsecase()
+    public function testDeleteShopUsecaseWhenShopIdExists()
     {
         $id = 1;
         $shop = new Shop();
-        $shop->__set('id', $id);
+        $shop->id = $id;
         $shopRepositoryMock = $this->createShopRepositoryWithFindMethodMock($id, $shop);
         $shopUsecase = new DeleteShopUsecase($shopRepositoryMock);
         $shopUsecase->execute($id);

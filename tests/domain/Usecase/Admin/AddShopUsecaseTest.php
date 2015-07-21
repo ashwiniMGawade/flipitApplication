@@ -31,7 +31,7 @@ class AddShopUsecaseTest extends \Codeception\TestCase\Test
     public function testCreateShopWithoutParams()
     {
         $shopRepository = $this->shopRepositoryMock();
-        $shopValidator = $this->createShopValidatorMock(true);
+        $shopValidator = $this->createShopValidatorMock(array(''));
         $affliateNetworkRepositoryMock = $this->affliateNetworkRepositoryMock();
         (new AddShopUsecase(
             $shopRepository,
@@ -48,10 +48,10 @@ class AddShopUsecaseTest extends \Codeception\TestCase\Test
         );
         $shopRepository     = $this->shopRepositoryMock();
         $affliateNetworkRepositoryMock = $this->affliateNetworkRepositoryMock();
-        $shopValidatory = $this->createShopValidatorMock(array());
+        $shopValidator = $this->createShopValidatorMock(array());
         (new AddShopUsecase(
             $shopRepository,
-            $shopValidatory,
+            $shopValidator,
             $affliateNetworkRepositoryMock
         )
         )->execute(new Shop(), $params);
