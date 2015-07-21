@@ -7,6 +7,7 @@ use \Core\Domain\Usecase\Admin\GetApiKeyListingUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\DeleteApiKeyUsecase;
+use \Core\Domain\Usecase\Admin\GetVisitorListingUsecase;
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Persistence\Factory\RepositoryFactory;
 
@@ -34,5 +35,10 @@ class AdminFactory
     public static function deleteApiKey()
     {
         return new DeleteApiKeyUsecase(RepositoryFactory::apiKeys());
+    }
+
+    public static function getVisitors()
+    {
+        return new GetVisitorListingUsecase(RepositoryFactory::visitor());
     }
 }
