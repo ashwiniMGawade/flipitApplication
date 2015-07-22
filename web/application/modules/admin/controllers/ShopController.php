@@ -416,7 +416,7 @@ class Admin_ShopController extends Zend_Controller_Action
                 ->orderBy('sp.position', 'ASC')
                 ->getQuery()
                 ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            $this->view->relatedShopName = KC\Repository\Shop::getRelatedShops($data['relatedshops']);
+            $this->view->relatedShopName = KC\Repository\Shop::getShopsRelated($data['relatedshops']);
             $this->view->data = $data ;
             $existingCategories  = $data['categoryshops'] ;
             $catArray  = array();
