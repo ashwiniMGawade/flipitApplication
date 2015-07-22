@@ -64,7 +64,7 @@
                ],
                "summary":"Update data related to email opens, clicks and bounces",
                "description":"",
-               "operationId":"updateVisitors",
+               "operationId":"updateVisitor",
                "consumes":[
                    "application/json"
                ],
@@ -75,10 +75,11 @@
                    {
                        "in":"body",
                        "name":"body",
-                       "description":"Visitor that needs to be updated",
+                       "description":"Visitor data that needs to be updated",
                        "required":true,
                        "schema":{
-                           "$ref":"#/definitions/visitor"
+                           "type": "array",
+                           "items": {"$ref":"#/definitions/visitor"}
                        }
                    }
                ],
@@ -283,11 +284,6 @@
       },
       "visitor":{
          "type":"object",
-         "required":[
-            "event",
-            "msg.email",
-            "msg.state"
-         ],
          "properties":{
             "event":{
                "type":"string",
