@@ -8,7 +8,7 @@ class AdminSteps extends \WebTester
     public function login($username = 'test@flipit.com', $password = 'password')
     {
         $I = $this;
-        $config = \Codeception\Configuration::config();
+        // $config = \Codeception\Configuration::config();
         // $this->addUser();
         $I->amOnPage(\LoginPage::$URL);
         $I->fillField(\LoginPage::$usernameField, $username);
@@ -16,10 +16,10 @@ class AdminSteps extends \WebTester
         $I->click(\LoginPage::$formSubmitButton);
     }
 
-    public function logout()
-    {
-        $I = $this;
-    }
+    // public function logout()
+    // {
+    //     $I = $this;
+    // }
 
     protected function addUser()
     {
