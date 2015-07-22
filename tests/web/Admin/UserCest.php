@@ -20,7 +20,7 @@ class UserCest
                     'email' => 'superadmin1@flipit.com',
                     'password' => md5('Mind@123'),
                     'status' => 1,
-                    'roleid' => 5,
+                    'roleid' => 1,
                     'slug' => 'test-user-super123',
                     'popularKortingscode' => '0',
                     'passwordchangetime' => $passwordChangeTime
@@ -31,7 +31,7 @@ class UserCest
                     'email' => 'superadmin2@flipit.com',
                     'password' => md5('Mind@123'),
                     'status' => 1,
-                    'roleid' => 5,
+                    'roleid' => 1,
                     'slug' => 'test-user-super',
                     'popularKortingscode' => '0',
                     'passwordchangetime' => $passwordChangeTime
@@ -42,12 +42,12 @@ class UserCest
             'ref_user_website',
             array(
                 array(
-                    'userid' => '355',
-                    'websiteid' => '39'
+                    'userid' => '365',
+                    'websiteid' => '1'
                 ),
                 array(
-                    'userid' => '356',
-                    'websiteid' => '39'
+                    'userid' => '366',
+                    'websiteid' => '1'
                 )
             )
         );
