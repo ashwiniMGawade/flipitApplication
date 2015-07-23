@@ -1,16 +1,11 @@
 {
    "swagger":"2.0",
-   "info":{
-      "description":"Welcome to Flipit API store",
-      "version":"1.0.0",
-      "title":"Flipit API"
-   },
    "host":"api.dev.flipit.com",
    "basePath":"",
    "tags":[
       {
          "name":"shop",
-         "description":"Everything about shops"
+         "description":"Shop operations"
       }
    ],
    "schemes":[
@@ -258,9 +253,5 @@
             }
          }
       }
-   },
-   "externalDocs":{
-      "description":"Find out more about Flipit",
-      "url":"http://flipit.com"
    }
 }
