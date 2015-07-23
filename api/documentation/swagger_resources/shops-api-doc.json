@@ -178,7 +178,7 @@
          "properties":{
             "name":{
                "type":"string",
-               "example":"doggie"
+               "example":"MyShop"
             },
             "permaLink":{
                "type":"string",
