@@ -7,7 +7,7 @@ process:
 	twig: false
 ---
 {assets:js order:10}
-user/themes/learn2/js/swagger/swagger.app.js
+user/themes/learn2/js/swagger/swagger.shop.js
 {/assets}
 
 <div class="swagger-section">
