@@ -295,8 +295,23 @@ $action = $this->action;
     <?php } ?>
 </ul>
 
+
 <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Administration'); ?></h2></div>
-<ul id="adminmenu" role="navigation">
+    <ul id="adminmenu" role="navigation">
+    <?php if ($sessionNamespace->settings['rights']['administration']['rights'] == '1') { ?>
+        <li class="menu-icon-user <?php echo $controller == 'apikeys' ? 'imbull-has-current-submenu' : 'imbull-not-current-submenu' ?>"
+            id="menu-posts">
+            <div class="imbull-menu-image">
+                <a href="<?php echo HTTP_PATH ?>admin/apikeys"><br></a>
+            </div>
+            <a href="<?php echo HTTP_PATH ?>admin/apikeys" class="imbull-has-current-submenu menu-top menu-icon-user"
+               tabindex="1">
+                <?php echo $this->translate('API Keys'); ?>
+            </a>
+        </li>
+    <?php
+    }
+    ?>
 
     <?php if ($sessionNamespace->settings['rights']['administration']['rights'] == '1') { ?>
 
@@ -367,21 +382,6 @@ $action = $this->action;
                 </div>
             </div>
         </li>
-    <?php
-    }
-    ?>
-
-    <?php if ($sessionNamespace->settings['rights']['administration']['rights'] == '1' || $sessionNamespace->settings['rights']['administration']['rights'] == '2') { ?>
-    <li class="menu-icon-user <?php echo $controller == 'apikeys' ? 'imbull-has-current-submenu' : 'imbull-not-current-submenu' ?>"
-        id="menu-posts">
-        <div class="imbull-menu-image">
-            <a href="<?php echo HTTP_PATH ?>admin/apikeys"><br></a>
-        </div>
-        <a href="<?php echo HTTP_PATH ?>admin/apikeys" class="imbull-has-current-submenu menu-top menu-icon-user"
-           tabindex="1">
-            <?php echo $this->translate('API Keys'); ?>
-        </a>
-    </li>
     <?php
     }
     ?>
