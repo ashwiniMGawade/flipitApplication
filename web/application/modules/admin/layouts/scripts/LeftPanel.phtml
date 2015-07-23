@@ -723,11 +723,11 @@ $action = $this->action;
     <?php } ?>
 </ul>
 
-
+<?php if ($sessionNamespace->settings['rights']['administration']['rights'] == '1' || $sessionNamespace->settings['rights']['administration']['rights'] == '2'): ?>
     <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Global Settings'); ?></h2></div>
-<?php if ($sessionNamespace->settings['rights']['administration']['rights'] == '1'): ?>
     <ul id="adminmenu" role="navigation">
-        <li <?php if ($controller == 'chain') { ?> class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-home current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" <?php } ?>
+    <?php if ($sessionNamespace->settings['rights']['administration']['rights'] == '1'): ?>
+       <li <?php if ($controller == 'chain') { ?> class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-home current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" <?php } ?>
             id="menu-links">
             <div class="imbull-menu-image artImageGreyShop"><a href="<?php echo HTTP_PATH ?>admin/chain"><br></a></div>
             <div class="">
@@ -736,8 +736,8 @@ $action = $this->action;
             <a href="<?php echo HTTP_PATH ?>admin/chain"
                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home"
                tabindex="1"><?php echo $this->translate('Chains'); ?></a>
-        </li>
-<?php endif; ?>
+       </li>
+    <?php endif; ?>
         <li <?php if ($controller == 'splash') { ?> class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-home current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" <?php } ?>
             id="menu-links">
             <div class="imbull-menu-image artImageGreyShop"><a href="<?php echo HTTP_PATH ?>admin/splash/"><br></a>
@@ -749,7 +749,7 @@ $action = $this->action;
                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home"
                tabindex="1"><?php echo $this->translate('Splash'); ?></a>
         </li>
-<?php if ($sessionNamespace->settings['rights']['administration']['rights'] == '1'): ?>
+    <?php if ($sessionNamespace->settings['rights']['administration']['rights'] == '1'): ?>
         <li <?php if ($controller == 'robot') { ?> class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-home current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" <?php } ?>
             id="menu-links">
             <div class="imbull-menu-image artImageGreyShop"><a href="<?php echo HTTP_PATH ?>admin/robot/"><br></a></div>
@@ -760,9 +760,9 @@ $action = $this->action;
                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home"
                tabindex="1"><?php echo $this->translate('Robot Files'); ?></a>
         </li>
+    <?php endif; ?>
     </ul>
 <?php endif; ?>
-
 <?php
 $releaseInfo = @BackEnd_Helper_viewHelper::currentRelease(); ?>
 <div class="clear"></div>
