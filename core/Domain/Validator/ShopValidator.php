@@ -30,6 +30,18 @@ class ShopValidator
                 $this->validator->notNull(),
                 $this->validator->length(array( 'max' => 255 ))
             ),
+            'overriteTitle' => array(
+                $this->validator->length(array( 'max' => 255 ))
+            ),
+            'title' => array(
+                $this->validator->length(array( 'max' => 255 ))
+            ),
+            'subTitle' => array(
+                $this->validator->length(array( 'max' => 255 ))
+            ),
+            'accountManagerName' => array(
+                $this->validator->length(array( 'max' => 255 ))
+            ),
             'created_at' => array(
                 $this->validator->notNull(),
                 $this->validator->dateTime()
