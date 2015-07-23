@@ -48,6 +48,13 @@ class Admin_FooterController extends Zend_Controller_Action
         ->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
 
+        $sessionNamespace = new \Zend_Session_Namespace();
+        if($sessionNamespace->settings['rights']['administration']['rights'] != '1') {
+            $flash = $this->_helper->getHelper('FlashMessenger');
+            $message = $this->view->translate ( 'You have no permission to access page' );
+            $flash->addMessage ( array ('error' => $message ));
+            $this->_redirect ( '/admin' );
+        }
     }
 
 }
