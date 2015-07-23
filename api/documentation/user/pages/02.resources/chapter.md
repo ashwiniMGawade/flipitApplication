@@ -6,6 +6,6 @@ taxonomy:
 
 ### Chapter 2
 
-# Intermediate
+# Resources
 
-Delve deeper into more **complex** topics
+Delve deeper into more **details** for available resources
