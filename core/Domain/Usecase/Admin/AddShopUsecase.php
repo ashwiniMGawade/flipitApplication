@@ -55,11 +55,11 @@ class AddShopUsecase
             $shop->setAccountManagerName($params['accountManagerName']);
         }
         if (isset($params['affliateNetwork'])) {
-            $affliateNetwork = $this->affliateNetworkRepository->findBy('\Core\Domain\Entity\AffliateNetwork', array('name'=>$params['affliateNetwork']));
-            if ((empty($affliateNetwork)) || !is_object($affliateNetwork[0])) {
+            $affliateNetwork = $this->affliateNetworkRepository->findOneBy('\Core\Domain\Entity\AffliateNetwork', array('name'=>$params['affliateNetwork']));
+            if (!is_object($affliateNetwork)) {
                 throw new \Exception('Invalid affliate network');
             }
-            $shop->setAffliatenetwork($affliateNetwork[0]);
+            $shop->setAffliatenetwork($affliateNetwork);
         }
         if (isset($params['deepLinkStatus'])) {
             $shop->setDeepLinkStatus($params['deepLinkStatus']);

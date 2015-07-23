@@ -79,7 +79,7 @@ class AddShopUsecaseTest extends \Codeception\TestCase\Test
 
         $shopRepository = $this->shopRepositoryMock();
         $shopValidator = $this->createShopValidatorMock(true);
-        $affliateNetworkRepositoryMock = $this->createAffliateNetworkRepositoryWithFindByMethodMock();
+        $affliateNetworkRepositoryMock = $this->createAffliateNetworkRepositoryWithFindOneByMethodMock();
         (new AddShopUsecase(
             $shopRepository,
             $shopValidator,
@@ -100,13 +100,13 @@ class AddShopUsecaseTest extends \Codeception\TestCase\Test
         return $affliateNetworkRepositoryMock;
     }
 
-    private function createAffliateNetworkRepositoryWithFindByMethodMock()
+    private function createAffliateNetworkRepositoryWithFindOneByMethodMock()
     {
         $affliateNetworkRepositoryMock = $this->affliateNetworkRepositoryMock();
         $affliateNetworkRepositoryMock
             ->expects($this->once())
-            ->method('findBy')
-            ->willReturn(array($this->createAffliateNetworkMock()));
+            ->method('findOneBy')
+            ->willReturn($this->createAffliateNetworkMock());
         return $affliateNetworkRepositoryMock;
     }
 
