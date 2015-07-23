@@ -34,7 +34,7 @@ $this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/dashboard.js" );
 
 		<h3>
 			<?php echo $this->translate('Scores of the last 7 days'); ?>
-<!--			<span>&nbsp;&nbsp;(--><?php //echo $this->translate('Last updated at'); ?><!--&nbsp;--><?php //echo $this->data['updated_at']->format('H:i M jS Y'); ?><!--)-->
+			<span>&nbsp;&nbsp;(<?php echo $this->translate('Last updated at'); ?>&nbsp;<?php echo $this->data['updated_at']->format('H:i M jS Y'); ?>)
 			</span>
 		</h3>
 
@@ -69,7 +69,7 @@ $this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/dashboard.js" );
 
 		<h3>
 			<?php echo $this->translate('Totals scores within this locale'); ?>
-<!--			<span>&nbsp;&nbsp;(--><?php //echo $this->translate('Last updated at'); ?><!--&nbsp;--><?php //echo $this->data['updated_at']->format('H:i M jS Y'); ?><!--)-->
+			<span>&nbsp;&nbsp;(<?php echo $this->translate('Last updated at'); ?>&nbsp;<?php echo $this->data['updated_at']->format('H:i M jS Y'); ?>)
 			</span>
 		</h3>
 
