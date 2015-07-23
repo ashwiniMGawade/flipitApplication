@@ -18,6 +18,14 @@ class Admin_EmailController extends Zend_Controller_Action
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
         $sessionNamespace = new Zend_Session_Namespace();
+
+        if (strtolower($this->view->action) == 'email-settings' && $sessionNamespace->settings['rights']['administration']['rights'] != '1') {
+            $flashMessenger = $this->_helper->getHelper('FlashMessenger');
+            $message = $this->view->translate('You have no permission to access page');
+            $flashMessenger->addMessage(array('error' => $message));
+            $this->_redirect('/admin');
+        }
+
         $this->_settings  = $sessionNamespace->settings['rights'] ;
         $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
     }

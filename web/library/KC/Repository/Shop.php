@@ -1991,7 +1991,7 @@ class Shop extends \Core\Domain\Entity\Shop
         return round($shopRatio);
     }
 
-    public static function getRelatedShops($relatedShopsInfo)
+    public static function getShopsRelated($relatedShopsInfo)
     {
         $relatedShopName = array();
         if (!empty($relatedShopsInfo)) {
