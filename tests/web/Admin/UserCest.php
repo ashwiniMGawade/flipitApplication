@@ -51,9 +51,17 @@ class UserCest
                 )
             )
         );
+
         $I->login('superadmin1@flipit.com', 'Mind@123');
         $I->see('superadmin1');
-        // $I->click('gebruikers');
-        // $I->see('superadmin2@flipit.com');
+        $I->click('Gebruikers');
+        $I->seeInCurrentUrl('admin/user');
+        $I->waitForElementVisible('#userList tbody tr', 3);
+        $I->click('superadmin2@flipit.com');
+        $I->fillField('Voornaam', 'NewFirstName');
+        $I->fillField('Nieuw wachtwoord', '');
+        $I->click('Profiel aanpassen');
+        $I->waitForElementVisible('#userList tbody tr', 20);
+        $I->see('NewFirstName');
     }
 }
