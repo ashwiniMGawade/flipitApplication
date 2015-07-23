@@ -39,4 +39,9 @@ interface ValidatorInterface
      * @return mixed
      */
     public function dateTime();
+
+    /**
+     * @return mixed
+     */
+    public function notBlank();    
 }

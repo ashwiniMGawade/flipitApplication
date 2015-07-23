@@ -134,4 +134,24 @@ class ValidatorTest extends \Codeception\TestCase\Test
         $response = (new Validator())->validate($apiKey, $rules);
         $this->assertEquals($expected, $response);
     }
+
+    public function testValidatorReturnsViolationForPropertyNotEqualsBlank()
+    {
+        $apiKey = new ApiKey();
+        $apiKey->__set('name', '');
+
+        $validator = new Validator();
+        $rules = array(
+            'name' => array(
+                $validator->notBlank()
+            )
+        );
+        $expected = array(
+            "name" => array(
+                'This value should not be blank.'
+            )
+        );
+        $response = (new Validator())->validate($apiKey, $rules);
+        $this->assertEquals($expected, $response);
+    }
 }
