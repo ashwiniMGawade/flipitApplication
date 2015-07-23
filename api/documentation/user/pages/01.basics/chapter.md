@@ -3,8 +3,9 @@ title: INTRODUCTION
 taxonomy:
     category: docs
 ---
+### Chapter 1
 
-##### Welcome to the Flipit API v2 documentation.
+# Introduction
 
 Flipit offers a great API (or Application Programming Interface) to connect with the Flipit platform. Our API allows you to retrieve user info, advertiser info, publishers info and much more.
 
