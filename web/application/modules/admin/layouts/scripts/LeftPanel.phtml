@@ -413,9 +413,9 @@ $action = $this->action;
     <?php } ?>
 </ul>
 
-<?php if ($sessionNamespace->settings['rights']['administration']['rights'] == '1') { ?>
 <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Email'); ?></h2></div>
 <ul id="adminmenu" role="navigation">
+    <?php if ($sessionNamespace->settings['rights']['administration']['rights'] == '1') { ?>
         <!--<li <?php if ($controller == 'email' && $action == 'index') { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" <?php } ?> id="menu-links">
 
       	<div class="imbull-menu-image"><a href="<?php echo HTTP_PATH; ?>admin/email/index"><br></a></div>
@@ -437,7 +437,7 @@ $action = $this->action;
             } ?> href="<?php echo HTTP_PATH; ?>admin/email/email-settings"
                  class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile"><?php echo $this->translate('Email Settings'); ?></a>
         </li>
-
+    <?php } ?>
         <li <?php if ($controller == 'email') { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" <?php } ?>
             id="menu-posts">
             <div class="imbull-menu-image">
@@ -482,7 +482,7 @@ $action = $this->action;
             </div>
         </li>
     </ul>
-<?php } ?>
+
 <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Template Settings'); ?></h2></div>
 <ul id="adminmenu" role="navigation">
 <?php if ($sessionNamespace->settings['rights']['administration']['rights'] == '1') : ?>
@@ -722,10 +722,10 @@ $action = $this->action;
         </li>
     <?php } ?>
 </ul>
-<?php
-#global settings available for only subper admin
-if ($sessionNamespace->settings['rights']['administration']['rights'] == '1'): ?>
+
+
     <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Global Settings'); ?></h2></div>
+<?php if ($sessionNamespace->settings['rights']['administration']['rights'] == '1'): ?>
     <ul id="adminmenu" role="navigation">
         <li <?php if ($controller == 'chain') { ?> class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-home current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" <?php } ?>
             id="menu-links">
@@ -737,6 +737,7 @@ if ($sessionNamespace->settings['rights']['administration']['rights'] == '1'): ?
                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home"
                tabindex="1"><?php echo $this->translate('Chains'); ?></a>
         </li>
+<?php endif; ?>
         <li <?php if ($controller == 'splash') { ?> class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-home current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" <?php } ?>
             id="menu-links">
             <div class="imbull-menu-image artImageGreyShop"><a href="<?php echo HTTP_PATH ?>admin/splash/"><br></a>
@@ -748,6 +749,7 @@ if ($sessionNamespace->settings['rights']['administration']['rights'] == '1'): ?
                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home"
                tabindex="1"><?php echo $this->translate('Splash'); ?></a>
         </li>
+<?php if ($sessionNamespace->settings['rights']['administration']['rights'] == '1'): ?>
         <li <?php if ($controller == 'robot') { ?> class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-home current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" <?php } ?>
             id="menu-links">
             <div class="imbull-menu-image artImageGreyShop"><a href="<?php echo HTTP_PATH ?>admin/robot/"><br></a></div>
@@ -759,9 +761,9 @@ if ($sessionNamespace->settings['rights']['administration']['rights'] == '1'): ?
                tabindex="1"><?php echo $this->translate('Robot Files'); ?></a>
         </li>
     </ul>
-<?php endif;
+<?php endif; ?>
 
-
+<?php
 $releaseInfo = @BackEnd_Helper_viewHelper::currentRelease(); ?>
 <div class="clear"></div>
 <div class='release-note'>
