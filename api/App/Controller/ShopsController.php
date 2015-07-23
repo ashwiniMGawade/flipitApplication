@@ -11,7 +11,6 @@ class ShopsController extends ApiBaseController
     {
         $shop = AdminFactory::getShop()->execute($id);
         echo $this->generateShopJsonData($shop);
-        exit;
     }
 
     public function createShop()
@@ -19,13 +18,7 @@ class ShopsController extends ApiBaseController
         $shop = AdminFactory::createShop()->execute();
         $params = json_decode($this->app->request->getBody(), true);
         $result = AdminFactory::addShop()->execute($shop, $params);
-        if (is_array($result) && !empty($result)) {
-            $this->app->response->setStatus(405);
-            echo json_encode($result);
-            return;
-        }
         echo $this->generateShopJsonData($result);
-        exit;
     }
 
     public function updateShop($id)
@@ -33,24 +26,23 @@ class ShopsController extends ApiBaseController
         $shop = AdminFactory::getShop()->execute($id);
         $params = json_decode($this->app->request->getBody(), true);
         $result = AdminFactory::updateShop()->execute($shop, $params);
-        if (is_array($result) && !empty($result)) {
-            $this->app->response->setStatus(405);
-            echo json_encode($result);
-            return;
-        }
         echo $this->generateShopJsonData($result);
-        exit;
     }
 
     public function deleteShop($id)
     {
-        $shop = AdminFactory::deleteShop()->execute($id);
-        echo json_encode(array('msg'=>'Shop deleted successfully.'));
-        exit;
+        if(AdminFactory::deleteShop()->execute($id)) {
+            echo json_encode(array('msg'=>'Shop deleted successfully.'));
+        }
     }
 
     private function generateShopJsonData($shop)
     {
+        if (is_array($shop) && !empty($shop)) {
+            $this->app->response->setStatus(405);
+            return json_encode($shop);
+        }
+
         $affliateNetwork = $shop->getAffliatenetwork();
 
         $shopData = array(

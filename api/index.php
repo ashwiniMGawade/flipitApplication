@@ -1,9 +1,4 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
-header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-header('Content-type: application/json');
-header('Access-Control-Max-Age: 86400');
 
 // Sets the environment to testing for codeception
 if (isset($_SERVER['HTTP_USER_AGENT']) && ($_SERVER['HTTP_USER_AGENT'] == 'Symfony2 BrowserKit' || strpos($_SERVER['HTTP_USER_AGENT'], 'PhantomJS') == true)) {

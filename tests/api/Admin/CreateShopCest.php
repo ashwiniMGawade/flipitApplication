@@ -36,7 +36,7 @@ class CreateShopCest
     public function testCreateShopWithInvalidParams(ApiTester $I)
     {
         $params = array(
-            'name'                  => ''
+            'name' => ''
         );
         $I->wantTo('Create shop with invalid data');
         $I->haveHttpHeader('Content-Type', 'application/json');
