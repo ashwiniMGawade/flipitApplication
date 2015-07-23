@@ -46,6 +46,7 @@ class ShopsController extends ApiBaseController
         $affliateNetwork = $shop->getAffliatenetwork();
 
         $shopData = array(
+            'id'                    => $shop->getId(),
             'name'                  => $shop->getName(),
             'permaLink'             => $shop->getPermaLink(),
             'overriteTitle'         => $shop->getOverriteTitle(),

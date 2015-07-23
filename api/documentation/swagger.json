@@ -219,7 +219,7 @@
                "description":"Exact name 'first name'",
                "example":""
             },
-            "affilliate_network":{
+            "affliateNetwork":{
                "type":"string",
                "description":"",
                "example":""
