@@ -7,6 +7,7 @@ class VisitorsController extends ApiBaseController
 {
     public function updateVisitor()
     {
+        $response = array();
         $params = json_decode($this->app->request->getBody(), true);
         if (!is_array($params) || empty($params)) {
             echo json_encode(array('msg'=>'Invalid Parameters.'));
@@ -31,8 +32,16 @@ class VisitorsController extends ApiBaseController
                 'email' => $processedEventMessage['email'],
                 'event' => $mandrillData['event']
             );
-            AdminFactory::updateVisitors()->execute($parameter);
+            $visitor = AdminFactory::updateVisitors()->execute($parameter);
+            $response[$visitor->getEmail()] = array(
+                'open' => $visitor->getMailOpenCount(),
+                'click' => $visitor->getMailClickCount(),
+                'soft_bounce' => $visitor->getMailSoftBounceCount(),
+                'hard_bounce' => $visitor->getMailHardBounceCount()
+            );
         }
+        echo json_encode($response);
+        exit;
     }
 
     private function processEventMessage($eventMessage)
