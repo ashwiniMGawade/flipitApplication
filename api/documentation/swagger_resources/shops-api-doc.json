@@ -6,10 +6,6 @@
       {
          "name":"shop",
           "description":"Shop Operations"
-      },
-      {
-         "name":"visitor",
-         "description":"Visitor Operations"
       }
    ],
    "schemes":[
@@ -52,43 +48,6 @@
          }
       },
 
-       "/visitors":{
-           "put":{
-               "tags":[
-                   "visitor"
-               ],
-               "summary":"Update data related to email opens, clicks and bounces",
-               "description":"",
-               "operationId":"updateVisitor",
-               "consumes":[
-                   "application/json"
-               ],
-               "produces":[
-                   "application/json"
-               ],
-               "parameters":[
-                   {
-                       "in":"body",
-                       "name":"body",
-                       "description":"Visitor data that needs to be updated",
-                       "required":true,
-                       "schema":{
-                           "type": "array",
-                           "items": {"$ref":"#/definitions/visitor"}
-                       }
-                   }
-               ],
-               "responses":{
-                   "200":{
-                       "description":"Request was successful"
-                   },
-                   "405":{
-                       "description":"Invalid input"
-                   }
-               }
-           }
-       },
-      
       "/shops/{shopId}":{
          "put":{
             "tags":[
@@ -277,28 +236,6 @@
             "shoptext":{
                "type":"string"
             }       
-         }
-      },
-      "visitor":{
-         "type":"object",
-         "properties":{
-            "event":{
-               "type":"string",
-               "example":"open"
-            },
-            "msg":{
-               "type":"object",
-               "properties": {
-                  "email": {
-                     "type": "string",
-                     "example": "test@example.com"
-                  },
-                  "state": {
-                     "type": "string",
-                     "example": "sent"
-                  }
-               }
-            }
          }
       },
       "ApiResponse":{
