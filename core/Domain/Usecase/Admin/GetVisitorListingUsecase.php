@@ -30,7 +30,7 @@ class GetVisitorListingUsecase
             $filters['firstName'] = $conditions['searchtext'];
         }
         if (!empty($conditions['email']) && $conditions['email'] != 'undefined') {
-            $filters['email'] = $conditions['searchtext'];
+            $filters['email'] = $conditions['email'];
         }
         return $filters;
     }
