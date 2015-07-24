@@ -7,18 +7,16 @@ use \Core\Domain\Usecase\Admin\GetApiKeyListingUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\DeleteApiKeyUsecase;
-<<<<<<< HEAD
 use \Core\Domain\Usecase\Admin\GetVisitorListingUsecase;
-=======
 use \Core\Domain\Usecase\Admin\GetShopUsecase;
 use \Core\Domain\Usecase\Admin\CreateShopUsecase;
 use \Core\Domain\Usecase\Admin\AddShopUsecase;
 use \Core\Domain\Usecase\Admin\UpdateShopUsecase;
 use \Core\Domain\Usecase\Admin\DeleteShopUsecase;
->>>>>>> 381aaf1e0b76a8def95760350d42f53c4cf96f72
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\ShopValidator;
 use \Core\Persistence\Factory\RepositoryFactory;
+use \Core\Domain\Usecase\Admin\UpdateVisitorUsecase;
 
 class AdminFactory
 {
@@ -46,11 +44,17 @@ class AdminFactory
         return new DeleteApiKeyUsecase(RepositoryFactory::apiKeys());
     }
 
-<<<<<<< HEAD
+
     public static function getVisitors()
     {
         return new GetVisitorListingUsecase(RepositoryFactory::visitor());
-=======
+    }
+
+    public static function updateVisitors()
+    {
+        return new UpdateVisitorUsecase(RepositoryFactory::visitor());
+    }
+
     public static function getShop()
     {
         return new GetShopUsecase(RepositoryFactory::shop());
@@ -82,6 +86,5 @@ class AdminFactory
     public static function deleteShop()
     {
         return new DeleteShopUsecase(RepositoryFactory::shop());
->>>>>>> 381aaf1e0b76a8def95760350d42f53c4cf96f72
     }
 }
