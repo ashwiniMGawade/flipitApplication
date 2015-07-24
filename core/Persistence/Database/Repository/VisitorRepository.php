@@ -6,7 +6,9 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class VisitorRepository extends BaseRepository implements VisitorRepositoryInterface
 {
-    public function findVisitors($entity, $conditions, $options)
+    protected $entity = '\Core\Domain\Entity\Visitor';
+
+    public function findVisitors($conditions, $options)
     {
         $limit = isset($options['limit']) && $options['limit'] !== null ? $options['limit'] : 100;
         $offset = isset($options['offset']) && $options['offset'] !== null ? $options['offset'] : 0;
@@ -16,7 +18,7 @@ class VisitorRepository extends BaseRepository implements VisitorRepositoryInter
         $queryBuilder = $this->em->createQueryBuilder();
         $queryBuilder
             ->select('v')
-            ->from('\Core\Domain\Entity\Visitor', 'v')
+            ->from($this->entity, 'v')
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->orderBy("v.$sortColumn", $sortDirection);
@@ -40,5 +42,13 @@ class VisitorRepository extends BaseRepository implements VisitorRepositoryInter
         $paginator = new Paginator($query, $fetchJoinCollection = true);
         $results['visitorCount'] = count($paginator);
         return  $results;
+    }
+
+    public function loadObject($params)
+    {
+        $visitor = $this->findOneBy($this->entity, $params);
+        print_r($visitor);
+        exit;
+        return $visitor;
     }
 }
