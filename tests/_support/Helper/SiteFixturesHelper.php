@@ -234,6 +234,7 @@ class SiteFixturesHelper
         
     public function createDashboard($I)
     {
+        $createdTime = date('Y-m-d H:i:s');
         $I->haveInDatabasePDOSite(
             'dashboard',
             array(
@@ -246,7 +247,10 @@ class SiteFixturesHelper
                 'total_no_of_shops'=> 22,
                 'total_no_of_shops_online_code'=> 33,
                 'total_no_of_shops_online_code_lastweek'=> 33,
-                'total_no_members'=>33
+                'total_no_members'=>33,
+                'deleted' => 0,
+                'created_at' => $createdTime,
+                'updated_at' => $createdTime
             )
         );
     }

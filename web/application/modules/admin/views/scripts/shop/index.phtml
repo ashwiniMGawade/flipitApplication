@@ -43,9 +43,12 @@ $sessionNamespace = new Zend_Session_Namespace();
          <p class="text-right">
               <a href='javascript:void(0)' onclick="showLightBoxForWidgetLocation()">
                   <?php echo $this->translate('Set Widget Location')?>
-              </a>  / 
+              </a>  /
+              <?php if($sessionNamespace->settings['rights']['administration']['rights'] == '1' ) : ?>
               <a href="<?php echo HTTP_PATH ?>admin/shop/importshops">
-                  <?php echo $this->translate('Import List'); ?></a> / 
+                  <?php echo $this->translate('Import List'); ?>
+              </a> /
+              <?php endif; ?>
               <a href="<?php echo HTTP_PATH ?>admin/shop/local-export-xlx">
                   <?php echo $this->translate('Local Export List'); ?>
               </a>

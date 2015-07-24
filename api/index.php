@@ -1,6 +1,8 @@
 <?php
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+
+// Sets the environment to testing for codeception
+if (isset($_SERVER['HTTP_USER_AGENT']) && ($_SERVER['HTTP_USER_AGENT'] == 'Symfony2 BrowserKit' || strpos($_SERVER['HTTP_USER_AGENT'], 'PhantomJS') == true)) {
+    apache_setenv('APPLICATION_ENV', 'testing');
 }
 
 include '../c3.php';
