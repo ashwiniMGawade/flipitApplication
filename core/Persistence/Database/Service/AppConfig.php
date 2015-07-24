@@ -39,16 +39,16 @@ class AppConfig
                     'host'     => 'localhost',
                     'dbname'   => 'kortingscode_user',
                     'user'     => 'root',
-                    'password' => 'root',
+                    'password' => 'root'
                 ),
                 'site' => array(
                     'driver'   => 'pdo_mysql',
                     'host'     => 'localhost',
                     'dbname'   => $dbName,
                     'user'     => 'root',
-                    'password' => 'root',
-                ),
-            ),
+                    'password' => 'root'
+                )
+            )
         );
     }
 
@@ -67,21 +67,40 @@ class AppConfig
                     'host'     => 'localhost',
                     'dbname'   => 'flipit_test_user',
                     'user'     => 'root',
-                    'password' => 'root',
+                    'password' => 'root'
                 ),
                 'site' => array(
                     'driver'   => 'pdo_mysql',
                     'host'     => 'localhost',
                     'dbname'   => 'flipit_test',
                     'user'     => 'root',
-                    'password' => 'root',
-                ),
-            ),
+                    'password' => 'root'
+                )
+            )
         );
     }
 
     public function getProductionConfig($dbName)
     {
+        $config = new \Zend_Config_Ini('../../web/application/configs/application.ini', $this->env);
+
+        $applicationDsn = $config->doctrine->en->dsn;
+        $splitDbName = explode('/', $applicationDsn);
+        $splitDbUserName = explode(':', $splitDbName[2]);
+        $splitDbPassword = explode('@', $splitDbUserName[1]);
+        $splitHostName = explode('@', $splitDbUserName[1]);
+        $dbPassword = $splitDbPassword[0];
+        $dbUserName = $splitDbUserName[0];
+        $dbName = $splitDbName[3];
+        $hostName = isset($splitHostName[1]) ? $splitHostName[1] : 'localhost';
+        $dsn =  array(
+            'host'     => $hostName,
+            'driver'   => 'pdo_mysql',
+            'user'     => $dbUserName,
+            'password' => $dbPassword,
+            'dbname'   => $dbName
+        );
+
         return array(
             'connections' => array(
                 'isDevMode' => false,
@@ -91,19 +110,19 @@ class AppConfig
                 'appMode'=> $this->env,
                 'user' => array(
                     'driver'   => 'pdo_mysql',
-                    'host'     => 'localhost',
+                    'host'     => $dsn['host'],
                     'dbname'   => 'kortingscode_user',
-                    'user'     => 'root',
-                    'password' => 'root',
+                    'user'     => $dsn['user'],
+                    'password' => $dsn['password']
                 ),
                 'site' => array(
                     'driver'   => 'pdo_mysql',
-                    'host'     => 'localhost',
+                    'host'     => $dsn['host'],
                     'dbname'   => $dbName,
-                    'user'     => 'root',
-                    'password' => 'root',
-                ),
-            ),
+                    'user'     => $dsn['user'],
+                    'password' => $dsn['password']
+                )
+            )
         );
     }
 }
