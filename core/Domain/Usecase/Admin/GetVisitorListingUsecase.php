@@ -15,7 +15,7 @@ class GetVisitorListingUsecase
     public function execute($conditions = array(), $request = array())
     {
         $filters = $this->setFilters($conditions);
-        $visitorData = $this->visitorRepository->findVisitors('\Core\Domain\Entity\Visitor', $filters, $request);
+        $visitorData = $this->visitorRepository->findVisitors($filters, $request);
         $visitorData['visitors'] = $this->prepareData($visitorData['visitors']);
         return $visitorData;
     }
