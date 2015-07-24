@@ -105,9 +105,15 @@ class Admin_VisitorController extends Zend_Controller_Action
 
     public function getvisitorlistAction()
     {
-        $params = $this->_getAllParams();
-        $visitorList = \KC\Repository\Visitor::VisitorList($params);
-        echo Zend_Json::encode($visitorList);
+        //$params = $this->_getAllParams();
+
+        $response = \Core\Domain\Factory\AdminFactory::getVisitors()->execute();
+        $response = \DataTable_Helper::createResponse($response);
+        print_r($response);
+        exit;
+        //$visitorList = \KC\Repository\Visitor::VisitorList($params);
+
+        echo Zend_Json::encode($response);
         die();
     }
 
