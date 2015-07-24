@@ -43,12 +43,4 @@ class VisitorRepository extends BaseRepository implements VisitorRepositoryInter
         $results['visitorCount'] = count($paginator);
         return  $results;
     }
-
-    public function loadObject($params)
-    {
-        $visitor = $this->findOneBy($this->entity, $params);
-        print_r($visitor);
-        exit;
-        return $visitor;
-    }
 }
