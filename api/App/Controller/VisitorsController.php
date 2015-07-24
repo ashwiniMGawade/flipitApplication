@@ -28,7 +28,8 @@ class VisitorsController extends ApiBaseController
             }
 
             $parameter = array(
-                $processedEventMessage['email'] => $mandrillData['event']
+                'email' => $processedEventMessage['email'],
+                'event' => $mandrillData['event']
             );
             AdminFactory::updateVisitors()->execute($parameter);
         }
