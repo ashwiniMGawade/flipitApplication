@@ -1,6 +1,8 @@
 <?php
 namespace Api\Controller;
 
+use Core\Domain\Factory\AdminFactory;
+
 class VisitorsController extends ApiBaseController
 {
     public function updateVisitor()
@@ -10,7 +12,7 @@ class VisitorsController extends ApiBaseController
             echo json_encode(array('msg'=>'Invalid Parameters.'));
             exit;
         }
-        $inputData = array();
+
         foreach ($params as $mandrillData) {
             if (!isset($mandrillData['event']) || empty($mandrillData['event'])) {
                 echo json_encode(array('msg'=>'Event Required'));
@@ -25,31 +27,12 @@ class VisitorsController extends ApiBaseController
                 exit;
             }
 
-            $inputData[$processedEventMessage['email']][] = $mandrillData['event'];
-
-//            if (!$this->validateEventName($mandrillData['event'])) {
-//                echo json_encode(array('msg'=>'Invalid Event'));
-//                exit;
-//            }
+            $parameter = array(
+                $processedEventMessage['email'] => $mandrillData['event']
+            );
+            AdminFactory::updateVisitors()->execute($parameter);
         }
-
-        print_r($inputData);
-        exit;
     }
-
-//    private function validateEventName($eventName)
-//    {
-//        $validMandrillEvents = array(
-//            'open',
-//            'click',
-//            'soft_bounce',
-//            'hard_bounce'
-//        );
-//        if (!in_array($eventName, $validMandrillEvents, true)) {
-//            return false;
-//        }
-//        return true;
-//    }
 
     private function processEventMessage($eventMessage)
     {
