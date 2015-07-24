@@ -36,6 +36,9 @@ $("input#searchFieldHeader").autocomplete({
         $('li.wLi2').removeClass('select');
         $('a#ui-active-menuitem').parents('li').addClass('select');
     },
+    open: function(){
+        $(this).autocomplete('widget').css('z-index', 15);
+    },
     }).data( "autocomplete" )._renderItem = function( ul, item, url ) {
         url = item.permalink;
         return $("<li class='wLi2'></li>").data("item.autocomplete", item).append(
