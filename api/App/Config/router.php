@@ -12,7 +12,7 @@ $app->group(
 $app->group(
     '/visitors',
     function () use ($app) {
-        $app->map('/:id', 'Api\Controller\ShopsController:updateShop')->via('PUT', 'PATCH');
+        $app->map('/', 'Api\Controller\VisitorsController:updateVisitor')->via('PUT', 'PATCH');
     }
 );
 
