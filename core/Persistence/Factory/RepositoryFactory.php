@@ -25,14 +25,13 @@ class RepositoryFactory
         return new ApiKeyRepository((new DoctrineManager)->getUserEntityManager());
     }
 
-<<<<<<< HEAD
     public static function visitor()
     {
         return new VisitorRepository((new DoctrineManager)->getLocaleEntityManager());
-=======
+    }
+
     public static function affliateNetwork()
     {
         return new AffliateNetworkRepository((new DoctrineManager)->getLocaleEntityManager());
->>>>>>> 381aaf1e0b76a8def95760350d42f53c4cf96f72
     }
 }
