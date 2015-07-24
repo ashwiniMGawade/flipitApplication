@@ -16,7 +16,7 @@ class GetVisitorListingUsecaseTest extends \Codeception\TestCase\Test
         $invalidParams = 123;
         $this->setExpectedException('Exception', 'Invalid Parameters');
         $getVisitorListingUsecase = new GetVisitorListingUsecase($this->createVisitorRepositoryInterfaceMock());
-        $visitors = $getVisitorListingUsecase->execute($invalidParams);
+        $getVisitorListingUsecase->execute($invalidParams);
     }
 
     public function testThrowsExceptionWhenParametersAreValidAndVisitorsListIsEmpty()
@@ -28,7 +28,7 @@ class GetVisitorListingUsecaseTest extends \Codeception\TestCase\Test
         $requestParams = array();
         $visitorRepository = $this->createVisitorRepositoryInterfaceWithFindVisitorsMethodMock(array());
         $getVisitorListingUsecase = new GetVisitorListingUsecase($visitorRepository);
-        $visitors = $getVisitorListingUsecase->execute($validParams, $requestParams);
+        $getVisitorListingUsecase->execute($validParams, $requestParams);
     }
 
     public function testGetVisitorListingUsecaseReturnsArrayOfVisitorsWhenParametersAreValid()
@@ -48,7 +48,7 @@ class GetVisitorListingUsecaseTest extends \Codeception\TestCase\Test
         $visitorRepository = $this->createVisitorRepositoryInterfaceMock();
         $visitorRepository->expects($this->once())
                           ->method('findVisitors')
-                          ->with($this->isType('string', '\Core\Domain\Entity\Visitor'), $this->isType('array'))
+                          ->with($this->isType('array'), $this->isType('array'))
                           ->willReturn(array('visitors' => $returns));
         return $visitorRepository;
     }
