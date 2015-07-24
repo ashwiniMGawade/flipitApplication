@@ -35,7 +35,7 @@ class BaseRepository implements BaseRepositoryInterface
 
     public function save($entity)
     {
-        $this->em->merge($entity);
+        $entity = $this->em->merge($entity);
         $this->em->flush();
         return $entity;
     }
