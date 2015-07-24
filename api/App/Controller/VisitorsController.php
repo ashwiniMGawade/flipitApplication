@@ -8,13 +8,13 @@ class VisitorsController extends ApiBaseController
         $params = json_decode($this->app->request->getBody(), true);
         if (!is_array($params) || empty($params)) {
             echo json_encode(array('msg'=>'Invalid Parameters.'));
-            die;
+            exit;
         }
         $inputData = array();
         foreach ($params as $mandrillData) {
             if (!isset($mandrillData['event']) || empty($mandrillData['event'])) {
                 echo json_encode(array('msg'=>'Event Required'));
-                die;
+                exit;
             }
             if (!isset($mandrillData['msg']) || empty($mandrillData['msg'])) {
                 echo json_encode(array('msg'=>'Message Required'));
@@ -34,21 +34,22 @@ class VisitorsController extends ApiBaseController
         }
 
         print_r($inputData);
+        exit;
     }
 
-    private function validateEventName($eventName)
-    {
-        $validMandrillEvents = array(
-            'open',
-            'click',
-            'soft_bounce',
-            'hard_bounce'
-        );
-        if (!in_array($eventName, $validMandrillEvents, true)) {
-            return false;
-        }
-        return true;
-    }
+//    private function validateEventName($eventName)
+//    {
+//        $validMandrillEvents = array(
+//            'open',
+//            'click',
+//            'soft_bounce',
+//            'hard_bounce'
+//        );
+//        if (!in_array($eventName, $validMandrillEvents, true)) {
+//            return false;
+//        }
+//        return true;
+//    }
 
     private function processEventMessage($eventMessage)
     {
