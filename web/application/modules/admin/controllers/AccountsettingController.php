@@ -63,7 +63,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                 case 'emailcontent':
                 default:
                     if ($this->_settings['system manager']['rights'] != '1') {
-                        $this->_redirect('/admin/auth/index');
+                        $this->_redirect('/admin');
                     }
 
             }

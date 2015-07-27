@@ -87,46 +87,26 @@ class UserCest
                 )
             )
         );
-        $I->haveInDatabasePDOUser(
-            'ref_user_website',
-            array(
-                array(
-                    'userid' => '365',
-                    'websiteid' => '1'
-                )
-            )
-        );
+        $this->seedRefUserWebsiteTable($I);
 
         $I->login('admin@flipit.com', 'Mind@123');
         $I->see('admin');
 
-        #Admin does not have access to Robots page
-        $I->amOnPage('admin/robot');
-        $I->see('Scores of the last 7 days');
-        #Admin does not have access to Chains page
-        $I->amOnPage('admin/chain');
-        $I->see('Scores of the last 7 days');
-        #Admin does not have access to Locale Settings page
-        $I->amOnPage('admin/locale/locale-settings');
-        $I->see('Scores of the last 7 days');
-        #Admin does not have access to Email Settings page
-        $I->amOnPage('admin/email/email-settings');
-        $I->see('Scores of the last 7 days');
-        #Admin does not have access to Import Shops page
-        $I->amOnPage('admin/shop/importshops');
-        $I->see('Voeg nieuwe winkel toe');
-        #Admin does not have access to Visitors page
-        $I->amOnPage('admin/visitor');
-        $I->see('Scores of the last 7 days');
-        #Admin does not have access to Ip Addresses page
-        $I->amOnPage('admin/ipaddresses');
-        $I->see('Scores of the last 7 days');
-        #Admin does not have access to Users page
-        $I->amOnPage('admin/user');
-        $I->see('Scores of the last 7 days');
-        #Admin does not have access to ApiKeys page
-        $I->amOnPage('admin/apikeys');
-        $I->see('Scores of the last 7 days');
+        $pages = array(
+            'admin/robot',
+            'admin/chain',
+            'admin/locale/locale-settings',
+            'admin/email/email-settings',
+            'admin/visitor',
+            'admin/ipaddresses',
+            'admin/user',
+            'admin/apikeys'
+        );
+
+        $redirectsTo = '/admin';
+
+        $this->testTryingToAccessPageRedirectsToURL($I, $pages, $redirectsTo);
+        $this->testTryingToAccessShopsImportPageRedirectsToShopPage($I);
     }
 
     public function userShouldNotSeeThesePagesWhenRoleEqualsEditorTest(WebTester $I, \Codeception\Scenario $scenario)
@@ -151,6 +131,52 @@ class UserCest
                 )
             )
         );
+        $this->seedRefUserWebsiteTable($I);
+
+        $I->login('editor@flipit.com', 'Mind@123');
+        $I->see('Editor');
+
+        $pages = array(
+            'admin/robot',
+            'admin/chain',
+            'admin/locale/locale-settings',
+            'admin/email/email-settings',
+            'admin/visitor',
+            'admin/ipaddresses',
+            'admin/user',
+            'admin/apikeys',
+            'admin/accountsetting',
+            'admin/accountsetting/emailcontent',
+            'admin/footer',
+            'admin/redirect',
+            'admin/language',
+            'admin/splash'
+        );
+
+        $redirectsTo = '/admin';
+
+        $this->testTryingToAccessPageRedirectsToURL($I, $pages, $redirectsTo);
+        $this->testTryingToAccessShopsImportPageRedirectsToShopPage($I);
+    }
+
+    private function testTryingToAccessPageRedirectsToURL($I, $pages, $redirectsTo)
+    {
+        foreach ($pages as $page) {
+            $I->amOnPage($page);
+            $I->seeCurrentUrlEquals($redirectsTo);
+        }
+    }
+
+    private function testTryingToAccessShopsImportPageRedirectsToShopPage($I)
+    {
+        #Non Super Admin users dont not have access to Import Shops page
+        $I->amOnPage('admin/shop/importshops');
+        $I->seeCurrentUrlEquals('/admin/shop');
+        $I->see('Voeg nieuwe winkel toe');
+    }
+
+    private function seedRefUserWebsiteTable($I)
+    {
         $I->haveInDatabasePDOUser(
             'ref_user_website',
             array(
@@ -160,54 +186,5 @@ class UserCest
                 )
             )
         );
-
-        $I->login('editor@flipit.com', 'Mind@123');
-        $I->see('Editor');
-
-        #Editor does not have access to Robots page
-        $I->amOnPage('admin/robot');
-        $I->see('Scores of the last 7 days');
-        #Editor does not have access to Chains page
-        $I->amOnPage('admin/chain');
-        $I->see('Scores of the last 7 days');
-        #Editor does not have access to Locale Settings page
-        $I->amOnPage('admin/locale/locale-settings');
-        $I->see('Scores of the last 7 days');
-        #Editor does not have access to Email Settings page
-        $I->amOnPage('admin/email/email-settings');
-        $I->see('Scores of the last 7 days');
-        #Editor does not have access to Import Shops page
-        $I->amOnPage('admin/shop/importshops');
-        $I->see('Voeg nieuwe winkel toe');
-        #Editor does not have access to Visitors page
-        $I->amOnPage('admin/visitor');
-        $I->see('Scores of the last 7 days');
-        #Editor does not have access to Ip Addresses page
-        $I->amOnPage('admin/ipaddresses');
-        $I->see('Scores of the last 7 days');
-        #Editor does not have access to Users page
-        $I->amOnPage('admin/user');
-        $I->see('Scores of the last 7 days');
-        #Editor does not have access to ApiKeys page
-        $I->amOnPage('admin/apikeys');
-        $I->see('Scores of the last 7 days');
-        #Editor does not have access to Account Settings page
-        $I->amOnPage('admin/accountsetting');
-        $I->see('Scores of the last 7 days');
-        #Editor does not have access to Email Management page
-        $I->amOnPage('admin/accountsetting/emailcontent');
-        $I->see('Scores of the last 7 days');
-        #Editor does not have access to Footer page
-        $I->amOnPage('admin/footer');
-        $I->see('Scores of the last 7 days');
-        #Editor does not have access to Redirect page
-        $I->amOnPage('admin/redirect');
-        $I->see('Scores of the last 7 days');
-        #Editor does not have access to Language page
-        $I->amOnPage('admin/language');
-        $I->see('Scores of the last 7 days');
-        #Editor does not have access to Splash page
-        $I->amOnPage('admin/splash');
-        $I->see('Scores of the last 7 days');
     }
 }

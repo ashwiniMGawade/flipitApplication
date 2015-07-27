@@ -44,7 +44,7 @@ class Admin_VisitorController extends Zend_Controller_Action
 
         } else {
             if ($this->_settings['administration']['rights'] != '1') {
-                $this->_redirect('/admin/auth/index');
+                $this->_redirect('/admin');
             }
         }
     }
