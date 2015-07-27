@@ -30,7 +30,8 @@ class CreateShopCest
         $I->sendPOST('/shops', json_encode($params));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(array('name' => 'Mock'));
+        //$I->seeResponseContainsJson(array('name' => 'Mock'));
+        $I->seeResponseContainsJson(array('msg' => 'This operation is not permitted.'));
     }
 
     public function testCreateShopWithInvalidParams(ApiTester $I)
@@ -41,8 +42,9 @@ class CreateShopCest
         $I->wantTo('Create shop with invalid data');
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/shops', json_encode($params));
-        $I->seeResponseCodeIs(405);
+        //$I->seeResponseCodeIs(405);
         $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(array('name' => array('This value should not be blank.')));
+        //$I->seeResponseContainsJson(array('name' => array('This value should not be blank.')));
+        $I->seeResponseContainsJson(array('msg' => 'This operation is not permitted.'));
     }
 }
