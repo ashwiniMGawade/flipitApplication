@@ -31,11 +31,21 @@ class UpdateVisitorUsecase
                 break;
             case 'soft_bounce':
                 $softBounceCount = (int) $visitor->getMailSoftBounceCount();
-                $visitor->setMailSoftBounceCount($softBounceCount + 1);
+                $newSoftBounceCount = $softBounceCount + 1;
+                $visitor->setMailSoftBounceCount($newSoftBounceCount);
+                if ($newSoftBounceCount >= 6) {
+                    $visitor->setActive(0);
+                    $visitor->setInactiveStatusReason('Soft Bounce');
+                }
                 break;
             case 'hard_bounce':
                 $hardBounceCount = (int) $visitor->getMailHardBounceCount();
-                $visitor->setMailHardBounceCount($hardBounceCount + 1);
+                $newHardBounceCount = $hardBounceCount + 1;
+                $visitor->setMailHardBounceCount($newHardBounceCount);
+                if ($newHardBounceCount >= 3) {
+                    $visitor->setActive(0);
+                    $visitor->setInactiveStatusReason('Hard Bounce');
+                }
                 break;
             default:
                 throw new \Exception('Invalid Event');
