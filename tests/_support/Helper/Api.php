@@ -5,7 +5,7 @@ namespace Helper;
 
 class Api extends \Codeception\Module
 {
-    public function _before()
+    public function _before(\Codeception\TestCase $test)
     {
         $databaseHelper = new DatabaseHelper;
         $databaseHelper->siteDatabaseSetup();
