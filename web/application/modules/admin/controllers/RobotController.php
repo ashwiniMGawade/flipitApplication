@@ -18,8 +18,7 @@ class Admin_RobotController extends Zend_Controller_Action
         $this->view->action = $this->getRequest()->getParam('action');
         $sessionNamespace = new Zend_Session_Namespace();
 
-        if ($sessionNamespace->settings['rights']['administration']['rights'] != '1'
-            && $sessionNamespace->settings['rights']['administration']['rights'] !='2') {
+        if ($sessionNamespace->settings['rights']['administration']['rights'] != '1') {
             $flashMessenger = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate('You have no permission to access page');
             $flashMessenger->addMessage(array('error' => $message));

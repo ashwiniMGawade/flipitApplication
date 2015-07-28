@@ -45,7 +45,7 @@ class Admin_UserController extends Zend_Controller_Action
             break;
             default:
                  if( $sessionNamespace->settings['rights']['administration']['rights'] != '1' ) {
-                    $this->_redirect('/admin/auth/index');
+                    $this->_redirect('/admin');
                  }
 
         }
@@ -594,7 +594,6 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function edituserAction()
     {
-
      $id = intval($this->getRequest()->getParam('id'));
      $this->view->qstring = $_SERVER['QUERY_STRING'];
      $this->view->countriesLocales = \FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames();
@@ -648,10 +647,8 @@ class Admin_UserController extends Zend_Controller_Action
            // die();
             $role =  Zend_Auth::getInstance()->getIdentity()->users->id;
 
-            if (($role=='3'
-                || $role=='4')
+            if (($role=='3' || $role=='4')
                 || $role > $data['users']['id']
-                || $data['users']['id'] == '1'
                 || $u->id == $id
             ) {
 

@@ -11,3 +11,5 @@ coverage:
         - api/*
     exclude:
         - api/documentation/*
+        - api/App/Middleware/*
+        - api/logs/*

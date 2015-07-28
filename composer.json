@@ -10,6 +10,12 @@
         "doctrine/common": "2.4.2",
         "doctrine/orm": "2.4.2",
         "akrabat/rka-slim-controller": "^2.0",
+        "slim/extras": "*",
+        "slim/middleware": "*",
+        "monolog/monolog": "*",
+        "flynsarmy/slim-monolog": "*",
+        "nocarrier/hal": "^0.9.11",
+        "symfony/validator": "^2.7",
         "aws/aws-sdk-php": "^3.2"
     },
     "require-dev": {

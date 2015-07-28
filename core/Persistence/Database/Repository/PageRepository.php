@@ -7,10 +7,4 @@ use \Core\Domain\Entity\Page;
 
 class PageRepository extends BaseRepository implements PageRepositoryInterface
 {
-    protected $em;
-
-    public function __construct($em)
-    {
-        $this->em = $em;
-    }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Usecase\Admin;
 
+use \Core\Domain\Entity\Shop;
 use \Core\Domain\Usecase\Admin\GetShopUsecase;
 
 class GetShopsUsecaseTest extends \Codeception\TestCase\Test
@@ -10,21 +11,48 @@ class GetShopsUsecaseTest extends \Codeception\TestCase\Test
      */
     protected $tester;
 
-    public function testGetShopUsecase()
+    public function testGetShopUsecaseWithIdNotExist()
     {
-        $id = 2;
-        $shop = new GetShopUsecase($this->shopRepositoryMock());
-        $shop->execute($id);
+        $id = 0;
+        $shopRepositoryMock = $this->createShopRepositoryWithFindMethodMock($id, 0);
+        $shopUsecase = new GetShopUsecase($shopRepositoryMock);
+        $this->setExpectedException('Exception', 'Shop not found');
+        $shopUsecase->execute($id);
     }
 
-    private function shopRepositoryMock()
+    public function testGetShopUsecase()
     {
-        $pageRepositoryMock = $this
-            ->getMock('\Core\Domain\Repository\ShopRepositoryInterface');
-        $pageRepositoryMock
+        $id = 1;
+        $shop = new Shop();
+        $shop->__set('id', $id);
+        $shopRepositoryMock = $this->createShopRepositoryWithFindMethodMock($id, $shop);
+        $shopUsecase = new GetShopUsecase($shopRepositoryMock);
+        $shopUsecase->execute($id);
+    }
+
+    public function testGetShopUsecaseWithInvalidId()
+    {
+        $id = 'invalid';
+        $shopRepositoryMock = $this->createShopRepositoryMock();
+        $this->setExpectedException('Exception', 'Invalid shop Id');
+        $shopUsecase = new GetShopUsecase($shopRepositoryMock);
+        $shopUsecase->execute($id);
+    }
+
+    private function createShopRepositoryMock()
+    {
+        $shopRepository = $this->getMockBuilder('\Core\Domain\Repository\ShopRepositoryInterface')->getMock();
+        return $shopRepository;
+    }
+
+    private function createShopRepositoryWithFindMethodMock($id, $returns)
+    {
+        $shopRepositoryMock = $this->createShopRepositoryMock();
+        $shopRepositoryMock
             ->expects($this->once())
             ->method('find')
-            ->with($this->equalTo('\Core\Domain\Entity\Shop'), $this->equalTo(2));
-        return $pageRepositoryMock;
+            ->with($this->equalTo('\Core\Domain\Entity\Shop'), $this->equalTo($id))
+            ->willReturn($returns);
+        return $shopRepositoryMock;
     }
 }

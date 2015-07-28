@@ -36,22 +36,15 @@ class Admin_VisitorController extends Zend_Controller_Action
                     # no restriction
                     break;
                 default:
-                    if (
-                        $this->_settings['administration']['rights'] != '1'
-                        && $this->_settings['administration']['rights'] != '2'
-                    ) {
-
+                    if ($this->_settings['administration']['rights'] != '1') {
                         $this->getResponse()->setHttpResponseCode(404);
-                        $this->_helper->redirector('index', 'index', null) ;
+                        $this->_helper->redirector('index', 'index', null);
                     }
             }
 
         } else {
-            if (
-                $this->_settings['administration']['rights'] != '1'
-                && $this->_settings['administration']['rights'] != '2'
-            ) {
-                $this->_redirect('/admin/auth/index');
+            if ($this->_settings['administration']['rights'] != '1') {
+                $this->_redirect('/admin');
             }
         }
     }

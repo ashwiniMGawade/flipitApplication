@@ -6,6 +6,13 @@ use \Core\Domain\Repository\BaseRepositoryInterface;
 
 class BaseRepository implements BaseRepositoryInterface
 {
+    protected $em;
+
+    public function __construct($em)
+    {
+        $this->em = $em;
+    }
+
     public function findOneBy($entity, array $conditions)
     {
         return $this->em->getRepository($entity)->findOneBy($conditions);
@@ -24,5 +31,12 @@ class BaseRepository implements BaseRepositoryInterface
     public function findBy($entity, array $conditions)
     {
         return $this->em->getRepository($entity)->findBy($conditions);
+    }
+
+    public function save($entity)
+    {
+        $this->em->merge($entity);
+        $this->em->flush();
+        return $entity;
     }
 }
