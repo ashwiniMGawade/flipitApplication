@@ -1,5 +1,5 @@
 <?php
-class AddEmailDataColumnsVisitor extends Doctrine_Migration_Base
+class AddInactiveStatusReasonColumnVisitor extends Doctrine_Migration_Base
 {
     public function up()
     {
