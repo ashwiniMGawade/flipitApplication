@@ -1,7 +1,5 @@
 <?php
 
-use \ApiTester;
-
 class WelcomeCest
 {
     public function welcomeTest(ApiTester $I)
