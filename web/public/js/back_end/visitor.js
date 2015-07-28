@@ -9,7 +9,7 @@ $(document).ready(function() {
 	var iEmailText = $.bbq.getState( 'iEmailText' , true ) || undefined;
 	var iStart = $.bbq.getState( 'iStart' , true ) || 0;
 	var iSortCol = $.bbq.getState( 'iSortCol' , true ) || 1;
-	var iSortDir = $.bbq.getState( 'iSortDir' , true ) || 'ASC';
+	var iSortDir = $.bbq.getState( 'iSortDir' , true ) || 'DESC';
 	getVisitorList(iSearchText,iEmailText,iStart,iSortCol,iSortDir);
 	
 	
@@ -419,14 +419,42 @@ function getVisitorList(iSearchText,iEmailText,iStart,iSortCol,iSortDir) {
 							return "<a href='javascript:void(0);'>" + obj.aData.email + "</a>" ;
 						},
 						"bSortable" : true
-					}, 					{
+					},
+                    {
+						"fnRender" : function(obj) {
+							return "<a href='javascript:void(0);'>" + obj.aData.opens + "</a>" ;
+						},
+						"bSortable" : true
+					},
+                    {
+						"fnRender" : function(obj) {
+							return "<a href='javascript:void(0);'>" + obj.aData.clicks + "</a>" ;
+						},
+						"bSortable" : true
+					},
+                    {
+						"fnRender" : function(obj) {
+							return "<a href='javascript:void(0);'>" + obj.aData.hard_bounces + "</a>" ;
+						},
+						"bSortable" : true
+					},
+                    {
+						"fnRender" : function(obj) {
+							return "<a href='javascript:void(0);'>" + obj.aData.soft_bounces + "</a>" ;
+						},
+						"bSortable" : true
+					},
+                    {
 						"fnRender" : function(obj) {
 							if(obj.aData.active == true)
 							{
-								return "<a href='javascript:void(0);'>" + __("Yes") + "</a>" ;
+								return "<a href='javascript:void(0);'>" + __("Active") + "</a>" ;
 							}else{
-								
-								return "<a href='javascript:void(0);'>" + __("No") + "</a>" ;
+                                var inactiveStatusReason = '';
+								if(obj.aData.inactiveStatusReason !== null) {
+                                    inactiveStatusReason = "(" + obj.aData.inactiveStatusReason + ")";
+                                }
+								return "<a href='javascript:void(0);'>" + __("Inactive "+inactiveStatusReason+"") + "</a>" ;
 							}
 						},
 						"bSortable" : true
