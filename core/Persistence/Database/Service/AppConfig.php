@@ -85,6 +85,7 @@ class AppConfig
         $config = new \Zend_Config_Ini('../../web/application/configs/application.ini', $this->env);
 
         $applicationDsn = $config->doctrine->en->dsn;
+        $memcacheDsn = $config->resources->frontController->params->memcache;
         $splitDbName = explode('/', $applicationDsn);
         $splitDbUserName = explode(':', $splitDbName[2]);
         $splitDbPassword = explode('@', $splitDbUserName[1]);
@@ -104,7 +105,7 @@ class AppConfig
         return array(
             'connections' => array(
                 'isDevMode' => false,
-                'cacheParams' => 'localhost:11211',
+                'cacheParams' => $memcacheDsn,
                 'proxy_path' => null,
                 'path' => array('/../../../../../core/Domain/Entity', '/../../../../../core/Domain/Entity/User'),
                 'appMode'=> $this->env,
