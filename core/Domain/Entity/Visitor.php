@@ -207,6 +207,27 @@ class Visitor
     protected $mailSoftBounceCount;
 
     /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    protected $inactiveStatusReason;
+
+    /**
+     * @return mixed
+     */
+    public function getInactiveStatusReason()
+    {
+        return $this->inactiveStatusReason;
+    }
+
+    /**
+     * @param mixed $inactiveStatusReason
+     */
+    public function setInactiveStatusReason($inactiveStatusReason)
+    {
+        $this->inactiveStatusReason = $inactiveStatusReason;
+    }
+
+    /**
      * @return mixed
      */
     public function getActive()
