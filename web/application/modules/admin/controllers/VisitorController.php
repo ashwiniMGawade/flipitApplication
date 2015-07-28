@@ -105,15 +105,36 @@ class Admin_VisitorController extends Zend_Controller_Action
 
     public function getvisitorlistAction()
     {
-        //$params = $this->_getAllParams();
+        $flash = $this->_helper->getHelper('FlashMessenger');
 
-        $response = \Core\Domain\Factory\AdminFactory::getVisitors()->execute();
-        $response = \DataTable_Helper::createResponse($response);
-        print_r($response);
-        exit;
-        //$visitorList = \KC\Repository\Visitor::VisitorList($params);
+        $filter['searchtext'] =  FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('searchtext'));
+        $filter['email'] =  FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('email'));
 
-        echo Zend_Json::encode($response);
+        $sortColumns = array(
+                'id',
+                'firstName',
+                'lastName',
+                'email',
+                'active',
+                'weeklyNewsLetter',
+                'created_at'
+            );
+
+        $request['offset'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayStart')));
+        $request['limit'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayLength')));
+        $request['sortByColumn'] = $sortColumns[intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iSortCol_0')))];
+        $request['sortDirection'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sSortDir_0'));
+
+        $sEcho = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sEcho')));
+
+        try {
+            $visitorList = \Core\Domain\Factory\AdminFactory::getVisitors()->execute($filter, $request);
+            $response = \DataTable_Helper::createResponse($sEcho, $visitorList['visitors'], $visitorList['visitorCount']);
+            echo Zend_Json::encode($response);
+        } catch (Exception $exception) {
+            $message = $this->view->translate($exception->getMessage());
+            $flash->addMessage(array('error' => $message));
+        }
         die();
     }
 
