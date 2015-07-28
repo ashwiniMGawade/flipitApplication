@@ -262,7 +262,7 @@ class SiteFixturesHelper
             array(
                 'pagetype' => 'default',
                 'pagetitle' => 'page',
-                'permalink' => 'inschrijven',
+                'permalink' => 'inschrijventest',
                 'metatitle' => 'inschrijven',
                 'metadescription' => 'inschrijven',
                 'content' => '',

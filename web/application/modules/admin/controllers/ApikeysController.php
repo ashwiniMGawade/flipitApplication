@@ -14,7 +14,7 @@ class Admin_ApikeysController extends Zend_Controller_Action
         $this->view->action = $this->getRequest()->getParam('action');
         $sessionNamespace = new Zend_Session_Namespace();
         if ($sessionNamespace->settings['rights']['administration']['rights'] != '1') {
-            $this->_redirect('/admin/auth/index');
+            $this->_redirect('/admin');
         }
     }
 
