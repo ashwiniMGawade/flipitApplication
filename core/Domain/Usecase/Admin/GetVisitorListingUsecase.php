@@ -47,7 +47,12 @@ class GetVisitorListingUsecase
                     'email' => $visitor->email,
                     'weeklyNewsLetter' => $visitor->weeklyNewsLetter,
                     'created_at' => $visitor->created_at,
-                    'active' => $visitor->active
+                    'active' => $visitor->active,
+                    'inactiveStatusReason' => $visitor->inactiveStatusReason,
+                    'clicks' => $visitor->mailClickCount,
+                    'opens' => $visitor->mailOpenCount,
+                    'hard_bounces' => $visitor->mailHardBounceCount,
+                    'soft_bounces' => $visitor->mailSoftBounceCount
                 );
             }
         }
