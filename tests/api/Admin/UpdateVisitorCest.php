@@ -29,7 +29,7 @@ class UpdateVisitorCest
 
     public function testUpdateVisitorThrowsErrorWithEmptyEventParameter(ApiTester $I)
     {
-        $params = '[
+        $params =   '[
                       {
                       }
                     ]';
@@ -141,26 +141,34 @@ class UpdateVisitorCest
         $I->seeResponseContainsJson(array('msg' => 'Invalid Message or Message Parameters'));
     }
 
-//    public function testUpdateVisitorThrowsErrorWithEmailIsInvalid(ApiTester $I)
-//    {
-//        $I->haveInDatabasePDOSite(
-//            'visitors',
-//            $params
-//        );
-//
-//        $params = '[
-//                        {
-//                            "event" : "open",
-//                            "msg" : {
-//                                "email" : "test@example.com"
-//                            }
-//                        }
-//                    ]';
-//        $I->wantTo('Update Visitor');
-//        $I->haveHttpHeader('Content-Type', 'application/json');
-//        $I->sendPUT('/visitors', $params);
-//        $I->seeResponseCodeIs(200);
-//        $I->seeResponseIsJson();
-//        $I->seeResponseContainsJson(array('msg' => 'Invalid Message or Message Parameters'));
-//    }
+    public function testUpdateVisitorThrowsErrorWithValidParameters(ApiTester $I)
+    {
+        $I->haveInDatabasePDOSite(
+            'visitor',
+            array(
+                'id' => 1,
+                'email' => 'test@example.com',
+                'mailOpenCount' => 1,
+                'mailClickCount' => 1,
+                'mailSoftBounceCount' => 1,
+                'mailHardBounceCount' => 1
+            )
+        );
+
+        $params = '[
+                        {
+                            "event" : "open",
+                            "msg" : {
+                                "email" : "test@example.com"
+                            }
+                        }
+                    ]';
+
+        $I->wantTo('Update Visitor');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendPUT('/visitors', $params);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        //$I->seeResponseContainsJson(array('msg' => 'Invalid Message or Message Parameters'));
+    }
 }
