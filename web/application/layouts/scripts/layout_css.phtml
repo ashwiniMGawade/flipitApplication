@@ -6,6 +6,6 @@ if (APPLICATION_ENV == 'development') {
     echo $this->headLink(array("rel"=>"stylesheet/less", 'href'=>$lessCssPath.'ie.less'));  
 } else {
     echo $this->headLink()
-        ->prependStylesheet("/public/css/front_end/all.css");
+        ->prependStylesheet("/public/css/front_end/all.css")
         ->prependStylesheet("/public/css/front_end/font-awesome.min.css");
 }
