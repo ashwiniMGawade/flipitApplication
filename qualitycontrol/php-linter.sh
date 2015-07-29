@@ -4,7 +4,7 @@ for file in `find ./`
 do
     EXTENSION="${file##*.}"
 
-    if [ "$EXTENSION" == "php" ]
+    if [ "$EXTENSION" = "php" ]
     then
         echo $EXTENSION
         RESULTS=`php -l $file`
