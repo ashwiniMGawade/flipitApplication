@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for file in `find ./KC-PROD-BUILD/flipit_application/`
+for file in `find ./`
 do
     EXTENSION="${file##*.}"
 
