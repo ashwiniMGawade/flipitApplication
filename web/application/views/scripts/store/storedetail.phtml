@@ -125,8 +125,7 @@ if (!empty($this->currentStoreInformation[0]['moretextforshop'])) {
 $activeOffersInShop = "";
 if (!empty($offersCount)) {
     if (isset($offersCount) && $offersCount > 1) {
-        $activeOffersInShop = '<li><span class="icon active-people"></span>
-            <span class="text couponsCount">'.$offersCount
+        $activeOffersInShop = '<li><span class="text couponsCount"><i class="fa fa-check-circle fa-lg"></i>  '.$offersCount
             .' '
             .FrontEnd_Helper_viewHelper::__translate('current offers').'</span></li>';
     }
@@ -134,7 +133,7 @@ if (!empty($offersCount)) {
 
 $offersAdded = '';
 if (!empty($this->offersAddedInShop) && $this->offersAddedInShop['offersInfo'] != '') {
-    $offersAdded = '<li><span class="icon time"></span><span class="text couponUsed">'
+    $offersAdded = '<li><span class="text couponUsed"><i class="fa fa-clock-o fa-lg"></i>  '
         .FrontEnd_Helper_viewHelper::__translate('This '.$this->offersAddedInShop['type'])
         . ' '
         .$this->offersAddedInShop['offersInfo']['amountOffers']

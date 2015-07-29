@@ -20,12 +20,7 @@ $("input#searchFieldHeader").autocomplete({
     search: function(event, ui) {
         $('.ajax-autocomplete ul').empty();
     },
-    source :  function( request, response ) {
-        var matcher = new RegExp("(" + $.ui.autocomplete.escapeRegex(request.term) + ")", "ig");
-        response( $.grep( shopsJSON, function( item ){
-        return matcher.test( item.label );
-        }));
-    },
+    source: shopsJSON,
     select: function(event, ui ) {
         $('form').submit(function() {
             return false;
@@ -38,13 +33,13 @@ $("input#searchFieldHeader").autocomplete({
     },
     open: function(){
         $(this).autocomplete('widget').css('z-index', 15);
-    },
+    }
     }).data( "autocomplete" )._renderItem = function( ul, item, url ) {
         url = item.permalink;
         return $("<li class='wLi2'></li>").data("item.autocomplete", item).append(
             $("<a href=" + HOST_PATH_LOCALE + url + "></a>").html((__highlight(item.label,$("input#searchFieldHeader").val()))))
         .appendTo(ul);
-     };  
+     };
     $("a#searchbuttonHeader").click(function(){
         if ($("input#searchFieldHeader")
             .val() == $(
