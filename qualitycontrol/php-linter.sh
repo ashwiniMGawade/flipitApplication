@@ -13,7 +13,7 @@ do
         if [ "$RESULTS" != "No syntax errors detected in $file" ]
         then
             echo $RESULTS
-            EXITSTATUS=1
+            ((EXITSTATUS=1))
         fi
     fi
 done
