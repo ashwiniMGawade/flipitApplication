@@ -38,7 +38,9 @@ require_once realpath(APPLICATION_PATH . '/../../vendor/autoload.php');
 require_once 'Zend/Application.php';
 require_once 'PHPExcel/PHPExcel.php';
 
-require_once '../../c3.php';
+if (APPLICATION_ENV !== 'production') {
+    include '../../c3.php';
+}
 
 $requestUri = $_SERVER['REQUEST_URI'];
 if (preg_match('/admin/', $requestUri, $matches)) {
