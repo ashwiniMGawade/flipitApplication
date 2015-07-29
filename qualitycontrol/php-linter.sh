@@ -6,6 +6,7 @@ do
 
     if [ "$EXTENSION" == "php" ]
     then
+        echo $EXTENSION
         RESULTS=`php -l $file`
 
         if [ "$RESULTS" != "No syntax errors detected in $file" ]
