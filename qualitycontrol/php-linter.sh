@@ -17,5 +17,5 @@ do
         fi
     fi
 done
-echo $EXITSTATUS
+
 exit $EXITSTATUS
