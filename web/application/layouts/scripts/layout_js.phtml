@@ -31,4 +31,11 @@ endif;
         ->prependFile("/public/js/bootstrap.min.js")
         ->prependFile("/public/js/jquery-1.7.2.min.js")
         ->prependScript('var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";')
-        ->prependScript('var LOCALE = "'. LOCALE .'";');
+        ->prependScript('var LOCALE = "'. LOCALE .'";')
+        ->prependScript(
+            "function OpenInNewTab(url)
+            {
+                var windowObject=window.open(url, '_blank');
+                windowObject.focus();
+            }"
+        );
