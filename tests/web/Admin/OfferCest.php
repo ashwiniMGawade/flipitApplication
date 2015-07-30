@@ -26,37 +26,50 @@ class OfferCest
         $I->haveInDatabasePDOSite(
             'offer',
             array(
-                'title' => 'TEST OFFER',
+                'id' => '10',
+                'title' => 'My new Offer Code',
                 'visability' => 'DE',
                 'discounttype' => 'CD',
-                'couponcode' => 'TESTOFFER',
-                'startdate' => '2015-07-22 14:42:03',
-                'enddate' => '2015-07-22 14:42:03',
-                'discountvalueType' => '',
+                'couponcode' => 'OFFERCODE',
+                'startdate' => '2015-07-01 00:05:00',
+                'enddate' => '2015-07-08 23:59:00',
+                'exclusivecode' => '0',
+                'editorpicks' => '0',
+                'extendedoffer' => '0',
+                'extendedtitle' => '',
+                'extendedurl' => '',
+                'extendedmetadescription' => '',
+                'extendedfulldescription' => '',
+                'discount' => '0',
+                'discountvalueType' => '0',
                 'authorId' => '1',
+                'authorName' => 'Some Author',
                 'shopid' => '1',
+                'maxlimit' => '',
                 'maxcode' => '0',
                 'deleted' => '0',
-                'created_at' => '2015-07-22 14:42:03',
-                'updated_at' => '2015-07-22 14:42:03',
+                'created_at' => '2015-06-30 17:01:34',
+                'updated_at' => '2015-06-30 17:01:34',
                 'userGenerated' => '0',
                 'approved' => '0',
                 'offline' => '0',
-                'tilesId' => '1',
+                'tilesId' => '331',
                 'shopexist' => '1',
-                'couponcodetype' => 'GN'
+                'popularityCount' => '0',
+                'couponcodetype' => 'GN',
+                'extendedoffertitle' => ''
             )
         );
 
         $I->amOnPage('admin/offer');
-        $I->waitForText('TESTOFFER');
-        $I->click('TESTOFFER');
-        $I->see('Aanbieding aanpassen');
+        $I->waitForText('OFFERCODE');
+        $I->click('OFFERCODE');
+        $I->seeInCurrentUrl('admin/offer/editoffer/id/10');
         $I->click('.liimg');
         $I->click('#optionsOnbtn');
         $I->click('Exclusieve code');
         $I->click('#offerEndButtons button#updateOfferBtn');
-        $I->wait(10);
+        $I->seeInCurrentUrl('admin/offer');
         $I->see('De actie is succesvol aangepast!');
     }
 
