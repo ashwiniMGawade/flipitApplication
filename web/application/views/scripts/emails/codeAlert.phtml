@@ -11,8 +11,8 @@ if( isset($topOffer->exclusiveCode) && $topOffer->exclusiveCode == 1) {
     $exclusiveImage = $this->httpPath."public/images/star.png";         
 }
 $utmParameters = $this->mailType != 'welcome'
-    ? '?popup='.$topOffer->id.'&utm_source=transactional&utm_medium=email&utm_campaign='
-    .$codeAlertSubject.'&type=code#'.$topOffer->id : '?popup='.$topOffer->id.'&type=code#'.$topOffer->id;
+    ? '?utm_source=transactional&utm_medium=email&utm_campaign='
+    .$codeAlertSubject.'&type=code#'.$topOffer->id : '?type=code#'.$topOffer->id;
 ?>
 <tr>
     <td bgcolor="#ffffff">
