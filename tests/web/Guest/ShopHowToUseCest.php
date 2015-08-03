@@ -4,9 +4,9 @@ use \WebTester;
 
 class ShopHowToUseCest
 {
-    public function testCheckHowToUsePageWithoutEnablingIt(WebTester $I, \Codeception\Scenario $scenario)
+    public function testAccessingHowToPageOfAShopGivesA404ErrorWhenItIsNotEnabled(WebTester $I, \Codeception\Scenario $scenario)
     {
-        $I->wantTo('Check how to use page for a shop without enabling it');
+        $I->wantTo('Test Accessing How To Page of a shop gives a 404 error when It is not enabled.');
 
         $I->haveInDatabasePDOSite(
             'shop',
