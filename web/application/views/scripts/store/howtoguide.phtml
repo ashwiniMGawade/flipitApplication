@@ -61,16 +61,6 @@ echo $headerBlock;
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4">
     <?php
-    echo $this->partial(
-            $storeViewPartialPath. '_shop-sidebar.phtml',
-            array(
-                'shopEditor' => '',
-                'latestShopUpdates'=> array(),
-                'shopChain' => $this->shopChain,
-                'shop' => $this->currentStoreInformation[0],
-                'popularStoresList'=> $this->popularStoresList
-            )
-        );
     if ($this->currentStoreInformation[0]['showSignupOption']) :
         $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
         echo $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
@@ -79,6 +69,7 @@ echo $headerBlock;
     $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
     echo $frontendSidebarHelper->popularCategoryWidget();
     echo $this->partial('socialcode/social-code.phtml', array('zendForm' => $this->zendForm));
+    echo $frontendSidebarHelper->PopularShopWidget();
     ?>
     </aside>
 </div>
