@@ -10,38 +10,48 @@ class VisitorsController extends ApiBaseController
         $response = array();
         $params = json_decode($this->app->request->getBody(), true);
         if (!is_array($params) || empty($params)) {
+            $this->app->response->setStatus(405);
             echo json_encode(array('msg'=>'Invalid Parameters.'));
-            exit;
+            return;
         }
 
         foreach ($params as $mandrillData) {
             if (!isset($mandrillData['event']) || empty($mandrillData['event'])) {
+                $this->app->response->setStatus(405);
                 echo json_encode(array('msg'=>'Event Required'));
-                exit;
+                return;
             }
             if (!isset($mandrillData['msg']) || empty($mandrillData['msg'])) {
+                $this->app->response->setStatus(405);
                 echo json_encode(array('msg'=>'Message Required'));
-                exit;
+                return;
             }
             if (!$processedEventMessage = $this->processEventMessage($mandrillData['msg'])) {
+                $this->app->response->setStatus(405);
                 echo json_encode(array('msg'=>'Invalid Message or Message Parameters'));
-                exit;
+                return;
             }
 
             $parameter = array(
                 'email' => $processedEventMessage['email'],
                 'event' => $mandrillData['event']
             );
-            $visitor = AdminFactory::updateVisitors()->execute($parameter);
-            $response[$visitor->getEmail()] = array(
-                'open' => $visitor->getMailOpenCount(),
-                'click' => $visitor->getMailClickCount(),
-                'soft_bounce' => $visitor->getMailSoftBounceCount(),
-                'hard_bounce' => $visitor->getMailHardBounceCount()
-            );
+            try {
+                $visitor = AdminFactory::updateVisitors()->execute($parameter);
+                $response[$visitor->getEmail()] = array(
+                    'open' => $visitor->getMailOpenCount(),
+                    'click' => $visitor->getMailClickCount(),
+                    'soft_bounce' => $visitor->getMailSoftBounceCount(),
+                    'hard_bounce' => $visitor->getMailHardBounceCount()
+                );
+            } catch (\Exception $e) {
+                $this->app->response->setStatus(405);
+                echo json_encode(array('msg'=>$e->getMessage()));
+                return;
+            }
         }
         echo json_encode($response);
-        exit;
+        return;
     }
 
     private function processEventMessage($eventMessage)
