@@ -375,7 +375,6 @@ class StoreController extends Zend_Controller_Action
         $this->view->offers = $offers;
         $this->view->currentStoreInformation = $shopInformation;
         $frontEndViewHelper = new \FrontEnd_Helper_SidebarWidgetFunctions();
-        $this->view->popularStoresList = $frontEndViewHelper->PopularShopWidget();
         $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->howToGuides = $howToGuides;
         $shopName = isset($shopInformation[0]['name']) ? $shopInformation[0]['name'] : '';
