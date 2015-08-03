@@ -116,6 +116,39 @@ class UpdateVisitorCest
         $this->runTest($I, $params, $expectedResult, $status);
     }
 
+    public function testUpdateVisitorThrowsErrorWithEmailDoesNotExist(ApiTester $I)
+    {
+        $params = '[
+                        {
+                            "event" : "open",
+                            "msg" : {
+                                "email" : "test@example.com"
+                            }
+                        }
+                    ]';
+
+        $expectedResult = array('msg' => 'Invalid Email');
+        $status = 405;
+        $this->runTest($I, $params, $expectedResult, $status);
+    }
+
+    public function testUpdateVisitorThrowsErrorWithEventIsInvalid(ApiTester $I)
+    {
+        $this->seedVisitorsTable($I);
+        $params = '[
+                        {
+                            "event" : "invalid-event",
+                            "msg" : {
+                                "email" : "test@example.com"
+                            }
+                        }
+                    ]';
+
+        $expectedResult = array('msg' => 'Invalid Event');
+        $status = 405;
+        $this->runTest($I, $params, $expectedResult, $status);
+    }
+
     public function testUsecaseUpdatesTheEmailOpenCountWhenEventEqualsOpen(ApiTester $I)
     {
         $this->seedVisitorsTable($I);
