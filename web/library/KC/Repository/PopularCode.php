@@ -187,13 +187,6 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         $flag = '0';
 
         if (sizeof($offer) > 0) {
-            $queryBuilderOffer = \Zend_Registry::get('emLocale')
-                ->createQueryBuilder()
-                ->update('\Core\Domain\Entity\Offer', 'o')
-                ->set('o.editorPicks', '1')
-                ->where('o.id = '.$id)
-                ->getQuery()
-                ->execute();
 
             //check offer exist or not
             $queryBuilderPopularCode = \Zend_Registry::get('emLocale')->createQueryBuilder();
