@@ -33,9 +33,10 @@ class Admin_ApikeysController extends Zend_Controller_Action
 
     public function getAction()
     {
+        $sEcho = 1;
         $apiKeys = AdminFactory::getApiKeys()->execute();
         $apiKeys = $this->prepareData($apiKeys);
-        $response = \DataTable_Helper::createResponse($apiKeys);
+        $response = \DataTable_Helper::createResponse($sEcho, $apiKeys, count($apiKeys));
         echo Zend_Json::encode($response);
         exit;
     }
