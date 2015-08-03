@@ -115,6 +115,10 @@ class Admin_VisitorController extends Zend_Controller_Action
                 'firstName',
                 'lastName',
                 'email',
+                'mailClickCount',
+                'mailOpenCount',
+                'mailHardBounceCount',
+                'mailSoftBounceCount',
                 'active',
                 'weeklyNewsLetter',
                 'created_at'

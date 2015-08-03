@@ -422,25 +422,29 @@ function getVisitorList(iSearchText,iEmailText,iStart,iSortCol,iSortDir) {
 					},
                     {
 						"fnRender" : function(obj) {
-							return "<a href='javascript:void(0);'>" + obj.aData.opens + "</a>" ;
+                            var opens = (obj.aData.opens) ? obj.aData.opens : 0;
+							return "<a href='javascript:void(0);'>" + opens + "</a>" ;
 						},
 						"bSortable" : true
 					},
                     {
 						"fnRender" : function(obj) {
-							return "<a href='javascript:void(0);'>" + obj.aData.clicks + "</a>" ;
+                            var clicks = (obj.aData.clicks) ? obj.aData.clicks : 0;
+							return "<a href='javascript:void(0);'>" + clicks + "</a>" ;
 						},
 						"bSortable" : true
 					},
                     {
 						"fnRender" : function(obj) {
-							return "<a href='javascript:void(0);'>" + obj.aData.hard_bounces + "</a>" ;
+                            var hard_bounces = (obj.aData.hard_bounces) ? obj.aData.hard_bounces : 0;
+							return "<a href='javascript:void(0);'>" + hard_bounces + "</a>" ;
 						},
 						"bSortable" : true
 					},
                     {
 						"fnRender" : function(obj) {
-							return "<a href='javascript:void(0);'>" + obj.aData.soft_bounces + "</a>" ;
+                            var soft_bounces = (obj.aData.soft_bounces) ? obj.aData.soft_bounces : 0;
+							return "<a href='javascript:void(0);'>" + soft_bounces + "</a>" ;
 						},
 						"bSortable" : true
 					},
