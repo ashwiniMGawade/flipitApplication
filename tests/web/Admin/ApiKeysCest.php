@@ -8,9 +8,11 @@ class ApiKeysCest
     public function apiKeyListingTest(WebTester $I, \Codeception\Scenario $scenario)
     {
         $I = new WebTester\AdminSteps($scenario);
+        $this->seedApiKeysTable($I, 'zgzjK*y3^rSdh@!do1r&%f^so4@UMyXb');
         $I->login();
         $I->click('API Keys');
         $I->seeInTitle('API Key Listing');
+        $I->waitForText('zgzjK*y3^rSdh@!do1r&%f^so4@UMyXb');
     }
 
     public function createApiKeyTest(WebTester $I, \Codeception\Scenario $scenario)
@@ -19,12 +21,33 @@ class ApiKeysCest
         $I->login();
         $I->amOnPage('/admin/apikeys');
         $I->click('Add new API Key');
-        $I->wait(3);
-        $I->see('Api Key has been successfully added');
+        $I->waitForText('Api Key has been successfully added');
+    }
+
+    public function deleteApiKeyTest(WebTester $I, \Codeception\Scenario $scenario)
+    {
+        $I = new WebTester\AdminSteps($scenario);
+        $I->login();
+        $this->seedApiKeysTable($I, 'zgzjK*y3^rSdh@!do1r&%f^so4@UMyXb');
+        $I->amOnPage('/admin/apikeys');
+        $I->waitForText('zgzjK*y3^rSdh@!do1r&%f^so4@UMyXb');
         $I->click('Delete');
-        $I->wait(1);
+        $I->waitForText('Are you sure you want to delete this Api Key?');
         $I->click('Yes');
-        $I->wait(3);
-        $I->see('Api Key has been deleted successfully');
+        $I->waitForText('Api Key has been deleted successfully');
+    }
+
+    private function seedApiKeysTable($I, $apiKey)
+    {
+        $createdTime = date('Y-m-d H:i:s');
+        $I->haveInDatabasePDOUser(
+            'api_keys',
+            array(
+                'user_id' => 354,
+                'api_key' => $apiKey,
+                'deleted' => 0,
+                'created_at' => $createdTime
+            )
+        );
     }
 }

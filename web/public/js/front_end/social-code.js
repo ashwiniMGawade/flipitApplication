@@ -34,12 +34,7 @@ $(document).bind('ready ajaxStop', function() {
             search: function(event, ui) {
                 $('.ajax-autocomplete ul').empty();
             },
-            source :  function(request, response) {
-                var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex(request.term), "i");
-                response($.grep(shopsJSON, function(item) {
-                    return matcher.test(item.label);
-                }));
-            },
+            source: shopsJSON,
             focus: function(event, ui) {
                 $('li.wLi2').removeClass('select');
                 $('a#ui-active-menuitem').parents('li').addClass('select');

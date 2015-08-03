@@ -29,7 +29,8 @@ class UpdateShopCest
         $I->sendPUT('/shops/1', json_encode($params));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(array('name' => 'Mock'));
+        //$I->seeResponseContainsJson(array('name' => 'Mock'));
+        $I->seeResponseContainsJson(array('msg' => 'This operation is not permitted.'));
     }
 
     public function testUpdateShopWithInvalidParams(ApiTester $I)
@@ -40,9 +41,10 @@ class UpdateShopCest
         $I->wantTo('Update shop with invalid data');
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPUT('/shops/1', json_encode($params));
-        $I->seeResponseCodeIs(405);
+        //$I->seeResponseCodeIs(405);
         $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(array('name' => array('This value should not be blank.')));
+        //$I->seeResponseContainsJson(array('name' => array('This value should not be blank.')));
+        $I->seeResponseContainsJson(array('msg' => 'This operation is not permitted.'));
     }
 
     public function testUpdateShopWithInvalidContentType(ApiTester $I)

@@ -45,7 +45,7 @@ class Admin_UserController extends Zend_Controller_Action
             break;
             default:
                  if( $sessionNamespace->settings['rights']['administration']['rights'] != '1' ) {
-                    $this->_redirect('/admin/auth/index');
+                    $this->_redirect('/admin');
                  }
 
         }

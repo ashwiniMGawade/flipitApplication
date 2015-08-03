@@ -16,7 +16,9 @@ class SignupCest
     {
         $I->wantTo('Signup in this site');
         $this->stepsToSignup($I);
-        $I->canSee('By creating this account you will subcribe to the Flipit newsletter. When you log into your account you can manage the newsletter options and code alerts for specific shops');
+        $I->canSee('By creating this account you will subscribe to the Flipit newsletter');
+        $I->seeLink('privacy policy');
+        $I->seeLink('voorwaarden');
     }
 
     protected function stepsToSignup($I)
