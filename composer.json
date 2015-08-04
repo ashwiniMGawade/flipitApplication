@@ -16,7 +16,8 @@
         "flynsarmy/slim-monolog": "*",
         "nocarrier/hal": "^0.9.11",
         "symfony/validator": "^2.7",
-        "aws/aws-sdk-php": "^3.2"
+        "aws/aws-sdk-php": "^3.2",
+        "mandrill/mandrill": "1.0.*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "2.0.*@dev",

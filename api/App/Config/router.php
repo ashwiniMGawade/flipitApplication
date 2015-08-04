@@ -9,6 +9,13 @@ $app->group(
     }
 );
 
+$app->group(
+    '/visitors',
+    function () use ($app) {
+        $app->map('/', 'Api\Controller\VisitorsController:updateVisitor')->via('PUT', 'PATCH');
+    }
+);
+
 $app->get(
     '/',
     function () {

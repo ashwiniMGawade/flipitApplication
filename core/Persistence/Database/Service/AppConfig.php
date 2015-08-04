@@ -8,6 +8,7 @@ class AppConfig
     public function __construct()
     {
         $this->env = defined('APPLICATION_ENV') ? APPLICATION_ENV : 'production';
+        $this->locale = isset($_COOKIE['locale']) ? $_COOKIE['locale'] : '';
     }
 
     public function getConfigs()
