@@ -12,7 +12,7 @@ class VisitorInactiveCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('visitor:inactive')
+            ->setName('email:inactivateVisitors')
             ->setDescription('Inactivate the Visitors that have not opened the newsletters in the past 3 months');
     }
 
