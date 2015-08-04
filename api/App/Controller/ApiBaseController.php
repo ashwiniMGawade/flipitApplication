@@ -1,5 +1,6 @@
 <?php
 namespace Api\Controller;
+use \Core\Domain\Service\Purifier;
 
 class ApiBaseController
 {
@@ -28,5 +29,11 @@ class ApiBaseController
     public function setResponse($response)
     {
         $this->response = $response;
+    }
+
+    protected function sanitize($params)
+    {
+        $purifier = new Purifier();
+        return $purifier->purify($params);
     }
 }
