@@ -1,6 +1,8 @@
 <?php
 namespace Core\Domain\Usecase\System;
 
+use Core\Domain\Repository\VisitorRepositoryInterface;
+
 class SleepingInactiveVisitorsUsecase
 {
 
@@ -11,6 +13,11 @@ class SleepingInactiveVisitorsUsecase
 
     public function execute()
     {
-
+        $visitorData = $this->visitorRepository->deactivate(
+            array(
+                'deleted' => 0,
+                'lastEmailOpenDate' => strtotime('-3 months')
+            )
+        );
     }
 }

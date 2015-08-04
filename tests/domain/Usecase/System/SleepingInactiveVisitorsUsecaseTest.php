@@ -1,7 +1,7 @@
 <?php
 namespace Usecase\System;
 
-use Core\Domain\Usecase\System\SleepingInactiveUsersUsecase;
+use Core\Domain\Usecase\System\SleepingInactiveVisitorsUsecase;
 
 class SleepingInactiveVisitorsUsecaseTest extends \Codeception\TestCase\Test
 {
@@ -10,8 +10,22 @@ class SleepingInactiveVisitorsUsecaseTest extends \Codeception\TestCase\Test
      */
     protected $tester;
 
-    public function testSleepingInactiveUsersUsecase()
+    public function testSleepingInactiveVisitorsUsecase()
     {
-        (new SleepingInactiveUsersUsecase())->execute();
+        (new SleepingInactiveVisitorsUsecase($this->createVisitorRepositoryInterfaceWithUpdateVisitorsMethodMock()))->execute();
+    }
+
+    private function createVisitorRepositoryInterfaceMock()
+    {
+        return $this->getMock('\Core\Domain\Repository\VisitorRepositoryInterface');
+    }
+
+    private function createVisitorRepositoryInterfaceWithUpdateVisitorsMethodMock()
+    {
+        $visitorRepository = $this->createVisitorRepositoryInterfaceMock();
+        $visitorRepository->expects($this->once())
+            ->method('deactivate')
+            ->with($this->isType('array'));
+        return $visitorRepository;
     }
 }
