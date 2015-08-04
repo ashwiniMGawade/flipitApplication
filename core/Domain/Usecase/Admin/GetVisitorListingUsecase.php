@@ -41,18 +41,18 @@ class GetVisitorListingUsecase
         if (!empty($visitors)) {
             foreach ($visitors as $visitor) {
                 $returnData[] = array(
-                    'id' => $visitor->id,
-                    'firstName' => $visitor->firstName,
-                    'lastName' => $visitor->lastName,
-                    'email' => $visitor->email,
-                    'weeklyNewsLetter' => $visitor->weeklyNewsLetter,
-                    'created_at' => $visitor->created_at,
-                    'active' => $visitor->active,
-                    'inactiveStatusReason' => $visitor->inactiveStatusReason,
-                    'clicks' => $visitor->mailClickCount,
-                    'opens' => $visitor->mailOpenCount,
-                    'hard_bounces' => $visitor->mailHardBounceCount,
-                    'soft_bounces' => $visitor->mailSoftBounceCount
+                    'id' => $visitor->getId(),
+                    'firstName' => $visitor->getFirstName(),
+                    'lastName' => $visitor->getLastName(),
+                    'email' => $visitor->getEmail(),
+                    'weeklyNewsLetter' => $visitor->getWeeklyNewsLetter(),
+                    'created_at' => $visitor->getCreatedAt(),
+                    'active' => $visitor->getActive(),
+                    'inactiveStatusReason' => $visitor->getInactiveStatusReason(),
+                    'clicks' => $visitor->getMailClickCount(),
+                    'opens' => $visitor->getMailOpenCount(),
+                    'hard_bounces' => $visitor->getMailHardBounceCount(),
+                    'soft_bounces' => $visitor->getMailSoftBounceCount()
                 );
             }
         }
