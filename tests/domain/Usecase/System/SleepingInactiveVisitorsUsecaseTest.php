@@ -3,7 +3,7 @@ namespace Usecase\System;
 
 use Core\Domain\Usecase\System\SleepingInactiveUsersUsecase;
 
-class SleepingInactiveUsersUsecaseTest extends \Codeception\TestCase\Test
+class SleepingInactiveVisitorsUsecaseTest extends \Codeception\TestCase\Test
 {
     /**
      * @var \DomainTester
