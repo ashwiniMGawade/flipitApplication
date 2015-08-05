@@ -33,7 +33,6 @@ class VisitorValidator
                 $this->validator->type(array('type' => 'integer'))
             ),
             'inactiveStatusReason' => array(
-                $this->validator->notNull(),
                 $this->validator->type(array('type' => 'string'))
             ),
             'active' => array(

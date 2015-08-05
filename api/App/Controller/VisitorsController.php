@@ -39,12 +39,12 @@ class VisitorsController extends ApiBaseController
 
             if ($mandrillData['event'] === 'open' && isset($processedEventMessage['opens'])) {
                 foreach ($processedEventMessage['opens'] as $opens) {
-                    if (!isset($opens['ts'])) {
+                    if (!isset($opens['ts']) || !is_numeric($opens['ts'])) {
                         $this->app->response->setStatus(405);
                         echo json_encode(array('msg'=>'Invalid Opens Timestamp'));
                         return;
                     }
-                    $parameter['opensTimestamp'] = $opens['ts'];
+                    $parameter['opensTimestamp'] = (int) $opens['ts'];
                 }
             }
 

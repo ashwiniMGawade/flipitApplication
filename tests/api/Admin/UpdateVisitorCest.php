@@ -315,7 +315,7 @@ class UpdateVisitorCest
                                 "email" : "test@example.com",
                                 "opens": [
                                     {
-                                        "ts":1430805793
+                                        "ts": "1430805793"
                                     }
                                 ]
                             }
