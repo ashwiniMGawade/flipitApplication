@@ -53,27 +53,56 @@
         "visitor":{
             "type":"object",
             "required":[
-                "event"
+                "event",
+                "msg"
             ],
             "properties":{
                 "event":{
                     "type":"string",
-                    "example":"open"
+                    "example":"open",
+                    "description": "Mandrill Event Type",
+                    "enum": [
+                        "open",
+                        "click",
+                        "soft_bounce",
+                        "hard_bounce"
+                    ]
                 },
-                "msg":{
-                    "type":"object",
-                    "required":[
-                        "email"
-                    ],
-                    "properties": {
-                        "email": {
-                            "type": "string",
-                            "example": "test@example.com"
-                        },
-                        "state": {
-                            "type": "string"
-                        }
-                    }
+                "msg": {
+                    "$ref": "#/definitions/msg"
+                }
+            }
+        },
+        "msg" : {
+            "type":"object",
+            "required":[
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "test@example.com"
+                },
+                "opens": {
+                    "$ref": "#/definitions/opens"
+                }
+            }
+        },
+        "opens" : {
+            "type":"array",
+            "items": {
+                "$ref": "#/definitions/ts"
+            }
+        },
+        "ts": {
+            "type":"object",
+            "required":[
+                "ts"
+            ],
+            "properties": {
+                "ts": {
+                    "type":"integer",
+                    "example":"1365111111"
                 }
             }
         }
