@@ -212,6 +212,27 @@ class Visitor
     protected $inactiveStatusReason;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    protected $lastEmailOpenDate;
+
+    /**
+     * @return mixed
+     */
+    public function getLastEmailOpenDate()
+    {
+        return $this->lastEmailOpenDate;
+    }
+
+    /**
+     * @param mixed $lastEmailOpenDate
+     */
+    public function setLastEmailOpenDate($lastEmailOpenDate)
+    {
+        $this->lastEmailOpenDate = $lastEmailOpenDate;
+    }
+
+    /**
      * @return mixed
      */
     public function getInactiveStatusReason()
