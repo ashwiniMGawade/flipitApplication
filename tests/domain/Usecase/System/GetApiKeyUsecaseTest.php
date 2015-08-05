@@ -8,7 +8,7 @@ class GetApiKeyUsecaseTest extends \Codeception\TestCase\Test
 {
     public function testGetApiKeyUsecaseWithKeyNotExist()
     {
-        $apiKeyRepositoryMock = $this->createApiKeyRepositoryWithFindOneByMethodMock(array('api_key'=>'ddfvfgfgf'),0);
+        $apiKeyRepositoryMock = $this->createApiKeyRepositoryWithFindOneByMethodMock(array('api_key'=>'ddfvfgfgf'), 0);
         $apiKeyUsecase = new GetApiKeyUsecase($apiKeyRepositoryMock);
         $apiKeyUsecase->execute('ddfvfgfgf');
     }
@@ -18,7 +18,7 @@ class GetApiKeyUsecaseTest extends \Codeception\TestCase\Test
         $key = 'qa!w0%ngK7r#AZxanmXKh1XAv&oUDHh$';
         $apiKey = new ApiKey();
         $apiKey->setApiKey($key);
-        $apiKeyRepositoryMock = $this->createApiKeyRepositoryWithFindOneByMethodMock(array('api_key'=>$key),$apiKey);
+        $apiKeyRepositoryMock = $this->createApiKeyRepositoryWithFindOneByMethodMock(array('api_key'=>$key), $apiKey);
         $apiKeyUsecase = new GetApiKeyUsecase($apiKeyRepositoryMock);
         $apiKeyUsecase->execute($key);
     }
@@ -28,7 +28,7 @@ class GetApiKeyUsecaseTest extends \Codeception\TestCase\Test
         $apiKeyRepositoryMock = $this->createApiKeyRepositoryMock();
         $apiKeyUsecase = new GetApiKeyUsecase($apiKeyRepositoryMock);
         $this->setExpectedException('Exception', 'Invalid API key');
-        $apiKeyUsecase->execute(NULL);
+        $apiKeyUsecase->execute(null);
     }
 
     private function createApiKeyRepositoryMock()

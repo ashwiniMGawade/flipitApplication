@@ -1,5 +1,6 @@
 <?php
 namespace System;
+
 use \ApiTester;
 
 class AuthenticationCest

@@ -36,8 +36,8 @@ class ApiBaseController
     public function authenticate()
     {
         $apiKey = $this->request->params('api_key');
-        if(strlen($apiKey)<1) {
-           $this->app->halt(401, json_encode(array('message'=>'API key is required.')));
+        if (strlen($apiKey)<1) {
+            $this->app->halt(401, json_encode(array('message'=>'API key is required.')));
         }
 
         $apiKey = SystemFactory::getApiKey()->execute($apiKey);
