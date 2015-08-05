@@ -43,4 +43,24 @@ class VisitorRepository extends BaseRepository implements VisitorRepositoryInter
         $results['visitorCount'] = count($paginator);
         return  $results;
     }
+
+    public function deactivate($filters)
+    {
+        $currentTime = date('Y-m-d H:i:s');
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder
+            ->update($this->entity, 'v')
+            ->set('v.active', 0)
+            ->set('v.updated_at', "'$currentTime'")
+            ->where('v.active = 1')
+            ->andWhere('v.deleted = 0');
+
+        if (isset($filters['lastEmailOpenDate']) && !empty($filters['lastEmailOpenDate'])) {
+            $fieldValue = $filters['lastEmailOpenDate'];
+            $queryBuilder->andWhere("v.lastEmailOpenDate < '$fieldValue'");
+        }
+        $query = $queryBuilder->getQuery();
+        $response = $query->execute();
+        return $response;
+    }
 }
