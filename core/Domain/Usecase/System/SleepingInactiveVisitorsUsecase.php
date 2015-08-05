@@ -12,7 +12,7 @@ class SleepingInactiveVisitorsUsecase
 
     public function execute()
     {
-        $noOfInactivatedVisitors = $this->visitorRepository->deactivate(
+        $noOfInactivatedVisitors = $this->visitorRepository->deactivateSleeper(
             array(
                 'lastEmailOpenDate' => strtotime('-3 months')
             )

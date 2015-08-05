@@ -21,7 +21,7 @@ class SleepingInactiveVisitorsUsecaseTest extends \Codeception\TestCase\Test
     {
         $visitorRepository = $this->getMock('\Core\Domain\Repository\VisitorRepositoryInterface');
         $visitorRepository->expects($this->once())
-            ->method('deactivate')
+            ->method('deactivateSleeper')
             ->with($this->isType('array'))
             ->willReturn(20);
         return $visitorRepository;

@@ -44,14 +44,16 @@ class VisitorRepository extends BaseRepository implements VisitorRepositoryInter
         return  $results;
     }
 
-    public function deactivate($filters)
+    public function deactivateSleeper($filters)
     {
         $currentTime = date('Y-m-d H:i:s');
+        $inactiveStateReason = 'Sleeper';
         $queryBuilder = $this->em->createQueryBuilder();
         $queryBuilder
             ->update($this->entity, 'v')
             ->set('v.active', 0)
             ->set('v.updated_at', "'$currentTime'")
+            ->set('v.inactiveStatusReason', "'$inactiveStateReason'")
             ->where('v.active = 1')
             ->andWhere('v.deleted = 0');
 
