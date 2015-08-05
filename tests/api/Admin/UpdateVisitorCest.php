@@ -120,7 +120,7 @@ class UpdateVisitorCest
     {
         $params = '[
                         {
-                            "event" : "open",
+                            "event" : "click",
                             "msg" : {
                                 "email" : "test@example.com"
                             }
@@ -146,30 +146,6 @@ class UpdateVisitorCest
 
         $expectedResult = array('msg' => 'Invalid Event');
         $status = 405;
-        $this->runTest($I, $params, $expectedResult, $status);
-    }
-
-    public function testUsecaseUpdatesTheEmailOpenCountWhenEventEqualsOpen(ApiTester $I)
-    {
-        $this->seedVisitorsTable($I);
-        $params = '[
-                        {
-                            "event" : "open",
-                            "msg" : {
-                                "email" : "test@example.com"
-                            }
-                        }
-                    ]';
-        $expectedResult = array (
-            'test@example.com' =>
-            array (
-                'open' => 2,
-                'click' => 1,
-                'soft_bounce' => 1,
-                'hard_bounce' => 1,
-            ),
-        );
-        $status = 200;
         $this->runTest($I, $params, $expectedResult, $status);
     }
 
@@ -239,6 +215,119 @@ class UpdateVisitorCest
                     'click' => 1,
                     'soft_bounce' => 1,
                     'hard_bounce' => 2,
+                ),
+        );
+        $status = 200;
+        $this->runTest($I, $params, $expectedResult, $status);
+    }
+
+    public function testUsecaseThrowsErrorWhenOpensIsNotArray(ApiTester $I)
+    {
+        $this->seedVisitorsTable($I);
+        $params = '[
+                        {
+                            "event" : "open",
+                            "msg" : {
+                                "email" : "test@example.com",
+                                "opens": "NOT_ARRAY"
+                            }
+                        }
+                    ]';
+        $expectedResult = array (
+            'msg' => 'Invalid Message or Message Parameters'
+        );
+        $status = 405;
+        $this->runTest($I, $params, $expectedResult, $status);
+    }
+
+    public function testUsecaseThrowsErrorWhenOpensIsEmpty(ApiTester $I)
+    {
+        $this->seedVisitorsTable($I);
+        $params = '[
+                        {
+                            "event" : "open",
+                            "msg" : {
+                                "email" : "test@example.com",
+                                "opens": []
+                            }
+                        }
+                    ]';
+        $expectedResult = array (
+            'msg' => 'Invalid Message or Message Parameters'
+        );
+        $status = 405;
+        $this->runTest($I, $params, $expectedResult, $status);
+    }
+
+    public function testUsecaseThrowsErrorWhenOpensDoesNotContainTimestamp(ApiTester $I)
+    {
+        $this->seedVisitorsTable($I);
+        $params = '[
+                        {
+                            "event" : "open",
+                            "msg" : {
+                                "email" : "test@example.com",
+                                "opens": [
+                                    {
+                                        "something":"invalid"
+                                    }
+                                ]
+                            }
+                        }
+                    ]';
+        $expectedResult = array (
+            'msg' => 'Invalid Opens Timestamp'
+        );
+        $status = 405;
+        $this->runTest($I, $params, $expectedResult, $status);
+    }
+
+    public function testUsecaseThrowsErrorWhenOpensTimestampIsNotAnInteger(ApiTester $I)
+    {
+        $this->seedVisitorsTable($I);
+        $params = '[
+                        {
+                            "event" : "open",
+                            "msg" : {
+                                "email" : "test@example.com",
+                                "opens": [
+                                    {
+                                        "ts":"NOT_AN_INTEGER"
+                                    }
+                                ]
+                            }
+                        }
+                    ]';
+        $expectedResult = array (
+            'msg' => 'Invalid Opens Timestamp'
+        );
+        $status = 405;
+        $this->runTest($I, $params, $expectedResult, $status);
+    }
+
+    public function testUsecaseUpdatesTheEmailOpenCountWhenEventEqualsOpen(ApiTester $I)
+    {
+        $this->seedVisitorsTable($I);
+        $params = '[
+                        {
+                            "event" : "open",
+                            "msg" : {
+                                "email" : "test@example.com",
+                                "opens": [
+                                    {
+                                        "ts":1430805793
+                                    }
+                                ]
+                            }
+                        }
+                    ]';
+        $expectedResult = array (
+            'test@example.com' =>
+                array (
+                    'open' => 2,
+                    'click' => 1,
+                    'soft_bounce' => 1,
+                    'hard_bounce' => 1,
                 ),
         );
         $status = 200;
