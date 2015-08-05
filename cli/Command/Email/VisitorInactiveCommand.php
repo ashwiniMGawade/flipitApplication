@@ -1,6 +1,7 @@
 <?php
 namespace Command\Email;
 
+use Core\Domain\Factory\SystemFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,6 +19,8 @@ class VisitorInactiveCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Helloo');
+        define('APPLICATION_ENV', 'development');
+        $noOfInactivatedVisitors = SystemFactory::sleepInactiveVisitors()->execute();
+        $output->writeln('Inactivated '. $noOfInactivatedVisitors .' Visitors.');
     }
 }
