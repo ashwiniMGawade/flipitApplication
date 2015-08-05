@@ -237,7 +237,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
         return true;
     }
 
-    public static function getFavoriteShops($visitorId)
+    public static function getShopsFavorite($visitorId)
     {
         $currentDate = date('Y-m-d 00:00:00');
         $entityManagerLocale = \Zend_Registry::get('emLocale');

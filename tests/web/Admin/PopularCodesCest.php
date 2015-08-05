@@ -3,36 +3,31 @@ namespace Admin;
 
 use \WebTester;
 
-class OfferCest
+class PopularCodesCest
 {
     public function _before(WebTester $I, \Codeception\Scenario $scenario)
     {
         $I = new WebTester\AdminSteps($scenario);
         $I->login();
-        $I->canSee('Acties');
-        $I->click('Acties');
     }
 
-    public function createOffer(WebTester $I, \Codeception\Scenario $scenario)
+    public function createPopularCodeAndCheckIfRecommended(WebTester $I, \Codeception\Scenario $scenario)
     {
-        $I->canSee('Add New Offer');
-        $I->click('Add New Offer');
-        $I->canSeeInCurrentUrl('offer/addoffer');
-        $this->fillForm($I);
-    }
+        $startDate = date('Y-m-d H:i:s', time()-86400);
+        $endDate = date('Y-m-d H:i:s', time()+86400);
 
-    public function editOffer(WebTester $I, \Codeception\Scenario $scenario)
-    {
+        $I->wantTo('See top-20 offers are not recommended');
+        /* Insert an offer in a database */
         $I->haveInDatabasePDOSite(
             'offer',
             array(
-                'id' => '10',
-                'title' => 'My new Offer Code',
+                'id' => '100',
+                'title' => 'New most popular offer code',
                 'visability' => 'DE',
                 'discounttype' => 'CD',
-                'couponcode' => 'OFFERCODE',
-                'startdate' => '2015-07-01 00:05:00',
-                'enddate' => '2015-07-08 23:59:00',
+                'couponcode' => 'OFFER100',
+                'startdate' => $startDate,
+                'enddate' => $endDate,
                 'exclusivecode' => '0',
                 'editorpicks' => '0',
                 'extendedoffer' => '0',
@@ -61,29 +56,21 @@ class OfferCest
             )
         );
 
+        /* Go to popular offers page & create one*/
+        $I->canSee('Top Kortingscodes');
+        $I->click('Top Kortingscodes');
+        $I->click('Search a offer');
+        $I->canSee('New most popular offer code');
+        $I->click('li.select2-highlighted');
+        $I->click('button#addNewOffer');
+
+        /*Come back to offer's page & check it shouldn't recommended*/
         $I->amOnPage('admin/offer');
-        $I->waitForText('OFFERCODE');
-        $I->click('OFFERCODE');
-        $I->seeInCurrentUrl('admin/offer/editoffer/id/10');
-        $I->click('.liimg');
+        $I->waitForText('OFFER100');
+        $I->click('OFFER100');
+        $I->seeInCurrentUrl('admin/offer/editoffer/id/100');
         $I->click('#optionsOnbtn');
-        $I->click('Exclusieve code');
-        $I->click('#offerEndButtons button#updateOfferBtn');
-        $I->seeInCurrentUrl('admin/offer');
-        $I->see('De actie is succesvol aangepast!');
+        $I->cantSeeCheckboxIsChecked('#editorpickcheckbox');
     }
 
-    protected function fillForm($I)
-    {
-        $I->click('Select a Shop');
-        $I->canSee('acceptance shop');
-        $I->click('li.select2-highlighted');
-        $I->waitForElementVisible('#addofferTitle');
-        $I->fillField('#addofferTitle', 'functional test');
-        $I->fillField('#couponCodeTxt', 'FUN234');
-        $I->click('.liimg');
-        $I->click('#optionsOnbtn');
-        $I->click('Exclusieve code');
-        $I->click('#offerEndButtons button#addOfferBtn');
-    }
 }

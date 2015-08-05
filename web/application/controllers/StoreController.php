@@ -362,7 +362,7 @@ class StoreController extends Zend_Controller_Action
             $shopId = KC\Repository\Shop::getShopIdByPermalink($this->getRequest()->getParam('permalink'));
         }
         $howToGuides = $this->_helper->Store->getHowToGuide($shopId);
-        if (empty($howToGuides)) {
+        if (empty($howToGuides)||!($howToGuides[0][0]['howToUse'])) {
             throw new \Zend_Controller_Action_Exception('', 404);
         }
         $howToGuides = $howToGuides[0];
@@ -375,7 +375,6 @@ class StoreController extends Zend_Controller_Action
         $this->view->offers = $offers;
         $this->view->currentStoreInformation = $shopInformation;
         $frontEndViewHelper = new \FrontEnd_Helper_SidebarWidgetFunctions();
-        $this->view->popularStoresList = $frontEndViewHelper->PopularShopWidget();
         $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->howToGuides = $howToGuides;
         $shopName = isset($shopInformation[0]['name']) ? $shopInformation[0]['name'] : '';

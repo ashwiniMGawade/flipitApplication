@@ -57,6 +57,7 @@ class ContactController extends Zend_Controller_Action
     public function sendMailThroughMandril($visitorName, $visitorEmail, $subject, $message)
     {
         $adminEmail = \KC\Repository\Signupmaxaccount::getEmailAddress();
+        $adminEmailId = $adminEmail[0]['emailperlocale'];
         if (!empty($visitorEmail)) {
             $mailer  = new \FrontEnd_Helper_Mailer();
             $content = array(
@@ -75,7 +76,7 @@ class ContactController extends Zend_Controller_Action
                 $visitorName,
                 $visitorEmail,
                 \FrontEnd_Helper_viewHelper::__email('email_sitename'),
-                $adminEmail[0]['emailperlocale'],
+                $adminEmailId,
                 \FrontEnd_Helper_viewHelper::__email('email_'.$subject),
                 $content,
                 \FrontEnd_Helper_viewHelper::__email('email_Contact header'),
