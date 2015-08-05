@@ -5,6 +5,13 @@ use \ApiTester;
 
 class UpdateVisitorCest
 {
+    protected $apiKey;
+
+    public function _before(ApiTester $I)
+    {
+        $this->apiKey = '%25NWcIzZ6Oy9uXv7fKJBZE!5%24EEMN%245%26X';
+    }
+
     public function testUpdateVisitorThrowsErrorWithEmptyParameters(ApiTester $I)
     {
         $params = '[]';
@@ -263,7 +270,7 @@ class UpdateVisitorCest
     private function runTest($I, $params, $expectedResult, $status)
     {
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPUT('/visitors', $params);
+        $I->sendPUT('/visitors?api_key='.$this->apiKey, $params);
         $I->seeResponseCodeIs($status);
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson($expectedResult);

@@ -5,6 +5,13 @@ use \ApiTester;
 
 class UpdateShopCest
 {
+    protected $apiKey;
+
+    public function _before(ApiTester $I)
+    {
+        $this->apiKey = '%25NWcIzZ6Oy9uXv7fKJBZE!5%24EEMN%245%26X';
+    }
+
     public function testUpdateShop(ApiTester $I)
     {
         $params = array(
@@ -26,7 +33,7 @@ class UpdateShopCest
         $I->haveInDatabasePDOSite('shop', $params);
         $I->wantTo('Update shop');
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPUT('/shops/1', json_encode($params));
+        $I->sendPUT('/shops/1?api_key='.$this->apiKey, json_encode($params));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         //$I->seeResponseContainsJson(array('name' => 'Mock'));
@@ -40,7 +47,7 @@ class UpdateShopCest
         );
         $I->wantTo('Update shop with invalid data');
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPUT('/shops/1', json_encode($params));
+        $I->sendPUT('/shops/1?api_key='.$this->apiKey, json_encode($params));
         //$I->seeResponseCodeIs(405);
         $I->seeResponseIsJson();
         //$I->seeResponseContainsJson(array('name' => array('This value should not be blank.')));
@@ -54,7 +61,7 @@ class UpdateShopCest
         );
         $I->wantTo('Update shop with invalid content type');
         $I->haveHttpHeader('Content-Type', 'application/text');
-        $I->sendPUT('/shops/1', json_encode($params));
+        $I->sendPUT('/shops/1?api_key='.$this->apiKey, json_encode($params));
         $I->seeResponseCodeIs(415);
     }
 }

@@ -15,14 +15,9 @@ class GetApiKeyUsecase
     public function execute($key)
     {
         if (is_null($key)) {
-            throw new \Exception('Invalid key', 400);
+            throw new \Exception('Invalid API key.');
         }
         
-        $apiKey = $this->apiKeyRepository->findOneBy('\Core\Domain\Entity\User\ApiKey', array('api_key' => $key));
-
-        if (false === is_object($apiKey)) {
-            throw new \Exception('Api key not found.', 404);
-        }
-        return $apiKey;
+        return $this->apiKeyRepository->findOneBy('\Core\Domain\Entity\User\ApiKey', array('api_key' => $key));
     }
 }
