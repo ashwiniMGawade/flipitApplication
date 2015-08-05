@@ -187,22 +187,22 @@ class Visitor
     protected $favoritevisitorshops;
 
     /**
-     * @ORM\Column(type="integer", length=20, nullable=true)
+     * @ORM\Column(type="integer", length=10, nullable=false)
      */
     protected $mailClickCount;
 
     /**
-     * @ORM\Column(type="integer", length=20, nullable=true)
+     * @ORM\Column(type="integer", length=10, nullable=false)
      */
     protected $mailOpenCount;
 
     /**
-     * @ORM\Column(type="integer", length=20, nullable=true)
+     * @ORM\Column(type="integer", length=10, nullable=false)
      */
     protected $mailHardBounceCount;
 
     /**
-     * @ORM\Column(type="integer", length=20, nullable=true)
+     * @ORM\Column(type="integer", length=10, nullable=false)
      */
     protected $mailSoftBounceCount;
 
