@@ -12,20 +12,18 @@ class SleepingInactiveVisitorsUsecaseTest extends \Codeception\TestCase\Test
 
     public function testSleepingInactiveVisitorsUsecase()
     {
-        (new SleepingInactiveVisitorsUsecase($this->createVisitorRepositoryInterfaceWithUpdateVisitorsMethodMock()))->execute();
+        (new SleepingInactiveVisitorsUsecase(
+            $this->createVisitorRepositoryInterfaceWithDeactivateMethodMock()
+        ))->execute();
     }
 
-    private function createVisitorRepositoryInterfaceMock()
+    private function createVisitorRepositoryInterfaceWithDeactivateMethodMock()
     {
-        return $this->getMock('\Core\Domain\Repository\VisitorRepositoryInterface');
-    }
-
-    private function createVisitorRepositoryInterfaceWithUpdateVisitorsMethodMock()
-    {
-        $visitorRepository = $this->createVisitorRepositoryInterfaceMock();
+        $visitorRepository = $this->getMock('\Core\Domain\Repository\VisitorRepositoryInterface');
         $visitorRepository->expects($this->once())
             ->method('deactivate')
-            ->with($this->isType('array'));
+            ->with($this->isType('array'))
+            ->willReturn(20);
         return $visitorRepository;
     }
 }

@@ -5,7 +5,6 @@ use Core\Domain\Repository\VisitorRepositoryInterface;
 
 class SleepingInactiveVisitorsUsecase
 {
-
     public function __construct(VisitorRepositoryInterface $visitorRepository)
     {
         $this->visitorRepository = $visitorRepository;
@@ -13,11 +12,11 @@ class SleepingInactiveVisitorsUsecase
 
     public function execute()
     {
-        $visitorData = $this->visitorRepository->deactivate(
+        $noOfInactivatedVisitors = $this->visitorRepository->deactivate(
             array(
-                'deleted' => 0,
                 'lastEmailOpenDate' => strtotime('-3 months')
             )
         );
+        return $noOfInactivatedVisitors;
     }
 }
