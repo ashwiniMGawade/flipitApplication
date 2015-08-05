@@ -51,15 +51,16 @@ class UpdateVisitorUsecaseTest extends \Codeception\TestCase\Test
         $visitor = new Visitor();
         $visitor->setEmail('test@example.com');
 
-        $this->setExpectedException('Exception', 'Invalid Email');
+        $expectedError = 'Invalid Email';
         $validInput = array(
             'email' => 'test@example.com',
             'event' => 'click'
         );
         $validatorRepository = $this->createVisitorRepositoryWithFindOneByMethodMock($visitor);
 
-        $visitorValidator = $this->createVisitorValidatorWithValidateMethodMock('Invalid Email');
-        (new UpdateVisitorUsecase($validatorRepository, $visitorValidator))->execute($validInput);
+        $visitorValidator = $this->createVisitorValidatorWithValidateMethodMock($expectedError);
+        $response = (new UpdateVisitorUsecase($validatorRepository, $visitorValidator))->execute($validInput);
+        $this->assertEquals($expectedError, $response);
     }
 
     public function testUpdateVisitorUsecaseWhenVisitorObjectIsValid()

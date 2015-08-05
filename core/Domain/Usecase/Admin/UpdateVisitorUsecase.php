@@ -65,9 +65,10 @@ class UpdateVisitorUsecase
                 throw new \Exception('Invalid Event');
                 break;
         }
+
         $validationResult = $this->visitorValidator->validate($visitor);
         if ($validationResult !== true) {
-            throw new \Exception($validationResult);
+            return $validationResult;
         }
         return $this->visitorRepository->save($visitor);
     }
