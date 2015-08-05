@@ -39,7 +39,7 @@ class VisitorsController extends ApiBaseController
 
             if ($mandrillData['event'] === 'open' && isset($processedEventMessage['opens'])) {
                 foreach ($processedEventMessage['opens'] as $opens) {
-                    if (!isset($opens['ts']) || !is_int($opens['ts'])) {
+                    if (!isset($opens['ts'])) {
                         $this->app->response->setStatus(405);
                         echo json_encode(array('msg'=>'Invalid Opens Timestamp'));
                         return;
@@ -50,6 +50,12 @@ class VisitorsController extends ApiBaseController
 
             try {
                 $visitor = AdminFactory::updateVisitors()->execute($parameter);
+                if (is_array($visitor)) {
+                    $errors = json_encode($visitor);
+                    $this->app->response->setStatus(405);
+                    echo json_encode(array('error'=> $errors));
+                    return;
+                }
                 $response[$visitor->getEmail()] = array(
                     'open' => $visitor->getMailOpenCount(),
                     'click' => $visitor->getMailClickCount(),
