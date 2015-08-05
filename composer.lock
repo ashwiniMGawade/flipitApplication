@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "df0d7c77ce2cfdd70645412b07402b81",
+    "hash": "64493ee146438b3b2c726b73e7c77da6",
     "packages": [
         {
             "name": "akrabat/rka-slim-controller",
@@ -888,6 +888,49 @@
                 "uri"
             ],
             "time": "2015-06-24 19:55:15"
+        },
+        {
+            "name": "mandrill/mandrill",
+            "version": "1.0.54",
+            "source": {
+                "type": "git",
+                "url": "https://bitbucket.org/mailchimp/mandrill-api-php.git",
+                "reference": "9f336b08ea148c80db3b694f3dc737cd4f414e19"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://bitbucket.org/mailchimp/mandrill-api-php/get/9f336b08ea148c80db3b694f3dc737cd4f414e19.zip",
+                "reference": "9f336b08ea148c80db3b694f3dc737cd4f414e19",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Mandrill": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Mandrill Devs",
+                    "email": "community@mandrill.com",
+                    "homepage": "http://mandrill.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "API client library for the Mandrill email as a service platform",
+            "homepage": "https://bitbucket.org/mailchimp/mandrill-api-php",
+            "keywords": [
+                "api",
+                "email"
+            ],
+            "time": "2014-10-16 21:08:20"
         },
         {
             "name": "monolog/monolog",
@@ -2709,7 +2752,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/67afe755b214bfa561ec87bba3b81b0b5cdaa69c",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/1ed6eff29047b6e78c7b64dd228354144cccd0dd",
                 "reference": "67afe755b214bfa561ec87bba3b81b0b5cdaa69c",
                 "shasum": ""
             },

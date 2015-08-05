@@ -1,0 +1,81 @@
+{
+    "swagger":"2.0",
+    "host":"api.dev.flipit.com",
+    "basePath":"",
+    "tags":[
+        {
+            "name":"visitor",
+            "description":"Visitor Operations"
+        }
+    ],
+    "schemes":[
+        "http"
+    ],
+    "paths":{
+        "/visitors":{
+            "put":{
+                "tags":[
+                    "visitor"
+                ],
+                "summary":"Update data related to email opens, clicks and bounces",
+                "description":"",
+                "operationId":"updateVisitor",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in":"body",
+                        "name":"body",
+                        "description":"Visitor data that needs to be updated",
+                        "required":true,
+                        "schema":{
+                            "type": "array",
+                            "items": {"$ref":"#/definitions/visitor"}
+                        }
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"Request was successful"
+                    },
+                    "405":{
+                        "description":"Invalid input"
+                    }
+                }
+            }
+        }
+    },
+    "definitions":{
+        "visitor":{
+            "type":"object",
+            "required":[
+                "event"
+            ],
+            "properties":{
+                "event":{
+                    "type":"string",
+                    "example":"open"
+                },
+                "msg":{
+                    "type":"object",
+                    "required":[
+                        "email"
+                    ],
+                    "properties": {
+                        "email": {
+                            "type": "string",
+                            "example": "test@example.com"
+                        },
+                        "state": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
