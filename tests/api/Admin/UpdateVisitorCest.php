@@ -334,6 +334,45 @@ class UpdateVisitorCest
         $this->runTest($I, $params, $expectedResult, $status);
     }
 
+    public function testUsecaseReturnsErrorWhenValidationFails(ApiTester $I)
+    {
+        $I->haveInDatabasePDOSite(
+            'visitor',
+            array(
+                'id' => 1,
+                'email' => 'test@example.com',
+                'mailOpenCount' => 1,
+                'mailClickCount' => 1,
+                'mailSoftBounceCount' => 1,
+                'mailHardBounceCount' => 1,
+                'active' => 1234234
+            )
+        );
+
+        $params = '[
+                        {
+                            "event" : "open",
+                            "msg" : {
+                                "email" : "test@example.com",
+                                "opens": [
+                                    {
+                                        "ts": "1365111111"
+                                    }
+                                ]
+                            }
+                        }
+                    ]';
+        $expectedResult = array (
+            'active' =>
+                array (
+                    0 => 'This value should have exactly 1 character.',
+                ),
+        );
+
+        $status = 405;
+        $this->runTest($I, $params, $expectedResult, $status);
+    }
+
     private function seedVisitorsTable($I)
     {
         $I->haveInDatabasePDOSite(

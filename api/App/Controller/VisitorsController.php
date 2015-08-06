@@ -49,19 +49,18 @@ class VisitorsController extends ApiBaseController
             }
 
             try {
-                $visitor = AdminFactory::updateVisitors()->execute($parameter);
-                if (is_array($visitor)) {
-                    $errors = json_encode($visitor);
+                $result = AdminFactory::updateVisitors()->execute($parameter);
+                if (!is_object($result)) {
                     $this->app->response->setStatus(405);
-                    echo json_encode(array('error'=> $errors));
-                    return;
+                    $response = $result;
+                } else {
+                    $response[$result->getEmail()] = array(
+                        'open' => $result->getMailOpenCount(),
+                        'click' => $result->getMailClickCount(),
+                        'soft_bounce' => $result->getMailSoftBounceCount(),
+                        'hard_bounce' => $result->getMailHardBounceCount()
+                    );
                 }
-                $response[$visitor->getEmail()] = array(
-                    'open' => $visitor->getMailOpenCount(),
-                    'click' => $visitor->getMailClickCount(),
-                    'soft_bounce' => $visitor->getMailSoftBounceCount(),
-                    'hard_bounce' => $visitor->getMailHardBounceCount()
-                );
             } catch (\Exception $e) {
                 $this->app->response->setStatus(405);
                 echo json_encode(array('msg'=>$e->getMessage()));
