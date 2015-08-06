@@ -1,12 +1,19 @@
 <?php
 namespace Core\Domain\Usecase\Guest;
 
+use Core\Domain\Repository\ViewCountRepositoryInterface;
+
 class GetOfferClickUsecase
 {
     protected $viewCountRepository;
 
-    public function execute()
+    public function __construct(ViewCountRepositoryInterface $viewCountRepository)
     {
-        
+        $this->viewCountRepository = $viewCountRepository;
+    }
+
+    public function execute($offerId, $clientIp)
+    {
+        return $this->viewCountRepository->getOfferClickCount($offerId, $clientIp);
     }
 }
