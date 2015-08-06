@@ -19,7 +19,6 @@ class VisitorInactiveCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        define('APPLICATION_ENV', 'development');
         $noOfInactivatedVisitors = SystemFactory::sleepInactiveVisitors()->execute();
         $output->writeln('Inactivated '. $noOfInactivatedVisitors .' Visitors.');
     }
