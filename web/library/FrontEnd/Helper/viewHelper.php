@@ -342,8 +342,6 @@ EOD;
             default:
                 break;
         }
-        var_dump($resultStatus);
-        exit;
         return $resultStatus;
     }
 
