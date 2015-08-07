@@ -2,6 +2,7 @@
 namespace Usecase\Admin;
 
 use \Core\Domain\Entity\Shop;
+use \Core\Domain\Service\Purifier;
 use \Core\Domain\Usecase\Admin\GetShopUsecase;
 
 class GetShopsUsecaseTest extends \Codeception\TestCase\Test
@@ -15,7 +16,7 @@ class GetShopsUsecaseTest extends \Codeception\TestCase\Test
     {
         $id = 0;
         $shopRepositoryMock = $this->createShopRepositoryWithFindMethodMock($id, 0);
-        $shopUsecase = new GetShopUsecase($shopRepositoryMock);
+        $shopUsecase = new GetShopUsecase($shopRepositoryMock, new Purifier());
         $this->setExpectedException('Exception', 'Shop not found');
         $shopUsecase->execute($id);
     }
@@ -26,7 +27,7 @@ class GetShopsUsecaseTest extends \Codeception\TestCase\Test
         $shop = new Shop();
         $shop->__set('id', $id);
         $shopRepositoryMock = $this->createShopRepositoryWithFindMethodMock($id, $shop);
-        $shopUsecase = new GetShopUsecase($shopRepositoryMock);
+        $shopUsecase = new GetShopUsecase($shopRepositoryMock, new Purifier());
         $shopUsecase->execute($id);
     }
 
@@ -35,7 +36,7 @@ class GetShopsUsecaseTest extends \Codeception\TestCase\Test
         $id = 'invalid';
         $shopRepositoryMock = $this->createShopRepositoryMock();
         $this->setExpectedException('Exception', 'Invalid shop Id');
-        $shopUsecase = new GetShopUsecase($shopRepositoryMock);
+        $shopUsecase = new GetShopUsecase($shopRepositoryMock, new Purifier());
         $shopUsecase->execute($id);
     }
 

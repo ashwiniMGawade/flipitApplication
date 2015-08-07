@@ -3,6 +3,7 @@ namespace Core\Domain\Factory;
 
 use \Core\Domain\Service\Validator;
 use \Core\Domain\Service\KeyGenerator;
+use \Core\Domain\Service\Purifier;
 use \Core\Domain\Usecase\Admin\GetApiKeyListingUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
@@ -57,7 +58,7 @@ class AdminFactory
 
     public static function getShop()
     {
-        return new GetShopUsecase(RepositoryFactory::shop());
+        return new GetShopUsecase(RepositoryFactory::shop(), new Purifier());
     }
 
     public static function createShop()
@@ -70,7 +71,8 @@ class AdminFactory
         return new AddShopUsecase(
             RepositoryFactory::shop(),
             new ShopValidator(new Validator()),
-            RepositoryFactory::affliateNetwork()
+            RepositoryFactory::affliateNetwork(),
+            new Purifier()
         );
     }
 
@@ -79,7 +81,8 @@ class AdminFactory
         return new UpdateShopUsecase(
             RepositoryFactory::shop(),
             new ShopValidator(new Validator()),
-            RepositoryFactory::affliateNetwork()
+            RepositoryFactory::affliateNetwork(),
+            new Purifier()
         );
     }
 
