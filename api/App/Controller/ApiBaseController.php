@@ -40,7 +40,7 @@ class ApiBaseController
             $this->app->halt(401, json_encode(array('message'=>'API key is required.')));
         }
 
-        $apiKey = SystemFactory::getApiKey()->execute($apiKey);
+        $apiKey = SystemFactory::getApiKey()->execute(array('api_key'=>$apiKey));
         if (false === is_object($apiKey)) {
             $this->app->halt(401, json_encode(array('message'=>'Invalid API key.')));
         }

@@ -3,14 +3,15 @@ namespace Usecase\System;
 
 use \Core\Domain\Entity\User\ApiKey;
 use \Core\Domain\Usecase\System\GetApiKeyUsecase;
+use \Core\Domain\Service\Purifier;
 
 class GetApiKeyUsecaseTest extends \Codeception\TestCase\Test
 {
     public function testGetApiKeyUsecaseWithKeyNotExist()
     {
         $apiKeyRepositoryMock = $this->createApiKeyRepositoryWithFindOneByMethodMock(array('api_key'=>'ddfvfgfgf'), 0);
-        $apiKeyUsecase = new GetApiKeyUsecase($apiKeyRepositoryMock);
-        $apiKeyUsecase->execute('ddfvfgfgf');
+        $apiKeyUsecase = new GetApiKeyUsecase($apiKeyRepositoryMock, new Purifier());
+        $apiKeyUsecase->execute(array('api_key'=>'ddfvfgfgf'));
     }
 
     public function testGetApiKeyUsecaseWithValidKey()
@@ -19,15 +20,23 @@ class GetApiKeyUsecaseTest extends \Codeception\TestCase\Test
         $apiKey = new ApiKey();
         $apiKey->setApiKey($key);
         $apiKeyRepositoryMock = $this->createApiKeyRepositoryWithFindOneByMethodMock(array('api_key'=>$key), $apiKey);
-        $apiKeyUsecase = new GetApiKeyUsecase($apiKeyRepositoryMock);
-        $apiKeyUsecase->execute($key);
+        $apiKeyUsecase = new GetApiKeyUsecase($apiKeyRepositoryMock, new Purifier());
+        $apiKeyUsecase->execute(array('api_key'=>$key));
     }
 
-    public function testGetApiKeyUsecaseWithInValidKey()
+    public function testGetApiKeyUsecaseWithInValidKeyCondition()
     {
         $apiKeyRepositoryMock = $this->createApiKeyRepositoryMock();
-        $apiKeyUsecase = new GetApiKeyUsecase($apiKeyRepositoryMock);
-        $this->setExpectedException('Exception', 'Invalid API key');
+        $apiKeyUsecase = new GetApiKeyUsecase($apiKeyRepositoryMock, new Purifier());
+        $this->setExpectedException('Exception', 'Invalid API key.');
+        $apiKeyUsecase->execute(array('api_key'=>''));
+    }
+
+    public function testGetApiKeyUsecaseWithInValidCondition()
+    {
+        $apiKeyRepositoryMock = $this->createApiKeyRepositoryMock();
+        $apiKeyUsecase = new GetApiKeyUsecase($apiKeyRepositoryMock, new Purifier());
+        $this->setExpectedException('Exception', 'Invalid API key condition.');
         $apiKeyUsecase->execute(null);
     }
 
