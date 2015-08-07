@@ -17,7 +17,6 @@ class ShopsController extends ApiBaseController
     {
         $shop = AdminFactory::createShop()->execute();
         $params = json_decode($this->app->request->getBody(), true);
-        $params = $this->sanitize($params);
         /*$result = AdminFactory::addShop()->execute($shop, $params);
         echo $this->generateShopJsonData($result);*/
         echo json_encode(array('msg'=>'This operation is not permitted.'));
@@ -27,7 +26,6 @@ class ShopsController extends ApiBaseController
     {
         $shop = AdminFactory::getShop()->execute($id);
         $params = json_decode($this->app->request->getBody(), true);
-        $params = $this->sanitize($params);
         /*$result = AdminFactory::updateShop()->execute($shop, $params);
         echo $this->generateShopJsonData($result);*/
         echo json_encode(array('msg'=>'This operation is not permitted.'));

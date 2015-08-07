@@ -2,9 +2,9 @@
 namespace Usecase\Admin;
 
 use \Core\Domain\Entity\Shop;
-use \Core\Domain\Entity\AffliateNetwork;
 use \Core\Domain\Usecase\Admin\UpdateShopUsecase;
 use \Core\Domain\Validator\ShopValidator;
+use \Core\Domain\Service\Purifier;
 
 class UpdateShopUsecaseTest extends \Codeception\TestCase\Test
 {
@@ -23,7 +23,8 @@ class UpdateShopUsecaseTest extends \Codeception\TestCase\Test
         (new UpdateShopUsecase(
             $shopRepository,
             new ShopValidator($validatorInterface),
-            $affliateNetworkRepositoryMock
+            $affliateNetworkRepositoryMock,
+            new Purifier()
         )
         )->execute(new Shop(), $params);
     }
@@ -36,7 +37,8 @@ class UpdateShopUsecaseTest extends \Codeception\TestCase\Test
         (new UpdateShopUsecase(
             $shopRepository,
             $shopValidator,
-            $affliateNetworkRepositoryMock
+            $affliateNetworkRepositoryMock,
+            new Purifier()
         )
         )->execute(new Shop());
     }
@@ -52,7 +54,8 @@ class UpdateShopUsecaseTest extends \Codeception\TestCase\Test
         (new UpdateShopUsecase(
             $shopRepository,
             $shopValidatory,
-            $affliateNetworkRepositoryMock
+            $affliateNetworkRepositoryMock,
+            new Purifier()
         )
         )->execute(new Shop(), $params);
     }
@@ -83,7 +86,8 @@ class UpdateShopUsecaseTest extends \Codeception\TestCase\Test
         (new UpdateShopUsecase(
             $shopRepository,
             $shopValidator,
-            $affliateNetworkRepositoryMock
+            $affliateNetworkRepositoryMock,
+            new Purifier()
         )
         )->execute(new Shop(), $params);
     }

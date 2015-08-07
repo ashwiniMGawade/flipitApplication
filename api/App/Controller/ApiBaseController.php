@@ -30,10 +30,4 @@ class ApiBaseController
     {
         $this->response = $response;
     }
-
-    protected function sanitize($params)
-    {
-        $purifier = new Purifier();
-        return $purifier->purify($params);
-    }
 }

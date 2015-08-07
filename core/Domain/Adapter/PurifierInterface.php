@@ -1,7 +1,7 @@
 <?php
 namespace Core\Domain\Adapter;
 
-interface HTMLPurifierInterface
+interface PurifierInterface
 {
     public function purify($params);
 }

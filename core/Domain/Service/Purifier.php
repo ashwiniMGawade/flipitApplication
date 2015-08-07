@@ -1,10 +1,10 @@
 <?php
 namespace Core\Domain\Service;
 
-use \Core\Domain\Adapter\HTMLPurifierInterface;
+use \Core\Domain\Adapter\PurifierInterface;
 use \HTMLPurifier;
 
-class Purifier implements HTMLPurifierInterface
+class Purifier implements PurifierInterface
 {
     protected $purifier;
 
