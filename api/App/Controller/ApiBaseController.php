@@ -1,6 +1,5 @@
 <?php
 namespace Api\Controller;
-use \Core\Domain\Service\Purifier;
 
 class ApiBaseController
 {
