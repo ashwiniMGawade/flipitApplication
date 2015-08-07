@@ -19,7 +19,7 @@ class VisitorInactiveCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $noOfInactivatedVisitors = SystemFactory::sleepInactiveVisitors()->execute();
-        $output->writeln('Inactivated '. $noOfInactivatedVisitors .' Visitors.');
+        $numberOfDeactivatedVisitors = SystemFactory::sleepInactiveVisitors()->execute();
+        $output->writeln('Inactivated '. $numberOfDeactivatedVisitors .' Visitors.');
     }
 }
