@@ -1,18 +1,18 @@
 <?php
 namespace Usecase\System;
 
-use Core\Domain\Usecase\System\SleepingInactiveVisitorsUsecase;
+use Core\Domain\Usecase\System\DeactivateSleepingVisitors;
 
-class SleepingInactiveVisitorsUsecaseTest extends \Codeception\TestCase\Test
+class DeactivateSleepingVisitorsTest extends \Codeception\TestCase\Test
 {
     /**
      * @var \DomainTester
      */
     protected $tester;
 
-    public function testSleepingInactiveVisitorsUsecase()
+    public function testDeactivateSleepingVisitors()
     {
-        (new SleepingInactiveVisitorsUsecase(
+        (new DeactivateSleepingVisitors(
             $this->createVisitorRepositoryInterfaceWithDeactivateMethodMock()
         ))->execute();
     }
