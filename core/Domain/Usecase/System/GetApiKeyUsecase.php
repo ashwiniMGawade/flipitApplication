@@ -24,10 +24,6 @@ class GetApiKeyUsecase
             throw new \Exception('Invalid API key condition.');
         }
 
-        if (isset($condition['api_key']) && strlen($condition['api_key'])<1) {
-            throw new \Exception('Invalid API key.');
-        }
-
         if (isset($condition['api_key'])) {
             $condition['api_key'] = html_entity_decode($condition['api_key']);
         }

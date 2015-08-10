@@ -24,14 +24,6 @@ class GetApiKeyUsecaseTest extends \Codeception\TestCase\Test
         $apiKeyUsecase->execute(array('api_key'=>$key));
     }
 
-    public function testGetApiKeyUsecaseWithInValidKeyCondition()
-    {
-        $apiKeyRepositoryMock = $this->createApiKeyRepositoryMock();
-        $apiKeyUsecase = new GetApiKeyUsecase($apiKeyRepositoryMock, new Purifier());
-        $this->setExpectedException('Exception', 'Invalid API key.');
-        $apiKeyUsecase->execute(array('api_key'=>''));
-    }
-
     public function testGetApiKeyUsecaseWithInValidCondition()
     {
         $apiKeyRepositoryMock = $this->createApiKeyRepositoryMock();
