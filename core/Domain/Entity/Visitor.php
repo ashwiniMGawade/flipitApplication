@@ -187,22 +187,22 @@ class Visitor
     protected $favoritevisitorshops;
 
     /**
-     * @ORM\Column(type="integer", length=20, nullable=true)
+     * @ORM\Column(type="integer", length=10, nullable=false)
      */
     protected $mailClickCount;
 
     /**
-     * @ORM\Column(type="integer", length=20, nullable=true)
+     * @ORM\Column(type="integer", length=10, nullable=false)
      */
     protected $mailOpenCount;
 
     /**
-     * @ORM\Column(type="integer", length=20, nullable=true)
+     * @ORM\Column(type="integer", length=10, nullable=false)
      */
     protected $mailHardBounceCount;
 
     /**
-     * @ORM\Column(type="integer", length=20, nullable=true)
+     * @ORM\Column(type="integer", length=10, nullable=false)
      */
     protected $mailSoftBounceCount;
 
@@ -210,6 +210,27 @@ class Visitor
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     protected $inactiveStatusReason;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $lastEmailOpenDate;
+
+    /**
+     * @return mixed
+     */
+    public function getLastEmailOpenDate()
+    {
+        return $this->lastEmailOpenDate;
+    }
+
+    /**
+     * @param mixed $lastEmailOpenDate
+     */
+    public function setLastEmailOpenDate($lastEmailOpenDate)
+    {
+        $this->lastEmailOpenDate = $lastEmailOpenDate;
+    }
 
     /**
      * @return mixed

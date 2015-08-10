@@ -1758,6 +1758,7 @@ CREATE TABLE IF NOT EXISTS `visitor` (
   `mailHardBounceCount` bigint(20) DEFAULT NULL,
   `mailSoftBounceCount` bigint(20) DEFAULT NULL,
   `inactiveStatusReason` varchar(20) DEFAULT NULL,
+  `lastEmailOpenDate` varchar(255) NOT NULL DEFAULT '1438698717',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `imageid_idx` (`imageid`),

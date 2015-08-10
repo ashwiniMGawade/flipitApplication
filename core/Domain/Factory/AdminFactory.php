@@ -16,6 +16,7 @@ use \Core\Domain\Usecase\Admin\UpdateShopUsecase;
 use \Core\Domain\Usecase\Admin\DeleteShopUsecase;
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\ShopValidator;
+use Core\Domain\Validator\VisitorValidator;
 use \Core\Persistence\Factory\RepositoryFactory;
 use \Core\Domain\Usecase\Admin\UpdateVisitorUsecase;
 
@@ -53,7 +54,7 @@ class AdminFactory
 
     public static function updateVisitors()
     {
-        return new UpdateVisitorUsecase(RepositoryFactory::visitor());
+        return new UpdateVisitorUsecase(RepositoryFactory::visitor(), new VisitorValidator(new Validator()));
     }
 
     public static function getShop()
