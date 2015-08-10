@@ -159,6 +159,36 @@ class UserCest
         $this->testTryingToAccessShopsImportPageRedirectsToShopPage($I);
     }
 
+    public function userShouldSeeLanguageFilePageWhenRoleEqualsAdmin(WebTester $I, \Codeception\Scenario $scenario)
+    {
+        $date = new \DateTime('now');
+        $passwordChangeTime =  $date->format('Y-m-d H:m:s');
+
+        $I = new WebTester\AdminSteps($scenario);
+        $I->haveInDatabasePDOUser(
+            'user',
+            array(
+                array(
+                    'firstName' => 'admin',
+                    'lastName' => 'user',
+                    'email' => 'admin@flipit.com',
+                    'password' => md5('Mind@123'),
+                    'status' => 1,
+                    'roleid' => 2,
+                    'slug' => 'test-admin-123',
+                    'popularKortingscode' => '0',
+                    'passwordchangetime' => $passwordChangeTime
+                )
+            )
+        );
+        $this->seedRefUserWebsiteTable($I);
+
+        $I->login('admin@flipit.com', 'Mind@123');
+        $I->see('admin');
+        $I->amOnPage('admin/language');
+        $I->see('Start Inline Translation');
+    }
+
     private function testTryingToAccessPageRedirectsToURL($I, $pages, $redirectsTo)
     {
         foreach ($pages as $page) {
