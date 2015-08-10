@@ -3,7 +3,7 @@ namespace KC\Repository;
 
 class Widget extends \Core\Domain\Entity\Widget
 {
-    public function addWidget($params)
+    public static function addWidget($params)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $widget = new \Core\Domain\Entity\Widget();
