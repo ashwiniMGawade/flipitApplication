@@ -84,7 +84,9 @@ class BackEnd_Helper_importOffersExcel
                     }
                 }
             }
-            unlink($excelFile);
+            if (file_exists($excelFile)) {
+                unlink($excelFile);
+            }
         }
         $entityManagerLocale->flush();
         return $offerCounter;
