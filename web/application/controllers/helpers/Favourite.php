@@ -63,7 +63,7 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
             getRequestedDataBySetGetCache(
                 'all_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShops',
                 array(
-                    'function' => '\KC\Repository\Visitor::getFavoriteShops',
+                    'function' => '\KC\Repository\Visitor::getShopsFavorite',
                     'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
                 )
             );

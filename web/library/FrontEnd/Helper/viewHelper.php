@@ -332,7 +332,7 @@ EOD;
         $resultStatus = "false";
         switch (strtolower($eventType)) {
             case 'onclick':
-                if (\KC\Repository\ViewCount::getOfferClick($offerId, $clientIp) == 0) {
+                if (\Core\Domain\Factory\GuestFactory::getOfferClick()->execute($offerId, $clientIp) == 0) {
                     \KC\Repository\ViewCount::saveOfferClick($offerId, $clientIp);
                     $varnishObj = new \KC\Repository\Varnish();
                     $varnishObj->addUrl(HTTP_PATH_LOCALE . 'offer/offer-view-count?offerId='. $offerId);

@@ -3,10 +3,12 @@ namespace Core\Domain\Factory;
 
 use \Core\Domain\Service\Validator;
 use \Core\Domain\Service\KeyGenerator;
+use \Core\Domain\Service\Purifier;
 use \Core\Domain\Usecase\Admin\GetApiKeyListingUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\DeleteApiKeyUsecase;
+use \Core\Domain\Usecase\Admin\GetVisitorListingUsecase;
 use \Core\Domain\Usecase\Admin\GetShopUsecase;
 use \Core\Domain\Usecase\Admin\CreateShopUsecase;
 use \Core\Domain\Usecase\Admin\AddShopUsecase;
@@ -14,7 +16,9 @@ use \Core\Domain\Usecase\Admin\UpdateShopUsecase;
 use \Core\Domain\Usecase\Admin\DeleteShopUsecase;
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\ShopValidator;
+use Core\Domain\Validator\VisitorValidator;
 use \Core\Persistence\Factory\RepositoryFactory;
+use \Core\Domain\Usecase\Admin\UpdateVisitorUsecase;
 
 class AdminFactory
 {
@@ -42,9 +46,20 @@ class AdminFactory
         return new DeleteApiKeyUsecase(RepositoryFactory::apiKeys());
     }
 
+
+    public static function getVisitors()
+    {
+        return new GetVisitorListingUsecase(RepositoryFactory::visitor());
+    }
+
+    public static function updateVisitors()
+    {
+        return new UpdateVisitorUsecase(RepositoryFactory::visitor(), new VisitorValidator(new Validator()));
+    }
+
     public static function getShop()
     {
-        return new GetShopUsecase(RepositoryFactory::shop());
+        return new GetShopUsecase(RepositoryFactory::shop(), new Purifier());
     }
 
     public static function createShop()
@@ -57,7 +72,8 @@ class AdminFactory
         return new AddShopUsecase(
             RepositoryFactory::shop(),
             new ShopValidator(new Validator()),
-            RepositoryFactory::affliateNetwork()
+            RepositoryFactory::affliateNetwork(),
+            new Purifier()
         );
     }
 
@@ -66,7 +82,8 @@ class AdminFactory
         return new UpdateShopUsecase(
             RepositoryFactory::shop(),
             new ShopValidator(new Validator()),
-            RepositoryFactory::affliateNetwork()
+            RepositoryFactory::affliateNetwork(),
+            new Purifier()
         );
     }
 

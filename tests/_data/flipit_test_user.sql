@@ -35,6 +35,13 @@ CREATE TABLE IF NOT EXISTS `api_keys` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+--
+-- Dumping data for table `api_keys`
+--
+
+INSERT INTO `api_keys` (`id`, `user_id`, `api_key`, `deleted`, `created_at`) VALUES
+(1, 1, '%NWcIzZ6Oy9uXv7fKJBZE!5$EEMN$5&X', 1, '2015-07-09 17:21:01');
+
 -- --------------------------------------------------------
 
 --

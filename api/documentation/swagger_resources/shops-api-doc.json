@@ -5,7 +5,7 @@
    "tags":[
       {
          "name":"shop",
-         "description":"Shop operations"
+          "description":"Shop Operations"
       }
    ],
    "schemes":[
@@ -47,7 +47,7 @@
             }
          }
       },
-      
+
       "/shops/{shopId}":{
          "put":{
             "tags":[

@@ -5,6 +5,13 @@ use \ApiTester;
 
 class CreateShopCest
 {
+    protected $apiKey;
+
+    public function _before(ApiTester $I)
+    {
+        $this->apiKey = '%25NWcIzZ6Oy9uXv7fKJBZE!5%24EEMN%245%26X';
+    }
+
     public function testCreateShopWithValidParameters(ApiTester $I)
     {
         $params = array(
@@ -27,7 +34,7 @@ class CreateShopCest
         $I->haveInDatabasePDOSite('affliate_network', array('name'=>'Affilinet'));
         $I->wantTo('Create shop');
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST('/shops', json_encode($params));
+        $I->sendPOST('/shops?api_key='.$this->apiKey, json_encode($params));
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         //$I->seeResponseContainsJson(array('name' => 'Mock'));
@@ -41,7 +48,7 @@ class CreateShopCest
         );
         $I->wantTo('Create shop with invalid data');
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST('/shops', json_encode($params));
+        $I->sendPOST('/shops?api_key='.$this->apiKey, json_encode($params));
         //$I->seeResponseCodeIs(405);
         $I->seeResponseIsJson();
         //$I->seeResponseContainsJson(array('name' => array('This value should not be blank.')));

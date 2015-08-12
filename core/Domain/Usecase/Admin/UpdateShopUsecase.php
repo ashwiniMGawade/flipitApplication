@@ -1,11 +1,11 @@
 <?php
 namespace Core\Domain\Usecase\Admin;
 
-use Core\Domain\Entity\AffliateNetwork;
 use \Core\Domain\Entity\Shop;
 use \Core\Domain\Repository\ShopRepositoryInterface;
 use \Core\Domain\Repository\AffliateNetworkRepositoryInterface;
 use \Core\Domain\Validator\ShopValidator;
+use \Core\Domain\Adapter\PurifierInterface;
 
 class UpdateShopUsecase
 {
@@ -15,15 +15,20 @@ class UpdateShopUsecase
 
     protected $affliateNetworkRepository;
 
-    public function __construct(ShopRepositoryInterface $shopRepository, ShopValidator $shopValidator, AffliateNetworkRepositoryInterface $affliateNetworkRepository)
+    protected $htmlPurifier;
+
+    public function __construct(ShopRepositoryInterface $shopRepository, ShopValidator $shopValidator, AffliateNetworkRepositoryInterface $affliateNetworkRepository, PurifierInterface $htmlPurifier)
     {
         $this->shopRepository               = $shopRepository;
         $this->shopValidator                = $shopValidator;
         $this->affliateNetworkRepository    = $affliateNetworkRepository;
+        $this->htmlPurifier                 = $htmlPurifier;
     }
 
     public function execute(Shop $shop, $params = array())
     {
+        $params = $this->htmlPurifier->purify($params);
+
         if (isset($params['name'])) {
             $shop->setName($params['name']);
         }

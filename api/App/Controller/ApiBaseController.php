@@ -1,6 +1,8 @@
 <?php
 namespace Api\Controller;
 
+use \Core\Domain\Factory\SystemFactory;
+
 class ApiBaseController
 {
     protected $app;
@@ -11,8 +13,9 @@ class ApiBaseController
     public function init()
     {
         if (self::RESPONSE_STATUS_UNSUPPORTED_MEDIA_TYPE === $this->app->response->getStatus()) {
-            $this->app->halt(self::RESPONSE_STATUS_UNSUPPORTED_MEDIA_TYPE);
+            $this->app->halt(self::RESPONSE_STATUS_UNSUPPORTED_MEDIA_TYPE, json_encode(array('message'=>'Unsupported media type')));
         }
+        $this->authenticate();
     }
 
     public function setApp($app)
@@ -28,5 +31,19 @@ class ApiBaseController
     public function setResponse($response)
     {
         $this->response = $response;
+    }
+
+    public function authenticate()
+    {
+        $apiKey = $this->request->params('api_key');
+        if (strlen($apiKey)<1) {
+            $this->app->halt(401, json_encode(array('message'=>'API key is required.')));
+        }
+
+        $apiKey = SystemFactory::getApiKey()->execute(array('api_key'=>$apiKey));
+        if (false === is_object($apiKey)) {
+            $this->app->halt(401, json_encode(array('message'=>'Invalid API key.')));
+        }
+        return true;
     }
 }
