@@ -139,12 +139,13 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             </select>
                            
           <div id="artcatg-div"   > 
-             <?php 
-             
-                foreach($this->pageDetail['moneysaving'] as $pageatrcatg){
-                    $pagecatg[]= $pageatrcatg['categoryid'];
-                 }
-                
+             <?php
+                $pagecatg = array();
+                if (isset($this->pageDetail['moneysaving']) && is_array($this->pageDetail['moneysaving'])) {
+                    foreach($this->pageDetail['moneysaving'] as $pageatrcatg){
+                        $pagecatg[]= $pageatrcatg['categoryid'];
+                    }
+                }
              ?>  
                     <p><?php echo $this->translate('Article categories'); ?></p>
                 <div class="web-address-list multiselect">

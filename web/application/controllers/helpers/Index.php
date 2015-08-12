@@ -20,7 +20,7 @@ class Zend_Controller_Action_Helper_Index extends Zend_Controller_Action_Helper_
 
     public static function removeDuplicateCode($offers, $pageName = '')
     {
-        $offersWithoutDuplicateShop = '';
+        $offersWithoutDuplicateShop = array();
         foreach ($offers as $offerId => $offer) {
             if ($pageName == 'specialPage') {
                 $offerData = $offer['offers']['shopOffers'];

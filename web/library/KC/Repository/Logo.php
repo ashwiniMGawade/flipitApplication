@@ -5,6 +5,9 @@ class Logo extends \Core\Domain\Entity\Logo
 {
     public static function getPageLogo($logoId)
     {
+        if(empty($logoId)) {
+           return '';
+        }
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale->select("l")
             ->from("\Core\Domain\Entity\Logo", "l")

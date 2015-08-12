@@ -32,12 +32,14 @@ class FrontEnd_Helper_SignUpPartialFunction
                     $whichFormIsPostForValidation = $signUpFormForStorePage;
                     break;
             }
-            if ($whichFormIsPostForValidation->isValid($currentSubmittedForm->getRequest()->getPost())) {
-                $signUpStep2Url = self::signUpRedirectLink($whichFormIsPostForValidation);
-                header('location:'. $signUpStep2Url);
-                exit();
-            } else {
-                $whichFormIsPostForValidation->highlightErrorElements();
+            if (is_object($whichFormIsPostForValidation)) {
+                if ($whichFormIsPostForValidation->isValid($currentSubmittedForm->getRequest()->getPost())) {
+                    $signUpStep2Url = self::signUpRedirectLink($whichFormIsPostForValidation);
+                    header('location:' . $signUpStep2Url);
+                    exit();
+                } else {
+                    $whichFormIsPostForValidation->highlightErrorElements();
+                }
             }
         }
         return true;

@@ -503,7 +503,7 @@ class Shop
         return $this->$property;
     }
 
-    public function __set($property, $value = '')
+    public function __set($property, $value)
     {
         $this->$property = $value;
     }

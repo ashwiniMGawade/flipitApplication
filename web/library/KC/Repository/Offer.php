@@ -1606,9 +1606,15 @@ class Offer extends \Core\Domain\Entity\Offer
         $img = $imgName;
         
         if ($img) {
-            unlink($user_path . $img);
-            unlink($user_path . "thum_" . $img);
-            unlink($user_path . "thum_large" . $img);
+            if (file_exists($user_path . $img)) {
+                unlink($user_path . $img);
+            }
+            if (file_exists($user_path . "thum_" . $img)) {
+                unlink($user_path . "thum_" . $img);
+            }
+            if (file_exists($user_path . "thum_large" . $img)) {
+                unlink($user_path . "thum_large" . $img);
+            }
         }
         if (!file_exists($user_path)) {
             mkdir($user_path, 0776, true);
