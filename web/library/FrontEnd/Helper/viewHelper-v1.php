@@ -1,4 +1,5 @@
 <?php
+use \HTMLPurifier;
 class FrontEnd_Helper_viewHelper
 {
     public static function writeLog($message, $logfile = '')
