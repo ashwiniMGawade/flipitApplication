@@ -10,7 +10,9 @@ class Purifier implements PurifierInterface
 
     public function __construct()
     {
-        $this->purifier = new HTMLPurifier();
+        $config = \HTMLPurifier_Config::createDefault();
+        $config->set('Cache.SerializerPath', '/tmp');
+        $this->purifier = new HTMLPurifier($config);
     }
 
     public function purify($params)

@@ -1,4 +1,5 @@
 <?php
+use \HTMLPurifier;
 class FrontEnd_Helper_viewHelper
 {
     public static function writeLog($message, $logfile = '')
@@ -699,8 +700,8 @@ EOD;
 
     public static function sanitize($string, $stripTags = true)
     {
-        require_once(LIBRARY_PATH.'/HTMLPurifier/HTMLPurifier.auto.php');
         $config = HTMLPurifier_Config::createDefault();
+        $config->set('Cache.SerializerPath', '/tmp');
         $purifier = new HTMLPurifier($config);
         $clean_html = $purifier->purify($string);
         return $clean_html;
