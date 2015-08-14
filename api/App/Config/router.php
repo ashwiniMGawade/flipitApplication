@@ -1,16 +1,18 @@
 <?php
+$locale = '';
 $req = $app->request;
-$isFlipit = isFlipit($req);
-$locale = determineLocale($req, $isFlipit);
 
+$isFlipit = isFlipit($req);
+
+if ($isFlipit) {
+    $locale = determineLocale($req, $config);
+}
+$localePath = $locale ? '/'.$locale : '';
 define('LOCALE', $locale);
 
-$locale = ( $locale ? '/'.$locale : '');
-
-if(($isFlipit && $locale) || !$isFlipit) {
-
+if (!$isFlipit || ($isFlipit && $locale)) {
     $app->group(
-        $locale.'/shops',
+        $localePath . '/shops',
         function () use ($app) {
             $app->get('/:id', 'Api\Controller\ShopsController:getShop');
             $app->post('/', 'Api\Controller\ShopsController:createShop');
@@ -20,14 +22,14 @@ if(($isFlipit && $locale) || !$isFlipit) {
     );
 
     $app->group(
-        '/visitors',
+        $localePath . '/visitors',
         function () use ($app) {
             $app->map('/', 'Api\Controller\VisitorsController:updateVisitor')->via('PUT', 'PATCH');
         }
     );
 
     $app->get(
-        '/',
+        $localePath . '/',
         function () {
             echo json_encode(array("msg" => "Welcome to Slim Framework"));
         }
@@ -36,17 +38,23 @@ if(($isFlipit && $locale) || !$isFlipit) {
 
 function isFlipit($req)
 {
-    $baseUrl = $req->getUrl();
-    $parsedBaseUrl = parse_url($baseUrl);
-    $domain = $parsedBaseUrl['host'];
-    $domainPieces = explode('.', $domain);
+    $baseUrl        = $req->getUrl();
+    $parsedBaseUrl  = parse_url($baseUrl);
+    $domain         = $parsedBaseUrl['host'];
+    $domainPieces   = explode('.', $domain);
+
     return in_array('flipit',$domainPieces);
 }
 
-function determineLocale($req, $isFlipit)
+function determineLocale($req, $config)
 {
-    $resourceUrl = $req->getResourceUri();
+    $resourceUrl        = $req->getResourceUri();
+    $resourceUrlPieces  = explode('/', $resourceUrl);
 
-    $resourceUrlPieces = explode('/', $resourceUrl);
-    return $isFlipit ? ( isset($resourceUrlPieces[1]) ? $resourceUrlPieces[1] : '' ) : '';
+    $locale = isset($resourceUrlPieces[1]) ? $resourceUrlPieces[1] : '';
+
+    if (in_array($locale, $config['locale'])) {
+        return $locale;
+    }
+    return false;
 }

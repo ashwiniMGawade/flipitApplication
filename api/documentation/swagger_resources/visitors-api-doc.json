@@ -1,6 +1,6 @@
 {
     "swagger":"2.0",
-    "host":"api.dev.flipit.com",
+    "host":"api.dev.kortingscode.nl",
     "basePath":"",
     "tags":[
         {
