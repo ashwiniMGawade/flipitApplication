@@ -90,7 +90,7 @@ function getFavShop() {
 										+ "' value='"
 										+ favShop[i].id
 										+ "' /> &nbsp"
-										+ favShop[i].name + "</li>";
+										+ favShop[i].shop.name + "</li>";
 							}
 							op += "</ul>";
 							$('div.multiselect').append(op);
