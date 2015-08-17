@@ -4,6 +4,7 @@ namespace Core\Domain\Factory;
 use \Core\Domain\Service\Validator;
 use \Core\Domain\Service\KeyGenerator;
 use \Core\Domain\Service\Purifier;
+
 use \Core\Domain\Usecase\Admin\GetApiKeyListingUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
@@ -14,11 +15,16 @@ use \Core\Domain\Usecase\Admin\CreateShopUsecase;
 use \Core\Domain\Usecase\Admin\AddShopUsecase;
 use \Core\Domain\Usecase\Admin\UpdateShopUsecase;
 use \Core\Domain\Usecase\Admin\DeleteShopUsecase;
+use \Core\Domain\Usecase\Admin\UpdateVisitorUsecase;
+use \Core\Domain\Usecase\Admin\CreateWidgetUsecase;
+use \Core\Domain\Usecase\Admin\AddWidgetUsecase;
+
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\ShopValidator;
 use Core\Domain\Validator\VisitorValidator;
+use Core\Domain\Validator\WidgetValidator;
+
 use \Core\Persistence\Factory\RepositoryFactory;
-use \Core\Domain\Usecase\Admin\UpdateVisitorUsecase;
 
 class AdminFactory
 {
@@ -90,5 +96,19 @@ class AdminFactory
     public static function deleteShop()
     {
         return new DeleteShopUsecase(RepositoryFactory::shop());
+    }
+
+    public static function createWidget()
+    {
+        return new CreateWidgetUsecase();
+    }
+
+    public static function addWidget()
+    {
+        return new AddWidgetUsecase(
+            RepositoryFactory::widget(),
+            new WidgetValidator(new Validator()),
+            new Purifier()
+        );
     }
 }
