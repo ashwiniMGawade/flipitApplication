@@ -66,21 +66,18 @@ if(empty($locale)) {
 function migrateDatabase($dsn, $key = "",$version = null)
 {
     try {
-
         echo "Datbase: ".$dsn . "\n" ;
 
         # auto load doctrine library
         spl_autoload_register(array('Doctrine', 'autoload'));
 
-
-        # create coonection
+        # create connection
         $DMC = Doctrine_Manager::connection($dsn, 'doctrine_site'.$key);
-        //$DMC1 = Doctrine_Manager::connection($connections['imbull'], 'doctrine');
 
         # auto  model class
         spl_autoload_register(array('Doctrine', 'modelsAutoload'));
 
-        # cretae donctrine mager
+        # create donctrine manager
         $manager = Doctrine_Manager::getInstance();
 
         # set manager attribute like table class, base classes etc
@@ -99,20 +96,16 @@ function migrateDatabase($dsn, $key = "",$version = null)
         if($migration->getLatestVersion() > $migration->getCurrentVersion() ) {
             # execute migrate()
             $migration->migrate($version);
-            echo "Database has been Migrated successfully \n\n";
+            echo "Database has been Migrated successfully to v" . $migration->getCurrentVersion() . " \n\n";
         } else {
-            echo "Database has been Migrated successfully \n\n";
+            echo "No migrations available. \n\n";
         }
 
         #close connection
         $manager->closeConnection($DMC);
 
     } catch (Exception $e) {
-        // print_r($e->getMessage());
+        print_r($e->getMessage());
     }
-
 }
 
-/*echo "<p>Start generating migrations...</p>";
-Doctrine_Core::generateMigrationsFromDb(realpath('C:/wamp/www/migrations'));
-echo "<p>Migration classes added successfully.</p>";*/
