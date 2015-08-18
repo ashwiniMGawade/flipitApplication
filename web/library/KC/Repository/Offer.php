@@ -1120,26 +1120,22 @@ class Offer extends \Core\Domain\Entity\Offer
     public static function orderOffersByOfferPosition($offers)
     {
         $offerWithPosition =  array();
-        $offerWithoughtPosition =  array();
         foreach ($offers as $key => $offer) {
-            if (!empty($offer['offer_position'])) {
-                $offerWithPosition[] = $offer;
-            } else {
-                $offerWithoughtPosition[] = $offer;
+            if ($offer['offer_position'] && $offer['offer_position'] > 0) {
+                $offerWithPosition = self::moveElement($offers, $key, ($offer['offer_position'] - 1));
             }
         }
-        $offerWithPosition = self::sortOfferByPosition($offerWithPosition);
-        return array_merge($offerWithPosition, $offerWithoughtPosition);
+        if (empty($offerWithPosition)) {
+            $offerWithPosition = $offers;
+        }
+        return $offerWithPosition;
     }
 
-    public static function sortOfferByPosition($offerWithPosition)
+    public static function moveElement($offers, $currentPosition, $newPosition)
     {
-        $sort = array();
-        foreach ($offerWithPosition as $keyIndex => $offer) {
-            $sort['offer_position'][$keyIndex] = $offer['offer_position'];
-        }
-        array_multisort($sort['offer_position'], SORT_ASC, $offerWithPosition);
-        return $offerWithPosition;
+        $genereateNewPosition = array_splice($offers, $currentPosition, 1);
+        array_splice($offers, $newPosition, 0, $genereateNewPosition);
+        return $offers;
     }
 
     public static function getCommonNewestOffers($type, $limit, $shopId = 0, $userId = "")
@@ -1610,9 +1606,15 @@ class Offer extends \Core\Domain\Entity\Offer
         $img = $imgName;
         
         if ($img) {
-            unlink($user_path . $img);
-            unlink($user_path . "thum_" . $img);
-            unlink($user_path . "thum_large" . $img);
+            if (file_exists($user_path . $img)) {
+                unlink($user_path . $img);
+            }
+            if (file_exists($user_path . "thum_" . $img)) {
+                unlink($user_path . "thum_" . $img);
+            }
+            if (file_exists($user_path . "thum_large" . $img)) {
+                unlink($user_path . "thum_large" . $img);
+            }
         }
         if (!file_exists($user_path)) {
             mkdir($user_path, 0776, true);

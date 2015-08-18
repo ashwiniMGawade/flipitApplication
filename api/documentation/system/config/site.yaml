@@ -1,0 +1,19 @@
+title: Flipit                                 # Name of the site
+
+author:
+  name: Flipit                    # Default author name
+  email: 'developer@flipit.com'                   # Default author email
+
+taxonomies: [category,tag]                  # Arbitrary list of taxonomy types
+
+blog:
+  route: '/blog'                            # Route to blog (deprecated)
+
+metadata:
+  description: 'Flipit'               # Site description
+
+summary:
+  enabled: true                             # enable or disable summary of page
+  format: short                             # long = summary delimiter will be ignored; short = use the first occurence of delimter or size
+  size: 300                                 # Maximum length of summary (characters)
+  delimiter: ===                            # The summary delimiter

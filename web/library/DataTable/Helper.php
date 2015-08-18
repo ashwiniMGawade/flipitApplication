@@ -24,4 +24,15 @@ class DataTable_Helper extends \NeuroSYS\DoctrineDatatables\Table
         }
         return array_merge($request, $override);
     }
+
+    public static function createResponse($sEcho, $data, $totalNumberOfRecords)
+    {
+        $returnData = array(
+            "sEcho" => $sEcho,
+            "aaData" => $data,
+            "iTotalRecords" => $totalNumberOfRecords,
+            "iTotalDisplayRecords" => $totalNumberOfRecords
+        );
+        return $returnData;
+    }
 }

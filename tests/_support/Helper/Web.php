@@ -11,11 +11,13 @@ class Web extends \Codeception\Module
      * This function is run before every web test to rest the Databases.
      * @param  \Codeception\TestCase $test 
      */
-    public function _before()
+    public function _before(\Codeception\TestCase $test)
     {
         $databaseHelper = new DatabaseHelper;
         $databaseHelper->siteDatabaseSetup();
         $databaseHelper->userDatabaseSetup();
+        $fixturesFactoryHelper = new FixturesFactoryHelper();
+        $fixturesFactoryHelper->execute($this);
     }
 
     public function haveInDatabasePDOSite($table, $arr)

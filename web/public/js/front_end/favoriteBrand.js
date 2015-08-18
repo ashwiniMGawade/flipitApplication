@@ -20,12 +20,7 @@ $("input#searchFieldBrandHeader").autocomplete({
     search: function(event, ui) {
         $('.ajax-autocomplete ul').empty();
     },
-    source :  function( request, response ) {
-        var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
-        response( $.grep( shopsJSON, function( item ){
-            return matcher.test( item.label );
-        }) );
-    },
+    source: shopsJSON,
     select: function(event, ui ) {
         $('form').submit(function() {
             return false;

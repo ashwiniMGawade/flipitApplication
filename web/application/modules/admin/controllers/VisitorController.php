@@ -36,22 +36,15 @@ class Admin_VisitorController extends Zend_Controller_Action
                     # no restriction
                     break;
                 default:
-                    if (
-                        $this->_settings['administration']['rights'] != '1'
-                        && $this->_settings['administration']['rights'] != '2'
-                    ) {
-
+                    if ($this->_settings['administration']['rights'] != '1') {
                         $this->getResponse()->setHttpResponseCode(404);
-                        $this->_helper->redirector('index', 'index', null) ;
+                        $this->_helper->redirector('index', 'index', null);
                     }
             }
 
         } else {
-            if (
-                $this->_settings['administration']['rights'] != '1'
-                && $this->_settings['administration']['rights'] != '2'
-            ) {
-                $this->_redirect('/admin/auth/index');
+            if ($this->_settings['administration']['rights'] != '1') {
+                $this->_redirect('/admin');
             }
         }
     }
@@ -112,9 +105,40 @@ class Admin_VisitorController extends Zend_Controller_Action
 
     public function getvisitorlistAction()
     {
-        $params = $this->_getAllParams();
-        $visitorList = \KC\Repository\Visitor::VisitorList($params);
-        echo Zend_Json::encode($visitorList);
+        $flash = $this->_helper->getHelper('FlashMessenger');
+
+        $filter['searchtext'] =  FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('searchtext'));
+        $filter['email'] =  FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('email'));
+
+        $sortColumns = array(
+                'id',
+                'firstName',
+                'lastName',
+                'email',
+                'mailClickCount',
+                'mailOpenCount',
+                'mailHardBounceCount',
+                'mailSoftBounceCount',
+                'active',
+                'weeklyNewsLetter',
+                'created_at'
+            );
+
+        $request['offset'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayStart')));
+        $request['limit'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayLength')));
+        $request['sortByColumn'] = $sortColumns[intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iSortCol_0')))];
+        $request['sortDirection'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sSortDir_0'));
+
+        $sEcho = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sEcho')));
+
+        try {
+            $visitorList = \Core\Domain\Factory\AdminFactory::getVisitors()->execute($filter, $request);
+            $response = \DataTable_Helper::createResponse($sEcho, $visitorList['visitors'], $visitorList['visitorCount']);
+            echo Zend_Json::encode($response);
+        } catch (Exception $exception) {
+            $message = $this->view->translate($exception->getMessage());
+            $flash->addMessage(array('error' => $message));
+        }
         die();
     }
 
@@ -233,7 +257,7 @@ class Admin_VisitorController extends Zend_Controller_Action
     }
     public function deletefavoriteshopAction()
     {
-        $params = $this->_getAllParams();
+        $params = $this->getAllParams();
         $success = \KC\Repository\Visitor::delelteFav($params);
         echo Zend_Json::encode($success);
         die();
@@ -241,27 +265,24 @@ class Admin_VisitorController extends Zend_Controller_Action
 
     public function importvisitorlistAction()
     {
-        $params = $this->_getAllParams();
+        $params = $this->getAllParams();
         if ($this->getRequest()->isPost()) {
             if (isset($_FILES['excelFile']['name']) && @$_FILES['excelFile']['name'] != '') {
                 $result = \KC\Repository\RouteRedirect::uploadExcel($_FILES['excelFile']['name'], true);
                 $excelFilePath = $result['path'];
                 $excelFile = $excelFilePath.$result['fileName'];
                 if ($result['status'] == 200) {
-
                     chmod($excelFile, 0775);
                     $flash = $this->_helper->getHelper('FlashMessenger');
                     $message = $this->view->translate('Visitors uploaded successfully');
                     $flash->addMessage(array('success' => $message));
-                    $this->_redirect(HTTP_PATH . 'admin/visitor/importvisitorlist');
+                    $this->redirect(HTTP_PATH . 'admin/visitor/importvisitorlist');
                 }
-
             } else {
-
                 $flash = $this->_helper->getHelper('FlashMessenger');
                 $message = $this->view->translate('Problem in your file!!');
                 $flash->addMessage(array('error' => $message));
-                $this->_redirect(HTTP_PATH . 'admin/visitor/importvisitorlist');
+                $this->redirect(HTTP_PATH . 'admin/visitor/importvisitorlist');
             }
         }
 
@@ -290,23 +311,5 @@ class Admin_VisitorController extends Zend_Controller_Action
         ->setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
                 ->setHeader('Cache-Control', 'max-age=0')
                 ->setBody(file_get_contents($fileName));
-    }
-
-    public function exportXlxAction()
-    {
-        # set fiel and its trnslattions
-        $locale = LOCALE == '' ? "-NL" : "-".strtoupper(LOCALE);
-        $visitorFile = UPLOAD_EXCEL_PATH . "visitorList".$locale.".csv";
-        $fileName =  $this->view->translate($visitorFile);
-        $this->_helper->layout()->disableLayout();
-        $this->_helper->viewRenderer->setNoRender(true);
-        # set reponse headers and body
-        $this->getResponse()
-        ->setHeader('Content-Disposition', 'attachment;filename=' . basename($fileName))
-        ->setHeader('Content-type', 'text/csv')
-        ->setHeader('Cache-Control', 'max-age=0')
-        ->setHeader('Pragma', 'no-cache')
-        ->setHeader('Expires', '0')
-        ->setBody(file_get_contents($fileName));
     }
 }

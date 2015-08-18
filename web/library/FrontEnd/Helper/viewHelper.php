@@ -1,4 +1,5 @@
 <?php
+use \HTMLPurifier;
 class FrontEnd_Helper_viewHelper
 {
     public static function writeLog($message, $logfile = '')
@@ -332,7 +333,7 @@ EOD;
         $resultStatus = "false";
         switch (strtolower($eventType)) {
             case 'onclick':
-                if (\KC\Repository\ViewCount::getOfferClick($offerId, $clientIp) == 0) {
+                if (\Core\Domain\Factory\GuestFactory::getOfferClick()->execute($offerId, $clientIp) == 0) {
                     \KC\Repository\ViewCount::saveOfferClick($offerId, $clientIp);
                     $varnishObj = new \KC\Repository\Varnish();
                     $varnishObj->addUrl(HTTP_PATH_LOCALE . 'offer/offer-view-count?offerId='. $offerId);
@@ -699,8 +700,8 @@ EOD;
 
     public static function sanitize($string, $stripTags = true)
     {
-        require_once(LIBRARY_PATH.'/HTMLPurifier/HTMLPurifier.auto.php');
         $config = HTMLPurifier_Config::createDefault();
+        $config->set('Cache.SerializerPath', '/tmp');
         $purifier = new HTMLPurifier($config);
         $clean_html = $purifier->purify($string);
         return $clean_html;

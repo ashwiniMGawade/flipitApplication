@@ -5,5 +5,24 @@ namespace Helper;
 
 class Api extends \Codeception\Module
 {
+    public function _before(\Codeception\TestCase $test)
+    {
+        $databaseHelper = new DatabaseHelper;
+        $databaseHelper->siteDatabaseSetup();
+        $databaseHelper->userDatabaseSetup();
+        $fixturesFactoryHelper = new FixturesFactoryHelper();
+        $fixturesFactoryHelper->execute($this);
+    }
 
+    public function haveInDatabasePDOSite($table, $arr)
+    {
+        $databaseHelper = new DatabaseHelper;
+        $databaseHelper->haveInDatabasePDOSite($table, $arr);
+    }
+
+    public function haveInDatabasePDOUser($table, $arr)
+    {
+        $databaseHelper = new DatabaseHelper;
+        $databaseHelper->haveInDatabasePDOUser($table, $arr);
+    }
 }

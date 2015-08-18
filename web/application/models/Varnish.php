@@ -1,4 +1,6 @@
 <?php
+use \Aws\Ec2\Ec2Client;
+
 class Varnish extends BaseVarnish
 {
 
@@ -28,18 +30,90 @@ class Varnish extends BaseVarnish
         }
     }
 
+    private function getIpAddressesOfAllProductionVarnishServers()
+    {
+        $ec2Client = Ec2Client::factory(array(
+            'region'   => 'eu-west-1',
+            'credentials' => array(
+                'key'      => 'AKIAIYSHHZL73F2VVZWA',
+                'secret'   => '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'
+            ),
+            'version' => 'latest',
+            // 'debug'   => true
+        ));
+
+        $result = $ec2Client->DescribeInstances(
+            array('Filters' => array(
+                array(
+                    'Name' => 'tag:aws:autoscaling:groupName',
+                    'Values' => array('flipit-production-VarnishAutoscalingGroup-11QGPT21DBMSP')
+                ),
+                array(
+                    'Name' => 'instance-state-name',
+                    'Values' => array('running')
+                )
+            ))
+        );
+
+        $ipAddresses = array();
+        if (isset($result['Reservations'])) {
+            $reservations = $result['Reservations'];
+            foreach ($reservations as $reservation) {
+                $instances = $reservation['Instances'];
+                foreach ($instances as $instance) {
+                    $ipAddresses[] = $instance['PrivateIpAddress'];
+                }
+            }
+        }
+        return $ipAddresses;
+    }
+
+    private function getCachedIpAddressesOfAllProductionVarnishServers()
+    {
+        $cache = new Application_Service_Cache_FileCache();
+        $cacheId = 'productionVarnishIpAddresses';
+        $currentTime = strtotime("now");
+        $ttl = strtotime("+15 minutes");
+
+        if ($cache->contains($cacheId)) {
+            $ipAddressesCache = unserialize($cache->fetch($cacheId));
+            if ($ipAddressesCache['ttl'] > $currentTime) {
+                return $ipAddressesCache['ipAddresses'];
+            }
+        }
+
+        $ipAddresses = $this->getIpAddressesOfAllProductionVarnishServers();
+        $ipAddressesCache['ttl'] = $ttl;
+        $ipAddressesCache['ipAddresses'] = $ipAddresses;
+        $cache->save($cacheId, serialize($ipAddressesCache));
+
+        return $ipAddressesCache['ipAddresses'];
+    }
+
     private function refreshVarnish($url)
     {
-        $curl = curl_init(rtrim($url, '/'));
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "REFRESH");
-        curl_setopt($curl, CURLOPT_NOBODY, true);
-        curl_exec($curl);
-        if (!curl_errno($curl)) {
-            $info = curl_getinfo($curl);
-            echo "URL: " . $info['url'] . "\n";
-            echo "Time: " . $info['total_time'] . "\n\n";
+        $ipAddresses = $this->getCachedIpAddressesOfAllProductionVarnishServers();
+        if (empty($ipAddresses)) {
+            throw new \Exception('Could not get Ip Addresses of the Varnish Production Server.');
         }
-        curl_close($curl);
+
+        foreach ($ipAddresses as $ipAddress) {
+            $parsedUrl = parse_url($url);
+            $path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '/';
+            $query = isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : '';
+            $fragment = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
+            $curl = curl_init($parsedUrl['scheme'] . "://" . $ipAddress . $path . $query . $fragment);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "REFRESH");
+            curl_setopt($curl, CURLOPT_NOBODY, true);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Host: ' . $parsedUrl['host']));
+            curl_exec($curl);
+            if (!curl_errno($curl)) {
+                $info = curl_getinfo($curl);
+                echo "URL: " . $info['url'] . "\n";
+                echo "Time: " . $info['total_time'] . "\n\n";
+            }
+            curl_close($curl);
+        }
     }
 
     public function processQueue()

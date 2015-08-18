@@ -9,8 +9,15 @@
         "doctrine/dbal": "2.5.1",
         "doctrine/common": "2.4.2",
         "doctrine/orm": "2.4.2",
-        "doctrine/migrations": "dev-master",
-        "symfony/yaml": "^2.7"
+        "akrabat/rka-slim-controller": "^2.0",
+        "slim/extras": "*",
+        "slim/middleware": "*",
+        "monolog/monolog": "*",
+        "flynsarmy/slim-monolog": "*",
+        "nocarrier/hal": "^0.9.11",
+        "symfony/validator": "^2.7",
+        "aws/aws-sdk-php": "^3.2",
+        "ezyang/htmlpurifier": "*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "2.0.*@dev",
@@ -33,7 +40,9 @@
             "Core\\": "core/",
             "Command\\": "cli/Command/",
             "Tests\\": "tests/",
-            "Config\\": "config/"
+            "Config\\": "config/",
+            "Zend\\": "vendor/zendframework/zendframework1/library/Zend/",
+            "Api\\": "api/App/"
         }
     },
     "config": {

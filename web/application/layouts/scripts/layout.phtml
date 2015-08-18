@@ -49,12 +49,21 @@ else:
     );
 endif;
 echo $this->headMeta();
+?>
+<script type="text/javascript">
+    function OpenInNewTab(url)
+    {
+        var windowObject=window.open(url, '_blank');
+        windowObject.focus();
+    }
+</script>
+<?php
 echo $this->render('layout_css.phtml');
 echo $this->render('layout_js.phtml');
 echo $this->headStyle();
 
 ?>
-
+    <script src="//cdn.optimizely.com/js/2493410045.js"></script>
 </head>
 <body<?php echo (!empty($this->pageCssClass) ? " class='$this->pageCssClass'" : ''); ?>>
 <?php

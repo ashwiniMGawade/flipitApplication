@@ -11,6 +11,9 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
     	? $categoryWithSpecialPage['categoryicon'] 
     	: $categoryWithSpecialPage['logo'];
 
+    $imageHeight = !empty($categoryImage['height']) ? $categoryImage['height'] : '175';
+    $imageWidth = !empty($categoryImage['width']) ? $categoryImage['width'] : '175';
+
     if (
         isset($categoryWithSpecialPage['featured_category']) 
         && $categoryWithSpecialPage['featured_category'] != ''
@@ -21,14 +24,15 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
            isset($categoryWithSpecialPage['categoryFeaturedImage']) 
            ? $categoryWithSpecialPage['categoryFeaturedImage'] 
            : $categoryWithSpecialPage['categoryicon'];
+        $imageHeight = 367;
+        $imageWidth = 367;
     }
     
     $categoryImageSource = '';
     if(isset($categoryImage['path'])) { 
         $categoryImageSource = PUBLIC_PATH_CDN.$categoryImage['path']."".$categoryImage['name'];
     }
-    $imageHeight = !empty($categoryImage['height']) ? $categoryImage['height'] : '175';
-    $imageWidth = !empty($categoryImage['width']) ? $categoryImage['width'] : '175';
+
     ?>
     <article class="box <?php echo $featuredCategoryClass; ?>">
         <?php 

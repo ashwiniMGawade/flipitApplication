@@ -22,6 +22,14 @@ class Admin_RedirectController extends Zend_Controller_Action
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
 
+        $sessionNamespace = new \Zend_Session_Namespace();
+        if ($sessionNamespace->settings['rights']['administration']['rights'] != 1
+            && $sessionNamespace->settings['rights']['administration']['rights'] != 2) {
+            $flash = $this->_helper->getHelper('FlashMessenger');
+            $message = $this->view->translate ( 'You have no permission to access page' );
+            $flash->addMessage ( array ('error' => $message ));
+            $this->_redirect ( '/admin' );
+        }
     }
 
     public function init()

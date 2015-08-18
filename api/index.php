@@ -1,24 +1,24 @@
 <?php
 
-require 'vendor/slim/slim/Slim/Slim.php';
+// Sets the environment to testing for codeception
+if (isset($_SERVER['HTTP_USER_AGENT']) && ($_SERVER['HTTP_USER_AGENT'] == 'Symfony2 BrowserKit' || strpos($_SERVER['HTTP_USER_AGENT'], 'PhantomJS') == true)) {
+    define('APPLICATION_ENV', 'testing');
+}else {
+    define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? : 'production'));
+}
 
-\Slim\Slim::registerAutoloader();
+include '../c3.php';
 
+require_once '../vendor/autoload.php';
+require_once 'App/Config/default.php';
 
+$app = new \RKA\Slim($config['app']);
 
-/*use Core\Domain\Entity;
-$offerEntity = new Offer();
-print_r($offerEntity); die;*/
+//Use of JSON middleware
+$app->add(new Api\Middleware\JSON());
+//Use of ErrorHandler middleware
+$app->add(new Api\Middleware\ErrorHandler());
 
-
-
-$app = new \Slim\Slim();
-
-$app->contentType("application/json");
-
-$app->get( '/', function () {
-    	echo "Welcome to Slim Framework";
-	}
-);
+require_once 'App/Config/router.php';
 
 $app->run();

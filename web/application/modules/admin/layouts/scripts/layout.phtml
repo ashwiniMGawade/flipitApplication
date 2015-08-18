@@ -56,45 +56,6 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap.js" );
 
 echo $this->headScript ();
 
-# add suffix according to locale
-$suffix = "" ;
-if(LOCALE)
-{
-	$suffix = "_" .LOCALE ;
-}
-
-
-$path =  ROOT_PATH . "language/backend_js" . strtoupper($suffix). ".po";
-$homepage = file_get_contents($path);
-
-preg_match_all('/msgid "(.*)"/', $homepage, $keys);
-preg_match_all('/msgstr "(.*)"/', $homepage, $strings);
-$str = array();
-
-foreach ($strings[1] as $key => $value) {
-
-	$str[] = array('null',$value);
-}
-
-$out = @array_combine($keys[1], $str);
-
-$json = preg_replace_callback(
-	"/\\\\u([a-f0-9]{4})/",
-	function($matches) {
-		return iconv('UCS-4LE','UTF-8',pack('V', hexdec('U'.$matches[1])));
-	},
-	json_encode($out)
-);
-$p = " var json = " . $json . " ;  var jsonData = {};  jsonData['frontend_js'] =json;  var gt = new Gettext({ 'domain' : 'frontend_js' , 'locale_data' : jsonData });";
-$file = ROOT_PATH . 'js/back_end/gtData.js';
-$path = ROOT_PATH . 'js/back_end/';
-if (!file_exists($path))
-	mkdir($path);
-$a = fopen($file, 'w');
-@fwrite($a, $p);
-@fclose($a);
-
-
 ?>
 <!--[if lte IE 7]>
 <?php
@@ -102,8 +63,7 @@ $a = fopen($file, 'w');
 $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "/css/css/ie.css" );
 ?>
 
-<![endif]--> 
-<script type="application/javascript" charset="utf-8" src="<?php echo PUBLIC_PATH_LOCALE ?>js/back_end/gtData.js"></script>
+<![endif]-->
 <body
 	class="imbull-admin js  post-php admin-bar branch-3-3 version-3-3-1 admin-color-fresh">
 <!-- start imbullwraper  -->

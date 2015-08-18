@@ -27,6 +27,14 @@
 }
 @redBorder: 1px solid red;
 @greenBorder: 1px solid #6AC00E;
+.register-page {
+    input[type='checkbox'].input-success ~ span.subscribe-newsletter{
+        color:#6AC00E;
+    }
+    input[type='checkbox'].input-error ~ span.subscribe-newsletter{
+        color:red;
+    }
+}
 input.input-error{
     border:@redBorder !important;
 }

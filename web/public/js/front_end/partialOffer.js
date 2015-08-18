@@ -14,10 +14,12 @@ $(document).ready(function() {
     }    
     $(window).bind('scroll', function() {
         var offersSection = $('#content section.section:eq(0) article:eq('+ offersSectionArticlesCount +')').offset();
-        if (offersSection.top <= $(window).scrollTop()) {
-            $("a.btn-top").fadeIn("slow");
-        } else {
-            $('a.btn-top').fadeOut("slow");
+        if (offersSection) {
+            if (offersSection.top <= $(window).scrollTop()) {
+                $("a.btn-top").fadeIn("slow");
+            } else {
+                $('a.btn-top').fadeOut("slow");
+            }
         }
     });
 });

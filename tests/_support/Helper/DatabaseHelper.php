@@ -21,7 +21,7 @@ class DatabaseHelper
 
     public function haveInDatabasePDOUser($table, $arr)
     {
-        $this->insertInToDb($this->siteConfig, $table, $arr);
+        $this->insertInToDb($this->userConfig, $table, $arr);
     }
 
     public function siteDatabaseSetup()

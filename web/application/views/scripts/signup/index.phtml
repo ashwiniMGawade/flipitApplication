@@ -70,6 +70,24 @@ endif;
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group link-blue-buttom">
+                            <?php echo $registerForm->subscribeNewsLetter->renderViewHelper();?>
+                            <span class='subscribe-newsletter'>
+                                <?php echo $this->translate('By creating this account you will subscribe to the Flipit newsletter and you will accept our '); ?>
+                                <a class='link-blue' href="<?php echo HTTP_PATH_LOCALE; ?>info/<?php echo FrontEnd_Helper_viewHelper::__link('link_privacy-cookies'); ?>">
+                                    <?php echo $this->translate('Privacy Policy');?>
+                                </a>
+                                <?php echo $this->translate(' and our '); ?>
+                                <a class='link-blue' href="<?php echo HTTP_PATH_LOCALE; ?>info/<?php echo FrontEnd_Helper_viewHelper::__link('link_terms'); ?>">
+                                    <?php echo $this->translate('Terms and Conditions');?></a><?php echo $this->translate('. When you log into your account you can manage the newsletter options and code alerts for specific shops.'); ?>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                          <?php echo $registerForm->shopId->renderViewHelper();?>
                          <?php 
@@ -78,16 +96,6 @@ endif;
                              FrontEnd_Helper_viewHelper::__form('form_Create account'),
                              array('class'=>'btn blue btn-lg btn-primary', 'id'=>'register')
                          ) ?>
-                    </div>
-                    <div class="form-group alt link-blue-buttom">
-                        <?php echo $this->translate('By creating an account, you accept our');?>
-                        <a class='link-blue' href="<?php echo HTTP_PATH_LOCALE; ?>info/<?php echo FrontEnd_Helper_viewHelper::__link('link_privacy-cookies'); ?>">
-                            <?php echo $this->translate('Privacy Policy');?>
-                        </a>
-                        <?php echo $this->translate('and our'); ?>
-                        <a class='link-blue' href="<?php echo HTTP_PATH_LOCALE; ?>info/<?php echo FrontEnd_Helper_viewHelper::__link('link_terms'); ?>">
-                            <?php echo $this->translate('Terms and Conditions');?>
-                        </a>
                     </div>
                 </div>
             </div>

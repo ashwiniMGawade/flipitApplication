@@ -1,0 +1,8 @@
+title: Flipit
+metadata:
+    description: 'Flipit'
+
+taxonomies: [category,tag]
+summary:
+  size: 300
+

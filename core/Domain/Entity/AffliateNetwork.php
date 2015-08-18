@@ -75,4 +75,180 @@ class AffliateNetwork
     {
         $this->$property = $value;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getAffliateNetwork()
+    {
+        return $this->affliate_network;
+    }
+
+    /**
+     * @param mixed $affliate_network
+     */
+    public function setAffliateNetwork($affliate_network)
+    {
+        $this->affliate_network = $affliate_network;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAffliateNetworks()
+    {
+        return $this->affliate_networks;
+    }
+
+    /**
+     * @param mixed $affliate_networks
+     */
+    public function setAffliateNetworks($affliate_networks)
+    {
+        $this->affliate_networks = $affliate_networks;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAffliateNetworkShop()
+    {
+        return $this->affliatenetwork;
+    }
+
+    /**
+     * @param mixed $affliatenetwork
+     */
+    public function setAffliateNetworkShop($affliatenetwork)
+    {
+        $this->affliatenetwork = $affliatenetwork;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * @param mixed $created_at
+     */
+    public function setCreatedAt($created_at)
+    {
+        $this->created_at = $created_at;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * @param mixed $deleted
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExtendedSubid()
+    {
+        return $this->extendedSubid;
+    }
+
+    /**
+     * @param mixed $extendedSubid
+     */
+    public function setExtendedSubid($extendedSubid)
+    {
+        $this->extendedSubid = $extendedSubid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubId()
+    {
+        return $this->subId;
+    }
+
+    /**
+     * @param mixed $subId
+     */
+    public function setSubId($subId)
+    {
+        $this->subId = $subId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * @param mixed $updated_at
+     */
+    public function setUpdatedAt($updated_at)
+    {
+        $this->updated_at = $updated_at;
+    }
 }
