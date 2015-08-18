@@ -154,4 +154,24 @@ class ValidatorTest extends \Codeception\TestCase\Test
         $response = (new Validator())->validate($apiKey, $rules);
         $this->assertEquals($expected, $response);
     }
+
+    public function testValidatorReturnsViolationForPropertyGreaterThanOtherValue()
+    {
+        $apiKey = new ApiKey();
+        $apiKey->__set('id', 1);
+
+        $validator = new Validator();
+        $rules = array(
+            'id' => array(
+                $validator->greaterThan(2)
+            )
+        );
+        $expected = array(
+            "id" => array(
+                'This value should be greater than 2.'
+            )
+        );
+        $response = (new Validator())->validate($apiKey, $rules);
+        $this->assertEquals($expected, $response);
+    }
 }

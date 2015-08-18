@@ -43,5 +43,12 @@ interface ValidatorInterface
     /**
      * @return mixed
      */
-    public function notBlank();    
+    public function notBlank();
+
+    /**
+     * @param array $value
+     *
+     * @return mixed
+     */
+    public function greaterThan($value);
 }

@@ -91,10 +91,18 @@ class Validator implements ValidatorInterface
     }
 
     /**
-     * @return \Symfony\Component\Validator\Constraints\DateTime
+     * @return \Symfony\Component\Validator\Constraints\NotBlank
      */
     public function notBlank()
     {
         return new Assert\NotBlank();
+    }
+
+    /**
+     * @return \Symfony\Component\Validator\Constraints\GreaterThan
+     */
+    public function greaterThan($value)
+    {
+        return new Assert\GreaterThan($value);
     }
 }

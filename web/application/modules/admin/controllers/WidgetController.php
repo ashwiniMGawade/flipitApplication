@@ -1,14 +1,12 @@
 <?php
-class Admin_WidgetController extends Zend_Controller_Action
+
+use \Core\Domain\Factory\AdminFactory;
+use \Core\Service\Errors;
+
+class Admin_WidgetController extends Application_Admin_BaseController
 {
     public function init()
     {
-        $flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        $message = $flashMessenger->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ?
-        $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ?
-        $message[0]['error'] : '';
     }
 
     public function preDispatch()
@@ -35,10 +33,15 @@ class Admin_WidgetController extends Zend_Controller_Action
     public function addwidgetAction()
     {
         if ($this->_request->isPost()) {
-            if (\KC\Repository\Widget::addWidget($this->_getAllParams())) {
-                self::addFlashMessage('Widget has been added successfully', 'success', HTTP_PATH.'admin/widget');
+            $widget = AdminFactory::createWidget()->execute();
+            $result = AdminFactory::addWidget()->execute($widget, $this->getAllParams());
+            if ($result instanceof Errors) {
+                $errors = $result->getErrorMessages();
+                $this->view->widget = $this->getAllParams();
+                $this->setFlashMessage('error', implode('<br>', $errors));
             } else {
-                self::addFlashMessage('Problem in your data', 'error', HTTP_PATH.'admin/widget');
+                $this->setFlashMessage('success', 'Widget has been added successfully');
+                $this->redirect(HTTP_PATH.'admin/widget');
             }
         }
     }
@@ -78,6 +81,8 @@ class Admin_WidgetController extends Zend_Controller_Action
         if (!empty($parameters['delete'])) {
             self::deleteWidget($parameters['id']);
         }
+
+        //return $this->view->render('widget/addwidget.phtml');
     }
 
     public function updateWidget($parameters)

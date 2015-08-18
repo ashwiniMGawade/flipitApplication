@@ -12,14 +12,17 @@ class Zend_View_Helper_FlashMessages extends Zend_View_Helper_Abstract
     public function flashMessages()
     {
         $messages = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->getMessages();
-        $output = '';
+        if(empty($messages)) {
+            $messages = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->getCurrentMessages();
+        }
 
-        if (!empty($messages)) {
-            $output .= '<ul class="flashMeessages">';
-            foreach ($messages as $message) {
-                $output .= '<li class="' . key($message) . '">' . current($message) . '</li>';
+        $output = '';
+        if (isset($messages[0]) && !empty($messages[0])) {
+            $output .= '<br><div class ="mainpage-content-colorbox success">';
+            foreach ($messages[0] as $message_type => $message) {
+                $output .= '<span class="' . $message_type . 'server">' . $message . '</span>';
             }
-            $output .= '</ul>';
+            $output .= '</div>';
         }
 
         $flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
