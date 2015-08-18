@@ -22,7 +22,7 @@ class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
     public function getNonDefaultWidget($widget)
     {
         if (!empty($widget['widget']['content'])) {
-            echo str_replace('<br />', '', html_entity_decode($widget['widget']['content']));
+            echo '<div class="htmlWidgetWrapper">'.str_replace('<br />', '', html_entity_decode($widget['widget']['content'])).'</div>';
         }
     }
 
