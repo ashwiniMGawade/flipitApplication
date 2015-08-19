@@ -261,10 +261,6 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             )
         );
 
-        if($this->getRequest()->getParam('name') == 'emailSubject') {
-            $val =BackEnd_Helper_viewHelper::stripSlashesFromString($val);
-        }
-
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
 
         switch ($this->getRequest()->getParam('name')){
@@ -279,6 +275,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                 ->getQuery()->execute();
                 break;
             case 'emailSubject':
+                $val = BackEnd_Helper_viewHelper::stripSlashesFromString($val);
                 $queryBuilder ->update('\Core\Domain\Entity\Signupmaxaccount', 'su')
                 ->set('su.emailsubject', '?1')->setParameter(1, $val)
                 ->getQuery()->execute();
