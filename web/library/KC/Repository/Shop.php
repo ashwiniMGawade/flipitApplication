@@ -560,7 +560,7 @@ class Shop extends \Core\Domain\Entity\Shop
         $relatedShops = array();
         if (!empty($relatedShopsIds[0]['relatedshopId'])) {
             foreach ($relatedShopsIds as $relatedShopsId) {
-                $relatedShops[] = self::getShopLogoByShopId($relatedShopsId['relatedshopId']);
+                $relatedShops[$relatedShopsId['relatedshopId']] = self::getShopLogoByShopId($relatedShopsId['relatedshopId']);
             }
             return $relatedShops;
         } else {
