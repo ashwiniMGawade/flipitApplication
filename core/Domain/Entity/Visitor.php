@@ -189,22 +189,22 @@ class Visitor
     /**
      * @ORM\Column(type="integer", length=10, nullable=false)
      */
-    protected $mailClickCount;
+    protected $mailClickCount = 0;
 
     /**
      * @ORM\Column(type="integer", length=10, nullable=false)
      */
-    protected $mailOpenCount;
+    protected $mailOpenCount = 0;
 
     /**
      * @ORM\Column(type="integer", length=10, nullable=false)
      */
-    protected $mailHardBounceCount;
+    protected $mailHardBounceCount = 0;
 
     /**
      * @ORM\Column(type="integer", length=10, nullable=false)
      */
-    protected $mailSoftBounceCount;
+    protected $mailSoftBounceCount = 0;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
@@ -215,6 +215,11 @@ class Visitor
      * @ORM\Column(type="datetime", length=255, nullable=true)
      */
     protected $lastEmailOpenDate;
+
+    public function __construct()
+    {
+        $this->lastEmailOpenDate = new \DateTime();
+    }
 
     /**
      * @return mixed
