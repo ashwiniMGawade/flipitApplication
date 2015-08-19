@@ -48,6 +48,7 @@ class WidgetValidator
             ),
             'endDate' => array(
                 $this->validator->dateTime(),
+                $this->validator->greaterThan('today'),
                 $this->validator->greaterThan($widget->getStartDate())
             )
         );
