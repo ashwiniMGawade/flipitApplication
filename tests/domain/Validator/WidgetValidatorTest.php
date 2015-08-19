@@ -2,22 +2,45 @@
 namespace Validator;
 
 use \Core\Domain\Entity\Widget;
+use \Core\Domain\Service\Validator;
 use \Core\Domain\Validator\WidgetValidator;
 
 class WidgetValidatorTest extends \Codeception\TestCase\Test
 {
-    protected $tester;
-
-    public function testShopValidatorWithValidOutcome()
+    public function testWidgetValidatorWithValidOutcome()
     {
         $widgetValidator = new WidgetValidator($this->mockValidatorInterface(true));
         $this->assertTrue($widgetValidator->validate(new Widget()));
     }
 
-    public function testShopValidatorWithInvalidOutcome()
+    public function testWidgetValidatorWithInvalidOutcome()
     {
         $widgetValidator = new WidgetValidator($this->mockValidatorInterface(false));
         $this->assertFalse($widgetValidator->validate(new Widget()));
+    }
+
+    public function testWidgetValidatorWithStartDateAndWithoutEndDate()
+    {
+        $widget = new Widget();
+        $widget->setTitle('Test');
+        $widget->setCreatedAt(new \DateTime('now'));
+        $widget->setUpdatedAt(new \DateTime('now'));
+        $widget->setStartDate(new \DateTime('now'));
+        $widgetValidator = new WidgetValidator(new Validator());
+        $result = $widgetValidator->validate($widget);
+        $this->assertEquals(array('endDate'=>array('This value should not be blank.')), $result);
+    }
+
+    public function testWidgetValidatorWithEndDateAndWithoutStartDate()
+    {
+        $widget = new Widget();
+        $widget->setTitle('Test');
+        $widget->setCreatedAt(new \DateTime('now'));
+        $widget->setUpdatedAt(new \DateTime('now'));
+        $widget->setEndDate(new \DateTime('now'));
+        $widgetValidator = new WidgetValidator(new Validator());
+        $result = $widgetValidator->validate($widget);
+        $this->assertEquals(array('startDate'=>array('This value should not be blank.')), $result);
     }
 
     private function mockValidatorInterface($flag)

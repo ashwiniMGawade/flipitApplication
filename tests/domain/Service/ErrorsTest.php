@@ -8,8 +8,15 @@ class ErrorsTest extends \Codeception\TestCase\Test
     public function testSetErrorAndGetErrorMethodsWithAssigningSingleError()
     {
         $errors = new Errors();
-        $errors->setError('test_field', 'This value should not be blank.');
+        $errors->setError('This value should not be blank.', 'test_field');
         $this->assertEquals('This value should not be blank.', $errors->getError('test_field'));
+    }
+
+    public function testSetErrorAndGetErrorMethodsWithAssigningSingleErrorWithoutFieldName()
+    {
+        $errors = new Errors();
+        $errors->setError('This value should not be blank.');
+        $this->assertEquals(array('This value should not be blank.'), $errors->getErrorsAll());
     }
 
     public function testSetErrorsAndGetErrorsAllMethodsWithAssigningMultipleErrors()

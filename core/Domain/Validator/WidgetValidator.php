@@ -15,19 +15,19 @@ class WidgetValidator
 
     public function validate(Widget $widget)
     {
-        $constraint = $this->setDefaultValidationRules($widget);
+        $constraints = $this->setDefaultValidationRules($widget);
         if (!is_null($widget->getStartDate())) {
-            $constraint['endDate'][] = $this->validator->notNull();
+            $constraints['endDate'][] = $this->validator->notNull();
         }
         if (!is_null($widget->getEndDate())) {
-            $constraint['startDate'][] = $this->validator->notNull();
+            $constraints['startDate'][] = $this->validator->notNull();
         }
-        return $this->validator->validate($widget, $constraint);
+        return $this->validator->validate($widget, $constraints);
     }
 
     private function setDefaultValidationRules($widget)
     {
-        $rules = array(
+        $constraints = array(
             'title' => array(
                 $this->validator->notBlank()
             ),
@@ -52,6 +52,6 @@ class WidgetValidator
                 $this->validator->greaterThan($widget->getStartDate())
             )
         );
-        return $rules;
+        return $constraints;
     }
 }

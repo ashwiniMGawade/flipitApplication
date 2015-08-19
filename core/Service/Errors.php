@@ -6,10 +6,12 @@ class Errors
 {
     protected $errors;
 
-    public function setError($fieldName, $errorMessage)
+    public function setError($errorMessage, $fieldName = '')
     {
         if ( strlen($fieldName) > 0 && strlen($errorMessage) > 0 ) {
             $this->errors[$fieldName] = $errorMessage;
+        } elseif( strlen($errorMessage) > 0 ) {
+            $this->errors[] = $errorMessage;
         }
     }
 
