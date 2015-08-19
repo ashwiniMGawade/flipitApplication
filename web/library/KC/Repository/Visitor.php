@@ -324,7 +324,7 @@ class Visitor extends \Core\Domain\Entity\Visitor
 
         $newArray = array();
         foreach ($data as $fav) {
-            $newArray[$fav['id']] = $fav['name'];
+            $newArray[$fav['id']] = $fav['shop']['name'];
         }
         return $data;
     }
