@@ -90,6 +90,11 @@ class Visitor extends \Core\Domain\Entity\Visitor
             $visitor->active =  '1';
             $visitor->changepasswordrequest =  '1';
             $visitor->email = \FrontEnd_Helper_viewHelper::sanitize($visitorInformation['emailAddress']);
+            $visitor->lastEmailOpenDate = new \DateTime('now');
+            $visitor->mailClickCount = 0;
+            $visitor->mailOpenCount = 0;
+            $visitor->mailHardBounceCount = 0;
+            $visitor->mailSoftBounceCount = 0;
             if (\KC\Repository\Signupmaxaccount::getemailConfirmationStatus()) {
                 $visitor->active = false;
             } else {

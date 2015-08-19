@@ -212,7 +212,7 @@ class Visitor
     protected $inactiveStatusReason;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="datetime", length=255, nullable=true)
      */
     protected $lastEmailOpenDate;
 
