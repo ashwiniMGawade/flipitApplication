@@ -6,7 +6,9 @@ $popularShops = $recordNotFound;
 if(!empty($this->popularShops)) :
     $popularShops = $this->partial(
         $favouriteViewPath . '_popularStores.phtml',
-        array('popularShops' => $this->popularShops)
+        array(
+            'popularShops' => $this->popularShops,
+            'numOfPopularShopsVisibleOnMobile' => $this->numOfPopularShopsVisibleOnMobile)
     );
 endif;
 $favouriteShops = $recordNotFound; 
