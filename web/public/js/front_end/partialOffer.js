@@ -92,6 +92,8 @@ function showCodeInformation(id) {
     }
     $('div#offerCodeDiv'+id).show();
     $('div#websiteOfferLink'+id).show();
+    $('div#websiteButton'+id).removeClass('hide');
+    $('div#websiteButton'+id).addClass('websiteButton');
     $('div#offerButton'+id).hide();
 }
 
