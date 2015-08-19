@@ -1,11 +1,11 @@
 <?php
 $locale = '';
-$req = $app->request;
+$request = $app->request;
 
-$isFlipit = isFlipit($req);
+$isFlipit = isFlipit($request);
 
 if ($isFlipit) {
-    $locale = determineLocale($req, $config);
+    $locale = determineLocale($request, $config);
 }
 $localePath = $locale ? '/'.$locale : '';
 define('LOCALE', $locale);
@@ -36,9 +36,9 @@ if (!$isFlipit || ($isFlipit && $locale)) {
     );
 }
 
-function isFlipit($req)
+function isFlipit($request)
 {
-    $baseUrl        = $req->getUrl();
+    $baseUrl        = $request->getUrl();
     $parsedBaseUrl  = parse_url($baseUrl);
     $domain         = $parsedBaseUrl['host'];
     $domainPieces   = explode('.', $domain);
@@ -46,9 +46,9 @@ function isFlipit($req)
     return in_array('flipit',$domainPieces);
 }
 
-function determineLocale($req, $config)
+function determineLocale($request, $config)
 {
-    $resourceUrl        = $req->getResourceUri();
+    $resourceUrl        = $request->getResourceUri();
     $resourceUrlPieces  = explode('/', $resourceUrl);
 
     $locale = isset($resourceUrlPieces[1]) ? $resourceUrlPieces[1] : '';

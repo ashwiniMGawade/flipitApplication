@@ -28,7 +28,7 @@ class ApiLocaleCest
         $I->seeResponseIsJson();
     }
 
-    public function testAccessingApiWithFlipitUrlAndOutLocaleParam(ApiTester $I)
+    public function testAccessingApiWithFlipitUrlAndWithoutLocaleParam(ApiTester $I)
     {
         $I->wantTo('Try to access API with Flipit url and without locale param');
         $I->sendGet('http://api.dev.flipit.com/shops/1?api_key='.$this->apiKey);
