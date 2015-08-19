@@ -50,7 +50,7 @@ class AddWidgetUsecase
 
         $validationResult = $this->widgetValidator->validate($widget);
 
-        if (true !== $validationResult) {
+        if (true !== $validationResult && is_array($validationResult)) {
             $result = new Errors();
             $result->setErrors($validationResult);
             return $result;
