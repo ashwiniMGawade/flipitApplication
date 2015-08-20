@@ -6,9 +6,9 @@ use \Core\Domain\Service\Purifier;
 use \Core\Domain\Usecase\Admin\AddWidgetUsecase;
 use Core\Service\Errors;
 
-class AddWidgetUsecaseTest extends \Codeception\TestCase\Test
+class UpdateWidgetUsecaseTest extends \Codeception\TestCase\Test
 {
-    public function testAddwidgetUsecaseReturnsErrorsObjectWhenParametersAreBlank()
+    /*public function testAddwidgetUsecaseReturnsErrorsObjectWhenParametersAreBlank()
     {
         $params = array(
             'title' => null,
@@ -75,5 +75,5 @@ class AddWidgetUsecaseTest extends \Codeception\TestCase\Test
             ->with($this->isInstanceOf('\Core\Domain\Entity\Widget'))
             ->willReturn($returns);
         return $mockWidgetValidator;
-    }
+    }*/
 }
