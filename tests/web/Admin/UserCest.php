@@ -159,7 +159,7 @@ class UserCest
         $this->testTryingToAccessShopsImportPageRedirectsToShopPage($I);
     }
 
-    public function userShouldSeeLanguageFilePageWhenRoleEqualsAdmin(WebTester $I, \Codeception\Scenario $scenario)
+    public function userShouldSeePagesWhenRoleEqualsAdmin(WebTester $I, \Codeception\Scenario $scenario)
     {
         $date = new \DateTime('now');
         $passwordChangeTime =  $date->format('Y-m-d H:m:s');
@@ -187,6 +187,8 @@ class UserCest
         $I->see('admin');
         $I->amOnPage('admin/language');
         $I->see('Start Inline Translation');
+        $I->amOnPage('admin/redirect');
+        $I->see('Voeg nieuwe redirect toe');
     }
 
     private function testTryingToAccessPageRedirectsToURL($I, $pages, $redirectsTo)

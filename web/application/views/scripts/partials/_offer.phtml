@@ -139,6 +139,11 @@ foreach ($this->offers as $offer) {
                 <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
                     <strong class="code-value"><?php echo $couponCode;?></strong>
                 </div>
+                <div class="btn-blue-wrapper hide" id="websiteButton<?php echo $offer->id; ?>">
+                    <a class="btn-code" target="_blank" href="<?php echo $urlToShow;?>" rel="nofollow">
+                        <?php echo $this->translate('Open Website');?>
+                    </a>
+                </div>
             </div>
     <?php
     if ($this->offersType != 'extendedOffer') {
