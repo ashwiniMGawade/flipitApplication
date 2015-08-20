@@ -332,8 +332,8 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
                 }
                 $onClick =
-                    self::getUserIsLoggedInOrNot() == "true"
-                    ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permalink'].$popupLink."')"
+                    self::getUserIsLoggedInOrNot() == true
+                    ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')"
                     : HTTP_PATH_LOCALE."accountlogin";
                 $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
                 $offerLink =
