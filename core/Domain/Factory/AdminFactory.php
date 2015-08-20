@@ -18,6 +18,8 @@ use \Core\Domain\Usecase\Admin\DeleteShopUsecase;
 use \Core\Domain\Usecase\Admin\UpdateVisitorUsecase;
 use \Core\Domain\Usecase\Admin\CreateWidgetUsecase;
 use \Core\Domain\Usecase\Admin\AddWidgetUsecase;
+use \Core\Domain\Usecase\Admin\GetWidgetUsecase;
+use \Core\Domain\Usecase\Admin\UpdateWidgetUsecase;
 
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\ShopValidator;
@@ -106,6 +108,20 @@ class AdminFactory
     public static function addWidget()
     {
         return new AddWidgetUsecase(
+            RepositoryFactory::widget(),
+            new WidgetValidator(new Validator()),
+            new Purifier()
+        );
+    }
+
+    public static function getWidget()
+    {
+        return new GetWidgetUsecase(RepositoryFactory::widget(), new Purifier());
+    }
+
+    public static function updateWidget()
+    {
+        return new UpdateWidgetUsecase(
             RepositoryFactory::widget(),
             new WidgetValidator(new Validator()),
             new Purifier()

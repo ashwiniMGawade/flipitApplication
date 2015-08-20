@@ -35,9 +35,10 @@ class Admin_WidgetController extends Application_Admin_BaseController
         if ($this->_request->isPost()) {
             $widget = AdminFactory::createWidget()->execute();
             $result = AdminFactory::addWidget()->execute($widget, $this->getAllParams());
+            $this->view->widget = $this->getAllParams();
             if ($result instanceof Errors) {
-                $errors = $result->getErrorMessages();
                 $this->view->widget = $this->getAllParams();
+                $errors = $result->getErrorMessages();
                 $this->setFlashMessage('error', implode('<br>', $errors));
             } else {
                 $this->setFlashMessage('success', 'Widget has been added successfully');
@@ -65,24 +66,52 @@ class Admin_WidgetController extends Application_Admin_BaseController
     {
         $widgetId = intval($this->getRequest()->getParam('id'));
         $this->view->qstring = $_SERVER['QUERY_STRING'];
-        $parameters = $this->_getAllParams();
-        if (intval($widgetId) > 0) {
-            $widgetInformation = \KC\Repository\Widget::getWidgetInformation($widgetId);
-            $this->view->widgetInformation = $widgetInformation;
+        $parameters = $this->getAllParams();
+        if (intval($widgetId) < 1) {
+            $this->setFlashMessage('error', 'Unable to perform this action.');
+            $this->redirect(HTTP_PATH.'admin/widget');
+        }
+        $result = AdminFactory::getWidget()->execute(array( 'id' => $widgetId ));
+        if ($result instanceof Errors) {
+            $errors = $result->getErrorMessages();
+            $this->setFlashMessage('error', implode('<br>', $errors));
+            $this->redirect(HTTP_PATH.'admin/widget');
+        } else {
+            $widget = $result;
             $this->view->id = $widgetId;
-            if (!$widgetInformation['showWithDefault']) {
-                $url = HTTP_PATH.'admin/widget#'.$this->getRequest()->getParam('qString');
-                self::addFlashMessage('This Widget has default widget', 'error', $url);
+            if (!$widget->getShowWithDefault()) {
+                $url = HTTP_PATH . 'admin/widget#' . $this->getRequest()->getParam('qString');
+                $this->setFlashMessage("error", "You can't modify default widget.");
+                $this->redirect($url);
+            }
+
+            if ($this->_request->isPost()) {
+
+                $result = AdminFactory::updateWidget()->execute($widget, $parameters);
+                if ($result instanceof Errors) {
+                    $errors = $result->getErrorMessages();
+                    $this->setFlashMessage('error', implode('<br>', $errors));
+                } else {
+                    $widget = $result;
+                    self::updateVarnish();
+                    \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_widget_list');
+                    $this->setFlashMessage('success', 'Widget has been updated successfully');
+                    $url = HTTP_PATH . 'admin/widget#' . $this->getRequest()->getParam('qString');
+                    $this->redirect($url);
+                }
+            }
+            $widgetInformation = array(
+                'title' => $widget->getTitle(),
+                'content' => $widget->getContent(),
+                'startDate' => $widget->getStartDate(),
+                'endDate' => $widget->getEndDate()
+            );
+            $this->view->widgetInformation = $widgetInformation;
+
+            if (!empty($parameters['delete'])) {
+                self::deleteWidget($parameters['id']);
             }
         }
-        if ($this->_request->isPost()) {
-            self::updateWidget($parameters);
-        }
-        if (!empty($parameters['delete'])) {
-            self::deleteWidget($parameters['id']);
-        }
-
-        //return $this->view->render('widget/addwidget.phtml');
     }
 
     public function updateWidget($parameters)

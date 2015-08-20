@@ -127,12 +127,10 @@ function callToPermanentDelete(){
 		});
 }
 
-function selectIsDated(dIv){
-
-    $("#" + dIv).addClass("btn-primary").siblings().removeClass("btn-primary");
-
-    switch(dIv){
-
+function selectIsDated(elemntId)
+{
+    $("#" + elemntId).addClass("btn-primary").siblings().removeClass("btn-primary");
+    switch(elemntId) {
         case 'id_dated_yes':
             $('#date_selectors_div').show();
             break;
@@ -142,8 +140,6 @@ function selectIsDated(dIv){
             $("input#widgetEndDate").val('');
             break;
         default:
-
-
     }
 }
 	  		

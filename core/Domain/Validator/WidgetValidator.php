@@ -21,6 +21,7 @@ class WidgetValidator
         }
         if (!is_null($widget->getEndDate())) {
             $constraints['startDate'][] = $this->validator->notNull();
+            $constraints['endDate'][] = $this->validator->greaterThan($widget->getStartDate());
         }
         return $this->validator->validate($widget, $constraints);
     }
@@ -47,9 +48,7 @@ class WidgetValidator
                 $this->validator->dateTime()
             ),
             'endDate' => array(
-                $this->validator->dateTime(),
-                $this->validator->greaterThan('today'),
-                $this->validator->greaterThan($widget->getStartDate())
+                $this->validator->dateTime()
             )
         );
         return $constraints;

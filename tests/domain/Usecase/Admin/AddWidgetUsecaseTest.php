@@ -8,7 +8,7 @@ use Core\Service\Errors;
 
 class AddWidgetUsecaseTest extends \Codeception\TestCase\Test
 {
-    public function testAddwidgetUsecaseReturnsErrorsObjectWhenParametersAreBlank()
+    public function testAddwidgetUsecaseReturnsErrorsObjectWithInvalidParameters()
     {
         $params = array(
             'title' => null,

@@ -3,22 +3,19 @@ namespace Usecase\Admin;
 
 use \Core\Domain\Entity\Widget;
 use \Core\Domain\Service\Purifier;
-use \Core\Domain\Usecase\Admin\AddWidgetUsecase;
+use \Core\Domain\Usecase\Admin\UpdateWidgetUsecase;
 use Core\Service\Errors;
 
 class UpdateWidgetUsecaseTest extends \Codeception\TestCase\Test
 {
-    /*public function testAddwidgetUsecaseReturnsErrorsObjectWhenParametersAreBlank()
+    public function testUpdatewidgetUsecaseReturnsErrorsObjectWithInvalidParameters()
     {
         $params = array(
-            'title' => null,
-            'content' => '',
-            'startDate' => date('Y-m-d'),
-            'endDate' => date('Y-m-d')
+            'title' => null
         );
         $widgetRepository = $this->widgetRepositoryMock();
         $widgetValidator = $this->createWidgetValidatorMock(array('title'=>'This field is required.'));
-        $result = (new AddWidgetUsecase(
+        $result = (new UpdateWidgetUsecase(
             $widgetRepository,
             $widgetValidator,
             new Purifier()
@@ -29,7 +26,7 @@ class UpdateWidgetUsecaseTest extends \Codeception\TestCase\Test
         $this->assertEquals($errors->getErrorMessages(), $result->getErrorMessages());
     }
 
-    public function testAddwidgetUsecaseReturnsWidgetObject()
+    public function testUpdatewidgetUsecaseReturnsWidgetObject()
     {
         $params = array(
             'title' => null,
@@ -39,7 +36,7 @@ class UpdateWidgetUsecaseTest extends \Codeception\TestCase\Test
         );
         $widgetRepository = $this->widgetRepositoryMockWithSaveMethod();
         $widgetValidator = $this->createWidgetValidatorMock(true);
-        $result = (new AddWidgetUsecase(
+        $result = (new UpdateWidgetUsecase(
             $widgetRepository,
             $widgetValidator,
             new Purifier()
@@ -75,5 +72,5 @@ class UpdateWidgetUsecaseTest extends \Codeception\TestCase\Test
             ->with($this->isInstanceOf('\Core\Domain\Entity\Widget'))
             ->willReturn($returns);
         return $mockWidgetValidator;
-    }*/
+    }
 }
