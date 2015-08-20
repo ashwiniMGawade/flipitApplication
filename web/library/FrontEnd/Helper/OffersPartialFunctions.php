@@ -331,10 +331,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
                     $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
                 }
-                $onClick =
-                    self::getUserIsLoggedInOrNot() == true
-                    ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')"
-                    : HTTP_PATH_LOCALE."accountlogin";
+                $onClick = "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')";
                 $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
                 $offerLink =
                     '<a id="'.$currentOffer->id.'" class="'.$class.' '.$imageClass.'" vote = "0" href= "'.$urlToShow.'" 
