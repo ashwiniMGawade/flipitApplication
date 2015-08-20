@@ -1,9 +1,14 @@
-<?php 
+<?php
+$numOfShops = 0;
+$mobileClass = '';
 foreach ($this->popularShops as $popularShop) :
+    if ($numOfShops >= $this->numOfPopularShopsVisibleOnMobile) :
+        $mobileClass = 'hidden-xs';
+    endif;
     $shopImage = PUBLIC_PATH_CDN.ltrim($popularShop['imgpath'], "/")
         .  "thum_big_" . $popularShop['imgname'];
     ?>
-    <article class="block col-sm-6 col-xs-6">
+    <article class="block col-sm-6 col-xs-6 <?php echo $mobileClass; ?>">
         <div class="text-holder">
             <div class="text-holder">
                 <a href="<?php echo $popularShop['permaLink']; ?>" class="img-ico">
@@ -42,4 +47,5 @@ foreach ($this->popularShops as $popularShop) :
         </div>
     </article>
     <?php
+    $numOfShops++;
 endforeach;

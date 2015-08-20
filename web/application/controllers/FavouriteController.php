@@ -48,8 +48,9 @@ class FavouriteController extends Zend_Controller_Action
             } else {
                 $stores = $this->_helper->Favourite->getPopularStores();
             }
-            
+
             $favouriteShops = $this->_helper->Favourite->getFavoritesStores();
+            $this->view->numOfPopularShopsVisibleOnMobile = 2;
             $this->view->popularShops = $this->_helper->Favourite->filterAlreadyFavouriteShops($stores, $favouriteShops);
             $this->view->favouriteShops = $favouriteShops;
             $userDetails = \FrontEnd_Helper_viewHelper::
@@ -79,7 +80,7 @@ class FavouriteController extends Zend_Controller_Action
                     'parameters' => array()
                 )
             );
-            
+
             $offers = $this->_helper->Favourite->getOffers($favoriteShopsOffers);
             $userDetails = \FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
@@ -97,7 +98,7 @@ class FavouriteController extends Zend_Controller_Action
         }
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
     }
-    
+
     public function sharesocialcodeAction()
     {
         $flashMessage = $this->_helper->getHelper('FlashMessenger');
