@@ -7,6 +7,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper as Helper;
 use Symfony\Component\Console\Input\ArgvInput;
 use Doctrine\DBAL\Migrations\Tools\Console\Command as MigrationsCommand;
+use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use \Command\GreetCommand;
 use \Command\Email\VisitorInactiveCommand;
 
@@ -16,6 +17,7 @@ $cli->setCatchExceptions(true);
 
 $helperSet = new Helper\HelperSet();
 $helperSet->set(new Helper\DialogHelper(), 'dialog');
+//$helperSet->set(new ConnectionHelper($connection), 'connection');
 $cli->setHelperSet($helperSet);
 
 $cli->add(new MigrationsCommand\ExecuteCommand());
