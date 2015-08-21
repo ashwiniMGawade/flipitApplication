@@ -18,11 +18,21 @@ class Zend_View_Helper_FlashMessages extends Zend_View_Helper_Abstract
 
         $output = '';
         if (isset($messages[0]) && !empty($messages[0])) {
-            $output .= '<br><div class ="mainpage-content-colorbox success">';
-            foreach ($messages[0] as $message_type => $message) {
-                $output .= '<span class="' . $message_type . 'server">' . $message . '</span>';
+            if(isset($messages[0]['error'])) {
+                $output .= '<div class ="alert-error" style="margin-top:5px; padding-top: 2px; padding-bottom: 2px; text-align: center;">';
+                $output .= '<label class="errorserver">' . $messages[0]['error'] . '</label>';
+                $output .= '</div>';
+            } elseif(isset($messages[0]['success'])) {
+                $output .= '<div class ="alert-success" style="margin-top:5px; padding-top: 2px; padding-bottom: 2px; text-align: center;">';
+                $output .= '<label class="successserver">' . $messages[0]['success'] . '</label>';
+                $output .= '</div>';
+            } else {
+                $output .= '<br><div class ="mainpage-content-colorbox success">';
+                foreach ($messages[0] as $message_type => $message) {
+                    $output .= '<span class="' . $message_type . 'server">' . $message . '</span>';
+                }
+                $output .= '</div>';
             }
-            $output .= '</div>';
         }
 
         $flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');

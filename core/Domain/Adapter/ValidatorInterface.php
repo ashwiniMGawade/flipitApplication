@@ -41,11 +41,6 @@ interface ValidatorInterface
     public function dateTime();
 
     /**
-     * @return mixed
-     */
-    public function notBlank();
-
-    /**
      * @param array $value
      *
      * @return mixed

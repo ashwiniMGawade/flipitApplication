@@ -18,7 +18,8 @@ class UpdateWidgetUsecaseTest extends \Codeception\TestCase\Test
         $result = (new UpdateWidgetUsecase(
             $widgetRepository,
             $widgetValidator,
-            new Purifier()
+            new Purifier(),
+            new Errors()
         )
         )->execute(new Widget(), $params);
         $errors = new Errors();
@@ -39,7 +40,8 @@ class UpdateWidgetUsecaseTest extends \Codeception\TestCase\Test
         $result = (new UpdateWidgetUsecase(
             $widgetRepository,
             $widgetValidator,
-            new Purifier()
+            new Purifier(),
+            new Errors()
         )
         )->execute(new Widget(), $params);
         $this->assertEquals(new Widget(), $result);

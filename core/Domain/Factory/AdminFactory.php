@@ -28,6 +28,8 @@ use Core\Domain\Validator\WidgetValidator;
 
 use \Core\Persistence\Factory\RepositoryFactory;
 
+use \Core\Service\Errors;
+
 class AdminFactory
 {
     public static function getApiKeys()
@@ -110,13 +112,14 @@ class AdminFactory
         return new AddWidgetUsecase(
             RepositoryFactory::widget(),
             new WidgetValidator(new Validator()),
-            new Purifier()
+            new Purifier(),
+            new Errors()
         );
     }
 
     public static function getWidget()
     {
-        return new GetWidgetUsecase(RepositoryFactory::widget(), new Purifier());
+        return new GetWidgetUsecase(RepositoryFactory::widget(), new Purifier(), new Errors());
     }
 
     public static function updateWidget()
@@ -124,7 +127,8 @@ class AdminFactory
         return new UpdateWidgetUsecase(
             RepositoryFactory::widget(),
             new WidgetValidator(new Validator()),
-            new Purifier()
+            new Purifier(),
+            new Errors()
         );
     }
 }

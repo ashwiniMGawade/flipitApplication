@@ -5,7 +5,7 @@ use \Core\Domain\Entity\Widget;
 use \Core\Domain\Repository\WidgetRepositoryInterface;
 use \Core\Domain\Validator\WidgetValidator;
 use \Core\Domain\Adapter\PurifierInterface;
-use \Core\Service\Errors;
+use \Core\Service\Interfaces\ErrorsInterface;
 
 class UpdateWidgetUsecase
 {
@@ -15,19 +15,22 @@ class UpdateWidgetUsecase
 
     protected $htmlPurifier;
 
+    protected $errors;
+
     public function __construct(
         WidgetRepositoryInterface $widgetRepository,
         WidgetValidator $widgetValidator,
-        PurifierInterface $htmlPurifier
+        PurifierInterface $htmlPurifier,
+        ErrorsInterface $errors
     ) {
         $this->widgetRepository = $widgetRepository;
         $this->widgetValidator  = $widgetValidator;
         $this->htmlPurifier     = $htmlPurifier;
+        $this->errors           = $errors;
     }
 
     public function execute(Widget $widget, $params = array())
     {
-        $result = true;
         $params = $this->htmlPurifier->purify($params);
         if (isset($params['title'])) {
             $widget->setTitle($params['title']);
@@ -46,9 +49,8 @@ class UpdateWidgetUsecase
 
         $validationResult = $this->widgetValidator->validate($widget);
         if (true !== $validationResult && is_array($validationResult)) {
-            $result = new Errors();
-            $result->setErrors($validationResult);
-            return $result;
+            $this->errors->setErrors($validationResult);
+            return $this->errors;
         }
         return $this->widgetRepository->save($widget);
     }

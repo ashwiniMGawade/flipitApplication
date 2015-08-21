@@ -15,22 +15,25 @@ class WidgetValidator
 
     public function validate(Widget $widget)
     {
-        $constraints = $this->setDefaultValidationRules($widget);
+        $constraints = $this->setDefaultValidationRules();
         if (!is_null($widget->getStartDate())) {
-            $constraints['endDate'][] = $this->validator->notNull();
+            $constraints['endDate'][] = $this->validator->notNull(array('message'=>'End date should not be blank.'));
+
+            if (!is_null($widget->getEndDate())) {
+                $constraints['endDate'][] = $this->validator->greaterThan( array ( 'value' => $widget->getStartDate(), 'message' => 'End date should be greater than start date.'));
+            }
         }
         if (!is_null($widget->getEndDate())) {
-            $constraints['startDate'][] = $this->validator->notNull();
-            $constraints['endDate'][] = $this->validator->greaterThan($widget->getStartDate());
+            $constraints['startDate'][] = $this->validator->notNull(array('message'=>'Start date should not be blank.'));
         }
         return $this->validator->validate($widget, $constraints);
     }
 
-    private function setDefaultValidationRules($widget)
+    private function setDefaultValidationRules()
     {
         $constraints = array(
             'title' => array(
-                $this->validator->notBlank()
+                $this->validator->notNull(array('message'=>'Title should not be blank.'))
             ),
             'deleted' => array(
                 $this->validator->type(array('type' => 'integer')),

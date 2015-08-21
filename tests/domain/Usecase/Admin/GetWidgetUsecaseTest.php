@@ -12,7 +12,7 @@ class GetWidgetUsecaseTest extends \Codeception\TestCase\Test
     {
         $condition = array('id' => 0);
         $widgetRepositoryMock = $this->createWidgetRepositoryWithFindMethodMock($condition, 0);
-        $widgetUsecase = new GetWidgetUsecase($widgetRepositoryMock, new Purifier());
+        $widgetUsecase = new GetWidgetUsecase($widgetRepositoryMock, new Purifier(), new Errors());
         $result = $widgetUsecase->execute($condition);
         $errors = new Errors();
         $errors->setError('Widget not found');
@@ -25,7 +25,7 @@ class GetWidgetUsecaseTest extends \Codeception\TestCase\Test
         $widget = new Widget();
         $widget->__set('id', 0);
         $widgetRepositoryMock = $this->createWidgetRepositoryWithFindMethodMock($condition, $widget);
-        $widgetUsecase = new GetWidgetUsecase($widgetRepositoryMock, new Purifier());
+        $widgetUsecase = new GetWidgetUsecase($widgetRepositoryMock, new Purifier(), new Errors());
         $result = $widgetUsecase->execute($condition);
         $this->assertEquals($widget, $result);
     }
@@ -34,7 +34,7 @@ class GetWidgetUsecaseTest extends \Codeception\TestCase\Test
     {
         $condition = 'invalid';
         $widgetRepositoryMock = $this->createWidgetRepositoryMock();
-        $widgetUsecase = new GetWidgetUsecase($widgetRepositoryMock, new Purifier());
+        $widgetUsecase = new GetWidgetUsecase($widgetRepositoryMock, new Purifier(), new Errors());
         $result = $widgetUsecase->execute($condition);
         $errors = new Errors();
         $errors->setError('Invalid input, unable to find widget.');

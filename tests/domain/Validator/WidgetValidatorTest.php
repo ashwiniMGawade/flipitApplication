@@ -19,6 +19,21 @@ class WidgetValidatorTest extends \Codeception\TestCase\Test
         $this->assertFalse($widgetValidator->validate(new Widget()));
     }
 
+    public function testWidgetValidatorWithOutTitle()
+    {
+        $endDate = new \DateTime('now');
+        $endDate->add(new \DateInterval('P10D'));
+        $widget = new Widget();
+        $widget->setTitle('');
+        $widget->setCreatedAt(new \DateTime('now'));
+        $widget->setUpdatedAt(new \DateTime('now'));
+        $widget->setStartDate(new \DateTime('now'));
+        $widget->setEndDate($endDate);
+        $widgetValidator = new WidgetValidator(new Validator());
+        $result = $widgetValidator->validate($widget);
+        $this->assertEquals(array('title'=>array('Title should not be blank.')), $result);
+    }
+
     public function testWidgetValidatorWithStartDateAndWithoutEndDate()
     {
         $widget = new Widget();
@@ -28,7 +43,7 @@ class WidgetValidatorTest extends \Codeception\TestCase\Test
         $widget->setStartDate(new \DateTime('now'));
         $widgetValidator = new WidgetValidator(new Validator());
         $result = $widgetValidator->validate($widget);
-        $this->assertEquals(array('endDate'=>array('This value should not be blank.')), $result);
+        $this->assertEquals(array('endDate'=>array('End date should not be blank.')), $result);
     }
 
     public function testWidgetValidatorWithEndDateAndWithoutStartDate()
@@ -40,7 +55,22 @@ class WidgetValidatorTest extends \Codeception\TestCase\Test
         $widget->setEndDate(new \DateTime('now'));
         $widgetValidator = new WidgetValidator(new Validator());
         $result = $widgetValidator->validate($widget);
-        $this->assertEquals(array('startDate'=>array('This value should not be blank.')), $result);
+        $this->assertEquals(array('startDate'=>array('Start date should not be blank.')), $result);
+    }
+
+    public function testWidgetValidatorWithStartDateGreaterThanEndDate()
+    {
+        $endDate = new \DateTime();;
+        $endDate->sub(new \DateInterval('P10D'));
+        $widget = new Widget();
+        $widget->setTitle('Test');
+        $widget->setCreatedAt(new \DateTime('now'));
+        $widget->setUpdatedAt(new \DateTime('now'));
+        $widget->setStartDate(new \DateTime('now'));
+        $widget->setEndDate($endDate);
+        $widgetValidator = new WidgetValidator(new Validator());
+        $result = $widgetValidator->validate($widget);
+        $this->assertEquals(array('endDate'=>array('End date should be greater than start date.')), $result);
     }
 
     private function mockValidatorInterface($flag)

@@ -2,7 +2,9 @@
 
 namespace Core\Service;
 
-class Errors
+use \Core\Service\Interfaces\ErrorsInterface;
+
+class Errors implements ErrorsInterface
 {
     protected $errors;
 
@@ -15,7 +17,7 @@ class Errors
         }
     }
 
-    public function setErrors($errorMessages)
+    public function setErrors($errorMessages = array())
     {
         foreach ($errorMessages as $fieldName => $fieldMessages) {
             $this->errors[$fieldName] = $fieldMessages;

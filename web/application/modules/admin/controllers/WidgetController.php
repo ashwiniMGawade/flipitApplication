@@ -38,8 +38,8 @@ class Admin_WidgetController extends Application_Admin_BaseController
             $this->view->widget = $this->getAllParams();
             if ($result instanceof Errors) {
                 $this->view->widget = $this->getAllParams();
-                $errors = $result->getErrorMessages();
-                $this->setFlashMessage('error', implode('<br>', $errors));
+                $errors = $result->getErrorsAll();
+                $this->setFlashMessage('error', $errors);
             } else {
                 $this->setFlashMessage('success', 'Widget has been added successfully');
                 $this->redirect(HTTP_PATH.'admin/widget');
@@ -49,14 +49,14 @@ class Admin_WidgetController extends Application_Admin_BaseController
 
     public function widgetlistAction()
     {
-        $widgetList = \KC\Repository\Widget::getWidgetList($this->_getAllParams());
+        $widgetList = \KC\Repository\Widget::getWidgetList($this->getAllParams());
         echo Zend_Json::encode($widgetList);
         exit();
     }
 
     public function onlinestatusAction()
     {
-        $widgetId = \KC\Repository\Widget::changeStatus($this->_getAllParams());
+        $widgetId = \KC\Repository\Widget::changeStatus($this->getAllParams());
         self::updateVarnish();
         echo Zend_Json::encode($widgetId);
         exit();
@@ -73,8 +73,8 @@ class Admin_WidgetController extends Application_Admin_BaseController
         }
         $result = AdminFactory::getWidget()->execute(array( 'id' => $widgetId ));
         if ($result instanceof Errors) {
-            $errors = $result->getErrorMessages();
-            $this->setFlashMessage('error', implode('<br>', $errors));
+            $errors = $result->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
             $this->redirect(HTTP_PATH.'admin/widget');
         } else {
             $widget = $result;
@@ -89,8 +89,8 @@ class Admin_WidgetController extends Application_Admin_BaseController
 
                 $result = AdminFactory::updateWidget()->execute($widget, $parameters);
                 if ($result instanceof Errors) {
-                    $errors = $result->getErrorMessages();
-                    $this->setFlashMessage('error', implode('<br>', $errors));
+                    $errors = $result->getErrorsAll();
+                    $this->setFlashMessage('error', $errors);
                 } else {
                     $widget = $result;
                     self::updateVarnish();
@@ -111,20 +111,6 @@ class Admin_WidgetController extends Application_Admin_BaseController
             if (!empty($parameters['delete'])) {
                 self::deleteWidget($parameters['id']);
             }
-        }
-    }
-
-    public function updateWidget($parameters)
-    {
-        $flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        $widget = new \KC\Repository\Widget();
-        if ($widget->updateWidget($parameters)) {
-            self::updateVarnish();
-            $url = HTTP_PATH.'admin/widget#'.$this->getRequest()->getParam('qString');
-            self::addFlashMessage('Widget has been updated successfully', 'success', $url);
-        } else {
-            $url = HTTP_PATH.'admin/widget#'.$this->getRequest()->getParam('qString');
-            self::addFlashMessage('Problem in your data', 'error', $url);
         }
     }
 

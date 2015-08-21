@@ -1,0 +1,42 @@
+<?php
+namespace Core\Service\Interfaces;
+
+/**
+ * Interface ErrorsInterface
+ *
+ * @package Core\Service\Interfaces
+ */
+interface ErrorsInterface
+{
+    /**
+     * @param $errorMessage
+     * @param $fieldName
+     *
+     * @return mixed
+     */
+    public function setError($errorMessage, $fieldName = '');
+
+    /**
+     * @param array $errorMessages
+     *
+     * @return mixed
+     */
+    public function setErrors($errorMessages = array());
+
+    /**
+     * @param array $fieldName
+     *
+     * @return mixed
+     */
+    public function getError($fieldName);
+
+    /**
+     * @return mixed
+     */
+    public function getErrorsAll();
+
+    /**
+     * @return mixed
+     */
+    public function getErrorMessages();
+}
