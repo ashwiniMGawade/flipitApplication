@@ -75,3 +75,10 @@ function ___removeOverLay() {
     jQuery('div#overlay').remove();
     return true ;
 }
+
+var createCookieAgreement = function() {
+    var expiry = new Date();
+    expiry.setFullYear(expiry.getFullYear() + 10);
+    document.cookie = "cookie_agreement=1; expires=" + expiry.toGMTString();
+    $('#footer-cookie-info').remove();
+}

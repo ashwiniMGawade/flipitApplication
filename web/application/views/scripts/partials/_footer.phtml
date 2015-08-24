@@ -56,3 +56,9 @@ if (APPLICATION_ENV == 'development') {
 echo $headScript;
 ?>
 </footer>
+<?php if (!isset($_COOKIE['cookie_agreement']) || empty($_COOKIE['cookie_agreement'])) { ?>
+<div id="footer-cookie-info">
+    <?php echo $this->translate('This site uses cookies ');?><a class="blue-label" onclick="createCookieAgreement();"><?php echo $this->translate('Okay, thanks');?></a>
+    <a class="txt-undrline" href="<?php echo HTTP_PATH_LOCALE; ?>info/<?php echo FrontEnd_Helper_viewHelper::__link('link_privacy-cookies'); ?>"><?php echo $this->translate('Find out more');?></a>
+</div>
+<?php } ?>
