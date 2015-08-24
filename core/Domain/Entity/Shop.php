@@ -497,6 +497,11 @@ class Shop
      * @ORM\Column(type="boolean", nullable=true)
      */
     protected $futurecode;
+
+    /**
+     * @ORM\Column(type="integer", length=1, nullable=true)
+     */
+    protected $classification = 1;
  
     public function __get($property)
     {
@@ -1986,5 +1991,21 @@ class Shop
     public function setVisitors($visitors)
     {
         $this->visitors = $visitors;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getClassification()
+    {
+        return $this->classification;
+    }
+
+    /**
+     * @param mixed $classification
+     */
+    public function setClassification($classification)
+    {
+        $this->classification = $classification;
     }
 }
