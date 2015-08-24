@@ -39,11 +39,11 @@ class UpdateWidgetUsecase
             $widget->setContent($params['content']);
         }
         if (isset($params['startDate'])) {
-            $startDate = ( strlen($params['startDate']) > 0 ) ? new \DateTime(date('Y-m-d', strtotime($params['startDate']))) : null;
+            $startDate = (!empty($params['startDate'])) ? new \DateTime(date('Y-m-d', strtotime($params['startDate']))) : null;
             $widget->setStartDate($startDate);
         }
-        if (isset($params['endDate']) ) {
-            $endDate = ( strlen($params['endDate']) > 0 ) ? new \DateTime(date('Y-m-d', strtotime($params['endDate']))) : null;
+        if (isset($params['endDate'])) {
+            $endDate = (!empty($params['endDate'])) ? new \DateTime(date('Y-m-d', strtotime($params['endDate']))) : null;
             $widget->setEndDate($endDate);
         }
 

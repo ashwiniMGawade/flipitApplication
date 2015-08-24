@@ -19,7 +19,7 @@ class WidgetValidatorTest extends \Codeception\TestCase\Test
         $this->assertFalse($widgetValidator->validate(new Widget()));
     }
 
-    public function testWidgetValidatorWithOutTitle()
+    public function testWidgetValidatorWithoutTitle()
     {
         $endDate = new \DateTime('now');
         $endDate->add(new \DateInterval('P10D'));
@@ -60,7 +60,7 @@ class WidgetValidatorTest extends \Codeception\TestCase\Test
 
     public function testWidgetValidatorWithStartDateGreaterThanEndDate()
     {
-        $endDate = new \DateTime();;
+        $endDate = new \DateTime();
         $endDate->sub(new \DateInterval('P10D'));
         $widget = new Widget();
         $widget->setTitle('Test');

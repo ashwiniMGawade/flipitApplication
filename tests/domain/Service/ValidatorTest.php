@@ -135,7 +135,7 @@ class ValidatorTest extends \Codeception\TestCase\Test
         $this->assertEquals($expected, $response);
     }
 
-    public function testValidatorReturnsViolationForPropertyGreaterThanOtherValue()
+    public function testValidatorReturnsViolationForPropertyGreaterThanValuePassed()
     {
         $apiKey = new ApiKey();
         $apiKey->__set('id', 1);

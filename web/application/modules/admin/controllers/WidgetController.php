@@ -71,9 +71,10 @@ class Admin_WidgetController extends Application_Admin_BaseController
             $this->setFlashMessage('error', 'Unable to perform this action.');
             $this->redirect(HTTP_PATH.'admin/widget');
         }
-        $result = AdminFactory::getWidget()->execute(array( 'id' => $widgetId ));
+        $result = AdminFactory::getWidget()->execute(array('id' => $widgetId));
         if ($result instanceof Errors) {
             $errors = $result->getErrorsAll();
+
             $this->setFlashMessage('error', $errors);
             $this->redirect(HTTP_PATH.'admin/widget');
         } else {

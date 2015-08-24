@@ -8,7 +8,7 @@ use Core\Service\Errors;
 
 class AddWidgetUsecaseTest extends \Codeception\TestCase\Test
 {
-    public function testAddwidgetUsecaseReturnsErrorsObjectWithInvalidParameters()
+    public function testAddWidgetUsecaseReturnsErrorsObjectWithInvalidParameters()
     {
         $params = array(
             'title' => null,
@@ -30,7 +30,7 @@ class AddWidgetUsecaseTest extends \Codeception\TestCase\Test
         $this->assertEquals($errors->getErrorMessages(), $result->getErrorMessages());
     }
 
-    public function testAddwidgetUsecaseReturnsWidgetObject()
+    public function testAddWidgetUsecaseReturnsWidgetObject()
     {
         $params = array(
             'title' => null,

@@ -10,9 +10,9 @@ class Errors implements ErrorsInterface
 
     public function setError($errorMessage, $fieldName = '')
     {
-        if ( strlen($fieldName) > 0 && strlen($errorMessage) > 0 ) {
+        if (!empty($fieldName) && !empty($errorMessage)) {
             $this->errors[$fieldName] = $errorMessage;
-        } elseif( strlen($errorMessage) > 0 ) {
+        } elseif (!empty($errorMessage)) {
             $this->errors[] = $errorMessage;
         }
     }
@@ -39,8 +39,7 @@ class Errors implements ErrorsInterface
     public function getErrorMessages()
     {
         $errorMessages = array();
-        foreach ($this->errors as $fieldName => $fieldMessages)
-        {
+        foreach ($this->errors as $fieldName => $fieldMessages) {
             if (is_array($fieldMessages)) {
                 $errorMessages[] = $fieldName . ": " . implode(', ', $fieldMessages);
             } else {

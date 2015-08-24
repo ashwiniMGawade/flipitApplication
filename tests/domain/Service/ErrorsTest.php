@@ -5,31 +5,32 @@ use Core\Service\Errors;
 
 class ErrorsTest extends \Codeception\TestCase\Test
 {
-    public function testSetErrorAndGetErrorMethodsWithAssigningSingleError()
+    public function testSetErrorAndGetErrorMethods()
     {
         $errors = new Errors();
         $errors->setError('This value should not be blank.', 'test_field');
         $this->assertEquals('This value should not be blank.', $errors->getError('test_field'));
     }
 
-    public function testSetErrorAndGetErrorMethodsWithAssigningSingleErrorWithoutFieldName()
+    public function testTryToSetErrorWithoutFieldNameAndGetErrorsAll()
     {
         $errors = new Errors();
         $errors->setError('This value should not be blank.');
         $this->assertEquals(array('This value should not be blank.'), $errors->getErrorsAll());
     }
 
-    public function testSetErrorsAndGetErrorsAllMethodsWithAssigningMultipleErrors()
+    public function testTryToSetAndGetMultipleErrors()
     {
         $errors = new Errors();
         $errorData = array(
-                'test_field' => 'This value should not be blank.'
+                'field1' => 'error1',
+                'field2' => 'error2'
         );
         $errors->setErrors($errorData);
-        $this->assertEquals(array('test_field' => 'This value should not be blank.'), $errors->getErrorsAll());
+        $this->assertEquals($errorData, $errors->getErrorsAll());
     }
 
-    public function testGetErrorMessagesMethodWithAssigningMultipleErrors()
+    public function testTryToGetErrorMessagesForMultipleErrors()
     {
         $errors = new Errors();
         $errorData = array(

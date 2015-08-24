@@ -8,7 +8,7 @@ use Core\Service\Errors;
 
 class GetWidgetUsecaseTest extends \Codeception\TestCase\Test
 {
-    public function testGetWidgetUsecaseWithIdNotExist()
+    public function testGetWidgetUsecaseWhenIdDoesNotExist()
     {
         $condition = array('id' => 0);
         $widgetRepositoryMock = $this->createWidgetRepositoryWithFindMethodMock($condition, 0);
@@ -16,7 +16,7 @@ class GetWidgetUsecaseTest extends \Codeception\TestCase\Test
         $result = $widgetUsecase->execute($condition);
         $errors = new Errors();
         $errors->setError('Widget not found');
-        $this->assertEquals($errors->getErrorsAll(), $result->getErrorsAll());
+        $this->assertEquals(array('Widget not found'), $result->getErrorsAll());
     }
 
     public function testGetWidgetUsecase()

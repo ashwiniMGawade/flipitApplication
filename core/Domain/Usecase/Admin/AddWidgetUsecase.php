@@ -38,11 +38,11 @@ class AddWidgetUsecase
         if (isset($params['content'])) {
             $widget->setContent($params['content']);
         }
-        if (isset($params['startDate']) && strlen($params['startDate']) > 0) {
+        if (isset($params['startDate']) && !empty($params['startDate'])) {
             $startDate = new \DateTime(date('Y-m-d', strtotime($params['startDate'])));
             $widget->setStartDate($startDate);
         }
-        if (isset($params['endDate']) && strlen($params['endDate']) > 0) {
+        if (isset($params['endDate']) && !empty($params['endDate'])) {
             $endDate = new \DateTime(date('Y-m-d', strtotime($params['endDate'])));
             $widget->setEndDate($endDate);
         }
