@@ -955,6 +955,7 @@ class Shop extends \Core\Domain\Entity\Shop
         $shopInfo->howtoMetaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaDesc']);
         $shopInfo->customHeader = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomHeader']);
         $shopInfo->howToIntroductionText = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['howToIntroductionText']);
+        $shopInfo->classification = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopClassification']);
         $shopInfo->showSimliarShops = \BackEnd_Helper_viewHelper::stripSlashesFromString(
             !empty($shopDetail['similarShops']) ? $shopDetail['similarShops'] : '0'
         );
@@ -1068,7 +1069,6 @@ class Shop extends \Core\Domain\Entity\Shop
         }
 
         $shopInfo->howToUse = $shopDetail['howTouseStatus'];
-
         if (intval($shopDetail['howTouseStatus']) > 0) {
             if (isset($shopDetail['shopHowToUsePageId'])) {
                 $shopInfo->howtoUsepageId = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopHowToUsePageId']);
