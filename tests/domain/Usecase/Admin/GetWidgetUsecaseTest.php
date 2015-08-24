@@ -30,7 +30,7 @@ class GetWidgetUsecaseTest extends \Codeception\TestCase\Test
         $this->assertEquals($widget, $result);
     }
 
-    public function testGetWidgetUsecaseWithInvalidId()
+    public function testGetWidgetUsecaseWhenIdIsInvalid()
     {
         $condition = 'invalid';
         $widgetRepositoryMock = $this->createWidgetRepositoryMock();

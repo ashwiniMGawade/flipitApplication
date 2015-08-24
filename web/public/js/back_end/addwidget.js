@@ -140,6 +140,7 @@ function selectIsDated(elemntId)
             $("input#widgetEndDate").val('');
             break;
         default:
+            break;
     }
 }
 	  		
