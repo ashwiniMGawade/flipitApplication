@@ -3,15 +3,13 @@
 
 set_time_limit(0);
 require_once __DIR__ . '/../vendor/autoload.php';
-
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Helper as Helper;
+use \Symfony\Component\Console\Application;
+use \Symfony\Component\Console\Helper as Helper;
 use \Doctrine\DBAL\Migrations\Tools\Console\Command as MigrationsCommand;
 use \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use \Command\LocaleMigrations\Helpers\ConfigurationHelper;
 use \Doctrine\DBAL\Migrations\Tools\Console\Helper as DoctrineHelper;
 use \Core\Persistence\Database\Service as Service;
-use \Command\GreetCommand;
 use \Command\LocaleMigrations as LocaleMigrations;
 use \Command\Email\VisitorInactiveCommand;
 
@@ -53,7 +51,5 @@ $cli->add(new LocaleMigrations\LocaleStatusCommand());
 $cli->add(new LocaleMigrations\LocaleVersionCommand());
 
 // Add business logic commands
-$cli->add(new GreetCommand());
 $cli->add(new VisitorInactiveCommand());
-
 $cli->run();
