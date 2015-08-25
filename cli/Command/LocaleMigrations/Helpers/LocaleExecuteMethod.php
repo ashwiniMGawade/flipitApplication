@@ -6,7 +6,6 @@ use Core\Service\LocaleLister;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
-use Doctrine\DBAL\Migrations\OutputWriter;
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use \Doctrine\DBAL\Migrations\Tools\Console\Helper as DoctrineHelper;
 use Symfony\Component\Console\Input as Input;
@@ -22,7 +21,7 @@ trait LocaleExecuteMethod
             $cli = new Application();
             $cli->setCatchExceptions(true);
 
-            $localeConfiguration = new ConfigurationHelper(new OutputWriter, $locale);
+            $localeConfiguration = new ConfigurationHelper($output, $locale);
             $localeConfiguration->buildLocaleConfiguration();
             $connection = $localeConfiguration->getConnection();
             $configuration = $localeConfiguration->getConfiguration();

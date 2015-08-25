@@ -5,14 +5,14 @@ set_time_limit(0);
 require_once __DIR__ . '/../vendor/autoload.php';
 use \Symfony\Component\Console\Application;
 use \Symfony\Component\Console\Helper as Helper;
-use \Doctrine\DBAL\Migrations\Tools\Console\Command as MigrationsCommand;
+use \Symfony\Component\Console\Output\ConsoleOutput;
 use \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
-use \Command\LocaleMigrations\Helpers\ConfigurationHelper;
 use \Doctrine\DBAL\Migrations\Tools\Console\Helper as DoctrineHelper;
+use \Doctrine\DBAL\Migrations\Tools\Console\Command as MigrationsCommand;
 use \Core\Persistence\Database\Service as Service;
+use \Command\LocaleMigrations\Helpers\ConfigurationHelper;
 use \Command\LocaleMigrations as LocaleMigrations;
 use \Command\Email\VisitorInactiveCommand;
-use \Doctrine\DBAL\Migrations\OutputWriter;
 
 define('APPLICATION_ENV', 'development');
 $cli = new Application();
@@ -22,7 +22,7 @@ $helperSet = new Helper\HelperSet();
 $helperSet->set(new Helper\DialogHelper(), 'dialog');
 
 // Add User DB Migrations commands
-$configurationHelper = new ConfigurationHelper(new OutputWriter);
+$configurationHelper = new ConfigurationHelper(new ConsoleOutput);
 $configurationHelper->buildUserConfiguration();
 $userConnection = $configurationHelper->getConnection();
 $userConfiguration = $configurationHelper->getConfiguration();

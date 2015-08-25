@@ -5,25 +5,27 @@ namespace Command\LocaleMigrations\Helpers;
 use \Doctrine\DBAL\Migrations\Configuration\Configuration;
 use \Core\Persistence\Database\Service as Service;
 use \Doctrine\DBAL\Migrations\OutputWriter;
+use \Symfony\Component\Console\Output\OutputInterface;
 
 class ConfigurationHelper
 {
     protected $locale;
     protected $configuration;
     protected $connection;
+    protected $output;
     protected $outputWriter;
 
-    public function __construct(OutputWriter $outputWriter, $locale = null)
+    public function __construct(OutputInterface $output, $locale = null)
     {
         $this->locale = $locale;
-        $this->outputWriter = $outputWriter;
+        $this->output = $output;
     }
 
     public function buildLocaleConfiguration()
     {
         self::setConnection('getLocaleEntityManager', $this->locale);
 
-        $configuration = new Configuration($this->connection, $this->outputWriter);
+        $configuration = new Configuration($this->connection, $this->getOutputWriter($this->output));
         $configuration->setName('Migrating ' . strtoupper($this->locale) . ' locale');
         $configuration->setMigrationsNamespace('LocaleMigrations');
         $configuration->setMigrationsDirectory(__DIR__ . '/../../../../core/Persistence/Database/Migrations/LocaleMigrations');
@@ -37,7 +39,7 @@ class ConfigurationHelper
     {
         self::setConnection('getUserEntityManager');
 
-        $configuration = new Configuration($this->connection, $this->outputWriter);
+        $configuration = new Configuration($this->connection, $this->getOutputWriter($this->output));
         $configuration->setName('Migrating User DB');
         $configuration->setMigrationsNamespace('UserMigrations');
         $configuration->setMigrationsDirectory(__DIR__ . '/../../../../core/Persistence/Database/Migrations/UserMigrations');
@@ -69,5 +71,16 @@ class ConfigurationHelper
     private function setConfiguration($configuration)
     {
         $this->configuration = $configuration;
+    }
+
+    private function getOutputWriter(OutputInterface $output)
+    {
+        if (!$this->outputWriter) {
+            $this->outputWriter = new OutputWriter(function($message) use ($output) {
+                return $output->writeln($message);
+            });
+        }
+
+        return $this->outputWriter;
     }
 }
