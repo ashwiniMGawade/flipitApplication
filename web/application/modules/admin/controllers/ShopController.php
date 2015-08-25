@@ -396,6 +396,7 @@ class Admin_ShopController extends Zend_Controller_Action
         // display managers and account managers list
         $users = new \KC\Repository\User();
         $this->view->MangersList = $users->getManagersLists($site_name);
+        $this->view->shopClassifications = $this->shopClassifications;
 
         // display  page's list
         $pages = new \KC\Repository\Page();
