@@ -1565,7 +1565,7 @@ class Offer extends \Core\Domain\Entity\Offer
         $query = $queryBuilder
         ->select(
             'o.title, o.id, o.Visability, o.shopExist,o.discountType, o.offer_position,
-            o.couponCode, o.extendedOffer, o.editorPicks, o.userGenerated, o.couponCodeType, s.name as shopName,
+            o.couponCode, o.extendedOffer, o.editorPicks, o.userGenerated, o.couponCodeType, s.name as shopName, s.classification as shopClassification,
             s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,o.extendedTitle, o.extendedoffertitle,
             o.extendedMetaDescription,
             page.id as pageId,tc.content as termsAndconditionContent,category.id as categoryId,img.name as imageName,
