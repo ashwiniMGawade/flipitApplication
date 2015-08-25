@@ -197,7 +197,7 @@ class Offer
 
     /**
      * @ORM\OneToOne(targetEntity="Core\Domain\Entity\Logo", inversedBy="offer")
-     * @ORM\JoinColumn(name="offerLogoId", referencedColumnName="id", unique=true)
+     * @ORM\JoinColumn(name="offerlogoid", referencedColumnName="id", unique=true)
      */
     protected $logo;
 
