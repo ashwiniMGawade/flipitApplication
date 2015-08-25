@@ -76,7 +76,7 @@ class ConfigurationHelper
     private function getOutputWriter(OutputInterface $output)
     {
         if (!$this->outputWriter) {
-            $this->outputWriter = new OutputWriter(function($message) use ($output) {
+            $this->outputWriter = new OutputWriter(function ($message) use ($output) {
                 return $output->writeln($message);
             });
         }
