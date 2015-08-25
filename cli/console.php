@@ -12,6 +12,7 @@ use \Doctrine\DBAL\Migrations\Tools\Console\Helper as DoctrineHelper;
 use \Core\Persistence\Database\Service as Service;
 use \Command\LocaleMigrations as LocaleMigrations;
 use \Command\Email\VisitorInactiveCommand;
+use \Doctrine\DBAL\Migrations\OutputWriter;
 
 define('APPLICATION_ENV', 'development');
 $cli = new Application();
@@ -21,7 +22,7 @@ $helperSet = new Helper\HelperSet();
 $helperSet->set(new Helper\DialogHelper(), 'dialog');
 
 // Add User DB Migrations commands
-$configurationHelper = new ConfigurationHelper();
+$configurationHelper = new ConfigurationHelper(new OutputWriter);
 $configurationHelper->buildUserConfiguration();
 $userConnection = $configurationHelper->getConnection();
 $userConfiguration = $configurationHelper->getConfiguration();

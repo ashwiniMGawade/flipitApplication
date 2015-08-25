@@ -22,7 +22,7 @@ trait LocaleExecuteMethod
             $cli = new Application();
             $cli->setCatchExceptions(true);
 
-            $localeConfiguration = new ConfigurationHelper($locale, new OutputWriter);
+            $localeConfiguration = new ConfigurationHelper(new OutputWriter, $locale);
             $localeConfiguration->buildLocaleConfiguration();
             $connection = $localeConfiguration->getConnection();
             $configuration = $localeConfiguration->getConfiguration();

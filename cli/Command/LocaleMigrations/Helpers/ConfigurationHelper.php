@@ -13,7 +13,7 @@ class ConfigurationHelper
     protected $connection;
     protected $outputWriter;
 
-    public function __construct($locale = null, OutputWriter $outputWriter = null)
+    public function __construct(OutputWriter $outputWriter, $locale = null)
     {
         $this->locale = $locale;
         $this->outputWriter = $outputWriter;
