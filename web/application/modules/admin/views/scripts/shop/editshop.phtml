@@ -58,6 +58,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                 $hash = md5($this->data['id'].date('Y').'-'.date('m').'-'.date('d').':'.date('H')); 
                 ?>
                 <a href="<?php echo 'http://'.$host.'/branding/start?storeUrl=http://'.$httpScheme.'.'.$_COOKIE['site_name'].'/' ?><?php echo $this->data['permaLink'].'&shopID='.$this->data['id'].'&hash='.$hash; ?>" class="btn btn-primary">Brand this shop</a>
+                <span id="shopRating"><?php echo $this->translate('Shop Rating'); ?> : <span><?php echo $this->shopClassifications[$this->data['classification']]; ?></span></span>
             </h1>
 
          
