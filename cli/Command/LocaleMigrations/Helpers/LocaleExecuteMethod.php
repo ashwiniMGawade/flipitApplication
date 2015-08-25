@@ -12,13 +12,13 @@ use \Doctrine\DBAL\Migrations\Tools\Console\Helper as DoctrineHelper;
 use Symfony\Component\Console\Input as Input;
 use Symfony\Component\Console\Helper as Helper;
 
-trait LocaleExecuteMethod {
+trait LocaleExecuteMethod
+{
     public function execute(Input\InputInterface $input, OutputInterface $output)
     {
         $locales = (new LocaleLister)->getAllLocales();
 
         foreach ($locales as $locale) {
-
             $cli = new Application();
             $cli->setCatchExceptions(true);
 
@@ -43,4 +43,4 @@ trait LocaleExecuteMethod {
             $output->writeln($commandOutputWithoutStatusCode);
         }
     }
-} 
+}
