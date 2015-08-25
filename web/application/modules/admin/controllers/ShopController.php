@@ -56,6 +56,9 @@ class Admin_ShopController extends Zend_Controller_Action
         $params = $this->_getAllParams();
         //cal to getshoplist function from Shop model
         $shopList = \KC\Repository\Shop::getshopList($params);
+        foreach ($shopList['aaData'] as &$shop) {
+            $shop['classification'] = $this->shopClassifications[$shop['classification']];
+        }
         echo Zend_Json::encode($shopList);
         die;
     }

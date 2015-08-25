@@ -675,7 +675,7 @@ class Shop extends \Core\Domain\Entity\Shop
             
         $request = \DataTable_Helper::createSearchRequest(
             $params,
-            array('s.id', 's.name', 's.permaLink', 's.affliateProgram', 's.created_at',
+            array('s.id', 's.name', 's.permaLink', 's.classification', 's.affliateProgram', 's.created_at',
                 's.lastSevendayClickouts', 's.shopAndOfferClickouts','a.name',
                 's.discussions', 's.showSignupOption', 's.status',
                 's.offlineSicne'
@@ -687,6 +687,7 @@ class Shop extends \Core\Domain\Entity\Shop
             ->add('number', 's.id')
             ->add('text', 's.name')
             ->add('text', 's.permaLink')
+            ->add('text', 's.classification')
             ->add('text', 's.affliateProgram')
             ->add('number', 's.created_at')
             ->add('number', 's.lastSevendayClickouts')
