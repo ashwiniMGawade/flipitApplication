@@ -8,6 +8,7 @@ use \Core\Persistence\Database\Repository\PageRepository;
 use \Core\Persistence\Database\Repository\ShopRepository;
 use \Core\Persistence\Database\Repository\ApiKeyRepository;
 use \Core\Persistence\Database\Repository\AffliateNetworkRepository;
+use \Core\Persistence\Database\Repository\WidgetRepository;
 
 class RepositoryFactory
 {
@@ -39,5 +40,10 @@ class RepositoryFactory
     public static function viewCount()
     {
         return new ViewCountRepository((new DoctrineManager)->getLocaleEntityManager());
+    }
+
+    public static function widget()
+    {
+        return new WidgetRepository((new DoctrineManager)->getLocaleEntityManager());
     }
 }

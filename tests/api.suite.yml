@@ -4,7 +4,7 @@ modules:
         - \Helper\Api
         - REST:
             depends: PhpBrowser
-            url: 'http://api.dev.flipit.com/'
+            url: 'http://api.dev.kortingscode.nl/'
 coverage:
     enabled: true
     include:

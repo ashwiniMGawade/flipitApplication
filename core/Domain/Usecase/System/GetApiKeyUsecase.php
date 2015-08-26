@@ -18,6 +18,7 @@ class GetApiKeyUsecase
 
     public function execute($condition)
     {
+
         $condition = $this->htmlPurifier->purify($condition);
 
         if (!is_array($condition)) {

@@ -1828,8 +1828,10 @@ CREATE TABLE IF NOT EXISTS `widget` (
   `updated_at` datetime NOT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   `function_name` varchar(255) DEFAULT NULL,
+  `startDate` datetime DEFAULT NULL,
+  `endDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 -- --------------------------------------------------------
 
