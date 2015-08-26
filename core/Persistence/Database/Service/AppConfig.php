@@ -8,12 +8,11 @@ class AppConfig
     public function __construct()
     {
         $this->env = defined('APPLICATION_ENV') ? APPLICATION_ENV : 'production';
-        $this->locale = isset($_COOKIE['locale']) ? $_COOKIE['locale'] : '';
+        $this->locale = defined('LOCALE') && LOCALE != '' ? LOCALE : 'en';
     }
 
     public function getConfigs()
     {
-        $this->locale  =  $this->locale != '' ? $this->locale : 'en';
         $dbName = $this->locale == 'en' ? 'kortingscode_site' : 'flipit_'.$this->locale;
 
         if ($this->env === 'development') {
@@ -21,7 +20,7 @@ class AppConfig
         } elseif ($this->env === 'testing') {
             return $this->getTestingConfig();
         } else {
-            return $this->getProductionConfig($dbName);
+            return $this->getProductionConfig();
         }
     }
 
@@ -81,11 +80,11 @@ class AppConfig
         );
     }
 
-    public function getProductionConfig($dbName)
+    public function getProductionConfig()
     {
         $config = new \Zend_Config_Ini('../../web/application/configs/application.ini', $this->env);
-
-        $applicationDsn = $config->doctrine->en->dsn;
+        $locale = $this->locale;
+        $applicationDsn = $config->doctrine->$locale->dsn;
         $memcacheDsn = $config->resources->frontController->params->memcache;
         $splitDbName = explode('/', $applicationDsn);
         $splitDbUserName = explode(':', $splitDbName[2]);
