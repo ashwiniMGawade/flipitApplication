@@ -24,16 +24,12 @@
                 <div id="post-body">
                     <div>
                         <div class="mainpage-content margin_widget_editor">
-                            <div class="mainpage-content-line">
-                                <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Title');?> </strong></label></div>
-                                <div class="mainpage-content-right">
-                                    <div class="mainpage-content-right-inner-right-other"></div>
-                                    <div class="mainpage-content-right-inner-left-other">
-                                        <input type="text" value="<?php echo isset($this->widget['title']) ? $this->widget['title'] : ''; ?>" name="title" id="title" class="span3" onchange="this.value=this.value.trim()">
-                                    </div>
+                            <div class="row-fluid">
+                                <div class="span2 mb10"><label><strong><?php echo $this->translate('Title');?> </strong>*</label></div>
+                                <div class="span10">
+                                    <input type="text" value="<?php echo isset($this->widget['title']) ? $this->widget['title'] : ''; ?>" name="title" id="title" class="span3">
                                 </div>
                             </div>
-                        </div>
 
                         <div class="row-fluid" id="visibiliyDiv">
                             <div class="span2 mb10">
@@ -80,7 +76,7 @@
                         </div>
 
                         <textarea name="content" id="content"><?php echo isset($this->widget['content']) ? $this->widget['content'] : ''; ?></textarea>
-
+                        </div>
                     </div>
                 </div>
                 <br class="clear">
