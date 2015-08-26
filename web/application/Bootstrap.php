@@ -116,7 +116,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 'resourceTypes' => array(
                     'form' => array('path' => 'forms/', 'namespace' => 'Form'),
                     'model' => array('path' => 'models/', 'namespace' => 'Model'),
-                    'service' => array('path' => 'services/', 'namespace' => 'Service')
+                    'service' => array('path' => 'services/', 'namespace' => 'Service'),
+                    'admin' => array('path' => 'modules/admin/controllers', 'namespace' => 'Admin')
                 )
             )
         );

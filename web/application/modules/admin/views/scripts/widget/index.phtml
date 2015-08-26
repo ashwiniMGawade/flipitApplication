@@ -10,11 +10,13 @@
     $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/select2.css" );
     $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/widgetList.js");
     ?>
+
     <?php echo $this->headTitle()->append('Widgets List');?>
     <div id="imbullbody">
         <div style="overflow: hidden;" id="imbullbody-content">
             <div class="wrap columns-2">
                 <div id="widgetListdiv">
+                    <?php echo $this->flashMessages(); ?>
                     <h1><?php echo $this->translate('backend_Widgets');?>
                         <button class="btn ml10" 
                             onClick="window.location.href='<?php echo HTTP_PATH.'admin/widget/addwidget';?>'">
@@ -25,23 +27,6 @@
                             class="btn ml10"><?php echo $this->translate('backend_Update Description')?>
                         </button>
                     </h1>
-                <?php 
-                if($this->messageSuccess!='' || $this->messageError!='' ) {?>
-                    <br>
-                    <div class ="mainpage-content-colorbox success">
-                    <?php 
-                    if ($this->messageSuccess!='') {?>
-                        <span class="successserver">
-                        <?php echo $this->messageSuccess; ?>
-                        </span>
-                    <?php 
-                    } if ($this->messageError!='') {
-                        ?>
-                        <span class="errorserver"><?php echo $this->messageError; ?></span>
-                        <?php 
-                    } ?>
-                </div>
-                <?php }?>
                 <form class="well form-search searchbarbox" name="searchform" id="searchform">
                    <div class="mainpage-content-searchbart">
                         <div class="mainpage-content-right-searchbar"><button id="searchButton" class="btn btn-primary" type="button"><?php echo $this->translate('Search');?></button></div>

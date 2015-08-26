@@ -18,3 +18,42 @@ $config['app']['log.writer'] = new \Flynsarmy\SlimMonolog\Log\MonologWriter(
         ),
     )
 );
+
+$config['locale'] = array(
+                        'at',
+                        'au',
+                        'be',
+                        'br',
+                        'ca',
+                        'ch',
+                        'de',
+                        'dk',
+                        'es',
+                        'fi',
+                        'fr',
+                        'id',
+                        'in',
+                        'it',
+                        'jp',
+                        'my',
+                        'no',
+                        'pl',
+                        'pt',
+                        'se',
+                        'sg',
+                        'tr',
+                        'uk',
+                        'us',
+                        'za',
+                        'kr',
+                        'ar',
+                        'ru',
+                        'hk',
+                        'sk',
+                        'nz',
+                        'cl',
+                        'ie',
+                        'mx',
+                        'cn'
+                    );
+

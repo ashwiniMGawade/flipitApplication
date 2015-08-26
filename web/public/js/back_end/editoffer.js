@@ -623,9 +623,16 @@ function setFormData(data){
 			
 		}else{
 		    if(data[0].imageName){
-			var image = data[0].path+"/thum_"+data[0].imageName;
-	        var imgSrc = PUBLIC_PATH_LOCALE + image;
-			jQuery('span#offerLogoId').append('<img src="'+imgSrc+'" id="uplodedOffer" alt="uploaded offer" title="uploaded offer">');
+                if (data[0].imageType !== 'pdf') {
+                    var image = data[0].path+"/thum_"+data[0].imageName;
+                    var imgSrc = PUBLIC_PATH_LOCALE + image;
+                    jQuery('span#offerLogoId').append('<img src="'+imgSrc+'" id="uplodedOffer" alt="uploaded offer" title="uploaded offer">');
+                }
+                else {
+                    var image = data[0].path+data[0].imageName;
+                    var imgSrc = PUBLIC_PATH_LOCALE + image;
+                    jQuery('span#offerLogoId').append('<p><a href="'+imgSrc+'" target="_blank">'+data[0].imageName+'</a></p>');
+                }
 	        //jQuery('#uplodedOffer').show().attr('src', imgSrc);
 			jQuery("#uploadOfferOption").click();
 		  }

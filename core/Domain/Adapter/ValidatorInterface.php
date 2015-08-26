@@ -41,7 +41,9 @@ interface ValidatorInterface
     public function dateTime();
 
     /**
+     * @param array $value
+     *
      * @return mixed
      */
-    public function notBlank();    
+    public function greaterThan($value);
 }

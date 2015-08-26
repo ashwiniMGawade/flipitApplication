@@ -8,6 +8,13 @@ $(document).ready(function() {
     });
 }
 
+$('.brands-page article div.text a').on('touchend', function(e) {
+    console.log('Mobile Touch ended : Favouriting Shop');
+    var el = $(this);
+    var link = el.attr('href');
+    window.location = link;
+});
+
 $('body').click(function(event){
     var clickedId = event.target.id;
     if (clickedId == "searchFieldBrandHeader") {

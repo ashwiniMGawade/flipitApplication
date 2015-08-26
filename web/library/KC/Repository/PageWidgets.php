@@ -12,6 +12,22 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
             ->leftJoin('sw.widget', 'w')
             ->where($queryBuilder->expr()->eq('sw.widget_type', $queryBuilder->expr()->literal($widgetsType)))
             ->andWhere('w.status= 1')
+            ->andWhere('w.startDate <= CURRENT_DATE() OR w.startDate IS NULL')
+            ->andWhere('w.endDate >= CURRENT_DATE() OR w.endDate IS NULL')
+            ->orderBy('sw.position', 'ASC');
+        $pageWidets = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $pageWidets;
+    }
+
+    public static function getAllWidgetsByType($widgetsType)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('sw, w')
+            ->from('\Core\Domain\Entity\pageWidgets', 'sw')
+            ->leftJoin('sw.widget', 'w')
+            ->where($queryBuilder->expr()->eq('sw.widget_type', $queryBuilder->expr()->literal($widgetsType)))
+            ->andWhere('w.status= 1')
             ->orderBy('sw.position', 'ASC');
         $pageWidets = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageWidets;

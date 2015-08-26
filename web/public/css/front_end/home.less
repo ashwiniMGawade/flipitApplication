@@ -866,7 +866,11 @@
             }
         }
         .best-items{
-            .heading{}
+            .heading{
+                h2 {
+                  font-size:18px;
+                }
+            }
             .all{
                 width:100%;
             }
@@ -942,9 +946,9 @@
 @media only screen and (max-width: 479px){
     .home-page {
         .section-top{
-            height: 410px;
+            height: 310px;
             .text-block{
-                top: 29%;
+                top: 8%;
             }
             .email-form{
                 margin: 10px;
@@ -1110,12 +1114,15 @@
     }
 }
 @media only screen and (max-width: 479px){
-    .vouchers{
+    .home-page .vouchers{
         ul{
             li{
                 &:before{
                     right: 20px;
                 }
+            }
+            .sub-text{
+                padding-right: 9%;
             }
         }
     }           
