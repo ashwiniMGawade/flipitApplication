@@ -169,7 +169,7 @@ class Admin_WidgetController extends Application_Admin_BaseController
         } else {
             $widgetType = key($widgetCategories);
         }
-        $categoryWidgets = \KC\Repository\PageWidgets::getWidgetsByType($widgetType);
+        $categoryWidgets = \KC\Repository\PageWidgets::getAllWidgetsByType($widgetType);
         $widgetsIds = array();
         if (!empty($categoryWidgets)) {
             $widgetsIds = self::getWidgetIds($categoryWidgets);

@@ -145,9 +145,6 @@
         .meta-holder{
             overflow: hidden;
             text-align: left;
-        }
-        .btn-holder{
-            float: left;
             .pop{
                 margin: 0 3px 0 0;
                 padding: 5px 16px 5px 13px;
@@ -158,13 +155,13 @@
                 }
             }
         }
+        .btn-holder{
+            float: left;
+        }
         .items-holder{
             overflow: hidden;
         }
         .items{
-            @media only screen and (max-width: 767px){
-              font-size: 11px;
-            }
             color: #949597;
             font-size: 13px;
             overflow: hidden;
@@ -174,7 +171,7 @@
             padding: 0;
             @media only screen and (max-width: 767px){
                 overflow: visible;
-                font-size: 12px;
+                font-size: 11px;
                 margin: 0 -8px 0 -7px;
                 padding: 7px 0 7px;
                 width: auto;
@@ -186,6 +183,12 @@
                 text-overflow: ellipsis;
                 overflow: hidden;
             }
+            .couponsCount,
+            .couponUsed {
+                @media only screen and (max-width: 767px) {
+                    color: #949597;
+                }
+            }
             li{
                 float: left;
                 margin: 0 11px 0 10px;
@@ -193,7 +196,6 @@
                 padding: 1px 0 1px 1px;
                 
                 @media only screen and (max-width: 767px){
-                    padding: 0 0 0 20px;
                     margin: 0 8px 11px 7px;
                     max-width: 100%;
                     display: none;

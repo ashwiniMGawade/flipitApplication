@@ -1069,10 +1069,11 @@ class Offer extends \Core\Domain\Entity\Offer
         $nowDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
-            ->select('o, s, img, vot, t, terms')
+            ->select('o, s, img, vot, t, terms, offerImage')
         ->from('\Core\Domain\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('s.logo', 'img')
+        ->leftJoin('o.logo', 'offerImage')
         ->leftJoin('o.offertermandcondition', 'terms')
         ->leftJoin('o.votes', 'vot')
         ->leftJoin('o.offerTiles', 't')
@@ -1568,7 +1569,7 @@ class Offer extends \Core\Domain\Entity\Offer
             o.couponCode, o.extendedOffer, o.editorPicks, o.userGenerated, o.couponCodeType, s.name as shopName,
             s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,o.extendedTitle, o.extendedoffertitle,
             o.extendedMetaDescription,
-            page.id as pageId,tc.content as termsAndconditionContent,category.id as categoryId,img.name as imageName,
+            page.id as pageId,tc.content as termsAndconditionContent,category.id as categoryId,img.name as imageName, img.ext as imageType,
             img.path,news.title as newsTitle,
             news.url, news.content as newsContent, o.tilesId as tilesId, t.path as offerTilesPath,t.name as offerTilesName,
             t.position,
@@ -2723,7 +2724,7 @@ class Offer extends \Core\Domain\Entity\Offer
                 }
                 if (@$matches[1]) {
 
-                    $offerImage  = new \Core\Domain\Entity\Image();
+                    $offerImage  = new \Core\Domain\Entity\Logo();
                     $offerImage->ext = $ext;
                     $offerImage->path ='images/upload/offer/';
                     $offerImage->name = $fileName;
@@ -2733,7 +2734,7 @@ class Offer extends \Core\Domain\Entity\Offer
                     $offerImage->updated_at = new \DateTime('now');
                     $entityManagerUser->persist($offerImage);
                     $entityManagerUser->flush();
-                    $saveOffer->offerlogoid =  $offerImage->getId();
+                    $saveOffer->logo =  $offerImage;
                 }
             } else {
                 $saveOffer->refOfferUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerrefurlPR']);

@@ -8,7 +8,8 @@ $(document).ready(function() {
     });
 }
 
-$('.brands-page article div.text a').on('click touchend', function(e) {
+$('.brands-page article div.text a').on('touchend', function(e) {
+    console.log('Mobile Touch ended : Favouriting Shop');
     var el = $(this);
     var link = el.attr('href');
     window.location = link;

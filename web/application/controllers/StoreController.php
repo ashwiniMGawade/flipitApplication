@@ -252,7 +252,7 @@ class StoreController extends Zend_Controller_Action
 
         if ($shopInformation[0]['showSimliarShops']) {
             $this->view->similarShops = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                (string)'shop_similar_shops',
+                (string)'shop_'.$shopId.'_similar_shops',
                 array(
                     'function' => 'KC\Repository\Shop::getSimilarShops',
                     'parameters' => array($shopId, 10)
