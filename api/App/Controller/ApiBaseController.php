@@ -1,7 +1,7 @@
 <?php
 namespace Api\Controller;
 
-use \Core\Domain\Factory\SystemFactory;
+use Api\Controller\Helper\Authenticator;
 
 class ApiBaseController
 {
@@ -39,11 +39,11 @@ class ApiBaseController
         if (strlen($apiKey)<1) {
             $this->app->halt(401, json_encode(array('message'=>'API key is required.')));
         }
-
-        $apiKey = SystemFactory::getApiKey()->execute(array('api_key'=>$apiKey));
-        if (false === is_object($apiKey)) {
+        $authenticator = new Authenticator();
+        if (false === $authenticator->authenticate($apiKey) ) {
             $this->app->halt(401, json_encode(array('message'=>'Invalid API key.')));
         }
-        return true;
+
+
     }
 }
