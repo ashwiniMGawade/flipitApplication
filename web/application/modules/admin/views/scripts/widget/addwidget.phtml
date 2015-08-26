@@ -30,53 +30,53 @@
                                     <input type="text" value="<?php echo isset($this->widget['title']) ? $this->widget['title'] : ''; ?>" name="title" id="title" class="span3">
                                 </div>
                             </div>
-
-                        <div class="row-fluid" id="visibiliyDiv">
-                            <div class="span2 mb10">
-                                <label><strong><?php echo $this->translate('Is Dated'); ?></strong></label>
-                            </div>
-                            <div class="span10">
-                                <div data-toggle="buttons-checkbox" class="btn-group">
-                                    <button type="button" class="btn btn-primary"  id="id_dated_yes" onClick="selectIsDated('id_dated_yes')">
-                                        <?php echo $this->translate('Yes'); ?>
-                                    </button>
-                                    <button type="button" class="btn" style="border-radius: 0 4px 4px 0;"
-                                            id="id_dated_no" onClick="selectIsDated('id_dated_no')">
-                                        <?php echo $this->translate('No'); ?>
-                                    </button>
-                                </div>
-                            </div>
                         </div>
-
-                        <div id="date_selectors_div">
-                            <div class="row-fluid">
-                                <div class="span2">
-                                    <label><strong><?php echo $this->translate('Start Date'); ?></strong></label>
+                        <div class="mainpage-content margin_widget_editor">
+                            <div class="row-fluid" id="visibiliyDiv">
+                                <div class="span2 mb10">
+                                    <label><strong><?php echo $this->translate('Is Dated'); ?></strong></label>
                                 </div>
-                                <div class="span2">
-                                    <div data-date-format="dd-mm-yyyy" data-date="<?php echo date('d-m-Y');?>" id="widgetStartDate_div"
-                                         class="input-append date">
-                                        <input readonly="readonly" type="text"  value="<?php echo isset($this->widget['startDate']) ? $this->widget['startDate'] : ''; ?>" class="span2 ignore2 date-time-cusor-style" id="widgetStartDate" name="startDate">
-                                        <span class="add-on"><i class="icon-th"></i></span>
+                                <div class="span10">
+                                    <div data-toggle="buttons-checkbox" class="btn-group">
+                                        <button type="button" class="btn btn-primary"  id="id_dated_yes" onClick="selectIsDated('id_dated_yes')">
+                                            <?php echo $this->translate('Yes'); ?>
+                                        </button>
+                                        <button type="button" class="btn" style="border-radius: 0 4px 4px 0;"
+                                                id="id_dated_no" onClick="selectIsDated('id_dated_no')">
+                                            <?php echo $this->translate('No'); ?>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row-fluid">
-                                <div class="span2">
-                                    <label><strong><?php echo $this->translate('End Date'); ?></strong></label>
+
+                            <div id="date_selectors_div">
+                                <div class="row-fluid">
+                                    <div class="span2">
+                                        <label><strong><?php echo $this->translate('Start Date'); ?></strong></label>
+                                    </div>
+                                    <div class="span2">
+                                        <div data-date-format="dd-mm-yyyy" data-date="<?php echo date('d-m-Y');?>" id="widgetStartDate_div"
+                                             class="input-append date">
+                                            <input readonly="readonly" type="text"  value="<?php echo isset($this->widget['startDate']) ? $this->widget['startDate'] : ''; ?>" class="span2 ignore2 date-time-cusor-style" id="widgetStartDate" name="startDate">
+                                            <span class="add-on"><i class="icon-th"></i></span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="span2">
-                                    <div data-date-format="dd-mm-yyyy" data-date="" id="widgetEndDate_div"
-                                         class="input-append date">
-                                        <input readonly="readonly"  type="text" value="<?php echo isset($this->widget['endDate']) ? $this->widget['endDate'] : ''; ?>" name="endDate" id="widgetEndDate" class="span2 ignore2 date-time-cusor-style">
-                                        <span class="add-on"><i class="icon-th"></i></span>
+                                <div class="row-fluid">
+                                    <div class="span2">
+                                        <label><strong><?php echo $this->translate('End Date'); ?></strong></label>
+                                    </div>
+                                    <div class="span2">
+                                        <div data-date-format="dd-mm-yyyy" data-date="" id="widgetEndDate_div"
+                                             class="input-append date">
+                                            <input readonly="readonly"  type="text" value="<?php echo isset($this->widget['endDate']) ? $this->widget['endDate'] : ''; ?>" name="endDate" id="widgetEndDate" class="span2 ignore2 date-time-cusor-style">
+                                            <span class="add-on"><i class="icon-th"></i></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                         <textarea name="content" id="content"><?php echo isset($this->widget['content']) ? $this->widget['content'] : ''; ?></textarea>
-                        </div>
                     </div>
                 </div>
                 <br class="clear">

@@ -37,7 +37,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
                                     <input type="text" value="<?php echo $this->widgetInformation['title'];?>" placeholder="" name="title" id="title" class="span3">
                                 </div>
                             </div>
-
+                        </div>
+                        <div class="mainpage-content margin_widget_editor">
                             <div class="row-fluid" id="visibiliyDiv">
                                 <div class="span2 mb10">
                                     <label><strong><?php echo $this->translate('Is Dated'); ?></strong></label>
@@ -81,10 +82,10 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
                                     </div>
                                 </div>
                             </div>
+                        </div>
                             <?php if ($this->widgetInformation['content']) :?>
                             <textarea name="content" id="content" ><?php echo $this->widgetInformation['content'];?></textarea>
                             <?php endif;?>
-                        </div>
                     </div>
                 </div>
                 <br class="clear">

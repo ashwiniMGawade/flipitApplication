@@ -25,7 +25,7 @@ class WidgetValidator
         }
         if (!is_null($widget->getEndDate())) {
             $constraints['startDate'][] = $this->validator->notNull(array('message'=>'Start date should not be blank.'));
-            $constraints['endDate'][] = $this->validator->greaterThan(array('value' => 'today', 'message' => 'End date must be future date.'));
+            $constraints['endDate'][] = $this->validator->greaterThan(array('value' => 'yesterday', 'message' => 'End date must be future date.'));
         }
         return $this->validator->validate($widget, $constraints);
     }
