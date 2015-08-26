@@ -57,9 +57,9 @@ class Validator implements ValidatorInterface
     /**
      * @return \Symfony\Component\Validator\Constraints\NotBlank
      */
-    public function notNull()
+    public function notNull($options = array())
     {
-        return new Assert\NotBlank();
+        return new Assert\NotBlank($options);
     }
 
     /**
@@ -85,16 +85,16 @@ class Validator implements ValidatorInterface
     /**
      * @return \Symfony\Component\Validator\Constraints\DateTime
      */
-    public function dateTime()
+    public function dateTime($options = array())
     {
-        return new Assert\DateTime();
+        return new Assert\DateTime($options);
     }
 
     /**
-     * @return \Symfony\Component\Validator\Constraints\DateTime
+     * @return \Symfony\Component\Validator\Constraints\GreaterThan
      */
-    public function notBlank()
+    public function greaterThan($options)
     {
-        return new Assert\NotBlank();
+        return new Assert\GreaterThan($options);
     }
 }

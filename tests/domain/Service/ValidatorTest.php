@@ -135,20 +135,20 @@ class ValidatorTest extends \Codeception\TestCase\Test
         $this->assertEquals($expected, $response);
     }
 
-    public function testValidatorReturnsViolationForPropertyNotEqualsBlank()
+    public function testValidatorReturnsViolationForPropertyGreaterThanValuePassed()
     {
         $apiKey = new ApiKey();
-        $apiKey->__set('name', '');
+        $apiKey->__set('id', 1);
 
         $validator = new Validator();
         $rules = array(
-            'name' => array(
-                $validator->notBlank()
+            'id' => array(
+                $validator->greaterThan(array('value' => 2))
             )
         );
         $expected = array(
-            "name" => array(
-                'This value should not be blank.'
+            "id" => array(
+                'This value should be greater than 2.'
             )
         );
         $response = (new Validator())->validate($apiKey, $rules);

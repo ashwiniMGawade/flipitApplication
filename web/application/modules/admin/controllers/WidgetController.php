@@ -1,14 +1,12 @@
 <?php
-class Admin_WidgetController extends Zend_Controller_Action
+
+use \Core\Domain\Factory\AdminFactory;
+use \Core\Service\Errors;
+
+class Admin_WidgetController extends Application_Admin_BaseController
 {
     public function init()
     {
-        $flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        $message = $flashMessenger->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ?
-        $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ?
-        $message[0]['error'] : '';
     }
 
     public function preDispatch()
@@ -35,24 +33,30 @@ class Admin_WidgetController extends Zend_Controller_Action
     public function addwidgetAction()
     {
         if ($this->_request->isPost()) {
-            if (\KC\Repository\Widget::addWidget($this->_getAllParams())) {
-                self::addFlashMessage('Widget has been added successfully', 'success', HTTP_PATH.'admin/widget');
+            $widget = AdminFactory::createWidget()->execute();
+            $result = AdminFactory::addWidget()->execute($widget, $this->getAllParams());
+            $this->view->widget = $this->getAllParams();
+            if ($result instanceof Errors) {
+                $this->view->widget = $this->getAllParams();
+                $errors = $result->getErrorsAll();
+                $this->setFlashMessage('error', $errors);
             } else {
-                self::addFlashMessage('Problem in your data', 'error', HTTP_PATH.'admin/widget');
+                $this->setFlashMessage('success', 'Widget has been added successfully');
+                $this->redirect(HTTP_PATH.'admin/widget');
             }
         }
     }
 
     public function widgetlistAction()
     {
-        $widgetList = \KC\Repository\Widget::getWidgetList($this->_getAllParams());
+        $widgetList = \KC\Repository\Widget::getWidgetList($this->getAllParams());
         echo Zend_Json::encode($widgetList);
         exit();
     }
 
     public function onlinestatusAction()
     {
-        $widgetId = \KC\Repository\Widget::changeStatus($this->_getAllParams());
+        $widgetId = \KC\Repository\Widget::changeStatus($this->getAllParams());
         self::updateVarnish();
         echo Zend_Json::encode($widgetId);
         exit();
@@ -62,35 +66,51 @@ class Admin_WidgetController extends Zend_Controller_Action
     {
         $widgetId = intval($this->getRequest()->getParam('id'));
         $this->view->qstring = $_SERVER['QUERY_STRING'];
-        $parameters = $this->_getAllParams();
-        if (intval($widgetId) > 0) {
-            $widgetInformation = \KC\Repository\Widget::getWidgetInformation($widgetId);
-            $this->view->widgetInformation = $widgetInformation;
-            $this->view->id = $widgetId;
-            if (!$widgetInformation['showWithDefault']) {
-                $url = HTTP_PATH.'admin/widget#'.$this->getRequest()->getParam('qString');
-                self::addFlashMessage('This Widget has default widget', 'error', $url);
-            }
+        $parameters = $this->getAllParams();
+        if (intval($widgetId) < 1) {
+            $this->setFlashMessage('error', 'Invalid widget id provided.');
+            $this->redirect(HTTP_PATH.'admin/widget');
         }
-        if ($this->_request->isPost()) {
-            self::updateWidget($parameters);
-        }
-        if (!empty($parameters['delete'])) {
-            self::deleteWidget($parameters['id']);
-        }
-    }
-
-    public function updateWidget($parameters)
-    {
-        $flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        $widget = new \KC\Repository\Widget();
-        if ($widget->updateWidget($parameters)) {
-            self::updateVarnish();
-            $url = HTTP_PATH.'admin/widget#'.$this->getRequest()->getParam('qString');
-            self::addFlashMessage('Widget has been updated successfully', 'success', $url);
+        $result = AdminFactory::getWidget()->execute(array('id' => $widgetId));
+        if ($result instanceof Errors) {
+            $errors = $result->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+            $this->redirect(HTTP_PATH.'admin/widget');
         } else {
-            $url = HTTP_PATH.'admin/widget#'.$this->getRequest()->getParam('qString');
-            self::addFlashMessage('Problem in your data', 'error', $url);
+            $widget = $result;
+            $this->view->id = $widgetId;
+            if (!$widget->getShowWithDefault()) {
+                $url = HTTP_PATH . 'admin/widget#' . $this->getRequest()->getParam('qString');
+                $this->setFlashMessage("error", "You can't modify default widget.");
+                $this->redirect($url);
+            }
+
+            if ($this->_request->isPost()) {
+
+                $result = AdminFactory::updateWidget()->execute($widget, $parameters);
+                if ($result instanceof Errors) {
+                    $errors = $result->getErrorsAll();
+                    $this->setFlashMessage('error', $errors);
+                } else {
+                    $widget = $result;
+                    self::updateVarnish();
+                    \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_widget_list');
+                    $this->setFlashMessage('success', 'Widget has been updated successfully');
+                    $url = HTTP_PATH . 'admin/widget#' . $this->getRequest()->getParam('qString');
+                    $this->redirect($url);
+                }
+            }
+            $widgetInformation = array(
+                'title' => $widget->getTitle(),
+                'content' => $widget->getContent(),
+                'startDate' => $widget->getStartDate(),
+                'endDate' => $widget->getEndDate()
+            );
+            $this->view->widgetInformation = $widgetInformation;
+
+            if (!empty($parameters['delete'])) {
+                self::deleteWidget($parameters['id']);
+            }
         }
     }
 
