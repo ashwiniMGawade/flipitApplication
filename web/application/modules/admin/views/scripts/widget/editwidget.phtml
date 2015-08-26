@@ -12,8 +12,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
   var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor" ; ?>" ;
 </script>
 <div class="wrap columns-2">
+    <?php echo $this->flashMessages(); ?>
     <div id="editWidgetDiv" class="wrap columns-2">
-        <?php echo $this->flashMessages(); ?>
     <h1>
         <span id="create"><?php echo $this->translate('Edit Widget');?></span>
         <button class="btn ml10" 

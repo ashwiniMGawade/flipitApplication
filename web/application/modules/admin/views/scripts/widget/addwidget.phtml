@@ -13,8 +13,8 @@
 </script>
 <!-- addwidget div starts -->
 <div class="wrap columns-2">
+    <?php echo $this->flashMessages(); ?>
     <div id="addNewWidgetDiv" class="wrap columns-2">
-        <?php echo $this->flashMessages(); ?>
         <h1><span id="create"><?php echo $this->translate('Create Widget');?></span><button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/widget'"><?php echo $this->translate('Cancel'); ?></button></h1>
         <form name="createWidget" id="createWidget" enctype="multipart/form-data" method="post">
             <input type="hidden" name='editedWidgetId' id='editedWidgetId' value="" />
