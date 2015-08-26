@@ -1,7 +1,7 @@
 <?php
 namespace Api\Controller;
 
-use Api\Controller\Helper\Authenticate;
+use Api\Controller\Helper\Authenticator;
 
 class ApiBaseController
 {
@@ -39,7 +39,7 @@ class ApiBaseController
         if (strlen($apiKey)<1) {
             $this->app->halt(401, json_encode(array('message'=>'API key is required.')));
         }
-        $authenticator = new Authenticate();
+        $authenticator = new Authenticator();
         if (false === $authenticator->authenticate($apiKey) ) {
             $this->app->halt(401, json_encode(array('message'=>'Invalid API key.')));
         }

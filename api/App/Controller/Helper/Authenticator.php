@@ -3,7 +3,7 @@ namespace Api\Controller\Helper;
 
 use \Core\Domain\Factory\SystemFactory;
 
-class Authenticate
+class Authenticator
 {
     public function authenticate($apiKey)
     {
