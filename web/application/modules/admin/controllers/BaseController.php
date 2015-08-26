@@ -4,16 +4,16 @@ class Application_Admin_BaseController extends Zend_Controller_Action
 {
     public function setFlashMessage($messageType, $message)
     {
-        $singleMessage = '';
+        $translatableSingleMessage = '';
         if (is_array($message)) {
             foreach ($message as $fieldMessage) {
-                $singleMessage .= implode('<br>', $fieldMessage) . '<br>';
+                $translatableSingleMessage .= implode('<br>', $fieldMessage) . '<br>';
             }
         } else {
-            $singleMessage = $message;
+            $translatableSingleMessage = $message;
         }
         $flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        $singleMessage = $this->view->translate($singleMessage);
-        $flashMessenger->addMessage(array($messageType => $singleMessage));
+        $translatableSingleMessage = $this->view->translate($translatableSingleMessage);
+        $flashMessenger->addMessage(array($messageType => $translatableSingleMessage));
     }
 }

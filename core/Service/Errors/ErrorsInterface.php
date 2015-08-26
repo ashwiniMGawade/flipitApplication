@@ -1,10 +1,10 @@
 <?php
-namespace Core\Service\Interfaces;
+namespace Core\Service\Errors;
 
 /**
  * Interface ErrorsInterface
  *
- * @package Core\Service\Interfaces
+ * @package Core\Service\Errors
  */
 interface ErrorsInterface
 {

@@ -5,7 +5,7 @@ use \Core\Domain\Entity\Widget;
 use \Core\Domain\Repository\WidgetRepositoryInterface;
 use \Core\Domain\Validator\WidgetValidator;
 use \Core\Domain\Adapter\PurifierInterface;
-use \Core\Service\Interfaces\ErrorsInterface;
+use \Core\Service\Errors\ErrorsInterface;
 
 class UpdateWidgetUsecase
 {

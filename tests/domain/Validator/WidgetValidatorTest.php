@@ -60,13 +60,15 @@ class WidgetValidatorTest extends \Codeception\TestCase\Test
 
     public function testWidgetValidatorWithStartDateGreaterThanEndDate()
     {
+        $startDate = new \DateTime();
+        $startDate->add(new \DateInterval('P10D'));
         $endDate = new \DateTime();
-        $endDate->sub(new \DateInterval('P10D'));
+        $endDate->add(new \DateInterval('P5D'));
         $widget = new Widget();
         $widget->setTitle('Test');
         $widget->setCreatedAt(new \DateTime('now'));
         $widget->setUpdatedAt(new \DateTime('now'));
-        $widget->setStartDate(new \DateTime('now'));
+        $widget->setStartDate($startDate);
         $widget->setEndDate($endDate);
         $widgetValidator = new WidgetValidator(new Validator());
         $result = $widgetValidator->validate($widget);

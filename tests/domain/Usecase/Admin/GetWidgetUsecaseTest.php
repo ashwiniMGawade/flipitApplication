@@ -16,7 +16,7 @@ class GetWidgetUsecaseTest extends \Codeception\TestCase\Test
         $result = $widgetUsecase->execute($condition);
         $errors = new Errors();
         $errors->setError('Widget not found');
-        $this->assertEquals(array('Widget not found'), $result->getErrorsAll());
+        $this->assertEquals($errors->getErrorsAll(), $result->getErrorsAll());
     }
 
     public function testGetWidgetUsecase()

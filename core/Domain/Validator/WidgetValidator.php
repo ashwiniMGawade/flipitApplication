@@ -20,11 +20,12 @@ class WidgetValidator
             $constraints['endDate'][] = $this->validator->notNull(array('message'=>'End date should not be blank.'));
 
             if (!is_null($widget->getEndDate())) {
-                $constraints['endDate'][] = $this->validator->greaterThan( array ( 'value' => $widget->getStartDate(), 'message' => 'End date should be greater than start date.'));
+                $constraints['endDate'][] = $this->validator->greaterThan(array('value' => $widget->getStartDate(), 'message' => 'End date should be greater than start date.'));
             }
         }
         if (!is_null($widget->getEndDate())) {
             $constraints['startDate'][] = $this->validator->notNull(array('message'=>'Start date should not be blank.'));
+            $constraints['endDate'][] = $this->validator->greaterThan(array('value' => 'today', 'message' => 'End date must be future date.'));
         }
         return $this->validator->validate($widget, $constraints);
     }

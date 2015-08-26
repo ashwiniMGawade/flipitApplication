@@ -2,7 +2,7 @@
 
 namespace Core\Service;
 
-use \Core\Service\Interfaces\ErrorsInterface;
+use \Core\Service\Errors\ErrorsInterface;
 
 class Errors implements ErrorsInterface
 {

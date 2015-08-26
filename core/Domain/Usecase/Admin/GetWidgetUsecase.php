@@ -3,7 +3,7 @@ namespace Core\Domain\Usecase\Admin;
 
 use \Core\Domain\Repository\WidgetRepositoryInterface;
 use \Core\Domain\Adapter\PurifierInterface;
-use \Core\Service\Interfaces\ErrorsInterface;
+use \Core\Service\Errors\ErrorsInterface;
 
 class GetWidgetUsecase
 {
