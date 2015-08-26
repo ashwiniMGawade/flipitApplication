@@ -813,6 +813,7 @@ class BackEnd_Helper_viewHelper
         $widgetCategories['all-shop-page'] = $this->zendTranslate->translate('backend_All shop page');
         $widgetCategories['top-20'] = $this->zendTranslate->translate('backend_Top-20');
         $widgetCategories['newest-code'] = $this->zendTranslate->translate('backend_Newest code');
+        $widgetCategories['how-to-guide'] = $this->zendTranslate->translate('backend_How to guide');
         return $widgetCategories;
     }
 

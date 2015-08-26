@@ -32,6 +32,9 @@ $(document).ready(function(){
 				return false;
 			}
 	  });
+
+    jQuery('#widgetStartDate_div').datepicker().on('changeDate');
+    jQuery('#widgetEndDate_div').datepicker().on('changeDate');
 	
 	// setup ckeditor and its configurtion
 	CKEDITOR.replace('content',
@@ -122,5 +125,22 @@ function callToPermanentDelete(){
 			}
 			
 		});
+}
+
+function selectIsDated(elemntId)
+{
+    $("#" + elemntId).addClass("btn-primary").siblings().removeClass("btn-primary");
+    switch(elemntId) {
+        case 'id_dated_yes':
+            $('#date_selectors_div').show();
+            break;
+        case 'id_dated_no':
+            $('#date_selectors_div').hide();
+            $("input#widgetStartDate").val('');
+            $("input#widgetEndDate").val('');
+            break;
+        default:
+            break;
+    }
 }
 	  		
