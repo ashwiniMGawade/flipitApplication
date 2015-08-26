@@ -7,6 +7,13 @@ class GlobalShopExport
     protected $row = 4;
     protected $column = 4;
     public $mandrillKey = '';
+    protected $shopClassifications = array(
+                                            1 => 'A',
+                                            2 => 'A+',
+                                            3 => 'AA',
+                                            4 => 'AA+',
+                                            5 => 'AAA'
+                                        );
 
     public function __construct()
     {
@@ -99,7 +106,7 @@ class GlobalShopExport
         $objPHPExcel->getActiveSheet()->setCellValue('A3', $this->zendTranslation->translate('Shopname'));
         $objPHPExcel->getActiveSheet()->setCellValue('B3', $this->zendTranslation->translate('Navigation URL'));
         $objPHPExcel->getActiveSheet()->setCellValue('C3', $this->zendTranslation->translate('Money shop'));
-        $objPHPExcel->getActiveSheet()->setCellValue('D3', $this->zendTranslation->translate('Account manager'));
+        $objPHPExcel->getActiveSheet()->setCellValue('D3', $this->zendTranslation->translate('Classification'));
         $objPHPExcel->getActiveSheet()->setCellValue('E3', $this->zendTranslation->translate('Start'));
         $objPHPExcel->getActiveSheet()->setCellValue('F3', $this->zendTranslation->translate('Network'));
         $objPHPExcel->getActiveSheet()->setCellValue('G3', $this->zendTranslation->translate('Online'));
@@ -163,8 +170,7 @@ class GlobalShopExport
         }
         foreach ($shopData as $shop) {
             $affliateProgram = $shop['affliateProgram'] == true ? 'Yes' : 'No';
-            $accountManagerName = !empty($shop['accountManagerName'])
-                ? User::getUserName($shop['accoutManagerId']) : '';
+            $shopRating = $this->shopClassifications[$shop['classification']];
             $startDate =  date("d-m-Y", strtotime($shop['created_at']));
             $affilateNetwork = !empty($shop['affname']) ? $shop['affname'] : '';
             $offLine = $shop['status']==true ? 'Yes' : 'No';
@@ -217,7 +223,7 @@ class GlobalShopExport
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$column, $shop['name']);
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$column, $shop['permaLink']);
             $objPHPExcel->getActiveSheet()->setCellValue('C'.$column, $affliateProgram);
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$column, $accountManagerName);
+            $objPHPExcel->getActiveSheet()->setCellValue('D'.$column, $shopRating);
             $objPHPExcel->getActiveSheet()->setCellValue('E'.$column, $startDate);
             $objPHPExcel->getActiveSheet()->setCellValue('F'.$column, $affilateNetwork);
             $objPHPExcel->getActiveSheet()->setCellValue('G'.$column, $offLine);

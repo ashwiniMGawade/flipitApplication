@@ -213,6 +213,10 @@ abstract class BaseShop extends Doctrine_Record
              'type' => 'string',
              'length' => '75',
         ));
+        $this->hasColumn('classification', 'integer', null, array(
+            'type' => 'integer',
+            'length' => 4,
+        ));
      /*   $this->hasColumn('Deliverytime', 'string', 255, array(
              'type' => 'string',
              'length' => '255',
