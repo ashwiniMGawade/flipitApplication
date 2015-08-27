@@ -25,6 +25,9 @@ class ShopsController extends ApiBaseController
     {
         $shop = AdminFactory::createShop()->execute();
         $params = json_decode($this->app->request->getBody(), true);
+        if (isset($params['classification'])) {
+            $params['classification'] = array_search($params['classification'], $this->shopClassification) ? : 1;
+        }
         /*$result = AdminFactory::addShop()->execute($shop, $params);
         echo $this->generateShopJsonData($result);*/
         echo json_encode(array('msg'=>'This operation is not permitted.'));
