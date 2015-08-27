@@ -7,6 +7,14 @@ use \Core\Domain\Factory\AdminFactory;
 
 class ShopsController extends ApiBaseController
 {
+    protected $shopClassification = array(
+                                            1 => 'A',
+                                            2 => 'A+',
+                                            3 => 'AA',
+                                            4 => 'AA+',
+                                            5 => 'AAA'
+                                        );
+
     public function getShop($id)
     {
         $shop = AdminFactory::getShop()->execute($id);
@@ -33,7 +41,7 @@ class ShopsController extends ApiBaseController
 
     public function deleteShop($id)
     {
-        if(AdminFactory::deleteShop()->execute($id)) {
+        if (AdminFactory::deleteShop()->execute($id)) {
             echo json_encode(array('msg'=>'Shop deleted successfully.'));
         }
     }
@@ -64,6 +72,7 @@ class ShopsController extends ApiBaseController
             'refUrl'                => $shop->getRefUrl(),
             'actualUrl'             => $shop->getActualUrl(),
             'shopText'              => $shop->getShopText(),
+            'classification'        => $this->shopClassification[$shop->getClassification()]
         );
         $shop = new Hal('/shops/'.$shop->getId(), $shopData);
         return $shop->asJson();
