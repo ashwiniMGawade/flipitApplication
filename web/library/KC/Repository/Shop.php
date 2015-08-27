@@ -669,6 +669,17 @@ class Shop extends \Core\Domain\Entity\Shop
             ->from("\Core\Domain\Entity\Shop", "s")
             ->leftJoin('s.affliatenetwork', 'a')
             ->where('s.deleted = '. $flag);
+
+        if (isset($params['affliatenetworkid'])) {
+            $shopList->andWhere('a.id='.$params['affliatenetworkid']);
+        }
+
+        if (isset($params['status'])) {
+            //var_dump($params['status']); die;
+            $shopList->andWhere('s.status='.$params['status']);
+        }
+
+
         if (!empty($srh)) {
             $shopList->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal("%".$srh."%")));
         }

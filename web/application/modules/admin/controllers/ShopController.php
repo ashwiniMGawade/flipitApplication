@@ -34,19 +34,19 @@ class Admin_ShopController extends Zend_Controller_Action
         // set logged in role
         $u = Auth_StaffAdapter::getIdentity();
         $this->view->role = $u->users->id;
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $flash->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ?
-        $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ?
-        $message[0]['error'] : '';
-
+        $affiliate = new \KC\Repository\AffliateNetwork();
+        $arr['sortBy'] = 'name';
+        $arr['off'] = '1';
+        $affiliateNetworkList =  $affiliate->getNetworkList($arr);
+        $this->view->affiliateNetworkList = (array) $affiliateNetworkList['aaData'];
     }
 
     public function getshopAction()
     {
         $params = $this->_getAllParams();
         //cal to getshoplist function from Shop model
+    //    $params['affliatenetworkid'] = 11;
+    //    $params['status'] = 1;
         $shopList = \KC\Repository\Shop::getshopList($params);
         echo Zend_Json::encode($shopList);
         die;
@@ -164,7 +164,6 @@ class Admin_ShopController extends Zend_Controller_Action
 
     public function uploadimageAction()
     {
-
         $uploadPath = "images/upload/shop/";
         $adapter = new Zend_File_Transfer_Adapter_Http();
         $user_path = ROOT_PATH . $uploadPath;
