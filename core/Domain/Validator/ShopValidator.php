@@ -53,6 +53,10 @@ class ShopValidator
             'deleted' => array(
                 $this->validator->type(array('type' => 'integer')),
                 $this->validator->length(array('min' => 1, 'max' => 1))
+            ),
+            'classification' => array(
+                $this->validator->type(array('type' => 'integer')),
+                $this->validator->length(array('min' => 1, 'max' => 1))
             )
         );
         return $rules;
