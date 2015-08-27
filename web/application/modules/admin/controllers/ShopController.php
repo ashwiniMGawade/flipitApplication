@@ -45,8 +45,6 @@ class Admin_ShopController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams();
         //cal to getshoplist function from Shop model
-    //    $params['affliatenetworkid'] = 11;
-    //    $params['status'] = 1;
         $shopList = \KC\Repository\Shop::getshopList($params);
         echo Zend_Json::encode($shopList);
         die;
