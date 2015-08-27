@@ -7,13 +7,6 @@ class GlobalShopExport
     protected $row = 4;
     protected $column = 4;
     public $mandrillKey = '';
-    protected $shopClassifications = array(
-                                            1 => 'A',
-                                            2 => 'A+',
-                                            3 => 'AA',
-                                            4 => 'AA+',
-                                            5 => 'AAA'
-                                        );
 
     public function __construct()
     {
@@ -161,6 +154,13 @@ class GlobalShopExport
 
     public function localeShopsData($shopData, $key, $objPHPExcel, $localeExport = '')
     {
+        $shopClassifications = array(
+            1 => 'A',
+            2 => 'A+',
+            3 => 'AA',
+            4 => 'AA+',
+            5 => 'AAA'
+        );
         if (!empty($localeExport )) {
             $column = 4;
             $row = 4;
@@ -170,7 +170,7 @@ class GlobalShopExport
         }
         foreach ($shopData as $shop) {
             $affliateProgram = $shop['affliateProgram'] == true ? 'Yes' : 'No';
-            $shopRating = $this->shopClassifications[$shop['classification']];
+            $shopRating = $shopClassifications[$shop['classification']];
             $startDate =  date("d-m-Y", strtotime($shop['created_at']));
             $affilateNetwork = !empty($shop['affname']) ? $shop['affname'] : '';
             $offLine = $shop['status']==true ? 'Yes' : 'No';
