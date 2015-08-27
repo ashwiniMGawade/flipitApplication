@@ -675,7 +675,6 @@ class Shop extends \Core\Domain\Entity\Shop
         }
 
         if (isset($params['status'])) {
-            //var_dump($params['status']); die;
             $shopList->andWhere('s.status='.$params['status']);
         }
 
