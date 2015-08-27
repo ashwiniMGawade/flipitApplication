@@ -1444,6 +1444,7 @@ CREATE TABLE IF NOT EXISTS `shop` (
   `code_alert_send_date` datetime DEFAULT NULL,
   `featuredtext` varchar(255) DEFAULT NULL,
   `featuredtextdate` datetime DEFAULT NULL,
+  `classification` tinyint(4) DEFAULT '1' COMMENT '1=A, 2=A+, 3=AA, 4=AA+, 5=AAA',
   PRIMARY KEY (`id`),
   UNIQUE KEY `logoid` (`logoid`),
   UNIQUE KEY `howtousesmallimageid` (`howtousesmallimageid`),
