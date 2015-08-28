@@ -1,10 +1,10 @@
 <?php
 namespace Usecase\Guest;
 
-use Core\Domain\Usecase\Guest\GetOfferClickUsecase;
+use Core\Domain\Usecase\Guest\GetOfferClicksUsecase;
 use Core\Persistence\Database\Repository\ViewCountRepository;
 
-class GetOfferClickUsecaseTest extends \Codeception\TestCase\Test
+class GetOfferClicksUsecaseTest extends \Codeception\TestCase\Test
 {
     /**
      * @var \DomainTester
@@ -12,13 +12,13 @@ class GetOfferClickUsecaseTest extends \Codeception\TestCase\Test
     protected $tester;
 
     // tests
-    public function testGetOfferClickUsecase()
+    public function testGetOfferClicksUsecase()
     {
         $offerId = 5101;
         $clientIp = 3232249857;
         $expectedClickCount = 0;
         $viewCountRepository = $this->createViewCountRepositoryMock($expectedClickCount);
-        $clickCount = (new GetOfferClickUsecase($viewCountRepository))->execute($offerId, $clientIp);
+        $clickCount = (new GetOfferClicksUsecase($viewCountRepository))->execute($offerId, $clientIp);
         $this->assertEquals($expectedClickCount, $clickCount);
     }
 

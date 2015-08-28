@@ -3,7 +3,7 @@ namespace Core\Domain\Usecase\Guest;
 
 use Core\Domain\Repository\ViewCountRepositoryInterface;
 
-class GetOfferClickUsecase
+class GetOfferClicksUsecase
 {
     protected $viewCountRepository;
 

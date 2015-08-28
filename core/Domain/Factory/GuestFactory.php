@@ -3,7 +3,7 @@
 namespace Core\Domain\Factory;
 
 use \Core\Domain\Usecase\Guest\GetHomePageUsecase;
-use Core\Domain\Usecase\Guest\GetOfferClickUsecase;
+use Core\Domain\Usecase\Guest\GetOfferClicksUsecase;
 use \Core\Persistence\Factory\RepositoryFactory;
 
 class GuestFactory
@@ -15,6 +15,6 @@ class GuestFactory
 
     public static function getOfferClick()
     {
-        return new GetOfferClickUsecase(RepositoryFactory::viewCount());
+        return new GetOfferClicksUsecase(RepositoryFactory::viewCount());
     }
 }
