@@ -9,7 +9,7 @@ use \Core\Domain\Usecase\Admin\GetApiKeysUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\DeleteApiKeyUsecase;
-use \Core\Domain\Usecase\Admin\GetVisitorListingUsecase;
+use \Core\Domain\Usecase\Admin\GetVisitorsUsecase;
 use \Core\Domain\Usecase\Admin\GetShopUsecase;
 use \Core\Domain\Usecase\Admin\CreateShopUsecase;
 use \Core\Domain\Usecase\Admin\AddShopUsecase;
@@ -59,7 +59,7 @@ class AdminFactory
 
     public static function getVisitors()
     {
-        return new GetVisitorListingUsecase(RepositoryFactory::visitor());
+        return new GetVisitorsUsecase(RepositoryFactory::visitor());
     }
 
     public static function updateVisitors()
