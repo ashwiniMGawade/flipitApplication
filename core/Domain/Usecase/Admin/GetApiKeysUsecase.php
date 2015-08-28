@@ -4,7 +4,7 @@ namespace Core\Domain\Usecase\Admin;
 use \Core\Domain\Repository\ApiKeyRepositoryInterface;
 
 /**
- * Class GetApiKeyListingUsecase
+ * Class GetApiKeysUsecase
  *
  * @package Core\Domain\Usecase\Admin
  */

@@ -1,15 +1,15 @@
 <?php
 namespace Usecase\Admin;
 
-use \Core\Domain\Usecase\Admin\GetApiKeyListingUsecase;
+use \Core\Domain\Usecase\Admin\GetApiKeysUsecase;
 use \Core\Domain\Repository\ApiKeyRepositoryInterface;
 
 /**
- * Class GetApiKeyListingUsecaseTest
+ * Class GetApiKeysUsecaseTest
  *
  * @package Usecase\Admin
  */
-class GetApiKeyListingUsecaseTest extends \Codeception\TestCase\Test
+class GetApiKeysUsecaseTest extends \Codeception\TestCase\Test
 {
     /**
      * @var \DomainTester
@@ -19,10 +19,10 @@ class GetApiKeyListingUsecaseTest extends \Codeception\TestCase\Test
     /**
      *
      */
-    public function testGetApiKeyListingUsecase()
+    public function testGetApiKeysUsecaseTest()
     {
         $apiKeyRepository = $this->createApiKeyRepositoryMock();
-        $GetApiKeyListing = new GetApiKeyListingUsecase($apiKeyRepository);
+        $GetApiKeyListing = new GetApiKeysUsecase($apiKeyRepository);
         $GetApiKeyListing->execute();
     }
 
