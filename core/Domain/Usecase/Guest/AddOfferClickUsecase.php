@@ -5,7 +5,7 @@ use Core\Domain\Entity\Offer;
 use Core\Domain\Entity\ViewCount;
 use Core\Domain\Repository\ViewCountRepositoryInterface;
 
-class SaveOfferClickUsecase
+class AddOfferClickUsecase
 {
     protected $viewCountRepository;
 

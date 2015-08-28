@@ -8,7 +8,7 @@ use \Core\Domain\Repository\ApiKeyRepositoryInterface;
  *
  * @package Core\Domain\Usecase\Admin
  */
-class GetApiKeyListingUsecase
+class GetApiKeysUsecase
 {
     /**
      * @var \Core\Domain\Repository\ApiKeyRepositoryInterface
