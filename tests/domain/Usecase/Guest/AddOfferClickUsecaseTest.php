@@ -3,9 +3,9 @@ namespace Usecase\Guest;
 
 use Core\Domain\Entity\Offer;
 use Core\Domain\Entity\ViewCount;
-use Core\Domain\Usecase\Guest\SaveOfferClickUsecase;
+use Core\Domain\Usecase\Guest\AddOfferClickUsecase;
 
-class SaveOfferClickUsecaseTest extends \Codeception\TestCase\Test
+class AddOfferClickUsecaseTest extends \Codeception\TestCase\Test
 {
     /**
      * @var \DomainTester
@@ -13,13 +13,13 @@ class SaveOfferClickUsecaseTest extends \Codeception\TestCase\Test
     protected $tester;
 
     // tests
-    public function testSaveOfferClickUsecase()
+    public function testAddOfferClickUsecase()
     {
         $offer = new Offer();
         $offer->id = 5101;
         $clientIp = 3232249857;
         $viewCountRepository = $this->createViewCountRepositoryMock();
-        (new SaveOfferClickUsecase($viewCountRepository))->execute(new ViewCount(), $offer, $clientIp);
+        (new AddOfferClickUsecase($viewCountRepository))->execute(new ViewCount(), $offer, $clientIp);
     }
 
     private function createViewCountRepositoryMock()
