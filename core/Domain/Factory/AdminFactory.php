@@ -5,7 +5,7 @@ use \Core\Domain\Service\Validator;
 use \Core\Domain\Service\KeyGenerator;
 use \Core\Domain\Service\Purifier;
 
-use \Core\Domain\Usecase\Admin\GetApiKeyListingUsecase;
+use \Core\Domain\Usecase\Admin\GetApiKeysUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\DeleteApiKeyUsecase;
@@ -34,7 +34,7 @@ class AdminFactory
 {
     public static function getApiKeys()
     {
-        return new GetApiKeyListingUsecase(RepositoryFactory::apiKeys());
+        return new GetApiKeysUsecase(RepositoryFactory::apiKeys());
     }
 
     public static function createApiKey()
