@@ -213,6 +213,10 @@ CREATE TABLE IF NOT EXISTS `category` (
   KEY `categoryHeaderImageId_foreign_key` (`categoryHeaderImageId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+INSERT INTO `category` (`id`, `name`, `permalink`, `metatitle`, `metadescription`, `description`, `status`, `categoryiconid`, `deleted`, `created_at`, `updated_at`, `featured_category`, `categoryFeaturedImageId`, `categoryHeaderImageId`) VALUES
+(1, 'Mode & Accessoires', 'mode', 'Mode & Fashion kortingscodes - Kortingscode.nl', 'Als je online gaat shoppen bij V&D, bij H&M of bij Asos, dan zou je graag korting ontvangen, toch? Neem dus allereerst een kijkje op Kortingscode.nl.', 0x4f6e6c696e652073686f7070656e20766f6f72206b6c6564696e673a20646520686f6262792076616e207672696a77656c206965646572652076726f75772e20416c6c65656e206a616d6d65722064617420657220696564657265206d61616e64207a6f7665656c2067656c6420646f6f726865656e20676161742c206f6d646174206a65206e65742064696520656e652070616172207363686f656e656e206f662064696520656e65206869707065207461732077696c742061616e736368616666656e2e20446161726f6d206b756e206a6520686965722065656e206f7665727a696368742076616e206b6f7274696e67656e2062696a2064697665727365206b6c6564696e6777696e6b656c732076696e64656e21, 1, 4464, 0, '2012-12-12 00:59:26', '2015-02-19 10:43:43', 0, 4367, 4754);
+
+
 -- --------------------------------------------------------
 
 --
