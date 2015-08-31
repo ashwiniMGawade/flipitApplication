@@ -7,8 +7,7 @@ class Admin_OfferController extends Zend_Controller_Action
     ############################################################
     public function getofferAction()
     {
-        $parameters = $this->_getAllParams();
-        //echo "<pre>";print_r($parameters);die;
+        $parameters = $this->getAllParams();
         $offerList = \KC\Repository\Offer::getOfferList($parameters);
         echo \Zend_Json::encode($offerList);
         die();
@@ -16,8 +15,7 @@ class Admin_OfferController extends Zend_Controller_Action
 
     public function gettrashedofferAction()
     {
-        $parameters = $this->_getAllParams();
-        //echo "<pre>";print_r($parameters);die;
+        $parameters = $this->getAllParams();
         $offerList = \KC\Repository\Offer::getTrashedOfferList($parameters);
         echo \Zend_Json::encode($offerList);
         die();
@@ -33,9 +31,8 @@ class Admin_OfferController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-
         $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
-        $params = $this->_getAllParams();
+        $params = $this->getAllParams();
         if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
@@ -72,7 +69,6 @@ class Admin_OfferController extends Zend_Controller_Action
     }
     public function addofferAction()
     {
-
         $this->view->shopList =\KC\Repository\Shop::getOfferShopList();
         $this->view->catList = \KC\Repository\Category::getCategoriesInformation();
         $pageObj = new KC\Repository\Page();
@@ -83,13 +79,11 @@ class Admin_OfferController extends Zend_Controller_Action
         $message = $flash->getMessages();
         $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
         $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
-
-
     }
 
     public function editofferAction()
     {
-        $parameters = $this->_getAllParams();
+        $parameters = $this->getAllParams();
         $this->view->offerId = $parameters['id'];
         $userGeneratedOfferStatus = KC\Repository\Offer::checkUserGeneratedOffer($parameters['id']);
         if ($userGeneratedOfferStatus) {
@@ -110,11 +104,9 @@ class Admin_OfferController extends Zend_Controller_Action
         $this->view->tiles = $allTiles;
     }
 
-
     public function updateofferAction()
     {
-
-        $parameters = $this->_getAllParams();
+        $parameters = $this->getAllParams();
 
         $offer =\Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Offer', $parameters['offerId']);
         $offerRepository = new KC\Repository\Offer();
@@ -132,9 +124,9 @@ class Admin_OfferController extends Zend_Controller_Action
             $flashMessage->addMessage(array('error' => $message ));
         }
         if ($parameters['approveSocialCode'] == 1) {
-            $this->_redirect(HTTP_PATH.'admin/usergeneratedoffer#'.$parameters['qString']);
+            $this->redirect(HTTP_PATH.'admin/usergeneratedoffer#'.$parameters['qString']);
         } else {
-            $this->_redirect(HTTP_PATH.'admin/offer#'.$parameters['qString']);
+            $this->redirect(HTTP_PATH.'admin/offer#'.$parameters['qString']);
         }
         die;
     }
@@ -142,11 +134,10 @@ class Admin_OfferController extends Zend_Controller_Action
 
     public function shopdetailAction()
     {
-        $params = $this->_getAllParams();
+        $params = $this->getAllParams();
         $shopObj = new \KC\Repository\Shop();
-        $Getshopdetails = $shopObj->getShopDetail($params['shopId']);
-        //echo "<pre>";print_r($Getshopdetails);die;
-        $details = Zend_Json::encode($Getshopdetails);
+        $shopDetails = $shopObj->getShopDetail($params['shopId']);
+        $details = Zend_Json::encode($shopDetails);
 
         echo $details;
         die;
@@ -154,7 +145,7 @@ class Admin_OfferController extends Zend_Controller_Action
 
     public function favouriteshopdetailAction()
     {
-        $params = $this->_getAllParams();
+        $params = $this->getAllParams();
         $favoriteShop = new \KC\Repository\FavoriteShop();
         $getVisitorsCount = $favoriteShop->getVisitorsCountByFavoriteShopId($params['shopId']);
         echo $getVisitorsCount;
@@ -163,7 +154,7 @@ class Admin_OfferController extends Zend_Controller_Action
 
     public function saveofferAction()
     {
-        $params = $this->_getAllParams();
+        $params = $this->getAllParams();
         $offerObj = new \KC\Repository\Offer();
         $offer = $offerObj->saveOffer($params);
 
@@ -201,10 +192,10 @@ class Admin_OfferController extends Zend_Controller_Action
         }
 
         if (filter_var($params['saveAndAddnew'], FILTER_VALIDATE_BOOLEAN)) {
-            $this->_redirect(HTTP_PATH.'admin/offer/addoffer');
+            $this->redirect(HTTP_PATH.'admin/offer/addoffer');
 
         } else {
-            $this->_redirect(HTTP_PATH.'admin/offer');
+            $this->redirect(HTTP_PATH.'admin/offer');
         }
 
     }
@@ -216,24 +207,25 @@ class Admin_OfferController extends Zend_Controller_Action
      */
     public function movetotrashAction()
     {
-            $id = $this->getRequest()->getParam('id');
+        $id = $this->getRequest()->getParam('id');
 
-            self::updateVarnish($id);
+        self::updateVarnish($id);
 
-            //cal to moveToTrash function from offer model class
-            $trash = \KC\Repository\Offer::moveToTrash($id);
+        //cal to moveToTrash function from offer model class
+        $trash = \KC\Repository\Offer::moveToTrash($id);
 
-            if (intval($trash) > 0) {
+        $flash = $this->_helper->getHelper('FlashMessenger');
 
-                $flash = $this->_helper->getHelper('FlashMessenger');
-                $message = $this->view->translate('Record has been moved to trash');
-                $flash->addMessage(array('success' => $message));
+        if (intval($trash) > 0) {
 
-            } else {
+            $message = $this->view->translate('Record has been moved to trash');
+            $flash->addMessage(array('success' => $message));
 
-                $message = $this->view->translate('Problem in your data.');
-                $flash->addMessage(array('error' => $message));
-            }
+        } else {
+
+            $message = $this->view->translate('Problem in your data.');
+            $flash->addMessage(array('error' => $message));
+        }
         echo Zend_Json::encode($trash);
         die;
     }
@@ -250,7 +242,6 @@ class Admin_OfferController extends Zend_Controller_Action
         $flag = $this->getRequest()->getParam('flag');
         //cal to searchToFiveShop function from offer model class
         $data = \KC\Repository\Offer::searchToFiveShop($srh, $flag);
-
 
         $ar = array();
         //$removeDup = array();
@@ -291,30 +282,19 @@ class Admin_OfferController extends Zend_Controller_Action
         $flag = $this->getRequest()->getParam('flag');
         //cal to searchToFiveShop function from offer model class
         $data = \KC\Repository\Offer::searchToFiveCoupon($srh, $flag);
-        //echo "<pre>";print_r($data);die;
 
         $ar = array();
-        //$removeDup = array();
         if (sizeof($data) > 0) {
-            //$ar[] = $srh;
             foreach ($data as $d) {
-
-                $id =  $d['id'];
-                //array fro remove duplicate search text
                 $ar[] = $d['couponCode'];
-
             }
-
         } else {
-
             $msg = $this->view->translate('No Record Found');
             $ar[] = $msg;
         }
 
         echo Zend_Json::encode($ar);
         die;
-
-        // action body
     }
 
 
@@ -335,33 +315,24 @@ class Admin_OfferController extends Zend_Controller_Action
         $ar = array();
         $removeDup = array();
         if (sizeof($data) > 0) {
-        //	$ar[] = $srh;
             foreach ($data as $d) {
 
                 $id =  $d['id'];
                 //array fro remove duplicate search text
                 if (isset($removeDup[$id])) {
                     $removeDup[$id] = $id;
-
                 } else {
-
                     $removeDup[$id] = $id;
                     $ar[] = ucfirst($d['title']);
-
                 }
-
             }
-
         } else {
-
             $msg = $this->view->translate('No Record Found');
             $ar[] = $msg;
         }
 
         echo Zend_Json::encode($ar);
         die;
-
-        // action body
     }
 
 
@@ -396,13 +367,10 @@ class Admin_OfferController extends Zend_Controller_Action
             $message = $this->view
                     ->translate('Record has been deleted successfully.');
             $flash->addMessage(array('success' => $message));
-
         } else {
-
             $message = $this->view->translate('Problem in your data.');
             $flash->addMessage(array('error' => $message));
         }
-    //	echo Zend_Json::encode($deletePermanent);
         die;
     }
     /**
@@ -418,16 +386,12 @@ class Admin_OfferController extends Zend_Controller_Action
 
         //cal to restoreOffer function from offer model class
         $restore = \KC\Repository\Offer::restoreOffer($id);
-
+        $flash = $this->_helper->getHelper('FlashMessenger');
         if (intval($restore) > 0) {
-
-            $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view
                     ->translate('Record has been restored successfully.');
             $flash->addMessage(array('success' => $message));
-
         } else {
-
             $message = $this->view->translate('Problem in your data.');
             $flash->addMessage(array('error' => $message));
         }
@@ -438,11 +402,11 @@ class Admin_OfferController extends Zend_Controller_Action
 
     public function offerdetailAction()
     {
-            $id = $this->getRequest()->getParam('offerId');
-            $offerObj = new KC\Repository\Offer();
-            $offerDetail = $offerObj->getOfferDetail($id);
-            echo Zend_Json::encode($offerDetail);
-            die;
+        $id = $this->getRequest()->getParam('offerId');
+        $offerObj = new KC\Repository\Offer();
+        $offerDetail = $offerObj->getOfferDetail($id);
+        echo Zend_Json::encode($offerDetail);
+        die;
     }
 
     public function addmorenewsAction()
@@ -450,7 +414,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
-        $params = $this->_getAllParams();
+        $params = $this->getAllParams();
 
         if (isset($params['secret']) && @base64_decode($params['secret']) == "kortingscodeoffernews" && isset($params['secret']) && @$params['jcode'] == "passwordmd5") {
 
@@ -501,40 +465,36 @@ class Admin_OfferController extends Zend_Controller_Action
 
         $rp = KC\Repository\Offer::getExtendedUrl($url);
 
-        if($id != '') {
+        if ($id != '') {
 
-
-            if(@$rp[0]['extendedUrl'] == $url ) {
-                if( @$rp[0]['id'] == $id ){
+            if (@$rp[0]['extendedUrl'] == $url ) {
+                if ( @$rp[0]['id'] == $id ){
                     $res = array( 	'status' => '200' ,
                             'url' => $url ,
                             'shopNavUrl' => $url ) ;
 
                     echo Zend_Json::encode($res ) ;
                     die ;
-                }else	{
-
+                } else {
                     $res = false ;
                     echo Zend_Json::encode( $res ) ;
                     die ;
                 }
             }
-
         }
 
-        if( strlen($url )  > 0) {
+        if ( strlen($url )  > 0) {
 
-            if(@$rp[0]['extendedUrl'] != $url ) {
+            if (@$rp[0]['extendedUrl'] != $url ) {
                 $res = array ( 'status' => '200',
                         'url' => $url,
                         'permaLink' =>
                         $this->getRequest ()->getParam ( "articlepermalink" )
                 );
-            }else {
-
-            $res = false;
+            } else {
+                $res = false;
             }
-        } else	{
+        } else {
 
             $res = false ;
         }
@@ -549,20 +509,17 @@ class Admin_OfferController extends Zend_Controller_Action
      */
     public function addoffertileAction()
     {
-        $params = $this->_getAllParams();
+        $params = $this->getAllParams();
         $imgext = \BackEnd_Helper_viewHelper::getImageExtension(@$params['hidimage']);
-        //if(isset($params['position']) && $params['position']!=""){
-            $offerTile = \KC\Repository\OfferTiles::addOfferTile($params,$imgext);
-            $newArr= array();
-            $newArr['imagename'] = $params['hidimage'];
-            $newArr['imagepath'] = PUBLIC_PATH_LOCALE."images/upload/offertiles/thum_small_".$params['hidimage'];
-            $newArr['imgId'] = $offerTile;
-            $newArr['label'] = $params['label'];
-            $newArr['type'] = $params['hidtype'];
-            echo Zend_Json::encode($newArr);
-            die();
-         //}
-
+        $offerTile = \KC\Repository\OfferTiles::addOfferTile($params,$imgext);
+        $newArr= array();
+        $newArr['imagename'] = $params['hidimage'];
+        $newArr['imagepath'] = PUBLIC_PATH_LOCALE."images/upload/offertiles/thum_small_".$params['hidimage'];
+        $newArr['imgId'] = $offerTile;
+        $newArr['label'] = $params['label'];
+        $newArr['type'] = $params['hidtype'];
+        echo Zend_Json::encode($newArr);
+        die();
     }
     public function onfileselectAction()
     {
@@ -571,24 +528,22 @@ class Admin_OfferController extends Zend_Controller_Action
             $temp = array();
             if(isset($_FILES['tileupload']['name']) && $_FILES['tileupload']['name']!=''){
                     //$data = new Offer();
-                    $temp['type'] = $_FILES['tileupload']['type'][0];
-                    $temp['path'] = $_FILES['tileupload']['tmp_name'][0];
+                $temp['type'] = $_FILES['tileupload']['type'][0];
+                $temp['path'] = $_FILES['tileupload']['tmp_name'][0];
 
-                    $fileName = \KC\Repository\Offer::uploadTiles($_FILES['tileupload']['name'][0]);
+                $fileName = \KC\Repository\Offer::uploadTiles($_FILES['tileupload']['name'][0]);
 
-                    $temp['name'] = $fileName;
+                $temp['name'] = $fileName;
 
-                }
-                echo Zend_Json::encode($temp);
+            }
+            echo Zend_Json::encode($temp);
         }
         die;
     }
 
     public function deletemenuAction()
     {
-        //echo "hello"; die;
-        $params = $this->_getAllParams();
-        //print_r($params); die;
+        $params = $this->getAllParams();
         $menu = \KC\Repository\OfferTiles::deleteMenuRecord($params);
         echo Zend_Json::encode($menu);
         die();
@@ -599,21 +554,18 @@ class Admin_OfferController extends Zend_Controller_Action
         $offerTiles = \KC\Repository\OfferTiles::getOfferTilesList($id);
         echo Zend_Json::encode($offerTiles);
         die();
-
     }
+
     public function getalltilesAction()
     {
         $Tiles = \KC\Repository\OfferTiles::getAllTiles();
         echo Zend_Json::encode($Tiles);
         die;
-        //return $Tiles;
     }
 
     public function getAllTilesForOfferAction()
     {
         $Tiles = \KC\Repository\OfferTiles::getAllTiles();
-        //echo Zend_Json::encode($Tiles);
-        //die;
         return $Tiles;
     }
 
@@ -652,7 +604,6 @@ class Admin_OfferController extends Zend_Controller_Action
             }
         }
 
-
         $objReader = PHPExcel_IOFactory::createReader('Excel2007');
         $objPHPExcel = $objReader->load(ROOT_PATH."/shopsdata.xlsx");
 
@@ -685,41 +636,37 @@ class Admin_OfferController extends Zend_Controller_Action
 
                 $shopList = Doctrine_Core::getTable('Shop')->findOneBy('name', $name);
 
-                if(!empty($shopList)){
+                if (!empty($shopList)) {
 
 
-                    if($shop_text != ""){
+                    if ($shop_text != "") {
                         $shopList->shopText = $shop_text;
-                    }else{
+                    } else {
                         //echo "lege desc voor ".$shopList['id']."\r\n";
                         //echo $shop_text."\n\r";
                     }
-                    if($freeDel == 0 || $freeDel=='0'||$freeDel == 1||$freeDel == '1'){
+                    if ($freeDel == 0 || $freeDel=='0'||$freeDel == 1||$freeDel == '1') {
 
                         $shopList->freeDelivery = intval($freeDel);
                         $shopList->deliveryCost = $delCost;
 
-                    }else {
+                    } else {
 
                         $shopList->freeDelivery = intval($freeDel);
                         $shopList->deliveryCost = " ";
-
                     }
 
-                    if($returnPol != " "){
+                    if ($returnPol != " ") {
                         $shopList->returnPolicy=$returnPol;
                     }
 
-                    if($returnPol != " "){
+                    if ($returnPol != " ") {
                         $shopList->Deliverytime= $delTime;
                     }
 
-
-
                     $key = array_search(strtolower($logo), array_map('strtolower', $image_array));
 
-
-                    if(!empty($key)){
+                    if (!empty($key)) {
 
                         $file = $image_array[$key];
                         $newName = time() . "_" . $file;
@@ -727,7 +674,7 @@ class Admin_OfferController extends Zend_Controller_Action
                         $ext = BackEnd_Helper_viewHelper :: getImageExtension($file);
                         $originalpath = $rootpath.$file;
 
-                        if($ext=='jpg' || $ext == 'png' || $ext =='JPEG'|| $ext =='PNG' || $ext =='gif'){
+                        if ($ext=='jpg' || $ext == 'png' || $ext =='JPEG'|| $ext =='PNG' || $ext =='gif') {
 
 
                             $thumbpath = $pathToUpload . "thum_large_" . $newName;
@@ -752,7 +699,7 @@ class Admin_OfferController extends Zend_Controller_Action
                             $shopList->logo->path = $pathUpload;
                             $shopList->logo->name = $newName;
 
-                        } else{
+                        } else {
                             echo $logo." This is an Invalid image";
                         }
                     }
@@ -760,7 +707,7 @@ class Admin_OfferController extends Zend_Controller_Action
                     //Website Screen shots
 
                     $keySite = array_search(strtolower($websiteScreen), array_map('strtolower', $siteimage_array));
-                    if(!empty($keySite)){
+                    if (!empty($keySite)) {
 
                         $sitefile = $siteimage_array[$keySite];
                         $sitenewName = time() . "_" . $sitefile;
@@ -768,7 +715,7 @@ class Admin_OfferController extends Zend_Controller_Action
                         $siteExt = \BackEnd_Helper_viewHelper::getImageExtension($sitefile);
                         $originalpath = $rootSitePath.$sitefile;
 
-                        if($siteExt=='jpg' || $siteExt == 'png' || $siteExt =='JPEG'|| $siteExt =='PNG' || $siteExt =='gif'){
+                        if ($siteExt=='jpg' || $siteExt == 'png' || $siteExt =='JPEG'|| $siteExt =='PNG' || $siteExt =='gif') {
 
                             $thumbpath = $pathToUploadSiteImg . "thum_large_" . $sitenewName;
                             BackEnd_Helper_viewHelper :: resizeImageFromFolder($originalpath, 450,0, $thumbpath, $siteExt);
@@ -776,13 +723,12 @@ class Admin_OfferController extends Zend_Controller_Action
                             $shopList->screenshot->path = $sitePathUpload;
                             $shopList->screenshot->name = $sitenewName;
 
-                        } else{
+                        } else {
                             echo $websiteScreen." This is an Invalid image";
                         }
                     }
 
                     $shopList->save();
-
                 }
             } else {
                 echo "The Shop Images Data has been imported Successfully!!";
@@ -888,34 +834,32 @@ class Admin_OfferController extends Zend_Controller_Action
         if ($isEdit) {
             $exactLink = "store/storedetail/id/".$this->getRequest()->getParam("id") ;
 
-            if(@$rp[0]['permalink'] == $url ) {
-                if( @$rp[0]['exactlink'] == $exactLink){
+            if (@$rp[0]['permalink'] == $url ) {
+                if( @$rp[0]['exactlink'] == $exactLink) {
                     $res = array( 	'status' => '200' ,
                             'url' => $url ,
                             'shopNavUrl' => $url ) ;
 
                     echo Zend_Json::encode($res ) ;
                     die ;
-                }else	{
-
+                } else {
                     $res = false ;
                     echo Zend_Json::encode( $res ) ;
                     die ;
                 }
             }
-            /* */
         }
 
 
-        if( strlen($url )  > 0) {
+        if ( strlen($url )  > 0) {
 
-            if(@$rp[0]['permalink'] != $url ) {
+            if (@$rp[0]['permalink'] != $url ) {
                 $res = array ( 'status' => '200',
                         'url' => $url,
                         'permaLink' =>
                         $this->getRequest ()->getParam ( "articlepermalink" )
                 );
-            }else {
+            } else {
 
                 $res = false;
             }
@@ -954,20 +898,14 @@ class Admin_OfferController extends Zend_Controller_Action
 
     public function exportcodelistAction()
     {
-
         $id = $this->getRequest()->getParam('id' , false);
 
-
-        if($id) {
-
+        if ($id) {
             //get all shop from database
             set_time_limit ( 10000 );
             ini_set('max_execution_time',115200);
             ini_set("memory_limit","1024M");
             $data =  \KC\Repository\CouponCode::exportCodeList($id);
-
-
-            //create object of phpExcel
 
             $objPHPExcel = new PHPExcel();
             $objPHPExcel->setActiveSheetIndex(0);
@@ -977,14 +915,9 @@ class Admin_OfferController extends Zend_Controller_Action
             $column = 2;
             $row = 2;
 
-
-
-            //loop for each shop
             foreach ($data as $code) {
 
-
                 $status = $code['status'] == 1 ? 'Available' : 'Used';
-
                 //set value in column of excel
                 $objPHPExcel->getActiveSheet()->setCellValue('A'.$column, $code['code']);
                 $objPHPExcel->getActiveSheet()->setCellValue('B'.$column, $status);
@@ -993,7 +926,6 @@ class Admin_OfferController extends Zend_Controller_Action
                 $column++;
                 $row++;
             }
-
             //FORMATING OF THE EXCELL
             $headerStyle = array(
                     'fill' => array(
@@ -1021,13 +953,9 @@ class Admin_OfferController extends Zend_Controller_Action
             $borderColumn =  (intval($column) -1 );
             $objPHPExcel->getActiveSheet()->getStyle('A1:'.'B'.$borderColumn)->applyFromArray($borderStyle);
 
-
             //SET SIZE OF THE CELL
             $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-
-
-            // redirect output to client browser
 
             $pathToFile = ROOT_PATH;
 
@@ -1040,13 +968,10 @@ class Admin_OfferController extends Zend_Controller_Action
             $objWriter->save('php://output');
             die();
 
-
         } else {
 
             $this->_helper->redirector('index', 'offer', 'admin');
         }
-
-
     }
 
     /**
@@ -1208,5 +1133,4 @@ class Admin_OfferController extends Zend_Controller_Action
             ->setHeader('Cache-Control', 'max-age=0')
             ->setBody(file_get_contents($fileName));
     }
-
 }

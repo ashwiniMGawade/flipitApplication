@@ -906,6 +906,10 @@ class Offer extends \Core\Domain\Entity\Offer
             ->leftJoin('o.shopOffers', 's')
             ->where($entityManagerUser->expr()->eq('o.deleted', $entityManagerUser->expr()->literal($deletedStatus)))
             ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')");
+
+        if ($parameters['expired']) {
+            $getOffersQuery->andWhere();
+        }
         if ($userRole=='4') {
             $getOffersQuery->andWhere(
                 $entityManagerUser->expr()->like('o.Visability', $entityManagerUser->expr()->literal('DE'))
