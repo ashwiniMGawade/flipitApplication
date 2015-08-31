@@ -2,6 +2,7 @@
 
 namespace Command\LocaleMigrations;
 
+use Command\LocaleMigrations\Helpers\LocaleExecuteCommonLogic;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,6 +14,11 @@ use \Doctrine\DBAL\Migrations\Tools\Console\Command as MigrationsCommand;
 
 class LocaleGenerateCommand extends Command
 {
+    use LocaleExecuteCommonLogic;
+
+    private $originalMigrationName = 'migrations:generate';
+    private $commandName = 'Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand';
+
     protected function configure()
     {
         $this
@@ -35,27 +41,6 @@ EOT
 
     public function execute(Input\InputInterface $input, OutputInterface $output)
     {
-        $cli = new Application();
-        $cli->setCatchExceptions(true);
-
-        $configurationHelper = new Helpers\ConfigurationHelper();
-        $configurationHelper->buildLocaleConfiguration();
-        $connection = $configurationHelper->getConnection();
-        $configuration = $configurationHelper->getConfiguration();
-
-        $helperSet = new Helper\HelperSet();
-        $helperSet->set(new Helper\DialogHelper(), 'dialog');
-        $helperSet->set(new ConnectionHelper($connection), 'db');
-        $helperSet->set(new DoctrineHelper\ConfigurationHelper($connection, $configuration), 'configuration');
-        $cli->setHelperSet($helperSet);
-
-        $cli->add(new MigrationsCommand\GenerateCommand());
-
-        $command = $cli->find('migrations:generate');
-
-        $commandOutput = $command->run($input, $output);
-        $commandOutputWithoutStatusCode = join("\n", array_slice(explode("\n", $commandOutput), 0, -1));
-
-        $output->writeln($commandOutputWithoutStatusCode);
+        $this->runCommand($input, $output);
     }
 }

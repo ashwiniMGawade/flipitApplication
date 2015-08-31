@@ -51,16 +51,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.3.0",
+            "version": "3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "9c2a1816e3402806741f3a22a5b38efa945c0a8a"
+                "reference": "ea818ff595cf833edf2561ac0c45cd168d868990"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/9c2a1816e3402806741f3a22a5b38efa945c0a8a",
-                "reference": "9c2a1816e3402806741f3a22a5b38efa945c0a8a",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/ea818ff595cf833edf2561ac0c45cd168d868990",
+                "reference": "ea818ff595cf833edf2561ac0c45cd168d868990",
                 "shasum": ""
             },
             "require": {
@@ -71,6 +71,7 @@
                 "php": ">=5.5"
             },
             "require-dev": {
+                "aws/aws-php-sns-message-validator": "^1.0",
                 "behat/behat": "~3.0",
                 "ext-dom": "*",
                 "ext-json": "*",
@@ -120,7 +121,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2015-08-20 23:06:52"
+            "time": "2015-08-28 00:16:42"
         },
         {
             "name": "doctrine/annotations",
@@ -602,12 +603,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "27edc388296a3cffc7c30942a7613abb4998701c"
+                "reference": "4e85ba638acf62e1afe735f94b0c51aa971f8773"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/27edc388296a3cffc7c30942a7613abb4998701c",
-                "reference": "27edc388296a3cffc7c30942a7613abb4998701c",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/4e85ba638acf62e1afe735f94b0c51aa971f8773",
+                "reference": "4e85ba638acf62e1afe735f94b0c51aa971f8773",
                 "shasum": ""
             },
             "require": {
@@ -661,7 +662,7 @@
                 "database",
                 "migrations"
             ],
-            "time": "2015-08-19 08:37:47"
+            "time": "2015-08-27 12:05:11"
         },
         {
             "name": "doctrine/orm",
