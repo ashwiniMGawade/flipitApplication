@@ -78,6 +78,9 @@ class AddShopUsecase
         if (isset($params['shopText'])) {
             $shop->setShopText($params['shopText']);
         }
+        if (isset($params['classification'])) {
+            $shop->setClassification($params['classification']);
+        }
 
         $shop->setCreatedAt(new \DateTime('now'));
         $shop->setDeleted(0);

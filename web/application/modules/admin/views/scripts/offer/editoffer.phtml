@@ -55,7 +55,8 @@ echo $this->headTitle()->append($browserTitle);?>
                 </button>
                 <input type="hidden" name="code-alert-string" id="code-alert-string" 
                 value="<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>">
-            <?php } ?>    
+            <?php } ?>
+            <span id="shopRating"><?php echo $this->translate('Shop Rating'); ?> : <span></span></span>
         </h1>
         <input type="hidden" name='offerImageSelect' id='offerImageSelect' value='' />
         <input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />

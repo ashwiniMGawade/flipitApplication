@@ -235,7 +235,17 @@
             },
             "shoptext":{
                "type":"string"
-            }       
+            },
+            "classification":{
+                "type":"string",
+                "enum": [
+                    "A",
+                    "A+",
+                    "AA",
+                    "AA+",
+                    "AAA"
+                ]
+            }
          }
       },
       "ApiResponse":{

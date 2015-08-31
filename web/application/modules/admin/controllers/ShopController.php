@@ -7,6 +7,7 @@ class Admin_ShopController extends Zend_Controller_Action
     public $exportPassword = '';
     public $mandrillSenderEmailAddress = '';
     public $mandrillSenderName = '';
+    public $shopClassifications;
   
     public function preDispatch()
     {
@@ -25,6 +26,13 @@ class Admin_ShopController extends Zend_Controller_Action
     public function init()
     {
         /* Initialize action controller here */
+        $this->shopClassifications = array(
+            1 => 'A',
+            2 => 'A+',
+            3 => 'AA',
+            4 => 'AA+',
+            5 => 'AAA'
+        );
     }
 
     public function indexAction()
@@ -44,6 +52,9 @@ class Admin_ShopController extends Zend_Controller_Action
         $params = $this->_getAllParams();
         //cal to getshoplist function from Shop model
         $shopList = \KC\Repository\Shop::getshopList($params);
+        foreach ($shopList['aaData'] as &$shop) {
+            $shop['classification'] = $this->shopClassifications[$shop['classification']];
+        }
         echo Zend_Json::encode($shopList);
         die;
     }
@@ -322,6 +333,7 @@ class Admin_ShopController extends Zend_Controller_Action
 
         $users = new \KC\Repository\User();
         $this->view->MangersList = $users->getManagersLists($site_name);
+        $this->view->shopClassifications = $this->shopClassifications;
         $pages = new \KC\Repository\Page();
         $this->view->DefaultPagesList = $pages->defaultPagesList();
         $affiliate = new \KC\Repository\AffliateNetwork();
@@ -383,6 +395,7 @@ class Admin_ShopController extends Zend_Controller_Action
         // display managers and account managers list
         $users = new \KC\Repository\User();
         $this->view->MangersList = $users->getManagersLists($site_name);
+        $this->view->shopClassifications = $this->shopClassifications;
 
         // display  page's list
         $pages = new \KC\Repository\Page();

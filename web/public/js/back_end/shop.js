@@ -147,6 +147,13 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir, extraParameters) {
                             "bSortable" : true
                         },{
                             "fnRender" : function(obj) {
+                                var tag = "<a href='javascript:void(0);'>" + obj.aData.classification + "</a>";
+                                return tag;
+                             },
+                            "bSearchable" : true,
+                            "bSortable" : true
+                        },{
+                            "fnRender" : function(obj) {
                                 var prog='';
                                 if(obj.aData.affliateProgram==true){
                                     prog = "<a href='javascript:void(0);'>" +"Yes" + "</a>";
