@@ -45,14 +45,14 @@ $sessionNamespace = new Zend_Session_Namespace();
                 <div class="fl ml15">
                     <select id="affliatenetworkid" name="affliatenetworkid">
                         <option value="">All Affiliate Network</option>
-                        <?php for($i=0;$i<count($this->affiliateNetworkList);$i++){
-                            if(trim( $this->affiliateNetworkList[$i]['name'])!=''){
+                        <?php foreach ($this->affiliateNetworkList as $affiliateNetwork):
+                            if (trim($affiliateNetwork['name']) != ''):
                                 ?>
-                                <option value="<?php echo $this->affiliateNetworkList[$i]['id']; ?>">
-                                    <?php echo $this->affiliateNetworkList[$i]['name']; ?>
+                                <option value="<?php echo $affiliateNetwork['id']; ?>">
+                                    <?php echo $affiliateNetwork['name']; ?>
                                 </option>
-                            <?php }
-                        } ?>
+                            <?php endif;
+                        endforeach; ?>
                     </select>
                 </div>
                <div class="fl ml15">

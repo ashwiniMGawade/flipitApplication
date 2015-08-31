@@ -89,7 +89,7 @@ var hashValue = "";
 var click = false;
 
 
-function getShops(iSearchText,iStart,iSortCol,iSortDir, extraInput) {
+function getShops(iSearchText,iStart,iSortCol,iSortDir, extraParameters) {
     //$('#shopListTable tr:gt(0)').remove();
     addOverLay();
     $("ul.ui-autocomplete").css('display','none');
@@ -118,7 +118,7 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir, extraInput) {
                 "bDeferRender": true,
                 "aaSorting": [[ iSortCol , iSortDir ]],
                 "sPaginationType" : "bootstrap",
-                "sAjaxSource" : HOST_PATH+"admin/shop/getshop/searchText/"+ escape(iSearchText) + '/flag/0'+extraInput,
+                "sAjaxSource" : HOST_PATH+"admin/shop/getshop/searchText/"+ escape(iSearchText) + '/flag/0'+extraParameters,
                 "aoColumns" : [
                         {
                             "fnRender" : function(obj) {
@@ -468,7 +468,9 @@ function searchByShop()
     if ($('#affliatenetworkid').val()) {
         extraParameters += '/affliatenetworkid/' + $('#affliatenetworkid').val();
     }
-    extraParameters += '/status/' + $('#shop_status').val();
+    if ($('#shop_status').val()) {
+        extraParameters += '/status/' + $('#shop_status').val();
+    }
     getShops(searchArt, 0, 0, 'asc', extraParameters);
 }
 
