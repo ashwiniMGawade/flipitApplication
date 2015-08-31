@@ -19,25 +19,7 @@ $sessionNamespace = new Zend_Session_Namespace();
 
       <div id="shopList">
        <div class="wrap columns-2">
-		<div class='wrap columns-2'>
-			<?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
-
-			<br>
-			<div class ="mainpage-content-colorbox success">
-
-			<?php if($this->messageSuccess!=''){?>
-
-			<span class="successserver"><?php echo $this->messageSuccess; ?></span>
-			<?php }?>
-
-			<?php if($this->messageError!=''){?>
-
-			<span class="errorserver"><?php echo $this->messageError; ?></span>
-			<?php } ?>
-			</div>
-		<?php
-		}?>
-		</div>
+           <?php echo $this->flashMessages(); ?>
         <h1 class="fl">Shops<button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/shop/createshop'" ><?php echo $this->translate('Add New Shop'); ?></button></h1><?php if($this->role == '1' || $this->role == '2')  { ?><a class="red trash-link" href="<?php echo HTTP_PATH ?>admin/shop/trash"><strong><?php echo $this->translate('Trash'); ?></strong></a><?php }?>
         <div class="clear"></div>
          <p class="text-right">
@@ -58,19 +40,40 @@ $sessionNamespace = new Zend_Session_Namespace();
                    / <a href="javascript:void(0);" onclick='sendExportPasswordEmail();'><?php echo $this->translate('Global Export List'); ?></a>
           <?php endif;?>
          </p>
-
-          <form class="well form-search searchbarbox" name="searchform" id="searchform">
-              <div class="mainpage-content-searchbart">
-                  <div class="mainpage-content-right-searchbar">
-                    <button id="searchByShop" type="button" class="btn btn-primary">
-                      <?php echo $this->translate('Search'); ?>
-                    </button>
-                  </div>
+       <div class="mainpage-content-colorbox">
+           <form class="form-search" name="searchform" id="searchform">
+                <div class="fl ml15">
+                    <select id="affliatenetworkid" name="affliatenetworkid">
+                        <option value="">All Affiliate Network</option>
+                        <?php foreach ($this->affiliateNetworkList as $affiliateNetwork):
+                            if (trim($affiliateNetwork['name']) != ''):
+                                ?>
+                                <option value="<?php echo $affiliateNetwork['id']; ?>">
+                                    <?php echo $affiliateNetwork['name']; ?>
+                                </option>
+                            <?php endif;
+                        endforeach; ?>
+                    </select>
+                </div>
+               <div class="fl ml15">
+                   <select id="shop_status" name="status">
+                       <option value="">Online/Offline</option>
+                       <option value="1">Online</option>
+                       <option value="0">Offline</option>
+                   </select>
+               </div>
+                <div class="mainpage-content-searchbart" style="width: 50%; float:right;">
+                    <div class="mainpage-content-right-searchbar">
+                        <button id="searchByShop" type="button" class="btn btn-primary">
+                            <?php echo $this->translate('Search'); ?>
+                        </button>
+                    </div>
                     <div class="mainpage-content-right-inner-left-searchbar">
                         <input type='hidden' id="searchShop" name="searchShop" style="width:99%;"/>
                     </div>
-              </div>
+                </div>
             </form>
+       </div>
 
             <table  class="table table-bordered table-striped" id="shopListTable" style="position:relative;">
                 <thead>

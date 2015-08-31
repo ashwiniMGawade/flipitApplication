@@ -20,8 +20,6 @@ class Admin_ShopController extends Zend_Controller_Action
         BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
-
-
     }
 
     public function init()
@@ -34,13 +32,11 @@ class Admin_ShopController extends Zend_Controller_Action
         // set logged in role
         $u = Auth_StaffAdapter::getIdentity();
         $this->view->role = $u->users->id;
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $flash->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ?
-        $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ?
-        $message[0]['error'] : '';
-
+        $affiliate = new \KC\Repository\AffliateNetwork();
+        $arr['sortBy'] = 'name';
+        $arr['off'] = '1';
+        $affiliateNetworkList =  $affiliate->getNetworkList($arr);
+        $this->view->affiliateNetworkList = (array) $affiliateNetworkList['aaData'];
     }
 
     public function getshopAction()
@@ -66,9 +62,9 @@ class Admin_ShopController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         //cal to function moveToTrash from Shop model
         $trash = \KC\Repository\Shop::moveToTrash($id);
+        $flash = $this->_helper->getHelper('FlashMessenger');
         if (intval($trash) > 0) {
             self::updateVarnish($id);
-            $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate('Record has been moved to trash');
             $flash->addMessage(array('success' => $message));
         } else {
@@ -103,9 +99,10 @@ class Admin_ShopController extends Zend_Controller_Action
         //cal to restoreShop function from offer model class
         $restore = \KC\Repository\Shop::restoreShop($id);
 
+        $flash = $this->_helper->getHelper('FlashMessenger');
+
         if (intval($restore) > 0) {
             self::updateVarnish($id);
-            $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view
             ->translate('Record has been restored successfully.');
             $flash->addMessage(array('success' => $message));
@@ -164,7 +161,6 @@ class Admin_ShopController extends Zend_Controller_Action
 
     public function uploadimageAction()
     {
-
         $uploadPath = "images/upload/shop/";
         $adapter = new Zend_File_Transfer_Adapter_Http();
         $user_path = ROOT_PATH . $uploadPath;
