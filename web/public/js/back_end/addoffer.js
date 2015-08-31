@@ -265,6 +265,11 @@ function init(){
       jQuery('#offerOption').hide();
       jQuery('#offerButtons').show();
   	});
+
+    jQuery('span#shopRating').hide();
+    jQuery('.select2-search-choice-close').click(function () {
+        jQuery('span#shopRating').hide();
+    });
 }
 
 function setDefaultTitle(el) {
@@ -314,7 +319,7 @@ function getDeeplinkForShop(param){
 		   }
 		   
 			
-	   } 
+	   }
 	});			   
 	
 }
@@ -450,6 +455,11 @@ function getShopDetail(value){
 			dataType : "json",
 			success : function(data) {
 				if (data != null) {
+                    var shopClassifications = { 1:'A', 2:'A+', 3:'AA', 4:'AA+', 5:'AAA'};
+                    if(data[0].classification != '' && data[0].classification != null) {
+                        jQuery('span#shopRating span').html(shopClassifications[data[0].classification]);
+                        jQuery('span#shopRating').show();
+                    }
 					if(data[0].notes != '' && data[0].notes != null){
 						jQuery('#aboutShopNoteDiv').show();
 						jQuery('#shopNotes').html(data[0].notes).addClass('alert-error');

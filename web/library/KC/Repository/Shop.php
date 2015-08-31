@@ -1492,7 +1492,7 @@ class Shop extends \Core\Domain\Entity\Shop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $shopDetail = $queryBuilder
             ->select(
-                's.notes,s.accountManagerName,s.deepLink,s.deepLinkStatus,s.strictConfirmation,a.name as affname,
+                's.notes,s.accountManagerName,s.deepLink,s.deepLinkStatus,s.strictConfirmation,s.classification, a.name as affname,
                 cat.id as categoryId'
             )
             ->from('\Core\Domain\Entity\Shop', 's')
