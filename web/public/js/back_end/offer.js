@@ -190,9 +190,14 @@ function searchByShop()
 	{
 		searchCoupon = undefined;
 	}
+
     var extraInput = '';
     if ($('#offerExpired').val()) {
-        var extraInput = '/expired/' + $('#offerExpired').val();
+        extraInput += '/expired/' + $('#offerExpired').val();
+    }
+
+    if ($('#offerStatus').val()) {
+        extraInput += '/status/' + $('#offerStatus').val();
     }
 
 	getOffers(txtOffer, searchShop, searchCoupon, type, 0, 5, 'desc', extraInput);
