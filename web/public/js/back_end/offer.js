@@ -200,6 +200,10 @@ function searchByShop()
         extraInput += '/status/' + $('#offerStatus').val();
     }
 
+    if ($('#shopRating').val()) {
+        extraInput += '/shopRating/' + $('#shopRating').val();
+    }
+
 	getOffers(txtOffer, searchShop, searchCoupon, type, 0, 5, 'desc', extraInput);
 }
 

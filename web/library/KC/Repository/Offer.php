@@ -937,6 +937,11 @@ class Offer extends \Core\Domain\Entity\Offer
                     break;
             }
         }
+
+        if (isset($parameters['shopRating'])) {
+            $getOffersQuery->andWhere("s.classification = " . $parameters['shopRating']);
+        }
+
         if ($userRole=='4') {
             $getOffersQuery->andWhere(
                 $entityManagerUser->expr()->like('o.Visability', $entityManagerUser->expr()->literal('DE'))
