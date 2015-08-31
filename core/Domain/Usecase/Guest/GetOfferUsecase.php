@@ -1,12 +1,39 @@
 <?php
 namespace Core\Domain\Usecase\Guest;
 
-use Core\Domain\Entity\Offer;
+use Core\Domain\Adapter\PurifierInterface;
+use Core\Domain\Repository\OfferRepositoryInterface;
+use Core\Service\Errors\ErrorsInterface;
 
 class GetOfferUsecase
 {
-    public function execute($offerId)
+    private $offerRepository;
+
+    protected $htmlPurifier;
+
+    protected $errors;
+
+    public function __construct(OfferRepositoryInterface $offerRepository, PurifierInterface $htmlPurifier, ErrorsInterface $errors)
     {
-        return new Offer();
+        $this->offerRepository = $offerRepository;
+        $this->htmlPurifier     = $htmlPurifier;
+        $this->errors = $errors;
+    }
+
+    public function execute($conditions)
+    {
+        $conditions = $this->htmlPurifier->purify($conditions);
+        if (!is_array($conditions)) {
+            $this->errors->setError('Invalid input, unable to find offer.');
+            return $this->errors;
+        }
+
+        $offer = $this->offerRepository->findOneBy('\Core\Domain\Entity\Offer', $conditions);
+
+        if (is_object($offer) === false) {
+            $this->errors->setError('Offer not found');
+            return $this->errors;
+        }
+        return $offer;
     }
 }
