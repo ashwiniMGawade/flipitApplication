@@ -29,6 +29,7 @@ class UpdateShopCest
             'refUrl'                => 'Mock',
             'actualUrl'             => 'Mock',
             'shopText'              => 'Mock',
+            'classification'        => 1,
         );
         $I->haveInDatabasePDOSite('shop', $params);
         $I->wantTo('Update shop');

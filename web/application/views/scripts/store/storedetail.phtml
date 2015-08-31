@@ -95,7 +95,8 @@ if($this->profileImage['addtosearch'] == 1):
 endif;
 
 $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-$offersCount = $this->currentStoreInformation[0]['affliateProgram'] != 0 ? count($this->offers) -3 : count($this->offers);
+$noOfExpiredCouponsDisplayed = count($this->expiredOffers) >= 3 ? 3 : count($this->expiredOffers);
+$offersCount = $this->currentStoreInformation[0]['affliateProgram'] != 0 ? count($this->offers) - $noOfExpiredCouponsDisplayed : count($this->offers);
 
 $frontShopHeaderHelper = new FrontEnd_Helper_ShopHeaderPartialFunctions();
 $headerBlock = $frontShopHeaderHelper->getShopHeader(

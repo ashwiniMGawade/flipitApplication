@@ -7,6 +7,14 @@ use \Core\Domain\Factory\AdminFactory;
 
 class ShopsController extends ApiBaseController
 {
+    protected $shopClassification = array(
+                                            1 => 'A',
+                                            2 => 'A+',
+                                            3 => 'AA',
+                                            4 => 'AA+',
+                                            5 => 'AAA'
+                                        );
+
     public function getShop($id)
     {
         $shop = AdminFactory::getShop()->execute($id);
@@ -17,6 +25,9 @@ class ShopsController extends ApiBaseController
     {
         $shop = AdminFactory::createShop()->execute();
         $params = json_decode($this->app->request->getBody(), true);
+        if (isset($params['classification'])) {
+            $params['classification'] = array_search($params['classification'], $this->shopClassification) ? : 1;
+        }
         /*$result = AdminFactory::addShop()->execute($shop, $params);
         echo $this->generateShopJsonData($result);*/
         echo json_encode(array('msg'=>'This operation is not permitted.'));
@@ -26,6 +37,9 @@ class ShopsController extends ApiBaseController
     {
         $shop = AdminFactory::getShop()->execute($id);
         $params = json_decode($this->app->request->getBody(), true);
+        if (isset($params['classification'])) {
+            $params['classification'] = array_search($params['classification'], $this->shopClassification) ? : 1;
+        }
         /*$result = AdminFactory::updateShop()->execute($shop, $params);
         echo $this->generateShopJsonData($result);*/
         echo json_encode(array('msg'=>'This operation is not permitted.'));
@@ -33,7 +47,7 @@ class ShopsController extends ApiBaseController
 
     public function deleteShop($id)
     {
-        if(AdminFactory::deleteShop()->execute($id)) {
+        if (AdminFactory::deleteShop()->execute($id)) {
             echo json_encode(array('msg'=>'Shop deleted successfully.'));
         }
     }
@@ -64,6 +78,7 @@ class ShopsController extends ApiBaseController
             'refUrl'                => $shop->getRefUrl(),
             'actualUrl'             => $shop->getActualUrl(),
             'shopText'              => $shop->getShopText(),
+            'classification'        => $this->shopClassification[$shop->getClassification()]
         );
         $shop = new Hal('/shops/'.$shop->getId(), $shopData);
         return $shop->asJson();

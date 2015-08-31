@@ -58,6 +58,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                 $hash = md5($this->data['id'].date('Y').'-'.date('m').'-'.date('d').':'.date('H')); 
                 ?>
                 <a href="<?php echo 'http://'.$host.'/branding/start?storeUrl=http://'.$httpScheme.'.'.$_COOKIE['site_name'].'/' ?><?php echo $this->data['permaLink'].'&shopID='.$this->data['id'].'&hash='.$hash; ?>" class="btn btn-primary">Brand this shop</a>
+                <span id="shopRating"><?php echo $this->translate('Shop Rating'); ?> : <span><?php echo $this->shopClassifications[$this->data['classification']]; ?></span></span>
             </h1>
 
          
@@ -199,6 +200,22 @@ echo $this->headTitle()->append('Edit Shop');?>
                           </select>
                        </div>   
                   </div>
+                </div>
+
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Rating'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <select class="mainpage-content-right-select" id="selectClassification" name="shopClassification">
+                                <?php foreach($this->shopClassifications as $classificationId => $classificationLabel) :
+                                    $selected = ($this->data['classification'] == $classificationId) ? 'selected = "selected"' : '';
+                                ?>
+                                    <option value="<?php echo $classificationId;?>" <?php echo $selected; ?>><?php echo $classificationLabel;?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
             

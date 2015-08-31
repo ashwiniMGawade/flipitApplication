@@ -78,6 +78,7 @@ class UpdateShopUsecaseTest extends \Codeception\TestCase\Test
             'refUrl'                => 'Mock',
             'actualUrl'             => 'Mock',
             'shopText'              => 'Mock',
+            'classification'        => 1,
         );
 
         $shopRepository = $this->shopRepositoryMock();
