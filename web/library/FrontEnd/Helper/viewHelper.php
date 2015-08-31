@@ -339,7 +339,8 @@ EOD;
                         'viewcount' => $offer,
                         'IP' => $clientIp
                     );
-                    if (\Core\Domain\Factory\GuestFactory::getViewCounts()->execute($conditions) == 0) {
+                    $viewCounts = \Core\Domain\Factory\GuestFactory::getViewCounts()->execute($conditions);
+                    if (count($viewCounts) == 0) {
                         \KC\Repository\ViewCount::saveOfferClick($offerId, $clientIp);
                         $varnishObj = new \KC\Repository\Varnish();
                         $varnishObj->addUrl(HTTP_PATH_LOCALE . 'offer/offer-view-count?offerId='. $offerId);
