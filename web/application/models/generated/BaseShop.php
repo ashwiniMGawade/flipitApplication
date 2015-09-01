@@ -409,6 +409,10 @@ abstract class BaseShop extends Doctrine_Record
                 'type' => 'timestamp'
             )
         );
+        $this->hasColumn('offerCount', 'integer', 10, array(
+            'type' => 'integer',
+            'length' => '10',
+        ));
     }
 
     public function setUp()

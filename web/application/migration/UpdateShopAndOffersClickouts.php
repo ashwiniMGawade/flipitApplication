@@ -21,8 +21,9 @@ class UpdateShopAndOffersClickouts
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-                        $this->updateTotalOfferShopViewCount($connection ['dsn'], $key);
-                        $this->updateLastSevenDaysShopOfferViewCount($connection ['dsn'], $key);
+                    $this->updateTotalOfferShopViewCount($connection ['dsn'], $key);
+                    //$this->updateLastSevenDaysShopOfferViewCount($connection ['dsn'], $key);
+                    $this->updateShopOfferCount($connection ['dsn'], $key);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     echo "\n\n";
@@ -59,6 +60,20 @@ class UpdateShopAndOffersClickouts
         $manager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - Last Seven Day Shop and Offer clicks has been updated successfully!!!"
+        );
+    }
+
+    protected function updateShopOfferCount($dsn, $key)
+    {
+        $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
+        $manager = CommonMigrationFunctions::loadDoctrineModels();
+        echo CommonMigrationFunctions::showProgressMessage(
+            "$key - Getting offers count of all the shops!!!"
+        );
+        Shop::updateOfferCount();
+        $manager->closeConnection($doctrineSiteDbConnection);
+        echo CommonMigrationFunctions::showProgressMessage(
+            "$key - Offer count has been updated successfully fot all shops!!!"
         );
     }
 }

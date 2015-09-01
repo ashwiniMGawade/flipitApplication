@@ -2229,4 +2229,24 @@ public static function getShopDetail($shopId)
         }
         return true;
     }
+
+    public static function updateOfferCount()
+    {
+        $data = Doctrine_Query::create()
+            ->select('o.shopid, COUNT(o.id) as offerCount')
+            ->from('offer o')
+            ->groupBy('o.shopid')
+            ->fetchArray();
+
+        foreach ($data as $value) {
+
+            if (isset($value['shopId']) && isset($value['offerCount'])) {
+                Doctrine_Query::create()
+                    ->update('Shop s')
+                    ->set('s.offerCount', $value['offerCount'])
+                    ->where('s.id = ?', $value['shopId'])
+                    ->execute();
+            }
+        }
+    }
 }

@@ -687,7 +687,7 @@ class Shop extends \Core\Domain\Entity\Shop
             $params,
             array('s.id', 's.name', 's.permaLink', 's.classification', 's.affliateProgram', 's.created_at',
                 's.lastSevendayClickouts', 's.shopAndOfferClickouts','a.name',
-                's.discussions', 's.showSignupOption', 's.status',
+                's.discussions', 's.offerCount', 's.showSignupOption', 's.status',
                 's.offlineSicne'
             )
         );
@@ -704,6 +704,7 @@ class Shop extends \Core\Domain\Entity\Shop
             ->add('number', 's.shopAndOfferClickouts')
             ->add('text', 'a.name')
             ->add('text', 's.discussions')
+            ->add('number', 's.offerCount')
             ->add('text', 's.showSignupOption')
             ->add('text', 's.status')
             ->add('text', 's.offlineSicne');
