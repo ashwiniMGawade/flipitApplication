@@ -2232,19 +2232,19 @@ public static function getShopDetail($shopId)
 
     public static function updateOfferCount()
     {
-        $data = Doctrine_Query::create()
+        $shopOfferCounts = Doctrine_Query::create()
             ->select('o.shopid, COUNT(o.id) as offerCount')
             ->from('offer o')
             ->groupBy('o.shopid')
             ->fetchArray();
 
-        foreach ($data as $value) {
+        foreach ($shopOfferCounts as $shopOfferCount) {
 
-            if (isset($value['shopId']) && isset($value['offerCount'])) {
+            if (isset($shopOfferCount['shopId']) && isset($shopOfferCount['offerCount'])) {
                 Doctrine_Query::create()
                     ->update('Shop s')
-                    ->set('s.offerCount', $value['offerCount'])
-                    ->where('s.id = ?', $value['shopId'])
+                    ->set('s.offerCount', $shopOfferCount['offerCount'])
+                    ->where('s.id = ?', $shopOfferCount['shopId'])
                     ->execute();
             }
         }
