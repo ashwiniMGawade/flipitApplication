@@ -34,7 +34,7 @@ class AdminFactory
 {
     public static function getApiKeys()
     {
-        return new GetApiKeysUsecase(RepositoryFactory::apiKeys());
+        return new GetApiKeysUsecase(RepositoryFactory::apiKeys(), new Purifier(), new Errors());
     }
 
     public static function createApiKey()
