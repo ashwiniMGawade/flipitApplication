@@ -2,9 +2,9 @@
 namespace Admin;
 
 use Core\Domain\Entity\Visitor;
-use \Core\Domain\Usecase\Admin\GetVisitorListingUsecase;
+use \Core\Domain\Usecase\Admin\GetVisitorsUsecase;
 
-class GetVisitorListingUsecaseTest extends \Codeception\TestCase\Test
+class GetVisitorsUsecaseTest extends \Codeception\TestCase\Test
 {
     /**
      * @var \DomainTester
@@ -15,8 +15,8 @@ class GetVisitorListingUsecaseTest extends \Codeception\TestCase\Test
     {
         $invalidParams = 123;
         $this->setExpectedException('Exception', 'Invalid Parameters');
-        $getVisitorListingUsecase = new GetVisitorListingUsecase($this->createVisitorRepositoryInterfaceMock());
-        $getVisitorListingUsecase->execute($invalidParams);
+        $getVisitorsUsecase = new GetVisitorsUsecase($this->createVisitorRepositoryInterfaceMock());
+        $getVisitorsUsecase->execute($invalidParams);
     }
 
     public function testThrowsExceptionWhenParametersAreValidAndVisitorsListIsEmpty()
@@ -27,14 +27,14 @@ class GetVisitorListingUsecaseTest extends \Codeception\TestCase\Test
         );
         $requestParams = array();
         $visitorRepository = $this->createVisitorRepositoryInterfaceWithFindVisitorsMethodMock(array());
-        $getVisitorListingUsecase = new GetVisitorListingUsecase($visitorRepository);
-        $getVisitorListingUsecase->execute($validParams, $requestParams);
+        $getVisitorsUsecase = new GetVisitorsUsecase($visitorRepository);
+        $getVisitorsUsecase->execute($validParams, $requestParams);
     }
 
-    public function testGetVisitorListingUsecaseReturnsArrayOfVisitorsWhenParametersAreValid()
+    public function testGetVisitorsUsecaseReturnsArrayOfVisitorsWhenParametersAreValid()
     {
         $visitorRepository = $this->createVisitorRepositoryInterfaceWithFindVisitorsMethodMock(array(new Visitor()));
-        $visitors = (new GetVisitorListingUsecase($visitorRepository))->execute();
+        $visitors = (new GetVisitorsUsecase($visitorRepository))->execute();
         $this->assertNotEmpty($visitors);
     }
 

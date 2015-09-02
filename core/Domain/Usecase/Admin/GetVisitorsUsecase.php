@@ -3,7 +3,7 @@ namespace Core\Domain\Usecase\Admin;
 
 use Core\Domain\Repository\VisitorRepositoryInterface;
 
-class GetVisitorListingUsecase
+class GetVisitorsUsecase
 {
     protected $visitorRepository;
 
