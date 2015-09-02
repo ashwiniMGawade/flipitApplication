@@ -46,6 +46,9 @@ class StoreController extends Zend_Controller_Action
             $explodedPermalink = explode("/", $shopPermalink);
             $shopPermalink = $explodedPermalink[1];
         }
+
+        #Set Language Reference Attribute value as nl-BE
+        $this->setLanguageReference($shopPermalink);
         
         $this->view->shareCodeStatus = '';
         if (isset($explodeUrl[1])) {
@@ -453,5 +456,37 @@ class StoreController extends Zend_Controller_Action
     {
         $this->_helper->layout()->disableLayout();
         $this->view->shopId = $this->getRequest()->getParam('shopid');
+    }
+
+    private function setLanguageReference($shopPermalink)
+    {
+        if (LOCALE == 'be') {
+            $shopPermalinks = array(
+                'bol-com',
+                'center-parcs',
+                'hellofresh',
+                'wijnbeurs',
+                'home24',
+                'spartoo',
+                'conrad',
+                'sarenza',
+                'nike',
+                'pabo',
+                'stylefile',
+                'bonprix',
+                'parfumswinkel',
+                'desigual',
+                'gaastra',
+                'fotofabriek',
+                'corendon',
+                'smartphoto',
+                'bobshop',
+                'mcdonalds'
+            );
+
+            if (in_array($shopPermalink, $shopPermalinks)) {
+                $this->view->languageReference = str_replace('_', '-', COUNTRY_LOCALE);
+            }
+        }
     }
 }
