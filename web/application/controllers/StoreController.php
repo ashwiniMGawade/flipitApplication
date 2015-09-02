@@ -25,6 +25,7 @@ class StoreController extends Zend_Controller_Action
             $request->setActionName('error');
         }
         $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
+
     }
 
     public function addshopinfevoriteAction()
