@@ -1,5 +1,7 @@
 <?php
 namespace KC\Repository;
+use Symfony\Component\Validator\Constraints\DateTime;
+
 class Offer extends \Core\Domain\Entity\Offer
 {
     ##################################################################################
@@ -906,6 +908,40 @@ class Offer extends \Core\Domain\Entity\Offer
             ->leftJoin('o.shopOffers', 's')
             ->where($entityManagerUser->expr()->eq('o.deleted', $entityManagerUser->expr()->literal($deletedStatus)))
             ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')");
+
+        if (isset($parameters['expired'])) {
+            switch ($parameters['expired']) {
+                case 1:
+                    $getOffersQuery->andWhere("o.endDate <= CURRENT_DATE()");
+                    break;
+                case 2:
+                    $getOffersQuery->andWhere("o.endDate >= CURRENT_DATE()");
+                    break;
+                case 3:
+                    $getOffersQuery->andWhere("o.endDate BETWEEN CURRENT_DATE() AND DATE_ADD(CURRENT_DATE(), 3, 'day')");
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (isset($parameters['status'])) {
+            switch ($parameters['status']) {
+                case 1:
+                    $getOffersQuery->andWhere("o.startDate <= CURRENT_DATE()");
+                    break;
+                case 2:
+                    $getOffersQuery->andWhere("o.startDate > CURRENT_DATE()");
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (isset($parameters['shopRating'])) {
+            $getOffersQuery->andWhere("s.classification = " . $parameters['shopRating']);
+        }
+
         if ($userRole=='4') {
             $getOffersQuery->andWhere(
                 $entityManagerUser->expr()->like('o.Visability', $entityManagerUser->expr()->literal('DE'))
@@ -935,7 +971,6 @@ class Offer extends \Core\Domain\Entity\Offer
                 $getOffersQuery->andWhere($entityManagerUser->expr()->eq('o.extendedOffer', 1));
             }
         }
-
         //with new change we willd delete above code after completons of datatatable
         $request  = \DataTable_Helper::createSearchRequest(
             $parameters,
