@@ -18,13 +18,21 @@ class Purifier implements PurifierInterface
     public function purify($params)
     {
         if (!is_array($params)) {
-            return $this->purifier->purify($params);
+            if (!is_object($params)) {
+                return $this->purifier->purify($params);
+            } else {
+                return $params;
+            }
         }
 
         $filteredParams = array();
 
-        foreach ($params as $key=>$value ) {
-            $filteredParams[$key] = $this->purifier->purify($value);
+        foreach ($params as $key => $value) {
+            if (!is_object($value)) {
+                $filteredParams[$key] = $this->purifier->purify($value);
+            } else {
+                $filteredParams[$key] = $value;
+            }
         }
         return $filteredParams;
     }

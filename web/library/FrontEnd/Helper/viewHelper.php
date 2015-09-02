@@ -333,11 +333,19 @@ EOD;
         $resultStatus = "false";
         switch (strtolower($eventType)) {
             case 'onclick':
-                if (\Core\Domain\Factory\GuestFactory::getOfferClick()->execute($offerId, $clientIp) == 0) {
-                    \KC\Repository\ViewCount::saveOfferClick($offerId, $clientIp);
-                    $varnishObj = new \KC\Repository\Varnish();
-                    $varnishObj->addUrl(HTTP_PATH_LOCALE . 'offer/offer-view-count?offerId='. $offerId);
-                    $resultStatus = "true";
+                $offer = \Core\Domain\Factory\GuestFactory::getOffer()->execute(array('id' => $offerId));
+                if ($offer instanceof \Core\Domain\Entity\Offer) {
+                    $conditions = array(
+                        'viewcount' => $offer,
+                        'IP' => $clientIp
+                    );
+                    $viewCounts = \Core\Domain\Factory\GuestFactory::getViewCounts()->execute($conditions);
+                    if (count($viewCounts) == 0) {
+                        \KC\Repository\ViewCount::saveOfferClick($offerId, $clientIp);
+                        $varnishObj = new \KC\Repository\Varnish();
+                        $varnishObj->addUrl(HTTP_PATH_LOCALE . 'offer/offer-view-count?offerId='. $offerId);
+                        $resultStatus = "true";
+                    }
                 }
                 break;
             default:

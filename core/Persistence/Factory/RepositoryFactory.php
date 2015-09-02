@@ -1,6 +1,7 @@
 <?php
 namespace Core\Persistence\Factory;
 
+use Core\Persistence\Database\Repository\OfferRepository;
 use Core\Persistence\Database\Repository\ViewCountRepository;
 use Core\Persistence\Database\Repository\VisitorRepository;
 use \Core\Persistence\Database\Service\DoctrineManager;
@@ -45,5 +46,10 @@ class RepositoryFactory
     public static function widget()
     {
         return new WidgetRepository((new DoctrineManager)->getLocaleEntityManager());
+    }
+
+    public static function offer()
+    {
+        return new OfferRepository((new DoctrineManager)->getLocaleEntityManager());
     }
 }
