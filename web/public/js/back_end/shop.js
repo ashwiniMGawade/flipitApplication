@@ -233,6 +233,14 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir, extraParameters) {
                             },
                             "bSearchable" : true,
                             "bSortable" : true
+                        },
+                        {
+                            "fnRender" : function(obj) {
+                                var tag = "<a href='javascript:void(0);'>" + obj.aData.offerCount + "</a>";
+                                return tag;
+                            },
+                            "bSearchable" : true,
+                            "bSortable" : true
                         },{
                             "fnRender" : function(obj) {
                                 

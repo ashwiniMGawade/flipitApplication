@@ -2229,4 +2229,26 @@ public static function getShopDetail($shopId)
         }
         return true;
     }
+
+    public static function updateActiveOffersCount()
+    {
+        $nowDate = date("Y-m-d H:i");
+        $shopOfferCounts = Doctrine_Query::create()
+            ->select('s.id')
+            ->from('shop s')
+            ->addSelect("(SELECT count(id) as offerCount FROM offer o WHERE o.shopId = s.id AND o.deleted = 0 AND o.offline = 0 AND o.endDate >='".$nowDate."' AND o.startDate <='".$nowDate."' AND ((o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1'))) as offerCount")
+            ->groupBy('s.id')
+            ->fetchArray();
+
+        foreach ($shopOfferCounts as $shopOfferCount) {
+
+            if (isset($shopOfferCount['id']) && isset($shopOfferCount['offerCount'])) {
+                Doctrine_Query::create()
+                    ->update('Shop s')
+                    ->set('s.offerCount', $shopOfferCount['offerCount'])
+                    ->where('s.id = ?', $shopOfferCount['id'])
+                    ->execute();
+            }
+        }
+    }
 }
