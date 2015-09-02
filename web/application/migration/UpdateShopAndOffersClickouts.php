@@ -22,7 +22,7 @@ class UpdateShopAndOffersClickouts
             if ($key != 'imbull') {
                 try {
                     $this->updateTotalOfferShopViewCount($connection ['dsn'], $key);
-                    //$this->updateLastSevenDaysShopOfferViewCount($connection ['dsn'], $key);
+                    $this->updateLastSevenDaysShopOfferViewCount($connection ['dsn'], $key);
                     $this->updateShopOfferCount($connection ['dsn'], $key);
                 } catch (Exception $e) {
                     echo $e->getMessage();
