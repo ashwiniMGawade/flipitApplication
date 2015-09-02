@@ -34,7 +34,8 @@ class Admin_ApikeysController extends Zend_Controller_Action
     public function getAction()
     {
         $sEcho = 1;
-        $apiKeys = AdminFactory::getApiKeys()->execute();
+        $conditions = array('deleted' => 0);
+        $apiKeys = AdminFactory::getApiKeys()->execute($conditions);
         $apiKeys = $this->prepareData($apiKeys);
         $response = \DataTable_Helper::createResponse($sEcho, $apiKeys, count($apiKeys));
         echo Zend_Json::encode($response);
