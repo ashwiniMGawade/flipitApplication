@@ -1,5 +1,8 @@
 <?php
 use \HTMLPurifier;
+use \Core\Domain\Factory\GuestFactory;
+use \Core\Domain\Entity\Offer;
+
 class FrontEnd_Helper_viewHelper
 {
     public static function writeLog($message, $logfile = '')
@@ -333,13 +336,13 @@ EOD;
         $resultStatus = "false";
         switch (strtolower($eventType)) {
             case 'onclick':
-                $offer = \Core\Domain\Factory\GuestFactory::getOffer()->execute(array('id' => $offerId));
-                if ($offer instanceof \Core\Domain\Entity\Offer) {
+                $offer = GuestFactory::getOffer()->execute(array('id' => $offerId));
+                if ($offer instanceof Offer) {
                     $conditions = array(
                         'viewcount' => $offer,
                         'IP' => $clientIp
                     );
-                    $viewCounts = \Core\Domain\Factory\GuestFactory::getViewCounts()->execute($conditions);
+                    $viewCounts = GuestFactory::getViewCounts()->execute($conditions);
                     if (count($viewCounts) == 0) {
                         \KC\Repository\ViewCount::saveOfferClick($offerId, $clientIp);
                         $varnishObj = new \KC\Repository\Varnish();
