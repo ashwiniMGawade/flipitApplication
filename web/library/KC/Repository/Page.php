@@ -1126,6 +1126,9 @@ class Page extends \Core\Domain\Entity\Page
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$pagePermalinkParam.'_data');
             $key = 'all_widget' . $params['pageTemplate'] . "_list";
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            if (isset($params['selectedpageType'])) {
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage' . $params['pageId'] . '_offers');
+            }
 
             $entityManagerLocale->persist($updatePage);
             $entityManagerLocale->flush();
