@@ -70,10 +70,10 @@ class UpdateShopAndOffersClickouts
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - Getting offers count of all the shops!!!"
         );
-        Shop::updateOfferCount();
+        Shop::updateActiveOffersCount();
         $manager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(
-            "$key - Offer count has been updated successfully fot all shops!!!"
+            "$key - Offer count has been updated successfully for all shops!!!"
         );
     }
 }
