@@ -511,6 +511,7 @@ class Offer extends \Core\Domain\Entity\Offer
         } else {
             $offersConstraintsQuery->orderBy('o.id', 'DESC');
         }
+
         if (isset($specialPage['enableWordConstraint']) && $specialPage['enableWordConstraint'] > 0
                 && $specialPage['enableWordConstraint'] != null) {
             $wordTitle = $specialPage['wordTitle'];
@@ -686,28 +687,26 @@ class Offer extends \Core\Domain\Entity\Offer
         if (count($specialOffersByConstraints) > 0) {
             $countOfSpecialOffersByConstraints = count($specialOffersByConstraints);
             for ($offerIndex = 0; $offerIndex < $countOfSpecialOffersByConstraints; $offerIndex++) {
+                $currentDate = date("Y-m-d");
+                $currentUNIXDate = strtotime($currentDate);
 
-                $offerPublishDate = $specialOffersByConstraints[$offerIndex]['startDate']->format('Y-m-d');
-                $offerExpiredDate = $specialOffersByConstraints[$offerIndex]['endDate']->format('Y-m-d');
-                $offerSubmissionDaysIncreasedBy = ' +'.$specialPage['timenumberOfDays'].' days';
-                $offerSubmissionDaysDecreasedBy  = ' -'.$specialPage['timenumberOfDays'].' days';
-                $increasedOfferPublishDate = date($offerPublishDate .$offerSubmissionDaysIncreasedBy);
-                $decreasedOfferExpiredDate = date($offerExpiredDate .$offerSubmissionDaysDecreasedBy);
-                $currentDate = strtotime(date("Y-m-d"));
-                $newOfferPublishDate = strtotime($increasedOfferPublishDate);
-                $newOfferExprationDate = strtotime($decreasedOfferExpiredDate);
+                $offerExpiryDate = $specialOffersByConstraints[$offerIndex]['endDate']->getTimestamp();
+                $maxOfferExpiryDate = strtotime($currentDate .' + '. $specialPage['timenumberOfDays'].' days');
+
+                $offerPublishDate = $specialOffersByConstraints[$offerIndex]['startDate']->getTimestamp();
+                $minOfferPublishDate = strtotime($currentDate .' - '. $specialPage['timenumberOfDays'].' days');
 
                 if (isset($specialPage['enableTimeConstraint']) && $specialPage['enableTimeConstraint'] == 1) {
                     if ($specialPage['timeType'] == 1) {
-                        if ($newOfferPublishDate >= $currentDate) {
+                        if ($minOfferPublishDate <= $offerPublishDate && $offerPublishDate <= $currentUNIXDate) {
                             $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
                         }
-                    } else if ($specialPage['timeType'] == 2) {
-                        if ($newOfferExprationDate <= $currentDate) {
+                    } elseif ($specialPage['timeType'] == 2) {
+                        if ($currentUNIXDate <= $offerExpiryDate && $offerExpiryDate <= $maxOfferExpiryDate) {
                             $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
                         }
                     }
-                } else if (isset($specialPage['enableClickConstraint']) && $specialPage['enableClickConstraint'] == true
+                } elseif (isset($specialPage['enableClickConstraint']) && $specialPage['enableClickConstraint'] == true
                         && $specialPage['enableClickConstraint'] == 1) {
                     if ($specialOffersByConstraints[$offerIndex]['clicks'] >= $specialPage['numberOfClicks']) {
                         $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
@@ -715,7 +714,32 @@ class Offer extends \Core\Domain\Entity\Offer
                 } else {
                     $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
                 }
+            }
 
+            if (isset($specialPage['enableTimeConstraint']) && $specialPage['enableTimeConstraint'] == 1 && $specialPage['timeType'] == 2) {
+                usort(
+                    $offersAccordingToConstraints,
+                    function ($a, $b) use ($specialPage) {
+                        if (isset($specialPage['oderOffers']) && $specialPage['oderOffers'] == 1) {
+                            return $a['endDate']->getTimestamp() - $b['endDate']->getTimestamp();
+                        } else {
+                            return $b['endDate']->getTimestamp() - $a['endDate']->getTimestamp();
+                        }
+                    }
+                );
+            }
+
+            if (isset($specialPage['enableTimeConstraint']) && $specialPage['enableTimeConstraint'] == 1 && $specialPage['timeType'] == 1) {
+                usort(
+                    $offersAccordingToConstraints,
+                    function ($a, $b) use ($specialPage) {
+                        if (isset($specialPage['oderOffers']) && $specialPage['oderOffers'] == 1) {
+                            return $a['startDate']->getTimestamp() - $b['startDate']->getTimestamp();
+                        } else {
+                            return $b['startDate']->getTimestamp() - $a['startDate']->getTimestamp();
+                        }
+                    }
+                );
             }
         }
         return $offersAccordingToConstraints;
