@@ -1,7 +1,7 @@
 <?php
 namespace Core\Persistence\Database\Service;
 
-class AppConfig implements AppConfigInterface
+class AppConfig
 {
     private $env = '';
     private $locale = '';

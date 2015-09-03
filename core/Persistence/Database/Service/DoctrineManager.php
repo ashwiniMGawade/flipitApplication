@@ -12,7 +12,7 @@ class DoctrineManager
     protected $localeEntityManger;
     protected $userEntityManger;
     
-    public function __construct(AppConfigInterface $appConfig)
+    public function __construct(AppConfig $appConfig)
     {
         $connectionInformation = $appConfig->getConfigs();
         $splitMemcacheValues = explode(':', $connectionInformation['connections']['cacheParams']);
