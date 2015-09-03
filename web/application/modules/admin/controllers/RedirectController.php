@@ -59,7 +59,7 @@ class Admin_RedirectController extends Zend_Controller_Action
         $response = array();
         if (!empty($redirects)) {
             foreach ($redirects as $redirect) {
-                $response[] = array('id' => $redirect['id'], 'label' => ucfirst($redirect['orignalurl']));
+                $response[] = array('id' => $redirect['id'], 'label' => $redirect['orignalurl']);
             }
         } else {
             $response[] = array('id' => '', 'label' => $this->view->translate('No Record Found'));
