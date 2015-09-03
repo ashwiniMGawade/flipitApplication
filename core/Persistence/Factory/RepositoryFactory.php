@@ -3,7 +3,7 @@ namespace Core\Persistence\Factory;
 
 use Core\Persistence\Database\Repository\ViewCountRepository;
 use Core\Persistence\Database\Repository\VisitorRepository;
-use \Core\Persistence\Database\Service\DoctrineManager;
+use \Core\Persistence\Database\Service as Service;
 use \Core\Persistence\Database\Repository\PageRepository;
 use \Core\Persistence\Database\Repository\ShopRepository;
 use \Core\Persistence\Database\Repository\ApiKeyRepository;
@@ -14,32 +14,32 @@ class RepositoryFactory
 {
     public static function page()
     {
-        return new PageRepository((new DoctrineManager)->getLocaleEntityManager());
+        return new PageRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 
     public static function shop()
     {
-        return new ShopRepository((new DoctrineManager)->getLocaleEntityManager());
+        return new ShopRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 
     public static function apiKeys()
     {
-        return new ApiKeyRepository((new DoctrineManager)->getUserEntityManager());
+        return new ApiKeyRepository((new Service\DoctrineManager(new Service\AppConfig()))->getUserEntityManager());
     }
 
     public static function visitor()
     {
-        return new VisitorRepository((new DoctrineManager)->getLocaleEntityManager());
+        return new VisitorRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 
     public static function affliateNetwork()
     {
-        return new AffliateNetworkRepository((new DoctrineManager)->getLocaleEntityManager());
+        return new AffliateNetworkRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 
     public static function viewCount()
     {
-        return new ViewCountRepository((new DoctrineManager)->getLocaleEntityManager());
+        return new ViewCountRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 
     public static function widget()
