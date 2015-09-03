@@ -9,18 +9,7 @@
 ?>
  <div id="searchbarlist">
    <div class="wrap columns-2">
-	<?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
-		<br>
-	<div class ="mainpage-content-colorbox success">
-		<?php if($this->messageSuccess!=''){?>
-			<span class="success"><?php echo $this->messageSuccess; ?></span>
-		<?php }?>
-		<?php if($this->messageError!=''){?>
-			<span class="error"><?php echo $this->messageError; ?></span>
-		<?php } ?>
-	</div>
-	<?php }?>
-	  
+       <?php echo $this->flashMessages(); ?>
         <h1 class="fl"><?php echo $this->translate('Redirects'); ?>
         	<button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/redirect/addredirect'"><?php echo $this->translate('Add New Redirect'); ?></button>
         </h1>
@@ -32,12 +21,12 @@
            <form class="form-search" name="searchform" id="searchform">
                <div class="mainpage-content-searchbart" style="width: 50%; float:right;">
                    <div class="mainpage-content-right-searchbar">
-                       <button id="searchByReidrect" type="button" class="btn btn-primary">
+                       <button id="search_redirect_btn" type="button" class="btn btn-primary">
                            <?php echo $this->translate('Search'); ?>
                        </button>
                    </div>
                    <div class="mainpage-content-right-inner-left-searchbar">
-                       <input type='hidden' id="searchReidrect" name="searchReidrect" style="width:99%;"/>
+                       <input type='hidden' id="reidrect_id" name="reidrect_id" style="width:99%;"/>
                    </div>
                </div>
            </form>
