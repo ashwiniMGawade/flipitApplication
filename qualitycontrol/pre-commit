@@ -19,19 +19,24 @@ then
 	IFS=$oIFS
 fi
 SFILES=${SFILES:-$STAGED_FILES_CMD}
-for FILE in $SFILES
-do
+
+if [ "$SFILES" != "" ]
+then
     echo -e "\n${ORANGE}----------------------------------------------------${NOCOLOR}"
     echo "${GREEN}Checking PHP Lint...${NOCOLOR}"
     echo "${ORANGE}----------------------------------------------------${NOCOLOR}"
-	php -l -d display_errors=0 $PROJECT/$FLIPIT_APPLICATION/$FILE
-	if [ $? != 0 ]
-	then
-		echo "Fix the error before commit."
-		exit 1
-	fi
-	FILES="$FILES $PROJECT/$FLIPIT_APPLICATION/$FILE"
-done
+
+    for FILE in $SFILES
+    do
+        php -l -d display_errors=0 $PROJECT/$FLIPIT_APPLICATION/$FILE
+        if [ $? != 0 ]
+        then
+            echo "Fix the error before commit."
+            exit 1
+        fi
+        FILES="$FILES $PROJECT/$FLIPIT_APPLICATION/$FILE"
+    done
+fi
 
 if [ "$FILES" != "" ]
 then
