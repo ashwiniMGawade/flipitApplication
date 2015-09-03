@@ -54,7 +54,7 @@ class Admin_RedirectController extends Zend_Controller_Action
 
     public function searchAction()
     {
-        $keyword = $this->getRequest()->getParam('keyword');
+        $keyword = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('keyword'));
         $redirects = \KC\Repository\RouteRedirect::searchRedirects($keyword);
         $response = array();
         if (!empty($redirects)) {
