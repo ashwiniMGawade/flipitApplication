@@ -1,5 +1,5 @@
 <?php
-namespace Guest;
+namespace Admin;
 use \WebTester;
 
 class ShopsFilterCest

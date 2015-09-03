@@ -45,14 +45,17 @@ class RouteRedirect extends \Core\Domain\Entity\RouteRedirect
     public static function getRedirect($params)
     {
         $request  = \DataTable_Helper::createSearchRequest($params, array('id','orignalurl', 'redirectto', 'created_at'));
-        $qb = \Zend_Registry::get('emLocale')->createQueryBuilder()->from('\Core\Domain\Entity\RouteRedirect', 'p');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder()->from('\Core\Domain\Entity\RouteRedirect', 'r');
+        if (isset($params['id']) && $params['id']) {
+            $queryBuilder->where('r.id = '.$params['id']);
+        }
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
-            ->setQueryBuilder($qb)
-            ->add('number', 'p.id')
-            ->add('text', 'p.orignalurl')
-            ->add('text', 'p.redirectto')
-            ->add('number', 'p.created_at');
+            ->setQueryBuilder($queryBuilder)
+            ->add('number', 'r.id')
+            ->add('text', 'r.orignalurl')
+            ->add('text', 'r.redirectto')
+            ->add('number', 'r.created_at');
 
         $results = $builder->getTable()->getResponseArray();
 
@@ -105,5 +108,18 @@ class RouteRedirect extends \Core\Domain\Entity\RouteRedirect
     {
         $uploadResponse = \BackEnd_Helper_viewHelper::uploadExcel($file, $import, $type = '');
         return $uploadResponse;
+    }
+
+    public static function searchRedirects($keyword)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('r.orignalurl, r.id')
+            ->from('\Core\Domain\Entity\RouteRedirect', 'r')
+            ->where('r.deleted=0')
+            ->andWhere("r.orignalurl LIKE '%$keyword%'")
+            ->orderBy('r.id', 'ASC')
+            ->setMaxResults(10);
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
     }
 }
