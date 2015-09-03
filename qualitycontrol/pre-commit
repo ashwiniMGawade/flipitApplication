@@ -5,6 +5,10 @@ FLIPIT_APPLICATION="flipit_application"
 API="api"
 STAGED_FILES_CMD=`git diff --cached --name-only --diff-filter=ACMR HEAD | grep \\\\.php`
 
+ORANGE=`tput setaf 3`
+NOCOLOR=`tput sgr0`
+GREEN=`tput setaf 2`
+
 # Determine if a file list is passed
 if [ "$#" -eq 1 ]
 then
@@ -15,9 +19,11 @@ then
 	IFS=$oIFS
 fi
 SFILES=${SFILES:-$STAGED_FILES_CMD}
-echo "Checking PHP Lint..."
 for FILE in $SFILES
 do
+    echo -e "\n${ORANGE}----------------------------------------------------${NOCOLOR}"
+    echo "${GREEN}Checking PHP Lint...${NOCOLOR}"
+    echo "${ORANGE}----------------------------------------------------${NOCOLOR}"
 	php -l -d display_errors=0 $PROJECT/$FLIPIT_APPLICATION/$FILE
 	if [ $? != 0 ]
 	then
@@ -29,7 +35,9 @@ done
 
 if [ "$FILES" != "" ]
 then
-	echo "Running Code Sniffer..."
+    echo -e "\n${ORANGE}----------------------------------------------------${NOCOLOR}"
+	echo "${GREEN}Running Code Sniffer...${NOCOLOR}"
+	echo "${ORANGE}----------------------------------------------------${NOCOLOR}"
 	$PROJECT/$FLIPIT_APPLICATION/bin/phpcs --standard=$PROJECT/$FLIPIT_APPLICATION/qualitycontrol/custom_ruleset.xml --encoding=utf-8  -n -p $FILES
 	if [ $? != 0 ]
 	then
@@ -37,7 +45,9 @@ then
 		exit 1
 	fi
 
-	echo "Running PHPMD..."
+    echo -e "\n${ORANGE}----------------------------------------------------${NOCOLOR}"
+	echo "${GREEN}Running PHPMD...${NOCOLOR}"
+	echo "${ORANGE}----------------------------------------------------${NOCOLOR}"
 	$PROJECT/$FLIPIT_APPLICATION/bin/phpmd $FILES text $PROJECT/$FLIPIT_APPLICATION/qualitycontrol/PhpMD/ruleset.xml
 	if [ $? != 0 ]
 	then
@@ -46,7 +56,9 @@ then
 	fi
 fi
 
-echo "Running Unit Tests..."
+echo -e "\n${ORANGE}----------------------------------------------------${NOCOLOR}"
+echo "${GREEN}Running Domain Tests...${NOCOLOR}"
+echo "${ORANGE}----------------------------------------------------${NOCOLOR}"
 $PROJECT/$FLIPIT_APPLICATION/bin/codecept run --config=$PROJECT/$FLIPIT_APPLICATION/codeception.yml domain --coverage --coverage-html
 if [ $? != 0 ]
 then
