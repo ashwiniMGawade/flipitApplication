@@ -5,10 +5,11 @@ class AppConfig
 {
     private $env = '';
     private $locale = '';
-    public function __construct()
+    public function __construct($locale = '')
     {
         $this->env = defined('APPLICATION_ENV') ? APPLICATION_ENV : 'production';
         $this->locale = defined('LOCALE') && LOCALE != '' ? LOCALE : 'en';
+        $this->locale = $locale ?: '';
     }
 
     public function getConfigs()

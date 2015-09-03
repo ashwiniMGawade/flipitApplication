@@ -12,27 +12,26 @@ class DoctrineManager
     protected $localeEntityManger;
     protected $userEntityManger;
     
-    public function __construct()
+    public function __construct(AppConfig $appConfig)
     {
-        $config = new AppConfig();
-        $connection = $config->getConfigs();
-        $splitMemcacheValues = explode(':', $connection['connections']['cacheParams']);
+        $connectionInformation = $appConfig->getConfigs();
+        $splitMemcacheValues = explode(':', $connectionInformation['connections']['cacheParams']);
         $memcachePort = isset($splitMemcacheValues[1]) ? $splitMemcacheValues[1] : '';
         $memcacheHost = isset($splitMemcacheValues[0]) ? $splitMemcacheValues[0] : '';
         $memcache = new \Memcached();
         $memcache->addServer($memcacheHost, $memcachePort);
         $cache = new \Doctrine\Common\Cache\MemcachedCache;
         $cache->setMemcached($memcache);
-        if ($connection['connections']['appMode'] === 'development' || $connection['connections']['appMode'] === 'testing') {
-            $cache = $connection['connections']['cache'];
+        if ($connectionInformation['connections']['appMode'] === 'development' || $connectionInformation['connections']['appMode'] === 'testing') {
+            $cache = $connectionInformation['connections']['cache'];
         }
-        $config = Setup::createConfiguration($connection['connections']['isDevMode'], $connection['connections']['proxy_path'], $cache);
+        $config = Setup::createConfiguration($connectionInformation['connections']['isDevMode'], $connectionInformation['connections']['proxy_path'], $cache);
         $config->setProxyNamespace('Proxy');
-        $driver = new AnnotationDriver(new AnnotationReader(), $connection['connections']['path']);
+        $driver = new AnnotationDriver(new AnnotationReader(), $connectionInformation['connections']['path']);
         AnnotationRegistry::registerLoader('class_exists');
         $config->setMetadataDriverImpl($driver);
-        $this->localeEntityManger = EntityManager::create($connection['connections']['site'], $config);
-        $this->userEntityManger = EntityManager::create($connection['connections']['user'], $config);
+        $this->localeEntityManger = EntityManager::create($connectionInformation['connections']['site'], $config);
+        $this->userEntityManger = EntityManager::create($connectionInformation['connections']['user'], $config);
     }
 
     public function getUserEntityManager()
