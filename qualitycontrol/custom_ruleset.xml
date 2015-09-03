@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<ruleset name="WebFlight Standard">
+
+    <description>A WebFlight coding standard</description>
+
+    <rule ref="PSR2"/>
+
+    <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
+        <exclude-pattern>*/web/application/controllers/*</exclude-pattern>
+        <exclude-pattern>*/web/application/modules/admin/controllers/*</exclude-pattern>
+    </rule>
+
+    <rule ref="Squiz.Classes.ValidClassName.NotCamelCaps">
+        <exclude-pattern>*/web/application/modules/admin/controllers/*</exclude-pattern>
+    </rule>
+
+</ruleset>

@@ -30,7 +30,7 @@ done
 if [ "$FILES" != "" ]
 then
 	echo "Running Code Sniffer..."
-	$PROJECT/$FLIPIT_APPLICATION/bin/phpcs --standard=PSR2 --encoding=utf-8  -n -p $FILES
+	$PROJECT/$FLIPIT_APPLICATION/bin/phpcs --standard=$PROJECT/$FLIPIT_APPLICATION/qualitycontrol/custom_ruleset.xml --encoding=utf-8  -n -p $FILES
 	if [ $? != 0 ]
 	then
 		echo "Fix the error before commit."
