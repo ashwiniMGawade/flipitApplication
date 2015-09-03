@@ -25,7 +25,9 @@ $(document).ready(function(){
         },
         formatSelection: function(data) {
             $("#reidrect_id").val(data.id);
-            $('#search_redirect_btn').click();
+            if (data.id) {
+                $('#search_redirect_btn').click();
+            }
             return data.label;
         }
     });

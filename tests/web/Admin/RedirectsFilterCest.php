@@ -23,6 +23,7 @@ class RedirectsFilterCest
         $I->click('Search Redirect');
         $I->canSee('www.xyz.com');
         $I->fillField('input[type=text]', 'www.xy');
+        $I->wait(1);
         $I->click('li.select2-highlighted');
         $I->click('#search_redirect_btn');
         $I->wait(1);

@@ -35,12 +35,12 @@ class Admin_RedirectController extends Zend_Controller_Action
     public function addredirectAction()
     {
         $params = $this->getAllParams();
-        if ($this->getRequest ()->isPost ()) {
+        if ($this->getRequest()->isPost()) {
             $keyword = \KC\Repository\RouteRedirect::addRedirect($params);
-            $flash = $this->_helper->getHelper ( 'FlashMessenger' );
-            $message = $this->view->translate ( 'Redirect has been created successfully' );
-            $flash->addMessage ( array ('success' => $message ));
-            $this->redirect ( HTTP_PATH . 'admin/redirect' );
+            $flash = $this->_helper->getHelper('FlashMessenger');
+            $message = $this->view->translate('Redirect has been created successfully');
+            $flash->addMessage(array('success' => $message));
+            $this->redirect(HTTP_PATH.'admin/redirect');
         }
     }
 
@@ -59,10 +59,10 @@ class Admin_RedirectController extends Zend_Controller_Action
         $response = array();
         if (!empty($redirects)) {
             foreach ($redirects as $redirect) {
-                $response[] = array( 'id' => $redirect['id'], 'label' => ucfirst($redirect['orignalurl']) );
+                $response[] = array('id' => $redirect['id'], 'label' => ucfirst($redirect['orignalurl']));
             }
         } else {
-            $response[] = $this->view->translate('No Record Found');
+            $response[] = array('id' => '', 'label' => $this->view->translate('No Record Found'));
         }
         echo Zend_Json::encode($response);
         die;
@@ -70,14 +70,14 @@ class Admin_RedirectController extends Zend_Controller_Action
 
     public function editredirectAction()
     {
-        $id = $this->getRequest ()->getParam ('id');
+        $id = $this->getRequest()->getParam('id');
         $this->view->qstring = $_SERVER['QUERY_STRING'];
         if ($id>0) {
             $searchbar = \KC\Repository\RouteRedirect::getRedirectForEdit($id);
             $this->view->editRedirect = $searchbar;
         }
-        if ($this->getRequest ()->isPost ()) {
-            $params = $this->getRequest ()->getParams();
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getRequest()->getParams();
             // cal to update keyword function
             $searchbar = \KC\Repository\RouteRedirect::updateRedirect($params);
             $flash = $this->_helper->getHelper('FlashMessenger');
