@@ -3,6 +3,8 @@
  $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.dataTables.min.js" );
  $this->headScript ()->appendFile ( PUBLIC_PATH . "js/dataTableComman.js" );
  $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
+ $this->headLink()->appendStylesheet(PUBLIC_PATH . "css/select2.css");
  $this->headScript()->appendFile  ( PUBLIC_PATH . "js/back_end/redirect.js");
 ?>
  <div id="searchbarlist">
@@ -25,6 +27,22 @@
       	<div class="clear"></div>
       	 <p class="text-right" style="margin:0 34px 9px;"><a href="<?php echo HTTP_PATH ?>admin/redirect/importredirect"><?php echo $this->translate('Import List'); ?></a></p>
          <p class="text-right" style="margin:0 34px 9px;"><a href="<?php echo HTTP_PATH ?>admin/redirect/exportredirectlist"><?php echo $this->translate('Export List'); ?></a></p>
+
+       <div class="mainpage-content-colorbox">
+           <form class="form-search" name="searchform" id="searchform">
+               <div class="mainpage-content-searchbart" style="width: 50%; float:right;">
+                   <div class="mainpage-content-right-searchbar">
+                       <button id="searchByReidrect" type="button" class="btn btn-primary">
+                           <?php echo $this->translate('Search'); ?>
+                       </button>
+                   </div>
+                   <div class="mainpage-content-right-inner-left-searchbar">
+                       <input type='hidden' id="searchReidrect" name="searchReidrect" style="width:99%;"/>
+                   </div>
+               </div>
+           </form>
+       </div>
+
          <table class="table table-bordered table-striped" id="RedirectListTbl" cellpadding="0" cellspacing="0">
           <thead>
               <tr>
