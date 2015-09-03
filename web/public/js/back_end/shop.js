@@ -208,6 +208,14 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir, extraParameters) {
                         },
                         {
                             "fnRender" : function(obj) {
+                                var tag = "<a href='javascript:void(0);'>" + obj.aData.id + "</a>";
+                                return tag;
+                            },
+                            "bSearchable" : true,
+                            "bSortable" : true
+                        },
+                        {
+                            "fnRender" : function(obj) {
                                 var tag = '';
                                 if(obj.aData.affliatenetwork==null || obj.aData.affliatenetwork.name=='' || obj.aData.affliatenetwork.name==undefined){
                                     tag = '';
