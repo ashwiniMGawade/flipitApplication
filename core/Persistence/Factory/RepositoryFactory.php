@@ -50,6 +50,6 @@ class RepositoryFactory
 
     public static function offer()
     {
-        return new OfferRepository((new DoctrineManager)->getLocaleEntityManager());
+        return new OfferRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 }
