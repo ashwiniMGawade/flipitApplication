@@ -45,7 +45,7 @@ class RepositoryFactory
 
     public static function widget()
     {
-        return new WidgetRepository((new DoctrineManager)->getLocaleEntityManager());
+        return new WidgetRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 
     public static function offer()
