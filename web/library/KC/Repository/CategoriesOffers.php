@@ -235,6 +235,7 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
             $categoryOffer->position = $i;
             $categoryOffer->deleted = 0;
             $categoryOffer->created_at = new \DateTime('now');
+            $categoryOffer->created_at = new \DateTime('now');
             $categoryOffer->updated_at = new \DateTime('now');
             $entityManagerLocale->persist($categoryOffer);
             $entityManagerLocale->flush();
@@ -269,10 +270,15 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
 
     public static function clearCacheOfCategoryOffers($id)
     {
+        $entityManagerLocale  = \Zend_Registry::get('emLocale');
+        $category = $entityManagerLocale->find('\Core\Domain\Entity\Category', $id);
+        $categoryPageCacheKey = str_replace('-', '', $category->permaLink);
         $key = 'home_category'.$id.'_offers';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesHome_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categories_count');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categories_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryPageCacheKey.'_data');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryPageCacheKey.'_voucherCodes');
     }
 }
