@@ -65,16 +65,16 @@ class FrontEnd_Helper_ClickoutFunctions
             if (!empty($network['affliatenetwork']['subId'])) {
                 $networkInformation = self::getExplodedSubidWithPattern($network['affliatenetwork']['subId']);
                 $gaCookie = isset($_COOKIE['_ga']) ? $_COOKIE['_ga'] : 'notAvailable';
-                $subid = str_replace('A2ASUBID', $conversionId, $networkInformation['subid']);
-                $subid = str_replace('GOOGLEANALYTICSTRACKINCID', $gaCookie, $subid);
-                $networkInfo['subid'] = $subid;
+                $subId = str_replace('A2ASUBID', $conversionId, $networkInformation['subid']);
+                $subId = str_replace('GOOGLEANALYTICSTRACKINCID', $gaCookie, $subId);
+                $networkInfo['subid'] = $subId;
                 $networkInfo['subidStringPattern'] = $networkInformation['stringPattern'];
             } elseif (!empty($network['affliatenetwork']['extendedSubid'])) {
                 $networkInformation = self::getExplodedSubidWithPattern($network['affliatenetwork']['extendedSubid']);
                 $gaCookie = isset($_COOKIE['_ga']) ? $_COOKIE['_ga'] : 'notAvailable';
-                $subid = str_replace('A2ASUBID', $conversionId, $networkInformation['subid']);
-                $subid = str_replace('GOOGLEANALYTICSTRACKINCID', $gaCookie, $subid);
-                $networkInfo['extendedSubId'] = $subid;
+                $extendedSubId = str_replace('A2ASUBID', $conversionId, $networkInformation['subid']);
+                $extendedSubId = str_replace('GOOGLEANALYTICSTRACKINCID', $gaCookie, $extendedSubId);
+                $networkInfo['extendedSubId'] = $extendedSubId;
                 $networkInfo['extendedSubIdStringPattern'] = $networkInformation['stringPattern'];
             }
         }
