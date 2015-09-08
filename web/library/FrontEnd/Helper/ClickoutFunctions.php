@@ -31,7 +31,7 @@ class FrontEnd_Helper_ClickoutFunctions
         $this->network = \KC\Repository\Shop::getAffliateNetworkDetail($shopId);
         $this->shopId = $shopId;
     }
-    
+
     public function checkIfShopHasAffliateNetwork()
     {
         if (!isset($this->network['affliatenetwork'])) {
@@ -52,8 +52,7 @@ class FrontEnd_Helper_ClickoutFunctions
             $this->shopSubRefUrl,
             $this->shopActualUrl,
             $this->shopPermalink,
-            $networkInfo['subid'],
-            $networkInfo['stringPattern']
+            $networkInfo
         );
         return $clickoutUrl;
     }
@@ -61,26 +60,24 @@ class FrontEnd_Helper_ClickoutFunctions
     // If the affliate network subid contains a regex pattern, then the subid will be splitted by the pipe and regex string pattern will be extracted from the subid.
     public static function getSubidWithStringPattern($network, $shopInfo, $clickoutType, $conversionId)
     {
-        $subid = "" ;
-        $stringPattern = "";
-
+        $networkInfo = array();
         if (isset($network['affliatenetwork'])) {
             if (!empty($network['affliatenetwork']['subId'])) {
                 $networkInformation = self::getExplodedSubidWithPattern($network['affliatenetwork']['subId']);
+                $gaCookie = isset($_COOKIE['_ga']) ? $_COOKIE['_ga'] : 'notAvailable';
+                $subid = str_replace('A2ASUBID', $conversionId, $networkInformation['subid']);
+                $subid = str_replace('GOOGLEANALYTICSTRACKINCID', $gaCookie, $subid);
+                $networkInfo['subid'] = $subid;
+                $networkInfo['subidStringPattern'] = $networkInformation['stringPattern'];
             } elseif (!empty($network['affliatenetwork']['extendedSubid'])) {
                 $networkInformation = self::getExplodedSubidWithPattern($network['affliatenetwork']['extendedSubid']);
+                $gaCookie = isset($_COOKIE['_ga']) ? $_COOKIE['_ga'] : 'notAvailable';
+                $subid = str_replace('A2ASUBID', $conversionId, $networkInformation['subid']);
+                $subid = str_replace('GOOGLEANALYTICSTRACKINCID', $gaCookie, $subid);
+                $networkInfo['extendedSubId'] = $subid;
+                $networkInfo['extendedSubIdStringPattern'] = $networkInformation['stringPattern'];
             }
-
-            $stringPattern = $networkInformation['stringPattern'];
-            $gaCookie = isset($_COOKIE['_ga']) ? $_COOKIE['_ga'] : 'notAvailable';
-            $subid = str_replace('A2ASUBID', $conversionId, $networkInformation['subid']);
-            $subid = str_replace('GOOGLEANALYTICSTRACKINCID', $gaCookie, $subid);
         }
-
-        $networkInfo = array(
-            "subid" => $subid,
-            "stringPattern" => $stringPattern
-        );
         return $networkInfo;
     }
 
@@ -109,14 +106,13 @@ class FrontEnd_Helper_ClickoutFunctions
         $shopSubRefUrl,
         $shopActualUrl,
         $shopPermalink,
-        $subid,
-        $stringPattern
+        $networkInfo
     ) {
-        if (isset($shopRefUrl) && $shopRefUrl!=null) {
-            $clickoutUrl = self::replaceSubidByStringPattern($shopRefUrl, $subid, $stringPattern);
-        } else if (isset($shopSubRefUrl) && $shopSubRefUrl!=null) {
-            $clickoutUrl = self::replaceSubidByStringPattern($shopSubRefUrl, $subid, $stringPattern);
-        } else if (isset($shopActualUrl) && $shopActualUrl!=null) {
+        if (!empty($shopRefUrl)) {
+            $clickoutUrl = self::replaceSubidByStringPattern($shopRefUrl, $networkInfo);
+        } else if (!empty($shopSubRefUrl)) {
+            $clickoutUrl = self::replaceSubidByStringPattern($shopSubRefUrl, $networkInfo);
+        } else if (!empty($shopActualUrl)) {
             $clickoutUrl = $shopActualUrl;
         } else {
             $clickoutUrl = HTTP_PATH_LOCALE.$shopPermalink;
@@ -124,16 +120,29 @@ class FrontEnd_Helper_ClickoutFunctions
         return $clickoutUrl;
     }
 
-    public static function replaceSubidByStringPattern($refUrl, $subid, $stringPattern)
+    public static function replaceSubidByStringPattern($refUrl, $networkInfo)
     {
-        if (isset($stringPattern) && $stringPattern != "") {
-            $clickoutUrl = preg_replace("/".$stringPattern."/", $subid, $refUrl);
+        if ((isset($networkInfo['subidStringPattern']) && $networkInfo['subidStringPattern']) || (isset($networkInfo['extendedSubIdStringPattern']) && $networkInfo['extendedSubIdStringPattern'])) {
+            $count = 0;
+
+            if (isset($networkInfo['subid']) && isset($networkInfo['subidStringPattern'])) {
+                $clickoutUrl = preg_replace("/" . $networkInfo['subidStringPattern'] . "/", $networkInfo['subid'], $refUrl, -1, $count);
+            }
+
+            if(!$count && isset($networkInfo['extendedSubId']) && isset($networkInfo['extendedSubIdStringPattern'])) {
+                $clickoutUrl = preg_replace("/".$networkInfo['extendedSubIdStringPattern']."/", $networkInfo['extendedSubId'], $refUrl);
+            }
+
             if ($clickoutUrl === null) {
                 $clickoutUrl = $refUrl;
             }
         } else {
             $clickoutUrl = $refUrl;
-            $clickoutUrl .= $subid;
+            if(isset($networkInfo['subid'])) {
+                $clickoutUrl .= $networkInfo['subid'];
+            }elseif(isset($networkInfo['extendedSubId'])) {
+                $clickoutUrl .= $networkInfo['extendedSubId'];
+            }
         }
         return $clickoutUrl;
     }
