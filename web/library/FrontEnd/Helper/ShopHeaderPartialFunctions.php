@@ -3,17 +3,21 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
 {
     public function getShopHeader($shop, $expiredMessage, $offerTitle)
     {
+        $affliateBounceRate = '';
         $bounceRate = "/out/shop/".$shop['id'];
         $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
         $shopUrl = $domainName.'out/shop/'.$shop['id'];
         $affliateProgramUrl = $shop['affliateProgram'] =='' ? $shop['actualUrl'] : $shop['affliateProgram'];
+        if('se' == LOCALE) {
+            $affliateBounceRate .= "gtmDataBuilder('retailerClickout', 'Retailer', 'Retailer Logo', 'Retailer', ".$shop['id'].");";
+        }
         if ($shop['affliateProgram']) :
-            $affliateBounceRate = "ga('send', 'event', 'aff','$bounceRate');";
+            $affliateBounceRate .= "ga('send', 'event', 'aff','$bounceRate');";
             $affliateUrl = $shopUrl;
             $affliateDisabled = '';
             $affliateClass = '';
         else:
-            $affliateBounceRate = '';
+            $affliateBounceRate .= '';
             $affliateUrl = '#';
             $affliateDisabled = 'disabled="disabled"';
             $affliateClass = 'btn-disabled';
