@@ -276,7 +276,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         $offerAnchorTagContent,
         $class,
         $offerImage,
-        $linkType
+        $clickedElement
     ) {
         $headOpen = '';
         $headClose = '';
@@ -301,7 +301,7 @@ class FrontEnd_Helper_OffersPartialFunctions
             $onClick = '';
             if ($currentOffer->discountType == "CD") {
                 if('se' == LOCALE) {
-                    $onClick .= "gtmDataBuilder('voucherClickout', 'Code', '".$linkType."', 'Offer', ".$currentOffer->id.");";
+                    $onClick .= "gtmDataBuilder('voucherClickout', 'Code', '".$clickedElement."', 'Offer', ".$currentOffer->id.");";
                 }
                 $onClick .= $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
                 $onClick .= "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')";
@@ -326,7 +326,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
                 }
                 if('se' == LOCALE) {
-                    $onClick .= "gtmDataBuilder('voucherClickout', 'Deal', '".$linkType."', 'Offer', ".$currentOffer->id.");";
+                    $onClick .= "gtmDataBuilder('voucherClickout', 'Deal', '".$clickedElement."', 'Offer', ".$currentOffer->id.");";
                 }
                 $onClick .= "ga('send', 'event', 'aff', '$offerBounceRate')";
                 $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
@@ -356,7 +356,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         $offerAnchorTagContent,
         $class,
         $offerImage = '',
-        $linkType
+        $clickedElement
     ) {
         
         $popupLink = self::getPopupLink($currentOffer, $urlToShow);
@@ -368,7 +368,7 @@ class FrontEnd_Helper_OffersPartialFunctions
             $offerAnchorTagContent,
             $class,
             $offerImage,
-            $linkType
+            $clickedElement
         );
         return $mainOfferLink;
     }
