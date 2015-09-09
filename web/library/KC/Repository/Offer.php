@@ -28,7 +28,10 @@ class Offer extends \Core\Domain\Entity\Offer
         $offerViewCount = self::getViewCountByCondition($offerViewCount, $offerId, $past31Days, $currentDate, 'month');
         if (intval($offerViewCount['viewCount']) < 5) {
             $offerViewCount = '';
+        } elseif (intval($offerViewCount['viewCount']) > 1000) {
+            $offerViewCount['viewCount'] = '1000+';
         }
+
         return $offerViewCount;
     }
 
