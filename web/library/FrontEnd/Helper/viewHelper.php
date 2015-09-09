@@ -1149,11 +1149,19 @@ EOD;
     public static function getOfferPopupLink($offer)
     {
         $offer = (object) $offer;
+        $onClick = '';
+        if('se' == LOCALE) {
+            if($offer->discountType == 'CD') {
+                $onClick .= "gtmDataBuilder('voucherClickout', 'Code', 'List', 'Offer', " . $offer->id . ");";
+            } else if($offer->discountType == 'SL') {
+                $onClick .= "gtmDataBuilder('voucherClickout', 'Deal', 'List', 'Offer', " . $offer->id . ");";
+            }
+        }
         $offerBounceRate = "/out/offer/".$offer->id;
         $offerPartial = new \FrontEnd_Helper_OffersPartialFunctions();
         $urlToShow = $offerPartial->getUrlToShow($offer);
         $popupLink = $offerPartial->getPopupLink($offer, $urlToShow);
-        $onClick = "ga('send', 'event', 'aff', '$offerBounceRate'),
+        $onClick .= "ga('send', 'event', 'aff', '$offerBounceRate'),
                 OpenInNewTab('".HTTP_PATH_LOCALE.$offer->shopOffers['permaLink'].$popupLink."')";
         $offerShopPermalinkAnchor = '<a  id="'.$offer->id.'"
                 href="'.$urlToShow.'" vote="0" rel="nofollow" 
