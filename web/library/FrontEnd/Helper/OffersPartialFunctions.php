@@ -275,7 +275,8 @@ class FrontEnd_Helper_OffersPartialFunctions
         $popupLink,
         $offerAnchorTagContent,
         $class,
-        $offerImage
+        $offerImage,
+        $clickedElement
     ) {
         $headOpen = '';
         $headClose = '';
@@ -297,8 +298,12 @@ class FrontEnd_Helper_OffersPartialFunctions
                 '<span class="'.$class.'">
             '.$offerAnchorText.' </span>';
         } else {
+            $onClick = '';
             if ($currentOffer->discountType == "CD") {
-                $onClick = $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
+                if('se' == LOCALE) {
+                    $onClick .= "gtmDataBuilder('voucherClickout', 'Code', '".$clickedElement."', 'Offer', ".$currentOffer->id.");";
+                }
+                $onClick .= $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
                 $onClick .= "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')";
                 if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
                     $offerLink ='<span class="'.$class.'">'.$offerAnchorText.' </span>';
@@ -320,7 +325,10 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
                     $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
                 }
-                $onClick = "ga('send', 'event', 'aff', '$offerBounceRate')";
+                if('se' == LOCALE) {
+                    $onClick .= "gtmDataBuilder('voucherClickout', 'Deal', '".$clickedElement."', 'Offer', ".$currentOffer->id.");";
+                }
+                $onClick .= "ga('send', 'event', 'aff', '$offerBounceRate')";
                 $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
                 $offerLink =
                     '<a id="'.$currentOffer->id.'" class="'.$class.' '.$imageClass.'" 
@@ -347,7 +355,8 @@ class FrontEnd_Helper_OffersPartialFunctions
         $offerBounceRate,
         $offerAnchorTagContent,
         $class,
-        $offerImage = ''
+        $offerImage = '',
+        $clickedElement
     ) {
         
         $popupLink = self::getPopupLink($currentOffer, $urlToShow);
@@ -358,7 +367,8 @@ class FrontEnd_Helper_OffersPartialFunctions
             $popupLink,
             $offerAnchorTagContent,
             $class,
-            $offerImage
+            $offerImage,
+            $clickedElement
         );
         return $mainOfferLink;
     }
@@ -379,7 +389,9 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $urlToShow,
                     $offerBounceRate,
                     FrontEnd_Helper_viewHelper::__translate('See the code'),
-                    "offer-teaser-button kccode"
+                    "offer-teaser-button kccode",
+                    '',
+                    'Button'
                 );
                 break;
             case 'offerTitle':
@@ -388,7 +400,9 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $urlToShow,
                     $offerBounceRate,
                     $offerAnchorTagContent,
-                    "link clickout-title"
+                    "link clickout-title",
+                    '',
+                    'Title'
                 );
                 break;
             case 'offerImage':
@@ -398,7 +412,8 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $offerBounceRate,
                     self::getOfferImage($currentOffer, $offerAnchorTagContent, $expired),
                     self::getCssClassNameForOffer($currentOffer, $offerAnchorTagContent),
-                    'offerImage'
+                    'offerImage',
+                    'Caption'
                 );
                 break;
             default:
