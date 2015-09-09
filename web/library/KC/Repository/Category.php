@@ -32,7 +32,7 @@ class Category extends \Core\Domain\Entity\Category
     public static function getCategoryVoucherCodes($categoryId, $numberOfOffers = 0, $pageName = '', $offerIds = '')
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $currentDateAndTime = date('Y-m-d 00:00:00');
+        $currentDateAndTime = date('Y-m-d H:i:s');
         $query = $queryBuilder
         ->select("roc, c, o, s, terms, l")
         ->from("\Core\Domain\Entity\RefOfferCategory", "roc")
@@ -55,7 +55,7 @@ class Category extends \Core\Domain\Entity\Category
         ->andWhere("o.deleted = 0")
         ->andWhere("o.userGenerated = 0")
         ->andWhere('o.endDate > '. $queryBuilder->expr()->literal($currentDateAndTime))
-        ->andWhere('o.startDate < '. $queryBuilder->expr()->literal($currentDateAndTime))
+        ->andWhere('o.startDate <= '. $queryBuilder->expr()->literal($currentDateAndTime))
         ->andWhere('o.discountType='. $queryBuilder->expr()->literal('CD'))
         ->andWhere('o.Visability!='. $queryBuilder->expr()->literal('MEM'))
         ->orderBy('o.exclusiveCode', 'DESC')

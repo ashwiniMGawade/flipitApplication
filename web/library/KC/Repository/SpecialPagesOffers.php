@@ -291,6 +291,7 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
                         'cron'
                     );
                 }
+                self::clearCacheOfSpecialPagesOffers($specialListPage[0]['page']['id']);
             }
         }
         return true;
