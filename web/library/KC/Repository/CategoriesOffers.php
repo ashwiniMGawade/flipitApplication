@@ -235,7 +235,6 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
             $categoryOffer->position = $i;
             $categoryOffer->deleted = 0;
             $categoryOffer->created_at = new \DateTime('now');
-            $categoryOffer->created_at = new \DateTime('now');
             $categoryOffer->updated_at = new \DateTime('now');
             $entityManagerLocale->persist($categoryOffer);
             $entityManagerLocale->flush();
