@@ -143,6 +143,20 @@ $howToIntroductionText = '';
                        </div>   
                   </div>
                 </div>
+
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Rating'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <select class="mainpage-content-right-select" id="selectClassification" name="shopClassification">
+                                <?php foreach($this->shopClassifications as $classificationId => $classificationLabel) : ?>
+                                    <option value="<?php echo $classificationId;?>"><?php echo ucfirst($classificationLabel);?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <div class="mainpage-content position-r">

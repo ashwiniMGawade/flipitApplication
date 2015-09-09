@@ -5,11 +5,11 @@ use \Core\Domain\Service\Validator;
 use \Core\Domain\Service\KeyGenerator;
 use \Core\Domain\Service\Purifier;
 
-use \Core\Domain\Usecase\Admin\GetApiKeyListingUsecase;
+use \Core\Domain\Usecase\Admin\GetApiKeysUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\DeleteApiKeyUsecase;
-use \Core\Domain\Usecase\Admin\GetVisitorListingUsecase;
+use \Core\Domain\Usecase\Admin\GetVisitorsUsecase;
 use \Core\Domain\Usecase\Admin\GetShopUsecase;
 use \Core\Domain\Usecase\Admin\CreateShopUsecase;
 use \Core\Domain\Usecase\Admin\AddShopUsecase;
@@ -34,7 +34,7 @@ class AdminFactory
 {
     public static function getApiKeys()
     {
-        return new GetApiKeyListingUsecase(RepositoryFactory::apiKeys());
+        return new GetApiKeysUsecase(RepositoryFactory::apiKeys(), new Purifier(), new Errors());
     }
 
     public static function createApiKey()
@@ -59,7 +59,7 @@ class AdminFactory
 
     public static function getVisitors()
     {
-        return new GetVisitorListingUsecase(RepositoryFactory::visitor());
+        return new GetVisitorsUsecase(RepositoryFactory::visitor());
     }
 
     public static function updateVisitors()

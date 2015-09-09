@@ -31,7 +31,7 @@ foreach ($this->offers as $offer) {
          $couponCode = '';
     }
     $dayleftCss = '';
-    if (intval($daysTillOfferExpires) <= 1 || $expiredOffer != '') {
+    if (intval($daysTillOfferExpires) <= 3 || $expiredOffer != '') {
         $dayleftCss = 'deal-less';
     }
     $defaultText = '';

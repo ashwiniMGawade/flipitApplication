@@ -202,27 +202,16 @@ function init(){
 				
 			}
 		
-		if( jQuery("input[name=printableCheckbox]").is(":checked") && jQuery("input[name=uploadoffercheck]").is(":checked") )
-		{
-			
-			
-			if ( jQuery("input[name=uploadoffer]").val().length == 0 && jQuery('img#uplodedOffer').length==0 )
-			{
+		if(jQuery("input[name=printableCheckbox]").is(":checked") && jQuery("input[name=uploadoffercheck]").is(":checked") && !jQuery('#printableOfferFileName').val()) {
+			if (!jQuery('input[name=uploadoffer]').val()) {
 					jQuery("div.uploadOfferMessage").removeClass("focus")
 					 .html(__("<span class='error help-inline'>Please upload jpg or pdf file</span>"));
-				
-				
 					errorExists['uploadoffer'] = false ;
-
 			} else {
-				
 				errorExists['uploadoffer'] =  true ;
 			}
 		} else {
-			
-			jQuery("div.uploadOfferMessage").removeClass("focus")
-			 .html("");
-			 
+			jQuery("div.uploadOfferMessage").removeClass("focus").html("");
 		}
 		if(jQuery('#news').hasClass('btn-primary') == false){
 			validateStartEndTimestamp(); 
@@ -426,6 +415,8 @@ function getOfferDetail(){
 
 
 function setFormData(data){
+    var shopClassifications = { 1:'A', 2:'A+', 3:'AA', 4:'AA+', 5:'AAA'};
+    jQuery('span#shopRating span').html(shopClassifications[data[0].shopClassification]);
 	jQuery('span#newsDiv').append('<div class="mainpage-content-right-inner-left"><label><strong>' +__("Title") +'</strong></label></div><div class="mainpage-content-right-inner-right-other"></div><div class="mainpage-content-right-inner-right-full"><input type="text" name="newsTitle[]" value="" placeholder="' +__('News title') +'" class="span3"></div><div class="mainpage-content-right-inner-left"><label><strong>'+__("Ref URL")+'</strong></label></div><div class="mainpage-content-right-inner-right-other"></div><div class="mainpage-content-right-inner-right-full"><input type="text" name="newsrefUrl[]" value="" id="newsrefUrl" disabled="disabled" placeholder="' +__('Ref.Url') +'" class="span3 ignore" style="width:330px !important;">&nbsp;&nbsp;&nbsp;'+__("Deeplinking is") +' <button class="btn" id="newsdeepLinkOnbtn" name="newsdeepLinkOnbtn" type="button" style="border-radius: 4px 0 0 4px;" onclick="newschangelinkStatus(this)">'+__("On") +'</button><button id="newsdeepLinkoofbtn" name="newsdeepLinkoofbtn" style="border-radius: 0 4px 4px 0;" onclick="newschangelinkStatus(this)" class="btn mr10 btn-primary"  type="button">'+__("Off") +'</button><input type="checkbox" style="display:none;" id="newsdeepLinkStatus" value="1" name="newsdeepLinkStatus[]"></div><div class="mainpage-content-right-inner-left"><label><strong>'+__("Description") +'</strong></label></div><div class="mainpage-content-right-inner-right-other"></div><div class="mainpage-content-right-inner-right-full"><textarea rows="4" cols="3" name="newsDescription[]" id="newsDescription"></textarea></div>');
 	// populate offer type data based based on offer type
 	if(data[0].Visability == 'MEM'){
@@ -615,14 +606,14 @@ function setFormData(data){
 		
 	 }
 	
-	else if(data[0].discountType=='PA'){
+	else if(data[0].discountType=='PA') {
 		jQuery("#printable").click();
 		if(data[0].refOfferUrl){
-		  jQuery("#userefurlOption").click();
-		  jQuery('#offerrefurlPR').val(data[0].refOfferUrl);
-			
-		}else{
+              jQuery("#userefurlOption").click();
+              jQuery('#offerrefurlPR').val(data[0].refOfferUrl);
+		} else {
 		    if(data[0].imageName){
+                jQuery('#printableOfferFileName').val(data[0].imageName);
                 if (data[0].imageType !== 'pdf') {
                     var image = data[0].path+"/thum_"+data[0].imageName;
                     var imgSrc = PUBLIC_PATH_LOCALE + image;
@@ -633,14 +624,10 @@ function setFormData(data){
                     var imgSrc = PUBLIC_PATH_LOCALE + image;
                     jQuery('span#offerLogoId').append('<p><a href="'+imgSrc+'" target="_blank">'+data[0].imageName+'</a></p>');
                 }
-	        //jQuery('#uplodedOffer').show().attr('src', imgSrc);
-			jQuery("#uploadOfferOption").click();
-		  }
-	   }
-		
-		
-		
-	 }
+                jQuery("#uploadOfferOption").click();
+		    }
+	    }
+    }
 	else if(data[0].discountType=='NW'){
 		jQuery("#visibiliyDiv").hide();
 	    jQuery("#offertitledetail").hide();

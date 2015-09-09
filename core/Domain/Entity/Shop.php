@@ -497,6 +497,16 @@ class Shop
      * @ORM\Column(type="boolean", nullable=true)
      */
     protected $futurecode;
+
+    /**
+     * @ORM\Column(type="integer", length=1, nullable=true)
+     */
+    protected $classification = 1;
+
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=true)
+     */
+    protected $offerCount = 0;
  
     public function __get($property)
     {
@@ -1986,5 +1996,37 @@ class Shop
     public function setVisitors($visitors)
     {
         $this->visitors = $visitors;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getClassification()
+    {
+        return $this->classification;
+    }
+
+    /**
+     * @param mixed $classification
+     */
+    public function setClassification($classification)
+    {
+        $this->classification = $classification;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOfferCount()
+    {
+        return $this->offerCount;
+    }
+
+    /**
+     * @param mixed $offerCount
+     */
+    public function setOfferCount($offerCount)
+    {
+        $this->offerCount = $offerCount;
     }
 }

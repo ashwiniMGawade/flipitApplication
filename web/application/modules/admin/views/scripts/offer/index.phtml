@@ -6,84 +6,115 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/offer.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
-$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
-$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/select2.css" );
-$role =  Zend_Auth::getInstance()->getIdentity()->users->id;
-
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/select2.css");
+$role = Zend_Auth::getInstance()->getIdentity()->users->id;
 
 ?>
 
-     <?php echo $this->headTitle()->append('Offers List');?>
-      <!-- offerList starts -->
-       <div id="offerList">
-        <div class="wrap columns-2">
+<?php echo $this->headTitle()->append('Offers List'); ?>
+<!-- offerList starts -->
+<div id="offerList">
+    <div class="wrap columns-2">
 
-        <div class='wrap columns-2'>
-		<?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
-		<br><div class ="mainpage-content-colorbox success">
-		<?php if($this->messageSuccess!=''){?>
-		<span class="successserver"><?php echo $this->messageSuccess; ?></span>
-		<?php }?>
-		<?php if($this->messageError!=''){?>
-		<span class="errorserver"><?php echo $this->messageError; ?></span>
-		<?php } ?>
-		</div>
-		<?php
-		}?>
-		</div>
-          <h1 class="fl">Offers
-          <button onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/offer/addoffer'" class="btn ml10"><?php echo $this->translate('Add New Offer')?></button></h1>
+        <?php echo $this->flashMessages(); ?>
+        <h1 class="fl">Offers
+            <button onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/offer/addoffer'"
+                    class="btn ml10"><?php echo $this->translate('Add New Offer') ?></button>
+        </h1>
         <?php
-          if($role=='1' || $role=='2')
-			{
-		?>
-          <a href="<?php echo HTTP_PATH ?>admin/offer/trash" class="red trash-link"><strong><?php echo $this->translate('Trash');?></strong></a>
-		<?php } ?>
-          	<div class="clear"></div>
-          	<p class="text-right"><a href="<?php echo HTTP_PATH ?>admin/offer/importoffers"><?php echo $this->translate('Import List'); ?></a> / <a href='<?php echo HTTP_PATH ?>admin/offer/export-xlx'><?php echo $this->translate('Export List')?></a></p>
-            <div class="mainpage-content-colorbox">
-                <form class="form-search" id="searchform">
-                	<div class="resetSearch fl">
-                        <input type='hidden' id="searchOffer" name="searchOffer" style="width:300px;"/>
-					        </div>
-                    <div class="fl ml15">
-                        <select id='couponType' name='couponType'>
-                        	<option value=''>All</option>
-                            <option value='CD'>Coupon</option>
-                            <option value='SL'>Sale</option>
-                            <option value='PA'>Printable</option>
-                            <option value='EX'>Extended</option>
-                        </select>
+        if ($role == '1' || $role == '2') {
+            ?>
+            <a href="<?php echo HTTP_PATH ?>admin/offer/trash"
+               class="red trash-link"><strong><?php echo $this->translate('Trash'); ?></strong></a>
+        <?php } ?>
+        <div class="clear"></div>
+        <p class="text-right"><a
+                href="<?php echo HTTP_PATH ?>admin/offer/importoffers"><?php echo $this->translate('Import List'); ?></a>
+            / <a href='<?php echo HTTP_PATH ?>admin/offer/export-xlx'><?php echo $this->translate('Export List') ?></a>
+        </p>
+
+        <div class="mainpage-content-colorbox" style="height: 100px;"">
+            <form class="form-search" id="searchform">
+                <div class="resetSearch fl">
+                    <input type='hidden' id="searchOffer" name="searchOffer" style="width:300px;"/>
+                </div>
+                <div class="fl ml15">
+                    <select id='shopRating' name='shopRating' class="select2">
+                        <option value=''>All Shop Ratings</option>
+                        <option value='1'>A</option>
+                        <option value='2'>A+</option>
+                        <option value='3'>AA</option>
+                        <option value='4'>AA+</option>
+                        <option value='5'>AAA</option>
+                    </select>
+                </div>
+                <div class="mainpage-content-searchbart">
+
+                    <div class="resetSearch mainpage-content-right-inner-left-searchbar-other">
+                        <input type="hidden" class="span3" id="searchShop" name="searchShop"
+                               style="width:35%;float:left;">
                     </div>
-                    <div class="mainpage-content-searchbart">
-                        <div class="mainpage-content-right-searchbar-offer">
-                        <button type='button' onClick='searchByShop();' id='searchShopeButton' value='searchShopeButton' class="btn btn-primary"><?php echo $this->translate('Search');?></button></div>
-                        <div class="resetSearch mainpage-content-right-inner-left-searchbar-other">
-                        	<input type="hidden" class="span3" id="searchShop" name="searchShop" style="width:35%;float:left;">
-                        </div>
-                        <div class="resetSearch mainpage-content-right-inner-left-searchbar-other">
-                          <input type="hidden" class="span3" id="searchCoupon" name="searchCoupon" style="width:35%;float:left;">
-                        </div>
+                    <div class="resetSearch mainpage-content-right-inner-left-searchbar-other">
+                        <input type="hidden" class="span3" id="searchCoupon" name="searchCoupon"
+                               style="width:35%;float:left;">
                     </div>
-                </form>
-            </div>
-            <table class="table table-bordered table-striped" id="offerListTable">
-                <thead>
-                  <tr>
-                  	<?php /*?><th><?php echo $this->translate('Id'); ?></th><?php  */?>
-                    <th><?php echo $this->translate('Title');?></th>
-                    <th><?php echo $this->translate('Shop');?></th>
-                    <th><?php echo $this->translate('Type');?></th>
-                    <th><?php echo $this->translate('Deeplinking');?></th>
-                    <th><?php echo $this->translate('Coupon Code');?></th>
-                    <th><?php echo $this->translate('Start');?></th>
-                    <th><?php echo $this->translate('End');?></th>
-                    <th><?php echo $this->translate('Clickouts');?></th>
-                    <th><?php echo $this->translate('Author');?></th>
-                    <th><?php echo $this->translate('Delete');?></th>
-                  </tr>
-                </thead>
-             </table>
-       </div>
-       <!-- offerList ends -->
-	</div>
+                </div>
+                <div class="clear"></div>
+                <br>
+                <div class="fl ">
+                    <select id='couponType' name='couponType' class="select2">
+                        <option value=''>All Coupon Types</option>
+                        <option value='CD'>Coupon</option>
+                        <option value='SL'>Sale</option>
+                        <option value='PA'>Printable</option>
+                        <option value='EX'>Extended</option>
+                    </select>
+                </div>
+                <div class="fl ml15">
+                    <select id='offerExpired' name='offerExpired' class="select2">
+                        <option value=''>Expired/Not Expired</option>
+                        <option value='1'>Expired</option>
+                        <option value='2'>Not Expired</option>
+                        <option value='3'>Almost Expired</option>
+                    </select>
+                </div>
+                <div class="fl ml15">
+                    <select id='offerStatus' name='offerStatus' class="select2">
+                        <option value=''>Published/Unpublished</option>
+                        <option value='1'>Published</option>
+                        <option value='2'>Unpublished</option>
+                    </select>
+                </div>
+
+
+
+                <div class="mainpage-content-searchbart mt10">
+
+                    <div class="mainpage-content-right-searchbar-offer">
+                        <button type='button' onClick='searchByShop();' id='searchShopeButton' value='searchShopeButton'
+                                class="btn btn-primary"><?php echo $this->translate('Search'); ?></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <table class="table table-bordered table-striped" id="offerListTable">
+            <thead>
+            <tr>
+                <?php /*?><th><?php echo $this->translate('Id'); ?></th><?php  */ ?>
+                <th><?php echo $this->translate('Title'); ?></th>
+                <th><?php echo $this->translate('Shop'); ?></th>
+                <th><?php echo $this->translate('Type'); ?></th>
+                <th><?php echo $this->translate('Deeplinking'); ?></th>
+                <th><?php echo $this->translate('Coupon Code'); ?></th>
+                <th><?php echo $this->translate('Start'); ?></th>
+                <th><?php echo $this->translate('End'); ?></th>
+                <th><?php echo $this->translate('Clickouts'); ?></th>
+                <th><?php echo $this->translate('Author'); ?></th>
+                <th><?php echo $this->translate('Delete'); ?></th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+    <!-- offerList ends -->
+</div>

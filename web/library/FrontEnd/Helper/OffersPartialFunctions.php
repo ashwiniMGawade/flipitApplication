@@ -642,9 +642,10 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         $totalViewCount = '';
         if (!empty($viewCount) && intval($viewCount) > 20) {
+            $vewCountText = ($viewCount>1000) ? '1000+' : $viewCount;
             $totalViewCount = '<span class="used text-info">
                 <span class="text-over">'
-                .$viewCount
+                . $vewCountText
                 .' '
                 .FrontEnd_Helper_viewHelper::__translate('codes used')
                 .'</span>

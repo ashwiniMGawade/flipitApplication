@@ -48,11 +48,11 @@ function init(){
     });
     $('.select2-search-choice-close').click(function(){
         $('input#searchShop').val('');
-        getShops($(this).val(),0,1,'asc');
+        getShops($(this).val(), 0, 1, 'asc', '');
     });
     $("input#searchShop").keypress(function(e) {
         if (e.which == 13) {
-           getShops($(this).val(),0,1,'asc');
+           getShops($(this).val(), 0, 1, 'asc', '');
         }
     });
     // display shop list 
@@ -60,8 +60,8 @@ function init(){
     var iStart = $.bbq.getState( 'iStart' , true ) || 0;
     var iSortCol = $.bbq.getState( 'iSortCol' , true ) || 1;
     var iSortDir = $.bbq.getState( 'iSortDir' , true ) || 'ASC';
-    getShops(iSearchText,iStart,iSortCol,iSortDir) ;
-    
+    getShops(iSearchText, iStart, iSortCol, iSortDir, '');
+
     $('#searchByShop').click(searchByShop);
     
     $('form#searchform').submit(function() {
@@ -89,7 +89,7 @@ var hashValue = "";
 var click = false;
 
 
-function getShops(iSearchText,iStart,iSortCol,iSortDir) {
+function getShops(iSearchText,iStart,iSortCol,iSortDir, extraParameters) {
     //$('#shopListTable tr:gt(0)').remove();
     addOverLay();
     $("ul.ui-autocomplete").css('display','none');
@@ -100,7 +100,7 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
     $('#shopList').removeClass('display-none');
     
     var searchText = $('#searchShop').val()=='' ? undefined : $('#searchShop').val();
-    
+
     shopListTable = $("#shopListTable")
     .dataTable(
             {
@@ -118,7 +118,7 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
                 "bDeferRender": true,
                 "aaSorting": [[ iSortCol , iSortDir ]],
                 "sPaginationType" : "bootstrap",
-                "sAjaxSource" : HOST_PATH+"admin/shop/getshop/searchText/"+ escape(iSearchText) + '/flag/0',
+                "sAjaxSource" : HOST_PATH+"admin/shop/getshop/searchText/"+ escape(iSearchText) + '/flag/0'+extraParameters,
                 "aoColumns" : [
                         {
                             "fnRender" : function(obj) {
@@ -141,6 +141,13 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
                         },{
                             "fnRender" : function(obj) {
                                 var tag = "<a href='javascript:void(0);'>" + obj.aData.permaLink + "</a>";
+                                return tag;
+                             },
+                            "bSearchable" : true,
+                            "bSortable" : true
+                        },{
+                            "fnRender" : function(obj) {
+                                var tag = "<a href='javascript:void(0);'>" + obj.aData.classification + "</a>";
                                 return tag;
                              },
                             "bSearchable" : true,
@@ -201,6 +208,14 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
                         },
                         {
                             "fnRender" : function(obj) {
+                                var tag = "<a href='javascript:void(0);'>" + obj.aData.id + "</a>";
+                                return tag;
+                            },
+                            "bSearchable" : true,
+                            "bSortable" : true
+                        },
+                        {
+                            "fnRender" : function(obj) {
                                 var tag = '';
                                 if(obj.aData.affliatenetwork==null || obj.aData.affliatenetwork.name=='' || obj.aData.affliatenetwork.name==undefined){
                                     tag = '';
@@ -223,6 +238,14 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
                                 
                                 return  "<a href='javascript:void(0);'>"+"No"+"</a>";
                               
+                            },
+                            "bSearchable" : true,
+                            "bSortable" : true
+                        },
+                        {
+                            "fnRender" : function(obj) {
+                                var tag = "<a href='javascript:void(0);'>" + obj.aData.offerCount + "</a>";
+                                return tag;
                             },
                             "bSearchable" : true,
                             "bSortable" : true
@@ -458,14 +481,20 @@ function changeStatus(id,obj,status){
  * or press enter 
  * @author kraj
  */
-function searchByShop(){
-    
+function searchByShop()
+{
     var searchArt = $("#searchShop").val();
-    if(searchArt=='' || searchArt==null)  {
-        
-            searchArt = undefined;
-        }
-    getShops(searchArt,0,0,'asc');
+    if (searchArt == '' || searchArt == null) {
+        searchArt = undefined;
+    }
+    var extraParameters = '';
+    if ($('#affliatenetworkid').val()) {
+        extraParameters += '/affliatenetworkid/' + $('#affliatenetworkid').val();
+    }
+    if ($('#shop_status').val()) {
+        extraParameters += '/status/' + $('#shop_status').val();
+    }
+    getShops(searchArt, 0, 0, 'asc', extraParameters);
 }
 
 function showGlobalExportPopUp()

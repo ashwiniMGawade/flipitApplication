@@ -57,6 +57,7 @@ $secret = base64_encode($code);
             <button type="button" onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/offer'" 
             href="#" class="btn ml10"><?php echo $this->translate('Cancel'); ?>
             </button>
+            <span id="shopRating"><?php echo $this->translate('Shop Rating'); ?> : <span></span></span>
         </h1>
         <input type="hidden" name='offerImageSelect' id='offerImageSelect' value='' />
         <input type="hidden" id="saveAndAddnewId" name="saveAndAddnew" value="false" />

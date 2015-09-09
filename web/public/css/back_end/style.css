@@ -3528,3 +3528,10 @@ div#error-message {
 .wt-389 {
 	width: 389px;
 }
+#shopRating {
+    font-size: 60%;
+    margin-left: 20px;
+}
+#shopRating span {
+    color: darkorange;
+}

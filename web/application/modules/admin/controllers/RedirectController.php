@@ -1,18 +1,10 @@
 <?php
 class Admin_RedirectController extends Zend_Controller_Action
 {
-
-    /**
-     * check authentication before load the page
-     *
-     * @see Zend_Controller_Action::preDispatch()
-     * @author kraj
-     * @version 1.0
-     */
     public function preDispatch()
     {
-        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
-        $params = $this->_getAllParams();
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();
+        $params = $this->getAllParams();
         if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
@@ -28,88 +20,73 @@ class Admin_RedirectController extends Zend_Controller_Action
             $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate ( 'You have no permission to access page' );
             $flash->addMessage ( array ('error' => $message ));
-            $this->_redirect ( '/admin' );
+            $this->redirect ( '/admin' );
         }
     }
 
     public function init()
     {
-        /* a Initialize action controller here */
     }
 
     public function indexAction()
     {
-        $flash = $this->_helper->getHelper ( 'FlashMessenger' );
-        $message = $flash->getMessages ();
-        $this->view->messageSuccess = isset ( $message [0] ['success'] ) ? $message [0] ['success'] : '';
-        $this->view->messageError = isset ( $message [0] ['error'] ) ? $message [0] ['error'] : '';
     }
-    /**
-     * add new keyword
-     * @author kraj
-     * @version 1.0
-     */
+
     public function addredirectAction()
     {
-        $params = $this->_getAllParams();
-        if($this->getRequest ()->isPost ()){
+        $params = $this->getAllParams();
+        if ($this->getRequest()->isPost()) {
             $keyword = \KC\Repository\RouteRedirect::addRedirect($params);
-            $flash = $this->_helper->getHelper ( 'FlashMessenger' );
-            $message = $this->view->translate ( 'Redirect has been created successfully' );
-            $flash->addMessage ( array ('success' => $message ));
-            $this->_redirect ( HTTP_PATH . 'admin/redirect' );
+            $flash = $this->_helper->getHelper('FlashMessenger');
+            $message = $this->view->translate('Redirect has been created successfully');
+            $flash->addMessage(array('success' => $message));
+            $this->redirect(HTTP_PATH.'admin/redirect');
         }
-
     }
-
-    /**
-     * get all Redirect from database and display in a list
-     * @author kraj
-     * @version 1.0
-     */
 
     public function redirectlistAction()
     {
-         $params = $this->_getAllParams();
-        // cal to function in ExcludedKeyword model class
+         $params = $this->getAllParams();
          $keywordList =  KC\Repository\RouteRedirect::getRedirect($params);
          echo Zend_Json::encode($keywordList);
          die ;
     }
 
-    /**
-     * edit excluded keyword by id
-     *
-     * @author kraj
-     * @version 1.0
-     */
-   public function editredirectAction()
-   {
-        $id = $this->getRequest ()->getParam ('id');
+    public function searchAction()
+    {
+        $keyword = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('keyword'));
+        $redirects = \KC\Repository\RouteRedirect::searchRedirects($keyword);
+        $response = array();
+        if (!empty($redirects)) {
+            foreach ($redirects as $redirect) {
+                $response[] = array('id' => $redirect['id'], 'label' => $redirect['orignalurl']);
+            }
+        } else {
+            $response[] = array('id' => '', 'label' => $this->view->translate('No Record Found'));
+        }
+        echo Zend_Json::encode($response);
+        die;
+    }
+
+    public function editredirectAction()
+    {
+        $id = $this->getRequest()->getParam('id');
         $this->view->qstring = $_SERVER['QUERY_STRING'];
         if ($id>0) {
-        // get keyword to edit on id basis
             $searchbar = \KC\Repository\RouteRedirect::getRedirectForEdit($id);
             $this->view->editRedirect = $searchbar;
-
-         }
-        if ($this->getRequest ()->isPost ()) {
-            $params = $this->getRequest ()->getParams();
+        }
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getRequest()->getParams();
             // cal to update keyword function
             $searchbar = \KC\Repository\RouteRedirect::updateRedirect($params);
             $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate('Redirect has been updated successfully');
             $flash->addMessage(array('success' => $message));
-            $this->_redirect(HTTP_PATH.'admin/redirect#'.$params['qString']);
+            $this->redirect(HTTP_PATH.'admin/redirect#'.$params['qString']);
         }
     }
 
-    /**
-     * delete excluded keyword by id
-     *
-     * @version 1.0
-     * @author kraj
-     */
     public function deleteredirectAction()
     {
         $id = $this->getRequest()->getParam('id');
@@ -118,15 +95,8 @@ class Admin_RedirectController extends Zend_Controller_Action
         $message = $this->view->translate ('Redirect has been deleted successfully' );
         $flash->addMessage ( array ('success' => $message ) );
         die();
-
     }
 
-    /**
-     * export excluded keyword list
-     *
-     * @version 1.0
-     * @author kraj
-     */
     public function exportredirectlistAction()
     {
         ini_set('max_execution_time', 115200);
@@ -230,7 +200,7 @@ class Admin_RedirectController extends Zend_Controller_Action
                     $flash = $this->_helper->getHelper('FlashMessenger');
                     $message = $this->view->translate('Redirect has been updated successfully');
                     $flash->addMessage(array('success' => $message));
-                    $this->_redirect(HTTP_PATH . 'admin/redirect');
+                    $this->redirect(HTTP_PATH . 'admin/redirect');
                 } else {
                     die('aaaaa');
                     return false;

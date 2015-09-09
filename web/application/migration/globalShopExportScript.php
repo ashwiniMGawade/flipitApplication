@@ -99,7 +99,7 @@ class GlobalShopExport
         $objPHPExcel->getActiveSheet()->setCellValue('A3', $this->zendTranslation->translate('Shopname'));
         $objPHPExcel->getActiveSheet()->setCellValue('B3', $this->zendTranslation->translate('Navigation URL'));
         $objPHPExcel->getActiveSheet()->setCellValue('C3', $this->zendTranslation->translate('Money shop'));
-        $objPHPExcel->getActiveSheet()->setCellValue('D3', $this->zendTranslation->translate('Account manager'));
+        $objPHPExcel->getActiveSheet()->setCellValue('D3', $this->zendTranslation->translate('Classification'));
         $objPHPExcel->getActiveSheet()->setCellValue('E3', $this->zendTranslation->translate('Start'));
         $objPHPExcel->getActiveSheet()->setCellValue('F3', $this->zendTranslation->translate('Network'));
         $objPHPExcel->getActiveSheet()->setCellValue('G3', $this->zendTranslation->translate('Online'));
@@ -125,17 +125,18 @@ class GlobalShopExport
         );
         $objPHPExcel->getActiveSheet()->setCellValue('Y3', $this->zendTranslation->translate('Last week Clickouts'));
         $objPHPExcel->getActiveSheet()->setCellValue('Z3', $this->zendTranslation->translate('Total Clickouts'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AA3', $this->zendTranslation->translate('Amount of Coupons'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AB3', $this->zendTranslation->translate('Amount of Offers'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AC3', $this->zendTranslation->translate('How To Guide'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AD3', $this->zendTranslation->translate('News Ticker'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AE3', $this->zendTranslation->translate('Display singup option'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AF3', $this->zendTranslation->translate('Display similar shops'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AG3', $this->zendTranslation->translate('Display chains'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AH3', $this->zendTranslation->translate('Custom Header Text'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AI3', $this->zendTranslation->translate('Extra opties'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AJ3', $this->zendTranslation->translate('Last Updated'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AK3', $this->zendTranslation->translate('Locale'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AA3', $this->zendTranslation->translate('Clickout ID'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AB3', $this->zendTranslation->translate('Amount of Coupons'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AC3', $this->zendTranslation->translate('Amount of Offers'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AD3', $this->zendTranslation->translate('How To Guide'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AE3', $this->zendTranslation->translate('News Ticker'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AF3', $this->zendTranslation->translate('Display singup option'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AG3', $this->zendTranslation->translate('Display similar shops'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AH3', $this->zendTranslation->translate('Display chains'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AI3', $this->zendTranslation->translate('Custom Header Text'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AJ3', $this->zendTranslation->translate('Extra opties'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AK3', $this->zendTranslation->translate('Last Updated'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AL3', $this->zendTranslation->translate('Locale'));
         return $objPHPExcel;
     }
 
@@ -154,6 +155,13 @@ class GlobalShopExport
 
     public function localeShopsData($shopData, $key, $objPHPExcel, $localeExport = '')
     {
+        $shopClassifications = array(
+            1 => 'A',
+            2 => 'A+',
+            3 => 'AA',
+            4 => 'AA+',
+            5 => 'AAA'
+        );
         if (!empty($localeExport )) {
             $column = 4;
             $row = 4;
@@ -163,8 +171,7 @@ class GlobalShopExport
         }
         foreach ($shopData as $shop) {
             $affliateProgram = $shop['affliateProgram'] == true ? 'Yes' : 'No';
-            $accountManagerName = !empty($shop['accountManagerName'])
-                ? User::getUserName($shop['accoutManagerId']) : '';
+            $shopRating = $shopClassifications[$shop['classification']];
             $startDate =  date("d-m-Y", strtotime($shop['created_at']));
             $affilateNetwork = !empty($shop['affname']) ? $shop['affname'] : '';
             $offLine = $shop['status']==true ? 'Yes' : 'No';
@@ -217,7 +224,7 @@ class GlobalShopExport
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$column, $shop['name']);
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$column, $shop['permaLink']);
             $objPHPExcel->getActiveSheet()->setCellValue('C'.$column, $affliateProgram);
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$column, $accountManagerName);
+            $objPHPExcel->getActiveSheet()->setCellValue('D'.$column, $shopRating);
             $objPHPExcel->getActiveSheet()->setCellValue('E'.$column, $startDate);
             $objPHPExcel->getActiveSheet()->setCellValue('F'.$column, $affilateNetwork);
             $objPHPExcel->getActiveSheet()->setCellValue('G'.$column, $offLine);
@@ -249,26 +256,27 @@ class GlobalShopExport
                 'Z'.$column,
                 ShopViewCount::getTotalViewCountOfShopAndOffer($shopId)
             );
+            $objPHPExcel->getActiveSheet()->setCellValue('AA'.$column, $shop['id']);
             $objPHPExcel->getActiveSheet()->setCellValue(
-                'AA'.$column,
+                'AB'.$column,
                 Offer::getTotalAmountOfShopCoupons($shopId, 'CD')
             );
-            $objPHPExcel->getActiveSheet()->setCellValue('AB'.$column, Offer::getTotalAmountOfShopCoupons($shopId));
-            $objPHPExcel->getActiveSheet()->setCellValue('AC'.$column, $howToGuide);
-            $objPHPExcel->getActiveSheet()->setCellValue('AD'.$column, $newsTicker);
-            $objPHPExcel->getActiveSheet()->setCellValue('AE'.$column, $showSignupOption);
-            $objPHPExcel->getActiveSheet()->setCellValue('AF'.$column, $showSimilarShops);
-            $objPHPExcel->getActiveSheet()->setCellValue('AG'.$column, $showChains);
-            $objPHPExcel->getActiveSheet()->setCellValue('AH'.$column, $customHeader);
-            $objPHPExcel->getActiveSheet()->setCellValue('AI'.$column, $displayExtraProperties);
-            $objPHPExcel->getActiveSheet()->setCellValue('AJ'.$column, $lastUpdated);
+            $objPHPExcel->getActiveSheet()->setCellValue('AC'.$column, Offer::getTotalAmountOfShopCoupons($shopId));
+            $objPHPExcel->getActiveSheet()->setCellValue('AD'.$column, $howToGuide);
+            $objPHPExcel->getActiveSheet()->setCellValue('AE'.$column, $newsTicker);
+            $objPHPExcel->getActiveSheet()->setCellValue('AF'.$column, $showSignupOption);
+            $objPHPExcel->getActiveSheet()->setCellValue('AG'.$column, $showSimilarShops);
+            $objPHPExcel->getActiveSheet()->setCellValue('AH'.$column, $showChains);
+            $objPHPExcel->getActiveSheet()->setCellValue('AI'.$column, $customHeader);
+            $objPHPExcel->getActiveSheet()->setCellValue('AJ'.$column, $displayExtraProperties);
+            $objPHPExcel->getActiveSheet()->setCellValue('AK'.$column, $lastUpdated);
 
             $localeName = $key ;
             if ($key == 'en') {
                 $localeName = 'default' ;
             }
 
-            $objPHPExcel->getActiveSheet()->setCellValue('AK'.$column, $localeName);
+            $objPHPExcel->getActiveSheet()->setCellValue('AL'.$column, $localeName);
             $column++;
             $row++;
         }

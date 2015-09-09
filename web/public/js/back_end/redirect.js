@@ -3,14 +3,42 @@ a * executes when document is loaded
  * @author pkaur4 
  */
 $(document).ready(function(){
-	
+
+    $("#reidrect_id").select2({
+        placeholder: __("Search Redirect"),
+        minimumInputLength: 1,
+        ajax: {
+            url: HOST_PATH + "admin/redirect/search",
+            dataType: 'json',
+            data: function(term, page) {
+                return {
+                    keyword: term
+                };
+            },
+            type: 'post',
+            results: function (data, page) {
+                return {results: data};
+            }
+        },
+        formatResult: function(data) {
+            return data.label;
+        },
+        formatSelection: function(data) {
+            $("#reidrect_id").val(data.id);
+            if (data.id) {
+                $('#search_redirect_btn').click();
+            }
+            return data.label;
+        }
+    });
+
 	var iStart = $.bbq.getState( 'iStart' , true ) || 0;
 	var iSortCol = $.bbq.getState( 'iSortCol' , true ) || 1;
 	var iSortDir = $.bbq.getState( 'iSortDir' , true ) || 'ASC';
 	//call to keyword list function while loading
 	if($("table#RedirectListTbl").length) {
 		 
-		 getRedirectList(iStart,iSortCol,iSortDir);
+		 getRedirectList(iStart,iSortCol,iSortDir, '');
 	}
 	$('form#addRedirectForm').submit(function(){
 		
@@ -23,13 +51,25 @@ $(document).ready(function(){
 	}
 	$('form#editRedirectForm').submit(function(){
 		
-			saveEditRedirect();
+		saveEditRedirect();
 	});
 	//call to validation function while editing redirect
 	if($('form#editRedirectForm').length) {
 	
 		editRedirectValidation();
 	}
+
+    $('#search_redirect_btn').click( function() {
+        var extraParameters = '';
+        if ( $('#reidrect_id').val() ) {
+            extraParameters += '/id/'+$('#reidrect_id').val();
+        }
+        getRedirectList(iStart,iSortCol,iSortDir, extraParameters);
+    });
+
+    $('.select2-search-choice-close').click(function(){
+        getRedirectList(iStart,iSortCol,iSortDir, '');
+    });
 	
 	$(window).bind( 'hashchange', function(e) {
 		if(hashValue != location.hash && click == false){
@@ -49,6 +89,7 @@ $(document).ready(function(){
 	}
 
 });
+
 function saveRedirect() {
 	
 	if($("form#addRedirectForm").valid()) {   
@@ -185,8 +226,7 @@ var click = false;
  * get excluded redirect listing 
  * @author kraj
  */
-function getRedirectList(iStart,iSortCol,iSortDir){
-	
+function getRedirectList(iStart, iSortCol, iSortDir, extraParameters) {
 	addOverLay();
 	$('#RedirectListTbl').addClass('widthTB');
 	RedirectListTbl = $("table#RedirectListTbl")
@@ -205,7 +245,7 @@ function getRedirectList(iStart,iSortCol,iSortDir){
 				},
 				"aaSorting": [[ iSortCol , iSortDir ]],
 				"sPaginationType" : "bootstrap",
-				"sAjaxSource" : HOST_PATH+"admin/redirect/redirectlist",
+				"sAjaxSource" : HOST_PATH+"admin/redirect/redirectlist"+extraParameters,
 				"aoColumns" : [
                          {
 	                       "fnRender" : function(obj){
@@ -463,4 +503,3 @@ function deleteRedirect(id){
 	
  });
 }
-

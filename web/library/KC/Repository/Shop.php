@@ -669,15 +669,25 @@ class Shop extends \Core\Domain\Entity\Shop
             ->from("\Core\Domain\Entity\Shop", "s")
             ->leftJoin('s.affliatenetwork', 'a')
             ->where('s.deleted = '. $flag);
+
+        if (isset($params['affliatenetworkid'])) {
+            $shopList->andWhere('a.id='.$params['affliatenetworkid']);
+        }
+
+        if (isset($params['status'])) {
+            $shopList->andWhere('s.status='.$params['status']);
+        }
+
+
         if (!empty($srh)) {
             $shopList->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal("%".$srh."%")));
         }
             
         $request = \DataTable_Helper::createSearchRequest(
             $params,
-            array('s.id', 's.name', 's.permaLink', 's.affliateProgram', 's.created_at',
+            array('s.id', 's.name', 's.permaLink', 's.classification', 's.affliateProgram', 's.created_at',
                 's.lastSevendayClickouts', 's.shopAndOfferClickouts','a.name',
-                's.discussions', 's.showSignupOption', 's.status',
+                's.discussions', 's.offerCount', 's.showSignupOption', 's.status',
                 's.offlineSicne'
             )
         );
@@ -687,12 +697,14 @@ class Shop extends \Core\Domain\Entity\Shop
             ->add('number', 's.id')
             ->add('text', 's.name')
             ->add('text', 's.permaLink')
+            ->add('text', 's.classification')
             ->add('text', 's.affliateProgram')
             ->add('number', 's.created_at')
             ->add('number', 's.lastSevendayClickouts')
             ->add('number', 's.shopAndOfferClickouts')
             ->add('text', 'a.name')
             ->add('text', 's.discussions')
+            ->add('number', 's.offerCount')
             ->add('text', 's.showSignupOption')
             ->add('text', 's.status')
             ->add('text', 's.offlineSicne');
@@ -955,6 +967,7 @@ class Shop extends \Core\Domain\Entity\Shop
         $shopInfo->howtoMetaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaDesc']);
         $shopInfo->customHeader = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomHeader']);
         $shopInfo->howToIntroductionText = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['howToIntroductionText']);
+        $shopInfo->classification = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopClassification']);
         $shopInfo->showSimliarShops = \BackEnd_Helper_viewHelper::stripSlashesFromString(
             !empty($shopDetail['similarShops']) ? $shopDetail['similarShops'] : '0'
         );
@@ -1068,7 +1081,6 @@ class Shop extends \Core\Domain\Entity\Shop
         }
 
         $shopInfo->howToUse = $shopDetail['howTouseStatus'];
-
         if (intval($shopDetail['howTouseStatus']) > 0) {
             if (isset($shopDetail['shopHowToUsePageId'])) {
                 $shopInfo->howtoUsepageId = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopHowToUsePageId']);
@@ -1491,7 +1503,7 @@ class Shop extends \Core\Domain\Entity\Shop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $shopDetail = $queryBuilder
             ->select(
-                's.notes,s.accountManagerName,s.deepLink,s.deepLinkStatus,s.strictConfirmation,a.name as affname,
+                's.notes,s.accountManagerName,s.deepLink,s.deepLinkStatus,s.strictConfirmation,s.classification, a.name as affname,
                 cat.id as categoryId'
             )
             ->from('\Core\Domain\Entity\Shop', 's')

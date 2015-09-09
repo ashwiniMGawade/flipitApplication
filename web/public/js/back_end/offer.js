@@ -7,10 +7,10 @@ function init(){
 	var iShopText = $.bbq.getState( 'iShopText' , true ) || undefined;
 	var iShopCoupon = $.bbq.getState( 'iShopCoupon' , true ) || undefined;
 	var iType = $.bbq.getState( 'iType' , true ) || undefined;
-	getOffers(iOfferText,iShopText,iShopCoupon,iType,iStart, iSortCol, iSortDir);
+	getOffers(iOfferText,iShopText,iShopCoupon,iType,iStart, iSortCol, iSortDir, '');
 	
-	$("#couponType").select2();
-	$("#couponType").select2("val", "");
+	$(".select2").select2();
+	$(".select2").select2("val", "");
 	
 	$("#searchOffer").select2({
 		placeholder: __("Search offer"),
@@ -153,12 +153,7 @@ function init(){
 			offerListTable.fnCustomRedraw();
 		}
 	});
-	
-//    $(window).trigger( 'hashchange' );
-	
 }
-
-
 
 /**
  * Function call when user click on shop search button 
@@ -194,9 +189,22 @@ function searchByShop()
 	if(searchCoupon =='' || searchCoupon == null)
 	{
 		searchCoupon = undefined;
-	} 
+	}
 
-	getOffers(txtOffer,searchShop,searchCoupon,type,0,5,'desc');
+    var extraInput = '';
+    if ($('#offerExpired').val()) {
+        extraInput += '/expired/' + $('#offerExpired').val();
+    }
+
+    if ($('#offerStatus').val()) {
+        extraInput += '/status/' + $('#offerStatus').val();
+    }
+
+    if ($('#shopRating').val()) {
+        extraInput += '/shopRating/' + $('#shopRating').val();
+    }
+
+	getOffers(txtOffer, searchShop, searchCoupon, type, 0, 5, 'desc', extraInput);
 }
 
 
@@ -210,7 +218,7 @@ var click = false;
  * @param type
  * @author kraj
  */
-function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
+function getOffers(txtOffer, txtShop, txtCoupon, type, iStart, iSortCol, iSortDir, extraInput) {
 	addOverLay();
 	
 	$("ul.ui-autocomplete").css('display','none');
@@ -233,7 +241,7 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
 				"oLanguage": {
 				      "sInfo": "<b>_START_-_END_</b> of <b>_TOTAL_</b>"
 				},
-				"sAjaxSource" : encodeURI(HOST_PATH+"admin/offer/getoffer/offerText/"+ txtOffer  + "/shopText/"+ txtShop + "/shopCoupon/"+ txtCoupon + "/couponType/"+ type +  "/flag/0"),
+				"sAjaxSource" : encodeURI(HOST_PATH+"admin/offer/getoffer/offerText/"+ txtOffer  + "/shopText/"+ txtShop + "/shopCoupon/"+ txtCoupon + "/couponType/"+ type +  "/flag/0" + extraInput),
 				"aoColumns" : [
 						{
 							"fnRender" : function(obj) {

@@ -213,6 +213,10 @@ abstract class BaseShop extends Doctrine_Record
              'type' => 'string',
              'length' => '75',
         ));
+        $this->hasColumn('classification', 'integer', null, array(
+            'type' => 'integer',
+            'length' => 4,
+        ));
      /*   $this->hasColumn('Deliverytime', 'string', 255, array(
              'type' => 'string',
              'length' => '255',
@@ -405,6 +409,10 @@ abstract class BaseShop extends Doctrine_Record
                 'type' => 'timestamp'
             )
         );
+        $this->hasColumn('offerCount', 'integer', 11, array(
+            'type' => 'integer',
+            'length' => '11',
+        ));
     }
 
     public function setUp()

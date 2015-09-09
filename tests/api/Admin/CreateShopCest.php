@@ -30,6 +30,7 @@ class CreateShopCest
             'refUrl'                => 'Mock',
             'actualUrl'             => 'Mock',
             'shopText'              => 'Mock',
+            'classification'        => 1,
         );
         $I->haveInDatabasePDOSite('affliate_network', array('name'=>'Affilinet'));
         $I->wantTo('Create shop');

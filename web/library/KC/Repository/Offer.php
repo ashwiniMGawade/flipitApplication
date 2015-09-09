@@ -1,5 +1,7 @@
 <?php
 namespace KC\Repository;
+use Symfony\Component\Validator\Constraints\DateTime;
+
 class Offer extends \Core\Domain\Entity\Offer
 {
     ##################################################################################
@@ -26,7 +28,10 @@ class Offer extends \Core\Domain\Entity\Offer
         $offerViewCount = self::getViewCountByCondition($offerViewCount, $offerId, $past31Days, $currentDate, 'month');
         if (intval($offerViewCount['viewCount']) < 5) {
             $offerViewCount = '';
+        } elseif (intval($offerViewCount['viewCount']) > 1000) {
+            $offerViewCount['viewCount'] = '1000+';
         }
+
         return $offerViewCount;
     }
 
@@ -509,6 +514,7 @@ class Offer extends \Core\Domain\Entity\Offer
         } else {
             $offersConstraintsQuery->orderBy('o.id', 'DESC');
         }
+
         if (isset($specialPage['enableWordConstraint']) && $specialPage['enableWordConstraint'] > 0
                 && $specialPage['enableWordConstraint'] != null) {
             $wordTitle = $specialPage['wordTitle'];
@@ -684,28 +690,26 @@ class Offer extends \Core\Domain\Entity\Offer
         if (count($specialOffersByConstraints) > 0) {
             $countOfSpecialOffersByConstraints = count($specialOffersByConstraints);
             for ($offerIndex = 0; $offerIndex < $countOfSpecialOffersByConstraints; $offerIndex++) {
+                $currentDate = date("Y-m-d");
+                $currentUNIXDate = strtotime($currentDate);
 
-                $offerPublishDate = $specialOffersByConstraints[$offerIndex]['startDate']->format('Y-m-d');
-                $offerExpiredDate = $specialOffersByConstraints[$offerIndex]['endDate']->format('Y-m-d');
-                $offerSubmissionDaysIncreasedBy = ' +'.$specialPage['timenumberOfDays'].' days';
-                $offerSubmissionDaysDecreasedBy  = ' -'.$specialPage['timenumberOfDays'].' days';
-                $increasedOfferPublishDate = date($offerPublishDate .$offerSubmissionDaysIncreasedBy);
-                $decreasedOfferExpiredDate = date($offerExpiredDate .$offerSubmissionDaysDecreasedBy);
-                $currentDate = strtotime(date("Y-m-d"));
-                $newOfferPublishDate = strtotime($increasedOfferPublishDate);
-                $newOfferExprationDate = strtotime($decreasedOfferExpiredDate);
+                $offerExpiryDate = $specialOffersByConstraints[$offerIndex]['endDate']->getTimestamp();
+                $maxOfferExpiryDate = strtotime($currentDate .' + '. $specialPage['timenumberOfDays'].' days');
+
+                $offerPublishDate = $specialOffersByConstraints[$offerIndex]['startDate']->getTimestamp();
+                $minOfferPublishDate = strtotime($currentDate .' - '. $specialPage['timenumberOfDays'].' days');
 
                 if (isset($specialPage['enableTimeConstraint']) && $specialPage['enableTimeConstraint'] == 1) {
                     if ($specialPage['timeType'] == 1) {
-                        if ($newOfferPublishDate >= $currentDate) {
+                        if ($minOfferPublishDate <= $offerPublishDate && $offerPublishDate <= $currentUNIXDate) {
                             $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
                         }
-                    } else if ($specialPage['timeType'] == 2) {
-                        if ($newOfferExprationDate <= $currentDate) {
+                    } elseif ($specialPage['timeType'] == 2) {
+                        if ($currentUNIXDate <= $offerExpiryDate && $offerExpiryDate <= $maxOfferExpiryDate) {
                             $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
                         }
                     }
-                } else if (isset($specialPage['enableClickConstraint']) && $specialPage['enableClickConstraint'] == true
+                } elseif (isset($specialPage['enableClickConstraint']) && $specialPage['enableClickConstraint'] == true
                         && $specialPage['enableClickConstraint'] == 1) {
                     if ($specialOffersByConstraints[$offerIndex]['clicks'] >= $specialPage['numberOfClicks']) {
                         $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
@@ -713,7 +717,32 @@ class Offer extends \Core\Domain\Entity\Offer
                 } else {
                     $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
                 }
+            }
 
+            if (isset($specialPage['enableTimeConstraint']) && $specialPage['enableTimeConstraint'] == 1 && $specialPage['timeType'] == 2) {
+                usort(
+                    $offersAccordingToConstraints,
+                    function ($a, $b) use ($specialPage) {
+                        if (isset($specialPage['oderOffers']) && $specialPage['oderOffers'] == 1) {
+                            return $a['endDate']->getTimestamp() - $b['endDate']->getTimestamp();
+                        } else {
+                            return $b['endDate']->getTimestamp() - $a['endDate']->getTimestamp();
+                        }
+                    }
+                );
+            }
+
+            if (isset($specialPage['enableTimeConstraint']) && $specialPage['enableTimeConstraint'] == 1 && $specialPage['timeType'] == 1) {
+                usort(
+                    $offersAccordingToConstraints,
+                    function ($a, $b) use ($specialPage) {
+                        if (isset($specialPage['oderOffers']) && $specialPage['oderOffers'] == 1) {
+                            return $a['startDate']->getTimestamp() - $b['startDate']->getTimestamp();
+                        } else {
+                            return $b['startDate']->getTimestamp() - $a['startDate']->getTimestamp();
+                        }
+                    }
+                );
             }
         }
         return $offersAccordingToConstraints;
@@ -906,6 +935,40 @@ class Offer extends \Core\Domain\Entity\Offer
             ->leftJoin('o.shopOffers', 's')
             ->where($entityManagerUser->expr()->eq('o.deleted', $entityManagerUser->expr()->literal($deletedStatus)))
             ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')");
+
+        if (isset($parameters['expired'])) {
+            switch ($parameters['expired']) {
+                case 1:
+                    $getOffersQuery->andWhere("o.endDate <= CURRENT_DATE()");
+                    break;
+                case 2:
+                    $getOffersQuery->andWhere("o.endDate >= CURRENT_DATE()");
+                    break;
+                case 3:
+                    $getOffersQuery->andWhere("o.endDate BETWEEN CURRENT_DATE() AND DATE_ADD(CURRENT_DATE(), 3, 'day')");
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (isset($parameters['status'])) {
+            switch ($parameters['status']) {
+                case 1:
+                    $getOffersQuery->andWhere("o.startDate <= CURRENT_DATE()");
+                    break;
+                case 2:
+                    $getOffersQuery->andWhere("o.startDate > CURRENT_DATE()");
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (isset($parameters['shopRating'])) {
+            $getOffersQuery->andWhere("s.classification = " . $parameters['shopRating']);
+        }
+
         if ($userRole=='4') {
             $getOffersQuery->andWhere(
                 $entityManagerUser->expr()->like('o.Visability', $entityManagerUser->expr()->literal('DE'))
@@ -935,7 +998,6 @@ class Offer extends \Core\Domain\Entity\Offer
                 $getOffersQuery->andWhere($entityManagerUser->expr()->eq('o.extendedOffer', 1));
             }
         }
-
         //with new change we willd delete above code after completons of datatatable
         $request  = \DataTable_Helper::createSearchRequest(
             $parameters,
@@ -1566,7 +1628,7 @@ class Offer extends \Core\Domain\Entity\Offer
         $query = $queryBuilder
         ->select(
             'o.title, o.id, o.Visability, o.shopExist,o.discountType, o.offer_position,
-            o.couponCode, o.extendedOffer, o.editorPicks, o.userGenerated, o.couponCodeType, s.name as shopName,
+            o.couponCode, o.extendedOffer, o.editorPicks, o.userGenerated, o.couponCodeType, s.name as shopName, s.classification as shopClassification,
             s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,o.extendedTitle, o.extendedoffertitle,
             o.extendedMetaDescription,
             page.id as pageId,tc.content as termsAndconditionContent,category.id as categoryId,img.name as imageName, img.ext as imageType,
@@ -3034,6 +3096,7 @@ class Offer extends \Core\Domain\Entity\Offer
 
         } else {
             $updateOffer->discountType = 'PA';
+            $updateOffer->couponCode = '';
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                     ->select('p.position')
@@ -3050,13 +3113,14 @@ class Offer extends \Core\Domain\Entity\Offer
                 $ext =  \BackEnd_Helper_viewHelper::stripSlashesFromString(
                     \BackEnd_Helper_viewHelper::getImageExtension($fileName)
                 );
+
                 $pattern = '/^[0-9]{10}_(.+)/i' ;
                 preg_match($pattern, $fileName, $matches);
                 if (!$fileName) {
                     return false;
                 }
                 if (@$matches[1]) {
-                    $offerImage  = new \Core\Domain\Entity\Image();
+                    $offerImage  = new \Core\Domain\Entity\Logo();
                     $offerImage->ext = $ext;
                     $offerImage->path ='images/upload/offer/';
                     $offerImage->name = $fileName;
@@ -3066,7 +3130,7 @@ class Offer extends \Core\Domain\Entity\Offer
                     $offerImage->updated_at = new \DateTime('now');
                     $entityManagerLocale->persist($offerImage);
                     $entityManagerLocale->flush();
-                    $saveOffer->offerlogoid =  $offerImage->getId();
+                    $updateOffer->logo =  $offerImage;
                 }
             } else {
                 $updateOffer->refOfferUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerrefurlPR']);

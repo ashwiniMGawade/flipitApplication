@@ -27,7 +27,7 @@ $shopLogo = $this->offerShopLogo;
 <script type="text/javascript">
 var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" ;
 </script>
-<?php 
+<?php
 $browserTitle = $this->offerController == 1 ? $this->translate('Edit Social Code') : $this->translate('Edit Offer');
 echo $this->headTitle()->append($browserTitle);?>
 <div class="wrap columns-2 edit-offer-main-cont">
@@ -55,7 +55,8 @@ echo $this->headTitle()->append($browserTitle);?>
                 </button>
                 <input type="hidden" name="code-alert-string" id="code-alert-string" 
                 value="<?php echo HTTP_PATH; ?>admin/offer<?php echo '#'.$this->qstring; ?>">
-            <?php } ?>    
+            <?php } ?>
+            <span id="shopRating"><?php echo $this->translate('Shop Rating'); ?> : <span></span></span>
         </h1>
         <input type="hidden" name='offerImageSelect' id='offerImageSelect' value='' />
         <input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />
@@ -424,7 +425,9 @@ echo $this->headTitle()->append($browserTitle);?>
                         <span id="offerLogoId"> </span>
                         <div class="mainpage-content-right-inner-left-other" id="uploadofferDiv">
                             <input type="file" class="ignore" name="uploadoffer" id="uploadoffer"
-                            onchange="checkFileType(event)" /><span>
+                            onchange="checkFileType(event)" />
+                            <input type="hidden" name="printableOfferFileName" id="printableOfferFileName" value="" />
+                            <span>
                             <?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB)')?></span>
                         </div>
                         <input type="checkbox" value="offerrefurl" id="offerrefurlcheck" name="offerrefurlcheck"

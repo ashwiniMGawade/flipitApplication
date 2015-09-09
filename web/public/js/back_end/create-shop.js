@@ -41,6 +41,7 @@ var validRules = {
     bigLogoFile : __("Second image lightbox! ok "),
     'title[]' : __("Chapter title  looks great"),
     customtextposition : __("Position looks great"),
+    selectClassification : __("Rating looks great"),
     //returnPolicy : "Return policy looks great"
 };
 
@@ -82,6 +83,7 @@ var focusRules = {
     bigLogoFile : __("Upload second image lightbox"),
     'title[]' : __("Enter chapter title"),
     customtextposition : __("Enter Position below 10"),
+    selectClassification : __("Select a Rating"),
     //deliveryCost : "Enter Delivery cost",
     //Deliverytime : "Enter Delivery time",
     //returnPolicy : "Enter Return policy"
@@ -757,6 +759,9 @@ function validateFormAddNewShop(){
                     selecteditors : {
                         required : true
                     },
+                    selectClassification : {
+                        required : true
+                    },
                     customtextposition : {
                         regex : /^([1-9]|10)$/
                     },
@@ -886,6 +891,9 @@ function validateFormAddNewShop(){
                     selecteditors : {
                         
                         required : __("Please select an editor")
+                    },
+                    selectClassification : {
+                        required : __("Please select a Rating")
                     },
                     howToPageSlug : {
                         required : __("Please enter how to page slug")

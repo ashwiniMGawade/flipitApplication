@@ -24,6 +24,7 @@
 @import "store-page.less";
 @import "expired-coupons.less";
 @import (css) "font-awesome.min.css";
+@import "footer.less";
 input[type="email"], input[type="tel"], input[type="search"], input[type="text"], input[type="password"], input[type="file"], input[type="submit"], textarea{-webkit-appearance:none;}
 body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
 .offer-teaser-button-wrapper {
@@ -115,16 +116,20 @@ body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
     margin-top: 2px;
     background: linear-gradient(38deg,#48A5E1 0,#48A5E1 49%,rgba(202,235,137,0) 50%,rgba(255,255,255,0) 100%) 0 6px no-repeat;
 }
-.offer-teaser-button-wrapper:hover {
-    .blue-corner {
-        background-position: 0 0;
-        -webkit-transform: rotateZ(15deg) translate(-9px,-3px) scaleX(1);
-        -ms-transform: rotateZ(15deg) translate(-9px,-3px) scaleX(1);
-        transform: rotateZ(15deg) translate(-9px,-3px) scaleX(1);
-    }
-    .show-code {
-        color:#3d3d3d;
-    }
+
+.offer-holder:hover {
+  .blue-corner {
+    background-position: 0 0;
+    -webkit-transform: rotateZ(15deg) translate(-9px,-3px) scaleX(1);
+    -ms-transform: rotateZ(15deg) translate(-9px,-3px) scaleX(1);
+    transform: rotateZ(15deg) translate(-9px,-3px) scaleX(1);
+  }
+  .show-code {
+    color:#3d3d3d;
+  }
+}
+.offer-holder:hover .offer-teaser-button.kccode {
+  width: 161px;
 }
 
 .offer-teaser-button.kccode {
@@ -137,8 +142,8 @@ body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
     transition: width 200ms;
     text-align: left;
 }
-.offer-teaser-button-wrapper:hover .offer-teaser-button.kccode {
-    width: 161px;
+.offer-holder:hover .offer-teaser-button.kccode {
+  width: 161px;
 }
 .offer-teaser-button.kccode::before {
     display: block;
