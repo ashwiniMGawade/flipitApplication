@@ -62,16 +62,16 @@ class FrontEnd_Helper_ClickoutFunctions
     {
         $networkInfo = array();
         if (isset($network['affliatenetwork'])) {
+            $gaCookie = isset($_COOKIE['_ga']) ? $_COOKIE['_ga'] : 'notAvailable';
             if (!empty($network['affliatenetwork']['subId'])) {
                 $networkInformation = self::getExplodedSubidWithPattern($network['affliatenetwork']['subId']);
-                $gaCookie = isset($_COOKIE['_ga']) ? $_COOKIE['_ga'] : 'notAvailable';
                 $subId = str_replace('A2ASUBID', $conversionId, $networkInformation['subid']);
                 $subId = str_replace('GOOGLEANALYTICSTRACKINCID', $gaCookie, $subId);
                 $networkInfo['subid'] = $subId;
                 $networkInfo['subidStringPattern'] = $networkInformation['stringPattern'];
-            } elseif (!empty($network['affliatenetwork']['extendedSubid'])) {
+            }
+            if (!empty($network['affliatenetwork']['extendedSubid'])) {
                 $networkInformation = self::getExplodedSubidWithPattern($network['affliatenetwork']['extendedSubid']);
-                $gaCookie = isset($_COOKIE['_ga']) ? $_COOKIE['_ga'] : 'notAvailable';
                 $extendedSubId = str_replace('A2ASUBID', $conversionId, $networkInformation['subid']);
                 $extendedSubId = str_replace('GOOGLEANALYTICSTRACKINCID', $gaCookie, $extendedSubId);
                 $networkInfo['extendedSubId'] = $extendedSubId;
@@ -129,18 +129,17 @@ class FrontEnd_Helper_ClickoutFunctions
                 $clickoutUrl = preg_replace("/" . $networkInfo['subidStringPattern'] . "/", $networkInfo['subid'], $refUrl, -1, $count);
             }
 
-            if(!$count && isset($networkInfo['extendedSubId']) && isset($networkInfo['extendedSubIdStringPattern'])) {
+            if (!$count && isset($networkInfo['extendedSubId']) && isset($networkInfo['extendedSubIdStringPattern'])) {
                 $clickoutUrl = preg_replace("/".$networkInfo['extendedSubIdStringPattern']."/", $networkInfo['extendedSubId'], $refUrl);
             }
-
             if ($clickoutUrl === null) {
                 $clickoutUrl = $refUrl;
             }
         } else {
             $clickoutUrl = $refUrl;
-            if(isset($networkInfo['subid'])) {
+            if (isset($networkInfo['subid'])) {
                 $clickoutUrl .= $networkInfo['subid'];
-            }elseif(isset($networkInfo['extendedSubId'])) {
+            } elseif (isset($networkInfo['extendedSubId'])) {
                 $clickoutUrl .= $networkInfo['extendedSubId'];
             }
         }
