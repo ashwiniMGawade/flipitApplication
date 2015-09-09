@@ -107,7 +107,6 @@ class Admin_OfferController extends Zend_Controller_Action
     public function updateofferAction()
     {
         $parameters = $this->getAllParams();
-
         $offer =\Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Offer', $parameters['offerId']);
         $offerRepository = new KC\Repository\Offer();
         $offerUpdated = $offerRepository->updateOffer($parameters);

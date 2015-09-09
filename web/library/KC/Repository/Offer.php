@@ -28,7 +28,10 @@ class Offer extends \Core\Domain\Entity\Offer
         $offerViewCount = self::getViewCountByCondition($offerViewCount, $offerId, $past31Days, $currentDate, 'month');
         if (intval($offerViewCount['viewCount']) < 5) {
             $offerViewCount = '';
+        } elseif (intval($offerViewCount['viewCount']) > 1000) {
+            $offerViewCount['viewCount'] = '1000+';
         }
+
         return $offerViewCount;
     }
 
@@ -3093,6 +3096,7 @@ class Offer extends \Core\Domain\Entity\Offer
 
         } else {
             $updateOffer->discountType = 'PA';
+            $updateOffer->couponCode = '';
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                     ->select('p.position')
@@ -3109,13 +3113,14 @@ class Offer extends \Core\Domain\Entity\Offer
                 $ext =  \BackEnd_Helper_viewHelper::stripSlashesFromString(
                     \BackEnd_Helper_viewHelper::getImageExtension($fileName)
                 );
+
                 $pattern = '/^[0-9]{10}_(.+)/i' ;
                 preg_match($pattern, $fileName, $matches);
                 if (!$fileName) {
                     return false;
                 }
                 if (@$matches[1]) {
-                    $offerImage  = new \Core\Domain\Entity\Image();
+                    $offerImage  = new \Core\Domain\Entity\Logo();
                     $offerImage->ext = $ext;
                     $offerImage->path ='images/upload/offer/';
                     $offerImage->name = $fileName;
@@ -3125,7 +3130,7 @@ class Offer extends \Core\Domain\Entity\Offer
                     $offerImage->updated_at = new \DateTime('now');
                     $entityManagerLocale->persist($offerImage);
                     $entityManagerLocale->flush();
-                    $saveOffer->offerlogoid =  $offerImage->getId();
+                    $updateOffer->logo =  $offerImage;
                 }
             } else {
                 $updateOffer->refOfferUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerrefurlPR']);
