@@ -124,12 +124,6 @@ class CategoryController extends Zend_Controller_Action
                 )
             );
         $specialPages = $this->_helper->Category->getSpecialPageWithOffersCount($specialPagesList);
-        $specialPages = array_filter(
-            $specialPages,
-            function ($key) {
-                return $key['totalCoupons'] > 0;
-            }
-        );
         $categories = FrontEnd_Helper_viewHelper::getCategories($allCategories);
         $this->view->categoriesWithSpecialPagesList = array_merge($categories, $specialPages);
         $this->view->pageCssClass = 'all-categories-alt-page';
