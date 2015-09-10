@@ -26,7 +26,11 @@ foreach ($this->popularStores as $popularStore) :
         $popularStoreImage = HTTP_PATH . "public/images/NoImage/storeLogo100_50.jpg";
     endif;
 
-    echo '<li>
+    $shopVisibilityClass = '';
+    if ($popularStoreIncrementCheck > 6) :
+        $shopVisibilityClass = 'visible-xs';
+    endif;
+    echo '<li class="'.$shopVisibilityClass.'">
         <a href="'.HTTP_PATH_LOCALE.$popularStore['popularshops']['permaLink'].'">
             <img src="' . $popularStoreImage . '"  
             alt="' .$popularStore['popularshops']['name'] . '" title="' .$popularStore['popularshops']['name'] . '" />
