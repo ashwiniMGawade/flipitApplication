@@ -269,10 +269,15 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
 
     public static function clearCacheOfCategoryOffers($id)
     {
+        $entityManagerLocale  = \Zend_Registry::get('emLocale');
+        $category = $entityManagerLocale->find('\Core\Domain\Entity\Category', $id);
+        $categoryPageCacheKey = str_replace('-', '', $category->permaLink);
         $key = 'home_category'.$id.'_offers';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesHome_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categories_count');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categories_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryPageCacheKey.'_data');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryPageCacheKey.'_voucherCodes');
     }
 }

@@ -202,27 +202,16 @@ function init(){
 				
 			}
 		
-		if( jQuery("input[name=printableCheckbox]").is(":checked") && jQuery("input[name=uploadoffercheck]").is(":checked") )
-		{
-			
-			
-			if ( jQuery("input[name=uploadoffer]").val().length == 0 && jQuery('img#uplodedOffer').length==0 )
-			{
+		if(jQuery("input[name=printableCheckbox]").is(":checked") && jQuery("input[name=uploadoffercheck]").is(":checked") && !jQuery('#printableOfferFileName').val()) {
+			if (!jQuery('input[name=uploadoffer]').val()) {
 					jQuery("div.uploadOfferMessage").removeClass("focus")
 					 .html(__("<span class='error help-inline'>Please upload jpg or pdf file</span>"));
-				
-				
 					errorExists['uploadoffer'] = false ;
-
 			} else {
-				
 				errorExists['uploadoffer'] =  true ;
 			}
 		} else {
-			
-			jQuery("div.uploadOfferMessage").removeClass("focus")
-			 .html("");
-			 
+			jQuery("div.uploadOfferMessage").removeClass("focus").html("");
 		}
 		if(jQuery('#news').hasClass('btn-primary') == false){
 			validateStartEndTimestamp(); 
@@ -617,14 +606,14 @@ function setFormData(data){
 		
 	 }
 	
-	else if(data[0].discountType=='PA'){
+	else if(data[0].discountType=='PA') {
 		jQuery("#printable").click();
 		if(data[0].refOfferUrl){
-		  jQuery("#userefurlOption").click();
-		  jQuery('#offerrefurlPR').val(data[0].refOfferUrl);
-			
-		}else{
+              jQuery("#userefurlOption").click();
+              jQuery('#offerrefurlPR').val(data[0].refOfferUrl);
+		} else {
 		    if(data[0].imageName){
+                jQuery('#printableOfferFileName').val(data[0].imageName);
                 if (data[0].imageType !== 'pdf') {
                     var image = data[0].path+"/thum_"+data[0].imageName;
                     var imgSrc = PUBLIC_PATH_LOCALE + image;
@@ -635,14 +624,10 @@ function setFormData(data){
                     var imgSrc = PUBLIC_PATH_LOCALE + image;
                     jQuery('span#offerLogoId').append('<p><a href="'+imgSrc+'" target="_blank">'+data[0].imageName+'</a></p>');
                 }
-	        //jQuery('#uplodedOffer').show().attr('src', imgSrc);
-			jQuery("#uploadOfferOption").click();
-		  }
-	   }
-		
-		
-		
-	 }
+                jQuery("#uploadOfferOption").click();
+		    }
+	    }
+    }
 	else if(data[0].discountType=='NW'){
 		jQuery("#visibiliyDiv").hide();
 	    jQuery("#offertitledetail").hide();
