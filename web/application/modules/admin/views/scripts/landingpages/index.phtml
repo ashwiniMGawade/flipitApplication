@@ -5,10 +5,10 @@
  $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
  $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/landingPages.js");
 ?>
-<div id="searchbarlist">
+<div id="landingPagesList">
    <div class="wrap columns-2">
         <h1 class="fl"><?php echo $this->translate('Landing Pages'); ?>
-            <button class="btn ml10" type="button" onClick="">
+            <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/landingpages/create'">
             <?php echo $this->translate('Add new Landing Page'); ?>
             </button>
         </h1>
@@ -30,5 +30,5 @@
             </thead>
         </table> 
   </div>
- </div>
+</div>
         

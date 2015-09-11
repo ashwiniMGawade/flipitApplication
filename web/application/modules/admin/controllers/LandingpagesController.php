@@ -65,4 +65,8 @@ class Admin_LandingpagesController extends Zend_Controller_Action
         echo Zend_Json::encode($response);
         exit;
     }
+
+    public function createAction()
+    {
+    }
 }
