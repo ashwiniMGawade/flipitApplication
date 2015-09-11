@@ -5,14 +5,8 @@ namespace LocaleMigrations;
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * Auto-generated Migration: Please modify to your needs!
- */
 class Version20150910142342 extends AbstractMigration
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $table = $schema->createTable('landingPages');
@@ -29,15 +23,11 @@ class Version20150910142342 extends AbstractMigration
         $table->addColumn('createdAt', 'datetime', array('length' => 12));
         $table->addColumn('updatedAt', 'datetime', array('length' => 12));
         $table->setPrimaryKey(array('id'));
-        $table->addForeignKeyConstraint('shop', array('shopId'), array('id'),  array("onDelete" => "CASCADE"), 'landingPages_shopId_shop_id');
+        $table->addForeignKeyConstraint('shop', array('shopId'), array('id'), array("onDelete" => "CASCADE"), 'landingPages_shopId_shop_id');
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $schema->dropTable('landingPages');
-
     }
 }
