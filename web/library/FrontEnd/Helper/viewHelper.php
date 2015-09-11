@@ -1172,8 +1172,7 @@ EOD;
         $offerPartial = new \FrontEnd_Helper_OffersPartialFunctions();
         $urlToShow = $offerPartial->getUrlToShow($offer);
         $popupLink = $offerPartial->getPopupLink($offer, $urlToShow);
-        $onClick .= "ga('send', 'event', 'aff', '$offerBounceRate'),
-                OpenInNewTab('".HTTP_PATH_LOCALE.$offer->shopOffers['permaLink'].$popupLink."')";
+        $onClick .= "OpenInNewTab('".HTTP_PATH_LOCALE.$offer->shopOffers['permaLink'].$popupLink."')";
         $offerShopPermalinkAnchor = '<a  id="'.$offer->id.'"
                 href="'.$urlToShow.'" vote="0" rel="nofollow" 
                 target="_self" onClick="'.$onClick.'">';

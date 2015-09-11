@@ -12,12 +12,10 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
             $affliateBounceRate .= "gtmDataBuilder('retailerClickout', 'Retailer', 'Retailer Logo', 'Retailer', ".$shop['id'].");";
         }
         if ($shop['affliateProgram']) :
-            $affliateBounceRate .= "ga('send', 'event', 'aff','$bounceRate');";
             $affliateUrl = $shopUrl;
             $affliateDisabled = '';
             $affliateClass = '';
         else:
-            $affliateBounceRate .= '';
             $affliateUrl = '#';
             $affliateDisabled = 'disabled="disabled"';
             $affliateClass = 'btn-disabled';
