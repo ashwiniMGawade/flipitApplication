@@ -161,6 +161,11 @@ $action = $this->action;
                                tabindex="1"><?php echo $this->translate('Affiliate Networks'); ?></a>
                         </li>
                     <?php } ?>
+                    <li>
+                        <?php $landingPageClass = ($controller == 'landingpages') ? "new-blueShop" : "new-greyShop"; ?>
+                        <a href="<?php echo HTTP_PATH ?>admin/landingpages" class="<?php echo $landingPageClass; ?>"
+                           tabindex="1"><?php echo $this->translate('Landing Pages'); ?></a>
+                    </li>
                 </ul>
             </div>
         </div>
