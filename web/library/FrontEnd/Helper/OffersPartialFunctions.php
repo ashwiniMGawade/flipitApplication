@@ -328,7 +328,6 @@ class FrontEnd_Helper_OffersPartialFunctions
                 if('se' == LOCALE) {
                     $onClick .= "gtmDataBuilder('voucherClickout', 'Deal', '".$clickedElement."', 'Offer', ".$currentOffer->id.");";
                 }
-                $onClick .= "ga('send', 'event', 'aff', '$offerBounceRate')";
                 $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
                 $offerLink =
                     '<a id="'.$currentOffer->id.'" class="'.$class.' '.$imageClass.'" 
