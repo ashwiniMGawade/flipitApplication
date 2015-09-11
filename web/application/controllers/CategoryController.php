@@ -6,10 +6,9 @@ class CategoryController extends Zend_Controller_Action
         $module     = strtolower($this->getRequest()->getParam('lang'));
         $controller = strtolower($this->getRequest()->getControllerName());
         $action     = strtolower($this->getRequest()->getActionName());
-        if (
-            file_exists(
-                APPLICATION_PATH . '/modules/' . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml"
-            )
+        if (file_exists(
+            APPLICATION_PATH . '/modules/' . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml"
+        )
         ) {
             $this->view->setScriptPath(APPLICATION_PATH . '/modules/' . $module . '/views/scripts');
         } else {
@@ -46,13 +45,18 @@ class CategoryController extends Zend_Controller_Action
             );
             $offersWithPagination = \FrontEnd_Helper_viewHelper::renderPagination(
                 $categoryVoucherCodes,
-                $this->_getAllParams(),
+                $this->getAllParams(),
                 20,
                 9
             );
-            if ($this->_getAllParams()['page'] > $offersWithPagination->getPages()->last) {
-                throw new \Zend_Controller_Action_Exception('', 404);
+
+            $numOfPages = $offersWithPagination->getPages()->last;
+            if ($numOfPages > 0) {
+                if ($this->getAllParams()['page'] > $numOfPages) {
+                    throw new \Zend_Controller_Action_Exception('', 404);
+                }
             }
+
             $this->view->offersWithPagination = $offersWithPagination;
             $this->view->categoryDetails = $categoryDetails;
             $this->view->offersType = 'offerWithPagenation';
