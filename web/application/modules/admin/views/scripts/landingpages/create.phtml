@@ -25,13 +25,12 @@
                         <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Online'); ?></strong></label></div>
                         <div class="mainpage-content-right">
                             <div data-toggle="buttons-checkbox" class="btn-group mb20">
-                                <input type="checkbox" class="hide" id="statusActiveCheckbox" name="statusActiveCheckbox" checked="checked" value="1">
-                                <input type="checkbox" class="hide" id="statusInactiveCheckbox" name="statusInactiveCheckbox" value="0">
+                                <input type="hidden" id="status" name="status" value=1>
                                 <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-primary" id="statusActive" onClick="">
+                                    <button type="button" class="btn btn-primary" id="statusActive" onClick="setStatus('statusActive')">
                                         <?php echo $this->translate('Yes'); ?>
                                     </button>
-                                    <button type="button" class="btn" id="statusInactive" onClick="">
+                                    <button type="button" class="btn" id="statusInactive" onClick="setStatus('statusInactive')">
                                         <?php echo $this->translate('No'); ?>
                                     </button>
                                 </div>

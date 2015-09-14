@@ -64,3 +64,12 @@ function init() {
         }
     );
 }
+
+function setStatus(status) {
+    jQuery('#' + status).addClass("btn-primary").siblings().removeClass("btn-primary");
+    if(status == 'statusActive') {
+        jQuery('#status').val(1);
+    } else {
+        jQuery('#status').val(0);
+    }
+}
