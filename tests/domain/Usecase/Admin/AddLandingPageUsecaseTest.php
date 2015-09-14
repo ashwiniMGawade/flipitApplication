@@ -62,9 +62,7 @@ class AddLandingPageUsecaseTest extends \Codeception\TestCase\Test
             'metaDescription' => '<p>Latest Offers</p>',
             'content' => '<p>Test Content</p>',
             'status' => 0,
-            'offlineSince' => new \DateTime('now'),
-            'createdAt' => new \DateTime('now'),
-            'updatedAt' => new \DateTime('now')
+            'offlineSince' => new \DateTime('now')
         );
 
         $landingPageRepository = $this->landingPageRepositoryMockWithSaveMethod(new LandingPages());

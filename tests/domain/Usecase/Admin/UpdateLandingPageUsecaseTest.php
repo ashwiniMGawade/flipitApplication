@@ -5,7 +5,7 @@ use Core\Domain\Entity\LandingPages;
 use Core\Domain\Entity\Shop;
 use Core\Domain\Service\Purifier;
 use Core\Domain\Service\Validator;
-use Core\Domain\Usecase\Admin\AddLandingPageUsecase;
+use Core\Domain\Usecase\Admin\UpdateLandingPageUsecase;
 use Core\Domain\Validator\LandingPageValidator;
 use Core\Service\Errors;
 
@@ -18,7 +18,7 @@ class UpdateLandingPageUsecaseTest extends \Codeception\TestCase\Test
         $params = array();
         $landingPageRepository = $this->landingPageRepositoryMock();
         $landingPageValidator = new LandingPageValidator(new Validator());
-        $result = (new AddLandingPageUsecase(
+        $result = (new UpdateLandingPageUsecase(
             $landingPageRepository,
             $landingPageValidator,
             new Purifier(),
@@ -38,7 +38,7 @@ class UpdateLandingPageUsecaseTest extends \Codeception\TestCase\Test
         );
         $landingPageRepository = $this->landingPageRepositoryMock();
         $landingPageValidator = $this->createLandingPageValidatorMock(array('title' => 'Title cannot be empty.'));
-        $result = (new AddLandingPageUsecase(
+        $result = (new UpdateLandingPageUsecase(
             $landingPageRepository,
             $landingPageValidator,
             new Purifier(),
@@ -67,7 +67,7 @@ class UpdateLandingPageUsecaseTest extends \Codeception\TestCase\Test
 
         $landingPageRepository = $this->landingPageRepositoryMockWithSaveMethod(new LandingPages());
         $landingPageValidator = $this->createLandingPageValidatorMock(true);
-        $result = (new AddLandingPageUsecase(
+        $result = (new UpdateLandingPageUsecase(
             $landingPageRepository,
             $landingPageValidator,
             new Purifier(),
