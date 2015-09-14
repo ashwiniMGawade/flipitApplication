@@ -13,15 +13,9 @@ class DeleteLandingPageUsecaseTest extends \Codeception\TestCase\Test
         $this->assertEquals(true, (new DeleteLandingPageUsecase($landingPagesRepository))->execute( new LandingPages()));
     }
 
-    private function landingPageRepositoryInterfaceMock()
-    {
-        $apiKeyRepository = $this->getMock('\Core\Domain\Repository\LandingPagesRepositoryInterface');
-        return $apiKeyRepository;
-    }
-
     private function createDeleteLandingPageRepositoryInterfaceWithMethodsMock($returns)
     {
-        $apiKeyRepository = $this->landingPageRepositoryInterfaceMock();
+        $apiKeyRepository = $this->getMock('\Core\Domain\Repository\LandingPagesRepositoryInterface');
         $apiKeyRepository
             ->expects($this->once())
             ->method('remove')

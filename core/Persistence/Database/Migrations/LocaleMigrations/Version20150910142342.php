@@ -19,7 +19,7 @@ class Version20150910142342 extends AbstractMigration
         $table->addColumn('metaDescription', 'text', array('notnull' => 0));
         $table->addColumn('content', 'blob', array('notnull' => 0));
         $table->addColumn('status', 'boolean', array('default' => 1, 'length' => 1, 'comment' => '1-available ,0-used'));
-        $table->addColumn('offlineSince', 'datetime', array('length' => 12));
+        $table->addColumn('offlineSince', 'datetime', array('length' => 12, 'notnull' => 0, 'default' => null));
         $table->addColumn('createdAt', 'datetime', array('length' => 12));
         $table->addColumn('updatedAt', 'datetime', array('length' => 12));
         $table->setPrimaryKey(array('id'));
