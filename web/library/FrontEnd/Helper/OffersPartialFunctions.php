@@ -299,10 +299,9 @@ class FrontEnd_Helper_OffersPartialFunctions
             '.$offerAnchorText.' </span>';
         } else {
             $onClick = '';
+            $isExpired = isset($currentOffer->expiredOffer) ? 'True' : 'False';
             if ($currentOffer->discountType == "CD") {
-                if('se' == LOCALE) {
-                    $onClick .= "gtmDataBuilder('voucherClickout', 'Code', '".$clickedElement."', 'Offer', ".$currentOffer->id.");";
-                }
+                $onClick .= "gtmDataBuilder('voucherClickout', 'Code', '".$clickedElement."', 'Offer', ".$currentOffer->id.", '".$isExpired."');";
                 $onClick .= $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
                 $onClick .= "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')";
                 if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
@@ -325,9 +324,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
                     $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
                 }
-                if('se' == LOCALE) {
-                    $onClick .= "gtmDataBuilder('voucherClickout', 'Deal', '".$clickedElement."', 'Offer', ".$currentOffer->id.");";
-                }
+                $onClick .= "gtmDataBuilder('voucherClickout', 'Deal', '".$clickedElement."', 'Offer', ".$currentOffer->id.", '".$isExpired."');";
                 $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
                 $offerLink =
                     '<a id="'.$currentOffer->id.'" class="'.$class.' '.$imageClass.'" 
