@@ -9,7 +9,6 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         $shopUrl = $domainName.'out/shop/'.$shop['id'];
         $affliateProgramUrl = $shop['affliateProgram'] =='' ? $shop['actualUrl'] : $shop['affliateProgram'];
         $affliateBounceRate .= "gtmDataBuilder('retailerClickout', 'Retailer', 'Retailer Logo', 'Retailer', ".$shop['id'].");";
-
         if ($shop['affliateProgram']) :
             $affliateUrl = $shopUrl;
             $affliateDisabled = '';
