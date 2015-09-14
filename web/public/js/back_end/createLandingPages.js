@@ -22,6 +22,11 @@ jQuery.noConflict();
 jQuery(document).ready(init);
 
 function init() {
+    jQuery("#shopName").select2({placeholder: __("Select a Shop")});
+    jQuery("#shopName").change(function(){
+        jQuery("#selectedShop").val(jQuery(this).val());
+    });
+
     jQuery('#permalink').NobleCount('#permalinkLeft',{
         max_chars: 68,
         prefixString : __("Shop overwrite title length ")

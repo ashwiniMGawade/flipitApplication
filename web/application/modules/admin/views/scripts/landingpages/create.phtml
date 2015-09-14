@@ -7,7 +7,8 @@
  $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.NobleCount.js");
  $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.textareaCounter.plugin.js");
  $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
- $this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
+ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
  $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createLandingPages.js");
 ?>
 <div id="imbullbody-content">
@@ -21,39 +22,34 @@
             <form method="POST" name="createLandingPage" id="createLandingPage">
                 <div class="mainpage-content">
                     <div class="mainpage-content-line">
-                        <div class="row-fluid mb10" id="statusDiv">
-                            <div class="span2">
-                                <strong><?php echo $this->translate('Online'); ?></strong>
-                            </div>
-                            <div class="span10">
-                                <div data-toggle="buttons-checkbox" class="btn-group mb20">
-                                    <input type="checkbox" class="hide" id="statusActiveCheckbox" name="statusActiveCheckbox" checked="checked" value="1">
-                                    <input type="checkbox" class="hide" id="statusInactiveCheckbox" name="statusInactiveCheckbox" value="0">
-                                    <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-primary" id="statusActive" onClick="">
-                                            <?php echo $this->translate('Yes'); ?>
-                                        </button>
-                                        <button type="button" class="btn" id="statusInactive" onClick="">
-                                            <?php echo $this->translate('No'); ?>
-                                        </button>
-                                    </div>
+                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Online'); ?></strong></label></div>
+                        <div class="mainpage-content-right">
+                            <div data-toggle="buttons-checkbox" class="btn-group mb20">
+                                <input type="checkbox" class="hide" id="statusActiveCheckbox" name="statusActiveCheckbox" checked="checked" value="1">
+                                <input type="checkbox" class="hide" id="statusInactiveCheckbox" name="statusInactiveCheckbox" value="0">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary" id="statusActive" onClick="">
+                                        <?php echo $this->translate('Yes'); ?>
+                                    </button>
+                                    <button type="button" class="btn" id="statusInactive" onClick="">
+                                        <?php echo $this->translate('No'); ?>
+                                    </button>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="row-fluid mb10" id="shopNameDiv">
-                            <div class="span2">
-                                <strong><?php echo $this->translate('Shop Name'); ?></strong>
-                            </div>
-                            <div class="span10">
-                                <select onchange="" name="shopName" class="combobox" id="shopName">
-                                    <option value=""></option>
-                                    <option value="1">Zalando</option>
-                                    <option value="2">Hema</option>
-                                    <option value="3">Albelli</option>
-                                </select>
-                                <input type="hidden" name="selctedShop" id="selctedShop" value="">
-                            </div>
+                    <div class="mainpage-content-line mb10">
+                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Shop Name'); ?></strong></label></div>
+                        <div class="mainpage-content-right">
+                            <select onchange="" name="shopName" class="combobox" id="shopName">
+                                <option value=""></option>
+                                <option value="1">Zalando</option>
+                                <option value="2">Hema</option>
+                                <option value="3">Albelli</option>
+                            </select>
+                            <input type="hidden" name="selectedShop" id="selectedShop" value="">
+                        </div>
                         </div>
                     </div>
                 </div>
