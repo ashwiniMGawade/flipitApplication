@@ -39,4 +39,11 @@ class BaseRepository implements BaseRepositoryInterface
         $this->em->flush();
         return $entity;
     }
+
+    public function remove($entity)
+    {
+        $result = $this->em->remove($entity);
+        $this->em->flush();
+        return $result;
+    }
 }
