@@ -50,11 +50,9 @@ else:
 endif;
 echo $this->headMeta();
 ?>
-<?php
-if(LOCALE=='se') : ?>
 <script type="text/javascript">
     dataLayer = [];
-    function gtmDataBuilder(eventName, variant, clickedElement, eventType, eventId) {
+    function gtmDataBuilder(eventName, variant, clickedElement, eventType, eventId, isExpired) {
             var gtmData = {
                     'event' : eventName,
                     'variant': variant,
@@ -64,12 +62,12 @@ if(LOCALE=='se') : ?>
                 gtmData['retailerId'] = eventId;
             } else {
                 gtmData['offerId'] = eventId;
+                gtmData['isExpired'] = isExpired;
             }
         dataLayer.push(gtmData);
         return true;
     }
 </script>
-<?php endif; ?>
 <script type="text/javascript">
     function OpenInNewTab(url)
     {
