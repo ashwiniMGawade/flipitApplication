@@ -1161,12 +1161,11 @@ EOD;
     {
         $offer = (object) $offer;
         $onClick = '';
-        if('se' == LOCALE) {
-            if($offer->discountType == 'CD') {
-                $onClick .= "gtmDataBuilder('voucherClickout', 'Code', 'List', 'Offer', " . $offer->id . ");";
-            } else if($offer->discountType == 'SL') {
-                $onClick .= "gtmDataBuilder('voucherClickout', 'Deal', 'List', 'Offer', " . $offer->id . ");";
-            }
+        $isExpired = isset($offer->expiredOffer) ? 'True' : 'False';
+        if($offer->discountType == 'CD') {
+            $onClick .= "gtmDataBuilder('voucherClickout', 'Code', 'List', 'Offer', " . $offer->id . ", '".$isExpired."');";
+        } else if($offer->discountType == 'SL') {
+            $onClick .= "gtmDataBuilder('voucherClickout', 'Deal', 'List', 'Offer', " . $offer->id . ", '".$isExpired."');";
         }
         $offerBounceRate = "/out/offer/".$offer->id;
         $offerPartial = new \FrontEnd_Helper_OffersPartialFunctions();

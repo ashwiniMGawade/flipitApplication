@@ -8,9 +8,8 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
         $shopUrl = $domainName.'out/shop/'.$shop['id'];
         $affliateProgramUrl = $shop['affliateProgram'] =='' ? $shop['actualUrl'] : $shop['affliateProgram'];
-        if('se' == LOCALE) {
-            $affliateBounceRate .= "gtmDataBuilder('retailerClickout', 'Retailer', 'Retailer Logo', 'Retailer', ".$shop['id'].");";
-        }
+        $affliateBounceRate .= "gtmDataBuilder('retailerClickout', 'Retailer', 'Retailer Logo', 'Retailer', ".$shop['id'].");";
+
         if ($shop['affliateProgram']) :
             $affliateUrl = $shopUrl;
             $affliateDisabled = '';
