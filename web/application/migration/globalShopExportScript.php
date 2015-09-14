@@ -69,22 +69,22 @@ class GlobalShopExport
         }
         $customLocale = $this->shopsData[$key]['customLocale'];
         $this->zendTranslation = new Zend_Translate(array(
-                'adapter' => 'gettext',
-                'disableNotices' => true));
+            'adapter' => 'gettext',
+            'disableNotices' => true));
         $this->zendTranslation->addTranslation(
             array(
-                    'content' => APPLICATION_PATH.'/../public/'. strtolower($this->localePath)
+                'content' => APPLICATION_PATH.'/../public/'. strtolower($this->localePath)
                     .'language/fallback/frontend_php'
                     . $suffix . '.mo',
-                    'locale' => $customLocale,
+                'locale' => $customLocale,
             )
         );
 
         $this->zendTranslation->addTranslation(
             array(
-                    'content' => APPLICATION_PATH.'/../public/'.strtolower($this->localePath).'language/po_links'
+                'content' => APPLICATION_PATH.'/../public/'.strtolower($this->localePath).'language/po_links'
                     . $suffix . '.mo',
-                    'locale' => $customLocale ,
+                'locale' => $customLocale ,
             )
         );
         $objPHPExcel = $this->getExcelHeaders();
@@ -136,7 +136,8 @@ class GlobalShopExport
         $objPHPExcel->getActiveSheet()->setCellValue('AI3', $this->zendTranslation->translate('Custom Header Text'));
         $objPHPExcel->getActiveSheet()->setCellValue('AJ3', $this->zendTranslation->translate('Extra opties'));
         $objPHPExcel->getActiveSheet()->setCellValue('AK3', $this->zendTranslation->translate('Last Updated'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AL3', $this->zendTranslation->translate('Locale'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AL3', $this->zendTranslation->translate('News Ticker update'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AM3', $this->zendTranslation->translate('Locale'));
         return $objPHPExcel;
     }
 
@@ -270,13 +271,15 @@ class GlobalShopExport
             $objPHPExcel->getActiveSheet()->setCellValue('AI'.$column, $customHeader);
             $objPHPExcel->getActiveSheet()->setCellValue('AJ'.$column, $displayExtraProperties);
             $objPHPExcel->getActiveSheet()->setCellValue('AK'.$column, $lastUpdated);
+            $newsTickerTime = !empty($newTickerTime) ? date("d-m-Y H:i:s", $newTickerTime) : '';
+            $objPHPExcel->getActiveSheet()->setCellValue('AL'.$column, $newsTickerTime);
 
             $localeName = $key ;
             if ($key == 'en') {
                 $localeName = 'default' ;
             }
 
-            $objPHPExcel->getActiveSheet()->setCellValue('AL'.$column, $localeName);
+            $objPHPExcel->getActiveSheet()->setCellValue('AM'.$column, $localeName);
             $column++;
             $row++;
         }
@@ -310,29 +313,29 @@ class GlobalShopExport
         $column = 4;
         $row = 4;
         $headerStyle = array(
-                'fill' => array(
-                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                        'color' => array('rgb'=>'00B4F2'),
-                ),
-                'font' => array(
-                        'bold' => true,
-                )
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb'=>'00B4F2'),
+            ),
+            'font' => array(
+                'bold' => true,
+            )
         );
         $borderStyle = array('borders' =>
-                array('outline' =>
-                        array('style' => PHPExcel_Style_Border::BORDER_THICK,
-                                'color' => array('argb' => '000000'),),),);
-        $objPHPExcel->getActiveSheet()->getStyle('A3:'.'AK3')->applyFromArray($headerStyle);
+            array('outline' =>
+                array('style' => PHPExcel_Style_Border::BORDER_THICK,
+                    'color' => array('argb' => '000000'),),),);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:'.'AM3')->applyFromArray($headerStyle);
 
-        $objPHPExcel->getActiveSheet()->getStyle('A3:AK3')->getAlignment()->setHorizontal(
+        $objPHPExcel->getActiveSheet()->getStyle('A3:AM3')->getAlignment()->setHorizontal(
             PHPExcel_Style_Alignment::HORIZONTAL_CENTER
         );
-        $objPHPExcel->getActiveSheet()->getStyle('B4:AK'.$row)->getAlignment()->setVertical(
+        $objPHPExcel->getActiveSheet()->getStyle('B4:AM'.$row)->getAlignment()->setVertical(
             PHPExcel_Style_Alignment::VERTICAL_TOP
         );
-        $objPHPExcel->getActiveSheet()->getStyle('A3:'.'AK3')->applyFromArray($borderStyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:'.'AM3')->applyFromArray($borderStyle);
         $borderColumn =  (intval($column) -1 );
-        $objPHPExcel->getActiveSheet()->getStyle('A3:'.'AK'.$borderColumn)->applyFromArray($borderStyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:'.'AM'.$borderColumn)->applyFromArray($borderStyle);
         $objPHPExcel = $this->setExcelSizeOfCell($objPHPExcel);
         return  $objPHPExcel;
     }
@@ -376,6 +379,8 @@ class GlobalShopExport
         $objPHPExcel->getActiveSheet()->getColumnDimension('AI')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AJ')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AK')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AL')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AM')->setAutoSize(true);
         return  $objPHPExcel;
     }
 
