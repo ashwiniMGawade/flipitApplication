@@ -9,6 +9,7 @@ use \Core\Domain\Usecase\Admin\GetApiKeysUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\DeleteApiKeyUsecase;
+use Core\Domain\Usecase\Admin\GetShopsUsecase;
 use \Core\Domain\Usecase\Admin\GetVisitorsUsecase;
 use \Core\Domain\Usecase\Admin\GetShopUsecase;
 use \Core\Domain\Usecase\Admin\CreateShopUsecase;
@@ -70,6 +71,11 @@ class AdminFactory
     public static function getShop()
     {
         return new GetShopUsecase(RepositoryFactory::shop(), new Purifier());
+    }
+
+    public static function getShops()
+    {
+        return new GetShopsUsecase(RepositoryFactory::shop(), new Purifier(), new Errors());
     }
 
     public static function createShop()
