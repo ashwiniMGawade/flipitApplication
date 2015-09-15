@@ -10,7 +10,7 @@ class DeleteLandingPageUsecaseTest extends \Codeception\TestCase\Test
     public function testDeleteLandingPageUsecase()
     {
         $landingPagesRepository = $this->createDeleteLandingPageRepositoryInterfaceWithMethodsMock(true);
-        $this->assertEquals(true, (new DeleteLandingPageUsecase($landingPagesRepository))->execute( new LandingPages()));
+        $this->assertEquals(true, (new DeleteLandingPageUsecase($landingPagesRepository))->execute(new LandingPages()));
     }
 
     private function createDeleteLandingPageRepositoryInterfaceWithMethodsMock($returns)

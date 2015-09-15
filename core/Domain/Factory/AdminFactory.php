@@ -5,29 +5,37 @@ use \Core\Domain\Service\Validator;
 use \Core\Domain\Service\KeyGenerator;
 use \Core\Domain\Service\Purifier;
 
-use Core\Domain\Usecase\Admin\DeleteLandingPageUsecase;
 use \Core\Domain\Usecase\Admin\GetApiKeysUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\DeleteApiKeyUsecase;
-use Core\Domain\Usecase\Admin\GetLandingPageUsecase;
-use \Core\Domain\Usecase\Admin\GetVisitorsUsecase;
+
+use \Core\Domain\Usecase\Admin\GetShopsUsecase;
 use \Core\Domain\Usecase\Admin\GetShopUsecase;
 use \Core\Domain\Usecase\Admin\CreateShopUsecase;
 use \Core\Domain\Usecase\Admin\AddShopUsecase;
 use \Core\Domain\Usecase\Admin\UpdateShopUsecase;
 use \Core\Domain\Usecase\Admin\DeleteShopUsecase;
+
+use \Core\Domain\Usecase\Admin\GetVisitorsUsecase;
 use \Core\Domain\Usecase\Admin\UpdateVisitorUsecase;
+
 use \Core\Domain\Usecase\Admin\CreateWidgetUsecase;
 use \Core\Domain\Usecase\Admin\AddWidgetUsecase;
 use \Core\Domain\Usecase\Admin\GetWidgetUsecase;
 use \Core\Domain\Usecase\Admin\UpdateWidgetUsecase;
+
+use \Core\Domain\Usecase\Admin\AddLandingPageUsecase;
+use \Core\Domain\Usecase\Admin\CreateLandingPageUsecase;
+use \Core\Domain\Usecase\Admin\GetLandingPageUsecase;
 use \Core\Domain\Usecase\Admin\GetLandingPagesUsecase;
+use \Core\Domain\Usecase\Admin\DeleteLandingPageUsecase;
 
 use \Core\Domain\Validator\ApiKeyValidator;
+use \Core\Domain\Validator\LandingPageValidator;
 use \Core\Domain\Validator\ShopValidator;
-use Core\Domain\Validator\VisitorValidator;
-use Core\Domain\Validator\WidgetValidator;
+use \Core\Domain\Validator\VisitorValidator;
+use \Core\Domain\Validator\WidgetValidator;
 
 use \Core\Persistence\Factory\RepositoryFactory;
 
@@ -73,6 +81,11 @@ class AdminFactory
     public static function getShop()
     {
         return new GetShopUsecase(RepositoryFactory::shop(), new Purifier());
+    }
+
+    public static function getShops()
+    {
+        return new GetShopsUsecase(RepositoryFactory::shop(), new Purifier(), new Errors());
     }
 
     public static function createShop()
@@ -140,7 +153,7 @@ class AdminFactory
         return new GetLandingPagesUsecase(RepositoryFactory::landingPages(), new Purifier(), new Errors());
     }
 
-    public  static function getLandingPage()
+    public static function getLandingPage()
     {
         return new GetLandingPageUsecase(RepositoryFactory::landingPages(), new Purifier(), new Errors());
     }
@@ -148,5 +161,20 @@ class AdminFactory
     public static function deleteLandingPage()
     {
         return new DeleteLandingPageUsecase(RepositoryFactory::landingPages());
+    }
+
+    public static function createLandingPage()
+    {
+        return new CreateLandingPageUsecase();
+    }
+
+    public static function addLandingPage()
+    {
+        return new AddLandingPageUsecase(
+            RepositoryFactory::landingPages(),
+            new LandingPageValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
     }
 }
