@@ -27,6 +27,7 @@ use \Core\Domain\Usecase\Admin\UpdateWidgetUsecase;
 
 use \Core\Domain\Usecase\Admin\AddLandingPageUsecase;
 use \Core\Domain\Usecase\Admin\CreateLandingPageUsecase;
+use \Core\Domain\Usecase\Admin\UpdateLandingPageUsecase;
 use \Core\Domain\Usecase\Admin\GetLandingPageUsecase;
 use \Core\Domain\Usecase\Admin\GetLandingPagesUsecase;
 use \Core\Domain\Usecase\Admin\DeleteLandingPageUsecase;
@@ -171,6 +172,16 @@ class AdminFactory
     public static function addLandingPage()
     {
         return new AddLandingPageUsecase(
+            RepositoryFactory::landingPages(),
+            new LandingPageValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+
+    public static function updateLandingPage()
+    {
+        return new UpdateLandingPageUsecase(
             RepositoryFactory::landingPages(),
             new LandingPageValidator(new Validator()),
             new Purifier(),
