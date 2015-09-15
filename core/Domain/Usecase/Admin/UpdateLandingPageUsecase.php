@@ -57,10 +57,15 @@ class UpdateLandingPageUsecase
             $landingPage->setMetaDescription($params['metaDescription']);
         }
         if (isset($params['status'])) {
-            $landingPage->setStatus($params['status']);
+            $landingPage->setStatus((int) $params['status']);
+            if ($params['status'] == 0) {
+                $landingPage->setOfflineSince(new \DateTime('now'));
+            } else {
+                $landingPage->setOfflineSince(null);
+            }
         }
-        if (isset($params['offlineSince'])) {
-            $landingPage->setOfflineSince($params['offlineSince']);
+        if (isset($params['content'])) {
+            $landingPage->setContent($params['content']);
         }
         $landingPage->setUpdatedAt(new \DateTime('now'));
 
