@@ -20,6 +20,7 @@ use \Core\Domain\Usecase\Admin\CreateWidgetUsecase;
 use \Core\Domain\Usecase\Admin\AddWidgetUsecase;
 use \Core\Domain\Usecase\Admin\GetWidgetUsecase;
 use \Core\Domain\Usecase\Admin\UpdateWidgetUsecase;
+use \Core\Domain\Usecase\Admin\GetLandingPagesUsecase;
 
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\ShopValidator;
@@ -130,5 +131,10 @@ class AdminFactory
             new Purifier(),
             new Errors()
         );
+    }
+
+    public static function getLandingPages()
+    {
+        return new GetLandingPagesUsecase(RepositoryFactory::landingPages(), new Purifier(), new Errors());
     }
 }

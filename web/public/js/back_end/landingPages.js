@@ -16,7 +16,7 @@ function getLandingPages(iStart,iSortCol,iSortDir) {
         "bLengthChange" : false,
         "bFilter" : false,
         "iDisplayStart" : iStart,
-        "iDisplayLength" : 20,
+        "iDisplayLength" : 100,
         "oLanguage": {
               "sInfo": "<b>_START_-_END_</b> of <b>_TOTAL_</b>"
         },
@@ -54,13 +54,6 @@ function getLandingPages(iStart,iSortCol,iSortDir) {
             "fnRender" : function(obj) {
                 if(obj.aData.shopOffersCount != null) {
                     return '<p editId=' + obj.aData.id + ' class="editId colorAsLink word-wrap-without-margin-offer"><a href="javascript:void(0)">' + obj.aData.shopOffersCount +'</a></p>';
-                }
-            }
-        },
-        {
-            "fnRender" : function(obj) {
-                if(obj.aData.shopCouponCount != null) {
-                    return '<p editId=' + obj.aData.id + ' class="editId colorAsLink word-wrap-without-margin-offer"><a href="javascript:void(0)">' + obj.aData.shopCouponCount +'</a></p>';
                 }
             }
         },

@@ -1,4 +1,7 @@
 <?php
+
+use \Core\Domain\Factory\AdminFactory;
+
 class Admin_LandingpagesController extends Zend_Controller_Action
 {
     public function preDispatch()
@@ -26,42 +29,22 @@ class Admin_LandingpagesController extends Zend_Controller_Action
 
     public function getAction()
     {
-        $landingPages = array(
-            array(
-                'id' => '1',
-                'title' => 'Zalando Landing Page',
-                'shopName' => 'Zalando',
-                'permalink' => 'zalando-landing-page',
-                'shopOffersCount' => 123,
-                'shopCouponCount' => 21,
-                'shopClickoutCount' => 67243,
-                'status' => 1,
+        $landingPages = AdminFactory::getLandingPages()->execute();
+        $landingPagesData = array();
+        foreach ($landingPages as $landingPage) {
+            $landingPagesData[] = array(
+                'id' => $landingPage->getId(),
+                'title' => $landingPage->getTitle(),
+                'shopName' => $landingPage->getShop()->getName(),
+                'permalink' => $landingPage->getPermalink(),
+                'shopOffersCount' => $landingPage->getShop()->getOfferCount(),
+                'shopClickoutCount' => $landingPage->getShop()->getShopAndOfferClickouts(),
+                'status' => $landingPage->getStatus(),
                 'offlineSince' => ''
-            ),
-            array(
-                'id' => '2',
-                'title' => 'Hema Landing Page',
-                'shopName' => 'Hema',
-                'permalink' => 'hema-landing-page',
-                'shopOffersCount' => 45,
-                'shopCouponCount' => 251,
-                'shopClickoutCount' => 57,
-                'status' => 1,
-                'offlineSince' => ''
-            ),
-            array(
-                'id' => '3',
-                'title' => 'Albelli Landing Page',
-                'shopName' => 'Albelli',
-                'permalink' => 'albelli-landing-page',
-                'shopOffersCount' => 787,
-                'shopCouponCount' => 3,
-                'shopClickoutCount' => 6547,
-                'status' => 0,
-                'offlineSince' => new \DateTime('now')
-            )
-        );
-        $response = \DataTable_Helper::createResponse(1, $landingPages, count($landingPages));
+            );
+        }
+
+        $response = \DataTable_Helper::createResponse(1, $landingPagesData, count($landingPages));
         echo Zend_Json::encode($response);
         exit;
     }

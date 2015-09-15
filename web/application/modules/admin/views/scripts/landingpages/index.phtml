@@ -7,7 +7,8 @@
 ?>
 <div id="landingPagesList">
    <div class="wrap columns-2">
-        <h1 class="fl"><?php echo $this->translate('Landing Pages'); ?>
+       <?php echo $this->flashMessages(); ?>
+        <h1 class="fl"><?php echo $this->translate('Landing Pages'); ?>n
             <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/landingpages/create'">
             <?php echo $this->translate('Add new Landing Page'); ?>
             </button>
@@ -21,7 +22,6 @@
                     <th><?php echo $this->translate('Shop Name');?></th>
                     <th><?php echo $this->translate('Permalink');?></th>
                     <th><?php echo $this->translate('Offers');?></th>
-                    <th><?php echo $this->translate('Coupons');?></th>
                     <th><?php echo $this->translate('Clickouts');?></th>
                     <th><?php echo $this->translate('Online');?></th>
                     <th><?php echo $this->translate('Offline Since');?></th>
