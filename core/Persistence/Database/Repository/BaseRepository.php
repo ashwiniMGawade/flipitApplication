@@ -42,6 +42,7 @@ class BaseRepository implements BaseRepositoryInterface
 
     public function remove($entity)
     {
+        $entity = $this->em->merge($entity);
         $result = $this->em->remove($entity);
         $this->em->flush();
         return $result;

@@ -107,19 +107,19 @@ function getLandingPages(iStart,iSortCol,iSortDir) {
 //    });
 //}
 //
-//function deleteApiKey(id) {
-//    bootbox.confirm("Are you sure you want to delete this Api Key?",'No','Yes',function(r) {
-//        if (!r) {
-//            return false;
-//        } else {
-//            addOverLay();
-//            $.ajax({
-//                type : "POST",
-//                url : HOST_PATH+"admin/apikeys/delete",
-//                data : "id="+id
-//            }).done(function(msg) {
-//                window.location = HOST_PATH + 'admin/apikeys';
-//            });
-//        }
-//    });
-//}
+function deleteLandingPage(id) {
+   bootbox.confirm("Are you sure you want to delete this Landing Page?",'No','Yes',function(r) {
+        if (!r) {
+            return false;
+        } else {
+            addOverLay();
+            $.ajax({
+                type : "POST",
+                url : HOST_PATH+"admin/landingpages/delete",
+                data : "id="+id
+            }).done(function(msg) {
+                window.location = HOST_PATH + 'admin/landingpages';
+            });
+        }
+    });
+}

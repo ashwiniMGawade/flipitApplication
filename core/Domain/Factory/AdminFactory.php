@@ -5,10 +5,12 @@ use \Core\Domain\Service\Validator;
 use \Core\Domain\Service\KeyGenerator;
 use \Core\Domain\Service\Purifier;
 
+use Core\Domain\Usecase\Admin\DeleteLandingPageUsecase;
 use \Core\Domain\Usecase\Admin\GetApiKeysUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\DeleteApiKeyUsecase;
+use Core\Domain\Usecase\Admin\GetLandingPageUsecase;
 use \Core\Domain\Usecase\Admin\GetVisitorsUsecase;
 use \Core\Domain\Usecase\Admin\GetShopUsecase;
 use \Core\Domain\Usecase\Admin\CreateShopUsecase;
@@ -136,5 +138,15 @@ class AdminFactory
     public static function getLandingPages()
     {
         return new GetLandingPagesUsecase(RepositoryFactory::landingPages(), new Purifier(), new Errors());
+    }
+
+    public  static function getLandingPage()
+    {
+        return new GetLandingPageUsecase(RepositoryFactory::landingPages(), new Purifier(), new Errors());
+    }
+
+    public static function deleteLandingPage()
+    {
+        return new DeleteLandingPageUsecase(RepositoryFactory::landingPages());
     }
 }

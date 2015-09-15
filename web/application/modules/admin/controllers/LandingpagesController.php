@@ -2,7 +2,7 @@
 
 use \Core\Domain\Factory\AdminFactory;
 
-class Admin_LandingpagesController extends Zend_Controller_Action
+class Admin_LandingpagesController extends Application_Admin_BaseController
 {
     public function preDispatch()
     {
@@ -40,7 +40,7 @@ class Admin_LandingpagesController extends Zend_Controller_Action
                 'shopOffersCount' => $landingPage->getShop()->getOfferCount(),
                 'shopClickoutCount' => $landingPage->getShop()->getShopAndOfferClickouts(),
                 'status' => $landingPage->getStatus(),
-                'offlineSince' => ''
+                'offlineSince' => $landingPage->getOfflineSince()
             );
         }
 
@@ -51,5 +51,23 @@ class Admin_LandingpagesController extends Zend_Controller_Action
 
     public function createAction()
     {
+    }
+
+    public function deleteAction() {
+        $landingPageId = intval($this->getRequest()->getParam('id'));
+        if (intval($landingPageId) < 1) {
+            $this->setFlashMessage('error', 'Invalid page id provided.');
+            die;
+        }
+
+        $result = AdminFactory::getLandingPage()->execute(array('id' => $landingPageId));
+        if ($result instanceof Errors) {
+            $errors = $result->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+            die;
+        }
+        AdminFactory::deleteLandingPage()->execute($result);
+        $this->setFlashMessage('success', 'Landing page deleted successfully.');
+        die;
     }
 }
