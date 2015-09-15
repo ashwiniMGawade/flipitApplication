@@ -12,6 +12,7 @@
  $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createLandingPages.js");
 ?>
 <div id="imbullbody-content">
+    <?php echo $this->flashMessages(); ?>
     <div id="landingPagesCreate">
         <div class="wrap columns-2">
             <h1>
@@ -25,9 +26,9 @@
                         <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Online'); ?></strong></label></div>
                         <div class="mainpage-content-right">
                             <div data-toggle="buttons-checkbox" class="btn-group mb20">
-                                <input type="hidden" id="status" name="status" value=1>
+                                <input type="hidden" id="status" name="status" value="<?php echo isset($this->landingPage['status']) ? $this->landingPage['status'] : 1; ?>">
                                 <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-primary" id="statusActive" onClick="setStatus('statusActive')">
+                                    <button type="button" class="btn" id="statusActive" onClick="setStatus('statusActive')">
                                         <?php echo $this->translate('Yes'); ?>
                                     </button>
                                     <button type="button" class="btn" id="statusInactive" onClick="setStatus('statusInactive')">
@@ -51,7 +52,7 @@
                                     endforeach;
                                     ?>
                                 </select>
-                                <input type="hidden" name="selectedShop" id="selectedShop" value="">
+                                <input type="hidden" name="selectedShop" id="selectedShop" value="<?php echo isset($this->landingPage['selectedShop']) ? $this->landingPage['selectedShop'] : ''; ?>">
                             </div>
                         </div>
                     </div>
@@ -63,7 +64,7 @@
                             <div class="mainpage-content-right-inner-left"><label id="permalinkLabel"><?php echo $this->translate('http://www.kortingscode.nl/gad/'); ?></label></div>
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-right-full">
-                                <input type="text" class="span3" placeholder="<?php echo $this->translate('Permalink'); ?>" name="permalink" id="permalink">
+                                <input type="text" class="span3" placeholder="<?php echo $this->translate('Permalink'); ?>" name="permalink" id="permalink" value="<?php echo isset($this->landingPage['permalink']) ? $this->landingPage['permalink'] : ''; ?>">
                             </div>
                         </div>
                     </div>
@@ -72,7 +73,7 @@
                         <div class="mainpage-content-right">
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-left-other">
-                                <input type="text" class="span3" placeholder="<?php echo $this->translate('Title'); ?>" name="title" id="title" style="margin-bottom: 0;">
+                                <input type="text" class="span3" placeholder="<?php echo $this->translate('Title'); ?>" name="title" id="title" style="margin-bottom: 0;" value="<?php echo isset($this->landingPage['title']) ? $this->landingPage['title'] : ''; ?>">
                                 <span id="titleLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
                             </div>
                         </div>
@@ -82,7 +83,7 @@
                         <div class="mainpage-content-right">
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-left-other">
-                                <input type="text" class="span3 ignore" placeholder="<?php echo $this->translate('Subtitle'); ?>" name="subTitle" id="subTitle" style="margin-bottom: 0;">
+                                <input type="text" class="span3 ignore" placeholder="<?php echo $this->translate('Subtitle'); ?>" name="subTitle" id="subTitle" style="margin-bottom: 0;" value="<?php echo isset($this->landingPage['subTitle']) ? $this->landingPage['subTitle'] : ''; ?>">
                                 <span id="subTitleLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
                             </div>
                         </div>
@@ -92,7 +93,7 @@
                         <div class="mainpage-content-right">
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-left-other">
-                                <input type="text" class="span3 ignore" placeholder="<?php echo $this->translate('Overwrite Title'); ?>" name="overwriteTitle" id="overwriteTitle" style="margin-bottom: 0;">
+                                <input type="text" class="span3 ignore" placeholder="<?php echo $this->translate('Overwrite Title'); ?>" name="overwriteTitle" id="overwriteTitle" style="margin-bottom: 0;" value="<?php echo isset($this->landingPage['overwriteTitle']) ? $this->landingPage['overwriteTitle'] : ''; ?>">
                                 <span id="overwriteTitleLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
                             </div>
                         </div>
@@ -102,7 +103,7 @@
                         <div class="mainpage-content-right">
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-left-other">
-                                <textarea class="input-xlarge mbot bbot ignore" id="metaDescription" name="metaDescription" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"></textarea>
+                                <textarea class="input-xlarge mbot bbot ignore" id="metaDescription" name="metaDescription" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"><?php echo isset($this->landingPage['metaDescription']) ? $this->landingPage['metaDescription'] : ''; ?></textarea>
                                 <input type="text" class="input-xlarge disabled btop word-count"  id="metaDescriptionLeft" disabled="disabled">
                             </div>
                         </div>
@@ -113,7 +114,7 @@
                         <div class="mainpage-content-right">
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-left-other">
-                                <textarea rows="3" id="pageContent" name="pageContent" placeholder="<?php echo $this->translate('Landing Page Content')?>" class="input-xlarge mbot bbot ignore word_count"></textarea>
+                                <textarea rows="3" id="pageContent" name="pageContent" placeholder="<?php echo $this->translate('Landing Page Content')?>" class="input-xlarge mbot bbot ignore word_count"><?php echo isset($this->landingPage['pageContent']) ? $this->landingPage['pageContent'] : ''; ?></textarea>
                             </div>
                         </div>
                     </div>

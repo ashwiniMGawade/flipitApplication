@@ -16,6 +16,16 @@ function init() {
     jQuery("#shopName").change(function(){
         jQuery("#selectedShop").val(jQuery(this).val());
     });
+    if(jQuery("#selectedShop").val()) {
+        jQuery("#shopName").select2("val", jQuery("#selectedShop").val());
+    }
+    if(jQuery("#status").val() == 1) {
+        jQuery('#statusActive').addClass('btn-primary');
+        jQuery('#statusInactive').removeClass('btn-primary');
+    } else {
+        jQuery('#statusInactive').addClass('btn-primary');
+        jQuery('#statusActive').removeClass('btn-primary');
+    }
 
     jQuery('#permalink').NobleCount('#permalinkLeft',{
         max_chars: 68,
@@ -86,6 +96,9 @@ function validateForm() {
         messages : {
             status : {
                 required : __("Please select a status")
+            },
+            selectedShop : {
+                required : __("Please select a shop")
             },
             permalink : {
                 required : __("Please enter a permalink")

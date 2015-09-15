@@ -1,6 +1,7 @@
 <?php
 namespace Core\Domain\Entity;
-use Doctrine\ORM\Mapping AS ORM;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
@@ -21,8 +22,8 @@ class LandingPages
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="Core\Domain\Entity\Shop", inversedBy="landingPages")
-     * @ORM\JoinColumn(name="shopId", referencedColumnName="id", unique=true)
+     * @ORM\OneToOne(targetEntity="Core\Domain\Entity\Shop")
+     * @ORM\JoinColumn(name="shopId", referencedColumnName="id")
      */
     protected $shop;
 
@@ -62,7 +63,7 @@ class LandingPages
     protected $status = 1;
 
     /**
-     * @ORM\Column(type="datetime", nullable=false)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     protected $offlineSince;
 

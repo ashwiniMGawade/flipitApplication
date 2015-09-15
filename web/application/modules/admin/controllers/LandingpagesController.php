@@ -1,7 +1,8 @@
 <?php
 use \Core\Domain\Factory\AdminFactory;
+use \Core\Service\Errors;
 
-class Admin_LandingpagesController extends Zend_Controller_Action
+class Admin_LandingpagesController extends Application_Admin_BaseController
 {
     public function preDispatch()
     {
@@ -79,5 +80,36 @@ class Admin_LandingpagesController extends Zend_Controller_Action
             'name' => 'ASC'
         );
         $this->view->shops = AdminFactory::getShops()->execute($conditions, $order);
+
+        if ($this->_request->isPost()) {
+            $landingPage = AdminFactory::createLandingPage()->execute();
+            $shopId = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('selectedShop')));
+            if ($shopId <= 0) {
+                $this->view->landingPage = $this->getAllParams();
+                $this->setFlashMessage('error', 'Invalid Shop');
+            } else {
+                $shop = AdminFactory::getShop()->execute($shopId);
+
+                $parameters['status'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('status')));
+                $parameters['title'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('title'));
+                $parameters['permalink'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('permalink'));
+                $parameters['subTitle'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('subTitle'));
+                $parameters['metaTitle'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('overwriteTitle'));
+                $parameters['metaDescription'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('metaDescription'));
+                $parameters['content'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('pageContent'));
+                $parameters['shop'] = $shop;
+
+                $result = AdminFactory::addLandingPage()->execute($landingPage, $parameters);
+
+                if ($result instanceof Errors) {
+                    $this->view->landingPage = $this->getAllParams();
+                    $errors = $result->getErrorsAll();
+                    $this->setFlashMessage('error', $errors);
+                } else {
+                    $this->setFlashMessage('success', 'Landing Page has been added successfully');
+                    $this->redirect(HTTP_PATH.'admin/landingpages');
+                }
+            }
+        }
     }
 }

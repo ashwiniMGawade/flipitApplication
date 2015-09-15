@@ -5,6 +5,8 @@ use \Core\Domain\Service\Validator;
 use \Core\Domain\Service\KeyGenerator;
 use \Core\Domain\Service\Purifier;
 
+use Core\Domain\Usecase\Admin\AddLandingPageUsecase;
+use Core\Domain\Usecase\Admin\CreateLandingPageUsecase;
 use \Core\Domain\Usecase\Admin\GetApiKeysUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
@@ -21,8 +23,10 @@ use \Core\Domain\Usecase\Admin\CreateWidgetUsecase;
 use \Core\Domain\Usecase\Admin\AddWidgetUsecase;
 use \Core\Domain\Usecase\Admin\GetWidgetUsecase;
 use \Core\Domain\Usecase\Admin\UpdateWidgetUsecase;
+use \Core\Domain\Usecase\Admin\GetLandingPagesUsecase;
 
 use \Core\Domain\Validator\ApiKeyValidator;
+use Core\Domain\Validator\LandingPageValidator;
 use \Core\Domain\Validator\ShopValidator;
 use Core\Domain\Validator\VisitorValidator;
 use Core\Domain\Validator\WidgetValidator;
@@ -133,6 +137,26 @@ class AdminFactory
         return new UpdateWidgetUsecase(
             RepositoryFactory::widget(),
             new WidgetValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+
+    public static function getLandingPages()
+    {
+        return new GetLandingPagesUsecase(RepositoryFactory::landingPages(), new Purifier(), new Errors());
+    }
+
+    public static function createLandingPage()
+    {
+        return new CreateLandingPageUsecase();
+    }
+
+    public static function addLandingPage()
+    {
+        return new AddLandingPageUsecase(
+            RepositoryFactory::landingPages(),
+            new LandingPageValidator(new Validator()),
             new Purifier(),
             new Errors()
         );

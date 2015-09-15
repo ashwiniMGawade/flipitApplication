@@ -25,6 +25,7 @@ class GetLandingPagesUsecase
             return $this->errors;
         }
         $conditions = $this->htmlPurifier->purify($conditions);
+
         return $this->landingPagesRepository->findBy('\Core\Domain\Entity\LandingPages', $conditions);
     }
 }
