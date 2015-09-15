@@ -70,24 +70,34 @@ class Admin_LandingpagesController extends Application_Admin_BaseController
             } else {
                 $shop = AdminFactory::getShop()->execute($shopId);
 
-                $parameters['status'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('status')));
-                $parameters['title'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('title'));
-                $parameters['permalink'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('permalink'));
-                $parameters['subTitle'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('subTitle'));
-                $parameters['metaTitle'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('overwriteTitle'));
-                $parameters['metaDescription'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('metaDescription'));
-                $parameters['content'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('pageContent'));
-                $parameters['shop'] = $shop;
+                $conditions = array(
+                    'shop' => $shop
+                );
+                $landingPagesForShop = AdminFactory::getLandingPages()->execute($conditions);
 
-                $result = AdminFactory::addLandingPage()->execute($landingPage, $parameters);
-
-                if ($result instanceof Errors) {
+                if (count($landingPagesForShop) > 0) {
                     $this->view->landingPage = $this->getAllParams();
-                    $errors = $result->getErrorsAll();
-                    $this->setFlashMessage('error', $errors);
+                    $this->setFlashMessage('error', 'Landing Page already exists for '.$shop->getName().'. Please select a different shop.');
                 } else {
-                    $this->setFlashMessage('success', 'Landing Page has been added successfully');
-                    $this->redirect(HTTP_PATH.'admin/landingpages');
+                    $parameters['status'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('status')));
+                    $parameters['title'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('title'));
+                    $parameters['permalink'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('permalink'));
+                    $parameters['subTitle'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('subTitle'));
+                    $parameters['metaTitle'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('overwriteTitle'));
+                    $parameters['metaDescription'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('metaDescription'));
+                    $parameters['content'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('pageContent'));
+                    $parameters['shop'] = $shop;
+
+                    $result = AdminFactory::addLandingPage()->execute($landingPage, $parameters);
+
+                    if ($result instanceof Errors) {
+                        $this->view->landingPage = $this->getAllParams();
+                        $errors = $result->getErrorsAll();
+                        $this->setFlashMessage('error', $errors);
+                    } else {
+                        $this->setFlashMessage('success', 'Landing Page has been added successfully');
+                        $this->redirect(HTTP_PATH.'admin/landingpages');
+                    }
                 }
             }
         }
@@ -142,25 +152,33 @@ class Admin_LandingpagesController extends Application_Admin_BaseController
                     $this->setFlashMessage('error', 'Invalid Shop');
                 } else {
                     $shop = AdminFactory::getShop()->execute($shopId);
-
-                    $parameters['status'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('status')));
-                    $parameters['title'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('title'));
-                    $parameters['permalink'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('permalink'));
-                    $parameters['subTitle'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('subTitle'));
-                    $parameters['metaTitle'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('overwriteTitle'));
-                    $parameters['metaDescription'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('metaDescription'));
-                    $parameters['content'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('pageContent'));
-                    $parameters['shop'] = $shop;
-
-                    $result = AdminFactory::updateLandingPage()->execute($landingPage, $parameters);
-
-                    if ($result instanceof Errors) {
+                    $conditions = array(
+                        'shop' => $shop
+                    );
+                    $landingPagesForShop = AdminFactory::getLandingPages()->execute($conditions);
+                    if ((count($landingPagesForShop) == 1 && $landingPagesForShop[0]->getId() != $landingPageId) || count($landingPagesForShop) > 1) {
                         $this->view->landingPage = $this->getAllParams();
-                        $errors = $result->getErrorsAll();
-                        $this->setFlashMessage('error', $errors);
+                        $this->setFlashMessage('error', 'Landing Page already exists for '.$shop->getName().'. Please select a different shop.');
                     } else {
-                        $this->setFlashMessage('success', 'Landing Page has been updated successfully');
-                        $this->redirect(HTTP_PATH.'admin/landingpages');
+                        $parameters['status'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('status')));
+                        $parameters['title'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('title'));
+                        $parameters['permalink'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('permalink'));
+                        $parameters['subTitle'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('subTitle'));
+                        $parameters['metaTitle'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('overwriteTitle'));
+                        $parameters['metaDescription'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('metaDescription'));
+                        $parameters['content'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('pageContent'));
+                        $parameters['shop'] = $shop;
+
+                        $result = AdminFactory::updateLandingPage()->execute($landingPage, $parameters);
+
+                        if ($result instanceof Errors) {
+                            $this->view->landingPage = $this->getAllParams();
+                            $errors = $result->getErrorsAll();
+                            $this->setFlashMessage('error', $errors);
+                        } else {
+                            $this->setFlashMessage('success', 'Landing Page has been updated successfully');
+                            $this->redirect(HTTP_PATH.'admin/landingpages');
+                        }
                     }
                 }
             }
