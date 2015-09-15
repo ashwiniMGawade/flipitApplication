@@ -1,21 +1,11 @@
 var validRules = {
-    shopName : __("Shop name looks great"),
     permalink : __("Permalink looks great"),
-    title : __("Landing Page Title looks great"),
-    subTitle : __("Landing Page Subtitle looks great"),
-    overwriteTitle : __("Overwrite Title looks great"),
-    metaDescription : __("Meta Description looks great"),
-    pageContent : __("Landing Page Content looks great")
+    title : __("Title looks great")
 };
 
 var focusRules = {
-    shopName : __("Select shop name"),
     permalink : __("Enter Permalink"),
-    title : __("Enter Landing Page Title"),
-    subTitle : __("Enter Landing Page Subtitle"),
-    overwriteTitle : __("Enter Overwrite Title"),
-    metaDescription : __("Enter Meta Description"),
-    pageContent : __("Enter Landing Page Content")
+    title : __("Enter Title")
 };
 
 jQuery.noConflict();
@@ -63,6 +53,8 @@ function init() {
             height : "300"
         }
     );
+
+    validateForm();
 }
 
 function setStatus(status) {
@@ -72,4 +64,65 @@ function setStatus(status) {
     } else {
         jQuery('#status').val(0);
     }
+}
+
+function validateForm() {
+    jQuery('#createLandingPage').validate({
+        errorClass : 'error',
+        validClass : 'success',
+        errorElement : 'span',
+        ignore: ".ignore",
+        errorPlacement : function(error, element) {
+            element.parent("div").prev("div").html(error);
+        },
+        rules: {
+            status : "required",
+            selectedShop : "required",
+            permalink : "required",
+            title : {
+                "required" : true
+            }
+        },
+        messages : {
+            status : {
+                required : __("Please select a status")
+            },
+            permalink : {
+                required : __("Please enter a permalink")
+            },
+            title : {
+                required : __("Please enter a title")
+            }
+        },
+        onfocusin : function (element) {
+            this.showLabel(element, focusRules[element.name]);
+            jQuery(element).parent('div')
+                .removeClass(this.settings.errorClass)
+                .removeClass(this.settings.validClass)
+                .prev("div")
+                .addClass('focus')
+                .removeClass(this.settings.errorClass)
+                .removeClass(this.settings.validClass);
+        },
+        highlight : function (element, errorClass, validClass) {
+            this.showLabel(element, focusRules[element.name]);
+            jQuery(element).parent('div')
+                .removeClass(validClass)
+                .addClass(errorClass)
+                .prev("div")
+                .removeClass(validClass)
+                .addClass(errorClass);
+        },
+        success: function (label, element) {
+            jQuery(element).parent('div')
+                .removeClass(this.errorClass)
+                .addClass(this.validClass)
+                .prev("div")
+                .removeClass(this.errorClass)
+                .addClass(this.validClass)
+                .removeClass("focus");
+            jQuery(label).append(validRules[element.name]);
+            label.addClass('valid');
+        }
+    });
 }

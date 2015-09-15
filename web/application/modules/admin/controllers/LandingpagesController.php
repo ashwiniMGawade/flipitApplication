@@ -1,4 +1,6 @@
 <?php
+use \Core\Domain\Factory\AdminFactory;
+
 class Admin_LandingpagesController extends Zend_Controller_Action
 {
     public function preDispatch()
@@ -68,5 +70,14 @@ class Admin_LandingpagesController extends Zend_Controller_Action
 
     public function createAction()
     {
+        $conditions = array(
+            'deleted' => 0,
+            'status' => 1
+        );
+
+        $order = array(
+            'name' => 'ASC'
+        );
+        $this->view->shops = AdminFactory::getShops()->execute($conditions, $order);
     }
 }

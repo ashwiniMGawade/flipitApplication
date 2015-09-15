@@ -41,14 +41,18 @@
                     <div class="mainpage-content-line mb10">
                         <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Shop Name'); ?></strong></label></div>
                         <div class="mainpage-content-right">
-                            <select onchange="" name="shopName" class="combobox" id="shopName">
-                                <option value=""></option>
-                                <option value="1">Zalando</option>
-                                <option value="2">Hema</option>
-                                <option value="3">Albelli</option>
-                            </select>
-                            <input type="hidden" name="selectedShop" id="selectedShop" value="">
-                        </div>
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <select name="shopName" class="combobox" id="shopName">
+                                    <option value=""></option>
+                                    <?php
+                                    foreach ($this->shops as $shop) :
+                                        echo "<option value=".$shop->id.">".$shop->name."</option>";
+                                    endforeach;
+                                    ?>
+                                </select>
+                                <input type="hidden" name="selectedShop" id="selectedShop" value="">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -68,7 +72,7 @@
                         <div class="mainpage-content-right">
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-left-other">
-                                <input type="text" class="span3 ignore" placeholder="<?php echo $this->translate('Title'); ?>" name="title" id="title" style="margin-bottom: 0;">
+                                <input type="text" class="span3" placeholder="<?php echo $this->translate('Title'); ?>" name="title" id="title" style="margin-bottom: 0;">
                                 <span id="titleLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
                             </div>
                         </div>
@@ -110,7 +114,6 @@
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-left-other">
                                 <textarea rows="3" id="pageContent" name="pageContent" placeholder="<?php echo $this->translate('Landing Page Content')?>" class="input-xlarge mbot bbot ignore word_count"></textarea>
-<!--                                <input type="text" class="input-xlarge disabled btop word-count"  id="pageContentLeft" disabled="disabled">-->
                             </div>
                         </div>
                     </div>
