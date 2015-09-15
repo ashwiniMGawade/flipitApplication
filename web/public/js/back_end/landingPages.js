@@ -100,7 +100,7 @@ function getLandingPages(iStart,iSortCol,iSortDir) {
             state[ 'iSortCol' ] = obj.aaSorting[0][0] ;
             state[ 'iSortDir' ] = obj.aaSorting[0][1] ;
 
-            jQuery("#LandingPagesListTbl").find('tr').find('td:lt(7)').click(function () {
+            jQuery("#LandingPagesListTbl").find('tr').find('td:lt(5)').click(function () {
                 var eId = $(this).parent('tr').find('p').attr('editid');
                 state['eId'] = eId ;
                 jQuery.bbq.pushState(state);
