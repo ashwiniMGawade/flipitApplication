@@ -20,13 +20,13 @@ class GetShopsUsecase
         $this->errors = $errors;
     }
 
-    public function execute($conditions)
+    public function execute($conditions, $order = array())
     {
         if (!is_array($conditions)) {
             $this->errors->setError('Invalid input, unable to find Shops.');
             return $this->errors;
         }
         $conditions = $this->htmlPurifier->purify($conditions);
-        return $this->shopRepository->findBy('\Core\Domain\Entity\Shop', $conditions);
+        return $this->shopRepository->findBy('\Core\Domain\Entity\Shop', $conditions, $order);
     }
 }
