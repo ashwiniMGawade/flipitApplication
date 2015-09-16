@@ -14,7 +14,6 @@ use \Command\LocaleMigrations\Helpers\ConfigurationHelper;
 use \Command\LocaleMigrations as LocaleMigrations;
 use \Command\Email\VisitorInactiveCommand;
 
-define('APPLICATION_ENV', 'development');
 $cli = new Application();
 $cli->setCatchExceptions(true);
 
