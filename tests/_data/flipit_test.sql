@@ -1858,3 +1858,33 @@ CREATE TABLE IF NOT EXISTS `widget_location` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `landingPages`
+--
+
+CREATE TABLE IF NOT EXISTS `landingPages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `shopId` bigint(20) NOT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `permalink` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `subTitle` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `metaTitle` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `metaDescription` longtext COLLATE utf8_unicode_ci,
+  `content` longblob,
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1-available ,0-used',
+  `offlineSince` datetime NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_2F3DC4D3C9E63C48` (`shopId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `landingPages`
+--
+ALTER TABLE `landingPages`
+  ADD CONSTRAINT `landingPages_shopId_shop_id` FOREIGN KEY (`shopId`) REFERENCES `shop` (`id`) ON DELETE CASCADE;

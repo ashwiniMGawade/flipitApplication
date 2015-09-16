@@ -5,7 +5,7 @@ use \Core\Domain\Entity\Shop;
 use \Core\Domain\Service\Purifier;
 use \Core\Domain\Usecase\Admin\GetShopUsecase;
 
-class GetShopsUsecaseTest extends \Codeception\TestCase\Test
+class GetShopUsecaseTest extends \Codeception\TestCase\Test
 {
     /**
      * @var \DomainTester
