@@ -1872,12 +1872,12 @@ CREATE TABLE IF NOT EXISTS `landingPages` (
   `metaDescription` longtext COLLATE utf8_unicode_ci,
   `content` longblob,
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1-available ,0-used',
-  `offlineSince` datetime NOT NULL,
+  `offlineSince` datetime DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_2F3DC4D3C9E63C48` (`shopId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=15 ;
 
 --
 -- Constraints for dumped tables
