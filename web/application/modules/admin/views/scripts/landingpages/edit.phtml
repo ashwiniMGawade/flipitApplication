@@ -64,7 +64,8 @@
                             <div class="mainpage-content-right-inner-left"><label id="permalinkLabel"><?php echo $this->translate('http://www.kortingscode.nl/gad/'); ?></label></div>
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-right-full">
-                                <input type="text" class="span3" placeholder="<?php echo $this->translate('Permalink'); ?>" name="permalink" id="permalink" value="<?php echo isset($this->landingPage['permalink']) ? $this->landingPage['permalink'] : ''; ?>">
+                                <input type="text" class="span3" style="margin-bottom: 0;" placeholder="<?php echo $this->translate('Permalink'); ?>" name="permalink" id="permalink" value="<?php echo isset($this->landingPage['permalink']) ? $this->landingPage['permalink'] : ''; ?>">
+                                <span id="permalinkNote" class="nobel disabled word-count btop shop-wordcount-width"><?php echo $this->translate('Permalink must contain only letters, numbers, underscores or dashes.') ?></span>
                             </div>
                         </div>
                     </div>
@@ -124,6 +125,7 @@
                     <button id="publishPageButton" type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('PUBLISH PAGE'); ?></button>
                     <a class="fl m10" href="javascript:void(0);" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/landingpages'" ><strong><?php echo $this->translate('CANCEL'); ?></strong></a>
                 </div>
+                <input type="hidden" name="editId" id="editId" class="hide ignore" value="<?php echo isset($this->landingPage['id']) ? $this->landingPage['id'] : ''; ?>"/>
             </form>
         </div>
     </div>
