@@ -8739,3 +8739,30 @@ body {
 	}
 }
 
+.btn-blue-wrapper .btn-code {
+    position: relative;
+    -webkit-appearance: none;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 15px;
+    text-transform: uppercase;
+    background-color: #3086BF;
+    background-image: -webkit-linear-gradient(top, #48a5e1, #3086bf);
+    background-image: linear-gradient(to bottom, #48a5e1, #3086bf);
+    border-radius: 3px;
+    border: 0;
+    padding: 10px 14px 11px;
+    box-shadow: 0 0 0 1px #2882BE;
+    -webkit-box-shadow: 0 0 0 1px #2882BE;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+    line-height: 18px;
+    border-top: 1px solid #7FC1EB;
+    width: 100%;
+}
+
+.offer-title {
+    color: #33383e;
+}

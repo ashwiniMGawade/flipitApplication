@@ -66,306 +66,71 @@ endif;
     </div>
 </div>
 <div class="discount-blocks">
-<div class="row same-height">
-<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-    <a href="#">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h2 class="common-height">Kortingscode Zalando voor 12% korting op jouw aankopen</h2>
-                <div id="offerButton61722" class="buttons offer-teaser-button-wrapper">
-                    <div class="offer-teaser-button-wrapper-inner ">
-                        <span class="offer-teaser-button kccode">Bekijk de code</span><span class="show-code">djjfnfjf</span>
-                        <span class="blue-corner"></span>
+    <?php $count = 1; ?>
+    <?php foreach($this->offers as $offer) :  ?>
+        <?php if($count==1 || $count==7): ?>
+            <div class="row same-height">
+        <?php endif; ?>
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+            <a href="#">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h2 class="common-height offer-title"><?php echo $offer['title']; ?></h2>
+                        <?php if(isset($offer['discountType']) && $offer['discountType'] == 'CD' ): ?>
+                            <div id="offerButton<?php echo $offer['id']; ?>" class="buttons offer-teaser-button-wrapper">
+                                <div class="offer-teaser-button-wrapper-inner">
+                                    <span class="offer-teaser-button kccode">Bekijk de code</span><span class="show-code"><?php echo FrontEnd_Helper_OffersPartialFunctions::generateRandomCharactersForOfferTeaser(4); ?></span>
+                                    <span class="blue-corner"></span>
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <div id="offerButton<?php echo $offer['id']; ?>">
+                                <div class="btn-blue-wrapper">
+                                    <a onclick="#" target="_blank" rel="nofollow" vote="0" href="<?php echo HTTP_PATH_LOCALE.'out/offer/'.$offer['id']; ?>" class="btn-code " id="<?php echo $offer['id']; ?>">
+                                        Bekijk deze korting</a>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
                     </div>
-                </div>
-            </div>
-            <div class="panel-footer">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                        <span class="validity"><span class="icon-timer"></span>Nog maar 1 dag geldig</span>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
-                        <span class="link-terms">Terms &amp; conditions</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-    <a href="#">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h2 class="common-height">Kortingscode Zalando voor 12% korting op jouw aankopen</h2>
-                <div id="offerButton61722" class="buttons offer-teaser-button-wrapper">
-                    <div class="offer-teaser-button-wrapper-inner ">
-                        <span class="offer-teaser-button kccode">Bekijk de code</span><span class="show-code">djjfnfjf</span>
-                        <span class="blue-corner"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-footer">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"></div>
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
-                        <span class="link-terms">Terms &amp; conditions</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-    <a href="#">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h2 class="common-height">Kortingscode Zalando voor 12% korting op jouw aankopen</h2>
-                <div id="offerButton61722" class="buttons offer-teaser-button-wrapper">
-                    <div class="offer-teaser-button-wrapper-inner ">
-                        <span class="offer-teaser-button kccode">Bekijk de code</span><span class="show-code">djjfnfjf</span>
-                        <span class="blue-corner"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-footer">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"></div>
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
-                        <span class="link-terms">Terms &amp; conditions</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-    <a href="#">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h2 class="common-height">Kortingscode Zalando voor 12% korting op jouw aankopen</h2>
-                <div id="offerButton61722" class="buttons offer-teaser-button-wrapper">
-                    <div class="offer-teaser-button-wrapper-inner ">
-                        <span class="offer-teaser-button kccode">Bekijk de code</span><span class="show-code">djjfnfjf</span>
-                        <span class="blue-corner"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-footer">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"></div>
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
-                        <span class="link-terms">Terms &amp; conditions</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-    <a href="#">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h2 class="common-height">Kortingscode Zalando voor 12% korting op jouw aankopen</h2>
-                <div id="offerButton61722" class="buttons offer-teaser-button-wrapper">
-                    <div class="offer-teaser-button-wrapper-inner ">
-                        <span class="offer-teaser-button kccode">Bekijk de code</span><span class="show-code">djjfnfjf</span>
-                        <span class="blue-corner"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-footer">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"></div>
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
-                        <span class="link-terms">Terms &amp; conditions</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-    <a href="#">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h2 class="common-height">Kortingscode Zalando voor 12% korting op jouw aankopen</h2>
-                <div id="offerButton61722" class="buttons offer-teaser-button-wrapper">
-                    <div class="offer-teaser-button-wrapper-inner ">
-                        <span class="offer-teaser-button kccode">Bekijk de code</span><span class="show-code">djjfnfjf</span>
-                        <span class="blue-corner"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-footer">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"></div>
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
-                        <span class="link-terms">Terms &amp; conditions</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-    <a href="#">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h2 class="common-height">Kortingscode Zalando voor 12% korting op jouw aankopen</h2>
-                <div id="offerButton61722" class="buttons offer-teaser-button-wrapper">
-                    <div class="offer-teaser-button-wrapper-inner ">
-                        <span class="offer-teaser-button kccode">Bekijk de code</span><span class="show-code">djjfnfjf</span>
-                        <span class="blue-corner"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-footer">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"></div>
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
-                        <span class="link-terms">Terms &amp; conditions</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-    <a href="#">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h2 class="common-height">Kortingscode Zalando voor 12% korting op jouw aankopen</h2>
-                <div id="offerButton61722" class="buttons offer-teaser-button-wrapper">
-                    <div class="offer-teaser-button-wrapper-inner ">
-                        <span class="offer-teaser-button kccode">Bekijk de code</span><span class="show-code">djjfnfjf</span>
-                        <span class="blue-corner"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-footer">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"></div>
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
-                        <span class="link-terms">Terms &amp; conditions</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-    <a href="#">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h2 class="common-height">Kortingscode Zalando voor 12% korting op jouw aankopen</h2>
-                <div id="offerButton61722" class="buttons offer-teaser-button-wrapper">
-                    <div class="offer-teaser-button-wrapper-inner ">
-                        <span class="offer-teaser-button kccode">Bekijk de code</span><span class="show-code">djjfnfjf</span>
-                        <span class="blue-corner"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-footer">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"></div>
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
-                        <span class="link-terms">Terms &amp; conditions</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-</div>
-<form action="#" class="newsletter-form text-center">
-    <fieldset>
-        <h2>Keep up to date about all MyTeksi voucher codes with our code alert.</h2>
-        <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 text-left">
-            <div class="input-group input-group-lg">
-                <input type="email" class="form-control" placeholder="Email Address">
-									<span class="input-group-btn">
-										<button class="btn btn-primary" type="button">Sign Up</button>
-									</span>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox"> Ik ga akkoord met onze <a href="#">privacy policy</a> en <a href="#">voorwaarden</a>.
-                </label>
-            </div>
-        </div>
-    </fieldset>
-</form>
-<div class="row same-height">
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-        <a href="#">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <h2 class="common-height">Kortingscode Zalando voor 12% korting op jouw aankopen</h2>
-                    <div id="offerButton61722" class="buttons offer-teaser-button-wrapper">
-                        <div class="offer-teaser-button-wrapper-inner ">
-                            <span class="offer-teaser-button kccode">Bekijk de code</span><span class="show-code">djjfnfjf</span>
-                            <span class="blue-corner"></span>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                <span class="validity"><span class="icon-timer"></span>Nog maar 1 dag geldig</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
+                                <span class="link-terms">Terms &amp; conditions</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="panel-footer">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"></div>
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
-                            <span class="link-terms">Terms &amp; conditions</span>
-                        </div>
+            </a>
+        </div>
+    <?php if($count==6): ?>
+        </div>
+        <form action="#" class="newsletter-form text-center">
+            <fieldset>
+                <h2>Keep up to date about all MyTeksi voucher codes with our code alert.</h2>
+                <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 text-left">
+                    <div class="input-group input-group-lg">
+                        <input type="email" class="form-control" placeholder="Email Address">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="button">Sign Up</button>
+                </span>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"> Ik ga akkoord met onze <a href="#">privacy policy</a> en <a href="#">voorwaarden</a>.
+                        </label>
                     </div>
                 </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-        <a href="#">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <h2 class="common-height">Kortingscode Zalando voor 12% korting op jouw aankopen</h2>
-                    <div id="offerButton61722" class="buttons offer-teaser-button-wrapper">
-                        <div class="offer-teaser-button-wrapper-inner ">
-                            <span class="offer-teaser-button kccode">Bekijk de code</span><span class="show-code">djjfnfjf</span>
-                            <span class="blue-corner"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-footer">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"></div>
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
-                            <span class="link-terms">Terms &amp; conditions</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-        <a href="#">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <h2 class="common-height">Kortingscode Zalando voor 12% korting op jouw aankopen</h2>
-                    <div id="offerButton61722" class="buttons offer-teaser-button-wrapper">
-                        <div class="offer-teaser-button-wrapper-inner ">
-                            <span class="offer-teaser-button kccode">Bekijk de code</span><span class="show-code">djjfnfjf</span>
-                            <span class="blue-corner"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-footer">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"></div>
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
-                            <span class="link-terms">Terms &amp; conditions</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
+            </fieldset>
+        </form>
+    <?php endif; ?>
+    <?php $count++; ?>
+    <?php endforeach; ?>
 </div>
+
 </div>
 <article class="about">
     <h2>What can we tell about Zalando?</h2>

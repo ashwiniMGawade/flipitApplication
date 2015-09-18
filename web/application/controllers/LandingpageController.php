@@ -20,6 +20,19 @@ class LandingpageController extends Zend_Controller_Action
         }
         $this->view->landingPage = $landingPage;
         $shop = $landingPage->getShop();
+
+        $allOffersInStoreKey = '6_topOffers'.$shop->getId().'_list';
+        $offers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            (string)$allOffersInStoreKey,
+            array(
+                'function' => 'KC\Repository\Offer::getAllOfferOnShop',
+                'parameters' => array($shop->getId())
+            ),
+            ''
+        );
+
+        $this->view->offers = $offers;
+
         $offersAddedInShopKey = "offersAdded_".$shop->getId()."_shop";
         $this->view->offersAddedInShop = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)$offersAddedInShopKey,
