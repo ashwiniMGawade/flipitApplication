@@ -10,6 +10,6 @@ class CreateLandingPageUsecaseTest extends \Codeception\TestCase\Test
     public function testCreateLandingPageUsecase()
     {
         $landingPage = (new CreateLandingPageUsecase())->execute();
-        $this->assertInstanceOf('\Core\Domain\Entity\LandingPages', $landingPage);
+        $this->assertInstanceOf('\Core\Domain\Entity\LandingPage', $landingPage);
     }
 }

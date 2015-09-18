@@ -2,18 +2,18 @@
 namespace Core\Domain\Usecase\Admin;
 
 use Core\Domain\Adapter\PurifierInterface;
-use \Core\Domain\Repository\LandingPagesRepositoryInterface;
+use \Core\Domain\Repository\LandingPageRepositoryInterface;
 use Core\Service\Errors\ErrorsInterface;
 
 class GetLandingPagesUsecase
 {
-    private $landingPagesRepository;
+    private $landingPageRepository;
     private $htmlPurifier;
     private $errors;
 
-    public function __construct(LandingPagesRepositoryInterface $landingPagesRepository, PurifierInterface $htmlPurifier, ErrorsInterface $errors)
+    public function __construct(LandingPageRepositoryInterface $landingPageRepository, PurifierInterface $htmlPurifier, ErrorsInterface $errors)
     {
-        $this->landingPagesRepository   = $landingPagesRepository;
+        $this->landingPageRepository   = $landingPageRepository;
         $this->htmlPurifier             = $htmlPurifier;
         $this->errors                   = $errors;
     }
@@ -26,6 +26,6 @@ class GetLandingPagesUsecase
         }
         $conditions = $this->htmlPurifier->purify($conditions);
 
-        return $this->landingPagesRepository->findBy('\Core\Domain\Entity\LandingPages', $conditions);
+        return $this->landingPageRepository->findBy('\Core\Domain\Entity\LandingPage', $conditions);
     }
 }

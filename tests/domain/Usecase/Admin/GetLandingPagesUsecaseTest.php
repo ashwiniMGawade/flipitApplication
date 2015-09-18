@@ -1,7 +1,7 @@
 <?php
 namespace Usecase\Admin;
 
-use \Core\Domain\Entity\LandingPages;
+use \Core\Domain\Entity\LandingPage;
 use \Core\Domain\Service\Purifier;
 use \Core\Domain\Usecase\Admin\GetLandingPagesUsecase;
 use \Core\Service\Errors;
@@ -18,7 +18,7 @@ class GetLandingPagesUsecaseTest extends \Codeception\TestCase\Test
 
     public function testGetLandingPagesUsecaseReturnsArrayWhenLandingPageExist()
     {
-        $landingPage = new LandingPages();
+        $landingPage = new LandingPage();
         $expectedResult = array($landingPage);
         $landingPageRepository = $this->createLandingPagesRepositoryWithFindByMethodMock($expectedResult);
         $viewCounts = (new GetLandingPagesUsecase($landingPageRepository, new Purifier(), new Errors()))->execute();
@@ -28,7 +28,7 @@ class GetLandingPagesUsecaseTest extends \Codeception\TestCase\Test
     public function testGetLandingPagesUsecaseReturnsErrorWhenParametersAreInvalid()
     {
         $conditions = 'invalid';
-        $landingPageRepository = $this->createLandingPagesRepositoryMock();
+        $landingPageRepository = $this->createLandingPageRepositoryMock();
         $errors = new Errors();
         $errors->setError('Invalid input, unable to find page.');
         $result = (new GetLandingPagesUsecase($landingPageRepository, new Purifier(), new Errors()))->execute($conditions);
@@ -36,19 +36,19 @@ class GetLandingPagesUsecaseTest extends \Codeception\TestCase\Test
         $this->assertEquals($errors->getErrorsAll(), $result->getErrorsAll());
     }
 
-    private function createLandingPagesRepositoryMock()
+    private function createLandingPageRepositoryMock()
     {
-        $viewLandingPages = $this->getMock('\Core\Domain\Repository\LandingPagesRepositoryInterface');
-        return $viewLandingPages;
+        $landingPageRepository = $this->getMock('\Core\Domain\Repository\LandingPageRepositoryInterface');
+        return $landingPageRepository;
     }
 
     private function createLandingPagesRepositoryWithFindByMethodMock($returns)
     {
-        $landingPagesRepository = $this->createLandingPagesRepositoryMock();
-        $landingPagesRepository->expects($this->once())
+        $landingPageRepository = $this->createLandingPageRepositoryMock();
+        $landingPageRepository->expects($this->once())
             ->method('findBy')
-            ->with($this->equalTo('\Core\Domain\Entity\LandingPages'), $this->isType('array'))
+            ->with($this->equalTo('\Core\Domain\Entity\LandingPage'), $this->isType('array'))
             ->willReturn($returns);
-        return $landingPagesRepository;
+        return $landingPageRepository;
     }
 }

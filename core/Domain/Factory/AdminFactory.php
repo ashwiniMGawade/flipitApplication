@@ -150,17 +150,17 @@ class AdminFactory
 
     public static function getLandingPages()
     {
-        return new GetLandingPagesUsecase(RepositoryFactory::landingPages(), new Purifier(), new Errors());
+        return new GetLandingPagesUsecase(RepositoryFactory::landingPage(), new Purifier(), new Errors());
     }
 
     public static function getLandingPage()
     {
-        return new GetLandingPageUsecase(RepositoryFactory::landingPages(), new Purifier(), new Errors());
+        return new GetLandingPageUsecase(RepositoryFactory::landingPage(), new Purifier(), new Errors());
     }
 
     public static function deleteLandingPage()
     {
-        return new DeleteLandingPageUsecase(RepositoryFactory::landingPages());
+        return new DeleteLandingPageUsecase(RepositoryFactory::landingPage());
     }
 
     public static function createLandingPage()
@@ -171,7 +171,7 @@ class AdminFactory
     public static function addLandingPage()
     {
         return new AddLandingPageUsecase(
-            RepositoryFactory::landingPages(),
+            RepositoryFactory::landingPage(),
             new LandingPageValidator(new Validator()),
             new Purifier(),
             new Errors()

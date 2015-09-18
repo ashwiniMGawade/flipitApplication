@@ -1,7 +1,7 @@
 <?php
 namespace Usecase\Admin;
 
-use \Core\Domain\Entity\LandingPages;
+use \Core\Domain\Entity\LandingPage;
 use \Core\Domain\Service\Purifier;
 use \Core\Domain\Usecase\Admin\GetLandingPageUsecase;
 use \Core\Service\Errors;
@@ -22,8 +22,8 @@ class GetLandingPageUsecaseTest extends \Codeception\TestCase\Test
     public function testGetWidgetUsecase()
     {
         $condition = array('id' => 0);
-        $landingPage = new LandingPages();
-        $landingPage->__set('id', 0);
+        $landingPage = new LandingPage();
+        $landingPage->setId(0);
         $landingPageRepositoryMock = $this->createLandingPageRepositoryWithFindMethodMock($condition, $landingPage);
         $landingPageUsecase = new GetLandingPageUsecase($landingPageRepositoryMock, new Purifier(), new Errors());
         $result = $landingPageUsecase->execute($condition);
@@ -43,7 +43,7 @@ class GetLandingPageUsecaseTest extends \Codeception\TestCase\Test
 
     private function createLandingPagRepositoryMock()
     {
-        $landingPageRepository = $this->getMockBuilder('\Core\Domain\Repository\LandingPagesRepositoryInterface')->getMock();
+        $landingPageRepository = $this->getMockBuilder('\Core\Domain\Repository\LandingPageRepositoryInterface')->getMock();
         return $landingPageRepository;
     }
 
@@ -53,7 +53,7 @@ class GetLandingPageUsecaseTest extends \Codeception\TestCase\Test
         $landingPageRepositoryMock
             ->expects($this->once())
             ->method('findOneBy')
-            ->with($this->equalTo('\Core\Domain\Entity\LandingPages'), $this->equalTo($condition))
+            ->with($this->equalTo('\Core\Domain\Entity\LandingPage'), $this->equalTo($condition))
             ->willReturn($returns);
         return $landingPageRepositoryMock;
     }
