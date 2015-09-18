@@ -64,15 +64,15 @@ class AddLandingPageUsecaseTest extends \Codeception\TestCase\Test
             'status' => 0
         );
 
-        $landingPageRepository = $this->landingPageRepositoryMockWithSaveMethod(new LandingPages());
+        $landingPageRepository = $this->landingPageRepositoryMockWithSaveMethod(new LandingPage());
         $landingPageValidator = $this->createLandingPageValidatorMock(true);
         $result = (new AddLandingPageUsecase(
             $landingPageRepository,
             $landingPageValidator,
             new Purifier(),
             new Errors()
-        ))->execute(new LandingPages(), $params);
-        $this->assertInstanceOf('\Core\Domain\Entity\LandingPages', $result);
+        ))->execute(new LandingPage(), $params);
+        $this->assertInstanceOf('\Core\Domain\Entity\LandingPage', $result);
     }
 
     public function testAddLandingPageUsecaseSetsOfflineSinceToNullWhenPageIsOnline()

@@ -182,7 +182,7 @@ class AdminFactory
     public static function updateLandingPage()
     {
         return new UpdateLandingPageUsecase(
-            RepositoryFactory::landingPages(),
+            RepositoryFactory::landingPage(),
             new LandingPageValidator(new Validator()),
             new Purifier(),
             new Errors()
