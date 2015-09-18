@@ -59,13 +59,6 @@ function getLandingPages(iStart,iSortCol,iSortDir) {
         },
         {
             "fnRender" : function(obj) {
-                if(obj.aData.shopClickoutCount != null) {
-                    return '<p editId=' + obj.aData.id + ' class="editId colorAsLink word-wrap-without-margin-offer"><a href="javascript:void(0)">' + obj.aData.shopClickoutCount +'</a></p>';
-                }
-            }
-        },
-        {
-            "fnRender" : function(obj) {
                 if(obj.aData.status != null) {
                     var online = (obj.aData.status == 1) ? 'btn-primary' : '';
                     var offline = (obj.aData.status == 0) ? 'btn-primary' : '';
