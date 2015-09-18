@@ -497,6 +497,9 @@ class StoreController extends Zend_Controller_Action
         switch (LOCALE) {
             case 'es':
                 $shopPermalinks = array('kiabi', 'rakuten-es', 'groupalia');
+                if( $shopPermalink === 'kiabi') {
+                    $this->view->displayVWOScriptOnTop = 1;
+                }
                 break;
             case 'sg':
                 $shopPermalinks = array('zalora', 'foodpanda', 'groupon');
