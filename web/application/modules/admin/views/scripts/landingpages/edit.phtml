@@ -9,18 +9,18 @@
  $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
  $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
  $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
- $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createLandingPages.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/editLandingPages.js");
 ?>
 <div id="imbullbody-content">
     <?php echo $this->flashMessages(); ?>
-    <div id="landingPagesCreate">
+    <div id="landingPagesEdit">
         <div class="wrap columns-2">
             <h1>
-                <?php echo $this->translate('Create Landing Page'); ?>
+                <?php echo $this->translate('Edit Landing Page'); ?>
                 <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/landingpages'"><?php echo $this->translate('Cancel'); ?></button>
             </h1>
 
-            <form method="POST" name="createLandingPage" id="createLandingPage">
+            <form method="POST" name="editLandingPage" id="editLandingPage">
                 <div class="mainpage-content">
                     <div class="mainpage-content-line">
                         <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Online'); ?></strong></label></div>
@@ -125,6 +125,7 @@
                     <button id="publishPageButton" type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('PUBLISH PAGE'); ?></button>
                     <a class="fl m10" href="javascript:void(0);" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/landingpages'" ><strong><?php echo $this->translate('CANCEL'); ?></strong></a>
                 </div>
+                <input type="hidden" name="editId" id="editId" class="hide ignore" value="<?php echo isset($this->landingPage['id']) ? $this->landingPage['id'] : ''; ?>"/>
             </form>
         </div>
     </div>

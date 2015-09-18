@@ -81,7 +81,7 @@ function setStatus(status) {
 }
 
 function validateForm() {
-    jQuery('#createLandingPage').validate({
+    jQuery('#editLandingPage').validate({
         errorClass : 'error',
         validClass : 'success',
         errorElement : 'span',
@@ -102,12 +102,15 @@ function validateForm() {
                     data: {
                         permalink : function() {
                             return jQuery( "#permalink" ).val();
+                        },
+                        editId : function() {
+                            return jQuery( "#editId" ).val();
                         }
                     }
                 }
             },
             title : {
-                required : true
+                "required" : true
             }
         },
         messages : {

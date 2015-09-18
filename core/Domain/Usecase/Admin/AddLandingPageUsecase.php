@@ -45,6 +45,10 @@ class AddLandingPageUsecase
             $landingPage->setShop($params['shop']);
         }
         if (isset($params['permalink'])) {
+            $pattern = array("/&amp;/", "/[\,+@#$%'&*!;&\"<>\^()]+/", '/\s/', "/-{2,}/");
+            $replaceWith = array("", "", "-", "-");
+            $urlString = preg_replace($pattern, $replaceWith, trim($params['permalink']));
+            $params['permalink'] = strtolower($urlString);
             $landingPage->setPermalink($params['permalink']);
         }
         if (isset($params['subTitle'])) {

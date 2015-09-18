@@ -49,7 +49,7 @@ class AddLandingPageUsecaseTest extends \Codeception\TestCase\Test
         $this->assertEquals($errors->getErrorMessages(), $result->getErrorMessages());
     }
 
-    public function testAddLandingPageUsecaseReturnsLandingPageObjectWhenParametersAreValid()
+    public function testAddLandingPageUsecaseSetsOfflineSinceWhenPageIsOffline()
     {
         $shop = new Shop();
         $shop->__set('id', 123);
@@ -61,8 +61,33 @@ class AddLandingPageUsecaseTest extends \Codeception\TestCase\Test
             'metaTitle' => 'Latest Offers',
             'metaDescription' => '<p>Latest Offers</p>',
             'content' => '<p>Test Content</p>',
-            'status' => 0,
-            'offlineSince' => new \DateTime('now')
+            'status' => 0
+        );
+
+        $landingPageRepository = $this->landingPageRepositoryMockWithSaveMethod(new LandingPages());
+        $landingPageValidator = $this->createLandingPageValidatorMock(true);
+        $result = (new AddLandingPageUsecase(
+            $landingPageRepository,
+            $landingPageValidator,
+            new Purifier(),
+            new Errors()
+        ))->execute(new LandingPages(), $params);
+        $this->assertInstanceOf('\Core\Domain\Entity\LandingPages', $result);
+    }
+
+    public function testAddLandingPageUsecaseSetsOfflineSinceToNullWhenPageIsOnline()
+    {
+        $shop = new Shop();
+        $shop->__set('id', 123);
+        $params = array(
+            'title' => 'Shopname - Landing Page',
+            'shop' => $shop,
+            'permalink' => 'shopname-landing-page-test',
+            'subTitle' => 'Latest Offers',
+            'metaTitle' => 'Latest Offers',
+            'metaDescription' => '<p>Latest Offers</p>',
+            'content' => '<p>Test Content</p>',
+            'status' => 1
         );
 
         $landingPageRepository = $this->landingPageRepositoryMockWithSaveMethod(new LandingPage());

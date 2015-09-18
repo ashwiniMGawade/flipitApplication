@@ -93,20 +93,25 @@ function getLandingPages(iStart,iSortCol,iSortDir) {
                         "</a>";
             },
             "bSortable" : false
-        }]
+        }],
+        "fnDrawCallback" : function(obj) {
+            var state = {};
+            state[ 'iStart' ] = obj._iDisplayStart ;
+            state[ 'iSortCol' ] = obj.aaSorting[0][0] ;
+            state[ 'iSortDir' ] = obj.aaSorting[0][1] ;
+
+            jQuery("#LandingPagesListTbl").find('tr').find('td:lt(5)').click(function () {
+                var eId = $(this).parent('tr').find('p').attr('editid');
+                state['eId'] = eId ;
+                jQuery.bbq.pushState(state);
+                window.location.href = HOST_PATH+"admin/landingpages/edit/id/" + eId + "?iStart="+
+                obj._iDisplayStart+"&iSortCol="+obj.aaSorting[0][0]+"&iSortDir="+
+                obj.aaSorting[0][1]+"&eId="+eId;
+            });
+        }
     });
 }
-//
-//function addApiKey()
-//{
-//    $.ajax({
-//        type : "GET",
-//        url : HOST_PATH+"admin/apikeys/create"
-//    }).done(function() {
-//        window.location = HOST_PATH + 'admin/apikeys';
-//    });
-//}
-//
+
 function deleteLandingPage(id) {
    bootbox.confirm("Are you sure you want to delete this Landing Page?",'No','Yes',function(r) {
         if (!r) {
