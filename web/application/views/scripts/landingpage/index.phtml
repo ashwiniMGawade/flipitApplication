@@ -60,14 +60,24 @@ endif;
         <ul class="action-list">
            <?php echo $offersAdded; ?>
             <li>
-                <a href="#"><span class="icon-check-circle"></span>15 geverifieerde acties</a>
+                <span class="icon-check-circle"></span><?php echo count($this->offers).' '.FrontEnd_Helper_viewHelper::__translate('current offers'); ?>
             </li>
         </ul>
     </div>
 </div>
 <div class="discount-blocks">
-    <?php $count = 1; ?>
-    <?php foreach($this->offers as $offer) :  ?>
+    <?php $count = 1;
+    $offersCount = count($this->offers);
+    $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
+    ?>
+    <?php foreach($this->offers as $offer) :
+        $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires((array)$offer['endDate']);
+        $offerBottomDaysTillExpireText = '';
+        if ($daysTillOfferExpires <= 3) {
+            $offerBottomDaysTillExpireText = $landingPageHelper->getDaysTillExpire($daysTillOfferExpires);
+        }
+        $termsAndConditions = $landingPageHelper->getOfferTermsAndCondition($offer);
+        ?>
         <?php if($count==1 || $count==7): ?>
             <div class="row same-height">
         <?php endif; ?>
@@ -91,53 +101,37 @@ endif;
                                 </div>
                             </div>
                         <?php endif; ?>
-
                     </div>
                     <div class="panel-footer">
                         <div class="row">
                             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                <span class="validity"><span class="icon-timer"></span>Nog maar 1 dag geldig</span>
+                                <?php echo $offerBottomDaysTillExpireText; ?>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
-                                <span class="link-terms">Terms &amp; conditions</span>
+                                <?php if($termsAndConditions != '' || $offer['userGenerated'] == 1): ?>
+                                    <span class="link-terms">Terms &amp; conditions</span>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </a>
         </div>
-    <?php if($count==6): ?>
+    <?php if($count==6 || ($count<6 && $count == $offersCount)): ?>
         </div>
-        <form action="#" class="newsletter-form text-center">
-            <fieldset>
-                <h2>Keep up to date about all MyTeksi voucher codes with our code alert.</h2>
-                <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 text-left">
-                    <div class="input-group input-group-lg">
-                        <input type="email" class="form-control" placeholder="Email Address">
-                <span class="input-group-btn">
-                    <button class="btn btn-primary" type="button">Sign Up</button>
-                </span>
-                    </div>
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox"> Ik ga akkoord met onze <a href="#">privacy policy</a> en <a href="#">voorwaarden</a>.
-                        </label>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
-    <?php endif; ?>
-    <?php $count++; ?>
-    <?php endforeach; ?>
+        <?php echo $this->partial('partials/_sem_subscription.phtml', array());
+        endif;
+        $count++;
+    endforeach; ?>
 </div>
+<?php if( 0 == $offersCount) :
+    echo $this->partial('partials/_sem_subscription.phtml', array());
+endif; ?>
 
-</div>
 <article class="about">
-    <h2>What can we tell about Zalando?</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus ad, voluptas sunt mollitia optio incidunt unde omnis, soluta adipisci sed possimus eveniet aliquam iure pariatur quia, error impedit placeat amet. Maiores, velit. Distinctio deleniti aut quia ipsam vero consequuntur neque eos optio, natus voluptates aperiam cum aspernatur illum quidem odit, accusamus ea commodi ipsa. In vero aperiam</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus ad, voluptas sunt mollitia optio incidunt unde omnis, soluta adipisci sed possimus eveniet aliquam iure pariatur quia, error impedit placeat amet. Maiores, velit. Distinctio deleniti aut quia ipsam vero consequuntur neque eos optio, natus voluptates aperiam cum aspernatur illum quidem odit, accusamus ea commodi ipsa. In vero aperiam nam mollitia cumque iste quibusdam repellendus cupiditate ipsum, et tenetur.</p>
-    <p>Distinctio deleniti aut quia ipsam vero consequuntur neque eos optio, natus voluptates aperiam cum aspernatur illum quidem odit, accusamus ea commodi ipsa. In vero aperiam nam mollitia cumque iste quibusdam repellendus cupiditate ipsum, et tenetur quis, porro nisi unde non deleniti neque, rem. Labore, incidunt ullam neque et maiores? Eaque quisquam amet perferendis, at rem distinctio nihil doloremque alias ducimus eum enim molestias repellendus corporis. Dignissimos ipsa quo tempora ex, delectus voluptatum? Reprehenderit nihil, quos tempora nulla. Optio quas ipsum hic aliquam similique! Magnam aliquam dolores veritatis illo facilis dolore commodi dolorum, sapiente sunt cum quasi, delectus.</p>
+    <?php echo $this->landingPage->getContent(); ?>
 </article>
+</div>
 </div>
 </main>
 </div>

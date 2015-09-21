@@ -18,8 +18,15 @@ class LandingpageController extends Zend_Controller_Action
         if ($landingPage instanceof Errors) {
             throw new \Zend_Controller_Action_Exception('', 404);
         }
-        $this->view->landingPage = $landingPage;
         $shop = $landingPage->getShop();
+
+        $allShopDetailKey = 'shopDetails_'.$shop->getId().'_list';
+        $shopInformation = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            (string)$allShopDetailKey,
+            array('function' => 'KC\Repository\Shop::getStoreDetailsForStorePage', 'parameters' => array($shop->getId())
+            ),
+            ''
+        );
 
         $allOffersInStoreKey = '6_topOffers'.$shop->getId().'_list';
         $offers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
@@ -31,8 +38,6 @@ class LandingpageController extends Zend_Controller_Action
             ''
         );
 
-        $this->view->offers = $offers;
-
         $offersAddedInShopKey = "offersAdded_".$shop->getId()."_shop";
         $this->view->offersAddedInShop = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)$offersAddedInShopKey,
@@ -42,5 +47,8 @@ class LandingpageController extends Zend_Controller_Action
             ),
             ''
         );
+        $this->view->offers                     = $offers;
+        $this->view->landingPage                = $landingPage;
+        $this->view->currentStoreInformation    = $shopInformation;
     }
 }
