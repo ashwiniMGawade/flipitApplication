@@ -94,40 +94,40 @@ endif;
             <div class="row same-height">
         <?php endif; ?>
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-            <a target="_blank" rel="nofollow" id="article" href="<?php echo $clickoutURL; ?>">
-                <div class="panel panel-default">
-                    <div class="panel-body">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <a target="_blank" rel="nofollow" id="article" href="<?php echo $clickoutURL; ?>">
                         <h2 class="common-height offer-title"><?php echo $offer['title']; ?></h2>
-                        <?php if(isset($offer['discountType']) && $offer['discountType'] == 'CD' ): ?>
-                            <div id="offerButton<?php echo $offer['id']; ?>" class="buttons offer-teaser-button-wrapper">
-                                <div class="offer-teaser-button-wrapper-inner">
-                                    <span class="offer-teaser-button kccode">Bekijk de code</span><span class="show-code"><?php echo FrontEnd_Helper_OffersPartialFunctions::generateRandomCharactersForOfferTeaser(4); ?></span>
-                                    <span class="blue-corner"></span>
-                                </div>
+                    </a>
+                    <?php if(isset($offer['discountType']) && $offer['discountType'] == 'CD' ): ?>
+                        <div id="offerButton<?php echo $offer['id']; ?>" class="buttons offer-teaser-button-wrapper">
+                            <div class="offer-teaser-button-wrapper-inner">
+                                <span class="offer-teaser-button kccode">Bekijk de code</span><span class="show-code"><?php echo FrontEnd_Helper_OffersPartialFunctions::generateRandomCharactersForOfferTeaser(4); ?></span>
+                                <span class="blue-corner"></span>
                             </div>
-                        <?php else: ?>
-                            <div id="offerButton<?php echo $offer['id']; ?>">
-                                <div class="btn-blue-wrapper">
-                                    <a onclick="#" target="_blank" rel="nofollow" vote="0" href="<?php echo $clickoutURL; ?>" class="btn-code " id="<?php echo $offer['id']; ?>">
-                                        Bekijk deze korting</a>
-                                </div>
+                        </div>
+                    <?php else: ?>
+                        <div id="offerButton<?php echo $offer['id']; ?>">
+                            <div class="btn-blue-wrapper">
+                                <a onclick="#" target="_blank" rel="nofollow" vote="0" href="<?php echo $clickoutURL; ?>" class="btn-code " id="<?php echo $offer['id']; ?>">
+                                    Bekijk deze korting</a>
                             </div>
-                        <?php endif; ?>
-                    </div>
-                    <div class="panel-footer">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                <?php echo $offerBottomDaysTillExpireText; ?>
-                            </div>
-                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
-                                <?php if($termsAndConditions != '' || $offer['userGenerated'] == 1): ?>
-                                    <span class="link-terms">Terms &amp; conditions</span>
-                                <?php endif; ?>
-                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                            <?php echo $offerBottomDaysTillExpireText; ?>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
+                            <?php if($termsAndConditions != '' || $offer['userGenerated'] == 1): ?>
+                                <span class="link-terms">Terms &amp; conditions</span>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
-            </a>
+            </div>
         </div>
     <?php if($count==6 || ($count<6 && $count == $offersCount)): ?>
         </div>
