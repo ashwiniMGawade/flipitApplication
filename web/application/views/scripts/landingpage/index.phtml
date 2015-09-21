@@ -83,12 +83,18 @@ endif;
             $offerBottomDaysTillExpireText = $landingPageHelper->getDaysTillExpire($daysTillOfferExpires);
         }
         $termsAndConditions = $landingPageHelper->getOfferTermsAndCondition($offer);
+        if (isset($offer['discountType']) && $offer['discountType'] == 'CD') {
+            $clickoutURL = '#';
+        } else {
+            $clickoutURL = HTTP_PATH_LOCALE.'out/offer/'.$offer['id'];
+        }
+
         ?>
         <?php if($count==1 || $count==7): ?>
             <div class="row same-height">
         <?php endif; ?>
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-            <a href="#">
+            <a target="_blank" rel="nofollow" id="article" href="<?php echo $clickoutURL; ?>">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h2 class="common-height offer-title"><?php echo $offer['title']; ?></h2>
@@ -102,7 +108,7 @@ endif;
                         <?php else: ?>
                             <div id="offerButton<?php echo $offer['id']; ?>">
                                 <div class="btn-blue-wrapper">
-                                    <a onclick="#" target="_blank" rel="nofollow" vote="0" href="<?php echo HTTP_PATH_LOCALE.'out/offer/'.$offer['id']; ?>" class="btn-code " id="<?php echo $offer['id']; ?>">
+                                    <a onclick="#" target="_blank" rel="nofollow" vote="0" href="<?php echo $clickoutURL; ?>" class="btn-code " id="<?php echo $offer['id']; ?>">
                                         Bekijk deze korting</a>
                                 </div>
                             </div>
