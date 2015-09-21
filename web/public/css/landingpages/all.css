@@ -8766,3 +8766,12 @@ body {
 .offer-title {
     color: #33383e;
 }
+
+.error {
+    color:#ff0000;
+}
+
+input.error {
+    outline: 1px solid #ff0000;
+}
+

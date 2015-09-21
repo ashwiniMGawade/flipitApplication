@@ -1,3 +1,43 @@
+jQuery('#sign_up_form').validate({
+    errorClass : 'error',
+    validClass : 'success',
+    errorPlacement : function(error, element) {
+        element.parent("div").next("div").html(error);
+    },
+    rules : {
+        emailAddress : {
+            required : true,
+            email : true,
+            remote : {
+                url : HOST_PATH_LOCALE + "signup/checkuser",
+                type : "post"
+            }
+        },
+        privacyPolicy : {
+            required : true
+        }
+    },
+    messages : {
+        emailAddress : {
+            required : 'Please enter email address!',
+            email : 'Please enter valid email address!',
+            remote :'This user is already registered with us!'
+        },
+        privacyPolicy : {
+            required : 'erere'
+        }
+    },
+    success: function (label, element) {
+        jQuery(element)
+            .parent('div')
+            .removeClass(this.errorClass)
+            .addClass(this.validClass)
+            .next("div")
+            .removeClass(this.errorClass)
+            .addClass(this.validClass)
+            .removeClass("focus");
+    }
+});
  // page init
 jQuery(function(){
 	initSameHeight();
@@ -17,6 +57,7 @@ function initSameHeight() {
  * jQuery SameHeight plugin
  */
 ;(function($){
+
 	$.fn.sameHeight = function(opt) {
 		var options = $.extend({
 			skipClass: 'same-height-ignore',

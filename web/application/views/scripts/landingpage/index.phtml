@@ -8,8 +8,10 @@
     <link rel="stylesheet" href="/public/css/landingpages/all.css">
 </head>
 <body>
+<script type="text/javascript" src="/public/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="/public/js/front_end/jquery.validate.js"></script>
+<script type="text/javascript">var HOST_PATH_LOCALE = "<?php echo HTTP_PATH_LOCALE; ?>";</script>
 <?php
-
 $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
 
 if(LOCALE == ''):
@@ -119,13 +121,13 @@ endif;
         </div>
     <?php if($count==6 || ($count<6 && $count == $offersCount)): ?>
         </div>
-        <?php echo $this->partial('partials/_sem_subscription.phtml', array());
+        <?php echo $this->partial('partials/_landingpage_signup.phtml', array());
         endif;
         $count++;
     endforeach; ?>
 </div>
 <?php if( 0 == $offersCount) :
-    echo $this->partial('partials/_sem_subscription.phtml', array());
+    echo $this->partial('partials/_landingpage_signup.phtml', array());
 endif; ?>
 
 <article class="about">
@@ -135,8 +137,7 @@ endif; ?>
 </div>
 </main>
 </div>
-<script src="/public/js/jquery-1.8.3.min.js"></script>
-<script src="/public/js/bootstrap.min.js"></script>
-<script src="/public/js/landingpages/jquery.main.js"></script>
+<script type="text/javascript"  src="/public/js/bootstrap.min.js"></script>
+<script type="text/javascript"  src="/public/js/landingpages/jquery.landingPage.js"></script>
 </body>
 </html>
