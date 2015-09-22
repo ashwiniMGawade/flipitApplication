@@ -77,6 +77,7 @@ endif;
     $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
     ?>
     <?php foreach($this->offers as $offer) :
+        $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
         $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires((array)$offer['endDate']);
         $offerBottomDaysTillExpireText = '';
         if ($daysTillOfferExpires <= 3) {
@@ -88,7 +89,14 @@ endif;
         } else {
             $clickoutURL = HTTP_PATH_LOCALE.'out/offer/'.$offer['id'];
         }
-
+        $defaultText = '';
+        if ($offer['userGenerated'] == '1') {
+            $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName($esiLocale);
+            $defaultText = FrontEnd_Helper_viewHelper::__translate(
+                'This code has been added by one of our users and not by the [websiteName] deal hunters'
+            );
+            $defaultText = str_replace('[websiteName]', $websiteName, $defaultText);
+        }
         ?>
         <?php if($count==1 || $count==7): ?>
             <div class="row same-height">
@@ -96,13 +104,14 @@ endif;
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <a target="_blank" rel="nofollow" id="article" href="<?php echo $clickoutURL; ?>">
+                    <a target="_blank" rel="nofollow" href="<?php echo $clickoutURL; ?>">
                         <h2 class="common-height offer-title"><?php echo $offer['title']; ?></h2>
                     </a>
                     <?php if(isset($offer['discountType']) && $offer['discountType'] == 'CD' ): ?>
                         <div id="offerButton<?php echo $offer['id']; ?>" class="buttons offer-teaser-button-wrapper">
                             <div class="offer-teaser-button-wrapper-inner">
-                                <span class="offer-teaser-button kccode">Bekijk de code</span><span class="show-code"><?php echo FrontEnd_Helper_OffersPartialFunctions::generateRandomCharactersForOfferTeaser(4); ?></span>
+                                <span class="offer-teaser-button kccode">Bekijk de code</span>
+                                <span class="show-code"><?php echo FrontEnd_Helper_OffersPartialFunctions::generateRandomCharactersForOfferTeaser(4); ?></span>
                                 <span class="blue-corner"></span>
                             </div>
                         </div>
@@ -122,10 +131,29 @@ endif;
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
                             <?php if($termsAndConditions != '' || $offer['userGenerated'] == 1): ?>
-                                <span class="link-terms">Terms &amp; conditions</span>
+                                <span class="link-terms">
+                                    <a id="termAndConditionLink<?php echo $offer['id']; ?>"
+                                       onclick="showTermAndConditions(<?php echo $offer['id']; ?>)" class="terms"
+                                       href="javascript:void(0);">
+                                        Terms &amp; conditions
+                                    </a></span>
                             <?php endif; ?>
                         </div>
                     </div>
+                </div>
+                <div class="terms-block" id='termAndConditions<?php echo $offer['id']; ?>'>
+                    <div class='term-and-condition'>
+                    <?php
+                    if (empty($defaultText)) {
+                        echo $this->translate('Terms &amp; Conditions');
+                    } else {
+                        echo '<span class="social-term-font">' .$defaultText.'</span>';
+                    }
+                    ?>
+                    </div>
+                    <ol class="num-list">
+                        <?php echo $termsAndConditions;?>
+                    </ol>
                 </div>
             </div>
         </div>

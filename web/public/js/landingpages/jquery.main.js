@@ -4,6 +4,11 @@ jQuery(function(){
 	jQuery('input, textarea').placeholder();
 });
 
+function showTermAndConditions(id) {
+    $('#termAndConditions'+id).toggle();
+    $('a#termAndConditionLink'+id).toggleClass('uparrow');
+}
+
 // align blocks height
 function initSameHeight() {
 	jQuery('.same-height').sameHeight({

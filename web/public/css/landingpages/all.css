@@ -6818,19 +6818,6 @@ body {
 	text-align: center;
 }
 
-.discount-blocks .panel .panel-footer .link-terms:after {
-	content: "\e60d";
-	font: 10px/16px "icomoon";
-	speak: none;
-	text-transform: none;
-	display: inline-block;
-	vertical-align: top;
-	margin-left: 5px;
-	text-decoration: none;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-}
-
 .discount-blocks .panel .panel-footer .validity {
 	display: block;
 	font-size: 13px;
@@ -6852,8 +6839,7 @@ body {
 .discount-blocks .panel .offer-teaser-button-wrapper {
 	position: relative;
 	width: 100%;
-	margin-bottom: 4px;
-	height: 41px;
+	height: 40px;
 }
 
 .discount-blocks .panel .offer-teaser-button-wrapper-inner {
@@ -8765,4 +8751,59 @@ body {
 
 .offer-title {
     color: #33383e;
+}
+
+
+.terms-block{
+    display:none;
+    padding: 25px 30px 22px;
+    font-size: 12px;
+    line-height: 18px;
+    color: #878a8d;
+    background: #f6f6f6;
+    border-top: 1px solid #eaeaea;
+    overflow: hidden;
+}
+
+.terms-block .term-and-condition {
+    color: #33383e;
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: normal;
+    margin: 0 0 12px;
+}
+
+.num-list {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    counter-reset: item;
+}
+
+.terms {
+    float: right;
+    margin: 4px 0 0 15px;
+    position: relative;
+    color: #878a8d;
+    padding: 0 26px 0 0;
+    text-decoration: underline;
+}
+
+.terms:after {
+    background: url(../../images/sprite2.png) no-repeat -137px 0;
+    width: 12px;
+    height: 7px;
+    position: absolute;
+    right: 0;
+    top: 4px;
+    content: "";
+}
+
+.terms.uparrow:after {
+    background: url(../../images/sprite.png) no-repeat -179px -127px;
+}
+
+.terms:hover, .terms:active, .terms:focus {
+    text-decoration: none;
+    color: #878a8d;
 }
