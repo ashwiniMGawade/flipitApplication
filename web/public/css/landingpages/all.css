@@ -8753,7 +8753,6 @@ body {
     color: #33383e;
 }
 
-
 .terms-block{
     display:none;
     padding: 25px 30px 22px;
@@ -8807,3 +8806,12 @@ body {
     text-decoration: none;
     color: #878a8d;
 }
+
+.error {
+    color:#ff0000;
+}
+
+input.error {
+    outline: 1px solid #ff0000;
+}
+

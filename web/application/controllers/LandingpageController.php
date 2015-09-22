@@ -12,6 +12,13 @@ class LandingpageController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getAllParams();
+            $visitorEmail = new Zend_Session_Namespace('emailAddressSignup');
+            $visitorEmail->emailAddressSignup = $params['emailAddress'];
+            $signUpUrl= HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven');
+            header('location:'. $signUpUrl);
+        }
         $pagePermalink = $this->_helper->Error->getPageParmalink(ltrim($this->_request->getPathInfo(), '/'));
         $pagePermalink = $this->_helper->Error->getPageNumbering($pagePermalink);
         $landingPage = GuestFactory::getLandingPage()->execute(array('permalink' => $pagePermalink));
