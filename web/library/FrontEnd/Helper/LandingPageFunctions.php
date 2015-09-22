@@ -40,8 +40,8 @@ class FrontEnd_Helper_LandingPageFunctions extends FrontEnd_Helper_viewHelper
     public function getOfferTermsAndCondition($currentOffer)
     {
         $termsAndConditions = '';
-        if (isset($currentOffer['offertermandcondition'])) {
-            if (count($currentOffer['offertermandcondition']) > 0) {
+        if (isset($currentOffer->offertermandcondition)) {
+            if (count($currentOffer->offertermandcondition) > 0) {
                 $termsAndConditions = $currentOffer['offertermandcondition'][0]['content'];
             }
         }

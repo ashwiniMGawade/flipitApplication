@@ -26,7 +26,6 @@ class LandingpageController extends Zend_Controller_Action
             throw new \Zend_Controller_Action_Exception('', 404);
         }
         $shop = $landingPage->getShop();
-
         $allShopDetailKey = 'shopDetails_'.$shop->getId().'_list';
         $shopInformation = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)$allShopDetailKey,
@@ -34,6 +33,15 @@ class LandingpageController extends Zend_Controller_Action
             ),
             ''
         );
+
+        /* We could not use this because comparing cannot be used in findBy method.. We need to recheck this.
+         * $offerConditions = array(
+            'shopOffers' => $shop,
+            'deleted' => 0,
+            'offline' => 0,
+            'endDate' => ''
+        );
+        $offers = GuestFactory::getOffers()->execute($offerConditions);*/
 
         $allOffersInStoreKey = '6_topOffers'.$shop->getId().'_list';
         $offers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(

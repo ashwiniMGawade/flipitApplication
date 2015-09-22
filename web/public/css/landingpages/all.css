@@ -228,7 +228,7 @@ th {
 @font-face {
 	font-family: "Glyphicons Halflings";
 	src: url("../fonts/glyphicons-halflings-regular.eot");
-	src: url("../fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
+	src: url("../fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
 }
 
 .glyphicon {
@@ -8781,7 +8781,7 @@ body {
 
 .terms {
     float: right;
-    margin: 4px 0 0 15px;
+    margin: 0px 0 0 15px;
     position: relative;
     color: #878a8d;
     padding: 0 26px 0 0;
@@ -8815,3 +8815,7 @@ input.error {
     outline: 1px solid #ff0000;
 }
 
+.privacyPolicy-label {
+    padding-left: 0!important;
+    letter-spacing: 0!important;
+}
