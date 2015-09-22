@@ -11,7 +11,7 @@
             <div></div>
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="privacyPolicy" id="privacyPolicy" value="accepated"> <label for="privacyPolicy">Ik ga akkoord met onze <a href="#">privacy policy</a> en <a href="#">voorwaarden</a>.</label>
+                    <input type="checkbox" name="privacyPolicy" id="privacyPolicy" value="accepated"> <label for="privacyPolicy">Ik ga akkoord met onze <a href="<?php echo HTTP_PATH_LOCALE; ?>info/<?php echo FrontEnd_Helper_viewHelper::__link('link_privacy-cookies'); ?>" target="_blank">privacy policy</a> en <a href="<?php echo HTTP_PATH_LOCALE; ?>info/<?php echo FrontEnd_Helper_viewHelper::__link('link_terms'); ?>" target="_blank">voorwaarden</a>.</label>
                 </label>
             </div>
         </div>
