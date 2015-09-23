@@ -332,9 +332,9 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir, extraParameters) {
                     state[ 'iSearchText' ] = iSearchText;
                     
                     $("#shopListTable").find('tr').find('td:lt(6)').click(function (e) {
-                        
+
                         var el = e.target  ? e.target :  e.srcElement ;
-                        
+
                         if(el.tagName != "BUTTON")
                         {
                             var eId = $(this).parent('tr').find('p').attr('editid');
