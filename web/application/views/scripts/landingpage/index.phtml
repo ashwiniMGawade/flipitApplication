@@ -32,160 +32,223 @@ else :
     $localeViewPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/';
     $localePartialPath = $localeViewPath.'scripts/landingpage/';
 endif;
+
+$landingPageHelper = new FrontEnd_Helper_LandingPageFunctions();
+$count = 1;
+$offersCount = count($this->offers);
+$offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
+$column1 = '';
+$column2 = '';
+$column3 = '';
+$column4 = '';
+$column5 = '';
+$column6 = '';
+foreach ($this->offers as $offer) {
+    $offer = (object)$offer;
+    $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
+
+    $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($offer->endDate);
+    $offerBottomDaysTillExpireText = '';
+    if ($daysTillOfferExpires <= 3) {
+        $offerBottomDaysTillExpireText = $landingPageHelper->getDaysTillExpire($daysTillOfferExpires);
+    }
+
+    $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
+
+    $urlToShow = $offerPartial->getUrlToShow($offer);
+    $onClick = '';
+    if (isset($offer->discountType) && $offer->discountType == 'CD') {
+        $popupLink = $offerPartial->getPopupLink($offer, $urlToShow);
+        $onClick .= "OpenInNewTab('".HTTP_PATH_LOCALE.'gad/'.$this->landingPage->getPermalink().$popupLink."');";
+    }
+    $clickoutURL = HTTP_PATH_LOCALE . 'out/offer/' . $offer->id;
+
+    $defaultText = '';
+    if ($offer->userGenerated == '1') {
+        $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName($esiLocale);
+        $defaultText = FrontEnd_Helper_viewHelper::__translate(
+            'This code has been added by one of our users and not by the [websiteName] deal hunters'
+        );
+        $defaultText = str_replace('[websiteName]', $websiteName, $defaultText);
+    }
+
+    $offerDiv = '';
+    if (isset($offer->discountType) && $offer->discountType == 'CD') {
+        $offerDiv ="<a rel='nofollow' href=".$clickoutURL." onclick=".$onClick.">
+                        <div id='offerButton".$offer->id."' class='buttons offer-teaser-button-wrapper'>
+                            <div class='offer-teaser-button-wrapper-inner'>
+                                <span class='offer-teaser-button kccode'>
+                                ".FrontEnd_Helper_viewHelper::__translate('Bekijk de korting')."
+                                </span>
+                                <span class='show-code'>".
+                                    FrontEnd_Helper_OffersPartialFunctions::generateRandomCharactersForOfferTeaser(4)
+                                ."</span>
+                                <span class='blue-corner'></span>
+                            </div>
+                        </div>
+                    </a>
+                    <div class='the-code' id='offerCodeDiv".$offer->id."'>
+                        <strong class='code-value'>".$offer->couponCode."</strong>
+                    </div>";
+    } elseif (isset($offer->discountType) && $offer->discountType == 'SL') {
+        $offerDiv ="<div id='offerButton".$offer->id."'>
+                        <div class='btn-blue-wrapper'>
+                            <a target='_blank' rel='nofollow' vote='0' href=".$clickoutURL."
+                            class='btn-code' id=".$offer->id.">
+                                ".FrontEnd_Helper_viewHelper::__translate('Bekijk de korting')."
+                            </a>
+                        </div>
+                    </div>";
+    } else {
+        $offerDiv ="<div id='offerButton".$offer->id."'>
+                        <div class='btn-blue-wrapper'>
+                            <a rel='nofollow' target='_blank' vote='0' href=".$urlToShow."
+                            class='btn-code' id=".$offer->id.">
+                                ".FrontEnd_Helper_viewHelper::__translate('Bekijk de korting')."
+                            </a>
+                        </div>
+                    </div>";
+    }
+
+    $termsAndConditionsLink = '';
+    $termsAndConditionsDiv = "<span class='link-terms'>&nbsp;</span>";
+    if($termsAndConditions != '' || $offer->userGenerated == 1) {
+        $termsAndConditionsLink =    "
+                                    <span class='link-terms'>
+                                        <a id='termAndConditionLink".$offer->id."'
+                                            onclick='showTermAndConditions(".$offer->id.")' class='terms'
+                                            href='javascript:void(0);'>
+                                            ".FrontEnd_Helper_viewHelper::__translate('Terms &amp; conditions')."
+                                        </a>
+                                    </span>
+                                    ";
+
+        if (empty($defaultText)) {
+            $termsText = $this->translate('Terms &amp; Conditions');
+        } else {
+            $termsText = "<span class='social-term-font'>" .$defaultText."</span>";
+        }
+
+        $termsAndConditionsDiv =    "<div class='terms-block' id='termAndConditions".$offer->id."'>
+                                        <div class='term-and-condition'>".$termsText."</div>
+                                        <ol class='num-list'>".$termsAndConditions."</ol>
+                                    </div>";
+    }
+
+    $offerPanel = '';
+    $offerPanel ="<div class='panel panel-default'>
+                    <div class='panel-body'>
+                        <a rel='nofollow' href=".$clickoutURL." onclick=".$onClick.">
+                            <h2 class='common-height'>".$offer->title."</h2>
+                        </a>
+                        ".$offerDiv."
+                    </div>
+                    <div class='panel-footer'>
+                        <div class='row'>
+                            <div class='col-xs-6 col-sm-6 col-md-6 col-lg-6'>
+                                ".$offerBottomDaysTillExpireText."
+                            </div>
+                            <div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right'>
+                                ".$termsAndConditionsLink."
+                            </div>
+                        </div>
+                    </div>
+                    ".$termsAndConditionsDiv."
+                </div>
+                ";
+
+    if ($count <= 6) {
+        if ($count % 3 == 1) {
+            $column1 .= $offerPanel;
+        } elseif ($count % 3 == 2) {
+            $column2 .= $offerPanel;
+        } elseif ($count % 3 == 0) {
+            $column3 .= $offerPanel;
+        }
+    } else {
+        if ($count % 3 == 1) {
+            $column4 .= $offerPanel;
+        } elseif ($count % 3 == 2) {
+            $column5 .= $offerPanel;
+        } elseif ($count % 3 == 0) {
+            $column6 .= $offerPanel;
+        }
+    }
+    $count++;
+}
 ?>
 <div id="wrapper">
-<header id="header">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                <div class="logo"><a href="<?php echo $websiteName;?>"><img src="<?php echo $logoPath; ?>" alt="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo alt');?>" title="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo title');?>" width="199" height="50"></a></div>
-            </div>
-            <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8 text-right">
-                <span class="slogan">Number 1 saving platform worldwide!</span>
-            </div>
-        </div>
-    </div>
-</header>
-<main id="main">
-<div class="container">
-<div class="heading-block">
-    <div class="logo-holder">
-        <?php
-            $landingPageHelper = new FrontEnd_Helper_LandingPageFunctions();
-            echo $landingPageHelper->getShopHeader($this->landingPage->getShop());
-        ?>
-    </div>
-    <div class="description">
-        <h1><?php echo $this->landingPage->getTitle(); ?></h1>
-        <?php
-        $offersAdded = '';
-        if (!empty($this->offersAddedInShop) && $this->offersAddedInShop['offersInfo'] != '') {
-            $offersAdded = '<li><span><i class="icon-timer"></i>  '
-                .FrontEnd_Helper_viewHelper::__translate('This '.$this->offersAddedInShop['type'])
-                . ' '
-                .$this->offersAddedInShop['offersInfo']['amountOffers']
-                .' '
-                .FrontEnd_Helper_viewHelper::__translate('offers have been added').'</span></li>';
-        }
-        ?>
-        <ul class="action-list">
-           <?php echo $offersAdded; ?>
-            <li>
-                <span class="icon-check-circle"></span><?php echo count($this->offers).' '.FrontEnd_Helper_viewHelper::__translate('current offers'); ?>
-            </li>
-        </ul>
-    </div>
-</div>
-<div class="discount-blocks">
-    <?php $count = 1;
-    $offersCount = count($this->offers);
-    $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
-    ?>
-    <?php foreach($this->offers as $offer) :
-        $offer = (object) $offer;
-        $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
-        $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($offer->endDate);
-        $offerBottomDaysTillExpireText = '';
-        if ($daysTillOfferExpires <= 3) {
-            $offerBottomDaysTillExpireText = $landingPageHelper->getDaysTillExpire($daysTillOfferExpires);
-        }
-        $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
-        $urlToShow = $offerPartial->getUrlToShow($offer);
-        $onClick = '';
-        if (isset($offer->discountType) && $offer->discountType == 'CD') {
-            $popupLink = $offerPartial->getPopupLink($offer, $urlToShow);
-            $onClick .= "OpenInNewTab('".HTTP_PATH_LOCALE.'gad/'.$this->landingPage->getPermalink().$popupLink."');";
-        }
-        $clickoutURL = HTTP_PATH_LOCALE.'out/offer/'.$offer->id;
-        $defaultText = '';
-        if ($offer->userGenerated == '1') {
-            $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName($esiLocale);
-            $defaultText = FrontEnd_Helper_viewHelper::__translate(
-                'This code has been added by one of our users and not by the [websiteName] deal hunters'
-            );
-            $defaultText = str_replace('[websiteName]', $websiteName, $defaultText);
-        }
-        ?>
-        <?php if($count==1 || $count==7): ?>
-            <div class="row same-height">
-        <?php endif; ?>
-        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <a rel="nofollow" href="<?php echo $clickoutURL; ?>" onclick="<?php echo $onClick; ?>">
-                        <h2 class="common-height offer-title"><?php echo $offer->title; ?></h2>
-                    </a>
-                    <?php if(isset($offer->discountType) && $offer->discountType == 'CD' ): ?>
-                        <a rel="nofollow" href="<?php echo $clickoutURL; ?>" onclick="<?php echo $onClick; ?>">
-                            <div id="offerButton<?php echo $offer->id; ?>" class="buttons offer-teaser-button-wrapper">
-                                <div class="offer-teaser-button-wrapper-inner">
-                                    <span class="offer-teaser-button kccode">Bekijk de code</span>
-                                    <span class="show-code"><?php echo FrontEnd_Helper_OffersPartialFunctions::generateRandomCharactersForOfferTeaser(4); ?></span>
-                                    <span class="blue-corner"></span>
-                                </div>
-                            </div>
+    <header id="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                    <div class="logo">
+                        <a href="<?php echo $websiteName;?>">
+                            <img src="<?php echo $logoPath; ?>"
+                                 alt="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo alt');?>"
+                                 title="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo title');?>"
+                                 width="199" height="50" />
                         </a>
-                        <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
-                            <strong class="code-value"><?php echo $offer->couponCode;?></strong>
-                        </div>
-                    <?php else: ?>
-                        <div id="offerButton<?php echo $offer->id; ?>">
-                            <div class="btn-blue-wrapper">
-                                <a onclick="<?php echo $onClick; ?>" rel="nofollow" vote="0" href="<?php echo $clickoutURL; ?>" class="btn-code " id="<?php echo $offer->id; ?>">
-                                    Bekijk deze korting</a>
-                            </div>
-                        </div>
-                    <?php endif; ?>
-                </div>
-                <div class="panel-footer">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                            <?php echo $offerBottomDaysTillExpireText; ?>
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
-                            <?php if($termsAndConditions != '' || $offer->userGenerated == 1): ?>
-                                <span class="link-terms">
-                                    <a id="termAndConditionLink<?php echo $offer->id; ?>"
-                                       onclick="showTermAndConditions(<?php echo $offer->id; ?>)" class="terms"
-                                       href="javascript:void(0);">
-                                        Terms &amp; conditions
-                                    </a></span>
-                            <?php endif; ?>
-                        </div>
                     </div>
                 </div>
-                <div class="terms-block" id='termAndConditions<?php echo $offer->id; ?>'>
-                    <div class='term-and-condition'>
-                    <?php
-                    if (empty($defaultText)) {
-                        echo $this->translate('Terms &amp; Conditions');
-                    } else {
-                        echo '<span class="social-term-font">' .$defaultText.'</span>';
-                    }
-                    ?>
-                    </div>
-                    <ol class="num-list">
-                        <?php echo $termsAndConditions;?>
-                    </ol>
+                <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8 text-right">
+                    <span class="slogan">Number 1 saving platform worldwide!</span>
                 </div>
             </div>
         </div>
-    <?php if($count==6 || ($count<6 && $count == $offersCount)): ?>
+    </header>
+<main id="main">
+    <div class="container">
+        <div class="heading-block">
+            <div class="logo-holder">
+                <?php
+                    echo $landingPageHelper->getShopHeader($this->landingPage->getShop());
+                ?>
+            </div>
+            <div class="description">
+                <h1><?php echo $this->landingPage->getTitle(); ?></h1>
+                <?php
+                $offersAdded = '';
+                if (!empty($this->offersAddedInShop) && $this->offersAddedInShop['offersInfo'] != '') {
+                    $offersAdded = '<li><span><i class="icon-timer"></i>  '
+                        .FrontEnd_Helper_viewHelper::__translate('This '.$this->offersAddedInShop['type'])
+                        . ' '
+                        .$this->offersAddedInShop['offersInfo']['amountOffers']
+                        .' '
+                        .FrontEnd_Helper_viewHelper::__translate('offers have been added').'</span></li>';
+                }
+                ?>
+                <ul class="action-list">
+                   <?php echo $offersAdded; ?>
+                    <li>
+                        <span class="icon-check-circle"></span><?php echo count($this->offers).' '.FrontEnd_Helper_viewHelper::__translate('current offers'); ?>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <?php echo $this->partial('partials/_landingpage_signup.phtml', array());
-        endif;
-        $count++;
-    endforeach; ?>
-</div>
-<?php if( 0 == $offersCount) :
-    echo $this->partial('partials/_landingpage_signup.phtml', array());
-endif; ?>
-
-<article class="about">
-    <?php echo $this->landingPage->getContent(); ?>
-</article>
-</div>
-</div>
+        <div class="discount-blocks">
+            <div class="row same-height">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column1; ?></div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column2; ?></div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column3; ?></div>
+            </div>
+            <?php
+            echo $this->partial('partials/_landingpage_signup.phtml', array());
+            if ($offersCount > 6) {
+            ?>
+            <div class="row same-height">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column4; ?></div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column5; ?></div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column6; ?></div>
+            </div>
+            <?php
+            }
+            ?>
+            <article class="about">
+                <?php echo $this->landingPage->getContent(); ?>
+            </article>
+        </div>
+    </div>
 </main>
 </div>
 <?php
