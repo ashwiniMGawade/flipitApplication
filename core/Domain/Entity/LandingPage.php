@@ -78,6 +78,11 @@ class LandingPage
     protected $updatedAt;
 
 
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
     /**
      * @return mixed
      */
@@ -268,5 +273,10 @@ class LandingPage
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
     }
 }
