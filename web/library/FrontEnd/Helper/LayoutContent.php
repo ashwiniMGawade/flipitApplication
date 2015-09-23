@@ -72,14 +72,46 @@ class FrontEnd_Helper_LayoutContent
 
     public static function loadGoogleTagManager()
     {
+        if(APPLICATION_ENV != 'production') {
+            return '';
+        }
+        $googleTagManagerCodes = array(
+            'at' => 'GTM-MJ93VF',
+            'au' => 'GTM-NHG28Z',
+            'be' => 'GTM-MMK2XF',
+            'br' => 'GTM-5D7Z74',
+            'ca' => 'GTM-MFDPWR',
+            'ch' => 'GTM-WD5G2S',
+            'de' => 'GTM-KRZV5K',
+            'dk' => 'GTM-N6R4NL',
+            'es' => 'GTM-KPTGNP',
+            'fr' => 'GTM-NTG9TK',
+            'id' => 'GTM-NGB2DB',
+            'in' => 'GTM-M3KC7D',
+            'it' => 'GTM-PHFNMN',
+            'my' => 'GTM-KH7S2G',
+            'no' => 'GTM-NX2363',
+            'nz' => 'GTM-N97XHL',
+            'pl' => 'GTM-MLBDQ2',
+            'pt' => 'GTM-PQVWHG',
+            'se' => 'GTM-WZ4XTW',
+            'sg' => 'GTM-NVGDBS',
+            'us' => 'GTM-TDJQKM',
+            'en' => 'GTM-ND66FS'
+        );
+        $locale = (LOCALE == '' ? 'en' : LOCALE);
+        if(!array_key_exists($locale, $googleTagManagerCodes)) {
+            return '';
+        }
+
         $googleTagManager = "<!-- Google Tag Manager -->
-            <noscript><iframe src=\"//www.googletagmanager.com/ns.html?id=GTM-W87MZ3\"
+            <noscript><iframe src=\"//www.googletagmanager.com/ns.html?id=".$googleTagManagerCodes[$locale]."\"
             height=\"0\" width=\"0\" style=\"display:none;visibility:hidden\"></iframe></noscript>
             <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-W87MZ3');</script>
+            })(window,document,'script','dataLayer','".$googleTagManagerCodes[$locale]."');</script>
             <!-- End Google Tag Manager -->";
 
         return $googleTagManager;
