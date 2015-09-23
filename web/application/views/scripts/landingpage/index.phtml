@@ -35,6 +35,7 @@ endif;
 
 $landingPageHelper = new FrontEnd_Helper_LandingPageFunctions();
 $count = 1;
+$numOfOffersBeforeSignUpForm = 6;
 $offersCount = count($this->offers);
 $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
 $column1 = '';
@@ -110,8 +111,8 @@ foreach ($this->offers as $offer) {
                     </div>";
     }
 
-    $termsAndConditionsLink = '';
-    $termsAndConditionsDiv = "<span class='link-terms'>&nbsp;</span>";
+    $termsAndConditionsLink = "<span class=''>&nbsp;</span>";
+    $termsAndConditionsDiv = "";
     if($termsAndConditions != '' || $offer->userGenerated == 1) {
         $termsAndConditionsLink =    "
                                     <span class='link-terms'>
@@ -157,7 +158,7 @@ foreach ($this->offers as $offer) {
                 </div>
                 ";
 
-    if ($count <= 6) {
+    if ($count <= $numOfOffersBeforeSignUpForm) {
         if ($count % 3 == 1) {
             $column1 .= $offerPanel;
         } elseif ($count % 3 == 2) {
@@ -234,7 +235,7 @@ foreach ($this->offers as $offer) {
             </div>
             <?php
             echo $this->partial('partials/_landingpage_signup.phtml', array());
-            if ($offersCount > 6) {
+            if ($offersCount > $numOfOffersBeforeSignUpForm) {
             ?>
             <div class="row same-height">
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column4; ?></div>
