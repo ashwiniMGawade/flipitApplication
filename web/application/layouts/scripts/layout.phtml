@@ -17,9 +17,6 @@ $language = isset($this->languageReference) ? $this->languageReference : $locale
 
 <html lang="<?php echo $language; ?>" xml:lang="<?php echo $language;?>" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<?php if (!isset($this->displayVWOScriptOnTop) || $this->displayVWOScriptOnTop != 1) : ?>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<?php endif; ?>
 <?php if (isset($this->displayVWOScript) && $this->displayVWOScript == 1) : ?>
 <!-- Start Visual Website Optimizer Asynchronous Code -->
 <script type='text/javascript'>
@@ -68,9 +65,7 @@ $language = isset($this->languageReference) ? $this->languageReference : $locale
 </script>
 <!-- End Visual Website Optimizer Asynchronous Code -->
 <?php endif; ?>
-<?php if (isset($this->displayVWOScriptOnTop) && $this->displayVWOScriptOnTop == 1) : ?>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<?php endif; ?>
 <?php
 if(isset($this->canonical)): 
     $this->headLink(FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical)); 
