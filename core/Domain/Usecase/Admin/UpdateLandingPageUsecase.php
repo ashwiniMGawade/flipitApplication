@@ -62,8 +62,11 @@ class UpdateLandingPageUsecase
         }
         if (isset($params['status'])) {
             $landingPage->setStatus((int) $params['status']);
+            $offlineSince = $landingPage->getOfflineSince();
             if ($params['status'] == 0) {
-                $landingPage->setOfflineSince(new \DateTime('now'));
+                if (empty($offlineSince)) {
+                    $landingPage->setOfflineSince(new \DateTime('now'));
+                }
             } else {
                 $landingPage->setOfflineSince(null);
             }
