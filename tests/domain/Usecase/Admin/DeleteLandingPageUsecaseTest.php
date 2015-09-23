@@ -1,7 +1,7 @@
 <?php
 namespace Usecase\Admin;
 
-use \Core\Domain\Entity\LandingPages;
+use \Core\Domain\Entity\LandingPage;
 use \Core\Domain\Usecase\Admin\DeleteLandingPageUsecase;
 
 class DeleteLandingPageUsecaseTest extends \Codeception\TestCase\Test
@@ -9,17 +9,17 @@ class DeleteLandingPageUsecaseTest extends \Codeception\TestCase\Test
 
     public function testDeleteLandingPageUsecase()
     {
-        $landingPagesRepository = $this->createDeleteLandingPageRepositoryInterfaceWithMethodsMock(true);
-        $this->assertEquals(true, (new DeleteLandingPageUsecase($landingPagesRepository))->execute(new LandingPages()));
+        $landingPageRepository = $this->createDeleteLandingPageRepositoryInterfaceWithMethodsMock(true);
+        $this->assertEquals(true, (new DeleteLandingPageUsecase($landingPageRepository))->execute(new LandingPage()));
     }
 
     private function createDeleteLandingPageRepositoryInterfaceWithMethodsMock($returns)
     {
-        $apiKeyRepository = $this->getMock('\Core\Domain\Repository\LandingPagesRepositoryInterface');
-        $apiKeyRepository
+        $landingPageRepository = $this->getMock('\Core\Domain\Repository\LandingPageRepositoryInterface');
+        $landingPageRepository
             ->expects($this->once())
             ->method('remove')
             ->willReturn($returns);
-        return $apiKeyRepository;
+        return $landingPageRepository;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 namespace Core\Domain\Usecase\Admin;
 
-use \Core\Domain\Repository\LandingPagesRepositoryInterface;
+use \Core\Domain\Repository\LandingPageRepositoryInterface;
 use \Core\Domain\Adapter\PurifierInterface;
 use \Core\Service\Errors\ErrorsInterface;
 
@@ -13,7 +13,7 @@ class GetLandingPageUsecase
 
     protected $errors;
 
-    public function __construct(LandingPagesRepositoryInterface $landingPageRepository, PurifierInterface $htmlPurifier, ErrorsInterface $errors)
+    public function __construct(LandingPageRepositoryInterface $landingPageRepository, PurifierInterface $htmlPurifier, ErrorsInterface $errors)
     {
         $this->landingPageRepository    = $landingPageRepository;
         $this->htmlPurifier             = $htmlPurifier;
@@ -28,7 +28,7 @@ class GetLandingPageUsecase
             return $this->errors;
         }
 
-        $landingPage = $this->landingPageRepository->findOneBy('\Core\Domain\Entity\LandingPages', $conditions);
+        $landingPage = $this->landingPageRepository->findOneBy('\Core\Domain\Entity\LandingPage', $conditions);
 
         if (false === is_object($landingPage)) {
             $this->errors->setError('Page not found');

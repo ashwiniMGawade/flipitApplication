@@ -1,7 +1,7 @@
 <?php
 namespace Usecase\Admin;
 
-use Core\Domain\Entity\LandingPages;
+use Core\Domain\Entity\LandingPage;
 use Core\Domain\Entity\Shop;
 use Core\Domain\Service\Purifier;
 use Core\Domain\Service\Validator;
@@ -23,7 +23,7 @@ class UpdateLandingPageUsecaseTest extends \Codeception\TestCase\Test
             $landingPageValidator,
             new Purifier(),
             new Errors()
-        ))->execute(new LandingPages(), $params);
+        ))->execute(new LandingPage(), $params);
         $errors = new Errors();
         $errors->setError('Invalid Parameters');
         $this->assertEquals($errors->getErrorMessages(), $result->getErrorMessages());
@@ -43,7 +43,7 @@ class UpdateLandingPageUsecaseTest extends \Codeception\TestCase\Test
             $landingPageValidator,
             new Purifier(),
             new Errors()
-        ))->execute(new LandingPages(), $params);
+        ))->execute(new LandingPage(), $params);
         $errors = new Errors();
         $errors->setError('Title cannot be empty.', 'title');
         $this->assertEquals($errors->getErrorMessages(), $result->getErrorMessages());
@@ -64,15 +64,15 @@ class UpdateLandingPageUsecaseTest extends \Codeception\TestCase\Test
             'status' => 0
         );
 
-        $landingPageRepository = $this->landingPageRepositoryMockWithSaveMethod(new LandingPages());
+        $landingPageRepository = $this->landingPageRepositoryMockWithSaveMethod(new LandingPage());
         $landingPageValidator = $this->createLandingPageValidatorMock(true);
         $result = (new UpdateLandingPageUsecase(
             $landingPageRepository,
             $landingPageValidator,
             new Purifier(),
             new Errors()
-        ))->execute(new LandingPages(), $params);
-        $this->assertInstanceOf('\Core\Domain\Entity\LandingPages', $result);
+        ))->execute(new LandingPage(), $params);
+        $this->assertInstanceOf('\Core\Domain\Entity\LandingPage', $result);
     }
 
     public function testUpdateLandingPageUsecaseSetsOfflineSinceToNullWhenPageIsOnline()
@@ -90,20 +90,20 @@ class UpdateLandingPageUsecaseTest extends \Codeception\TestCase\Test
             'status' => 1
         );
 
-        $landingPageRepository = $this->landingPageRepositoryMockWithSaveMethod(new LandingPages());
+        $landingPageRepository = $this->landingPageRepositoryMockWithSaveMethod(new LandingPage());
         $landingPageValidator = $this->createLandingPageValidatorMock(true);
         $result = (new UpdateLandingPageUsecase(
             $landingPageRepository,
             $landingPageValidator,
             new Purifier(),
             new Errors()
-        ))->execute(new LandingPages(), $params);
-        $this->assertInstanceOf('\Core\Domain\Entity\LandingPages', $result);
+        ))->execute(new LandingPage(), $params);
+        $this->assertInstanceOf('\Core\Domain\Entity\LandingPage', $result);
     }
 
     private function landingPageRepositoryMock()
     {
-        $landingPageRepositoryMock = $this->getMock('\Core\Domain\Repository\LandingPagesRepositoryInterface');
+        $landingPageRepositoryMock = $this->getMock('\Core\Domain\Repository\LandingPageRepositoryInterface');
         return $landingPageRepositoryMock;
     }
 
@@ -113,7 +113,7 @@ class UpdateLandingPageUsecaseTest extends \Codeception\TestCase\Test
         $landingPageRepositoryMock
             ->expects($this->once())
             ->method('save')
-            ->with($this->isInstanceOf('\Core\Domain\Entity\LandingPages'))
+            ->with($this->isInstanceOf('\Core\Domain\Entity\LandingPage'))
             ->willReturn($returns);
         return $landingPageRepositoryMock;
     }
@@ -125,7 +125,7 @@ class UpdateLandingPageUsecaseTest extends \Codeception\TestCase\Test
             ->getMock();
         $mockLandingPageValidator->expects($this->once())
             ->method('validate')
-            ->with($this->isInstanceOf('\Core\Domain\Entity\LandingPages'))
+            ->with($this->isInstanceOf('\Core\Domain\Entity\LandingPage'))
             ->willReturn($returns);
         return $mockLandingPageValidator;
     }

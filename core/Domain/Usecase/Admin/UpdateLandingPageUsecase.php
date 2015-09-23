@@ -2,9 +2,9 @@
 namespace Core\Domain\Usecase\Admin;
 
 use \Core\Domain\Adapter\PurifierInterface;
-use \Core\Domain\Entity\LandingPages;
+use \Core\Domain\Entity\LandingPage;
 use \Core\Domain\Entity\Shop;
-use \Core\Domain\Repository\LandingPagesRepositoryInterface;
+use \Core\Domain\Repository\LandingPageRepositoryInterface;
 use \Core\Domain\Validator\LandingPageValidator;
 use \Core\Service\Errors\ErrorsInterface;
 
@@ -19,7 +19,7 @@ class UpdateLandingPageUsecase
     protected $errors;
 
     public function __construct(
-        LandingPagesRepositoryInterface $landingPageRepository,
+        LandingPageRepositoryInterface $landingPageRepository,
         LandingPageValidator $landingPageValidator,
         PurifierInterface $htmlPurifier,
         ErrorsInterface $errors
@@ -30,7 +30,7 @@ class UpdateLandingPageUsecase
         $this->errors           = $errors;
     }
 
-    public function execute(LandingPages $landingPage, $params = array())
+    public function execute(LandingPage $landingPage, $params = array())
     {
         if (empty($params)) {
             $this->errors->setError('Invalid Parameters');
@@ -45,6 +45,10 @@ class UpdateLandingPageUsecase
             $landingPage->setShop($params['shop']);
         }
         if (isset($params['permalink'])) {
+            $pattern = array("/&amp;/", "/[\,+@#$%'&*!;&\"<>\^()]+/", '/\s/', "/-{2,}/");
+            $replaceWith = array("", "", "-", "-");
+            $urlString = preg_replace($pattern, $replaceWith, trim($params['permalink']));
+            $params['permalink'] = strtolower($urlString);
             $landingPage->setPermalink($params['permalink']);
         }
         if (isset($params['subTitle'])) {

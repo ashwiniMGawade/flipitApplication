@@ -11,6 +11,10 @@ var focusRules = {
 jQuery.noConflict();
 jQuery(document).ready(init);
 
+jQuery.validator.addMethod("permalinkRegex", function(value, element) {
+    return this.optional(element) || /^[a-z0-9\-_]+$/i.test(value);
+}, "Field must contain only letters, numbers, underscores or dashes.");
+
 function init() {
     jQuery("#shopName").select2({placeholder: __("Select a Shop")});
     jQuery("#shopName").change(function(){
@@ -88,9 +92,22 @@ function validateForm() {
         rules: {
             status : "required",
             selectedShop : "required",
-            permalink : "required",
+            permalink : {
+                required : true,
+                minlength : 3,
+                permalinkRegex: true,
+                remote : {
+                    url: HOST_PATH + "admin/landingpages/validatepermalink",
+                    type: "post",
+                    data: {
+                        permalink : function() {
+                            return jQuery( "#permalink" ).val();
+                        }
+                    }
+                }
+            },
             title : {
-                "required" : true
+                required : true
             }
         },
         messages : {
@@ -101,7 +118,10 @@ function validateForm() {
                 required : __("Please select a shop")
             },
             permalink : {
-                required : __("Please enter a permalink")
+                required : __("Please enter a permalink"),
+                minlength : __("Please enter atleast 3 characters"),
+                permalinkRegex : __("Invalid characters"),
+                remote: __("Permalink already in use")
             },
             title : {
                 required : __("Please enter a title")

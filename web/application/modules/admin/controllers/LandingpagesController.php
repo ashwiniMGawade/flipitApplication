@@ -134,6 +134,7 @@ class Admin_LandingpagesController extends Application_Admin_BaseController
             $shopId = $shop->getId();
 
             $landingPageInfo = array(
+                'id' => $landingPage->getId(),
                 'status' => $landingPage->getStatus(),
                 'title' => $landingPage->getTitle(),
                 'subTitle' => $landingPage->getSubTitle(),
@@ -202,5 +203,29 @@ class Admin_LandingpagesController extends Application_Admin_BaseController
         AdminFactory::deleteLandingPage()->execute($result);
         $this->setFlashMessage('success', 'Landing page deleted successfully.');
         die;
+    }
+
+    public function validatepermalinkAction()
+    {
+        $isValid = false;
+        $permalink = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('permalink'));
+        $landingPageId = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('editId')));
+
+        $pattern = array("/&amp;/", "/[\,+@#$%'&*!;&\"<>\^()]+/", '/\s/', "/-{2,}/");
+        $replaceWith = array("", "", "-", "-");
+        $urlString = preg_replace($pattern, $replaceWith, trim($permalink));
+        $permalink = strtolower($urlString);
+
+        $conditions = array(
+            'permalink' => $permalink
+        );
+        $landingPages = AdminFactory::getLandingPages()->execute($conditions);
+        if (count($landingPages) == 0) {
+            $isValid = true;
+        } elseif (count($landingPages) == 1 && $landingPages[0]->getId() == $landingPageId) {
+            $isValid = true;
+        }
+        echo Zend_Json::encode($isValid);
+        exit;
     }
 }

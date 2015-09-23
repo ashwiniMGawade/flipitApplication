@@ -10,7 +10,7 @@ use \Core\Persistence\Database\Repository\ShopRepository;
 use \Core\Persistence\Database\Repository\ApiKeyRepository;
 use \Core\Persistence\Database\Repository\AffliateNetworkRepository;
 use \Core\Persistence\Database\Repository\WidgetRepository;
-use \Core\Persistence\Database\Repository\LandingPagesRepository;
+use \Core\Persistence\Database\Repository\LandingPageRepository;
 
 class RepositoryFactory
 {
@@ -54,8 +54,8 @@ class RepositoryFactory
         return new OfferRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 
-    public static function landingPages()
+    public static function landingPage()
     {
-        return new LandingPagesRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
+        return new LandingPageRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 }

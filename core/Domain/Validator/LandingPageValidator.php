@@ -2,7 +2,7 @@
 namespace Core\Domain\Validator;
 
 use Core\Domain\Adapter\ValidatorInterface;
-use Core\Domain\Entity\LandingPages;
+use Core\Domain\Entity\LandingPage;
 
 class LandingPageValidator
 {
@@ -13,7 +13,7 @@ class LandingPageValidator
         $this->validator = $validator;
     }
 
-    public function validate(LandingPages $landingPage)
+    public function validate(LandingPage $landingPage)
     {
         $constraints = $this->setDefaultValidationRules();
         return $this->validator->validate($landingPage, $constraints);

@@ -1,7 +1,7 @@
 <?php
 namespace Validator;
 
-use Core\Domain\Entity\LandingPages;
+use Core\Domain\Entity\LandingPage;
 use Core\Domain\Validator\LandingPageValidator;
 
 class LandingPageValidatorTest extends \Codeception\TestCase\Test
@@ -9,13 +9,13 @@ class LandingPageValidatorTest extends \Codeception\TestCase\Test
     public function testLandingPageValidatorWithValidOutcome()
     {
         $landingPageValidator = new LandingPageValidator($this->mockValidatorInterface(true));
-        $this->assertTrue($landingPageValidator->validate(new LandingPages()));
+        $this->assertTrue($landingPageValidator->validate(new LandingPage()));
     }
 
     public function testLandingPageValidatorWithInvalidOutcome()
     {
         $landingPageValidator = new LandingPageValidator($this->mockValidatorInterface(false));
-        $this->assertFalse($landingPageValidator->validate(new LandingPages()));
+        $this->assertFalse($landingPageValidator->validate(new LandingPage()));
     }
 
     private function mockValidatorInterface($flag)
