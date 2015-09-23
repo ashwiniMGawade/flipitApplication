@@ -13,6 +13,9 @@ echo $this->doctype();
 # manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
 $locale = explode('_', COUNTRY_LOCALE);
 $language = isset($this->languageReference) ? $this->languageReference : $locale[0];
+if($language == 'nn') {
+    $language = 'no';
+}
 ?>
 
 <html lang="<?php echo $language; ?>" xml:lang="<?php echo $language;?>" xmlns="http://www.w3.org/1999/xhtml">
