@@ -7,11 +7,7 @@ class StoreController extends Zend_Controller_Action
         $module   = strtolower($this->getRequest()->getParam('lang'));
         $controller = strtolower($this->getRequest()->getControllerName());
         $action     = strtolower($this->getRequest()->getActionName());
-        if (
-            file_exists(
-                APPLICATION_PATH . '/modules/' . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml"
-            )
-        ) {
+        if (file_exists(APPLICATION_PATH . '/modules/' . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")) {
             $this->view->setScriptPath(APPLICATION_PATH . '/modules/'  . $module . '/views/scripts');
         } else {
             $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');

@@ -1,5 +1,6 @@
 <?php
 $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
+
 $onclick = "gtmDataBuilder('retailerClickout', 'Retailer', 'Retailer Official Link', 'Retailer', ".$this->shop['id'].");";
 
 $shopUrl = $this->shop['affliateProgram'] == '1' ?

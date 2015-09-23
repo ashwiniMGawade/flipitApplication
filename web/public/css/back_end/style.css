@@ -3535,3 +3535,11 @@ div#error-message {
 #shopRating span {
     color: darkorange;
 }
+#landingPagesCreate .mainpage-content-right-inner-left,
+#landingPagesEdit .mainpage-content-right-inner-left {
+    width: 14em;
+}
+#landingPagesCreate .mainpage-content-right-inner-right-full,
+#landingPagesEdit .mainpage-content-right-inner-right-full {
+    margin: 0 21em 0 16em;
+}
