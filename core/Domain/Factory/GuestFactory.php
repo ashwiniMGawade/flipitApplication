@@ -35,6 +35,6 @@ class GuestFactory
 
     public static function getLandingPage()
     {
-        return new GetLandingPageUsecase(RepositoryFactory::landingPages(), new Purifier(), new Errors());
+        return new GetLandingPageUsecase(RepositoryFactory::landingPage(), new Purifier(), new Errors());
     }
 }
