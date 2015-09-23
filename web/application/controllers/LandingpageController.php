@@ -21,7 +21,11 @@ class LandingpageController extends Zend_Controller_Action
         }
         $pagePermalink = $this->_helper->Error->getPageParmalink(ltrim($this->_request->getPathInfo(), '/'));
         $pagePermalink = $this->_helper->Error->getPageNumbering($pagePermalink);
-        $landingPage = GuestFactory::getLandingPage()->execute(array('permalink' => $pagePermalink));
+        $conditions = array(
+            'permalink' => $pagePermalink,
+            'status' => 1
+        );
+        $landingPage = GuestFactory::getLandingPage()->execute($conditions);
         if ($landingPage instanceof Errors) {
             throw new \Zend_Controller_Action_Exception('', 404);
         }
