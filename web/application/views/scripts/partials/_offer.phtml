@@ -268,7 +268,7 @@ foreach ($this->offers as $offer) {
         <div class="offer-box" id="websiteOfferLink<?php echo $offer->id ;?>" <?php echo $style;?>>
             <hr class="alt2">
             <div class="offer">
-                <span><?php echo $expiredOffer != '' 
+                <span><?php echo $expiredOffer != ''
                     ? $this->translate('Go to the website')
                     : $this->translate('Grab this offer now:');?></span>
                 <a target = "_blank" href="<?php echo $urlToShow;?>" rel= "nofollow">
@@ -280,7 +280,7 @@ foreach ($this->offers as $offer) {
         </div>
         <div class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
             <div class='term-and-condition'>
-                <?php 
+                <?php
                 if (empty($defaultText)) {
                     echo $this->translate('Terms &amp; Conditions');
                 } else {

@@ -9,4 +9,5 @@ interface BaseRepositoryInterface
     public function findAll($entity);
     public function findBy($entity, $conditions = array(), $order = array(), $limit = null, $offset = null);
     public function save($entity);
+    public function remove($entity);
 }
