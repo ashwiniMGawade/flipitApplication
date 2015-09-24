@@ -9,7 +9,7 @@ class Config
     public function __construct()
     {
         if (defined('APPLICATION_ENV')) {
-            $this->env = defined('APPLICATION_ENV');
+            $this->env = APPLICATION_ENV;
         } elseif (getenv('APPLICATION_ENV')) {
             $this->env = getenv('APPLICATION_ENV');
         } else {
