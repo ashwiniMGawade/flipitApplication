@@ -7,6 +7,9 @@
     <meta name="description" content="<?php echo $this->landingPage->getMetaDescription(); ?>">
     <link rel="stylesheet" href="/public/css/landingpages/all.css">
     <link rel="stylesheet/less" href="/public/css/landingpages/landingPage.less">
+    <?php
+        echo $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
+    ?>
     <script type="text/javascript">
         function OpenInNewTab(url)
         {
@@ -184,12 +187,10 @@ foreach ($this->offers as $offer) {
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <div class="logo">
-                        <a href="<?php echo $websiteName;?>">
-                            <img src="<?php echo $logoPath; ?>"
-                                 alt="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo alt');?>"
-                                 title="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo title');?>"
-                                 width="199" height="50" />
-                        </a>
+                        <img src="<?php echo $logoPath; ?>"
+                             alt="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo alt');?>"
+                             title="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo title');?>"
+                             width="199" height="50" />
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8 text-right">
