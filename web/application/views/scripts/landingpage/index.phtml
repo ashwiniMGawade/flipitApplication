@@ -5,10 +5,9 @@
     <title><?php echo $this->landingPage->getMetaTitle(); ?></title>
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8" >
     <meta name="description" content="<?php echo $this->landingPage->getMetaDescription(); ?>">
-    <link rel="stylesheet" href="/public/css/landingpages/all.css">
-    <link rel="stylesheet/less" href="/public/css/landingpages/landingPage.less">
     <?php
         echo $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
+        echo $this->render('landingpage/layout_css.phtml');
     ?>
     <script type="text/javascript">
         function OpenInNewTab(url)
@@ -99,7 +98,7 @@ foreach ($this->offers as $offer) {
                         <div class='btn-blue-wrapper'>
                             <a target='_blank' rel='nofollow' vote='0' href=".$clickoutURL."
                             class='btn-code' id=".$offer->id.">
-                                ".FrontEnd_Helper_viewHelper::__translate('Bekijk de korting')."
+                                ".FrontEnd_Helper_viewHelper::__translate('Bekijk deze korting')."
                             </a>
                         </div>
                     </div>";
@@ -108,7 +107,7 @@ foreach ($this->offers as $offer) {
                         <div class='btn-blue-wrapper'>
                             <a rel='nofollow' target='_blank' vote='0' href=".$urlToShow."
                             class='btn-code' id=".$offer->id.">
-                                ".FrontEnd_Helper_viewHelper::__translate('Bekijk de korting')."
+                                ".FrontEnd_Helper_viewHelper::__translate('Bekijk deze korting')."
                             </a>
                         </div>
                     </div>";
@@ -273,19 +272,8 @@ else :
     echo $partialViewPath->render($partialsPath. '_pop_up.phtml');
 endif;
 ?>
-<script type="text/javascript">
-    var domainName = "<?php echo HTTP_PATH; ?>";
-    var LOCALE = "<?php echo LOCALE; ?>";
-    var HOST_PATH_LOCALE = "<?php echo HTTP_PATH_LOCALE; ?>";
-</script>
-<script type="text/javascript" src="/public/js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/public/js/front_end/jquery.validate.js"></script>
-<script type="text/javascript" src="/public/js/front_end/modalPopLite.min.js"></script>
-<script type="text/javascript" src="/public/js/front_end/zeroclipboard/ZeroClipboard.js"></script>
-<script type="text/javascript" src="/public/js/front_end/partialOffer.js"></script>
-<script type="text/javascript" src="/public/js/front_end/bigtext.js"></script>
-<script type="text/javascript" src="/public/js/landingpages/jquery.landingPage.js"></script>
-<script type="text/javascript" src="/public/js/front_end/less/dist/less-1.7.0.js"></script>
+<?php
+echo $this->render('landingpage/layout_js.phtml');
+?>
 </body>
 </html>
