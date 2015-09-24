@@ -59,7 +59,7 @@ class Admin_LandingpagesController extends Application_Admin_BaseController
         $order = array(
             'name' => 'ASC'
         );
-        $this->view->shops = AdminFactory::getShops()->execute($conditions, $order);
+        $this->view->shops = \KC\Repository\Shop::getOfferShopList();
 
         if ($this->_request->isPost()) {
             $landingPage = AdminFactory::createLandingPage()->execute();
@@ -113,7 +113,7 @@ class Admin_LandingpagesController extends Application_Admin_BaseController
         $order = array(
             'name' => 'ASC'
         );
-        $this->view->shops = AdminFactory::getShops()->execute($conditions, $order);
+        $this->view->shops = \KC\Repository\Shop::getOfferShopList();
 
         $landingPageId = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('id')));
         $this->view->qstring = $_SERVER['QUERY_STRING'];

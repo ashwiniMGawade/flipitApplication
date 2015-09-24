@@ -48,7 +48,7 @@
                                     <option value=""></option>
                                     <?php
                                     foreach ($this->shops as $shop) :
-                                        echo "<option value=".$shop->id.">".$shop->name."</option>";
+                                        echo "<option value=".$shop['id'].">".$shop['name']."</option>";
                                     endforeach;
                                     ?>
                                 </select>
