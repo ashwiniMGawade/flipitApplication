@@ -410,3 +410,10 @@ jQuery.onFontResize = (function($) {
 	}
 
 }(this, document, jQuery));
+
+function createCookieAgreement() {
+    var expiry = new Date();
+    expiry.setFullYear(expiry.getFullYear() + 10);
+    document.cookie = "cookie_agreement=1; expires=" + expiry.toGMTString();
+    $('#footer-cookie-info').remove();
+}

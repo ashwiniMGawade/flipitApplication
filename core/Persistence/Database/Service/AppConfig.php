@@ -1,13 +1,15 @@
 <?php
 namespace Core\Persistence\Database\Service;
 
+use Core\Service\Config;
+
 class AppConfig
 {
     private $env = '';
     private $locale = '';
     public function __construct($locale = '')
     {
-        $this->env = defined('APPLICATION_ENV') ? APPLICATION_ENV : 'production';
+        $this->env = (new Config)->getEnvironment();
         $this->locale = !empty($locale) ? $locale : (defined('LOCALE') && LOCALE != '' ? LOCALE : 'en');
     }
 
@@ -82,7 +84,7 @@ class AppConfig
 
     public function getProductionConfig()
     {
-        $config = new \Zend_Config_Ini('../../web/application/configs/application.ini', $this->env);
+        $config = (new Config)->getConfig();
         $locale = $this->locale;
         $applicationDsn = $config->doctrine->$locale->dsn;
         $memcacheDsn = $config->resources->frontController->params->memcache;

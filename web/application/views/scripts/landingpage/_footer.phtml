@@ -5,15 +5,14 @@ $footer = FrontEnd_Helper_viewHelper::getFooterData();
     <div class="bottom-panel">
         <div class="container" id ="footer-signup-form"></div>
     </div>
-    <div class="container bottom-nav">
-        <div class="row">
-            <?php echo $footer['middleColumn1'];?>
-            <?php echo FrontEnd_Helper_viewHelper::replaceStringVariable($footer['middleColumn2']);?>
-            <?php echo $footer['middleColumn3'];?>
-        </div>
-    </div>
     <div class="container add-block">
     <?php echo $footer['middleColumn4'];?>
     <?php echo $footer['bottomFooter'];?>
     </div>
 </footer>
+<?php if (!isset($_COOKIE['cookie_agreement']) || empty($_COOKIE['cookie_agreement'])) { ?>
+    <div id="footer-cookie-info">
+        <?php echo FrontEnd_Helper_viewHelper::__translate('This site uses cookies ');?><a class="btn btn-primary btn-xs" onclick="createCookieAgreement();"><strong><?php echo FrontEnd_Helper_viewHelper::__translate('Okay, thanks');?></strong></a>
+        <a class="txt-underline" href="<?php echo HTTP_PATH_LOCALE; ?>info/<?php echo FrontEnd_Helper_viewHelper::__link('link_privacy-cookies'); ?>"><?php echo FrontEnd_Helper_viewHelper::__translate('Find out more');?></a>
+    </div>
+<?php } ?>

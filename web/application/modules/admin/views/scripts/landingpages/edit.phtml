@@ -48,7 +48,7 @@
                                     <option value=""></option>
                                     <?php
                                     foreach ($this->shops as $shop) :
-                                        echo "<option value=".$shop->id.">".$shop->name."</option>";
+                                        echo "<option value=".$shop['id'].">".$shop['name']."</option>";
                                     endforeach;
                                     ?>
                                 </select>
@@ -61,7 +61,7 @@
                     <div class="mainpage-content-line">
                         <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Permalink'); ?></strong></label></div>
                         <div class="mainpage-content-right">
-                            <div class="mainpage-content-right-inner-left"><label id="permalinkLabel"><?php echo $this->translate('http://www.kortingscode.nl/gad/'); ?></label></div>
+                            <div class="mainpage-content-right-inner-left"><label id="permalinkLabel"><?php echo $this->translate('http://www.kortingscode.nl/glp/'); ?></label></div>
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-right-full">
                                 <input type="text" class="span3" style="margin-bottom: 0;" placeholder="<?php echo $this->translate('Permalink'); ?>" name="permalink" id="permalink" value="<?php echo isset($this->landingPage['permalink']) ? $this->landingPage['permalink'] : ''; ?>">

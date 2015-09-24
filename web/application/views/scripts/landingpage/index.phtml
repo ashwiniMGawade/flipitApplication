@@ -5,8 +5,10 @@
     <title><?php echo $this->landingPage->getMetaTitle(); ?></title>
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8" >
     <meta name="description" content="<?php echo $this->landingPage->getMetaDescription(); ?>">
-    <link rel="stylesheet" href="/public/css/landingpages/all.css">
-    <link rel="stylesheet/less" href="/public/css/landingpages/landingPage.less">
+    <?php
+        $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
+        echo $this->render('landingpage/layout_css.phtml');
+    ?>
     <script type="text/javascript">
         function OpenInNewTab(url)
         {
@@ -60,7 +62,7 @@ foreach ($this->offers as $offer) {
     $onClick = '';
     if (isset($offer->discountType) && $offer->discountType == 'CD') {
         $popupLink = $offerPartial->getPopupLink($offer, $urlToShow);
-        $onClick .= "OpenInNewTab('".HTTP_PATH_LOCALE.'gad/'.$this->landingPage->getPermalink().$popupLink."');";
+        $onClick .= "OpenInNewTab('".HTTP_PATH_LOCALE."glp/".$this->landingPage->getPermalink().$popupLink."');";
     }
     $clickoutURL = HTTP_PATH_LOCALE . 'out/offer/' . $offer->id;
 
@@ -75,88 +77,87 @@ foreach ($this->offers as $offer) {
 
     $offerDiv = '';
     if (isset($offer->discountType) && $offer->discountType == 'CD') {
-        $offerDiv ="<a rel='nofollow' href=".$clickoutURL." onclick=".$onClick.">
-                        <div id='offerButton".$offer->id."' class='buttons offer-teaser-button-wrapper'>
-                            <div class='offer-teaser-button-wrapper-inner'>
-                                <span class='offer-teaser-button kccode'>
-                                ".FrontEnd_Helper_viewHelper::__translate('Bekijk de korting')."
+        $offerDiv ='<a rel="nofollow" href="'.$clickoutURL.'" onclick="'.$onClick.'">
+                        <div id="offerButton'.$offer->id.'" class="buttons offer-teaser-button-wrapper">
+                            <div class="offer-teaser-button-wrapper-inner">
+                                <span class="offer-teaser-button kccode">
+                                '.FrontEnd_Helper_viewHelper::__translate('Bekijk de korting').'
                                 </span>
-                                <span class='show-code'>".
+                                <span class="show-code">'.
                                     FrontEnd_Helper_OffersPartialFunctions::generateRandomCharactersForOfferTeaser(4)
-                                ."</span>
-                                <span class='blue-corner'></span>
+                                .'</span>
+                                <span class="blue-corner"></span>
                             </div>
                         </div>
                     </a>
-                    <div class='the-code' id='offerCodeDiv".$offer->id."'>
-                        <strong class='code-value'>".$offer->couponCode."</strong>
-                    </div>";
+                    <div class="the-code" id="offerCodeDiv'.$offer->id.'">
+                        <strong class="code-value">'.$offer->couponCode.'</strong>
+                    </div>';
     } elseif (isset($offer->discountType) && $offer->discountType == 'SL') {
-        $offerDiv ="<div id='offerButton".$offer->id."'>
-                        <div class='btn-blue-wrapper'>
-                            <a target='_blank' rel='nofollow' vote='0' href=".$clickoutURL."
-                            class='btn-code' id=".$offer->id.">
-                                ".FrontEnd_Helper_viewHelper::__translate('Bekijk de korting')."
+        $offerDiv = '<div id="offerButton'.$offer->id.'">
+                        <div class="btn-blue-wrapper">
+                            <a target="_blank" rel="nofollow" vote="0" href="'.$clickoutURL.'"
+                            class="btn-code" id="'.$offer->id.'">
+                                '.FrontEnd_Helper_viewHelper::__translate('Bekijk deze korting').'
                             </a>
                         </div>
-                    </div>";
+                    </div>';
     } else {
-        $offerDiv ="<div id='offerButton".$offer->id."'>
-                        <div class='btn-blue-wrapper'>
-                            <a rel='nofollow' target='_blank' vote='0' href=".$urlToShow."
-                            class='btn-code' id=".$offer->id.">
-                                ".FrontEnd_Helper_viewHelper::__translate('Bekijk de korting')."
+        $offerDiv = '<div id="offerButton'.$offer->id.'">
+                        <div class="btn-blue-wrapper">
+                            <a rel="nofollow" target="_blank" vote="0" href="'.$urlToShow.'"
+                            class="btn-code" id="'.$offer->id.'">
+                                '.FrontEnd_Helper_viewHelper::__translate('Bekijk deze korting').'
                             </a>
                         </div>
-                    </div>";
+                    </div>';
     }
 
-    $termsAndConditionsLink = "<span class=''>&nbsp;</span>";
+    $termsAndConditionsLink = '<span class="">&nbsp;</span>';
     $termsAndConditionsDiv = "";
     if($termsAndConditions != '' || $offer->userGenerated == 1) {
-        $termsAndConditionsLink =    "
-                                    <span class='link-terms'>
-                                        <a id='termAndConditionLink".$offer->id."'
-                                            onclick='showTermAndConditions(".$offer->id.")' class='terms'
-                                            href='javascript:void(0);'>
-                                            ".FrontEnd_Helper_viewHelper::__translate('Terms &amp; conditions')."
+        $termsAndConditionsLink =  '<span class="link-terms">
+                                        <a id="termAndConditionLink'.$offer->id.'"
+                                            onclick="showTermAndConditions('.$offer->id.')" class="terms"
+                                            href="javascript:void(0);">
+                                            '.FrontEnd_Helper_viewHelper::__translate('Terms &amp; conditions').'
                                         </a>
                                     </span>
-                                    ";
+                                    ';
 
         if (empty($defaultText)) {
             $termsText = $this->translate('Terms &amp; Conditions');
         } else {
-            $termsText = "<span class='social-term-font'>" .$defaultText."</span>";
+            $termsText = '<span class="social-term-font">' .$defaultText.'</span>';
         }
 
-        $termsAndConditionsDiv =    "<div class='terms-block' id='termAndConditions".$offer->id."'>
-                                        <div class='term-and-condition'>".$termsText."</div>
-                                        <ol class='num-list'>".$termsAndConditions."</ol>
-                                    </div>";
+        $termsAndConditionsDiv = '<div class="terms-block" id="termAndConditions'.$offer->id.'">
+                                        <div class="term-and-condition">'.$termsText.'</div>
+                                        <ol class="num-list">'.$termsAndConditions.'</ol>
+                                    </div>';
     }
 
     $offerPanel = '';
-    $offerPanel ="<div class='panel panel-default'>
-                    <div class='panel-body'>
-                        <a rel='nofollow' href=".$clickoutURL." onclick=".$onClick.">
-                            <h2 class='common-height'>".$offer->title."</h2>
+    $offerPanel ='<div class="panel panel-default">
+                    <div class="panel-body">
+                        <a rel="nofollow" href="'.$clickoutURL.'" onclick="'.$onClick.'">
+                            <h2 class="common-height">'.$offer->title.'</h2>
                         </a>
-                        ".$offerDiv."
+                        '.$offerDiv.'
                     </div>
-                    <div class='panel-footer'>
-                        <div class='row'>
-                            <div class='col-xs-6 col-sm-6 col-md-6 col-lg-6'>
-                                ".$offerBottomDaysTillExpireText."
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                '.$offerBottomDaysTillExpireText.'
                             </div>
-                            <div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right'>
-                                ".$termsAndConditionsLink."
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+                                '.$termsAndConditionsLink.'
                             </div>
                         </div>
                     </div>
-                    ".$termsAndConditionsDiv."
+                    '.$termsAndConditionsDiv.'
                 </div>
-                ";
+                ';
 
     if ($count <= $numOfOffersBeforeSignUpForm) {
         if ($count % 3 == 1) {
@@ -184,12 +185,10 @@ foreach ($this->offers as $offer) {
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <div class="logo">
-                        <a href="<?php echo $websiteName;?>">
-                            <img src="<?php echo $logoPath; ?>"
-                                 alt="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo alt');?>"
-                                 title="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo title');?>"
-                                 width="199" height="50" />
-                        </a>
+                        <img src="<?php echo $logoPath; ?>"
+                             alt="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo alt');?>"
+                             title="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo title');?>"
+                             width="199" height="50" />
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8 text-right">
@@ -210,14 +209,14 @@ foreach ($this->offers as $offer) {
                 <h1><?php echo $this->landingPage->getTitle(); ?></h1>
                 <?php
                 $offersAdded = '';
-                if (!empty($this->offersAddedInShop) && $this->offersAddedInShop['offersInfo'] != '') {
+                if (!empty($this->offersAddedInShop) && $this->offersAddedInShop['offersInfo'] != '') :
                     $offersAdded = '<li><span><i class="icon-timer"></i>  '
                         .FrontEnd_Helper_viewHelper::__translate('This '.$this->offersAddedInShop['type'])
                         . ' '
                         .$this->offersAddedInShop['offersInfo']['amountOffers']
                         .' '
                         .FrontEnd_Helper_viewHelper::__translate('offers have been added').'</span></li>';
-                }
+                endif;
                 ?>
                 <ul class="action-list">
                    <?php echo $offersAdded; ?>
@@ -235,7 +234,7 @@ foreach ($this->offers as $offer) {
             </div>
             <?php
             echo $this->partial('partials/_landingpage_signup.phtml', array());
-            if ($offersCount > $numOfOffersBeforeSignUpForm) {
+            if ($offersCount > $numOfOffersBeforeSignUpForm):
             ?>
             <div class="row same-height">
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column4; ?></div>
@@ -243,11 +242,13 @@ foreach ($this->offers as $offer) {
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column6; ?></div>
             </div>
             <?php
-            }
+            endif;
             ?>
+            <?php if ($this->landingPage->getContent() != '' ): ?>
             <article class="about">
                 <?php echo $this->landingPage->getContent(); ?>
             </article>
+            <?php endif; ?>
         </div>
     </div>
 </main>
@@ -270,19 +271,8 @@ else :
     echo $partialViewPath->render($partialsPath. '_pop_up.phtml');
 endif;
 ?>
-<script type="text/javascript">
-    var domainName = "<?php echo HTTP_PATH; ?>";
-    var LOCALE = "<?php echo LOCALE; ?>";
-    var HOST_PATH_LOCALE = "<?php echo HTTP_PATH_LOCALE; ?>";
-</script>
-<script type="text/javascript" src="/public/js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/public/js/front_end/jquery.validate.js"></script>
-<script type="text/javascript" src="/public/js/front_end/modalPopLite.min.js"></script>
-<script type="text/javascript" src="/public/js/front_end/zeroclipboard/ZeroClipboard.js"></script>
-<script type="text/javascript" src="/public/js/front_end/partialOffer.js"></script>
-<script type="text/javascript" src="/public/js/front_end/bigtext.js"></script>
-<script type="text/javascript" src="/public/js/landingpages/jquery.landingPage.js"></script>
-<script type="text/javascript" src="/public/js/front_end/less/dist/less-1.7.0.js"></script>
+<?php
+echo $this->render('landingpage/layout_js.phtml');
+?>
 </body>
 </html>

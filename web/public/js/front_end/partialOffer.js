@@ -90,7 +90,7 @@ function showCodeInformation(id) {
             }
         });
     }
-    $('div#offerCodeDiv'+id).show();
+    $('div#offerCodeDiv'+id).show().addClass('show');
     $('div#websiteOfferLink'+id).show();
     $('div#websiteButton'+id).removeClass('hide');
     $('div#websiteButton'+id).addClass('websiteButton');

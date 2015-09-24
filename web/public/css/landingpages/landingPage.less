@@ -1,5 +1,7 @@
 @import "../front_end/custom-variables.less";
 @import "../front_end/custom-mixins.less";
+@import "../front_end/footer.less";
+@import (css) "all.css";
 #footer{
   text-shadow:none;
   background:none;
@@ -478,6 +480,8 @@
   }
   .terms-block {
     margin-top: 10px;
+    background: none;
+    border: none;
   }
   .logo-box{
     float:right;
@@ -849,4 +853,30 @@
     margin: 0 0 10px;
     text-align: center;
   }
+}
+
+.ui-dialog{
+  background-color: #eeeeee;
+  border: 1px solid rgba(0,0,0,0.3);
+  -webkit-border-radius: 6px;
+  box-shadow: 0 3px 7px rgba(0,0,0,0.3);
+  padding: 20px;
+  color:#000;
+  z-index: 99999999 !important;
+  a {
+    color: #c43d3a;
+    font-weight: bold;
+  }
+}
+.ui-front { z-index: 99999999 !important; }
+
+.ui-widget-header{
+  font-size: 18px;
+  cursor: move;
+  margin-bottom: 5px;
+}
+
+.ui-dialog-titlebar-close{
+  float: right;
+  font-size: 12px;
 }
