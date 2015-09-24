@@ -271,19 +271,8 @@ else :
     echo $partialViewPath->render($partialsPath. '_pop_up.phtml');
 endif;
 ?>
-<script type="text/javascript">
-    var domainName = "<?php echo HTTP_PATH; ?>";
-    var LOCALE = "<?php echo LOCALE; ?>";
-    var HOST_PATH_LOCALE = "<?php echo HTTP_PATH_LOCALE; ?>";
-</script>
-<script type="text/javascript" src="/public/js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/public/js/front_end/jquery.validate.js"></script>
-<script type="text/javascript" src="/public/js/front_end/modalPopLite.min.js"></script>
-<script type="text/javascript" src="/public/js/front_end/zeroclipboard/ZeroClipboard.js"></script>
-<script type="text/javascript" src="/public/js/front_end/partialOffer.js"></script>
-<script type="text/javascript" src="/public/js/front_end/bigtext.js"></script>
-<script type="text/javascript" src="/public/js/landingpages/jquery.landingPage.js"></script>
-<script type="text/javascript" src="/public/js/front_end/less/dist/less-1.7.0.js"></script>
+<?php
+echo $this->render('landingpage/layout_js.phtml');
+?>
 </body>
 </html>
