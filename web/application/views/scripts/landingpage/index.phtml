@@ -5,8 +5,9 @@
     <title><?php echo $this->landingPage->getMetaTitle(); ?></title>
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8" >
     <meta name="description" content="<?php echo $this->landingPage->getMetaDescription(); ?>">
-    <link rel="stylesheet" href="/public/css/landingpages/all.css">
-    <link rel="stylesheet/less" href="/public/css/landingpages/landingPage.less">
+    <?php
+    echo $this->render('landingpage/layout_css.phtml');
+    ?>
     <script type="text/javascript">
         function OpenInNewTab(url)
         {
