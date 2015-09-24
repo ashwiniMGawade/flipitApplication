@@ -100,7 +100,7 @@ $action = $this->action;
         </div>
     </li>
 
-    <li  <?php if ($controller == 'shop' || $controller == 'newsticker' || $controller == 'affiliate' || $controller == 'category') { ?> class="imbull-has-submenu  imbull-has-current-submenu imbull-menu-open menu-top menu-icon-shop" <?php } else { ?> class="imbull-has-submenu  imbull-not-current-submenu imbull-menu-open menu-top menu-icon-shop" <?php } ?>
+    <li  <?php if ($controller == 'shop' || $controller == 'newsticker' || $controller == 'affiliate' || $controller == 'category' || $controller == 'landingpages') { ?> class="imbull-has-submenu  imbull-has-current-submenu imbull-menu-open menu-top menu-icon-shop" <?php } else { ?> class="imbull-has-submenu  imbull-not-current-submenu imbull-menu-open menu-top menu-icon-shop" <?php } ?>
         id="menu-media">
 
         <div class="imbull-menu-image <?php if ($controller == 'shop' || $controller == 'affiliate') {
@@ -161,6 +161,11 @@ $action = $this->action;
                                tabindex="1"><?php echo $this->translate('Affiliate Networks'); ?></a>
                         </li>
                     <?php } ?>
+                    <li>
+                        <?php $landingPageClass = ($controller == 'landingpages') ? "new-blueShop" : "new-greyShop"; ?>
+                        <a href="<?php echo HTTP_PATH ?>admin/landingpages" class="<?php echo $landingPageClass; ?>"
+                           tabindex="1"><?php echo $this->translate('Landing Pages'); ?></a>
+                    </li>
                 </ul>
             </div>
         </div>

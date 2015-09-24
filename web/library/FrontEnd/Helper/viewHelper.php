@@ -1162,7 +1162,6 @@ EOD;
         $offer = (object) $offer;
         $onClick = '';
         $isExpired = isset($offer->expiredOffer) ? 'True' : 'False';
-        $isExpired = isset($offer->expiredOffer) ? 'True' : 'False';
         if($offer->discountType == 'CD') {
             $onClick .= "gtmDataBuilder('voucherClickout', 'Code', 'List', 'Offer', " . $offer->id . ", '".$isExpired."');";
         } else if($offer->discountType == 'SL') {

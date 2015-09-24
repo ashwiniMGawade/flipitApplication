@@ -52,7 +52,7 @@ class StoreController extends Zend_Controller_Action
         if (isset($explodeUrl[1])) {
             $this->view->shareCodeStatus = $explodeUrl[1];
         }
-        
+
         $this->view->storePageUrl = $shopPermalink;
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($shopPermalink);
         $shopRecordsLimit = 10;
@@ -141,7 +141,7 @@ class StoreController extends Zend_Controller_Action
                         $this->view->shopChain = $shopChains['string'];
                     }
                 }
-                
+
             }*/
 
             $shopImage = PUBLIC_PATH_CDN.ltrim($shopInformation[0]['logo']['path'], "/")
@@ -171,7 +171,7 @@ class StoreController extends Zend_Controller_Action
                 ? $this->_helper->Store->mergeExpiredOffersWithLiveOffers($offers, $topThreeExpiredOffers)
                 : $offers;
         }
-        
+
         $this->view->currentStoreInformation = $shopInformation;
         $this->view->moneySavingGuideArticle = $moneySavingGuideArticle;
         $this->view->latestShopUpdates = $latestShopUpdates;
@@ -313,7 +313,7 @@ class StoreController extends Zend_Controller_Action
         $allShopsCacheKey = 'all_shops'. FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter(
             $startingAndEndingCharacter
         ).'_list';
-        
+
         $allStoresList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             $allShopsCacheKey,
             array('function' => '\KC\Repository\Shop::getAllStoresForFrontEnd', 'parameters' => array($startingCharacter, $endingCharacter)),
@@ -322,7 +322,7 @@ class StoreController extends Zend_Controller_Action
 
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             '5_popularShops_list',
-            array('function' => '\KC\Repository\Shop::getAllPopularStores', 'parameters' => array(5)),
+            array('function' => '\KC\Repository\Shop::getAllPopularStores', 'parameters' => array(6)),
             true
         );
 

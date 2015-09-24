@@ -90,7 +90,7 @@ function showCodeInformation(id) {
             }
         });
     }
-    $('div#offerCodeDiv'+id).show();
+    $('div#offerCodeDiv'+id).show().addClass('show');
     $('div#websiteOfferLink'+id).show();
     $('div#websiteButton'+id).removeClass('hide');
     $('div#websiteButton'+id).addClass('websiteButton');
@@ -188,7 +188,6 @@ function showCodePopUp(event) {
         var offerVote = $(event).attr('vote');
         var offerUrl = $(event).attr('alt');
     }
-    
     $('#element_to_pop_up').html('');
     if(! ( /(Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini)/i.test(navigator.userAgent) )) {
     customPopUp('element_to_pop_up');
@@ -214,7 +213,7 @@ function showCodePopUp(event) {
 }
 
 function customPopUp(id) {
-    var popupId = id; 
+    var popupId = id;
     $('#' + popupId).css({
         "z-index" : 999999
     }).fadeIn();
@@ -229,7 +228,7 @@ function fadeCustomPopup()
 {
     $('#fade').css({
         'filter' : 'alpha(opacity=80)'
-    }).fadeIn();
+    }).hide().fadeIn();
 }
 
 function customPopUpClose() {

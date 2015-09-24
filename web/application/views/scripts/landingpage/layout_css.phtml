@@ -1,0 +1,7 @@
+<?php
+if (APPLICATION_ENV == 'development') {
+    echo $this->headLink(array("rel"=>"stylesheet/less", 'href'=>'/public/css/landingpages/landingPage.less'));
+} else {
+    echo $this->headLink()
+        ->prependStylesheet("/public/css/landingpages/landingPage.css");
+}

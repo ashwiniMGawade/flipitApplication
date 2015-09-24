@@ -22,7 +22,7 @@ if (count($this->offersWithPagination)>0) {
         )
     );
 } else {
-    $offers ='<div class = "no-record">' . $this->translate('No record found') .'</div>';
+    $offers ='<div class = "no-record no-offers">' . $this->translate('Unfortunately there aren\'t any coupons available in this category. Come back later for some awesome coupons!') .'</div>';
 }
 ?> 
 <div class="row">

@@ -1,6 +1,7 @@
 <?php
 namespace Core\Domain\Entity;
-use Doctrine\ORM\Mapping AS ORM;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
@@ -40,7 +41,7 @@ class RefOfferPage
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Page", inversedBy="pageoffers")
-     * @ORM\JoinColumn(name="pageId", referencedColumnName="id", nullable=false, onDelete="restrict")
+     * @ORM\JoinColumn(name="pageId", referencedColumnName="id", nullable=false, onDelete="cascade")
      */
     protected $offers;
 

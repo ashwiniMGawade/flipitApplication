@@ -1,35 +1,33 @@
 <?php
 foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
-    if($categoryWithSpecialPage['totalCoupons'] >= 4) {
     $featuredCategoryClass = '';
     $featuredCategorySpan = '';
-    if(isset($categoryWithSpecialPage['logo'])) {
+    if (isset($categoryWithSpecialPage['logo'])) {
         $featuredCategorySpan = '<span class="label">'.$this->translate('special').'</span>';
     }
-    $categoryImage = 
-    	isset($categoryWithSpecialPage['categoryicon']) 
-    	? $categoryWithSpecialPage['categoryicon'] 
-    	: $categoryWithSpecialPage['logo'];
+    $categoryImage =
+        isset($categoryWithSpecialPage['categoryicon'])
+        ? $categoryWithSpecialPage['categoryicon']
+        : $categoryWithSpecialPage['logo'];
 
     $imageHeight = !empty($categoryImage['height']) ? $categoryImage['height'] : '175';
     $imageWidth = !empty($categoryImage['width']) ? $categoryImage['width'] : '175';
 
-    if (
-        isset($categoryWithSpecialPage['featured_category']) 
+    if (isset($categoryWithSpecialPage['featured_category'])
         && $categoryWithSpecialPage['featured_category'] != ''
         && $categoryWithSpecialPage['featured_category'] != '0'
     ) {
         $featuredCategoryClass = "box-top";
         $categoryImage =
-           isset($categoryWithSpecialPage['categoryFeaturedImage']) 
-           ? $categoryWithSpecialPage['categoryFeaturedImage'] 
+           isset($categoryWithSpecialPage['categoryFeaturedImage'])
+           ? $categoryWithSpecialPage['categoryFeaturedImage']
            : $categoryWithSpecialPage['categoryicon'];
         $imageHeight = 367;
         $imageWidth = 367;
     }
     
     $categoryImageSource = '';
-    if(isset($categoryImage['path'])) { 
+    if (isset($categoryImage['path'])) {
         $categoryImageSource = PUBLIC_PATH_CDN.$categoryImage['path']."".$categoryImage['name'];
     }
 
@@ -37,8 +35,8 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
     <article class="box <?php echo $featuredCategoryClass; ?>">
         <?php 
         $permalink =
-            isset($categoryWithSpecialPage['categoryicon']) 
-            ? FrontEnd_Helper_viewHelper::__link('link_categorieen').'/'. $categoryWithSpecialPage['permaLink'] 
+            isset($categoryWithSpecialPage['categoryicon'])
+            ? FrontEnd_Helper_viewHelper::__link('link_categorieen').'/'. $categoryWithSpecialPage['permaLink']
             : $categoryWithSpecialPage['permaLink'];
         ?>
         <a title='<?php echo $categoryWithSpecialPage['name'];?>' href="<?php echo HTTP_PATH_LOCALE .  $permalink?>">
@@ -50,7 +48,7 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
                 <span><?php echo FrontEnd_Helper_viewHelper::__form('form_Coupons inside'); ?></span>
             </div>
             <div class="caption">
-                <?php echo $featuredCategorySpan; 
+                <?php echo $featuredCategorySpan;
                  $title = mb_strlen($categoryWithSpecialPage['name']) > 50 ?
                     mb_substr($categoryWithSpecialPage['name'], 0, 50).'..' :
                     $categoryWithSpecialPage['name'];
@@ -60,5 +58,4 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
         </a>
     </article>
     <?php
-}
 }
