@@ -11,7 +11,7 @@ class FrontEnd_Helper_LandingPageFunctions extends FrontEnd_Helper_viewHelper
         } else {
             $html .= '<a href="#">';
         }
-        $html .= '<img src="'.PUBLIC_PATH_CDN.$shop->getLogo()->path.'thum_big_'.$shop->getLogo()->name.'" alt="zalando" width="114" height="53">';
+        $html .= '<img src="'.PUBLIC_PATH_CDN.$shop->getLogo()->path.'thum_big_'.$shop->getLogo()->name.'" alt="'.$shop->getTitle().'" width="160" height="80">';
         $html .= '</a></div>';
         return $html;
     }
