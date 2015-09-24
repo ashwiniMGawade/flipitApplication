@@ -60,7 +60,7 @@ foreach ($this->offers as $offer) {
     $onClick = '';
     if (isset($offer->discountType) && $offer->discountType == 'CD') {
         $popupLink = $offerPartial->getPopupLink($offer, $urlToShow);
-        $onClick .= "OpenInNewTab('".HTTP_PATH_LOCALE.'gad/'.$this->landingPage->getPermalink().$popupLink."');";
+        $onClick .= "OpenInNewTab('".HTTP_PATH_LOCALE.'glp/'.$this->landingPage->getPermalink().$popupLink."');";
     }
     $clickoutURL = HTTP_PATH_LOCALE . 'out/offer/' . $offer->id;
 
@@ -210,14 +210,14 @@ foreach ($this->offers as $offer) {
                 <h1><?php echo $this->landingPage->getTitle(); ?></h1>
                 <?php
                 $offersAdded = '';
-                if (!empty($this->offersAddedInShop) && $this->offersAddedInShop['offersInfo'] != '') {
+                if (!empty($this->offersAddedInShop) && $this->offersAddedInShop['offersInfo'] != '') :
                     $offersAdded = '<li><span><i class="icon-timer"></i>  '
                         .FrontEnd_Helper_viewHelper::__translate('This '.$this->offersAddedInShop['type'])
                         . ' '
                         .$this->offersAddedInShop['offersInfo']['amountOffers']
                         .' '
                         .FrontEnd_Helper_viewHelper::__translate('offers have been added').'</span></li>';
-                }
+                endif;
                 ?>
                 <ul class="action-list">
                    <?php echo $offersAdded; ?>
@@ -235,7 +235,7 @@ foreach ($this->offers as $offer) {
             </div>
             <?php
             echo $this->partial('partials/_landingpage_signup.phtml', array());
-            if ($offersCount > $numOfOffersBeforeSignUpForm) {
+            if ($offersCount > $numOfOffersBeforeSignUpForm):
             ?>
             <div class="row same-height">
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column4; ?></div>
@@ -243,11 +243,13 @@ foreach ($this->offers as $offer) {
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column6; ?></div>
             </div>
             <?php
-            }
+            endif;
             ?>
+            <?php if ($this->landingPage->getContent() != '' ): ?>
             <article class="about">
                 <?php echo $this->landingPage->getContent(); ?>
             </article>
+            <?php endif; ?>
         </div>
     </div>
 </main>
