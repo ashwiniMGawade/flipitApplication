@@ -1,5 +1,6 @@
 @import "../front_end/custom-variables.less";
 @import "../front_end/custom-mixins.less";
+@import "../front_end/footer.less";
 #footer{
   text-shadow:none;
   background:none;
@@ -844,24 +845,11 @@
   }
 }
 
-
-#footer-cookie-info{
-  background-color: #616161;
-  text-align: center;
-  color: #FFF;
-  padding: 5px 0px;
-  font-weight: 600;
-  font-family: sans-serif;
-  font-size: 11px;
-  a.txt-underline{
-    color: #FFF;
-    border-bottom: 1.5px solid #fff;
-  }
-  a.txt-underline:hover{
-    cursor: pointer;
-    text-decoration: none;
-  }
-  a{
-    font-size: 11px;
+@media only screen and (max-width: 767px) {
+  #footer .add-block .benefits li {
+    display: block;
+    width: 100%;
+    margin: 0 0 10px;
+    text-align: center;
   }
 }
