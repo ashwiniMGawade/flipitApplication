@@ -6,7 +6,7 @@
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8" >
     <meta name="description" content="<?php echo $this->landingPage->getMetaDescription(); ?>">
     <?php
-        echo $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
+        $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
         echo $this->render('landingpage/layout_css.phtml');
     ?>
     <script type="text/javascript">
