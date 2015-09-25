@@ -5,6 +5,11 @@ if (APPLICATION_ENV == 'development') {
 } else {
     $headScript = $this->minifyHeadScript();
 }
+if(LOCALE != '') :
+    $headScript->prependFile("/public/" . LOCALE ."/js/front_end/json/translation.js");
+else:
+    $headScript->prependFile("public/js/front_end/json/translation.js");
+endif;
 $headScript
     ->prependFile("/public/js/landingpages/jquery.landingPage.js")
     ->prependFile("/public/js/front_end/bigtext.js")
@@ -12,8 +17,10 @@ $headScript
     ->prependFile("/public/js/front_end/zeroclipboard/ZeroClipboard.js")
     ->prependFile("/public/js/front_end/modalPopLite.min.js")
     ->prependFile("/public/js/front_end/jquery.validate.js")
+    ->prependFile("/public/js/Gettext.js")
+    ->prependFile("/public/js/jquery-ui-1.8.16.custom.min.js")
     ->prependFile("/public/js/bootstrap.min.js")
-    ->prependFile("/public/js/jquery-1.8.3.min.js")
+    ->prependFile("/public/js/jquery-1.7.2.min.js")
     ->prependScript('var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";')
     ->prependScript('var LOCALE = "'. LOCALE .'";')
     ->prependScript('var domainName = "'. HTTP_PATH .'";');
