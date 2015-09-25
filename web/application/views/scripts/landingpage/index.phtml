@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $this->landingPage->getMetaTitle(); ?></title>
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8" >
+    <meta name="robots" content="noindex,nofollow" />
     <meta name="description" content="<?php echo $this->landingPage->getMetaDescription(); ?>">
     <?php
         $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
@@ -184,11 +185,11 @@ foreach ($this->offers as $offer) {
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                    <div class="logo">
+                    <div class="<?php echo $logoCssClass; ?>">
                         <img src="<?php echo $logoPath; ?>"
                              alt="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo alt');?>"
                              title="<?php echo FrontEnd_Helper_viewHelper::__form('form_website logo title');?>"
-                             width="199" height="50" />
+                             height="50" />
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8 text-right">
