@@ -6721,10 +6721,19 @@ body {
 }
 
 .heading-block h1 {
-	margin: 0 0 13px;
+    font-size: 26px;
+    line-height: 30px;
 	color: #32383e;
-	letter-spacing: -1px;
-	word-spacing: 3px;
+    margin: 0;
+}
+
+.heading-block h2 {
+    color: #878a8d;
+    font-size: 14px;
+    line-height: 14px;
+    display: block;
+    font-weight: normal;
+    margin: 5px 0 10px;
 }
 
 .heading-block .action-list {
@@ -7812,7 +7821,7 @@ body {
 	}
 
 	.heading-block h1 {
-		font-size: 30px;
+		font-size: 26px;
 	}
 
 	.heading-block .action-list li {
@@ -8820,16 +8829,12 @@ body {
     color: #878a8d;
 }
 
-.error, .red {
+.red {
     color:#ff0000!important;
 }
 
-input.error {
-    outline: 1px solid #ff0000;
-}
-
-input.error focus{
-    outline: 1px solid #ff0000;
+#emailAddress.error {
+    border: 1px solid #ff0000;
 }
 
 .privacyPolicy-label {
