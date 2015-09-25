@@ -121,13 +121,13 @@ foreach ($this->offers as $offer) {
                                         <a id="termAndConditionLink'.$offer->id.'"
                                             onclick="showTermAndConditions('.$offer->id.')" class="terms"
                                             href="javascript:void(0);">
-                                            '.FrontEnd_Helper_viewHelper::__translate('Terms &amp; conditions').'
+                                            '.FrontEnd_Helper_viewHelper::__translate('Terms &amp; Conditions').'
                                         </a>
                                     </span>
                                     ';
 
         if (empty($defaultText)) {
-            $termsText = $this->translate('Terms &amp; Conditions');
+            $termsText = $this->translate('Terms and Conditions');
         } else {
             $termsText = '<span class="social-term-font">' .$defaultText.'</span>';
         }
@@ -193,7 +193,7 @@ foreach ($this->offers as $offer) {
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8 text-right">
-                    <span class="slogan">Number 1 saving platform worldwide!</span>
+                    <span class="slogan"><?php echo FrontEnd_Helper_viewHelper::__translate('Number 1 saving platform worldwide!'); ?></span>
                 </div>
             </div>
         </div>
