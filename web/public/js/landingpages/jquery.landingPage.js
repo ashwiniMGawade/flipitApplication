@@ -1,8 +1,9 @@
 jQuery('#sign_up_form').validate({
     errorClass : 'error',
     validClass : 'success',
+    focusInvalid: false,
     errorPlacement : function(error, element) {
-        element.parent("div").next("div").html(error);
+      //  element.parent("div").next("div").html(error);
     },
     rules : {
         emailAddress : {
@@ -17,29 +18,25 @@ jQuery('#sign_up_form').validate({
             required : true
         }
     },
-    messages : {
-        emailAddress : {
-            required : 'Please enter email address!',
-            email : 'Please enter valid email address!',
-            remote :'This user is already registered with us!'
-        },
-        privacyPolicy : {
-            required : 'erere'
-        }
+    highlight : function (element, errorClass, validClass) {
+        jQuery(element)
+            .removeClass(validClass)
+            .addClass(errorClass)
+            .next('label')
+            .removeClass(validClass)
+            .addClass('red');
     },
     success: function (label, element) {
         jQuery(element)
-            .parent('div')
             .removeClass(this.errorClass)
             .addClass(this.validClass)
-            .next("div")
-            .removeClass(this.errorClass)
-            .addClass(this.validClass)
-            .removeClass("focus");
+            .next('label')
+            .removeClass('red')
+            .addClass(this.validClass);
     }
 });
  // page init
-jQuery(function(){
+jQuery(function() {
 	initSameHeight();
 	jQuery('input, textarea').placeholder();
 });

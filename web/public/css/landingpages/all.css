@@ -6665,13 +6665,19 @@ body {
 }
 
 .logo {
-	width: 120px;
 	height: auto;
 	margin: 0 auto;
 }
 
+.logo .flipit {
+    width:200px;
+}
+
+.logo .kortingscode {
+    width:200px;
+}
+
 .logo img {
-	width: 100%;
 	height: auto;
 	display: block;
 }
@@ -7783,7 +7789,6 @@ body {
 
 	.logo {
 		margin: 0;
-		width: 199px;
 		height: 50px;
 	}
 
@@ -8419,6 +8424,14 @@ body {
 		border: 1px solid #ddd;
 	}
 
+    .logo .flipit {
+        width:200px;
+    }
+
+    .logo .kortingscode {
+        width:200px;
+    }
+
 	.table-responsive > .table {
 		margin-bottom: 0;
 	}
@@ -8807,11 +8820,15 @@ body {
     color: #878a8d;
 }
 
-.error {
-    color:#ff0000;
+.error, .red {
+    color:#ff0000!important;
 }
 
 input.error {
+    outline: 1px solid #ff0000;
+}
+
+input.error focus{
     outline: 1px solid #ff0000;
 }
 
