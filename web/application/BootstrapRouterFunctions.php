@@ -380,6 +380,16 @@ class BootstrapRouterFunctions
                 )
             )
         );
+        $routeObject->addRoute(
+            'glp/',
+            new Zend_Controller_Router_Route(
+                'glp/*',
+                array(
+                    'action' => "error",
+                    'controller' => "error"
+                )
+            )
+        );
     }
 
     public static function getRouteFromRuleFile($routeObject)
