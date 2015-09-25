@@ -8824,12 +8824,8 @@ body {
     color:#ff0000!important;
 }
 
-input.error {
-    outline: 1px solid #ff0000;
-}
-
-input.error focus{
-    outline: 1px solid #ff0000;
+#emailAddress.error {
+    border: 1px solid #ff0000;
 }
 
 .privacyPolicy-label {
