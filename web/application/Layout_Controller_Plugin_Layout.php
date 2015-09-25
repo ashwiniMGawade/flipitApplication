@@ -25,7 +25,7 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
             throw new \Zend_Controller_Action_Exception('', 404);
         }
 
-        if (strpos(HTTP_HOST, 'kortingscode.nl') === false && $this->localeDirectoryName == '' && $this->moduleName != '') {
+        if (strpos(HTTP_HOST, 'kortingscode.nl') === false && $this->localeDirectoryName == '' && $this->moduleName != '' && $this->moduleName != 'admin') {
             throw new \Zend_Controller_Action_Exception('', 404);
         }
         // print in case public keyword exists in url
