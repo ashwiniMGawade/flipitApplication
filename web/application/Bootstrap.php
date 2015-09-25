@@ -218,10 +218,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             BootstrapRouterFunctions::setRouteIfModuelNotExist($this->route, $httpScheme);
             BootstrapRouterFunctions::setRouteForLocale($this->request, $this->route, $this->routeProperties);
         } else {
+            BootstrapRouterFunctions::getRouteFromRuleFile($this->route);
             if (HTTP_HOST == $httpScheme.'.flipit.com') {
                 BootstrapRouterFunctions::errorRouteForFlipit($this->route);
             }
-            BootstrapRouterFunctions::getRouteFromRuleFile($this->route);
         }
         return;
     }
