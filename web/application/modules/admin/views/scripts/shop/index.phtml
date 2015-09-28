@@ -23,9 +23,6 @@ $sessionNamespace = new Zend_Session_Namespace();
         <h1 class="fl">Shops<button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/shop/createshop'" ><?php echo $this->translate('Add New Shop'); ?></button></h1><?php if($this->role == '1' || $this->role == '2')  { ?><a class="red trash-link" href="<?php echo HTTP_PATH ?>admin/shop/trash"><strong><?php echo $this->translate('Trash'); ?></strong></a><?php }?>
         <div class="clear"></div>
          <p class="text-right">
-              <a href='javascript:void(0)' onclick="showLightBoxForWidgetLocation()">
-                  <?php echo $this->translate('Set Widget Location')?>
-              </a>  /
               <?php if($sessionNamespace->settings['rights']['administration']['rights'] == '1' ) : ?>
               <a href="<?php echo HTTP_PATH ?>admin/shop/importshops">
                   <?php echo $this->translate('Import List'); ?>
