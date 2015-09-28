@@ -967,9 +967,10 @@ class Admin_UserController extends Zend_Controller_Action
 
     public function checkexportpasswordAction()
     {
+        $password = md5($this->_getParam('password'));
         $globalExportPassword =  new \KC\Repository\GlobalExportPassword();
         $globalExportPasswordCount = $globalExportPassword->checkPasswordForExport(
-            $this->_getParam('password'),
+            $password,
             'shopExport'
         );
 
