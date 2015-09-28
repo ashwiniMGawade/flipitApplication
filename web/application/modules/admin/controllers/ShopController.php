@@ -1093,7 +1093,7 @@ class Admin_ShopController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(true);
         $globalExportParameters = $this->_getAllParams();
         $checkPassword = \KC\Repository\GlobalExportPassword::getPasswordForExportDownloads('shopExport');
-        if (isset($globalExportParameters['password']) && $globalExportParameters['password'] == $checkPassword) {
+        if (isset($globalExportParameters['password']) && md5($globalExportParameters['password']) == $checkPassword) {
             # set fiel and its trnslattions
             $file =  APPLICATION_PATH. '/../data/excels/globalShopList.xlsx' ;
             $fileName =  $this->view->translate($file);
