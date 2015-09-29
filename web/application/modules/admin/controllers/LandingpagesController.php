@@ -129,7 +129,7 @@ class Admin_LandingpagesController extends Application_Admin_BaseController
         } else {
             $landingPage = $result;
             $this->view->id = $landingPageId;
-
+            $permalink = $landingPage->getPermalink();
             $shop = $landingPage->getShop();
             $shopId = $shop->getId();
 
@@ -177,6 +177,7 @@ class Admin_LandingpagesController extends Application_Admin_BaseController
                             $errors = $result->getErrorsAll();
                             $this->setFlashMessage('error', $errors);
                         } else {
+                            self::updateVarnish($permalink);
                             $this->setFlashMessage('success', 'Landing Page has been updated successfully');
                             $this->redirect(HTTP_PATH.'admin/landingpages');
                         }
@@ -201,8 +202,15 @@ class Admin_LandingpagesController extends Application_Admin_BaseController
             die;
         }
         AdminFactory::deleteLandingPage()->execute($result);
+        self::updateVarnish($result->getPermalink());
         $this->setFlashMessage('success', 'Landing page deleted successfully.');
         die;
+    }
+
+    public function updateVarnish($permalink)
+    {
+        $varnishObj = new \KC\Repository\Varnish();
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND.'glp/'.$permalink);
     }
 
     public function validatepermalinkAction()
