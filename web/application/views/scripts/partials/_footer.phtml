@@ -1,21 +1,6 @@
 <?php
+$signUpUrl= HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven');
 $footer = FrontEnd_Helper_viewHelper::getFooterData();
-$signUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
-	'footerLargeSignUpForm',
-	'SignUp',
-	'email-form form-inline',
-	'orange'
-);
-if (
-	zend_Controller_Front::getInstance()->getRequest()->isPost() 
-	&& zend_Controller_Front::getInstance()->getRequest()->getParam('formName')=='footerLargeSignUpForm') {
-    if ($signUpForm->isValid(zend_Controller_Front::getInstance()->getRequest()->getPost())) {
-        $signUpStep2Url = FrontEnd_Helper_SignUpPartialFunction::signUpRedirectLink($signUpForm);
-        header('location:'. $signUpStep2Url);
-    } else {
-        $signUpForm->highlightErrorElements();
-    }
-}
 ?>
 <footer id="footer">
 <?php 
@@ -24,11 +9,16 @@ if(zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='log
 ):
 ?>
     <div class="bottom-panel">
-        <div class="container" id ="footer-signup-form">
-            <?php 
-            $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-            echo $this->esi($this->locale.'signup/signupwidgetfooter?shopId='
-                .'&signupFormWidgetType=footerSignupForm&shopLogoOrDefaultImage=');
+        <div class="container" id="footer-signup-button">
+            <?php
+            if (!isset($_COOKIE['registered_user'])) :
+                ?>
+                <div class="text-center">
+                    <h4><?php echo FrontEnd_Helper_viewHelper::__translate('Sign up for the newsletter and keep up to date about all voucher codes.'); ?></h4>
+                    <a href="<?php echo $signUpUrl; ?>" class="btn btn-primary sign-up-button"><?php echo FrontEnd_Helper_viewHelper::__form('form_Sign up'); ?></a>
+                </div>
+                <?php
+            endif;
             ?>
         </div>
     </div>
