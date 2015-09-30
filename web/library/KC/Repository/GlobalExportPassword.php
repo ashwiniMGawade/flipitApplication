@@ -3,7 +3,7 @@ namespace KC\Repository;
 
 class GlobalExportPassword extends \Core\Domain\Entity\User\GlobalExportPassword
 {
-    public static function savePasswordForExportDownloads($type)
+    public static function savePasswordForExportDownloads($type, $password)
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder
@@ -15,13 +15,13 @@ class GlobalExportPassword extends \Core\Domain\Entity\User\GlobalExportPassword
         if (!empty($globalExportInformation)) {
             $queryBuilderUpdate = \Zend_Registry::get('emUser')->createQueryBuilder();
             $queryBuilderUpdate->update('\Core\Domain\Entity\User\GlobalExportPassword', 'gep')
-            ->set('gep.password', mt_rand())
+            ->set('gep.password', $queryBuilderUpdate->expr()->literal($password))
             ->where('gep.id ='.$globalExportInformation[0]['id'])
             ->getQuery()->execute();
         } else {
             $entityManagerLocale  = \Zend_Registry::get('emUser');
             $globalExportPassword = new \Core\Domain\Entity\User\GlobalExportPassword();
-            $globalExportPassword->password = mt_rand();
+            $globalExportPassword->password = $password;
             $globalExportPassword->exportType = $type;
             $globalExportPassword->created_at = new \DateTime('now');
             $globalExportPassword->updated_at = new \DateTime('now');

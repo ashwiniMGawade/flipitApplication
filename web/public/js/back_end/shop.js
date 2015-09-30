@@ -524,6 +524,7 @@ function sendExportPasswordEmail()
         type : "post",
         success : function(data) {
             $('#export-password-modal').remove();
+            $('form#globalExportForm :input').val("");
             showModel("","","add");
         }
     });
@@ -686,7 +687,6 @@ function validateGlobalExportForm(){
             },
             submitHandler: function(form) {
                 form.submit();
-                $('#globalExportForm')[0].reset();
                 $('#myModal').modal('hide');
             }
         });
