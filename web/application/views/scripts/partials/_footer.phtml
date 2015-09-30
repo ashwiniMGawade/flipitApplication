@@ -10,8 +10,8 @@ if(zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='log
 ?>
     <div class="bottom-panel">
         <div class="container" id="footer-signup-button">
-            <?php 
-            if (!\Auth_VisitorAdapter::hasIdentity()) :
+            <?php
+            if (!isset($_COOKIE['registered_user'])) :
                 ?>
                 <div class="text-center">
                     <h4><?php echo FrontEnd_Helper_viewHelper::__translate('Sign up for the newsletter and keep up to date about all voucher codes.'); ?></h4>
