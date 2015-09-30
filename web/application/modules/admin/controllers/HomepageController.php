@@ -112,6 +112,19 @@ class Admin_HomepageController extends Zend_Controller_Action
                 </div>
                 <div class="mainpage-content-line mb10">
                     <div class="mainpage-content-left">
+                        <label><strong>'.$this->view->translate("Permalink").'</strong></label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" placeholder="'.$this->view->translate("Permalink").'" name="permalink[]"
+                                class="span3 mbot" maxlength="55"
+                                value="">
+                        </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left">
                         <label><strong>'.$this->view->translate('Description').'</strong></label>
                     </div>
                     <div class="mainpage-content-right">

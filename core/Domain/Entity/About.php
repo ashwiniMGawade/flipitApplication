@@ -40,6 +40,11 @@ class About
      */
     protected $updated_at;
 
+    /**
+     * @ORM\Column(type="string", unique=true, length=255, nullable=true)
+     */
+    protected $permalink;
+
     public function __get($property)
     {
         return $this->$property;

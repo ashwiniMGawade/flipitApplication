@@ -3,10 +3,11 @@
         <ul class="tabset">
 <?php
 foreach ($this->aboutTabs as $aboutTabIndex => $aboutTab):
+    $strElementId =  (!empty($aboutTab['permalink'])) ? $aboutTab['permalink'] : $aboutTabIndex;
     ?>
-            <li class="<?php echo $aboutTabIndex=='0' ? 'active' : ''; ?>">
-                <a id="tab_<?php echo $aboutTabIndex;?>" 
-                onclick="showTab('<?php echo $aboutTabIndex;?>');" href="javascript:void(0)">
+            <li class="<?php echo $aboutTabIndex=='0' ? 'active' : ''; ?>" id="<?php echo $strElementId; ?>">
+                <a id="tab_<?php echo $strElementId;?>"
+                onclick="showTab('<?php echo $strElementId;?>');" href="javascript:void(0)">
                 <?php echo $aboutTab['title']; ?>
                 </a>
             </li>
@@ -17,8 +18,9 @@ endforeach;
         <div class="tab-content">
 <?php 
 foreach ($this->aboutTabs as $aboutTabIndex => $aboutTab):
+    $strElementId =  (!empty($aboutTab['permalink'])) ? $aboutTab['permalink'] : $aboutTabIndex;
 ?>
-            <div id="services_<?php echo $aboutTabIndex; ?>">
+            <div id="services_<?php echo $strElementId; ?>">
                 <?php echo $aboutTab['content']; ?>
             </div>
 <?php 

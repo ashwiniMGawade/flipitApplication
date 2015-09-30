@@ -101,6 +101,13 @@ class About extends \Core\Domain\Entity\About
             $about->status = @$params['status'][$a] ? 1 : 0;
             $about->created_at = new \DateTime('now');
             $about->updated_at = new \DateTime('now');
+            $permalink = @$params['permalink'][$a] ?
+                \BackEnd_Helper_viewHelper::stripSlashesFromString($params['permalink'][$a]) : null;
+            $pattern = array("/&amp;/", "/[\,+@#$%'&*!;&\"<>\^()]+/", '/\s/', "/-{2,}/");
+            $replaceWith = array("", "", "-", "-");
+            $urlString = preg_replace($pattern, $replaceWith, trim($permalink));
+            $permalink = strtolower($urlString);
+            $about->permalink = $permalink;
             $entityManagerLocale = \Zend_Registry::get('emLocale');
             $entityManagerLocale->persist($about);
             $entityManagerLocale->flush();

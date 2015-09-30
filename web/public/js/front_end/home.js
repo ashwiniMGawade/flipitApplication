@@ -5,6 +5,11 @@ $(document).ready(function() {
     $('div.tab-content div:gt(0)').hide();
     removeActiveClass();
     $('#div_topOffers').addClass('active-li');
+    var hashElement = window.location.hash.substr(1);
+    if(hashElement && $('#services_'+hashElement).length && $('a#tab_'+hashElement).length) {
+        showTab(hashElement);
+        $("#"+hashElement).focus();
+    }
 });
 function showRelatedDiv(element) {
     removeActiveClass();
