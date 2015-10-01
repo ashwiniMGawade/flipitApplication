@@ -218,19 +218,23 @@ class Admin_HomepageController extends Zend_Controller_Action
             $this->redirect('/admin/homepage');
         }
 
-
         // check if about form is submitted
         if ($this->_request->isPost() && $this->getRequest()->getParam("form") == "about") {
             if ($this->_settings['content']['rights'] == '1') {
                 $params = $this->getAllParams();
                 $pattern = array("/&amp;/", "/[\,+@#$%'&*!;&\"<>\^()]+/", '/\s/', "/-{2,}/");
                 $replaceWith = array("", "", "-", "-");
-                for ($a=0; $a < count($params['permalink']); $a++) {
-                    $urlString = preg_replace($pattern, $replaceWith, trim($params['permalink'][$a]));
+                $isValidPermalink = true;
+                foreach ($params['permalink'] as $index => $permalink) {
+                    unset($params['permalink'][$index]);
+                    $urlString = preg_replace($pattern, $replaceWith, trim($permalink));
                     $permalink = strtolower($urlString);
-                    $params['permalink'][$a] = $permalink;
+                    if ($permalink != '' && in_array($permalink, $params['permalink'])) {
+                        $isValidPermalink = false;
+                    }
+                    $params['permalink'][$index] = $permalink;
                 }
-                if (count($params['permalink']) !== count(array_unique($params['permalink']))) {
+                if (!$isValidPermalink) {
                     $message = $this->view->translate('All about tab permalink must be unique.');
                     $flash->addMessage(array('error' => $message ));
                     $this->redirect('/admin/homepage');
