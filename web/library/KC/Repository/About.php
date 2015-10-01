@@ -101,6 +101,9 @@ class About extends \Core\Domain\Entity\About
             $about->status = @$params['status'][$a] ? 1 : 0;
             $about->created_at = new \DateTime('now');
             $about->updated_at = new \DateTime('now');
+            $about->permalink = @$params['permalink'][$a] ?
+                \BackEnd_Helper_viewHelper::stripSlashesFromString($params['permalink'][$a]) : null;
+
             $entityManagerLocale = \Zend_Registry::get('emLocale');
             $entityManagerLocale->persist($about);
             $entityManagerLocale->flush();

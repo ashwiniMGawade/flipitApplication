@@ -22,11 +22,11 @@ class Admin_HomepageController extends Zend_Controller_Action
         $conn2 = \BackEnd_Helper_viewHelper::addConnection(); // connection
         // generate with second
         // database
-        $params = $this->_getAllParams();
+        $params = $this->getAllParams();
         if (! \Auth_StaffAdapter::hasIdentity()) {
             $referer = new \Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-            $this->_redirect('/admin/auth/index');
+            $this->redirect('/admin/auth/index');
         }
         \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
@@ -53,7 +53,7 @@ class Admin_HomepageController extends Zend_Controller_Action
         }
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-        $params = $this->_getAllParams();
+        $params = $this->getAllParams();
         $abouthtml = '';
 
         if ($params['tab'] == 'anothertab') {
@@ -112,6 +112,19 @@ class Admin_HomepageController extends Zend_Controller_Action
                 </div>
                 <div class="mainpage-content-line mb10">
                     <div class="mainpage-content-left">
+                        <label><strong>'.$this->view->translate("Permalink").'</strong></label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" placeholder="'.$this->view->translate("Permalink").'" name="permalink[]"
+                                class="span3 mbot" maxlength="55"
+                                value="">
+                        </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left">
                         <label><strong>'.$this->view->translate('Description').'</strong></label>
                     </div>
                     <div class="mainpage-content-right">
@@ -141,8 +154,8 @@ class Admin_HomepageController extends Zend_Controller_Action
     {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-        $parmas = $this->_getAllParams();
-        $id = $parmas['removeid'];
+        $params = $this->getAllParams();
+        $id = $params['removeid'];
         if ($id) {
             $about = \KC\Repository\About::removeeabouttab($id);
             $deleted = \KC\Repository\Settings::removesettingabouttab($id);
@@ -190,33 +203,48 @@ class Admin_HomepageController extends Zend_Controller_Action
             $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate('Changes has been saved successfully.');
             $flash->addMessage(array('success' => $message ));
-            $parmas = $this->_getAllParams();
-            \KC\Repository\SeenIn::update($parmas);
-            $this->_redirect('/admin/homepage');
+            $params = $this->getAllParams();
+            \KC\Repository\SeenIn::update($params);
+            $this->redirect('/admin/homepage');
         }
         // check if asSeenIn form is submitted
         if ($this->_request->isPost() && $this->getRequest()->getParam("form") == "homepage_banner") {
             $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate('Changes has been saved successfully.');
             $flash->addMessage(array('success' => $message ));
-            $parmas = $this->_getAllParams();
-            $result = \KC\Repository\Signupmaxaccount::updateHeaderImage($parmas);
+            $params = $this->getAllParams();
+            $result = \KC\Repository\Signupmaxaccount::updateHeaderImage($params);
             self::updateVarnish();
-            $this->_redirect('/admin/homepage');
+            $this->redirect('/admin/homepage');
         }
-
 
         // check if about form is submitted
         if ($this->_request->isPost() && $this->getRequest()->getParam("form") == "about") {
             if ($this->_settings['content']['rights'] == '1') {
-                $flash = $this->_helper->getHelper('FlashMessenger');
+                $params = $this->getAllParams();
+                $pattern = array("/&amp;/", "/[\,+@#$%'&*!;&\"<>\^()]+/", '/\s/', "/-{2,}/");
+                $replaceWith = array("", "", "-", "-");
+                $isValidPermalink = true;
+                foreach ($params['permalink'] as $index => $permalink) {
+                    unset($params['permalink'][$index]);
+                    $urlString = preg_replace($pattern, $replaceWith, trim($permalink));
+                    $permalink = strtolower($urlString);
+                    if ($permalink != '' && in_array($permalink, $params['permalink'])) {
+                        $isValidPermalink = false;
+                    }
+                    $params['permalink'][$index] = $permalink;
+                }
+                if (!$isValidPermalink) {
+                    $message = $this->view->translate('All about tab permalink must be unique.');
+                    $flash->addMessage(array('error' => $message ));
+                    $this->redirect('/admin/homepage');
+                }
+                \KC\Repository\About::update($params);
                 $message = $this->view->translate('Changes has been saved successfully.');
                 $flash->addMessage(array('success' => $message ));
-                $parmas = $this->_getAllParams();
-                \KC\Repository\About::update($parmas);
                 self::updateVarnish();
             } else {
-                $this->_redirect('/admin/index');
+                $this->redirect('/admin/index');
             }
         }
         // return updated about content
@@ -887,14 +915,14 @@ class Admin_HomepageController extends Zend_Controller_Action
         if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
                 if (isset($_FILES['homepageBanner']['name']) && @$_FILES['homepageBanner']['name'] != '') {
-                    $parmas = $this->_getAllParams();
-                    $result = \KC\Repository\Signupmaxaccount::updateHeaderImage($parmas);
+                    $params = $this->getAllParams();
+                    $result = \KC\Repository\Signupmaxaccount::updateHeaderImage($params);
                     self::updateVarnish();
                     $this->_helper->json($result);
                 }
             }
         }
-        $this->_redirect('/admin/homepage');
+        $this->redirect('/admin/homepage');
     }
 
     /**
@@ -907,13 +935,13 @@ class Admin_HomepageController extends Zend_Controller_Action
     {
         if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
-                $parmas = $this->_getAllParams();
-                $result = \KC\Repository\Signupmaxaccount::deleteHeaderImage($parmas);
+                $params = $this->_getAllParams();
+                $result = \KC\Repository\Signupmaxaccount::deleteHeaderImage($params);
                 self::updateVarnish();
                 $this->_helper->json($result);
             }
         }
-        $this->_redirect('/admin/homepage');
+        $this->redirect('/admin/homepage');
     }
 
 
@@ -922,14 +950,14 @@ class Admin_HomepageController extends Zend_Controller_Action
         if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
                 if (isset($_FILES['homepageWidgetBackground']['name']) && @$_FILES['homepageWidgetBackground']['name'] != '') {
-                    $parmas = $this->_getAllParams();
-                    $result = \KC\Repository\Signupmaxaccount::updateWidgetBackgroundImage($parmas);
+                    $params = $this->getAllParams();
+                    $result = \KC\Repository\Signupmaxaccount::updateWidgetBackgroundImage($params);
                     self::updateVarnish();
                     $this->_helper->json($result);
                 }
             }
         }
-        $this->_redirect('/admin/homepage');
+        $this->redirect('/admin/homepage');
     }
 
     /**
@@ -943,12 +971,12 @@ class Admin_HomepageController extends Zend_Controller_Action
     {
         if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
-                $parmas = $this->_getAllParams();
-                $result = \KC\Repository\Signupmaxaccount::deleteWidgetImage($parmas);
+                $params = $this->_getAllParams();
+                $result = \KC\Repository\Signupmaxaccount::deleteWidgetImage($params);
                 self::updateVarnish();
                 $this->_helper->json($result);
             }
         }
-        $this->_redirect('/admin/homepage');
+        $this->redirect('/admin/homepage');
     }
 }
