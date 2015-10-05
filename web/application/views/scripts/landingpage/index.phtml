@@ -72,10 +72,12 @@ foreach ($this->offers as $offer) {
     $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
 
     $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($offer->endDate);
-    $offerBottomDaysTillExpireText = '';
+    $exclusiveOrDaysToExpireText = '';
     if ($daysTillOfferExpires <= 3) {
-        $offerBottomDaysTillExpireText = $landingPageHelper->getDaysTillExpire($daysTillOfferExpires);
+        $exclusiveOrDaysToExpireText = $landingPageHelper->getDaysTillExpire($daysTillOfferExpires);
     }
+
+    $expiredOffer = isset($offer->expiredOffer) ? $offer->expiredOffer : '';
 
     $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
 
@@ -99,6 +101,16 @@ foreach ($this->offers as $offer) {
 
     $offerDiv = '';
     if (isset($offer->discountType) && $offer->discountType == 'CD') {
+        $verifiedText = $offerPartial->getVerifiedText();
+        $validityText = '<li>'.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires, $expiredOffer).'</li>';
+
+        if($exclusiveOrDaysToExpireText == '') {
+            if ($offer->exclusiveCode == '1') {
+                $exclusiveOrDaysToExpireText = $offerPartial->getOfferOption(FrontEnd_Helper_viewHelper::__translate('Exclusive'),
+                    'ex');
+            }
+        }
+
         $gtmTitleClick = "gtmDataBuilder('voucherClickout', 'Code', 'Title', 'Offer', ".$offer->id.", '".$isExpired."');";
         $gtmButtonClick = "gtmDataBuilder('voucherClickout', 'Code', 'Button', 'Offer', ".$offer->id.", '".$isExpired."');";
         $offerDiv ='<a rel="nofollow" href="'.$clickoutURL.'" onclick="'.$gtmTitleClick.$onClick.'">
@@ -121,6 +133,8 @@ foreach ($this->offers as $offer) {
                         <strong class="code-value">'.$offer->couponCode.'</strong>
                     </div>';
     } elseif (isset($offer->discountType) && $offer->discountType == 'SL') {
+        $verifiedText = $offerPartial->getVerifiedText();
+        $validityText = '<li>'.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires, $expiredOffer).'</li>';
         $gtmTitleClick = "gtmDataBuilder('voucherClickout', 'Deal', 'Title', 'Offer', ".$offer->id.", '".$isExpired."');";
         $gtmButtonClick = "gtmDataBuilder('voucherClickout', 'Deal', 'Button', 'Offer', ".$offer->id.", '".$isExpired."');";
         $offerDiv = '<a rel="nofollow" href="'.$clickoutURL.'" onclick="'.$gtmTitleClick.$onClick.'" target="_blank">
@@ -135,6 +149,8 @@ foreach ($this->offers as $offer) {
                         </div>
                     </div>';
     } else {
+        $verifiedText = '';
+        $validityText = '';
         $gtmTitleClick = "gtmDataBuilder('voucherClickout', 'Deal', 'Title', 'Offer', ".$offer->id.", '".$isExpired."');";
         $gtmButtonClick = "gtmDataBuilder('voucherClickout', 'Deal', 'Button', 'Offer', ".$offer->id.", '".$isExpired."');";
         $offerDiv = '<a rel="nofollow" href="'.$clickoutURL.'" onclick="'.$gtmTitleClick.$onClick.'" target="_blank">
@@ -150,9 +166,9 @@ foreach ($this->offers as $offer) {
                     </div>';
     }
 
-    $termsAndConditionsLink = '<span class="">&nbsp;</span>';
+    $termsAndConditionsLink = '';
     $termsAndConditionsDiv = "";
-    if($termsAndConditions != '' || $offer->userGenerated == 1) {
+    if ($termsAndConditions != '' || $offer->userGenerated == 1) {
         $termsAndConditionsLink =  '<span class="link-terms">
                                         <a id="termAndConditionLink'.$offer->id.'"
                                             onclick="showTermAndConditions('.$offer->id.')" class="terms"
@@ -175,20 +191,29 @@ foreach ($this->offers as $offer) {
     }
 
     $offerPanel = '';
+    $offerPanelFooterDiv = '';
+    if ($exclusiveOrDaysToExpireText != '' || $termsAndConditionsLink != '') {
+        $offerPanelFooterDiv = '<div class="panel-footer">
+                                    <div class="row">
+                                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                            '.$exclusiveOrDaysToExpireText.'
+                                        </div>
+                                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+                                            '.$termsAndConditionsLink.'
+                                        </div>
+                                    </div>
+                                </div>';
+    }
+
     $offerPanel ='<div class="panel panel-default">
                     <div class="panel-body">
+                        <ul class="meta-items">
+                            '.$verifiedText.'
+                            '.$validityText.'
+                        </ul>
                         '.$offerDiv.'
                     </div>
-                    <div class="panel-footer">
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                '.$offerBottomDaysTillExpireText.'
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
-                                '.$termsAndConditionsLink.'
-                            </div>
-                        </div>
-                    </div>
+                    '.$offerPanelFooterDiv.'
                     '.$termsAndConditionsDiv.'
                 </div>
                 ';
