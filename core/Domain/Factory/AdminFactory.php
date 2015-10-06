@@ -14,6 +14,7 @@ use \Core\Domain\Usecase\Admin\GetShopsUsecase;
 use \Core\Domain\Usecase\Admin\GetShopUsecase;
 use \Core\Domain\Usecase\Admin\CreateShopUsecase;
 use \Core\Domain\Usecase\Admin\AddShopUsecase;
+use Core\Domain\Usecase\Admin\GetURLSettingsUsecase;
 use \Core\Domain\Usecase\Admin\UpdateShopUsecase;
 use \Core\Domain\Usecase\Admin\DeleteShopUsecase;
 
@@ -187,5 +188,10 @@ class AdminFactory
             new Purifier(),
             new Errors()
         );
+    }
+
+    public static function getURLSettings()
+    {
+        return new GetURLSettingsUsecase(RepositoryFactory::urlSetting(), new Purifier(), new Errors());
     }
 }
