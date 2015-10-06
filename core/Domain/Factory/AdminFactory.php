@@ -5,6 +5,7 @@ use \Core\Domain\Service\Validator;
 use \Core\Domain\Service\KeyGenerator;
 use \Core\Domain\Service\Purifier;
 
+use Core\Domain\Usecase\Admin\CreateURLSettingUsecase;
 use \Core\Domain\Usecase\Admin\GetApiKeysUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
@@ -193,5 +194,10 @@ class AdminFactory
     public static function getURLSettings()
     {
         return new GetURLSettingsUsecase(RepositoryFactory::urlSetting(), new Purifier(), new Errors());
+    }
+
+    public static function createURLSettings()
+    {
+        return new CreateURLSettingUsecase();
     }
 }
