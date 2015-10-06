@@ -21,8 +21,8 @@ class GetLandingPagesUsecaseTest extends \Codeception\TestCase\Test
         $landingPage = new LandingPage();
         $expectedResult = array($landingPage);
         $landingPageRepository = $this->createLandingPagesRepositoryWithFindByMethodMock($expectedResult);
-        $viewCounts = (new GetLandingPagesUsecase($landingPageRepository, new Purifier(), new Errors()))->execute();
-        $this->assertEquals(count($expectedResult), count($viewCounts));
+        $landingPages = (new GetLandingPagesUsecase($landingPageRepository, new Purifier(), new Errors()))->execute();
+        $this->assertEquals(count($expectedResult), count($landingPages));
     }
 
     public function testGetLandingPagesUsecaseReturnsErrorWhenParametersAreInvalid()
