@@ -19,7 +19,7 @@ class GetLandingPageUsecaseTest extends \Codeception\TestCase\Test
         $this->assertEquals($errors->getErrorsAll(), $result->getErrorsAll());
     }
 
-    public function testGetWidgetUsecase()
+    public function testGetLandingPageUsecase()
     {
         $condition = array('id' => 0);
         $landingPage = new LandingPage();
@@ -33,7 +33,7 @@ class GetLandingPageUsecaseTest extends \Codeception\TestCase\Test
     public function testGetLandingPageUsecaseWhenIdIsInvalid()
     {
         $condition = 'invalid';
-        $landingPageRepositoryMock = $this->createLandingPagRepositoryMock();
+        $landingPageRepositoryMock = $this->createLandingPageRepositoryMock();
         $landingPageUsecase = new GetLandingPageUsecase($landingPageRepositoryMock, new Purifier(), new Errors());
         $result = $landingPageUsecase->execute($condition);
         $errors = new Errors();
@@ -41,7 +41,7 @@ class GetLandingPageUsecaseTest extends \Codeception\TestCase\Test
         $this->assertEquals($errors->getErrorsAll(), $result->getErrorsAll());
     }
 
-    private function createLandingPagRepositoryMock()
+    private function createLandingPageRepositoryMock()
     {
         $landingPageRepository = $this->getMockBuilder('\Core\Domain\Repository\LandingPageRepositoryInterface')->getMock();
         return $landingPageRepository;
@@ -49,7 +49,7 @@ class GetLandingPageUsecaseTest extends \Codeception\TestCase\Test
 
     private function createLandingPageRepositoryWithFindMethodMock($condition, $returns)
     {
-        $landingPageRepositoryMock = $this->createLandingPagRepositoryMock();
+        $landingPageRepositoryMock = $this->createLandingPageRepositoryMock();
         $landingPageRepositoryMock
             ->expects($this->once())
             ->method('findOneBy')
