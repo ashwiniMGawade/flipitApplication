@@ -22,7 +22,7 @@ class URLSetting
     protected $url;
 
     /**
-     * @ORM\Column(type="integer", length="1")
+     * @ORM\Column(type="integer")
      */
     protected $status;
 
