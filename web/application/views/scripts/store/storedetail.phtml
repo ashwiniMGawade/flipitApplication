@@ -1,4 +1,4 @@
-<?php 
+<?php
 $session = new Zend_Session_Namespace('Branding');
 if (empty($session->brandingActivated) && !empty($this->shopBranding)): 
     $this->headStyle()->appendStyle($this->shop()->brandingCss($this->shopBranding));
@@ -186,6 +186,11 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
 </div>
 <div class="row"> 
     <div id="content" class ="col-md-8 col-sm-8">
+    <div class="popup-box hide">
+        <a href="#" class="btn-close">close</a>
+        <span class="time">clock</span>
+        <span class="text">1 day left: Dunas Hotels and Resorts coupon code. <a href="#">Click here to open coupon</a></span>
+    </div>
     <?php 
     echo $noMoneyNocodeMessage;
     if (!empty($noMoneyNocodeMessage)) {

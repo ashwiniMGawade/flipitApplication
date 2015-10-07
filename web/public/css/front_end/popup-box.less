@@ -1,0 +1,73 @@
+.popup-box{
+	background:#313131;
+	max-width:-148px;
+	border-radius:3px;
+	color:#fff;
+	border:1px solid #1d1d1d;
+	position:fixed;
+	bottom:10px;
+	left:10px;
+	z-index:9;
+	visibility:hidden;
+	@media only screen and (min-width: 1440px) {
+		max-width:112px;
+		visibility:visible;
+		padding:15px 7px 7px;
+	}
+	@media only screen and (min-width: 1500px) {
+		max-width:143px;
+		padding:17px 7px 7px;
+	}
+	@media only screen and (min-width: 1720px) {
+		max-width:250px;
+		bottom:20px;
+		left:20px;
+		padding:19px 9px 7px;
+	}
+	a{
+		text-decoration:underline !important;
+		&:hover{
+			text-decoration:none !important;
+			background:none !important;
+		}
+	}
+	.time{
+		background:url(../../images/sprite2.png) no-repeat -59px -16px;
+		float:left;
+		text-indent:-9999px;
+		overflow:hidden;
+		margin:0 8px 0 0;
+		width:20px;
+		height:19px;
+		display:none;
+		@media only screen and (min-width: 1500px) {
+			display:inline-block;
+		}
+	}
+	.text{
+		display:block;
+		overflow:hidden;
+	}
+	a{
+		color:#fff;
+		text-decoration:underline;
+		&:hover{
+			text-decoration:none;
+		}
+	}
+	.btn-close{
+		background:url(../../images/sprite2.png) no-repeat -21px -26px;
+		position:absolute;
+		top:5px;
+		right:5px;
+		width:9px;
+		height:9px;
+		text-indent:-9999px;
+		overflow:hidden;
+		text-decoration:none;
+		&:hover{
+			opacity:0.8;
+			background:url(../../images/sprite2.png) no-repeat -21px -26px !important;
+		}
+	}
+}
