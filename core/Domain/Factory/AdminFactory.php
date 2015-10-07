@@ -18,6 +18,7 @@ use \Core\Domain\Usecase\Admin\UpdateShopUsecase;
 use \Core\Domain\Usecase\Admin\DeleteShopUsecase;
 
 use \Core\Domain\Usecase\Admin\GetVisitorsUsecase;
+use Core\Domain\Usecase\Admin\UpdateURLSettingUsecase;
 use \Core\Domain\Usecase\Admin\UpdateVisitorUsecase;
 
 use \Core\Domain\Usecase\Admin\CreateWidgetUsecase;
@@ -218,5 +219,15 @@ class AdminFactory
     public static function getURLSetting()
     {
         return new GetURLSettingUsecase(RepositoryFactory::urlSetting(), new Purifier(), new Errors());
+    }
+
+    public static function updateURLSetting()
+    {
+        return new UpdateURLSettingUsecase(
+            RepositoryFactory::urlSetting(),
+            new UrlSettingValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
     }
 }
