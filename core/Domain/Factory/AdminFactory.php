@@ -10,6 +10,9 @@ use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\DeleteApiKeyUsecase;
 
+use \Core\Domain\Usecase\Admin\GetSettingsUsecase;
+use \Core\Domain\Usecase\Admin\UpdateSettingUsecase;
+
 use \Core\Domain\Usecase\Admin\GetShopsUsecase;
 use \Core\Domain\Usecase\Admin\GetShopUsecase;
 use \Core\Domain\Usecase\Admin\CreateShopUsecase;
@@ -34,6 +37,7 @@ use \Core\Domain\Usecase\Admin\DeleteLandingPageUsecase;
 
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\LandingPageValidator;
+use \Core\Domain\Validator\SettingsValidator;
 use \Core\Domain\Validator\ShopValidator;
 use \Core\Domain\Validator\VisitorValidator;
 use \Core\Domain\Validator\WidgetValidator;
@@ -184,6 +188,24 @@ class AdminFactory
         return new UpdateLandingPageUsecase(
             RepositoryFactory::landingPage(),
             new LandingPageValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+
+    public static function getSettings() {
+        return new GetSettingsUsecase(
+            RepositoryFactory::settings(),
+            new Purifier(),
+            new Errors()
+        );
+    }
+
+    public static function updateSetting()
+    {
+        return new UpdateSettingUsecase(
+            RepositoryFactory::settings(),
+            new SettingsValidator(new Validator()),
             new Purifier(),
             new Errors()
         );

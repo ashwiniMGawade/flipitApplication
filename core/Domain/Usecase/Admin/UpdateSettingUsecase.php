@@ -4,6 +4,8 @@ namespace Core\Domain\Usecase\Admin;
 use \Core\Domain\Entity\Settings;
 use \Core\Domain\Repository\SettingsRepositoryInterface;
 use \Core\Domain\Adapter\PurifierInterface;
+use \Core\Domain\Validator\SettingsValidator;
+use \Core\Service\Errors\ErrorsInterface;
 
 class UpdateSettingUsecase
 {
@@ -11,12 +13,20 @@ class UpdateSettingUsecase
 
     protected $htmlPurifier;
 
+    protected $settingsValidator;
+
+    protected $errors;
+
     public function __construct(
         SettingsRepositoryInterface $settingsRepository,
-        PurifierInterface $htmlPurifier
+        SettingsValidator $settingsValidator,
+        PurifierInterface $htmlPurifier,
+        ErrorsInterface $errors
     ) {
-        $this->settingsRepository = $settingsRepository;
-        $this->htmlPurifier     = $htmlPurifier;
+        $this->settingsRepository   = $settingsRepository;
+        $this->htmlPurifier         = $htmlPurifier;
+        $this->settingsValidator    = $settingsValidator;
+        $this->errors               = $errors;
     }
 
     public function execute(Settings $setting, $params = array())
@@ -26,6 +36,13 @@ class UpdateSettingUsecase
             $setting->setValue($params['value']);
         }
         $setting->setUpdatedAt(new \DateTime('now'));
+
+        $validationResult = $this->settingsValidator->validate($setting);
+
+        if (true !== $validationResult && is_array($validationResult)) {
+            $this->errors->setErrors($validationResult);
+            return $this->errors;
+        }
         return $this->settingsRepository->save($setting);
     }
 }

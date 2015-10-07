@@ -1,6 +1,9 @@
 <?php
 
-class Admin_LocaleController extends Zend_Controller_Action
+use \Core\Domain\Factory\AdminFactory;
+use \Core\Service\Errors;
+
+class Admin_LocaleController extends Application_Admin_BaseController
 {
     protected $_settings = false;
 
@@ -11,7 +14,7 @@ class Admin_LocaleController extends Zend_Controller_Action
         if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-            $this->_redirect('/admin/auth/index');
+            $this->redirect('/admin/auth/index');
         }
 
         \BackEnd_Helper_viewHelper::closeConnection($connectionInformation);
@@ -23,7 +26,7 @@ class Admin_LocaleController extends Zend_Controller_Action
             $flashMessenger = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate('You have no permission to access page');
             $flashMessenger->addMessage(array('error' => $message));
-            $this->_redirect('/admin');
+            $this->redirect('/admin');
         }
 
         $this->_settings  = $sessionNamespace->settings['rights'];
@@ -45,11 +48,30 @@ class Admin_LocaleController extends Zend_Controller_Action
         
         $this->view->chainHrefLang = KC\Repository\Website::getWebsiteDetails('', $site_name);
 
+        $this->view->settings = AdminFactory::getSettings()->execute(array('isEditable'=>1, 'deleted'=>0));
+
         if ($this->getRequest()->isPost()) {
-            $chainParameters = $this->getRequest()->getParams();
-            KC\Repository\Website::saveChain($chainParameters['chain'], $site_name);
-            $this->setFlashMessage($this, 'Chain has been updated successfully');
-            $this->_redirect(HTTP_PATH . 'admin/locale/locale-settings');
+            $params = $this->getRequest()->getParams();
+
+            KC\Repository\Website::saveChain($params['chain'], $site_name);
+            $isValid = true;
+            if (true === is_array($params['settings'])) {
+                foreach ($this->view->settings as $setting) {
+                    if (true == array_key_exists($setting->getName(), $params['settings']) && $setting->getValue() != $params['settings'][$setting->getName()]) {
+                        $data = array('value' => $params['settings'][$setting->getName()]);
+                        $result = AdminFactory::updateSetting()->execute($setting, $data);
+                        if ($result instanceof Errors) {
+                            $this->setFlashMessage('error', $result->getErrorsAll());
+                            $isValid = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (true == $isValid) {
+                $this->setFlashMessage1($this, 'Locale settings has been updated successfully');
+                $this->redirect(HTTP_PATH . 'admin/locale/locale-settings');
+            }
         }
     }
 
@@ -59,14 +81,14 @@ class Admin_LocaleController extends Zend_Controller_Action
         $localeSettings = KC\Repository\LocaleSettings::getLocaleSettings();
         KC\Repository\LocaleSettings::savelocale($localeName);
         KC\Repository\Chain::updateChainItemLocale($localeName, $localeSettings[0]['locale']);
-        $this->setFlashMessage($this, 'Locale has been changed successfully.');
+        $this->setFlashMessage1($this, 'Locale has been changed successfully.');
         exit();
     }
     
     public function saveTimezoneAction()
     {
         KC\Repository\LocaleSettings::saveTimezone($this->getRequest()->getParam('timezone'));
-        $this->setFlashMessage($this, 'Timezone has been changed successfully.');
+        $this->setFlashMessage1($this, 'Timezone has been changed successfully.');
         exit();
     }
 
@@ -80,11 +102,11 @@ class Admin_LocaleController extends Zend_Controller_Action
     public function savelocalestatusAction()
     {
         KC\Repository\Website::setLocaleStatus($this->getRequest()->getParam('localeStatus'), $_COOKIE['site_name']);
-        $this->setFlashMessage($this, 'Locale Status has been changed successfully.');
+        $this->setFlashMessage1($this, 'Locale Status has been changed successfully.');
         exit();
     }
 
-    public function setFlashMessage($currentObject, $messageText)
+    public function setFlashMessage1($currentObject, $messageText)
     {
         $flash = $currentObject->_helper->getHelper('FlashMessenger');
         $message = $currentObject->view->translate($messageText);
