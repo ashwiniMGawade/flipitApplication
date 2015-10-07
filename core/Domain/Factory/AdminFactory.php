@@ -5,7 +5,6 @@ use \Core\Domain\Service\Validator;
 use \Core\Domain\Service\KeyGenerator;
 use \Core\Domain\Service\Purifier;
 
-use Core\Domain\Usecase\Admin\CreateURLSettingUsecase;
 use \Core\Domain\Usecase\Admin\GetApiKeysUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
@@ -15,7 +14,6 @@ use \Core\Domain\Usecase\Admin\GetShopsUsecase;
 use \Core\Domain\Usecase\Admin\GetShopUsecase;
 use \Core\Domain\Usecase\Admin\CreateShopUsecase;
 use \Core\Domain\Usecase\Admin\AddShopUsecase;
-use Core\Domain\Usecase\Admin\GetURLSettingsUsecase;
 use \Core\Domain\Usecase\Admin\UpdateShopUsecase;
 use \Core\Domain\Usecase\Admin\DeleteShopUsecase;
 
@@ -34,11 +32,17 @@ use \Core\Domain\Usecase\Admin\GetLandingPageUsecase;
 use \Core\Domain\Usecase\Admin\GetLandingPagesUsecase;
 use \Core\Domain\Usecase\Admin\DeleteLandingPageUsecase;
 
+use \Core\Domain\Usecase\Admin\AddURLSettingUsecase;
+use \Core\Domain\Usecase\Admin\CreateURLSettingUsecase;
+use \Core\Domain\Usecase\Admin\GetURLSettingsUsecase;
+use \Core\Domain\Usecase\Admin\GetURLSettingUsecase;
+
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\LandingPageValidator;
 use \Core\Domain\Validator\ShopValidator;
 use \Core\Domain\Validator\VisitorValidator;
 use \Core\Domain\Validator\WidgetValidator;
+use \Core\Domain\Validator\UrlSettingValidator;
 
 use \Core\Persistence\Factory\RepositoryFactory;
 
@@ -199,5 +203,20 @@ class AdminFactory
     public static function createURLSettings()
     {
         return new CreateURLSettingUsecase();
+    }
+
+    public static function addURLSetting()
+    {
+        return new AddURLSettingUsecase(
+            RepositoryFactory::urlSetting(),
+            new UrlSettingValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+
+    public static function getURLSetting()
+    {
+        return new GetURLSettingUsecase(RepositoryFactory::urlSetting(), new Purifier(), new Errors());
     }
 }
