@@ -11,8 +11,10 @@ endif;
 echo $this->doctype();
 
 # manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
+$htmlLang = FrontEnd_Helper_LayoutContent::loadHtmlLang();
+
 $locale = explode('_', COUNTRY_LOCALE);
-$language = isset($this->languageReference) ? $this->languageReference : $locale[0];
+$language = isset($this->languageReference) ? $this->languageReference : (!empty($htmlLang) ? $htmlLang: $locale[0]);
 if($language == 'nn') {
     $language = 'no';
 }
