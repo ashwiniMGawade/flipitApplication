@@ -17,13 +17,6 @@ class SettingsValidator
     {
         $constraints = array();
         $constraints['updated_at'][] = $this->validator->dateTime();
-        switch ($settings->getName()) {
-            case 'HTML_LANG':
-                $constraints['value'][] = $this->validator->type(array('type' => 'alpha', 'message' => 'HTML lang must contain only alphabets'));
-                break;
-            default:
-                break;
-        }
         return $this->validator->validate($settings, $constraints);
     }
 }

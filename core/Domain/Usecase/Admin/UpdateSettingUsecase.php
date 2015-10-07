@@ -37,12 +37,6 @@ class UpdateSettingUsecase
         }
         $setting->setUpdatedAt(new \DateTime('now'));
 
-        $validationResult = $this->settingsValidator->validate($setting);
-
-        if (true !== $validationResult && is_array($validationResult)) {
-            $this->errors->setErrors($validationResult);
-            return $this->errors;
-        }
         return $this->settingsRepository->save($setting);
     }
 }
