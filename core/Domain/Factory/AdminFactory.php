@@ -5,6 +5,7 @@ use \Core\Domain\Service\Validator;
 use \Core\Domain\Service\KeyGenerator;
 use \Core\Domain\Service\Purifier;
 
+use Core\Domain\Usecase\Admin\DeleteURLSettingUsecase;
 use \Core\Domain\Usecase\Admin\GetApiKeysUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
@@ -229,5 +230,10 @@ class AdminFactory
             new Purifier(),
             new Errors()
         );
+    }
+
+    public static function deleteURLSetting()
+    {
+        return new DeleteURLSettingUsecase(RepositoryFactory::urlSetting());
     }
 }
