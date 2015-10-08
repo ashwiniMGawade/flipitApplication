@@ -186,12 +186,8 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
 </div>
 <div class="row"> 
     <div id="content" class ="col-md-8 col-sm-8">
-    <div class="popup-box hide">
-        <a href="#" class="btn-close">close</a>
-        <span class="time">clock</span>
-        <span class="text">1 day left: Dunas Hotels and Resorts coupon code. <a href="#">Click here to open coupon</a></span>
-    </div>
-    <?php 
+    <?php
+    echo FrontEnd_Helper_viewHelper::getFloatingCoupon();
     echo $noMoneyNocodeMessage;
     if (!empty($noMoneyNocodeMessage)) {
         ?>
