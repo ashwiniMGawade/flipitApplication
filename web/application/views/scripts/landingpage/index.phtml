@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<?php
+if (FrontEnd_Helper_LayoutContent::loadVWOScript() === true) :
+    echo $this->render('partials/_vwo_script.phtml');
+endif;
+?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $this->landingPage->getMetaTitle(); ?></title>
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8" >
