@@ -6,6 +6,7 @@ use \Core\Domain\Service\Purifier;
 use \Core\Domain\Usecase\Admin\GetLandingPageUsecase;
 use \Core\Domain\Usecase\Guest\GetHomePageUsecase;
 use Core\Domain\Usecase\Guest\GetOffersUsecase;
+use Core\Domain\Usecase\Guest\GetURLSettingUsecase;
 use \Core\Domain\Usecase\Guest\GetViewCountsUsecase;
 use \Core\Domain\Usecase\Guest\GetOfferUsecase;
 use \Core\Persistence\Factory\RepositoryFactory;
@@ -36,5 +37,10 @@ class GuestFactory
     public static function getLandingPage()
     {
         return new GetLandingPageUsecase(RepositoryFactory::landingPage(), new Purifier(), new Errors());
+    }
+
+    public static function getURLSetting()
+    {
+        return new GetURLSettingUsecase(RepositoryFactory::urlSetting(), new Purifier(), new Errors());
     }
 }
