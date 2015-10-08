@@ -281,4 +281,30 @@ class FrontEnd_Helper_LayoutContent
             return array('locale' => '','mostPopularCoupon' => '');
         }
     }
+
+    public static function loadVWOScript()
+    {
+        $displayVWOScript = false;
+        $rawUrl = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $url = explode('?', $rawUrl);
+        $urlString = $url[0];
+
+        if (LOCALE != '') {
+            $localeUrl = explode("/", $urlString);
+            $urlString = isset($localeUrl[1]) ? $localeUrl[1] : '';
+        }
+        if (empty($urlString)) {
+            $urlString = '/';
+        }
+
+        $conditions = array(
+            'url' => $urlString,
+            'status' => 1
+        );
+        $result = \Core\Domain\Factory\GuestFactory::getURLSetting()->execute($conditions);
+        if ($result instanceof \Core\Domain\Entity\URLSetting) {
+            $displayVWOScript = true;
+        }
+        return $displayVWOScript;
+    }
 }
