@@ -23,9 +23,8 @@ class Admin_LocaleController extends Application_Admin_BaseController
         $sessionNamespace = new Zend_Session_Namespace();
 
         if ($sessionNamespace->settings['rights']['administration']['rights'] != '1') {
-            $flashMessenger = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate('You have no permission to access page');
-            $flashMessenger->addMessage(array('error' => $message));
+            $this->setFlashMessage('success', $message);
             $this->redirect('/admin');
         }
 
@@ -33,10 +32,6 @@ class Admin_LocaleController extends Application_Admin_BaseController
     }
     public function localeSettingsAction()
     {
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $flash->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
         $this->view->locale = KC\Repository\Signupmaxaccount::getAllMaxAccounts();
         $this->view->localeSettings = KC\Repository\LocaleSettings::getLocaleSettings();
         $this->view->timezones_list = KC\Repository\Signupmaxaccount::$timezones;
@@ -69,7 +64,7 @@ class Admin_LocaleController extends Application_Admin_BaseController
                 }
             }
             if (true == $isValid) {
-                $this->setFlashMessage1($this, 'Locale settings has been updated successfully');
+                $this->setFlashMessage('success', 'Locale settings has been updated successfully');
                 $this->redirect(HTTP_PATH . 'admin/locale/locale-settings');
             }
         }
@@ -81,14 +76,14 @@ class Admin_LocaleController extends Application_Admin_BaseController
         $localeSettings = KC\Repository\LocaleSettings::getLocaleSettings();
         KC\Repository\LocaleSettings::savelocale($localeName);
         KC\Repository\Chain::updateChainItemLocale($localeName, $localeSettings[0]['locale']);
-        $this->setFlashMessage1($this, 'Locale has been changed successfully.');
+        $this->setFlashMessage('success', 'Locale has been changed successfully.');
         exit();
     }
     
     public function saveTimezoneAction()
     {
         KC\Repository\LocaleSettings::saveTimezone($this->getRequest()->getParam('timezone'));
-        $this->setFlashMessage1($this, 'Timezone has been changed successfully.');
+        $this->setFlashMessage('success', 'Timezone has been changed successfully.');
         exit();
     }
 
@@ -102,14 +97,7 @@ class Admin_LocaleController extends Application_Admin_BaseController
     public function savelocalestatusAction()
     {
         KC\Repository\Website::setLocaleStatus($this->getRequest()->getParam('localeStatus'), $_COOKIE['site_name']);
-        $this->setFlashMessage1($this, 'Locale Status has been changed successfully.');
+        $this->setFlashMessage('success', 'Locale Status has been changed successfully.');
         exit();
-    }
-
-    public function setFlashMessage1($currentObject, $messageText)
-    {
-        $flash = $currentObject->_helper->getHelper('FlashMessenger');
-        $message = $currentObject->view->translate($messageText);
-        $flash->addMessage(array('success' => $message));
     }
 }
