@@ -33,6 +33,7 @@ class Admin_ShopController extends Zend_Controller_Action
             4 => 'AA+',
             5 => 'AAA'
         );
+
     }
 
     public function indexAction()
@@ -1092,7 +1093,7 @@ class Admin_ShopController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(true);
         $globalExportParameters = $this->_getAllParams();
         $checkPassword = \KC\Repository\GlobalExportPassword::getPasswordForExportDownloads('shopExport');
-        if (isset($globalExportParameters['password']) && $globalExportParameters['password'] == $checkPassword) {
+        if (isset($globalExportParameters['password']) && md5($globalExportParameters['password']) == $checkPassword) {
             # set fiel and its trnslattions
             $file =  APPLICATION_PATH. '/../data/excels/globalShopList.xlsx' ;
             $fileName =  $this->view->translate($file);
@@ -1108,13 +1109,13 @@ class Admin_ShopController extends Zend_Controller_Action
     public function globalExportXlxPasswordAction()
     {
         $this->saveGlobalExportPassword();
-        $this->sendMailToSuperAdmin();
         exit();
     }
 
     protected function saveGlobalExportPassword()
     {
-        \KC\Repository\GlobalExportPassword::savePasswordForExportDownloads('shopExport');
+        $superAdminPassword = Auth_StaffAdapter::getIdentity()->password;
+        \KC\Repository\GlobalExportPassword::savePasswordForExportDownloads('shopExport', $superAdminPassword);
         $this->exportPassword = \KC\Repository\GlobalExportPassword::getPasswordForExportDownloads('shopExport');
     }
 

@@ -48,13 +48,19 @@ class Zend_Controller_Action_Helper_Index extends Zend_Controller_Action_Helper_
         foreach ($categoryIds as $categoryId) {
             $categoryOffers =
             \KC\Repository\CategoriesOffers::getCategoryOffersByCategoryIdForFrontEnd($categoryId['category']['id']);
-            if (empty($categoryOffers)) {
-                $categoryOffers = self::removeDuplicateCode(
+            if (count($categoryOffers) < 10) {
+                $allCategoryOffers = self::removeDuplicateCode(
                     \KC\Repository\Category::getCategoryVoucherCodes($categoryId['category']['id'], 50, 'homePage'),
                     'homePage'
                 );
+                $categoryOffers = array_merge($categoryOffers, $allCategoryOffers);
             }
-            $categoriesOffers[$categoryId['category']['permaLink']] = $categoryOffers;
+            $offersInCategory = array();
+            foreach ($categoryOffers as $offer) {
+                $offersInCategory[$offer['id']] = $offer;
+            }
+            $offersInCategory = array_slice($offersInCategory, 0, 10);
+            $categoriesOffers[$categoryId['category']['permaLink']] = $offersInCategory;
         }
         return $categoriesOffers;
     }
