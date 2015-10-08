@@ -281,4 +281,13 @@ class FrontEnd_Helper_LayoutContent
             return array('locale' => '','mostPopularCoupon' => '');
         }
     }
+
+    public static function loadHtmlLang()
+    {
+        $htmlLangSetting = \FrontEnd_Helper_viewHelper::getSetting('HTML_LANG');
+        if ($htmlLangSetting instanceof \Core\Domain\Entity\Settings) {
+            return $htmlLangSetting->getValue();
+        }
+        return false;
+    }
 }

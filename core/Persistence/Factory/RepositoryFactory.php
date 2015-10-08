@@ -1,6 +1,7 @@
 <?php
 namespace Core\Persistence\Factory;
 
+use Core\Persistence\Database\Repository\SettingsRepository;
 use \Core\Persistence\Database\Service as Service;
 use \Core\Persistence\Database\Repository\OfferRepository;
 use \Core\Persistence\Database\Repository\ViewCountRepository;
@@ -57,5 +58,10 @@ class RepositoryFactory
     public static function landingPage()
     {
         return new LandingPageRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
+    }
+
+    public static function settings()
+    {
+        return new SettingsRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 }

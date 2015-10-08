@@ -2,6 +2,7 @@
 use \HTMLPurifier;
 use \Core\Domain\Factory\GuestFactory;
 use \Core\Domain\Entity\Offer;
+use \Core\Domain\Factory\SystemFactory;
 
 class FrontEnd_Helper_viewHelper
 {
@@ -1176,5 +1177,14 @@ EOD;
                 href="'.$urlToShow.'" vote="0" rel="nofollow" 
                 target="_self" onClick="'.$onClick.'">';
         return $offerShopPermalinkAnchor;
+    }
+
+    public static function getSetting($name)
+    {
+        $conditions = array(
+            'name' => $name,
+            'deleted' => 0
+        );
+        return SystemFactory::getSetting()->execute($conditions);
     }
 }
