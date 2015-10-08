@@ -46,8 +46,7 @@ class StoreController extends Zend_Controller_Action
 
         #Set Language Reference Attribute value as nl-BE
         $this->setLanguageReference($shopPermalink);
-        $this->displayVWOScript($shopPermalink);
-        
+
         $this->view->shareCodeStatus = '';
         if (isset($explodeUrl[1])) {
             $this->view->shareCodeStatus = $explodeUrl[1];
@@ -485,27 +484,6 @@ class StoreController extends Zend_Controller_Action
             if (in_array($shopPermalink, $shopPermalinks)) {
                 $this->view->languageReference = str_replace('_', '-', COUNTRY_LOCALE);
             }
-        }
-    }
-
-    private function displayVWOScript($shopPermalink)
-    {
-        switch (LOCALE) {
-            case 'es':
-                $shopPermalinks = array('kiabi', 'rakuten-es', 'groupalia');
-                break;
-            case 'sg':
-                $shopPermalinks = array('zalora', 'foodpanda', 'groupon');
-                break;
-            case 'id':
-                $shopPermalinks = array('blibli', 'groupon-disdus', 'pegipegi');
-                break;
-            default:
-                $shopPermalinks = array();
-                break;
-        }
-        if (in_array($shopPermalink, $shopPermalinks)) {
-            $this->view->displayVWOScript = 1;
         }
     }
 }

@@ -105,16 +105,5 @@ class IndexController extends Zend_Controller_Action
         } else {
             $this->_helper->viewRenderer->setNoRender(true);
         }
-
-        #set VWO script
-        $this->displayVWOScript();
-    }
-
-    private function displayVWOScript()
-    {
-        $locales = array('id');
-        if (in_array(LOCALE, $locales) && $this->view->action == 'index') {
-            $this->view->displayVWOScript = 1;
-        }
     }
 }
