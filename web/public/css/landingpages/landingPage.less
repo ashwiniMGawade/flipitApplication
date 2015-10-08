@@ -1,5 +1,6 @@
 @import "../front_end/custom-variables.less";
 @import "../front_end/custom-mixins.less";
+@import "../front_end/less-bootstrap/mixins.less";
 @import "../front_end/footer.less";
 @import (css) "all.css";
 #footer{
@@ -885,4 +886,102 @@
   position: absolute;
   left: 0;
   top: 40px;
+}
+
+.meta-items{
+  @media only screen and (max-width: 767px){
+    display: none;
+  }
+  list-style: none;
+  margin: -1px 0 6px;
+  padding: 0;
+  color: #878a8d;
+  font-size: 12px;
+  line-height: 15px;
+  .clearfix;
+  @media only screen and (max-width: 767px){
+    margin: 0 -5px;
+  }
+  li{
+    float: left;
+    position: relative;
+    padding: 0 8px 0 6px;
+    font-size: 10px;
+    @media only screen and (max-width: 767px){
+      padding: 0 5px 3px;
+    }
+    &:first-child{
+      padding-left: 0;
+      @media only screen and (max-width: 767px){
+        padding-left: 5px;
+      }
+      &:after{
+        display: none;
+      }
+    }
+    &:after{
+      background: #878a8d;
+      .square(2px);
+      position: absolute;
+      left: -2px;
+      top: 7px;
+      content: "";
+    }
+  }
+  .verification{
+    display: block;
+    position: relative;
+    padding: 0 0 0 18px;
+    &:after{
+      position: absolute;
+      left: 0;
+      top: 2px;
+      background: url(../../images/sprite2.png) no-repeat -63px 0;
+      .square(11px);
+      content: "";
+    }
+
+  }
+}
+
+.text-info{
+  position: relative;
+  padding: 0 0 0 26px;
+  display: block;
+  color: #878a8d;
+  @media only screen and (max-width: 767px){
+    padding: 0 0 0 22px;
+    margin: 0 0 5px;
+  }
+
+  &:after{
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: url(../../images/sprite2.png) no-repeat;
+    content: "";
+  }
+  &.exclusive{
+    color: #eb9528;
+    font-weight: 700;
+    &:after{
+      background-position: -83px 0;
+      .square(17px);
+      @media only screen and (max-width: 979px){
+        left: -1px;
+      }
+
+    }
+  }
+  &.date:after{
+    .size(16px, 17px);
+    top:-1px;
+  }
+  &.used{
+    &:after{
+      .size(15px, 11px);
+      background-position: -112px 0;
+      top: 2px;
+    }
+  }
 }
