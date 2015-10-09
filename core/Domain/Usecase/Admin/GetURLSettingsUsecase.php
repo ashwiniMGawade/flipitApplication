@@ -1,9 +1,9 @@
 <?php
 namespace Core\Domain\Usecase\Admin;
 
-use Core\Domain\Adapter\PurifierInterface;
-use Core\Domain\Repository\URLSettingRepositoryInterface;
-use Core\Service\Errors\ErrorsInterface;
+use \Core\Domain\Adapter\PurifierInterface;
+use \Core\Domain\Repository\URLSettingRepositoryInterface;
+use \Core\Service\Errors\ErrorsInterface;
 
 class GetURLSettingsUsecase
 {

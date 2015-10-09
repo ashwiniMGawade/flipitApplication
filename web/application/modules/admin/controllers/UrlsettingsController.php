@@ -47,7 +47,7 @@ class Admin_UrlsettingsController extends Application_Admin_BaseController
     public function createAction()
     {
         if ($this->_request->isPost()) {
-            $urlSetting = AdminFactory::createURLSettings()->execute();
+            $urlSetting = AdminFactory::createURLSetting()->execute();
 
             $parameters['status'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('status')));
             $parameters['url'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('url'));
@@ -59,6 +59,8 @@ class Admin_UrlsettingsController extends Application_Admin_BaseController
                 $errors = $result->getErrorsAll();
                 $this->setFlashMessage('error', $errors);
             } else {
+                $url = $result->getUrl();
+                self::updateVarnish($url);
                 $this->setFlashMessage('success', 'VWO Tag has been added successfully');
                 $this->redirect(HTTP_PATH.'admin/urlsettings');
             }

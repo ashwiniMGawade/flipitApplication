@@ -202,7 +202,7 @@ class AdminFactory
         return new GetURLSettingsUsecase(RepositoryFactory::urlSetting(), new Purifier(), new Errors());
     }
 
-    public static function createURLSettings()
+    public static function createURLSetting()
     {
         return new CreateURLSettingUsecase();
     }
