@@ -50,6 +50,7 @@ function getUrlSettings(iStart,iSortCol,iSortDir) {
                     return html;
                 }
             },
+            "bSortable" : false,
             "sWidth" : '30%'
         },
         {
