@@ -12,6 +12,7 @@ use \Core\Persistence\Database\Repository\ApiKeyRepository;
 use \Core\Persistence\Database\Repository\AffliateNetworkRepository;
 use \Core\Persistence\Database\Repository\WidgetRepository;
 use \Core\Persistence\Database\Repository\LandingPageRepository;
+use \Core\Persistence\Database\Repository\URLSettingRepository;
 
 class RepositoryFactory
 {
@@ -63,5 +64,10 @@ class RepositoryFactory
     public static function settings()
     {
         return new SettingsRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
+    }
+
+    public static function urlSetting()
+    {
+        return new URLSettingRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 }

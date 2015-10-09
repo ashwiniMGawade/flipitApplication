@@ -726,6 +726,23 @@ $action = $this->action;
                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-language" <?php echo $color; ?>><?php echo $this->translate('Language File'); ?></a>
         </li>
     <?php } ?>
+    <li <?php if ($controller == 'urlsettings') : ?>
+            class="imbull-has-submenu menu-top menu-icon-pages imbull-menu-open imbull-has-current-submenu"
+        <?php else : ?>
+            class="imbull-has-submenu menu-top menu-icon-pages imbull-menu-open imbull-not-current-submenu"
+        <?php endif; ?>
+        id="menu-links">
+
+        <div class="imbull-menu-image"><a href="<?php echo HTTP_PATH; ?>admin/urlsettings"><br></a></div>
+        <div class="">
+            <div></div>
+        </div>
+        <a <?php if ($controller == 'urlsettings') :
+            echo 'style=color:#0088CC';
+            endif; ?>
+            href="<?php echo HTTP_PATH; ?>admin/urlsettings"
+            class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-pages"><?php echo $this->translate('VWO Manager'); ?></a>
+    </li>
 </ul>
 
 <?php if ($sessionNamespace->settings['rights']['administration']['rights'] == '1' || $sessionNamespace->settings['rights']['administration']['rights'] == '2'): ?>

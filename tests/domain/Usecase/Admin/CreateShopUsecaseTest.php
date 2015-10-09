@@ -10,7 +10,7 @@ class CreateShopUsecaseTest extends \Codeception\TestCase\Test
      */
     protected $tester;
 
-    public function testCreateApiKeyUsecase()
+    public function testCreateShopUsecase()
     {
         $this->assertInstanceOf(
             '\Core\Domain\Entity\Shop',

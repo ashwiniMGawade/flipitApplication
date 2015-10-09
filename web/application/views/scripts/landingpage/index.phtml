@@ -6,6 +6,11 @@ $language = !empty($htmlLang) ? $htmlLang: $locale[0];
 ?>
 <html lang="<?php echo $language; ?>" xml:lang="<?php echo $language;?>" xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<?php
+if (FrontEnd_Helper_LayoutContent::loadVWOScript() === true) :
+    echo $this->render('partials/_vwo_script.phtml');
+endif;
+?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $this->landingPage->getMetaTitle(); ?></title>
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8" >

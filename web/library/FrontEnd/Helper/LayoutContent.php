@@ -290,4 +290,30 @@ class FrontEnd_Helper_LayoutContent
         }
         return false;
     }
+
+    public static function loadVWOScript()
+    {
+        $displayVWOScript = false;
+        $rawUrl = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $url = explode('?', $rawUrl);
+        $urlString = $url[0];
+
+        if (LOCALE != '') {
+            $localeUrl = explode('/', $urlString);
+            unset($localeUrl[0]);
+            $urlString = implode('/', $localeUrl);
+        }
+        if (empty($urlString)) {
+            $urlString = '/';
+        }
+        $conditions = array(
+            'url' => $urlString,
+            'status' => 1
+        );
+        $result = \Core\Domain\Factory\GuestFactory::getURLSetting()->execute($conditions);
+        if ($result instanceof \Core\Domain\Entity\URLSetting) {
+            $displayVWOScript = true;
+        }
+        return $displayVWOScript;
+    }
 }
