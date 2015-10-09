@@ -290,13 +290,13 @@ class FrontEnd_Helper_LayoutContent
         $urlString = $url[0];
 
         if (LOCALE != '') {
-            $localeUrl = explode("/", $urlString);
-            $urlString = isset($localeUrl[1]) ? $localeUrl[1] : '';
+            $localeUrl = explode('/', $urlString);
+            unset($localeUrl[0]);
+            $urlString = implode('/', $localeUrl);
         }
         if (empty($urlString)) {
             $urlString = '/';
         }
-
         $conditions = array(
             'url' => $urlString,
             'status' => 1
