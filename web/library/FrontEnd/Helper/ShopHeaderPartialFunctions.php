@@ -96,4 +96,20 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         
         return $anchorTag;
     }
+
+    public function getFloatingCoupon()
+    {
+        $offer = KC\Repository\Offer::getFloatingCouponByShopIds();
+        if (true === empty($offer)) {
+            return '';
+        }
+        $offerDaysLeft = $offer[0]['endDate']->diff(new \DateTime())->days;
+        $dayLeftText =  ( $offerDaysLeft > 1) ? 'days' : 'day';
+        $floatingCoupon = '<div class="popup-box hide">
+            <a href="#" class="btn-close">close</a>
+            <span class="time">clock</span>
+            <span class="text">' . $offerDaysLeft . ' ' . $dayLeftText . ' left: ' . $offer[0]['shopName'] . ' coupon code. <a href="#">Click here to open coupon</a></span>
+        </div>';
+        return $floatingCoupon;
+    }
 }

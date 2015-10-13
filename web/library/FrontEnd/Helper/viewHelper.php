@@ -1177,14 +1177,4 @@ EOD;
                 target="_self" onClick="'.$onClick.'">';
         return $offerShopPermalinkAnchor;
     }
-
-    public static function getFloatingCoupon()
-    {
-        $floatingCoupon = '<div class="popup-box hide">
-            <a href="#" class="btn-close">close</a>
-            <span class="time">clock</span>
-            <span class="text">1 day left: Dunas Hotels and Resorts coupon code. <a href="#">Click here to open coupon</a></span>
-        </div>';
-        return $floatingCoupon;
-    }
 }

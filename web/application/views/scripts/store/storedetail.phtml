@@ -187,7 +187,7 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
 <div class="row"> 
     <div id="content" class ="col-md-8 col-sm-8">
     <?php
-    echo FrontEnd_Helper_viewHelper::getFloatingCoupon();
+    echo $frontShopHeaderHelper->getFloatingCoupon();
     echo $noMoneyNocodeMessage;
     if (!empty($noMoneyNocodeMessage)) {
         ?>
