@@ -99,17 +99,27 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
 
     public function getFloatingCoupon()
     {
-        $offer = KC\Repository\Offer::getFloatingCouponByShopIds();
+        if (isset($_COOKIE['floatingCouponClosed']) && !empty($_COOKIE['floatingCouponClosed'])) {
+            return '';
+        }
+        $offer = KC\Repository\Offer::getFloatingCoupon();
         if (true === empty($offer)) {
             return '';
         }
-        $offerDaysLeft = $offer[0]['endDate']->diff(new \DateTime())->days;
+        $offer = (object)$offer[0];
+        $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
+        $urlToShow = $offerPartial->getUrlToShow($offer);
+        $popupLink = $offerPartial->getPopupLink($offer, $urlToShow);
+        $onClick = "OpenInNewTab('".HTTP_PATH_LOCALE.$offer->shopOffers['permaLink'].$popupLink."');";
+        $gtmClick = "gtmDataBuilder('voucherClickout', 'Code', 'Title', 'Offer', ".$offer->id.", 'false');";
+        $offerDaysLeft = $offer->endDate->diff(new \DateTime())->days;
         $dayLeftText =  ( $offerDaysLeft > 1) ? 'days' : 'day';
-        $floatingCoupon = '<div class="popup-box hide">
-            <a href="#" class="btn-close">close</a>
-            <span class="time">clock</span>
-            <span class="text">' . $offerDaysLeft . ' ' . $dayLeftText . ' left: ' . $offer[0]['shopName'] . ' coupon code. <a href="#">Click here to open coupon</a></span>
-        </div>';
+        $floatingCoupon = '<div class="popup-box hide" id="floatingCouponBox">
+                <a href="#" class="btn-close">close</a>
+                <span class="time">clock</span>
+                <span class="text">' . $offerDaysLeft . ' ' . $dayLeftText . ' left: ' . $offer->shopOffers['name'] . ' coupon code.
+                <a href="'.$urlToShow.'" onclick="setFloatingCouponCookie();'.$gtmClick.$onClick.'" class="floating-coupon-link">'.$this->__translate('Click here to open coupon').'</a></span>
+            </div>';
         return $floatingCoupon;
     }
 }

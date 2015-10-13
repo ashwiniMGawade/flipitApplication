@@ -3586,21 +3586,21 @@ class Offer extends \Core\Domain\Entity\Offer
         return $topCouponCodes;
     }
 
-    public static function getFloatingCouponByShopIds()
+    public static function getFloatingCoupon()
     {
         $minDate = new \DateTime(date('Y-m-d 23:59:59'));
         $maxDate = new \DateTime(date('Y-m-d 23:59:59'));
         $maxDate->add(new \DateInterval('P3D'));
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
-            ->select('o.id, o.endDate, s.name as shopName')
+            ->select('o, s')
             ->from('\Core\Domain\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->where('o.deleted = 0')
             ->andWhere('o.offline = 0')
             ->andWhere('o.endDate > :minEndDate')
             ->andWhere('o.endDate <= :maxEndDate')
-            ->andWhere($entityManagerUser->expr()->eq('o.discountType', $entityManagerUser->expr()->literal('CD')))
+            ->andWhere("o.discountType = 'CD'")
             ->setParameter('minEndDate', $minDate)
             ->setParameter('maxEndDate', $maxDate)
             ->addOrderBy('o.endDate', 'ASC')
