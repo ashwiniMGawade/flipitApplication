@@ -243,19 +243,14 @@ class Page extends \Core\Domain\Entity\Page
             ? $params["searchText"] : '';
 
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('page.pageTitle, page.created_at, page.updated_at, page.contentManagerName')
+        $result = $entityManagerUser->select('page.id, page.pageTitle, page.created_at, page.updated_at, page.contentManagerName')
             ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, 1)
             ->where('page.deleted = ?1')
-            ->setParameter(2, $srhPage.'%')
-            ->andWhere($entityManagerUser->expr()->like('page.pageTitle , ?2'));
-        $result =  \DataTable_Helper::generateDataTableResponse(
-            $pageList,
-            $params,
-            array("__identifier" => 'page.pageTitle','page.created_at','page.updated_at','page.contentManagerName'),
-            array(),
-            array()
-        );
+            ->andWhere(
+                $entityManagerUser->expr()->like('page.pageTitle', $entityManagerUser->expr()->literal($srhPage.'%'))
+            )
+            ->getQuery()->execute();
         return $result;
     }
 
@@ -307,19 +302,22 @@ class Page extends \Core\Domain\Entity\Page
     {
         if ($id) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->update('\Core\Domain\Entity\Page', 'page')
+            $updatePage = $queryBuilder->update('\Core\Domain\Entity\Page', 'page')
             ->set('page.deleted', 0)
             ->setParameter(1, $id)
             ->where('page.id = ?1')
             ->getQuery();
-            $query->execute();
-            $u = $queryBuilder->find('\Core\Domain\Entity\Page', $id);
-            $query = $queryBuilder->update('\Core\Domain\Entity\RoutePermalink', 'routePermalink')
+            $updatePage->execute();
+
+            $u = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Page', $id);
+
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $updateRoutePermalink = $queryBuilder->update('\Core\Domain\Entity\RoutePermalink', 'routePermalink')
             ->set('routePermalink.deleted', 0)
-            ->setParameter(1, $u->permalink)
             ->where('routePermalink.permalink = ?1')
+            ->setParameter(1, $u->permalink)
             ->getQuery();
-            $query->execute();
+            $updateRoutePermalink->execute();
         } else {
             $id = null;
         }
@@ -329,17 +327,20 @@ class Page extends \Core\Domain\Entity\Page
         return $id;
     }
 
-    public static function deletepage($id)
+    public static function moveToTrash($id)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->update('\Core\Domain\Entity\Page', 'page')
-            ->set('page.deleted', 2)
+            ->set('page.deleted', 1)
             ->setParameter(1, $id)
             ->where('page.id = ?1')
             ->getQuery();
         $query->execute();
-        $u = $queryBuilder->find('\Core\Domain\Entity\Page', $id);
-        $query = $queryBuilder->delete('\Core\Domain\Entity\RoutePermalink', 'routePermalink')
+
+        $u = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Page', $id);
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->update('\Core\Domain\Entity\RoutePermalink', 'routePermalink')
+            ->set('routePermalink.deleted', 1)
             ->setParameter(1, $u->permalink)
             ->where('routePermalink.permalink = ?1')
             ->getQuery();
@@ -350,48 +351,33 @@ class Page extends \Core\Domain\Entity\Page
         return 1;
     }
 
-    public static function moveToTrash($id)
+    public static function deletepage($id)
     {
         if ($id) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->select('rpw')
-                ->from('\Core\Domain\Entity\RefPageWidget', 'rpw')
+            $query = $queryBuilder->delete('\Core\Domain\Entity\RefPageWidget', 'rpw')
                 ->setParameter(1, $id)
-                ->where('rpw.widget = ?1');
-            $refPageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            if (!empty($refPageDetails)) {
-                $query = $queryBuilder->delete('\Core\Domain\Entity\RefPageWidget', 'rpw')
-                    ->setParameter(1, $id)
-                    ->where('rpw.widget = ?1')
-                    ->getQuery();
-                $query->execute();
-            }
+                ->where('rpw.widget = ?1')
+                ->getQuery();
+            $query->execute();
            
             $query = $queryBuilder->select('page')
                 ->from('\Core\Domain\Entity\Page', 'page')
                 ->setParameter(1, $id)
                 ->where('page.id = ?1');
             $pageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            $query = $queryBuilder->select('routePermalink')
-                ->from('\Core\Domain\Entity\RoutePermalink', 'routePermalink')
+
+            $query = $queryBuilder->delete('\Core\Domain\Entity\RoutePermalink', 'routePermalink')
                 ->setParameter(1, $pageDetails[0]['permalink'])
-                ->where('routePermalink.permalink = ?1');
-            $routePermalinkDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            if (!empty($routePermalinkDetails)) {
-                $query = $queryBuilder->delete('\Core\Domain\Entity\RoutePermalink', 'routePermalink')
-                    ->setParameter(1, $pageDetails[0]['permalink'])
-                    ->where('routePermalink.permalink = ?1')
-                    ->getQuery();
-                $query->execute();
-            }
+                ->where('routePermalink.permalink = ?1')
+                ->getQuery();
+            $query->execute();
 
             $query = $queryBuilder->delete('\Core\Domain\Entity\Page', 'page')
                 ->setParameter(1, $id)
                 ->where('page.id = ?1')
                 ->getQuery();
             $query->execute();
-
-            
         } else {
             $id = null;
         }

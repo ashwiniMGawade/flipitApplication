@@ -14,27 +14,18 @@ $this->headScript()->prependFile(PUBLIC_PATH . "js/back_end/widget-location.js")
    <!-- pageList starts -->
       	<div id="pageList">
              <div class="wrap columns-2">
-                <div class='wrap columns-2'>
-		<?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
-		<br><div class ="mainpage-content-colorbox success">
-		<?php if($this->messageSuccess!=''){?>
-		<span class="successserver"><?php echo $this->messageSuccess; ?></span>
-		<?php }?>
-		<?php if($this->messageError!=''){?>
-		<span class="errorserver"><?php echo $this->messageError; ?></span>
-		<?php } ?>
-		</div>
-		<?php 
-		}?>
-		</div>
-          <h1 class="fl"><?php echo $this->translate('Pages')?><button onclick="window.location.href='<?php echo HTTP_PATH;?>admin/page/addpage'" class="btn ml10"><?php echo $this->translate('Add New Page')?></button></h1>
-          	<div class="clear"></div>
+                 <?php echo $this->flashMessages(); ?>
+                 <h1 class="fl"><?php echo $this->translate('Pages')?><button onclick="window.location.href='<?php echo HTTP_PATH;?>admin/page/addpage'" class="btn ml10"><?php echo $this->translate('Add New Page')?></button></h1>
+                 <a href="<?php echo HTTP_PATH ?>admin/page/trash" class="red trash-link">
+                     <strong><?php echo $this->translate('Trash'); ?></strong>
+                 </a>
+          	     <div class="clear"></div>
         
-          	<p class="text-right">
-                <a href='<?php echo HTTP_PATH;?>admin/page/exportpagelist'>
-                    <?php echo $this->translate('Export List')?>
-                </a>
-            </p>
+                 <p class="text-right">
+                     <a href='<?php echo HTTP_PATH;?>admin/page/exportpagelist'>
+                         <?php echo $this->translate('Export List')?>
+                     </a>
+                 </p>
           <div class="mainpage-content-colorbox">	
         <form class="form-search"  name="searchform" id="searchform">
           <div class="fl ml15"> 
