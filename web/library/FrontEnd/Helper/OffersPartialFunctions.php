@@ -299,18 +299,26 @@ class FrontEnd_Helper_OffersPartialFunctions
             '.$offerAnchorText.' </span>';
         } else {
             $onClick = '';
-            $isExpired = isset($currentOffer->expiredOffer) ? 'True' : 'False';
+            $gtmData = array(
+                'event' => 'voucherClickout',
+                'variant' => 'Code',
+                'clickedElement' => $clickedElement,
+                'offerId' => $currentOffer->id,
+                'isExpired' => isset($currentOffer->expiredOffer) ? 'True' : 'False'
+            );
+
             if ($currentOffer->discountType == "CD") {
-                $onClick .= "gtmDataBuilder('voucherClickout', 'Code', '".$clickedElement."', 'Offer', ".$currentOffer->id.", '".$isExpired."');";
+                $gtmData = json_encode($gtmData);
+                $onClick .= "gtmDataBuilder($gtmData),";
                 $onClick .= $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
-                $onClick .= "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."')";
+                $onClick .= "OpenInNewTab(\"".HTTP_PATH_LOCALE.$currentOffer->shopOffers['permaLink'].$popupLink."\")";
                 if ($currentOffer->userGenerated == 1 && $currentOffer->approved == '0') {
                     $offerLink ='<span class="'.$class.'">'.$offerAnchorText.' </span>';
                 } else {
                     $offerLink =
                         '<a  id="'.$currentOffer->id.'"
                         href="'.$urlToShow.'" vote="0" rel="nofollow" 
-                        target="_self" onClick="'.$onClick.'">
+                        target="_self" onClick=\''.$onClick.'\'>
                         <span class="'.$class.'">'.$offerAnchorText.'</span>';
                     if ($class == 'offer-teaser-button kccode') {
                         $offerLink .=
@@ -324,11 +332,13 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
                     $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
                 }
-                $onClick .= "gtmDataBuilder('voucherClickout', 'Deal', '".$clickedElement."', 'Offer', ".$currentOffer->id.", '".$isExpired."');";
+                $gtmData['variant'] = 'Deal';
+                $gtmData = json_encode($gtmData);
+                $onClick .= "gtmDataBuilder($gtmData);";
                 $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
                 $offerLink =
                     '<a id="'.$currentOffer->id.'" class="'.$class.' '.$imageClass.'" 
-                    href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
+                    href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick=\''.$onClick.'\'>
                  '.$offerAnchorText.'</a>';
             } else {
                 if ($class == "offer-teaser-button kccode") {

@@ -1161,20 +1161,27 @@ EOD;
     {
         $offer = (object) $offer;
         $onClick = '';
-        $isExpired = isset($offer->expiredOffer) ? 'True' : 'False';
+        $gtmData = array(
+            'event' => 'voucherClickout',
+            'clickedElement' => 'List',
+            'offerId' => $offer->id,
+            'isExpired' => isset($offer->expiredOffer) ? 'True' : 'False'
+        );
         if($offer->discountType == 'CD') {
-            $onClick .= "gtmDataBuilder('voucherClickout', 'Code', 'List', 'Offer', " . $offer->id . ", '".$isExpired."');";
+            $gtmData['variant'] = 'Code';
         } else if($offer->discountType == 'SL') {
-            $onClick .= "gtmDataBuilder('voucherClickout', 'Deal', 'List', 'Offer', " . $offer->id . ", '".$isExpired."');";
+            $gtmData['variant'] = 'Deal';
         }
+        $gtmData = json_encode($gtmData);
+        $onClick .= "gtmDataBuilder($gtmData),";
         $offerBounceRate = "/out/offer/".$offer->id;
         $offerPartial = new \FrontEnd_Helper_OffersPartialFunctions();
         $urlToShow = $offerPartial->getUrlToShow($offer);
         $popupLink = $offerPartial->getPopupLink($offer, $urlToShow);
-        $onClick .= "OpenInNewTab('".HTTP_PATH_LOCALE.$offer->shopOffers['permaLink'].$popupLink."')";
+        $onClick .= "OpenInNewTab(\"".HTTP_PATH_LOCALE.$offer->shopOffers['permaLink'].$popupLink."\")";
         $offerShopPermalinkAnchor = '<a  id="'.$offer->id.'"
                 href="'.$urlToShow.'" vote="0" rel="nofollow" 
-                target="_self" onClick="'.$onClick.'">';
+                target="_self" onClick=\''.$onClick.'\'>';
         return $offerShopPermalinkAnchor;
     }
 }

@@ -73,7 +73,7 @@ class FrontEnd_Helper_LayoutContent
     public static function loadGoogleTagManager()
     {
         if(APPLICATION_ENV != 'production') {
-            return '';
+           return '';
         }
         $googleTagManagerCodes = array(
             'at' => 'GTM-MJ93VF',

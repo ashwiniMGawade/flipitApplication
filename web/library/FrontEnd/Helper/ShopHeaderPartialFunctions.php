@@ -8,7 +8,13 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
         $shopUrl = $domainName.'out/shop/'.$shop['id'];
         $affliateProgramUrl = $shop['affliateProgram'] =='' ? $shop['actualUrl'] : $shop['affliateProgram'];
-        $affliateBounceRate .= "gtmDataBuilder('retailerClickout', 'Retailer', 'Retailer Logo', 'Retailer', ".$shop['id'].");";
+        $gtmData = array(
+            'event' => 'retailerClickout',
+            'variant' => 'Retailer',
+            'clickedElement' => 'Retailer Logo',
+            'retailerId' => $shop['id']
+        );
+        $affliateBounceRate .= "gtmDataBuilder(".json_encode($gtmData).");";
         if ($shop['affliateProgram']) :
             $affliateUrl = $shopUrl;
             $affliateDisabled = '';
@@ -43,7 +49,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
             alt="'.$shop['name'].'" width="176" height="89" title="'.$shop['name'].'" />';
         $shopImageContent = $affliateUrl != '#' ? '<a target="_blank" rel="nofollow" 
             class="text-blue-link store-header-link '.$affliateClass.'"  '.$affliateDisabled.'
-            onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">'.$shopImage.'</a>' : $shopImage;
+            onclick=\''.$affliateBounceRate.'\' href="'.$affliateUrl.'">'.$shopImage.'</a>' : $shopImage;
         $divContent =
             '<div class="header-block header-block-2">
                 <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;">
@@ -110,15 +116,25 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
         $urlToShow = $offerPartial->getUrlToShow($offer);
         $popupLink = $offerPartial->getPopupLink($offer, $urlToShow);
-        $onClick = "OpenInNewTab('".HTTP_PATH_LOCALE.$offer->shopOffers['permaLink'].$popupLink."');";
-        $gtmClick = "gtmDataBuilder('voucherClickout', 'Code', 'Title', 'Offer', ".$offer->id.", 'false');";
+        $onClick = "OpenInNewTab(\"".HTTP_PATH_LOCALE.$offer->shopOffers['permaLink'].$popupLink."\");";
+
+        $gtmData = array(
+            'event' => 'voucherClickout',
+            'variant' => 'Code',
+            'clickedElement' => 'Text Link',
+            'offerId' => $offer->id,
+            'isExpired' => isset($offer->expiredOffer) ? 'True' : 'False',
+            'isFloating' => 'True'
+        );
+        $gtmData = json_encode($gtmData);
+        $gtmClick = "gtmDataBuilder($gtmData);";
         $offerDaysLeft = $offer->endDate->diff(new \DateTime())->days;
         $dayLeftText =  ( $offerDaysLeft > 1) ? 'days' : 'day';
-        $floatingCoupon = '<div class="popup-box hide" id="floatingCouponBox">
+        $floatingCoupon = '<div class="popup-box hide" id="floatingCouponBox" offerId="'.$offer->id.'">
                 <a href="#" class="btn-close">close</a>
                 <span class="time">clock</span>
                 <span class="text">' . $offerDaysLeft . ' ' . $dayLeftText . ' left: ' . $offer->shopOffers['name'] . ' coupon code.
-                <a href="'.$urlToShow.'" onclick="setFloatingCouponCookie();'.$gtmClick.$onClick.'" class="floating-coupon-link">'.$this->__translate('Click here to open coupon').'</a></span>
+                <a href="'.$urlToShow.'" onclick=\'setFloatingCouponCookie();'.$gtmClick.$onClick.'\' class="floating-coupon-link">'.$this->__translate('Click here to open coupon').'</a></span>
             </div>';
         return $floatingCoupon;
     }

@@ -15,15 +15,30 @@ function setFloatingCouponCookie() {
     return true;
 }
 
+function sendGTMData(offerId) {
+    var gtmData = {
+        'event' : 'floatingOfferImpression',
+        'variant' : 'Code',
+        'clickedElement' : 'Text Link',
+        'impressionElement':'floatingOffer',
+        'offerId' : offerId,
+        'isExpired' : 'False',
+        'isFloating' : 'True'
+    };
+    gtmDataBuilder(gtmData);
+}
+
 function initOpenPopup() {
 	var timer = 3000;
 	jQuery('#floatingCouponBox').each(function() {
 		var holder = jQuery(this);
 		var close = holder.find('.btn-close');
+        var offerId = holder.attr('offerId');
 		setTimeout(function() {
 			holder.removeClass('hide');
 			holder.hide();
 			holder.fadeIn(400);
+            sendGTMData(offerId);
 		},timer);
 
 		function closeHandler(e) {
