@@ -304,6 +304,7 @@ class Page extends \Core\Domain\Entity\Page
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $updatePage = $queryBuilder->update('\Core\Domain\Entity\Page', 'page')
             ->set('page.deleted', 0)
+            ->set('page.updated_at', $queryBuilder->expr()->literal(date('Y-m-d H:i:s')))
             ->setParameter(1, $id)
             ->where('page.id = ?1')
             ->getQuery();
@@ -332,6 +333,7 @@ class Page extends \Core\Domain\Entity\Page
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->update('\Core\Domain\Entity\Page', 'page')
             ->set('page.deleted', 1)
+            ->set('page.updated_at', $queryBuilder->expr()->literal(date('Y-m-d H:i:s')))
             ->setParameter(1, $id)
             ->where('page.id = ?1')
             ->getQuery();
