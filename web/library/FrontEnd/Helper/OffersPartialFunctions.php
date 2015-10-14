@@ -355,7 +355,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         $clickedElement
     ) {
         
-        $popupLink = self::getUrlToShow($currentOffer, $urlToShow);
+        $popupLink = self::getPopupLink($currentOffer, $urlToShow);
         echo $mainOfferLink = self::getmainOfferLink(
             $currentOffer,
             $urlToShow,
