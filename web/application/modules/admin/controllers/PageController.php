@@ -25,6 +25,8 @@ class Admin_PageController extends Zend_Controller_Action
     public function init()
     {
         /* Initialize action controller here */
+        $sessionNamespace = new Zend_Session_Namespace();
+        $this->_settings  = $sessionNamespace->settings['rights'] ;
     }
     /**
      * display list of pages in this view
@@ -168,12 +170,13 @@ class Admin_PageController extends Zend_Controller_Action
      */
     public function trashlistAction()
     {
-        $params = $this->_getAllParams();
+        $params = $this->getAllParams();
         $pageObj = new \KC\Repository\Page();
         // cal to function in network model class
         $pageList =  $pageObj->gettrashedPages($params);
+        $pageList = \DataTable_Helper::createResponse(1, $pageList, count($pageList));
         echo Zend_Json::encode($pageList);
-        die ;
+        die;
     }
 
     /**
@@ -383,14 +386,8 @@ class Admin_PageController extends Zend_Controller_Action
      */
     public function trashAction()
     {
-        $role =  \Zend_Auth::getInstance()->getIdentity()->roleId;
-        if($role=='1' || $role=='2') {
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $flash->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
-        }else{
-            $this->_redirect(HTTP_PATH.'admin/page');
+        if ($this->_settings['administration']['rights'] != 1 && $this->_settings['administration']['rights'] != 2) {
+            $this->redirect(HTTP_PATH.'admin/page');
         }
     }
     /**
@@ -405,12 +402,9 @@ class Admin_PageController extends Zend_Controller_Action
         $deletePermanent = KC\Repository\Page::deletepage($id);
         $flash = $this->_helper->getHelper('FlashMessenger');
         if (intval($deletePermanent) > 0) {
-            $message = $this->view
-                    ->translate('Record has been deleted successfully.');
+            $message = $this->view->translate('Page has been deleted successfully.');
             $flash->addMessage(array('success' => $message));
-
         } else {
-
             $message = $this->view->translate('Problem in your data.');
             $flash->addMessage(array('error' => $message));
         }
@@ -430,20 +424,14 @@ class Admin_PageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         //cal to restoreOffer function from offer model class
         $restore = \KC\Repository\Page::restorePage($id);
-
+        $flash = $this->_helper->getHelper('FlashMessenger');
         if (intval($restore) > 0) {
-
-            $flash = $this->_helper->getHelper('FlashMessenger');
-            $message = $this->view
-            ->translate('Record has been restored successfully.');
+            $message = $this->view->translate('Page has been restored successfully.');
             $flash->addMessage(array('success' => $message));
-
         } else {
-
             $message = $this->view->translate('Problem in your data.');
             $flash->addMessage(array('error' => $message));
         }
-
         echo Zend_Json::encode($restore);
         die;
     }
@@ -459,15 +447,11 @@ class Admin_PageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
 
         $trash = KC\Repository\Page::moveToTrash($id);
-
+        $flash = $this->_helper->getHelper('FlashMessenger');
         if (intval($trash) > 0) {
-
-            $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate('Page has been moved to trash successfully');
             $flash->addMessage(array('success' => $message));
-
         } else {
-
             $message = $this->view->translate('Problem in your data.');
             $flash->addMessage(array('error' => $message));
         }
@@ -596,4 +580,4 @@ class Admin_PageController extends Zend_Controller_Action
 
         die ();
     }
- }
+}
