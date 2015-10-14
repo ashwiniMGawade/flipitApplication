@@ -386,12 +386,7 @@ class Admin_PageController extends Zend_Controller_Action
      */
     public function trashAction()
     {
-        if ($this->_settings['administration']['rights'] != '1' || $this->_settings['administration']['rights'] != '2') {
-            $flash = $this->_helper->getHelper('FlashMessenger');
-            $message = $flash->getMessages();
-            $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
-            $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
-        } else {
+        if ($this->_settings['administration']['rights'] != 1 && $this->_settings['administration']['rights'] != 2) {
             $this->redirect(HTTP_PATH.'admin/page');
         }
     }
