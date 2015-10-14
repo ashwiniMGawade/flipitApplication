@@ -3588,9 +3588,9 @@ class Offer extends \Core\Domain\Entity\Offer
 
     public static function getFloatingCoupon()
     {
-        $minDate = new \DateTime(date('Y-m-d 23:59:59'));
-        $maxDate = new \DateTime(date('Y-m-d 23:59:59'));
-        $maxDate->add(new \DateInterval('P3D'));
+        $minOfferEndDate = new \DateTime(date('Y-m-d 23:59:59'));
+        $maxOfferEndDate = new \DateTime(date('Y-m-d 23:59:59'));
+        $maxOfferEndDate->add(new \DateInterval('P3D'));
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
             ->select('o, s')
@@ -3601,8 +3601,8 @@ class Offer extends \Core\Domain\Entity\Offer
             ->andWhere('o.endDate > :minEndDate')
             ->andWhere('o.endDate <= :maxEndDate')
             ->andWhere("o.discountType = 'CD'")
-            ->setParameter('minEndDate', $minDate)
-            ->setParameter('maxEndDate', $maxDate)
+            ->setParameter('minEndDate', $minOfferEndDate)
+            ->setParameter('maxEndDate', $maxOfferEndDate)
             ->addOrderBy('o.endDate', 'ASC')
             ->addOrderBy('o.totalViewcount', 'DESC')
             ->setMaxResults(1);
