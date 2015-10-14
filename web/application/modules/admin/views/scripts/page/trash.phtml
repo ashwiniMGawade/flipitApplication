@@ -1,51 +1,33 @@
-<?php 
-
+<?php
 $this->headTitle()->append($this->translate('Trashed Pages'));
-
-
-
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.dataTables.min.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/dataTableComman.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
-$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/trashpage.js");
 ?>
-<?php echo $this->headTitle()->append('Trashed Pages List');?>
-   <!-- pageList starts -->
-      	<div id="pageList">
-             <div class="wrap columns-2">
-                 <?php echo $this->flashMessages(); ?>
-          <h1 class="fl"><?php echo $this->translate('Trashed Pages')?>
-          <button onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/page'" class="btn ml10"><?php echo $this->translate('Cancel')?></button></h1>
-                    	<div class="clear"></div>
-
-<!--              <form class="well form-search searchbarbox"  name="searchform" id="searchform">-->
-<!--              	<div class="mainpage-content-searchbart" style="width: 100%; float:left;">-->
-<!--                    <div class="mainpage-content-right-searchbar">-->
-<!--                    	<button id='searchButton' type='button' class="btn btn-primary"  onClick="pageList();">--><?php //echo $this->translate('Search'); ?><!--</button>-->
-<!--                    </div>-->
-<!--                    <div class="mainpage-content-right-inner-left-searchbar">-->
-<!--                    	<input type="text" placeholder="search" class="span3" id="SearchPage" name="SearchPage">-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </form>-->
-
-             <table class="table table-bordered table-striped" id="pageListTbl">
-                <thead>
-                  <tr>
-                  	<th><?php echo $this->translate('Page Title'); ?></th>
-                    <th><?php echo $this->translate('Created');?></th>
-                    <th><?php echo $this->translate('Trashed');?></th>
-                    <th><?php echo $this->translate('Author');?></th>
-                    <th><?php echo $this->translate('Restore');?></th>
-                    <th><?php echo $this->translate('Delete Permanently');?></th>
-                  </tr>
-                </thead>
-             </table>
-         </div>
-           
-        </div>
-          
- 
-        
+<?php echo $this->headTitle()->append('Trashed Pages List'); ?>
+<!-- pageList starts -->
+<div id="pageList">
+    <div class="wrap columns-2">
+        <?php echo $this->flashMessages(); ?>
+        <h1 class="fl"><?php echo $this->translate('Trashed Pages') ?>
+            <button onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/page'"
+                    class="btn ml10"><?php echo $this->translate('Back to List') ?></button>
+        </h1>
+        <div class="clear"></div>
+        <table class="table table-bordered table-striped" id="pageListTbl">
+            <thead>
+            <tr>
+                <th><?php echo $this->translate('Page Title'); ?></th>
+                <th><?php echo $this->translate('Created'); ?></th>
+                <th><?php echo $this->translate('Trashed'); ?></th>
+                <th><?php echo $this->translate('Author'); ?></th>
+                <th><?php echo $this->translate('Restore'); ?></th>
+                <th><?php echo $this->translate('Delete Permanently'); ?></th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>
