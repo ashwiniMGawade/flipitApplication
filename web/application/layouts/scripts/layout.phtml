@@ -57,18 +57,7 @@ echo $this->headMeta();
 ?>
 <script type="text/javascript">
     dataLayer = [];
-    function gtmDataBuilder(eventName, variant, clickedElement, eventType, eventId, isExpired) {
-            var gtmData = {
-                    'event' : eventName,
-                    'variant': variant,
-                    'clickedElement' : clickedElement
-            };
-        if ( 'Retailer' == eventType ) {
-                gtmData['retailerId'] = eventId;
-            } else {
-                gtmData['offerId'] = eventId;
-                gtmData['isExpired'] = isExpired;
-            }
+    function gtmDataBuilder(gtmData) {
         dataLayer.push(gtmData);
         return true;
     }

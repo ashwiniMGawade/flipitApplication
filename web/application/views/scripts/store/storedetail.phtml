@@ -1,4 +1,4 @@
-<?php 
+<?php
 $session = new Zend_Session_Namespace('Branding');
 if (empty($session->brandingActivated) && !empty($this->shopBranding)): 
     $this->headStyle()->appendStyle($this->shop()->brandingCss($this->shopBranding));
@@ -186,7 +186,8 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
 </div>
 <div class="row"> 
     <div id="content" class ="col-md-8 col-sm-8">
-    <?php 
+    <?php
+    echo $frontShopHeaderHelper->getFloatingCoupon();
     echo $noMoneyNocodeMessage;
     if (!empty($noMoneyNocodeMessage)) {
         ?>
