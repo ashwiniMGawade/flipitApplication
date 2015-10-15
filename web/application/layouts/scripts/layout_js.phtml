@@ -27,6 +27,11 @@ else:
                 a.appendChild(r);
             })(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');");
 endif;
+
+if (FrontEnd_Helper_LayoutContent::loadPicreelScript() === true) :
+    $headScript->prependFile("//assets.pcrl.co/js/jstracker.min.js");
+endif;
+
     $headScript
         ->prependFile("/public/js/front_end/jquery.menu.js")
         ->prependFile("/public/js/front_end/social-code.js")

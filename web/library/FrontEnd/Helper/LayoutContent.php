@@ -151,7 +151,7 @@ class FrontEnd_Helper_LayoutContent
         $facebookMetaUrl = 'facebookMeta.phtml';
         return $facebookMetaUrl;
     }
-    
+
     public static function loadTwitterMeta($twitterDescription, $twitterSite)
     {
         $twitter = new \Zend_View();
@@ -201,7 +201,7 @@ class FrontEnd_Helper_LayoutContent
     {
         return '<nav id="nav">' . self::getWebsiteMainMenu() . '</nav>';
     }
-     
+
     public static function getWebsiteMainMenu($navigation = '')
     {
         $websiteMenus = KC\Repository\Menu::getFirstLevelMenu($navigation);
@@ -214,17 +214,17 @@ class FrontEnd_Helper_LayoutContent
                 $cssClassForLastLi = strtolower($websiteMenu['name']) == 'plus' ? $cssClass: '';
                 $websiteMainMenu.=
                 '<li class="' . $cssClassForLastLi .'" id="'. $websiteMenu["name"] .'">
-                    <a id="'. $websiteMenu["name"] . '" name="'. $websiteMenu["name"] . '" 
+                    <a id="'. $websiteMenu["name"] . '" name="'. $websiteMenu["name"] . '"
                         class="" href="'. HTTP_PATH_LOCALE  . $websiteMenu['url'] . '">' . ucfirst($websiteMenu["name"])
                     . '</a>';
-                
+
                 if (strpos($websiteMenu['url'], '09-e')) {
                     $websiteMainMenu.=self::generateTopShopsDropdown();
                 }
                 $websiteMainMenu.='</li>';
             }
         }
-        
+
         $websiteMainMenu .=
         '</ul>';
         return $websiteMainMenu;
@@ -247,7 +247,7 @@ class FrontEnd_Helper_LayoutContent
         }
         $topShopsDropdown.=
             '</ul></div>
-            <a class="btn" 
+            <a class="btn"
                 href="'. HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_alle-winkels-09-e').'">'
                 .FrontEnd_Helper_viewHelper::__translate('View all shops'). '</a>
         </div>';
@@ -315,5 +315,38 @@ class FrontEnd_Helper_LayoutContent
             $displayVWOScript = true;
         }
         return $displayVWOScript;
+    }
+
+    public static function loadPicreelScript()
+    {
+        $displayPicreelScript = false;
+        if (LOCALE != '') {
+            return $displayPicreelScript;
+        }
+        $rawUrl = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $allowedUrls = array(
+            'belsimpel',
+            'bijenkorf',
+            'categorieen/mode',
+            'de-online-drogist',
+            'decathlon',
+            'kaartje2go',
+            'kijkshop',
+            'kruidvat',
+            'mediamarkt',
+            'miinto',
+            'nelly',
+            'plus/efteling-korting',
+            'plus/korting-bioscoop',
+            'plus/korting-in-het-openbaar-vervoer',
+            'plus/onderhandelen-korting',
+            'voetbalshop',
+            'zara',
+            'ziengs'
+        );
+        if (in_array($rawUrl, $allowedUrls)) {
+            $displayPicreelScript = true;
+        }
+        return $displayPicreelScript;
     }
 }
