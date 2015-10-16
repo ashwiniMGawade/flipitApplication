@@ -170,6 +170,12 @@ if (
 ):
     echo '</div></div>';
 endif;
+
+if (FrontEnd_Helper_LayoutContent::loadPicreelScript() === true) :
+    ?>
+    <script type="text/javascript" src="//assets.pcrl.co/js/jstracker.min.js"></script>
+    <?php
+endif;
 ?>
 </body>
 </html>
