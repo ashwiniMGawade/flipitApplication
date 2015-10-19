@@ -40,6 +40,16 @@ class Splash
      */
     protected $updated_at;
 
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=false)
+     */
+    protected $shopId;
+
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=false)
+     */
+    protected $position;
+
     public function __get($property)
     {
         return $this->$property;
