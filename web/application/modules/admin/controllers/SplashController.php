@@ -32,7 +32,6 @@ class Admin_SplashController extends Zend_Controller_Action
     public function indexAction()
     {
         $splashTableData = $this->splashObject->getSplashInformation();
-
         if (!empty($splashTableData)) {
             \BackEnd_Helper_DatabaseManager::addConnection($splashTableData[0]['locale']);
             $splashOfferDetails = $this->splashObject->getOfferById($splashTableData[0]['offerId']);
@@ -67,17 +66,46 @@ class Admin_SplashController extends Zend_Controller_Action
         }
     }
 
+    public function shopsListAction()
+    {
+        if ($this->_request->isXmlHttpRequest()) {
+            $localeId = intval($this->getRequest()->getParam('locale', false));
+            if ($localeId) {
+                $locale = \BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
+                \BackEnd_Helper_DatabaseManager::addConnection($locale);
+                $searchKeyword = $this->getRequest()->getParam('keyword');
+                $activeShops = $stores = \KC\Repository\Shop::getStoresForSearchByKeyword(
+                    $searchKeyword,
+                    25,
+                    ''
+                );
+                $shops = array();
+                if (!empty($activeShops)) {
+                    foreach ($activeShops as $activeShop) {
+                        $shops[] = array('name' => ucfirst($activeShop['name']),
+                            'id' => $activeShop['id']);
+                    }
+                } else {
+                    $message = $this->view->translate('No Record Found');
+                    $shops[] = array('name' => $message);
+                }
+                $this->_helper->json($shops);
+            }
+        }
+        exit();
+    }
+
     public function offersListAction()
     {
         if ($this->_request->isXmlHttpRequest()) {
             $localeId = intval($this->getRequest()->getParam('locale', false));
-
             if ($localeId) {
                 $locale = \BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
                 \BackEnd_Helper_DatabaseManager::addConnection($locale);
                 $offers = new \KC\Repository\Offer();
                 $offerKeyword = $this->getRequest()->getParam('keyword');
-                $activeCoupons = $offers->getActiveCoupons($offerKeyword);
+                $shopId = $this->getRequest()->getParam('shop');
+                $activeCoupons = $offers->getActiveCoupons($offerKeyword, $shopId);
                 $coupons = array();
                 if (!empty($activeCoupons)) {
                     foreach ($activeCoupons as $activeCoupon) {

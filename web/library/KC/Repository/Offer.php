@@ -762,7 +762,7 @@ class Offer extends \Core\Domain\Entity\Offer
         return $specialOffersAfterMerging;
     }
 
-    public static function getActiveCoupons($keyword)
+    public static function getActiveCoupons($keyword, $shopId)
     {
         $currentDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -784,6 +784,10 @@ class Offer extends \Core\Domain\Entity\Offer
         ->setParameter(6, 0)
         ->andWhere('s.deleted = ?6')
         ->orderBy('o.id', 'DESC');
+        if ($shopId != '') {
+            $query = $query->setParameter(7, $shopId);
+            $query = $query->andWhere('s.id = ?7');
+        }
         $activeCoupons = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $activeCoupons;
     }
