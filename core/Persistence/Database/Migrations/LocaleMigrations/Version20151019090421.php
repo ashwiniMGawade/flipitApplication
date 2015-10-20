@@ -17,6 +17,8 @@ class Version20151019090421 extends AbstractMigration
     {
         $codeAlertQueueTable = $schema->getTable('code_alert_queue');
         $codeAlertQueueTable->addColumn('started', 'boolean', array('notnull' => 0, 'default' => 0, 'length' => 1, 'comment' => '1-Started sending email ,0-Mail sending is not started yet'));
+        $signUpMaxAccountTable = $schema->getTable('signupmaxaccount');
+        $signUpMaxAccountTable->addColumn('started', 'boolean', array('notnull' => 0, 'default' => 0, 'length' => 1, 'comment' => '1-Started sending email ,0-Mail sending is not started yet'));
     }
 
     /**
@@ -26,5 +28,7 @@ class Version20151019090421 extends AbstractMigration
     {
         $codeAlertQueueTable = $schema->getTable('code_alert_queue');
         $codeAlertQueueTable->dropColumn('started');
+        $signUpMaxAccountTable = $schema->getTable('signupmaxaccount');
+        $signUpMaxAccountTable->dropColumn('started');
     }
 }
