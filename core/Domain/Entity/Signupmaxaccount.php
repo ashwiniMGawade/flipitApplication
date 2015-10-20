@@ -135,6 +135,11 @@ class Signupmaxaccount
      */
     protected $newsletter_sent_time;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    protected $started;
+
     public function __get($property)
     {
         return $this->$property;
