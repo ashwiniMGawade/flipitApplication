@@ -61,7 +61,7 @@ class SendNewsletter
             $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
             $scheduledTime =  date('Y-m-d', strtotime($newsLetterSettings[0]['newletter_scheduled_time']));
             $newsletterSentTime = date('Y-m-d', strtotime($newsLetterSettings[0]['newsletter_sent_time']));
-            if ($newsLetterSettings[0]['newletter_is_scheduled'] == 1 && $newsLetterSettings[0]['started'] != 1) {
+            if ($newsLetterSettings[0]['newletter_is_scheduled'] === 1 && $newsLetterSettings[0]['started'] !== 1) {
                 if ($newsLetterSettings[0]['newletter_is_scheduled'] == 1
                         && $scheduledTime <= $currentDate
                         && $newsletterSentTime < $currentDate) {
