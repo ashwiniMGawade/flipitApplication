@@ -134,6 +134,7 @@ class SendCodeAlert
         $codeAlertOffers = CodeAlertQueue::getCodealertOffers();
         if (!empty($codeAlertOffers)) {
             foreach ($codeAlertOffers as $codeAlertOffer) {
+                CodeAlertQueue::startCodeAlertQueueByOfferId($codeAlertOffer['id']);
                 $this->shopId = $codeAlertOffer['shop']['id'];
                 $currentDate = date('Y-m-d H:i:s');
                 $startDateTimestamp = strtotime($codeAlertOffer['startDate']) + 3600;

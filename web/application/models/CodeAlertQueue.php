@@ -64,6 +64,7 @@ class CodeAlertQueue extends BaseCodeAlertQueue
             ->select('c.offerId,c.shopId')
             ->from('CodeAlertQueue c')
             ->where('c.deleted = 0')
+            ->andWhere('c.started = 0 OR c.started IS NULL')
             ->fetchArray();
         $offers =  array();
         $codeAlertOffers = array();
@@ -138,6 +139,16 @@ class CodeAlertQueue extends BaseCodeAlertQueue
         Doctrine_Query::create()
             ->update('CodeAlertQueue c')
             ->set('c.deleted', 1)
+            ->where("c.offerId=".$offerId)
+            ->execute();
+        return true;
+    }
+
+    public static function startCodeAlertQueueByOfferId($offerId)
+    {
+        Doctrine_Query::create()
+            ->update('CodeAlertQueue c')
+            ->set('c.started', 1)
             ->where("c.offerId=".$offerId)
             ->execute();
         return true;
