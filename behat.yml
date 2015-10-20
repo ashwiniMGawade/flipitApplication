@@ -1,1 +1,7 @@
 # behat.yml
+default:
+    extensions:
+        Behat\MinkExtension\Extension:
+            base_url: http://www.kortingscode.nl
+            goutte: ~
+            selenium2: ~
