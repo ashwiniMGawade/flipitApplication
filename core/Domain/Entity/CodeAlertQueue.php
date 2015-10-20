@@ -39,6 +39,12 @@ class CodeAlertQueue
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
     protected $offerId;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    protected $started;
+
     public function __get($property)
     {
         return $this->$property;

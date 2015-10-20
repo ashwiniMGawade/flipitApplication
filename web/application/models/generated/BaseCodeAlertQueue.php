@@ -71,6 +71,21 @@ abstract class BaseCodeAlertQueue extends Doctrine_Record
                 'autoincrement' => false,
             )
         );
+        $this->hasColumn(
+            'started',
+            'boolean',
+            1,
+            array(
+                'type' => 'boolean',
+                'length' => 1,
+                'fixed' => false,
+                'unsigned' => false,
+                'primary' => false,
+                'notnull' => false,
+                'autoincrement' => false,
+                'default' => 0
+            )
+        );
     }
 
     public function setUp()

@@ -574,6 +574,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
         $signupMaxAccount->newletter_scheduled_time = $newsLetterScheduledDateTime;
         $signupMaxAccount->created_at = $signupMaxAccount->created_at;
         $signupMaxAccount->updated_at = new \DateTime('now');
+        $signupMaxAccount->started = 0;
         $entityManagerLocale->persist($signupMaxAccount);
         $entityManagerLocale->flush();
         return 1;
@@ -585,6 +586,7 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
         $queryBuilder->update('\Core\Domain\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->set('signupmaxaccount.newletter_scheduled_time', $queryBuilder->expr()->literal($newsLetterScheduledDateTime))
             ->set('signupmaxaccount.newletter_is_scheduled', 1)
+            ->set('signupmaxaccount.started', 0)
             ->where('signupmaxaccount.id=1')
             ->getQuery()
             ->execute();
