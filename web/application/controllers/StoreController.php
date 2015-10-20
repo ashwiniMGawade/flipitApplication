@@ -44,10 +44,6 @@ class StoreController extends Zend_Controller_Action
             $shopPermalink = $explodedPermalink[1];
         }
 
-        #Set Language Reference Attribute value as nl-BE
-        $this->setLanguageReference($shopPermalink);
-        $this->displayVWOScript($shopPermalink);
-        
         $this->view->shareCodeStatus = '';
         if (isset($explodeUrl[1])) {
             $this->view->shareCodeStatus = $explodeUrl[1];
@@ -454,58 +450,5 @@ class StoreController extends Zend_Controller_Action
     {
         $this->_helper->layout()->disableLayout();
         $this->view->shopId = $this->getRequest()->getParam('shopid');
-    }
-
-    private function setLanguageReference($shopPermalink)
-    {
-        if (LOCALE == 'be') {
-            $shopPermalinks = array(
-                'bol-com',
-                'center-parcs',
-                'hellofresh',
-                'wijnbeurs',
-                'home24',
-                'spartoo',
-                'conrad',
-                'sarenza',
-                'nike',
-                'pabo',
-                'stylefile',
-                'bonprix',
-                'parfumswinkel',
-                'desigual',
-                'gaastra',
-                'fotofabriek',
-                'corendon',
-                'smartphoto',
-                'bobshop',
-                'mcdonalds'
-            );
-
-            if (in_array($shopPermalink, $shopPermalinks)) {
-                $this->view->languageReference = str_replace('_', '-', COUNTRY_LOCALE);
-            }
-        }
-    }
-
-    private function displayVWOScript($shopPermalink)
-    {
-        switch (LOCALE) {
-            case 'es':
-                $shopPermalinks = array('kiabi', 'rakuten-es', 'groupalia');
-                break;
-            case 'sg':
-                $shopPermalinks = array('zalora', 'foodpanda', 'groupon');
-                break;
-            case 'id':
-                $shopPermalinks = array('blibli', 'groupon-disdus', 'pegipegi');
-                break;
-            default:
-                $shopPermalinks = array();
-                break;
-        }
-        if (in_array($shopPermalink, $shopPermalinks)) {
-            $this->view->displayVWOScript = 1;
-        }
     }
 }

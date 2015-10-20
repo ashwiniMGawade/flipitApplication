@@ -1,0 +1,57 @@
+<?php
+$this->headTitle()->append($this->translate('Edit VWO Tag'));
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/editURLSettings.js");
+?>
+<div id="imbullbody-content">
+    <?php echo $this->flashMessages(); ?>
+    <div id="URLSettingEdit">
+        <div class="wrap columns-2">
+            <h1>
+                <?php echo $this->translate('Edit VWO Tag'); ?>
+                <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/urlsettings'"><?php echo $this->translate('Cancel'); ?></button>
+            </h1>
+
+            <form method="POST" name="editURLSetting" id="editURLSetting">
+                <div class="mainpage-content">
+
+                    <div class="mainpage-content-line mb20">
+                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('URL'); ?></strong></label></div>
+                        <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-left"><label id="urlLabel"><?php echo $this->translate('http://www.kortingscode.nl/'); ?></label></div>
+                            <div class="mainpage-content-right-inner-right-other"></div>
+                            <div class="mainpage-content-right-inner-right-full">
+                                <input type="text" class="span3" style="margin-bottom: 0;" placeholder="<?php echo $this->translate('URL'); ?>" name="url" id="url" value="<?php echo isset($this->urlSetting['url']) ? $this->urlSetting['url'] : ''; ?>">
+                                <span id="urlNote" class="nobel disabled word-count btop shop-wordcount-width"><?php echo $this->translate('Add / for homepage.') ?></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('VWO Tag'); ?></strong></label></div>
+                        <div class="mainpage-content-right">
+                            <div data-toggle="buttons-checkbox" class="btn-group mb20">
+                                <input type="hidden" id="status" name="status" value="<?php echo isset($this->urlSetting['status']) ? $this->urlSetting['status'] : 1; ?>">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn" id="statusActive" onClick="setStatus('statusActive')">
+                                        <?php echo $this->translate('On'); ?>
+                                    </button>
+                                    <button type="button" class="btn" id="statusInactive" onClick="setStatus('statusInactive')">
+                                        <?php echo $this->translate('Off'); ?>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="mainpage-content-colorbox">
+                    <button id="EditVWOTagButton" type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('Edit VWO Tag'); ?></button>
+                    <a class="fl m10" href="javascript:void(0);" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/urlsettings'" ><strong><?php echo $this->translate('CANCEL'); ?></strong></a>
+                </div>
+                <input type="hidden" name="editId" id="editId" class="hide ignore" value="<?php echo isset($this->urlSetting['id']) ? $this->urlSetting['id'] : ''; ?>"/>
+            </form>
+        </div>
+    </div>
+</div>

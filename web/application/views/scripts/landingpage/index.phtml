@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html>
+<?php
+$htmlLang = FrontEnd_Helper_LayoutContent::loadHtmlLang();
+$locale = explode('_', COUNTRY_LOCALE);
+$language = !empty($htmlLang) ? $htmlLang: $locale[0];
+?>
+<html lang="<?php echo $language; ?>" xml:lang="<?php echo $language;?>" xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<?php
+if (FrontEnd_Helper_LayoutContent::loadVWOScript() === true) :
+    echo $this->render('partials/_vwo_script.phtml');
+endif;
+?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $this->landingPage->getMetaTitle(); ?></title>
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8" >
-    <meta name="robots" content="noindex,nofollow" />
+    <meta name="robots" content="noindex,follow" />
     <meta name="description" content="<?php echo $this->landingPage->getMetaDescription(); ?>">
     <?php
         $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
@@ -12,19 +22,7 @@
     ?>
     <script type="text/javascript">
         dataLayer = [];
-        function gtmDataBuilder(eventName, variant, clickedElement, eventType, eventId, isExpired) {
-            var gtmData = {
-                'event' : eventName,
-                'variant' : variant,
-                'clickedElement' : clickedElement,
-                'sourceType' : 'glp'
-            };
-            if ( 'Retailer' == eventType ) {
-                gtmData['retailerId'] = eventId;
-            } else {
-                gtmData['offerId'] = eventId;
-                gtmData['isExpired'] = isExpired;
-            }
+        function gtmDataBuilder(gtmData) {
             dataLayer.push(gtmData);
             return true;
         }
@@ -72,10 +70,12 @@ foreach ($this->offers as $offer) {
     $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
 
     $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($offer->endDate);
-    $offerBottomDaysTillExpireText = '';
+    $exclusiveOrDaysToExpireText = '';
     if ($daysTillOfferExpires <= 3) {
-        $offerBottomDaysTillExpireText = $landingPageHelper->getDaysTillExpire($daysTillOfferExpires);
+        $exclusiveOrDaysToExpireText = $landingPageHelper->getDaysTillExpire($daysTillOfferExpires);
     }
+
+    $expiredOffer = isset($offer->expiredOffer) ? $offer->expiredOffer : '';
 
     $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
 
@@ -84,7 +84,7 @@ foreach ($this->offers as $offer) {
     $onClick = '';
     if (isset($offer->discountType) && $offer->discountType == 'CD') {
         $popupLink = $offerPartial->getPopupLink($offer, $urlToShow);
-        $onClick .= "OpenInNewTab('".HTTP_PATH_LOCALE."glp/".$this->landingPage->getPermalink().$popupLink."');";
+        $onClick .= "OpenInNewTab(\"".HTTP_PATH_LOCALE."glp/".$this->landingPage->getPermalink().$popupLink."\");";
     }
     $clickoutURL = HTTP_PATH_LOCALE.'out/offer/'.$offer->id;
 
@@ -98,13 +98,34 @@ foreach ($this->offers as $offer) {
     }
 
     $offerDiv = '';
+    $gtmData = array(
+        'event' => 'voucherClickout',
+        'clickedElement' => 'Title',
+        'offerId' => $offer->id,
+        'sourceType' => 'glp',
+        'isExpired' => isset($offer->expiredOffer) ? 'True' : 'False'
+    );
     if (isset($offer->discountType) && $offer->discountType == 'CD') {
-        $gtmTitleClick = "gtmDataBuilder('voucherClickout', 'Code', 'Title', 'Offer', ".$offer->id.", '".$isExpired."');";
-        $gtmButtonClick = "gtmDataBuilder('voucherClickout', 'Code', 'Button', 'Offer', ".$offer->id.", '".$isExpired."');";
-        $offerDiv ='<a rel="nofollow" href="'.$clickoutURL.'" onclick="'.$gtmTitleClick.$onClick.'">
+        $verifiedText = $offerPartial->getVerifiedText();
+        $validityText = '<li>'.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires, $expiredOffer).'</li>';
+
+        if($exclusiveOrDaysToExpireText == '') {
+            if ($offer->exclusiveCode == '1') {
+                $exclusiveOrDaysToExpireText = $offerPartial->getOfferOption(FrontEnd_Helper_viewHelper::__translate('Exclusive'),
+                    'ex');
+            }
+        }
+
+        $gtmData['variant'] = 'Code';
+        $gtmDataForTitle = json_encode($gtmData);
+        $gtmData['clickedElement'] = 'Button';
+        $gtmDataForButton = json_encode($gtmData);
+        $gtmTitleClick = "gtmDataBuilder($gtmDataForTitle);";
+        $gtmButtonClick = "gtmDataBuilder($gtmDataForButton);";
+        $offerDiv ='<a rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmTitleClick.$onClick.'\'>
                         <h2 class="common-height">'.$offer->title.'</h2>
                     </a>
-                    <a rel="nofollow" href="'.$clickoutURL.'" onclick="'.$gtmButtonClick.$onClick.'">
+                    <a rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmButtonClick.$onClick.'\'>
                         <div id="offerButton'.$offer->id.'" class="buttons offer-teaser-button-wrapper">
                             <div class="offer-teaser-button-wrapper-inner">
                                 <span class="offer-teaser-button kccode">
@@ -121,38 +142,50 @@ foreach ($this->offers as $offer) {
                         <strong class="code-value">'.$offer->couponCode.'</strong>
                     </div>';
     } elseif (isset($offer->discountType) && $offer->discountType == 'SL') {
-        $gtmTitleClick = "gtmDataBuilder('voucherClickout', 'Deal', 'Title', 'Offer', ".$offer->id.", '".$isExpired."');";
-        $gtmButtonClick = "gtmDataBuilder('voucherClickout', 'Deal', 'Button', 'Offer', ".$offer->id.", '".$isExpired."');";
-        $offerDiv = '<a rel="nofollow" href="'.$clickoutURL.'" onclick="'.$gtmTitleClick.$onClick.'" target="_blank">
+        $verifiedText = $offerPartial->getVerifiedText();
+        $validityText = '<li>'.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires, $expiredOffer).'</li>';
+        $gtmData['variant'] = 'Deal';
+        $gtmDataForTitle = json_encode($gtmData);
+        $gtmData['clickedElement'] = 'Button';
+        $gtmDataForButton = json_encode($gtmData);
+        $gtmTitleClick = "gtmDataBuilder($gtmDataForTitle);";
+        $gtmButtonClick = "gtmDataBuilder($gtmDataForButton);";
+        $offerDiv = '<a rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmTitleClick.$onClick.'\' target="_blank">
                         <h2 class="common-height">'.$offer->title.'</h2>
                     </a>
                     <div id="offerButton'.$offer->id.'">
                         <div class="btn-blue-wrapper">
                             <a target="_blank" rel="nofollow" vote="0" href="'.$clickoutURL.'"
-                            class="btn-code" id="'.$offer->id.'" onclick="'.$gtmButtonClick.'">
+                            class="btn-code" id="'.$offer->id.'" onclick=\''.$gtmButtonClick.'\'>
                                 '.FrontEnd_Helper_viewHelper::__translate('Bekijk deze korting').'
                             </a>
                         </div>
                     </div>';
     } else {
-        $gtmTitleClick = "gtmDataBuilder('voucherClickout', 'Deal', 'Title', 'Offer', ".$offer->id.", '".$isExpired."');";
-        $gtmButtonClick = "gtmDataBuilder('voucherClickout', 'Deal', 'Button', 'Offer', ".$offer->id.", '".$isExpired."');";
-        $offerDiv = '<a rel="nofollow" href="'.$clickoutURL.'" onclick="'.$gtmTitleClick.$onClick.'" target="_blank">
+        $verifiedText = '';
+        $validityText = '';
+        $gtmData['variant'] = 'Deal';
+        $gtmDataForTitle = json_encode($gtmData);
+        $gtmData['clickedElement'] = 'Button';
+        $gtmDataForButton = json_encode($gtmData);
+        $gtmTitleClick = "gtmDataBuilder($gtmDataForTitle);";
+        $gtmButtonClick = "gtmDataBuilder($gtmDataForButton);";
+        $offerDiv = '<a rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmTitleClick.$onClick.'\' target="_blank">
                         <h2 class="common-height">'.$offer->title.'</h2>
                     </a>
                     <div id="offerButton'.$offer->id.'">
                         <div class="btn-blue-wrapper">
                             <a rel="nofollow" target="_blank" vote="0" href="'.$urlToShow.'"
-                            class="btn-code" id="'.$offer->id.'" onclick="'.$gtmButtonClick.'">
+                            class="btn-code" id="'.$offer->id.'" onclick=\''.$gtmButtonClick.'\'>
                                 '.FrontEnd_Helper_viewHelper::__translate('Bekijk deze korting').'
                             </a>
                         </div>
                     </div>';
     }
 
-    $termsAndConditionsLink = '<span class="">&nbsp;</span>';
+    $termsAndConditionsLink = '';
     $termsAndConditionsDiv = "";
-    if($termsAndConditions != '' || $offer->userGenerated == 1) {
+    if ($termsAndConditions != '' || $offer->userGenerated == 1) {
         $termsAndConditionsLink =  '<span class="link-terms">
                                         <a id="termAndConditionLink'.$offer->id.'"
                                             onclick="showTermAndConditions('.$offer->id.')" class="terms"
@@ -175,20 +208,29 @@ foreach ($this->offers as $offer) {
     }
 
     $offerPanel = '';
+    $offerPanelFooterDiv = '';
+    if ($exclusiveOrDaysToExpireText != '' || $termsAndConditionsLink != '') {
+        $offerPanelFooterDiv = '<div class="panel-footer">
+                                    <div class="row">
+                                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                            '.$exclusiveOrDaysToExpireText.'
+                                        </div>
+                                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+                                            '.$termsAndConditionsLink.'
+                                        </div>
+                                    </div>
+                                </div>';
+    }
+
     $offerPanel ='<div class="panel panel-default">
                     <div class="panel-body">
+                        <ul class="meta-items">
+                            '.$verifiedText.'
+                            '.$validityText.'
+                        </ul>
                         '.$offerDiv.'
                     </div>
-                    <div class="panel-footer">
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                '.$offerBottomDaysTillExpireText.'
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
-                                '.$termsAndConditionsLink.'
-                            </div>
-                        </div>
-                    </div>
+                    '.$offerPanelFooterDiv.'
                     '.$termsAndConditionsDiv.'
                 </div>
                 ';

@@ -5,12 +5,20 @@ class FrontEnd_Helper_LandingPageFunctions extends FrontEnd_Helper_viewHelper
     {
         $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
         $html = '<div class="logo-shop">';
-        $onClick = "gtmDataBuilder('retailerClickout', 'Retailer', 'Retailer Logo', 'Retailer', ".$shop->getId().");";
+        $gtmData = array(
+            'event' => 'retailerClickout',
+            'variant' => 'Retailer',
+            'clickedElement' => 'Retailer Logo',
+            'sourceType' => 'glp',
+            'retailerId' => $shop->getId()
+        );
+        $gtmData = json_encode($gtmData);
+        $onClick = "gtmDataBuilder($gtmData);";
         if ($shop->getAffliateProgram()) {
             $shopUrl = $domainName . 'out/shop/' . $shop->getId();
-            $html .= '<a href="' . $shopUrl . '" target="_blank" onClick="'.$onClick.'">';
+            $html .= '<a href="' . $shopUrl . '" target="_blank" onClick=\''.$onClick.'\'>';
         } else {
-            $html .= '<a href="#" onClick="'.$onClick.'">';
+            $html .= '<a href="#" onClick=\''.$onClick.'\'>';
         }
         $html .= '<img src="'.PUBLIC_PATH_CDN.$shop->getLogo()->path.'thum_big_'.$shop->getLogo()->name.'" alt="'.$shop->getTitle().'" width="160" height="80">';
         $html .= '</a></div>';

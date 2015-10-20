@@ -5,10 +5,14 @@ use \Core\Domain\Service\Validator;
 use \Core\Domain\Service\KeyGenerator;
 use \Core\Domain\Service\Purifier;
 
+use Core\Domain\Usecase\Admin\DeleteURLSettingUsecase;
 use \Core\Domain\Usecase\Admin\GetApiKeysUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\DeleteApiKeyUsecase;
+
+use \Core\Domain\Usecase\Admin\GetSettingsUsecase;
+use \Core\Domain\Usecase\Admin\UpdateSettingUsecase;
 
 use \Core\Domain\Usecase\Admin\GetShopsUsecase;
 use \Core\Domain\Usecase\Admin\GetShopUsecase;
@@ -18,6 +22,7 @@ use \Core\Domain\Usecase\Admin\UpdateShopUsecase;
 use \Core\Domain\Usecase\Admin\DeleteShopUsecase;
 
 use \Core\Domain\Usecase\Admin\GetVisitorsUsecase;
+use Core\Domain\Usecase\Admin\UpdateURLSettingUsecase;
 use \Core\Domain\Usecase\Admin\UpdateVisitorUsecase;
 
 use \Core\Domain\Usecase\Admin\CreateWidgetUsecase;
@@ -32,11 +37,18 @@ use \Core\Domain\Usecase\Admin\GetLandingPageUsecase;
 use \Core\Domain\Usecase\Admin\GetLandingPagesUsecase;
 use \Core\Domain\Usecase\Admin\DeleteLandingPageUsecase;
 
+use \Core\Domain\Usecase\Admin\AddURLSettingUsecase;
+use \Core\Domain\Usecase\Admin\CreateURLSettingUsecase;
+use \Core\Domain\Usecase\Admin\GetURLSettingsUsecase;
+use \Core\Domain\Usecase\Admin\GetURLSettingUsecase;
+
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\LandingPageValidator;
+use \Core\Domain\Validator\SettingsValidator;
 use \Core\Domain\Validator\ShopValidator;
 use \Core\Domain\Validator\VisitorValidator;
 use \Core\Domain\Validator\WidgetValidator;
+use \Core\Domain\Validator\UrlSettingValidator;
 
 use \Core\Persistence\Factory\RepositoryFactory;
 
@@ -187,5 +199,64 @@ class AdminFactory
             new Purifier(),
             new Errors()
         );
+    }
+
+    public static function getSettings()
+    {
+        return new GetSettingsUsecase(
+            RepositoryFactory::settings(),
+            new Purifier(),
+            new Errors()
+        );
+    }
+
+    public static function updateSetting()
+    {
+        return new UpdateSettingUsecase(
+            RepositoryFactory::settings(),
+            new SettingsValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+
+    public static function getURLSettings()
+    {
+        return new GetURLSettingsUsecase(RepositoryFactory::urlSetting(), new Purifier(), new Errors());
+    }
+
+    public static function createURLSetting()
+    {
+        return new CreateURLSettingUsecase();
+    }
+
+    public static function addURLSetting()
+    {
+        return new AddURLSettingUsecase(
+            RepositoryFactory::urlSetting(),
+            new UrlSettingValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+
+    public static function getURLSetting()
+    {
+        return new GetURLSettingUsecase(RepositoryFactory::urlSetting(), new Purifier(), new Errors());
+    }
+
+    public static function updateURLSetting()
+    {
+        return new UpdateURLSettingUsecase(
+            RepositoryFactory::urlSetting(),
+            new UrlSettingValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+
+    public static function deleteURLSetting()
+    {
+        return new DeleteURLSettingUsecase(RepositoryFactory::urlSetting());
     }
 }

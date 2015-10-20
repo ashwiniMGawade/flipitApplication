@@ -3585,4 +3585,28 @@ class Offer extends \Core\Domain\Entity\Offer
         ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $topCouponCodes;
     }
+
+    public static function getFloatingCoupon()
+    {
+        $minOfferEndDate = new \DateTime(date('Y-m-d 00:00:00'));
+        $maxOfferEndDate = new \DateTime(date('Y-m-d 23:59:59'));
+        $maxOfferEndDate->add(new \DateInterval('P3D'));
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser
+            ->select('o, s')
+            ->from('\Core\Domain\Entity\Offer', 'o')
+            ->leftJoin('o.shopOffers', 's')
+            ->where('o.deleted = 0')
+            ->andWhere('o.offline = 0')
+            ->andWhere('o.endDate > :minEndDate')
+            ->andWhere('o.endDate <= :maxEndDate')
+            ->andWhere("o.discountType = 'CD'")
+            ->andWhere('o.userGenerated = 0')
+            ->setParameter('minEndDate', $minOfferEndDate)
+            ->setParameter('maxEndDate', $maxOfferEndDate)
+            ->addOrderBy('o.endDate', 'ASC')
+            ->addOrderBy('o.totalViewcount', 'DESC')
+            ->setMaxResults(1);
+        return $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+    }
 }
