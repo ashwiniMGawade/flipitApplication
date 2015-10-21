@@ -129,11 +129,11 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         $gtmData = json_encode($gtmData);
         $gtmClick = "gtmDataBuilder($gtmData);";
         $offerDaysLeft = $offer->endDate->diff(new \DateTime())->days;
-        $dayLeftText =  ( $offerDaysLeft < 1 ? 'Expires Today' : ( ( $offerDaysLeft > 1 ) ? $offerDaysLeft . 'days left' : '1 day left' ) );
+        $dayLeftText =  ( $offerDaysLeft < 1 ? 'Expires Today' : ( ( $offerDaysLeft > 1 ) ? $offerDaysLeft . ' days left' : '1 day left' ) );
         $floatingCoupon = '<div class="popup-box hide" id="floatingCouponBox" offerId="'.$offer->id.'">
                 <a href="#" class="btn-close">close</a>
                 <span class="time">clock</span>
-                <span class="text">' . $this->__translate( $dayLeftText ) . ' : ' . $offer->shopOffers['name'] . ' ' .$this->__translate('coupon code').'
+                <span class="text">' . $this->__translate( 'Tip' ) . ' - '  . $this->__translate( $dayLeftText ) . ' : ' . $offer->shopOffers['name'] . ' ' .$this->__translate('coupon code').'
                 <a href="'.$urlToShow.'" onclick=\'setFloatingCouponCookie();'.$gtmClick.$onClick.'\' class="floating-coupon-link">'.$this->__translate('Click here to open coupon').'</a></span>
             </div>';
         return $floatingCoupon;
