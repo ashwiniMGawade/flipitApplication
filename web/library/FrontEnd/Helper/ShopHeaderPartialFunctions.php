@@ -133,8 +133,8 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         $floatingCoupon = '<div class="popup-box hide" id="floatingCouponBox" offerId="'.$offer->id.'">
                 <a href="#" class="btn-close">close</a>
                 <span class="time">clock</span>
-                <span class="text">' . $this->__translate( 'Tip' ) . ' - '  . $this->__translate( $dayLeftText ) . ' : ' . $offer->shopOffers['name'] . ' ' .$this->__translate('coupon code').'
-                <a href="'.$urlToShow.'" onclick=\'setFloatingCouponCookie();'.$gtmClick.$onClick.'\' class="floating-coupon-link">'.$this->__translate('Click here to open coupon').'</a></span>
+                <span class="text">' . $this->__translate( 'Tip : ' . $dayLeftText . ' - Discount at ' ) . $offer->shopOffers['name'] . $this->__translate(' with this code.').'
+                <a href="'.$urlToShow.'" onclick=\'setFloatingCouponCookie();'.$gtmClick.$onClick.'\' class="floating-coupon-link">'.$this->__translate('Click here for the coupon code').'</a></span>
             </div>';
         return $floatingCoupon;
     }
