@@ -43,10 +43,7 @@ class Translations extends \Core\Domain\Entity\Translations
         if (!empty($existingTranslation[0]['id'])) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $queryBuilder->update('\Core\Domain\Entity\Translations', 't')
-                ->set(
-                    't.translation',
-                    "'".$translationsAfterRemovingTags[(string)\Zend_Registry::get('Zend_Locale')]."'"
-                )
+                ->set('t.translation', '?1')->setParameter(1, $translationsAfterRemovingTags[(string)\Zend_Registry::get('Zend_Locale')])
                 ->where('t.id = '.$existingTranslation[0]['id'])
                 ->getQuery()->execute();
         } else {
