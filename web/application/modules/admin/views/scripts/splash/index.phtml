@@ -9,19 +9,8 @@
 ?>
 <div id="chainList">
     <div class="wrap columns-2">
-        <?php
-        if ($this->messageSuccess!='' || $this->messageError!='' ) {?>
-	       <br>
-            <div class ="mainpage-content-colorbox success">
-		<?php if ($this->messageSuccess!='') {?>
-		    <span class="successserver"><?php echo $this->messageSuccess; ?></span>
-		<?php } if ($this->messageError!='') {?>
-		    <span class="errorserver"><?php echo $this->messageError; ?></span>
-		<?php } ?>
-		    </div>
-		<?php 
-		}?>
-        <h1 class="fl"><?php echo $this->translate('Current Splash Offer'); ?>
+        <?php echo $this->flashMessages(); ?>
+        <h1 class="fl"><?php echo $this->translate('Current Splash Offers'); ?>
         <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/splash/add-offer'"><?php echo $this->translate('Add New Offer'); ?>
         </button>
         </h1>

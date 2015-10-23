@@ -1,5 +1,9 @@
 <?php
-class Admin_SplashController extends Zend_Controller_Action
+
+use \Core\Domain\Factory\SystemFactory;
+use \Core\Domain\Factory\AdminFactory;
+
+class Admin_SplashController extends Application_Admin_BaseController
 {
     public $flashMessenger = '';
 
@@ -51,18 +55,34 @@ class Admin_SplashController extends Zend_Controller_Action
         if ($this->_request->isPost()) {
             $localeId = $urlRequest->getParam('locale', false);
             $locale = \BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
-            $offerId = $urlRequest->getParam('searchOfferId', false);
-            $splashTableData = $this->splashObject->getSplashInformation();
+            $params = array(
+                'locale' => $locale,
+                'shopId' => (int) $urlRequest->getParam('searchShopId', false),
+                'offerId' => (int) $urlRequest->getParam('searchOfferId', false)
+            );
 
-            if (!empty($splashTableData)) {
-                $this->splashObject->deleteSplashoffer();
+            $splashOffers = SystemFactory::getSplashOffers()->execute($params);
+
+            if(count($splashOffers)>0) {
+                $this->setFlashMessage('error', 'This splash offer already exist.');
+                $this->redirect(HTTP_PATH . 'admin/splash');
             }
+            $splashOffers = SystemFactory::getSplashOffers()->execute();
+            $position = count($splashOffers) + 1;
 
-            $this->splashObject->saveSplashOffer($offerId, $locale);
-            $varnishObject = new \KC\Repository\Varnish();
-            $varnishObject->addUrl("http://www.flipit.com");
-            $this->setFlashMessage('Offer has been added successfully');
-            $this->_redirect(HTTP_PATH . 'admin/splash');
+            $params['position'] = $position;
+            $splashOffer = AdminFactory::createSplashOffer()->execute();
+            $result = AdminFactory::addSplashOffer()->execute($splashOffer, $params);
+            if ($result instanceof Errors) {
+                $this->view->widget = $this->getAllParams();
+                $errors = $result->getErrorsAll();
+                $this->setFlashMessage('error', $errors);
+            } else {
+                $this->setFlashMessage('success', 'Offer has been added successfully');
+                $varnishObject = new \KC\Repository\Varnish();
+                $varnishObject->addUrl("http://www.flipit.com");
+            }
+            $this->redirect(HTTP_PATH . 'admin/splash');
         }
     }
 
@@ -127,7 +147,7 @@ class Admin_SplashController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->getFlashMessage();
         $this->splashObject->deleteSplashoffer();
-        $this->setFlashMessage('Offer has been deleted successfully');
+        $this->setFlashSuccessMessage('Offer has been deleted successfully');
         $this->_redirect(HTTP_PATH . 'admin/splash');
     }
 
@@ -139,7 +159,7 @@ class Admin_SplashController extends Zend_Controller_Action
         return $this;
     }
 
-    public function setFlashMessage($messageText)
+    public function setFlashSuccessMessage($messageText)
     {
         $message = $this->view->translate($messageText);
         $this->flashMessenger->addMessage(array('success' => $message));

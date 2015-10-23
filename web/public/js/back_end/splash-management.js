@@ -2,9 +2,9 @@ function updateShops(localeElement) {
     var locale = parseInt(localeElement.value) ;
     if(locale > 0)
     {
-        $("#searchShops").val("");
+        $("#searchShop").val("");
 
-        $("#searchShops").select2({
+        $("#searchShop").select2({
             placeholder: __("Search Shop"),
             minimumInputLength: 1,
             ajax: {
@@ -22,8 +22,8 @@ function updateShops(localeElement) {
                 return data.name;
             },
             formatSelection: function(data) {
-                $("#searchShops").val(data.name);
-                $("#searchShopsId").val(data.id);
+                $("#searchShop").val(data.name);
+                $("#searchShopId").val(data.id);
                 updateOffers(localeElement, data.id);
                 return data.name;
             }

@@ -40,13 +40,13 @@ class AddSplashOfferUsecase
             $splashOffer->setLocale($params['locale']);
         }
         if (isset($params['shopId'])) {
-            $splashOffer->setShopId($params['shopId']);
+            $splashOffer->setShopId((int)$params['shopId']);
         }
         if (isset($params['offerId'])) {
-            $splashOffer->setPosition($params['offerId']);
+            $splashOffer->setOfferId((int)$params['offerId']);
         }
         if (isset($params['position'])) {
-            $splashOffer->setPosition($params['position']);
+            $splashOffer->setPosition((int)$params['position']);
         }
 
         $splashOffer->setDeleted(0);

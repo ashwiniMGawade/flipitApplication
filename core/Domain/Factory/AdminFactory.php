@@ -5,7 +5,10 @@ use \Core\Domain\Service\Validator;
 use \Core\Domain\Service\KeyGenerator;
 use \Core\Domain\Service\Purifier;
 
-use Core\Domain\Usecase\Admin\DeleteURLSettingUsecase;
+use \Core\Domain\Usecase\Admin\AddSplashOfferUsecase;
+use \Core\Domain\Usecase\Admin\CreateSplashOfferUsecase;
+use \Core\Domain\Usecase\System\GetSplashOffersUsecase;
+
 use \Core\Domain\Usecase\Admin\GetApiKeysUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
@@ -22,7 +25,6 @@ use \Core\Domain\Usecase\Admin\UpdateShopUsecase;
 use \Core\Domain\Usecase\Admin\DeleteShopUsecase;
 
 use \Core\Domain\Usecase\Admin\GetVisitorsUsecase;
-use Core\Domain\Usecase\Admin\UpdateURLSettingUsecase;
 use \Core\Domain\Usecase\Admin\UpdateVisitorUsecase;
 
 use \Core\Domain\Usecase\Admin\CreateWidgetUsecase;
@@ -41,11 +43,14 @@ use \Core\Domain\Usecase\Admin\AddURLSettingUsecase;
 use \Core\Domain\Usecase\Admin\CreateURLSettingUsecase;
 use \Core\Domain\Usecase\Admin\GetURLSettingsUsecase;
 use \Core\Domain\Usecase\Admin\GetURLSettingUsecase;
+use \Core\Domain\Usecase\Admin\UpdateURLSettingUsecase;
+use \Core\Domain\Usecase\Admin\DeleteURLSettingUsecase;
 
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\LandingPageValidator;
 use \Core\Domain\Validator\SettingsValidator;
 use \Core\Domain\Validator\ShopValidator;
+use \Core\Domain\Validator\SplashOfferValidator;
 use \Core\Domain\Validator\VisitorValidator;
 use \Core\Domain\Validator\WidgetValidator;
 use \Core\Domain\Validator\UrlSettingValidator;
@@ -258,5 +263,25 @@ class AdminFactory
     public static function deleteURLSetting()
     {
         return new DeleteURLSettingUsecase(RepositoryFactory::urlSetting());
+    }
+
+    public static function createSplashOffer()
+    {
+        return new CreateSplashOfferUsecase();
+    }
+
+    public static function addSplashOffer()
+    {
+        return new AddSplashOfferUsecase(
+            RepositoryFactory::splashOffer(),
+            new SplashOfferValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+
+    public static function getSplashOffer()
+    {
+        return new GetSplashOffersUsecase(RepositoryFactory::splashOffer(), new Purifier(), new Errors());
     }
 }
