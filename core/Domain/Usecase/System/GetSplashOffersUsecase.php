@@ -18,7 +18,7 @@ class GetSplashOffersUsecase
         $this->errors                   = $errors;
     }
 
-    public function execute($conditions = array())
+    public function execute($conditions = array(), $order = array())
     {
         if (!is_array($conditions)) {
             $this->errors->setError('Invalid input, unable to find record.');
@@ -26,6 +26,6 @@ class GetSplashOffersUsecase
         }
         $conditions = $this->htmlPurifier->purify($conditions);
 
-        return $this->splashOfferRepository->findBy('\Core\Domain\Entity\User\Splash', $conditions);
+        return $this->splashOfferRepository->findBy('\Core\Domain\Entity\User\Splash', $conditions, $order);
     }
 }

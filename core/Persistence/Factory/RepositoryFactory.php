@@ -52,9 +52,9 @@ class RepositoryFactory
         return new WidgetRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 
-    public static function offer()
+    public static function offer($locale = '')
     {
-        return new OfferRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
+        return new OfferRepository((new Service\DoctrineManager(new Service\AppConfig($locale)))->getLocaleEntityManager());
     }
 
     public static function landingPage()

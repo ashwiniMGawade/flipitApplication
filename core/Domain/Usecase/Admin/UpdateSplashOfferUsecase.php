@@ -36,19 +36,17 @@ class UpdateSplashOfferUsecase
             return $this->errors;
         }
         $params = $this->htmlPurifier->purify($params);
-
-        $params = $this->htmlPurifier->purify($params);
         if (isset($params['locale'])) {
             $splashOffer->setLocale($params['locale']);
         }
         if (isset($params['shopId'])) {
-            $splashOffer->setShopId($params['shopId']);
+            $splashOffer->setShopId((int)$params['shopId']);
         }
         if (isset($params['offerId'])) {
-            $splashOffer->setPosition($params['offerId']);
+            $splashOffer->setPosition((int)$params['offerId']);
         }
         if (isset($params['position'])) {
-            $splashOffer->setPosition($params['position']);
+            $splashOffer->setPosition((int)$params['position']);
         }
         $splashOffer->setUpdatedAt(new \DateTime('now'));
 

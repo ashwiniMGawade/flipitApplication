@@ -1,3 +1,9 @@
+$(document).ready(function() {
+    $('#splash-offer-table').dataTable({"bFilter":false, "bPaginate":false}).rowReordering({successCallback:function(){
+        $('#save-order-section').show();
+    }});
+});
+
 function updateShops(localeElement) {
     var locale = parseInt(localeElement.value) ;
     if(locale > 0)

@@ -7,7 +7,9 @@ use \Core\Domain\Service\Purifier;
 
 use \Core\Domain\Usecase\Admin\AddSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\CreateSplashOfferUsecase;
-use \Core\Domain\Usecase\System\GetSplashOffersUsecase;
+use \Core\Domain\Usecase\Admin\DeleteSplashOfferUsecase;
+use \Core\Domain\Usecase\Admin\GetSplashOfferUsecase;
+use \Core\Domain\Usecase\Admin\UpdateSplashOfferUsecase;
 
 use \Core\Domain\Usecase\Admin\GetApiKeysUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
@@ -282,6 +284,21 @@ class AdminFactory
 
     public static function getSplashOffer()
     {
-        return new GetSplashOffersUsecase(RepositoryFactory::splashOffer(), new Purifier(), new Errors());
+        return new GetSplashOfferUsecase(RepositoryFactory::splashOffer(), new Purifier(), new Errors());
+    }
+
+    public static function deleteSplashOffer()
+    {
+        return new DeleteSplashOfferUsecase(RepositoryFactory::splashOffer());
+    }
+
+    public static function updateSplashOffer()
+    {
+        return new UpdateSplashOfferUsecase(
+            RepositoryFactory::splashOffer(),
+            new SplashOfferValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
     }
 }

@@ -35,23 +35,28 @@ class Admin_SplashController extends Application_Admin_BaseController
 
     public function indexAction()
     {
-        $splashTableData = $this->splashObject->getSplashInformation();
-        if (!empty($splashTableData)) {
-            \BackEnd_Helper_DatabaseManager::addConnection($splashTableData[0]['locale']);
-            $splashOfferDetails = $this->splashObject->getOfferById($splashTableData[0]['offerId']);
-            $this->view->currentOfferTitle = $splashOfferDetails->title;
-            $this->view->currentOfferLocale = $splashTableData[0]['locale'];
+        $splashOffersData = array();
+        $splashOffers = ( array ) SystemFactory::getSplashOffers()->execute(array(), array('position'=>'ASC'));
+        if( false == empty( $splashOffers) ) {
+            foreach( $splashOffers as $splashOffer ) {
+                $offer = SystemFactory::getOffer($splashOffer->getLocale())->execute(array( 'id' => $splashOffer->getOfferId()));
+                if( $offer instanceof  \Core\Domain\Entity\Offer) {
+                    $splashOffersData[] = array(
+                        'id' => $splashOffer->getId(),
+                        'locale' => $splashOffer->getLocale(),
+                        'offer' => $offer->getTitle(),
+                        'shop'  => $offer->getShopOffers()->getTitle(),
+                    );
+                }
+            }
         }
-
-        $this->getFlashMessage();
+        $this->view->splashOffersData = $splashOffersData;
     }
 
     public function addOfferAction()
     {
         $urlRequest = $this->getRequest();
         $this->view->websites = \KC\Repository\Website::getAllWebsites();
-        $this->getFlashMessage();
-
         if ($this->_request->isPost()) {
             $localeId = $urlRequest->getParam('locale', false);
             $locale = \BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
@@ -78,12 +83,33 @@ class Admin_SplashController extends Application_Admin_BaseController
                 $errors = $result->getErrorsAll();
                 $this->setFlashMessage('error', $errors);
             } else {
+                $this->refreshSplashPageVarnish();
                 $this->setFlashMessage('success', 'Offer has been added successfully');
-                $varnishObject = new \KC\Repository\Varnish();
-                $varnishObject->addUrl("http://www.flipit.com");
             }
             $this->redirect(HTTP_PATH . 'admin/splash');
         }
+    }
+
+    public function refreshSplashPageVarnish() {
+        $varnishObject = new \KC\Repository\Varnish();
+        $varnishObject->addUrl("http://www.flipit.com");
+    }
+
+    public function reorderAction()
+    {
+        $params = $this->getRequest()->getParams();
+        $splashOffers = ( array ) SystemFactory::getSplashOffers()->execute(array());
+        $splashOffers = $this->rekeyObjects($splashOffers, 'Id');
+        foreach( $params['splashOffers'] as $order => $splashOfferId ) {
+            if(true == array_key_exists($splashOfferId, $splashOffers)) {
+                $splashOffer = $splashOffers[$splashOfferId];
+                $params = array( 'position' => $order+1);
+                $result = AdminFactory::updateSplashOffer()->execute($splashOffer, $params);
+            }
+        }
+        $this->refreshSplashPageVarnish();
+        $this->setFlashMessage('success', 'Offers has been reordered successfully');
+        $this->redirect(HTTP_PATH . 'admin/splash');
     }
 
     public function shopsListAction()
@@ -144,25 +170,21 @@ class Admin_SplashController extends Application_Admin_BaseController
 
     public function deleteOfferAction()
     {
-        $this->_helper->layout->disableLayout();
-        $this->getFlashMessage();
-        $this->splashObject->deleteSplashoffer();
-        $this->setFlashSuccessMessage('Offer has been deleted successfully');
-        $this->_redirect(HTTP_PATH . 'admin/splash');
-    }
+        $splashOfferId = intval($this->getRequest()->getParam('id'));
+        if (intval($splashOfferId) < 1) {
+            $this->setFlashMessage('error', 'Invalid selection.');
+            die;
+        }
 
-    public function getFlashMessage()
-    {
-        $message = $this->flashMessenger->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
-        return $this;
-    }
-
-    public function setFlashSuccessMessage($messageText)
-    {
-        $message = $this->view->translate($messageText);
-        $this->flashMessenger->addMessage(array('success' => $message));
-        return $this;
+        $result = AdminFactory::getSplashOffer()->execute(array('id' => $splashOfferId));
+        if ($result instanceof Errors) {
+            $errors = $result->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+            $this->redirect(HTTP_PATH . 'admin/splash');
+        }
+        AdminFactory::deleteSplashOffer()->execute($result);
+        $this->refreshSplashPageVarnish();
+        $this->setFlashMessage('success', 'Splash Offer deleted successfully.');
+        $this->redirect(HTTP_PATH . 'admin/splash');
     }
 }
