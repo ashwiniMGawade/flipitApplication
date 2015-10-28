@@ -113,8 +113,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
                         <div class="mainpage-content-right">
                             <div data-toggle="buttons-checkbox" class="btn-group">
                             <?php if($setting->getName() == 'SHOW_FLOATING_COUPON') : ?>
-                                <button type="button" data-option="1" class="btn <?php echo 1 ==  $setting->getValue() ? 'btn-primary' : ''; ?>" onclick="localeSettingToggle(this, '<?php echo $setting->getName(); ?>');"><?php echo $this->translate('Yes'); ?></button>
-                                <button type="button" data-option="0" class="btn <?php echo 1 ==  $setting->getValue() ? '' : 'btn-primary'; ?>" style="border-radius: 0 4px 4px 0;" onclick="localeSettingToggle(this, '<?php echo $setting->getName(); ?>');"><?php echo $this->translate('No'); ?></button>
+                                <button type="button" data-option="1" id="<?php echo $setting->getName(); ?>_ON_BTN" class="btn <?php echo 1 ==  $setting->getValue() ? 'btn-primary' : ''; ?>" onclick="localeSettingToggle(this, '<?php echo $setting->getName(); ?>');"><?php echo $this->translate('Yes'); ?></button>
+                                <button type="button" data-option="0" id="<?php echo $setting->getName(); ?>_OFF_BTN" class="btn <?php echo 1 ==  $setting->getValue() ? '' : 'btn-primary'; ?>" style="border-radius: 0 4px 4px 0;" onclick="localeSettingToggle(this, '<?php echo $setting->getName(); ?>');"><?php echo $this->translate('No'); ?></button>
                                 <input type="hidden" value="<?php echo $setting->getValue(); ?>" name="settings[<?php echo $setting->getName(); ?>]" id="<?php echo $setting->getName(); ?>" class="span3">
                             <?php else: ?>
                                 <input type="text" value="<?php echo $setting->getValue(); ?>" name="settings[<?php echo $setting->getName(); ?>]" class="span3">
@@ -128,7 +128,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
                 <div class="mainpage-content-right">
                     <div class="mainpage-content-right-inner-left-other">
                     <div class="btn-group" data-toggle="buttons-checkbox">
-                        <button class="btn btn-primary" type="submit">
+                        <button class="btn btn-primary" type="submit" id="save-locale-settings">
                             <?php echo $this->translate('Submit'); ?>
                         </button>
                     </div>
