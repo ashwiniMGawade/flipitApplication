@@ -108,6 +108,10 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         if (isset($_COOKIE['floatingCouponClosed']) && !empty($_COOKIE['floatingCouponClosed'])) {
             return '';
         }
+        $showFloatingCouponSetting = \FrontEnd_Helper_viewHelper::getSetting('SHOW_FLOATING_COUPON');
+        if ($showFloatingCouponSetting instanceof \Core\Service\Errors || 0 == (int) $showFloatingCouponSetting->getValue()) {
+            return '';
+        }
         $offer = KC\Repository\Offer::getFloatingCoupon();
         if (true === empty($offer)) {
             return '';
