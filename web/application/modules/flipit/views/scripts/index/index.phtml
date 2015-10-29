@@ -15,7 +15,7 @@
                 <div class="logo"><a href="#"><img src="<?php echo PUBLIC_PATH;?>images/logo2.png" alt="Flipit Your online couponing portal" width="199" height="50"></a></div>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-7 text-right">
-                <span class="h-text"><a href="#">To Flipit.com Deutschland</a></span>
+                <span class="h-text"><a id="current-local" href=""></a></span>
             </div>
         </div>
     </div>
@@ -285,9 +285,15 @@
                         <li><a href="#">Press</a></li>
                     </ul>
                 </nav>
-                <div class="f-panel">
-                    <p>This site uses cookies <a class="btn thanks-btn" href="#">Okay, thanks</a> <a href="#">Find out more</a></p>
-                </div>
+                <?php if (!isset($_COOKIE['cookie_agreement']) || empty($_COOKIE['cookie_agreement'])) { ?>
+                    <div class="f-panel" id="footer-cookie-info">
+                        <?php echo FrontEnd_Helper_viewHelper::__translate('This site uses cookies ');?>
+                        <a class="btn thanks-btn">
+                            <strong><?php echo FrontEnd_Helper_viewHelper::__translate('Okay, thanks');?></strong>
+                        </a>
+                        <a class="txt-underline" href="<?php echo HTTP_PATH_LOCALE; ?>info/<?php echo FrontEnd_Helper_viewHelper::__link('link_privacy-cookies'); ?>"><?php echo FrontEnd_Helper_viewHelper::__translate('Find out more');?></a>
+                    </div>
+                <?php } ?>
             </div>
         </div>
     </div>
@@ -318,6 +324,12 @@ echo $headScript
         $.get("http://ipinfo.io", function(response) {
             if(response.country.toLowerCase() in availableLanguages){
                 var countryCode = response.country.toLowerCase();
+                var countryUrl = '/'+countryCode;
+                if(countryCode == 'nl') {
+                    countryUrl = 'http://www.kortingscode.nl';
+                }
+                var countryName = availableLanguages[countryCode];
+                $("#current-local").attr('href', countryUrl).html("To Flipit.com "+ countryName);
                 $('select.present').val(countryCode);
                 jcf.refreshAll();
             }
@@ -334,9 +346,15 @@ echo $headScript
                 window.location.href = countryUrl;
             }
         });
+
+        $(".thanks-btn").on("click", function() {
+            var expiry = new Date();
+            expiry.setFullYear(expiry.getFullYear() + 10);
+            document.cookie = "cookie_agreement=1; expires=" + expiry.toGMTString();
+            $('#footer-cookie-info').remove();
+        });
     });
 </script>
-
 </body>
 </html>
 
