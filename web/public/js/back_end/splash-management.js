@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    if($('#addOfferForm').length>0) {
+        validateForm();
+    }
     if($('#splash-offer-table').length>0) {
         $('#splash-offer-table').dataTable({"bFilter": false, "bPaginate": false}).rowReordering({
             successCallback: function () {
@@ -7,6 +10,51 @@ $(document).ready(function() {
         });
     }
 });
+
+
+function validateForm() {
+    jQuery('#addOfferForm').validate({
+        errorClass : 'error',
+        validClass : 'success',
+        errorElement : 'span',
+        ignore: ".ignore",
+        errorPlacement : function(error, element) {
+            element.parent("div").prev("div").html(error);
+        },
+        rules: {
+            locale : "required",
+            searchShopId : "required",
+            searchOfferId : "required"
+        },
+        messages : {
+            locale : {
+                required : __("Please select a locale")
+            },
+            searchShopId : {
+                required : __("Please select a shop")
+            },
+            searchOfferId : {
+                required : __("Please select an offer")
+            }
+        },
+        highlight : function (element, errorClass, validClass) {
+            jQuery(element).parent('div')
+                .removeClass(validClass)
+                .addClass(errorClass)
+                .prev("div")
+                .removeClass(validClass)
+                .addClass(errorClass);
+        },
+        success: function (label, element) {
+            jQuery(element).parent('div')
+                .removeClass(this.errorClass)
+                .addClass(this.validClass)
+                .prev("div")
+                .removeClass(this.errorClass)
+                .addClass(this.validClass);
+        }
+    });
+}
 
 function updateShops(localeElement) {
     var locale = parseInt(localeElement.value) ;
