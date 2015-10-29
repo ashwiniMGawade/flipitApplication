@@ -1,8 +1,20 @@
 jQuery(document).ready(function() {
-	var floatingCoupon = initOpenPopup();
+    if(document.cookie.indexOf("floatingCouponClosed=1") > 0) {
+        return;
+    }
+    jQuery.ajax({
+        url : HOST_PATH_LOCALE + "offer/floating-coupon",
+        method : "post",
+        type : "post",
+        success : function(data) {
+            jQuery('#floatingCouponContainer').html(data);
+            initOpenPopup();
+        }
+    });
 });
 
-function setFloatingCouponCookie() {
+function setFloatingCouponCookie()
+{
     var now = new Date();
     var expire = new Date();
     expire.setFullYear(now.getFullYear());
@@ -15,7 +27,8 @@ function setFloatingCouponCookie() {
     return true;
 }
 
-function sendGTMData(offerId) {
+function sendGTMData(offerId)
+{
     var gtmData = {
         'event' : 'floatingOfferImpression',
         'variant' : 'Code',
@@ -29,7 +42,7 @@ function sendGTMData(offerId) {
 }
 
 function initOpenPopup() {
-	var timer = 3000;
+	var timer = 2000;
 	jQuery('#floatingCouponBox').each(function() {
 		var holder = jQuery(this);
 		var close = holder.find('.btn-close');
