@@ -27,15 +27,15 @@ class SplashOfferValidator
             ),
             'shopId' => array(
                 $this->validator->notNull(array('message'=>'Shop should not be blank.')),
-                $this->validator->type(array('type' => 'integer'))
+                $this->validator->greaterThan(array('value' => 0, 'message' => 'Shop should not be blank.'))
             ),
             'offerId' => array(
                 $this->validator->notNull(array('message'=>'Offer should not be blank.')),
-                $this->validator->type(array('type' => 'integer'))
+                $this->validator->greaterThan(array('value' => 0, 'message' => 'Offer should not be blank.'))
             ),
             'position' => array(
                 $this->validator->notNull(array('message'=>'Position should not be blank.')),
-                $this->validator->type(array('type' => 'integer'))
+                $this->validator->greaterThan(array('value' => 0, 'message' => 'Position should not be blank.'))
             ),
             'created_at' => array(
                 $this->validator->notNull(),

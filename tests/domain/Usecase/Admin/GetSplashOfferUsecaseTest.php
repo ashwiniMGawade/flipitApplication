@@ -8,7 +8,7 @@ use \Core\Service\Errors;
 
 class GetSplashOfferUsecaseTest extends \Codeception\TestCase\Test
 {
-    public function testGetSplashOfferUsecaseWhenIdDoesNotExist()
+    public function testGetSplashOfferUsecaseReturnsErrorWhenRecordDoesNotExist()
     {
         $condition = array('id' => 0);
         $splashOfferRepositoryMock = $this->createSplashOfferRepositoryWithFindMethodMock($condition, 0);
@@ -19,7 +19,7 @@ class GetSplashOfferUsecaseTest extends \Codeception\TestCase\Test
         $this->assertEquals($errors->getErrorsAll(), $result->getErrorsAll());
     }
 
-    public function testGetSplashOfferUsecaseWhenRecordExists()
+    public function testGetSplashOfferUsecaseReturnsDataWhenRecordExists()
     {
         $condition = array('id' => 1);
         $splashOffer = new Splash();
@@ -30,7 +30,7 @@ class GetSplashOfferUsecaseTest extends \Codeception\TestCase\Test
         $this->assertEquals($splashOffer, $result);
     }
 
-    public function testGetSplashOfferUsecaseWhenConditionIsInvalid()
+    public function testGetSplashOfferUsecaseReturnsErrorWhenConditionIsInvalid()
     {
         $condition = 'invalid';
         $splashOfferRepositoryMock = $this->createSplashOfferRepositoryMock();

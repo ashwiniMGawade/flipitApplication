@@ -2,6 +2,7 @@
 
 use \Core\Domain\Factory\SystemFactory;
 use \Core\Domain\Factory\AdminFactory;
+use \Core\Service\Errors;
 
 class Admin_SplashController extends Application_Admin_BaseController
 {
@@ -59,13 +60,16 @@ class Admin_SplashController extends Application_Admin_BaseController
         $this->view->websites = \KC\Repository\Website::getAllWebsites();
         if ($this->_request->isPost()) {
             $localeId = $urlRequest->getParam('locale', false);
+            if(true == empty($localeId)) {
+                $this->setFlashMessage('error', 'Locale should not be blank.');
+                $this->redirect(HTTP_PATH . 'admin/splash');
+            }
             $locale = \BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
             $params = array(
                 'locale' => $locale,
-                'shopId' => (int) $urlRequest->getParam('searchShopId', false),
-                'offerId' => (int) $urlRequest->getParam('searchOfferId', false)
+                'shopId' => $urlRequest->getParam('searchShopId', false),
+                'offerId' => $urlRequest->getParam('searchOfferId', false)
             );
-
             $splashOffers = SystemFactory::getSplashOffers()->execute($params);
 
             if(count($splashOffers)>0) {

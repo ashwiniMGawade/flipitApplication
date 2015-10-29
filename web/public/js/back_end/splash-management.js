@@ -1,7 +1,11 @@
 $(document).ready(function() {
-    $('#splash-offer-table').dataTable({"bFilter":false, "bPaginate":false}).rowReordering({successCallback:function(){
-        $('#save-order-section').show();
-    }});
+    if($('#splash-offer-table').length>0) {
+        $('#splash-offer-table').dataTable({"bFilter": false, "bPaginate": false}).rowReordering({
+            successCallback: function () {
+                $('#save-order-section').show();
+            }
+        });
+    }
 });
 
 function updateShops(localeElement) {
