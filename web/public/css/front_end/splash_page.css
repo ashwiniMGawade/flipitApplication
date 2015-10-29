@@ -32,6 +32,11 @@ summary {
 	display: block;
 }
 
+#main {
+    padding-top:0;
+    padding-bottom:0;
+}
+
 audio,
 canvas,
 progress,
@@ -7230,6 +7235,11 @@ a:hover {
 	display: block;
 }
 
+#footer .container{
+    padding-top:0px;
+    padding-bottom:0px;
+}
+
 .add-nav {
 	margin: 0 0 20px;
 }
@@ -7259,6 +7269,10 @@ a:hover {
 	margin: 0 0 13px;
 }
 
+#footer .add-nav ul li + li:before{
+    content: "";
+}
+
 .add-nav ul li:before {
 	position: absolute;
 	content: "";
@@ -7268,6 +7282,8 @@ a:hover {
 	display: none;
 	border-left: 1px solid #a9a9a9;
 }
+
+
 
 .add-nav ul li a {
 	color: #888887;
