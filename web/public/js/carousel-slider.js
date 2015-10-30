@@ -20,7 +20,7 @@ function initCarousel() {
 			autoRotation: true,
 			switchTime: 3000,
 			animSpeed: 500,
-			step: 1
+			step: 3
 		});
 	} else {
 		jQuery('.carousel').find('.slideset').each(function(){

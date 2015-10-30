@@ -8,7 +8,6 @@ if (APPLICATION_ENV == 'development') {
 }
 $this->minifyHeadScript()
     ->prependFile("/public/js/common.js")
-    ->prependFile("/public/js/front_end/popupShow.js")
     ->prependFile("/public/js/front_end/bigtext.js");
 if(LOCALE !='') :
     $this->minifyHeadScript()

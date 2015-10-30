@@ -52,3 +52,9 @@ function LocaleStatusToggle(el)
 		}
 	});
 }
+
+function localeSettingToggle(element, inputFieldId)
+{
+    $(element).addClass('btn-primary').siblings('button').removeClass('btn-primary active');
+    $('#'+inputFieldId).val($(element).attr('data-option'));
+}

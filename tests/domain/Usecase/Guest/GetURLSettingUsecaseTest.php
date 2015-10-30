@@ -3,7 +3,7 @@ namespace Usecase\Guest;
 
 use \Core\Domain\Entity\URLSetting;
 use \Core\Domain\Service\Purifier;
-use \Core\Domain\Usecase\Admin\GetURLSettingUsecase;
+use \Core\Domain\Usecase\Guest\GetURLSettingUsecase;
 use \Core\Service\Errors;
 
 class GetURLSettingUsecaseTest extends \Codeception\TestCase\Test
