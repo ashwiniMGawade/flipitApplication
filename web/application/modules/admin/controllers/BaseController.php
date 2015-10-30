@@ -16,4 +16,14 @@ class Application_Admin_BaseController extends Zend_Controller_Action
         $translatableSingleMessage = $this->view->translate($translatableSingleMessage);
         $flashMessenger->addMessage(array($messageType => $translatableSingleMessage));
     }
+
+    public function rekeyObjects($data, $fieldName)
+    {
+        $formattedData = array();
+        $getFunction = 'get'.$fieldName;
+        foreach($data as $record) {
+            $formattedData[$record->$getFunction()] = $record;
+        }
+        return $formattedData;
+    }
 }
