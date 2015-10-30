@@ -300,7 +300,7 @@
                     </ul>
                 </nav>
                 <?php if (!isset($_COOKIE['cookie_agreement']) || empty($_COOKIE['cookie_agreement'])) { ?>
-                    <div class="f-panel" id="footer-cookie-info">
+                    <div class="f-panel" id="footer-cookie-bar">
                         <?php echo FrontEnd_Helper_viewHelper::__translate('This site uses cookies ');?>
                         <a class="btn thanks-btn">
                             <strong><?php echo FrontEnd_Helper_viewHelper::__translate('Okay, thanks');?></strong>
@@ -365,7 +365,7 @@ echo $headScript
             var expiry = new Date();
             expiry.setFullYear(expiry.getFullYear() + 10);
             document.cookie = "cookie_agreement=1; expires=" + expiry.toGMTString();
-            $('#footer-cookie-info').remove();
+            $('#footer-cookie-bar').remove();
         });
     });
 </script>
