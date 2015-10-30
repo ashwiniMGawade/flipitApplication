@@ -46,7 +46,7 @@ class Admin_SplashController extends Application_Admin_BaseController
                         'id' => $splashOffer->getId(),
                         'locale' => $splashOffer->getLocale(),
                         'offer' => $offer->getTitle(),
-                        'shop'  => $offer->getShopOffers()->getTitle(),
+                        'shop'  => $offer->getShopOffers()->getName(),
                     );
                 }
             }
