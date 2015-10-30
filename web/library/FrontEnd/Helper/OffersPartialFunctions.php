@@ -1,5 +1,6 @@
 <?php
 use \Core\Domain\Factory\SystemFactory;
+use \Core\Domain\Factory\GuestFactory;
 
 class FrontEnd_Helper_OffersPartialFunctions
 {
@@ -706,5 +707,14 @@ class FrontEnd_Helper_OffersPartialFunctions
         }
 
         return $couponHtml;
+    }
+
+    public static function getTotalOfferCount($locale) {
+        $totalOfferCount = 0;
+        $dashboard = GuestFactory::getDashboard($locale)->execute(array());
+        if ($dashboard instanceof \Core\Domain\Entity\Dashboard) {
+            $totalOfferCount = $dashboard->getTotalNoOfOffers();
+        }
+        return $totalOfferCount;
     }
 }

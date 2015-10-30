@@ -1,6 +1,7 @@
 <?php
 namespace Core\Persistence\Factory;
 
+use \Core\Persistence\Database\Repository\DashboardRepository;
 use \Core\Persistence\Database\Repository\SettingsRepository;
 use \Core\Persistence\Database\Repository\SplashOfferRepository;
 use \Core\Persistence\Database\Service as Service;
@@ -75,5 +76,10 @@ class RepositoryFactory
     public static function splashOffer()
     {
         return new SplashOfferRepository((new Service\DoctrineManager(new Service\AppConfig()))->getUserEntityManager());
+    }
+
+    public static function dashboard($locale = '')
+    {
+        return new DashboardRepository((new Service\DoctrineManager(new Service\AppConfig($locale)))->getLocaleEntityManager());
     }
 }
