@@ -288,11 +288,11 @@ echo $headScript
 
         var get_coupon_count = function(country_code) {
             $.ajax({
-                url :"/coupon-count",
+                url :"/total-coupon-count",
                 type: "post",
                 data:
                 {
-                    local: country_code
+                    locale: country_code
                 },
                 success: function(response){
                     $("#coupon_count").html(response);
