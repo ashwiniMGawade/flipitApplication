@@ -246,6 +246,11 @@
 </footer>
 </div>
 
+<script type="text/javascript">
+    var availableLanguages = <?php echo json_encode(
+    FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true')); ?>;
+</script>
+
 <?php
 if (APPLICATION_ENV == 'development') {
     $headScript =  $this->HeadScript();
@@ -255,74 +260,13 @@ if (APPLICATION_ENV == 'development') {
 }
 
 echo $headScript
+    ->prependFile("/public/js/front_end/splash_page.js")
     ->prependFile("/public/js/bootstrap.js")
     ->prependFile("/public/js/coustom-select.js")
     ->prependFile("/public/js/carousel-slider.js")
     ->prependFile("/public/js/front_end/jquery.main.js")
     ->prependScript('var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";');
 ?>
-
-<script type="text/javascript">
-    $(function(){
-        var availableLanguages = <?php echo json_encode(
-                FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true')); ?>;
-
-        $.get("http://ipinfo.io", function(response) {
-            if(response.country.toLowerCase() in availableLanguages){
-                var countryCode = response.country.toLowerCase();
-                var countryUrl = '/'+countryCode;
-                if(countryCode == 'nl') {
-                    countryUrl = 'http://www.kortingscode.nl';
-                }
-                var countryName = availableLanguages[countryCode];
-                $("#current-local").attr('href', countryUrl).html("To Flipit.com "+ countryName);
-                $('select.present').val(countryCode);
-                get_coupon_count(countryCode);
-                jcf.refreshAll();
-            }
-        }, "jsonp");
-
-        $('select.present').on('change', function(e){
-            get_coupon_count($(this).val());
-        });
-
-        var get_coupon_count = function(country_code) {
-            $.ajax({
-                url :"/total-coupon-count",
-                type: "post",
-                data:
-                {
-                    locale: country_code
-                },
-                success: function(response){
-                    $("#coupon_count").html(response);
-                },
-                error : function(error) {
-
-                }
-            });
-        }
-
-        $('form.select-form').submit(function(e){
-            e.preventDefault();
-            countryCode = $('select.present').val();
-            if (countryCode != '') {
-                var countryUrl = '/'+countryCode;
-                if(countryCode == 'nl') {
-                    countryUrl = 'http://www.kortingscode.nl';
-                }
-                window.location.href = countryUrl;
-            }
-        });
-
-        $(".thanks-btn").on("click", function() {
-            var expiry = new Date();
-            expiry.setFullYear(expiry.getFullYear() + 10);
-            document.cookie = "cookie_agreement=1; expires=" + expiry.toGMTString();
-            $('#footer-cookie-bar').remove();
-        });
-    });
-</script>
 </body>
 </html>
 
