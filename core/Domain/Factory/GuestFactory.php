@@ -4,9 +4,10 @@ namespace Core\Domain\Factory;
 
 use \Core\Domain\Service\Purifier;
 use \Core\Domain\Usecase\Admin\GetLandingPageUsecase;
+use \Core\Domain\Usecase\Guest\GetDashboardUsecase;
 use \Core\Domain\Usecase\Guest\GetHomePageUsecase;
-use Core\Domain\Usecase\Guest\GetOffersUsecase;
-use Core\Domain\Usecase\Guest\GetURLSettingUsecase;
+use \Core\Domain\Usecase\Guest\GetOffersUsecase;
+use \Core\Domain\Usecase\Guest\GetURLSettingUsecase;
 use \Core\Domain\Usecase\Guest\GetViewCountsUsecase;
 use \Core\Domain\Usecase\Guest\GetOfferUsecase;
 use \Core\Persistence\Factory\RepositoryFactory;
@@ -42,5 +43,10 @@ class GuestFactory
     public static function getURLSetting()
     {
         return new GetURLSettingUsecase(RepositoryFactory::urlSetting(), new Purifier(), new Errors());
+    }
+
+    public static function getDashboard($locale = '')
+    {
+        return new GetDashboardUsecase(RepositoryFactory::dashboard($locale), new Purifier(), new Errors());
     }
 }

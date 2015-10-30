@@ -1,145 +1,259 @@
 <!DOCTYPE html>
 <html>
 <?php echo $this->render('partials/_head.phtml'); ?>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,600' rel='stylesheet' type='text/css'/>
+<link type="text/css" media="all" rel="stylesheet" href="<?php echo HTTP_PATH;?>public/css/front_end/splash_page.css">
 <script type="text/javascript" src="/public/js/jquery-1.7.2.min.js"></script>
 </head>
-<body class="splash-page">
-<?php
-echo FrontEnd_Helper_LayoutContent::loadGoogleTagManager();
-$serverNameScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
-$mostPopularCoupon = FrontEnd_Helper_layoutContent::getMostPopularCouponOnEarth(); 
-    if (!empty($mostPopularCoupon['locale']) && !empty($mostPopularCoupon['mostPopularCoupon'])) { 
-        $countryName = FrontEnd_Helper_viewHelper::getCountryNameByLocale($mostPopularCoupon['locale']);
-        $localeName = 
-            $mostPopularCoupon['locale'] == 'en' 
-            ? '' 
-            : $mostPopularCoupon['locale'].'/';
-        $domainName = 
-            $mostPopularCoupon['locale'] == 'en' 
-            ? 'http://'.$serverNameScheme.'.kortingscode.nl/' 
-            : 'http://'.$serverNameScheme.'.flipit.com/'.$localeName;
-        $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
-        $daysTillOfferExpires = 
-            $offerPartial->getDaysTillOfferExpires($mostPopularCoupon['mostPopularCoupon'][0]['endDate']);
-        $offerExpiryDate = 
-            $offerPartial->getOfferDates((object) $mostPopularCoupon['mostPopularCoupon'][0], $daysTillOfferExpires);
-    }
-?>
-    <div id="wrapper">
-        <div class="container">
-            <div class="panel-box win-min-height">
-                <strong class="logo-panel"><a href="http://<?php echo $serverNameScheme; ?>.flipit.com/"><h1>Changing the way we save</h1></a></strong>
-                <span class="alt-text">CHoose RegioN:</span>
-                <div id="selectedByIP" style="display:none;" class="region-box"></div>
-                <div class="links-cols">
-                    <div class="row">
-                    <div class="col-xs-6">
-                        <strong class="title">ASIA</strong>
-                        <ul>
-                            <li><a href="http://www.flipit.com/in">India</a></li>
-                            <li><a href="http://www.flipit.com/id">Indonesia</a></li>
-                            <li><a href="http://www.flipit.com/my">Malaysia | Malasja</a></li>
-                            <li><a href="http://www.flipit.com/sg">Singapore</a></li>
-                        </ul>
-                        <strong class="title">australia</strong>
-                        <ul>
-                            <li><a href="http://www.flipit.com/au">Australia</a></li>
-                            <li><a href="http://www.flipit.com/nz">New Zealand</a></li>
-                        </ul>
-                        <strong class="title">NORTH AND SOUTH AMERICA</strong>
-                        <ul>
-                            <li><a href="http://www.flipit.com/br">Brazil | Brasil</a></li>
-                            <li><a href="http://www.flipit.com/ca">Canada</a></li>
-                            <li><a href="http://www.flipit.com/us">United States</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-xs-6">
-                        <strong class="title">EUROPE</strong>
-                        <ul>
-                            <li><a href="http://www.flipit.com/be">Belgium | België</a></li>
-                            <li><a href="http://www.flipit.com/dk">Denmark | Danmark</a></li>
-                            <li><a href="http://www.flipit.com/fr">France</a></li>
-                            <li><a href="http://www.flipit.com/de">Germany | Deutschland</a></li>
-                            <li><a href="http://www.flipit.com/it">Italy | Italia</a></li>
-                            <li><a href="http://www.kortingscode.nl">Netherlands | Nederland</a></li>
-                            <li><a href="http://www.flipit.com/pl">Poland | Polska</a></li>
-                            <li><a href="http://www.flipit.com/pt">Portugal</a></li>
-                            <li><a href="http://www.flipit.com/es">Spain | España</a></li>
-                            <li><a href="http://www.flipit.com/se">Sweden | Sverige</a></li>
-                            <li><a href="http://www.flipit.com/ch">Switzerland | Schweiz</a></li>
-                            <li><a href="http://www.flipit.com/no">Norway | Norge</a></li>
-                        </ul>
-                    </div>
-                    </div>
-                </div>
-                <?php
-                    if (!empty($mostPopularCoupon['locale']) && !empty($mostPopularCoupon['mostPopularCoupon'])) { 
-                ?>        
-                <span class="alt-text">Most Popular Coupon ON EARTH</span>
-                <div class="sponsor-box">
-                    <span class="image">
-                        <a href="<?php echo $domainName.$mostPopularCoupon['mostPopularCoupon'][1]['permaLink']; ?>">
-                            <img src="<?php echo PUBLIC_PATH_CDN.$localeName
-                            .ltrim($mostPopularCoupon['mostPopularCoupon'][2]['path'], '/')
-                            .'thum_medium_'
-                            .$mostPopularCoupon['mostPopularCoupon'][2]['name']; ?>" 
-                            alt="<?php echo $mostPopularCoupon['mostPopularCoupon'][2]['name'];?>"
-                            width="86" height="44" />
-                        </a>
-                    </span>
-                    <div class="text-box">
-                         <a href="<?php echo $domainName.$mostPopularCoupon['mostPopularCoupon'][1]['permaLink']; ?>">
-                            <strong>Flipit 
-                            <?php echo $countryName; ?> - 
-                            <?php echo $mostPopularCoupon['mostPopularCoupon'][1]['name']; ?>
-                            </strong>
-                        </a>
-                        <p><span class="mark"><?php echo 'Added: '.
-                        $mostPopularCoupon['mostPopularCoupon'][0]['startDate']->format('M d, Y').
-                        ', Expires on: '.
-                        $mostPopularCoupon['mostPopularCoupon'][0]['endDate']->format('M d, Y'); ?></span>
-                            <?php echo $mostPopularCoupon['mostPopularCoupon'][0]['exclusiveCode'] != '' ? 
-                            '<span class="mark2">Exclusive</span>' : '' ; ?></p>
-                        <a href="<?php echo $domainName.$mostPopularCoupon['mostPopularCoupon'][1]['permaLink']; ?>">
-                        <?php echo $mostPopularCoupon['mostPopularCoupon'][0]['title']; ?></a>
-                    </div>
-                </div>
-                <?php 
-                    }
-                ?>
+
+<body class="inner">
+<div id="wrapper">
+<header id="header" class="header">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-5">
+                <div class="logo"><a href="#"><img src="<?php echo PUBLIC_PATH;?>images/logo2.png" alt="Flipit Your online couponing portal" width="199" height="50"></a></div>
             </div>
-            <div class="bg-stretch">
-                <img src="<?php echo PUBLIC_PATH;?>images/front_end/img-33.jpg" alt="img-33" />
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-7 text-right">
+                <span class="h-text"><a id="current-local" href=""></a></span>
             </div>
         </div>
     </div>
-    <script type="text/javascript">
+</header>
+<main id="main" role="main">
+<div class="banner" style="background-image:url(<?php echo PUBLIC_PATH;?>images/front_end/banner.jpg)">
+    <div class="caption">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <form  action="" class="select-form">
+                        <fieldset>
+                            <label for="coutry">Select country! <span>We have <span id="coupon_count"></span> codes available in</span></label>
+                            <div class="input-group">
+                                <select class="present" data-jcf='{"wrapNative": false, "wrapNativeOnMobile": false}'>
+                                    <option class="hideme">Select your country</option>
+                                    <?php
+                                    $languages = FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true');
+                                    foreach ($languages as $lang_code => $lang_val) {
+                                        echo '<option data-image-class="country-flags '.$lang_code.'" value="'.$lang_code.'">'.$lang_val.'</option>';
+                                    }
+                                    ?>
+                                </select>
+                                <span class="input-group-btn">
+                                    <button class="btn country-btn" type="submit">CONTINUE</button>
+                                </span>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php $globalTrendingCoupon = FrontEnd_Helper_OffersPartialFunctions::getSplashPageTradingCoupons();
+if ('' != $globalTrendingCoupon): ?>
+<section class="carousel container">
+    <div class="row">
+        <header class="col-xs-12">
+            <h1>Our global trending coupons</h1>
+        </header>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="mask">
+                <div class="slideset">
+                    <?php echo $globalTrendingCoupon; ?>
+                </div>
+            </div>
+            <ul class="pagination">
+            </ul>
+            <a class="btn-prev" href="#"><span class="icon-chevron-small-left"></span></a>
+            <a class="btn-next" href="#"><span class="icon-chevron-small-right"></span></a>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+<article class="information-sec same-height">
+    <div class="alignleft common-height">
+        <div class="text-wrp">
+            <h2>Flipit.com — your online couponing portal</h2>
+            <p>Flipit is your tool of choice for saving money on your online shopping. We work closely with leading brands worldwide to bring you the best deals and discount codes available on the web.</p>
+            <p>Now you’re here, you’re just a few clicks away from knocking a percentage or amount off your online order! It won’t cost you a thing and you don’t even need to register with us to take advantage of our great discounts. We check, verify and publish brand new voucher codes each and every day, so you can find a way to save money on your online purchase all year round.</p>
+            <p>Simply select your country, search for your favourite brand, then click on your favourite deal to reveal your desired coupon code. When you’re ready, proceed to checkout and copy the voucher code from Flipit.com into the designated box, and enjoy your discount! Saving online really is that easy</p>
+            <p>We hope you enjoy saving money with us!</p>
+        </div>
+    </div>
+    <div class="img-block common-height" style="background-image:url(<?php echo PUBLIC_PATH;?>images/front_end/img.jpg)"></div>
+</article>
+<section class="popular-sec">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12"><h2>What’s  popular on Flipit.com?</h2></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2">
+                <h3>Singapore</h3>
+                <ul class="list-unstyled">
+                    <li><a href="<?php echo HTTP_PATH;?>sg/zalora">Zalora</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>sg/lazada-singapore">Lazada</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>sg/redmart">RedMart</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>sg/foodpanda">Foodpanda</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>sg/hotels-com">Hotels.com</a></li>
+                </ul>
 
-        $(function(){
-            var availableLanguages = <?php echo json_encode(
-                FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true')); ?>;
+                <h3>Sweden</h3>
+                <ul class="list-unstyled">
+                    <li><a href="<?php echo HTTP_PATH;?>se/adidas">Adidas</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>se/miinto">Miinto</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>se/zoovillage">Zoovillage</a></li>
+                </ul>
 
-            $.get("http://ipinfo.io", function(response) {
-                if(response.country.toLowerCase() in availableLanguages){
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2">
+                <h3>France</h3>
+                <ul class="list-unstyled">
+                    <li><a href="<?php echo HTTP_PATH;?>fr/aliexpress">Aliexpress</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>fr/kiabi">Kiabi</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>fr/ms-mode">MS mode</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>fr/hema">HEMA</a></li>
+                </ul>
 
-                    var countryCode = response.country.toLowerCase(),
-                        countryName = availableLanguages[countryCode];
+                <h3>Indonesie</h3>
+                <ul class="list-unstyled">
+                    <li><a href="<?php echo HTTP_PATH;?>id/lazada">Lazada</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>id/bilna">Bilna</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>id/blibli">Blibli</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>id/zalora">Zalora</a></li>
+                </ul>
+            </div>
 
-                    var countryUrl = '/'+countryCode;
-                    if(countryName == 'Netherlands') {
-                        countryUrl = 'http://www.kortingscode.nl';
-                    }
-                    var htmlContent = '<span class="flag"><span class="country-flags '+ countryCode +'"></span></span>';
-                        htmlContent+= '<span class="text">Country Detected:  <a href="'+countryUrl+'">'+ countryName
-                        +'</a></span>';
+            <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2">
+                <h3>Spain</h3>
+                <ul class="list-unstyled">
+                    <li><a href="<?php echo HTTP_PATH;?>es/kiabi">Kiabi.es</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>es/pc-componentes">PcComponentes</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>es/sportium">Sportium</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>es/casa-del-libro">Casa del Libro</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>es/vueling">Vueling</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>es/groupalia">Groupalia</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>es/rakuten-es">Rakuten</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>es/letsbonus">LetsBonus</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>es/descuentos-perfumes">PerfumesClub</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>es/promociones-farma">Promofarma</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2">
+                <h3>Denmark</h3>
+                <ul class="list-unstyled">
+                    <li><a href="<?php echo HTTP_PATH;?>dk/stylepit">Stylepit</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>dk/asos">ASOS</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>dk/hotels-com">Hotels.com</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>dk/pixizoo">PixiZoo</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>dk/bona-parte">BON'A PARTE</a></li>
+                </ul>
 
-                    $('#selectedByIP').html(htmlContent).show();
-                }
+                <h3>Malaysia</h3>
+                <ul class="list-unstyled">
+                    <li><a href="<?php echo HTTP_PATH;?>my/groupon">Groupon</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>my/zalora">Zalora</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>my/foodpanda">Foodpanda</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>my/lazada">Lazada</a></li>
+                </ul>
 
-            }, "jsonp");
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2">
+                <h3>Belgie</h3>
+                <ul class="list-unstyled">
+                    <li><a href="<?php echo HTTP_PATH;?>be/zalando">Zalando</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>be/bol-com">bol.com</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>be/collishop">ColliShop</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>be/albelli">Albelli</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>be/smartphoto">Smartphoto</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>be/hema">HEMA</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>be/sarenza">Sarenza</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>be/lensonline">LensOnline</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>be/center-parcs">Center Parcs</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>be/hellofresh">HelloFresh</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2">
+                <h3>New Zealand</h3>
+                <ul class="list-unstyled">
+                    <li><a href="<?php echo HTTP_PATH;?>nz/value-basket">Value Basket</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>nz/mighty-ape">Mighty Ape</a></li>
+                </ul>
+                <h3>Portugal</h3>
+                <ul class="list-unstyled">
+                    <li><a href="<?php echo HTTP_PATH;?>pt/edreams">eDreams</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>pt/fnac">Fnac</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>pt/worten">Worten</a></li>
+                </ul>
 
-        });
-    </script>
+                <h3>Australia</h3>
+                <ul class="list-unstyled">
+                    <li><a href="<?php echo HTTP_PATH;?>au/groupon">Groupon</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>au/crazy-sales">CrazySales</a></li>
+                    <li><a href="<?php echo HTTP_PATH;?>au/get-glasses">Get Glasses</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+<aside class="aside">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 block">
+                <span class="count">22</span>
+                <p>countries</p>
+            </div>
+            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 block">
+                <span class="count">30 Million+</span>
+                <p>vistors per year</p>
+            </div>
+            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 block">
+                <span class="count">40.000</span>
+                <p>codes online</p>
+            </div>
+            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 block">
+                <span class="count">4</span>
+                <p>continents</p>
+            </div>
+        </div>
+    </div>
+</aside>
+</main>
+<footer id="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="qshopes-logo"><a href="#"><img src="<?php echo PUBLIC_PATH;?>images/logo-qshops.jpg" alt="Q shope keurmerk"></a></div>
+                <nav class="add-nav">
+                    <ul>
+                        <li class="copy-right">&copy; 2009-<?php echo date('Y', time());?>  <a href="#">Flipit.com  -  Imbull.com, Inc</a>. All rights reserved</li>
+
+                    </ul>
+                </nav>
+                <?php if (!isset($_COOKIE['cookie_agreement']) || empty($_COOKIE['cookie_agreement'])) { ?>
+                    <div class="f-panel" id="footer-cookie-bar">
+                        <?php echo FrontEnd_Helper_viewHelper::__translate('This site uses cookies ');?>
+                        <a class="btn thanks-btn">
+                            <strong><?php echo FrontEnd_Helper_viewHelper::__translate('Okay, thanks');?></strong>
+                        </a>
+                        <a class="txt-underline" href="sg/info/<?php echo FrontEnd_Helper_viewHelper::__link('link_privacy-cookies'); ?>"><?php echo FrontEnd_Helper_viewHelper::__translate('Find out more');?></a>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+
+<script type="text/javascript">
+    var availableLanguages = <?php echo json_encode(
+    FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true')); ?>;
+</script>
+
 <?php
 if (APPLICATION_ENV == 'development') {
     $headScript =  $this->HeadScript();
@@ -149,10 +263,14 @@ if (APPLICATION_ENV == 'development') {
 }
 
 echo $headScript
-    ->prependFile("/public/js/front_end/jquery.main.js")
+    ->prependFile("/public/js/front_end/splash_page.js")
     ->prependFile("/public/js/bootstrap.js")
+    ->prependFile("/public/js/coustom-select.js")
+    ->prependFile("/public/js/carousel-slider.js")
+    ->prependFile("/public/js/front_end/jquery.main.js")
     ->prependScript('var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";');
 ?>
 </body>
 </html>
+
 
