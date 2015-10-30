@@ -7355,10 +7355,10 @@ a:hover {
 	right: -9999px;
 	top: 0;
 	bottom: -999px;
-	background: #e68e20;
+	background: #616161;
 	display: block;
 	z-index: -1;
-	border: solid #e4e4e4;
+	border: solid #616161;
 	border-width: 1px 0;
 }
 
@@ -7392,9 +7392,7 @@ a:hover {
 .f-panel .btn.thanks-btn:hover {
 	text-decoration: none;
 	opacity: .9;
-	background: #54a52e;
 	border-radius: 4px;
-	border-color: #54a52e;
 }
 
 /* custom select styles */
@@ -7625,6 +7623,7 @@ body {
 	width: 120px;
 	height: auto;
 	margin: 0 auto;
+    float:none;
 }
 
 .logo img {
