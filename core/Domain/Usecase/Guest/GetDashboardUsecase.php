@@ -24,6 +24,10 @@ class GetDashboardUsecase
     public function execute($conditions)
     {
         $conditions = $this->htmlPurifier->purify($conditions);
+        if (!is_array($conditions)) {
+            $this->errors->setError('Invalid input, unable to find record.');
+            return $this->errors;
+        }
 
         $dashboard = $this->dashboardRepository->findOneBy('\Core\Domain\Entity\Dashboard', $conditions);
 
