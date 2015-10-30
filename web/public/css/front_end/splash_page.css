@@ -4576,10 +4576,16 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 	padding-left: 0;
 	margin: 15px 0;
 	border-radius: 4px;
+    border-top:0;
+
 }
 
 .pagination > li {
 	display: inline;
+}
+
+.pagination li {
+   float:none;
 }
 
 .pagination > li > a,
@@ -6685,6 +6691,7 @@ a:hover {
 
 #header.header .logo {
 	width: 260px;
+    overflow: visible;
 }
 
 #header.header .h-text {
