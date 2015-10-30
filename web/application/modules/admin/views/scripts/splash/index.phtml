@@ -3,52 +3,57 @@
  $this->headTitle()->append($this->translate('Splash Offer management'));
  $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.dataTables.min.js" );
  $this->headScript ()->appendFile ( PUBLIC_PATH . "js/dataTableComman.js" );
- $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");   
+ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.dataTables.rowReordering.js" );
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/splash-management.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
  $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
  $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
 ?>
+<form method="post" action="<?php echo HTTP_PATH ;?>admin/splash/reorder">
 <div id="chainList">
     <div class="wrap columns-2">
-        <?php
-        if ($this->messageSuccess!='' || $this->messageError!='' ) {?>
-	       <br>
-            <div class ="mainpage-content-colorbox success">
-		<?php if ($this->messageSuccess!='') {?>
-		    <span class="successserver"><?php echo $this->messageSuccess; ?></span>
-		<?php } if ($this->messageError!='') {?>
-		    <span class="errorserver"><?php echo $this->messageError; ?></span>
-		<?php } ?>
-		    </div>
-		<?php 
-		}?>
-        <h1 class="fl"><?php echo $this->translate('Current Splash Offer'); ?>
-        <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/splash/add-offer'"><?php echo $this->translate('Add New Offer'); ?>
-        </button>
+        <?php echo $this->flashMessages(); ?>
+        <?php if(count($this->splashOffersData)>8): ?>
+        <div style="margin-top:14px; padding-top: 5px; padding-bottom: 5px; text-align: center;" class="alert alert-info"><label class="successserver">Maximum splash page offer limit reached, you cannot add more offers to splash page.</label></div>
+            <h1 class="fl"><?php echo $this->translate('Current Splash Offers'); ?></h1>
+        <?php else: ?>
+        <h1 class="fl"><?php echo $this->translate('Current Splash Offers'); ?>
+            <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/splash/add-offer'"><?php echo $this->translate('Add New Offer'); ?>
+            </button>
         </h1>
+        <?php endif; ?>
         <div class="clear"></div>
-        <table class="table table-bordered table-striped"  cellpadding="0" cellspacing="0">
+        <table class="table table-bordered table-striped"  cellpadding="0" cellspacing="0" id="splash-offer-table">
             <thead>
                 <tr>
-                  <th><?php echo $this->translate('Active Offer Name'); ?></th>
-                  <th><?php echo $this->translate('Active Offer Locale'); ?></th>
-                  <th><?php echo $this->translate('Action'); ?></th>
+                    <th>#</th>
+                    <th><?php echo $this->translate('Offer Name'); ?></th>
+                    <th><?php echo $this->translate('Shop Name'); ?></th>
+                    <th><?php echo $this->translate('Locale'); ?></th>
+                    <th><?php echo $this->translate('Action'); ?></th>
                 </tr>
             </thead>
-            <tr>
-                <?php if (!empty($this->currentOfferTitle)) { ?>
-                    <td><?php echo $this->currentOfferTitle; ?></td>
-                    <td><?php echo $this->currentOfferLocale; ?></td>
-                    <td>  
-                        <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/splash/delete-offer'"><?php echo $this->translate('Delete'); ?>
-                        </button>
-                    </td>
-                <?php } else { ?>
-                    <td><?php echo $this->translate('No Record Found');?></td> 
-                    <td><?php echo $this->translate('No Record Found');?></td>
-                    <td><?php echo $this->translate('No Record Found');?></td>
-                <?php } ?>    
-            </tr>
-        </table> 
+            <?php if( true == !empty($this->splashOffersData)):
+                $row = 1;
+                foreach($this->splashOffersData as $splashOffer): ?>
+                    <tr id="row_<?php echo $splashOffer['id']; ?>" data-position="<?php echo $row; ?>">
+                        <td><?php echo $row; ?></td>
+                        <td><input type="hidden" name="splashOffers[]" value="<?php echo $splashOffer['id']; ?>"><?php echo $splashOffer['offer']; ?></td>
+                        <td><?php echo $splashOffer['shop']; ?></td>
+                        <td><?php echo $splashOffer['locale']; ?></td>
+                        <td>
+                            <button class="btn ml10 mb10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/splash/delete-offer/id/<?php echo $splashOffer['id']; ?>'"><?php echo $this->translate('Delete'); ?>
+                            </button>
+                        </td>
+                    </tr>
+                <?php $row++; endforeach; ?>
+            <?php endif; ?>
+        </table>
     </div>
 </div>
-        
+<div class="clear"></div><br>
+<div id="save-order-section" style="display:none;">
+    <button class="btn btn-large btn-primary fl" type="submit" id="publishShopButton">SAVE ORDER</button>
+    <a onclick="window.location.href='<?php echo HTTP_PATH ;?>admin/splash'" href="javascript:void(0);" class="fl m10"><strong>CANCEL</strong></a>
+</div>
+</form>

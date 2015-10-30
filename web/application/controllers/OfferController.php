@@ -6,11 +6,7 @@ class OfferController extends Zend_Controller_Action
         $module     = strtolower($this->getRequest()->getParam('lang'));
         $controller = strtolower($this->getRequest()->getControllerName());
         $action     = strtolower($this->getRequest()->getActionName());
-        if (
-            file_exists(
-                APPLICATION_PATH . '/modules/' . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml"
-            )
-        ) {
+        if (file_exists(APPLICATION_PATH . '/modules/' . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")) {
             $this->view->setScriptPath(APPLICATION_PATH . '/modules/' . $module . '/views/scripts');
         } else {
             $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
@@ -295,5 +291,14 @@ class OfferController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
         $offerId = $this->getRequest()->getParam('offerId');
         $this->view->offerViewCount = \KC\Repository\Offer::getViewCountByOfferId($offerId);
+    }
+
+    public function floatingCouponAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $frontShopHeaderHelper = new FrontEnd_Helper_ShopHeaderPartialFunctions();
+        $floatingCouponHtml = $frontShopHeaderHelper->getFloatingCoupon();
+        echo $floatingCouponHtml;
+        exit;
     }
 }

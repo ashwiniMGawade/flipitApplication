@@ -1350,7 +1350,6 @@ CREATE TABLE IF NOT EXISTS `seen_in` (
 --
 -- Table structure for table `settings`
 --
-
 CREATE TABLE IF NOT EXISTS `settings` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -1359,9 +1358,15 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `label` varchar(255) DEFAULT NULL,
+  `isEditable` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+INSERT INTO `settings` (`id`, `name`, `value`, `status`, `created_at`, `updated_at`, `deleted`, `label`, `isEditable`) VALUES
+(10, 'HTML_LANG', '', 1, '2015-10-08 08:38:38', '2015-10-08 08:41:16', 0, 'HTML Lang', 1),
+(11, 'SHOW_FLOATING_COUPON', '0', 0, '2015-10-28 10:42:48', '2015-10-28 11:31:15', 0, 'Display Floating Coupon', 1);
 
 -- --------------------------------------------------------
 
@@ -1691,6 +1696,25 @@ CREATE TABLE IF NOT EXISTS `translations` (
   `deleted` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `URLSettings`
+--
+
+CREATE TABLE IF NOT EXISTS `URLSettings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1-On, 0-Off',
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `url_idx` (`url`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
 
 -- --------------------------------------------------------
 
