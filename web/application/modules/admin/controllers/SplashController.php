@@ -54,6 +54,13 @@ class Admin_SplashController extends Application_Admin_BaseController
         $this->view->splashOffersData = $splashOffersData;
     }
 
+    public function pageAction()
+    {
+        var_dump($_POST);
+        var_dump($_FILES);
+        exit;
+    }
+
     public function addOfferAction()
     {
         $urlRequest = $this->getRequest();
