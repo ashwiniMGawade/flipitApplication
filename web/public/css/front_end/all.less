@@ -693,7 +693,7 @@ div.box a.remove-fovourite.blue{
 }
 .section{
     .border-radius;
-    border:1px solid #e4e4e4;
+    /*border:1px solid #e4e4e4;*/
     background:@white-color;
     margin:0 0 28px;
     overflow:hidden;
@@ -708,16 +708,19 @@ div.box a.remove-fovourite.blue{
         font-size:12px;
         line-height:15px;
         border-top:1px solid @page-header-border-color;
+
         margin:0;
-        &:first-child{border:none;}
+        &:first-child{/*border:none;*/}
         .holder{
             padding:30px;
             position:relative;
             overflow:hidden;
+            border:1px solid @page-header-border-color;
             .clickout-title:hover a{
                 color: #07c;
             }
         }
+
         .offer-holder:hover{
             background: #fdf9f2;
             border: 1px solid #fbe6cf;
@@ -872,6 +875,10 @@ div.box a.remove-fovourite.blue{
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
             -webkit-border-radius: 0 0 2px 2px;
         }
+    }
+    article.block{
+      border-top:0;
+      border-bottom:15px solid #f6f6f6;
     }
     article.block.active:hover{
         background-color: #fcfcfc;
