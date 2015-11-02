@@ -22,7 +22,8 @@ class Version20151102081555 extends AbstractMigration
         $table->setPrimaryKey(array('id'));
     }
 
-    public function postUp(Schema $schema) {
+    public function postUp(Schema $schema)
+    {
         $this->connection->executeQuery("INSERT INTO `splashPage` (`id`, `content`, `image`, `popularShops`, `updatedBy`, `updatedAt`) VALUES (NULL, '<h2>Flipit.com — your online couponing portal</h2>
 <p>Flipit is your tool of choice for saving money on your online shopping. We work closely with leading brands worldwide to bring you the best deals and discount codes available on the web.</p>
 <p>Now you’re here, you’re just a few clicks away from knocking a percentage or amount off your online order! It won’t cost you a thing and you don’t even need to register with us to take advantage of our great discounts. We check, verify and publish brand new voucher codes each and every day, so you can find a way to save money on your online purchase all year round.</p>
