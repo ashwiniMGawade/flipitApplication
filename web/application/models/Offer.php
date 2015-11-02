@@ -2166,7 +2166,7 @@ class Offer extends BaseOffer
 
     public static function getOfferDetail($offerId, $type = '')
     {
-        $nowDate = date("Y-m-d H:i");
+        $nowDate = date("Y-m-d H:i:s");
         $shopParameters = $type != '' ? ',s.refUrl,s.permalink' : '';
         $offerDetails = Doctrine_Query::create()
         ->select('o.*,s.name,s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,p.id,tc.*,cat.id,img.*,news.*,t.*'.$shopParameters)
