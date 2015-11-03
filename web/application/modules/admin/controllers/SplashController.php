@@ -77,21 +77,7 @@ class Admin_SplashController extends Application_Admin_BaseController
     public function imagesAction()
     {
         $splashOffersData = array();
-        $splashOffers = ( array ) SystemFactory::getSplashOffers()->execute(array(), array('position'=>'ASC'));
-        if( false == empty( $splashOffers) ) {
-            foreach( $splashOffers as $splashOffer ) {
-                $offer = SystemFactory::getOffer($splashOffer->getLocale())->execute(array( 'id' => $splashOffer->getOfferId()));
-                if( $offer instanceof  \Core\Domain\Entity\Offer) {
-                    $splashOffersData[] = array(
-                        'id' => $splashOffer->getId(),
-                        'locale' => $splashOffer->getLocale(),
-                        'offer' => $offer->getTitle(),
-                        'shop'  => $offer->getShopOffers()->getName(),
-                    );
-                }
-            }
-        }
-        $this->view->splashOffersData = $splashOffersData;
+        $this->view->splashImages = ( array ) SystemFactory::getSplashImages()->execute(array(), array('position'=>'ASC'));
     }
 
     public function uploadImage($file, $rootPath)

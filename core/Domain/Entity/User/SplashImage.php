@@ -4,7 +4,7 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="splashImage")
+ * @ORM\Table(name="splashImages")
  */
 class SplashImage
 {
