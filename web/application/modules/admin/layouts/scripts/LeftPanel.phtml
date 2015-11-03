@@ -545,8 +545,8 @@ $action = $this->action;
         </li>
     <?php endif; ?>
     <?php
-    # make footer only editbable by superadmins
-    if ($sessionNamespace->settings['rights']['content']['rights'] == '1') : ?>
+    # make footer only editbable by superadmins and admin
+    if (in_array($sessionNamespace->settings['rights']['content']['rights'], array('1', '2'))) : ?>
         <li <?php if ($controller == 'footer') { ?>class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-footer current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-footer" <?php } ?>
             id="menu-links">
             <div class="imbull-menu-image"><a href="<?php echo HTTP_PATH ?>admin/footer"><br> </a></div>
