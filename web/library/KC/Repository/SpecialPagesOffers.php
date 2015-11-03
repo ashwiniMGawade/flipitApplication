@@ -13,7 +13,6 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
             ->select('op, o, terms, s, l')
             ->from('\Core\Domain\Entity\SpecialPagesOffers', 'op')
             ->leftJoin('op.offers', 'o')
-            ->leftJoin('op.pages', 'p')
             ->leftJoin('o.offertermandcondition', 'terms')
             ->andWhere(
                 "(o.couponCodeType = 'UN' AND (SELECT count(cc.id) FROM \Core\Domain\Entity\CouponCode cc WHERE cc.offer = o.id and o.status=1)  > 0)
