@@ -11,14 +11,22 @@
 ?>
 <form method="post" action="<?php echo HTTP_PATH ;?>admin/splash/reorder">
 <div id="chainList">
+    <div class="top_navigation">
+        <ul>
+            <li><a href="/admin/splash/page">Splash Page</a></li>
+            <li><a href="/admin/splash" class="selected_nav">Splash Offers </a></li>
+            <li><a href="/admin/splash/page">Featured Images </a></li>
+        </ul>
+    </div>
+    <div class="clear"></div>
     <div class="wrap columns-2">
         <?php echo $this->flashMessages(); ?>
         <?php if(count($this->splashOffersData)>8): ?>
         <div style="margin-top:14px; padding-top: 5px; padding-bottom: 5px; text-align: center;" class="alert alert-info"><label class="successserver">Maximum splash page offer limit reached, you cannot add more offers to splash page.</label></div>
-            <h1 class="fl"><?php echo $this->translate('Current Splash Offers'); ?></h1>
+            <h1 class="fl"><?php echo $this->translate('Splash Offers'); ?></h1>
         <?php else: ?>
-        <h1 class="fl"><?php echo $this->translate('Current Splash Offers'); ?>
-            <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/splash/add-offer'"><?php echo $this->translate('Add New Offer'); ?>
+        <h1 class="fl"><?php echo $this->translate('Splash Offers'); ?>
+            <button class="btn ml10 btn-primary" type="button" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/splash/add-offer'"><?php echo $this->translate('Add New Offer'); ?>
             </button>
         </h1>
         <?php endif; ?>

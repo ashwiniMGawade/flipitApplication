@@ -39,7 +39,7 @@ class UpdateSplashPageUsecase
             $splashPage->setImage($params['image']);
         }
         if (isset($params['popularShops'])) {
-            $splashPage->setPolularShops($params['popularShops']);
+            $splashPage->setPopularShops($params['popularShops']);
         }
         if (isset($params['updatedBy'])) {
             $splashPage->setUpdatedBy($params['updatedBy']);

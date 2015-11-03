@@ -56,9 +56,11 @@ class Admin_SplashController extends Application_Admin_BaseController
 
     public function pageAction()
     {
-        var_dump($_POST);
+        $splashPage = SystemFactory::getSplashPage()->execute(array('id' => 1));
+        $this->view->splashPage = $splashPage;
+        /*var_dump($_POST);
         var_dump($_FILES);
-        exit;
+        exit;*/
     }
 
     public function addOfferAction()

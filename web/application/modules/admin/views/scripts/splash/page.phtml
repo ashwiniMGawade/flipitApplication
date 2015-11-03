@@ -12,6 +12,13 @@ $this->headTitle()->append('Splash Page');
 
 <div id="imbullbody">
     <div style="overflow: hidden;" id="imbullbody-content">
+        <div class="top_navigation">
+            <ul>
+                <li><a href="/admin/splash/page" class="selected_nav">Splash Page </a></li>
+                <li><a href="/admin/splash" id="subMenu">Splash Offers </a></li>
+                <li><a href="/admin/splash/page" id="subMenu">Featured Images </a></li>
+            </ul>
+        </div>
         <div class="wrap columns-2">
             <?php echo $this->flashMessages(); ?>
 
@@ -28,8 +35,7 @@ $this->headTitle()->append('Splash Page');
                                     <div class="mainpage-content-right">
                                         <div class="mainpage-content-right-inner-right-other"></div>
                                         <div class="mainpage-content-right-inner-left-other">
-                                            <textarea name="topFooter"  id="topFooter"><?php echo  $this->footer ? $this->footer['topFooter'] : ""; ?></textarea>
-
+                                            <textarea name="splashPage[content]"  id="splashPageContent"><?php echo  $this->splashPage ? $this->splashPage->getContent() : ""; ?></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -69,7 +75,7 @@ $this->headTitle()->append('Splash Page');
                                     <div class="mainpage-content-right">
                                         <div class="mainpage-content-right-inner-right-other"></div>
                                         <div class="mainpage-content-right-inner-left-other">
-                                            <textarea name="column1"  id="column1"><?php echo  $this->footer ? $this->footer['middleColumn1'] : ""; ?></textarea>
+                                            <textarea name="splashPage[popularShops]"  id="splashPagePopularShops"><?php echo  $this->splashPage ? $this->splashPage->getPopularShops() : ""; ?></textarea>
                                         </div>
                                     </div>
                                 </div>

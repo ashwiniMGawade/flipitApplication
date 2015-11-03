@@ -26,10 +26,8 @@ $(document).ready(function(){
 	
 
 	// setup ckeditor and its configurtion
-	CKEDITOR.replace( 'topFooter',
+	CKEDITOR.replace( 'splashPageContent',
 			{
-				//fullPage : true,
-				////extraPlugins : 'wordcount',
 				customConfig : 'config.js' ,  
 				toolbar :  'BasicToolbar'  ,
 				width : "605" ,
@@ -37,54 +35,8 @@ $(document).ready(function(){
 				
 			});
 	// setup ckeditor and its configurtion
-	CKEDITOR.replace( 'column1',
+	CKEDITOR.replace( 'splashPagePopularShops',
 			{
-				//fullPage : true,
-				////extraPlugins : 'wordcount',
-				customConfig : 'config.js' ,  
-				toolbar :  'BasicToolbar'  ,
-				width : "605" ,
-				height : "250"
-				
-			});
-	// setup ckeditor and its configurtion
-	CKEDITOR.replace( 'column2',
-			{
-				//fullPage : true,
-				////extraPlugins : 'wordcount',
-				customConfig : 'config.js' ,  
-				toolbar :  'BasicToolbar'  ,
-				width : "605" ,
-				height : "250"
-				
-			});
-	// setup ckeditor and its configurtion
-	CKEDITOR.replace( 'column3',
-			{
-				//fullPage : true,
-				////extraPlugins : 'wordcount',
-				customConfig : 'config.js' ,  
-				toolbar :  'BasicToolbar'  ,
-				width : "605" ,
-				height : "250"
-				
-			});
-	// setup ckeditor and its configurtion
-	CKEDITOR.replace( 'column4',
-			{
-				//fullPage : true,
-				////extraPlugins : 'wordcount',
-				customConfig : 'config.js' ,  
-				toolbar :  'BasicToolbar'  ,
-				width : "605" ,
-				height : "250"
-				
-			});
-	// setup ckeditor and its configurtion
-	CKEDITOR.replace( 'bottomFooter',
-			{
-				//fullPage : true,
-				////extraPlugins : 'wordcount',
 				customConfig : 'config.js' ,  
 				toolbar :  'BasicToolbar'  ,
 				width : "605" ,

@@ -29,7 +29,7 @@ class SplashPage
     /**
      * @ORM\Column(type="text", nullable=false)
      */
-    protected $polularShops;
+    protected $popularShops;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=false)
@@ -97,17 +97,17 @@ class SplashPage
     /**
      * @return mixed
      */
-    public function getPolularShops()
+    public function getPopularShops()
     {
-        return $this->polularShops;
+        return $this->popularShops;
     }
 
     /**
      * @param mixed $polularShops
      */
-    public function setPolularShops($polularShops)
+    public function setPopularShops($popularShops)
     {
-        $this->polularShops = $polularShops;
+        $this->popularShops = $popularShops;
     }
 
     /**

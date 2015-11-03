@@ -4,6 +4,7 @@ namespace Core\Persistence\Factory;
 use \Core\Persistence\Database\Repository\DashboardRepository;
 use \Core\Persistence\Database\Repository\SettingsRepository;
 use \Core\Persistence\Database\Repository\SplashOfferRepository;
+use \Core\Persistence\Database\Repository\SplashPageRepository;
 use \Core\Persistence\Database\Service as Service;
 use \Core\Persistence\Database\Repository\OfferRepository;
 use \Core\Persistence\Database\Repository\ViewCountRepository;
@@ -81,5 +82,10 @@ class RepositoryFactory
     public static function dashboard($locale = '')
     {
         return new DashboardRepository((new Service\DoctrineManager(new Service\AppConfig($locale)))->getLocaleEntityManager());
+    }
+
+    public static function splashPage()
+    {
+        return new SplashPageRepository((new Service\DoctrineManager(new Service\AppConfig()))->getUserEntityManager());
     }
 }
