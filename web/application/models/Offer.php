@@ -2166,6 +2166,7 @@ class Offer extends BaseOffer
 
     public static function getOfferDetail($offerId, $type = '')
     {
+        $nowDate = date("Y-m-d H:i:s");
         $shopParameters = $type != '' ? ',s.refUrl,s.permalink' : '';
         $offerDetails = Doctrine_Query::create()
         ->select('o.*,s.name,s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,p.id,tc.*,cat.id,img.*,news.*,t.*'.$shopParameters)
@@ -2187,6 +2188,8 @@ class Offer extends BaseOffer
         ->addSelect("(SELECT  count(cc.status) FROM CouponCode cc WHERE cc.offerid = o.id and cc.status = 0) as used")
         ->addSelect("(SELECT  count(ccc.status) FROM CouponCode ccc WHERE ccc.offerid = o.id and ccc.status = 1) as available")
         ->andWhere("o.id =$offerId")
+        ->andWhere("o.startDate <= '".$nowDate."'")
+        ->andWhere("o.endDate > '".$nowDate."'")
         ->fetchArray();
         return $offerDetails;
     }
