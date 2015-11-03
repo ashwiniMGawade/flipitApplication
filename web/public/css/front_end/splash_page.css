@@ -3563,6 +3563,9 @@ tbody.collapse.in {
 	outline: 0;
 	background-color: #337ab7;
 }
+h3 a:hover {
+    text-decoration: none;
+}
 
 .dropdown-menu > .disabled > a,
 .dropdown-menu > .disabled > a:hover,
@@ -9760,6 +9763,13 @@ body {
 }
 
 @media screen and (max-width: 767px) {
+    .popular-sec .container {
+        margin-left: 10%;
+        margin-right: 5%;
+    }
+    .popular-sec h2{
+        text-align:left;
+    }
 	.table-responsive {
 		width: 100%;
 		margin-bottom: 11.25px;
