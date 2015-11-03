@@ -14,30 +14,22 @@
     <div class="top_navigation">
         <ul>
             <li><a href="/admin/splash/page">Splash Page</a></li>
-            <li><a href="/admin/splash" class="selected_nav">Splash Offers </a></li>
-            <li><a href="/admin/splash/images">Featured Images </a></li>
+            <li><a href="/admin/splash">Splash Offers </a></li>
+            <li><a href="/admin/splash/images" class="selected_nav">Featured Images </a></li>
         </ul>
     </div>
     <div class="clear"></div>
     <div class="wrap columns-2">
         <?php echo $this->flashMessages(); ?>
-        <?php if(count($this->splashOffersData)>8): ?>
-        <div style="margin-top:14px; padding-top: 5px; padding-bottom: 5px; text-align: center;" class="alert alert-info"><label class="successserver">Maximum splash page offer limit reached, you cannot add more offers to splash page.</label></div>
-            <h1 class="fl"><?php echo $this->translate('Splash Offers'); ?></h1>
-        <?php else: ?>
         <h1 class="fl"><?php echo $this->translate('Splash Offers'); ?>
-            <button class="btn ml10 btn-primary" type="button" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/splash/add-offer'"><?php echo $this->translate('Add New Offer'); ?>
-            </button>
+            <button class="btn ml10 btn-primary" type="button" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/splash/upload-featured-image'"><?php echo $this->translate('Upload New Image'); ?></button>
         </h1>
-        <?php endif; ?>
         <div class="clear"></div>
         <table class="table table-bordered table-striped"  cellpadding="0" cellspacing="0" id="splash-offer-table">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th><?php echo $this->translate('Offer Name'); ?></th>
-                    <th><?php echo $this->translate('Shop Name'); ?></th>
-                    <th><?php echo $this->translate('Locale'); ?></th>
+                    <th><?php echo $this->translate('Image'); ?></th>
                     <th><?php echo $this->translate('Action'); ?></th>
                 </tr>
             </thead>
@@ -47,12 +39,7 @@
                     <tr id="row_<?php echo $splashOffer['id']; ?>" data-position="<?php echo $row; ?>">
                         <td><?php echo $row; ?></td>
                         <td><input type="hidden" name="splashOffers[]" value="<?php echo $splashOffer['id']; ?>"><?php echo $splashOffer['offer']; ?></td>
-                        <td><?php echo $splashOffer['shop']; ?></td>
-                        <td><?php echo $splashOffer['locale']; ?></td>
-                        <td>
-                            <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/splash/delete-offer/id/<?php echo $splashOffer['id']; ?>'"><?php echo $this->translate('Delete'); ?>
-                            </button>
-                        </td>
+                        <td><button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/splash/delete-offer/id/<?php echo $splashOffer['id']; ?>'"><?php echo $this->translate('Delete'); ?></button></td>
                     </tr>
                 <?php $row++; endforeach; ?>
             <?php endif; ?>

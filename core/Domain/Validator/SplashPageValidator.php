@@ -26,7 +26,7 @@ class SplashPageValidator
                 $this->validator->notNull(array('message'=>'Content should not be blank.'))
             ),
             'image' => array(
-                $this->validator->notNull(array('message'=>'Image should not be blank.'))
+                $this->validator->notNull(array('message'=>'Please upload a valid splash image.'))
             ),
             'popularShops' => array(
                 $this->validator->notNull(array('message'=>'Popular shops should not be blank.'))

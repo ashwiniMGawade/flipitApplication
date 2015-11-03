@@ -16,12 +16,12 @@ $this->headTitle()->append('Splash Page');
             <ul>
                 <li><a href="/admin/splash/page" class="selected_nav">Splash Page </a></li>
                 <li><a href="/admin/splash" id="subMenu">Splash Offers </a></li>
-                <li><a href="/admin/splash/page" id="subMenu">Featured Images </a></li>
+                <li><a href="/admin/splash/images" id="subMenu">Featured Images </a></li>
             </ul>
         </div>
+        <div class="clear"></div>
         <div class="wrap columns-2">
             <?php echo $this->flashMessages(); ?>
-
             <h1><?php echo $this->translate('Splash Page');?></h1>
             <form name="splashPage" id="splashPage" enctype="multipart/form-data" method="post">
                 <div id="poststuff" class="metabox-holder has-right-sidebar">
@@ -51,14 +51,14 @@ $this->headTitle()->append('Splash Page');
                                                     <div class="mainpage-content-right-inner"></div>
                                                     <div class="mainpage-content-right-inner">
                                                         <div class='browse-container'>
-                                                            <?php if (!empty($this->newsletterHeaderImage['path'])) { ?>
-                                                                <img class='image-container' src="<?php echo PUBLIC_PATH_CDN .$this->newsletterHeaderImage['path'] .urldecode($this->newsletterHeaderImage['name']); ?>">
-                                                            <?php } ?>
+                                                            <?php if ( '' != $this->splashPage->getImage()) : ?>
+                                                                <img class='image-container' src="<?php echo PUBLIC_PATH . 'images/front_end/' . $this->splashPage->getImage(); ?>">
+                                                            <?php endif; ?>
                                                         </div>
-                                                        <input type="file"  id="splashPageImage" class="span3 margin-bottom-tenpx" name="splashPage[image]">
+                                                        <input type="file"  id="splashPageImage" class="span3 margin-bottom-tenpx" name="splashImage">
                                                         <div class="margin-bottom-tenpx">
                                                             <span class="help-inline" id="logo_file_message">
-                                                                <?php echo $this->translate("Image Size: 615px x 162px (*.jpg or *.png file only)"); ?>
+                                                                <?php echo $this->translate("Image Size:(*.jpeg, *.jpg or *.png file only)"); ?>
                                                             </span>
                                                         </div>
                                                     </div>
@@ -85,9 +85,8 @@ $this->headTitle()->append('Splash Page');
                     <br class="clear">
                 </div>
                 <div class="mainpage-content-colorbox">
-                    <button id="updateFooterButton"
-                            class="btn btn-large btn-primary fl"><?php echo $this->translate('EDIT SPLASH PAGE'); ?></button>
-                    <a href="/admin/splash/page" class="fl m10" onclick=""><strong><?php echo $this->translate('CANCEL'); ?></strong></a>
+                    <button id="updateFooterButton" class="btn btn-large btn-primary fl"><?php echo $this->translate('EDIT SPLASH PAGE'); ?></button>
+                    <a href="/admin/splash/page" class="fl m10"><strong><?php echo $this->translate('CANCEL'); ?></strong></a>
                 </div>
             </form>
 

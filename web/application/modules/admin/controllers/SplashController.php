@@ -58,9 +58,66 @@ class Admin_SplashController extends Application_Admin_BaseController
     {
         $splashPage = SystemFactory::getSplashPage()->execute(array('id' => 1));
         $this->view->splashPage = $splashPage;
-        /*var_dump($_POST);
-        var_dump($_FILES);
-        exit;*/
+        if ($this->_request->isPost()) {
+            $rootPath = ROOT_PATH . 'images/front_end/';
+            $image = $this->uploadImage('splashImage', $rootPath);
+            $pageParams = $this->getRequest()->getParam('splashPage', false);
+            $pageParams['image'] = $image;
+            $result = AdminFactory::updateSplashPage()->execute($splashPage, $pageParams);
+            if ($result instanceof Errors) {
+                $errors = $result->getErrorsAll();
+                $this->setFlashMessage('error', $errors);
+            } else {
+                $this->refreshSplashPageVarnish();
+                $this->setFlashMessage('success', 'Splash page has been updated successfully');
+            }
+        }
+    }
+
+    public function imagesAction()
+    {
+        $splashOffersData = array();
+        $splashOffers = ( array ) SystemFactory::getSplashOffers()->execute(array(), array('position'=>'ASC'));
+        if( false == empty( $splashOffers) ) {
+            foreach( $splashOffers as $splashOffer ) {
+                $offer = SystemFactory::getOffer($splashOffer->getLocale())->execute(array( 'id' => $splashOffer->getOfferId()));
+                if( $offer instanceof  \Core\Domain\Entity\Offer) {
+                    $splashOffersData[] = array(
+                        'id' => $splashOffer->getId(),
+                        'locale' => $splashOffer->getLocale(),
+                        'offer' => $offer->getTitle(),
+                        'shop'  => $offer->getShopOffers()->getName(),
+                    );
+                }
+            }
+        }
+        $this->view->splashOffersData = $splashOffersData;
+    }
+
+    public function uploadImage($file, $rootPath)
+    {
+        $adapter = new \Zend_File_Transfer_Adapter_Http();
+        $adapter->getFileInfo($file);
+        if (!file_exists($rootPath)) {
+            mkdir($rootPath, 0755, true);
+        }
+        $adapter->setDestination($rootPath);
+        $adapter->addValidator('Extension', false, array('jpg,jpeg,png', true));
+        $imageName = $adapter->getFileName($file, false);
+        $targetPath = $rootPath . $imageName;
+        $adapter->addFilter(
+            new \Zend_Filter_File_Rename(
+                array('target' => $targetPath, 'overwrite' => true)
+            ),
+            null,
+            $file
+        );
+        $adapter->receive($file);
+        if ($adapter->isValid($file)) {
+            return $imageName;
+        } else {
+            return false;
+        }
     }
 
     public function addOfferAction()
@@ -92,7 +149,6 @@ class Admin_SplashController extends Application_Admin_BaseController
             $splashOffer = AdminFactory::createSplashOffer()->execute();
             $result = AdminFactory::addSplashOffer()->execute($splashOffer, $params);
             if ($result instanceof Errors) {
-                $this->view->widget = $this->getAllParams();
                 $errors = $result->getErrorsAll();
                 $this->setFlashMessage('error', $errors);
             } else {

@@ -10,6 +10,7 @@ use \Core\Domain\Usecase\Admin\CreateSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\DeleteSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\GetSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\UpdateSplashOfferUsecase;
+use \Core\Domain\Usecase\Admin\UpdateSplashPageUsecase;
 
 use \Core\Domain\Usecase\Admin\GetApiKeysUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
@@ -53,6 +54,7 @@ use \Core\Domain\Validator\LandingPageValidator;
 use \Core\Domain\Validator\SettingsValidator;
 use \Core\Domain\Validator\ShopValidator;
 use \Core\Domain\Validator\SplashOfferValidator;
+use \Core\Domain\Validator\SplashPageValidator;
 use \Core\Domain\Validator\VisitorValidator;
 use \Core\Domain\Validator\WidgetValidator;
 use \Core\Domain\Validator\UrlSettingValidator;
@@ -297,6 +299,16 @@ class AdminFactory
         return new UpdateSplashOfferUsecase(
             RepositoryFactory::splashOffer(),
             new SplashOfferValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+
+    public static function updateSplashPage()
+    {
+        return new UpdateSplashPageUsecase(
+            RepositoryFactory::splashPage(),
+            new SplashPageValidator(new Validator()),
             new Purifier(),
             new Errors()
         );
