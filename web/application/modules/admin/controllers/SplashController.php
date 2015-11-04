@@ -38,10 +38,10 @@ class Admin_SplashController extends Application_Admin_BaseController
     {
         $splashOffersData = array();
         $splashOffers = ( array ) SystemFactory::getSplashOffers()->execute(array(), array('position'=>'ASC'));
-        if( false == empty( $splashOffers) ) {
-            foreach( $splashOffers as $splashOffer ) {
+        if (false == empty($splashOffers)) {
+            foreach ($splashOffers as $splashOffer) {
                 $offer = SystemFactory::getOffer($splashOffer->getLocale())->execute(array( 'id' => $splashOffer->getOfferId()));
-                if( $offer instanceof  \Core\Domain\Entity\Offer) {
+                if ($offer instanceof  \Core\Domain\Entity\Offer) {
                     $splashOffersData[] = array(
                         'id' => $splashOffer->getId(),
                         'locale' => $splashOffer->getLocale(),
@@ -59,13 +59,15 @@ class Admin_SplashController extends Application_Admin_BaseController
         $splashPage = SystemFactory::getSplashPage()->execute(array('id' => 1));
         $this->view->splashPage = $splashPage;
         if ($this->_request->isPost()) {
-            $rootPath = ROOT_PATH . 'images/front_end/';
-            $image = $this->uploadImage('splashImage', $rootPath);
             $pageParams = $this->getRequest()->getParam('splashPage', false);
-            $pageParams['image'] = $image;
-            $oldFile = $rootPath . $splashPage->getImage();
-            if( $image !== $splashPage->getImage() && true === file_exists($oldFile)) {
-                unlink($oldFile);
+            if (true === isset($_FILES['splashImage']) && true === isset($_FILES['splashImage']['name']) && '' !== $_FILES['splashImage']['name']) {
+                $rootPath = ROOT_PATH . 'images/front_end/';
+                $image = $this->uploadImage('splashImage', $rootPath);
+                $pageParams['image'] = $image;
+                $oldFile = $rootPath . $splashPage->getImage();
+                if ($image !== $splashPage->getImage() && true === file_exists($oldFile)) {
+                    unlink($oldFile);
+                }
             }
             $result = AdminFactory::updateSplashPage()->execute($splashPage, $pageParams);
             if ($result instanceof Errors) {
@@ -84,7 +86,7 @@ class Admin_SplashController extends Application_Admin_BaseController
         $this->view->websites = \KC\Repository\Website::getAllWebsites();
         if ($this->_request->isPost()) {
             $localeId = $urlRequest->getParam('locale', false);
-            if(true == empty($localeId)) {
+            if (true == empty($localeId)) {
                 $this->setFlashMessage('error', 'Locale should not be blank.');
                 $this->redirect(HTTP_PATH . 'admin/splash');
             }
@@ -96,7 +98,7 @@ class Admin_SplashController extends Application_Admin_BaseController
             );
             $splashOffers = SystemFactory::getSplashOffers()->execute($params);
 
-            if(count($splashOffers)>0) {
+            if (count($splashOffers)>0) {
                 $this->setFlashMessage('error', 'This splash offer already exist.');
                 $this->redirect(HTTP_PATH . 'admin/splash');
             }
@@ -122,8 +124,8 @@ class Admin_SplashController extends Application_Admin_BaseController
         $params = $this->getRequest()->getParams();
         $splashOffers = ( array ) SystemFactory::getSplashOffers()->execute(array());
         $splashOffers = $this->rekeyObjects($splashOffers, 'Id');
-        foreach( $params['splashOffers'] as $order => $splashOfferId ) {
-            if(true == array_key_exists($splashOfferId, $splashOffers)) {
+        foreach ($params['splashOffers'] as $order => $splashOfferId) {
+            if (true == array_key_exists($splashOfferId, $splashOffers)) {
                 $splashOffer = $splashOffers[$splashOfferId];
                 $params = array( 'position' => $order+1);
                 $result = AdminFactory::updateSplashOffer()->execute($splashOffer, $params);
@@ -139,7 +141,7 @@ class Admin_SplashController extends Application_Admin_BaseController
         $splashOfferId = intval($this->getRequest()->getParam('id'));
         if (intval($splashOfferId) < 1) {
             $this->setFlashMessage('error', 'Invalid selection.');
-            die;
+            $this->redirect(HTTP_PATH . 'admin/splash');
         }
 
         $result = AdminFactory::getSplashOffer()->execute(array('id' => $splashOfferId));
@@ -186,11 +188,11 @@ class Admin_SplashController extends Application_Admin_BaseController
         $params = $this->getRequest()->getParams();
         $splashImages = ( array ) SystemFactory::getSplashImages()->execute(array(), array('position'=>'ASC'));
         $splashImages = $this->rekeyObjects($splashImages, 'Id');
-        foreach( $params['splashImages'] as $order => $splashImageId ) {
-            if(true == array_key_exists($splashImageId, $splashImages)) {
+        foreach ($params['splashImages'] as $order => $splashImageId) {
+            if (true == array_key_exists($splashImageId, $splashImages)) {
                 $splashImage = $splashImages[$splashImageId];
                 $params = array( 'position' => $order+1);
-                $result = AdminFactory::updateSplashImage()->execute($splashImage, $params);
+                AdminFactory::updateSplashImage()->execute($splashImage, $params);
             }
         }
         $this->refreshSplashPageVarnish();
@@ -203,7 +205,7 @@ class Admin_SplashController extends Application_Admin_BaseController
         $splashImageId = intval($this->getRequest()->getParam('id'));
         if (intval($splashImageId) < 1) {
             $this->setFlashMessage('error', 'Invalid selection.');
-            die;
+            $this->redirect(HTTP_PATH . 'admin/splash/images');
         }
 
         $result = AdminFactory::getSplashImage()->execute(array('id' => $splashImageId));
@@ -248,7 +250,8 @@ class Admin_SplashController extends Application_Admin_BaseController
         }
     }
 
-    public function refreshSplashPageVarnish() {
+    public function refreshSplashPageVarnish()
+    {
         $varnishObject = new \KC\Repository\Varnish();
         $varnishObject->addUrl("http://www.flipit.com");
     }
