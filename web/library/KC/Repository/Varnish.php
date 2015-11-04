@@ -99,7 +99,7 @@ class Varnish extends \Core\Domain\Entity\Varnish
         $query = $queryBuilder
             ->select('count(v.id) as Vcount')
             ->from('\Core\Domain\Entity\Varnish', 'v')
-            ->where($queryBuilder->expr()->gt('v.refresh_time', '?1'))
+            ->where($queryBuilder->expr()->lte('v.refresh_time', '?1'))
             ->setParameter(1, date('Y-m-d H:i:s'));
         $varnishUrlsCount = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return !empty($varnishUrlsCount) ? $varnishUrlsCount[0]['Vcount'] : 0;
