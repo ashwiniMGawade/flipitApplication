@@ -23,19 +23,32 @@ function initCarousel() {
 			step: 3
 		});
 	} else {
-		jQuery('.carousel').find('.slideset').each(function(){
-			var holder = jQuery(this);
-			var items = holder.find('.slide');
-			var mask = holder.parent();
+		// jQuery('.carousel').find('.slideset').each(function(){
+		// 	var holder = jQuery(this);
+		// 	var items = holder.find('.slide');
+		// 	var mask = holder.parent();
 
-			holder.css({
-				width: (items.eq(0).outerWidth(true)) * items.length
-			})
-			mask.css({
-				overflow:'auto'
-			})
-		})
-
+		// 	holder.css({
+		// 		width: ((items.eq(0).outerWidth(true)) * items.length) + 34
+		// 	})
+		// 	mask.css({
+		// 		overflow:'auto'
+		// 	})
+		// })
+		jQuery('.carousel').scrollGallery({
+			mask: '.mask',
+			slider: '.slideset',
+			slides: '.slide',
+			btnPrev: 'a.btn-prev',
+			btnNext: 'a.btn-next',
+			generatePagination: '.pagination1',
+			circularRotation:false,
+			maskAutoSize: true,
+			autoRotation: false,
+			switchTime: 3000,
+			animSpeed: 500,
+			step: 1
+		});
 	}
 }
 

@@ -6815,9 +6815,11 @@ a:hover {
 }
 
 .carousel .mask .slide {
-	width: 300px;
+	width: 253px;
 	float: left;
 	position: relative;
+    margin-right:7px;
+    margin: 0 7px 0;
 }
 
 .carousel .mask .slide > img {
