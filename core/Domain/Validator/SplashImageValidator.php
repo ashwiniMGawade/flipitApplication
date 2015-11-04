@@ -29,7 +29,7 @@ class SplashImageValidator
                 $this->validator->notNull(array('message'=>'Position should not be blank.')),
                 $this->validator->greaterThan(array('value' => 0, 'message' => 'Position should not be blank.'))
             ),
-            'created_at' => array(
+            'createdAt' => array(
                 $this->validator->notNull(),
                 $this->validator->dateTime()
             )

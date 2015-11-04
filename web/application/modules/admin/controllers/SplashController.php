@@ -74,38 +74,6 @@ class Admin_SplashController extends Application_Admin_BaseController
         }
     }
 
-    public function imagesAction()
-    {
-        $splashOffersData = array();
-        $this->view->splashImages = ( array ) SystemFactory::getSplashImages()->execute(array(), array('position'=>'ASC'));
-    }
-
-    public function uploadImage($file, $rootPath)
-    {
-        $adapter = new \Zend_File_Transfer_Adapter_Http();
-        $adapter->getFileInfo($file);
-        if (!file_exists($rootPath)) {
-            mkdir($rootPath, 0755, true);
-        }
-        $adapter->setDestination($rootPath);
-        $adapter->addValidator('Extension', false, array('jpg,jpeg,png', true));
-        $imageName = $adapter->getFileName($file, false);
-        $targetPath = $rootPath . $imageName;
-        $adapter->addFilter(
-            new \Zend_Filter_File_Rename(
-                array('target' => $targetPath, 'overwrite' => true)
-            ),
-            null,
-            $file
-        );
-        $adapter->receive($file);
-        if ($adapter->isValid($file)) {
-            return $imageName;
-        } else {
-            return false;
-        }
-    }
-
     public function addOfferAction()
     {
         $urlRequest = $this->getRequest();
@@ -145,11 +113,6 @@ class Admin_SplashController extends Application_Admin_BaseController
         }
     }
 
-    public function refreshSplashPageVarnish() {
-        $varnishObject = new \KC\Repository\Varnish();
-        $varnishObject->addUrl("http://www.flipit.com");
-    }
-
     public function reorderAction()
     {
         $params = $this->getRequest()->getParams();
@@ -165,6 +128,105 @@ class Admin_SplashController extends Application_Admin_BaseController
         $this->refreshSplashPageVarnish();
         $this->setFlashMessage('success', 'Offers has been reordered successfully');
         $this->redirect(HTTP_PATH . 'admin/splash');
+    }
+
+    public function deleteOfferAction()
+    {
+        $splashOfferId = intval($this->getRequest()->getParam('id'));
+        if (intval($splashOfferId) < 1) {
+            $this->setFlashMessage('error', 'Invalid selection.');
+            die;
+        }
+
+        $result = AdminFactory::getSplashOffer()->execute(array('id' => $splashOfferId));
+        if ($result instanceof Errors) {
+            $errors = $result->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+            $this->redirect(HTTP_PATH . 'admin/splash');
+        }
+        AdminFactory::deleteSplashOffer()->execute($result);
+        $this->refreshSplashPageVarnish();
+        $this->setFlashMessage('success', 'Splash Offer deleted successfully.');
+        $this->redirect(HTTP_PATH . 'admin/splash');
+    }
+
+    public function imagesAction()
+    {
+        $splashOffersData = array();
+        $this->view->splashImages = ( array ) SystemFactory::getSplashImages()->execute(array(), array('position'=>'ASC'));
+    }
+
+    public function addFeaturedImageAction()
+    {
+        $this->layout()->setLayout('foo');
+    }
+
+    public function reorderImagesAction()
+    {
+        $params = $this->getRequest()->getParams();
+        $splashImages = ( array ) SystemFactory::getSplashImages()->execute(array(), array('position'=>'ASC'));
+        $splashImages = $this->rekeyObjects($splashImages, 'Id');
+        foreach( $params['splashImages'] as $order => $splashImageId ) {
+            if(true == array_key_exists($splashImageId, $splashImages)) {
+                $splashImage = $splashImages[$splashImageId];
+                $params = array( 'position' => $order+1);
+                $result = AdminFactory::updateSplashImage()->execute($splashImage, $params);
+            }
+        }
+        $this->refreshSplashPageVarnish();
+        $this->setFlashMessage('success', 'Featured images has been reordered successfully');
+        $this->redirect(HTTP_PATH . 'admin/splash/images');
+    }
+
+    public function deleteImageAction()
+    {
+        $splashImageId = intval($this->getRequest()->getParam('id'));
+        if (intval($splashImageId) < 1) {
+            $this->setFlashMessage('error', 'Invalid selection.');
+            die;
+        }
+
+        $result = AdminFactory::getSplashImage()->execute(array('id' => $splashImageId));
+        if ($result instanceof Errors) {
+            $errors = $result->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+            $this->redirect(HTTP_PATH . 'admin/splash/images');
+        }
+        AdminFactory::deleteSplashImages()->execute($result);
+        $this->refreshSplashPageVarnish();
+        $this->setFlashMessage('success', 'Splash image deleted successfully.');
+        $this->redirect(HTTP_PATH . 'admin/splash/images');
+    }
+
+    public function uploadImage($file, $rootPath)
+    {
+        $adapter = new \Zend_File_Transfer_Adapter_Http();
+        $adapter->getFileInfo($file);
+        if (!file_exists($rootPath)) {
+            mkdir($rootPath, 0755, true);
+        }
+        $adapter->setDestination($rootPath);
+        $adapter->addValidator('Extension', false, array('jpg,jpeg,png', true));
+        $imageName = $adapter->getFileName($file, false);
+        $targetPath = $rootPath . $imageName;
+        $adapter->addFilter(
+            new \Zend_Filter_File_Rename(
+                array('target' => $targetPath, 'overwrite' => true)
+            ),
+            null,
+            $file
+        );
+        $adapter->receive($file);
+        if ($adapter->isValid($file)) {
+            return $imageName;
+        } else {
+            return false;
+        }
+    }
+
+    public function refreshSplashPageVarnish() {
+        $varnishObject = new \KC\Repository\Varnish();
+        $varnishObject->addUrl("http://www.flipit.com");
     }
 
     public function shopsListAction()
@@ -221,25 +283,5 @@ class Admin_SplashController extends Application_Admin_BaseController
             }
         }
         exit();
-    }
-
-    public function deleteOfferAction()
-    {
-        $splashOfferId = intval($this->getRequest()->getParam('id'));
-        if (intval($splashOfferId) < 1) {
-            $this->setFlashMessage('error', 'Invalid selection.');
-            die;
-        }
-
-        $result = AdminFactory::getSplashOffer()->execute(array('id' => $splashOfferId));
-        if ($result instanceof Errors) {
-            $errors = $result->getErrorsAll();
-            $this->setFlashMessage('error', $errors);
-            $this->redirect(HTTP_PATH . 'admin/splash');
-        }
-        AdminFactory::deleteSplashOffer()->execute($result);
-        $this->refreshSplashPageVarnish();
-        $this->setFlashMessage('success', 'Splash Offer deleted successfully.');
-        $this->redirect(HTTP_PATH . 'admin/splash');
     }
 }

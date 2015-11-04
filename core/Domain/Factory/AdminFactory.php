@@ -12,6 +12,12 @@ use \Core\Domain\Usecase\Admin\GetSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\UpdateSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\UpdateSplashPageUsecase;
 
+use \Core\Domain\Usecase\Admin\AddSplashImageUsecase;
+use \Core\Domain\Usecase\Admin\CreateSplashImageUsecase;
+use \Core\Domain\Usecase\Admin\GetSplashImageUsecase;
+use \Core\Domain\Usecase\Admin\DeleteSplashImageUsecase;
+use \Core\Domain\Usecase\Admin\UpdateSplashImageUsecase;
+
 use \Core\Domain\Usecase\Admin\GetApiKeysUsecase;
 use \Core\Domain\Usecase\Admin\CreateApiKeyUsecase;
 use \Core\Domain\Usecase\Admin\AddApiKeyUsecase;
@@ -53,6 +59,7 @@ use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\LandingPageValidator;
 use \Core\Domain\Validator\SettingsValidator;
 use \Core\Domain\Validator\ShopValidator;
+use \Core\Domain\Validator\SplashImageValidator;
 use \Core\Domain\Validator\SplashOfferValidator;
 use \Core\Domain\Validator\SplashPageValidator;
 use \Core\Domain\Validator\VisitorValidator;
@@ -312,5 +319,40 @@ class AdminFactory
             new Purifier(),
             new Errors()
         );
+    }
+
+    public static function createSplashImage()
+    {
+        return new CreateSplashImageUsecase();
+    }
+
+    public static function addSplashImage()
+    {
+        return new AddSplashImageUsecase(
+            RepositoryFactory::splashImage(),
+            new SplashImageValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+
+    public static function getSplashImage()
+    {
+        return new GetSplashImageUsecase(RepositoryFactory::splashImage(), new Purifier(), new Errors());
+    }
+
+    public static function updateSplashImage()
+    {
+        return new UpdateSplashImageUsecase(
+            RepositoryFactory::splashImage(),
+            new SplashImageValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+
+    public static function deleteSplashImages()
+    {
+        return new DeleteSplashImageUsecase(RepositoryFactory::splashImage());
     }
 }

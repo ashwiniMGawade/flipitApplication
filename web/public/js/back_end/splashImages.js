@@ -121,3 +121,15 @@ function updateOffers(localeElement, shopId)
         });
     }
 }
+
+function showModel()
+{
+    $.ajax({
+        url: HOST_PATH + "admin/splash/add-featured-image",
+        method: "post",
+        success: function (data) {
+            $('#myModal').html(data).modal('show');
+        }
+    });
+    return false;
+}
