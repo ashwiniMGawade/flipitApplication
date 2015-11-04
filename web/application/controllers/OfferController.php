@@ -23,6 +23,7 @@ class OfferController extends Zend_Controller_Action
         $pagePermalink = isset($pagePermalink[0]) ? $pagePermalink[0] : '';
         $pageDetails = (object)\KC\Repository\Page::getPageDetailsFromUrl($pagePermalink);
 
+
         $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
 
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
@@ -44,11 +45,12 @@ class OfferController extends Zend_Controller_Action
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
         $offers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            (string)'20_topOffers_list',
-            (array)array('function' => 'Application_Service_Factory::topOffers', 'parameters' => array(20)
+            (string)'50_topOffers_list',
+            (array)array('function' => 'Application_Service_Factory::topOffers', 'parameters' => array(50)
             ),
             ''
         );
+
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'10_popularShops_list',
             (array)array('function' => '\KC\Repository\Shop::getAllPopularStores', 'parameters' => array(10)
@@ -302,7 +304,8 @@ class OfferController extends Zend_Controller_Action
         exit;
     }
 
-    public function totalcouponcountAction() {
+    public function totalcouponcountAction()
+    {
         $this->_helper->layout()->disableLayout();
         $locale = $this->getRequest()->getParam('locale');
         $locale = $locale == 'nl' ? 'en' : $locale;
