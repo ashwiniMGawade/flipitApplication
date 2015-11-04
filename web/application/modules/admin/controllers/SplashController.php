@@ -63,6 +63,10 @@ class Admin_SplashController extends Application_Admin_BaseController
             $image = $this->uploadImage('splashImage', $rootPath);
             $pageParams = $this->getRequest()->getParam('splashPage', false);
             $pageParams['image'] = $image;
+            $oldFile = $rootPath . $splashPage->getImage();
+            if( $image !== $splashPage->getImage() && true === file_exists($oldFile)) {
+                unlink($oldFile);
+            }
             $result = AdminFactory::updateSplashPage()->execute($splashPage, $pageParams);
             if ($result instanceof Errors) {
                 $errors = $result->getErrorsAll();
@@ -152,13 +156,29 @@ class Admin_SplashController extends Application_Admin_BaseController
 
     public function imagesAction()
     {
-        $splashOffersData = array();
-        $this->view->splashImages = ( array ) SystemFactory::getSplashImages()->execute(array(), array('position'=>'ASC'));
+        $splashImages = ( array ) SystemFactory::getSplashImages()->execute(array(), array('position'=>'ASC'));
+        if ($this->_request->isPost()) {
+            $splashImage = AdminFactory::createSplashImage()->execute();
+            $rootPath = ROOT_PATH . 'images/front_end/trading_coupon/';
+            $uploadedImage = $this->uploadImage('featuredImage', $rootPath);
+            $params['image'] = $uploadedImage;
+            $params['position'] = count($splashImages) + 1;
+            $result = AdminFactory::addSplashImage()->execute($splashImage, $params);
+            if ($result instanceof Errors) {
+                $errors = $result->getErrorsAll();
+                $this->setFlashMessage('error', $errors);
+            } else {
+                $this->refreshSplashPageVarnish();
+                $this->setFlashMessage('success', 'Featured image has been added successfully');
+                $splashImages = ( array ) SystemFactory::getSplashImages()->execute(array(), array('position'=>'ASC'));
+            }
+        }
+        $this->view->splashImages = $splashImages;
     }
 
     public function addFeaturedImageAction()
     {
-        $this->layout()->setLayout('foo');
+        $this ->_helper-> layout()->disableLayout();
     }
 
     public function reorderImagesAction()
@@ -193,6 +213,10 @@ class Admin_SplashController extends Application_Admin_BaseController
             $this->redirect(HTTP_PATH . 'admin/splash/images');
         }
         AdminFactory::deleteSplashImages()->execute($result);
+        $image = ROOT_PATH . 'images/front_end/trading_coupon/' . $result->getImage();
+        if (true === file_exists($image)) {
+            unlink($image);
+        }
         $this->refreshSplashPageVarnish();
         $this->setFlashMessage('success', 'Splash image deleted successfully.');
         $this->redirect(HTTP_PATH . 'admin/splash/images');

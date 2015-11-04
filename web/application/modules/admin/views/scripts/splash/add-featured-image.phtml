@@ -1,29 +1,13 @@
 <div class="wrap columns-2">
-    <form id="menuForm" name="menuForm">
+    <form name="splashImageForm" id="splashImageForm" enctype="multipart/form-data" method="post">
         <div class="m-item-popup-hdr">Menu item</div>
         <div class="metabox-holder has-right-sidebar" id="poststuff">
             <div id="post-body">
                 <div class="mainpage-content-line">
-                    <div class="mainpage-content-left"><label><strong>Label</strong></label></div>
+                    <div class="mainpage-content-left"><label><strong>Select Image</strong></label></div>
                     <div class="mainpage-content-right-inner-right-other display-none"></div>
                     <div class="mainpage-content-right">
-                        <input type="text" id="label" name="label" class="span3" placeholder="Label..">
-                    </div>
-                </div>
-
-                <div class="mainpage-content-line">
-                    <div class="mainpage-content-left"><label><strong>URL</strong></label></div>
-                    <div class="mainpage-content-right-inner-right-other display-none"></div>
-                    <div class="mainpage-content-right">
-                        <input type="text" class="span3" id="url" name="url">
-                    </div>
-                </div>
-
-                <div class="mainpage-content-line">
-                    <div class="mainpage-content-left"><label><strong>Sorteer</strong></label></div>
-                    <div class="mainpage-content-right-inner-right-other display-none"></div>
-                    <div class="mainpage-content-right">
-                        <input type="text" class="span3" placeholder="1" id="position" name="position">
+                        <input type="file" id="featuredImage" class="span3 margin-bottom-tenpx" name="featuredImage">
                     </div>
                 </div>
             </div>
@@ -31,13 +15,8 @@
         </div>
 
         <div class="m-item-popup-btm">
-            <input type="hidden" name="hid" id="hid" value="46">
-            <input type="hidden" name="roothid" id="roothid" value="46">
-            <input type="hidden" name="hidimage" id="hidimage" value="">
-            <input type="hidden" name="imageid" id="imageid" value="0">
-            <input type="hidden" name="hidimageorg" id="hidimageorg" value="">
             <button type="submit" class="btn btn-large btn-primary fl" id="submitButton" value="">Wijzigingen opslaan</button>
             <button data-dismiss="modal" class="btn ml10 m5" value="">Annuleren</button>
-            <a onclick="deleteMenu(46,0,46)" class="red menuDelete" href="javascript:void(0);"><strong>DELETE</strong></a></div>
+        </div>
     </form>
 </div>
