@@ -35,6 +35,7 @@ class IndexController extends Zend_Controller_Action
             FACEBOOK_IMAGE,
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
+
         if (\FrontEnd_Helper_HomePagePartialFunctions:: getFlipitHomePageStatus()) {
             
             $this->view->topOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
@@ -101,6 +102,7 @@ class IndexController extends Zend_Controller_Action
                 ),
                 ''
             );
+
             $this->view->pageCssClass = 'home-page';
         } else {
             $this->_helper->viewRenderer->setNoRender(true);

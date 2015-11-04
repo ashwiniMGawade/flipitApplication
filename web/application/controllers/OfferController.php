@@ -301,4 +301,13 @@ class OfferController extends Zend_Controller_Action
         echo $floatingCouponHtml;
         exit;
     }
+
+    public function totalcouponcountAction() {
+        $this->_helper->layout()->disableLayout();
+        $locale = $this->getRequest()->getParam('locale');
+        $locale = $locale == 'nl' ? 'en' : $locale;
+        $totalOfferCount = FrontEnd_Helper_OffersPartialFunctions::getTotalOfferCount($locale);
+        echo $totalOfferCount;
+        exit;
+    }
 }

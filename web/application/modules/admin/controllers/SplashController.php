@@ -1,5 +1,10 @@
 <?php
-class Admin_SplashController extends Zend_Controller_Action
+
+use \Core\Domain\Factory\SystemFactory;
+use \Core\Domain\Factory\AdminFactory;
+use \Core\Service\Errors;
+
+class Admin_SplashController extends Application_Admin_BaseController
 {
     public $flashMessenger = '';
 
@@ -31,53 +36,126 @@ class Admin_SplashController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $splashTableData = $this->splashObject->getSplashInformation();
-
-        if (!empty($splashTableData)) {
-            \BackEnd_Helper_DatabaseManager::addConnection($splashTableData[0]['locale']);
-            $splashOfferDetails = $this->splashObject->getOfferById($splashTableData[0]['offerId']);
-            $this->view->currentOfferTitle = $splashOfferDetails->title;
-            $this->view->currentOfferLocale = $splashTableData[0]['locale'];
+        $splashOffersData = array();
+        $splashOffers = ( array ) SystemFactory::getSplashOffers()->execute(array(), array('position'=>'ASC'));
+        if( false == empty( $splashOffers) ) {
+            foreach( $splashOffers as $splashOffer ) {
+                $offer = SystemFactory::getOffer($splashOffer->getLocale())->execute(array( 'id' => $splashOffer->getOfferId()));
+                if( $offer instanceof  \Core\Domain\Entity\Offer) {
+                    $splashOffersData[] = array(
+                        'id' => $splashOffer->getId(),
+                        'locale' => $splashOffer->getLocale(),
+                        'offer' => $offer->getTitle(),
+                        'shop'  => $offer->getShopOffers()->getName(),
+                    );
+                }
+            }
         }
-
-        $this->getFlashMessage();
+        $this->view->splashOffersData = $splashOffersData;
     }
 
     public function addOfferAction()
     {
         $urlRequest = $this->getRequest();
         $this->view->websites = \KC\Repository\Website::getAllWebsites();
-        $this->getFlashMessage();
-
         if ($this->_request->isPost()) {
             $localeId = $urlRequest->getParam('locale', false);
-            $locale = \BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
-            $offerId = $urlRequest->getParam('searchOfferId', false);
-            $splashTableData = $this->splashObject->getSplashInformation();
-
-            if (!empty($splashTableData)) {
-                $this->splashObject->deleteSplashoffer();
+            if(true == empty($localeId)) {
+                $this->setFlashMessage('error', 'Locale should not be blank.');
+                $this->redirect(HTTP_PATH . 'admin/splash');
             }
+            $locale = \BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
+            $params = array(
+                'locale' => $locale,
+                'shopId' => $urlRequest->getParam('searchShopId', false),
+                'offerId' => $urlRequest->getParam('searchOfferId', false)
+            );
+            $splashOffers = SystemFactory::getSplashOffers()->execute($params);
 
-            $this->splashObject->saveSplashOffer($offerId, $locale);
-            $varnishObject = new \KC\Repository\Varnish();
-            $varnishObject->addUrl("http://www.flipit.com");
-            $this->setFlashMessage('Offer has been added successfully');
-            $this->_redirect(HTTP_PATH . 'admin/splash');
+            if(count($splashOffers)>0) {
+                $this->setFlashMessage('error', 'This splash offer already exist.');
+                $this->redirect(HTTP_PATH . 'admin/splash');
+            }
+            $splashOffers = SystemFactory::getSplashOffers()->execute();
+            $position = count($splashOffers) + 1;
+
+            $params['position'] = $position;
+            $splashOffer = AdminFactory::createSplashOffer()->execute();
+            $result = AdminFactory::addSplashOffer()->execute($splashOffer, $params);
+            if ($result instanceof Errors) {
+                $this->view->widget = $this->getAllParams();
+                $errors = $result->getErrorsAll();
+                $this->setFlashMessage('error', $errors);
+            } else {
+                $this->refreshSplashPageVarnish();
+                $this->setFlashMessage('success', 'Offer has been added successfully');
+            }
+            $this->redirect(HTTP_PATH . 'admin/splash');
         }
+    }
+
+    public function refreshSplashPageVarnish() {
+        $varnishObject = new \KC\Repository\Varnish();
+        $varnishObject->addUrl("http://www.flipit.com");
+    }
+
+    public function reorderAction()
+    {
+        $params = $this->getRequest()->getParams();
+        $splashOffers = ( array ) SystemFactory::getSplashOffers()->execute(array());
+        $splashOffers = $this->rekeyObjects($splashOffers, 'Id');
+        foreach( $params['splashOffers'] as $order => $splashOfferId ) {
+            if(true == array_key_exists($splashOfferId, $splashOffers)) {
+                $splashOffer = $splashOffers[$splashOfferId];
+                $params = array( 'position' => $order+1);
+                $result = AdminFactory::updateSplashOffer()->execute($splashOffer, $params);
+            }
+        }
+        $this->refreshSplashPageVarnish();
+        $this->setFlashMessage('success', 'Offers has been reordered successfully');
+        $this->redirect(HTTP_PATH . 'admin/splash');
+    }
+
+    public function shopsListAction()
+    {
+        if ($this->_request->isXmlHttpRequest()) {
+            $localeId = intval($this->getRequest()->getParam('locale', false));
+            if ($localeId) {
+                $locale = \BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
+                \BackEnd_Helper_DatabaseManager::addConnection($locale);
+                $searchKeyword = $this->getRequest()->getParam('keyword');
+                $activeShops = $stores = \KC\Repository\Shop::getStoresForSearchByKeyword(
+                    $searchKeyword,
+                    25,
+                    ''
+                );
+                $shops = array();
+                if (!empty($activeShops)) {
+                    foreach ($activeShops as $activeShop) {
+                        $shops[] = array('name' => ucfirst($activeShop['name']),
+                            'id' => $activeShop['id']);
+                    }
+                } else {
+                    $message = $this->view->translate('No Record Found');
+                    $shops[] = array('name' => $message);
+                }
+                $this->_helper->json($shops);
+            }
+        }
+        exit();
     }
 
     public function offersListAction()
     {
         if ($this->_request->isXmlHttpRequest()) {
             $localeId = intval($this->getRequest()->getParam('locale', false));
-
             if ($localeId) {
                 $locale = \BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
                 \BackEnd_Helper_DatabaseManager::addConnection($locale);
                 $offers = new \KC\Repository\Offer();
                 $offerKeyword = $this->getRequest()->getParam('keyword');
-                $activeCoupons = $offers->getActiveCoupons($offerKeyword);
+                $shopId = $this->getRequest()->getParam('shop');
+                $activeCoupons = $offers->getActiveCoupons($offerKeyword, $shopId);
                 $coupons = array();
                 if (!empty($activeCoupons)) {
                     foreach ($activeCoupons as $activeCoupon) {
@@ -96,25 +174,21 @@ class Admin_SplashController extends Zend_Controller_Action
 
     public function deleteOfferAction()
     {
-        $this->_helper->layout->disableLayout();
-        $this->getFlashMessage();
-        $this->splashObject->deleteSplashoffer();
-        $this->setFlashMessage('Offer has been deleted successfully');
-        $this->_redirect(HTTP_PATH . 'admin/splash');
-    }
+        $splashOfferId = intval($this->getRequest()->getParam('id'));
+        if (intval($splashOfferId) < 1) {
+            $this->setFlashMessage('error', 'Invalid selection.');
+            die;
+        }
 
-    public function getFlashMessage()
-    {
-        $message = $this->flashMessenger->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
-        return $this;
-    }
-
-    public function setFlashMessage($messageText)
-    {
-        $message = $this->view->translate($messageText);
-        $this->flashMessenger->addMessage(array('success' => $message));
-        return $this;
+        $result = AdminFactory::getSplashOffer()->execute(array('id' => $splashOfferId));
+        if ($result instanceof Errors) {
+            $errors = $result->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+            $this->redirect(HTTP_PATH . 'admin/splash');
+        }
+        AdminFactory::deleteSplashOffer()->execute($result);
+        $this->refreshSplashPageVarnish();
+        $this->setFlashMessage('success', 'Splash Offer deleted successfully.');
+        $this->redirect(HTTP_PATH . 'admin/splash');
     }
 }

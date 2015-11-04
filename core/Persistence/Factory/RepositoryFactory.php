@@ -1,7 +1,9 @@
 <?php
 namespace Core\Persistence\Factory;
 
-use Core\Persistence\Database\Repository\SettingsRepository;
+use \Core\Persistence\Database\Repository\DashboardRepository;
+use \Core\Persistence\Database\Repository\SettingsRepository;
+use \Core\Persistence\Database\Repository\SplashOfferRepository;
 use \Core\Persistence\Database\Service as Service;
 use \Core\Persistence\Database\Repository\OfferRepository;
 use \Core\Persistence\Database\Repository\ViewCountRepository;
@@ -51,9 +53,9 @@ class RepositoryFactory
         return new WidgetRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 
-    public static function offer()
+    public static function offer($locale = '')
     {
-        return new OfferRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
+        return new OfferRepository((new Service\DoctrineManager(new Service\AppConfig($locale)))->getLocaleEntityManager());
     }
 
     public static function landingPage()
@@ -69,5 +71,15 @@ class RepositoryFactory
     public static function urlSetting()
     {
         return new URLSettingRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
+    }
+
+    public static function splashOffer()
+    {
+        return new SplashOfferRepository((new Service\DoctrineManager(new Service\AppConfig()))->getUserEntityManager());
+    }
+
+    public static function dashboard($locale = '')
+    {
+        return new DashboardRepository((new Service\DoctrineManager(new Service\AppConfig($locale)))->getLocaleEntityManager());
     }
 }
