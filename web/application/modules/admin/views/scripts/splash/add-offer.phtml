@@ -16,8 +16,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/splash-management.js
                     <label><strong><?php echo $this->translate('Locale'); ?></strong></label>
                 </div>
                 <div class="mainpage-content-right oveflow-hidden">
-                    <div class="mainpage-content-right-inner-left-other"></div>
-                    <div class="mainpage-content-right-inner-left-other fl oh">
+                    <div class="mainpage-content-right-inner-right-other"></div>
+                    <div class="fl oh">
                         <?php 
                             echo $this->locale['0']['locale'] ;
                         ?>
@@ -36,7 +36,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/splash-management.js
                     </div>
                 </div>
             </div>
-            <div  class="mainpage-content-line mb10">
+            <div  class="mainpage-content-line mb10" id="shopSection" style="display:none;">
                 <div class="mainpage-content-left">
                     <label>
                         <strong><?php echo $this->translate('Shop'); ?></strong>
@@ -48,13 +48,10 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/splash-management.js
                         <input type='hidden' id="searchShop" value="" name="searchShop" class='select-width'/>
                         <input type='hidden' id="searchShopId" value="" name="searchShopId"/>
                     </div>
-                    <div class="mainpage-content-right-inner-right-other focus error">
-                        <span for="offerName" class="error help-inline"></span>
-                    </div>
                     <div class="clear"></div>
                 </div>
             </div>
-            <div  class="mainpage-content-line mb10">
+            <div  class="mainpage-content-line mb10" id="offerSection" style="display:none;">
                 <div class="mainpage-content-left">
                     <label>
                         <strong><?php echo $this->translate('Offers'); ?></strong>
@@ -70,9 +67,6 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/splash-management.js
                         <span for="offerName" class="error help-inline"></span>
                     </div>
                     <div class="clear"></div>
-                </div>
-                <div class="mainpage-content-right-inner-right-other focus error">
-                    <span for="offerName" class="error help-inline"></span>
                 </div>
             </div>
             <div class="clear"></div>
