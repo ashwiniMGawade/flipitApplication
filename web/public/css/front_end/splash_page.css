@@ -228,6 +228,11 @@ th {
 	padding: 0;
 }
 
+.logo-text {
+    margin-left:138px;
+    display:none;
+}
+
 /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
 
 @font-face {
@@ -3563,6 +3568,9 @@ tbody.collapse.in {
 	outline: 0;
 	background-color: #337ab7;
 }
+h3 a:hover {
+    text-decoration: none;
+}
 
 .dropdown-menu > .disabled > a,
 .dropdown-menu > .disabled > a:hover,
@@ -6690,7 +6698,7 @@ a:hover {
 }
 
 #header.header .logo {
-	width: 260px;
+	width: 125px;
     overflow: visible;
 }
 
@@ -6748,13 +6756,14 @@ a:hover {
 .select-form label {
 	display: block;
 	color: #fff;
-	font-size: 25px;
+	font-size: 22px;
 	line-height: 25px;
 	text-shadow: 0 0 6px rgba(17, 16, 13, .1);
 	font-weight: bold;
 	margin: 0 0 10px;
 	max-height: 84px;
 	overflow: hidden;
+    text-align:center;
 }
 
 .select-form label span {
@@ -6812,9 +6821,11 @@ a:hover {
 }
 
 .carousel .mask .slide {
-	width: 300px;
+	width: 253px;
 	float: left;
 	position: relative;
+    margin-right:7px;
+    margin: 0 7px 0;
 }
 
 .carousel .mask .slide > img {
@@ -6869,6 +6880,7 @@ a:hover {
 
 .carousel .mask .caption .text-holder p {
 	margin: 0 0 6px;
+    min-height:28px;
 }
 
 .carousel .mask .caption .flag {
@@ -7623,11 +7635,10 @@ body {
 	width: 120px;
 	height: auto;
 	margin: 0 auto;
-    float:none;
+    float:left;
 }
 
 .logo img {
-	width: 100%;
 	height: auto;
 	display: block;
 }
@@ -8684,6 +8695,9 @@ body {
 		padding-top: 48px;
 		padding-bottom: 48px;
 	}
+    .carousel .mask .caption .text-holder p {
+        min-height:35px;
+    }
 
 	.container .jumbotron,
 	.container-fluid .jumbotron {
@@ -8768,7 +8782,7 @@ body {
 	}
 
 	#header.header .logo {
-		width: 301px;
+		width: 125px;
 	}
 
 	#header.header .h-text {
@@ -9278,8 +9292,11 @@ body {
 
 @media only screen and (min-width: 992px) {
 	#header.header .logo {
-		width: 392px;
+		width: 125px;
 	}
+    .logo-text {
+        display:block;
+    }
 
 	#header.header .h-text {
 		font-size: 20px;
@@ -9298,7 +9315,7 @@ body {
 
 	.select-form label {
 		margin: 0 29px 0 0;
-		font-size: 28px;
+		font-size: 25px;
 		line-height: 40px;
 		float: left;
 		max-width: 524px;
@@ -9411,6 +9428,9 @@ body {
 	.container {
 		width: 1190px;
 	}
+    .logo-text {
+       display:block;
+    }
 
 	.col-lg-1,
 	.col-lg-2,
@@ -9669,9 +9689,12 @@ body {
 	.select-form {
 		padding: 61px 24px 53px 36px;
 	}
+    .logo-text {
+        display:block;
+    }
 
 	.select-form label {
-		font-size: 32px;
+		font-size: 27px;
 		line-height: 40px;
 		max-width: 554px;
 	}
@@ -9714,6 +9737,9 @@ body {
 	.carousel {
 		width: 1191px;
 	}
+    .logo-text {
+        display:block;
+    }
 
 	.carousel .mask {
 		width: 1191px;
@@ -9740,6 +9766,7 @@ body {
 
 	.carousel .mask .caption .text-holder p {
 		margin: 0 0 13px;
+        min-height:43px;
 	}
 
 	.carousel .mask .caption .flag {
@@ -9760,6 +9787,13 @@ body {
 }
 
 @media screen and (max-width: 767px) {
+    .popular-sec .container {
+        margin-left: 10%;
+        margin-right: 5%;
+    }
+    .popular-sec h2{
+        text-align:left;
+    }
 	.table-responsive {
 		width: 100%;
 		margin-bottom: 11.25px;

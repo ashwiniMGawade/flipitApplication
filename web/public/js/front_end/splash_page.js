@@ -18,23 +18,6 @@ $(function(){
         get_coupon_count($(this).val());
     });
 
-    var get_coupon_count = function(country_code) {
-        $.ajax({
-            url :"/total-coupon-count",
-            type: "post",
-            data:
-            {
-                locale: country_code
-            },
-            success: function(response){
-                $("#coupon_count").html(response);
-            },
-            error : function(error) {
-
-            }
-        });
-    }
-
     $('form.select-form').submit(function(e){
         e.preventDefault();
         countryCode = $('select.present').val();
