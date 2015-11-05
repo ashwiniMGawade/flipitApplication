@@ -45,10 +45,10 @@ function initCarousel() {
 			maskAutoSize: true,
 			autoRotation: true,
 			circularRotation:false,
-			minSlideNum: 3,
+			minSlideNum: 1,
 			switchTime: 3000,
 			animSpeed: 500,
-			step: 1
+			step: 3
 		});
 	}
 }
