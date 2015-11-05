@@ -57,7 +57,7 @@ class Page extends \Core\Domain\Entity\Page
             ->where('page.permalink ='."'".\FrontEnd_Helper_viewHelper::sanitize($permalink)."'")
             ->andWhere('page.publish = 1')
             ->andWhere('page.pageLock = 0')
-            ->andWhere('page.deleted = 0');55555555555555555555555555555555555555555555555555
+            ->andWhere('page.deleted = 0');
         $pageDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageDetails;
     }
