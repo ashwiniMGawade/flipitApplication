@@ -9,7 +9,7 @@ class SplashPageCest
     {
         $I = new WebTester\AdminSteps($scenario);
         $I->login();
-        $I->wantTo('Test splash page content update .');
+        $I->wantTo('Test splash page content update.');
         $I->amOnPage('/admin/splash/page');
         $I->wait(3);
         $I->click('#updateFooterButton');
@@ -24,10 +24,45 @@ class SplashPageCest
         $startDate = new \DateTime();
         $endDate = new \DateTime();
         $endDate->add(new \DateInterval('P2D'));
-        $I->wantTo('Test use can add offers on splash page .');
+        $I->wantTo('Test user can add offers on splash page .');
         $this->seedOfferData($I, 10, 'Offer Special for Splash', 'ABCD', 1, $startDate, $endDate);
-        $I->amOnPage('/admin/splash/page');
-        $I->wait(3);
+        $I->amOnPage('/admin/splash');
+        $I->wait(1);
+        $I->click('Add New Offer');
+        $this->fillAddOfferForm($I);
+    }
+
+    /*public function testSplashPageFeaturedImages(WebTester $I, \Codeception\Scenario $scenario)
+    {
+        $I = new WebTester\AdminSteps($scenario);
+        $I->login();
+        $I->wantTo('Test user can add upload featured images on splash page .');
+        $I->amOnPage('/admin/splash/images');
+        $I->wait(1);
+        $I->click('Upload New Image');
+        $I->wait(1);
+        $I->attachFile('#featuredImage', 'Chrysanthemum.jpg');
+        $I->wait(1);
+        $I->click('#submitUploadBtn');
+    }*/
+
+    private function fillAddOfferForm($I)
+    {
+        $I->wait(1);
+        $I->selectOption("#locale", 'kortingscode.nl');
+        $I->waitForText('Winkel');
+        $I->click('Search Shop');
+        $I->fillField('input[type=text]', 'acceptance');
+        $I->wait(2);
+        $I->click('.select2-highlighted');
+        $I->waitForText('Acties');
+        $I->click('Search Offer');
+        $I->fillField('input.select2-focused[type=text]', 'Offer Special');
+        $I->wait(2);
+        $I->click('.select2-highlighted');
+        $I->click('#updateseenIdButton');
+        $I->wait(1);
+        $I->canSee('Offer has been added successfully');
     }
 
     private function seedOfferData($I, $id, $title, $code, $shopId, $startDate, $endDate)
