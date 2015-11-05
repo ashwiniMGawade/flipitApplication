@@ -162,7 +162,10 @@ class Admin_SplashController extends Application_Admin_BaseController
         if ($this->_request->isPost()) {
             $splashImage = AdminFactory::createSplashImage()->execute();
             $rootPath = ROOT_PATH . 'images/front_end/trading_coupon/';
-            $uploadedImage = $this->uploadImage('featuredImage', $rootPath);
+            $uploadedImage = '';
+            if (true === isset($_FILES['featuredImage']) && true === isset($_FILES['featuredImage']['name']) && '' !== $_FILES['featuredImage']['name']) {
+                $uploadedImage = $this->uploadImage('featuredImage', $rootPath);
+            }
             $params['image'] = $uploadedImage;
             $params['position'] = count($splashImages) + 1;
             $result = AdminFactory::addSplashImage()->execute($splashImage, $params);
