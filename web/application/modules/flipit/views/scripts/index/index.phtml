@@ -38,11 +38,9 @@
                                 <select class="present" data-jcf='{"wrapNative": false, "wrapNativeOnMobile": false}'>
                                     <option class="hideme">Select your country</option>
                                     <?php
-                                    $languages = FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true');unset($languages['ar']);
-                                    unset($languages['at']);
-                                    unset($languages['ca']);
-                                    foreach ($languages as $lang_code => $lang_val) {
-                                        echo '<option data-image-class="country-flags '.$lang_code.'" value="'.$lang_code.'">'.$lang_val.'</option>';
+                                    $locales = (array) FrontEnd_Helper_viewHelper::getAllCountriesForSplashPage();
+                                    foreach ($locales as $localeCode => $localeName) {
+                                        echo '<option data-image-class="country-flags '.$localeCode.'" value="'.$localeCode.'">'.$localeName.'</option>';
                                     }
                                     ?>
                                 </select>
