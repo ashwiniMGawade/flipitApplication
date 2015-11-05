@@ -14,10 +14,10 @@
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-5">
                 <div class="logo">
                     <a href="<?php echo HTTP_PATH;?>">
-                        <img src="<?php echo PUBLIC_PATH;?>images/logo-flipit-125-50.png" alt="Flipit Your online couponing portal" width="125" height="50">
+                        <img src="<?php echo PUBLIC_PATH;?>images/logo-flipit-125-50.png" alt="Flipit Your Online Couponing Portal" width="125" height="50">
                     </a>
                 </div>
-                <div class="logo-text"><h1>Your online couponing portal</h1></div>
+                <div class="logo-text"><h1>Your Online Couponing Portal</h1></div>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-7 text-right">
                 <span class="h-text"><a id="current-local" href=""></a></span>
@@ -33,13 +33,14 @@
                 <div class="col-xs-12">
                     <form  action="" class="select-form">
                         <fieldset>
-                            <label for="coutry">Select your country, and find your voucher</label>
+                            <label for="coutry">Select Your Country to Find all Vouchers</label>
                             <div class="input-group">
                                 <select class="present" data-jcf='{"wrapNative": false, "wrapNativeOnMobile": false}'>
                                     <option class="hideme">Select your country</option>
                                     <?php
-                                    $languages = FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true');
-                                    unset($languages['ar']);
+                                    $languages = FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true');unset($languages['ar']);
+                                    unset($languages['at']);
+                                    unset($languages['ca']);
                                     foreach ($languages as $lang_code => $lang_val) {
                                         echo '<option data-image-class="country-flags '.$lang_code.'" value="'.$lang_code.'">'.$lang_val.'</option>';
                                     }
@@ -61,7 +62,7 @@ if ('' != $globalTrendingCoupon): ?>
 <section class="carousel container">
     <div class="row">
         <header class="col-xs-12">
-            <h1>The best vouchers on Flipit</h1>
+            <h1>Check Out Today’s Best Discount Codes</h1>
         </header>
     </div>
     <div class="row">
@@ -82,7 +83,7 @@ if ('' != $globalTrendingCoupon): ?>
 <article class="information-sec same-height">
     <div class="alignleft common-height">
         <div class="text-wrp">
-            <h2>Flipit.com — your online couponing portal</h2>
+            <h2>Flipit.com — Your Online Couponing Portal</h2>
             <p>Flipit is your tool of choice for saving money on your online shopping. We work closely with leading brands worldwide to bring you the best deals and discount codes available on the web.</p>
             <p>Now you’re here, you’re just a few clicks away from knocking a percentage or amount off your online order! It won’t cost you a thing and you don’t even need to register with us to take advantage of our great discounts. We check, verify and publish brand new voucher codes each and every day, so you can find a way to save money on your online purchase all year round.</p>
             <p>Simply select your country, search for your favourite brand, then click on your favourite deal to reveal your desired coupon code. When you’re ready, proceed to checkout and copy the voucher code from Flipit.com into the designated box, and enjoy your discount! Saving online really is that easy.</p>
@@ -94,7 +95,7 @@ if ('' != $globalTrendingCoupon): ?>
 <section class="popular-sec">
     <div class="container">
         <div class="row">
-            <div class="col-xs-12"><h2>Most popular shops on Flipit</h2></div>
+            <div class="col-xs-12"><h2>Promo Codes and Discounts for 6500+ Online Stores</h2></div>
         </div>
         <div class="row">
             <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2">
