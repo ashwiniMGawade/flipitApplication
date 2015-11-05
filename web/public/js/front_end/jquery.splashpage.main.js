@@ -146,7 +146,7 @@ PlatformDetect = (function(){
 
 	return {
 		options: {
-			cssPath: window.pathInfo ? pathInfo.base + pathInfo.css : 'css/'
+			cssPath: window.pathInfo ? pathInfo.base + pathInfo.css : 'public/css/'
 		},
 		addModule: function(obj) {
 			detectModules[obj.type] = obj;
@@ -210,7 +210,7 @@ PlatformDetect.addModule({
 });
 
 // Detect rules
-PlatformDetect.addRule({type: 'allmobile', css: 'allmobile.css'});
+PlatformDetect.addRule({type: 'allmobile', css: 'front_end/allmobile.css'});
 
 /*
  * jQuery FontResize Event
