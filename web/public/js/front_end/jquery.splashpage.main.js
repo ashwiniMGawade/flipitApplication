@@ -144,10 +144,9 @@ function initSameHeight() {
 PlatformDetect = (function(){
 	var detectModules = {};
 
-
 	return {
 		options: {
-			cssPath: window.pathInfo ? pathInfo.base + pathInfo.css : 'public/css/'
+			cssPath: window.pathInfo ? pathInfo.base + pathInfo.css : 'css/'
 		},
 		addModule: function(obj) {
 			detectModules[obj.type] = obj;
@@ -211,7 +210,7 @@ PlatformDetect.addModule({
 });
 
 // Detect rules
-PlatformDetect.addRule({type: 'allmobile', css: 'front_end/splash-page-allmobile.css'});
+PlatformDetect.addRule({type: 'allmobile', css: 'allmobile.css'});
 
 /*
  * jQuery FontResize Event

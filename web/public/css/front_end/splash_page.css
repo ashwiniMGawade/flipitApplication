@@ -1774,6 +1774,15 @@ blockquote ul:last-child,
 blockquote ol:last-child {
 	margin-bottom: 0;
 }
+.carousel.mobile {
+    padding: 0 0 39px !important;
+    width: 100%;
+}
+
+.carousel.mobile .mask {
+    width: 100%;
+}
+
 
 blockquote footer,
 blockquote small,
@@ -8147,6 +8156,13 @@ body {
 	.jcf-select {
 		max-width: 340px;
 	}
+    .carousel .mask .slide {
+        width: 300px;
+    }
+    .carousel.mobile .mask {
+        width: 100%;
+        padding: 0 17px;
+    }
 }
 
 @media (min-width: 768px) {
@@ -8817,12 +8833,12 @@ body {
 	}
 
 	.carousel .mask {
-		width: 703px;
-		padding: 0 0 0 15px;
+		width: 600px;
 	}
 
 	.carousel .mask .slide {
-		width: 329px;
+		width: 300px;
+        margin-left:0px;
 		margin-right: 15px;
 	}
 
