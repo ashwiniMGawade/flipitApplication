@@ -3,6 +3,7 @@ class OfferController extends Zend_Controller_Action
 {
     public function init()
     {
+
         $module     = strtolower($this->getRequest()->getParam('lang'));
         $controller = strtolower($this->getRequest()->getControllerName());
         $action     = strtolower($this->getRequest()->getActionName());
@@ -16,14 +17,12 @@ class OfferController extends Zend_Controller_Action
 
     public function top50Action()
     {
-        $pageName = 'top-20';
+        $pageName = 'top-50';
         $pagePermalink = \FrontEnd_Helper_viewHelper::getPagePermalink();
 
         $pagePermalink = explode('?', $pagePermalink);
         $pagePermalink = isset($pagePermalink[0]) ? $pagePermalink[0] : '';
         $pageDetails = (object)\KC\Repository\Page::getPageDetailsFromUrl($pagePermalink);
-        print_R($pageDetails);exit;
-
 
         $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
 
