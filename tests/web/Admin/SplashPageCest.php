@@ -9,6 +9,23 @@ class SplashPageCest
     {
         $I = new WebTester\AdminSteps($scenario);
         $I->login();
+        $I->wantTo('Test splash page content update .');
+        $I->amOnPage('/admin/splash/page');
+        $I->wait(3);
+        $I->click('#updateFooterButton');
+        $I->wait(1);
+        $I->canSee('Splash page has been updated successfully');
+    }
+
+    public function testSplashPageOffers(WebTester $I, \Codeception\Scenario $scenario)
+    {
+        $I = new WebTester\AdminSteps($scenario);
+        $I->login();
+        $startDate = new \DateTime();
+        $endDate = new \DateTime();
+        $endDate->add(new \DateInterval('P2D'));
+        $I->wantTo('Test use can add offers on splash page .');
+        $this->seedOfferData($I, 10, 'Offer Special for Splash', 'ABCD', 1, $startDate, $endDate);
         $I->amOnPage('/admin/splash/page');
         $I->wait(3);
     }
