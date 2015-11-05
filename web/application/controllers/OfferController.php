@@ -14,7 +14,7 @@ class OfferController extends Zend_Controller_Action
         $this->viewHelperObject = new \FrontEnd_Helper_viewHelper();
     }
 
-    public function top20Action()
+    public function top50Action()
     {
         $pageName = 'top-20';
         $pagePermalink = \FrontEnd_Helper_viewHelper::getPagePermalink();
@@ -22,6 +22,7 @@ class OfferController extends Zend_Controller_Action
         $pagePermalink = explode('?', $pagePermalink);
         $pagePermalink = isset($pagePermalink[0]) ? $pagePermalink[0] : '';
         $pageDetails = (object)\KC\Repository\Page::getPageDetailsFromUrl($pagePermalink);
+        print_R($pageDetails);exit;
 
 
         $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
