@@ -7,8 +7,34 @@ jQuery(function(){
 function initCarousel() {
 	var isTouchDevice = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
 	var isWinPhoneDevice = /Windows Phone/.test(navigator.userAgent);
+	if (isTouchDevice || isWinPhoneDevice) {
+		var win =jQuery(window);
+		var gallery = jQuery('.carousel');
+		gallery.find('.slideset').each(function(){
+			var holder = jQuery(this);
+			var items = holder.find('.slide');
+			var mask = holder.parent();
+			gallery.addClass('mobile');
+			function recalcWidth(){
+				holder.css({
+					overflow:'hidden',
+					width: ((items.eq(0).outerWidth(true)) * items.length),
+				})
+				if(win.width()> 767){
 
-	if (!isTouchDevice && !isWinPhoneDevice) {
+					holder.css({
+						overflow:'hidden',
+						width: ((items.eq(0).outerWidth(true)) * items.length) + 2,
+					})
+				}
+				mask.css({
+					overflow:'auto'
+				})
+			}
+			recalcWidth();
+			win.on('resize', recalcWidth);
+		})
+	} else {
 		jQuery('.carousel').scrollGallery({
 			mask: '.mask',
 			slider: '.slideset',
@@ -18,24 +44,12 @@ function initCarousel() {
 			generatePagination: '.pagination',
 			maskAutoSize: true,
 			autoRotation: true,
+			circularRotation:false,
+			minSlideNum: 1,
 			switchTime: 3000,
 			animSpeed: 500,
 			step: 3
 		});
-	} else {
-		jQuery('.carousel').find('.slideset').each(function(){
-			var holder = jQuery(this);
-			var items = holder.find('.slide');
-			var mask = holder.parent();
-
-			holder.css({
-				width: (items.eq(0).outerWidth(true)) * items.length
-			})
-			mask.css({
-				overflow:'auto'
-			})
-		})
-
 	}
 }
 
@@ -78,6 +92,7 @@ function initCarousel() {
 			handleTouch: true,
 			vertical: false,
 			useTranslate3D: false,
+			minSlideNum:3,
 			step: false
 		}, options);
 		this.init();
@@ -138,6 +153,12 @@ function initCarousel() {
 			// misc elements
 			this.curNum = this.gallery.find(this.options.currentNumber);
 			this.allNum = this.gallery.find(this.options.totalNumber);
+
+			if (this.slides.length <= this.options.minSlideNum) {
+				this.btnPrev.hide();
+				this.btnNext.hide();
+				this.pagerLinks.hide();
+			};
 		},
 		attachEvents: function() {
 			// bind handlers scope
@@ -303,6 +324,7 @@ function initCarousel() {
 					this.stepOffsets.push(Math.max(tmpOffset, this.maxOffset));
 					this.stepsCount++;
 				}
+				this.stepsCount--
 			}
 			// scroll by mask size
 			else {
@@ -466,7 +488,7 @@ function initCarousel() {
 		autoRotate: function() {
 			var self = this;
 			clearTimeout(this.timer);
-			if(this.options.autoRotation && !this.galleryHover && !this.autoRotationStopped) {
+			if(this.options.autoRotation && !this.galleryHover && !this.autoRotationStopped && this.slides.length > 2) {
 				this.timer = setTimeout(function(){
 					self.nextSlide(true);
 				}, this.options.switchTime);

@@ -9,31 +9,14 @@ $(function(){
             var countryName = availableLanguages[countryCode];
             $("#current-local").attr('href', countryUrl).html("To Flipit.com "+ countryName);
             $('select.present').val(countryCode);
-            get_coupon_count(countryCode);
+            //get_coupon_count(countryCode);
             jcf.refreshAll();
         }
     }, "jsonp");
 
     $('select.present').on('change', function(e){
-        get_coupon_count($(this).val());
+        //get_coupon_count($(this).val());
     });
-
-    var get_coupon_count = function(country_code) {
-        $.ajax({
-            url :"/total-coupon-count",
-            type: "post",
-            data:
-            {
-                locale: country_code
-            },
-            success: function(response){
-                $("#coupon_count").html(response);
-            },
-            error : function(error) {
-
-            }
-        });
-    }
 
     $('form.select-form').submit(function(e){
         e.preventDefault();

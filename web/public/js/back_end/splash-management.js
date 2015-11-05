@@ -60,8 +60,8 @@ function updateShops(localeElement) {
     var locale = parseInt(localeElement.value) ;
     if(locale > 0)
     {
+        $('#shopSection').show();
         $("#searchShop").val("");
-
         $("#searchShop").select2({
             placeholder: __("Search Shop"),
             minimumInputLength: 1,
@@ -92,10 +92,10 @@ function updateShops(localeElement) {
 function updateOffers(localeElement, shopId)
 {
     var locale = parseInt(localeElement.value) ;
-    if(locale > 0)
+    if(locale > 0 && shopId > 0)
     {
+        $('#offerSection').show();
         $("#searchOffers").val("");
-
         $("#searchOffers").select2({
             placeholder: __("Search Offer"),
             minimumInputLength: 1,
@@ -119,5 +119,7 @@ function updateOffers(localeElement, shopId)
                 return data.name;
             }
         });
+    } else {
+        $('#offerSection').hide();
     }
 }
