@@ -8,7 +8,7 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDate = date("Y-m-d H:i");
-        $expire_time = SpecialPagesOffers::getPageTimeConstraint($pageId);
+        $expireTime = SpecialPagesOffers::getPageTimeConstraint($pageId);
         $query = $queryBuilder
             ->select('op, o, terms, s, l')
             ->from('\Core\Domain\Entity\SpecialPagesOffers', 'op')
@@ -29,9 +29,9 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
             ->andWhere($queryBuilder->expr()->neq('o.Visability', $queryBuilder->expr()->literal("MEM")))
             ->orderBy('op.position');
 
-        if ($expire_time) {
-            $expire_date = date("Y-m-d H:i", strtotime("+". $expire_time. " days"));
-            $query = $queryBuilder->andWhere('o.endDate <= '.$queryBuilder->expr()->literal($expire_date));
+        if ($expireTime) {
+            $expireDate = date("Y-m-d H:i", strtotime("+". $expireTime. " days"));
+            $query = $queryBuilder->andWhere('o.endDate <= '.$queryBuilder->expr()->literal($expireDate));
         }
 
         $specialPageOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
