@@ -8,6 +8,7 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDate = date("Y-m-d H:i");
+        $expireTime = SpecialPagesOffers::getPageTimeConstraint($pageId);
         $query = $queryBuilder
             ->select('op, o, terms, s, l')
             ->from('\Core\Domain\Entity\SpecialPagesOffers', 'op')
@@ -20,16 +21,37 @@ class SpecialPagesOffers extends \Core\Domain\Entity\SpecialPagesOffers
             ->leftJoin('o.shopOffers', 's')
             ->leftJoin('s.logo', 'l')
             ->where('op.pages = '.$pageId)
-            ->andWhere('o.endDate >'.$queryBuilder->expr()->literal($currentDate))
+            ->andWhere('o.endDate >='.$queryBuilder->expr()->literal($currentDate))
             ->andWhere('o.startDate <='.$queryBuilder->expr()->literal($currentDate))
             ->andWhere('o.deleted = 0')
             ->andWhere('s.deleted = 0')
             ->andWhere('s.status = 1')
             ->andWhere($queryBuilder->expr()->neq('o.Visability', $queryBuilder->expr()->literal("MEM")))
             ->orderBy('op.position');
+
+        if ($expireTime) {
+            $expireDate = date("Y-m-d H:i", strtotime("+". $expireTime. " days"));
+            $query = $queryBuilder->andWhere('o.endDate <= '.$queryBuilder->expr()->literal($expireDate));
+        }
+
         $specialPageOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
         return self::removeDuplicateOffers($specialPageOffers, $pageType);
     }
+
+    private static function getPageTimeConstraint($pageId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('p.timenumberOfDays')
+            ->from('\Core\Domain\Entity\Page', 'p')
+            ->where('p.id ='.$pageId)
+            ->andWhere('p.enableTimeConstraint = 1');
+
+        $timeconstraint = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return !empty($timeconstraint) ? $timeconstraint[0]['timenumberOfDays'] : false;
+    }
+
 
     public static function removeDuplicateOffers($specialPageOffers, $pageType = '')
     {
