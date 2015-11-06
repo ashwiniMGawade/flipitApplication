@@ -18,22 +18,21 @@ function initCarousel() {
 			function recalcWidth(){
 				holder.css({
 					overflow:'hidden',
-					width: ((items.eq(0).outerWidth(true)) * items.length),
-				})
+					width: ((items.eq(0).outerWidth(true)) * items.length) + 24
+				});
 				if(win.width()> 767){
-
 					holder.css({
 						overflow:'hidden',
-						width: ((items.eq(0).outerWidth(true)) * items.length) + 2,
-					})
+						width: ((items.eq(0).outerWidth(true)) * items.length) +24
+					});
 				}
 				mask.css({
 					overflow:'auto'
-				})
+				});
 			}
 			recalcWidth();
-			win.on('resize', recalcWidth);
-		})
+			win.on('resize orientationchange', recalcWidth);
+		});
 	} else {
 		jQuery('.carousel').scrollGallery({
 			mask: '.mask',
@@ -45,10 +44,9 @@ function initCarousel() {
 			maskAutoSize: true,
 			autoRotation: true,
 			circularRotation:false,
-			minSlideNum: 1,
+			minSlideNum: 3,
 			switchTime: 3000,
-			animSpeed: 500,
-			step: 3
+			animSpeed: 500
 		});
 	}
 }
@@ -109,6 +107,7 @@ function initCarousel() {
 			}
 		},
 		findElements: function() {
+			var self = this;
 			// define dimensions proporties
 			this.fullSizeFunction = this.options.vertical ? 'outerHeight' : 'outerWidth';
 			this.innerSizeFunction = this.options.vertical ? 'height' : 'width';
@@ -157,8 +156,11 @@ function initCarousel() {
 			if (this.slides.length <= this.options.minSlideNum) {
 				this.btnPrev.hide();
 				this.btnNext.hide();
-				this.pagerLinks.hide();
-			};
+				this.pagerLinks.parents('.pagination').hide();
+				setTimeout(function(){
+					self.slider.css({margin:'0 auto'});
+				},100);
+			}
 		},
 		attachEvents: function() {
 			// bind handlers scope
@@ -267,10 +269,13 @@ function initCarousel() {
 		onWindowResize: function() {
 			if(!this.galleryAnimating) {
 				this.calculateOffsets();
-				this.refreshPosition();
-				this.buildPagination();
-				this.refreshState();
 				this.resizeQueue = false;
+				if (this.slides.length > this.options.minSlideNum) {
+					this.refreshState();
+					this.refreshPosition();
+					this.buildPagination();
+
+				}
 			} else {
 				this.resizeQueue = true;
 			}
@@ -324,7 +329,7 @@ function initCarousel() {
 					this.stepOffsets.push(Math.max(tmpOffset, this.maxOffset));
 					this.stepsCount++;
 				}
-				this.stepsCount--
+				// this.stepsCount--
 			}
 			// scroll by mask size
 			else {
