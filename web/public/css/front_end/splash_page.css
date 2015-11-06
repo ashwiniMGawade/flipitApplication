@@ -6821,7 +6821,7 @@ a:hover {
 	overflow: hidden;
 	text-align: left;
 	margin: 0 auto;
-	width: 300px;
+	width: 267px;
 }
 
 .carousel .mask .slideset {
@@ -8156,12 +8156,14 @@ body {
 	.jcf-select {
 		max-width: 340px;
 	}
+    .carousel .mask {
+        width: 315px;
+    }
     .carousel .mask .slide {
         width: 300px;
     }
     .carousel.mobile .mask {
         width: 100%;
-        padding: 0 17px;
     }
 }
 
@@ -8715,6 +8717,10 @@ body {
         min-height:35px;
     }
 
+    .carousel .mask .caption .text-holder p {
+        min-height:35px;
+    }
+
 	.container .jumbotron,
 	.container-fluid .jumbotron {
 		padding-left: 60px;
@@ -8833,7 +8839,7 @@ body {
 	}
 
 	.carousel .mask {
-		width: 600px;
+		width: 630px;
 	}
 
 	.carousel .mask .slide {
@@ -8841,6 +8847,10 @@ body {
         margin-left:0px;
 		margin-right: 15px;
 	}
+
+    .carousel.mobile .mask .slideset {
+        padding: 0 12px;
+    }
 
 	.carousel .mask .caption {
 		padding: 15px 8px;
@@ -9349,7 +9359,7 @@ body {
 	}
 
 	.carousel .mask {
-		width: 927px;
+		width: 912px;
 	}
 
 	.carousel .mask .slide {
