@@ -65,7 +65,7 @@ class Admin_SplashController extends Application_Admin_BaseController
                 $image = $this->uploadImage('splashImage', $rootPath);
                 $pageParams['image'] = $image;
                 $oldFile = $rootPath . $splashPage->getImage();
-                if ($image !== $splashPage->getImage() && true === file_exists($oldFile)) {
+                if ($image !== false && $image !== $splashPage->getImage() && true === file_exists($oldFile)) {
                     unlink($oldFile);
                 }
             }
