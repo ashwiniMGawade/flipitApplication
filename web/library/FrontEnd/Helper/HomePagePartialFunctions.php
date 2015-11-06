@@ -173,7 +173,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
                     $imageTagOrSpan = self::getLeftPanelImage($pageLeftImage, $imageSize, $imageDescription);
                 }
             } else if ($listType =='topOffers') {
-                $pageLeftImage = KC\Repository\Page::getPageHomeImageByPermalink(FrontEnd_Helper_viewHelper::__link('link_top-20'));
+                $pageLeftImage = KC\Repository\Page::getPageHomeImageByPermalink(FrontEnd_Helper_viewHelper::__link('link_top-50'));
                 $pageLeftImage = !empty($pageLeftImage) ? $pageLeftImage : HTTP_PATH ."public/images/img-08.png";
                 $imageTagOrSpan = self::getLeftPanelImage($pageLeftImage, $imageSize, $imageDescription);
             } else if ($listType =='newOffers') {
@@ -197,7 +197,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
     {
         $topOffer = $this->getRightColumnOffersHtml(
             'topOffers',
-            HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_top-20'),
+            HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_top-50'),
             FrontEnd_Helper_viewHelper::__form('form_All Top Codes')
         );
 
