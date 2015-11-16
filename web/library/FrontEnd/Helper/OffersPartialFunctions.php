@@ -665,7 +665,8 @@ class FrontEnd_Helper_OffersPartialFunctions
     public static function getSplashPageTradingCoupons()
     {
         $couponHtml = '';
-        $splashOffers = SystemFactory::getSplashOffers()->execute(array(), array('position'=>'ASC'));
+        $splashOffers = (array) SystemFactory::getSplashOffers()->execute(array(), array('position'=>'ASC'));
+        $splashImages = (array) SystemFactory::getSplashImages()->execute(array(), array('position'=>'ASC'));
         $offerCount = 1;
         $serverNameScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
         foreach ($splashOffers as $splashOffer) {
@@ -685,8 +686,9 @@ class FrontEnd_Helper_OffersPartialFunctions
                 } else {
                     $offerTitle = $offer->getTitle();
                 }
+                $splashImage = true === array_key_exists($offerCount, $splashImages) ? $splashImages[$offerCount]->getImage() : 'slide_img1.jpg';
                 $couponHtml .= '<div class="slide">
-                        <img src="'.PUBLIC_PATH.'images/front_end/trading_coupon/slide_img'.$offerCount.'.jpg" alt="'.$offer->getTitle().'">
+                        <img src="'.PUBLIC_PATH.'images/front_end/trading_coupon/'.$splashImage.'" alt="'.$offer->getTitle().'">
                         <div class="caption">
                             <div class="img-holder">
                                 <a href="'.$clickUrl.'"><img src="'.$logoPath.$offer->getShopOffers()->getLogo()->path.'thum_big_'.$offer->getShopOffers()->getLogo()->name.'" alt="'.$offer->getShopOffers()->getName().'"></a>

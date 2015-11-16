@@ -78,165 +78,18 @@ if ('' != $globalTrendingCoupon): ?>
     </div>
 </section>
 <?php endif; ?>
+<?php $splashPage = FrontEnd_Helper_LayoutContent::loadSplashPage(); ?>
 <article class="information-sec same-height">
     <div class="alignleft common-height">
         <div class="text-wrp">
-            <h2>Flipit.com — Your Online Couponing Portal</h2>
-            <p>Flipit is your tool of choice for saving money on your online shopping. We work closely with leading brands worldwide to bring you the best deals and discount codes available on the web.</p>
-            <p>Now you’re here, you’re just a few clicks away from knocking a percentage or amount off your online order! It won’t cost you a thing and you don’t even need to register with us to take advantage of our great discounts. We check, verify and publish brand new voucher codes each and every day, so you can find a way to save money on your online purchase all year round.</p>
-            <p>Simply select your country, search for your favourite brand, then click on your favourite deal to reveal your desired coupon code. When you’re ready, proceed to checkout and copy the voucher code from Flipit.com into the designated box, and enjoy your discount! Saving online really is that easy.</p>
-            <p>We hope you enjoy saving money with us!</p>
+            <?php echo $splashPage->getContent(); ?>
         </div>
     </div>
-    <div class="img-block common-height" style="background-image:url(<?php echo PUBLIC_PATH;?>images/front_end/splash.jpg)"></div>
+    <div class="img-block common-height" style="background-image:url(<?php echo PUBLIC_PATH;?>images/front_end/<?php echo $splashPage->getImage(); ?>)"></div>
 </article>
 <section class="popular-sec">
     <div class="container">
-        <div class="row">
-            <div class="col-xs-12"><h2>Promo Codes and Discounts for 6500+ Online Stores</h2></div>
-        </div>
-        <div class="row">
-            <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2">
-
-                <h3><a href="<?php echo HTTP_PATH;?>be/">Belgium</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>be/zalando">Zalando</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>be/bol-com">bol.com</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>be/collishop">ColliShop</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>be/albelli">Albelli</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>be/smartphoto">Smartphoto</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>be/hema">HEMA BE</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>be/sarenza">Sarenza</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>be/lensonline">LensOnline</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>be/center-parcs">Center Parcs</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>be/hellofresh">HelloFresh</a></li>
-                </ul>
-                <h3><a href="<?php echo HTTP_PATH;?>se/">Sweden</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>se/adidas">Adidas</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>se/miinto">Miinto</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>se/zoovillage">Zoovillage</a></li>
-                </ul>
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2">
-                <h3><a href="<?php echo HTTP_PATH;?>es/">Spain</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>es/kiabi">Kiabi ES</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>es/pc-componentes">PcComponentes</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>es/sportium">Sportium</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>es/casa-del-libro">Casa del Libro</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>es/vueling">Vueling</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>es/groupalia">Groupalia</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>es/rakuten-es">Rakuten</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>es/letsbonus">LetsBonus</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>es/descuentos-perfumes">PerfumesClub</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>es/promociones-farma">Promofarma</a></li>
-                </ul>
-                <h3><a href="<?php echo HTTP_PATH;?>au/">Australia</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>au/groupon">Groupon AU</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>au/crazy-sales">CrazySales</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>au/get-glasses">Get Glasses AU</a></li>
-                </ul>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2">
-                <h3><a href="<?php echo HTTP_PATH;?>it/">Italy</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>it/home24">Home24</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>it/desigual">Desigual</a></li>
-                </ul>
-                <h3><a href="<?php echo HTTP_PATH;?>br/">Brazil</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>br/adidas">adidas</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>br/sephora">Sephora</a></li>
-                </ul>
-                <h3><a href="<?php echo HTTP_PATH;?>pl/">Poland</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>pl/interhome">Interhome</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>pl/answear">Answear</a></li>
-                </ul>
-                <h3><a href="<?php echo HTTP_PATH;?>pt/">Portugal</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>pt/edreams">eDreams</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>pt/fnac">FNAC</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>pt/worten">Worten</a></li>
-                </ul>
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2">
-                <h3><a href="<?php echo HTTP_PATH;?>sg/">Singapore</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>sg/zalora">Zalora SG</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>sg/lazada-singapore">Lazada SG</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>sg/redmart">RedMart</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>sg/foodpanda">Foodpanda</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>sg/hotels-com">Hotels.com SG</a></li>
-                </ul>
-                <h3><a href="<?php echo HTTP_PATH;?>id/">Indonesie</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>id/lazada">Lazada ID</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>id/bilna">Bilna</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>id/blibli">Blibli</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>id/zalora">Zalora ID</a></li>
-                </ul>
-                <h3><a href="<?php echo HTTP_PATH;?>nz/">New Zealand</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>nz/value-basket">Value Basket</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>nz/mighty-ape">Mighty Ape</a></li>
-                </ul>
-            </div>
-
-            <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2">
-                <h3><a href="<?php echo HTTP_PATH;?>fr/">France</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>fr/aliexpress">Aliexpress FR</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>fr/kiabi">Kiabi FR</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>fr/ms-mode">MS mode</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>fr/hema">HEMA FR</a></li>
-                </ul>
-
-                <h3><a href="<?php echo HTTP_PATH;?>ch/">Switzerland</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>ch/deindeal">DeinDeal</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>ch/reifendirekt">Reifendirekt</a></li>
-                </ul>
-                <h3><a href="<?php echo HTTP_PATH;?>no/">Norway</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>no/nelly">Nelly</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>no/jollyroom">Jollyroom</a></li>
-                </ul>
-                <h3><a href="<?php echo HTTP_PATH;?>us/">United States</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>us/monnier-freres">Monnier Freres</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>us/iventure">iVenture</a></li>
-                </ul>
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2">
-                <h3><a href="<?php echo HTTP_PATH;?>de/">Germany</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>de/otto">Otto</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>de/redcoon">Redcoon</a></li>
-                </ul>
-                <h3><a href="<?php echo HTTP_PATH;?>dk/">Denmark</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>dk/stylepit">Stylepit</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>dk/asos">ASOS</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>dk/hotels-com">Hotels.com DK</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>dk/pixizoo">PixiZoo</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>dk/bona-parte">BON'A PARTE</a></li>
-                </ul>
-                <h3><a href="<?php echo HTTP_PATH;?>in/">India</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>in/amazon-in">Amazon</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>in/flipkart">Flipkart</a></li>
-                </ul>
-                <h3><a href="<?php echo HTTP_PATH;?>my/">Malaysia</a></h3>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo HTTP_PATH;?>my/zalora">Zalora MY</a></li>
-                    <li><a href="<?php echo HTTP_PATH;?>my/lazada">Lazada MY</a></li>
-                </ul>
-            </div>
-        </div>
+        <?php echo $splashPage->getPopularShops(); ?>
     </div>
 </section>
 <aside class="aside">
