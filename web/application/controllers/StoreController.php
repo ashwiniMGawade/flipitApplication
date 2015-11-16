@@ -74,6 +74,7 @@ class StoreController extends Zend_Controller_Action
         $currentShopId = $shopParams['id'];
         $shopId = $this->getRequest()->getParam('id');
 
+
         if ($shopId) {
             $shopList = $shopId.'_list';
             $allShopDetailKey = 'shopDetails_'.$shopList;
@@ -92,6 +93,9 @@ class StoreController extends Zend_Controller_Action
                 ),
                 ''
             );
+
+            $offers = $this->_reorder_offers_as_per_created_date($offers);
+
             $allLatestUpdatesInStoreKey = '4_shopLatestUpdates_'.$shopList;
             $latestShopUpdates = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allLatestUpdatesInStoreKey,
@@ -284,6 +288,33 @@ class StoreController extends Zend_Controller_Action
             $moneyShop,
             $this->view->offers
         );
+    }
+
+    private function _reorder_offers_as_per_created_date($offers)
+    {
+        $reorderOffers = array();
+        $saleOffers = array();
+        for($i = 0; $i < count($offers) ; $i++) {
+            if($offers[$i]['discountType'] == 'CD') {
+                $reorderOffers[] = $offers[$i];
+            } else {
+                $saleOffers[] = $offers[$i];
+            }
+        }
+
+        //REARRANGE SALE OFFERS
+        for($i = 0; $i < count($saleOffers) ; $i++) {
+            for($j = 0; $j <= $i ; $j++) {
+                if ($saleOffers[$j]['created_at']->date < $saleOffers[$i]['created_at']->date) {
+                    $temp = $saleOffers[$i];
+                    $saleOffers[$i] = $saleOffers[$j];
+                    $saleOffers[$j] = $temp;
+                }
+            }
+        }
+        $reorderOffers = array_merge($reorderOffers, $saleOffers);
+        return $reorderOffers;
+
     }
 
     public function indexAction()
