@@ -219,7 +219,7 @@ class Admin_EmailController extends Zend_Controller_Action
                                             'content' => HTTP_PATH_FRONTEND . 'info/contact'
                                     ),
                                     array('name' => 'moreOffersLink',
-                                            'content' => HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_top-20')
+                                            'content' => HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_top-50')
                                     ),
                                     array('name' => 'moreOffers',
                                             'content' => $this->view->translate('Bekijk meer van onze top aanbiedingen') . ' >'
@@ -364,7 +364,7 @@ class Admin_EmailController extends Zend_Controller_Action
             $refreshTime
         );
         $varnishObj->addUrl(
-            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-20'),
+            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-50'),
             $refreshTime
         );
         $varnishObj->addUrl(
@@ -393,7 +393,7 @@ class Admin_EmailController extends Zend_Controller_Action
             $refreshTime
         );
         $varnishObj->addUrl(
-            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-20'),
+            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-50'),
             $refreshTime
         );
         $varnishObj->addUrl(

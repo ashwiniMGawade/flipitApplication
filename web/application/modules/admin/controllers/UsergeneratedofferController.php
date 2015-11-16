@@ -145,7 +145,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
         $varnishObj = new Varnish();
         $varnishObj->addUrl(HTTP_PATH_FRONTEND);
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_nieuw'));
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-20'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-50'));
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_categorieen'));
         $varnishObj->addUrl("http://www.flipit.com");
         if (LOCALE == '') {
