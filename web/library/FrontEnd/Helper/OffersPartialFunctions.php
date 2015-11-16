@@ -671,7 +671,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         $serverNameScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
         foreach ($splashOffers as $splashOffer) {
             $offer = SystemFactory::getOffer($splashOffer->getLocale())->execute(array( 'id' => $splashOffer->getOfferId()));
-            if ($offer instanceof  \Core\Domain\Entity\Offer && $offerCount < 10) {
+            if ($offer instanceof  \Core\Domain\Entity\Offer) {
                 if ($splashOffer->getLocale() == 'en') {
                     $locale = $splashOffer->getLocale() == 'en' ? 'nl' : $splashOffer->getLocale();
                     $logoPath = $splashOffer->getLocale() == 'en' ? PUBLIC_PATH_CDN : PUBLIC_PATH_CDN . $locale . '/';
@@ -681,11 +681,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $logoPath = PUBLIC_PATH_CDN . $locale . '/';
                     $clickUrl = 'http://'.$serverNameScheme.'.flipit.com/'.$locale.'/'.$offer->getShopOffers()->getPermalink();
                 }
-                if (mb_strlen($offer->getTitle(), 'UTF-8') > 42) {
-                    $offerTitle = mb_substr($offer->getTitle(), 0, 42, 'UTF-8')."...";
-                } else {
-                    $offerTitle = $offer->getTitle();
-                }
+                $offerTitle = (mb_strlen($offer->getTitle(), 'UTF-8') > 42) ? mb_substr($offer->getTitle(), 0, 42, 'UTF-8')."..." : $offer->getTitle();
                 $offerCount = (count($splashImages) < $offerCount) ? 1 : $offerCount;
                 $splashImage = true === array_key_exists($offerCount, $splashImages) ? $splashImages[$offerCount]->getImage() : 'slide_img1.jpg';
                 $couponHtml .= '<div class="slide">
