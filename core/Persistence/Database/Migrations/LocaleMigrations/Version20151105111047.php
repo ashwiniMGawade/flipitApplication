@@ -17,21 +17,21 @@ class Version20151105111047 extends AbstractMigration
     {
         //update the page details
         $this->connection->executeQuery(
-            "update page set
+            "UPDATE page SET
               pagetitle = replace(pagetitle, '20', '50'),
               metatitle = replace(metatitle, '20', '50'),
               metadescription = replace(metadescription, '20', '50'),
               permalink= replace(permalink, '20', '50')
-            where
-              permalink='top-20' or  permalink='top20'"
+            WHERE
+              permalink='top-20' or permalink='top20'"
         );
 
         //update the menu
         $this->connection->executeQuery(
-            "update menu set
+            "UPDATE menu SET
               name = replace(name, '20', '50'),
               url = replace(url, '20', '50')
-            where
+            WHERE
               url='top-20'"
         );
 
@@ -44,21 +44,21 @@ class Version20151105111047 extends AbstractMigration
     {
         //revert  the page details
         $this->connection->executeQuery(
-            "update page set
+            "UPDATE page SET
               pagetitle = replace(pagetitle, '50', '20'),
               metatitle = replace(metatitle, '50', '20'),
               metadescription = replace(metadescription, '50', '20'),
-              permalink= replace(permalink, '50', '20')
-            where
+              permalink = replace(permalink, '50', '20')
+            WHERE
               permalink='top-50'"
         );
 
         //revert  the page details
         $this->connection->executeQuery(
-            "update menu set
+            "UPDATE menu SET
               name = replace(name, '50', '20'),
               url = replace(url, '50', '20')
-            where
+            WHERE
               url='top-50'"
         );
 
