@@ -213,7 +213,7 @@ class Admin_SplashController extends Application_Admin_BaseController
 
         $splashImages = ( array ) SystemFactory::getSplashImages()->execute(array());
         $splashOffers = ( array ) SystemFactory::getSplashOffers()->execute(array());
-        if (count($splashOffers)>=count($splashImages)) {
+        if (count($splashOffers) >= count($splashImages)) {
             $this->setFlashMessage('error', 'You can\'t delete this image as it is associated with an offer.');
             $this->redirect(HTTP_PATH . 'admin/splash/images');
         }

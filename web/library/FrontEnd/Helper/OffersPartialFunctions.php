@@ -686,6 +686,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                 } else {
                     $offerTitle = $offer->getTitle();
                 }
+                $offerCount = (count($splashImages) < $offerCount) ? 1 : $offerCount;
                 $splashImage = true === array_key_exists($offerCount, $splashImages) ? $splashImages[$offerCount]->getImage() : 'slide_img1.jpg';
                 $couponHtml .= '<div class="slide">
                         <img src="'.PUBLIC_PATH.'images/front_end/trading_coupon/'.$splashImage.'" alt="'.$offer->getTitle().'">
