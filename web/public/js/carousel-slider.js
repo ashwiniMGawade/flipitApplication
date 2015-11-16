@@ -7,8 +7,33 @@ jQuery(function(){
 function initCarousel() {
 	var isTouchDevice = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
 	var isWinPhoneDevice = /Windows Phone/.test(navigator.userAgent);
-
-	if (!isTouchDevice && !isWinPhoneDevice) {
+	if (isTouchDevice || isWinPhoneDevice) {
+		var win =jQuery(window);
+		var gallery = jQuery('.carousel');
+		gallery.find('.slideset').each(function(){
+			var holder = jQuery(this);
+			var items = holder.find('.slide');
+			var mask = holder.parent();
+			gallery.addClass('mobile');
+			function recalcWidth(){
+				holder.css({
+					overflow:'hidden',
+					width: ((items.eq(0).outerWidth(true)) * items.length) + 24
+				});
+				if(win.width()> 767){
+					holder.css({
+						overflow:'hidden',
+						width: ((items.eq(0).outerWidth(true)) * items.length) +24
+					});
+				}
+				mask.css({
+					overflow:'auto'
+				});
+			}
+			recalcWidth();
+			win.on('resize orientationchange', recalcWidth);
+		});
+	} else {
 		jQuery('.carousel').scrollGallery({
 			mask: '.mask',
 			slider: '.slideset',
@@ -18,24 +43,11 @@ function initCarousel() {
 			generatePagination: '.pagination',
 			maskAutoSize: true,
 			autoRotation: true,
+			circularRotation:false,
+			minSlideNum: 3,
 			switchTime: 3000,
-			animSpeed: 500,
-			step: 3
+			animSpeed: 500
 		});
-	} else {
-		jQuery('.carousel').find('.slideset').each(function(){
-			var holder = jQuery(this);
-			var items = holder.find('.slide');
-			var mask = holder.parent();
-
-			holder.css({
-				width: (items.eq(0).outerWidth(true)) * items.length
-			})
-			mask.css({
-				overflow:'auto'
-			})
-		})
-
 	}
 }
 
@@ -78,6 +90,7 @@ function initCarousel() {
 			handleTouch: true,
 			vertical: false,
 			useTranslate3D: false,
+			minSlideNum:3,
 			step: false
 		}, options);
 		this.init();
@@ -94,6 +107,7 @@ function initCarousel() {
 			}
 		},
 		findElements: function() {
+			var self = this;
 			// define dimensions proporties
 			this.fullSizeFunction = this.options.vertical ? 'outerHeight' : 'outerWidth';
 			this.innerSizeFunction = this.options.vertical ? 'height' : 'width';
@@ -138,6 +152,15 @@ function initCarousel() {
 			// misc elements
 			this.curNum = this.gallery.find(this.options.currentNumber);
 			this.allNum = this.gallery.find(this.options.totalNumber);
+
+			if (this.slides.length <= this.options.minSlideNum) {
+				this.btnPrev.hide();
+				this.btnNext.hide();
+				this.pagerLinks.parents('.pagination').hide();
+				setTimeout(function(){
+					self.slider.css({margin:'0 auto'});
+				},100);
+			}
 		},
 		attachEvents: function() {
 			// bind handlers scope
@@ -246,10 +269,13 @@ function initCarousel() {
 		onWindowResize: function() {
 			if(!this.galleryAnimating) {
 				this.calculateOffsets();
-				this.refreshPosition();
-				this.buildPagination();
-				this.refreshState();
 				this.resizeQueue = false;
+				if (this.slides.length > this.options.minSlideNum) {
+					this.refreshState();
+					this.refreshPosition();
+					this.buildPagination();
+
+				}
 			} else {
 				this.resizeQueue = true;
 			}
@@ -303,6 +329,7 @@ function initCarousel() {
 					this.stepOffsets.push(Math.max(tmpOffset, this.maxOffset));
 					this.stepsCount++;
 				}
+				// this.stepsCount--
 			}
 			// scroll by mask size
 			else {
@@ -466,7 +493,7 @@ function initCarousel() {
 		autoRotate: function() {
 			var self = this;
 			clearTimeout(this.timer);
-			if(this.options.autoRotation && !this.galleryHover && !this.autoRotationStopped) {
+			if(this.options.autoRotation && !this.galleryHover && !this.autoRotationStopped && this.slides.length > 2) {
 				this.timer = setTimeout(function(){
 					self.nextSlide(true);
 				}, this.options.switchTime);
