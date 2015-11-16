@@ -61,10 +61,10 @@ class FrontEnd_Helper_SignUpPartialFunction
     {
        if ($widgetType== 'sidebarWidget') {
         $signUpHeader=
-        	'<h4 class="form-signin-heading">' .FrontEnd_Helper_viewHelper::__translate('Sign up').'
+        	'<label class="form-signin-heading">' .FrontEnd_Helper_viewHelper::__translate('Sign up').'
             <span>'.FrontEnd_Helper_viewHelper::__translate('and join over').'<br>' 
             .FrontEnd_Helper_viewHelper::__translate('10 million people')
-            .'</span></h4>';
+            .'</span></label>';
        } else if($widgetType == 'categoryPageSignupForm') {
         $signUpHeader='<h2 class="form-signin-heading">' .'
             <span>'.FrontEnd_Helper_viewHelper::__translate('Sign up for our newsletter and receive discounts inside your mailbox').'!'

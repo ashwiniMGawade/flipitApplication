@@ -1194,4 +1194,12 @@ EOD;
         );
         return SystemFactory::getSetting()->execute($conditions);
     }
+
+    public static function getAllCountriesForSplashPage()
+    {
+        $locales = (array) FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true');
+        asort($locales);
+        unset($locales['ar'], $locales['at'], $locales['ca']);
+        return $locales;
+    }
 }

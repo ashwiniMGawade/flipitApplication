@@ -18,7 +18,7 @@ class Application_Service_Offer_SimilarOffer extends Application_Service_Offer_O
             if ($this->affiliateProgram != 0) {
                 $getSimilarShopOffers = $this->getSlicedNumberOfShopSimilarOffers($getSimilarShopOffers, 3);
             } else {
-                $getSimilarShopOffers = $this->getSlicedNumberOfShopSimilarOffers($getSimilarShopOffers, 10);
+                $getSimilarShopOffers = $this->getSlicedNumberOfShopSimilarOffers($getSimilarShopOffers, 3);
             }
         } else {
             $getSimilarShopOffers = '';
