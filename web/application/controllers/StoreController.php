@@ -301,11 +301,10 @@ class StoreController extends Zend_Controller_Action
                 $saleOffers[] = $offers[$i];
             }
         }
-
         //REARRANGE SALE OFFERS
         for($i = 0; $i < count($saleOffers) ; $i++) {
             for($j = 0; $j <= $i ; $j++) {
-                if ($saleOffers[$j]['created_at']->date < $saleOffers[$i]['created_at']->date) {
+                if ($saleOffers[$j]['startDate']->date < $saleOffers[$i]['startDate']->date) {
                     $temp = $saleOffers[$i];
                     $saleOffers[$i] = $saleOffers[$j];
                     $saleOffers[$j] = $temp;
@@ -314,7 +313,6 @@ class StoreController extends Zend_Controller_Action
         }
         $reorderOffers = array_merge($reorderOffers, $saleOffers);
         return $reorderOffers;
-
     }
 
     public function indexAction()
