@@ -295,7 +295,7 @@ class StoreController extends Zend_Controller_Action
         $reorderOffers = array();
         $saleOffers = array();
         for($i = 0; $i < count($offers) ; $i++) {
-            if($offers[$i]['discountType'] == 'CD') {
+            if('CD' == $offers[$i]['discountType']) {
                 $reorderOffers[] = $offers[$i];
             } else {
                 $saleOffers[] = $offers[$i];
