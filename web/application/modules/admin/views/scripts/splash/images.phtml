@@ -39,7 +39,7 @@
                     <tr id="row_<?php echo $splashImage->getId(); ?>" data-position="<?php echo $row; ?>">
                         <td><?php echo $row; ?></td>
                         <td><input type="hidden" name="splashImages[]" value="<?php echo $splashImage->getId(); ?>">
-                            <img class='image-container mb10' src="<?php echo PUBLIC_PATH . 'images/front_end/trading_coupon/' . $splashImage->getImage(); ?>" height="90" width="100">
+                            <img class='image-container mb10' src="<?php echo PUBLIC_PATH . 'images/upload/splash/' . $splashImage->getImage(); ?>" height="90" width="100">
                         </td>
                         <td><button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/splash/delete-image/id/<?php echo $splashImage->getId(); ?>'"><?php echo $this->translate('Delete'); ?></button></td>
                     </tr>

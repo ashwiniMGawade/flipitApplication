@@ -23,11 +23,6 @@ class Version20151103113930 extends AbstractMigration
         $table->setPrimaryKey(array('id'));
     }
 
-    public function postUp(Schema $schema)
-    {
-        $this->connection->executeQuery("INSERT INTO `splashImages` (`id`, `image`, `position`, `createdAt`) VALUES (NULL, 'slide_img1.jpg','1', NOW()),(NULL, 'slide_img2.jpg','2', NOW()), (NULL, 'slide_img3.jpg','3', NOW()), (NULL, 'slide_img4.jpg','4', NOW()), (NULL, 'slide_img5.jpg','5', NOW()), (NULL, 'slide_img6.jpg','6', NOW()), (NULL, 'slide_img7.jpg','7', NOW()), (NULL, 'slide_img8.jpg','8', NOW()), (NULL, 'slide_img9.jpg','9', NOW())");
-    }
-
     /**
      * @param Schema $schema
      */
