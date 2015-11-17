@@ -233,7 +233,10 @@ class Admin_SplashController extends Application_Admin_BaseController
         $adapter->getFileInfo($file);
         if (!file_exists($rootPath)) {
             mkdir($rootPath, 0755, true);
+        } elseif(!is_writable($rootPath)) {
+            chmod($rootPath, 0755);
         }
+
         $adapter->setDestination($rootPath);
         $adapter->addValidator('Extension', false, array('jpg,jpeg,png', true));
         $imageName = $adapter->getFileName($file, false);
