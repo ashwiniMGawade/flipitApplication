@@ -61,7 +61,7 @@ class Admin_SplashController extends Application_Admin_BaseController
         if ($this->_request->isPost()) {
             $pageParams = $this->getRequest()->getParam('splashPage', false);
             if (true === isset($_FILES['splashImage']) && true === isset($_FILES['splashImage']['name']) && '' !== $_FILES['splashImage']['name']) {
-                $rootPath = ROOT_PATH . 'images/front_end/';
+                $rootPath = BASE_PATH . 'images/upload/splash/';
                 $image = $this->uploadImage('splashImage', $rootPath);
                 $pageParams['image'] = $image;
                 $oldFile = $rootPath . $splashPage->getImage();
@@ -161,7 +161,7 @@ class Admin_SplashController extends Application_Admin_BaseController
         $splashImages = ( array ) SystemFactory::getSplashImages()->execute(array(), array('position'=>'ASC'));
         if ($this->_request->isPost()) {
             $splashImage = AdminFactory::createSplashImage()->execute();
-            $rootPath = ROOT_PATH . 'images/front_end/trading_coupon/';
+            $rootPath = BASE_PATH . 'images/upload/splash/';
             $uploadedImage = '';
             if (true === isset($_FILES['featuredImage']) && true === isset($_FILES['featuredImage']['name']) && '' !== $_FILES['featuredImage']['name']) {
                 $uploadedImage = $this->uploadImage('featuredImage', $rootPath);
@@ -218,7 +218,7 @@ class Admin_SplashController extends Application_Admin_BaseController
             $this->redirect(HTTP_PATH . 'admin/splash/images');
         }
         AdminFactory::deleteSplashImages()->execute($result);
-        $image = ROOT_PATH . 'images/front_end/trading_coupon/' . $result->getImage();
+        $image = BASE_PATH . 'images/upload/splash/' . $result->getImage();
         if (true === file_exists($image)) {
             unlink($image);
         }
@@ -233,7 +233,10 @@ class Admin_SplashController extends Application_Admin_BaseController
         $adapter->getFileInfo($file);
         if (!file_exists($rootPath)) {
             mkdir($rootPath, 0755, true);
+        } elseif(!is_writable($rootPath)) {
+            chmod($rootPath, 0755);
         }
+
         $adapter->setDestination($rootPath);
         $adapter->addValidator('Extension', false, array('jpg,jpeg,png', true));
         $imageName = $adapter->getFileName($file, false);

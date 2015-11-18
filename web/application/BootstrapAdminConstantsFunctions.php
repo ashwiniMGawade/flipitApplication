@@ -34,6 +34,7 @@ class BootstrapAdminConstantsFunctions
             'http://' . HTTP_HOST. dirname($scriptName) . '/' . $localeAbbreviation
         );
         defined('ROOT_PATH') || define('ROOT_PATH', dirname($scriptFileName) . '/' . $localeAbbreviation);
+        defined('BASE_PATH') || define('BASE_PATH', dirname($scriptFileName) . '/');
     }
 
     public static function constantsImagesForAdminModule($localeAbbreviation, $scriptName, $moduleDirectoryName)
