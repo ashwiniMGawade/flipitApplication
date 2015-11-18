@@ -68,6 +68,7 @@ $("input#searchFieldHeader").autocomplete({
             } else {
                 var searchedKeywordValue = $("input#searchFieldHeader").val();
                 var specialCharacter  = escapeRegExp(searchedKeywordValue);
+                searchedKeywordValue = searchedKeywordValue.replace(specialCharacter, "-");
                 if (searchedKeywordValue == 'Vind kortingscodes voor jouw favoriete winkels..') {
                     return false;
                 }
