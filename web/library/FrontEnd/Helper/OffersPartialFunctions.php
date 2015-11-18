@@ -583,16 +583,16 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         $coupons = array();
         $saleOffers = array();
-        foreach($offers as $offer)  {
-            if('CD' == $offer['discountType']) {
+        foreach ($offers as $offer)  {
+            if ('CD' == $offer['discountType']) {
                 $coupons[] = $offer;
             } else {
                 $saleOffers[] = $offer;
             }
         }
 
-        for($i = 0; $i < count($saleOffers) ; $i++) {
-            for($j = 0; $j <= $i ; $j++) {
+        for ($i = 0; $i < count($saleOffers) ; $i++) {
+            for ($j = 0; $j <= $i ; $j++) {
                 if ($saleOffers[$j]['startDate']->date < $saleOffers[$i]['startDate']->date) {
                     $temp = $saleOffers[$i];
                     $saleOffers[$i] = $saleOffers[$j];

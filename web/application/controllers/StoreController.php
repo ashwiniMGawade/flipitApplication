@@ -74,7 +74,6 @@ class StoreController extends Zend_Controller_Action
         $currentShopId = $shopParams['id'];
         $shopId = $this->getRequest()->getParam('id');
 
-
         if ($shopId) {
             $shopList = $shopId.'_list';
             $allShopDetailKey = 'shopDetails_'.$shopList;
