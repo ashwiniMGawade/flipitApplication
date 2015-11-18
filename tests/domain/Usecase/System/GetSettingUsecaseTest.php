@@ -19,7 +19,7 @@ class GetSettingUsecaseTest extends \Codeception\TestCase\Test
         $this->assertEquals($errors->getErrorsAll(), $result->getErrorsAll());
     }
 
-    public function testGetWidgetUsecase()
+    public function testGetSettingUsecaseReturnsObjectWhenValidInputPassed()
     {
         $condition = array('id' => 0);
         $setting = new Settings();

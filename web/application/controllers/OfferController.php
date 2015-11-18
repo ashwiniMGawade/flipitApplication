@@ -3,6 +3,7 @@ class OfferController extends Zend_Controller_Action
 {
     public function init()
     {
+
         $module     = strtolower($this->getRequest()->getParam('lang'));
         $controller = strtolower($this->getRequest()->getControllerName());
         $action     = strtolower($this->getRequest()->getActionName());
@@ -14,9 +15,9 @@ class OfferController extends Zend_Controller_Action
         $this->viewHelperObject = new \FrontEnd_Helper_viewHelper();
     }
 
-    public function top20Action()
+    public function top50Action()
     {
-        $pageName = 'top-20';
+        $pageName = 'top-50';
         $pagePermalink = \FrontEnd_Helper_viewHelper::getPagePermalink();
 
         $pagePermalink = explode('?', $pagePermalink);
@@ -44,11 +45,12 @@ class OfferController extends Zend_Controller_Action
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
         $offers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            (string)'20_topOffers_list',
-            (array)array('function' => 'Application_Service_Factory::topOffers', 'parameters' => array(20)
+            (string)'50_topOffers_list',
+            (array)array('function' => 'Application_Service_Factory::topOffers', 'parameters' => array(50)
             ),
             ''
         );
+
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'10_popularShops_list',
             (array)array('function' => '\KC\Repository\Shop::getAllPopularStores', 'parameters' => array(10)
@@ -302,7 +304,8 @@ class OfferController extends Zend_Controller_Action
         exit;
     }
 
-    public function totalcouponcountAction() {
+    public function totalcouponcountAction()
+    {
         $this->_helper->layout()->disableLayout();
         $locale = $this->getRequest()->getParam('locale');
         $locale = $locale == 'nl' ? 'en' : $locale;

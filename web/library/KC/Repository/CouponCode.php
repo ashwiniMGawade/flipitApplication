@@ -40,7 +40,7 @@ class CouponCode extends \Core\Domain\Entity\CouponCode
             $varnishObj = new \KC\Repository\Varnish();
             $varnishObj->addUrl(HTTP_PATH);
             $varnishObj->addUrl(HTTP_PATH . \FrontEnd_Helper_viewHelper::__link('link_nieuw'));
-            $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-20'));
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-50'));
             if (LOCALE == '') {
                 if (defined(HTTP_PATH_FRONTEND)) {
                     $varnishObj->addUrl(HTTP_PATH_FRONTEND  . 'marktplaatsfeed');

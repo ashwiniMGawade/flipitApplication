@@ -121,7 +121,7 @@ class FrontEnd_Helper_MandrillMailFunctions {
         $staticContent = array(
             array(
                 'name' => 'moreOffersLink',
-                'content' => HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_top-20')
+                'content' => HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_top-50')
             ),
            array(
                'name' => 'moreOffers',

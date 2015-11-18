@@ -545,8 +545,8 @@ $action = $this->action;
         </li>
     <?php endif; ?>
     <?php
-    # make footer only editbable by superadmins
-    if ($sessionNamespace->settings['rights']['content']['rights'] == '1') : ?>
+    # make footer only editbable by superadmins and admin
+    if (in_array($sessionNamespace->settings['rights']['content']['rights'], array('1', '2'))) : ?>
         <li <?php if ($controller == 'footer') { ?>class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-footer current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-footer" <?php } ?>
             id="menu-links">
             <div class="imbull-menu-image"><a href="<?php echo HTTP_PATH ?>admin/footer"><br> </a></div>
@@ -762,14 +762,33 @@ $action = $this->action;
     <?php endif; ?>
         <li <?php if ($controller == 'splash') { ?> class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-home current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" <?php } ?>
             id="menu-links">
-            <div class="imbull-menu-image artImageGreyShop"><a href="<?php echo HTTP_PATH ?>admin/splash/"><br></a>
+            <div class="imbull-menu-image"><a href="<?php echo HTTP_PATH ?>admin/splash/"><br></a>
             </div>
             <div class="">
                 <div></div>
             </div>
-            <a href="<?php echo HTTP_PATH ?>admin/splash/"
+            <a href="<?php echo HTTP_PATH ?>admin/splash/page"
                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home"
-               tabindex="1"><?php echo $this->translate('Splash'); ?></a>
+               tabindex="1"><?php echo $this->translate('Splash'); ?>
+                <!--<span <?php /*if ($controller == 'splash'){ */?>class="arrow-down" <?php /*} else { */?> class="arrow-up" <?php /*} */?>></span>-->
+            </a>
+            <!--<div class="imbull-submenu">
+                <div class="imbull-submenu-wrap">
+                    <div class="imbull-submenu-head"><?php /*echo $this->translate('Splash O'); */?> </div>
+                    <ul>
+                        <?php /*if ($controller == 'splash' && $action == 'index') {
+                            $searchColorClass = "new-blue";
+                        } else {
+                            $searchColorClass = "new-gray";
+                        } */?>
+                        <li>
+                            <a href="<?php /*echo HTTP_PATH */?>admin/splash"
+                               class="<?php /*echo $searchColorClass; */?>"
+                               tabindex="1"><?php /*echo $this->translate('Splash Offers'); */?> </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>-->
         </li>
     <?php if ($sessionNamespace->settings['rights']['administration']['rights'] == '1'): ?>
         <li <?php if ($controller == 'robot') { ?> class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-home current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" <?php } ?>

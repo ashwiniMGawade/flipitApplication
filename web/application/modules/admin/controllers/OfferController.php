@@ -766,7 +766,7 @@ class Admin_OfferController extends Zend_Controller_Action
             $refreshTime
         );
         $varnishObj->addUrl(
-            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-20'),
+            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-50'),
             $refreshTime
         );
         $varnishObj->addUrl(
@@ -797,7 +797,7 @@ class Admin_OfferController extends Zend_Controller_Action
             $refreshTime
         );
         $varnishObj->addUrl(
-            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-20'),
+            HTTP_PATH_FRONTEND . \FrontEnd_Helper_viewHelper::__link('link_top-50'),
             $refreshTime
         );
         $varnishObj->addUrl(
