@@ -56,9 +56,9 @@ $(document).ready(function() {
 						$('ul#mostPopularCode').append(li);
 						$('ul#mostPopularCode li').click(changeSelectedClass);
 					}
-					bootbox.alert(__('Popular offers successfully updated.'));
+                    $('#popular_success_message').css("visibility", "visible");
 					setTimeout(function(){
-					  bootbox.hideAll();
+                        $('#popular_success_message').css("visibility", "hidden");
 					}, 3000);
 		        }
 		    });
