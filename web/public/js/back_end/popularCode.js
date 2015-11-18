@@ -56,9 +56,9 @@ $(document).ready(function() {
 						$('ul#mostPopularCode').append(li);
 						$('ul#mostPopularCode li').click(changeSelectedClass);
 					}
-                    $('#popular_success_message').show();
+                    $('#popular_success_message').css("visibility", "visible");
 					setTimeout(function(){
-                        $('#popular_success_message').hide();
+                        $('#popular_success_message').css("visibility", "hidden");
 					}, 3000);
 		        }
 		    });
