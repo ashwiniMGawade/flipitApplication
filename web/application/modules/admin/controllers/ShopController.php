@@ -51,6 +51,7 @@ class Admin_ShopController extends Zend_Controller_Action
     public function getshopAction()
     {
         $params = $this->_getAllParams();
+        $params['searchText'] = html_entity_decode($params['searchText']);
         //cal to getshoplist function from Shop model
         $shopList = \KC\Repository\Shop::getshopList($params);
         foreach ($shopList['aaData'] as &$shop) {
