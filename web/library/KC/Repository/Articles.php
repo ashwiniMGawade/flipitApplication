@@ -498,11 +498,17 @@ class Articles extends \Core\Domain\Entity\Articles
         $data->authorid = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['authorList']);
         $data->authorname = trim(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['authorNameHidden']));
 
+
         if (isset($_FILES['articleImage']['name']) && $_FILES['articleImage']['name'] != '') {
             $result = self::uploadImage('articleImage');
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension(@$result['fileName']);
-                $articleImage = $entityManagerLocale->find('\Core\Domain\Entity\ImageArticlesIcon', $data->articleImage->id);
+
+                if(isset($data->articleImage->id)) {
+                    $articleImage = $entityManagerLocale->find('\Core\Domain\Entity\ImageArticlesIcon', $data->articleImage->id);
+                } else {
+                    $articleImage = new \Core\Domain\Entity\ImageArticlesIcon();
+                }
                 $articleImage->ext = @$ext;
                 $articleImage->path = @$result['path'];
                 $articleImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
@@ -522,7 +528,13 @@ class Articles extends \Core\Domain\Entity\Articles
             $artThumbnail = self::uploadImage('articleImageSmall');
             if (@$artThumbnail['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension(@$artThumbnail['fileName']);
-                $articleThumb = $entityManagerLocale->find('\Core\Domain\Entity\ImageArticlesThumb', $data->thumbnail->id);
+
+                if(isset($data->thumbnail->id)) {
+                    $articleThumb = $entityManagerLocale->find('\Core\Domain\Entity\ImageArticlesThumb', $data->thumbnail->id);
+                } else {
+                    $articleThumb = new \Core\Domain\Entity\ImageArticlesThumb();
+                }
+
                 $articleThumb->ext = @$ext;
                 $articleThumb->path = @\BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['path']);
                 $articleThumb->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['fileName']);

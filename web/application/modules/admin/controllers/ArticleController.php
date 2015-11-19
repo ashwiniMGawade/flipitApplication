@@ -68,7 +68,7 @@ class Admin_ArticleController extends Zend_Controller_Action
 
     public function createarticleAction()
     {
-        
+
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('cat')
