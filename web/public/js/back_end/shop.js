@@ -100,7 +100,6 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir, extraParameters) {
     $('#shopList').removeClass('display-none');
     
     var searchText = $('#searchShop').val()=='' ? undefined : $('#searchShop').val();
-
     shopListTable = $("#shopListTable")
     .dataTable(
             {
@@ -118,7 +117,7 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir, extraParameters) {
                 "bDeferRender": true,
                 "aaSorting": [[ iSortCol , iSortDir ]],
                 "sPaginationType" : "bootstrap",
-                "sAjaxSource" : HOST_PATH+"admin/shop/getshop/searchText/"+ escape(iSearchText) + '/flag/0'+extraParameters,
+                "sAjaxSource" : HOST_PATH+"admin/shop/getshop/searchText/"+ encodeURI(iSearchText) + '/flag/0'+extraParameters,
                 "aoColumns" : [
                         {
                             "fnRender" : function(obj) {
