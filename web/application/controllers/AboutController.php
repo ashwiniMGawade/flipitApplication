@@ -131,4 +131,9 @@ class AboutController extends Zend_Controller_Action
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->pageCssClass = 'author-page';
     }
+
+    public function loadCookieBarAction()
+    {
+        $this->_helper->layout()->disableLayout();
+    }
 }
