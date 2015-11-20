@@ -123,7 +123,7 @@ foreach ($this->offers as $offer) {
         $gtmTitleClick = "gtmDataBuilder($gtmDataForTitle);";
         $gtmButtonClick = "gtmDataBuilder($gtmDataForButton);";
         $offerDiv ='<a rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmTitleClick.$onClick.'\'>
-                        <h2 class="common-height">'.$offer->title.'</h2>
+                        <h2 class="common-height">'.FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offer->title).'</h2>
                     </a>
                     <a rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmButtonClick.$onClick.'\'>
                         <div id="offerButton'.$offer->id.'" class="buttons offer-teaser-button-wrapper">
