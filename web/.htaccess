@@ -646,6 +646,10 @@ RewriteRule ^at/genussregion?$	http://www.flipit.com/ch/kategorien/essen-trinken
 RewriteRule ^at/Alle-shops?$	http://www.flipit.com/ch/alle-shops-09-e? [R=301,L]
 RewriteRule ^at/suchen?$	http://www.flipit.com/ch/suchen? [R=301,L]
 
+RewriteCond %{REQUEST_URI} ^/be/link_top-50?$ [NC]
+RewriteCond %{QUERY_STRING} ^(.*)$ [NC]
+RewriteRule ^be/link_top-50?$ http://%{SERVER_NAME}/be/top50?%{QUERY_STRING} [R=301,L]
+
 
 # Start with the app
 RewriteRule ^.*$ public/index.php [NC,L]
