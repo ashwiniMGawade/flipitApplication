@@ -658,7 +658,7 @@ RewriteCond %{REQUEST_URI} link_top-50?$ [NC]
 RewriteCond %{QUERY_STRING} ^(.*)$ [NC]
 RewriteRule ^(.*)/link_top-50?$ http://%{SERVER_NAME}/$1/top-50?%{QUERY_STRING} [R=301,L]
 
-#rule for dev.kortingscode.nl
+#rule for kortingscode.nl
 RewriteCond %{REQUEST_URI} link_top-50?$ [NC]
 RewriteCond %{QUERY_STRING} ^(.*)$ [NC]
 RewriteRule ^link_top-50?$ http://%{SERVER_NAME}/top-50?%{QUERY_STRING} [R=301,L]
