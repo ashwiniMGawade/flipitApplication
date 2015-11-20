@@ -106,9 +106,15 @@ class Admin_VisitorController extends Zend_Controller_Action
     public function getvisitorlistAction()
     {
         $flash = $this->_helper->getHelper('FlashMessenger');
-
-        $filter['searchtext'] =  FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('searchtext'));
-        $filter['email'] =  FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('email'));
+        $conditions = array('deleted' => 0);
+        $searchText =  FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('searchtext'));
+        $email =  FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('email'));
+        if (!empty($searchText) && $searchText != 'undefined') {
+            $conditions['firstName'] = $searchText;
+        }
+        if (!empty($email) && $email != 'undefined') {
+            $conditions['email'] = $email;
+        }
 
         $sortColumns = array(
                 'id',
@@ -132,7 +138,8 @@ class Admin_VisitorController extends Zend_Controller_Action
         $sEcho = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sEcho')));
 
         try {
-            $visitorList = \Core\Domain\Factory\AdminFactory::getVisitors()->execute($filter, $request);
+            $visitorList = \Core\Domain\Factory\AdminFactory::getVisitors()->execute($conditions, $request);
+            $visitorList['visitors'] = $this->prepareData($visitorList['visitors']);
             $response = \DataTable_Helper::createResponse($sEcho, $visitorList['visitors'], $visitorList['visitorCount']);
             echo Zend_Json::encode($response);
         } catch (Exception $exception) {
@@ -140,6 +147,30 @@ class Admin_VisitorController extends Zend_Controller_Action
             $flash->addMessage(array('error' => $message));
         }
         die();
+    }
+
+    private function prepareData($visitors)
+    {
+        $returnData = array();
+        if (!empty($visitors)) {
+            foreach ($visitors as $visitor) {
+                $returnData[] = array(
+                    'id' => $visitor->getId(),
+                    'firstName' => $visitor->getFirstName(),
+                    'lastName' => $visitor->getLastName(),
+                    'email' => $visitor->getEmail(),
+                    'weeklyNewsLetter' => $visitor->getWeeklyNewsLetter(),
+                    'created_at' => $visitor->getCreatedAt(),
+                    'active' => $visitor->getActive(),
+                    'inactiveStatusReason' => $visitor->getInactiveStatusReason(),
+                    'clicks' => $visitor->getMailClickCount(),
+                    'opens' => $visitor->getMailOpenCount(),
+                    'hard_bounces' => $visitor->getMailHardBounceCount(),
+                    'soft_bounces' => $visitor->getMailSoftBounceCount()
+                );
+            }
+        }
+        return $returnData;
     }
 
     public function editvisitorAction()

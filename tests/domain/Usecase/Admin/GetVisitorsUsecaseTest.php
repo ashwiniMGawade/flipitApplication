@@ -22,7 +22,7 @@ class GetVisitorsUsecaseTest extends \Codeception\TestCase\Test
     public function testThrowsExceptionWhenParametersAreValidAndVisitorsListIsEmpty()
     {
         $validParams = array(
-            'searchtext' => 'sam',
+            'firstName' => 'sam',
             'email' => '@gmail.com'
         );
         $requestParams = array();
