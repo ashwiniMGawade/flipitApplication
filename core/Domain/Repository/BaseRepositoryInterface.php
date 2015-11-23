@@ -10,4 +10,5 @@ interface BaseRepositoryInterface
     public function findBy($entity, $conditions = array(), $order = array(), $limit = null, $offset = null);
     public function save($entity);
     public function remove($entity);
+    public function findAllPaginated($entity, $conditions = array(), $order = array(), $limit = null, $offset = null);
 }

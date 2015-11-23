@@ -3,6 +3,7 @@
 namespace Core\Persistence\Database\Repository;
 
 use \Core\Domain\Repository\BaseRepositoryInterface;
+use \Doctrine\ORM\Tools\Pagination\Paginator;
 
 class BaseRepository implements BaseRepositoryInterface
 {
@@ -46,5 +47,35 @@ class BaseRepository implements BaseRepositoryInterface
         $result = $this->em->remove($entity);
         $this->em->flush();
         return $result;
+    }
+
+    public function findAllPaginated($entity, $conditions = array(), $order = array(), $limit = 100, $offset = 0)
+    {
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder
+            ->select('t')
+            ->from($entity, 't')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset);
+
+        if (false == empty($order)) {
+            $orderField = key($order);
+            $queryBuilder->orderBy("t.$orderField", $order[$orderField]);
+        }
+        $conditionsCount = 1;
+        foreach ($conditions as $field => $value) {
+            if ($conditionsCount == 1) {
+                $queryBuilder->where("t.$field='$value'");
+            } else {
+                $queryBuilder->andWhere("t.$field='$value'");
+            }
+            $conditionsCount++;
+        }
+        $query = $queryBuilder->getQuery();
+
+        $results['records'] = $query->getResult();
+        $paginator = new Paginator($query, $fetchJoinCollection = true);
+        $results['count'] = count($paginator);
+        return  $results;
     }
 }

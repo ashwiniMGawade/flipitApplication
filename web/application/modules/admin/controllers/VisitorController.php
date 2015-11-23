@@ -21,17 +21,14 @@ class Admin_VisitorController extends Zend_Controller_Action
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
 
-
         # redirect of a user don't have any permission for this controller
         $sessionNamespace = new Zend_Session_Namespace();
         $this->_settings  = $sessionNamespace->settings['rights'] ;
 
-
         # apply admin level access on all controllers
         if ($this->getRequest()->isXmlHttpRequest()) {
-
             # add action as new case which needs to be viewed by other users
-            switch(strtolower($this->view->action)) {
+            switch (strtolower($this->view->action)) {
                 case 'searchemails':
                     # no restriction
                     break;
@@ -115,38 +112,41 @@ class Admin_VisitorController extends Zend_Controller_Action
         if (!empty($email) && $email != 'undefined') {
             $conditions['email'] = $email;
         }
-
-        $sortColumns = array(
-                'id',
-                'firstName',
-                'lastName',
-                'email',
-                'mailClickCount',
-                'mailOpenCount',
-                'mailHardBounceCount',
-                'mailSoftBounceCount',
-                'active',
-                'weeklyNewsLetter',
-                'created_at'
-            );
-
-        $request['offset'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayStart')));
-        $request['limit'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayLength')));
-        $request['sortByColumn'] = $sortColumns[intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iSortCol_0')))];
-        $request['sortDirection'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sSortDir_0'));
-
-        $sEcho = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sEcho')));
-
+        $order = $this->getOrderByField();
+        $offset = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayStart')));
+        $limit = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayLength')));
         try {
-            $visitorList = \Core\Domain\Factory\AdminFactory::getVisitors()->execute($conditions, $request);
-            $visitorList['visitors'] = $this->prepareData($visitorList['visitors']);
-            $response = \DataTable_Helper::createResponse($sEcho, $visitorList['visitors'], $visitorList['visitorCount']);
+            $visitorList = \Core\Domain\Factory\AdminFactory::getPaginatedVisitors()->execute($conditions, $order, $limit, $offset);
+            $visitorList['records'] = $this->prepareData($visitorList['records']);
+            $sEcho = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sEcho')));
+            $response = \DataTable_Helper::createResponse($sEcho, $visitorList['records'], $visitorList['count']);
             echo Zend_Json::encode($response);
         } catch (Exception $exception) {
             $message = $this->view->translate($exception->getMessage());
             $flash->addMessage(array('error' => $message));
         }
         die();
+    }
+
+    private function getOrderByField()
+    {
+        $sortColumns = array(
+            'id',
+            'firstName',
+            'lastName',
+            'email',
+            'mailClickCount',
+            'mailOpenCount',
+            'mailHardBounceCount',
+            'mailSoftBounceCount',
+            'active',
+            'weeklyNewsLetter',
+            'created_at'
+        );
+
+        $orderByField = $sortColumns[intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iSortCol_0')))];
+        $orderByDirection = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sSortDir_0'));
+        return null != $orderByField ? array($orderByField => $orderByDirection) : array();
     }
 
     private function prepareData($visitors)

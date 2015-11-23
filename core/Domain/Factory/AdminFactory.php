@@ -33,7 +33,7 @@ use \Core\Domain\Usecase\Admin\AddShopUsecase;
 use \Core\Domain\Usecase\Admin\UpdateShopUsecase;
 use \Core\Domain\Usecase\Admin\DeleteShopUsecase;
 
-use \Core\Domain\Usecase\Admin\GetVisitorsUsecase;
+use \Core\Domain\Usecase\Admin\GetPaginatedVisitorsUsecase;
 use \Core\Domain\Usecase\Admin\UpdateVisitorUsecase;
 
 use \Core\Domain\Usecase\Admin\CreateWidgetUsecase;
@@ -97,9 +97,9 @@ class AdminFactory
     }
 
 
-    public static function getVisitors()
+    public static function getPaginatedVisitors()
     {
-        return new GetVisitorsUsecase(RepositoryFactory::visitor());
+        return new GetPaginatedVisitorsUsecase(RepositoryFactory::visitor(), new Purifier(), new Errors());
     }
 
     public static function updateVisitors()
