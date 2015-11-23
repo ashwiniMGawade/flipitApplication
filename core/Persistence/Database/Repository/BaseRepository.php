@@ -58,13 +58,13 @@ class BaseRepository implements BaseRepositoryInterface
             ->setMaxResults($limit)
             ->setFirstResult($offset);
 
-        if (false == empty($order)) {
+        if (false === empty($order)) {
             $orderField = key($order);
             $queryBuilder->orderBy("table.$orderField", $order[$orderField]);
         }
         $conditionsCount = 1;
         foreach ($conditions as $field => $value) {
-            if ($conditionsCount == 1) {
+            if ($conditionsCount === 1) {
                 $queryBuilder->where("table.$field='$value'");
             } else {
                 $queryBuilder->andWhere("table.$field='$value'");
