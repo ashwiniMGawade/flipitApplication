@@ -1,5 +1,7 @@
 <?php
 
+use \Core\Service\Errors;
+
 class Admin_VisitorController extends Zend_Controller_Action
 {
 
@@ -115,17 +117,17 @@ class Admin_VisitorController extends Zend_Controller_Action
         $order = $this->getOrderByField();
         $offset = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayStart')));
         $limit = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayLength')));
-        try {
-            $visitorList = \Core\Domain\Factory\AdminFactory::getVisitors()->execute($conditions, $order, $limit, $offset, true);
-            $visitorList['records'] = $this->prepareData($visitorList['records']);
+        $result = \Core\Domain\Factory\AdminFactory::getVisitors()->execute($conditions, $order, $limit, $offset, true);
+        if ($result instanceof Errors) {
+            $errors = $result->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+        } else {
+            $visitorList['records'] = $this->prepareData($result['records']);
             $sEcho = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sEcho')));
-            $response = \DataTable_Helper::createResponse($sEcho, $visitorList['records'], $visitorList['count']);
+            $response = \DataTable_Helper::createResponse($sEcho, $visitorList['records'], $result['count']);
             echo Zend_Json::encode($response);
-        } catch (Exception $exception) {
-            $message = $this->view->translate($exception->getMessage());
-            $flash->addMessage(array('error' => $message));
         }
-        die();
+        exit;
     }
 
     private function getOrderByField()

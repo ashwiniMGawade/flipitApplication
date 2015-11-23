@@ -25,7 +25,6 @@ class GetVisitorsUsecase
             $this->errors->setError('Invalid input, unable to find record.');
             return $this->errors;
         }
-        $conditions['deleted'] = 0;
         if (false === $isPaginated) {
             $visitorData = $this->visitorRepository->findBy('\Core\Domain\Entity\Visitor', $conditions, $order,
             $limit, $offset);
