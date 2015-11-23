@@ -116,7 +116,7 @@ class Admin_VisitorController extends Zend_Controller_Action
         $offset = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayStart')));
         $limit = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayLength')));
         try {
-            $visitorList = \Core\Domain\Factory\AdminFactory::getPaginatedVisitors()->execute($conditions, $order, $limit, $offset);
+            $visitorList = \Core\Domain\Factory\AdminFactory::getVisitors()->execute($conditions, $order, $limit, $offset, true);
             $visitorList['records'] = $this->prepareData($visitorList['records']);
             $sEcho = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sEcho')));
             $response = \DataTable_Helper::createResponse($sEcho, $visitorList['records'], $visitorList['count']);

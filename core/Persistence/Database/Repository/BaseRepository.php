@@ -53,21 +53,21 @@ class BaseRepository implements BaseRepositoryInterface
     {
         $queryBuilder = $this->em->createQueryBuilder();
         $queryBuilder
-            ->select('t')
-            ->from($entity, 't')
+            ->select('table')
+            ->from($entity, 'table')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
 
         if (false == empty($order)) {
             $orderField = key($order);
-            $queryBuilder->orderBy("t.$orderField", $order[$orderField]);
+            $queryBuilder->orderBy("table.$orderField", $order[$orderField]);
         }
         $conditionsCount = 1;
         foreach ($conditions as $field => $value) {
             if ($conditionsCount == 1) {
-                $queryBuilder->where("t.$field='$value'");
+                $queryBuilder->where("table.$field='$value'");
             } else {
-                $queryBuilder->andWhere("t.$field='$value'");
+                $queryBuilder->andWhere("table.$field='$value'");
             }
             $conditionsCount++;
         }
