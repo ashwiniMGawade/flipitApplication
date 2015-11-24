@@ -37,13 +37,12 @@ class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface
         if ($visitoSession->read()) {
             $visitor = $visitoSession->read();
             $visitorDetails = Zend_Registry::get('emLocale')->getRepository('\Core\Domain\Entity\Visitor')->findOneBy(array('id' => $visitor->id, 'email' => $visitor->email));
-
             if ($visitorDetails) {
                 return true;
             }
         }
         return false;
-    }//
+    }
 
     public static function getIdentity()
     {
