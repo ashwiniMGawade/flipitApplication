@@ -2,306 +2,104 @@
 namespace Usecase\Admin;
 
 use \Core\Domain\Entity\Visitor;
+use \Core\Domain\Service\Purifier;
 use \Core\Domain\Usecase\Admin\UpdateVisitorUsecase;
-use \Core\Domain\Validator\VisitorValidator;
+use \Core\Service\Errors;
 
 class UpdateVisitorUsecaseTest extends \Codeception\TestCase\Test
 {
-    /**
-     * @var \DomainTester
-     */
-    protected $tester;
-
-    protected $visitorRepository;
-
-    protected function _before()
+    public function testUpdateVisitorUsecaseReturnsErrorsObjectWithInvalidParameters()
     {
-        $this->visitorRepository = $this->createVisitorRepositoryInterfaceMock();
-    }
-
-    public function testUpdateVisitorUsecaseWhenInputNotEqualsArray()
-    {
-        $this->setExpectedException('Exception', 'Invalid Parameters');
-        $invalidInput = 'NOT_ARRAY';
-        $validatorInterface = $this->createValidatorInterfaceMock();
-        (new UpdateVisitorUsecase($this->visitorRepository, new VisitorValidator($validatorInterface)))->execute($invalidInput);
-    }
-
-    public function testUpdateVisitorUsecaseWhenInputEqualsEmptyArray()
-    {
-        $this->setExpectedException('Exception', 'Invalid Parameters');
-        $invalidInput = array();
-        $validatorInterface = $this->createValidatorInterfaceMock();
-        (new UpdateVisitorUsecase($this->visitorRepository, new VisitorValidator($validatorInterface)))->execute($invalidInput);
-    }
-
-    public function testUpdateVisitorUsecaseWhenEmailIsInValid()
-    {
-        $this->setExpectedException('Exception', 'Invalid Email');
-        $validInput = array(
-            'email' => 'test@example.com',
-            'event' => 'open'
+        $params = array(
+            'email' => null
         );
-        $validatorInterface = $this->createValidatorInterfaceMock();
-        (new UpdateVisitorUsecase($this->visitorRepository, new VisitorValidator($validatorInterface)))->execute($validInput);
+        $visitorRepository = $this->visitorRepositoryMock();
+        $visitorValidator = $this->createVisitorValidatorMock(array('email'=>'email should not be blank.'));
+        $result = (new UpdateVisitorUsecase(
+            $visitorRepository,
+            $visitorValidator,
+            new Purifier(),
+            new Errors()
+        )
+        )->execute(new Visitor(), $params);
+        $errors = new Errors();
+        $errors->setError('email should not be blank.', 'email');
+        $this->assertEquals($errors->getErrorMessages(), $result->getErrorMessages());
     }
 
-    public function testUpdateVisitorUsecaseWhenVisitorObjectIsInvalid()
+    public function testUpdateVisitorUsecaseReturnsVisitorObject()
     {
-        $visitor = new Visitor();
-        $visitor->setEmail('test@example.com');
-
-        $expectedError = 'Invalid Email';
-        $validInput = array(
-            'email' => 'test@example.com',
-            'event' => 'click'
+        $params = array(
+            'mailOpenCount' => 1,
+            'lastEmailOpenDate' => 2,
+            'mailClickCount' => 10,
+            'mailSoftBounceCount' => 1,
+            'mailHardBounceCount' => 3,
+            'active' => 1,
+            'inactiveStatusReason' => 'Test shops',
+            'activeCodeId' => 1,
+            'changePasswordRequest' => 1,
+            'codeAlert' => 1,
+            'codeAlertSendDate' => '2015-06-30 17:01:34',
+            'currentLogIn' => 1,
+            'content' => 'Test text',
+            'dateOfBirth' => '2015-06-30 17:01:34',
+            'deleted' => 0,
+            'email' => 'test@flipit.com',
+            'fashionNewsLetter' => 0,
+            'firstName' => 'Visitor First Name',
+            'gender' => 1,
+            'interested' => 1,
+            'lastLogIn' => '2015-06-30 17:01:34',
+            'lastName' => 'Last',
+            'password' => 1,
+            'postalCode' => '111111',
+            'profileImg' => 'test.jpg',
+            'pwd' => 'shrgdsfjh',
+            'status' => 1,
+            'travelNewsLetter' => 1,
+            'weeklyNewsLetter' => 1,
+            'username' => 1,
+            'visitorKeyword' => 1
         );
-        $validatorRepository = $this->createVisitorRepositoryWithFindOneByMethodMock($visitor);
-
-        $visitorValidator = $this->createVisitorValidatorWithValidateMethodMock($expectedError);
-        $response = (new UpdateVisitorUsecase($validatorRepository, $visitorValidator))->execute($validInput);
-        $this->assertEquals($expectedError, $response);
+        $visitorRepository = $this->visitorRepositoryMockWithSaveMethod();
+        $visitorValidator = $this->createVisitorValidatorMock(true);
+        $result = (new UpdateVisitorUsecase(
+            $visitorRepository,
+            $visitorValidator,
+            new Purifier(),
+            new Errors()
+        )
+        )->execute(new Visitor(), $params);
+        $this->assertEquals(new Visitor(), $result);
     }
 
-    public function testUpdateVisitorUsecaseWhenVisitorObjectIsValid()
+    private function visitorRepositoryMock()
     {
-        $visitor = new Visitor();
-        $visitor->setEmail('test@example.com');
+        $visitorRepositoryMock = $this->getMock('\Core\Domain\Repository\VisitorRepositoryInterface');
+        return $visitorRepositoryMock;
+    }
 
-        $validInput = array(
-            'email' => 'test@example.com',
-            'event' => 'click'
-        );
-        $validatorRepository = $this->createVisitorRepositoryWithFindOneByMethodMock($visitor);
-        $validatorRepository->expects($this->once())
+    private function visitorRepositoryMockWithSaveMethod()
+    {
+        $visitorRepositoryMock = $this->visitorRepositoryMock();
+        $visitorRepositoryMock
+            ->expects($this->once())
             ->method('save')
-            ->with($this->isInstanceOf('\Core\Domain\Entity\Visitor'));
-
-        $visitorValidator = $this->createVisitorValidatorWithValidateMethodMock(true);
-        (new UpdateVisitorUsecase($validatorRepository, $visitorValidator))->execute($validInput);
+            ->with($this->isInstanceOf('\Core\Domain\Entity\Visitor'))
+            ->willReturn(new Visitor());
+        return $visitorRepositoryMock;
     }
 
-    public function testUsecaseThrowsErrorWhenOpensTimeStampDoesNotExist()
+    private function createVisitorValidatorMock($returns)
     {
-        $this->setExpectedException('Exception', 'Invalid Opens Timestamp');
-        $visitor = $this->createVisitorMock();
-        $initialOpenCount = $visitor->getMailOpenCount();
-        $visitor->expects($this->once())->method('getMailOpenCount');
-        $visitor->expects($this->once())->method('setMailOpenCount')->with($initialOpenCount + 1);
-
-        $validatorRepository = $this->createVisitorRepositoryWithFindOneByMethodMock($visitor);
-
-        $validatorInterface = $this->createValidatorInterfaceMock();
-
-        $validInput = array(
-            'email' => 'test@example.com',
-            'event' => 'open'
-        );
-        (new UpdateVisitorUsecase($validatorRepository, new VisitorValidator($validatorInterface)))->execute($validInput);
-    }
-
-    public function testUsecaseIncrementsOpenCountWhenTryingToUpdateEmailOpenForAnEmailId()
-    {
-        $visitor = $this->createVisitorMock();
-        $initialOpenCount = $visitor->getMailOpenCount();
-        $visitor->expects($this->once())->method('getMailOpenCount');
-        $visitor->expects($this->once())->method('setMailOpenCount')->with($initialOpenCount + 1);
-
-        $validatorRepository = $this->createVisitorRepositoryWithFindOneByMethodMock($visitor);
-        $validatorRepository->expects($this->once())
-            ->method('save')
-            ->with($this->isInstanceOf('\Core\Domain\Entity\Visitor'));
-
-        $visitorValidator = $this->createVisitorValidatorWithValidateMethodMock(true);
-
-        $validInput = array(
-            'email' => 'test@example.com',
-            'event' => 'open',
-            'opensTimestamp' => 1430805793
-        );
-        (new UpdateVisitorUsecase($validatorRepository, $visitorValidator))->execute($validInput);
-    }
-
-    public function testUsecaseIncrementsClickCountWhenTryingToUpdateEmailClickForAnEmailId()
-    {
-        $visitor = $this->createVisitorMock();
-        $initialClickCount = $visitor->getMailClickCount();
-        $visitor->expects($this->once())->method('getMailClickCount');
-        $visitor->expects($this->once())->method('setMailClickCount')->with($initialClickCount + 1);
-
-        $validatorRepository = $this->createVisitorRepositoryWithFindOneByMethodMock($visitor);
-        $validatorRepository->expects($this->once())
-            ->method('save')
-            ->with($this->isInstanceOf('\Core\Domain\Entity\Visitor'));
-
-        $visitorValidator = $this->createVisitorValidatorWithValidateMethodMock(true);
-
-        $validInput = array(
-            'email' => 'test@example.com',
-            'event' => 'click'
-        );
-        (new UpdateVisitorUsecase($validatorRepository, $visitorValidator))->execute($validInput);
-    }
-
-    public function testUsecaseIncrementsSoftBounceCountWhenTryingToUpdateEmailSoftBounceForAnEmailId()
-    {
-        $visitor = $this->createVisitorMock();
-        $initialSoftBounceCount = $visitor->getMailSoftBounceCount();
-        $visitor->expects($this->once())->method('getMailSoftBounceCount');
-        $visitor->expects($this->once())->method('setMailSoftBounceCount')->with($initialSoftBounceCount + 1);
-
-        $validatorRepository = $this->createVisitorRepositoryWithFindOneByMethodMock($visitor);
-        $validatorRepository->expects($this->once())
-            ->method('save')
-            ->with($this->isInstanceOf('\Core\Domain\Entity\Visitor'));
-
-        $visitorValidator = $this->createVisitorValidatorWithValidateMethodMock(true);
-
-        $validInput = array(
-            'email' => 'test@example.com',
-            'event' => 'soft_bounce'
-        );
-        (new UpdateVisitorUsecase($validatorRepository, $visitorValidator))->execute($validInput);
-    }
-
-    public function testUsecaseSetsTheVisitorAsInactiveWhenSoftBounceCountIsGreaterThanOrEqualTo6()
-    {
-        $initialSoftBounceCount = 5;
-        $visitor = $this->createVisitorWithGetMailSoftBounceCountMethodMock($initialSoftBounceCount);
-        $visitor->expects($this->once())->method('getMailSoftBounceCount');
-        $visitor->expects($this->once())->method('setMailSoftBounceCount')->with($initialSoftBounceCount + 1);
-        $visitor->expects($this->once())->method('setActive')->with(0);
-        $visitor->expects($this->once())->method('setInactiveStatusReason')->with('Soft Bounce');
-
-        $validatorRepository = $this->createVisitorRepositoryWithFindOneByMethodMock($visitor);
-        $validatorRepository->expects($this->once())
-            ->method('save')
-            ->with($this->isInstanceOf('\Core\Domain\Entity\Visitor'));
-
-        $visitorValidator = $this->createVisitorValidatorWithValidateMethodMock(true);
-
-        $validInput = array(
-            'email' => 'test@example.com',
-            'event' => 'soft_bounce'
-        );
-        (new UpdateVisitorUsecase($validatorRepository, $visitorValidator))->execute($validInput);
-    }
-
-    public function testUsecaseIncrementsHardBounceCountWhenTryingToUpdateEmailHardBounceForAnEmailId()
-    {
-        $visitor = $this->createVisitorMock();
-        $initialHardBounceCount = $visitor->getMailHardBounceCount();
-        $visitor->expects($this->once())->method('getMailHardBounceCount');
-        $visitor->expects($this->once())->method('setMailHardBounceCount')->with($initialHardBounceCount + 1);
-
-        $validatorRepository = $this->createVisitorRepositoryWithFindOneByMethodMock($visitor);
-        $validatorRepository->expects($this->once())
-            ->method('save')
-            ->with($this->isInstanceOf('\Core\Domain\Entity\Visitor'));
-
-        $visitorValidator = $this->createVisitorValidatorWithValidateMethodMock(true);
-
-        $validInput = array(
-            'email' => 'test@example.com',
-            'event' => 'hard_bounce'
-        );
-        (new UpdateVisitorUsecase($validatorRepository, $visitorValidator))->execute($validInput);
-    }
-
-    public function testUsecaseSetsTheVisitorAsInactiveWhenHardBounceCountIsGreaterThanOrEqualTo3()
-    {
-        $initialHardBounceCount = 2;
-        $visitor = $this->createVisitorWithGetMailHardBounceCountMethodMock($initialHardBounceCount);
-        $visitor->expects($this->once())->method('getMailHardBounceCount');
-        $visitor->expects($this->once())->method('setMailHardBounceCount')->with($initialHardBounceCount + 1);
-        $visitor->expects($this->once())->method('setActive')->with(0);
-        $visitor->expects($this->once())->method('setInactiveStatusReason')->with('Hard Bounce');
-
-        $validatorRepository = $this->createVisitorRepositoryWithFindOneByMethodMock($visitor);
-        $validatorRepository->expects($this->once())
-            ->method('save')
-            ->with($this->isInstanceOf('\Core\Domain\Entity\Visitor'));
-
-        $visitorValidator = $this->createVisitorValidatorWithValidateMethodMock(true);
-
-        $validInput = array(
-            'email' => 'test@example.com',
-            'event' => 'hard_bounce'
-        );
-        (new UpdateVisitorUsecase($validatorRepository, $visitorValidator))->execute($validInput);
-    }
-
-    public function testUpdateVisitorUsecaseThrowsExceptionWhenEventIsInValid()
-    {
-        $visitor = $this->createVisitorMock();
-
-        $validatorRepository = $this->createVisitorRepositoryWithFindOneByMethodMock($visitor);
-
-        $this->setExpectedException('Exception', 'Invalid Event');
-        $validInput = array(
-            'email' => 'test@example.com',
-            'event' => 'invalid_event'
-        );
-        $validatorInterface = $this->createValidatorInterfaceMock();
-        (new UpdateVisitorUsecase($validatorRepository, new VisitorValidator($validatorInterface)))->execute($validInput);
-    }
-
-    private function createVisitorMock()
-    {
-        $visitor = $this->getMock('\Core\Domain\Entity\Visitor');
-        return $visitor;
-    }
-
-    private function createVisitorWithGetMailSoftBounceCountMethodMock($count)
-    {
-        $visitor = $this->createVisitorMock();
-        $visitor->expects($this->once())->method('getMailSoftBounceCount')->willReturn($count);
-        return $visitor;
-    }
-
-    private function createVisitorWithGetMailHardBounceCountMethodMock($count)
-    {
-        $visitor = $this->createVisitorMock();
-        $visitor->expects($this->once())->method('getMailHardBounceCount')->willReturn($count);
-        return $visitor;
-    }
-
-    private function createVisitorRepositoryInterfaceMock()
-    {
-        return $this->getMock('\Core\Domain\Repository\VisitorRepositoryInterface');
-    }
-
-    private function createVisitorRepositoryWithFindOneByMethodMock($returns)
-    {
-        $visitorRepository = $this->createVisitorRepositoryInterfaceMock();
-        $visitorRepository->expects($this->once())
-                          ->method('findOneBy')
-                          ->with($this->isType('string', '\Core\Domain\Entity\Visitor'), $this->isType('array'))
-                          ->willReturn($returns);
-        return $visitorRepository;
-    }
-
-    private function createVisitorValidatorMock()
-    {
-        $visitorValidator = $this->getMockBuilder('\Core\Domain\Validator\VisitorValidator')
+        $mockVisitorValidator = $this->getMockBuilder('\Core\Domain\Validator\VisitorValidator')
             ->disableOriginalConstructor()
             ->getMock();
-        return $visitorValidator;
-    }
-
-    private function createVisitorValidatorWithValidateMethodMock($returns)
-    {
-        $visitorValidator = $this->createVisitorValidatorMock();
-        $visitorValidator->expects($this->once())
-                         ->method('validate')
-                         ->with($this->isInstanceOf('\Core\Domain\Entity\Visitor'))
-                         ->willReturn($returns);
-        return $visitorValidator;
-    }
-
-    private function createValidatorInterfaceMock()
-    {
-        $mockValidatorInterface = $this->getMock('\Core\Domain\Adapter\ValidatorInterface');
-        return $mockValidatorInterface;
+        $mockVisitorValidator->expects($this->once())
+            ->method('validate')
+            ->with($this->isInstanceOf('\Core\Domain\Entity\Visitor'))
+            ->willReturn($returns);
+        return $mockVisitorValidator;
     }
 }
