@@ -49,9 +49,6 @@ class VisitorValidator
             'status' => array(
                 $this->validator->type(array('type' => 'integer')),
                 $this->validator->length(array('min' => 1, 'max' => 1))
-            ),
-            'lastEmailOpenDate' => array(
-                $this->validator->notNull()
             )
         );
         return $this->validator->validate($visitor, $rules);

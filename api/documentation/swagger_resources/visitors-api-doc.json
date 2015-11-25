@@ -17,7 +17,7 @@
                 "tags":[
                     "visitor"
                 ],
-                "summary":"Update data related to email opens, clicks and bounces",
+                "summary":"Update visitor information",
                 "description":"",
                 "operationId":"updateVisitor",
                 "consumes":[
@@ -53,8 +53,7 @@
         "visitor":{
             "type":"object",
             "required":[
-                "event",
-                "msg"
+                "email"
             ],
             "properties":{
                 "event":{
@@ -68,39 +67,11 @@
                         "hard_bounce"
                     ]
                 },
-                "msg": {
-                    "$ref": "#/definitions/msg"
-                }
-            }
-        },
-        "msg" : {
-            "type":"object",
-            "required":[
-                "email"
-            ],
-            "properties": {
                 "email": {
                     "type": "string",
                     "example": "test@example.com"
                 },
-                "opens": {
-                    "$ref": "#/definitions/opens"
-                }
-            }
-        },
-        "opens" : {
-            "type":"array",
-            "items": {
-                "$ref": "#/definitions/ts"
-            }
-        },
-        "ts": {
-            "type":"object",
-            "required":[
-                "ts"
-            ],
-            "properties": {
-                "ts": {
+                "timeStamp": {
                     "type":"integer",
                     "example":"1365111111"
                 }

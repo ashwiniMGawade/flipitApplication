@@ -31,22 +31,22 @@ class UpdateVisitorUsecase
         $params = $this->htmlPurifier->purify($params);
 
         if (isset($params['mailOpenCount'])) {
-            $visitor->setMailOpenCount($params['mailOpenCount']);
+            $visitor->setMailOpenCount((int)$params['mailOpenCount']);
         }
         if (isset($params['lastEmailOpenDate'])) {
             $visitor->setLastEmailOpenDate($params['lastEmailOpenDate']);
         }
         if (isset($params['mailClickCount'])) {
-            $visitor->setMailClickCount($params['mailClickCount']);
+            $visitor->setMailClickCount((int)$params['mailClickCount']);
         }
         if (isset($params['mailSoftBounceCount'])) {
-            $visitor->setMailSoftBounceCount($params['mailSoftBounceCount']);
+            $visitor->setMailSoftBounceCount((int)$params['mailSoftBounceCount']);
         }
         if (isset($params['mailHardBounceCount'])) {
-            $visitor->setMailHardBounceCount($params['mailHardBounceCount']);
+            $visitor->setMailHardBounceCount((int)$params['mailHardBounceCount']);
         }
         if (isset($params['active'])) {
-            $visitor->setActive(0);
+            $visitor->setActive((int)$params['active']);
         }
         if (isset($params['inactiveStatusReason'])) {
             $visitor->setInactiveStatusReason($params['inactiveStatusReason']);
@@ -71,7 +71,7 @@ class UpdateVisitorUsecase
             $visitor->setDateOfBirth($params['dateOfBirth']);
         }
         if (isset($params['deleted'])) {
-            $visitor->setDeleted($params['deleted']);
+            $visitor->setDeleted((int)$params['deleted']);
         }
         if (isset($params['email'])) {
             $visitor->setEmail($params['email']);
@@ -107,7 +107,7 @@ class UpdateVisitorUsecase
             $visitor->setPwd($params['pwd']);
         }
         if (isset($params['status'])) {
-            $visitor->setStatus($params['status']);
+            $visitor->setStatus((int)$params['status']);
         }
         if (isset($params['travelNewsLetter'])) {
             $visitor->setTravelNewsLetter($params['travelNewsLetter']);
