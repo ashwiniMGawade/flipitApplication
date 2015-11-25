@@ -55,8 +55,9 @@ class User extends \Core\Domain\Entity\User\User
             ->setParameter(3, '0')
             ->andWhere('u.deleted = ?3')
             ->setParameter(4, $websiteName)
-            ->andWhere('w.url = ?4');
-        $userDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            ->andWhere('w.url = ?4')
+            ->setMaxResults(1);
+        $userDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $userDetails;
     }
 

@@ -66,69 +66,77 @@ class AboutController extends Zend_Controller_Action
 
     public function profileAction()
     {
-        $authorSlugName = $this->getRequest()->getParam('slug');
-        $authorId = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'user_'. str_replace('-', '_', $authorSlugName) .'_data',
-            array('function' => '\KC\Repository\User::getUserIdBySlugName', 'parameters' => array($authorSlugName)),
-            0
-        );
-        $authorDetailsForView = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'user_'.$authorId .'_data',
-            array(
-                'function' => '\KC\Repository\User::getUserProfileDetails',
-                'parameters' => array($authorId, $this->_helper->About->getWebsiteNameWithLocale())
-            ),
-            0
-        );
-        if (empty($authorDetailsForView)) {
-            throw new \Zend_Controller_Action_Exception('', 404);
-        }
-
-        $authorDetails = $authorDetailsForView[0];
-        $authorFavouriteShops = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'user_'. 'favouriteShop'.$authorId .'_data',
-            array('function' => '\KC\Repository\User::getUserFavouriteStores', 'parameters' => array($authorId)),
-            0
-        );
-        $authorMostReadArticles = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'user_'. 'mostRead'.$authorId .'_data',
-            array('function' => '\KC\Repository\MoneySaving::getMostReadArticles', 'parameters' => array(4, $authorId)),
-            0
-        );
-        $authorFullName = $authorDetails['firstName'].' '. $authorDetails['lastName'];
-        $permalink = ltrim(\Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $customHeader = '';
-        $this->viewHelperObject->getMetaTags(
-            $this,
-            $authorFullName,
-            '',
-            trim($authorDetails['mainText']),
-            \FrontEnd_Helper_viewHelper::__link('link_redactie') .'/'.$authorDetails['slug'],
-            FACEBOOK_IMAGE,
-            $customHeader
-        );
-
-        $cacheKey = \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($authorSlugName);
-        $this->view->discussionComments =
-            \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                'get_'.$cacheKey.'_disqusComments',
-                array(
-                    'function' => '\KC\Repository\DisqusComments::getPageUrlBasedDisqusComments',
-                    'parameters' => array($authorSlugName)
-                ),
-                ''
+        try {
+            $authorSlugName = $this->getRequest()->getParam('slug');
+            $authorId = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                'user_'. str_replace('-', '_', $authorSlugName) .'_data',
+                array('function' => '\KC\Repository\User::getUserIdBySlugName', 'parameters' => array($authorSlugName)),
+                0
             );
-        $this->view->authorDetails = $authorDetailsForView;
-        $this->view->authorFavouriteShops = $authorFavouriteShops;
-        $this->view->authorMostReadArticles = $authorMostReadArticles;
+            $authorDetailsForView = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                'user_'.$authorId .'_data',
+                array(
+                    'function' => '\KC\Repository\User::getUserProfileDetails',
+                    'parameters' => array($authorId, $this->_helper->About->getWebsiteNameWithLocale())
+                ),
+                0
+            );
 
-        $signUpFormSidebarWidget = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
-            'formSignupSidebarWidget',
-            'SignUp '
-        );
-        \FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
-        $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        $this->view->pageCssClass = 'author-page';
+                if (empty($authorDetailsForView)) {
+                    throw new \Zend_Controller_Action_Exception('', 404);
+                }
+
+
+
+            $authorDetails = $authorDetailsForView[0];
+            $authorFavouriteShops = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                'user_'. 'favouriteShop'.$authorId .'_data',
+                array('function' => '\KC\Repository\User::getUserFavouriteStores', 'parameters' => array($authorId)),
+                0
+            );
+            $authorMostReadArticles = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                'user_'. 'mostRead'.$authorId .'_data',
+                array('function' => '\KC\Repository\MoneySaving::getMostReadArticles', 'parameters' => array(4, $authorId)),
+                0
+            );
+            $authorFullName = $authorDetails['firstName'].' '. $authorDetails['lastName'];
+            $permalink = ltrim(\Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+            $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($permalink);
+            $customHeader = '';
+            $this->viewHelperObject->getMetaTags(
+                $this,
+                $authorFullName,
+                '',
+                trim($authorDetails['mainText']),
+                \FrontEnd_Helper_viewHelper::__link('link_redactie') .'/'.$authorDetails['slug'],
+                FACEBOOK_IMAGE,
+                $customHeader
+            );
+
+            $cacheKey = \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($authorSlugName);
+            $this->view->discussionComments =
+                \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                    'get_'.$cacheKey.'_disqusComments',
+                    array(
+                        'function' => '\KC\Repository\DisqusComments::getPageUrlBasedDisqusComments',
+                        'parameters' => array($authorSlugName)
+                    ),
+                    ''
+                );
+            $this->view->authorDetails = $authorDetailsForView;
+            $this->view->authorFavouriteShops = $authorFavouriteShops;
+            $this->view->authorMostReadArticles = $authorMostReadArticles;
+
+            $signUpFormSidebarWidget = \FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+                'formSignupSidebarWidget',
+                'SignUp '
+            );
+            \FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
+            $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+            $this->view->pageCssClass = 'author-page';
+        } catch( Exception $e) {
+            $this->_helper->redirector->setCode(301);
+            $this->_redirect(HTTP_PATH_LOCALE);
+        }
     }
 }
