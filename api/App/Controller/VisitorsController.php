@@ -57,10 +57,8 @@ class VisitorsController extends ApiBaseController
         $params = array();
         switch ($visitorParams['event']) {
             case 'open':
-                if (!isset($visitorParams['timeStamp']) || empty($visitorParams['timeStamp'])) {
-                    $this->app->response->setStatus(405);
-                    echo json_encode(array('msg'=>'Open timestamp required'));
-                    return;
+                if (!isset($visitorParams['timeStamp']) || !is_numeric($visitorParams['timeStamp'])) {
+                    $this->app->halt(405, json_encode(array('msg'=>'Invalid mail open Timestamp')));
                 }
                 $openCount = (int) $visitor->getMailOpenCount();
                 $params['mailOpenCount'] = $openCount + 1;
@@ -89,9 +87,7 @@ class VisitorsController extends ApiBaseController
                 $params['mailHardBounceCount'] = $hardBounceCount + 1;
                 break;
             default:
-                $this->app->response->setStatus(405);
-                echo json_encode(array('msg'=>'Invalid Event'));
-                return;
+                $this->app->halt(405, json_encode(array('msg'=>'Invalid Event')));
                 break;
         }
         return $params;
