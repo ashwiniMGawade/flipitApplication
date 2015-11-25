@@ -51,58 +51,27 @@ class UpdateVisitorCest
         $this->runTest($I, $params, $expectedResult, $status);
     }
 
-    public function testUpdateVisitorThrowsErrorWithMsgParameterDoesNotExist(ApiTester $I)
+    public function testUpdateVisitorThrowsErrorWithEmailParameterDoesNotExist(ApiTester $I)
     {
         $params = '[
                         {
                             "event":"open"
                         }
                     ]';
-        $expectedResult = array('msg' => 'Message Required');
+        $expectedResult = array('msg' => 'Email Required');
         $status = 405;
         $this->runTest($I, $params, $expectedResult, $status);
     }
 
-    public function testUpdateVisitorThrowsErrorWithMsgParameterIsEmpty(ApiTester $I)
+    public function testUpdateVisitorThrowsErrorWithEmailParameterIsEmpty(ApiTester $I)
     {
         $params = '[
                         {
                             "event" : "open",
-                            "msg" : ""
+                            "email" : ""
                         }
                     ]';
-        $expectedResult = array('msg' => 'Message Required');
-        $status = 405;
-        $this->runTest($I, $params, $expectedResult, $status);
-    }
-
-    public function testUpdateVisitorThrowsErrorWithMsgParameterIsInvalid(ApiTester $I)
-    {
-        $params = '[
-                        {
-                            "event" : "open",
-                            "msg" : {
-                                "I_am_invalid" : ""
-                            }
-                        }
-                    ]';
-        $expectedResult = array('msg' => 'Invalid Message or Message Parameters');
-        $status = 405;
-        $this->runTest($I, $params, $expectedResult, $status);
-    }
-
-    public function testUpdateVisitorThrowsErrorWithEmailIsEmpty(ApiTester $I)
-    {
-        $params = '[
-                        {
-                            "event" : "open",
-                            "msg" : {
-                                "email" : ""
-                            }
-                        }
-                    ]';
-
-        $expectedResult = array('msg' => 'Invalid Message or Message Parameters');
+        $expectedResult = array('msg' => 'Email Required');
         $status = 405;
         $this->runTest($I, $params, $expectedResult, $status);
     }
@@ -112,25 +81,7 @@ class UpdateVisitorCest
         $params = '[
                         {
                             "event" : "open",
-                            "msg" : {
-                                "email" : "invalid_email"
-                            }
-                        }
-                    ]';
-
-        $expectedResult = array('msg' => 'Invalid Message or Message Parameters');
-        $status = 405;
-        $this->runTest($I, $params, $expectedResult, $status);
-    }
-
-    public function testUpdateVisitorThrowsErrorWithEmailDoesNotExist(ApiTester $I)
-    {
-        $params = '[
-                        {
-                            "event" : "click",
-                            "msg" : {
-                                "email" : "test@example.com"
-                            }
+                            "email" : "invalid_email"
                         }
                     ]';
 
@@ -145,9 +96,7 @@ class UpdateVisitorCest
         $params = '[
                         {
                             "event" : "invalid-event",
-                            "msg" : {
-                                "email" : "test@example.com"
-                            }
+                            "email" : "test@example.com"
                         }
                     ]';
 
@@ -162,9 +111,7 @@ class UpdateVisitorCest
         $params = '[
                         {
                             "event" : "click",
-                            "msg" : {
-                                "email" : "test@example.com"
-                            }
+                            "email" : "test@example.com"
                         }
                     ]';
         $expectedResult = array (
@@ -186,9 +133,7 @@ class UpdateVisitorCest
         $params = '[
                         {
                             "event" : "soft_bounce",
-                            "msg" : {
-                                "email" : "test@example.com"
-                            }
+                            "email" : "test@example.com"
                         }
                     ]';
         $expectedResult = array (
@@ -210,9 +155,7 @@ class UpdateVisitorCest
         $params = '[
                         {
                             "event" : "hard_bounce",
-                            "msg" : {
-                                "email" : "test@example.com"
-                            }
+                            "email" : "test@example.com"
                         }
                     ]';
         $expectedResult = array (
@@ -228,85 +171,17 @@ class UpdateVisitorCest
         $this->runTest($I, $params, $expectedResult, $status);
     }
 
-    public function testUsecaseThrowsErrorWhenOpensIsNotArray(ApiTester $I)
+    public function testUsecaseThrowsErrorWhenOpensEventDoesNotContainTimestamp(ApiTester $I)
     {
         $this->seedVisitorsTable($I);
         $params = '[
                         {
                             "event" : "open",
-                            "msg" : {
-                                "email" : "test@example.com",
-                                "opens": "NOT_ARRAY"
-                            }
+                            "email" : "test@example.com"
                         }
                     ]';
         $expectedResult = array (
-            'msg' => 'Invalid Message or Message Parameters'
-        );
-        $status = 405;
-        $this->runTest($I, $params, $expectedResult, $status);
-    }
-
-    public function testUsecaseThrowsErrorWhenOpensIsEmpty(ApiTester $I)
-    {
-        $this->seedVisitorsTable($I);
-        $params = '[
-                        {
-                            "event" : "open",
-                            "msg" : {
-                                "email" : "test@example.com",
-                                "opens": []
-                            }
-                        }
-                    ]';
-        $expectedResult = array (
-            'msg' => 'Invalid Message or Message Parameters'
-        );
-        $status = 405;
-        $this->runTest($I, $params, $expectedResult, $status);
-    }
-
-    public function testUsecaseThrowsErrorWhenOpensDoesNotContainTimestamp(ApiTester $I)
-    {
-        $this->seedVisitorsTable($I);
-        $params = '[
-                        {
-                            "event" : "open",
-                            "msg" : {
-                                "email" : "test@example.com",
-                                "opens": [
-                                    {
-                                        "something":"invalid"
-                                    }
-                                ]
-                            }
-                        }
-                    ]';
-        $expectedResult = array (
-            'msg' => 'Invalid Opens Timestamp'
-        );
-        $status = 405;
-        $this->runTest($I, $params, $expectedResult, $status);
-    }
-
-    public function testUsecaseThrowsErrorWhenOpensTimestampIsNotAnInteger(ApiTester $I)
-    {
-        $this->seedVisitorsTable($I);
-        $params = '[
-                        {
-                            "event" : "open",
-                            "msg" : {
-                                "email" : "test@example.com",
-                                "opens": [
-                                    {
-                                        "ts":"NOT_AN_INTEGER"
-                                    }
-                                ]
-                            }
-                        }
-                    ]';
-        $expectedResult = array (
-            'msg' => 'Invalid Opens Timestamp'
+            'msg' => 'Invalid mail open Timestamp'
         );
         $status = 405;
         $this->runTest($I, $params, $expectedResult, $status);
@@ -318,14 +193,8 @@ class UpdateVisitorCest
         $params = '[
                         {
                             "event" : "open",
-                            "msg" : {
-                                "email" : "test@example.com",
-                                "opens": [
-                                    {
-                                        "ts": "1430805793"
-                                    }
-                                ]
-                            }
+                            "email" : "test@example.com",
+                            "timeStamp": "1430805793"
                         }
                     ]';
         $expectedResult = array (
@@ -341,7 +210,7 @@ class UpdateVisitorCest
         $this->runTest($I, $params, $expectedResult, $status);
     }
 
-    public function testUsecaseReturnsErrorWhenValidationFails(ApiTester $I)
+    /*public function testUsecaseReturnsErrorWhenValidationFails(ApiTester $I)
     {
         $I->haveInDatabasePDOSite(
             'visitor',
@@ -359,14 +228,8 @@ class UpdateVisitorCest
         $params = '[
                         {
                             "event" : "open",
-                            "msg" : {
-                                "email" : "test@example.com",
-                                "opens": [
-                                    {
-                                        "ts": "1365111111"
-                                    }
-                                ]
-                            }
+                            "email" : "test@example.com",
+                            "timeStamp": "1365111111"
                         }
                     ]';
         $expectedResult = array (
@@ -378,7 +241,7 @@ class UpdateVisitorCest
 
         $status = 405;
         $this->runTest($I, $params, $expectedResult, $status);
-    }
+    }*/
 
     private function seedVisitorsTable($I)
     {

@@ -1,107 +1,95 @@
 <?php
 namespace Api\Controller;
 
-use Core\Domain\Factory\AdminFactory;
+use \Core\Domain\Factory\AdminFactory;
+use \Core\Service\Errors;
 
 class VisitorsController extends ApiBaseController
 {
     public function updateVisitor()
     {
         $response = array();
-        $params = json_decode($this->app->request->getBody(), true);
-        if (!is_array($params) || empty($params)) {
+        $visitorsData = json_decode($this->app->request->getBody(), true);
+        if (!is_array($visitorsData) || empty($visitorsData)) {
             $this->app->response->setStatus(405);
             echo json_encode(array('msg'=>'Invalid Parameters.'));
             return;
         }
 
-        foreach ($params as $mandrillData) {
-            if (!isset($mandrillData['event']) || empty($mandrillData['event'])) {
+        foreach ($visitorsData as $visitorParams) {
+            if (!isset($visitorParams['event']) || empty($visitorParams['event'])) {
                 $this->app->response->setStatus(405);
                 echo json_encode(array('msg'=>'Event Required'));
                 return;
             }
-            if (!isset($mandrillData['msg']) || empty($mandrillData['msg'])) {
+            if (!isset($visitorParams['email']) || empty($visitorParams['email'])) {
                 $this->app->response->setStatus(405);
-                echo json_encode(array('msg'=>'Message Required'));
+                echo json_encode(array('msg'=>'Email Required'));
                 return;
             }
-            if (!$processedEventMessage = $this->processEventMessage($mandrillData['msg'], $mandrillData['event'])) {
+            $conditions = array('email' => $visitorParams['email']);
+            $visitor = AdminFactory::getVisitor()->execute($conditions);
+            if($visitor instanceof Errors) {
                 $this->app->response->setStatus(405);
-                echo json_encode(array('msg'=>'Invalid Message or Message Parameters'));
+                echo json_encode(array('msg'=>'Invalid Email'));
                 return;
             }
-
-            $parameter = array(
-                'email' => $processedEventMessage['email'],
-                'event' => $mandrillData['event']
-            );
-
-            if ($mandrillData['event'] === 'open' && isset($processedEventMessage['opens'])) {
-                foreach ($processedEventMessage['opens'] as $opens) {
-                    if (!isset($opens['ts']) || !is_numeric($opens['ts'])) {
-                        $this->app->response->setStatus(405);
-                        echo json_encode(array('msg'=>'Invalid Opens Timestamp'));
-                        return;
-                    }
-                    $parameter['opensTimestamp'] = (int) $opens['ts'];
-                }
-            }
-
-            try {
-                $result = AdminFactory::updateVisitors()->execute($parameter);
-                if (!is_object($result)) {
-                    $this->app->response->setStatus(405);
-                    $response = $result;
-                } else {
-                    $response[$result->getEmail()] = array(
-                        'open' => $result->getMailOpenCount(),
-                        'click' => $result->getMailClickCount(),
-                        'soft_bounce' => $result->getMailSoftBounceCount(),
-                        'hard_bounce' => $result->getMailHardBounceCount()
-                    );
-                }
-            } catch (\Exception $e) {
+            $params = $this->createParamsData($visitor, $visitorParams);
+            $result = AdminFactory::updateVisitors()->execute($visitor, $params);
+            if($result instanceof Errors) {
                 $this->app->response->setStatus(405);
-                echo json_encode(array('msg'=>$e->getMessage()));
-                return;
+                $response = $result->getErrorsAll();
+            } else {
+                $response[$result->getEmail()] = array(
+                    'open' => $result->getMailOpenCount(),
+                    'click' => $result->getMailClickCount(),
+                    'soft_bounce' => $result->getMailSoftBounceCount(),
+                    'hard_bounce' => $result->getMailHardBounceCount()
+                );
             }
         }
         echo json_encode($response);
         return;
     }
 
-    private function processEventMessage($eventMessage, $eventName = null)
+    private function createParamsData($visitor, $visitorParams)
     {
-        $validMessageParameters = array(
-            'email'
-        );
-        if ($eventName === 'open') {
-            $validMessageParameters[] = 'opens';
+        $params = array();
+        switch ($visitorParams['event']) {
+            case 'open':
+                if (!isset($visitorParams['timeStamp']) || !is_numeric($visitorParams['timeStamp'])) {
+                    $this->app->halt(405, json_encode(array('msg'=>'Invalid mail open Timestamp')));
+                }
+                $openCount = (int) $visitor->getMailOpenCount();
+                $params['mailOpenCount'] = $openCount + 1;
+                $openDate = new \DateTime();
+                $openDate->setTimestamp($visitorParams['timeStamp']);
+                $params['lastEmailOpenDate'] = $openDate;
+                break;
+            case 'click':
+                $clickCount = (int) $visitor->getMailClickCount();
+                $params['mailClickCount'] = $clickCount + 1;
+                break;
+            case 'soft_bounce':
+                $softBounceCount = (int) $visitor->getMailSoftBounceCount();
+                if ($softBounceCount >= 5) {
+                    $params['active'] = 0;
+                    $params['inactiveStatusReason'] = 'Soft Bounce';
+                }
+                $params['mailSoftBounceCount'] = $softBounceCount + 1;
+                break;
+            case 'hard_bounce':
+                $hardBounceCount = (int) $visitor->getMailHardBounceCount();
+                if ($hardBounceCount >= 2) {
+                    $params['active'] = 0;
+                    $params['inactiveStatusReason'] = 'Hard Bounce';
+                }
+                $params['mailHardBounceCount'] = $hardBounceCount + 1;
+                break;
+            default:
+                $this->app->halt(405, json_encode(array('msg'=>'Invalid Event')));
+                break;
         }
-        $eventMessage = $this->filterArrayElements($eventMessage, $validMessageParameters);
-        foreach ($eventMessage as $key => $value) {
-            if (empty($value)) {
-                return false;
-            }
-            if ($key === 'email' && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                return false;
-            }
-            if ($key === 'opens' && !is_array($value)) {
-                return false;
-            }
-        }
-        return $eventMessage;
-    }
-
-    private function filterArrayElements($parameters, $filter)
-    {
-        $filteredArray = array();
-        if (is_array($filter) && !empty($filter) && is_array($parameters)) {
-            foreach ($filter as $key) {
-                $filteredArray[$key] = isset($parameters[$key]) ? $parameters[$key] : null;
-            }
-        }
-        return $filteredArray;
+        return $params;
     }
 }

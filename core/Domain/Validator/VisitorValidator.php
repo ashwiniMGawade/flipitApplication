@@ -35,12 +35,20 @@ class VisitorValidator
             'inactiveStatusReason' => array(
                 $this->validator->type(array('type' => 'string'))
             ),
+            'email' => array(
+                $this->validator->notNull()
+            ),
             'active' => array(
                 $this->validator->type(array('type' => 'integer')),
                 $this->validator->length(array('min' => 1, 'max' => 1))
             ),
-            'lastEmailOpenDate' => array(
-                $this->validator->notNull()
+            'deleted' => array(
+                $this->validator->type(array('type' => 'integer')),
+                $this->validator->length(array('min' => 1, 'max' => 1))
+            ),
+            'status' => array(
+                $this->validator->type(array('type' => 'integer')),
+                $this->validator->length(array('min' => 1, 'max' => 1))
             )
         );
         return $this->validator->validate($visitor, $rules);
