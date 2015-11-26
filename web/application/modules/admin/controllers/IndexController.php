@@ -8,8 +8,6 @@ class Admin_IndexController extends Application_Admin_BaseController
             $referer = new \Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
-            \Auth_StaffAdapter::checkACL();
-
         }
     }
     public function init()
