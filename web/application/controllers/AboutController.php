@@ -66,6 +66,7 @@ class AboutController extends Zend_Controller_Action
 
     public function profileAction()
     {
+
         $authorSlugName = $this->getRequest()->getParam('slug');
         $authorId = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'user_'. str_replace('-', '_', $authorSlugName) .'_data',
@@ -81,9 +82,9 @@ class AboutController extends Zend_Controller_Action
             0
         );
         if (empty($authorDetailsForView)) {
-            throw new \Zend_Controller_Action_Exception('', 404);
+            $this->_helper->redirector->setCode(301);
+            $this->_redirect(HTTP_PATH_LOCALE);
         }
-
         $authorDetails = $authorDetailsForView[0];
         $authorFavouriteShops = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'user_'. 'favouriteShop'.$authorId .'_data',
