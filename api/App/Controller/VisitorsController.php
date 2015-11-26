@@ -9,35 +9,34 @@ class VisitorsController extends ApiBaseController
 {
     public function getVisitor($id)
     {
+        if (is_null($id) || !is_numeric($id)) {
+            $this->app->halt(400, json_encode(array('messages' => array('Invalid visitor Id'))));
+        }
         $conditions = array('id' => $id);
         $visitor = AdminFactory::getVisitor()->execute($conditions);
-        if($visitor instanceof Errors) {
-            $this->app->response->setStatus(405);
-            echo json_encode(array('msg'=>'Invalid Id'));
-            return;
+        if ($visitor instanceof Errors) {
+            $this->app->halt(404, json_encode(array('messages' => $visitor->getErrorsAll())));
         }
         echo $this->generateVisitorJsonData($visitor);
     }
 
     public function updateVisitor($id)
     {
+        if (is_null($id) || !is_numeric($id)) {
+            $this->app->halt(400, json_encode(array('messages' => array('Invalid visitor Id'))));
+        }
         $params = json_decode($this->app->request->getBody(), true);
         $conditions = array('id' => $id);
         $visitor = AdminFactory::getVisitor()->execute($conditions);
-        if($visitor instanceof Errors) {
-            $this->app->response->setStatus(405);
-            echo json_encode(array('msg'=>'Invalid Id'));
-            return;
+        if ($visitor instanceof Errors) {
+            $this->app->halt(404, json_encode(array('messages' => $visitor->getErrorsAll())));
         }
         $params = $this->formatInput($params);
         $result = AdminFactory::updateVisitors()->execute($visitor, $params);
-        if($result instanceof Errors) {
-            $this->app->response->setStatus(405);
-            $response = $result->getErrorsAll();
-            $response = json_encode($response);
-        } else {
-            $response = $this->generateVisitorJsonData($result);
+        if ($result instanceof Errors) {
+            $this->app->halt(405, json_encode(array('messages' => $result->getErrorsAll())));
         }
+        $response = $this->generateVisitorJsonData($result);
         echo $response;
     }
 

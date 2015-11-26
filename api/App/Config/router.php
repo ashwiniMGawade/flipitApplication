@@ -32,7 +32,7 @@ if (!$isFlipit || ($isFlipit && $locale)) {
     $app->get(
         $localePath . '/',
         function () {
-            echo json_encode(array("msg" => "Welcome to Slim Framework"));
+            echo json_encode(array("messages" => "Welcome to Slim Framework"));
         }
     );
 }

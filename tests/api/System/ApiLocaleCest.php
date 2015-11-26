@@ -34,6 +34,6 @@ class ApiLocaleCest
         $I->sendGet('http://api.dev.flipit.com/shops/1?api_key='.$this->apiKey);
         $I->seeResponseCodeIs(404);
         $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(array('message'=>'Not found'));
+        $I->seeResponseContainsJson(array('messages'=>'Not found'));
     }
 }

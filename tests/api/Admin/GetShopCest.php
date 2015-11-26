@@ -26,7 +26,7 @@ class GetShopCest
         $I->sendGet('/shops/?api_key='.$this->apiKey);
         $I->seeResponseCodeIs(404);
         $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(['message' => 'Not found']);
+        $I->seeResponseContainsJson(['messages' => 'Not found']);
     }
 
     public function testGetShopWithStringId(ApiTester $I)
