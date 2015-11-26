@@ -25,13 +25,6 @@ class Admin_IndexController extends Application_Admin_BaseController
 
     public function indexAction()
     {
-//        if ($this->getRequest()->isPost()) {
-//            $params = $this->getRequest()->getParams();
-//            $site_name = isset($params['site_name']) ? $params['site_name'] : '';
-//            if (!empty($site_name)) {
-//                \Auth_StaffAdapter::checkACL($site_name);
-//            }
-//        }
         $data = KC\Repository\Dashboard::getDashboardToDisplay();
         $this->view->data = $data;
         $lastweek = $data['total_no_of_shops_online_code_lastweek'];
