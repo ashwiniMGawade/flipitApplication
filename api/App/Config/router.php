@@ -24,7 +24,8 @@ if (!$isFlipit || ($isFlipit && $locale)) {
     $app->group(
         $localePath . '/visitors',
         function () use ($app) {
-            $app->map('/', 'Api\Controller\VisitorsController:updateVisitor')->via('PUT', 'PATCH');
+            $app->get('/:id', 'Api\Controller\VisitorsController:getVisitor');
+            $app->map('/:id', 'Api\Controller\VisitorsController:updateVisitor')->via('PUT', 'PATCH');
         }
     );
 
