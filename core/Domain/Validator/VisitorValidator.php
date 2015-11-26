@@ -36,7 +36,8 @@ class VisitorValidator
                 $this->validator->type(array('type' => 'string'))
             ),
             'email' => array(
-                $this->validator->notNull()
+                $this->validator->notNull(),
+                $this->validator->email()
             ),
             'active' => array(
                 $this->validator->type(array('type' => 'integer')),
@@ -49,6 +50,9 @@ class VisitorValidator
             'status' => array(
                 $this->validator->type(array('type' => 'integer')),
                 $this->validator->length(array('min' => 1, 'max' => 1))
+            ),
+            'dateOfBirth' => array(
+                $this->validator->dateTime()
             )
         );
         return $this->validator->validate($visitor, $rules);
