@@ -1,6 +1,5 @@
 <?php
-class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface
-{
+class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface{
 
     protected $email = "";
     protected $password = "";
