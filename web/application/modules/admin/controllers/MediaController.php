@@ -1,6 +1,6 @@
 <?php
 
-class Admin_MediaController extends Zend_Controller_Action
+class Admin_MediaController extends Application_Admin_BaseController
 {
     public function preDispatch()
     {

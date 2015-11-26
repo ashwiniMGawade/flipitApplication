@@ -1,5 +1,5 @@
 <?php
-class Admin_ArticlecategoryController extends Zend_Controller_Action
+class Admin_ArticlecategoryController extends Application_Admin_BaseController
 {
 /**
  * initialize flash messages on view.

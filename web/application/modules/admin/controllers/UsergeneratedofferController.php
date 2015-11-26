@@ -1,5 +1,5 @@
 <?php
-class Admin_UsergeneratedofferController extends Zend_Controller_Action
+class Admin_UsergeneratedofferController extends Application_Admin_BaseController
 {
     public function preDispatch()
     {

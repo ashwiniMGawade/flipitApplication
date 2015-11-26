@@ -1,6 +1,6 @@
 <?php
 
-class Admin_MenuController extends Zend_Controller_Action
+class Admin_MenuController extends Application_Admin_BaseController
 {
 
     /**

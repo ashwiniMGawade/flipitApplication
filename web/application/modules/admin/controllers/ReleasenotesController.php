@@ -4,7 +4,7 @@
  * @author sp singh
  *
  */
-class Admin_ReleasenotesController extends Zend_Controller_Action
+class Admin_ReleasenotesController extends Application_Admin_BaseController
 {
 
     public function preDispatch()

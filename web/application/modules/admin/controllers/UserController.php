@@ -6,7 +6,7 @@
  *
  */
 
-class Admin_UserController extends Zend_Controller_Action
+class Admin_UserController extends Application_Admin_BaseController
 {
     /**
      * check authentication before load the page

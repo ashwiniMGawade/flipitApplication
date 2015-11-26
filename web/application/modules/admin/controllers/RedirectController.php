@@ -1,5 +1,5 @@
 <?php
-class Admin_RedirectController extends Zend_Controller_Action
+class Admin_RedirectController extends Application_Admin_BaseController
 {
     public function preDispatch()
     {
