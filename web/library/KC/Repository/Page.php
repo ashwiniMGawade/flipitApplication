@@ -661,7 +661,7 @@ class Page extends \Core\Domain\Entity\Page
             }
             if (isset($params['coupconCodeeclusivechk'])) {
                 $savePage->couponExclusive =
-                    BackEnd_Helper_viewHelper::stripSlashesFromString($params['coupconCodeeclusivechk']);
+                    \BackEnd_Helper_viewHelper::stripSlashesFromString($params['coupconCodeeclusivechk']);
             }
             if (isset($params['saleregularchk'])) {
                 $savePage->saleRegular =
@@ -891,7 +891,6 @@ class Page extends \Core\Domain\Entity\Page
         } else {
             $repo = $entityManagerLocale->getRepository('\Core\Domain\Entity\DefaultPage');
         }
-
         $updatePage = $repo->find($params['pageId']);
         $updatePage->slug =  $params['slug'];
         if (isset($params['selectedpageType'])) {
