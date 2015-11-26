@@ -31,7 +31,7 @@ class UpdateVisitorUsecaseTest extends \Codeception\TestCase\Test
     {
         $params = array(
             'mailOpenCount' => 1,
-            'lastEmailOpenDate' => 2,
+            'lastEmailOpenDate' => '2015-06-30 17:01:34',
             'mailClickCount' => 10,
             'mailSoftBounceCount' => 1,
             'mailHardBounceCount' => 3,
@@ -45,12 +45,13 @@ class UpdateVisitorUsecaseTest extends \Codeception\TestCase\Test
             'content' => 'Test text',
             'dateOfBirth' => '2015-06-30 17:01:34',
             'deleted' => 0,
-            'email' => 'test@flipit.com',
+            'email' => 'new@visitor.com',
             'fashionNewsLetter' => 0,
             'firstName' => 'Visitor First Name',
             'gender' => 1,
             'interested' => 1,
             'lastLogIn' => '2015-06-30 17:01:34',
+            'currentLogin' => '2015-06-30 17:01:34',
             'lastName' => 'Last',
             'password' => 1,
             'postalCode' => '111111',
@@ -71,7 +72,7 @@ class UpdateVisitorUsecaseTest extends \Codeception\TestCase\Test
             new Errors()
         )
         )->execute(new Visitor(), $params);
-        $this->assertEquals(new Visitor(), $result);
+        $this->assertInstanceOf('Core\Domain\Entity\Visitor', $result);
     }
 
     private function visitorRepositoryMock()
