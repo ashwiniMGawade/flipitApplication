@@ -11,7 +11,63 @@
     "schemes":[
         "http"
     ],
-    "paths":{
+    "paths":
+        {
+        "/visitors":{
+            "get":{
+                "tags":[
+                    "visitor"
+                ],
+                "summary":"Get visitors",
+                "description":"",
+                "operationId":"getVisitors",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in":"query",
+                        "name":"page",
+                        "description":"Page number",
+                        "required":false,
+                        "type":"integer",
+                        "default":1
+                    },
+                    {
+                        "in":"query",
+                        "name":"perPage",
+                        "description":"Paginator results per page (max 100)",
+                        "required":false,
+                        "type":"integer",
+                        "default":100
+                    },
+                    {
+                        "in":"query",
+                        "name":"email",
+                        "description":"Email id to find a record",
+                        "required":false,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"Request was successful",
+                        "schema":{
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/visitor"
+                            }
+                        }
+                    },
+                    "405":{
+                        "description":"Invalid input"
+                    }
+                }
+            }
+        },
         "/visitors/{visitorId}":{
             "put":{
                 "tags":[
@@ -19,7 +75,7 @@
                 ],
                 "summary":"Update visitor information",
                 "description":"",
-                "operationId":"updatevisitor",
+                "operationId":"updateVisitor",
                 "consumes":[
                     "application/json"
                 ],
@@ -63,7 +119,7 @@
                 ],
                 "summary":"Find visitor by id",
                 "description":"Returns a single visitor",
-                "operationId":"getvisitorById",
+                "operationId":"getVisitorById",
                 "produces":[
                     "application/json"
                 ],

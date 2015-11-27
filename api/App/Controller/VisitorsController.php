@@ -7,6 +7,38 @@ use \Core\Service\Errors;
 
 class VisitorsController extends ApiBaseController
 {
+    public function getVisitors()
+    {
+        $page = (int) $this->app->request()->get('page');
+        $perPage = (int) $this->app->request()->get('perPage');
+        $perPage = ($perPage === 0) ? 100 : $perPage;
+        $email = $this->app->request()->get('email');
+        $conditions = array();
+        $currentLink = '/visitors?page=' . ($page) . '&perPage=' . $perPage;
+        $nextLink = '/visitors?page=' . ($page + 1) . '&perPage=' . $perPage;
+        if (false === is_null($email)) {
+            $conditions['email'] = $email;
+            $currentLink .= '&email='.urlencode($email);
+            $nextLink .= '&email='.urlencode($email);
+        }
+        $currentLink .= '&api_key='.urlencode($this->app->request()->get('api_key'));
+        $nextLink .= '&api_key='.urlencode($this->app->request()->get('api_key'));
+        $visitors = AdminFactory::getVisitors()->execute($conditions, array(), $perPage, $page);
+        if ($visitors instanceof Errors) {
+            $this->app->halt(404, json_encode(array('messages' => $visitors->getErrorsAll())));
+        }
+        $visitorsData = new Hal($currentLink);
+        if (count($visitors) == $perPage) {
+            $visitorsData->addLink('next', $nextLink);
+        }
+
+        foreach ($visitors as $visitor) {
+            $visitor =  $this->generateVisitorJsonData($visitor);
+            $visitorsData->addResource('visitor', $visitor);
+        }
+        echo $visitorsData->asJson();
+    }
+
     public function getVisitor($id)
     {
         if (is_null($id) || !is_numeric($id)) {
@@ -17,7 +49,8 @@ class VisitorsController extends ApiBaseController
         if ($visitor instanceof Errors) {
             $this->app->halt(404, json_encode(array('messages' => $visitor->getErrorsAll())));
         }
-        echo $this->generateVisitorJsonData($visitor);
+        $visitor = $this->generateVisitorJsonData($visitor);
+        echo $visitor->asJson();
     }
 
     public function updateVisitor($id)
@@ -37,7 +70,7 @@ class VisitorsController extends ApiBaseController
             $this->app->halt(405, json_encode(array('messages' => $result->getErrorsAll())));
         }
         $response = $this->generateVisitorJsonData($result);
-        echo $response;
+        echo $response->asJson();
     }
 
     private  function formatInput($params)
@@ -90,6 +123,7 @@ class VisitorsController extends ApiBaseController
         $codeAlertSendDate = $visitor->getCodeAlertSendDate();
 
         $visitorData = array(
+            'id' => $visitor->getId(),
             'email' => $visitor->getEmail(),
             'firstName' => $visitor->getFirstName(),
             'lastName' => $visitor->getLastName(),
@@ -120,7 +154,6 @@ class VisitorsController extends ApiBaseController
             'weeklyNewsLetter' => (1 === $visitor->getWeeklyNewsLetter()) ? 'Yes' : 'No',
             'username' => $visitor->getUsername()
         );
-        $shop = new Hal('/visitors/'.$visitor->getId(), $visitorData);
-        return $shop->asJson();
+        return new Hal('/visitors/'.$visitor->getId(), $visitorData);
     }
 }

@@ -36,7 +36,7 @@ class UpdateVisitorCest
         $I->wantTo('Test PUT visitor success when valid input passed');
         $this->seedVisitorsTable($I);
         $params = json_encode(array('email' => 'ramesh@example.com'));
-        $expectedResult = array('email1' => 'ramesh@example.com');
+        $expectedResult = array('email' => 'ramesh@example.com');
         $status = 200;
         $this->runTest($I, 1, $params, $expectedResult, $status);
     }
