@@ -1,5 +1,7 @@
 <?php
 
+use \Core\Service\Errors;
+
 class Admin_VisitorController extends Zend_Controller_Action
 {
 
@@ -21,17 +23,14 @@ class Admin_VisitorController extends Zend_Controller_Action
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
 
-
         # redirect of a user don't have any permission for this controller
         $sessionNamespace = new Zend_Session_Namespace();
         $this->_settings  = $sessionNamespace->settings['rights'] ;
 
-
         # apply admin level access on all controllers
         if ($this->getRequest()->isXmlHttpRequest()) {
-
             # add action as new case which needs to be viewed by other users
-            switch(strtolower($this->view->action)) {
+            switch (strtolower($this->view->action)) {
                 case 'searchemails':
                     # no restriction
                     break;
@@ -106,40 +105,74 @@ class Admin_VisitorController extends Zend_Controller_Action
     public function getvisitorlistAction()
     {
         $flash = $this->_helper->getHelper('FlashMessenger');
-
-        $filter['searchtext'] =  FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('searchtext'));
-        $filter['email'] =  FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('email'));
-
-        $sortColumns = array(
-                'id',
-                'firstName',
-                'lastName',
-                'email',
-                'mailClickCount',
-                'mailOpenCount',
-                'mailHardBounceCount',
-                'mailSoftBounceCount',
-                'active',
-                'weeklyNewsLetter',
-                'created_at'
-            );
-
-        $request['offset'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayStart')));
-        $request['limit'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayLength')));
-        $request['sortByColumn'] = $sortColumns[intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iSortCol_0')))];
-        $request['sortDirection'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sSortDir_0'));
-
-        $sEcho = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sEcho')));
-
-        try {
-            $visitorList = \Core\Domain\Factory\AdminFactory::getVisitors()->execute($filter, $request);
-            $response = \DataTable_Helper::createResponse($sEcho, $visitorList['visitors'], $visitorList['visitorCount']);
-            echo Zend_Json::encode($response);
-        } catch (Exception $exception) {
-            $message = $this->view->translate($exception->getMessage());
-            $flash->addMessage(array('error' => $message));
+        $conditions = array('deleted' => 0);
+        $searchText =  FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('searchtext'));
+        $email =  FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('email'));
+        if (!empty($searchText) && $searchText != 'undefined') {
+            $conditions['firstName'] = $searchText;
         }
-        die();
+        if (!empty($email) && $email != 'undefined') {
+            $conditions['email'] = $email;
+        }
+        $order = $this->getOrderByField();
+        $offset = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayStart')));
+        $limit = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayLength')));
+        $result = \Core\Domain\Factory\AdminFactory::getVisitors()->execute($conditions, $order, $limit, $offset, true);
+        if ($result instanceof Errors) {
+            $errors = $result->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+        } else {
+            $visitorList['records'] = $this->prepareData($result['records']);
+            $sEcho = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sEcho')));
+            $response = \DataTable_Helper::createResponse($sEcho, $visitorList['records'], $result['count']);
+            echo Zend_Json::encode($response);
+        }
+        exit;
+    }
+
+    private function getOrderByField()
+    {
+        $sortColumns = array(
+            'id',
+            'firstName',
+            'lastName',
+            'email',
+            'mailClickCount',
+            'mailOpenCount',
+            'mailHardBounceCount',
+            'mailSoftBounceCount',
+            'active',
+            'weeklyNewsLetter',
+            'created_at'
+        );
+
+        $orderByField = $sortColumns[intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iSortCol_0')))];
+        $orderByDirection = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sSortDir_0'));
+        return null != $orderByField ? array($orderByField => $orderByDirection) : array();
+    }
+
+    private function prepareData($visitors)
+    {
+        $returnData = array();
+        if (!empty($visitors)) {
+            foreach ($visitors as $visitor) {
+                $returnData[] = array(
+                    'id' => $visitor->getId(),
+                    'firstName' => $visitor->getFirstName(),
+                    'lastName' => $visitor->getLastName(),
+                    'email' => $visitor->getEmail(),
+                    'weeklyNewsLetter' => $visitor->getWeeklyNewsLetter(),
+                    'created_at' => $visitor->getCreatedAt(),
+                    'active' => $visitor->getActive(),
+                    'inactiveStatusReason' => $visitor->getInactiveStatusReason(),
+                    'clicks' => $visitor->getMailClickCount(),
+                    'opens' => $visitor->getMailOpenCount(),
+                    'hard_bounces' => $visitor->getMailHardBounceCount(),
+                    'soft_bounces' => $visitor->getMailSoftBounceCount()
+                );
+            }
+        }
+        return $returnData;
     }
 
     public function editvisitorAction()
