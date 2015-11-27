@@ -994,7 +994,7 @@ EOD;
 	
     public static function getPermalinkAfterRemovingSpecialCharacterAndReplacedWithHyphen($keyword)
     {
-        $keyword = preg_replace("/[\/\&_~,`@!(){}:'*+^%#$?#=-]/", "-", $keyword);
+        $keyword = preg_replace("/[\/\&_~,`@!(){}:'*+^%#$?#.=-]/", "-", $keyword);
         return $keyword;
     }
 
