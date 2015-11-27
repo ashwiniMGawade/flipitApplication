@@ -1,0 +1,6 @@
+<?php if (!isset($_COOKIE['cookie_agreement']) || empty($_COOKIE['cookie_agreement'])) { ?>
+    <div id="footer-cookie-info">
+        <?php echo FrontEnd_Helper_viewHelper::__translate('This site uses cookies ');?><a class="btn btn-primary btn-xs" onclick="createCookieAgreement();"><strong><?php echo FrontEnd_Helper_viewHelper::__translate('Okay, thanks');?></strong></a>
+        <a class="txt-underline" href="<?php echo HTTP_PATH_LOCALE; ?>info/<?php echo FrontEnd_Helper_viewHelper::__link('link_privacy-cookies'); ?>"><?php echo FrontEnd_Helper_viewHelper::__translate('Find out more');?></a>
+    </div>
+<?php } ?>

@@ -7,6 +7,7 @@ $(document).ready(function(){
     });
     loopImages();
     loop(0);
+    loadCookieBar();
 });
 
 var loopImages = function(){
@@ -76,6 +77,19 @@ function ___removeOverLay() {
     return true ;
 }
 
+var loadCookieBar = function() {
+    if(document.cookie.indexOf("cookie_agreement=1") > -1) {
+        return;
+    }
+    jQuery.ajax({
+        url : HOST_PATH_LOCALE + "about/load-cookie-bar",
+        method : "post",
+        type : "post",
+        success : function(data) {
+            jQuery('#cookieBarContainer').html(data);
+        }
+    });
+}
 var createCookieAgreement = function() {
     var expiry = new Date();
     expiry.setFullYear(expiry.getFullYear() + 10);
