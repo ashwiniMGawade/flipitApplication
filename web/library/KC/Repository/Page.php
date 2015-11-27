@@ -293,7 +293,7 @@ class Page extends \Core\Domain\Entity\Page
             ->from('\Core\Domain\Entity\Page', 'page')
             ->setParameter(1, 0)
             ->where('page.deleted = ?1')
-            ->orderBy('page.id DESC');
+            ->orderBy('page.id','DESC');
         $pageList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageList;
     }
