@@ -26,19 +26,28 @@ class GetVisitorsCest
     {
         $I->wantTo('Test GET visitor returns data when passed email record exists');
         $this->seedVisitorsTable($I, 'test@example.com');
-        $I->sendGet('/visitors?test@email=example.com&api_key='.$this->apiKey);
+        $I->sendGet('/visitors?email=test@example.com&api_key='.$this->apiKey);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson(array('email' => 'test@example.com'));
     }
 
-    public function testGetVisitorReturnsDataWhenPassedEmailRecordNotExists(ApiTester $I)
+    public function testGetVisitorReturnsDataWhenPassedEmailRecordDoesNotExists(ApiTester $I)
     {
-        $I->wantTo('Test GET visitor returns data when passed email record not exists');
-        $I->sendGet('/visitors?test@email=example.com&api_key='.$this->apiKey);
+        $I->wantTo('Test GET visitor returns data when passed email record does not exists');
+        $I->sendGet('/visitors?email=test@example.com&api_key='.$this->apiKey);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         $I->cantSeeResponseContainsJson(array('email' => 'test@example.com'));
+    }
+
+    public function testGetVisitorReturnsDataWhenPassedEmailIdIsNotValid(ApiTester $I)
+    {
+        $I->wantTo('Test GET visitor returns data when passed email is not valid');
+        $I->sendGet('/visitors?email=not-email&api_key='.$this->apiKey);
+        $I->seeResponseCodeIs(405);
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(array('messages' => array( 'Invalid Email')));
     }
 
     private function seedVisitorsTable($I, $email)

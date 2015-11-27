@@ -16,6 +16,9 @@ class VisitorsController extends ApiBaseController
         $conditions = array();
         $currentLink = '/visitors?page=' . ($page) . '&perPage=' . $perPage;
         $nextLink = '/visitors?page=' . ($page + 1) . '&perPage=' . $perPage;
+        if (false === is_null($email) && false === filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->app->halt(405, json_encode(array('messages' => array('Invalid Email'))));
+        }
         if (false === is_null($email)) {
             $conditions['email'] = $email;
             $currentLink .= '&email='.urlencode($email);

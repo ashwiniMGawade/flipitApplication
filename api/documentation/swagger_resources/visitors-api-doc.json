@@ -86,7 +86,7 @@
                     {
                         "in":"path",
                         "name":"visitorId",
-                        "description":"Visitor Id that needs to be update",
+                        "description":"Visitor Id that needs to be updated",
                         "required":true,
                         "type":"integer",
                         "format":"int64"
@@ -94,7 +94,7 @@
                     {
                         "in":"body",
                         "name":"body",
-                        "description":"Visitor that needs to be update",
+                        "description":"Visitor data that needs to be updated",
                         "required":true,
                         "schema":{
                             "$ref":"#/definitions/visitor"
