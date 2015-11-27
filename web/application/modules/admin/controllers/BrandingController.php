@@ -1,5 +1,5 @@
 <?php
-class Admin_BrandingController extends Zend_Controller_Action
+class Admin_BrandingController extends Application_Admin_BaseController
 {
     public function init()
     {

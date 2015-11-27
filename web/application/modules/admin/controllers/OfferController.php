@@ -1,5 +1,5 @@
 <?php
-class Admin_OfferController extends Zend_Controller_Action
+class Admin_OfferController extends Application_Admin_BaseController
 {
 
     ############################################################

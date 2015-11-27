@@ -1,6 +1,6 @@
 <?php
 
-class Admin_TestController extends Zend_Controller_Action
+class Admin_TestController extends Application_Admin_BaseController
 {
 
     /**

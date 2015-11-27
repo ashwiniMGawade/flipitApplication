@@ -4,7 +4,7 @@
  * @author Er.kundal
  *
  */
-class Admin_HomepageController extends Zend_Controller_Action
+class Admin_HomepageController extends Application_Admin_BaseController
 {
 
     # holds settings regarding user rights

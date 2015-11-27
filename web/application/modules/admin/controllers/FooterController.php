@@ -1,6 +1,6 @@
 <?php
 
-class Admin_FooterController extends Zend_Controller_Action
+class Admin_FooterController extends Application_Admin_BaseController
 {
 
     public function init()

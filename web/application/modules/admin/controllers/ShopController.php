@@ -1,6 +1,6 @@
 <?php
 
-class Admin_ShopController extends Zend_Controller_Action
+class Admin_ShopController extends Application_Admin_BaseController
 {
 
     public $mandrillKey = '';

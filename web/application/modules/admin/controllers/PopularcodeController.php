@@ -1,6 +1,6 @@
 <?php
 
-class Admin_PopularcodeController extends Zend_Controller_Action
+class Admin_PopularcodeController extends Application_Admin_BaseController
 {
     public function preDispatch()
     {
