@@ -34,7 +34,7 @@
                         "description":"Page number",
                         "required":false,
                         "type":"integer",
-                        "default":1
+                        "default":0
                     },
                     {
                         "in":"query",

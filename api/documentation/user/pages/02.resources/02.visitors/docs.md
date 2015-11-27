@@ -6,7 +6,7 @@ taxonomy:
 process:
 	twig: false
 ---
-{assets:js order:10}
+{assets:js}
 swagger_resources/swagger.visitor.js
 {/assets}
 
