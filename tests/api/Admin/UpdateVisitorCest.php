@@ -12,7 +12,7 @@ class UpdateVisitorCest
         $this->apiKey = $I->getConfig('apiKey');
     }
 
-    public function testPutVisitorWhenInvalidIdPassed(ApiTester $I)
+    public function testPutVisitorGivesErrorWhenInvalidIdPassed(ApiTester $I)
     {
         $I->wantTo('Test PUT visitor gives error when invalid id passed');
         $this->seedVisitorsTable($I);
@@ -31,9 +31,9 @@ class UpdateVisitorCest
         $I->seeResponseContainsJson(['messages' => 'Not found']);
     }
 
-    public function testPutVisitorWhenValidInputPassed(ApiTester $I)
+    public function testPutVisitorUpdatesVisitorWhenValidInputPassed(ApiTester $I)
     {
-        $I->wantTo('Test PUT visitor success when valid input passed');
+        $I->wantTo('Test PUT visitor updates visitor when valid input passed');
         $this->seedVisitorsTable($I);
         $params = json_encode(array('email' => 'test@example.com'));
         $expectedResult = array('email' => 'test@example.com');
@@ -41,9 +41,9 @@ class UpdateVisitorCest
         $this->runTest($I, 1, $params, $expectedResult, $status);
     }
 
-    public function testPutVisitorWhenInValidEmailPassed(ApiTester $I)
+    public function testPutVisitorGivesErrorWhenInValidEmailPassed(ApiTester $I)
     {
-        $I->wantTo('Test PUT visitor success when invalid email passed');
+        $I->wantTo('Test PUT visitor gives error when invalid email passed');
         $this->seedVisitorsTable($I);
         $params = json_encode(array('email' => 'not an email'));
         $expectedResult = array('This value is not a valid email address.');
