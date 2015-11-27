@@ -12,9 +12,9 @@ class GetVisitorCest
         $this->apiKey = $I->getConfig('apiKey');
     }
 
-    public function testGetVisitorReturnsDataWhenRecordExists(ApiTester $I)
+    public function testGetVisitorReturnsVisitorWhenRecordExists(ApiTester $I)
     {
-        $I->wantTo('Test GET visitor returns data when record exists');
+        $I->wantTo('Test GET visitor returns visitor record when record exists');
         $this->seedVisitorsTable($I);
         $I->sendGet('/visitors/1?api_key='.$this->apiKey);
         $I->seeResponseCodeIs(200);

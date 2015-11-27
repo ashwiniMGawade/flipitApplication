@@ -22,7 +22,7 @@ class UpdateVisitorCest
         $this->runTest($I, 2, $params, $expectedResult, $status);
     }
 
-    public function testPutVisitorGivesErrorWhenIdDoesNotPassed(ApiTester $I)
+    public function testPutVisitorGivesErrorWhenIdNotSpecified(ApiTester $I)
     {
         $I->wantTo('Test PUT visitor gives error when id does not passed');
         $I->sendPUT('/visitors/?api_key='.$this->apiKey);

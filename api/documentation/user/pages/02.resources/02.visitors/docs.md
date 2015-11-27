@@ -14,8 +14,8 @@ swagger_resources/swagger.visitor.js
 	<div id='header'>
 	    <div class="swagger-ui-wrap">
 	        <form id='api_selector'>
-	            <div class='input'><input placeholder="apikey" id="input_apiKey" name="apiKey" type="text"/></div>
-	            <div class='input explore-btn'><a id="explore" href="#">Explore</a></div>
+	            <div class='input'><input placeholder="API Key" id="input_apiKey" name="apiKey" type="text"/></div>
+	            <div class='input explore-btn'><a id="explore" href="#">API Key</a></div>
 	        </form>
 	    </div>
 	</div>
