@@ -6,7 +6,7 @@
  * @author Surinderpal Singh
  *
  */
-class Admin_RssController extends Zend_Controller_Action
+class Admin_RssController extends Application_Admin_BaseController
 {
     public function init()
     {

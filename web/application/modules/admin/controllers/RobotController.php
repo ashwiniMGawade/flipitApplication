@@ -1,5 +1,5 @@
 <?php
-class Admin_RobotController extends Zend_Controller_Action
+class Admin_RobotController extends Application_Admin_BaseController
 {
     public $flashMessenger = '';
 
@@ -64,7 +64,7 @@ class Admin_RobotController extends Zend_Controller_Action
             $robotsTextHandle = fopen($robotsTextFile, 'w');
             fwrite($robotsTextHandle, $robotsFileParameters['content']);
             fclose($robotsTextHandle);
-            $this->setFlashMessage('Robot.txt has been updated!!!');
+            $this->setSingleFlashMessage('Robot.txt has been updated!!!');
             $this->_redirect(HTTP_PATH . 'admin/robot');
         }
     }
@@ -77,7 +77,7 @@ class Admin_RobotController extends Zend_Controller_Action
         return $this;
     }
 
-    public function setFlashMessage($messageText)
+    public function setSingleFlashMessage($messageText)
     {
         $message = $this->view->translate($messageText);
         $this->flashMessenger->addMessage(array('success' => $message));

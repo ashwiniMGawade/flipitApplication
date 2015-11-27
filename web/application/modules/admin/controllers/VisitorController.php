@@ -1,6 +1,6 @@
 <?php
 
-class Admin_VisitorController extends Zend_Controller_Action
+class Admin_VisitorController extends Application_Admin_BaseController
 {
 
     /**

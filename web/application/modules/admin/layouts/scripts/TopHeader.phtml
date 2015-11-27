@@ -5,7 +5,7 @@
 		$sessionNamespace = new Zend_Session_Namespace();
 		$lastLogin = Zend_Auth::getInstance()->getIdentity()->lastLogIn->format('H:i M dS Y');
 		?>
-	   <select class="fl-ie" onchange="localeSettingCMS(this);">
+	   <select class="fl-ie" onchange="localeSettingCMS(this);" name="site_name">
 	     <?php 
 	    	for($w=0;$w<count($sessionNamespace->settings['webaccess']);$w++){
 	       		$siteName = $sessionNamespace->settings['webaccess'][$w]['websitename'];
@@ -18,10 +18,9 @@
 	</form>
 <?php
 	if(LOCALE == '') {
-		
 		$refresLink = $this->translate("refresh") . " kc " . $this->translate("cache");
 	}else {
-		
+
 		$refresLink = $this->translate("refresh") . " ". LOCALE ." ". $this->translate("cache");
 	}
 	$httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();

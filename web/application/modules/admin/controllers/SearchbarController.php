@@ -1,5 +1,5 @@
 <?php
-class Admin_SearchbarController extends Zend_Controller_Action
+class Admin_SearchbarController extends Application_Admin_BaseController
 {
 
     /**

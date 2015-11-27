@@ -1,7 +1,7 @@
 <?php
 use \Core\Domain\Factory\AdminFactory;
 
-class Admin_ApikeysController extends Zend_Controller_Action
+class Admin_ApikeysController extends Application_Admin_BaseController
 {
     public function preDispatch()
     {

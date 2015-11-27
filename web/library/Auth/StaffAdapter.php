@@ -127,4 +127,26 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
             header('Location:' . PARENT_PATH . 'admin/auth');
         }
     }
+
+    public static function checkACL() {
+        $site_name =  isset($_COOKIE['site_name']) ?  $_COOKIE['site_name'] : '';
+        $locale_code = isset($_COOKIE['locale']) ?  $_COOKIE['locale'] : '';
+        $sessionNamespace = new Zend_Session_Namespace();
+
+        $accesible_sites = array_column($sessionNamespace->settings['webaccess'], 'name');
+        if (!in_array($site_name, $accesible_sites) || !in_array('flipit.com/'.$locale_code, $accesible_sites)) {
+            $website = trim($accesible_sites[0]);
+            $locateData = explode('/', $website);
+            # set website name
+            setcookie('site_name', $website, time() + 86400, '/');
+            # set locale based on website(en for kc.nl)
+            $locale = isset($locateData[1]) ? $locateData[1] : 'en' ;
+            setcookie('locale', $locale, time() + 86400, '/');
+
+            $front_controller = Zend_Controller_Front::getInstance();
+            $baseUrl =  $front_controller->getBaseUrl();
+
+            header('Location:' .$baseUrl.'/admin');
+        }
+    }
 }

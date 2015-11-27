@@ -4,7 +4,7 @@
  * @author sunny patial
  *
  */
-class Admin_AccountsettingController extends Zend_Controller_Action
+class Admin_AccountsettingController extends Application_Admin_BaseController
 {
     public $dataShopName = array();
     public $dataOfferName = array();
