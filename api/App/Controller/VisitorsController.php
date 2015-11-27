@@ -68,7 +68,7 @@ class VisitorsController extends ApiBaseController
             $this->app->halt(404, json_encode(array('messages' => $visitor->getErrorsAll())));
         }
         $params = $this->formatInput($params);
-        $result = AdminFactory::updateVisitors()->execute($visitor, $params);
+        $result = AdminFactory::updateVisitor()->execute($visitor, $params);
         if ($result instanceof Errors) {
             $this->app->halt(405, json_encode(array('messages' => $result->getErrorsAll())));
         }
