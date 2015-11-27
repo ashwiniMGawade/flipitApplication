@@ -8,6 +8,6 @@ class WelcomeCest
         $I->sendGet('/');
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
-        $I->seeResponseContains('{"msg":"Welcome to Slim Framework"}');
+        $I->seeResponseContains('{"messages":"Welcome to Flipit"}');
     }
 }

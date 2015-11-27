@@ -2,7 +2,6 @@
 namespace Api\Controller;
 
 use \Nocarrier\Hal;
-use \Api\Controller\ApiBaseController;
 use \Core\Domain\Factory\AdminFactory;
 
 class ShopsController extends ApiBaseController
