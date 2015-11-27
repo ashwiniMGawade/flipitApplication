@@ -25,19 +25,29 @@ class UpdateVisitorCest
     public function testPutVisitorGivesErrorWhenIdDoesNotPassed(ApiTester $I)
     {
         $I->wantTo('Test PUT visitor gives error when id does not passed');
-        $I->sendGet('/visitors/?api_key='.$this->apiKey);
+        $I->sendPUT('/visitors/?api_key='.$this->apiKey);
         $I->seeResponseCodeIs(404);
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson(['messages' => 'Not found']);
     }
 
-    public function testPutVisitorWhenValidIdPassed(ApiTester $I)
+    public function testPutVisitorWhenValidInputPassed(ApiTester $I)
     {
         $I->wantTo('Test PUT visitor success when valid input passed');
         $this->seedVisitorsTable($I);
-        $params = json_encode(array('email' => 'ramesh@example.com'));
-        $expectedResult = array('email' => 'ramesh@example.com');
+        $params = json_encode(array('email' => 'test@example.com'));
+        $expectedResult = array('email' => 'test@example.com');
         $status = 200;
+        $this->runTest($I, 1, $params, $expectedResult, $status);
+    }
+
+    public function testPutVisitorWhenInValidEmailPassed(ApiTester $I)
+    {
+        $I->wantTo('Test PUT visitor success when invalid email passed');
+        $this->seedVisitorsTable($I);
+        $params = json_encode(array('email' => 'not an email'));
+        $expectedResult = array('This value is not a valid email address.');
+        $status = 405;
         $this->runTest($I, 1, $params, $expectedResult, $status);
     }
 

@@ -21,15 +21,6 @@ class GetVisitorCest
         $I->seeResponseIsJson();
     }
 
-    public function testGetVisitorGivesErrorWhenIdNotPassed(ApiTester $I)
-    {
-        $I->wantTo('Test GET visitor gives error when id does not passed.');
-        $I->sendGet('/visitors/?api_key='.$this->apiKey);
-        $I->seeResponseCodeIs(404);
-        $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(['messages' => 'Not found']);
-    }
-
     public function testGetVisitorGivesErrorWhenInvalidIdPassed(ApiTester $I)
     {
         $I->wantTo('Test GET visitor gives error when invalid id passed');
@@ -53,12 +44,7 @@ class GetVisitorCest
         $I->haveInDatabasePDOSite(
             'visitor',
             array(
-                'id' => 1,
-                'email' => 'test@example.com',
-                'mailOpenCount' => 1,
-                'mailClickCount' => 1,
-                'mailSoftBounceCount' => 1,
-                'mailHardBounceCount' => 1
+                'email' => 'test@example.com'
             )
         );
     }
