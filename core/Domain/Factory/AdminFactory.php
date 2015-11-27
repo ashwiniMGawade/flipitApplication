@@ -99,7 +99,7 @@ class AdminFactory
 
     public static function getVisitors()
     {
-        return new GetVisitorsUsecase(RepositoryFactory::visitor());
+        return new GetVisitorsUsecase(RepositoryFactory::visitor(), new Purifier(), new Errors());
     }
 
     public static function updateVisitors()
