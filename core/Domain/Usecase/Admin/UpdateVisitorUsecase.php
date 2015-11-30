@@ -34,7 +34,8 @@ class UpdateVisitorUsecase
             $visitor->setMailOpenCount((int)$params['mailOpenCount']);
         }
         if (isset($params['lastEmailOpenDate'])) {
-            $visitor->setLastEmailOpenDate($params['lastEmailOpenDate']);
+            $lastEmailOpenDate = (!empty($params['lastEmailOpenDate'])) ? new \DateTime(date('Y-m-d h:i:s', strtotime($params['lastEmailOpenDate']))) : null;
+            $visitor->setLastEmailOpenDate($lastEmailOpenDate);
         }
         if (isset($params['mailClickCount'])) {
             $visitor->setMailClickCount((int)$params['mailClickCount']);
@@ -51,24 +52,26 @@ class UpdateVisitorUsecase
         if (isset($params['inactiveStatusReason'])) {
             $visitor->setInactiveStatusReason($params['inactiveStatusReason']);
         }
-
         if (isset($params['activeCodeId'])) {
             $visitor->setActiveCodeid($params['activeCodeId']);
         }
         if (isset($params['changePasswordRequest'])) {
-            $visitor->setChangepasswordrequest($params['changePasswordRequest']);
+            $visitor->setChangepasswordrequest((int)$params['changePasswordRequest']);
         }
         if (isset($params['codeAlert'])) {
-            $visitor->setCodeAlert($params['codeAlert']);
+            $visitor->setCodeAlert((int)$params['codeAlert']);
         }
         if (isset($params['codeAlertSendDate'])) {
-            $visitor->setCodeAlertSendDate($params['codeAlertSendDate']);
+            $codeAlertSendDate = (!empty($params['codeAlertSendDate'])) ? new \DateTime(date('Y-m-d h:i:s', strtotime($params['codeAlertSendDate']))) : null;
+            $visitor->setCodeAlertSendDate($codeAlertSendDate);
         }
-        if (isset($params['currentLogIn'])) {
-            $visitor->setCurrentLogIn($params['currentLogIn']);
+        if (isset($params['currentLogin'])) {
+            $currentLogin = (!empty($params['currentLogin'])) ? new \DateTime(date('Y-m-d h:i:s', strtotime($params['currentLogin']))) : null;
+            $visitor->setCurrentLogIn($currentLogin);
         }
         if (isset($params['dateOfBirth'])) {
-            $visitor->setDateOfBirth($params['dateOfBirth']);
+            $dateOfBirth = (!empty($params['dateOfBirth'])) ? new \DateTime(date('Y-m-d', strtotime($params['dateOfBirth']))) : null;
+            $visitor->setDateOfBirth($dateOfBirth);
         }
         if (isset($params['deleted'])) {
             $visitor->setDeleted((int)$params['deleted']);
@@ -83,13 +86,14 @@ class UpdateVisitorUsecase
             $visitor->setFirstName($params['firstName']);
         }
         if (isset($params['gender'])) {
-            $visitor->setGender($params['gender']);
+            $visitor->setGender((int)$params['gender']);
         }
         if (isset($params['interested'])) {
             $visitor->setInterested($params['interested']);
         }
         if (isset($params['lastLogIn'])) {
-            $visitor->setLastLogIn($params['lastLogIn']);
+            $lastLogIn = (!empty($params['lastLogIn'])) ? new \DateTime(date('Y-m-d h:i:s', strtotime($params['lastLogIn']))) : null;
+            $visitor->setLastLogIn($lastLogIn);
         }
         if (isset($params['lastName'])) {
             $visitor->setLastName($params['lastName']);
@@ -110,16 +114,13 @@ class UpdateVisitorUsecase
             $visitor->setStatus((int)$params['status']);
         }
         if (isset($params['travelNewsLetter'])) {
-            $visitor->setTravelNewsLetter($params['travelNewsLetter']);
+            $visitor->setTravelNewsLetter((int)$params['travelNewsLetter']);
         }
         if (isset($params['weeklyNewsLetter'])) {
-            $visitor->setWeeklyNewsLetter($params['weeklyNewsLetter']);
+            $visitor->setWeeklyNewsLetter((int)$params['weeklyNewsLetter']);
         }
         if (isset($params['username'])) {
             $visitor->setUsername($params['username']);
-        }
-        if (isset($params['visitorKeyword'])) {
-            $visitor->setVisitorKeyword($params['visitorKeyword']);
         }
 
         $visitor->setUpdatedAt(new \DateTime('now'));

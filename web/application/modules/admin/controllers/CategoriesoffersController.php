@@ -1,6 +1,6 @@
 <?php
 
-class Admin_CategoriesoffersController extends Zend_Controller_Action
+class Admin_CategoriesoffersController extends Application_Admin_BaseController
 {
     public function preDispatch()
     {

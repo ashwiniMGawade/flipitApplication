@@ -1,18 +1,14 @@
 <?php
 
-class Admin_IndexController extends Zend_Controller_Action
+class Admin_IndexController extends Application_Admin_BaseController
 {
-
     public function preDispatch()
     {
-
         if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new \Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
-
         }
-
     }
     public function init()
     {

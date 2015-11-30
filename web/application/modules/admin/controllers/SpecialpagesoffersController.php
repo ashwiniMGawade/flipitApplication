@@ -1,6 +1,6 @@
 <?php
 
-class Admin_SpecialpagesoffersController extends Zend_Controller_Action
+class Admin_SpecialpagesoffersController extends Application_Admin_BaseController
 {
     public function preDispatch()
     {

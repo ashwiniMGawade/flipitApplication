@@ -1,5 +1,5 @@
 <?php
-class Admin_WidgetlocationController extends Zend_Controller_Action
+class Admin_WidgetlocationController extends Application_Admin_BaseController
 {
     public function preDispatch()
     {

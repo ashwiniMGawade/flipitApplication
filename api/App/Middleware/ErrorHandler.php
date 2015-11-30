@@ -13,7 +13,7 @@ class ErrorHandler extends \Slim\Middleware
         $app = $this->app;
         $app->notFound(
             function () use ($app) {
-                echo json_encode(array('code' => 404,'message' => 'Not found'));
+                echo json_encode(array('code' => 404, 'messages' => 'Not found'));
             }
         );
 

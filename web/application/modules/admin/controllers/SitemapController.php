@@ -6,7 +6,7 @@
  * @author Raman
  *
  */
-class Admin_SitemapController extends Zend_Controller_Action
+class Admin_SitemapController extends Application_Admin_BaseController
 {
     public function init()
     {

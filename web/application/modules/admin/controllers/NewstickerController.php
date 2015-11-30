@@ -1,6 +1,6 @@
 <?php
 
-class Admin_NewstickerController extends Zend_Controller_Action
+class Admin_NewstickerController extends Application_Admin_BaseController
 {
     /**
      * check authentication before load the page

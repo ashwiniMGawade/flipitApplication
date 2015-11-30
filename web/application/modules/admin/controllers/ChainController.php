@@ -5,7 +5,7 @@
  * @author spsingh1
  *
  */
-class Admin_ChainController extends Zend_Controller_Action
+class Admin_ChainController extends Application_Admin_BaseController
 {
     /**
      * check authentication before load the page

@@ -1,5 +1,5 @@
 <?php
-class Admin_PageController extends Zend_Controller_Action
+class Admin_PageController extends Application_Admin_BaseController
 {
     /**
      * check authentication before load the page

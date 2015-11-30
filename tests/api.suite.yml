@@ -2,9 +2,13 @@ class_name: ApiTester
 modules:
     enabled:
         - \Helper\Api
+        - \Helper\ConfigHelper
         - REST:
             depends: PhpBrowser
             url: 'http://api.dev.kortingscode.nl/'
+    config:
+        \Helper\ConfigHelper:
+             apiKey: '%25NWcIzZ6Oy9uXv7fKJBZE!5%24EEMN%245%26X'
 coverage:
     enabled: true
     include:

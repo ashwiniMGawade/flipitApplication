@@ -1,6 +1,6 @@
 <?php
 
-class Admin_EmailController extends Zend_Controller_Action
+class Admin_EmailController extends Application_Admin_BaseController
 {
     public $flashMessenger = '';
     public $_settings = false ;
@@ -292,11 +292,11 @@ class Admin_EmailController extends Zend_Controller_Action
             $sendersParameters = $this->getRequest()->getParams();
             
             if ($sendersParameters['senderName']  == '' || $sendersParameters['senderEmail'] == '') {
-                $this->setFlashMessage('Error in updating Email Settings.');
+                $this->setSingleFlashMessage('Error in updating Email Settings.');
             } else {
                 KC\Repository\Settings::updateSendersSettings('sender_email_address', $sendersParameters['senderEmail']);
                 KC\Repository\Settings::updateSendersSettings('sender_name', $sendersParameters['senderName']);
-                $this->setFlashMessage('Email Settings have been updated successfully');
+                $this->setSingleFlashMessage('Email Settings have been updated successfully');
             }
             $this->_redirect(HTTP_PATH . 'admin/email/email-settings');
         }
@@ -329,7 +329,7 @@ class Admin_EmailController extends Zend_Controller_Action
                 $codeAlertParameters['emailSubject'],
                 $codeAlertParameters['emailHeader']
             );
-            $this->setFlashMessage('Code alert Settings have been updated successfully');
+            $this->setSingleFlashMessage('Code alert Settings have been updated successfully');
             $this->_redirect(HTTP_PATH . 'admin/email/code-alert-settings');
         }
     }
@@ -466,7 +466,7 @@ class Admin_EmailController extends Zend_Controller_Action
         return $this;
     }
 
-    public function setFlashMessage($messageText)
+    public function setSingleFlashMessage($messageText)
     {
         $message = $this->view->translate($messageText);
         $this->flashMessenger->addMessage(array('success' => $message));

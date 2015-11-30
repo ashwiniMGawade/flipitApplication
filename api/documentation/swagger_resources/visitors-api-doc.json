@@ -11,8 +11,64 @@
     "schemes":[
         "http"
     ],
-    "paths":{
+    "paths":
+        {
         "/visitors":{
+            "get":{
+                "tags":[
+                    "visitor"
+                ],
+                "summary":"Get visitors",
+                "description":"",
+                "operationId":"getVisitors",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in":"query",
+                        "name":"page",
+                        "description":"Page number",
+                        "required":false,
+                        "type":"integer",
+                        "default":0
+                    },
+                    {
+                        "in":"query",
+                        "name":"perPage",
+                        "description":"Paginator results per page (max 100)",
+                        "required":false,
+                        "type":"integer",
+                        "default":100
+                    },
+                    {
+                        "in":"query",
+                        "name":"email",
+                        "description":"Email id to find a record",
+                        "required":false,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"Request was successful",
+                        "schema":{
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/visitor"
+                            }
+                        }
+                    },
+                    "405":{
+                        "description":"Invalid input"
+                    }
+                }
+            }
+        },
+        "/visitors/{visitorId}":{
             "put":{
                 "tags":[
                     "visitor"
@@ -28,13 +84,20 @@
                 ],
                 "parameters":[
                     {
+                        "in":"path",
+                        "name":"visitorId",
+                        "description":"Visitor Id that needs to be updated",
+                        "required":true,
+                        "type":"integer",
+                        "format":"int64"
+                    },
+                    {
                         "in":"body",
                         "name":"body",
                         "description":"Visitor data that needs to be updated",
                         "required":true,
                         "schema":{
-                            "type": "array",
-                            "items": {"$ref":"#/definitions/visitor"}
+                            "$ref":"#/definitions/visitor"
                         }
                     }
                 ],
@@ -42,8 +105,46 @@
                     "200":{
                         "description":"Request was successful"
                     },
+                    "404":{
+                        "description":"Visitor not found"
+                    },
                     "405":{
                         "description":"Invalid input"
+                    }
+                }
+            },
+            "get":{
+                "tags":[
+                    "visitor"
+                ],
+                "summary":"Find visitor by id",
+                "description":"Returns a single visitor",
+                "operationId":"getVisitorById",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"visitorId",
+                        "description":"Visitor that needs to be fetched",
+                        "required":true,
+                        "type":"integer",
+                        "format":"int64"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"Request was successful",
+                        "schema":{
+                            "$ref":"#/definitions/visitor"
+                        }
+                    },
+                    "404":{
+                        "description":"Visitor not found"
+                    },
+                    "400":{
+                        "description":"Invalid visitor Id"
                     }
                 }
             }
@@ -56,24 +157,121 @@
                 "email"
             ],
             "properties":{
-                "event":{
+                "firstName":{
                     "type":"string",
-                    "example":"open",
-                    "description": "Mandrill Event Type",
-                    "enum": [
-                        "open",
-                        "click",
-                        "soft_bounce",
-                        "hard_bounce"
-                    ]
+                    "example":"John"
+                },
+                "lastName":{
+                    "type":"string",
+                    "example":"Doe"
                 },
                 "email": {
                     "type": "string",
                     "example": "test@example.com"
                 },
-                "timeStamp": {
+                "mailOpenCount":{
                     "type":"integer",
-                    "example":"1365111111"
+                    "example":1
+                },
+                "mailClickCount":{
+                    "type":"integer",
+                    "example":1
+                },
+                "mailSoftBounceCount":{
+                    "type":"integer",
+                    "example":1
+                },
+                "mailHardBounceCount":{
+                    "type":"integer",
+                    "example":1
+                },
+                "active":{
+                    "type":"string",
+                    "enum": ["Yes", "No"]
+                },
+                "inactiveStatusReason":{
+                    "type":"string",
+                    "example":"Hard Bounce"
+                },
+                "activeCodeId":{
+                    "type":"string",
+                    "example":"1"
+                },
+                "changePasswordRequest":{
+                    "type":"string",
+                    "enum": ["Yes", "No"]
+                },
+                "codeAlert":{
+                    "type":"string",
+                    "enum": ["Yes", "No"]
+                },
+                "codeAlertSendDate":{
+                    "type":"string",
+                    "example":"2015-12-12 23:31:51"
+                },
+                "currentLogin":{
+                    "type":"string",
+                    "example":"2015-12-12 23:31:51"
+                },
+                "dateOfBirth":{
+                    "type":"string",
+                    "example":"1989-12-12"
+                },
+                "deleted":{
+                    "type":"string",
+                    "enum": ["Yes", "No"]
+                },
+                "fashionNewsLetter":{
+                    "type":"string",
+                    "enum": ["Yes", "No"]
+                },
+                "gender":{
+                    "type":"string",
+                    "enum": ["Male", "Female"]
+                },
+                "interested":{
+                    "type":"string",
+                    "example":"Yes"
+                },
+                "lastLogIn":{
+                    "type":"string",
+                    "example":"2015-12-12 23:31:51"
+                },
+                "password":{
+                    "type":"string",
+                    "example":"gf%shgd36e"
+                },
+                "postalCode":{
+                    "type":"string",
+                    "example":"111111"
+                },
+                "profileImg":{
+                    "type":"string",
+                    "example":"test.jpg"
+                },
+                "pwd":{
+                    "type":"string",
+                    "example":"sdwersd"
+                },
+                "status":{
+                    "type":"string",
+                    "enum": ["Online", "Offline"]
+                },
+                "travelNewsLetter":{
+                    "type":"string",
+                    "enum": ["Yes", "No"]
+                },
+                "weeklyNewsLetter":{
+                    "type":"string",
+                    "enum": ["Yes", "No"]
+                },
+                "username":{
+                    "type":"string",
+                    "example":"johnd"
+                },
+                "lastEmailOpenDate": {
+                    "type":"integer",
+                    "example":"2015-12-12 23:31:51"
                 }
             }
         }

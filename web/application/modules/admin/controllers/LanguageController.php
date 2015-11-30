@@ -1,6 +1,6 @@
 <?php
 
-class Admin_LanguageController extends Zend_Controller_Action
+class Admin_LanguageController extends Application_Admin_BaseController
 {
 
     /**
