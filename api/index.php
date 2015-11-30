@@ -13,7 +13,7 @@ require_once 'App/Config/default.php';
 
 $app = new \RKA\Slim($config['app']);
 
-require_once 'CacheServiceHandler.php';
+$cacheService = require_once 'CacheServiceHandler.php';
 //Use of JSON middleware
 $app->add(new Api\Middleware\JSON());
 //Use of ErrorHandler middleware

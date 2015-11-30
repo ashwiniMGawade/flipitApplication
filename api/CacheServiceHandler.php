@@ -9,3 +9,4 @@ switch ($app->config('cache.service')) {
         $cacheService = new Memcached(new AppConfig());
         break;
 }
+return $cacheService;
