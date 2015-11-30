@@ -448,6 +448,7 @@ class Offer extends \Core\Domain\Entity\Offer
         ->andWhere($entityManagerUser->expr()->gt('o.endDate', $entityManagerUser->expr()->literal($currentDate)))
         ->andWhere($entityManagerUser->expr()->lte('o.startDate', $entityManagerUser->expr()->literal($currentDate)))
         ->andWhere('o.deleted = 0')
+        ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
         ->andWhere('s.deleted = 0')
         ->andWhere('s.status = 1')
         ->andWhere($entityManagerUser->expr()->neq('o.Visability', $entityManagerUser->expr()->literal("MEM")))
@@ -911,6 +912,7 @@ class Offer extends \Core\Domain\Entity\Offer
             ->leftJoin('o.offerTiles', 't')
             ->where('o.deleted = 0')
             ->andWhere('o.offline = 0')
+            ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
             ->andWhere('s.deleted = 0')
             ->andWhere('o.endDate >'."'".$currentDate."'")
             ->andWhere('o.startDate <='."'".$currentDate."'")
@@ -921,6 +923,7 @@ class Offer extends \Core\Domain\Entity\Offer
                 $entityManagerUser->expr()->like("o.title", $entityManagerUser->expr()->literal("%".mysqli_real_escape_string(\FrontEnd_Helper_viewHelper::getDbConnectionDetails(), $searchKeyword)."%"))
             ))
             ->orderBy('s.name');
+
         $shopOffersBySearchedKeywords = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopOffersBySearchedKeywords;
     }
@@ -1285,6 +1288,7 @@ class Offer extends \Core\Domain\Entity\Offer
             ->leftJoin('o.offertermandcondition', 'tc')
             ->leftJoin('o.offerTiles', 't')
             ->leftJoin('s.logo', 'img')
+            ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
             ->where('o.shopOffers = '.$shopId)
             ->andWhere('o.endDate <='."'".$currentDate."'")
             ->andWhere('o.startDate <='."'".$currentDate."'")
@@ -1577,6 +1581,7 @@ class Offer extends \Core\Domain\Entity\Offer
                 ->from('\Core\Domain\Entity\Offer', 'o')
                 ->where('o.deleted='.$flag)
                 ->andWhere("o.couponCode LIKE '$keyword%'")
+                ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
                 ->orderBy('o.id', 'ASC')
                 ->setMaxResults(5);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -1935,6 +1940,7 @@ class Offer extends \Core\Domain\Entity\Offer
         ->where('o.title !='."'".$title."'")
         ->andWhere('o.endDate >='."'".$currentDate."'")
         ->andWhere('o.startDate <='."'".$currentDate."'")
+        ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
         ->andWhere('o.deleted = 0')
         ->andWhere('s.deleted = 0')
         ->orderBy('po.id', 'DESC')
@@ -2097,6 +2103,7 @@ class Offer extends \Core\Domain\Entity\Offer
                 ->andWhere('o.discountType = ?2')
                 ->andWhere('o.endDate >'."'".$date."'")
                 ->andWhere('o.startDate <='."'".$date."'")
+                ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
                 ->orderBy('o.id', 'DESC')
                 ->setMaxResults($limit);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -2186,6 +2193,7 @@ class Offer extends \Core\Domain\Entity\Offer
         ->where('o.Visability!=' ."'$memOnly'")
         ->andWhere('o.deleted =0')
         ->andWhere('s.deleted =0')
+        ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
         ->setParameter(1, 'NW')
         ->andWhere('o.discountType != ?1')
         ->orderBy('o.id', 'DESC')
@@ -2306,6 +2314,7 @@ class Offer extends \Core\Domain\Entity\Offer
             ->Where('s.id='.$shopId)
             ->andWhere('o.deleted =0')
             ->andWhere('s.deleted =0')
+            ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
             ->orderBy('po.offer', 'DESC')
             ->setMaxResults($limit);
         $popularOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -2361,6 +2370,7 @@ class Offer extends \Core\Domain\Entity\Offer
         ->andWhere('o.exclusiveCode != 0')
         ->andWhere('o.endDate >'."'".$date."'")
         ->andWhere('o.startDate <='."'".$date."'")
+        ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
         ->andWhere('o.deleted =0')
         ->andWhere('s.deleted =0')
         ->orderBy('o.title', 'ASC');
@@ -2383,6 +2393,7 @@ class Offer extends \Core\Domain\Entity\Offer
         ->where('o.Visability = ?1')
         ->andWhere('o.deleted =0')
         ->andWhere('s.deleted =0')
+        ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
         ->andWhere('o.endDate >'."'".$date."'")
         ->andWhere('o.startDate <='."'".$date."'")
         ->orderBy('o.id', 'DESC');
@@ -2410,6 +2421,7 @@ class Offer extends \Core\Domain\Entity\Offer
         ->andWhere('o.deleted =0')
         ->andWhere('o.endDate >'."'".$date."'")
         ->andWhere('o.startDate <='."'".$date."'")
+        ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
         ->andWhere('s.deleted =0');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
@@ -2470,6 +2482,7 @@ class Offer extends \Core\Domain\Entity\Offer
             ->andWhere('o.discountType = ?1')
             ->andWhere('o.endDate >'."'".$date."'")
             ->andWhere('o.startDate <='."'".$date."'")
+            ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
             ->orderBy('o.id', 'DESC');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
@@ -2547,6 +2560,7 @@ class Offer extends \Core\Domain\Entity\Offer
         ->select("count(o.id) as amountOffers")
         ->from('\Core\Domain\Entity\Offer', 'o')
         ->where('o.deleted = 0')
+        ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
         ->setParameter(1, 'NW')
         ->andWhere('o.discountType != ?1')
         ->setParameter(2, $queryBuilder->expr()->literal($past7Days))
@@ -2602,6 +2616,7 @@ class Offer extends \Core\Domain\Entity\Offer
             ->leftJoin('o.shopOffers', 's')
             ->where('o.deleted = 0')
             ->andWhere('o.offline = 0')
+            ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
             ->add(
                 'where',
                 $queryBuilder->expr()->between(
@@ -2628,6 +2643,7 @@ class Offer extends \Core\Domain\Entity\Offer
         ->select("count(o.id) as amountOffers")
         ->from('\Core\Domain\Entity\Offer', 'o')
         ->where('o.deleted = 0')
+        ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
         ->andWhere('o.endDate >'."'".$date."'")
         ->andWhere('o.startDate <='."'".$date."'")
         ->setParameter(1, 'NW')
@@ -2648,6 +2664,7 @@ class Offer extends \Core\Domain\Entity\Offer
         ->andWhere('o.endDate >'."'".$date."'")
         ->andWhere('o.startDate <='."'".$date."'")
         ->andWhere('o.shopOffers = '.$shopId)
+        ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
         ->setParameter(1, 'NW')
         ->andWhere('o.discountType != ?1');
         if ($type == 'CD') {
@@ -2670,6 +2687,7 @@ class Offer extends \Core\Domain\Entity\Offer
         ->andWhere('o.shopOffers = '.$shopId)
         ->andWhere('o.endDate >'."'".$date."'")
         ->andWhere('o.startDate <='."'".$date."'")
+        ->andWhere("(o.userGenerated=0 and o.approved='0') or (o.userGenerated=1 and o.approved='1')")
         ->setParameter(1, 'CD')
         ->andWhere('o.discountType = ?1');
         $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
