@@ -1,7 +1,5 @@
 <?php
-
 namespace Core\Domain\Adapter;
-
 
 interface CacheInterface
 {
