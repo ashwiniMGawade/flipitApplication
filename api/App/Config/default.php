@@ -2,9 +2,6 @@
 
 $config['app']['debug'] = false;
 
-// Cache TTL in seconds
-$config['app']['cache.ttl'] = 60;
-
 // Max requests per hour
 $config['app']['rate.limit'] = 1000;
 

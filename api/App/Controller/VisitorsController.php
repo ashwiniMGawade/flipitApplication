@@ -68,6 +68,13 @@ class VisitorsController extends ApiBaseController
             $this->app->halt(404, json_encode(array('messages' => $visitor->getErrorsAll())));
         }
         $params = $this->formatInput($params);
+        if( true === isset($params['email']) ) {
+            $emailCondition = array('email' => $params['email']);
+            $visitors = AdminFactory::getVisitors()->execute($emailCondition);
+            if( count($visitors) > 1 || current($visitors)->getId() != $id ) {
+                $this->app->halt(405, json_encode(array('messages' => array('This Email is already in use.'))));
+            }
+        }
         $result = AdminFactory::updateVisitor()->execute($visitor, $params);
         if ($result instanceof Errors) {
             $this->app->halt(405, json_encode(array('messages' => $result->getErrorsAll())));
