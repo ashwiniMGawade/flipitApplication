@@ -1,20 +1,19 @@
 <?php
 namespace API\Middleware;
 
-use \Core\Domain\Service\Memcached;
-use \Core\Persistence\Database\Service\AppConfig;
+use \Core\Domain\Adapter\CacheInterface;
 
 class RateLimit extends \Slim\Middleware
 {
-    protected $memcached;
+    protected $cache;
     protected $root;
     protected $max;
 
-    public function __construct($root = '')
+    public function __construct($root = '', CacheInterface $cache)
     {
         $this->root = $root;
         $this->max = 1000; // Requests per hour
-        $this->memcached = new Memcached(new AppConfig());
+        $this->cache = $cache;
     }
 
     public function call()
@@ -104,12 +103,12 @@ class RateLimit extends \Slim\Middleware
 
     protected function fetch($key)
     {
-        return $this->memcached->get($key);
+        return $this->cache->get($key);
     }
 
     protected function save($key, $value, $expire = 0)
     {
-        $this->memcached->set($key, $value, $expire);
+        $this->cache->set($key, $value, $expire);
     }
     /**
      * Exits with status "429 Too Many Requests"

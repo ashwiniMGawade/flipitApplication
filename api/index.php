@@ -1,4 +1,6 @@
 <?php
+use \Core\Domain\Service\Memcached;
+use \Core\Persistence\Database\Service\AppConfig;
 
 // Sets the environment to testing for codeception
 if (isset($_SERVER['HTTP_USER_AGENT']) && ($_SERVER['HTTP_USER_AGENT'] == 'Symfony2 BrowserKit' || strpos($_SERVER['HTTP_USER_AGENT'], 'PhantomJS') == true)) {
@@ -19,7 +21,7 @@ $app->add(new Api\Middleware\JSON());
 //Use of ErrorHandler middleware
 $app->add(new Api\Middleware\ErrorHandler());
 
-$app->add(new Api\Middleware\RateLimit('/visitors'));
+$app->add(new Api\Middleware\RateLimit('/visitors', new Memcached(new AppConfig())));
 
 require_once 'App/Config/router.php';
 
