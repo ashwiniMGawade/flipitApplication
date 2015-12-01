@@ -1,4 +1,7 @@
 <?php
+use \Core\Domain\Factory\AdminFactory;
+use \Core\Domain\Factory\SystemFactory;
+use \Core\Service\Errors;
 
 class Admin_NewslettercampaignsController extends Application_Admin_BaseController
 {
@@ -50,6 +53,42 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
 
     public function settingsAction()
     {
+        $campaignHeaderSetting = SystemFactory::getSetting()->execute(array('name'=>'NEWSLETTER_CAMPAIGN_HEADER'));
+        $this->view->campaign_header = !empty($campaignHeaderSetting) ? $campaignHeaderSetting->value : '';
+
+        $campaignFooterSetting = SystemFactory::getSetting()->execute(array('name'=>'NEWSLETTER_CAMPAIGN_FOOTER'));
+        $this->view->campaign_footer = !empty($campaignFooterSetting) ? $campaignFooterSetting->value : '';
+
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getRequest()->getParams();
+            $isValid = true;
+
+            $params['campaign-header'] = trim($params['campaign-header']);
+            $params['campaign-footer'] = trim($params['campaign-footer']);
+            if (true === empty($params['campaign-header'])) {
+                $this->setFlashMessage('error', "campaign header is required");
+                $isValid = false;
+            }
+            if (true === empty($params['campaign-footer'])) {
+                $this->setFlashMessage('error', "campaign footer is required");
+                $isValid = false;
+            }
+
+            $result = AdminFactory::updateSetting()->execute($campaignHeaderSetting, array('value'=>$params['campaign-header']));
+            if ($result instanceof Errors) {
+                $this->setFlashMessage('error', $result->getErrorsAll());
+                $isValid = false;
+            }
+
+            $result = AdminFactory::updateSetting()->execute($campaignFooterSetting, array('value'=>$params['campaign-footer']));
+            if ($result instanceof Errors) {
+                $this->setFlashMessage('error', $result->getErrorsAll());
+                $isValid = false;
+            }            if (true == $isValid) {
+                $this->setFlashMessage('success', 'Campaign settings has been updated successfully');
+                $this->redirect(HTTP_PATH . 'admin/newslettercampaigns/settings');
+            }
+        }
 
     }
 

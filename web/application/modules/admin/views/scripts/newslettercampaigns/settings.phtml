@@ -4,10 +4,11 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/jquery-ui-1.8.16.custom.min.js
 $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/locale.js");
 
-$controller = $this->controllerName;
-$action = $this->action;
 ?>
 <div class="wrap columns-2">
+    <div class='wrap columns-2'>
+        <?php echo $this->flashMessages(); ?>
+    </div>
     <h1><?php echo $this->translate('Campaign Template Settings');?></h1>
 
     <form id="campaignsettings" name="campaignsettingsform" enctype="multipart/form-data" method="POST"
@@ -19,7 +20,9 @@ $action = $this->action;
                 <div class="mainpage-content-right">
                     <div class="mainpage-content-right-inner-right-other"></div>
                     <div class="mainpage-content-right-inner-left-other">
-                        <textarea class="span3" id="campaign-header" name="header" placeholder="<?php echo $this->translate('Default Header');?>"></textarea>
+                        <textarea class="span3" id="campaign-header" name="campaign-header" placeholder="<?php echo $this->translate('Default Header');?>">
+                            <?php echo trim($this->campaign_header); ?>
+                        </textarea>
                     </div>
                 </div>
             </div>
@@ -28,7 +31,9 @@ $action = $this->action;
                 <div class="mainpage-content-right">
                     <div class="mainpage-content-right-inner-right-other"></div>
                     <div class="mainpage-content-right-inner-left-other">
-                        <textarea class="span3" id="campaign-footer" name="footer" placeholder="<?php echo $this->translate('Default Footer');?>"></textarea>
+                        <textarea class="span3" id="campaign-footer" name="campaign-footer" placeholder="<?php echo $this->translate('Default Footer');?>">
+                            <?php echo trim($this->campaign_footer); ?>
+                        </textarea>
                     </div>
                 </div>
             </div>
