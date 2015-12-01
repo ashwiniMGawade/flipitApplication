@@ -1,7 +1,7 @@
 <?php
 namespace API\Middleware;
 
-use \Core\Domain\Adapter\CacheInterface;
+use \Core\Persistence\Adapter\CacheInterface;
 
 class RateLimit extends \Slim\Middleware
 {
