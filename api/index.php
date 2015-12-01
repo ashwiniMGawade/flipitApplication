@@ -1,4 +1,5 @@
 <?php
+use Core\Domain\Factory\CacheFactory;
 // Sets the environment to testing for codeception
 if (isset($_SERVER['HTTP_USER_AGENT']) && ($_SERVER['HTTP_USER_AGENT'] == 'Symfony2 BrowserKit' || strpos($_SERVER['HTTP_USER_AGENT'], 'PhantomJS') == true)) {
     define('APPLICATION_ENV', 'testing');
@@ -13,7 +14,7 @@ require_once 'App/Config/default.php';
 
 $app = new \RKA\Slim($config['app']);
 
-$cacheService = require_once 'CacheServiceHandler.php';
+$cacheService = CacheFactory::fastCache();
 //Use of JSON middleware
 $app->add(new Api\Middleware\JSON());
 //Use of ErrorHandler middleware
