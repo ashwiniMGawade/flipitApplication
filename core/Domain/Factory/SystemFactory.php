@@ -50,9 +50,4 @@ class SystemFactory
     {
         return new GetSplashImagesUsecase(RepositoryFactory::splashImage(), new Purifier(), new Errors());
     }
-
-    public static function getCacheService()
-    {
-        return new Memcached(new AppConfig());
-    }
 }
