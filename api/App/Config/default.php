@@ -53,4 +53,3 @@ $config['locale'] = array(
                         'mx',
                         'cn'
                     );
-
