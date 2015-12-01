@@ -128,11 +128,18 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
         }
     }
 
-    public static function checkACL() {
+    public static function checkACL()
+    {
         $site_name =  isset($_COOKIE['site_name']) ?  $_COOKIE['site_name'] : '';
         $locale_code = isset($_COOKIE['locale']) ?  $_COOKIE['locale'] : '';
-        if($site_name == 'kortingscode.nl' || $locale_code == "en") return;
+        if ($site_name == 'kortingscode.nl' || $locale_code == "en") {
+            return;
+        }
+
         $sessionNamespace = new Zend_Session_Namespace();
+        if (!isset($sessionNamespace->settings['webaccess'])) {
+            return;
+        }
 
         $accesible_sites = array_column($sessionNamespace->settings['webaccess'], 'name');
         if (!in_array($site_name, $accesible_sites) || !in_array('flipit.com/'.$locale_code, $accesible_sites)) {
