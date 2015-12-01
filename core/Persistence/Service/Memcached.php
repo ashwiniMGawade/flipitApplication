@@ -1,15 +1,16 @@
 <?php
-namespace Core\Domain\Service;
+namespace Core\Persistence\Service;
 
-use \Core\Domain\Adapter\CacheInterface;
+use \Core\Persistence\Adapter\CacheInterface;
 use \Core\Persistence\Database\Service\AppConfig;
 
 class Memcached implements CacheInterface
 {
     protected $memcached;
 
-    public function __construct(AppConfig $appConfig)
+    public function __construct()
     {
+        $appConfig = new AppConfig();
         $connectionInformation = $appConfig->getConfigs();
         $splitMemcacheValues = explode(':', $connectionInformation['connections']['cacheParams']);
         $memcachePort = isset($splitMemcacheValues[1]) ? $splitMemcacheValues[1] : '';
