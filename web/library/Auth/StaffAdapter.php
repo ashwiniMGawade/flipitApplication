@@ -131,6 +131,7 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
     public static function checkACL() {
         $site_name =  isset($_COOKIE['site_name']) ?  $_COOKIE['site_name'] : '';
         $locale_code = isset($_COOKIE['locale']) ?  $_COOKIE['locale'] : '';
+        if($site_name == 'kortingscode.nl' || $locale_code == "en") return;
         $sessionNamespace = new Zend_Session_Namespace();
 
         $accesible_sites = array_column($sessionNamespace->settings['webaccess'], 'name');
