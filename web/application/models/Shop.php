@@ -1376,7 +1376,6 @@ class Shop extends BaseShop
                 ->leftJoin("s.relatedshops rs")
                 ->leftJoin("s.shopreasons sr")
                 ->where("s.deleted=0")
-                ->andwhere("sr.fieldvalue<>''")
                 ->orderBy("s.id DESC")
                 ->fetchArray();
         return $shopList;
