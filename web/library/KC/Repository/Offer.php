@@ -923,7 +923,6 @@ class Offer extends \Core\Domain\Entity\Offer
                 $entityManagerUser->expr()->like("o.title", $entityManagerUser->expr()->literal("%".mysqli_real_escape_string(\FrontEnd_Helper_viewHelper::getDbConnectionDetails(), $searchKeyword)."%"))
             ))
             ->orderBy('s.name');
-
         $shopOffersBySearchedKeywords = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopOffersBySearchedKeywords;
     }
