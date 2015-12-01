@@ -485,8 +485,52 @@ $action = $this->action;
                     </ul>
                 </div>
             </div>
+    </li>
+        <li <?php if ($controller == 'newslettercampaigns') { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" <?php } ?>
+        id="menu-links">
+            <div class="imbull-menu-image">
+                <a href="<?php echo HTTP_PATH ?>admin/email/code-alert"><br></a>
+            </div>
+            <div class="">
+                <div></div>
+            </div>
+            <a href="<?php echo HTTP_PATH ?>admin/newslettercampaigns/index"
+               class="imbull-has-current-submenu imbull-has-submenu  imbull-menu-open menu-top menu-icon-lightbox"
+               tabindex="1"><?php echo $this->translate('Newsletter Campaigns'); ?>
+                <span
+                    <?php if ($controller == 'newslettercampaigns') { ?>class="arrow-down" <?php } else { ?> class="arrow-up" <?php } ?>></span>
+            </a>
+
+            <div class="imbull-submenu">
+                <div class="imbull-submenu-wrap">
+                    <div class="imbull-submenu-head"><?php echo $this->translate('Newsletter Campaigns'); ?> </div>
+                    <ul>
+                        <?php if ($controller == 'newslettercampaigns' && $action == 'create') {
+                            $userColorClass = "new-blue";
+                        } else {
+                            $userColorClass = "new-gray";
+                        } ?>
+                        <li>
+                            <a href="<?php echo HTTP_PATH ?>admin/newslettercampaigns/create"
+                               class="<?php echo $userColorClass; ?>"
+                               tabindex="1"><?php echo $this->translate('Create Campaign'); ?> </a>
+                        </li>
+                        <?php if ($controller == 'newslettercampaigns' && $action == 'settings') {
+                            $userColorClass = "new-blue";
+                        } else {
+                            $userColorClass = "new-gray";
+                        } ?>
+                        <li>
+                            <a href="<?php echo HTTP_PATH ?>admin/newslettercampaigns/settings"
+                               class="<?php echo $userColorClass; ?>"
+                               tabindex="1"><?php echo $this->translate('Campaign Settings'); ?> </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </li>
     </ul>
+
 
 <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Template Settings'); ?></h2></div>
 <ul id="adminmenu" role="navigation">
