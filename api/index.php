@@ -1,5 +1,4 @@
 <?php
-
 // Sets the environment to testing for codeception
 if (isset($_SERVER['HTTP_USER_AGENT']) && ($_SERVER['HTTP_USER_AGENT'] == 'Symfony2 BrowserKit' || strpos($_SERVER['HTTP_USER_AGENT'], 'PhantomJS') == true)) {
     define('APPLICATION_ENV', 'testing');
@@ -14,10 +13,13 @@ require_once 'App/Config/default.php';
 
 $app = new \RKA\Slim($config['app']);
 
+$cacheService = require_once 'CacheServiceHandler.php';
 //Use of JSON middleware
 $app->add(new Api\Middleware\JSON());
 //Use of ErrorHandler middleware
 $app->add(new Api\Middleware\ErrorHandler());
+
+$app->add(new Api\Middleware\RateLimit('/visitors', $cacheService));
 
 require_once 'App/Config/router.php';
 

@@ -2,11 +2,10 @@
 
 $config['app']['debug'] = false;
 
-// Cache TTL in seconds
-$config['app']['cache.ttl'] = 60;
-
 // Max requests per hour
-//$config['app']['rate.limit'] = 1000;
+$config['app']['rate.limit'] = 1000;
+// Name of the cache service which is used here and available in the Core
+$config['app']['cache.service'] = 'memcached';
 
 $config['app']['log.writer'] = new \Flynsarmy\SlimMonolog\Log\MonologWriter(
     array(
