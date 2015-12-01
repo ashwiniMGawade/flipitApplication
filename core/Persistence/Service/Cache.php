@@ -1,7 +1,7 @@
 <?php
-namespace Core\Cache\Service;
+namespace Core\Persistence\Service;
 
-use \Core\Cache\Adapter\CacheInterface;
+use \Core\Persistence\Adapter\CacheInterface;
 
 class Cache implements CacheInterface
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Core\Cache\Adapter;
+namespace Core\Persistence\Adapter;
 
 interface CacheInterface
 {

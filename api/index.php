@@ -1,5 +1,5 @@
 <?php
-use \Core\Cache\Factory\CacheFactory;
+use \Core\Persistence\Factory\CacheFactory;
 
 // Sets the environment to testing for codeception
 if (isset($_SERVER['HTTP_USER_AGENT']) && ($_SERVER['HTTP_USER_AGENT'] == 'Symfony2 BrowserKit' || strpos($_SERVER['HTTP_USER_AGENT'], 'PhantomJS') == true)) {
@@ -15,7 +15,7 @@ require_once 'App/Config/default.php';
 
 $app = new \RKA\Slim($config['app']);
 
-$cacheService = CacheFactory::fastCache();
+$cacheService = CacheFactory::keyValueCache();
 
 //Use of JSON middleware
 $app->add(new Api\Middleware\JSON());

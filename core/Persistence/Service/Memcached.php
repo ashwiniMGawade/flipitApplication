@@ -1,7 +1,7 @@
 <?php
-namespace Core\Cache\Service;
+namespace Core\Persistence\Service;
 
-use \Core\Cache\Adapter\CacheInterface;
+use \Core\Persistence\Adapter\CacheInterface;
 use \Core\Persistence\Database\Service\AppConfig;
 
 class Memcached implements CacheInterface
