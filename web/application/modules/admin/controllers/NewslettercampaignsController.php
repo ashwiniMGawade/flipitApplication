@@ -12,7 +12,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-       // \BackEnd_Helper_viewHelper::closeConnection($conn2);
+     
         $this->view->controllerName = $this->getRequest()
             ->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
