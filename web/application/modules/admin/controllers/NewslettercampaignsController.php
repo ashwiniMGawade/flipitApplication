@@ -5,27 +5,17 @@ use \Core\Service\Errors;
 
 class Admin_NewslettercampaignsController extends Application_Admin_BaseController
 {
-
-    /**
-     * check authentication before load the page
-     * @see Zend_Controller_Action::preDispatch()
-     * @author mkaur
-     * @version 1.0
-     */
     public function preDispatch()
     {
-        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
-        $params = $this->_getAllParams();
         if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        \BackEnd_Helper_viewHelper::closeConnection($conn2);
+       // \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()
             ->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
-
 
         # redirect of a user don't have any permission for this controller
         $sessionNamespace = new Zend_Session_Namespace();
@@ -82,7 +72,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                 $this->setFlashMessage('error', $result->getErrorsAll());
                 $isValid = false;
             }
-            if (true == $isValid) {
+            if (true === $isValid) {
                 $this->setFlashMessage('success', 'Campaign settings has been updated successfully');
                 $this->redirect(HTTP_PATH . 'admin/newslettercampaigns/settings');
             }
