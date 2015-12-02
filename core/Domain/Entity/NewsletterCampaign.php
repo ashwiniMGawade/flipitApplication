@@ -76,11 +76,7 @@ class NewsletterCampaign
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    protected $isStrated;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $newsletterSentTimet;
+    protected $newsletterSentTime;
     /**
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
@@ -241,23 +237,7 @@ class NewsletterCampaign
     /**
      * @return mixed
      */
-    public function getIsStrated()
-    {
-        return $this->isStrated;
-    }
-
-    /**
-     * @param mixed $isStrated
-     */
-    public function setIsStrated($isStrated)
-    {
-        $this->isStrated = $isStrated;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getNewsletterSentTimet()
+    public function getNewsletterSentTime()
     {
         return $this->newsletterSentTimet;
     }
@@ -265,7 +245,7 @@ class NewsletterCampaign
     /**
      * @param mixed $newsletterSentTimet
      */
-    public function setNewsletterSentTimet($newsletterSentTimet)
+    public function setNewsletterSentTime($newsletterSentTimet)
     {
         $this->newsletterSentTimet = $newsletterSentTimet;
     }

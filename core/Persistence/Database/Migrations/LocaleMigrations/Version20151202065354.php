@@ -27,7 +27,6 @@ class Version20151202065354 extends AbstractMigration
         $table->addColumn('offerPartTwoTitle', 'string', array('notnull' => 0));
         $table->addColumn('scheduledStatus', 'boolean', array('default' => 0, 'length' => 1, 'comment' => '1-Scheduled, 0-Not Scheduled'));
         $table->addColumn('scheduledTime', 'datetime', array('notnull' => 0, 'length' => 12));
-        $table->addColumn('isStrated', 'boolean', array('default' => 0, 'length' => 1, 'comment' => '1-Stated, 0-Not Started'));
         $table->addColumn('newsletterSentTime', 'datetime', array('notnull' => 0, 'length' => 12));
         $table->addColumn('receipientCount', 'integer',  array('notnull' => 0));
         $table->addColumn('createdAt', 'datetime', array('notnull' => 1, 'length' => 12));

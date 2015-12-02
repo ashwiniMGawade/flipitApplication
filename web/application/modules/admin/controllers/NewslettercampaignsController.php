@@ -29,8 +29,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
 
         # redirect of a user don't have any permission for this controller
         $sessionNamespace = new Zend_Session_Namespace();
-        if (
-            $sessionNamespace->settings['rights']['content']['rights'] != '1'
+        if ($sessionNamespace->settings['rights']['content']['rights'] != '1'
             && $sessionNamespace->settings['rights']['content']['rights'] != '2'
         ) {
             $this->_redirect('/admin/auth/index');
@@ -43,7 +42,8 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
 
     public function indexAction()
     {
-
+        $campaignList = ( array ) SystemFactory::getNewsletterCampaigns()->execute(array(), array('id'=>'DESC'));
+        PRINT_r($campaignList);exit;
     }
 
     public function createAction()
