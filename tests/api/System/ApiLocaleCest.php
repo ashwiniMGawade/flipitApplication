@@ -9,7 +9,7 @@ class ApiLocaleCest
 
     public function _before(ApiTester $I)
     {
-        $this->apiKey = '%25NWcIzZ6Oy9uXv7fKJBZE!5%24EEMN%245%26X';
+        $this->apiKey = $I->getConfig('apiKey');
     }
 
     public function testAccessingApiWithKCUrl(ApiTester $I)
@@ -34,6 +34,6 @@ class ApiLocaleCest
         $I->sendGet('http://api.dev.flipit.com/shops/1?api_key='.$this->apiKey);
         $I->seeResponseCodeIs(404);
         $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(array('message'=>'Not found'));
+        $I->seeResponseContainsJson(array('messages'=>'Not found'));
     }
 }

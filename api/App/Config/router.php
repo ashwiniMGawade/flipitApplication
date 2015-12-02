@@ -24,14 +24,16 @@ if (!$isFlipit || ($isFlipit && $locale)) {
     $app->group(
         $localePath . '/visitors',
         function () use ($app) {
-            $app->map('/', 'Api\Controller\VisitorsController:updateVisitor')->via('PUT', 'PATCH');
+            $app->get('/', 'Api\Controller\VisitorsController:getVisitors');
+            $app->get('/:id', 'Api\Controller\VisitorsController:getVisitor');
+            $app->map('/:id', 'Api\Controller\VisitorsController:updateVisitor')->via('PUT', 'PATCH');
         }
     );
 
     $app->get(
         $localePath . '/',
         function () {
-            echo json_encode(array("msg" => "Welcome to Slim Framework"));
+            echo json_encode(array("messages" => "Welcome to Flipit"));
         }
     );
 }

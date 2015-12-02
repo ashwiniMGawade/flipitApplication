@@ -2,11 +2,8 @@
 
 $config['app']['debug'] = false;
 
-// Cache TTL in seconds
-$config['app']['cache.ttl'] = 60;
-
 // Max requests per hour
-//$config['app']['rate.limit'] = 1000;
+$config['app']['rate.limit'] = 1000;
 
 $config['app']['log.writer'] = new \Flynsarmy\SlimMonolog\Log\MonologWriter(
     array(
@@ -56,4 +53,3 @@ $config['locale'] = array(
                         'mx',
                         'cn'
                     );
-

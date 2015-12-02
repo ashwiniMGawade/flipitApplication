@@ -39,6 +39,7 @@ class RouteRedirect extends \Core\Domain\Entity\RouteRedirect
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $entityManagerLocale->persist($routeRedirect);
         $entityManagerLocale->flush();
+        self::refreshVarnishUrl($routeRedirect->orignalurl);
         return true;
     }
 
@@ -82,6 +83,7 @@ class RouteRedirect extends \Core\Domain\Entity\RouteRedirect
         $routeRedirect->updated_at = new \DateTime('now');
         $entityManagerLocale->persist($routeRedirect);
         $entityManagerLocale->flush();
+        self::refreshVarnishUrl($routeRedirect->orignalurl);
         return true;
     }
 
@@ -101,6 +103,7 @@ class RouteRedirect extends \Core\Domain\Entity\RouteRedirect
         $routeRedirect =  $entityManagerLocale->find('\Core\Domain\Entity\RouteRedirect', $id);
         $entityManagerLocale->remove($routeRedirect);
         $entityManagerLocale->flush();
+        self::refreshVarnishUrl($routeRedirect->orignalurl);
         return true;
     }
 
@@ -121,5 +124,11 @@ class RouteRedirect extends \Core\Domain\Entity\RouteRedirect
             ->setMaxResults(10);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
+    }
+
+    public static function refreshVarnishUrl($redirectUrl)
+    {
+        $varnishObj = new \KC\Repository\Varnish();
+        $varnishObj->addUrl($redirectUrl);
     }
 }

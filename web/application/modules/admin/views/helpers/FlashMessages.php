@@ -19,11 +19,13 @@ class Zend_View_Helper_FlashMessages extends Zend_View_Helper_Abstract
         $output = '';
         if (isset($messages[0]) && !empty($messages[0])) {
             if(isset($messages[0]['error'])) {
-                $output .= '<div class ="alert alert-error" style="margin-top:14px; padding-top: 5px; padding-bottom: 5px; text-align: center;">';
+                $output .= '<div class ="alert alert-error mt10">';
+                $output .= '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>';
                 $output .= '<label class="errorserver">' . $messages[0]['error'] . '</label>';
                 $output .= '</div>';
             } elseif(isset($messages[0]['success'])) {
-                $output .= '<div class ="alert alert-success" style="margin-top:14px; padding-top: 5px; padding-bottom: 5px; text-align: center;">';
+                $output .= '<div class ="alert alert-success mt10">';
+                $output .= '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>';
                 $output .= '<label class="successserver">' . $messages[0]['success'] . '</label>';
                 $output .= '</div>';
             } else {
