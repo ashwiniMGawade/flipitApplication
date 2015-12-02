@@ -62,7 +62,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
             $isValid = true;
-
             $params['campaign-header'] = trim($params['campaign-header']);
             $params['campaign-footer'] = trim($params['campaign-footer']);
             if (true === empty($params['campaign-header'])) {
@@ -73,23 +72,20 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                 $this->setFlashMessage('error', "campaign footer is required");
                 $isValid = false;
             }
-
             $result = AdminFactory::updateSetting()->execute($campaignHeaderSetting, array('value'=>$params['campaign-header']));
             if ($result instanceof Errors) {
                 $this->setFlashMessage('error', $result->getErrorsAll());
                 $isValid = false;
             }
-
             $result = AdminFactory::updateSetting()->execute($campaignFooterSetting, array('value'=>$params['campaign-footer']));
             if ($result instanceof Errors) {
                 $this->setFlashMessage('error', $result->getErrorsAll());
                 $isValid = false;
-            }            if (true == $isValid) {
+            }
+            if (true == $isValid) {
                 $this->setFlashMessage('success', 'Campaign settings has been updated successfully');
                 $this->redirect(HTTP_PATH . 'admin/newslettercampaigns/settings');
             }
         }
-
     }
-
 }
