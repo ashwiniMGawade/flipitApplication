@@ -133,6 +133,10 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
         $locale_code = isset($_COOKIE['locale']) ?  $_COOKIE['locale'] : '';
         $sessionNamespace = new Zend_Session_Namespace();
 
+        if($site_name == "kortingscode.nl" || $locale_code == 'en') return;
+
+        if(empty($sessionNamespace->settings['webaccess'])) return;
+
         $accesible_sites = array_column($sessionNamespace->settings['webaccess'], 'name');
         if (!in_array($site_name, $accesible_sites) || !in_array('flipit.com/'.$locale_code, $accesible_sites)) {
             $website = trim($accesible_sites[0]);
