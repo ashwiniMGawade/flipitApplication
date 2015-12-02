@@ -12,7 +12,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-     
+
         $this->view->controllerName = $this->getRequest()
             ->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
@@ -62,15 +62,17 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                 $this->setFlashMessage('error', "campaign footer is required");
                 $isValid = false;
             }
-            $result = AdminFactory::updateSetting()->execute($campaignHeaderSetting, array('value'=>$params['campaign-header']));
-            if ($result instanceof Errors) {
-                $this->setFlashMessage('error', $result->getErrorsAll());
-                $isValid = false;
-            }
-            $result = AdminFactory::updateSetting()->execute($campaignFooterSetting, array('value'=>$params['campaign-footer']));
-            if ($result instanceof Errors) {
-                $this->setFlashMessage('error', $result->getErrorsAll());
-                $isValid = false;
+            if ($isValid) {
+                $result = AdminFactory::updateSetting()->execute($campaignHeaderSetting, array('value' => $params['campaign-header']));
+                if ($result instanceof Errors) {
+                    $this->setFlashMessage('error', $result->getErrorsAll());
+                    $isValid = false;
+                }
+                $result = AdminFactory::updateSetting()->execute($campaignFooterSetting, array('value' => $params['campaign-footer']));
+                if ($result instanceof Errors) {
+                    $this->setFlashMessage('error', $result->getErrorsAll());
+                    $isValid = false;
+                }
             }
             if (true === $isValid) {
                 $this->setFlashMessage('success', 'Campaign settings has been updated successfully');
