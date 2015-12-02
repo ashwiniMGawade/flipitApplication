@@ -24,6 +24,11 @@ class NewsletterCampaign
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    protected $campaignSubject;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     protected $senderName;
 
     /**
@@ -82,6 +87,10 @@ class NewsletterCampaign
      */
     protected $receipientCount;
     /**
+     * @ORM\Column(type="integer", length=1, nullable=false)
+     */
+    protected $deleted;
+    /**
      * @ORM\Column(type="datetime", nullable=false)
      */
     protected $createdAt;
@@ -102,6 +111,22 @@ class NewsletterCampaign
      * @param mixed $campaignName
      */
     public function setCampaignName($campaignName)
+    {
+        $this->campaignName = $campaignName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCampaignSubject()
+    {
+        return $this->campaignName;
+    }
+
+    /**
+     * @param mixed $campaignName
+     */
+    public function setCampaignSubject($campaignName)
     {
         $this->campaignName = $campaignName;
     }
@@ -310,6 +335,22 @@ class NewsletterCampaign
      * @param mixed $scheduledStatus
      */
     public function setScheduledStatus($scheduledStatus)
+    {
+        $this->scheduledStatus = $scheduledStatus;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getdeleted()
+    {
+        return $this->scheduledStatus;
+    }
+
+    /**
+     * @param mixed $scheduledStatus
+     */
+    public function setdeleted($scheduledStatus)
     {
         $this->scheduledStatus = $scheduledStatus;
     }
