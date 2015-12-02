@@ -16,7 +16,7 @@ function getNewsletterCampaignList(iStart,iSortCol,iSortDir) {
     newsletterCampaignListTable = $("#newsletterCampaignListTable").dataTable({
         "bLengthChange" : false,
         "bInfo" : true,
-        "bFilter" : true,
+        "bFilter" : false,
         "bDestroy" : true,
         "bProcessing" : false,
         "bServerSide" : true,
@@ -47,9 +47,9 @@ function getNewsletterCampaignList(iStart,iSortCol,iSortDir) {
                 "fnRender" : function(obj) {
                     if(obj.aData.scheduledStatus == true)
                     {
-                        return "<a href='javascript:void(0);'>" + __("Active") + "</a>" ;
+                        return "<span class='success'>" + __("Scheduled") + "</span>" ;
                     }else{
-                       return "<a href='javascript:void(0);'>" + __("Inactive") + "</a>" ;
+                       return "<span href='javascript:void(0);' class='error'>" + __("Not Scheduled") + "</span>" ;
                     }
                 },
                 "bSortable" : true
@@ -65,8 +65,11 @@ function getNewsletterCampaignList(iStart,iSortCol,iSortDir) {
             },
             {
                 "fnRender" : function(obj) {
-
-                    return "<a href='javascript:void(0);'>" + obj.aData.scheduledTime.date + "</a>" ;
+                    if(obj.aData.warnings == 'OK') {
+                        return "<span class='success'>" + obj.aData.warnings + "</span>";
+                    } else {
+                        return "<span class='error'>" + obj.aData.warnings + "</span>";
+                    }
 
                 },
                 //"bSearchable" : false,

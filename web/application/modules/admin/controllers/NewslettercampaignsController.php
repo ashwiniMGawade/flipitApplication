@@ -99,7 +99,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     'campaignSubject' => $campaign->getCampaignSubject(),
                     'scheduledStatus' => $campaign->getScheduledStatus(),
                     'scheduledTime' => $campaign->getScheduledTime(),
-                    'warnings' => $campaign->getCampaignName()
+                    'warnings' => 'OK' //Needs to change when warning task is done
                 );
             }
         }
