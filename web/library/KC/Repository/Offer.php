@@ -1180,28 +1180,9 @@ class Offer extends \Core\Domain\Entity\Offer
             $query = $query->setMaxResults($limit);
         }
         $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        $sortedOffers = self::orderOffersByOfferPosition($offers);
-        return $sortedOffers;
-    }
-
-    public static function orderOffersByOfferPosition($offers)
-    {
-        $offerWithPosition =  array();
-        foreach ($offers as $key => $offer) {
-            if ($offer['offer_position'] && $offer['offer_position'] > 0) {
-                $offerWithPosition = self::moveElement($offers, $key, ($offer['offer_position'] - 1));
-            }
-        }
-        if (empty($offerWithPosition)) {
-            $offerWithPosition = $offers;
-        }
-        return $offerWithPosition;
-    }
-
-    public static function moveElement($offers, $currentPosition, $newPosition)
-    {
-        $genereateNewPosition = array_splice($offers, $currentPosition, 1);
-        array_splice($offers, $newPosition, 0, $genereateNewPosition);
+        usort($offers, function($currentOffer, $nextOffer) {
+            return $currentOffer['offer_position'] - $nextOffer['offer_position'];
+        });
         return $offers;
     }
 
