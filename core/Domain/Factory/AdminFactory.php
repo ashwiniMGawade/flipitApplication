@@ -67,6 +67,8 @@ use \Core\Domain\Validator\VisitorValidator;
 use \Core\Domain\Validator\WidgetValidator;
 use \Core\Domain\Validator\UrlSettingValidator;
 
+use \Core\Domain\Usecase\Admin\GetNewsletterCampaignUsecase;
+
 use \Core\Persistence\Factory\RepositoryFactory;
 
 use \Core\Service\Errors;
@@ -365,5 +367,10 @@ class AdminFactory
     public static function getVisitor()
     {
         return new GetVisitorUsecase(RepositoryFactory::visitor(), new Purifier(), new Errors());
+    }
+
+    public static function getNewsletterCampaign()
+    {
+        return new GetNewsletterCampaignUsecase(RepositoryFactory::newsletterCampaign(), new Purifier(), new Errors());
     }
 }

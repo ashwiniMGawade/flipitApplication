@@ -32,7 +32,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
 
     public function indexAction()
     {
-
     }
 
     public function getnewslettercampaignlistAction()
