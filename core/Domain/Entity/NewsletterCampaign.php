@@ -45,10 +45,12 @@ class NewsletterCampaign
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $headerBanner;
+
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $headerBannerURL;
+
     /**
      * @ORM\Column(type="text", nullable=true)
      */
@@ -58,42 +60,52 @@ class NewsletterCampaign
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $footerBanner;
+
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $footerBannerURL;
+
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $offerPartOneTitle;
+
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $offerPartTwoTitle;
+
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
     protected $scheduledStatus;
+
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $scheduledTime;
+
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
     protected $newsletterSentTime;
+
     /**
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
     protected $receipientCount;
+
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
     protected $deleted;
+
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
     protected $createdAt;
+
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */

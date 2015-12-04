@@ -36,6 +36,13 @@ class GetNewsletterCampaignsUsecaseTest extends \Codeception\TestCase\Test
         $this->assertEquals($errors->getErrorsAll(), $result->getErrorsAll());
     }
 
+    public function testGetNewsletterCampaignsUsecaseReturnsArrayOfCampaignssObjectWhenParametersAreValid()
+    {
+        $newsletterCampaignRepository = $this->createNewsletterCampaignsRepositoryInterfaceMockWithPaginatedMethod(array(new NewsletterCampaign()));
+        $campaigns = (new GetNewsletterCampaignsUsecase($newsletterCampaignRepository, new Purifier(), new Errors()))->execute(array(), array(), null, null, true);
+        $this->assertNotEmpty($campaigns);
+    }
+
     private function createNewsletterCampaignRepositoryMock()
     {
         $newsletterCampaignRepository = $this->getMock('\Core\Domain\Repository\NewsletterCampaignRepositoryInterface');
@@ -48,6 +55,16 @@ class GetNewsletterCampaignsUsecaseTest extends \Codeception\TestCase\Test
         $newsletterCampaignRepository->expects($this->once())
             ->method('findBy')
             ->with($this->equalTo('\Core\Domain\Entity\NewsletterCampaign'), $this->isType('array'))
+            ->willReturn($returns);
+        return $newsletterCampaignRepository;
+    }
+
+    private function createNewsletterCampaignsRepositoryInterfaceMockWithPaginatedMethod($returns)
+    {
+        $newsletterCampaignRepository = $this->createNewsletterCampaignRepositoryMock();
+        $newsletterCampaignRepository->expects($this->once())
+            ->method('findAllPaginated')
+            ->with('\Core\Domain\Entity\NewsletterCampaign', $this->isType('array'), $this->isType('array'))
             ->willReturn($returns);
         return $newsletterCampaignRepository;
     }
