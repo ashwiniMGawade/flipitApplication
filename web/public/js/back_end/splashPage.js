@@ -1,7 +1,7 @@
 var CKcontent = false ;
 $(document).ready(function(){
     $('.numeric').keyup(function () {
-        this.value = this.value.replace(/[^1-9\.]/g,'');
+        this.value = this.value.replace(/[^0-9\.]/g,'');
     });
 	// setup ckeditor and its configurtion
 	CKEDITOR.replace( 'splashPageContent',
