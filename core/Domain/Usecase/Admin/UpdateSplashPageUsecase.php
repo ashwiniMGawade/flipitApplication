@@ -44,6 +44,24 @@ class UpdateSplashPageUsecase
         if (isset($params['updatedBy'])) {
             $splashPage->setUpdatedBy($params['updatedBy']);
         }
+        if (isset($params['infoImage'])) {
+            $splashPage->setInfoImage($params['infoImage']);
+        }
+        if (isset($params['footer'])) {
+            $splashPage->setFooter($params['footer']);
+        }
+        if (isset($params['visitorsPerMonthCount'])) {
+            $splashPage->setVisitorsPerMonthCount((int)$params['visitorsPerMonthCount']);
+        }
+        if (isset($params['verifiedActionCount'])) {
+            $splashPage->setVerifiedActionCount((int)$params['verifiedActionCount']);
+        }
+        if (isset($params['newsletterSignupCount'])) {
+            $splashPage->setNewsletterSignupCount((int)$params['newsletterSignupCount']);
+        }
+        if (isset($params['retailerOnlineCount'])) {
+            $splashPage->setRetailerOnlineCount((int)$params['retailerOnlineCount']);
+        }
         $splashPage->setUpdatedAt(new \DateTime('now'));
 
         $validationResult = $this->splashPageValidator->validate($splashPage);
