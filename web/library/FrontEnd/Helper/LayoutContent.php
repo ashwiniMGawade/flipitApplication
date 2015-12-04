@@ -1,4 +1,6 @@
 <?php
+use \Core\Domain\Factory\SystemFactory;
+
 class FrontEnd_Helper_LayoutContent
 {
     public static function loadFlipitHomePage($flipitUrl)
@@ -348,5 +350,14 @@ class FrontEnd_Helper_LayoutContent
             $displayPicreelScript = true;
         }
         return $displayPicreelScript;
+    }
+
+    public static function loadSplashPage()
+    {
+        $splashPage = SystemFactory::getSplashPage()->execute(array('id' => 1));
+        if ($splashPage instanceof Core\Service\Errors) {
+            $splashPage = new \Core\Domain\Entity\User\SplashPage();
+        }
+        return $splashPage;
     }
 }
