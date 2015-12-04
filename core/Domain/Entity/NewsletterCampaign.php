@@ -132,15 +132,15 @@ class NewsletterCampaign
      */
     public function getCampaignSubject()
     {
-        return $this->campaignName;
+        return $this->campaignSubject;
     }
 
     /**
-     * @param mixed $campaignName
+     * @param mixed $campaignSubject
      */
-    public function setCampaignSubject($campaignName)
+    public function setCampaignSubject($campaignSubject)
     {
-        $this->campaignName = $campaignName;
+        $this->campaignSubject = $campaignSubject;
     }
 
     /**
@@ -280,11 +280,11 @@ class NewsletterCampaign
     }
 
     /**
-     * @param mixed $newsletterSentTimet
+     * @param mixed $newsletterSentTime
      */
-    public function setNewsletterSentTime($newsletterSentTimet)
+    public function setNewsletterSentTime($newsletterSentTime)
     {
-        $this->newsletterSentTimet = $newsletterSentTimet;
+        $this->newsletterSentTime = $newsletterSentTime;
     }
 
     /**
