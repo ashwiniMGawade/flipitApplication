@@ -19,8 +19,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
 
         # redirect of a user don't have any permission for this controller
         $sessionNamespace = new Zend_Session_Namespace();
-        if (
-            $sessionNamespace->settings['rights']['content']['rights'] != '1'
+        if ($sessionNamespace->settings['rights']['content']['rights'] != '1'
             && $sessionNamespace->settings['rights']['content']['rights'] != '2'
         ) {
             $this->_redirect('/admin/auth/index');
@@ -28,12 +27,73 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
     }
     public function init()
     {
-        /* Initialize action controller here */
+        $flash = $this->_helper->getHelper('FlashMessenger');
+        $message = $flash->getMessages();
+        $this->view->messageSuccess = isset($message[0]['success']) ?
+            $message[0]['success'] : '';
+        $this->view->messageError = isset($message[0]['error']) ?
+            $message[0]['error'] : '';
     }
 
     public function indexAction()
     {
 
+    }
+
+    public function getnewslettercampaignlistAction()
+    {
+        $flash = $this->_helper->getHelper('FlashMessenger');
+        $conditions = array('deleted' => 0);
+        $campaignList = array();
+        $order = $this->getOrderByField();
+        $offset = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayStart')));
+        $limit = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayLength')));
+        $result = ( array )SystemFactory::getNewsletterCampaigns()->execute($conditions, $order, $limit, $offset, true);
+        if ($result instanceof Errors) {
+            $errors = $result->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+        } else {
+            $campaignList['records'] = $this->prepareData($result['records']);
+            $sEcho = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sEcho')));
+            $response = \DataTable_Helper::createResponse($sEcho, $campaignList['records'], $result['count']);
+            echo Zend_Json::encode($response);
+        }
+        exit;
+    }
+
+    private function getOrderByField()
+    {
+        $sortColumns = array(
+            'id',
+            'campaignName',
+            'campaignSubject',
+            'scheduledTime',
+            'scheduledStatus',
+            'createdAt'
+        );
+
+        $orderByField = $sortColumns[intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iSortCol_0')))];
+        $orderByDirection = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sSortDir_0'));
+        $orderByDirection = !empty($orderByDirection) ? $orderByDirection : 'ASC';
+        return null != $orderByField ? array($orderByField => $orderByDirection) : array();
+    }
+
+    private function prepareData($campaigns)
+    {
+        $returnData = array();
+        if (!empty($campaigns)) {
+            foreach ($campaigns as $campaign) {
+                $returnData[] = array(
+                    'id' => $campaign->getId(),
+                    'campaignName' => $campaign->getCampaignName(),
+                    'campaignSubject' => $campaign->getCampaignSubject(),
+                    'scheduledStatus' => $campaign->getScheduledStatus(),
+                    'scheduledTime' => $campaign->getScheduledTime(),
+                    'warnings' => 'OK' //Needs to change when warning task is done
+                );
+            }
+        }
+        return $returnData;
     }
 
     public function createAction()
