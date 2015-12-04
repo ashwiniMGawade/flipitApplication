@@ -17,6 +17,7 @@ use \Core\Persistence\Database\Repository\AffliateNetworkRepository;
 use \Core\Persistence\Database\Repository\WidgetRepository;
 use \Core\Persistence\Database\Repository\LandingPageRepository;
 use \Core\Persistence\Database\Repository\URLSettingRepository;
+use \Core\Persistence\Database\Repository\NewsletterCampaignRepository;
 
 class RepositoryFactory
 {
@@ -92,5 +93,10 @@ class RepositoryFactory
     public static function splashImage()
     {
         return new SplashImageRepository((new Service\DoctrineManager(new Service\AppConfig()))->getUserEntityManager());
+    }
+
+    public static function newsletterCampaign()
+    {
+        return new NewsletterCampaignRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 }
