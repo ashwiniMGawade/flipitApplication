@@ -1,2 +1,29 @@
 <?php
+$this->headTitle()->append($this->translate('Newsletter Campaigns'));
 
+$this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.dataTables.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/dataTableComman.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.ui.widget.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/newsletterCampaign.js");
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+?>
+
+<!-- Div for campaign list  -->
+
+<div class="wrap columns-2" id="newsletterCampaignListDiv">
+    <?php echo $this->flashMessages(); ?>
+    <h1 class="fl"><?php echo $this->translate('Newsletter Campaigns');?></h1>
+    <div class="clear"></div>
+    <table id="newsletterCampaignListTable" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th><?php echo $this->translate('Campaign Name'); ?></th>
+            <th><?php echo $this->translate('Campaign Subject'); ?></th>
+            <th><?php echo $this->translate('Schedule Status'); ?></th>
+            <th><?php echo $this->translate('Schedule Date Time (local time)'); ?></th>
+            <th><?php echo $this->translate('Warnings'); ?></th>
+            <th><?php echo $this->translate('Delete'); ?></th>
+        </tr>
+        </thead>
+    </table>
+</div><!-- End code of list campaigns -->
