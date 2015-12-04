@@ -27,12 +27,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
     }
     public function init()
     {
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $flash->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ?
-            $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ?
-            $message[0]['error'] : '';
+
     }
 
     public function indexAction()
@@ -42,12 +37,12 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
 
     public function getnewslettercampaignlistAction()
     {
-        $flash = $this->_helper->getHelper('FlashMessenger');
         $conditions = array('deleted' => 0);
         $campaignList = array();
         $order = $this->getOrderByField();
         $offset = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayStart')));
         $limit = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayLength')));
+
         $result = ( array )SystemFactory::getNewsletterCampaigns()->execute($conditions, $order, $limit, $offset, true);
         if ($result instanceof Errors) {
             $errors = $result->getErrorsAll();
