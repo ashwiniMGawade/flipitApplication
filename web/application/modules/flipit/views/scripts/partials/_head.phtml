@@ -3,21 +3,6 @@
 <title>Flipit.com - Your Global Promo Code and Coupon Portal</title>
 <meta name="viewport" content="user-scalable=yes, width=device-width, initial-scale=1.0" />
 <link href="http://www.flipit.com" rel="canonical" />
-<?php
-if (APPLICATION_ENV == 'development') {
-    $lessCssPath = "/public/css/front_end/";
-    $this->headLink(array("rel"=>"stylesheet/less", 'href'=>$lessCssPath.'all.less'));
-    echo $this->headLink(array("rel"=>"stylesheet/less", 'href'=>$lessCssPath.'ie.less'));
-} else {
-    echo $this->headLink()
-        ->prependStylesheet("/public/css/front_end/all.css");
-}
-?>
-<link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
-<!--[if IE]>
-<link type="text/css" media="all" rel="stylesheet" href="<?php echo HTTP_PATH;?>public/front_end/css/ie.css">
-<script type="text/javascript" src="<?php echo HTTP_PATH;?>public/front_end/js/ie.js"></script>
-<![endif]-->
 <link href="<?php echo HTTP_PATH;?>public/flipit/images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 <meta name="msvalidate.01" content="44C2028411B932A2DCC28359FD20685F" />
 <meta property="og:title" content="Flipit.com">
@@ -35,3 +20,8 @@ if (APPLICATION_ENV == 'development') {
     ga('create', 'UA-17691171-3', 'flipit.com');
     ga('send', 'pageview'); 
 </script>
+<link rel="stylesheet" href="<?php echo HTTP_PATH;?>public/css/bootstrap-3.3.5.css">
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,600' rel='stylesheet' type='text/css'>
+<link type="text/css" media="all" rel="stylesheet" href="<?php echo HTTP_PATH;?>public/css/front_end/splash_page.css">
+<script type="text/javascript" src="<?php echo HTTP_PATH;?>public/js/jquery-1.11.2.min.js"></script>
+</head>
