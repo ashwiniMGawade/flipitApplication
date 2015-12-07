@@ -114,11 +114,10 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
             $newsletterCampaign = AdminFactory::getNewsletterCampaign()->execute(array('id'=>$this->view->campaignID));
-            $params = $this->_handleImageUpload($params);
+            $params = $this->_handleImageUpload($params, $newsletterCampaign->headerBanner, $newsletterCampaign->footerBanner);
             $this->view->newsletterCampaign = $this->getAllParams();
 
             $result = AdminFactory::addNewsletterCampaign()->execute($newsletterCampaign, $params);
-
             if ($result instanceof Errors) {
                 $errors = $result->getErrorsAll();
                 $this->setFlashMessage('error', $errors);
@@ -207,16 +206,22 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         return $returnData;
     }
 
-    private function _handleImageUpload($params)
+    private function _handleImageUpload($params, $headerBanner = '' , $footerBanner = '')
     {
         if (true === isset($_FILES['headerBanner']) && true === isset($_FILES['headerBanner']['name']) && '' !== $_FILES['headerBanner']['name']) {
             $rootPath = BASE_PATH . 'images/upload/newslettercampaigns/';
             $image = $this->uploadImage('headerBanner', $rootPath);
+            if (false !== $image && !empty($headerBanner)) {
+                unlink(BASE_PATH . 'images/upload/newslettercampaigns/'.$headerBanner);
+            }
             $params['headerBanner'] = $image;
         }
         if (true === isset($_FILES['footerBanner']) && true === isset($_FILES['footerBanner']['name']) && '' !== $_FILES['footerBanner']['name']) {
             $rootPath = BASE_PATH . 'images/upload/newslettercampaigns/';
             $image = $this->uploadImage('footerBanner', $rootPath);
+            if (false !== $image && !empty($footerBanner)) {
+                unlink(BASE_PATH . 'images/upload/newslettercampaigns/'.$footerBanner);
+            }
             $params['footerBanner'] = $image;
         }
         return $params;
