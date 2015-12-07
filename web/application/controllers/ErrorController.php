@@ -17,14 +17,17 @@ class ErrorController extends Zend_Controller_Action
             case \Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
             case \Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
             case \Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
-
-                $pagePermalink = $this->_helper->Error->getPageParmalink(ltrim($this->_request->getPathInfo(), '/'));
+                if (LOCALE === '') {
+                    $pagePermalink = $this->_helper->Error->getPageParmalink(ltrim($this->_request->getPathInfo(), '/'));
+                } else {
+                    $pagePermalink = $this->_helper->Error->getPermalinkForFlipit(ltrim($this->_request->getPathInfo(), '/'));
+                    $pagePermalink = $this->_helper->Error->getPageParmalink(ltrim($pagePermalink, '/'));
+                }
                 $pageNumber = $this->_helper->Error->getPageNumbering($pagePermalink);
                 $pageDetails = $this->getPageDetails($pagePermalink, $pageNumber);
                 $pageDetails = isset($pageDetails[0]) ? $pageDetails[0] : $pageDetails;
-                
                 if (isset($pageDetails['pageType']) && $pageDetails['pageType']=='default') {
-                    if ($pageNumber > 0) {
+                    if (is_numeric($pageNumber)) {
                         $pageNumber = 10;
                     }
                 }
@@ -63,6 +66,7 @@ class ErrorController extends Zend_Controller_Action
                             ),
                             ''
                         );
+
                     $paginationNumber['page'] = $pageNumber;
                     $specialOffersPaginator = \FrontEnd_Helper_viewHelper::renderPagination(
                         $specialPageOffers,
