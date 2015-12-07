@@ -117,31 +117,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="footer-hold">
-                        <strong class="title">Lorum ipsum popie jopie zinnetje voor Arthur</strong>
-                        <ul class="list-inline logos-holder">
-                            <li><a href="#"><img src="<?php echo HTTP_PATH;?>public/images/flipit-logo-blue.png" alt="flipit"></a></li>
-                            <li><a href="#"><img src="<?php echo HTTP_PATH;?>public/images/logo-qshops.png" alt="Q shope keurmerk"></a></li>
-                            <li><a href="#"><img src="<?php echo HTTP_PATH;?>public/images/imbull-logo.png" alt="logo"></a></li>
-                        </ul>
-                        <div class="center-box">
-                            <nav class="add-nav">
-                                <ul>
-                                    <li><a href="#">Flipit.com is a subsidiary of Imbull</a></li>
-                                    <li>Chamber of Commerce #34339618</li>
-                                </ul>
-                            </nav>
-                            <p>van Ostadestraat 149, 1073TK Amsterdam - Netherlands</p>
-                        </div>
-                        <div class="center-box">
-                            <nav class="add-nav">
-                                <ul>
-                                    <li><a href="#">Contact</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
-                                    <li><a href="#">Disclaimer</a></li>
-                                </ul>
-                            </nav>
-                            <p>Copyright &copy; 2009-2015 <a href="#">Imbull.com</a></p>
-                        </div>
+                        <?php echo $splashPage->getFooter(); ?>
                     </div>
                     <div class="f-panel">
                         <p>Deze site gebruikt cookies <a class="btn thanks-btn" href="#">Ik ga akkoord</a> <a href="#">Meer info over cookies</a></p>
@@ -161,8 +137,7 @@
 -->
 
 <script type="text/javascript">
-    var availableLanguages = <?php echo json_encode(
-    FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true')); ?>;
+    var availableLanguages = <?php echo json_encode(FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true')); ?>;
 </script>
 
 <?php
@@ -183,5 +158,3 @@ echo $headScript
 ?>
 </body>
 </html>
-$locales = (array) FrontEnd_Helper_viewHelper::getAllCountriesForSplashPage();
-<?php

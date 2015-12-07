@@ -6,21 +6,14 @@ $(function(){
             if(countryCode == 'nl') {
                 countryUrl = 'http://www.kortingscode.nl';
             }
-            var countryName = availableLanguages[countryCode];
-            $("#current-local").attr('href', countryUrl).html("To Flipit.com "+ countryName);
-            $('select.present').val(countryCode);
-            //get_coupon_count(countryCode);
+            $('#coutry').val(countryCode);
             jcf.refreshAll();
         }
     }, "jsonp");
 
-    $('select.present').on('change', function(e){
-        //get_coupon_count($(this).val());
-    });
-
     $('form.select-form').submit(function(e){
         e.preventDefault();
-        countryCode = $('select.present').val();
+        countryCode = $('#coutry').val();
         if (countryCode != '') {
             var countryUrl = '/'+countryCode;
             if(countryCode == 'nl') {
