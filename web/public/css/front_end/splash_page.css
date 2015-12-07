@@ -7775,6 +7775,16 @@ body > .jcf-select-drop.jcf-drop-flipped {
     border: 0;
 }
 
+.jcf-list .flag, .jcf-select-text .flag {
+    float:left;
+    margin:5px 7px 0 0;
+    line-height:0;
+}
+
+.jcf-select-text .flag {
+    float: none;
+}
+
 /* multiple select styles */
 
 .jcf-list-box {
@@ -10793,6 +10803,13 @@ body {
 }
 
 @media screen and (max-width: 767px) {
+    .popular-sec .container {
+        margin-left: 10%;
+        margin-right: 5%;
+    }
+    .popular-sec h2{
+        text-align:left;
+    }
     .table-responsive {
         width: 100%;
         margin-bottom: 11.25px;
