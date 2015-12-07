@@ -119,27 +119,21 @@
                     <div class="footer-hold">
                         <?php echo $splashPage->getFooter(); ?>
                     </div>
-                    <div class="f-panel">
-                        <p>Deze site gebruikt cookies <a class="btn thanks-btn" href="#">Ik ga akkoord</a> <a href="#">Meer info over cookies</a></p>
+                    <?php if (!isset($_COOKIE['cookie_agreement']) || empty($_COOKIE['cookie_agreement'])) { ?>
+                    <div class="f-panel" id="footer-cookie-bar">
+                        <p>This site uses cookies
+                            <a class="btn thanks-btn" href="#">Okay, thanks</a>
+                            <a href="sg/info/<?php echo FrontEnd_Helper_viewHelper::__link('link_privacy-cookies'); ?>">Find out more</a></p>
                     </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>
     </footer>
 </div>
-<!--
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script type="text/javascript">window.jQuery || document.write('<script src="js/jquery-1.11.2.min.js"><\/script>')</script>
-<script src="js/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/jquery.main.js"></script>
-<script src="js/coustom-select.js"></script>
-<script src="js/carousel-slider.js"></script>
--->
-
 <script type="text/javascript">
     var availableLanguages = <?php echo json_encode(FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true')); ?>;
 </script>
-
 <?php
 if (APPLICATION_ENV == 'development') {
     $headScript =  $this->HeadScript();
@@ -147,7 +141,6 @@ if (APPLICATION_ENV == 'development') {
 } else {
     $headScript = $this->HeadScript();
 }
-
 echo $headScript
     ->prependFile("/public/js/front_end/splash_page.js")
     ->prependFile("/public/js/bootstrap.min.js")
