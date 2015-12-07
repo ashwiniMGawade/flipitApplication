@@ -96,8 +96,12 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
             $newsletterCampaign = AdminFactory::createNewsletterCampaign()->execute();
-            $result = AdminFactory::addNewsletterCampaign()->execute($newsletterCampaign, $params);
+
+            $params = $this->_handleImageUpload($params);
             $this->view->newsletterCampaign = $this->getAllParams();
+
+            $result = AdminFactory::addNewsletterCampaign()->execute($newsletterCampaign, $params);
+
             if ($result instanceof Errors) {
                 $errors = $result->getErrorsAll();
                 $this->setFlashMessage('error', $errors);
@@ -118,6 +122,49 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $this->view->newsletterCampaign['campaignFooter'] = !empty($campaignFooterSetting) ? $campaignFooterSetting->value : '';
         }
 
+    }
+
+    private function _handleImageUpload($params) {
+        if (true === isset($_FILES['headerBanner']) && true === isset($_FILES['headerBanner']['name']) && '' !== $_FILES['headerBanner']['name']) {
+            $rootPath = BASE_PATH . 'images/upload/newslettercampaigns/';
+            $image = $this->uploadImage('headerBanner', $rootPath);
+            $params['headerBanner'] = $image;
+        }
+        if (true === isset($_FILES['footerBanner']) && true === isset($_FILES['footerBanner']['name']) && '' !== $_FILES['footerBanner']['name']) {
+            $rootPath = BASE_PATH . 'images/upload/newslettercampaigns/';
+            $image = $this->uploadImage('footerBanner', $rootPath);
+            $params['footerBanner'] = $image;
+        }
+        return $params;
+    }
+
+    public function uploadImage($file, $rootPath)
+    {
+        $adapter = new \Zend_File_Transfer_Adapter_Http();
+        $adapter->getFileInfo($file);
+        if (!file_exists($rootPath)) {
+            mkdir($rootPath, 0755, true);
+        } elseif(!is_writable($rootPath)) {
+            chmod($rootPath, 0755);
+        }
+
+        $adapter->setDestination($rootPath);
+        $adapter->addValidator('Extension', false, array('jpg,jpeg,png,JPG,PNG', true));
+        $imageName = time().'.'.pathinfo($adapter->getFileName($file, false))['extension'];
+        $targetPath = $rootPath . $imageName;
+        $adapter->addFilter(
+            new \Zend_Filter_File_Rename(
+                array('target' => $targetPath, 'overwrite' => true)
+            ),
+            null,
+            $file
+        );
+        $adapter->receive($file);
+        if ($adapter->isValid($file)) {
+            return $imageName;
+        } else {
+            return false;
+        }
     }
 
     public function refreshNewsletterCampaignPageVarnish()

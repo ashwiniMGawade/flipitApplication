@@ -13,7 +13,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.bootstrap.wizard.js"
     <div class='wrap columns-2'>
         <?php echo $this->flashMessages(); ?>
     </div>
-    <form id="wizardform" method="post" action="">
+    <form id="wizardform" method="post" action="" enctype="multipart/form-data">
         <h1 class="fl"><?php echo $this->translate('Cteate Newsletter Campaign');?>
             <button type="button" onclick="" href="#" id="sendTestMail" class="btn ml10"><?php echo $this->translate('Send Test Email');?></button>
             <input type="submit" onclick="" href="#" id="saveNewsletterCampaign" class="btn ml10" value="<?php echo $this->translate('Save & Exit');?>"></button>
@@ -95,7 +95,8 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.bootstrap.wizard.js"
                                                 <div class="mainpage-content-right-inner"></div>
                                                 <div class="mainpage-content-right-inner">
                                                     <div class="browse-container">
-                                                        <img class="image-container" src="<?php echo  isset($this->newsletterCampaign['campaignHeaderBanner']) ? trim($this->newsletterCampaign['campaignHeaderBanner']): '';?>">
+                                                        <img class="image-container"
+                                                             src="<?php echo  isset($this->newsletterCampaign['campaignHeaderBanner']) ?  BASE_PATH . 'images/upload/newslettercampaigns/'.trim($this->newsletterCampaign['campaignHeaderBanner']): '';?>">
                                                     </div>
                                                     <input type="file" id="headerBanner" class="span3 margin-bottom-tenpx" name="headerBanner">
                                                     <div class="margin-bottom-tenpx">
@@ -140,7 +141,8 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.bootstrap.wizard.js"
                                                 <div class="mainpage-content-right-inner"></div>
                                                 <div class="mainpage-content-right-inner">
                                                     <div class="browse-container">
-                                                        <img class="image-container" src="<?php echo isset($this->newsletterCampaign['campaignFooterBanner']) ? trim($this->newsletterCampaign['campaignFooterBanner']): ''; ?>">
+                                                        <img class="image-container"
+                                                             src="<?php echo isset($this->newsletterCampaign['campaignFooterBanner']) ?  BASE_PATH . 'images/upload/newslettercampaigns/'.trim($this->newsletterCampaign['campaignFooterBanner']): ''; ?>">
                                                     </div>
                                                     <input type="file" id="footerBanner" class="span3 margin-bottom-tenpx" name="footerBanner">
                                                     <div class="margin-bottom-tenpx">
