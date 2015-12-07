@@ -92,30 +92,32 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
 
     public function createAction()
     {
+        $this->view->newsletterCampaign = array();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
             $newsletterCampaign = AdminFactory::createNewsletterCampaign()->execute();
             $result = AdminFactory::addNewsletterCampaign()->execute($newsletterCampaign, $params);
+            $this->view->newsletterCampaign = $this->getAllParams();
             if ($result instanceof Errors) {
                 $errors = $result->getErrorsAll();
                 $this->setFlashMessage('error', $errors);
             } else {
                 $this->refreshNewsletterCampaignPageVarnish();
                 $this->setFlashMessage('success', 'News letter campaign has been added successfully');
+                $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
             }
-            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
-
         } else {
             $sendersEmailAddress = KC\Repository\Settings::getEmailSettings('sender_email_address');
-            $this->view->senderEmail = $sendersEmailAddress;
-            $this->view->senderName = KC\Repository\Settings::getEmailSettings('sender_name');
+            $this->view->newsletterCampaign['senderEmail'] = $sendersEmailAddress;
+            $this->view->newsletterCampaign['senderName'] = KC\Repository\Settings::getEmailSettings('sender_name');
 
             $campaignHeaderSetting = SystemFactory::getSetting()->execute(array('name'=>'NEWSLETTER_CAMPAIGN_HEADER'));
-            $this->view->campaignHeader = !empty($campaignHeaderSetting) ? $campaignHeaderSetting->value : '';
+            $this->view->newsletterCampaign['campaignHeader'] = !empty($campaignHeaderSetting) ? $campaignHeaderSetting->value : '';
 
             $campaignFooterSetting = SystemFactory::getSetting()->execute(array('name'=>'NEWSLETTER_CAMPAIGN_FOOTER'));
-            $this->view->campaignFooter = !empty($campaignFooterSetting) ? $campaignFooterSetting->value : '';
+            $this->view->newsletterCampaign['campaignFooter'] = !empty($campaignFooterSetting) ? $campaignFooterSetting->value : '';
         }
+
     }
 
     public function refreshNewsletterCampaignPageVarnish()
