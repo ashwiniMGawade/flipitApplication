@@ -92,7 +92,19 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
 
     public function createAction()
     {
+        if ($this->getRequest()->isPost()) {
 
+        } else {
+            $sendersEmailAddress = KC\Repository\Settings::getEmailSettings('sender_email_address');
+            $this->view->senderEmail = $sendersEmailAddress;
+            $this->view->senderName = KC\Repository\Settings::getEmailSettings('sender_name');
+
+            $campaignHeaderSetting = SystemFactory::getSetting()->execute(array('name'=>'NEWSLETTER_CAMPAIGN_HEADER'));
+            $this->view->campaignHeader = !empty($campaignHeaderSetting) ? $campaignHeaderSetting->value : '';
+
+            $campaignFooterSetting = SystemFactory::getSetting()->execute(array('name'=>'NEWSLETTER_CAMPAIGN_FOOTER'));
+            $this->view->campaignFooter = !empty($campaignFooterSetting) ? $campaignFooterSetting->value : '';
+        }
     }
 
     public function settingsAction()

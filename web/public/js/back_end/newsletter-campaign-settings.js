@@ -1,5 +1,5 @@
 /**
- * validRules oject contain all the messages that are visible when an elment
+ * validRules object contain all the messages that are visible when an elment
  * value is valid
  *
  * structure to define a message for element: key is to be element name and Value is
