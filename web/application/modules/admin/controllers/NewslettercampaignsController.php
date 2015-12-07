@@ -72,23 +72,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         return null != $orderByField ? array($orderByField => $orderByDirection) : array();
     }
 
-    private function prepareData($campaigns)
-    {
-        $returnData = array();
-        if (!empty($campaigns)) {
-            foreach ($campaigns as $campaign) {
-                $returnData[] = array(
-                    'id' => $campaign->getId(),
-                    'campaignName' => $campaign->getCampaignName(),
-                    'campaignSubject' => $campaign->getCampaignSubject(),
-                    'scheduledStatus' => $campaign->getScheduledStatus(),
-                    'scheduledTime' => $campaign->getScheduledTime(),
-                    'warnings' => 'OK' //Needs to change when warning task is done
-                );
-            }
-        }
-        return $returnData;
-    }
 
     public function createAction()
     {
@@ -121,56 +104,50 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $campaignFooterSetting = SystemFactory::getSetting()->execute(array('name'=>'NEWSLETTER_CAMPAIGN_FOOTER'));
             $this->view->newsletterCampaign['campaignFooter'] = !empty($campaignFooterSetting) ? $campaignFooterSetting->value : '';
         }
-
     }
 
-    private function _handleImageUpload($params) {
-        if (true === isset($_FILES['headerBanner']) && true === isset($_FILES['headerBanner']['name']) && '' !== $_FILES['headerBanner']['name']) {
-            $rootPath = BASE_PATH . 'images/upload/newslettercampaigns/';
-            $image = $this->uploadImage('headerBanner', $rootPath);
-            $params['headerBanner'] = $image;
-        }
-        if (true === isset($_FILES['footerBanner']) && true === isset($_FILES['footerBanner']['name']) && '' !== $_FILES['footerBanner']['name']) {
-            $rootPath = BASE_PATH . 'images/upload/newslettercampaigns/';
-            $image = $this->uploadImage('footerBanner', $rootPath);
-            $params['footerBanner'] = $image;
-        }
-        return $params;
-    }
-
-    public function uploadImage($file, $rootPath)
+    public function editAction()
     {
-        $adapter = new \Zend_File_Transfer_Adapter_Http();
-        $adapter->getFileInfo($file);
-        if (!file_exists($rootPath)) {
-            mkdir($rootPath, 0755, true);
-        } elseif(!is_writable($rootPath)) {
-            chmod($rootPath, 0755);
+        $parameters = $this->getAllParams();
+        $this->view->campaignID = $parameters['id'];
+        $this->view->newsletterCampaign = array();
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getRequest()->getParams();
+            $newsletterCampaign = AdminFactory::getNewsletterCampaign()->execute(array('id'=>$this->view->campaignID));
+            $params = $this->_handleImageUpload($params);
+            $this->view->newsletterCampaign = $this->getAllParams();
+
+            $result = AdminFactory::addNewsletterCampaign()->execute($newsletterCampaign, $params);
+
+            if ($result instanceof Errors) {
+                $errors = $result->getErrorsAll();
+                $this->setFlashMessage('error', $errors);
+            } else {
+                $this->refreshNewsletterCampaignPageVarnish();
+                $this->setFlashMessage('success', 'News letter campaign has been added successfully');
+                $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+            }
         }
 
-        $adapter->setDestination($rootPath);
-        $adapter->addValidator('Extension', false, array('jpg,jpeg,png,JPG,PNG', true));
-        $imageName = time().'.'.pathinfo($adapter->getFileName($file, false))['extension'];
-        $targetPath = $rootPath . $imageName;
-        $adapter->addFilter(
-            new \Zend_Filter_File_Rename(
-                array('target' => $targetPath, 'overwrite' => true)
-            ),
-            null,
-            $file
-        );
-        $adapter->receive($file);
-        if ($adapter->isValid($file)) {
-            return $imageName;
+        $newsletterCampaign = AdminFactory::getNewsletterCampaign()->execute(array('id'=>$this->view->campaignID));
+        if ($newsletterCampaign instanceof Errors) {
+            $errors = $newsletterCampaign->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
         } else {
-            return false;
+            $this->view->newsletterCampaign = $this->_dismount($newsletterCampaign);
         }
     }
 
-    public function refreshNewsletterCampaignPageVarnish()
+    private function _dismount($object)
     {
-        $varnishObject = new \KC\Repository\Varnish();
-        $varnishObject->addUrl("http://www.flipit.com");
+        $reflectionClass = new ReflectionClass(get_class($object));
+        $array = array();
+        foreach ($reflectionClass->getProperties() as $property) {
+            $property->setAccessible(true);
+            $array[$property->getName()] = $property->getValue($object);
+            $property->setAccessible(false);
+        }
+        return $array;
     }
 
     public function settingsAction()
@@ -211,5 +188,72 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                 }
             }
         }
+    }
+    private function prepareData($campaigns)
+    {
+        $returnData = array();
+        if (!empty($campaigns)) {
+            foreach ($campaigns as $campaign) {
+                $returnData[] = array(
+                    'id' => $campaign->getId(),
+                    'campaignName' => $campaign->getCampaignName(),
+                    'campaignSubject' => $campaign->getCampaignSubject(),
+                    'scheduledStatus' => $campaign->getScheduledStatus(),
+                    'scheduledTime' => $campaign->getScheduledTime(),
+                    'warnings' => 'OK' //Needs to change when warning task is done
+                );
+            }
+        }
+        return $returnData;
+    }
+
+    private function _handleImageUpload($params)
+    {
+        if (true === isset($_FILES['headerBanner']) && true === isset($_FILES['headerBanner']['name']) && '' !== $_FILES['headerBanner']['name']) {
+            $rootPath = BASE_PATH . 'images/upload/newslettercampaigns/';
+            $image = $this->uploadImage('headerBanner', $rootPath);
+            $params['headerBanner'] = $image;
+        }
+        if (true === isset($_FILES['footerBanner']) && true === isset($_FILES['footerBanner']['name']) && '' !== $_FILES['footerBanner']['name']) {
+            $rootPath = BASE_PATH . 'images/upload/newslettercampaigns/';
+            $image = $this->uploadImage('footerBanner', $rootPath);
+            $params['footerBanner'] = $image;
+        }
+        return $params;
+    }
+
+    public function uploadImage($file, $rootPath)
+    {
+        $adapter = new \Zend_File_Transfer_Adapter_Http();
+        $adapter->getFileInfo($file);
+        if (!file_exists($rootPath)) {
+            mkdir($rootPath, 0755, true);
+        } elseif (!is_writable($rootPath)) {
+            chmod($rootPath, 0755);
+        }
+
+        $adapter->setDestination($rootPath);
+        $adapter->addValidator('Extension', false, array('jpg,jpeg,png,JPG,PNG', true));
+        $imageName = time().'.'.pathinfo($adapter->getFileName($file, false))['extension'];
+        $targetPath = $rootPath . $imageName;
+        $adapter->addFilter(
+            new \Zend_Filter_File_Rename(
+                array('target' => $targetPath, 'overwrite' => true)
+            ),
+            null,
+            $file
+        );
+        $adapter->receive($file);
+        if ($adapter->isValid($file)) {
+            return $imageName;
+        } else {
+            return false;
+        }
+    }
+
+    public function refreshNewsletterCampaignPageVarnish()
+    {
+        $varnishObject = new \KC\Repository\Varnish();
+        $varnishObject->addUrl("http://www.flipit.com");
     }
 }

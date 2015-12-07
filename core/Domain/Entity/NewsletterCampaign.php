@@ -77,7 +77,7 @@ class NewsletterCampaign
     protected $offerPartTwoTitle;
 
     /**
-     * @ORM\Column(type="integer", length=1, nullable=true)
+     * @ORM\Column(type="integer", length=1, nullable=false)
      */
     protected $scheduledStatus;
 
@@ -87,7 +87,7 @@ class NewsletterCampaign
     protected $scheduledTime;
 
     /**
-     * @ORM\Column(type="integer", length=1, nullable=true)
+     * @ORM\Column(type="integer", length=1, nullable=false)
      */
     protected $newsletterSentTime;
 
@@ -97,7 +97,7 @@ class NewsletterCampaign
     protected $receipientCount;
 
     /**
-     * @ORM\Column(type="integer", length=1, nullable=true)
+     * @ORM\Column(type="integer", length=1, nullable=false)
      */
     protected $deleted;
 
@@ -107,7 +107,7 @@ class NewsletterCampaign
     protected $createdAt;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", nullable=false)
      */
     protected $updatedAt;
 
@@ -354,17 +354,17 @@ class NewsletterCampaign
     /**
      * @return mixed
      */
-    public function getDeleted()
+    public function getdeleted()
     {
-        return $this->deleted;
+        return $this->scheduledStatus;
     }
 
     /**
-     * @param mixed $deleted
+     * @param mixed $scheduledStatus
      */
-    public function setDeleted($deleted)
+    public function setdeleted($scheduledStatus)
     {
-        $this->deleted = $deleted;
+        $this->scheduledStatus = $scheduledStatus;
     }
 
     /**

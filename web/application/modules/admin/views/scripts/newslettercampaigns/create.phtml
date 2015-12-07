@@ -1,20 +1,20 @@
 <?php
-$this->headTitle()->append($this->translate('Cteate Newsletter Campaign'));
+$this->headTitle()->append($this->translate('Create Newsletter Campaign'));
 
 $this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.ui.widget.js");
 $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.bootstrap.wizard.js");
-//$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampaign.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampaign.js");
 ?>
 
-<!-- Div for campaign list  -->
+<!-- Div for campaign info  -->
 
 <div class="wrap columns-2" id="newsletterCampaignListDiv">
     <div class='wrap columns-2'>
         <?php echo $this->flashMessages(); ?>
     </div>
     <form id="wizardform" method="post" action="" enctype="multipart/form-data">
-        <h1 class="fl"><?php echo $this->translate('Cteate Newsletter Campaign');?>
+        <h1 class="fl"><?php echo $this->translate('Create Newsletter Campaign');?>
             <button type="button" onclick="" href="#" id="sendTestMail" class="btn ml10"><?php echo $this->translate('Send Test Email');?></button>
             <input type="submit" onclick="" href="#" id="saveNewsletterCampaign" class="btn ml10" value="<?php echo $this->translate('Save & Exit');?>"></button>
         </h1>
@@ -183,4 +183,4 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.bootstrap.wizard.js"
             </div>
         </div>
     </form>
-</div><!-- End code of list campaigns -->
+</div><!-- End code of info campaigns -->
