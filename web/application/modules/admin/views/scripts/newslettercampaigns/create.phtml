@@ -1,7 +1,7 @@
 <?php
 $this->headTitle()->append($this->translate('Cteate Newsletter Campaign'));
 
-
+$this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.ui.widget.js");
 $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.bootstrap.wizard.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampaign.js");
@@ -37,6 +37,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                             <div class="mainpage-content-line">
                                 <div class="mainpage-content-left"><label><strong><?php echo $this->translate('E-mail title(internal use only)');?></strong></label></div>
                                 <div class="mainpage-content-right">
+                                    <div class="mainpage-content-right-inner-right-other"></div>
                                     <div class="mainpage-content-right-inner-left-other">
                                         <input type="text" class="span3" id="campaignName" name="campaignName" placeholder="<?php echo $this->translate('Campaign Name');?>"><?php echo trim($this->campaignName); ?></input>
                                     </div>
@@ -45,6 +46,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                             <div class="mainpage-content-line">
                                 <div class="mainpage-content-left"><label><strong><?php echo $this->translate('E-mail');?></strong></label></div>
                                 <div class="mainpage-content-right">
+                                    <div class="mainpage-content-right-inner-right-other"></div>
                                     <div class="mainpage-content-right-inner-left-other">
                                         <input type="text" class="span3" id="senderEmail" name="senderEmail" value="<?php echo trim($this->senderEmail); ?>" placeholder="<?php echo $this->translate('E-mail');?>"></input>
                                     </div>
@@ -53,6 +55,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                             <div class="mainpage-content-line">
                                 <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Sender Name');?></strong></label></div>
                                 <div class="mainpage-content-right">
+                                    <div class="mainpage-content-right-inner-right-other"></div>
                                     <div class="mainpage-content-right-inner-left-other">
                                         <input type="text" class="span3" id="senderName" name="senderName" value="<?php echo trim($this->senderName); ?>" placeholder="<?php echo $this->translate('Sender Name');?>"></input>
                                     </div>
@@ -61,6 +64,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                             <div class="mainpage-content-line">
                                 <div class="mainpage-content-left"><label><strong><?php echo $this->translate('E-mail Subject');?></strong></label></div>
                                 <div class="mainpage-content-right">
+                                    <div class="mainpage-content-right-inner-right-other"></div>
                                     <div class="mainpage-content-right-inner-left-other">
                                         <input type="text" class="span3" id="campaignSubject" name="campaignSubject" placeholder="<?php echo $this->translate('E-mail Subject');?>"><?php echo trim($this->campaignSubject); ?></input>
                                     </div>
@@ -69,6 +73,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                             <div class="mainpage-content-line">
                                 <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Header');?></strong></label></div>
                                 <div class="mainpage-content-right">
+                                    <div class="mainpage-content-right-inner-right-other"></div>
                                     <div class="mainpage-content-right-inner-left-other">
                                         <textarea class="span3" id="campaignHeader" name="campaignHeader" placeholder="<?php echo $this->translate('Header');?>"><?php echo trim($this->campaignHeader); ?></textarea>
                                     </div>
@@ -103,14 +108,16 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                             <div class="mainpage-content-line">
                                 <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Header Banner URL');?></strong></label></div>
                                 <div class="mainpage-content-right">
+                                    <div class="mainpage-content-right-inner-right-other"></div>
                                     <div class="mainpage-content-right-inner-left-other">
-                                        <input type="text" class="span3" id="headerBannerUrl" name="headerBannerUrl" placeholder="<?php echo $this->translate('Header Banner URL');?>" value="<?php echo trim($this->headerBannerURL);?>">
+                                        <input type="text" class="span3" id="headerBannerURL" name="headerBannerURL" placeholder="<?php echo $this->translate('Header Banner URL');?>" value="<?php echo trim($this->headerBannerURL);?>">
                                     </div>
                                 </div>
                             </div>
                             <div class="mainpage-content-line">
                                 <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Footer');?></strong></label></div>
                                 <div class="mainpage-content-right">
+                                    <div class="mainpage-content-right-inner-right-other"></div>
                                     <div class="mainpage-content-right-inner-left-other">
                                         <textarea class="span3" id="campaignFooter" name="campaignFooter" placeholder="<?php echo $this->translate('Footer');?>"><?php echo trim($this->campaignFooter); ?></textarea>
                                     </div>
@@ -147,7 +154,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                                 <div class="mainpage-content-right">
                                     <div class="mainpage-content-right-inner-right-other"></div>
                                     <div class="mainpage-content-right-inner-left-other">
-                                        <input type="text" class="span3" id="footerBannerUrl" name="footerBannerUrl" placeholder="<?php echo $this->translate('Footer Banner URL');?>" value="<?php echo trim($this->footerBannerURL); ?>">
+                                        <input type="text" class="span3" id="footerBannerURL" name="footerBannerURL" placeholder="<?php echo $this->translate('Footer Banner URL');?>" value="<?php echo trim($this->footerBannerURL); ?>">
                                     </div>
                                 </div>
                             </div>
