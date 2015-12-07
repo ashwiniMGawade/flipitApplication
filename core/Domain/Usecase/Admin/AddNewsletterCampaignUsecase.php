@@ -45,8 +45,8 @@ class AddNewsletterCampaignUsecase
         if (isset($params['senderName'])) {
             $newsletterCampaign->setSenderName($params['senderName']);
         }
-        if (isset($params['header'])) {
-            $newsletterCampaign->setHeaderBanner($params['header']);
+        if (isset($params['campaignHeader'])) {
+            $newsletterCampaign->setHeader($params['campaignHeader']);
         }
         if (isset($params['headerBanner'])) {
             $newsletterCampaign->setHeaderBanner($params['headerBanner']);
@@ -54,8 +54,8 @@ class AddNewsletterCampaignUsecase
         if (isset($params['headerBannerURL'])) {
             $newsletterCampaign->setHeaderBannerURL($params['headerBannerURL']);
         }
-        if (isset($params['footer'])) {
-            $newsletterCampaign->setHeaderBanner($params['footer']);
+        if (isset($params['campaignFooter'])) {
+            $newsletterCampaign->setFooter($params['campaignFooter']);
         }
         if (isset($params['footerBanner'])) {
             $newsletterCampaign->setFooterBanner($params['footerBanner']);
@@ -74,6 +74,8 @@ class AddNewsletterCampaignUsecase
         }
         if (isset($params['scheduledStatus'])) {
             $newsletterCampaign->setScheduledStatus($params['scheduledStatus']);
+        } else {
+            $newsletterCampaign->setScheduledStatus(0);
         }
         if (isset($params['scheduledTime'])) {
             $newsletterCampaign->setScheduledTime($params['scheduledTime']);
@@ -86,8 +88,12 @@ class AddNewsletterCampaignUsecase
         }
         if (isset($params['deleted'])) {
             $newsletterCampaign->setDeleted($params['deleted']);
+        } else {
+            $newsletterCampaign->setDeleted(0);
         }
         $newsletterCampaign->setCreatedAt(new \DateTime('now'));
+        $newsletterCampaign->setUpdatedAt(new \DateTime('now'));
+
         $validationResult = $this->newsletterCampaignValidator->validate($newsletterCampaign);
 
         if (true !== $validationResult && is_array($validationResult)) {

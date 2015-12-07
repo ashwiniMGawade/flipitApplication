@@ -56,8 +56,11 @@ function getNewsletterCampaignList(iStart,iSortCol,iSortDir) {
             },
             {
                 "fnRender" : function(obj) {
-
-                    return "<a href='javascript:void(0);'>" + obj.aData.scheduledTime.date + "</a>" ;
+                    if(obj.aData.scheduledStatus == true) {
+                        return "<a href='javascript:void(0);'>" + obj.aData.scheduledTime.date + "</a>";
+                    }else{
+                        return "<span href='javascript:void(0);' class='error'>-</span>" ;
+                    }
 
                 },
                 //"bSearchable" : false,

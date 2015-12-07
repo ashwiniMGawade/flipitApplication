@@ -93,6 +93,17 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
     public function createAction()
     {
         if ($this->getRequest()->isPost()) {
+            $params = $this->getRequest()->getParams();
+            $newsletterCampaign = AdminFactory::createNewsletterCampaign()->execute();
+            $result = AdminFactory::addNewsletterCampaign()->execute($newsletterCampaign, $params);
+            if ($result instanceof Errors) {
+                $errors = $result->getErrorsAll();
+                $this->setFlashMessage('error', $errors);
+            } else {
+                $this->refreshNewsletterCampaignPageVarnish();
+                $this->setFlashMessage('success', 'News letter campaign has been added successfully');
+            }
+            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
 
         } else {
             $sendersEmailAddress = KC\Repository\Settings::getEmailSettings('sender_email_address');
@@ -105,6 +116,12 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $campaignFooterSetting = SystemFactory::getSetting()->execute(array('name'=>'NEWSLETTER_CAMPAIGN_FOOTER'));
             $this->view->campaignFooter = !empty($campaignFooterSetting) ? $campaignFooterSetting->value : '';
         }
+    }
+
+    public function refreshNewsletterCampaignPageVarnish()
+    {
+        $varnishObject = new \KC\Repository\Varnish();
+        $varnishObject->addUrl("http://www.flipit.com");
     }
 
     public function settingsAction()
