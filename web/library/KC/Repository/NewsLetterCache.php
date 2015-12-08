@@ -78,17 +78,21 @@ class NewsLetterCache extends \Core\Domain\Entity\NewsLetterCache
 
     public static function getTopOffersByFallBack($topOffers)
     {
-        $topOffersIds = explode(',', $topOffers);
         $offersExist = true;
-        foreach ($topOffersIds as $topOffersId) {
-            if (!\KC\Repository\Offer::offerExistOrNot($topOffersId)) {
-                $offersExist = false;
+        if(!empty($topOffers)) {
+            $topOffersIds = explode(',', $topOffers);
+            foreach ($topOffersIds as $topOffersId) {
+                if (!\KC\Repository\Offer::offerExistOrNot($topOffersId)) {
+                    $offersExist = false;
+                }
             }
+        } else {
+            $offersExist = false;
         }
         if ($offersExist) {
             $topVouchercodes = \KC\Repository\Offer::getOffersForNewsletter($topOffersIds);
         } else {
-            $topVouchercodes = \Application_Service_Factory::topOffers(10);
+            $topVouchercodes = \KC\Repository\Offer::getTopOffers(10);
         }
         return $topVouchercodes;
     }

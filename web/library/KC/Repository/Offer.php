@@ -75,16 +75,7 @@ class Offer extends \Core\Domain\Entity\Offer
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select(
-                's.id,s.name,
-                s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,
-                s.actualUrl,terms.content,
-                o.id,o.Visability,o.userGenerated,o.title,o.authorId,
-                o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,o.authorName,
-                o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.extendedUrl,
-                o.discountType,o.startdate,o.endDate,o.nickname,o.approved,
-                img.id, img.path, img.name'
-            )
+            ->select('o, s, img')
             ->from('\Core\Domain\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->leftJoin('s.logo', 'img')
@@ -109,7 +100,9 @@ class Offer extends \Core\Domain\Entity\Offer
     {
         $offersWithOrder = '';
         foreach ($offerIds as $id) {
-            $offersWithOrder[] = $offers[$id];
+            if(true === isset($offers[$id])) {
+                $offersWithOrder[] = $offers[$id];
+            }
         }
         return $offersWithOrder;
     }
