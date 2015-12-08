@@ -92,6 +92,9 @@ class StoreController extends Zend_Controller_Action
                 ),
                 ''
             );
+
+            $offers = \FrontEnd_Helper_OffersPartialFunctions::reorderOffers($offers);
+
             $allLatestUpdatesInStoreKey = '4_shopLatestUpdates_'.$shopList;
             $latestShopUpdates = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allLatestUpdatesInStoreKey,

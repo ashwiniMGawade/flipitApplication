@@ -9,7 +9,7 @@ class DeleteShopCest
 
     public function _before(ApiTester $I)
     {
-        $this->apiKey = '%25NWcIzZ6Oy9uXv7fKJBZE!5%24EEMN%245%26X';
+        $this->apiKey = $I->getConfig('apiKey');
     }
 
     public function testDeleteShop(ApiTester $I)
@@ -26,7 +26,7 @@ class DeleteShopCest
         $I->sendGet('/shops/?api_key='.$this->apiKey);
         $I->seeResponseCodeIs(404);
         $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(['message' => 'Not found']);
+        $I->seeResponseContainsJson(['messages' => 'Not found']);
     }
 
     public function testDeleteShopWithStringId(ApiTester $I)

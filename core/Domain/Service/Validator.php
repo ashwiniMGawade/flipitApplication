@@ -97,4 +97,12 @@ class Validator implements ValidatorInterface
     {
         return new Assert\GreaterThan($options);
     }
+
+    /**
+     * @return \Symfony\Component\Validator\Constraints\Email
+     */
+    public function email()
+    {
+        return new Assert\Email();
+    }
 }

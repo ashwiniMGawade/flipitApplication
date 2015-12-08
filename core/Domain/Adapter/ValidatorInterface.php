@@ -46,4 +46,9 @@ interface ValidatorInterface
      * @return mixed
      */
     public function greaterThan($value);
+
+    /**
+     * @return mixed
+     */
+    public function email();
 }
