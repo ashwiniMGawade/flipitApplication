@@ -1,6 +1,6 @@
 {
    "swagger":"2.0",
-   "host":"api.dev.kortingscode.nl",
+   "host":"api.kortingscode.nl",
    "basePath":"",
    "tags":[
       {
