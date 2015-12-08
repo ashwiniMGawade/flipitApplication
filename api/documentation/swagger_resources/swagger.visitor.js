@@ -3,31 +3,30 @@ $(function () {
     if (url && url.length > 1) {
         url = decodeURIComponent(url[1]);
     } else {
-        url = "http://developer.dev.flipit.com/swagger_resources/visitors-api-doc.json";
+        url = 'http://'+window.location.host+'/swagger_resources/visitors-api-doc.json';
     }
-    window.swaggerUi = new SwaggerUi({
+    $.ajax({
         url: url,
-        validatorUrl : null,
-        dom_id: "swagger-ui-container",
-        supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
-        onComplete: function(swaggerApi, swaggerUi){
-            if(typeof initOAuth == "function") {
-                initOAuth({
-                    clientId: "your-client-id",
-                    realm: "your-realms",
-                    appName: "your-app-name"
-                });
-            }
-            $('pre code').each(function(i, e) {
-                hljs.highlightBlock(e)
-            });
-            addApiKeyAuthorization();
-        },
-        onFailure: function(data) {
-            log("Unable to Load SwaggerUI");
-        },
-        docExpansion: "list",
-        apisSorter: "alpha"
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json',
+        ifModified: true,
+        cache: false,
+        complete: function (xhr, status) {
+            var spec = JSON.parse(xhr.responseText);
+            var host = window.location.host;
+            spec.host = host.replace('developer', 'api');
+            window.swaggerUi = new SwaggerUi({
+                url : url, // This will make Swagger happy
+                dom_id: "swagger-ui-container",
+                validatorUrl : null,
+                supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+                spec: spec,
+                docExpansion: "list",
+                apisSorter: "alpha"
+             });
+            window.swaggerUi.load();
+        }
     });
 
     function addApiKeyAuthorization(){
@@ -41,12 +40,6 @@ $(function () {
 
     $('#input_apiKey').change(addApiKeyAuthorization);
 
-    // if you have an apiKey you would like to pre-populate on the page for demonstration purposes...
-    /*
-     var apiKey = "myApiKeyXXXX123456789";
-     $('#input_apiKey').val(apiKey);
-     */
-    window.swaggerUi.load();
     function log() {
         if ('console' in window) {
             console.log.apply(console, arguments);
