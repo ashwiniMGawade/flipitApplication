@@ -1,8 +1,9 @@
 <?php
 namespace Service;
 
-use Core\Domain\Entity\User\ApiKey;
-use Core\Domain\Service\Validator;
+use \Core\Domain\Entity\User\ApiKey;
+use \Core\Domain\Entity\Visitor;
+use \Core\Domain\Service\Validator;
 
 /**
  * Class ValidatorTest
@@ -152,6 +153,29 @@ class ValidatorTest extends \Codeception\TestCase\Test
             )
         );
         $response = (new Validator())->validate($apiKey, $rules);
+        $this->assertEquals($expected, $response);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testValidatorReturnsViolationForPropertyEqualsEmail()
+    {
+        $visitor = new Visitor();
+        $visitor->setEmail('invalid');
+
+        $validator = new Validator();
+        $rules = array(
+            'email' => array(
+                $validator->email(),
+            )
+        );
+        $expected = array(
+            "email" => array(
+                'This value is not a valid email address.'
+            )
+        );
+        $response = (new Validator())->validate($visitor, $rules);
         $this->assertEquals($expected, $response);
     }
 }

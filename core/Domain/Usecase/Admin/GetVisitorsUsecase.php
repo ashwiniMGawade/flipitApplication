@@ -1,61 +1,34 @@
 <?php
 namespace Core\Domain\Usecase\Admin;
 
-use Core\Domain\Repository\VisitorRepositoryInterface;
+use \Core\Domain\Repository\VisitorRepositoryInterface;
+use \Core\Domain\Adapter\PurifierInterface;
+use \Core\Service\Errors\ErrorsInterface;
 
 class GetVisitorsUsecase
 {
     protected $visitorRepository;
+    private $htmlPurifier;
+    private $errors;
 
-    public function __construct(VisitorRepositoryInterface $visitorRepository)
+    public function __construct(VisitorRepositoryInterface $visitorRepository, PurifierInterface $htmlPurifier, ErrorsInterface $errors)
     {
         $this->visitorRepository = $visitorRepository;
+        $this->htmlPurifier      = $htmlPurifier;
+        $this->errors            = $errors;
     }
 
-    public function execute($conditions = array(), $request = array())
+    public function execute($conditions = array(), $order = array(), $limit = 100, $offset = 0, $isPaginated = false)
     {
-        $filters = $this->setFilters($conditions);
-        $visitorData = $this->visitorRepository->findVisitors($filters, $request);
-        $visitorData['visitors'] = $this->prepareData($visitorData['visitors']);
-        return $visitorData;
-    }
-
-    private function setFilters($conditions)
-    {
-        $filters = array('deleted' => 0);
         if (!is_array($conditions)) {
-            throw new \Exception('Invalid Parameters');
+            $this->errors->setError('Invalid input, unable to find record.');
+            return $this->errors;
         }
-        if (!empty($conditions['searchtext']) && $conditions['searchtext'] != 'undefined') {
-            $filters['firstName'] = $conditions['searchtext'];
+        if (false === $isPaginated) {
+            $visitorData = $this->visitorRepository->findBy('\Core\Domain\Entity\Visitor', $conditions, $order, $limit, $offset);
+        } else {
+            $visitorData = $this->visitorRepository->findAllPaginated('\Core\Domain\Entity\Visitor', $conditions, $order, $limit, $offset);
         }
-        if (!empty($conditions['email']) && $conditions['email'] != 'undefined') {
-            $filters['email'] = $conditions['email'];
-        }
-        return $filters;
-    }
-
-    private function prepareData($visitors)
-    {
-        $returnData = array();
-        if (!empty($visitors)) {
-            foreach ($visitors as $visitor) {
-                $returnData[] = array(
-                    'id' => $visitor->getId(),
-                    'firstName' => $visitor->getFirstName(),
-                    'lastName' => $visitor->getLastName(),
-                    'email' => $visitor->getEmail(),
-                    'weeklyNewsLetter' => $visitor->getWeeklyNewsLetter(),
-                    'created_at' => $visitor->getCreatedAt(),
-                    'active' => $visitor->getActive(),
-                    'inactiveStatusReason' => $visitor->getInactiveStatusReason(),
-                    'clicks' => $visitor->getMailClickCount(),
-                    'opens' => $visitor->getMailOpenCount(),
-                    'hard_bounces' => $visitor->getMailHardBounceCount(),
-                    'soft_bounces' => $visitor->getMailSoftBounceCount()
-                );
-            }
-        }
-        return $returnData;
+        return $visitorData;
     }
 }

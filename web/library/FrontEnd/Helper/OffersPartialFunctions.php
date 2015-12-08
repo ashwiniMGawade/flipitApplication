@@ -579,6 +579,30 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $minimumRange + $random;
     }
 
+    public static function reorderOffers($offers)
+    {
+        $coupons = array();
+        $saleOffers = array();
+        foreach ($offers as $offer)  {
+            if ('CD' == $offer['discountType']) {
+                $coupons[] = $offer;
+            } else {
+                $saleOffers[] = $offer;
+            }
+        }
+
+        for ($i = 0; $i < count($saleOffers) ; $i++) {
+            for ($j = 0; $j <= $i ; $j++) {
+                if ($saleOffers[$j]['startDate']->date < $saleOffers[$i]['startDate']->date) {
+                    $temp = $saleOffers[$i];
+                    $saleOffers[$i] = $saleOffers[$j];
+                    $saleOffers[$j] = $temp;
+                }
+            }
+        }
+        return array_merge($coupons, $saleOffers);
+    }
+
     public static function generateRandomCharactersForOfferTeaser($stringLength)
     {
         $randomString = "";

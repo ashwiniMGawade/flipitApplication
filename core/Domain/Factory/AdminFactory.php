@@ -35,6 +35,7 @@ use \Core\Domain\Usecase\Admin\DeleteShopUsecase;
 
 use \Core\Domain\Usecase\Admin\GetVisitorsUsecase;
 use \Core\Domain\Usecase\Admin\UpdateVisitorUsecase;
+use \Core\Domain\Usecase\System\GetVisitorUsecase;
 
 use \Core\Domain\Usecase\Admin\CreateWidgetUsecase;
 use \Core\Domain\Usecase\Admin\AddWidgetUsecase;
@@ -99,12 +100,17 @@ class AdminFactory
 
     public static function getVisitors()
     {
-        return new GetVisitorsUsecase(RepositoryFactory::visitor());
+        return new GetVisitorsUsecase(RepositoryFactory::visitor(), new Purifier(), new Errors());
     }
 
-    public static function updateVisitors()
+    public static function updateVisitor()
     {
-        return new UpdateVisitorUsecase(RepositoryFactory::visitor(), new VisitorValidator(new Validator()));
+        return new UpdateVisitorUsecase(
+            RepositoryFactory::visitor(),
+            new VisitorValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
     }
 
     public static function getShop()
@@ -354,5 +360,10 @@ class AdminFactory
     public static function deleteSplashImages()
     {
         return new DeleteSplashImageUsecase(RepositoryFactory::splashImage());
+    }
+
+    public static function getVisitor()
+    {
+        return new GetVisitorUsecase(RepositoryFactory::visitor(), new Purifier(), new Errors());
     }
 }

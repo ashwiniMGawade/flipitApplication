@@ -3,6 +3,8 @@ namespace Admin;
 
 use Core\Domain\Entity\Visitor;
 use \Core\Domain\Usecase\Admin\GetVisitorsUsecase;
+use \Core\Domain\Service\Purifier;
+use \Core\Service\Errors;
 
 class GetVisitorsUsecaseTest extends \Codeception\TestCase\Test
 {
@@ -11,30 +13,39 @@ class GetVisitorsUsecaseTest extends \Codeception\TestCase\Test
      */
     protected $tester;
 
-    public function testThrowsExceptionWhenParametersAreInvalid()
+    public function testGetVisitorsUsecaseReturnsErrorObjectWhenInvalidParamsPassed()
     {
         $invalidParams = 123;
-        $this->setExpectedException('Exception', 'Invalid Parameters');
-        $getVisitorsUsecase = new GetVisitorsUsecase($this->createVisitorRepositoryInterfaceMock());
-        $getVisitorsUsecase->execute($invalidParams);
+        $errors = new Errors();
+        $errors->setError('Invalid input, unable to find record.');
+        $visitorRepository = $this->createVisitorRepositoryInterfaceMock();
+        $result = (new GetVisitorsUsecase($visitorRepository, new Purifier(), new Errors()))->execute($invalidParams);
+        $this->assertInstanceOf('\Core\Service\Errors', $result);
+        $this->assertEquals($errors->getErrorsAll(), $result->getErrorsAll());
     }
 
-    public function testThrowsExceptionWhenParametersAreValidAndVisitorsListIsEmpty()
+    public function testGetVisitorsUsecaseReturnsEmptyWhenValidParametersPassed()
     {
-        $validParams = array(
-            'searchtext' => 'sam',
+        $params = array(
+            'firstName' => 'sam',
             'email' => '@gmail.com'
         );
-        $requestParams = array();
-        $visitorRepository = $this->createVisitorRepositoryInterfaceWithFindVisitorsMethodMock(array());
-        $getVisitorsUsecase = new GetVisitorsUsecase($visitorRepository);
-        $getVisitorsUsecase->execute($validParams, $requestParams);
+        $visitorRepository = $this->createVisitorRepositoryInterfaceMockWithFindByMethod(array());
+        $result = (new GetVisitorsUsecase($visitorRepository, new Purifier(), new Errors()))->execute($params);
+        $this->assertEmpty($result);
     }
 
-    public function testGetVisitorsUsecaseReturnsArrayOfVisitorsWhenParametersAreValid()
+    public function testGetVisitorsUsecaseReturnsArrayOfVisitorsWithPaginationDataWhenParametersAreValid()
     {
-        $visitorRepository = $this->createVisitorRepositoryInterfaceWithFindVisitorsMethodMock(array(new Visitor()));
-        $visitors = (new GetVisitorsUsecase($visitorRepository))->execute();
+        $visitorRepository = $this->createVisitorRepositoryInterfaceMockWithFindByMethod(array('records' => array(new Visitor())));
+        $visitors = (new GetVisitorsUsecase($visitorRepository, new Purifier(), new Errors()))->execute();
+        $this->assertNotEmpty($visitors['records']);
+    }
+
+    public function testGetVisitorsUsecaseReturnsArrayOfVisitorsObjectWhenParametersAreValid()
+    {
+        $visitorRepository = $this->createVisitorRepositoryInterfaceMockWithPaginatedMethod(array(new Visitor()));
+        $visitors = (new GetVisitorsUsecase($visitorRepository, new Purifier(), new Errors()))->execute(array(), array(), null, null, true);
         $this->assertNotEmpty($visitors);
     }
 
@@ -43,13 +54,23 @@ class GetVisitorsUsecaseTest extends \Codeception\TestCase\Test
         return $this->getMock('\Core\Domain\Repository\VisitorRepositoryInterface');
     }
 
-    private function createVisitorRepositoryInterfaceWithFindVisitorsMethodMock($returns)
+    private function createVisitorRepositoryInterfaceMockWithPaginatedMethod($returns)
     {
         $visitorRepository = $this->createVisitorRepositoryInterfaceMock();
         $visitorRepository->expects($this->once())
-                          ->method('findVisitors')
-                          ->with($this->isType('array'), $this->isType('array'))
-                          ->willReturn(array('visitors' => $returns));
+                          ->method('findAllPaginated')
+                          ->with('\Core\Domain\Entity\Visitor', $this->isType('array'), $this->isType('array'))
+                          ->willReturn($returns);
+        return $visitorRepository;
+    }
+
+    private function createVisitorRepositoryInterfaceMockWithFindByMethod($returns)
+    {
+        $visitorRepository = $this->createVisitorRepositoryInterfaceMock();
+        $visitorRepository->expects($this->once())
+            ->method('findBy')
+            ->with('\Core\Domain\Entity\Visitor', $this->isType('array'), $this->isType('array'))
+            ->willReturn($returns);
         return $visitorRepository;
     }
 }
