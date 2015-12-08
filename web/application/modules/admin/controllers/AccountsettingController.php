@@ -138,7 +138,7 @@ class Admin_AccountsettingController extends Application_Admin_BaseController
                 switch ($messageStatusResult) {
                     case '1':
                         \KC\Repository\NewsLetterCache::saveNewsLetterCacheContent();
-                            $flashMessage->addMessage(
+                        $flashMessage->addMessage(
                                 array(
                                     'success' => $this->view->translate('Newsletter has been successfully scheduled')
                                 )
@@ -163,17 +163,31 @@ class Admin_AccountsettingController extends Application_Admin_BaseController
                 }
                 $this->_helper->redirector('emailcontent', 'accountsetting', null);
             }
-
             FrontEnd_Helper_viewHelper::exceedMemoryLimitAndExcutionTime();
-            $topVouchercodes = Application_Service_Factory::topOffers(10);
-            $categoryflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularCategories_list');
-            if ($categoryflag) {
-                $topCategories = array_slice(\FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);
-                \FrontEnd_Helper_viewHelper::setInCache('10_popularCategories_list', $topCategories);
+            $newsLetterCache = \KC\Repository\NewsLetterCache::getAllNewsLetterCacheContent();
+            if (!empty($newsLetterCache)) {
+                $topCategories = \KC\Repository\NewsLetterCache::getCategoryByFallBack($newsLetterCache['top_category_id']);
+                $topVouchercodes = \KC\Repository\NewsLetterCache::getTopOffersByFallBack($newsLetterCache['top_offers_ids']);
+                $categoryVouchers = \KC\Repository\NewsLetterCache::getTopCategoryOffersByFallBack(
+                    $newsLetterCache['top_category_offers_ids'],
+                    $topCategories[0]['id']
+                );
+                $categoryName = $topCategories[0]['name'];
+                $categoryPermalink = $topCategories[0]['permaLink'];
             } else {
-                $topCategories = \FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
+                $topVouchercodes = Application_Service_Factory::topOffers(10);
+                $categoryflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularCategories_list');
+                if ($categoryflag) {
+                    $topCategories = array_slice(\FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);
+                    \FrontEnd_Helper_viewHelper::setInCache('10_popularCategories_list', $topCategories);
+                } else {
+                    $topCategories = \FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
+                }
+                $categoryVouchers = array_slice(\KC\Repository\Category::getCategoryVoucherCodes($topCategories[0]['category']['id']), 0, 3);
+                $categoryName = $topCategories[0]['category']['name'];
+                $categoryPermalink = $topCategories[0]['category']['permaLink'];
             }
-           
+
             $newsLetterHeaderImage = \KC\Repository\Newsletterbanners::getHeaderOrFooterImage('header');
             $newsLetterHeaderImage = !empty($newsLetterHeaderImage) ? $newsLetterHeaderImage : '';
             $newsLetterFooterImage = \KC\Repository\Newsletterbanners::getHeaderOrFooterImage('footer');
@@ -186,9 +200,6 @@ class Admin_AccountsettingController extends Application_Admin_BaseController
             \BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this);
             \BackEnd_Helper_MandrillHelper::getHeaderFooterContent($this);
             $mandrill = new Mandrill_Init($this->getInvokeArg('mandrillKey'));
-            $categoryVouchers = array_slice(\KC\Repository\Category::getCategoryVoucherCodes($topCategories[0]['category']['id']), 0, 3);
-            $categoryName = $topCategories[0]['category']['name'];
-            $categoryPermalink = $topCategories[0]['category']['permaLink'];
             $newsletterHeader = \KC\Repository\Signupmaxaccount::getEmailHeaderFooter();
             try {
                 \FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
