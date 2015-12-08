@@ -31,7 +31,7 @@ class ErrorController extends Zend_Controller_Action
                         $pageNumber = 10;
                     }
                 }
-                if ($pageNumber >= 10) {
+                if (is_numeric($pageNumber) &&  $pageNumber>= 10) {
                     $this->_helper->layout()->disableLayout();
                     \FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
                 }
