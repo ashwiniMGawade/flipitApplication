@@ -2,12 +2,12 @@
 namespace KC\Repository;
 class ShopReasons extends \Core\Domain\Entity\ShopReasons
 {
-    public static function saveReasons($reasons, $shopId)
+    public static function saveReasons($reasons, $shop)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->delete('\Core\Domain\Entity\ShopReasons', 's')
-            ->where('s.shopid ='.$shopId)
+            ->where('s.shopid ='.$shop->id)
             ->getQuery();
         $query->execute();
         foreach ($reasons as $key => $reason) {
@@ -16,7 +16,7 @@ class ShopReasons extends \Core\Domain\Entity\ShopReasons
             if ($key != '') {
                 $ShopReasons->fieldname = $key;
                 $ShopReasons->fieldvalue =  $reason;
-                $ShopReasons->shopid =  $shopId;
+                $ShopReasons->shop =  $shop;
                 $ShopReasons->deleted =  0;
                 $entityManagerLocale->persist($ShopReasons);
                 $entityManagerLocale->flush();
