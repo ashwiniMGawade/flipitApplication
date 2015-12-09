@@ -6,7 +6,7 @@ class Page extends \Core\Domain\Entity\Page
     ############ REFECTORED CODE ########################
     public static function getPageDetailsInError($permalink)
     {
-        $currentDate = date('Y-m-d 00:00:00');
+        $currentDate = date('Y-m-d 23:59:59');
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale->select('page, attr, pagewidget, himg')
             ->from('\Core\Domain\Entity\Page', 'page')
@@ -750,6 +750,7 @@ class Page extends \Core\Domain\Entity\Page
                 return false;
             }
         }
+
 
         if (isset($params['publishDate']) && $params['publishDate']!='') {
             $publishDate= date('Y-m-d', strtotime($params['publishDate']))
