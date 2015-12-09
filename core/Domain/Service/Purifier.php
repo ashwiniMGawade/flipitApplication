@@ -12,6 +12,18 @@ class Purifier implements PurifierInterface
     {
         $config = \HTMLPurifier_Config::createDefault();
         $config->set('Cache.SerializerPath', '/tmp');
+        // Set some HTML5 properties
+        $config->set('HTML.DefinitionID', 'html5-definitions');
+        $config->set('HTML.DefinitionRev', 1);
+        if ($def = $config->maybeGetRawHTMLDefinition()) {
+            $def->addElement('section', 'Block', 'Flow', 'Common');
+            $def->addElement('nav',     'Block', 'Flow', 'Common');
+            $def->addElement('article', 'Block', 'Flow', 'Common');
+            $def->addElement('i', 'Block', 'Flow', 'Common');
+            $def->addElement('aside',   'Block', 'Flow', 'Common');
+            $def->addElement('header',  'Block', 'Flow', 'Common');
+            $def->addElement('footer',  'Block', 'Flow', 'Common');
+        }
         $this->purifier = new HTMLPurifier($config);
     }
 

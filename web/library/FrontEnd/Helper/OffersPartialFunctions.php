@@ -686,7 +686,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         }
         return $totalViewCount;
     }
-    public static function getSplashPageTradingCoupons()
+    public static function getSplashPageGlobalCoupons()
     {
         $couponHtml = '';
         $splashOffers = (array) SystemFactory::getSplashOffers()->execute(array(), array('position'=>'ASC'));
@@ -708,27 +708,24 @@ class FrontEnd_Helper_OffersPartialFunctions
                 $offerTitle = (mb_strlen($offer->getTitle(), 'UTF-8') > 42) ? mb_substr($offer->getTitle(), 0, 42, 'UTF-8')."..." : $offer->getTitle();
                 $offerCount = (count($splashImages) < $offerCount) ? 1 : $offerCount;
                 $splashImage = true === array_key_exists($offerCount, $splashImages) ? $splashImages[$offerCount]->getImage() : 'slide_img1.jpg';
-                $couponHtml .= '<div class="slide">
-                        <img src="'.PUBLIC_PATH.'images/front_end/trading_coupon/'.$splashImage.'" alt="'.$offer->getTitle().'">
+                $couponHtml .= '<div class="slide"><a href="'.$clickUrl.'">
+                        <img src="'.PUBLIC_PATH.'images/upload/splash/'.$splashImage.'" alt="'.$offer->getTitle().'">
                         <div class="caption">
                             <div class="img-holder">
-                                <a href="'.$clickUrl.'"><img src="'.$logoPath.$offer->getShopOffers()->getLogo()->path.'thum_big_'.$offer->getShopOffers()->getLogo()->name.'" alt="'.$offer->getShopOffers()->getName().'"></a>
+                                <img src="'.$logoPath.$offer->getShopOffers()->getLogo()->path.'thum_big_'.$offer->getShopOffers()->getLogo()->name.'" alt="'.$offer->getShopOffers()->getName().'">
                             </div>
                             <div class="text-holder">
-                                <p><strong class="persent"><a href="'.$clickUrl.'">'.$offerTitle.'</a></strong></p>
+                                <p><strong class="persent">'.$offerTitle.'</strong></p>
                                 <span class="flag">
-                                    <a href="'.$clickUrl.'">
-                                        <span class="flag"><span style="display :inline-block" class="country-flags '.$locale.'"></span></span>
-                                        <span class="country">'.$offer->getShopOffers()->getName().'</span>
-                                    </a>
+                                    <span class="flag"><span style="display :inline-block" class="country-flags '.$locale.'"></span></span>
+                                    <span class="country">'.$offer->getShopOffers()->getName().'</span>
                                 </span>
                             </div>
                         </div>
-                    </div>';
+                    </a></div>';
                 $offerCount++;
             }
         }
-
         return $couponHtml;
     }
 

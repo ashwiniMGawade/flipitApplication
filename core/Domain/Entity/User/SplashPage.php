@@ -41,6 +41,36 @@ class SplashPage
      */
     protected $updatedAt;
 
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     */
+    protected $infoImage;
+
+    /**
+     * @ORM\Column(type="text", nullable=false)
+     */
+    protected $footer;
+
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=false)
+     */
+    protected $visitorsPerMonthCount;
+
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=false)
+     */
+    protected $verifiedActionCount;
+
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=false)
+     */
+    protected $newsletterSignupCount;
+
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=false)
+     */
+    protected $retailerOnlineCount;
+
     public function __get($property)
     {
         return $this->$property;
@@ -145,5 +175,101 @@ class SplashPage
     public function __set($property, $value)
     {
         $this->$property = $value;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFooter()
+    {
+        return $this->footer;
+    }
+
+    /**
+     * @param mixed $footer
+     */
+    public function setFooter($footer)
+    {
+        $this->footer = $footer;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInfoImage()
+    {
+        return $this->infoImage;
+    }
+
+    /**
+     * @param mixed $infoImage
+     */
+    public function setInfoImage($infoImage)
+    {
+        $this->infoImage = $infoImage;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNewsletterSignupCount()
+    {
+        return $this->newsletterSignupCount;
+    }
+
+    /**
+     * @param mixed $newsletterSignupCount
+     */
+    public function setNewsletterSignupCount($newsletterSignupCount)
+    {
+        $this->newsletterSignupCount = $newsletterSignupCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRetailerOnlineCount()
+    {
+        return $this->retailerOnlineCount;
+    }
+
+    /**
+     * @param mixed $retailerOnlineCount
+     */
+    public function setRetailerOnlineCount($retailerOnlineCount)
+    {
+        $this->retailerOnlineCount = $retailerOnlineCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVerifiedActionCount()
+    {
+        return $this->verifiedActionCount;
+    }
+
+    /**
+     * @param mixed $verifiedActionCount
+     */
+    public function setVerifiedActionCount($verifiedActionCount)
+    {
+        $this->verifiedActionCount = $verifiedActionCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVisitorsPerMonthCount()
+    {
+        return $this->visitorsPerMonthCount;
+    }
+
+    /**
+     * @param mixed $visitorsPerMonthCount
+     */
+    public function setVisitorsPerMonthCount($visitorsPerMonthCount)
+    {
+        $this->visitorsPerMonthCount = $visitorsPerMonthCount;
     }
 }

@@ -69,6 +69,15 @@ class Admin_SplashController extends Application_Admin_BaseController
                     unlink($oldFile);
                 }
             }
+            if (true === isset($_FILES['splashInfoImage']) && true === isset($_FILES['splashInfoImage']['name']) && '' !== $_FILES['splashInfoImage']['name']) {
+                $rootPath = BASE_PATH . 'images/upload/splash/';
+                $infoImage = $this->uploadImage('splashInfoImage', $rootPath);
+                $pageParams['infoImage'] = $infoImage;
+                $oldFile = $rootPath . $splashPage->getInfoImage();
+                if ($infoImage !== false && $infoImage !== $splashPage->getInfoImage() && true === file_exists($oldFile)) {
+                    unlink($oldFile);
+                }
+            }
             $result = AdminFactory::updateSplashPage()->execute($splashPage, $pageParams);
             if ($result instanceof Errors) {
                 $errors = $result->getErrorsAll();

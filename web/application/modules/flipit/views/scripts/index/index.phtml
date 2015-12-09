@@ -1,151 +1,139 @@
 <!DOCTYPE html>
-<html>
+<html class="cap-black">
 <?php echo $this->render('partials/_head.phtml'); ?>
-<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,600' rel='stylesheet' type='text/css'/>
-<link type="text/css" media="all" rel="stylesheet" href="<?php echo HTTP_PATH;?>public/css/front_end/splash_page.css">
-<script type="text/javascript" src="/public/js/jquery-1.7.2.min.js"></script>
-</head>
-
-<body class="inner">
+<body class="splash">
+<?php $splashPage = FrontEnd_Helper_LayoutContent::loadSplashPage(); ?>
 <div id="wrapper">
-    <header id="header" class="header">
+    <header id="header" class="splash-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="logo"><a href="#"><img src="<?php echo PUBLIC_PATH;?>images/logo3.png" alt="Flipit Your online couponing portal"></a></div>
+            </div>
+        </div>
+    </div>
+</header>
+    <main id="main" role="main">
+    <div class="banner splash-banner" style="background-image:url(<?php echo HTTP_PATH;?>public/images/upload/splash/<?php echo $splashPage->getImage(); ?>)">
+    <div class="caption">
         <div class="container">
             <div class="row">
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-5">
-                    <div class="logo">
-                        <a href="<?php echo HTTP_PATH;?>">
-                            <img src="<?php echo PUBLIC_PATH;?>images/logo-flipit-125-50.png" alt="Flipit Your Online Couponing Portal" width="125" height="50">
-                        </a>
-                    </div>
-                    <div class="logo-text"><h1>Your Online Couponing Portal</h1></div>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-7 text-right">
-                    <span class="h-text"><a id="current-local" href=""></a></span>
+                <div class="col-xs-12">
+                    <h1>Save Money in 22 Countries <br>With Our Coupons</h1>
                 </div>
             </div>
-        </div>
-    </header>
-    <main id="main" role="main">
-        <div class="banner" style="background-image:url(<?php echo PUBLIC_PATH;?>images/front_end/banner.jpg)">
-            <div class="caption">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <form  action="" class="select-form">
-                                <fieldset>
-                                    <label for="coutry">Select Your Country to Find all Vouchers</label>
-                                    <div class="input-group">
-                                        <select class="present" data-jcf='{"wrapNative": false, "wrapNativeOnMobile": false}'>
-                                            <option class="hideme">Select your country</option>
-                                            <?php
-                                            $locales = (array) FrontEnd_Helper_viewHelper::getAllCountriesForSplashPage();
-                                            foreach ($locales as $localeCode => $localeName) {
-                                                echo '<option data-image-class="country-flags '.$localeCode.'" value="'.$localeCode.'">'.$localeName.'</option>';
-                                            }
-                                            ?>
-                                        </select>
+            <div class="row">
+                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+                    <form  action="#" class="select-form">
+                        <fieldset>
+                            <label for="coutry">Select Your Country to Find all Vouchers</label>
+                            <div class="input-group">
+                                <select id="coutry" class="vouchers jcf-hidden" data-jcf='{"wrapNative": false, "wrapNativeOnMobile": false}'>
+                                    <option class="hideme">Select your country</option>
+                                   <?php
+                                   $locales = (array) FrontEnd_Helper_viewHelper::getAllCountriesForSplashPage();
+                                   foreach ($locales as $localeCode => $localeName) {
+                                    echo '<option data-image-class="country-flags '.$localeCode.'" value="'.$localeCode.'">'.$localeName.'</option>';
+                                    }
+                                    ?>
+                                </select>
                                 <span class="input-group-btn">
-                                    <button class="btn country-btn" type="submit">GO</button>
+                                    <button class="btn country-btn" type="submit">Keep Moving</button>
                                 </span>
-                                    </div>
-                                </fieldset>
-                            </form>
-                        </div>
-                    </div>
+                            </div>
+                        </fieldset>
+                    </form>
                 </div>
             </div>
         </div>
-        <?php $globalTrendingCoupon = FrontEnd_Helper_OffersPartialFunctions::getSplashPageTradingCoupons();
-        if ('' != $globalTrendingCoupon): ?>
-            <section class="carousel container">
-                <div class="row">
-                    <header class="col-xs-12">
-                        <h1>Check Out Today’s Best Discount Codes</h1>
-                    </header>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="mask">
-                            <div class="slideset">
-                                <?php echo $globalTrendingCoupon; ?>
-                            </div>
-                        </div>
-                        <ul class="pagination">
-                        </ul>
-                        <a class="btn-prev" href="#"><span class="icon-chevron-small-left"></span></a>
-                        <a class="btn-next" href="#"><span class="icon-chevron-small-right"></span></a>
-                    </div>
-                </div>
-            </section>
-        <?php endif; ?>
-        <?php $splashPage = FrontEnd_Helper_LayoutContent::loadSplashPage(); ?>
-        <article class="information-sec same-height">
-            <div class="alignleft common-height">
-                <div class="text-wrp">
-                    <?php echo $splashPage->getContent(); ?>
-                </div>
+    </div>
+</div>
+    <?php $globalTrendingCoupon = FrontEnd_Helper_OffersPartialFunctions::getSplashPageGlobalCoupons();
+    if ('' != $globalTrendingCoupon): ?>
+        <section class="carousel container splash-carousel">
+            <div class="row">
+                <header class="col-xs-12">
+                    <h2>Today’s global coupon pick</h2>
+                </header>
             </div>
-            <div class="img-block common-height" style="background-image:url(<?php echo PUBLIC_PATH;?>images/front_end/<?php echo $splashPage->getImage(); ?>)"></div>
-        </article>
-        <section class="popular-sec">
-            <div class="container">
-                <?php echo $splashPage->getPopularShops(); ?>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="mask">
+                        <div class="slideset">
+                            <?php echo $globalTrendingCoupon; ?>
+                        </div>
+                    </div>
+                    <div class="pagination">
+                    </div>
+                    <a class="btn-prev" href="#"><span class="icon-left-arrow"></span></a>
+                    <a class="btn-next" href="#"><span class="icon-right-arrow"></span></a>
+                </div>
             </div>
         </section>
-        <aside class="aside">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 block">
-                        <span class="count">22</span>
-                        <p>countries</p>
+    <?php endif; ?>
+    <section class="popular-sec">
+        <div class="container">
+            <?php echo $splashPage->getPopularShops(); ?>
+        </div>
+    </section>
+    <section class="info-sec" style="background-image: url(<?php echo HTTP_PATH;?>public/images/upload/splash/<?php echo $splashPage->getInfoImage(); ?>);">
+        <div class="container">
+            <?php echo $splashPage->getContent(); ?>
+        </div>
+    </section>
+    <aside class="aside add">
+        <div class="container">
+            <div class="row cols-wrp">
+                <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+                    <div class="col">
+                        <strong class="count"><?php echo number_format($splashPage->getVisitorsPerMonthCount(), null,null,'.'); ?>+</strong>
+                        <p>bezoekers per maand</p>
                     </div>
-                    <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 block">
-                        <span class="count">30 Million+</span>
-                        <p>vistors per year</p>
+                </div>
+                <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+                    <div class="col num">
+                        <strong class="count"><?php echo number_format($splashPage->getVerifiedActionCount(), null,null,'.'); ?>+</strong>
+                        <p>Geverifieerde acties</p>
                     </div>
-                    <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 block">
-                        <span class="count">40.000</span>
-                        <p>codes online</p>
+                </div>
+                <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+                    <div class="col news-letter">
+                        <strong class="count"><?php echo number_format($splashPage->getNewsletterSignupCount(), null,null,'.'); ?>+</strong>
+                        <p>Nieuwsbrief aanmeldingen</p>
                     </div>
-                    <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 block">
-                        <span class="count">4</span>
-                        <p>continents</p>
+                </div>
+                <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+                    <div class="col retail">
+                        <strong class="count"><?php echo number_format($splashPage->getRetailerOnlineCount(), null,null,'.'); ?>+</strong>
+                        <p>Retailers online</p>
                     </div>
                 </div>
             </div>
-        </aside>
-    </main>
+        </div>
+    </aside>
+</main>
     <footer id="footer">
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="qshopes-logo"><img src="<?php echo PUBLIC_PATH;?>images/logo-qshops.jpg" alt="Q shope keurmerk"></div>
-                    <nav class="add-nav">
-                        <ul>
-                            <li class="copy-right">&copy; 2009-<?php echo date('Y', time());?>  <a href="<?php echo HTTP_PATH;?>">Flipit.com</a> -  <a href="http://www.imbull.com/">Imbull.com</a>, Inc</a>. All rights reserved</li>
-
-                        </ul>
-                    </nav>
+                    <div class="footer-hold">
+                        <?php echo $splashPage->getFooter(); ?>
+                    </div>
                     <?php if (!isset($_COOKIE['cookie_agreement']) || empty($_COOKIE['cookie_agreement'])) { ?>
-                        <div class="f-panel" id="footer-cookie-bar">
-                            This site uses cookies
-                            <a class="btn thanks-btn">
-                                <strong>Okay, thanks</strong>
-                            </a>
-                            <a class="txt-underline" href="sg/info/<?php echo FrontEnd_Helper_viewHelper::__link('link_privacy-cookies'); ?>">Find out more</a>
-                        </div>
+                    <div class="f-panel" id="footer-cookie-bar">
+                        <p>This site uses cookies
+                            <a class="btn thanks-btn" href="#">Okay, thanks</a>
+                            <a href="sg/info/<?php echo FrontEnd_Helper_viewHelper::__link('link_privacy-cookies'); ?>">Find out more</a></p>
+                    </div>
                     <?php } ?>
                 </div>
             </div>
         </div>
     </footer>
 </div>
-
 <script type="text/javascript">
-    var availableLanguages = <?php echo json_encode(
-    FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true')); ?>;
+    var availableLanguages = <?php echo json_encode(FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true')); ?>;
 </script>
-
 <?php
 if (APPLICATION_ENV == 'development') {
     $headScript =  $this->HeadScript();
@@ -153,10 +141,9 @@ if (APPLICATION_ENV == 'development') {
 } else {
     $headScript = $this->HeadScript();
 }
-
 echo $headScript
     ->prependFile("/public/js/front_end/splash_page.js")
-    ->prependFile("/public/js/bootstrap.js")
+    ->prependFile("/public/js/bootstrap.min.js")
     ->prependFile("/public/js/coustom-select.js")
     ->prependFile("/public/js/carousel-slider.js")
     ->prependFile("/public/js/front_end/jquery.splashpage.main.js")
@@ -164,5 +151,3 @@ echo $headScript
 ?>
 </body>
 </html>
-
-
