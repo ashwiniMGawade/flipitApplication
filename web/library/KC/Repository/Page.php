@@ -756,7 +756,6 @@ class Page extends \Core\Domain\Entity\Page
             $publishDate= date('Y-m-d', strtotime($params['publishDate']))
                 .' '.date('H:i:s', strtotime($params['publishTimehh']));
             $savePage->publishDate = new \DateTime($publishDate);
-            //$savePage->publishDate = new \DateTime($publishDate, new \DateTimeZone(date_default_timezone_get()));
         }
         $savePage->pageTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageTitle']);
         $savePage->subtitle = \FrontEnd_Helper_viewHelper::sanitize(
@@ -1050,8 +1049,6 @@ class Page extends \Core\Domain\Entity\Page
                 strtotime($params['publishTimehh'])
             );
             $updatePage->publishDate = new \DateTime($publishDate);
-            //$updatePage->publishDate = new \DateTime($publishDate, new \DateTimeZone(date_default_timezone_get()));
-            //echo date_default_timezone_get();exit;
         }
         $updatePage->pageTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageTitle']);
         $updatePage->subtitle = \FrontEnd_Helper_viewHelper::sanitize(
