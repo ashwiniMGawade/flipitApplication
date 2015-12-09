@@ -315,4 +315,33 @@ $(function(){
                 return false;
             }
         });
+
+    $("#testEmail").select2({
+        placeholder: __("Search Email"),
+        minimumInputLength: 1,
+        ajax: {
+            url: HOST_PATH + "admin/visitor/searchemails",
+            dataType: 'json',
+            data: function (term, page) {
+                return {
+                    keyword: term,
+                    flag: 0
+                };
+            },
+            type: 'post',
+            results: function (data, page) {
+                $("#testEmail").trigger('change');
+                return {results: data};
+            }
+        },
+        formatResult: function (data) {
+            return data;
+        },
+        formatSelection: function (data) {
+            alert('selected');
+            $("#testEmail").val(data);
+            return data;
+        }
     });
+
+});

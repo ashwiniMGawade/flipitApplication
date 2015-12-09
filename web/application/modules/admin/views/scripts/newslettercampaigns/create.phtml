@@ -3,7 +3,8 @@ $this->headTitle()->append($this->translate('Create Newsletter Campaign'));
 
 $this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.ui.widget.js");
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.bootstrap.wizard.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.bootstrap.wizard.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampaign.js");
 ?>
 
@@ -15,7 +16,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
     </div>
     <form id="wizardform" method="post" action="" enctype="multipart/form-data">
         <h1 class="fl"><?php echo $this->translate('Create Newsletter Campaign');?>
-            <button type="button" onclick="" href="#" id="sendTestMail" class="btn ml10"><?php echo $this->translate('Send Test Email');?></button>
+            <button type="button" onclick="$('#myModal').modal('show');" href="#" id="sendTestMail" class="btn ml10"><?php echo $this->translate('Send Test Email');?></button>
             <input type="submit" onclick="" href="#" id="saveNewsletterCampaign" class="btn ml10" value="<?php echo $this->translate('Save & Exit');?>"></button>
         </h1>
         <div class="clear"></div>
@@ -184,3 +185,29 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
         </div>
     </form>
 </div><!-- End code of info campaigns -->
+<div class="modal display-none popup-width" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal display-none popup-width in" style="display: block;">
+        <div class="wrap columns-2" style="">
+            <form method="post" id="sendTestEmailForm" name="sendTestEmailForm">
+                <div class="m-item-popup-hdr">Send Test Email</div>
+                <div id="poststuff" class="metabox-holder has-right-sidebar">
+                    <div id="post-body" style="">
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-right ml20">
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input type="hidden" id='testEmail' name='testEmail' placeholder="Search Email.." style="width:300px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br class="clear">
+                </div>
+
+                <div class="m-item-popup-btm">
+                    <button value="" id="submitUploadBtn" class="btn btn-large btn-primary fl" type="submit">Upload</button>
+                    <button value="" class="btn ml10 m5" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
