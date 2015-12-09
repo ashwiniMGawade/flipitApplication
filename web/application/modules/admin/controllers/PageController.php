@@ -302,8 +302,9 @@ class Admin_PageController extends Application_Admin_BaseController
                 $Locked = $this->view->translate('No');
             }
 
+            $createdDate = (array) $page['created_at'];
             // get created from array
-            $Created = date("d-m-Y", strtotime($page['created_at']));
+            $Created = isset($createdDate['date'])? date("d-m-Y", strtotime($createdDate['date'])) : '';
 
             // get Published from Array
 
