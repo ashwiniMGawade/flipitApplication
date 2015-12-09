@@ -163,7 +163,7 @@ EOD;
         }
         $canocalUrl = $permalink;
         preg_match("/[^\/]+$/", $permalink, $permalinkMatches);
-        if (intval($permalinkMatches[0]) > 0 && intval($permalinkMatches[0]) < 10) :
+        if (ctype_digit($permalinkMatches[0]) && intval($permalinkMatches[0]) > 0 && intval($permalinkMatches[0]) < 10) :
             if (intval($permalinkMatches[0]) > intval($pageCount)) :
                 $permalink = explode('/'.$permalinkMatches[0], $permalink);
                 $permalink = $permalink[0];
@@ -182,7 +182,7 @@ EOD;
                 header('location:'. HTTP_PATH.$permalink[0]);
             }
             $permalink = $permalink[0];
-        elseif (intval($permalinkMatches[0]) > 10) :
+        elseif (ctype_digit($permalinkMatches[0]) && intval($permalinkMatches[0]) > 10) :
             throw new Exception('Error occured');
         else:
             $permalink = $permalink;
