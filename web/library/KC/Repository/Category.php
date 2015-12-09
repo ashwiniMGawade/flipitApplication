@@ -22,7 +22,7 @@ class Category extends \Core\Domain\Entity\Category
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-             ->select("c.id, c.name, c.permalink")
+             ->select("c.id, c.name, c.permaLink")
             ->from('\Core\Domain\Entity\Category', 'c')
             ->where("c.id = " . $id);
         $category = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
