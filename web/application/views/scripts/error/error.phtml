@@ -1,6 +1,6 @@
 <?php
 $messege = $this->message;
-if ($messege == "Page not found" &&  $this->matches < 10) {
+if ($messege == "Page not found" &&  !is_numeric($this->matches)) {
     echo $this->render('error/pageContent.phtml');
 } else {
 	$httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
