@@ -181,7 +181,7 @@ PlatformDetect = (function(){
 
     return {
         options: {
-            cssPath: window.pathInfo ? pathInfo.base + pathInfo.css : 'public/css/'
+            cssPath: window.pathInfo ? pathInfo.base + pathInfo.css : 'public/css/splash/'
         },
         addModule: function(obj) {
             detectModules[obj.type] = obj;
