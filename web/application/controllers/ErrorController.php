@@ -27,11 +27,11 @@ class ErrorController extends Zend_Controller_Action
                 $pageDetails = $this->getPageDetails($pagePermalink, $pageNumber);
                 $pageDetails = isset($pageDetails[0]) ? $pageDetails[0] : $pageDetails;
                 if (isset($pageDetails['pageType']) && $pageDetails['pageType']=='default') {
-                    if (is_numeric($pageNumber)) {
+                    if (ctype_digit($pageNumber)) {
                         $pageNumber = 10;
                     }
                 }
-                if (is_numeric($pageNumber) &&  $pageNumber>= 10) {
+                if (ctype_digit($pageNumber) &&  $pageNumber>= 10) {
                     $this->_helper->layout()->disableLayout();
                     \FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
                 }
