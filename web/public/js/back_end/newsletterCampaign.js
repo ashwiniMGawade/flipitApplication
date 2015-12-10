@@ -29,6 +29,10 @@ function getNewsletterCampaignList(iStart,iSortCol,iSortDir) {
         "aaSorting": [[ iSortCol , iSortDir ]],
         "sPaginationType" : "bootstrap",
         "sAjaxSource" : HOST_PATH + "admin/newslettercampaigns/getNewsletterCampaignList",
+        "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+            $(nRow).attr( "data-id", aData.id);
+            return nRow;
+        },
         "aoColumns" : [
             {
                 "fnRender" : function(obj) {
@@ -56,8 +60,11 @@ function getNewsletterCampaignList(iStart,iSortCol,iSortDir) {
             },
             {
                 "fnRender" : function(obj) {
-
-                    return "<a href='javascript:void(0);'>" + obj.aData.scheduledTime.date + "</a>" ;
+                    if(obj.aData.scheduledStatus == true) {
+                        return "<a href='javascript:void(0);'>" + obj.aData.scheduledTime.date + "</a>";
+                    }else{
+                        return "<span href='javascript:void(0);' class='error'>-</span>" ;
+                    }
 
                 },
                 //"bSearchable" : false,
@@ -101,9 +108,9 @@ function getNewsletterCampaignList(iStart,iSortCol,iSortDir) {
                 state[ 'eId' ] = eId ;
                 click = true;
                 $.bbq.pushState( state );
-                window.location.href = HOST_PATH + "admin/visitor/editvisitor/id/" + eId+ "?iStart="+
+                window.location.href = HOST_PATH + "admin/newslettercampaigns/edit/id/" + eId+ "?iStart="+
                 obj._iDisplayStart+"&iSortCol="+obj.aaSorting[0][0]+"&iSortDir="+
-                obj.aaSorting[0][1]+"&iSearchText="+iSearchText+"&iEmailText="+iEmailText+"&eId="+eId;
+                obj.aaSorting[0][1];
             });
 
             $.bbq.pushState( state );

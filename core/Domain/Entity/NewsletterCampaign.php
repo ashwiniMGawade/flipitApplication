@@ -79,7 +79,7 @@ class NewsletterCampaign
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    protected $scheduledStatus;
+    protected $scheduledStatus = 0;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -99,7 +99,7 @@ class NewsletterCampaign
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    protected $deleted;
+    protected $deleted = 0;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
@@ -132,15 +132,15 @@ class NewsletterCampaign
      */
     public function getCampaignSubject()
     {
-        return $this->campaignName;
+        return $this->campaignSubject;
     }
 
     /**
-     * @param mixed $campaignName
+     * @param mixed $campaignSubject
      */
-    public function setCampaignSubject($campaignName)
+    public function setCampaignSubject($campaignSubject)
     {
-        $this->campaignName = $campaignName;
+        $this->campaignSubject = $campaignSubject;
     }
 
     /**
@@ -280,11 +280,11 @@ class NewsletterCampaign
     }
 
     /**
-     * @param mixed $newsletterSentTimet
+     * @param mixed $newsletterSentTime
      */
-    public function setNewsletterSentTime($newsletterSentTimet)
+    public function setNewsletterSentTime($newsletterSentTime)
     {
-        $this->newsletterSentTimet = $newsletterSentTimet;
+        $this->newsletterSentTime = $newsletterSentTime;
     }
 
     /**
