@@ -8,15 +8,12 @@ class ShopExcelInformation extends \Core\Domain\Entity\ShopExcelInformation
             ? $shopExcelParameters["SearchText"] : '';
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $excelInformation = $queryBuilder
-            ->from("\Core\Domain\Entity\ShopExcelInformation", "sei")
-            ->where("sei.deleted = 0");
+            ->from("\Core\Domain\Entity\ShopExcelInformation", "sei");
+
         if ($type == '') {
-            $excelInformation = $excelInformation
-                ->andWhere('sei.passCount = 0')
-                ->andWhere('sei.filename <> 0')
-                ->andWhere('sei.failCount = 0');
+            $excelInformation = $excelInformation->where("sei.deleted = 0");
         } else {
-            $excelInformation = $excelInformation->andWhere('sei.totalShopsCount = 0');
+            $excelInformation = $excelInformation->andWhere('sei.deleted = 1');
         }
         $request  = \DataTable_Helper::createSearchRequest(
             $shopExcelParameters,
@@ -24,14 +21,14 @@ class ShopExcelInformation extends \Core\Domain\Entity\ShopExcelInformation
         );
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
-        ->setQueryBuilder($excelInformation)
-        ->add('number', 'sei.id')
-        ->add('text', 'sei.created_at')
-        ->add('number', 'sei.totalShopsCount')
-        ->add('number', 'sei.passCount')
-        ->add('number', 'sei.failCount')
-        ->add('text', 'sei.updated_at')
-        ->add('text', 'sei.userName');
+            ->setQueryBuilder($excelInformation)
+            ->add('number', 'sei.id')
+            ->add('text', 'sei.created_at')
+            ->add('number', 'sei.totalShopsCount')
+            ->add('number', 'sei.passCount')
+            ->add('number', 'sei.failCount')
+            ->add('text', 'sei.updated_at')
+            ->add('text', 'sei.userName');
         $excelImportInformation = $builder->getTable()->getResponseArray();
         return $excelImportInformation;
     }
