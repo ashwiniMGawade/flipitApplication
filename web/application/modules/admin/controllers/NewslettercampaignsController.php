@@ -79,19 +79,18 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
             $newsletterCampaign = AdminFactory::createNewsletterCampaign()->execute();
-
             $params = $this->_handleImageUpload($params);
             $this->view->newsletterCampaign = $this->getAllParams();
-
-            $result = AdminFactory::addNewsletterCampaign()->execute($newsletterCampaign, $params);
-
-            if ($result instanceof Errors) {
-                $errors = $result->getErrorsAll();
-                $this->setFlashMessage('error', $errors);
-            } else {
-                $this->refreshNewsletterCampaignPageVarnish();
-                $this->setFlashMessage('success', 'News letter campaign has been added successfully');
-                $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+            if ($params) {
+                $result = AdminFactory::addNewsletterCampaign()->execute($newsletterCampaign, $params);
+                if ($result instanceof Errors) {
+                    $errors = $result->getErrorsAll();
+                    $this->setFlashMessage('error', $errors);
+                } else {
+                    $this->refreshNewsletterCampaignPageVarnish();
+                    $this->setFlashMessage('success', 'News letter campaign has been added successfully');
+                    $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+                }
             }
         } else {
             $sendersEmailAddress = KC\Repository\Settings::getEmailSettings('sender_email_address');
@@ -116,15 +115,16 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $newsletterCampaign = AdminFactory::getNewsletterCampaign()->execute(array('id'=>$this->view->campaignID));
             $params = $this->_handleImageUpload($params, $newsletterCampaign->headerBanner, $newsletterCampaign->footerBanner);
             $this->view->newsletterCampaign = $this->getAllParams();
-
-            $result = AdminFactory::addNewsletterCampaign()->execute($newsletterCampaign, $params);
-            if ($result instanceof Errors) {
-                $errors = $result->getErrorsAll();
-                $this->setFlashMessage('error', $errors);
-            } else {
-                $this->refreshNewsletterCampaignPageVarnish();
-                $this->setFlashMessage('success', 'News letter campaign has been added successfully');
-                $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+            if ($params) {
+                $result = AdminFactory::addNewsletterCampaign()->execute($newsletterCampaign, $params);
+                if ($result instanceof Errors) {
+                    $errors = $result->getErrorsAll();
+                    $this->setFlashMessage('error', $errors);
+                } else {
+                    $this->refreshNewsletterCampaignPageVarnish();
+                    $this->setFlashMessage('success', 'News letter campaign has been added successfully');
+                    $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+                }
             }
         }
 
@@ -211,6 +211,9 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         if (true === isset($_FILES['headerBanner']) && true === isset($_FILES['headerBanner']['name']) && '' !== $_FILES['headerBanner']['name']) {
             $rootPath = BASE_PATH . 'images/upload/newslettercampaigns/';
             $image = $this->uploadImage('headerBanner', $rootPath);
+            if(false === $image) {
+                $this->setFlashMessage('error', "Please upload valid header banner");return false;
+            }
             if (false !== $image && !empty($headerBanner)) {
                 unlink(BASE_PATH . 'images/upload/newslettercampaigns/'.$headerBanner);
             }
@@ -219,6 +222,9 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         if (true === isset($_FILES['footerBanner']) && true === isset($_FILES['footerBanner']['name']) && '' !== $_FILES['footerBanner']['name']) {
             $rootPath = BASE_PATH . 'images/upload/newslettercampaigns/';
             $image = $this->uploadImage('footerBanner', $rootPath);
+            if(false === $image) {
+                $this->setFlashMessage('error', "please upload valid footer banner");return false;
+            }
             if (false !== $image && !empty($footerBanner)) {
                 unlink(BASE_PATH . 'images/upload/newslettercampaigns/'.$footerBanner);
             }
@@ -239,7 +245,8 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
 
         $adapter->setDestination($rootPath);
         $adapter->addValidator('Extension', false, array('jpg,jpeg,png,JPG,PNG', true));
-        $imageName = time().'.'.pathinfo($adapter->getFileName($file, false))['extension'];
+        $imageName = pathinfo($adapter->getFileName($file, false));
+        $imageName = isset($imageName['extension']) ? time().'.'.$imageName['extension'] : '';
         $targetPath = $rootPath . $imageName;
         $adapter->addFilter(
             new \Zend_Filter_File_Rename(
