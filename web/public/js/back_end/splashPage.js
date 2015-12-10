@@ -1,9 +1,6 @@
 var CKcontent = false ;
 $(document).ready(function(){
-    $('.numeric').keyup(function () {
-        this.value = this.value.replace(/[^0-9\.]/g,'');
-    });
-	// setup ckeditor and its configurtion
+   // setup ckeditor and its configurtion
 	CKEDITOR.replace( 'splashPageContent',
         {
             customConfig : 'config.js' ,
@@ -22,6 +19,14 @@ $(document).ready(function(){
 
         });
     CKEDITOR.replace( 'splashPageFooter',
+        {
+            customConfig : 'config.js' ,
+            toolbar :  'BasicToolbar'  ,
+            width : "605" ,
+            height : "250"
+
+        });
+    CKEDITOR.replace( 'splashPageStatistics',
         {
             customConfig : 'config.js' ,
             toolbar :  'BasicToolbar'  ,

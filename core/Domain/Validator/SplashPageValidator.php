@@ -37,22 +37,9 @@ class SplashPageValidator
             'footer' => array(
                 $this->validator->notNull(array('message' => 'Footer content should not be blank.'))
             ),
-            'visitorsPerMonthCount' => array(
-                $this->validator->notNull(array('message' => 'Visitor per month count should not be blank.')),
-                $this->validator->type(array('type' => 'integer', 'message' => 'Visitor per month count must be an integer.'))
-            ),
-            'verifiedActionCount' => array(
-                $this->validator->notNull(array('message' => 'Verified action count should not be blank.')),
-                $this->validator->type(array('type' => 'integer', 'message' => 'Verified action count must be an integer.'))
-            ),
-            'newsletterSignupCount' => array(
-                $this->validator->notNull(array('message' => 'Newsletter signup count should not be blank.')),
-                $this->validator->type(array('type' => 'integer', 'message' => 'Newsletter signup count must be an integer.'))
-            ),
-            'retailerOnlineCount' => array(
-                $this->validator->notNull(array('message' => 'Retailer online count should not be blank.')),
-                $this->validator->type(array('type' => 'integer', 'message' => 'Retailer online count must be an integer.'))
-            ),
+            'statistics' => array(
+                $this->validator->notNull(array('message' => 'Statistics should not be blank.'))
+            )
         );
         return $constraints;
     }

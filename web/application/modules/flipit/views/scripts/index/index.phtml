@@ -83,32 +83,7 @@
     </section>
     <aside class="aside add">
         <div class="container">
-            <div class="row cols-wrp">
-                <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
-                    <div class="col">
-                        <strong class="count"><?php echo number_format($splashPage->getVisitorsPerMonthCount(), null,null,'.'); ?>+</strong>
-                        <p>bezoekers per maand</p>
-                    </div>
-                </div>
-                <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
-                    <div class="col num">
-                        <strong class="count"><?php echo number_format($splashPage->getVerifiedActionCount(), null,null,'.'); ?>+</strong>
-                        <p>Geverifieerde acties</p>
-                    </div>
-                </div>
-                <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
-                    <div class="col news-letter">
-                        <strong class="count"><?php echo number_format($splashPage->getNewsletterSignupCount(), null,null,'.'); ?>+</strong>
-                        <p>Nieuwsbrief aanmeldingen</p>
-                    </div>
-                </div>
-                <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
-                    <div class="col retail">
-                        <strong class="count"><?php echo number_format($splashPage->getRetailerOnlineCount(), null,null,'.'); ?>+</strong>
-                        <p>Retailers online</p>
-                    </div>
-                </div>
-            </div>
+            <?php echo $splashPage->getStatistics(); ?>
         </div>
     </aside>
 </main>

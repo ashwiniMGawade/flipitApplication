@@ -108,38 +108,19 @@ $this->headTitle()->append('Splash Page');
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="mainpage-content-line">
                                     <div class="mainpage-content-left">
-                                        <label><strong><?php echo $this->translate('Visitors Per Month Count'); ?></strong></label>
+                                        <label><strong><?php echo $this->translate('Statistics'); ?></strong></label>
                                     </div>
                                     <div class="mainpage-content-right">
-                                        <input type="text" name="splashPage[visitorsPerMonthCount]" id="splashPageVisitorsPerMonthCount" value="<?php echo  $this->splashPage ? $this->splashPage->getVisitorsPerMonthCount() : ""; ?>" placeholder="<?php echo $this->translate('Visitors Per Month Count'); ?>" class="input-small mbot bbot ignore span3 numeric">
+                                        <div class="mainpage-content-right-inner-right-other"></div>
+                                        <div class="mainpage-content-right-inner-left-other">
+                                            <textarea name="splashPage[statistics]"  id="splashPageStatistics"><?php echo  $this->splashPage ? $this->splashPage->getStatistics() : ""; ?></textarea>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="mainpage-content-line">
-                                    <div class="mainpage-content-left">
-                                        <label><strong><?php echo $this->translate('Verified Action Count'); ?></strong></label>
-                                    </div>
-                                    <div class="mainpage-content-right">
-                                        <input type="text" name="splashPage[verifiedActionCount]" id="splashPageVerifiedActionCount" value="<?php echo  $this->splashPage ? $this->splashPage->getVerifiedActionCount() : ""; ?>" placeholder="<?php echo $this->translate('Verified Action Count'); ?>" class="input-small mbot bbot ignore span3 numeric">
-                                    </div>
-                                </div>
-                                <div class="mainpage-content-line">
-                                    <div class="mainpage-content-left">
-                                        <label><strong><?php echo $this->translate('Newsletter Signup Count'); ?></strong></label>
-                                    </div>
-                                    <div class="mainpage-content-right">
-                                        <input type="text" name="splashPage[newsletterSignupCount]" id="splashPageNewsletterSignupCount" value="<?php echo  $this->splashPage ? $this->splashPage->getNewsletterSignupCount() : ""; ?>" placeholder="<?php echo $this->translate('Newsletter Signup Count'); ?>" class="input-small mbot bbot ignore span3 numeric">
-                                    </div>
-                                </div>
-                                <div class="mainpage-content-line">
-                                    <div class="mainpage-content-left">
-                                        <label><strong><?php echo $this->translate('Retailer Online Count'); ?></strong></label>
-                                    </div>
-                                    <div class="mainpage-content-right">
-                                        <input type="text" name="splashPage[retailerOnlineCount]" id="splashPageRetailerOnlineCount" value="<?php echo  $this->splashPage ? $this->splashPage->getRetailerOnlineCount() : ""; ?>" placeholder="<?php echo $this->translate('Retailer Online Count'); ?>" class="input-small mbot bbot ignore span3 numeric">
-                                    </div>
-                                </div>
+
                                 <div class="mainpage-content-line">
                                     <div class="mainpage-content-left">
                                         <label><strong><?php echo $this->translate('Footer Content'); ?></strong></label>

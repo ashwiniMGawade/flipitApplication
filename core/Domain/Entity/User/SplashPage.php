@@ -52,24 +52,9 @@ class SplashPage
     protected $footer;
 
     /**
-     * @ORM\Column(type="integer", length=11, nullable=false)
+     * @ORM\Column(type="text", nullable=false)
      */
-    protected $visitorsPerMonthCount;
-
-    /**
-     * @ORM\Column(type="integer", length=11, nullable=false)
-     */
-    protected $verifiedActionCount;
-
-    /**
-     * @ORM\Column(type="integer", length=11, nullable=false)
-     */
-    protected $newsletterSignupCount;
-
-    /**
-     * @ORM\Column(type="integer", length=11, nullable=false)
-     */
-    protected $retailerOnlineCount;
+    protected $statistics;
 
     public function __get($property)
     {
@@ -212,64 +197,17 @@ class SplashPage
     /**
      * @return mixed
      */
-    public function getNewsletterSignupCount()
+    public function getStatistics()
     {
-        return $this->newsletterSignupCount;
+        return $this->statistics;
     }
 
     /**
-     * @param mixed $newsletterSignupCount
+     * @param mixed $statistics
      */
-    public function setNewsletterSignupCount($newsletterSignupCount)
+    public function setStatistics($statistics)
     {
-        $this->newsletterSignupCount = $newsletterSignupCount;
+        $this->statistics = $statistics;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getRetailerOnlineCount()
-    {
-        return $this->retailerOnlineCount;
-    }
-
-    /**
-     * @param mixed $retailerOnlineCount
-     */
-    public function setRetailerOnlineCount($retailerOnlineCount)
-    {
-        $this->retailerOnlineCount = $retailerOnlineCount;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getVerifiedActionCount()
-    {
-        return $this->verifiedActionCount;
-    }
-
-    /**
-     * @param mixed $verifiedActionCount
-     */
-    public function setVerifiedActionCount($verifiedActionCount)
-    {
-        $this->verifiedActionCount = $verifiedActionCount;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getVisitorsPerMonthCount()
-    {
-        return $this->visitorsPerMonthCount;
-    }
-
-    /**
-     * @param mixed $visitorsPerMonthCount
-     */
-    public function setVisitorsPerMonthCount($visitorsPerMonthCount)
-    {
-        $this->visitorsPerMonthCount = $visitorsPerMonthCount;
-    }
 }

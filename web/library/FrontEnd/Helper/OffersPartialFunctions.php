@@ -691,7 +691,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         $couponHtml = '';
         $splashOffers = (array) SystemFactory::getSplashOffers()->execute(array(), array('position'=>'ASC'));
         $splashImages = (array) SystemFactory::getSplashImages()->execute(array(), array('position'=>'ASC'));
-        $offerCount = 1;
+        $offerCount = 0;
         $serverNameScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
         foreach ($splashOffers as $splashOffer) {
             $offer = SystemFactory::getOffer($splashOffer->getLocale())->execute(array( 'id' => $splashOffer->getOfferId()));
