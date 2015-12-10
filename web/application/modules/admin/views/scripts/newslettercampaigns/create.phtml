@@ -13,7 +13,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
     <div class='wrap columns-2'>
         <?php echo $this->flashMessages(); ?>
     </div>
-    <form id="wizardform" method="post" action="" enctype="multipart/form-data">
+    <form id="NewsletterWizardform" method="post" action="" enctype="multipart/form-data">
         <h1 class="fl"><?php echo $this->translate('Create Newsletter Campaign');?>
             <button type="button" onclick="" href="#" id="sendTestMail" class="btn ml10"><?php echo $this->translate('Send Test Email');?></button>
             <input type="submit" onclick="" href="#" id="saveNewsletterCampaign" class="btn ml10" value="<?php echo $this->translate('Save & Exit');?>"></button>
@@ -28,9 +28,6 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                 </ul>
             </div>
             <div class="panel-body">
-<!--                <div class="progress progress-xs m-t-md">-->
-<!--                    <div class="progress-bar bg-success" style="width: 33.3333333333333%;"></div>-->
-<!--                </div>-->
                 <div class="tab-content">
                     <div class="tab-pane active" id="step1">
                         <div class="mainpage-content">

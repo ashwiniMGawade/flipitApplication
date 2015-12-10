@@ -74,8 +74,6 @@ class AddNewsletterCampaignUsecase
         }
         if (isset($params['scheduledStatus'])) {
             $newsletterCampaign->setScheduledStatus($params['scheduledStatus']);
-        } else {
-            $newsletterCampaign->setScheduledStatus(0);
         }
         if (isset($params['scheduledTime'])) {
             $newsletterCampaign->setScheduledTime($params['scheduledTime']);
@@ -88,8 +86,6 @@ class AddNewsletterCampaignUsecase
         }
         if (isset($params['deleted'])) {
             $newsletterCampaign->setDeleted($params['deleted']);
-        } else {
-            $newsletterCampaign->setDeleted(0);
         }
         $newsletterCampaign->setCreatedAt(new \DateTime('now'));
         $newsletterCampaign->setUpdatedAt(new \DateTime('now'));

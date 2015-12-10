@@ -15,7 +15,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
     <div class='wrap columns-2'>
         <?php echo $this->flashMessages(); ?>
 </div>
-<form id="wizardform" method="post" action="" enctype="multipart/form-data">
+<form id="NewsletterWizardform" method="post" action="" enctype="multipart/form-data">
     <h1 class="fl"><?php echo $this->translate('Edit Newsletter Campaign');?>
         <button type="button" onclick="" href="#" id="sendTestMail" class="btn ml10"><?php echo $this->translate('Send Test Email');?></button>
         <input type="submit" onclick="" href="#" id="saveNewsletterCampaign" class="btn ml10" value="<?php echo $this->translate('Save & Exit');?>"></button>
@@ -30,9 +30,6 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
             </ul>
         </div>
         <div class="panel-body">
-            <!--                <div class="progress progress-xs m-t-md">-->
-            <!--                    <div class="progress-bar bg-success" style="width: 33.3333333333333%;"></div>-->
-            <!--                </div>-->
             <div class="tab-content">
                 <div class="tab-pane active" id="step1">
                     <div class="mainpage-content">
@@ -97,8 +94,10 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                                             <div class="mainpage-content-right-inner"></div>
                                             <div class="mainpage-content-right-inner">
                                                 <div class="browse-container">
+                                                    <?php if ( isset($this->newsletterCampaign['headerBanner'])) { ?>
                                                     <img class="image-container"
-                                                         src="<?php echo  isset($this->newsletterCampaign['headerBanner']) ?  HTTP_PATH . 'public/images/upload/newslettercampaigns/'.trim($this->newsletterCampaign['headerBanner']): '';?>">
+                                                         src="<?php echo  HTTP_PATH . 'public/images/upload/newslettercampaigns/'.trim($this->newsletterCampaign['headerBanner']);?>">
+                                                    <?php } ?>
                                                 </div>
                                                 <input type="file" id="headerBanner" class="span3 margin-bottom-tenpx" name="headerBanner">
                                                 <div class="margin-bottom-tenpx">
@@ -143,8 +142,10 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                                             <div class="mainpage-content-right-inner"></div>
                                             <div class="mainpage-content-right-inner">
                                                 <div class="browse-container">
+                                                    <?php if ( isset($this->newsletterCampaign['footerBanner']) ) { ?>
                                                     <img class="image-container"
-                                                         src="<?php echo isset($this->newsletterCampaign['footerBanner']) ?  HTTP_PATH . 'public/images/upload/newslettercampaigns/'.trim($this->newsletterCampaign['footerBanner']): ''; ?>">
+                                                         src="<?php echo HTTP_PATH . 'public/images/upload/newslettercampaigns/'.trim($this->newsletterCampaign['footerBanner']); ?>">
+                                                    <?php } ?>
                                                 </div>
                                                 <input type="file" id="footerBanner" class="span3 margin-bottom-tenpx" name="footerBanner">
                                                 <div class="margin-bottom-tenpx">

@@ -79,7 +79,7 @@ class NewsletterCampaign
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    protected $scheduledStatus;
+    protected $scheduledStatus = 0;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -99,7 +99,7 @@ class NewsletterCampaign
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    protected $deleted;
+    protected $deleted = 0;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)

@@ -23,39 +23,39 @@ class NewsletterCampaignValidator
     {
         $constraints = array(
             'campaignName' => array(
-                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid string.")),
+                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid Campaign Name.")),
                 $this->validator->length(array( 'max' => 255 ))
             ),
             'campaignSubject' => array(
-                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid string.")),
+                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid Campaign Subject.")),
                 $this->validator->length(array( 'max' => 255 ))
             ),
             'senderName' => array(
-                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid string.")),
+                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid Sender Name.")),
                 $this->validator->length(array( 'max' => 255 ))
             ),
             'headerBanner' => array(
-                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid string.")),
+                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid Header Banner.")),
                 $this->validator->length(array( 'max' => 255 ))
             ),
             'headerBannerURL' => array(
-                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid string.")),
+                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid Header Banner URL.")),
                 $this->validator->length(array( 'max' => 255 ))
             ),
             'footerBanner' => array(
-                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid string.")),
+                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid Footer Banner.")),
                 $this->validator->length(array( 'max' => 255 ))
             ),
             'footerBannerURL' => array(
-                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid string.")),
+                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid Footer Banner URL.")),
                 $this->validator->length(array( 'max' => 255 ))
             ),
             'offerPartOneTitle' => array(
-                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid string.")),
+                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid Offer PartOne Title.")),
                 $this->validator->length(array( 'max' => 255 ))
             ),
             'offerPartTwoTitle' => array(
-                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid string.")),
+                $this->validator->type(array('type' => 'string', 'message' => "Please enter valid OfferPart Two Title.")),
                 $this->validator->length(array( 'max' => 255 ))
             ),
             'senderEmail' => array(
@@ -80,7 +80,7 @@ class NewsletterCampaignValidator
                 $this->validator->length(array('min' => 1, 'max' => 1))
             ),
             'createdAt' => array(
-                $this->validator->notNull(array('message' => "Please enter value")),
+                $this->validator->notNull(array('message' => "Please enter Created date")),
                 $this->validator->dateTime()
             )
         );

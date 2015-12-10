@@ -1,19 +1,18 @@
 $(function(){
-        $('#wizardform').bootstrapWizard({
+        $('#NewsletterWizardform').bootstrapWizard({
             'tabClass': 'nav nav-tabs',
             'onNext': function(tab, navigation, index) {
-                var valid = true; // was false initially
+                return true;
                 // wrire validation logic here
-                return valid;
             },
             onTabClick: function(tab, navigation, index) {
-                return false;
+                return true;
             },
             onTabShow: function(tab, navigation, index) {
                 var $total = navigation.find('li').length;
                 var $current = index+1;
                 var $percent = ($current/$total) * 100;
-                $('#wizardform').find('.progress-bar').css({width:$percent+'%'});
+                $('#NewsletterWizardform').find('.progress-bar').css({width:$percent+'%'});
             }
         });
 
@@ -120,12 +119,12 @@ $(function(){
                 }
             });
 
-            //function call to validate new category
-            validateWizardForm();
+            //function call to validate
+            validateNewsletterWizardform();
         }
 
-        var validateWizardForm = function (){
-            validatorForwizardForm = $("form#wizardform").validate(
+        var validateNewsletterWizardform = function (){
+            validatorForNewsletterWizardform = $("form#NewsletterWizardform").validate(
                 {
                     errorClass : 'error',
                     validClass : 'success',
@@ -307,8 +306,8 @@ $(function(){
         }
 
         init();
-        $('form#wizardform').submit(function () {
-            if ($("form#wizardform").valid()) {
+        $('form#NewsletterWizardform').submit(function () {
+            if ($("form#NewsletterWizardform").valid()) {
                 $('#saveNewsletterCampaign').attr('disabled', "disabled");
                 return true;
             } else {
