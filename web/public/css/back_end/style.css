@@ -3543,3 +3543,6 @@ div#error-message {
 #landingPagesEdit .mainpage-content-right-inner-right-full {
     margin: 0 21em 0 16em;
 }
+.margin-b0 {
+    margin-bottom: 0px;
+}

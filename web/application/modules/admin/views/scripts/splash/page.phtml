@@ -12,23 +12,23 @@ $this->headTitle()->append('Splash Page');
 
 <div id="imbullbody">
     <div style="overflow: hidden;" id="imbullbody-content">
-        <div class="top_navigation">
-            <ul>
-                <li><a href="/admin/splash/page" class="selected_nav">Splash Page </a></li>
-                <li><a href="/admin/splash" id="subMenu">Splash Offers </a></li>
-                <li><a href="/admin/splash/images" id="subMenu">Featured Images </a></li>
-            </ul>
-        </div>
-        <div class="clear"></div>
         <div class="wrap columns-2">
             <?php echo $this->flashMessages(); ?>
             <h1><?php echo $this->translate('Splash Page');?></h1>
+            <div class="clear"></div>
+            <div class="top_navigation margin-b0">
+                <ul>
+                    <li><a href="/admin/splash/page" class="selected_nav">Splash Page </a></li>
+                    <li><a href="/admin/splash" id="subMenu">Splash Offers </a></li>
+                    <li><a href="/admin/splash/images" id="subMenu">Featured Images </a></li>
+                </ul>
+            </div>
             <form name="splashPage" id="splashPage" enctype="multipart/form-data" method="post">
                 <div id="poststuff" class="metabox-holder has-right-sidebar">
                     <div id="post-body">
                         <div>
-                            <div class="mainpage-content">
-
+                            <div class="mainpage-content" style="border-top: none;">
+                                <br>
                                 <div class="mainpage-content-line mb10">
                                     <div class="mainpage-content-left">
                                         <label><strong><?php echo $this->translate('Banner Image'); ?></strong></label>
