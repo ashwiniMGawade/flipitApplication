@@ -10,7 +10,7 @@ class ShopExcelInformation extends \Core\Domain\Entity\ShopExcelInformation
         $excelInformation = $queryBuilder
             ->from("\Core\Domain\Entity\ShopExcelInformation", "sei");
 
-        if ($type == '') {
+        if (empty($type)) {
             $excelInformation = $excelInformation->where("sei.deleted = 0");
         } else {
             $excelInformation = $excelInformation->andWhere('sei.deleted = 1');

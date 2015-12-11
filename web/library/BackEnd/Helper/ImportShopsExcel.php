@@ -25,7 +25,7 @@ class BackEnd_Helper_ImportShopsExcel
                 $shopId = Shop::getShopIdByShopName($shopName);
                 if (!empty($shopId)) {
                     $shopData = array();
-                    if ($metaDescription !='') {
+                    if (!empty($metaDescription)) {
                         $shopData['metaDescription'] = $metaDescription;
                     }
                     Shop::updateShopFromExcelData($shopData, $shopId);
