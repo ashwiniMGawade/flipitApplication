@@ -405,10 +405,10 @@
             padding: 4px 28px 2px 21px;
             margin: 0 -20px;
             @media only screen and (max-width: 979px){
-                padding: 7px 20px 6px;
+                padding: 4px 20px 2px;
             }
             @media only screen and (max-width: 767px){
-                padding: 7px 15px 0;
+                padding: 0px 15px 0;
                 margin: 10px -15px 0;
                 font-size: 11px;
             }
@@ -422,7 +422,7 @@
                 text-decoration: underline;
                 @media only screen and (max-width: 979px){
                     
-                    margin: 4px 0 5px 5px;
+                    margin: 4px 0 0 5px;
                     
                 }
                 @media only screen and (max-width: 767px){
@@ -440,121 +440,121 @@
                     top: 4px;
                     content: "";
                 }
+            }
+            .terms.uparrow{
+                &:after{
+                    background:url(../../images/sprite.png) no-repeat -179px -127px;
                 }
-                .terms.uparrow{
-                    &:after{
-                        background:url(../../images/sprite.png) no-repeat -179px -127px;
+                &:hover:after,
+                &:focus:after{background-position: -180px -157px;}
+            }
+            .info{
+                padding: 4px 0 0;
+                margin: 0;
+                overflow: hidden;
+                ul{
+                    margin: 0 -10px;
+                    list-style: none;
+                    padding: 0;
+                    @media only screen and (max-width: 979px){
+                        margin: 0 -6px;
                     }
-                    &:hover:after,
-                    &:focus:after{background-position: -180px -157px;}
-                }
-                .info{
-                    padding: 4px 0 0;
-                    margin: 0;
-                    overflow: hidden;
-                    ul{
-                        margin: 0 -10px;
-                        list-style: none;
-                        padding: 0;
+                    li{
+                        float: left;
+                        padding: 1px 10px 4px;
+                        white-space: nowrap;
                         @media only screen and (max-width: 979px){
-                            margin: 0 -6px;
+                            padding: 0 6px 3px;
                         }
-                        li{
-                            float: left;
-                            padding: 1px 10px 4px;
-                            white-space: nowrap;
-                            @media only screen and (max-width: 979px){
-                                padding: 0 6px 3px;
-                            }
-                            @media only screen and (max-width: 767px){
-                                display: none;
-                                max-width: 100%;
-                            }
-                            &.visible-xs{
-                                display: block !important;
-                            }
-                            &:last-child{
-                                @media only screen and (max-width: 767px){
-                                }
-                            }
-                            &:nth-child(2){
-                                @media only screen and (max-width: 479px){
-                                }
-                            }
-                            .img-author{
-                                float: left;
-                                .square(20px);
-                                border-radius: 1px;
-                                margin: -3px 6px 0 0;
-                            }
-                            .name{
-                                display: inline-block;
-                                vertical-align: top;
-                                .text-blue {
-                                    color: #308cc9;
-                                }
-                            }
-                        }
-                    }
-                    .text{
-                        display: block;
-                        color: #878a8d;
-                        padding: 0;
-                        .text-over{
+                        @media only screen and (max-width: 767px){
+                            display: none;
                             max-width: 100%;
                         }
-                        a{
-                            color: #878a8d;
-                            text-decoration: underline;
-                            
-                            &:hover{
-                                text-decoration: none;
+                        &.visible-xs{
+                            display: block !important;
+                        }
+                        &:last-child{
+                            @media only screen and (max-width: 767px){
+                            }
+                        }
+                        &:nth-child(2){
+                            @media only screen and (max-width: 479px){
+                            }
+                        }
+                        .img-author{
+                            float: left;
+                            .square(20px);
+                            border-radius: 1px;
+                            margin: -3px 6px 0 0;
+                        }
+                        .name{
+                            display: inline-block;
+                            vertical-align: top;
+                            .text-blue {
+                                color: #308cc9;
                             }
                         }
                     }
-                    .text-info{
-                        position: relative;
-                        padding: 0 0 0 26px;
-                        display: block;
-                        color: #878a8d;
-                        @media only screen and (max-width: 767px){
-                            padding: 0 0 0 22px;
-                            margin: 0 0 5px;
-                        }
-                        
-                        &:after{
-                            position: absolute;
-                            left: 0;
-                            top: 0;
-                            background: url(../../images/sprite2.png) no-repeat;
-                            content: "";
-                        }
-                        &.exclusive{
-                            color: #eb9528;
-                            font-weight: 700;
-                            &:after{
-                                background-position: -83px 0;
-                                .square(17px);
-                                @media only screen and (max-width: 979px){
-                                    left: -1px; 
-                                }
-
-                            }
-                        }
-                        &.date:after{
-                            .size(16px, 17px);
-                            top:-1px;
-                        }
-                        &.used{
-                            &:after{
-                                .size(15px, 11px);
-                                background-position: -112px 0;
-                                top: 2px;
-                            }
-                        }
-                    }
-
                 }
+                .text{
+                    display: block;
+                    color: #878a8d;
+                    padding: 0;
+                    .text-over{
+                        max-width: 100%;
+                    }
+                    a{
+                        color: #878a8d;
+                        text-decoration: underline;
+
+                        &:hover{
+                            text-decoration: none;
+                        }
+                    }
+                }
+                .text-info{
+                    position: relative;
+                    padding: 0 0 0 26px;
+                    display: block;
+                    color: #878a8d;
+                    @media only screen and (max-width: 767px){
+                        padding: 0 0 0 22px;
+                        margin: 0 0 5px;
+                    }
+                        
+                    &:after{
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        background: url(../../images/sprite2.png) no-repeat;
+                        content: "";
+                    }
+                    &.exclusive{
+                        color: #eb9528;
+                        font-weight: 700;
+                        &:after{
+                            background-position: -83px 0;
+                            .square(17px);
+                            @media only screen and (max-width: 979px){
+                                left: -1px;
+                            }
+
+                        }
+                    }
+                    &.date:after{
+                        .size(16px, 17px);
+                        top:-1px;
+                    }
+                    &.used{
+                        &:after{
+                            .size(15px, 11px);
+                            background-position: -112px 0;
+                            top: 2px;
+                        }
+                    }
+                }
+
+            }
         }
         .meta-items{
             @media only screen and (max-width: 767px){
