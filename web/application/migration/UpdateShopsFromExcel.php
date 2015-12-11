@@ -47,7 +47,7 @@ class UpdateShopsFromExcel
             $failCount = $updatedInformation['failCount'];
             $userName = $excelData['userName'];
 
-            ShopExcelInformation::saveShopExcelData($passCount, $failCount, $userName, $fileName);
+            ShopExcelInformation::saveShopExcelData($passCount, $failCount, $fileName);
             echo CommonMigrationFunctions::showProgressMessage(
                 "$key - Shops has been Updated successfully!!!"
             );
@@ -57,7 +57,6 @@ class UpdateShopsFromExcel
             );
         }
         $manager->closeConnection($doctrineSiteDbConnection);
-        
     }
 }
 new UpdateShopsFromExcel();
