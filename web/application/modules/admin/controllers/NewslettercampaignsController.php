@@ -235,7 +235,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                 $this->setFlashMessage('error', "Please upload valid header banner.");return false;
             }
             if (false !== $image && !empty($headerBanner)) {
-                unlink(BASE_PATH . 'images/upload/newslettercampaigns/'.$headerBanner);
+                @unlink(BASE_PATH . 'images/upload/newslettercampaigns/'.$headerBanner);
             }
             $this->message[] = "Successfully uploaded header banner image.";
             $params['headerBanner'] = $image;
@@ -247,7 +247,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                 $this->setFlashMessage('error', "please upload valid footer banner.");return false;
             }
             if (false !== $image && !empty($footerBanner)) {
-                unlink(BASE_PATH . 'images/upload/newslettercampaigns/'.$footerBanner);
+                @unlink(BASE_PATH . 'images/upload/newslettercampaigns/'.$footerBanner);
             }
             $this->message[] = "Successfully uploaded footer banner image.";
             $params['footerBanner'] = $image;
