@@ -3546,3 +3546,31 @@ div#error-message {
 .margin-b0 {
     margin-bottom: 0px;
 }
+#NewsletterWizardform .nav-tabs {
+   border-bottom: 0px;
+}
+
+#NewsletterWizardform .nav-tabs>li>a {
+    background-color:#e6e6e6;
+    color:#333;
+    margin-right:8px;
+}
+
+#NewsletterWizardform .nav-tabs>.active>a {
+    color: #fff;
+    background-color:#0074cc;
+    border: 1px solid #0074cc;
+}
+#NewsletterWizardform .previous a{
+    float:right;
+    background-color:#e6e6e6;
+    color:#333;
+    margin-right:5px;
+    border-radius:5px;
+}
+#NewsletterWizardform .next a{
+    background-color:#0074cc;
+    color: #fff;
+    border: 1px solid #0074cc;
+    border-radius:5px;
+}
