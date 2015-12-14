@@ -137,6 +137,25 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         }
     }
 
+    public function deleteAction()
+    {
+        $newsletterCampaignId = intval($this->getRequest()->getParam('id'));
+        if (intval($newsletterCampaignId) < 1) {
+            $this->setFlashMessage('error', 'Invalid selection.');
+            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+        }
+
+        $result = AdminFactory::getNewsletterCampaign()->execute(array('id' => $newsletterCampaignId));
+        if ($result instanceof Errors) {
+            $errors = $result->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+        }
+        AdminFactory::deleteNewsletterCampaign()->execute($result);
+        $this->setFlashMessage('success', 'Newsletter campaign successfully deleted.');
+        $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+    }
+
     private function _dismount($object)
     {
         $reflectionClass = new ReflectionClass(get_class($object));
