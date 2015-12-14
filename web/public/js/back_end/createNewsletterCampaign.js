@@ -338,7 +338,6 @@ $(function(){
             return data;
         },
         formatSelection: function (data) {
-            alert('selected');
             $("#testEmail").val(data);
             return data;
         }
