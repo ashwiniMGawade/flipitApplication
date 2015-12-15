@@ -5,6 +5,7 @@ use \Core\Service\Errors;
 
 class Admin_NewslettercampaignsController extends Application_Admin_BaseController
 {
+    protected $message = [];
     public function preDispatch()
     {
         if (!\Auth_StaffAdapter::hasIdentity()) {
@@ -88,7 +89,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     $this->setFlashMessage('error', $errors);
                 } else {
                     $this->refreshNewsletterCampaignPageVarnish();
-                    $this->setFlashMessage('success', 'News letter campaign has been added successfully');
+                    $this->setFlashMessage('success', 'News letter campaign has been added successfully.</br>'. implode('<br/>',$this->message));
                     $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
                 }
             }
@@ -122,7 +123,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     $this->setFlashMessage('error', $errors);
                 } else {
                     $this->refreshNewsletterCampaignPageVarnish();
-                    $this->setFlashMessage('success', 'News letter campaign has been added successfully');
+                    $this->setFlashMessage('success', 'News letter campaign has been updated successfully.</br>'. implode('<br/>',$this->message));
                     $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
                 }
             }
@@ -135,6 +136,25 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         } else {
             $this->view->newsletterCampaign = $this->_dismount($newsletterCampaign);
         }
+    }
+
+    public function deleteAction()
+    {
+        $newsletterCampaignId = intval($this->getRequest()->getParam('id'));
+        if (intval($newsletterCampaignId) < 1) {
+            $this->setFlashMessage('error', 'Invalid selection.');
+            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+        }
+
+        $result = AdminFactory::getNewsletterCampaign()->execute(array('id' => $newsletterCampaignId));
+        if ($result instanceof Errors) {
+            $errors = $result->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+        }
+        AdminFactory::deleteNewsletterCampaign()->execute($result);
+        $this->setFlashMessage('success', 'Newsletter campaign successfully deleted.');
+        $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
     }
 
     private function _dismount($object)
@@ -212,22 +232,24 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $rootPath = BASE_PATH . 'images/upload/newslettercampaigns/';
             $image = $this->uploadImage('headerBanner', $rootPath);
             if(false === $image) {
-                $this->setFlashMessage('error', "Please upload valid header banner");return false;
+                $this->setFlashMessage('error', "Please upload valid header banner.");return false;
             }
             if (false !== $image && !empty($headerBanner)) {
-                unlink(BASE_PATH . 'images/upload/newslettercampaigns/'.$headerBanner);
+                @unlink(BASE_PATH . 'images/upload/newslettercampaigns/'.$headerBanner);
             }
+            $this->message[] = "Successfully uploaded header banner image.";
             $params['headerBanner'] = $image;
         }
         if (true === isset($_FILES['footerBanner']) && true === isset($_FILES['footerBanner']['name']) && '' !== $_FILES['footerBanner']['name']) {
             $rootPath = BASE_PATH . 'images/upload/newslettercampaigns/';
             $image = $this->uploadImage('footerBanner', $rootPath);
             if(false === $image) {
-                $this->setFlashMessage('error', "please upload valid footer banner");return false;
+                $this->setFlashMessage('error', "please upload valid footer banner.");return false;
             }
             if (false !== $image && !empty($footerBanner)) {
-                unlink(BASE_PATH . 'images/upload/newslettercampaigns/'.$footerBanner);
+                @unlink(BASE_PATH . 'images/upload/newslettercampaigns/'.$footerBanner);
             }
+            $this->message[] = "Successfully uploaded footer banner image.";
             $params['footerBanner'] = $image;
         }
         return $params;

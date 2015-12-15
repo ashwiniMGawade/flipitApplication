@@ -93,15 +93,16 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                                         <div class="mainpage-content-line header-image-cont">
                                             <div class="mainpage-content-right-inner"></div>
                                             <div class="mainpage-content-right-inner">
+                                                <?php if ( isset($this->newsletterCampaign['headerBanner'])) { ?>
                                                 <div class="browse-container">
-                                                    <?php if ( isset($this->newsletterCampaign['headerBanner'])) { ?>
                                                     <img class="image-container"
                                                          src="<?php echo  HTTP_PATH . 'public/images/upload/newslettercampaigns/'.trim($this->newsletterCampaign['headerBanner']);?>">
-                                                    <?php } ?>
                                                 </div>
+                                                <?php } ?>
+
                                                 <input type="file" id="headerBanner" class="span3 margin-bottom-tenpx" name="headerBanner">
                                                 <div class="margin-bottom-tenpx">
-                                                        <span class="help-inline" id="logo_file_message">
+                                                        <span class="help-inline" id="headerBanner_file_message">
                                                         Image Size:(*.jpeg, *.jpg or *.png file only)</span>
                                                 </div>
                                             </div>
@@ -141,15 +142,15 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                                         <div class="mainpage-content-line header-image-cont">
                                             <div class="mainpage-content-right-inner"></div>
                                             <div class="mainpage-content-right-inner">
+                                                <?php if ( isset($this->newsletterCampaign['footerBanner']) ) { ?>
                                                 <div class="browse-container">
-                                                    <?php if ( isset($this->newsletterCampaign['footerBanner']) ) { ?>
                                                     <img class="image-container"
                                                          src="<?php echo HTTP_PATH . 'public/images/upload/newslettercampaigns/'.trim($this->newsletterCampaign['footerBanner']); ?>">
-                                                    <?php } ?>
                                                 </div>
+                                                <?php } ?>
                                                 <input type="file" id="footerBanner" class="span3 margin-bottom-tenpx" name="footerBanner">
                                                 <div class="margin-bottom-tenpx">
-                                                        <span class="help-inline" id="logo_file_message">
+                                                        <span class="help-inline" id="footerBanner_file_message">
                                                         Image Size:(*.jpeg, *.jpg or *.png file only) </span>
                                                 </div>
                                             </div>
@@ -169,7 +170,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                                 </div>
                             </div>
                         </div>
-                        <div class="clear"></div>
+                        <div class="mainpage-content-line">&nbsp;</div>
                     </div>
                 </div>
                 <div class="tab-pane" id="step2">
@@ -177,10 +178,10 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                 </div>
                 <div class="tab-pane" id="step3">This is step 3</div>
                 <ul class="pager wizard m-b-sm">
-                    <li class="previous first disabled" style="display:none;"><a href="#">First</a></li>
-                    <li class="previous disabled"><a href="#">Previous</a></li>
                     <li class="next last" style="display:none;"><a href="#">Last</a></li>
                     <li class="next"><a href="#">Next</a></li>
+                    <li class="previous first disabled" style="display:none;"><a href="#">First</a></li>
+                    <li class="previous disabled"><a href="#">Previous</a></li>
                 </ul>
             </div>
         </div>

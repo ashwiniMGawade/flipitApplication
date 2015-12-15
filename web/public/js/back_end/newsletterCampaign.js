@@ -4,42 +4,18 @@ $(document).ready(function() {
     var iSortDir = $.bbq.getState('iSortDir', true) || 'DESC';
     getNewsletterCampaignList(iStart, iSortCol, iSortDir);
 
-
     deleteCampaign = function (campaignId) {
         bootbox.confirm(__('Are you sure you want to delete this campaign?'), function(r){
             if(!r){
-
                 return false;
-
             }else{
                 moverToTrash(campaignId);
             }
         });
     }
-
-
     function moverToTrash(campaignId) {
         addOverLay();
-        $.ajax({
-            url : HOST_PATH + "admin/newslettercampaigns/delete",
-            method : "post",
-            data : {
-                'id' : campaignId
-            },
-            dataType : "json",
-            type : "post",
-            success : function(data) {
-                if (data != null) {
-                    removeOverLay();
-                    document.location.href = HOST_PATH + "admin/newslettercampaigns/" ;
-                } else {
-                    bootbox.alert(__("<span class='error'>Error in deleting record.</span>"));
-                }
-            },
-            error : function(error) {
-                bootbox.alert(__("<span class='error'>Error in deleting record.</span>"));
-            }
-        });
+        document.location.href = HOST_PATH + "admin/newslettercampaigns/delete/id/"+campaignId ;
     }
 });
 
@@ -74,7 +50,6 @@ function getNewsletterCampaignList(iStart,iSortCol,iSortDir) {
         "aoColumns" : [
             {
                 "fnRender" : function(obj) {
-
                     return "<a rel="+ obj.aData.id +" href='javascript:void(0);'>" + ucfirst(obj.aData.campaignName) + "</a>" ;
                 },
                 "bSortable" : true
