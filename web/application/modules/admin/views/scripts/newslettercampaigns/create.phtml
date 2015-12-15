@@ -22,9 +22,21 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
         <div class="panel panel-default">
             <div class="panel-heading">
                 <ul class="nav nav-tabs font-bold">
-                    <li class="active "><a href="#step1" data-toggle="tab">1. Email Settings</a></li>
-                    <li class=""><a href="#step2" data-toggle="tab">2. Coupons</a></li>
-                    <li class=""><a href="#step3" data-toggle="tab">3. Schedule</a></li>
+                    <li class="active ">
+                        <a class="" type="button" id="searchByArticle" href="#step1" data-toggle="tab">
+                            1. Email Settings
+                        </a>
+                    </li>
+                    <li class="">
+                        <a class="" type="button" id="searchByArticle" href="#step2" data-toggle="tab">
+                            2. Coupons
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="#step2" data-toggle="tab" class="">
+                            3. Schedule
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="panel-body">
@@ -176,7 +188,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                     <div class="tab-pane" id="step3">This is step 3</div>
                     <ul class="pager wizard m-b-sm">
                         <li class="next last" style="display:none;"><a href="#">Last</a></li>
-                        <li class="next"><a href="#">Next</a></li>
+                        <li class="next"><a href="#" class="">Next</a></li>
                         <li class="previous first disabled" style="display:none;"><a href="#">First</a></li>
                         <li class="previous disabled"><a href="#">Previous</a></li>
                     </ul>
