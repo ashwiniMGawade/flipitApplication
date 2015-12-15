@@ -16,6 +16,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
     <form id="NewsletterWizardform" method="post" action="" enctype="multipart/form-data">
         <h1 class="fl"><?php echo $this->translate('Create Newsletter Campaign');?>
             <button type="button" onclick="" href="#" id="sendTestMail" class="btn ml10"><?php echo $this->translate('Send Test Email');?></button>
+            <img id="loader" src="<?php echo PUBLIC_PATH;?>images/loader.gif" style="display:none;">
             <input type="submit" onclick="" href="#" id="saveNewsletterCampaign" class="btn ml10" value="<?php echo $this->translate('Save & Exit');?>"></button>
         </h1>
         <div class="clear"></div>
@@ -101,7 +102,6 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                                     <div class="mainpage-content-line">
                                         <div class="mainpage-content-right-inner-left-other">
                                             <div class="mainpage-content-line header-image-cont">
-                                                <div class="mainpage-content-right-inner"></div>
                                                 <div class="mainpage-content-right-inner">
                                                     <div class="browse-container">
                                                         <?php if ( isset($this->newsletterCampaign['headerBanner'])) { ?>
@@ -149,7 +149,6 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                                     <div class="mainpage-content-line">
                                         <div class="mainpage-content-right-inner-left-other">
                                             <div class="mainpage-content-line header-image-cont">
-                                                <div class="mainpage-content-right-inner"></div>
                                                 <div class="mainpage-content-right-inner">
                                                     <div class="browse-container">
                                                         <?php if ( isset($this->newsletterCampaign['footerBanner']) ) { ?>

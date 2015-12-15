@@ -113,6 +113,11 @@ $(function(){
                     for (var i in invalidForm) {
                         if (invalidForm[i]) {
                             $('#saveNewsletterCampaign').removeAttr('disabled');
+                            $('#sendTestMail').removeAttr('disabled');
+                            $('.nav-tabs a').removeClass('disable_a_href');
+                            $('.next a').removeClass('disable_a_href')
+                            $('.previous a').removeClass('disable_a_href')
+                            $("#loader").hide();
                             return false;
                         }
                     }
@@ -120,7 +125,7 @@ $(function(){
             });
 
             //function call to validate
-            validateNewsletterWizardform();
+            //validateNewsletterWizardform();
         }
 
         var validateNewsletterWizardform = function (){
@@ -309,6 +314,11 @@ $(function(){
         $('form#NewsletterWizardform').submit(function () {
             if ($("form#NewsletterWizardform").valid()) {
                 $('#saveNewsletterCampaign').attr('disabled', "disabled");
+                $('#sendTestMail').attr('disabled', "disabled");
+                $('.nav-tabs a').addClass('disable_a_href');
+                $('.next a').addClass('disable_a_href');
+                $('.previous a').addClass('disable_a_href');
+                $("#loader").show();
                 return true;
             } else {
                 return false;

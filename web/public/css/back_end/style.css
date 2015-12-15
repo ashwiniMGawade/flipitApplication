@@ -3572,6 +3572,9 @@ div#error-message {
     color: #fff;
     border-radius:5px;
 }
+.disable_a_href{
+    pointer-events: none;
+}
 
 #NewsletterWizardform .nav-tabs>.active>a, #NewsletterWizardform .nav-tabs>.active>a:hover {
     color:#fff;
