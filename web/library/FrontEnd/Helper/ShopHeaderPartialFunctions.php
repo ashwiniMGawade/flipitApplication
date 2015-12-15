@@ -134,7 +134,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         $gtmClick = "gtmDataBuilder($gtmData);";
         $offerDaysLeft = $offer->endDate->diff(new \DateTime())->days;
         $dayLeftText =  ( $offerDaysLeft < 1 ? 'Expires Today' : ( ( $offerDaysLeft > 1 ) ? $offerDaysLeft . ' days left' : '1 day left' ) );
-        $floatingCoupon = '<div class="popup-box hide" id="floatingCouponBox" offerId="'.$offer->id.'">
+        $floatingCoupon = '<div class="popup-box hide floating-coupon-box" id="floatingCouponBox" offerId="'.$offer->id.'">
                 <a href="#" class="btn-close">close</a>
                 <span class="time">clock</span>
                 <span class="text">' . $this->__translate( 'Tip : ' . $dayLeftText . ' - Discount at ' ) . $offer->shopOffers['name'] . $this->__translate(' with this code.').'
