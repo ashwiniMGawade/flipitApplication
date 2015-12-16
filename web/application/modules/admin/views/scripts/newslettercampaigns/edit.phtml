@@ -1,0 +1,229 @@
+<?php
+
+$this->headTitle()->append($this->translate('Edit Newsletter Campaign'));
+
+$this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.ui.widget.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.bootstrap.wizard.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampaign.js");
+
+?>
+
+<!-- Div for campaign info  -->
+
+<div class="wrap columns-2" id="newsletterCampaignListDiv">
+    <div class='wrap columns-2'>
+        <?php echo $this->flashMessages(); ?>
+</div>
+<form id="NewsletterWizardform" method="post" action="" enctype="multipart/form-data">
+    <h1 class="fl"><?php echo $this->translate('Edit Newsletter Campaign');?>
+        <button type="button" onclick="$('#myModal').modal('show');" href="#" id="sendTestMail" class="btn ml10"><?php echo $this->translate('Send Test Email');?></button>
+        <img id="loader" src="<?php echo PUBLIC_PATH;?>images/loader.gif" style="display:none;">
+        <input type="submit" onclick="" href="#" id="saveNewsletterCampaign" class="btn ml10" value="<?php echo $this->translate('Save & Exit');?>"></button>
+        <a type="button" href="<?php echo HTTP_PATH;?>admin/newslettercampaigns" id="cancel" class="btn ml10"><?php echo $this->translate('Cancel');?></a>
+    </h1>
+    <div class="clear"></div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <ul class="nav nav-tabs font-bold">
+                <li class="active ">
+                    <a class=""  href="#step1" data-toggle="tab">
+                        1. Email Settings
+                    </a>
+                </li>
+                <li class="">
+                    <a class=""  href="#step2" data-toggle="tab">
+                        2. Coupons
+                    </a>
+                </li>
+                <li class="">
+                    <a href="#step2" data-toggle="tab" class="">
+                        3. Schedule
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="panel-body">
+            <div class="tab-content">
+                <div class="tab-pane active" id="step1">
+                    <div class="mainpage-content">
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('E-mail title(internal use only)');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input type="text" class="span3" id="campaignName" name="campaignName" placeholder="<?php echo $this->translate('Campaign Name');?>"
+                                           value="<?php echo isset($this->newsletterCampaign['campaignName']) ? trim($this->newsletterCampaign['campaignName']): ''; ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('E-mail');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input type="text" class="span3" id="senderEmail" name="senderEmail"
+                                           value="<?php echo isset($this->newsletterCampaign['senderEmail']) ? trim($this->newsletterCampaign['senderEmail']): ''; ?>" placeholder="<?php echo $this->translate('E-mail');?>"></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Sender Name');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input type="text" class="span3" id="senderName" name="senderName"
+                                           value="<?php echo isset($this->newsletterCampaign['senderName']) ? trim($this->newsletterCampaign['senderName']): ''; ?>" placeholder="<?php echo $this->translate('Sender Name');?>"></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('E-mail Subject');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input type="text" class="span3" id="campaignSubject" name="campaignSubject" placeholder="<?php echo $this->translate('E-mail Subject');?>"
+                                           value="<?php echo isset($this->newsletterCampaign['campaignSubject']) ? trim($this->newsletterCampaign['campaignSubject']): ''; ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Header');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <textarea class="span3" id="campaignHeader" style="height:135px;"  name="campaignHeader" placeholder="<?php echo $this->translate('Header');?>"><?php echo isset($this->newsletterCampaign['header']) ? trim($this->newsletterCampaign['header']): '';?></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label><strong>Header Banner</strong></label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-line">
+                                    <div class="mainpage-content-right-inner-left-other">
+                                        <div class="mainpage-content-line header-image-cont">
+                                            <div class="mainpage-content-right-inner">
+                                                <?php if ( isset($this->newsletterCampaign['headerBanner'])) { ?>
+                                                <div class="browse-container">
+                                                    <img class="image-container"
+                                                         src="<?php echo  HTTP_PATH . 'public/images/upload/newslettercampaigns/'.trim($this->newsletterCampaign['headerBanner']);?>">
+                                                </div>
+                                                <?php } ?>
+                                                <input type="file" id="headerBanner" class="span3 margin-bottom-tenpx" name="headerBanner">
+                                                <div class="margin-bottom-tenpx">
+                                                        <span class="help-inline" id="headerBanner_file_message">
+                                                        Image Size:(*.jpeg, *.jpg or *.png file only)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Header Banner URL');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input type="text" class="span3" id="headerBannerURL" name="headerBannerURL" placeholder="<?php echo $this->translate('Header Banner URL');?>"
+                                           value="<?php echo isset($this->newsletterCampaign['headerBannerURL']) ? trim($this->newsletterCampaign['headerBannerURL']): '';?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Footer');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <textarea class="span3" id="campaignFooter" style="height:135px;" name="campaignFooter" placeholder="<?php echo $this->translate('Footer');?>"><?php echo isset($this->newsletterCampaign['footer']) ? trim($this->newsletterCampaign['footer']): ''; ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label><strong>Footer Banner</strong></label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-line">
+                                    <div class="mainpage-content-right-inner-left-other">
+                                        <div class="mainpage-content-line header-image-cont">
+                                            <div class="mainpage-content-right-inner">
+                                                <?php if ( isset($this->newsletterCampaign['footerBanner']) ) { ?>
+                                                <div class="browse-container">
+                                                    <img class="image-container"
+                                                         src="<?php echo HTTP_PATH . 'public/images/upload/newslettercampaigns/'.trim($this->newsletterCampaign['footerBanner']); ?>">
+                                                </div>
+                                                <?php } ?>
+                                                <input type="file" id="footerBanner" class="span3 margin-bottom-tenpx" name="footerBanner">
+                                                <div class="margin-bottom-tenpx">
+                                                        <span class="help-inline" id="footerBanner_file_message">
+                                                        Image Size:(*.jpeg, *.jpg or *.png file only) </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Footer Banner URL');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input type="text" class="span3" id="footerBannerURL" name="footerBannerURL" placeholder="<?php echo $this->translate('Footer Banner URL');?>"
+                                           value="<?php echo isset($this->newsletterCampaign['footerBannerURL']) ? trim($this->newsletterCampaign['footerBannerURL']): '';?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">&nbsp;</div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="step2">
+                    step2
+                </div>
+                <div class="tab-pane" id="step3">This is step 3</div>
+                <ul class="pager wizard m-b-sm">
+                    <li class="next last" style="display:none;"><a href="#">Last</a></li>
+                    <li class="next"><a href="#">Next</a></li>
+                    <li class="previous first disabled" style="display:none;"><a href="#">First</a></li>
+                    <li class="previous disabled"><a href="#">Previous</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</form>
+</div><!-- End code of info campaigns -->
+
+<div class="modal display-none popup-width" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" id="myModal" class="modal display-none popup-width in" style="display: block;">
+        <div class="wrap columns-2" style="">
+            <form method="post" id="sendTestEmailForm" name="sendTestEmailForm">
+                <div class="m-item-popup-hdr">Send Test Email</div>
+                <div id="poststuff" class="metabox-holder has-right-sidebar">
+                    <div id="post-body" style="min-height: 110px;">
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-right ml20">
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input type="hidden" id='testEmail' name='testEmail' placeholder="Search Email.." style="width:300px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br class="clear">
+                </div>
+
+                <div class="m-item-popup-btm">
+                    <button value="" id="submitUploadBtn" class="btn btn-primary m5" type="submit">Send</button>
+                    <button value="" class="btn ml10 m5" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

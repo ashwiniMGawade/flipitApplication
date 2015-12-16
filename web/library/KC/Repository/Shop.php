@@ -1273,7 +1273,7 @@ class Shop extends \Core\Domain\Entity\Shop
                     ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle6']) : '';
                 $shopReasons['reasonsubtitle6'] = !empty($shopDetail['reasonsubtitle6'])
                     ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle6']) : '';
-                \KC\Repository\ShopReasons::saveReasons($shopReasons, $shopInfo->id);
+                \KC\Repository\ShopReasons::saveReasons($shopReasons, $shopInfo);
             }
 
             $key = 'shop_similar_shops';

@@ -393,6 +393,11 @@ class Shop
     protected $relatedshops;
 
     /**
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\ShopReasons", mappedBy="shop")
+     */
+    protected $shopreasons;
+
+    /**
      * @ORM\OneToMany(targetEntity="Core\Domain\Entity\ShopHowToChapter", mappedBy="shop")
      */
     protected $howtochapter;
@@ -1613,7 +1618,21 @@ class Shop
     {
         $this->relatedshops = $relatedshops;
     }
+    /**
+     * @return mixed
+     */
+    public function getShopReasons()
+    {
+        return $this->shopreasons;
+    }
 
+    /**
+     * @param mixed $shopreasons
+     */
+    public function setShopReasons($shopreasons)
+    {
+        $this->shopreasons = $shopreasons;
+    }
     /**
      * @return mixed
      */

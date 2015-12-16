@@ -56,6 +56,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.filebrowserImageUploadUrl = '/public/js/back_end/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
 	config.filebrowserFlashUploadUrl = '/public/js/back_end/ckeditor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash'
 
-		
-		
+
+    CKEDITOR.dtd.$removeEmpty['span'] = false;
+    CKEDITOR.dtd.$removeEmpty['i'] = false;
 };

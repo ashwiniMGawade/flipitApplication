@@ -293,23 +293,6 @@ foreach ($this->offers as $offer) {
         </div>
     </article>
     <?php
-    $widgetPosition = !empty($this->widgetPosition) ? $this->widgetPosition : 1;
-    if (!empty($this->shopPage)) {
-        $showSignupOption = $this->showSignupOption;
-        if ($this->shop['affliateProgram'] == 1) {
-            $widgetPosition = $this->widgetPosition;
-        }
-    } else {
-        $showSignupOption = 1;
-    }
-    if ($offerCounter == $widgetPosition && $showSignupOption == 1 && $widgetPosition > 0) :
-        if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage'
-            || $this->offersType=='offerWithPagenation' || $this->offersType=='newestOffer'):
-            $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-            echo $this->esi($this->locale.'signup/signupwidgetlarge?shopId='.$this->currentStoreInformation[0]['id']
-                .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage=');
-        endif;
-    endif;
     if ($this->offersType=='simple') {
         if ($offer->shopOffers['showcustomtext'] == 1
             && $offerCounter == $offer->shopOffers['customtextposition']) { ?>

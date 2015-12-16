@@ -686,15 +686,16 @@ class FrontEnd_Helper_OffersPartialFunctions
         }
         return $totalViewCount;
     }
-    public static function getSplashPageTradingCoupons()
+    public static function getSplashPageGlobalCoupons()
     {
         $couponHtml = '';
-        $splashOffers = SystemFactory::getSplashOffers()->execute(array(), array('position'=>'ASC'));
-        $offerCount = 1;
+        $splashOffers = (array) SystemFactory::getSplashOffers()->execute(array(), array('position'=>'ASC'));
+        $splashImages = (array) SystemFactory::getSplashImages()->execute(array(), array('position'=>'ASC'));
+        $offerCount = 0;
         $serverNameScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
         foreach ($splashOffers as $splashOffer) {
             $offer = SystemFactory::getOffer($splashOffer->getLocale())->execute(array( 'id' => $splashOffer->getOfferId()));
-            if ($offer instanceof  \Core\Domain\Entity\Offer && $offerCount < 10) {
+            if ($offer instanceof  \Core\Domain\Entity\Offer) {
                 if ($splashOffer->getLocale() == 'en') {
                     $locale = $splashOffer->getLocale() == 'en' ? 'nl' : $splashOffer->getLocale();
                     $logoPath = $splashOffer->getLocale() == 'en' ? PUBLIC_PATH_CDN : PUBLIC_PATH_CDN . $locale . '/';
@@ -704,32 +705,27 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $logoPath = PUBLIC_PATH_CDN . $locale . '/';
                     $clickUrl = 'http://'.$serverNameScheme.'.flipit.com/'.$locale.'/'.$offer->getShopOffers()->getPermalink();
                 }
-                if (mb_strlen($offer->getTitle(), 'UTF-8') > 42) {
-                    $offerTitle = mb_substr($offer->getTitle(), 0, 42, 'UTF-8')."...";
-                } else {
-                    $offerTitle = $offer->getTitle();
-                }
-                $couponHtml .= '<div class="slide">
-                        <img src="'.PUBLIC_PATH.'images/front_end/trading_coupon/slide_img'.$offerCount.'.jpg" alt="'.$offer->getTitle().'">
+                $offerTitle = (mb_strlen($offer->getTitle(), 'UTF-8') > 42) ? mb_substr($offer->getTitle(), 0, 42, 'UTF-8')."..." : $offer->getTitle();
+                $offerCount = (count($splashImages) < $offerCount) ? 1 : $offerCount;
+                $splashImage = true === array_key_exists($offerCount, $splashImages) ? $splashImages[$offerCount]->getImage() : 'slide_img1.jpg';
+                $couponHtml .= '<div class="slide"><a href="'.$clickUrl.'">
+                        <img height="300" src="'.PUBLIC_PATH.'images/upload/splash/'.$splashImage.'" alt="'.$offer->getTitle().'">
                         <div class="caption">
                             <div class="img-holder">
-                                <a href="'.$clickUrl.'"><img src="'.$logoPath.$offer->getShopOffers()->getLogo()->path.'thum_big_'.$offer->getShopOffers()->getLogo()->name.'" alt="'.$offer->getShopOffers()->getName().'"></a>
+                                <img src="'.$logoPath.$offer->getShopOffers()->getLogo()->path.'thum_big_'.$offer->getShopOffers()->getLogo()->name.'" alt="'.$offer->getShopOffers()->getName().'">
                             </div>
                             <div class="text-holder">
-                                <p><strong class="persent"><a href="'.$clickUrl.'">'.$offerTitle.'</a></strong></p>
+                                <p><strong class="persent">'.$offerTitle.'</strong></p>
                                 <span class="flag">
-                                    <a href="'.$clickUrl.'">
-                                        <span class="flag"><span style="display :inline-block" class="country-flags '.$locale.'"></span></span>
-                                        <span class="country">'.$offer->getShopOffers()->getName().'</span>
-                                    </a>
+                                    <span class="flag"><span style="display :inline-block" class="country-flags '.$locale.'"></span></span>
+                                    <span class="country">'.$offer->getShopOffers()->getName().'</span>
                                 </span>
                             </div>
                         </div>
-                    </div>';
+                    </a></div>';
                 $offerCount++;
             }
         }
-
         return $couponHtml;
     }
 

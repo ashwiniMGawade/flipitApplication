@@ -1368,12 +1368,13 @@ class Shop extends BaseShop
      */
     public static function exportShopsList()
     {
-        $shopList = Doctrine_Query::create()->select('s.*,a.name as affname,c.name,rs.name')
+        $shopList = Doctrine_Query::create()->select('s.*,a.name as affname,c.name,rs.name, sr.fieldname, sr.fieldvalue')
                 ->from("Shop s")
                 ->leftJoin('s.affliatenetwork a')->leftJoin("s.category c")
                 ->addSelect("(SELECT con.updated_at FROM OfferNews  con  WHERE con.shopId = s.id order by updated_at Desc LIMIT 1) as newsTickerTime")
                 ->addSelect("(SELECT o.updated_at FROM Offer o WHERE o.shopId = s.id and o.deleted = 0 order by updated_at Desc LIMIT 1) as offerTime")
                 ->leftJoin("s.relatedshops rs")
+                ->leftJoin("s.shopreasons sr")
                 ->where("s.deleted=0")
                 ->orderBy("s.id DESC")
                 ->fetchArray();
@@ -2190,7 +2191,7 @@ public static function getShopDetail($shopId)
         $shopId = Doctrine_Query::create()
             ->select('s.id')
             ->from('Shop s')
-            ->where('s.name="'.ucfirst($shopName).'"')
+            ->where('s.name= ?', ucfirst($shopName))
             ->fetchArray();
         return isset($shopId[0]) ? $shopId[0]['id'] : '';
     }

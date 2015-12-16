@@ -41,6 +41,21 @@ class SplashPage
      */
     protected $updatedAt;
 
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     */
+    protected $infoImage;
+
+    /**
+     * @ORM\Column(type="text", nullable=false)
+     */
+    protected $footer;
+
+    /**
+     * @ORM\Column(type="text", nullable=false)
+     */
+    protected $statistics;
+
     public function __get($property)
     {
         return $this->$property;
@@ -146,4 +161,53 @@ class SplashPage
     {
         $this->$property = $value;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getFooter()
+    {
+        return $this->footer;
+    }
+
+    /**
+     * @param mixed $footer
+     */
+    public function setFooter($footer)
+    {
+        $this->footer = $footer;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInfoImage()
+    {
+        return $this->infoImage;
+    }
+
+    /**
+     * @param mixed $infoImage
+     */
+    public function setInfoImage($infoImage)
+    {
+        $this->infoImage = $infoImage;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatistics()
+    {
+        return $this->statistics;
+    }
+
+    /**
+     * @param mixed $statistics
+     */
+    public function setStatistics($statistics)
+    {
+        $this->statistics = $statistics;
+    }
+
 }

@@ -44,6 +44,13 @@ class ShopReasons
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated_at;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Shop", inversedBy="shopreasons")
+     * @ORM\JoinColumn(name="shopid", referencedColumnName="id")
+     */
+    protected $shop;
+
     public function __get($property)
     {
         return $this->$property;

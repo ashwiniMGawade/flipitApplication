@@ -56,6 +56,12 @@ use \Core\Domain\Usecase\Admin\GetURLSettingUsecase;
 use \Core\Domain\Usecase\Admin\UpdateURLSettingUsecase;
 use \Core\Domain\Usecase\Admin\DeleteURLSettingUsecase;
 
+use \Core\Domain\Usecase\Admin\GetNewsletterCampaignUsecase;
+use \Core\Domain\Usecase\Admin\CreateNewsletterCampaignUsecase;
+use \Core\Domain\Usecase\Admin\AddNewsletterCampaignUsecase;
+use \Core\Domain\Usecase\Admin\UpdateNewsletterCampaignUsecase;
+use \Core\Domain\Usecase\Admin\DeleteNewsletterCampaignUsecase;
+
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\LandingPageValidator;
 use \Core\Domain\Validator\SettingsValidator;
@@ -66,6 +72,7 @@ use \Core\Domain\Validator\SplashPageValidator;
 use \Core\Domain\Validator\VisitorValidator;
 use \Core\Domain\Validator\WidgetValidator;
 use \Core\Domain\Validator\UrlSettingValidator;
+use \Core\Domain\Validator\NewsletterCampaignValidator;
 
 use \Core\Persistence\Factory\RepositoryFactory;
 
@@ -365,5 +372,40 @@ class AdminFactory
     public static function getVisitor()
     {
         return new GetVisitorUsecase(RepositoryFactory::visitor(), new Purifier(), new Errors());
+    }
+
+    public static function getNewsletterCampaign()
+    {
+        return new GetNewsletterCampaignUsecase(RepositoryFactory::newsletterCampaign(), new Purifier(), new Errors());
+    }
+
+    public static function createNewsletterCampaign()
+    {
+        return new CreateNewsletterCampaignUsecase();
+    }
+
+    public static function addNewsletterCampaign()
+    {
+        return new AddNewsletterCampaignUsecase(
+            RepositoryFactory::newsletterCampaign(),
+            new NewsletterCampaignValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+
+    public static function updateNewsletterCampaign()
+    {
+        return new UpdateNewsletterCampaignUsecase(
+            RepositoryFactory::newsletterCampaign(),
+            new NewsletterCampaignValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+
+    public static function deleteNewsletterCampaign()
+    {
+        return new DeleteNewsletterCampaignUsecase(RepositoryFactory::newsletterCampaign());
     }
 }
