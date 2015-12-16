@@ -22,7 +22,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/locale.js");
                 <div class="mainpage-content-right">
                     <div class="mainpage-content-right-inner-right-other"></div>
                     <div class="mainpage-content-right-inner-left-other">
-                        <textarea class="span3" id="campaign-header" name="campaign-header" placeholder="<?php echo $this->translate('Default Header');?>"><?php echo trim($this->campaign_header); ?></textarea>
+                        <textarea class="span3" id="campaign-header" name="campaign-header" style="height:135px;" placeholder="<?php echo $this->translate('Default Header');?>"><?php echo trim($this->campaign_header); ?></textarea>
                     </div>
                 </div>
             </div>
@@ -31,14 +31,14 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/locale.js");
                 <div class="mainpage-content-right">
                     <div class="mainpage-content-right-inner-right-other"></div>
                     <div class="mainpage-content-right-inner-left-other">
-                        <textarea class="span3" id="campaign-footer" name="campaign-footer" placeholder="<?php echo $this->translate('Default Footer');?>"><?php echo trim($this->campaign_footer); ?> </textarea>
+                        <textarea class="span3" id="campaign-footer" name="campaign-footer" style="height:135px;" placeholder="<?php echo $this->translate('Default Footer');?>"><?php echo trim($this->campaign_footer); ?> </textarea>
                     </div>
                 </div>
             </div>
         </div>
         <div class="mainpage-content-colorbox">
             <button id="saveSettings" type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('Save Settings');?></button>
-            <a class="fl m10" href="javascript:void(0);" href ="<?php echo HTTP_PATH ;?>/admin/newslettercampaigns/settings'"><strong>CANCEL</strong></a>
+            <a class="fl m10"  href ="<?php echo HTTP_PATH ;?>/admin/newslettercampaigns/"><strong>CANCEL</strong></a>
         </div>
     </form>
 </div>

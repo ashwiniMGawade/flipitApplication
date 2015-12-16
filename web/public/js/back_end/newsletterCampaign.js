@@ -3,6 +3,20 @@ $(document).ready(function() {
     var iSortCol = $.bbq.getState('iSortCol', true) || 1;
     var iSortDir = $.bbq.getState('iSortDir', true) || 'DESC';
     getNewsletterCampaignList(iStart, iSortCol, iSortDir);
+
+    deleteCampaign = function (campaignId) {
+        bootbox.confirm(__('Are you sure you want to delete this campaign?'), function(r){
+            if(!r){
+                return false;
+            }else{
+                moverToTrash(campaignId);
+            }
+        });
+    }
+    function moverToTrash(campaignId) {
+        addOverLay();
+        document.location.href = HOST_PATH + "admin/newslettercampaigns/delete/id/"+campaignId ;
+    }
 });
 
 var newsletterCampaignListTable = null ;
@@ -36,8 +50,7 @@ function getNewsletterCampaignList(iStart,iSortCol,iSortDir) {
         "aoColumns" : [
             {
                 "fnRender" : function(obj) {
-
-                    return "<a rel="+ obj.aData.id +" href='javascript:void(0);'>" + ucfirst(obj.aData.campaignName) + "</a>" ;
+                    return "<p><a rel="+ obj.aData.id +" href='javascript:void(0);'>" + ucfirst(obj.aData.campaignName) + "</a></p>" ;
                 },
                 "bSortable" : true
             },
@@ -85,7 +98,7 @@ function getNewsletterCampaignList(iStart,iSortCol,iSortDir) {
             {
                 "fnRender" : function(obj) {
 
-                    return "<a  onclick='deleteVisitor("+obj.aData.id+")' href='javascript:void(0)'>" + __('Delete') + "</a>" ;
+                    return "<a  onclick='deleteCampaign("+obj.aData.id+")' href='javascript:void(0)'>" + __('Delete') + "</a>" ;
 
                 },
                 //"bSearchable" : false,
@@ -103,7 +116,7 @@ function getNewsletterCampaignList(iStart,iSortCol,iSortDir) {
             state[ 'iSortCol' ] = obj.aaSorting[0][0] ;
             state[ 'iSortDir' ] = obj.aaSorting[0][1] ;
 
-            $("#newsletterCampaignListTable").find('tr').find('td:lt(6)').click(function () {
+            $("#newsletterCampaignListTable").find('tr').find('td:lt(4)').click(function () {
                 var eId = $(this).parent('tr').find('a').attr('rel');
                 state[ 'eId' ] = eId ;
                 click = true;

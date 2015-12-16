@@ -11,19 +11,18 @@
 ?>
 <form method="post" action="<?php echo HTTP_PATH ;?>admin/splash/reorder-images">
 <div id="chainList">
-    <div class="top_navigation">
-        <ul>
-            <li><a href="/admin/splash/page">Splash Page</a></li>
-            <li><a href="/admin/splash">Splash Offers </a></li>
-            <li><a href="/admin/splash/images" class="selected_nav">Featured Images </a></li>
-        </ul>
-    </div>
-    <div class="clear"></div>
     <div class="wrap columns-2">
         <?php echo $this->flashMessages(); ?>
         <h1 class="fl"><?php echo $this->translate('Featured Images'); ?>
             <button class="btn ml10 btn-primary" type="button" onClick="showModel();"><?php echo $this->translate('Upload New Image'); ?></button>
         </h1>
+        <div class="top_navigation">
+            <ul>
+                <li><a href="/admin/splash/page">Splash Page</a></li>
+                <li><a href="/admin/splash">Splash Offers </a></li>
+                <li><a href="/admin/splash/images" class="selected_nav">Featured Images </a></li>
+            </ul>
+        </div>
         <div class="clear"></div>
         <table class="table table-bordered table-striped"  cellpadding="0" cellspacing="0" id="splash-image-table">
             <thead>

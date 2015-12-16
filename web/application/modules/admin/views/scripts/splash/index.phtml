@@ -11,14 +11,6 @@
 ?>
 <form method="post" action="<?php echo HTTP_PATH ;?>admin/splash/reorder">
 <div id="chainList">
-    <div class="top_navigation">
-        <ul>
-            <li><a href="/admin/splash/page">Splash Page</a></li>
-            <li><a href="/admin/splash" class="selected_nav">Splash Offers </a></li>
-            <li><a href="/admin/splash/images">Featured Images </a></li>
-        </ul>
-    </div>
-    <div class="clear"></div>
     <div class="wrap columns-2">
         <?php echo $this->flashMessages(); ?>
         <?php if(count($this->splashOffersData)>8): ?>
@@ -30,6 +22,14 @@
             </button>
         </h1>
         <?php endif; ?>
+        <div class="clear"></div>
+        <div class="top_navigation">
+            <ul>
+                <li><a href="/admin/splash/page">Splash Page</a></li>
+                <li><a href="/admin/splash" class="selected_nav">Splash Offers </a></li>
+                <li><a href="/admin/splash/images">Featured Images </a></li>
+            </ul>
+        </div>
         <div class="clear"></div>
         <table class="table table-bordered table-striped"  cellpadding="0" cellspacing="0" id="splash-offer-table">
             <thead>
