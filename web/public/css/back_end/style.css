@@ -3553,14 +3553,8 @@ div#error-message {
 #NewsletterWizardform .mainpage-content {
     border-top:0px;
 }
-#NewsletterWizardform .nav-tabs>li>a {
 
-    margin-right:8px;
-}
 
-#NewsletterWizardform .nav-tabs>.active>a {
-    color: #fff;
-}
 #NewsletterWizardform .previous a{
     float:right;
     background-color:#eeeeee;
@@ -3576,32 +3570,11 @@ div#error-message {
     pointer-events: none;
 }
 
-#NewsletterWizardform .nav-tabs>.active>a, #NewsletterWizardform .nav-tabs>.active>a:hover {
-    color:#fff;
-    text-shadow:0 -1px 0 rgba(0,0,0,0.25);
-}
-#NewsletterWizardform .nav-tabs>.active>a{
-    color:rgba(255,255,255,0.75)
-}
-#NewsletterWizardform .nav-tabs a, #NewsletterWizardform .next a {
+ #NewsletterWizardform .next a {
     border-color:#ccc;
     border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25)
 }
-#NewsletterWizardform .nav-tabs > li > a{
-    margin-left: 0;
-    margin-right: 20px;
-    padding: 8px 20px;
-    background-color:#EEEEEE;
-    color: #666;
-}
-#NewsletterWizardform .nav-tabs > li.active > a {
-    background-color: transparent;
-    color: #ffffff;
-}
-/*#NewsletterWizardform .nav-tabs > li.active > a.btn:hover{*/
-    /*background-image: none;*/
-/*}*/
-#NewsletterWizardform .nav-tabs>.active>a , #NewsletterWizardform .next a{
+ #NewsletterWizardform .next a{
     background-color:#0074cc;
     *background-color:#05c;
     background-image:-ms-linear-gradient(top, #08c, #05c);
