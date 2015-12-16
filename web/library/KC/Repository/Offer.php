@@ -2799,7 +2799,8 @@ class Offer extends \Core\Domain\Entity\Offer
         }
 
         $saveOffer->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['addofferTitle']);
-        $saveOffer->offer_position = \FrontEnd_Helper_viewHelper::sanitize($params['offerPosition']);
+        $offerPosition = \FrontEnd_Helper_viewHelper::sanitize($params['offerPosition']);
+        $saveOffer->offer_position = !empty($offerPosition) ? $offerPosition : 1000;
         if (isset($params['deepLinkStatus'])) {
             $saveOffer->refURL =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerRefUrl']);
         
