@@ -50,7 +50,7 @@ function getNewsletterCampaignList(iStart,iSortCol,iSortDir) {
         "aoColumns" : [
             {
                 "fnRender" : function(obj) {
-                    return "<a rel="+ obj.aData.id +" href='javascript:void(0);'>" + ucfirst(obj.aData.campaignName) + "</a>" ;
+                    return "<p><a rel="+ obj.aData.id +" href='javascript:void(0);'>" + ucfirst(obj.aData.campaignName) + "</a></p>" ;
                 },
                 "bSortable" : true
             },

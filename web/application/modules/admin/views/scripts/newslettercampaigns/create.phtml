@@ -17,15 +17,28 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
     <form id="NewsletterWizardform" method="post" action="" enctype="multipart/form-data">
         <h1 class="fl"><?php echo $this->translate('Create Newsletter Campaign');?>
             <button type="button" onclick="$('#myModal').modal('show');" href="#" id="sendTestMail" class="btn ml10"><?php echo $this->translate('Send Test Email');?></button>
+            <img id="loader" src="<?php echo PUBLIC_PATH;?>images/loader.gif" style="display:none;">
             <input type="submit" onclick="" href="#" id="saveNewsletterCampaign" class="btn ml10" value="<?php echo $this->translate('Save & Exit');?>"></button>
         </h1>
         <div class="clear"></div>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <ul class="nav nav-tabs font-bold">
-                    <li class="active "><a href="#step1" data-toggle="tab">1. Email Settings</a></li>
-                    <li class=""><a href="#step2" data-toggle="tab">2. Coupons</a></li>
-                    <li class=""><a href="#step3" data-toggle="tab">3. Schedule</a></li>
+                    <li class="active ">
+                        <a class="" type="button" id="searchByArticle" href="#step1" data-toggle="tab">
+                            1. Email Settings
+                        </a>
+                    </li>
+                    <li class="">
+                        <a class="" type="button" id="searchByArticle" href="#step2" data-toggle="tab">
+                            2. Coupons
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="#step2" data-toggle="tab" class="">
+                            3. Schedule
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="panel-body">
@@ -90,7 +103,6 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                                     <div class="mainpage-content-line">
                                         <div class="mainpage-content-right-inner-left-other">
                                             <div class="mainpage-content-line header-image-cont">
-                                                <div class="mainpage-content-right-inner"></div>
                                                 <div class="mainpage-content-right-inner">
                                                     <div class="browse-container">
                                                         <?php if ( isset($this->newsletterCampaign['headerBanner'])) { ?>
@@ -138,7 +150,6 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                                     <div class="mainpage-content-line">
                                         <div class="mainpage-content-right-inner-left-other">
                                             <div class="mainpage-content-line header-image-cont">
-                                                <div class="mainpage-content-right-inner"></div>
                                                 <div class="mainpage-content-right-inner">
                                                     <div class="browse-container">
                                                         <?php if ( isset($this->newsletterCampaign['footerBanner']) ) { ?>
@@ -177,7 +188,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                     <div class="tab-pane" id="step3">This is step 3</div>
                     <ul class="pager wizard m-b-sm">
                         <li class="next last" style="display:none;"><a href="#">Last</a></li>
-                        <li class="next"><a href="#">Next</a></li>
+                        <li class="next"><a href="#" class="">Next</a></li>
                         <li class="previous first disabled" style="display:none;"><a href="#">First</a></li>
                         <li class="previous disabled"><a href="#">Previous</a></li>
                     </ul>
