@@ -17,7 +17,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
     <form id="NewsletterWizardform" method="post" action="" enctype="multipart/form-data">
         <h1 class="fl"><?php echo $this->translate('Create Newsletter Campaign');?>
             <button type="button" onclick="$('#myModal').modal('show');" href="#" id="sendTestMail" class="btn ml10"><?php echo $this->translate('Send Test Email');?></button>
-            <img id="loader" src="<?php echo PUBLIC_PATH;?>images/ajax-loader2" style="display:none;">
+            <img id="loader" src="<?php echo PUBLIC_PATH;?>images/loader.gif" style="display:none;">
             <input type="submit" onclick="" href="#" id="saveNewsletterCampaign" class="btn ml10" value="<?php echo $this->translate('Save & Exit');?>"></button>
             <a type="button" href="<?php echo HTTP_PATH;?>admin/newslettercampaigns" id="cancel" class="btn ml10"><?php echo $this->translate('Cancel');?></a>
 
