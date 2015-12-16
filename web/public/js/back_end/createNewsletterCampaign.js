@@ -114,9 +114,10 @@ $(function(){
                         if (invalidForm[i]) {
                             $('#saveNewsletterCampaign').removeAttr('disabled');
                             $('#sendTestMail').removeAttr('disabled');
+                            $('#cancel').removeClass('disable_a_href disabled')
                             $('.nav-tabs a').removeClass('disable_a_href');
-                            $('.next a').removeClass('disable_a_href')
-                            $('.previous a').removeClass('disable_a_href')
+                            $('.next a').removeClass('disable_a_href');
+                            $('.previous a').removeClass('disable_a_href');
                             $("#loader").hide();
                             return false;
                         }
@@ -315,6 +316,7 @@ $(function(){
             if ($("form#NewsletterWizardform").valid()) {
                 $('#saveNewsletterCampaign').attr('disabled', "disabled");
                 $('#sendTestMail').attr('disabled', "disabled");
+                $('#cancel').addClass('disable_a_href disabled')
                 $('.nav-tabs a').addClass('disable_a_href');
                 $('.next a').addClass('disable_a_href');
                 $('.previous a').addClass('disable_a_href');
