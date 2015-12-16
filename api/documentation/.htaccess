@@ -1,5 +1,12 @@
 <IfModule mod_rewrite.c>
 
+
+AuthUserFile /var/www/flipit_application/api/documentation/.htpasswd
+#AuthGroupFile /dev/null
+AuthName "Enter password"
+AuthType Basic
+require valid-user
+
 RewriteEngine On
 
 ## Begin RewriteBase
