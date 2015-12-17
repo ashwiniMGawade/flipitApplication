@@ -614,6 +614,17 @@ $action = $this->action;
            class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile"><?php echo $this->translate('Popular Codes'); ?></a>
     </li>
 
+    <li <?php if ($controller == 'top50coupons') { ?> class="imbull-has-submenu  menu-top menu-icon-popular imbull-has-current-submenu current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-popular" <?php } ?>
+        id="menu-links">
+
+        <div class="imbull-menu-image"><a href="<?php echo HTTP_PATH; ?>admin/top50coupons"><br></a></div>
+        <div class="">
+            <div></div>
+        </div>
+        <a href="<?php echo HTTP_PATH; ?>admin/top50coupons"
+           class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile"><?php echo $this->translate('Top 50 page offers'); ?></a>
+    </li>
+
     <li
         <?php
         if ($controller == 'populararticles') {
