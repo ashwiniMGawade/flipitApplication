@@ -21,15 +21,24 @@ class FrontEnd_Helper_PageHeaderPartialFunctions
     {
         $headertitle = '<h1>' . $headerText . '</h1>';
         $headerSubTitle = '<h2>' . $headerSubText . '</h2>';
-        $header = '<div class="header-block top-header-block"> 
-            <div class="icon">
-            </div>
-            <div class="box">
-                <div class="holder">
-                    '.$headertitle.$headerSubTitle.'
+        if($headerImage != '') {
+            $header = '<div class="banner-block">
+                <img alt="'.$headerText.'" src="'.$headerImage.'" class="image" title="'.$headerImage.'">
+                <div class="bar">
+                        '.$headertitle.'
                 </div>
-            </div>
-        </div>';
+            </div>';
+        } else {
+            $header = '<div class="header-block top-header-block">
+                <div class="icon">
+                </div>
+                <div class="box">
+                    <div class="holder">
+                        '.$headertitle.$headerSubTitle.'
+                    </div>
+                </div>
+            </div>';
+        }
         return $header;
     }
 }
