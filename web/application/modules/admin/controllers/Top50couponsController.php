@@ -21,7 +21,7 @@ class Admin_Top50couponsController extends Application_Admin_BaseController
 
     public function indexAction()
     {
-        $data = \KC\Repository\PopularCode::getPopularCode();
+        $data = \KC\Repository\PopularCode::getPopularCode(50 , 'TOP50');
         $neAr = array();
         foreach ($data as $pOffer) {
             $neAr[] = $pOffer['offerId'];
@@ -30,4 +30,24 @@ class Admin_Top50couponsController extends Application_Admin_BaseController
         $this->view->data = $data;
         $this->view->offer = $allOffer;
     }
+
+    public function savetop50couponspositionAction()
+    {
+        \KC\Repository\PopularCode::savePopularOffersPosition($this->getRequest()->getParam('offerid'), 'TOP50');
+        $popularCode = \KC\Repository\PopularCode::getPopularCode(50, 'TOP50');
+        echo \Zend_Json::encode($popularCode);
+        exit();
+    }
+
+    public function addofferAction()
+    {
+        $data = $this->getRequest()->getParam('id');
+        $flag = \KC\Repository\PopularCode::addOfferInList($data, 'TOP50');
+        if ($flag && $flag != "0" && $flag != "1" && $flag != '2') {
+            self::updateVarnish();
+        }
+        echo \Zend_Json::encode($flag);
+        die();
+    }
+
 }

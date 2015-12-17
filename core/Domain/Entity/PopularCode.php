@@ -2,6 +2,8 @@
 namespace Core\Domain\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 
+
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="popular_code", uniqueConstraints={@ORM\UniqueConstraint(name="offerid", columns={"offerid"})})

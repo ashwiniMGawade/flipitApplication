@@ -85,7 +85,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         return $data;
     }
 
-    public static function getPopularCode($limit = 27)
+    public static function getPopularCode($limit = 27, $type = 'MN')
     {
         $date = date('Y-m-d H:i:s');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -98,6 +98,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
             ->andWhere("o.userGenerated = 0")
             ->andWhere('s.deleted = 0')
             ->andWhere('o.offline = 0')
+            ->andWhere('p.type = '."'".$type."'")
             ->andWhere('o.endDate >'."'".$date."'")
             ->andWhere('o.startDate <='."'".$date."'")
             ->setMaxResults($limit)
@@ -174,7 +175,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         return $data;
     }
 
-    public static function addOfferInList($id)
+    public static function addOfferInList($id, $type = "MN")
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $offer = $queryBuilder
@@ -187,13 +188,13 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         $flag = '0';
 
         if (sizeof($offer) > 0) {
-
             //check offer exist or not
             $queryBuilderPopularCode = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $pc = $queryBuilderPopularCode
                 ->select('pc')
                 ->from('\Core\Domain\Entity\PopularCode', 'pc')
                 ->where('pc.popularcode =' . $id)
+                ->andWhere('pc.type = '."'".$type."'")
                 ->getQuery()
                 ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             if (sizeof($pc) > 0) {
@@ -205,6 +206,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
                 $data = $queryBuilderPosition
                     ->select('p.position')
                     ->from('\Core\Domain\Entity\PopularCode', 'p')
+                    ->Where('p.type = '."'".$type."'")
                     ->orderBy('p.position', 'DESC')
                     ->setMaxResults(1)
                     ->getQuery()
@@ -216,7 +218,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
                 }
                 $entityManagerLocale  = \Zend_Registry::get('emLocale');
                 $pc = new \Core\Domain\Entity\PopularCode();
-                $pc->type = 'MN';
+                $pc->type = strtoupper($type);
                 $pc->popularcode = $entityManagerLocale->find('\Core\Domain\Entity\Offer', $id);
                 $pc->position = (intval($NewPos) + 1);
                 $pc->deleted = 0;
@@ -227,11 +229,11 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
                 $entityManagerLocale->flush();
                 
                 $flag  = array(
-                    'id'=>$pc->id,
-                    'type'=>'MN',
-                    'offerId'=>$id,
-                    'position'=>(intval($NewPos) + 1),
-                    'title'=>$offer[0]['title']
+                    'id' => $pc->id,
+                    'type' => $type,
+                    'offerId' => $id,
+                    'position' => (intval($NewPos) + 1),
+                    'title' => $offer[0]['title']
                 );
             }
         }
@@ -320,13 +322,15 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         }
     }
 
-    public static function savePopularOffersPosition($offerId)
+    public static function savePopularOffersPosition($offerId, $type = "MN")
     {
+        echo $type; exit;
         if (!empty($offerId)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->delete('\Core\Domain\Entity\PopularCode', 's')
                 ->where('s.id > 0')
+                ->andWhere('s.type = '."'".$type."'")
                 ->getQuery()
                 ->execute();
             $offerId = explode(',', $offerId);
@@ -336,7 +340,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
                 $popularCode = new \Core\Domain\Entity\PopularCode();
                 $popularCode->popularcode = $entityManagerLocale->find('\Core\Domain\Entity\Offer', $offerIdValue);
                 $popularCode->position = $i;
-                $popularCode->type = "MN";
+                $popularCode->type = strtoupper($type);
                 $popularCode->status = 1;
                 $popularCode->deleted = 0;
                 $popularCode->created_at = new \DateTime('now');
