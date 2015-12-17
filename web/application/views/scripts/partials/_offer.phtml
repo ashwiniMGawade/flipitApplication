@@ -277,15 +277,14 @@ foreach ($this->offers as $offer) {
                 </a>
             </div>
         </div>
-        <div class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
+        <?php
+            $termsClass = 'terms-block';
+            if ($offer->exclusiveCode == '1') {
+                $termsClass .= $expiredOffer != '' ? '' : ' orange-terms';
+            }
+        ?>
+        <div class="<?php echo $termsClass; ?>" id='termAndConditions<?php echo $offer->id ;?>'>
             <div class='term-and-condition'>
-                <?php
-                if (empty($defaultText)) {
-                    echo $this->translate('Terms &amp; Conditions');
-                } else {
-                    echo '<span class="social-term-font">' .$defaultText.'</span>';
-                }
-                ?>
             </div>
             <ol class="num-list">
             <?php echo $termsAndConditions;?>
