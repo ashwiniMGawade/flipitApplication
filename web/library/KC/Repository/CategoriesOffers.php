@@ -1,5 +1,6 @@
 <?php
 namespace KC\Repository;
+
 class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
 {
     public static function getCategoryOffersByCategoryIdForFrontEnd($categoryId)
@@ -279,5 +280,6 @@ class CategoriesOffers extends \Core\Domain\Entity\CategoriesOffers
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categories_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryPageCacheKey.'_data');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryPageCacheKey.'_voucherCodes');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryPageCacheKey.'_voucherCodes_orders');
     }
 }
