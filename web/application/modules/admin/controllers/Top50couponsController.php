@@ -50,4 +50,15 @@ class Admin_Top50couponsController extends Application_Admin_BaseController
         die();
     }
 
+    public function updateVarnish()
+    {
+        // Add urls to refresh in Varnish
+        $varnishObj = new KC\Repository\Varnish();
+        $varnishObj->addUrl(rtrim( HTTP_PATH_FRONTEND , '/'));
+        if (LOCALE == '') {
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed');
+        }
+    }
+
 }
