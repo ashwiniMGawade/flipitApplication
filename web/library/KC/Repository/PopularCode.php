@@ -108,7 +108,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         return $data;
     }
 
-    public static function gethomePopularvoucherCode($flag)
+    public static function gethomePopularvoucherCode($flag, $type = "MN")
     {
         $date = date('Y-m-d H:i:s');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -133,6 +133,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
             ->setParameter(5, 'MEM')
             ->andWhere('o.Visability != ?5')
             ->andWhere('o.userGenerated = 0')
+            ->andWhere('p.type = '."'".$type."'")
             ->orderBy('p.position', 'ASC')
             ->setMaxResults($flag)
             ->getQuery()
@@ -140,7 +141,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         return $data;
     }
 
-    public static function gethomePopularvoucherCodeForMarktplaatFeeds($flag, $id = array(6))
+    public static function gethomePopularvoucherCodeForMarktplaatFeeds($flag, $id = array(6), $type = "MN")
     {
         $date = date('Y-m-d H:i:s');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -168,6 +169,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
             ->setParameter(5, 'MEM')
             ->andWhere('o.Visability != ?5')
             ->andWhere('o.userGenerated = 0')
+            ->andWhere('p.type = '."'".$type."'")
             ->orderBy('p.position', 'ASC')
             ->setMaxResults($flag)
             ->getQuery()
@@ -314,22 +316,33 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
     {
         if ($id) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder
-                ->delete('\Core\Domain\Entity\PopularCode', 's')
-                ->where('s.id ='.$id)
+            $popularCodeDetails = $queryBuilder
+                ->select('popularcode.type')
+                ->from('\Core\Domain\Entity\PopularCode', 'popularcode')
+                ->where('popularcode.id ='.$id)
+                ->setMaxResults(1)
                 ->getQuery()
-                ->execute();
-
-            if ($flagForCache==true) {
-                $queryBuilder
-                    ->update('\Core\Domain\Entity\PopularCode', 'pc')
-                    ->set('pc.position', 'pc.position -1')
-                    ->where('pc.position > '.$position)
+                ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            if (!empty($popularCodeDetails)) {
+                $query = $queryBuilder
+                    ->delete('\Core\Domain\Entity\PopularCode', 's')
+                    ->where('s.id ='.$id)
                     ->getQuery()
                     ->execute();
 
-                self::clearTop20Cache();
+                if ($flagForCache==true) {
+                    $queryBuilder
+                        ->update('\Core\Domain\Entity\PopularCode', 'pc')
+                        ->set('pc.position', 'pc.position -1')
+                        ->where('pc.position > '.$position)
+                        ->Where('pc.type = '."'".$popularCodeDetails[0]['type']."'")
+                        ->getQuery()
+                        ->execute();
+
+                    self::clearTop20Cache();
+                }
             }
+
         }
     }
 
