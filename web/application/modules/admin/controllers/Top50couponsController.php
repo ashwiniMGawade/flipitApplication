@@ -50,6 +50,19 @@ class Admin_Top50couponsController extends Application_Admin_BaseController
         die();
     }
 
+    public function deletetop50couponAction()
+    {
+        $id = $this->getRequest()->getParam('id');
+        $position = $this->getRequest()->getParam('pos');
+        $isUpdated = \KC\Repository\PopularCode::deletePapularCode($id, $position, 'TOP50');
+        if ($isUpdated) {
+            self::updateVarnish();
+        }
+        $data = \KC\Repository\PopularCode::getPopularCode();
+        echo \Zend_Json::encode($data);
+        die();
+    }
+
     public function updateVarnish()
     {
         // Add urls to refresh in Varnish

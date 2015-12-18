@@ -242,7 +242,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         return $flag;
     }
 
-    public static function deletePapularCode($id, $position)
+    public static function deletePapularCode($id, $position, $type = "MN")
     {
         if ($id) {
             $queryBuilderPopularOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -258,8 +258,17 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
             $queryBuilderOffer = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $queryBuilderOffer
                 ->update('\Core\Domain\Entity\Offer', 'o')
+                ->set('o.editorPicks', $queryBuilderOffer->expr()->literal('o.editorPicks - 1'))
+                ->where('o.id = '.$offerDetail[0]['id'])
+                ->where('o.editorPicks > 1')
+                ->getQuery()
+                ->execute();
+
+            $queryBuilderOffer
+                ->update('\Core\Domain\Entity\Offer', 'o')
                 ->set('o.editorPicks', '0')
                 ->where('o.id = '.$offerDetail[0]['id'])
+                ->where('o.editorPicks <= 1')
                 ->getQuery()
                 ->execute();
 
@@ -273,6 +282,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
             $queryBuilder ->update('\Core\Domain\Entity\PopularCode', 'pc')
                 ->set('pc.position', $queryBuilder->expr()->literal('pc.position -1'))
                 ->where('pc.position > '.$position)
+                ->Where('pc.type = '."'".$type."'")
                 ->getQuery()
                 ->execute();
 
@@ -280,6 +290,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
             $newOfferList = $queryBuilder
                 ->select('popularcode')
                 ->from('\Core\Domain\Entity\PopularCode', 'popularcode')
+                ->Where('popularcode.type = '."'".$type."'")
                 ->getQuery()
                 ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             $newPos = 1;
