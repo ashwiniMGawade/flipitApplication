@@ -218,6 +218,7 @@ class Offer
 
     /**
      * @ORM\OneToMany(targetEntity="Core\Domain\Entity\PopularCode", mappedBy="popularcode")
+     * @ORM\JoinColumn(name="id", referencedColumnName="offerid", onDelete="restrict")
      */
     protected $offer;
 

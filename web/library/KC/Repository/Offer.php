@@ -1132,16 +1132,17 @@ class Offer extends \Core\Domain\Entity\Offer
         $nowDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
-            ->select('o, s, img, vot, t, terms, offerImage')
+            ->select('o, s, img, vot, t, terms, offerImage, pc')
         ->from('\Core\Domain\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
+        ->leftJoin('o.offer', 'pc')
         ->leftJoin('s.logo', 'img')
         ->leftJoin('o.logo', 'offerImage')
         ->leftJoin('o.offertermandcondition', 'terms')
         ->leftJoin('o.votes', 'vot')
         ->leftJoin('o.offerTiles', 't')
         ->where('o.deleted = 0');
-        
+
         if (!$includingOffline) {
             $query = $query
                 ->andWhere('o.offline = 0')
@@ -1177,9 +1178,11 @@ class Offer extends \Core\Domain\Entity\Offer
             $query = $query->setMaxResults($limit);
         }
         $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
         usort($offers, function ($currentOffer, $nextOffer) {
             return $currentOffer['offer_position'] - $nextOffer['offer_position'];
         });
+
         return $offers;
     }
 

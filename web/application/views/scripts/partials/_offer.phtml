@@ -65,7 +65,8 @@ foreach ($this->offers as $offer) {
     ?>
     <article class="block <?php echo $offerClass.' '.$expiredDealClass; ?>">
         <div class="holder <?php echo $offerHolderClass; ?>" id="<?php echo $offer->id; ?>">
-    <?php 
+    <?php
+
     echo $offerPartial->getCommonRedirectUrlForOffer(
         $offer,
         $urlToShow,
@@ -197,14 +198,25 @@ foreach ($this->offers as $offer) {
             $offer->shopOffers['permaLink']
         );
     }
+    $top50coupon = '';
+    if (isset($offer->offer) && !empty($offer->offer)) {
+        foreach ($offer->offer as $popularcode) {
+            if ($popularcode['type'] == 'TOP50') {
+                $top50coupon = '<li> <span class="imbull-menu-image top50"></span> Top 50 coupon code</li>';
+            }
+        }
+    }
     $combinedOfferBottomText = $offerBottomTermsAndConditionLink
         .$offerBottomTextForExclusiveOrSocialOrEditor
+        .$top50coupon
         .$offerBottomDaysTillExpireText
         .$offerBottomViewAllShopsLink.$offerBottomExtendedLink;
+
     if (!empty($combinedOfferBottomText)) {
         ?>
         <div class="info-area">
-            <?php echo $offerBottomTermsAndConditionLink;?>
+            <?php echo $offerBottomTermsAndConditionLink; ?>
+
             <div class="info">
                <ul>
                     <?php
@@ -213,7 +225,8 @@ foreach ($this->offers as $offer) {
                         $offerBottomDaysTillExpireText,
                         $offerBottomViewAllShopsLink,
                         $offerBottomExtendedLink
-                    ); 
+                    );
+
                     $offerBottomTextForExclusiveOrSocialOrEditor = 
                         isset($offerOptionsWithPriorityClasses['offerBottomTextForExclusiveOrSocialOrEditor']) 
                         ? $offerOptionsWithPriorityClasses['offerBottomTextForExclusiveOrSocialOrEditor'] 
@@ -236,6 +249,7 @@ foreach ($this->offers as $offer) {
                         : '';
 
                     echo $offerBottomTextForExclusiveOrSocialOrEditor
+                        .$top50coupon
                         .$offerBottomDaysTillExpireText
                         .$offerBottomViewAllShopsLink;
                     $showUsedCode = false;
@@ -261,7 +275,7 @@ foreach ($this->offers as $offer) {
                </ul>
             </div>
         </div>
-        <?php 
+        <?php
     }
     ?>
     </div>
