@@ -1,5 +1,4 @@
 <?php
-
 namespace KC\Repository;
 
 class PopularCode extends \Core\Domain\Entity\PopularCode
@@ -389,5 +388,6 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('shop_popularShopForWidget_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('50_topOffers_list');
     }
 }

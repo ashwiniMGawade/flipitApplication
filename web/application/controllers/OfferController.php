@@ -44,6 +44,7 @@ class OfferController extends Zend_Controller_Action
             FACEBOOK_IMAGE,
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
+
         $offers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'50_topOffers_list',
             (array)array('function' => 'Application_Service_Factory::topOffers', 'parameters' => array(50)

@@ -21,7 +21,7 @@ class Admin_Top50couponsController extends Application_Admin_BaseController
 
     public function indexAction()
     {
-        $data = \KC\Repository\PopularCode::getPopularCode(50 , 'TOP50');
+        $data = \KC\Repository\PopularCode::getPopularCode(50, 'TOP50');
         $neAr = array();
         foreach ($data as $pOffer) {
             $neAr[] = $pOffer['offerId'];
@@ -35,6 +35,7 @@ class Admin_Top50couponsController extends Application_Admin_BaseController
     {
         \KC\Repository\PopularCode::savePopularOffersPosition($this->getRequest()->getParam('offerid'), 'TOP50');
         $popularCode = \KC\Repository\PopularCode::getPopularCode(50, 'TOP50');
+        self::updateVarnish();
         echo \Zend_Json::encode($popularCode);
         exit();
     }
@@ -67,11 +68,13 @@ class Admin_Top50couponsController extends Application_Admin_BaseController
     {
         // Add urls to refresh in Varnish
         $varnishObj = new KC\Repository\Varnish();
-        $varnishObj->addUrl(rtrim( HTTP_PATH_FRONTEND , '/'));
+        $varnishObj->addUrl(rtrim(HTTP_PATH_FRONTEND, '/'));
         if (LOCALE == '') {
             $varnishObj->addUrl(HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
             $varnishObj->addUrl(HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed');
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND . 'top-50');
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND . 'top50');
         }
     }
-
 }
+

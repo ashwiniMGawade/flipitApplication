@@ -1,12 +1,11 @@
 <?php
 namespace Core\Domain\Entity;
-use Doctrine\ORM\Mapping AS ORM;
 
-
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="popular_code", uniqueConstraints={@ORM\UniqueConstraint(name="offerid", columns={"offerid"})})
+ * @ORM\Table(name="popular_code")
  */
 class PopularCode
 {

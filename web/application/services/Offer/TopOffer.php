@@ -12,7 +12,7 @@ class Application_Service_Offer_TopOffer extends Application_Service_Offer_Offer
 
     public function execute($limit)
     {
-        $topCouponCodes = $this->offerRepository->getTopCouponCodes(array(), $limit);
+        $topCouponCodes = $this->offerRepository->getTopCouponCodes(array(), $limit, 'TOP50');
 
         if (count($topCouponCodes) < $limit) {
             $totalViewCountOffersLimit = $limit - count($topCouponCodes);
@@ -26,7 +26,6 @@ class Application_Service_Offer_TopOffer extends Application_Service_Offer_Offer
     private function getOffersByType($limit, $constraintLimit)
     {
         $topVoucherCodes = $this->offerRepository->getOffers('totalViewCount', $constraintLimit);
-
         if (count($topVoucherCodes) < $constraintLimit) {
             $newestCodesLimit = $constraintLimit - count($topVoucherCodes);
             $newestVoucherCodes = $this->offerRepository->getOffers('newest', $newestCodesLimit);
@@ -48,12 +47,12 @@ class Application_Service_Offer_TopOffer extends Application_Service_Offer_Offer
                     : '';
                 $topCouponCodes[] = array(
                     'id'=> $shopId,
+                    'position' => count($topCouponCodes)+1,
                     'permaLink' => $shopPermalink,
                     'popularcode' => $topVoucherCodeValue
                 );
             }
         }
-        
         return $topCouponCodes;
     }
 
@@ -63,7 +62,7 @@ class Application_Service_Offer_TopOffer extends Application_Service_Offer_Offer
 
         if (!empty($topCouponCodes)) {
             foreach ($topCouponCodes as $topCouponCodeValue) {
-                $topOffers[] = $topCouponCodeValue['popularcode'];
+                $topOffers[] = array_merge(array('top50rank' => $topCouponCodeValue['position']), $topCouponCodeValue['popularcode']);
             }
         }
 
