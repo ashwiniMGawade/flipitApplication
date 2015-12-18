@@ -14,7 +14,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         
-        foreach($popIds as $popId):
+        foreach ($popIds as $popId):
             $popIdsToDelete = $entityManagerLocale
                 ->select('o.id')
                 ->from('\Core\Domain\Entity\Offer', 'o')
@@ -22,7 +22,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
                 ->andWhere('o.endDate <'."'".$date."'")
                 ->getQuery()
                 ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            if($popIdsToDelete):
+            if ($popIdsToDelete):
                 self::deletePopular($popId['popularcode'], $popId['position'], $flagForCache);
             endif;
         endforeach;
@@ -324,7 +324,6 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
 
     public static function savePopularOffersPosition($offerId, $type = "MN")
     {
-        echo $type; exit;
         if (!empty($offerId)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder

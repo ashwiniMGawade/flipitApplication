@@ -32,7 +32,7 @@ $(document).ready(function() {
 		    var offerid = offerid.toString();
 			$.ajax({
 		        type : "POST",
-		        url : HOST_PATH + "admin/top50coupons/savetop50couponspositionAction",
+		        url : HOST_PATH + "admin/top50coupons/savetop50couponsposition",
 		        method : "post",
 		        dataType : 'json',
 		        data: { offerid: offerid },
@@ -237,8 +237,6 @@ function addNewOffer() {
 }
 /**
  * move down element on one position from list
- * @author kraj
- * @version 1.0
  */
 function moveDown() {
 	
