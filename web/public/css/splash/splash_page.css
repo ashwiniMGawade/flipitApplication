@@ -9793,7 +9793,7 @@ body {
     }
 
     .aside.add {
-        padding: 47px 0 40px;
+        padding: 47px 0 41px;
     }
 
     .aside.add .col {
@@ -11335,22 +11335,48 @@ body {
     width: 10%;
     float: left;
 }
+@media only screen and (min-width: 959px){
+    .cols-wrp{
+        margin-left: 45px;
+    }
+}
 
-
-@media (min-width: 768px) and (max-width: 960px){
+@media (min-width: 768px) and (max-width: 959px){
     .popular-sec .row .col, .popular-sec .row .col:last-child {
         width:33.333333%;
         float: left;
     }
     .popular-sec-wrapper{
         padding: 0 50px;
+        margin-left: 50px;
     }
-
-
 }
 @media (max-width:767px){
     .popular-sec .row .col, .popular-sec .row .col:last-child{
         width: 50%;
     }
+    .popular-sec-wrapper{
+        margin-left: 15px;
+    }
+}
 
+@media (min-width:665px) and (max-width:740px) {
+    .popular-sec .row .col, .popular-sec .row .col:last-child{
+        width: 16%;
+    }
+    .popular-sec-wrapper{
+        margin-left: 15px;
+    }
+    .popular-sec{
+        max-width: 100%;
+    }
+    .popular-sec .container{
+        margin:0;
+    }
+    .popular-sec h3{
+        font-size: 14px;
+    }
+    .col-xs-6{
+        width: 25%;
+    }
 }
