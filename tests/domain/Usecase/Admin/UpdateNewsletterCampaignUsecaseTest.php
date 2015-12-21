@@ -60,8 +60,8 @@ class UpdateNewsletterCampaignUsecaseTest extends \Codeception\TestCase\Test
     {
         $params = array(
             'campaignName' => 'test',
-            'header'=> 'header',
-            'footer'=> 'footer',
+            'campaignHeader'=> 'header',
+            'campaignFooter'=> 'footer',
             'campaignSubject' => 'test',
             'senderName' => 'test',
             'headerBanner' => 'test',
