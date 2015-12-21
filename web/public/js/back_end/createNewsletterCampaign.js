@@ -6,6 +6,9 @@ $(function(){
                 // wrire validation logic here
             },
             onTabClick: function(tab, navigation, index) {
+                if(tab.next().find('a').attr('id') == 'campaignOffers') {
+                    getOffersData();
+                }
                 return true;
             },
             onTabShow: function(tab, navigation, index) {
@@ -15,6 +18,19 @@ $(function(){
                 $('#NewsletterWizardform').find('.progress-bar').css({width:$percent+'%'});
             }
         });
+
+    var getOffersData = function() {
+        $.ajax({
+            url: HOST_PATH + "admin/newslettercampaigns/offers",
+            type: 'post',
+            success: function(data) {
+                $("#step2").html(data);
+            },
+            error : function(e) {
+                console.log(e);
+            }
+        });
+    }
 
 
         var ranNum = Math.floor((Math.random()*50)+1);

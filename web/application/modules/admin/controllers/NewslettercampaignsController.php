@@ -290,4 +290,8 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $varnishObject = new \KC\Repository\Varnish();
         $varnishObject->addUrl("http://www.flipit.com");
     }
+
+    public function offersAction() {
+        $this ->_helper-> layout()->disableLayout();
+    }
 }
