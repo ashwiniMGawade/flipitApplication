@@ -202,7 +202,7 @@ foreach ($this->offers as $offer) {
     if (isset($offer->offer) && !empty($offer->offer)) {
         foreach ($offer->offer as $popularcode) {
             if ($popularcode['type'] == 'TOP50') {
-                $top50coupon = '<li> <span class="imbull-menu-image top50"></span> Top 50 coupon code</li>';
+                $top50coupon = '<li class="cursor-pointer" title="This coupon is listed in our top 50 coupons"><span class="imbull-menu-image top50" ></span>Top 50 code</li>';
             }
         }
     }
