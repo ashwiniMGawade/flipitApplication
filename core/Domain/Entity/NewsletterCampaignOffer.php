@@ -29,13 +29,13 @@ class NewsletterCampaignOffer
     protected $newsletterCampaign;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Offer", inversedBy="campaignOffers")
+     * @ORM\OneToOne(targetEntity="Core\Domain\Entity\Offer", inversedBy="campaignOffer")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id")
      */
-    protected $offers;
+    protected $offer;
 
     /**
-     * @ORM\Column(type="integer", length=8, nullable=true)
+     * @ORM\Column(type="integer", length=8, nullable=false)
      */
     protected $position;
 
@@ -74,6 +74,38 @@ class NewsletterCampaignOffer
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNewsletterCampaign()
+    {
+        return $this->newsletterCampaign;
+    }
+
+    /**
+     * @param mixed $newsletterCampaign
+     */
+    public function setNewsletterCampaign($newsletterCampaign)
+    {
+        $this->newsletterCampaign = $newsletterCampaign;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOffer()
+    {
+        return $this->offer;
+    }
+
+    /**
+     * @param mixed $offer
+     */
+    public function setOffer($offer)
+    {
+        $this->offer = $offer;
     }
 
     /**

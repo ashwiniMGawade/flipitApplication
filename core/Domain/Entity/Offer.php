@@ -284,9 +284,9 @@ class Offer
     protected $categoriesOffers;
 
     /**
-     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\NewsletterCampaignOffer", mappedBy="offers")
+     * @ORM\OneToOne(targetEntity="Core\Domain\Entity\NewsletterCampaignOffer", mappedBy="offer")
      */
-    protected $campaignOffers;
+    protected $campaignOffer;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
