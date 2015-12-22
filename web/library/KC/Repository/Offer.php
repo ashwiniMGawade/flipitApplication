@@ -1160,6 +1160,7 @@ class Offer extends \Core\Domain\Entity\Offer
             $query = $query
                 ->andWhere('o.discountType !='.$entityManagerUser->expr()->literal('NW'))
                 ->orderBy('o.discountType', 'ASC')
+                ->addOrderBy('o.offer_position', 'ASC')
                 ->addOrderBy('o.totalViewcount', 'DESC');
         }
 
@@ -1175,9 +1176,6 @@ class Offer extends \Core\Domain\Entity\Offer
             $query = $query->setMaxResults($limit);
         }
         $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        usort($offers, function($currentOffer, $nextOffer) {
-            return $currentOffer['offer_position'] - $nextOffer['offer_position'];
-        });
         return $offers;
     }
 
