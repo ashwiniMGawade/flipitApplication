@@ -218,15 +218,16 @@ class FrontEnd_Helper_OffersPartialFunctions
 
     public function getOfferTypeText($currentOffer)
     {
-        
         if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
             $offerTypeText = FrontEnd_Helper_viewHelper::__translate('printable');
         } else if ($currentOffer->discountType=='SL') {
             $offerTypeText = FrontEnd_Helper_viewHelper::__translate('sale');
         } else if (isset($currentOffer->extendedOffer) ? $currentOffer->extendedOffer =='1' : '') {
             $offerTypeText = FrontEnd_Helper_viewHelper::__translate('deal');
+        } else if (isset($currentOffer->top50rank)) {
+            $offerTypeText = '<div class="imbull-menu-image top50"></div>'. $currentOffer->top50rank . ' of 50';
         } else {
-            $offerTypeText = 'code';
+        $offerTypeText = 'code';
         }
         return $offerTypeText;
     }
@@ -355,6 +356,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     '.$offerAnchorText .'</a>';
             }
         }
+
         return $headOpen. $offerLink . $headClose;
     }
 

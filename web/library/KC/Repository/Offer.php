@@ -1,5 +1,6 @@
 <?php
 namespace KC\Repository;
+
 use Symfony\Component\Validator\Constraints\DateTime;
 
 class Offer extends \Core\Domain\Entity\Offer
@@ -100,7 +101,7 @@ class Offer extends \Core\Domain\Entity\Offer
     {
         $offersWithOrder = '';
         foreach ($offerIds as $id) {
-            if(true === isset($offers[$id])) {
+            if (true === isset($offers[$id])) {
                 $offersWithOrder[] = $offers[$id];
             }
         }
@@ -274,7 +275,7 @@ class Offer extends \Core\Domain\Entity\Offer
         return $topOffers;
     }
 
-    public static function getTopCouponCodes($shopCategories, $limit = 5)
+    public static function getTopCouponCodes($shopCategories, $limit = 5, $type = "MN")
     {
         $currentDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -303,6 +304,7 @@ class Offer extends \Core\Domain\Entity\Offer
             ->andWhere('o.endDate >'."'".$currentDate."'")
             ->andWhere('o.startDate <='."'".$currentDate."'")
             ->andWhere("o.discountType = 'CD'")
+            ->andWhere('p.type = '."'".$type."'")
             ->andWhere('o.userGenerated = 0')
             ->andWhere("o.Visability != 'MEM'")
             ->orderBy('p.position', 'ASC')
@@ -849,7 +851,7 @@ class Offer extends \Core\Domain\Entity\Offer
     public static function searchOffers($searchParameters, $shopIds, $limit)
     {
         $searchKeyword = '';
-        if(isset($searchParameters['searchField'])) :
+        if (isset($searchParameters['searchField'])) :
             $searchKeyword = $searchParameters['searchField'];
         endif;
 
@@ -864,7 +866,7 @@ class Offer extends \Core\Domain\Entity\Offer
     public static function getOffersByShopIds($shopIds, $currentDate)
     {
         $shopOffersByShopIds = array();
-        if(!empty($shopIds)) :
+        if (!empty($shopIds)) :
             $shopIds = ("'" . implode("', '", $shopIds) . "'");
             $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $entityManagerUser
@@ -1130,16 +1132,17 @@ class Offer extends \Core\Domain\Entity\Offer
         $nowDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
-            ->select('o, s, img, vot, t, terms, offerImage')
+            ->select('o, s, img, vot, t, terms, offerImage, pc')
         ->from('\Core\Domain\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
+        ->leftJoin('o.offer', 'pc')
         ->leftJoin('s.logo', 'img')
         ->leftJoin('o.logo', 'offerImage')
         ->leftJoin('o.offertermandcondition', 'terms')
         ->leftJoin('o.votes', 'vot')
         ->leftJoin('o.offerTiles', 't')
         ->where('o.deleted = 0');
-        
+
         if (!$includingOffline) {
             $query = $query
                 ->andWhere('o.offline = 0')
@@ -1176,6 +1179,11 @@ class Offer extends \Core\Domain\Entity\Offer
             $query = $query->setMaxResults($limit);
         }
         $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        usort($offers, function ($currentOffer, $nextOffer) {
+            return $currentOffer['offer_position'] - $nextOffer['offer_position'];
+        });
+
         return $offers;
     }
 
@@ -2223,8 +2231,7 @@ class Offer extends \Core\Domain\Entity\Offer
         $limit = null,
         $getExclusiveOnly = false,
         $includingOffline = false
-    )
-    {
+    ) {
         $nowDate = date('Y-m-d H:i:s');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
@@ -3043,7 +3050,7 @@ class Offer extends \Core\Domain\Entity\Offer
     }
 
     public function updateOffer($params)
-    {//echo "<pre>";print_r($params);die;
+    {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
         $repo = $entityManagerLocale->getRepository('\Core\Domain\Entity\Offer');
         $updateOffer = $repo->find($params['offerId']);
