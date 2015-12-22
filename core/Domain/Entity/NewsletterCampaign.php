@@ -111,6 +111,12 @@ class NewsletterCampaign
      */
     protected $updatedAt;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\NewsletterCampaignOffer", mappedBy="newsletterCampaign")
+     */
+    protected $newsletterCampaignOffers;
+
     /**
      * @return mixed
      */
