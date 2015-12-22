@@ -7,7 +7,7 @@ use \Core\Domain\Adapter\PurifierInterface;
 use \Core\Domain\Validator\NewsletterCampaignOfferValidator;
 use \Core\Service\Errors\ErrorsInterface;
 
-class AddNewsletterCampaignOfferOfferUsecase
+class AddNewsletterCampaignOfferUsecase
 {
     protected $newsletterCampaignOfferRepository;
 
