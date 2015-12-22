@@ -27,23 +27,20 @@ $this->headTitle()->append($this->translate('Top 50 Coupon Codes'));
                 <label class="successserver">Top 50 coupons has been reordered successfully</label>
             </div>
             <div id="poststuff" class="metabox-holder has-right-sidebar">
-            
-              <!-- button div with searchbar -->
+
               <div id="side-info-column" class="inner-sidebar-coupon">
                 <div id="side-sortables" class="meta-box-sortables ui-sortable">
                   <div class="coupon-sidebar-outer">
-                  
-                    <!-- searchbar div -->
                     <div class="coupon-sidebar-heading">
                     	<select  style="display: none; width : 389px;" class="combobox" name="offerlist" id="offerlist">
 								<option value=""></option>
 								<?php
-								foreach ($this->offer as $o) { 
+								foreach ($this->offer as $offerDetail) {
 									
-								if (trim ($o ['title'] ) != '') {
-									$offer = substr ($o ['title'], 0, 70 );
+								if (trim ($offerDetail ['title'] ) != '') {
+									$offer = substr ($offerDetail ['title'], 0, 70 );
 								?>
-									<option  value="<?php echo $o['id']; ?>"><?php echo $offer; ?></option>
+									<option  value="<?php echo $offerDetail['id']; ?>"><?php echo $offer; ?></option>
 								
 									
 								<?php }} ?>
@@ -75,28 +72,19 @@ $this->headTitle()->append($this->translate('Top 50 Coupon Codes'));
               		<div class="top-coupon-list">
                         <ul id='top50coupons'>
                         <?php 
-                        if(!empty($this->data)){ 
-                        	
-                        	foreach ($this->data as $o){
-                        	
-                        		if($o['type'] == "TOP50"){
-                        			
+                        if (!empty($this->data)) {
+                        	foreach ($this->data as $offerDetail) {
+                        		if ($offerDetail['type'] == "TOP50") {
                         			$lockImage = HTTP_PATH."public/images/back_end/stock_lock.png";
                         			$image = "<img src=".$lockImage." height='20' style='float:right' width='20'>";
-                        		}else{
+                        		} else {
                         			$lockImage = "";
                         			$image = "";
                         		}
-                        			
-                        		
-                        		echo  "<li class='ui-state-default' reltype='" . $o['type'] . "' relpos='" . $o['position'] . "' reloffer='" . $o['offerId'] . "' id='" . $o['id'] . "' ><span>" . $o['title'] ."</span>" .$image."</li>";
-              						
-              					}
-              				
-                        } else { 
-              					
+                        		echo  "<li class='ui-state-default' reltype='" . $offerDetail['type'] . "' relpos='" . $offerDetail['position'] . "' reloffer='" . $offerDetail['offerId'] . "' id='" . $offerDetail['id'] . "' ><span>" . $offerDetail['title'] ."</span>" .$image."</li>";
+                            }
+                        } else {
                          	echo  "<li id='0'>No record found !</li>";
-              					
               			} ?>
               			</ul>
                     </div>

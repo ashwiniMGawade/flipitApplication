@@ -22,11 +22,11 @@ class Admin_Top50couponsController extends Application_Admin_BaseController
     public function indexAction()
     {
         $data = \KC\Repository\PopularCode::getPopularCode(50, 'TOP50');
-        $neAr = array();
+        $existingOffers = array();
         foreach ($data as $pOffer) {
-            $neAr[] = $pOffer['offerId'];
+            $existingOffers[] = $pOffer['offerId'];
         }
-        $allOffer = \KC\Repository\PopularCode::searchAllOffer($neAr);
+        $allOffer = \KC\Repository\PopularCode::searchAllOffer($existingOffers);
         $this->view->data = $data;
         $this->view->offer = $allOffer;
     }
@@ -59,7 +59,7 @@ class Admin_Top50couponsController extends Application_Admin_BaseController
         if ($isUpdated) {
             self::updateVarnish();
         }
-        $data = \KC\Repository\PopularCode::getPopularCode();
+        $data = \KC\Repository\PopularCode::getPopularCode(50, 'TOP50');
         echo \Zend_Json::encode($data);
         die();
     }
