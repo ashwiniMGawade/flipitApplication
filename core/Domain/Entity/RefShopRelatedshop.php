@@ -24,6 +24,11 @@ class RefShopRelatedshop
     /**
      * @ORM\Column(type="integer", length=8, nullable=false)
      */
+    protected $shopId;
+
+    /**
+     * @ORM\Column(type="integer", length=8, nullable=false)
+     */
     protected $relatedshopId;
 
     /**
@@ -46,6 +51,13 @@ class RefShopRelatedshop
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id")
      */
     protected $shop;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\Shop", inversedBy="id")
+     * @ORM\JoinColumn(name="relatedshopId", referencedColumnName="id")
+     */
+    protected $relatedShop;
 
     public function __get($property)
     {
