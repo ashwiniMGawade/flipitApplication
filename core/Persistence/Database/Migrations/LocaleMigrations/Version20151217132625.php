@@ -16,15 +16,15 @@ class Version20151217132625 extends AbstractMigration
     public function up(Schema $schema)
     {
         $popularCouponCode = $schema->getTable('popular_code');
-        if ($popularCouponCode->hasForeignKey('offerid')) {
-            $popularCouponCode->removeForeignKey('offerid');
+        if ($popularCouponCode->hasForeignKey('popular_code_offerid_offer_id')) {
+            $popularCouponCode->removeForeignKey('popular_code_offerid_offer_id');
         }
 
         if ($popularCouponCode->hasIndex('offerid')) {
             $popularCouponCode->dropIndex('offerid');
         }
 
-        $popularCouponCode->addForeignKeyConstraint('offer', array('offerid'), array('id'), array('onDelete' => 'CASCADE'), 'offerid');
+        $popularCouponCode->addForeignKeyConstraint('offer', array('offerid'), array('id'), array('onDelete' => 'CASCADE'), 'popular_code_offerid_offer_id');
 
     }
 
