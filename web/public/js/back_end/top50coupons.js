@@ -12,13 +12,11 @@ $(document).ready(function() {
 	$("input#searchCouponTxt").keypress(function(e) {
 		addSelectedClassOnButton(1);
 		$('ul#top50coupons li').removeClass('selected');
-            // if the key pressed is the enter key
               if (e.which == 13) {
                   searchByTxt();
               }
 		});
 
-		//code for selection of li
 		$('ul#top50coupons li').click(changeSelectedClass);
 		
 		$( "#top50coupons" ).sortable();
@@ -42,47 +40,38 @@ $(document).ready(function() {
 					$( "#top50coupons" ).sortable( "refreshPositions" );
 					$('ul#top50coupons li').remove();
 						var li = '';
+                        if (json != '') {
+                            for(var i in json){
+                                    lockImage = HOST_PATH + "public/images/back_end/stock_lock.png";
+                                    image = "<img src=" + lockImage + " height='20' style='float:right' width='20'>";
+                                    li+= "<li class='ui-state-default' reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' >" + json[i].title + "</span>" + image + "</li>";
 
-					if(json!=''){
-						for(var i in json)
-							{
-								lockImage = HOST_PATH + "public/images/back_end/stock_lock.png";
-							    image = "<img src=" + lockImage + " height='20' style='float:right' width='20'>";
-							 	li+= "<li class='ui-state-default' reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' >" + json[i].title + "</span>" + image + "</li>";
-
-							}
-						$('ul#top50coupons').append(li);
-						$('ul#top50coupons li').click(changeSelectedClass);
-					}
-                    $('#popular_success_message').css("visibility", "visible");
-					setTimeout(function(){
-                        $('#popular_success_message').css("visibility", "hidden");
-					}, 3000);
-		        }
+                                }
+                            $('ul#top50coupons').append(li);
+                            $('ul#top50coupons li').click(changeSelectedClass);
+                        }
+                        $('#popular_success_message').css("visibility", "visible");
+                        setTimeout(function(){
+                            $('#popular_success_message').css("visibility", "hidden");
+                        }, 3000);
+                }
 		    });
 
 	 	});
 		
 });
-/**
- * search offer by text
- */
+
 function searchByTxt() {
 	$("ul.ui-autocomplete").css('display','none');
 	$("ul.ui-autocomplete").html('');
 }
-/**
- * change selected class of li
- */
+
 function changeSelectedClass() {
 	$('ul#top50coupons li').removeClass('selected');
 	$(this).addClass('selected');
-	//apply selected class on current button
 	addSelectedClassOnButton(2);
 }
-/**
- * change selected of button
- */
+
 function addSelectedClassOnButton(flag) {
 	if (flag == 1) {
 		$('button#deleteOne').removeClass('btn-primary');
@@ -99,9 +88,7 @@ function addSelectedClassOnButton(flag) {
 		$(flag).addClass('btn-primary');
 	}
 }
-/**
- * add offer in offer list
- */
+
 String.prototype.escapeSingleQuotes = function () {
     if (this == null) return null;
     return this.replace(/'/g, "\\'");
@@ -111,7 +98,6 @@ String.prototype.escapeSingleQuotes = function () {
 function addNewOffer() {
 	var flag =  '#addNewOffer';
 	$('#addNewOffer').attr('disabled' ,"disabled");
-	//apply selected class on current button
 	addSelectedClassOnButton(flag);
 	
 	if ($('ul#top50coupons li').length > 50) {
@@ -157,14 +143,10 @@ function addNewOffer() {
 	}
 	
 }
-/**
- * confirmation for deletion
- * */
 
 function deleteOne() {
 	var flag =  '#deleteOne';
 	$('#deleteOne').attr('disabled' ,"disabled");
-	//apply selected class on current button
 	addSelectedClassOnButton(flag);
 	var id = $('ul#top50coupons li.selected').attr('id');
 	if(parseInt(id) > 0){
@@ -182,9 +164,7 @@ function deleteOne() {
 		$('#deleteOne').removeAttr('disabled');
 	}
 }
-/**
- * delete popular code from list
- */
+
 function deleteTop50Coupon() {
 	var id = $('ul#top50coupons li.selected').attr('id');
 	var offerId = $('ul#top50coupons li.selected').attr('reloffer');
@@ -217,11 +197,6 @@ function deleteTop50Coupon() {
     });
 }
 
-/**
- * add id's of already selected offers in an array
- * @author kraj
- * @version 1.0
- */
 function selectedElements() {
 	var selectedRelated = new Array();
 	$('ul#top50coupons').find('li').each(function(index) {
@@ -229,52 +204,3 @@ function selectedElements() {
 	});
 	$('#SearchedValueIds').val(selectedRelated);
 }
-
-/**
- * lock element for one position from list
- * @author Raman 
- * @version 1.0
- */
-function lock() {
-	
-	var flag =  '#lock';
-	//$('#moveDown').attr('disabled' ,"disabled");
-	//apply selected class on current button
-	addSelectedClassOnButton(flag);
-	var id = $('ul#top50coupons li.selected').attr('reloffer');
-	//var pos = $('ul#top50coupons li.selected').attr('relpos');
-	
-	if(parseInt(id) > 0) {
-		$.ajax({
-			url : HOST_PATH + "admin/popularcode/lock",
-			type : "post",
-			dataType : "json",
-			data : {'id' : id},
-			success : function(json) {
-				$('ul#top50coupons li').remove();
-				var li = '';
-				for(var i in json) {
-					if(json[i].type == "MN"){
-						lockImage = HOST_PATH + "public/images/back_end/stock_lock.png";
-						image = "<img src=" + lockImage + " height='20' style='float:right' width='20'>";
-					}else{
-						image = "";
-					}
-					li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' ><span>" + json[i].offer.title + "</span>" + image +"</li>";
-						
-					}
-				$('ul#top50coupons').append(li);
-				$('ul#top50coupons li#'+id).addClass('selected');
-				$('ul#top50coupons li').click(changeSelectedClass);
-				$('#lock').removeAttr('disabled');
-			}
-		});
-		
-	} else {
-		
-		bootbox.alert(__('Please select an offer from list'));
-		//$('#moveDown').removeAttr('disabled');
-	}
-	
-}
-

@@ -3050,7 +3050,6 @@ class Offer extends \Core\Domain\Entity\Offer
 
     public function updateOffer($params)
     {
-        //echo "<pre>";print_r($params);die;
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
         $repo = $entityManagerLocale->getRepository('\Core\Domain\Entity\Offer');
         $updateOffer = $repo->find($params['offerId']);
