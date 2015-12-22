@@ -18,7 +18,7 @@ class GetNewsletterCampaignOfferUsecase
         PurifierInterface $htmlPurifier,
         ErrorsInterface $errors
     ) {
-        $this->newsletterCampaignRepository = $newsletterCampaignOfferRepository;
+        $this->newsletterCampaignOfferRepository = $newsletterCampaignOfferRepository;
         $this->htmlPurifier     = $htmlPurifier;
         $this->errors           = $errors;
     }
@@ -31,7 +31,7 @@ class GetNewsletterCampaignOfferUsecase
             return $this->errors;
         }
 
-        $newsletterCampaignOffer = $this->newsletterCampaignRepository->findOneBy('\Core\Domain\Entity\NewsletterCampaignOffer', $conditions);
+        $newsletterCampaignOffer = $this->newsletterCampaignOfferRepository->findOneBy('\Core\Domain\Entity\NewsletterCampaignOffer', $conditions);
 
         if (false === is_object($newsletterCampaignOffer)) {
             $this->errors->setError('Newsletter Campaign offer not found');
