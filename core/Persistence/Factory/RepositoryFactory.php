@@ -18,6 +18,7 @@ use \Core\Persistence\Database\Repository\WidgetRepository;
 use \Core\Persistence\Database\Repository\LandingPageRepository;
 use \Core\Persistence\Database\Repository\URLSettingRepository;
 use \Core\Persistence\Database\Repository\NewsletterCampaignRepository;
+use \Core\Persistence\Database\Repository\NewsletterCampaignOfferRepository;
 
 class RepositoryFactory
 {
@@ -98,5 +99,10 @@ class RepositoryFactory
     public static function newsletterCampaign()
     {
         return new NewsletterCampaignRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
+    }
+
+    public static function newsletterCampaignOffer()
+    {
+        return new NewsletterCampaignOfferRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 }

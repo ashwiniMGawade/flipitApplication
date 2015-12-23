@@ -7,10 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(
  *      name="newsletterCampaignOffers"
- *      indexes={
- *         @ORM\Index(name="newsletterCampaignOffers_campaignId_newsletterCampaigns_id", columns={"campaignId"})
- *         @ORM\Index(name="newsletterCampaignOffers_offerId_offer_id", columns={"offerId"})
- *      }
  * )
  */
 class NewsletterCampaignOffer
@@ -21,6 +17,16 @@ class NewsletterCampaignOffer
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @ORM\Column(type="integer", nullable=false)
+     */
+    protected $campaignId;
+
+    /**
+     * @ORM\Column(type="integer", nullable=false)
+     */
+    protected $offerId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\Domain\Entity\NewsletterCampaign", inversedBy="newsletterCampaignOffers")
@@ -44,7 +50,6 @@ class NewsletterCampaignOffer
      */
     protected $section;
 
-    /*
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
@@ -90,6 +95,39 @@ class NewsletterCampaignOffer
     public function setNewsletterCampaign($newsletterCampaign)
     {
         $this->newsletterCampaign = $newsletterCampaign;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getCampaignId()
+    {
+        return $this->campaignId;
+    }
+
+    /**
+     * @param mixed $campaignId
+     */
+    public function setCampaignId($campaignId)
+    {
+        $this->campaignId = $campaignId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOfferId()
+    {
+        return $this->offerId;
+    }
+
+    /**
+     * @param mixed $offerId
+     */
+    public function setOfferId($offerId)
+    {
+        $this->offerId = $offerId;
     }
 
     /**
@@ -159,7 +197,7 @@ class NewsletterCampaignOffer
     /**
      * @return mixed
      */
-    public function getdeleted()
+    public function getDeleted()
     {
         return $this->deleted;
     }
@@ -167,7 +205,7 @@ class NewsletterCampaignOffer
     /**
      * @param mixed $deleted
      */
-    public function setdeleted($deleted)
+    public function setDeleted($deleted)
     {
         $this->deleted = $deleted;
     }

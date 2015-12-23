@@ -9,7 +9,7 @@ class Version20151222075821 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
-        $table = $schema->createTable('newsletterCampainOffers');
+        $table = $schema->createTable('newsletterCampaignOffers');
         $table->addColumn('id', 'integer', array('autoincrement' => true));
         $table->addColumn('campaignId', 'integer');
         $table->addColumn('offerId', 'bigint');
@@ -26,7 +26,7 @@ class Version20151222075821 extends AbstractMigration
 
     public function down(Schema $schema)
     {
-        $schema->dropTable('newsletterCampainOffers');
+        $schema->dropTable('newsletterCampaignOffers');
 
     }
 }

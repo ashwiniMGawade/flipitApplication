@@ -21,8 +21,9 @@ $(function(){
 
     var getOffersData = function() {
         $.ajax({
-            url: HOST_PATH + "admin/newslettercampaigns/offers",
+            url: HOST_PATH + "admin/newslettercampaigns/getOfferslist",
             type: 'post',
+            data: {'campaignId' : $('#NewsletterWizardform').data('id')},
             success: function(data) {
                 $("#step2").html(data);
             },

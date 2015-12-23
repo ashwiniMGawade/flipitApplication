@@ -44,6 +44,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $limit = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayLength')));
 
         $result = ( array )SystemFactory::getNewsletterCampaigns()->execute($conditions, $order, $limit, $offset, true);
+
         if ($result instanceof Errors) {
             $errors = $result->getErrorsAll();
             $this->setFlashMessage('error', $errors);
@@ -89,7 +90,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     $this->setFlashMessage('error', $errors);
                 } else {
                     $this->refreshNewsletterCampaignPageVarnish();
-                    $this->setFlashMessage('success', 'News letter campaign has been added successfully.</br>'. implode('<br/>',$this->message));
+                    $this->setFlashMessage('success', 'News letter campaign has been added successfully.</br>'. implode('<br/>', $this->message));
                     $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
                 }
             }
@@ -123,7 +124,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     $this->setFlashMessage('error', $errors);
                 } else {
                     $this->refreshNewsletterCampaignPageVarnish();
-                    $this->setFlashMessage('success', 'News letter campaign has been updated successfully.</br>'. implode('<br/>',$this->message));
+                    $this->setFlashMessage('success', 'News letter campaign has been updated successfully.</br>'. implode('<br/>', $this->message));
                     $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
                 }
             }
@@ -226,13 +227,14 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         return $returnData;
     }
 
-    private function _handleImageUpload($params, $headerBanner = '' , $footerBanner = '')
+    private function _handleImageUpload($params, $headerBanner = '', $footerBanner = '')
     {
         if (true === isset($_FILES['headerBanner']) && true === isset($_FILES['headerBanner']['name']) && '' !== $_FILES['headerBanner']['name']) {
             $rootPath = BASE_PATH . 'images/upload/newslettercampaigns/';
             $image = $this->uploadImage('headerBanner', $rootPath);
-            if(false === $image) {
-                $this->setFlashMessage('error', "Please upload valid header banner.");return false;
+            if (false === $image) {
+                $this->setFlashMessage('error', "Please upload valid header banner.");
+                return false;
             }
             if (false !== $image && !empty($headerBanner)) {
                 @unlink(BASE_PATH . 'images/upload/newslettercampaigns/'.$headerBanner);
@@ -243,8 +245,9 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         if (true === isset($_FILES['footerBanner']) && true === isset($_FILES['footerBanner']['name']) && '' !== $_FILES['footerBanner']['name']) {
             $rootPath = BASE_PATH . 'images/upload/newslettercampaigns/';
             $image = $this->uploadImage('footerBanner', $rootPath);
-            if(false === $image) {
-                $this->setFlashMessage('error', "please upload valid footer banner.");return false;
+            if (false === $image) {
+                $this->setFlashMessage('error', "please upload valid footer banner.");
+                return false;
             }
             if (false !== $image && !empty($footerBanner)) {
                 @unlink(BASE_PATH . 'images/upload/newslettercampaigns/'.$footerBanner);
@@ -291,7 +294,49 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $varnishObject->addUrl("http://www.flipit.com");
     }
 
-    public function offersAction() {
-        $this ->_helper-> layout()->disableLayout();
+    public function getofferslistAction()
+    {
+        $this->_helper-> layout()->disableLayout();
+        $conditions = array('deleted' => 0);
+        $params = $this->getRequest()->getParams();
+        $campaignId = isset($params['campaignId']) ? $params['campaignId']: 1;
+        if (! empty($campaignId)) {
+            $campaignDetails = AdminFactory::getNewsletterCampaign()->execute(array('id' => $campaignId));
+            if ($campaignDetails instanceof Errors) {
+                $errors = $campaignDetails->getErrorsAll();
+                $this->setFlashMessage('error', $errors);
+            } else {
+                $conditions['campaignId'] = $campaignId;
+            }
+        }
+        $this->view->partOneOffers = $this->_getSectionOffers($conditions, 1);
+        $this->view->partTwoOffers = $this->_getSectionOffers($conditions, 2);
+    }
+
+    private function _getSectionOffers($conditions, $section)
+    {
+        $conditions['section'] = $section;
+        $result = SystemFactory::getNewsletterCampaignsOffers()->execute($conditions, null, null, null, true);
+        if ($result instanceof Errors) {
+            $errors = $result->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+        } else {
+            $campaignOffersData = [];
+            $campaignOffers = $result['records'];
+            if (false == empty($campaignOffers)) {
+                foreach ($campaignOffers as $campaignOffer) {
+                    $offer = SystemFactory::getOffer()->execute(array( 'id' => $campaignOffer->getOfferId()));
+                    if ($offer instanceof  \Core\Domain\Entity\Offer) {
+                        $campaignOffersData[] = array(
+                            'id' => $campaignOffer->getId(),
+                            'title' => $campaignOffer->getOffer()->getTitle(),
+                            'position' => $campaignOffer->getPosition(),
+                        );
+                    }
+                }
+            }
+            return $campaignOffersData;
+        }
+        return array();
     }
 }

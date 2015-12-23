@@ -408,4 +408,9 @@ class AdminFactory
     {
         return new DeleteNewsletterCampaignUsecase(RepositoryFactory::newsletterCampaign());
     }
+
+    public static function getNewsletterCampaignOffer()
+    {
+        return new GetNewsletterCampaignOfferUsecase(RepositoryFactory::newsletterCampaignOffer(), new Purifier(), new Errors());
+    }
 }

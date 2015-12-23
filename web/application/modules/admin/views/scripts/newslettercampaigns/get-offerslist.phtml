@@ -60,16 +60,11 @@ $this->headScript()
                 <div class="top-coupon-list">
                     <ul id='mostPopularCode'>
                         <?php
-                        if (!empty($this->data)){
-                            foreach ($this->data as $o){
-                                if ($o['type'] == "MN"){
+                        if (!empty($this->partOneOffers)){
+                            foreach ($this->partOneOffers as $offerDetail){
                                     $lockImage = HTTP_PATH."public/images/back_end/stock_lock.png";
                                     $image = "<img src=".$lockImage." height='20' style='float:right' width='20'>";
-                                } else {
-                                    $lockImage = "";
-                                    $image = "";
-                                }
-                                echo  "<li class='ui-state-default' reltype='" . $o['type'] . "' relpos='" . $o['position'] . "' reloffer='" . $o['offerId'] . "' id='" . $o['id'] . "' ><span>" . $o['title'] ."</span>" .$image."</li>";
+                                echo  "<li class='ui-state-default'  relpos='" . $offerDetail['position'] . "' reloffer='" . $offerDetail['id'] . "' id='" . $offerDetail['id'] . "' ><span>" . $offerDetail['title'] ."</span>" .$image."</li>";
                             }
                         } else {
                             echo  "<li id='0'>No record found !</li>";
@@ -125,16 +120,11 @@ $this->headScript()
                 <div class="top-coupon-list">
                     <ul id='mostPopularCode'>
                         <?php
-                        if (!empty($this->data)){
-                            foreach ($this->data as $o){
-                                if ($o['type'] == "MN"){
-                                    $lockImage = HTTP_PATH."public/images/back_end/stock_lock.png";
-                                    $image = "<img src=".$lockImage." height='20' style='float:right' width='20'>";
-                                } else {
-                                    $lockImage = "";
-                                    $image = "";
-                                }
-                                echo  "<li class='ui-state-default' reltype='" . $o['type'] . "' relpos='" . $o['position'] . "' reloffer='" . $o['offerId'] . "' id='" . $o['id'] . "' ><span>" . $o['title'] ."</span>" .$image."</li>";
+                        if (!empty($this->partTwoOffers)){
+                            foreach ($this->partTwoOffers as $offerDetail){
+                                $lockImage = HTTP_PATH."public/images/back_end/stock_lock.png";
+                                $image = "<img src=".$lockImage." height='20' style='float:right' width='20'>";
+                                echo "<li class='ui-state-default'  relpos='" . $offerDetail['position'] . "' reloffer='" . $offerDetail['id'] . "' id='" . $offerDetail['id'] . "' ><span>" . $offerDetail['title'] ."</span>" .$image."</li>";
                             }
                         } else {
                             echo  "<li id='0'>No record found !</li>";
