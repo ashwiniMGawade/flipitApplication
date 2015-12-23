@@ -95,8 +95,8 @@ class RepositoryFactory
         return new SplashImageRepository((new Service\DoctrineManager(new Service\AppConfig()))->getUserEntityManager());
     }
 
-    public static function newsletterCampaign()
+    public static function newsletterCampaign($locale = '')
     {
-        return new NewsletterCampaignRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
+        return new NewsletterCampaignRepository((new Service\DoctrineManager(new Service\AppConfig($locale)))->getLocaleEntityManager());
     }
 }

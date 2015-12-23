@@ -50,8 +50,8 @@ class SystemFactory
         return new GetSplashImagesUsecase(RepositoryFactory::splashImage(), new Purifier(), new Errors());
     }
 
-    public static function getNewsletterCampaigns()
+    public static function getNewsletterCampaigns($locale = '')
     {
-        return new GetNewsletterCampaignsUsecase(RepositoryFactory::newsletterCampaign(), new Purifier(), new Errors());
+        return new GetNewsletterCampaignsUsecase(RepositoryFactory::newsletterCampaign($locale), new Purifier(), new Errors());
     }
 }
