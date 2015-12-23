@@ -42,45 +42,45 @@ $(document).ready(function() {
     $( "#partTwoCode").sortable();
     $( "#partOneCode" ).disableSelection();
     $( "#partTwoCode" ).disableSelection();
-    //$( "#partOneCode" ).on( "sortstop", function( event, ui ) {
-    //    var offerid = new Array();
-    //    $('.ui-state-default').each(function(){
-    //        offerid.push($(this).attr('reloffer'));
-    //    });
-    //    $('div.image-loading-icon').append("<img id='img-load' src='" +  HOST_PATH  + "/public/images/validating.gif'/>");
-    //    var offerid = offerid.toString();
-    //    $.ajax({
-    //        type : "POST",
-    //        url : HOST_PATH + "admin/popularcode/savepopularoffersposition",
-    //        method : "post",
-    //        dataType : 'json',
-    //        data: { offerid: offerid },
-    //        success : function(json) {
-    //            $('#img-load').remove();
-    //            $( "#mostPopularCode" ).sortable( "refresh" );
-    //            $( "#mostPopularCode" ).sortable( "refreshPositions" );
-    //            $('ul#mostPopularCode li').remove();
-    //            var li = '';
-    //
-    //            if(json!=''){
-    //                for(var i in json)
-    //                {
-    //                    lockImage = HOST_PATH + "public/images/back_end/stock_lock.png";
-    //                    image = "<img src=" + lockImage + " height='20' style='float:right' width='20'>";
-    //                    li+= "<li class='ui-state-default' reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' >" + json[i].title + "</span>" + image + "</li>";
-    //
-    //                }
-    //                $('ul#mostPopularCode').append(li);
-    //                $('ul#mostPopularCode li').click(changeSelectedClass);
-    //            }
-    //            $('#popular_success_message').css("visibility", "visible");
-    //            setTimeout(function(){
-    //                $('#popular_success_message').css("visibility", "hidden");
-    //            }, 3000);
-    //        }
-    //    });
-    //
-    //});
+    $( "#partOneCode" ).on( "sortstop", function( event, ui ) {
+        var offerid = new Array();
+        $('#partOneCode .ui-state-default').each(function(){
+            offerid.push($(this).attr('reloffer'));
+        });
+        $('div.image-loading-icon').append("<img id='img-load' src='" +  HOST_PATH  + "/public/images/validating.gif'/>");
+        var offerid = offerid.toString();
+        //$.ajax({
+        //    type : "POST",
+        //    url : HOST_PATH + "admin/popularcode/savepopularoffersposition",
+        //    method : "post",
+        //    dataType : 'json',
+        //    data: { offerid: offerid },
+        //    success : function(json) {
+        //        $('#img-load').remove();
+        //        $( "#mostPopularCode" ).sortable( "refresh" );
+        //        $( "#mostPopularCode" ).sortable( "refreshPositions" );
+        //        $('ul#mostPopularCode li').remove();
+        //        var li = '';
+        //
+        //        if(json!=''){
+        //            for(var i in json)
+        //            {
+        //                lockImage = HOST_PATH + "public/images/back_end/stock_lock.png";
+        //                image = "<img src=" + lockImage + " height='20' style='float:right' width='20'>";
+        //                li+= "<li class='ui-state-default' reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' >" + json[i].title + "</span>" + image + "</li>";
+        //
+        //            }
+        //            $('ul#mostPopularCode').append(li);
+        //            $('ul#mostPopularCode li').click(changeSelectedClass);
+        //        }
+        //        $('#popular_success_message').css("visibility", "visible");
+        //        setTimeout(function(){
+        //            $('#popular_success_message').css("visibility", "hidden");
+        //        }, 3000);
+        //    }
+        //});
+
+    });
 
 });
 
