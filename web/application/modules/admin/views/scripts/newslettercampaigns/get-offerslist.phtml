@@ -1,20 +1,7 @@
-<?php
-$this->headTitle()->append($this->translate('Newsletter Campaign offers'));
-$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
-$this->headScript()
-    ->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
-$this->headLink()
-    ->appendStylesheet(PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css");
-
-$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/back_end/bootstrap-combobox.css" );
-
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/bootstrap-typeahead.js" );
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/select2.min.js" );
-
-$this->headScript()
-    ->appendFile(PUBLIC_PATH . "/js/back_end/newsletterCampaignOffers.js");
-?>
-<div class="wrap columns-2" id="campaignOffers_one">
+<script type="text/javascript" src="<?php echo PUBLIC_PATH ;?>js/back_end/select2.min.js"></script>
+<script type="text/javascript" src="<?php echo PUBLIC_PATH;?>js/back_end/newsletterCampaignOffers.js"></script>
+<script type="text/javascript" src="<?php echo PUBLIC_PATH;?>js/jquery-ui-1.8.16.custom.min.js"></script>
+<div class="wrap columns-2" id="campaignOffersOne">
     <h1>
         <?php echo $this->translate('Offer part 1'); ?>
     </h1>
@@ -28,14 +15,14 @@ $this->headScript()
             <div id="side-sortables" class="meta-box-sortables ui-sortable">
                 <div class="coupon-sidebar-outer">
                     <div class="coupon-sidebar-heading">
-                        <select  style="display: none; width : 389px;" class="combobox" name="offerlist" id="offerlist">
+                        <select  style="display: none; width : 389px;" class="combobox" name="PartOneOfferlist" id="PartOneOfferlist">
                             <option value=""></option>
                             <?php
-                            foreach ($this->offer as $o) {
-                                if (trim ($o ['title'] ) != '') {
-                                    $offer = substr ($o ['title'], 0, 70 );
+                            foreach ($this->partOneSearchOffers as $offerDetail) {
+                                if (trim ($offerDetail ['title'] ) != '') {
+                                    $offer = substr ($offerDetail ['title'], 0, 70 );
                                     ?>
-                                    <option  value="<?php echo $o['id']; ?>"><?php echo $offer; ?></option>
+                                    <option  value="<?php echo $offerDetail['id']; ?>"><?php echo $offer; ?></option>
                                 <?php }} ?>
                         </select>
                         <input type="hidden" name="selctedOffer" id="selctedOffer" value="">
@@ -44,10 +31,10 @@ $this->headScript()
                         <input type='hidden' name="SearchedValueIds" id="SearchedValueIds" value="">
                     </div>
                     <div class="coupon-sidebar-content-box">
-                        <button id='addNewOffer' onClick='addNewOffer();' class="btn btn-primary">ADD NEW OFFER</button>
+                        <button  onClick='addNewOffer();' class="btn btn-primary addNewOffer">ADD NEW OFFER</button>
                     </div>
                     <div class="coupon-sidebar-content-box mb10 image-loading-icon">
-                        <button id='deleteOne' onClick='deleteOne();' class="btn">DELETE</button>
+                        <button onClick='deleteOne();' class="btn deleteOne">DELETE</button>
                     </div>
                 </div>
             </div>
@@ -58,7 +45,7 @@ $this->headScript()
         <div id="post-body">
             <div id="post-body-content-coupon">
                 <div class="top-coupon-list">
-                    <ul id='mostPopularCode'>
+                    <ul id='partOneCode'>
                         <?php
                         if (!empty($this->partOneOffers)){
                             foreach ($this->partOneOffers as $offerDetail){
@@ -76,7 +63,7 @@ $this->headScript()
         <br class="clear">
     </div>
 </div>
-<div class="wrap columns-2" id="campaignOffers_two">
+<div class="wrap columns-2" id="campaignOffersTwo">
     <h1>
         <?php echo $this->translate('Offer part 2'); ?>
     </h1>
@@ -89,14 +76,14 @@ $this->headScript()
             <div id="side-sortables" class="meta-box-sortables ui-sortable">
                 <div class="coupon-sidebar-outer">
                     <div class="coupon-sidebar-heading">
-                        <select  style="display: none; width : 389px;" class="combobox" name="offerlist" id="offerlist">
+                        <select  style="display: none; width : 389px;" class="combobox" name="PartTwoOfferlist" id="PartTwoOfferlist">
                             <option value=""></option>
                             <?php
-                            foreach ($this->offer as $o) {
-                                if (trim ($o ['title'] ) != '') {
-                                    $offer = substr ($o ['title'], 0, 70 );
+                            foreach ($this->partTwoSearchOffers as $offerDetail) {
+                                if (trim ($offerDetail ['title'] ) != '') {
+                                    $offer = substr ($offerDetail ['title'], 0, 70 );
                                     ?>
-                                    <option  value="<?php echo $o['id']; ?>"><?php echo $offer; ?></option>
+                                    <option  value="<?php echo $offerDetail['id']; ?>"><?php echo $offer; ?></option>
                                 <?php }} ?>
                         </select>
                         <input type="hidden" name="selctedOffer" id="selctedOffer" value="">
@@ -104,10 +91,10 @@ $this->headScript()
                         <input type='hidden' name="SearchedValueIds" id="SearchedValueIds" value="">
                     </div>
                     <div class="coupon-sidebar-content-box">
-                        <button id='addNewOffer' onClick='addNewOffer();' class="btn btn-primary" >ADD NEW OFFER</button>
+                        <button  onClick='addNewOffer();' class="btn btn-primary addNewOffer" >ADD NEW OFFER</button>
                     </div>
                     <div class="coupon-sidebar-content-box mb10 image-loading-icon">
-                        <button id='deleteOne' onClick='deleteOne();' class="btn">DELETE</button>
+                        <button onClick='deleteOne();' class="btn deleteOne">DELETE</button>
                     </div>
                 </div>
             </div>
@@ -118,7 +105,7 @@ $this->headScript()
         <div id="post-body">
             <div id="post-body-content-coupon">
                 <div class="top-coupon-list">
-                    <ul id='mostPopularCode'>
+                    <ul id='partTwoCode'>
                         <?php
                         if (!empty($this->partTwoOffers)){
                             foreach ($this->partTwoOffers as $offerDetail){

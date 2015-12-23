@@ -311,6 +311,18 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         }
         $this->view->partOneOffers = $this->_getSectionOffers($conditions, 1);
         $this->view->partTwoOffers = $this->_getSectionOffers($conditions, 2);
+
+        foreach ($this->view->partOneOffers as $pOffer) {
+            $existingPartOneOffers[] = $pOffer['id'];
+        }
+
+        foreach ($this->view->partTwoOffers as $pOffer) {
+            $existingPartTwoOffers[] = $pOffer['id'];
+        }
+
+        $this->view->partOneSearchOffers = \KC\Repository\PopularCode::searchAllOffer($existingPartOneOffers);
+        $this->view->partTwoSearchOffers = \KC\Repository\PopularCode::searchAllOffer($existingPartTwoOffers);
+     
     }
 
     private function _getSectionOffers($conditions, $section)
