@@ -107,6 +107,50 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         }
     }
 
+    private function updateOffers($section, $newsletterCampaignId, $offers) {
+        $result = SystemFactory::getNewsletterCampaignsOffers()->execute(array('section' => 1, 'campaignId' => $newsletterCampaignId));
+        if ($result instanceof Errors) {
+            $errors = $result->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+        } else {
+            if (empty($result)) {
+                foreach($offers as $index => $offer) {
+                    $params['offer'] = SystemFactory::getOffer()->execute(array('id' => $offer));
+                    if ($params['offer'] instanceof Errors) {
+                        $errors = $params['offer']->getErrorsAll();
+                        $this->setFlashMessage('error', $errors);
+                    }
+                    $params['newsletterCampaign'] = AdminFactory::getNewsletterCampaign()->execute(array('id' => $newsletterCampaignId));
+                    if ($params['newsletterCampaign'] instanceof Errors) {
+                        $errors = $params['newsletterCampaign']->getErrorsAll();
+                        $this->setFlashMessage('error', $errors);
+                    }
+                    $params['section'] = $section;
+                    $params['position'] = $index +1;
+                    $this->_createOffer($params);
+                }
+            } else {
+                foreach ($result as $index => $offer) {
+                    $params['offer'] = $offer->getOffer();
+                    $params['newsletterCampaign'] = $offer->getNewsletterCampaign();
+                    $params['section'] = $offer->getSection();
+                    $params['position'] = $index +1;
+                    AdminFactory::deleteNewsletterCampaignOffer()->execute($offer);
+                    $this->_createOffer($params);
+                }
+            }
+        }
+    }
+
+    private function _createOffer($params) {
+        $campaignOffer = AdminFactory::createNewsletterCampaignOffer()->execute();
+        $result = AdminFactory::addNewsletterCampaignOffer()->execute($campaignOffer, $params);
+        if ($result instanceof Errors) {
+            $errors = $result->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+        }
+    }
+
     public function editAction()
     {
         $parameters = $this->getAllParams();
@@ -124,7 +168,10 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     $this->setFlashMessage('error', $errors);
                 } else {
                     if (isset($params['partOneOffers']) && !empty($params['partOneOffers'])) {
-
+                        $this->updateOffers(1, $this->view->campaignID, $params['partOneOffers']);
+                    }
+                    if (isset($params['partTwoOffers']) && !empty($params['partTwoOffers'])) {
+                        $this->updateOffers(2, $this->view->campaignID, $params['partTwoOffers']);
                     }
                     $this->refreshNewsletterCampaignPageVarnish();
                     $this->setFlashMessage('success', 'News letter campaign has been updated successfully.</br>'. implode('<br/>', $this->message));

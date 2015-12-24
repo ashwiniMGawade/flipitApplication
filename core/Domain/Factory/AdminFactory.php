@@ -79,6 +79,7 @@ use \Core\Domain\Validator\VisitorValidator;
 use \Core\Domain\Validator\WidgetValidator;
 use \Core\Domain\Validator\UrlSettingValidator;
 use \Core\Domain\Validator\NewsletterCampaignValidator;
+use \Core\Domain\Validator\NewsletterCampaignOfferValidator;
 
 use \Core\Persistence\Factory\RepositoryFactory;
 

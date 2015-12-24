@@ -46,7 +46,7 @@ class AddNewsletterCampaignOfferUsecase
             $newsletterCampaignOffer->setPosition($params['position']);
         }
         if (isset($params['section'])) {
-            $newsletterCampaignOffer->setSection($params['section']);
+            $newsletterCampaignOffer->setSection((int)$params['section']);
         }
         if (isset($params['deleted'])) {
             $newsletterCampaignOffer->setDeleted($params['deleted']);

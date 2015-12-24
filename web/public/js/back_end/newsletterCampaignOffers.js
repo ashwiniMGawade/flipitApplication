@@ -71,7 +71,8 @@ function addNewOffer(element) {
                 bootbox.alert(__('This offer already exists in the list'));
             }
             else {
-                var position = $('#'+parentId+' table tr').length;
+                $("#"+parentId+" table tr td.dataTables_empty").parent().remove();
+                var position = $('#'+parentId+' table tr').not('td.dataTables_empty').length;
                 var className = ($('#'+parentId+' table tr:last').hasClass("odd")) ? "even" : "odd";
                 var data = {'postion':position, 'offerId' : id, 'title': title};
                 lockImage = HOST_PATH + "public/images/back_end/stock_lock.png";
@@ -81,7 +82,7 @@ function addNewOffer(element) {
                     '<td class="sorting_1 sorting_2">'+position+'</td>'+
                     '<td><input type="hidden" name="partOneOffers[]" value="'+data.offerId+'">'+data.title.replace(/\\/g, '')+'</td>'+
                         '<td></td>'+
-                        '<td><input type="button" class="btn ml10 mb10" onclick="" value="Delete"></td>'+
+                        '<td><input type="button" class="btn ml10 mb10" onclick="deleteOne('+"row_"+position+')" value="Delete"></td>'+
                         '</tr>';
                 $("#"+parentId+" table tbody").append(tr);
 
