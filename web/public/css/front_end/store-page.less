@@ -293,7 +293,7 @@
         &.orange-block{
             .offer-holder{
                 &:hover{
-                    padding: 15px 15px 2px;
+                    padding: 15px;
                     border-bottom: 1px solid #eaeaea;
                     @media only screen and (max-width: 767px){
                         padding: 15px 15px 2px;
@@ -383,15 +383,7 @@
         }
         }
         .offer-holder{
-            padding: 15px 15px 2px;
-            @media only screen and (max-width: 767px){
-                padding: 15px 15px 2px;
-            }
-            &:hover{
-                @media only screen and (max-width: 767px){
-                    padding: 15px 15px 2px;
-                }
-            }
+            padding: 15px;
         }
         .clickout-title, .link{
             text-decoration: none !important;
@@ -401,9 +393,12 @@
         }
         .info-area{
             overflow: hidden;
-            background: url(../../images/border.png) repeat-x;
+            background: url(../../images/border.png) repeat-x scroll 0 15px;
             padding: 4px 28px 2px 21px;
             margin: 0 -20px;
+            clear: both;
+            padding-top: 20px;
+            margin-bottom: -8px;
             @media only screen and (max-width: 979px){
                 padding: 4px 20px 2px;
             }
@@ -815,11 +810,10 @@
     margin: 21px 0 5px 15px;
   }
 }
-
 @media only screen and (min-width: 1200px) {
   .section .block .text {
     max-width: 61.5%;
     width: auto;
-    float:left;
+    float: left;
   }
 }
