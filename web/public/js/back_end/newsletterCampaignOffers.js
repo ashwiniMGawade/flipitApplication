@@ -13,10 +13,12 @@ $(document).ready(function() {
         $("#campaignOffersTwo #selctedOfferText").val($(this).find('option[value='+$(this).val()+']').text());
         addSelectedClassOnButton(1, 'campaignOffersTwo');
     });
+
     //call to function for selected class(button)
     addSelectedClassOnButton(1, 'campaignOffersOne');
     addSelectedClassOnButton(1, 'campaignOffersTwo');
     selectedElements();
+
     $("input#searchCouponTxt").keypress(function(e) {
         addSelectedClassOnButton(1);
         $('ul#mostPopularCode li').removeClass('selected');
@@ -24,83 +26,35 @@ $(document).ready(function() {
             searchByTxt();
         }
     });
-    //code for selection of li
-    $('ul#partOneCode li').on('click', function() {
-        $('ul#partOneCode li').removeClass('selected');
-        $(this).addClass('selected');
-        //apply selected class on current button
-        addSelectedClassOnButton(2, "campaignOffersOne");
-    });
 
-    $('ul#partTwoCode li').on('click', function() {
-        $('ul#partTwoCode li').removeClass('selected');
-        $(this).addClass('selected');
-        //apply selected class on current button
-        addSelectedClassOnButton(2, "campaignOffersTwo");
-    });
-
-    $( "#partOneCode").sortable();
-    $( "#partTwoCode").sortable();
+    setTimeout(initiateDatatables(), 4000);
     $( "#partOneCode" ).disableSelection();
     $( "#partTwoCode" ).disableSelection();
-    $( "#partOneCode" ).on( "sortstop", function( event, ui ) {onclick
-        var offerid = new Array();
-        $('#partOneCode .ui-state-default').each(function(){
-            offerid.push($(this).attr('reloffer'));
-        });
-        $('div.image-loading-icon').append("<img id='img-load' src='" +  HOST_PATH  + "/public/images/validating.gif'/>");
-        var offerid = offerid.toString();
-        //$.ajax({
-        //    type : "POST",
-        //    url : HOST_PATH + "admin/popularcode/savepopularoffersposition",
-        //    method : "post",
-        //    dataType : 'json',
-        //    data: { offerid: offerid },
-        //    success : function(json) {
-        //        $('#img-load').remove();
-        //        $( "#mostPopularCode" ).sortable( "refresh" );
-        //        $( "#mostPopularCode" ).sortable( "refreshPositions" );
-        //        $('ul#mostPopularCode li').remove();
-        //        var li = '';
-        //
-        //        if(json!=''){
-        //            for(var i in json)
-        //            {
-        //                lockImage = HOST_PATH + "public/images/back_end/stock_lock.png";
-        //                image = "<img src=" + lockImage + " height='20' style='float:right' width='20'>";
-        //                li+= "<li class='ui-state-default' reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' >" + json[i].title + "</span>" + image + "</li>";
-        //
-        //            }
-        //            $('ul#mostPopularCode').append(li);
-        //            $('ul#mostPopularCode li').click(changeSelectedClass);
-        //        }
-        //        $('#popular_success_message').css("visibility", "visible");
-        //        setTimeout(function(){
-        //            $('#popular_success_message').css("visibility", "hidden");
-        //        }, 3000);
-        //    }
-        //});
-
-    });
 });
 
-function searchByTxt() {
+function initiateDatatables() {
+    if($('#partOneOffers').length>0) {
+        $('#partOneOffers').dataTable({"bFilter": false, "bPaginate": false}).rowReordering();
+    }
+    if($('#partTwoOffers').length>0) {
+        $('#partTwoOffers').dataTable({"bFilter": false, "bPaginate": false}).rowReordering();
+    }
+}
 
+function searchByTxt() {
     $("ul.ui-autocomplete").css('display','none');
     $("ul.ui-autocomplete").html('');
-    console.log('ok');
-    //addSelectedClassOnButton(4);
-    //$(this).addClass().addClass('btn-primary');
 }
 
 function addNewOffer(element) {
     $(element).attr('disabled' ,"disabled");
     parentId = $(element).closest('.wrap').attr('id');
+    console.log(parentId);
     var flag =  '#'+parentId+' .addNewOffer';
     addSelectedClassOnButton(flag, parentId);
 
-    if($('ul#'+parentId+' li').length > 26) {
-        bootbox.alert(__('Part one offer list can have maximum 27 records, please delete one if you want to add more offers'));
+    if($('#'+parentId+' table tr').length > 50) {
+        bootbox.alert(__('Part one offer list can have maximum 50 records, please delete one if you want to add more offers'));
         $('#'+parentId+' .addNewOffer').removeAttr('disabled');
         return false;
     } else {
@@ -117,18 +71,19 @@ function addNewOffer(element) {
                 bootbox.alert(__('This offer already exists in the list'));
             }
             else {
-                var data = {'postion':1, 'offerId' : id, 'title': title};
+                var position = $('#'+parentId+' table tr').length;
+                var className = ($('#'+parentId+' table tr:last').hasClass("odd")) ? "even" : "odd";
+                var data = {'postion':position, 'offerId' : id, 'title': title};
                 lockImage = HOST_PATH + "public/images/back_end/stock_lock.png";
                 image = "<img src=" + lockImage + " height='20' style='float:right' width='20'>";
 
-                var li  = "<li class='ui-state-default' relpos='" + data.position + "' reloffer='" + data.offerId + "' id='" + data.id + "' ><span>" + data.title.replace(/\\/g, '')  + "</span>"+ image + "</li>";
-                $("#"+parentId+" ul").append(li);
-
-                $("#"+parentId+" li#"+ data.id).click(changeSelectedClass, parentId);
-
-                console.log( $("#"+parentId+" ul li#0").html());
-
-                $("#"+parentId+" ul li#0").remove();
+                var tr = '<tr id="row_'+position+'" data-position="'+position+'" class="'+className+'">'+
+                    '<td class="sorting_1 sorting_2">'+position+'</td>'+
+                    '<td><input type="hidden" name="partOneOffers[]" value="'+data.offerId+'">'+data.title.replace(/\\/g, '')+'</td>'+
+                        '<td></td>'+
+                        '<td><input type="button" class="btn ml10 mb10" onclick="" value="Delete"></td>'+
+                        '</tr>';
+                $("#"+parentId+" table tbody").append(tr);
 
                 $("#"+parentId+" div.combobox a.select2-choice").children('span').html('');
 
@@ -173,79 +128,10 @@ String.prototype.escapeSingleQuotes = function () {
     return this.replace(/'/g, "\\'");
 };
 
-
-
-
-function deleteOne() {
-
-    var flag =  '#deleteOne';
-    $('#deleteOne').attr('disabled' ,"disabled");
-    //apply selected class on current button
-    addSelectedClassOnButton(flag);
-    var id = $('ul#mostPopularCode li.selected').attr('id');
-    if(parseInt(id) > 0){
-        bootbox.confirm(__("Are you sure you want to delete this code?"),__('No'),__('Yes'),function(r){
-
-            if(!r){
-                $('#deleteOne').removeAttr('disabled');
-                //return false if not confimed
-                return false;
-
-            } else {
-                //call to delete function
-                deletePopularCode();
-                $('#deleteOne').removeAttr('disabled');
-            }
-
-        });
-    } else {
-
-        bootbox.alert(__('Please select an offer from list'));
-        $('#deleteOne').removeAttr('disabled');
-    }
+function deleteOne(id) {
+    $("#"+id).remove();
 }
 
-function deletePopularCode() {
-
-    var id = $('ul#mostPopularCode li.selected').attr('id');
-    var offerId = $('ul#mostPopularCode li.selected').attr('reloffer');
-    var title = $('ul#mostPopularCode li.selected').children('span').html();
-    var pos = $('ul#mostPopularCode li.selected').attr('relpos');
-
-    $.ajax({
-        url : HOST_PATH + "admin/popularcode/deletepopularcode/id/" + id + "/pos/" + pos,
-        method : "post",
-        dataType : "json",
-        type : "post",
-        success : function(json) {
-
-            $('ul#mostPopularCode li').remove();
-            var li = '';
-            for(var i in json) {
-                if(json[i].type == "MN"){
-                    lockImage = HOST_PATH + "public/images/back_end/stock_lock.png";
-                    image = "<img src=" + lockImage + " height='20' style='float:right' width='20'>";
-                }else{
-                    image = "";
-                }
-                li+= "<li class='ui-state-default' reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' ><span>" + json[i].title +"</span>" + image + "</li>";
-
-
-            }
-            $('select#offerlist').append('<option value="' + offerId + '">' + title  + '</option>');
-
-            $('ul#mostPopularCode').append(li);
-            $('ul#mostPopularCode li#'+id).addClass('selected');
-            $('ul#mostPopularCode li').click(changeSelectedClass);
-            //$('ul#mostPopularCode li#'+ $('ul#mostPopularCode li.selected').attr('id')).remove();
-            selectedElements();
-        }
-
-
-    });
-
-
-}
 
 function selectedElements(parentId) {
     var selectedRelated = new Array();

@@ -312,6 +312,8 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $this->view->partOneOffers = $this->_getSectionOffers($conditions, 1);
         $this->view->partTwoOffers = $this->_getSectionOffers($conditions, 2);
 
+        $existingPartOneOffers = [];
+        $existingPartTwoOffers = [];
         foreach ($this->view->partOneOffers as $pOffer) {
             $existingPartOneOffers[] = $pOffer['id'];
         }
@@ -340,9 +342,10 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     $offer = SystemFactory::getOffer()->execute(array( 'id' => $campaignOffer->getOfferId()));
                     if ($offer instanceof  \Core\Domain\Entity\Offer) {
                         $campaignOffersData[] = array(
-                            'id' => $campaignOffer->getId(),
-                            'title' => $campaignOffer->getOffer()->getTitle(),
+                            'id' => $campaignOffer->getOffer()->getId(),
+                            'offer' => $campaignOffer->getOffer()->getTitle(),
                             'position' => $campaignOffer->getPosition(),
+                            'shop'  => $campaignOffer->getOffer()->getShopOffers()->getName(),
                         );
                     }
                 }

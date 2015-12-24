@@ -2,6 +2,9 @@ $(function(){
         $('#NewsletterWizardform').bootstrapWizard({
             'tabClass': 'nav nav-tabs',
             'onNext': function(tab, navigation, index) {
+                if(tab.next().find('a').attr('id') == 'campaignOffers') {
+                    getOffersData();
+                }
                 return true;
                 // wrire validation logic here
             },
@@ -329,10 +332,6 @@ $(function(){
         }
 
         init();
-
-
-
-    $('#saveNewsletterCampaign').on("click", function(e) {
         $('form#NewsletterWizardform').submit(function () {
             if ($("form#NewsletterWizardform").valid()) {
                 $('#saveNewsletterCampaign').attr('disabled', "disabled");
@@ -347,7 +346,11 @@ $(function(){
                 return false;
             }
         });
-});
+
+
+    $('#saveNewsletterCampaign').on("click", function(e) {
+        $('form#NewsletterWizardform').submit();
+    });
 
     $("#testEmail").select2({
         placeholder: __("Search Email"),
