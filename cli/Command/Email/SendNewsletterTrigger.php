@@ -20,7 +20,7 @@ class SendNewsletterTrigger extends Command
             ->setName('email:sendNewsletterTrigger')
             ->setDescription('This command will check whether newsletter is scheduled, if yes then start a new job to send a scheduled newsletter')
             ->setHelp(<<<EOT
-The <info>%command.name%</info> command generates an excel files for pay:
+The <info>%command.name%</info> command will loop all the locale & check whether a newsletter campaign is scheduled & trigger a new process to send newsletter
 
 <info>%command.full_name%</info>
 EOT
@@ -64,7 +64,7 @@ EOT
                 $bulkEmailRepository->save($bulkEmail);
 
                 // Setting the newsletter campaign to scheduled
-                $newsletterCampaign->setScheduledStatus(1);
+                $newsletterCampaign->setScheduledStatus(2);
 
                 $newsletterCampaignRepository = RepositoryFactory::newsletterCampaign($local);
                 $newsletterCampaignRepository->save($newsletterCampaign);
