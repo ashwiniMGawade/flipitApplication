@@ -54,7 +54,7 @@
                                     <td><input type="hidden" name="partOneOffers[]" value="<?php echo $offer['id']; ?>"><?php echo $offer['offer']; ?></td>
                                     <td><?php echo $offer['shop']; ?></td>
                                     <td>
-                                        <input type="button" class="btn ml10 mb10" type="button" onClick="deleteOne('row_<?php echo $offer['id']; ?>')" value='Delete'>
+                                        <input type="button" class="btn ml10 mb10" type="button" onClick="deleteOne('row_<?php echo $offer['id']; ?>', 'campaignOffersOne')" value='Delete'>
                                     </td>
                                 </tr>
                                 <?php $row++; endforeach; ?>
@@ -120,7 +120,7 @@
                                     <td><input type="hidden" name="partTwoOffers[]" value="<?php echo $offer['id']; ?>"><?php echo $offer['offer']; ?></td>
                                     <td><?php echo $offer['shop']; ?></td>
                                     <td>
-                                        <input type="button" class="btn ml10 mb10" type="button" onClick="deleteOne('row_<?php echo $offer['id']; ?>')"  value='Delete'>
+                                        <input type="button" class="btn ml10 mb10" type="button" onClick="deleteOne('row_<?php echo $offer['id']; ?>', 'campaignOffersTwo')"  value='Delete'>
                                     </td>
                                 </tr>
                                 <?php $row++; endforeach; ?>

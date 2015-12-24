@@ -75,14 +75,15 @@ function addNewOffer(element) {
                 var position = $('#'+parentId+' table tr').not('td.dataTables_empty').length;
                 var className = ($('#'+parentId+' table tr:last').hasClass("odd")) ? "even" : "odd";
                 var data = {'postion':position, 'offerId' : id, 'title': title};
+                var name = (parentId === "campaignOffersOne" ) ? 'partOneOffers[]' : 'partTwoOffers[]';
                 lockImage = HOST_PATH + "public/images/back_end/stock_lock.png";
                 image = "<img src=" + lockImage + " height='20' style='float:right' width='20'>";
 
                 var tr = '<tr id="row_'+position+'" data-position="'+position+'" class="'+className+'">'+
                     '<td class="sorting_1 sorting_2">'+position+'</td>'+
-                    '<td><input type="hidden" name="partOneOffers[]" value="'+data.offerId+'">'+data.title.replace(/\\/g, '')+'</td>'+
+                    '<td><input type="hidden" name="'+name+'" value="'+data.offerId+'">'+data.title.replace(/\\/g, '')+'</td>'+
                         '<td></td>'+
-                        '<td><input type="button" class="btn ml10 mb10" onclick="deleteOne('+"row_"+position+')" value="Delete"></td>'+
+                        '<td><input type="button" class="btn ml10 mb10" onclick="deleteOne('+"row_"+position+', '+parentId+')" value="Delete"></td>'+
                         '</tr>';
                 $("#"+parentId+" table tbody").append(tr);
 
@@ -129,8 +130,9 @@ String.prototype.escapeSingleQuotes = function () {
     return this.replace(/'/g, "\\'");
 };
 
-function deleteOne(id) {
-    $("#"+id).remove();
+function deleteOne(id, parentId) {
+    alert(id + " "+ parentId);
+    $("#"+parentId + " #" + id).remove();
 }
 
 
