@@ -2,8 +2,10 @@
 namespace Command\Email;
 
 use Core\Domain\Factory\SystemFactory;
+use Core\Persistence\Factory\RepositoryFactory;
 use Core\Service\LocaleLister;
 use Core\Domain\Entity\NewsletterCampaign;
+use Core\Domain\Entity\BulkEmail;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,20 +30,20 @@ EOT
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $locales = (new LocaleLister)->getAllLocales();
+        $locals = (new LocaleLister)->getAllLocals();
 
         $newsletterCampaigns = array();
 
-        foreach ($locales as $locale) {
-            $newsletterCampaign = SystemFactory::getNewsletterCampaigns($locale)->execute();
+        foreach ($locals as $local) {
+            $newsletterCampaign = SystemFactory::getNewsletterCampaigns($local)->execute();
             if (!empty($newsletterCampaign[0]) && $newsletterCampaign[0] instanceof NewsletterCampaign) {
-                array_push($newsletterCampaigns, $newsletterCampaign[0]);
+                $newsletterCampaigns[$local] = $newsletterCampaign[0];
             }
         }
 
         $newsletterCampaignsToSend = $this->_validateToSend($newsletterCampaigns);
         $scheduledNewsletters = $this->_scheduleNewsletter($newsletterCampaignsToSend);
-        $output->writeln($scheduledNewsletters);
+        $output->writeln('<info>' . $scheduledNewsletters . '</info>');
     }
 
     private function _validateToSend(array $newsletterCampaigns)
@@ -49,9 +51,9 @@ EOT
         $currentDateTime = new \DateTime('now', (new \DateTimezone("Europe/Amsterdam")));
         $newsletterCampaignsToSend = array();
 
-        foreach ($newsletterCampaigns as $newsletterCampaign) {
-            if ($currentDateTime > $newsletterCampaign->scheduledTime) {
-                array_push($newsletterCampaignsToSend, $newsletterCampaign);
+        foreach ($newsletterCampaigns as $local => $newsletterCampaign) {
+            if ($currentDateTime > $newsletterCampaign->scheduledTime && !$newsletterCampaign->scheduledStatus) {
+                $newsletterCampaignsToSend[$local] = $newsletterCampaign;
             }
         }
 
@@ -60,6 +62,30 @@ EOT
 
     private function _scheduleNewsletter($newsletterCampaigns)
     {
-        return "I would like to schedule the campaign, but need a DynamoDb connection first...";
+        $bulkEmailRepository = RepositoryFactory::bulkEmail();
+        $result = array();
+
+        foreach ($newsletterCampaigns as $local => $newsletterCampaign) {
+            $bulkEmail = new BulkEmail;
+            $bulkEmail->setEmailType('newsletter');
+            $bulkEmail->setLocal($local);
+            $bulkEmail->setReferenceId($newsletterCampaign->getId());
+
+            // Creating a new document in object store
+            $bulkEmailRepository->save($bulkEmail);
+
+            // Setting the newsletter campaign to scheduled
+            $newsletterCampaign->setScheduledStatus(1);
+
+            $newsletterCampaignRepository = RepositoryFactory::newsletterCampaign($local);
+            $newsletterCampaignRepository->save($newsletterCampaign);
+
+            array_push($result, $local);
+        }
+
+        $scheduledLocales = join(' ', $result);
+        return (empty($scheduledLocales)) ?
+            "No newsletters scheduled." :
+            "For the following local(s) a newsletter is scheduled for sending: " . strtoupper($scheduledLocales);
     }
 }

@@ -49,7 +49,13 @@ class AppConfig
                     'dbname'   => $dbName,
                     'user'     => 'root',
                     'password' => 'root'
+                ),
+                'dynamoDb' => array(
+                    'dynamoDbRegion' => '',
+                    'accessKey' => '',
+                    'securityKey' => ''
                 )
+
             )
         );
     }
@@ -77,6 +83,11 @@ class AppConfig
                     'dbname'   => 'flipit_test',
                     'user'     => 'root',
                     'password' => 'root'
+                ),
+                'dynamoDb' => array(
+                    'dynamoDbRegion' => '',
+                    'accessKey' => '',
+                    'securityKey' => ''
                 )
             )
         );
@@ -124,6 +135,11 @@ class AppConfig
                     'dbname'   => $dbName,
                     'user'     => $dsn['user'],
                     'password' => $dsn['password']
+                ),
+                'dynamoDb' => array(
+                    'dynamoDbRegion' => $config->dynamodb->dynamodbregion,
+                    'accessKey' => $config->dynamodb->key,
+                    'securityKey' => $config->dynamodb->secret
                 )
             )
         );
