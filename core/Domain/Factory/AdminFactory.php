@@ -62,6 +62,12 @@ use \Core\Domain\Usecase\Admin\AddNewsletterCampaignUsecase;
 use \Core\Domain\Usecase\Admin\UpdateNewsletterCampaignUsecase;
 use \Core\Domain\Usecase\Admin\DeleteNewsletterCampaignUsecase;
 
+
+use \Core\Domain\Usecase\Admin\GetNewsletterCampaignOfferUsecase;
+use \Core\Domain\Usecase\Admin\CreateNewsletterCampaignOfferUsecase;
+use \Core\Domain\Usecase\Admin\AddNewsletterCampaignOfferUsecase;
+use \Core\Domain\Usecase\Admin\DeleteNewsletterCampaignOfferUsecase;
+
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\LandingPageValidator;
 use \Core\Domain\Validator\SettingsValidator;
@@ -412,5 +418,24 @@ class AdminFactory
     public static function getNewsletterCampaignOffer()
     {
         return new GetNewsletterCampaignOfferUsecase(RepositoryFactory::newsletterCampaignOffer(), new Purifier(), new Errors());
+    }
+
+    public static function createNewsletterCampaignOffer()
+    {
+        return new CreateNewsletterCampaignOfferUsecase();
+    }
+
+    public static function addNewsletterCampaignOffer()
+    {
+        return new AddNewsletterCampaignOfferUsecase(
+            RepositoryFactory::newsletterCampaignOffer(),
+            new NewsletterCampaignOfferValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+    public static function deleteNewsletterCampaignOffer()
+    {
+        return new DeleteNewsletterCampaignOfferUsecase(RepositoryFactory::newsletterCampaignOffer());
     }
 }

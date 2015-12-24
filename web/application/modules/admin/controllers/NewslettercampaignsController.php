@@ -123,6 +123,9 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     $errors = $result->getErrorsAll();
                     $this->setFlashMessage('error', $errors);
                 } else {
+                    if (isset($params['partOneOffers']) && !empty($params['partOneOffers'])) {
+
+                    }
                     $this->refreshNewsletterCampaignPageVarnish();
                     $this->setFlashMessage('success', 'News letter campaign has been updated successfully.</br>'. implode('<br/>', $this->message));
                     $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
