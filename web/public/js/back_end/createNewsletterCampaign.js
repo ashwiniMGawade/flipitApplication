@@ -329,6 +329,10 @@ $(function(){
         }
 
         init();
+
+
+
+    $('#saveNewsletterCampaign').on("click", function(e) {
         $('form#NewsletterWizardform').submit(function () {
             if ($("form#NewsletterWizardform").valid()) {
                 $('#saveNewsletterCampaign').attr('disabled', "disabled");
@@ -343,6 +347,7 @@ $(function(){
                 return false;
             }
         });
+});
 
     $("#testEmail").select2({
         placeholder: __("Search Email"),

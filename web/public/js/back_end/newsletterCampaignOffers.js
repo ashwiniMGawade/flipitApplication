@@ -3,12 +3,14 @@ $(document).ready(function() {
     $("#PartTwoOfferlist").select2({placeholder: __("Search a offer")});
 
     $("#PartOneOfferlist").change(function(){
-        $("#PartOneOfferlist #selctedOffer").val($(this).val());
+        $("#campaignOffersOne #selctedOffer").val($(this).val());
+        $("#campaignOffersOne #selctedOfferText").val($(this).find('option[value='+$(this).val()+']').text());
         addSelectedClassOnButton(1, 'campaignOffersOne');
     });
 
     $("#PartTwoOfferlist").change(function(){
-        $("#PartTwoOfferlist #selctedOffer").val($(this).val());
+        $("#campaignOffersTwo #selctedOffer").val($(this).val());
+        $("#campaignOffersTwo #selctedOfferText").val($(this).find('option[value='+$(this).val()+']').text());
         addSelectedClassOnButton(1, 'campaignOffersTwo');
     });
     //call to function for selected class(button)
@@ -37,12 +39,11 @@ $(document).ready(function() {
         addSelectedClassOnButton(2, "campaignOffersTwo");
     });
 
-
     $( "#partOneCode").sortable();
     $( "#partTwoCode").sortable();
     $( "#partOneCode" ).disableSelection();
     $( "#partTwoCode" ).disableSelection();
-    $( "#partOneCode" ).on( "sortstop", function( event, ui ) {
+    $( "#partOneCode" ).on( "sortstop", function( event, ui ) {onclick
         var offerid = new Array();
         $('#partOneCode .ui-state-default').each(function(){
             offerid.push($(this).attr('reloffer'));
@@ -81,7 +82,6 @@ $(document).ready(function() {
         //});
 
     });
-
 });
 
 function searchByTxt() {
@@ -91,6 +91,65 @@ function searchByTxt() {
     console.log('ok');
     //addSelectedClassOnButton(4);
     //$(this).addClass().addClass('btn-primary');
+}
+
+function addNewOffer(element) {
+    $(element).attr('disabled' ,"disabled");
+    parentId = $(element).closest('.wrap').attr('id');
+    var flag =  '#'+parentId+' .addNewOffer';
+    addSelectedClassOnButton(flag, parentId);
+
+    if($('ul#'+parentId+' li').length > 26) {
+        bootbox.alert(__('Part one offer list can have maximum 27 records, please delete one if you want to add more offers'));
+        $('#'+parentId+' .addNewOffer').removeAttr('disabled');
+        return false;
+    } else {
+        if($("#"+parentId+" input#selctedOffer").val() == '' || $("#"+parentId+" input#selctedOffer") == undefined) {
+            bootbox.alert(__('Please select an offer'));
+            $('#'+parentId+' .addNewOffer').removeAttr('disabled');
+            return false;
+        } else {
+            var id = $("#"+parentId+" input#selctedOffer").val();
+            var title = $("#"+parentId+" input#selctedOfferText").val();
+            var existingOffers = $("#"+parentId+" input#SearchedValueIds").val();
+
+            if($.inArray(id, existingOffers) !== -1) {
+                bootbox.alert(__('This offer already exists in the list'));
+            }
+            else {
+                var data = {'postion':1, 'offerId' : id, 'title': title};
+                lockImage = HOST_PATH + "public/images/back_end/stock_lock.png";
+                image = "<img src=" + lockImage + " height='20' style='float:right' width='20'>";
+
+                var li  = "<li class='ui-state-default' relpos='" + data.position + "' reloffer='" + data.offerId + "' id='" + data.id + "' ><span>" + data.title.replace(/\\/g, '')  + "</span>"+ image + "</li>";
+                $("#"+parentId+" ul").append(li);
+
+                $("#"+parentId+" li#"+ data.id).click(changeSelectedClass, parentId);
+
+                console.log( $("#"+parentId+" ul li#0").html());
+
+                $("#"+parentId+" ul li#0").remove();
+
+                $("#"+parentId+" div.combobox a.select2-choice").children('span').html('');
+
+                $("#"+parentId+" select option[value='"+  id +"']").remove();
+
+                $("#"+parentId+" input#selctedOffer").val('');
+
+                selectedElements(parentId);
+
+            }
+            $('#'+parentId+' .addNewOffer').removeAttr('disabled');
+        }
+    }
+}
+
+function changeSelectedClass(parentId) {
+
+    $("#"+parentId+" ul li").removeClass('selected');
+    $(this).addClass('selected');
+    //apply selected class on current button
+    addSelectedClassOnButton(2, parentId);
 }
 
 function addSelectedClassOnButton(flag, id) {
@@ -114,84 +173,7 @@ String.prototype.escapeSingleQuotes = function () {
     return this.replace(/'/g, "\\'");
 };
 
-function addNewOffer() {
-    var flag =  '#addNewOffer';
-    $('#addNewOffer').attr('disabled' ,"disabled");
-    //apply selected class on current button
-    addSelectedClassOnButton(flag);
 
-    if($('ul#mostPopularCode li').length > 26) {
-
-        bootbox.alert(__('Popular code list can have maximum 27 records, please delete one if you want to add more popular code'));
-
-        $('#addNewOffer').removeAttr('disabled');
-
-    } else {
-
-        if($("input#selctedOffer").val()=='' || $("input#selctedOffer").val()==undefined)
-        {
-            //console.log('ok');
-            bootbox.alert(__('Please select an offer'));
-
-            $('#addNewOffer').removeAttr('disabled');
-
-        } else {
-
-            var id = $("input#selctedOffer").val();
-
-            $.ajax({
-                url : HOST_PATH + "admin/popularcode/addoffer/id/" + id,
-                method : "post",
-                dataType : "json",
-                type : "post",
-                success : function(data) {
-
-                    //console.log(data);
-                    if(data=='2' || data==2)
-                    {
-                        bootbox.alert(__('This offer already exists in the list'));
-                    }
-                    else if(data=='0' && data==0) {
-
-                        bootbox.alert(__('This offer does not exist'));
-
-
-                    } else {
-
-                        if(data.type == "MN"){
-                            lockImage = HOST_PATH + "public/images/back_end/stock_lock.png";
-                            image = "<img src=" + lockImage + " height='20' style='float:right' width='20'>";
-                        }else{
-                            image = "";
-                        }
-                        var li  = "<li class='ui-state-default' reltype='" + data.type + "' relpos='" + data.position + "' reloffer='" + data.offerId + "' id='" + data.id + "' ><span>" + data.title.replace(/\\/g, '')  + "</span>"+ image + "</li>";
-                        $('ul#mostPopularCode').append(li);
-
-                        $('ul#mostPopularCode li#'+ data.id).click(changeSelectedClass);
-
-                        $('ul#mostPopularCode li#0').remove();
-
-                        $('div.combobox a.select2-choice').children('span').html('');
-
-                        $("#offerlist option[value='"+  id +"']").remove();
-
-                        $("input#selctedOffer").val('');
-
-                        selectedElements();
-
-                    }
-
-
-                    $('#addNewOffer').removeAttr('disabled');
-                }
-
-
-            });
-            //code add offer in list here
-        }
-    }
-
-}
 
 
 function deleteOne() {
@@ -265,11 +247,14 @@ function deletePopularCode() {
 
 }
 
-function selectedElements() {
+function selectedElements(parentId) {
     var selectedRelated = new Array();
-    $('ul#mostPopularCode').find('li').each(function(index) {
-        selectedRelated[index] = $(this).attr('reloffer');
+    $('#'+parentId+ ' ul').find('li').each(function(index) {
+        offerid = $(this).attr('reloffer');
+        if ($.inArray(offerid, selectedRelated) == -1) {
+            selectedRelated[index] = offerid;
+        }
     });
-    $('#SearchedValueIds').val(selectedRelated);
+    $('#'+parentId+ ' #SearchedValueIds').val(selectedRelated);
 }
 

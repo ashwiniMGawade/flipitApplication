@@ -1,4 +1,5 @@
 <script type="text/javascript" src="<?php echo PUBLIC_PATH ;?>js/back_end/select2.min.js"></script>
+<script type="text/javascript" src="<?php echo PUBLIC_PATH ;?>js/back_end/bootbox.min.js"></script>
 <script type="text/javascript" src="<?php echo PUBLIC_PATH;?>js/back_end/newsletterCampaignOffers.js"></script>
 <script type="text/javascript" src="<?php echo PUBLIC_PATH;?>js/jquery-ui-1.8.16.custom.min.js"></script>
 <div class="wrap columns-2" id="campaignOffersOne">
@@ -31,10 +32,10 @@
                         <input type='hidden' name="SearchedValueIds" id="SearchedValueIds" value="">
                     </div>
                     <div class="coupon-sidebar-content-box">
-                        <button  onClick='addNewOffer();' class="btn btn-primary addNewOffer">ADD NEW OFFER</button>
+                        <input type="button"  onClick='addNewOffer(this)' class="btn btn-primary addNewOffer" value="ADD NEW OFFER">
                     </div>
                     <div class="coupon-sidebar-content-box mb10 image-loading-icon">
-                        <button onClick='deleteOne();' class="btn deleteOne">DELETE</button>
+                        <input type="button" onClick='deleteOne();' class="btn deleteOne" value="DELETE">
                     </div>
                 </div>
             </div>
@@ -91,10 +92,10 @@
                         <input type='hidden' name="SearchedValueIds" id="SearchedValueIds" value="">
                     </div>
                     <div class="coupon-sidebar-content-box">
-                        <button  onClick='addNewOffer();' class="btn btn-primary addNewOffer" >ADD NEW OFFER</button>
+                        <input type="button"  onClick='addNewOffer(this)' class="btn btn-primary addNewOffer" value="ADD NEW OFFER">
                     </div>
                     <div class="coupon-sidebar-content-box mb10 image-loading-icon">
-                        <button onClick='deleteOne();' class="btn deleteOne">DELETE</button>
+                        <input type="button" onClick='deleteOne();' class="btn deleteOne" value="DELETE">
                     </div>
                 </div>
             </div>
