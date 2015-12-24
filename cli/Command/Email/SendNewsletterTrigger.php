@@ -32,32 +32,20 @@ EOT
     {
         $locals = (new LocaleLister)->getAllLocals();
 
-        $newsletterCampaigns = array();
-
-        foreach ($locals as $local) {
-            $newsletterCampaign = SystemFactory::getNewsletterCampaigns($local)->execute();
-            if (!empty($newsletterCampaign[0]) && $newsletterCampaign[0] instanceof NewsletterCampaign) {
-                $newsletterCampaigns[$local] = $newsletterCampaign[0];
-            }
-        }
-
-        $newsletterCampaignsToSend = $this->_validateToSend($newsletterCampaigns);
-        $scheduledNewsletters = $this->_scheduleNewsletter($newsletterCampaignsToSend);
-        $output->writeln('<info>' . $scheduledNewsletters . '</info>');
-    }
-
-    private function _validateToSend(array $newsletterCampaigns)
-    {
-        $currentDateTime = new \DateTime('now', (new \DateTimezone("Europe/Amsterdam")));
         $newsletterCampaignsToSend = array();
 
-        foreach ($newsletterCampaigns as $local => $newsletterCampaign) {
-            if ($currentDateTime > $newsletterCampaign->scheduledTime && !$newsletterCampaign->scheduledStatus) {
-                $newsletterCampaignsToSend[$local] = $newsletterCampaign;
+        foreach ($locals as $local) {
+            $conditions = array('scheduledStatus' => 1);
+            $currentDateTime = new \DateTime('now', (new \DateTimezone("Europe/Amsterdam")));
+            $newsletterCampaignsData = SystemFactory::getNewsletterCampaigns($local)->execute($conditions);
+            foreach ($newsletterCampaignsData as $newsletterCampaign) {
+                if ($newsletterCampaign instanceof NewsletterCampaign && $currentDateTime > $newsletterCampaign->scheduledTime) {
+                    $newsletterCampaignsToSend[$local][] = $newsletterCampaign;
+                }
             }
         }
-
-        return $newsletterCampaignsToSend;
+        $scheduledNewsletters = $this->_scheduleNewsletter($newsletterCampaignsToSend);
+        $output->writeln('<info>' . $scheduledNewsletters . '</info>');
     }
 
     private function _scheduleNewsletter($newsletterCampaigns)
@@ -65,22 +53,24 @@ EOT
         $bulkEmailRepository = RepositoryFactory::bulkEmail();
         $result = array();
 
-        foreach ($newsletterCampaigns as $local => $newsletterCampaign) {
-            $bulkEmail = new BulkEmail;
-            $bulkEmail->setEmailType('newsletter');
-            $bulkEmail->setLocal($local);
-            $bulkEmail->setReferenceId($newsletterCampaign->getId());
+        foreach ($newsletterCampaigns as $local => $newsletterCampaigns) {
+            foreach ($newsletterCampaigns as $newsletterCampaign) {
+                $bulkEmail = new BulkEmail;
+                $bulkEmail->setEmailType('newsletter');
+                $bulkEmail->setLocal($local);
+                $bulkEmail->setReferenceId($newsletterCampaign->getId());
 
-            // Creating a new document in object store
-            $bulkEmailRepository->save($bulkEmail);
+                // Creating a new document in object store
+                $bulkEmailRepository->save($bulkEmail);
 
-            // Setting the newsletter campaign to scheduled
-            $newsletterCampaign->setScheduledStatus(1);
+                // Setting the newsletter campaign to scheduled
+                $newsletterCampaign->setScheduledStatus(1);
 
-            $newsletterCampaignRepository = RepositoryFactory::newsletterCampaign($local);
-            $newsletterCampaignRepository->save($newsletterCampaign);
+                $newsletterCampaignRepository = RepositoryFactory::newsletterCampaign($local);
+                $newsletterCampaignRepository->save($newsletterCampaign);
 
-            array_push($result, $local);
+                array_push($result, $local);
+            }
         }
 
         $scheduledLocales = join(' ', $result);
