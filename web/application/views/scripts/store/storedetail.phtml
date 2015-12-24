@@ -1,6 +1,7 @@
 <?php
 
 $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/floatingCoupon.js");
+$this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/add-class.js");
 $session = new Zend_Session_Namespace('Branding');
 if (empty($session->brandingActivated) && !empty($this->shopBranding)): 
     $this->headStyle()->appendStyle($this->shop()->brandingCss($this->shopBranding));
