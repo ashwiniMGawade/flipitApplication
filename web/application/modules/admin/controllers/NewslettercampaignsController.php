@@ -168,6 +168,8 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $parameters = $this->getAllParams();
         $this->view->newsletterCampaign = array();
         $this->view->newsletterCampaign['id'] = $parameters['id'];
+        $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
+        $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
         $newsletterCampaign = AdminFactory::getNewsletterCampaign()->execute(array('id'=>$parameters['id']));
 
         if ($newsletterCampaign instanceof Errors) {

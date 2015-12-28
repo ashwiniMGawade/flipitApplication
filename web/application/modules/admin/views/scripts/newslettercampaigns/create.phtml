@@ -20,12 +20,13 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
 <div class="wrap columns-2" id="newsletterCampaignListDiv">
     <div class='wrap columns-2'>
         <?php echo $this->flashMessages(); ?>
+        <div class="error form-error"></div>
     </div>
     <form id="NewsletterWizardform" method="post" action="" enctype="multipart/form-data">
         <h1 class="fl"><?php echo $this->translate('Create Newsletter Campaign');?>
             <button type="button" onclick="$('#sendTest').modal('show');" href="#" id="sendTestMail" class="btn ml10"><?php echo $this->translate('Send Test Email');?></button>
             <img id="loader" src="<?php echo PUBLIC_PATH;?>images/loader.gif" style="display:none;">
-            <input type="submit" onclick="" href="#" id="saveNewsletterCampaign" class="btn ml10" value="<?php echo $this->translate('Save & Exit');?>"></button>
+            <input type="button" onclick="" href="#" id="saveNewsletterCampaign" class="btn ml10" value="<?php echo $this->translate('Save & Exit');?>"></button>
             <a type="button" href="<?php echo HTTP_PATH;?>admin/newslettercampaigns" id="cancel" class="btn ml10"><?php echo $this->translate('Cancel');?></a>
 
         </h1>
@@ -256,6 +257,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                         <li class="next"><a href="#" class="">Next</a></li>
                         <li class="previous first disabled" style="display:none;"><a href="#">First</a></li>
                         <li class="previous disabled"><a href="#">Previous</a></li>
+                        <li class="btn-primary hide" id="scheduleButton"><a href="#">Schedule</a></li>
                     </ul>
                 </div>
             </div>

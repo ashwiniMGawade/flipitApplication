@@ -18,6 +18,14 @@ $(function(){
                 var $total = navigation.find('li').length;
                 var $current = index+1;
                 var $percent = ($current/$total) * 100;
+                if(tab.find('a').attr('id') == 'ScheduleCampaign') {
+                    $(".next:not('.last')").hide();
+                    $("#scheduleButton").removeClass("hide");
+
+                } else {
+                    $(".next:not('.last')").show();
+                    $("#scheduleButton").addClass("hide");
+                }
                 $('#NewsletterWizardform').find('.progress-bar').css({width:$percent+'%'});
             }
         });
@@ -111,7 +119,8 @@ $(function(){
             onkeyup : false,
             onfocusout : function(element) {
                 $(element).valid();
-            }
+            },
+            ignore:[],
 
         });
 
@@ -129,6 +138,7 @@ $(function(){
         {
             $("form").submit(function(e){
                 // e.preventDefault();
+                alert(JSON.stringify(invalidForm));
                 if (! jQuery.isEmptyObject(invalidForm) ) {
                     for (var i in invalidForm) {
                         if (invalidForm[i]) {
@@ -146,7 +156,7 @@ $(function(){
             });
 
             //function call to validate
-            //validateNewsletterWizardform();
+            validateNewsletterWizardform();
         }
 
         var validateNewsletterWizardform = function (){
@@ -155,16 +165,23 @@ $(function(){
                     errorClass : 'error',
                     validClass : 'success',
                     errorElement : 'span',
-                    ignore: ".ignore, :hidden",
+                    ignore: "",
                     afterReset  : resetBorders,
                     errorPlacement : function(error, element) {
                         element.parent("div").prev("div")
                             .html(error);
+                        if($(".form-error").find('span[for='+element.attr('name')+']').length ==0 ){
+                            $(".form-error").append(error);
+                        }
+
                     },
                     rules : {
                         "senderEmail": {
                             required : true,
                             email    : true
+                        },
+                        "campaignSubject" : {
+                            required : true
                         },
                         "campaignHeader": {
                             minlength : 10
@@ -183,6 +200,9 @@ $(function(){
                         "senderEmail" : {
                             required : __("Please enter your email address"),
                             email : __("Please enter valid email address")
+                        },
+                        "campaignSubject" : {
+                            required : __("Please enter Newsletter campaign Subject"),
                         },
                         "campaignHeader": {
                             minlength : __("Please enter atleast 10 characters")
@@ -352,6 +372,13 @@ $(function(){
         $('form#NewsletterWizardform').submit();
     });
 
+    $('#scheduleButton').on("click", function(e) {
+        alert($("form#NewsletterWizardform").valid());
+        if ($("form#NewsletterWizardform").valid()) {
+            $('form#NewsletterWizardform').submit();
+        }
+    });
+
     $("#testEmail").select2({
         placeholder: __("Search Email"),
         minimumInputLength: 1,
@@ -382,6 +409,10 @@ $(function(){
     $("#dp1").datepicker().on('changeDate', validateScheduleTimestamp);
     function validateScheduleTimestamp()
     {
+        $("input[name=scheduleDate]").rules("add", "required");
+        $("input[name=scheduleTime]").rules("add", "required");
+        $("input[name=senderEmail]").rules("add", "required");
+        $("input[name=campaignSubject]").rules("add", "required");
         var sDate = Date.parseExact( jQuery("input#scheduleDate").val() , "dd-MM-yyyy") ;
         var now = new Date() ;
         var currentDate = now.getDate() + "-" + ( now.getMonth() + 1 ) + "-" + now.getFullYear() ;
@@ -410,7 +441,12 @@ $(function(){
         }
         if(hasError)
         {
-
+            $('#saveNewsletterCampaign').attr('disabled', "disabled");
+            $('#sendTestMail').attr('disabled', "disabled");
+            $('#cancel').addClass('disable_a_href disabled')
+            $('.nav-tabs a').addClass('disable_a_href');
+            $('.next a').addClass('disable_a_href');
+            $('.previous a').addClass('disable_a_href');
             jQuery("div.dateValidationMessage").removeClass("success").addClass("error").html(__("<span class='error help-inline'>Shedule date should be greater than current date</span>"))
                 .next("div").addClass("error").removeClass("success");
         } else 	{

@@ -1,7 +1,8 @@
 <?php
 
 $this->headTitle()->append($this->translate('Edit Newsletter Campaign'));
-
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/datepicker.css");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/timepicker.css");
 $this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.ui.widget.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
@@ -10,6 +11,9 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.dataTables.min.js" )
 $this->headScript ()->appendFile ( PUBLIC_PATH . "js/dataTableComman.js" );
 $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.dataTables.rowReordering.js" );
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampaign.js");
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/date.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-timepicker.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
 
 
 ?>
@@ -19,6 +23,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
 <div class="wrap columns-2" id="newsletterCampaignListDiv">
     <div class='wrap columns-2'>
         <?php echo $this->flashMessages(); ?>
+        <div class="error form-error"></div>
 </div>
 <form id="NewsletterWizardform" method="post" action="" enctype="multipart/form-data" data-id="<?php echo $this->newsletterCampaign['id'];?>">
     <h1 class="fl"><?php echo $this->translate('Edit Newsletter Campaign');?>
@@ -192,12 +197,69 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
                 <div class="tab-pane" id="step2">
 
                 </div>
-                <div class="tab-pane" id="step3">This is step 3</div>
+                <div class="tab-pane" id="step3">
+                    <div class="mainpage-content">
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Recipients');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <div class="mb20"><?php echo $this->recipientCount['recepients'] . $this->translate(' Recipients selected');?></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mainpage-content-line mb10">
+                            <div class="mainpage-content-left">
+                                <label><strong><?php echo $this->translate('Time Zone'); ?></strong></label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <div data-toggle="buttons-checkbox" class="btn-group timezone">
+                                        <label>
+                                            <strong>
+                                                <?php
+                                                # set current timezone for scheduled newsletter if available (in case if it is schediled)
+                                                echo $currentTimezone = isset($this->localeSettings['0']['timezone']) ?
+                                                    $this->localeSettings['0']['timezone'] : "" ;
+                                                ?>
+                                            </strong>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Send Date/Time');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other dateValidationMessage"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <div data-date-format="dd-mm-yyyy" data-date="<?php echo date('d-m-Y');?>" id="dp1" class="input-append date">
+                                        <input readonly="readonly" type="text"  value="<?php echo date('d-m-Y');?>"
+                                               placeholder="<?php echo $this->translate('Sunday, April 1');?>"
+                                               class="span2 ignore2 date-time-cusor-style" id="scheduleDate"
+                                               name="scheduleDate">
+                                        <span class="add-on"><i class="icon-th"></i></span>
+                                    </div>
+                                    <div class="input-append bootstrap-timepicker-component" style="display: inline-block;">
+                                        <input readonly="readonly" type="text" name="scheduleTime" id="scheduleTime" class="input-small timepicker-default ignore2 date-time-cusor-style">
+                                            <span class="add-on">
+                                                <i class="icon-time" style="background-position: -47px -24px;"></i>
+                                            </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
                 <ul class="pager wizard m-b-sm">
                     <li class="next last" style="display:none;"><a href="#">Last</a></li>
                     <li class="next"><a href="#">Next</a></li>
                     <li class="previous first disabled" style="display:none;"><a href="#">First</a></li>
                     <li class="previous disabled"><a href="#">Previous</a></li>
+                    <li class="btn-primary hide" id="scheduleButton"><a href="#">Schedule</a></li>
                 </ul>
             </div>
         </div>
