@@ -30,6 +30,15 @@ if (!$isFlipit || ($isFlipit && $locale)) {
         }
     );
 
+    $app->group(
+        $localePath . '/newslettercampaigns',
+        function () use ($app) {
+            $app->get('/', 'Api\Controller\NewsletterCampaignsController:getNewsletterCampaigns');
+            $app->get('/:id', 'Api\Controller\NewsletterCampaignsController:getNewsletterCampaign');
+            $app->map('/:id', 'Api\Controller\NewsletterCampaignsController:updateNewsletterCampaign')->via('PUT', 'PATCH');
+        }
+    );
+
     $app->get(
         $localePath . '/',
         function () {

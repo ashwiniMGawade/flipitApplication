@@ -37,7 +37,7 @@ class VisitorsController extends ApiBaseController
 
         foreach ($visitors as $visitor) {
             $visitor =  $this->generateVisitorJsonData($visitor);
-            $visitorsData->addResource('visitor', $visitor);
+            $visitorsData->addResource('visitors', $visitor);
         }
         echo $visitorsData->asJson();
     }
