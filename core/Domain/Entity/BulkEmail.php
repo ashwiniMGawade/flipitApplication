@@ -4,10 +4,27 @@ namespace Core\Domain\Entity;
 
 class BulkEmail
 {
+    protected $timeStamp;
     protected $emailType;
     protected $referenceId;
     protected $local;
     protected $userId;
+
+    /**
+     * @return mixed
+     */
+    public function getTimeStamp()
+    {
+        return $this->timeStamp;
+    }
+
+    /**
+     * @param mixed $timeStamp
+     */
+    public function setTimeStamp($timeStamp)
+    {
+        $this->timeStamp = $timeStamp;
+    }
 
     /**
      * @return mixed

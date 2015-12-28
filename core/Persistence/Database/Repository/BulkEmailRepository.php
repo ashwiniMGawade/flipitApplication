@@ -19,6 +19,9 @@ class BulkEmailRepository implements BulkEmailInterface
     public function save(BulkEmail $bulkEmail)
     {
         $itemArray = array(
+            'Timestamp' => array(
+                'N' => (string) $bulkEmail->getTimeStamp()
+            ),
             'EmailType' => array(
                 'S' => (string) $bulkEmail->getEmailType()
             ),
@@ -33,7 +36,6 @@ class BulkEmailRepository implements BulkEmailInterface
         if (!empty($bulkEmail->getUserId())) {
             $itemArray['UserId'] = array('N' => (string) $bulkEmail->getUserId());
         }
-
         return $this->dynamoDbClient->putItem(array(
             'TableName' => 'BulkEmailTest',
             'Item' => $itemArray

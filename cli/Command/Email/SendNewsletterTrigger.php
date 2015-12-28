@@ -56,6 +56,7 @@ EOT
         foreach ($newsletterCampaigns as $local => $newsletterCampaigns) {
             foreach ($newsletterCampaigns as $newsletterCampaign) {
                 $bulkEmail = new BulkEmail;
+                $bulkEmail->setTimeStamp(time());
                 $bulkEmail->setEmailType('newsletter');
                 $bulkEmail->setLocal($local);
                 $bulkEmail->setReferenceId($newsletterCampaign->getId());
