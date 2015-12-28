@@ -78,6 +78,8 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
     public function createAction()
     {
         $this->view->newsletterCampaign = array();
+        $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
+        $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
             $newsletterCampaign = AdminFactory::createNewsletterCampaign()->execute();
@@ -113,7 +115,8 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         }
     }
 
-    private function updateOffers($section, $newsletterCampaignId, $offers) {
+    private function updateOffers($section, $newsletterCampaignId, $offers)
+    {
         $result = SystemFactory::getNewsletterCampaignsOffers()->execute(array('section' => $section, 'campaignId' => $newsletterCampaignId));
         if ($result instanceof Errors) {
             $errors = $result->getErrorsAll();
@@ -124,7 +127,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     AdminFactory::deleteNewsletterCampaignOffer()->execute($offer);
                 }
             }
-            foreach($offers as $index => $offer) {
+            foreach ($offers as $index => $offer) {
                 $params['offer'] = SystemFactory::getOffer()->execute(array('id' => $offer));
                 if ($params['offer'] instanceof Errors) {
                     $errors = $params['offer']->getErrorsAll();
@@ -142,7 +145,8 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         }
     }
 
-    private function _createOffer($params) {
+    private function _createOffer($params)
+    {
         $campaignOffer = AdminFactory::createNewsletterCampaignOffer()->execute();
         $result = AdminFactory::addNewsletterCampaignOffer()->execute($campaignOffer, $params);
         if ($result instanceof Errors) {

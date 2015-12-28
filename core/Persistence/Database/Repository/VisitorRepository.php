@@ -29,4 +29,17 @@ class VisitorRepository extends BaseRepository implements VisitorRepositoryInter
         $response = $query->execute();
         return $response;
     }
+
+    public function getNewsletterReceipientCount()
+    {
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder
+            ->select('count(v.id) as recepients')
+            ->from('\Core\Domain\Entity\Visitor', 'v')
+            ->where('v.status = 1')
+            ->andWhere('v.active = 1')
+            ->andWhere('v.weeklyNewsLetter = 1');
+        $response = $queryBuilder->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $response;
+    }
 }

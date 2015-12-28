@@ -37,70 +37,70 @@ $(function(){
     }
 
 
-        var ranNum = Math.floor((Math.random()*50)+1);
-        var info = $('#gi'), num='';
-        var count = 0;
-        $('#gn').on('keydown', function(){info.text('.')});
-        $('#guessform').bootstrapWizard({
-            'tabClass': 'nav nav-tabs',
-            'onNext': function(tab, navigation, index) {
-                var answer = $('#gn').val();
-                num = num +' '+ answer;
-                count++;
-                if(answer > ranNum)
-                {
-                    info.text("Guess lower!");
-                    return false;
-                }
-                else if(answer < ranNum)
-                {
-                    info.text("Guess higher!!");
-                    return false;
-                }
-                else if(answer==ranNum)
-                {
-                    ranNum = Math.floor((Math.random()*50)+1);
-                    $('#answer').text(answer);
-                    $('#count').text(count);
-                    $('#num').text(num);
-                    count = 0;
-                    return true;
-                }
-            },
-            onTabClick: function(tab, navigation, index) {
+    var ranNum = Math.floor((Math.random()*50)+1);
+    var info = $('#gi'), num='';
+    var count = 0;
+    $('#gn').on('keydown', function(){info.text('.')});
+    $('#guessform').bootstrapWizard({
+        'tabClass': 'nav nav-tabs',
+        'onNext': function(tab, navigation, index) {
+            var answer = $('#gn').val();
+            num = num +' '+ answer;
+            count++;
+            if(answer > ranNum)
+            {
+                info.text("Guess lower!");
                 return false;
             }
-        });
+            else if(answer < ranNum)
+            {
+                info.text("Guess higher!!");
+                return false;
+            }
+            else if(answer==ranNum)
+            {
+                ranNum = Math.floor((Math.random()*50)+1);
+                $('#answer').text(answer);
+                $('#count').text(count);
+                $('#num').text(num);
+                count = 0;
+                return true;
+            }
+        },
+        onTabClick: function(tab, navigation, index) {
+            return false;
+        }
+    });
 
-        /**
-         * validRules object contain all the messages that are visible when an elment
-         * value is valid
-         *
-         * structure to define a message for element: key is to be element name and Value is
-         * message
-         */
-        var validRules = {
-            "campaignHeader" : __("Campaign header looks great"),
-            "campaignFooter" : __("Campaign foorer looks great"),
-            "senderEmail" : __("Email address looks great"),
-            "headerBannerURL" : __("Campaign header banner URL looks great"),
-            "footerBannerURL" : __("Campaign footer banner URL looks great")
-        };
+    /**
+     * validRules object contain all the messages that are visible when an elment
+     * value is valid
+     *
+     * structure to define a message for element: key is to be element name and Value is
+     * message
+     */
+    var validRules = {
+        "campaignHeader" : __("Campaign header looks great"),
+        "campaignFooter" : __("Campaign foorer looks great"),
+        "senderEmail" : __("Email address looks great"),
+        "headerBannerURL" : __("Campaign header banner URL looks great"),
+        "footerBannerURL" : __("Campaign footer banner URL looks great")
+    };
 
-        /**
-         * focusRules oject contain all the messages that are visible on focus of an
-         * elelement
-         *
-         * structure to define a message for element : key is to be element name and Value is
-         * message
-         */
-        var focusRules = {
-            "campaignHeader" : __("Please enter valid Campaign header"),
-            "campaignFooter" : __("Please enter valid Campaign foorert"),
-            "senderEmail" : __("Please enter valid Email address"),
-            "headerBannerURL" : __("Please enter valid Campaign header banner URL"),
-            "footerBannerURL" : __("Please enter valid Campaign footer banner URL")
-        };
+    /**
+     * focusRules oject contain all the messages that are visible on focus of an
+     * elelement
+     *
+     * structure to define a message for element : key is to be element name and Value is
+     * message
+     */
+    var focusRules = {
+        "campaignHeader" : __("Please enter valid Campaign header"),
+        "campaignFooter" : __("Please enter valid Campaign foorert"),
+        "senderEmail" : __("Please enter valid Email address"),
+        "headerBannerURL" : __("Please enter valid Campaign header banner URL"),
+        "footerBannerURL" : __("Please enter valid Campaign footer banner URL")
+    };
 
 
 
@@ -377,6 +377,63 @@ $(function(){
             $("#testEmail").val(data);
             return data;
         }
+    });
+
+    $("#dp1").datepicker().on('changeDate', validateScheduleTimestamp);
+    function validateScheduleTimestamp()
+    {
+        var sDate = Date.parseExact( jQuery("input#scheduleDate").val() , "dd-MM-yyyy") ;
+        var now = new Date() ;
+        var currentDate = now.getDate() + "-" + ( now.getMonth() + 1 ) + "-" + now.getFullYear() ;
+
+        currentDate = Date.parseExact( currentDate , "d-M-yyyy");
+
+        // check start date should be greater than or equal to current date
+
+        var sTime = jQuery("input#scheduleTime").val();
+
+
+        var hasError = false ;
+        if( sDate.compareTo ( currentDate ) == 0)
+        {
+            // check time satrt time is greater than  end time
+            if(sTime  >= now.getMinutes())
+            {
+                hasError = true ;
+            } else {
+                hasError = false  ;
+            }
+        }
+        // end date is greaqtetr than start date
+        if ( sDate.compareTo ( currentDate ) < 0 )
+        {
+            hasError = true   ;
+        }
+
+        // check for error i.e start date time is greater than end date time
+        if(hasError)
+        {
+            // Change msg by Er.kundal
+            jQuery("div.dateValidationMessage1").removeClass("success").addClass("error").html(__("<span class='error help-inline'>Shedule date should be greater than current date</span>"))
+                .next("div").addClass("error").removeClass("success");
+            jQuery("div.dateValidationMessage2").removeClass("success").addClass("error").html(__("<span class='error help-inline'></span>"))
+                .next("div").addClass("error").removeClass("success");
+        } else 	{
+            jQuery("div.dateValidationMessage1").removeClass("error").addClass("success")
+                .html(__("<span class='success help-inline'>Valid</span>"))
+                .next("div").removeClass("error").addClass("success");
+            jQuery("div.dateValidationMessage2").removeClass("error").addClass("success")
+                .html(__("<span class='success help-inline'>Valid</span>"))
+                .next("div").removeClass("error").addClass("success");
+        }
+    }
+
+    jQuery('#scheduleTime').timepicker({
+        minuteStep: 5,
+        template: 'modal',
+        showSeconds: false,
+        showMeridian: false,
+        'afterUpdate'  : validateScheduleTimestamp
     });
 
 });

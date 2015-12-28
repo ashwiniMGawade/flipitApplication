@@ -1,6 +1,7 @@
 <?php
 $this->headTitle()->append($this->translate('Create Newsletter Campaign'));
-
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/datepicker.css");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/timepicker.css");
 $this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.ui.widget.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
@@ -9,6 +10,9 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampa
 $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.dataTables.min.js" );
 $this->headScript ()->appendFile ( PUBLIC_PATH . "js/dataTableComman.js" );
 $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.dataTables.rowReordering.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/date.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-timepicker.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
 ?>
 
 <!-- Div for campaign info  -->
@@ -197,17 +201,28 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.dataTables.rowReorde
                                 <div class="mainpage-content-right">
                                     <div class="mainpage-content-right-inner-right-other"></div>
                                     <div class="mainpage-content-right-inner-left-other">
-                                       <div class="mb20">365444 <?php echo $this->translate(' Recipients selected');?></div>
+                                       <div class="mb20"><?php echo $this->recipientCount['recepients'] . $this->translate(' Recipients selected');?></div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="mainpage-content-line">
-                                <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Timezone');?></strong></label></div>
+                            <div class="mainpage-content-line mb10">
+                                <div class="mainpage-content-left">
+                                    <label><strong><?php echo $this->translate('Time Zone'); ?></strong></label>
+                                </div>
                                 <div class="mainpage-content-right">
-                                    <div class="mainpage-content-right-inner-right-other"></div>
                                     <div class="mainpage-content-right-inner-left-other">
-                                        <div class="mb20" ><?php echo $this->translate('US Central');?> </div>
+                                        <div data-toggle="buttons-checkbox" class="btn-group timezone">
+                                            <label>
+                                                <strong>
+                                                    <?php
+                                                    # set current timezone for scheduled newsletter if available (in case if it is schediled)
+                                                    echo $currentTimezone = isset($this->localeSettings['0']['timezone']) ?
+                                                        $this->localeSettings['0']['timezone'] : "" ;
+                                                    ?>
+                                                </strong>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -217,8 +232,11 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.dataTables.rowReorde
                                 <div class="mainpage-content-right">
                                     <div class="mainpage-content-right-inner-right-other"></div>
                                     <div class="mainpage-content-right-inner-left-other">
-                                        <div data-date-format="dd-mm-yyyy" data-date="31-12-2015" id="dp4" class="input-append date">
-                                            <input readonly="readonly" type="text" value="" placeholder="" name="scheduleDate" id="scheduleDate" class="span2 ignore2 date-time-cusor-style">
+                                        <div data-date-format="dd-mm-yyyy" data-date="<?php echo date('d-m-Y');?>" id="dp1" class="input-append date">
+                                            <input readonly="readonly" type="text"  value="<?php echo date('d-m-Y');?>"
+                                                   placeholder="<?php echo $this->translate('Sunday, April 1');?>"
+                                                   class="span2 ignore2 date-time-cusor-style" id="scheduleDate"
+                                                   name="scheduleDate">
                                             <span class="add-on"><i class="icon-th"></i></span>
                                         </div>
                                         <div class="input-append bootstrap-timepicker-component" style="display: inline-block;">
