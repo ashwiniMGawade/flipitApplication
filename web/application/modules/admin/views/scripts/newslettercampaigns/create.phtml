@@ -191,7 +191,47 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.dataTables.rowReorde
 
                     </div>
                     <div class="tab-pane" id="step3">
+                        <div class="mainpage-content">
+                            <div class="mainpage-content-line">
+                                <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Recipients');?></strong></label></div>
+                                <div class="mainpage-content-right">
+                                    <div class="mainpage-content-right-inner-right-other"></div>
+                                    <div class="mainpage-content-right-inner-left-other">
+                                       <div class="mb20">365444 <?php echo $this->translate(' Recipients selected');?></div>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <div class="mainpage-content-line">
+                                <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Timezone');?></strong></label></div>
+                                <div class="mainpage-content-right">
+                                    <div class="mainpage-content-right-inner-right-other"></div>
+                                    <div class="mainpage-content-right-inner-left-other">
+                                        <div class="mb20" ><?php echo $this->translate('US Central');?> </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mainpage-content-line">
+                                <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Send Date/Time');?></strong></label></div>
+                                <div class="mainpage-content-right">
+                                    <div class="mainpage-content-right-inner-right-other"></div>
+                                    <div class="mainpage-content-right-inner-left-other">
+                                        <div data-date-format="dd-mm-yyyy" data-date="31-12-2015" id="dp4" class="input-append date">
+                                            <input readonly="readonly" type="text" value="" placeholder="" name="scheduleDate" id="scheduleDate" class="span2 ignore2 date-time-cusor-style">
+                                            <span class="add-on"><i class="icon-th"></i></span>
+                                        </div>
+                                        <div class="input-append bootstrap-timepicker-component" style="display: inline-block;">
+                                            <input readonly="readonly" type="text" name="scheduleTime" id="scheduleTime" class="input-small timepicker-default ignore2 date-time-cusor-style">
+                                            <span class="add-on">
+                                                <i class="icon-time" style="background-position: -47px -24px;"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                     <ul class="pager wizard m-b-sm">
                         <li class="next last" style="display:none;"><a href="#">Last</a></li>
