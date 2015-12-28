@@ -220,11 +220,20 @@ class Admin_AuthController extends Zend_Controller_Action
                     $html->assign('host', HTTP_PATH ."/admin");
                     //render view
                     $bodyText = $html->render('template.phtml');
-                    $recipents = array("to" => $this->getRequest()->getParam("email"));
                     $subject = \FrontEnd_Helper_viewHelper::__email("email_Forgot password");
-                    $body = $bodyText;
-                    //send a mail to user password update notification
-                    $sendEmail = \BackEnd_Helper_viewHelper::SendMail($recipents,$subject, $body);
+                    $mandrill = new Mandrill_Init($this->getInvokeArg('mandrillKey'));
+                    $message =
+                        array(
+                            'subject'    => $subject,
+                            'from_email' => 'system@imbull.com',
+                            'from_name'  => 'System',
+                            'to'         => array(array('email'=>$this->getRequest()->getParam("email"))) ,
+                            'html'       => $bodyText,
+                            'inline_css' => true
+                        );
+                    $mandrill->messages->send($message);
+
+
                     $url  =  HTTP_PATH . 'admin/auth/pwdresetsuccessfully';
                     $this->_redirect($url);
 
