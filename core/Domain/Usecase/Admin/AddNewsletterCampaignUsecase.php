@@ -73,7 +73,7 @@ class AddNewsletterCampaignUsecase
             $newsletterCampaign->setSenderEmail($params['senderEmail']);
         }
         if (isset($params['scheduledStatus'])) {
-            $newsletterCampaign->setScheduledStatus($params['scheduledStatus']);
+            $newsletterCampaign->setScheduledStatus((int)$params['scheduledStatus']);
         }
         if (isset($params['scheduledTime'])) {
             $newsletterCampaign->setScheduledTime($params['scheduledTime']);

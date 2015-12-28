@@ -404,25 +404,17 @@ $(function(){
                 hasError = false  ;
             }
         }
-        // end date is greaqtetr than start date
         if ( sDate.compareTo ( currentDate ) < 0 )
         {
             hasError = true   ;
         }
-
-        // check for error i.e start date time is greater than end date time
         if(hasError)
         {
-            // Change msg by Er.kundal
-            jQuery("div.dateValidationMessage1").removeClass("success").addClass("error").html(__("<span class='error help-inline'>Shedule date should be greater than current date</span>"))
-                .next("div").addClass("error").removeClass("success");
-            jQuery("div.dateValidationMessage2").removeClass("success").addClass("error").html(__("<span class='error help-inline'></span>"))
+
+            jQuery("div.dateValidationMessage").removeClass("success").addClass("error").html(__("<span class='error help-inline'>Shedule date should be greater than current date</span>"))
                 .next("div").addClass("error").removeClass("success");
         } else 	{
-            jQuery("div.dateValidationMessage1").removeClass("error").addClass("success")
-                .html(__("<span class='success help-inline'>Valid</span>"))
-                .next("div").removeClass("error").addClass("success");
-            jQuery("div.dateValidationMessage2").removeClass("error").addClass("success")
+            jQuery("div.dateValidationMessage").removeClass("error").addClass("success")
                 .html(__("<span class='success help-inline'>Valid</span>"))
                 .next("div").removeClass("error").addClass("success");
         }

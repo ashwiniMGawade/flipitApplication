@@ -85,7 +85,15 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $newsletterCampaign = AdminFactory::createNewsletterCampaign()->execute();
             $params = $this->_handleImageUpload($params);
             $this->view->newsletterCampaign = $this->getAllParams();
+
             if ($params) {
+                if (isset($params['scheduleDate']) && isset($params['scheduleTime'])) {
+                    $UserTimezone = new DateTimeZone( $this->view->localeSettings['0']['timezone']);
+                    $date = new DateTime( $params['scheduleDate'] . $params['scheduleTime'] , $UserTimezone );
+                    $date->setTimezone(new DateTimeZone('GMT'));
+                    $params['scheduledStatus'] = 1;
+                    $params['scheduledTime'] = $date;
+                }
                 $result = AdminFactory::addNewsletterCampaign()->execute($newsletterCampaign, $params);
                 if ($result instanceof Errors) {
                     $errors = $result->getErrorsAll();
