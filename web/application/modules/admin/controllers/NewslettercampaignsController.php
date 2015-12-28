@@ -87,7 +87,12 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $this->view->newsletterCampaign = $this->getAllParams();
 
             if ($params) {
-                if (isset($params['scheduleDate']) && isset($params['scheduleTime'])) {
+                if (isset($params['schedule']) && isset($params['scheduleDate']) && isset($params['scheduleTime']) && !empty($params['scheduleDate'])) {
+                    if(isset($params['campaignSubject']) && empty($params['campaignSubject']))
+                    {
+                        $this->setFlashMessage('error', "Please enter campaign subject");
+                        return;
+                    }
                     $UserTimezone = new DateTimeZone( $this->view->localeSettings['0']['timezone']);
                     $date = new DateTime( $params['scheduleDate'] . $params['scheduleTime'] , $UserTimezone );
                     $date->setTimezone(new DateTimeZone('GMT'));
@@ -179,6 +184,18 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         }
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
+            if (isset($params['schedule']) && isset($params['scheduleDate']) && isset($params['scheduleTime']) && !empty($params['scheduleDate'])) {
+                if(isset($params['campaignSubject']) && empty($params['campaignSubject']))
+                {
+                    $this->setFlashMessage('error', "Please enter campaign subject");
+                    return;
+                }
+                $UserTimezone = new DateTimeZone( $this->view->localeSettings['0']['timezone']);
+                $date = new DateTime( $params['scheduleDate'] . $params['scheduleTime'] , $UserTimezone );
+                $date->setTimezone(new DateTimeZone('GMT'));
+                $params['scheduledStatus'] = 1;
+                $params['scheduledTime'] = $date;
+            }
             $params = $this->_handleImageUpload($params, $newsletterCampaign->headerBanner, $newsletterCampaign->footerBanner);
             $this->view->newsletterCampaign = $this->getAllParams();
             if ($params) {
@@ -280,8 +297,14 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
     private function prepareData($campaigns)
     {
         $returnData = array();
+        $localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         if (!empty($campaigns)) {
             foreach ($campaigns as $campaign) {
+//                //$UserTimezone = new DateTimeZone( $localeSettings['0']['timezone']);
+//                $scheduledTime = $campaign->getScheduledTime();
+//                var_dump($scheduledTime);
+//                $date = new DateTime( $scheduledTime->format('Y-m-d H:i:s') , $UserTimezone );
+//                var_dump($date);
                 $returnData[] = array(
                     'id' => $campaign->getId(),
                     'campaignName' => $campaign->getCampaignName(),

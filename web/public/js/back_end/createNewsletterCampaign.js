@@ -20,11 +20,11 @@ $(function(){
                 var $percent = ($current/$total) * 100;
                 if(tab.find('a').attr('id') == 'ScheduleCampaign') {
                     $(".next:not('.last')").hide();
-                    $("#scheduleButton").removeClass("hide");
+                    $("#scheduleButton").show();
 
                 } else {
                     $(".next:not('.last')").show();
-                    $("#scheduleButton").addClass("hide");
+                    $("#scheduleButton").hide();
                 }
                 $('#NewsletterWizardform').find('.progress-bar').css({width:$percent+'%'});
             }
@@ -88,11 +88,7 @@ $(function(){
      * message
      */
     var validRules = {
-        "campaignHeader" : __("Campaign header looks great"),
-        "campaignFooter" : __("Campaign foorer looks great"),
-        "senderEmail" : __("Email address looks great"),
-        "headerBannerURL" : __("Campaign header banner URL looks great"),
-        "footerBannerURL" : __("Campaign footer banner URL looks great")
+        "senderEmail" : __("Email address looks great")
     };
 
     /**
@@ -103,11 +99,7 @@ $(function(){
      * message
      */
     var focusRules = {
-        "campaignHeader" : __("Please enter valid Campaign header"),
-        "campaignFooter" : __("Please enter valid Campaign foorert"),
-        "senderEmail" : __("Please enter valid Email address"),
-        "headerBannerURL" : __("Please enter valid Campaign header banner URL"),
-        "footerBannerURL" : __("Please enter valid Campaign footer banner URL")
+        "senderEmail" : __("Please enter valid Email address")
     };
 
 
@@ -138,7 +130,6 @@ $(function(){
         {
             $("form").submit(function(e){
                 // e.preventDefault();
-                alert(JSON.stringify(invalidForm));
                 if (! jQuery.isEmptyObject(invalidForm) ) {
                     for (var i in invalidForm) {
                         if (invalidForm[i]) {
@@ -171,17 +162,13 @@ $(function(){
                         element.parent("div").prev("div")
                             .html(error);
                         if($(".form-error").find('span[for='+element.attr('name')+']').length ==0 ){
-                            $(".form-error").append(error);
+                            $(".form-error").append( error );
                         }
-
                     },
                     rules : {
                         "senderEmail": {
                             required : true,
                             email    : true
-                        },
-                        "campaignSubject" : {
-                            required : true
                         },
                         "campaignHeader": {
                             minlength : 10
@@ -200,9 +187,6 @@ $(function(){
                         "senderEmail" : {
                             required : __("Please enter your email address"),
                             email : __("Please enter valid email address")
-                        },
-                        "campaignSubject" : {
-                            required : __("Please enter Newsletter campaign Subject"),
                         },
                         "campaignHeader": {
                             minlength : __("Please enter atleast 10 characters")
@@ -373,7 +357,14 @@ $(function(){
     });
 
     $('#scheduleButton').on("click", function(e) {
-        alert($("form#NewsletterWizardform").valid());
+        $( "input[name='campaignSubject']" ).rules( "add", {
+            required: true,
+            minlength: 2,
+            messages: {
+                required: "Please enter Newsletter campaign Subject in email setting step.",
+                minlength: jQuery.validator.format("Please, at least {0} characters are necessary")
+            }
+        });
         if ($("form#NewsletterWizardform").valid()) {
             $('form#NewsletterWizardform').submit();
         }
