@@ -8,6 +8,7 @@ use \Core\Domain\Service\Purifier;
 use \Core\Domain\Usecase\Admin\AddSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\CreateSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\DeleteSplashOfferUsecase;
+use Core\Domain\Usecase\Admin\GetNewsletterCampaignsByConditionsUsecase;
 use \Core\Domain\Usecase\Admin\GetSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\UpdateSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\UpdateSplashPageUsecase;
@@ -384,6 +385,11 @@ class AdminFactory
     public static function getNewsletterCampaign()
     {
         return new GetNewsletterCampaignUsecase(RepositoryFactory::newsletterCampaign(), new Purifier(), new Errors());
+    }
+
+    public static function getNewsletterCampaignsByConditions()
+    {
+        return new GetNewsletterCampaignsByConditionsUsecase(RepositoryFactory::newsletterCampaign(), new Purifier(), new Errors());
     }
 
     public static function createNewsletterCampaign()
