@@ -159,7 +159,7 @@ $(function(){
                     errorPlacement : function(error, element) {
                         element.parent("div").prev("div")
                             .html(error);
-                        if($(".form-error").find('span[for='+element.attr('name')+']').length ==0 ){
+                        if($(".form-error").find('span[for='+element.attr('name')+']').length == 0  && error.html() != ''){
                             $(".form-error").append( error );
                         }
                     },
@@ -463,6 +463,12 @@ $(function(){
             jQuery("div.dateValidationMessage").removeClass("success").addClass("error").html(__("<span class='error help-inline'>Shedule date should be greater than current date</span>"))
                 .next("div").addClass("error").removeClass("success");
         } else 	{
+            $('#saveNewsletterCampaign').removeAttr('disabled');
+            $('#sendTestMail').removeAttr('disabled');
+            $('#cancel').removeClass('disable_a_href disabled')
+            $('.nav-tabs a').removeClass('disable_a_href');
+            $('.next a').removeClass('disable_a_href');
+            $('.previous a').removeClass('disable_a_href');
             jQuery("div.dateValidationMessage").removeClass("error").addClass("success")
                 .html(__("<span class='success help-inline'>Valid</span>"))
                 .next("div").removeClass("error").addClass("success");
