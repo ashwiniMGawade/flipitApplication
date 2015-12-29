@@ -13,18 +13,10 @@ class NewsletterCampaignsController extends ApiBaseController
         $page = (int) $this->app->request()->get('page');
         $perPage = (int) $this->app->request()->get('perPage');
         $perPage = ($perPage === 0) ? 100 : $perPage;
-        $email = $this->app->request()->get('email');
         $conditions = array();
         $currentLink = '/newsletterCampaigns?page=' . ($page) . '&perPage=' . $perPage;
         $nextLink = '/newsletterCampaigns?page=' . ($page + 1) . '&perPage=' . $perPage;
-        if (false === is_null($email) && false === filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->app->halt(405, json_encode(array('messages' => array('Invalid Email'))));
-        }
-        if (false === is_null($email)) {
-            $conditions['email'] = $email;
-            $currentLink .= '&email='.urlencode($email);
-            $nextLink .= '&email='.urlencode($email);
-        }
+
         $currentLink .= '&api_key='.urlencode($this->app->request()->get('api_key'));
         $nextLink .= '&api_key='.urlencode($this->app->request()->get('api_key'));
         $newsletterCampaigns = SystemFactory::getNewsletterCampaigns()->execute($conditions, array(), $perPage, $page);
@@ -127,43 +119,29 @@ class NewsletterCampaignsController extends ApiBaseController
 
     private function generateNewsletterCampaignJsonData($newsletterCampaign)
     {
-        $lastEmailOpenDate = $newsletterCampaign->getLastEmailOpenDate();
-        $currentLogIn = $newsletterCampaign->getCurrentLogIn();
+        $newsletterSentTime = $newsletterCampaign->getNewsletterSentTime();
+        $scheduledTime = $newsletterCampaign->getScheduledTime();
         $dateOfBirth = $newsletterCampaign->getDateOfBirth();
         $lastLogIn = $newsletterCampaign->getLastLogIn();
         $codeAlertSendDate = $newsletterCampaign->getCodeAlertSendDate();
 
         $newsletterCampaignData = array(
             'id' => $newsletterCampaign->getId(),
-            'email' => $newsletterCampaign->getEmail(),
-            'firstName' => $newsletterCampaign->getFirstName(),
-            'lastName' => $newsletterCampaign->getLastName(),
-            'mailOpenCount' => $newsletterCampaign->getMailOpenCount(),
-            'lastEmailOpenDate' => !empty($lastEmailOpenDate) ? $lastEmailOpenDate->format('Y-m-d H:i:s') : '',
-            'mailClickCount' => $newsletterCampaign->getMailClickCount(),
-            'mailSoftBounceCount' => $newsletterCampaign->getMailSoftBounceCount(),
-            'mailHardBounceCount' => $newsletterCampaign->getMailHardBounceCount(),
-            'active' => (1 === $newsletterCampaign->getActive()) ? 'Yes' : 'No',
-            'inactiveStatusReason' => $newsletterCampaign->getInactiveStatusReason(),
-            'activeCodeId' => $newsletterCampaign->getActiveCodeId(),
-            'changePasswordRequest' => (1 === $newsletterCampaign->getChangePasswordRequest()) ? 'Yes' : 'No',
-            'codeAlert' => (1 === $newsletterCampaign->getCodeAlert()) ? 'Yes' : 'No',
-            'codeAlertSendDate' => !empty($codeAlertSendDate) ? $codeAlertSendDate->format('Y-m-d H:i:s') : '',
-            'currentLogIn' => !empty($currentLogIn) ? $currentLogIn->format('Y-m-d H:i:s') : '',
-            'dateOfBirth' => !empty($dateOfBirth) ? $dateOfBirth->format('Y-m-d') : '',
-            'deleted' => (1 === $newsletterCampaign->getDeleted()) ? 'Yes' : 'No',
-            'fashionNewsLetter' => (1 === $newsletterCampaign->getFashionNewsLetter()) ? 'Yes' : 'No',
-            'gender' => (1 === $newsletterCampaign->getGender()) ? 'Female' : 'Male',
-            'interested' => $newsletterCampaign->getInterested(),
-            'lastLogIn' => !empty($lastLogIn) ? $lastLogIn->format('Y-m-d H:i:s') : '',
-            'password' => $newsletterCampaign->getPassword(),
-            'postalCode' => $newsletterCampaign->getPostalCode(),
-            'profileImg' => $newsletterCampaign->getProfileImg(),
-            'pwd' => $newsletterCampaign->getPwd(),
-            'status' => (1 === $newsletterCampaign->getStatus()) ? 'Online' : 'Offline',
-            'travelNewsLetter' => (1 === $newsletterCampaign->getTravelNewsLetter()) ? 'Yes' : 'No',
-            'weeklyNewsLetter' => (1 === $newsletterCampaign->getWeeklyNewsLetter()) ? 'Yes' : 'No',
-            'username' => $newsletterCampaign->getUsername()
+            'campaignName' => $newsletterCampaign->getEmail(),
+            'campaignSubject' => $newsletterCampaign->getFirstName(),
+            'senderName' => $newsletterCampaign->getLastName(),
+            'senderEmail' => $newsletterCampaign->getMailOpenCount(),
+            'header' => !empty($lastEmailOpenDate) ? $lastEmailOpenDate->format('Y-m-d H:i:s') : '',
+            'headerBannerURL' => $newsletterCampaign->getMailClickCount(),
+            'footer' => $newsletterCampaign->getMailSoftBounceCount(),
+            'footerBannerURL' => $newsletterCampaign->getMailHardBounceCount(),
+            'offerPartOneTitle' => (1 === $newsletterCampaign->getActive()) ? 'Yes' : 'No',
+            'offerPartTwoTitle' => $newsletterCampaign->getInactiveStatusReason(),
+            'scheduledStatus' => (0 === $newsletterCampaign->getScheduledStatus() ? 'Pending' : 1 === $newsletterCampaign->getScheduledStatus() ? 'Scheduled' : ''),
+            'scheduledTime' => !empty($scheduledTime) ? $scheduledTime->format('Y-m-d H:i:s') : '',
+            'newsletterSentTime' => !empty($newsletterSentTime) ? $newsletterSentTime->format('Y-m-d H:i:s') : '',
+            'receipientCount' => $newsletterCampaign->getReceipientCount(),
+            'deleted' => (1 === $newsletterCampaign->getDeleted()) ? 'Yes' : 'No'
         );
         return new Hal('/newsletterCampaigns/'.$newsletterCampaign->getId(), $newsletterCampaignData);
     }

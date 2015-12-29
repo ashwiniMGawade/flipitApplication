@@ -13,7 +13,7 @@
     ],
     "paths":
         {
-        "/newsletterCampaigns":{
+        "/newslettercampaigns":{
             "get":{
                 "tags":[
                     "newsletterCampaign"
@@ -43,13 +43,6 @@
                         "required":false,
                         "type":"integer",
                         "default":100
-                    },
-                    {
-                        "in":"query",
-                        "name":"email",
-                        "description":"Email id to find a record",
-                        "required":false,
-                        "type":"string"
                     }
                 ],
                 "responses":{
@@ -68,7 +61,7 @@
                 }
             }
         },
-        "/newsletterCampaigns/{newsletterCampaignId}":{
+        "/newslettercampaigns/{newsletterCampaignId}":{
             "put":{
                 "tags":[
                     "newsletterCampaign"
@@ -157,121 +150,65 @@
                 "email"
             ],
             "properties":{
-                "firstName":{
+                "campaignName":{
                     "type":"string",
-                    "example":"John"
+                    "example":"Christmas Eve"
                 },
-                "lastName":{
+                "campaignSubject":{
                     "type":"string",
-                    "example":"Doe"
+                    "example":"Christmas Special Offers"
                 },
-                "email": {
+                "senderName": {
                     "type": "string",
-                    "example": "test@example.com"
+                    "example": "Flipit US"
                 },
-                "mailOpenCount":{
-                    "type":"integer",
-                    "example":1
-                },
-                "mailClickCount":{
-                    "type":"integer",
-                    "example":1
-                },
-                "mailSoftBounceCount":{
-                    "type":"integer",
-                    "example":1
-                },
-                "mailHardBounceCount":{
-                    "type":"integer",
-                    "example":1
-                },
-                "active":{
+                "senderEmail":{
                     "type":"string",
-                    "enum": ["Yes", "No"]
+                    "example":"us@flipit.com"
                 },
-                "inactiveStatusReason":{
+                "header":{
                     "type":"string",
-                    "example":"Hard Bounce"
+                    "example":"Header Text"
                 },
-                "activeCodeId":{
+                "headerBannerURL":{
                     "type":"string",
-                    "example":"1"
+                    "example":"http://flipit.com/be"
                 },
-                "changePasswordRequest":{
+                "footer":{
                     "type":"string",
-                    "enum": ["Yes", "No"]
+                    "example":"Footer Text"
                 },
-                "codeAlert":{
+                "footerBannerURL":{
                     "type":"string",
-                    "enum": ["Yes", "No"]
+                    "example":"http://flipit.com/be"
                 },
-                "codeAlertSendDate":{
+                "offerPartOneTitle":{
+                    "type":"string",
+                    "example":"Today's Special Offers"
+                },
+                "offerPartTwoTitle":{
+                    "type":"string",
+                    "example":"Most trading coupons"
+                },
+                "scheduledStatus":{
+                    "type":"string",
+                    "enum": ["Pending", "Scheduled", "Triggered", "Sent"]
+                },
+                "scheduledTime":{
                     "type":"string",
                     "example":"2015-12-12 23:31:51"
                 },
-                "currentLogin":{
+                "newsletterSentTime":{
                     "type":"string",
                     "example":"2015-12-12 23:31:51"
                 },
-                "dateOfBirth":{
-                    "type":"string",
-                    "example":"1989-12-12"
+                "receipientCount":{
+                    "type":"integer",
+                    "example":2100
                 },
                 "deleted":{
                     "type":"string",
                     "enum": ["Yes", "No"]
-                },
-                "fashionNewsLetter":{
-                    "type":"string",
-                    "enum": ["Yes", "No"]
-                },
-                "gender":{
-                    "type":"string",
-                    "enum": ["Male", "Female"]
-                },
-                "interested":{
-                    "type":"string",
-                    "example":"Yes"
-                },
-                "lastLogIn":{
-                    "type":"string",
-                    "example":"2015-12-12 23:31:51"
-                },
-                "password":{
-                    "type":"string",
-                    "example":"gf%shgd36e"
-                },
-                "postalCode":{
-                    "type":"string",
-                    "example":"111111"
-                },
-                "profileImg":{
-                    "type":"string",
-                    "example":"test.jpg"
-                },
-                "pwd":{
-                    "type":"string",
-                    "example":"sdwersd"
-                },
-                "status":{
-                    "type":"string",
-                    "enum": ["Online", "Offline"]
-                },
-                "travelNewsLetter":{
-                    "type":"string",
-                    "enum": ["Yes", "No"]
-                },
-                "weeklyNewsLetter":{
-                    "type":"string",
-                    "enum": ["Yes", "No"]
-                },
-                "username":{
-                    "type":"string",
-                    "example":"johnd"
-                },
-                "lastEmailOpenDate": {
-                    "type":"integer",
-                    "example":"2015-12-12 23:31:51"
                 }
             }
         }
