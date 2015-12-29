@@ -23,6 +23,12 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
 <div class="wrap columns-2" id="newsletterCampaignListDiv">
     <div class='wrap columns-2'>
         <?php echo $this->flashMessages(); ?>
+        <div class="alert"><?php
+            foreach($this->warnings as $warning) {
+                echo $warning."<br/>";
+            }
+        ?>
+        </div>
         <div class="error form-error"></div>
 </div>
 <form id="NewsletterWizardform" method="post" action="" enctype="multipart/form-data" data-id="<?php echo $this->newsletterCampaign['id'];?>">

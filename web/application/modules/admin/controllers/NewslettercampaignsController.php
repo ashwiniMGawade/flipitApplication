@@ -100,7 +100,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         return $response;
     }
 
-    private function checkNewsletterForWarnings($newsletterCampaign) {
+    private function checkNewsletterForWarnings($newsletterCampaign, $returWarnings = false) {
         $warnings = [];
         if ($newsletterCampaign->getScheduledStatus() == 1 ){
             //another newsletter is scheduled within 24 hours
@@ -114,12 +114,32 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                 )
             );
             if (!empty($scheduledCampaigns)) {
-                $warnings[] = ['Another newsletter is scheduled within 24 hours'];
-                return $warnings;
+                $warnings[] = 'Another newsletter is scheduled within 24 hours';
+                if (!$returWarnings) {
+                    return true;
+                }
             }
             //an offer is not going to be live when the newsletter is send. Keep the timezone in mind!
+            $result = SystemFactory::getNewsletterCampaignsOffers()->execute(array('campaignId' => $newsletterCampaign->getId()));
+            if ($result instanceof Errors) {
+                $errors = $result->getErrorsAll();
+                $this->setFlashMessage('error', $errors);
+            } else {
+                foreach($result as $offerData) {
+                    $startDate = $offerData->getOffer()->getStartDate();
+                    if( $newsletterCampaign->getScheduledTime() < $startDate->format('U')) {
+                        $warnings[] = 'Offer "'. $offerData->getOffer()->getTitle(). '" wont be live when newsletter is sent';
+                        if (!$returWarnings) {
+                            return true;
+                        }
+                    }
+                }
+            }
         }
-        return false;
+        if (!$returWarnings) {
+            return false;
+        }
+        return $warnings;
 
     }
     public function createAction()
@@ -265,6 +285,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $this->setFlashMessage('error', $errors);
         } else {
             $this->view->newsletterCampaign = $this->_dismount($newsletterCampaign);
+            $this->view->warnings = $this->checkNewsletterForWarnings($newsletterCampaign, true);
         }
     }
 
