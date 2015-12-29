@@ -20,11 +20,11 @@ $(function(){
                 var $percent = ($current/$total) * 100;
                 if(tab.find('a').attr('id') == 'ScheduleCampaign') {
                     $(".next:not('.last')").hide();
-                    $("#scheduleButton").show();
+                    $(".accessSave").show();
 
                 } else {
                     $(".next:not('.last')").show();
-                    $("#scheduleButton").hide();
+                    $(".accessSave").hide();
                 }
                 $('#NewsletterWizardform').find('.progress-bar').css({width:$percent+'%'});
             }
@@ -88,7 +88,6 @@ $(function(){
      * message
      */
     var validRules = {
-        "senderEmail" : __("Email address looks great")
     };
 
     /**
@@ -99,7 +98,6 @@ $(function(){
      * message
      */
     var focusRules = {
-        "senderEmail" : __("Please enter valid Email address")
     };
 
 
@@ -352,7 +350,7 @@ $(function(){
         });
 
 
-    $('#saveNewsletterCampaign').on("click", function(e) {
+    $('#saveNewsletterCampaign, #saveCampaign').on("click", function(e) {
         $('form#NewsletterWizardform').submit();
     });
 

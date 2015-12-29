@@ -22,14 +22,16 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
     <div class='wrap columns-2'>
         <?php echo $this->flashMessages(); ?>
         <div class="error alert-error form-error"></div>
-        <div class="alert alert-warning"><?php
+        <?php
             if(isset($this->warnings) && !empty($this->warnings)) {
+                echo '<div class="alert alert-warning">';
                 foreach($this->warnings as $warning) {
                     echo $warning."<br/>";
                 }
+                echo '</div>';
             }
         ?>
-        </div>
+
 
 </div>
 <form id="NewsletterWizardform" method="post" action="" enctype="multipart/form-data" data-id="<?php echo $this->newsletterCampaign['id'];?>">
@@ -274,7 +276,13 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                 <ul class="pager wizard m-b-sm">
                     <li class="next last" style="display:none;"><a href="#">Last</a></li>
                     <li class="next"><a href="#">Next</a></li>
-                    <li class="btn-primary hide" style="display:none;" id="scheduleButton"><input type="hidden" name="schedule"><a href="#">Schedule</a></li>
+                    <?php
+                    $sessionNamespace = new Zend_Session_Namespace();
+                    if (in_array($sessionNamespace->settings['rights']['content']['rights'], array('1', '2'))) { ?>
+                    <li class="btn-primary accessSave" style="display:none;" id="scheduleButton"><input type="hidden" name="schedule"><a href="#">Schedule</a></li>
+                    <?php } else { ?>
+                    <li class="btn-primary accessSave" style="display:none;" id="saveCampaign"><a href="#">Save and Exit</a></li>
+                    <?php } ?>
                     <li class="previous first disabled" style="display:none;"><a href="#">First</a></li>
                     <li class="previous disabled"><a href="#">Previous</a></li>
 

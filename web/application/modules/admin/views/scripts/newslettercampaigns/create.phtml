@@ -259,7 +259,13 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                     <ul class="pager wizard m-b-sm">
                         <li class="next last" style="display:none;"><a href="#">Last</a></li>
                         <li class="next"><a href="#" class="">Next</a></li>
-                        <li class="btn-primary" style="display:none;" id="scheduleButton"><input type="hidden" name="schedule"><a href="#">Schedule</a></li>
+                        <?php
+                        $sessionNamespace = new Zend_Session_Namespace();
+                        if (in_array($sessionNamespace->settings['rights']['content']['rights'], array('1', '2'))) { ?>
+                            <li class="btn-primary accessSave" style="display:none;" id="scheduleButton"><input type="hidden" name="schedule"><a href="#">Schedule</a></li>
+                        <?php } else { ?>
+                            <li class="btn-primary accessSave" style="display:none;" id="saveCampaign"><a href="#">Save and Exit</a></li>
+                        <?php } ?>
                         <li class="previous first disabled" style="display:none;"><a href="#">First</a></li>
                         <li class="previous disabled"><a href="#">Previous</a></li>
 
