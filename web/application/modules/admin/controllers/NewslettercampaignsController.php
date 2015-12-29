@@ -241,7 +241,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
         $newsletterCampaign = AdminFactory::getNewsletterCampaign()->execute(array('id'=>$parameters['id']));
-
+        $this->view->warnings = $this->checkNewsletterForWarnings($newsletterCampaign, true);
         if ($newsletterCampaign instanceof Errors) {
             $errors = $newsletterCampaign->getErrorsAll();
             $this->setFlashMessage('error', $errors);
@@ -285,7 +285,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $this->setFlashMessage('error', $errors);
         } else {
             $this->view->newsletterCampaign = $this->_dismount($newsletterCampaign);
-            $this->view->warnings = $this->checkNewsletterForWarnings($newsletterCampaign, true);
         }
     }
 
