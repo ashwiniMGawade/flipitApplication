@@ -195,7 +195,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                     </div>
                 </div>
                 <div class="tab-pane" id="step2">
-
+                    <div class="mainpage-content"></div>
                 </div>
                 <div class="tab-pane" id="step3">
                     <div class="mainpage-content">
@@ -240,7 +240,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                                           $date =  $date = DateTime::createFromFormat( 'U', $this->newsletterCampaign['scheduledTime'] );
                                         ?>
                                         <div data-date-format="dd-mm-yyyy" data-date="<?php echo isset($date) ?  $date->format('d-m-Y') : date('d-m-Y');?>" id="dp1" class="input-append date">
-                                            <input readonly="readonly" type="text"  value="<?php echo isset($date) ?  $date->format('d-m-Y') :  date('d-m-Y'); ?>
+                                            <input readonly="readonly" type="text"  value="<?php echo isset($date) ?  $date->format('d-m-Y') :  date('d-m-Y'); ?>"
                                                    placeholder=''
                                                    class="span2 ignore2 date-time-cusor-style" id="scheduleDate"
                                                    name="scheduleDate">

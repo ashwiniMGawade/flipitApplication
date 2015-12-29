@@ -36,7 +36,7 @@ $(function(){
             type: 'post',
             data: {'campaignId' : $('#NewsletterWizardform').data('id')},
             success: function(data) {
-                $("#step2").html(data);
+                $("#step2 .mainpage-content").html(data);
             },
             error : function(e) {
                 console.log(e);

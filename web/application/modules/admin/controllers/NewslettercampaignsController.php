@@ -101,6 +101,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
     }
 
     private function checkNewsletterForWarnings($newsletterCampaign) {
+        $warnings = [];
         if ($newsletterCampaign->getScheduledStatus() == 1 ){
             //another newsletter is scheduled within 24 hours
             $beginOfDay = strtotime("midnight", $newsletterCampaign->getScheduledTime());
@@ -113,8 +114,10 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                 )
             );
             if (!empty($scheduledCampaigns)) {
-                return true;
+                $warnings[] = ['Another newsletter is scheduled within 24 hours'];
+                return $warnings;
             }
+            //an offer is not going to be live when the newsletter is send. Keep the timezone in mind!
         }
         return false;
 
@@ -218,8 +221,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
         $newsletterCampaign = AdminFactory::getNewsletterCampaign()->execute(array('id'=>$parameters['id']));
-
-        $this->checkNewsletterForWarnings($newsletterCampaign); exit;
 
         if ($newsletterCampaign instanceof Errors) {
             $errors = $newsletterCampaign->getErrorsAll();
