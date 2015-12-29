@@ -236,8 +236,11 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                                 <div class="mainpage-content-right-inner-right-other dateValidationMessage"></div>
                                 <div class="mainpage-content-right-inner-left-other">
                                     <div>
-                                        <div data-date-format="dd-mm-yyyy" data-date="<?php echo isset($this->newsletterCampaign['scheduledTime']) ?  $this->newsletterCampaign['scheduledTime']->format('d-m-Y') : date('d-m-Y');?>" id="dp1" class="input-append date">
-                                            <input readonly="readonly" type="text"  value="<?php echo isset($this->newsletterCampaign['scheduledTime']) ?  $this->newsletterCampaign['scheduledTime']->format('d-m-Y') :  date('d-m-Y'); ?>
+                                        <?php
+                                          $date =  $date = DateTime::createFromFormat( 'U', $this->newsletterCampaign['scheduledTime'] );
+                                        ?>
+                                        <div data-date-format="dd-mm-yyyy" data-date="<?php echo isset($date) ?  $date->format('d-m-Y') : date('d-m-Y');?>" id="dp1" class="input-append date">
+                                            <input readonly="readonly" type="text"  value="<?php echo isset($date) ?  $date->format('d-m-Y') :  date('d-m-Y'); ?>
                                                    placeholder=''
                                                    class="span2 ignore2 date-time-cusor-style" id="scheduleDate"
                                                    name="scheduleDate">
@@ -247,7 +250,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                                     <div>
                                         <div class="input-append bootstrap-timepicker-component" style="display: inline-block;">
                                             <input readonly="readonly" type="text" name="scheduleTime" id="scheduleTime" class="input-small timepicker-default ignore2 date-time-cusor-style"
-                                                value="<?php echo isset($this->newsletterCampaign['scheduledTime']) ?  $this->newsletterCampaign['scheduledTime']->format('H:i') : date('H:i');?>">
+                                                value="<?php echo isset( $date) ?   $date->format('H:i') : date('H:i');?>">
                                                 <span class="add-on">
                                                     <i class="icon-time" style="background-position: -47px -24px;"></i>
                                                 </span>
@@ -262,9 +265,10 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                 <ul class="pager wizard m-b-sm">
                     <li class="next last" style="display:none;"><a href="#">Last</a></li>
                     <li class="next"><a href="#">Next</a></li>
+                    <li class="btn-primary hide" style="display:none;" id="scheduleButton"><input type="hidden" name="schedule"><a href="#">Schedule</a></li>
                     <li class="previous first disabled" style="display:none;"><a href="#">First</a></li>
                     <li class="previous disabled"><a href="#">Previous</a></li>
-                    <li class="btn-primary hide" style="display:none;" id="scheduleButton"><input type="hidden" name="schedule"><a href="#">Schedule</a></li>
+
                 </ul>
             </div>
         </div>

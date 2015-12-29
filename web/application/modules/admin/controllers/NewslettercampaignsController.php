@@ -74,7 +74,40 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         return null != $orderByField ? array($orderByField => $orderByDirection) : array();
     }
 
+    private function validateScheduleCampaign($params)
+    {
+        $response = [];
+        if(isset($params['scheduleDate']) && empty($params['scheduleDate']))
+        {
+            $response['error'][] = "Please enter campaign scheduled Date";
+        }
+        if(isset($params['campaignSubject']) && empty($params['campaignSubject']))
+        {
+            $response['error'][] = "Please enter campaign subject";
+        }
+        if(isset($params['campaignHeader']) && empty($params['campaignHeader']))
+        {
+            $response['error'][] = "Please enter campaign Header";
+        }
+        if(isset($params['campaignFooter']) && empty($params['campaignFooter']))
+        {
+            $response['error'][] = "Please enter campaign Footer";
+        }
+        if(isset($params['senderName']) && empty($params['senderName']))
+        {
+            $response['error'][] = "Please enter sender Name";
+        }
+        return $response;
+    }
 
+    private function checkNewsletterForWarnings($newsletterCampaign) {
+        if ($newsletterCampaign->getscheduledStatus() == 1 ){
+            //another newsletter is scheduled within 24 hours
+            return true;
+        }
+        return false;
+
+    }
     public function createAction()
     {
         $this->view->newsletterCampaign = array();
@@ -85,19 +118,17 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $newsletterCampaign = AdminFactory::createNewsletterCampaign()->execute();
             $params = $this->_handleImageUpload($params);
             $this->view->newsletterCampaign = $this->getAllParams();
-
             if ($params) {
-                if (isset($params['schedule']) && isset($params['scheduleDate']) && isset($params['scheduleTime']) && !empty($params['scheduleDate'])) {
-                    if(isset($params['campaignSubject']) && empty($params['campaignSubject']))
-                    {
-                        $this->setFlashMessage('error', "Please enter campaign subject");
+                if (isset($params['schedule'])) {
+                    $validationResults = $this->validateScheduleCampaign($params);
+                    if (isset($validationResults['error'])) {
+                        $this->setFlashMessage('error', implode('.', $validationResults['error']));
                         return;
                     }
                     $UserTimezone = new DateTimeZone( $this->view->localeSettings['0']['timezone']);
                     $date = new DateTime( $params['scheduleDate'] . $params['scheduleTime'] , $UserTimezone );
-                    $date->setTimezone(new DateTimeZone('GMT'));
                     $params['scheduledStatus'] = 1;
-                    $params['scheduledTime'] = $date;
+                    $params['scheduledTime'] = $date->getTimestamp();
                 }
                 $result = AdminFactory::addNewsletterCampaign()->execute($newsletterCampaign, $params);
                 if ($result instanceof Errors) {
@@ -111,7 +142,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                         $this->updateOffers(2, $result->getId(), $params['partTwoOffers']);
                     }
                     $this->refreshNewsletterCampaignPageVarnish();
-                    $this->setFlashMessage('success', 'News letter campaign has been updated successfully.</br>'. implode('<br/>', $this->message));
+                    $this->setFlashMessage('success', 'News letter campaign has been created successfully.</br>'. implode('<br/>', $this->message));
                     $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
                 }
             }
@@ -184,17 +215,16 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         }
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
-            if (isset($params['schedule']) && isset($params['scheduleDate']) && isset($params['scheduleTime']) && !empty($params['scheduleDate'])) {
-                if(isset($params['campaignSubject']) && empty($params['campaignSubject']))
-                {
-                    $this->setFlashMessage('error', "Please enter campaign subject");
+            if (isset($params['schedule'])) {
+                $validationResults = $this->validateScheduleCampaign($params);
+                if (isset($validationResults['error'])) {
+                    $this->setFlashMessage('error', implode('.', $validationResults['error']));
                     return;
                 }
                 $UserTimezone = new DateTimeZone( $this->view->localeSettings['0']['timezone']);
                 $date = new DateTime( $params['scheduleDate'] . $params['scheduleTime'] , $UserTimezone );
-                $date->setTimezone(new DateTimeZone('GMT'));
                 $params['scheduledStatus'] = 1;
-                $params['scheduledTime'] = $date;
+                $params['scheduledTime'] = $date->getTimestamp();
             }
             $params = $this->_handleImageUpload($params, $newsletterCampaign->headerBanner, $newsletterCampaign->footerBanner);
             $this->view->newsletterCampaign = $this->getAllParams();
@@ -300,18 +330,23 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         if (!empty($campaigns)) {
             foreach ($campaigns as $campaign) {
-//                //$UserTimezone = new DateTimeZone( $localeSettings['0']['timezone']);
-//                $scheduledTime = $campaign->getScheduledTime();
-//                var_dump($scheduledTime);
-//                $date = new DateTime( $scheduledTime->format('Y-m-d H:i:s') , $UserTimezone );
-//                var_dump($date);
+                $scheduledTime = $campaign->getScheduledTime();
+                $scheduledDate = '';
+                if (!empty($scheduledTime)) {
+                    $UserTimezone = new DateTimeZone( $localeSettings['0']['timezone']);
+                    $date = DateTime::createFromFormat( 'U', $scheduledTime );
+                    $date->setTimeZone($UserTimezone);
+                    $scheduledDate =  $date->format('Y-m-d H:i:s');
+                }
+                $warnings = $this->checkNewsletterForWarnings($campaign);
+
                 $returnData[] = array(
                     'id' => $campaign->getId(),
                     'campaignName' => $campaign->getCampaignName(),
                     'campaignSubject' => $campaign->getCampaignSubject(),
                     'scheduledStatus' => $campaign->getScheduledStatus(),
-                    'scheduledTime' => $campaign->getScheduledTime(),
-                    'warnings' => 'OK' //Needs to change when warning task is done
+                    'scheduledTime' => $scheduledDate,
+                    'warnings' => (!$warnings) ? 'OK' : 'Warnings',
                 );
             }
         }

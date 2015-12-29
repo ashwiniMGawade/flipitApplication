@@ -74,7 +74,7 @@ function getNewsletterCampaignList(iStart,iSortCol,iSortDir) {
             {
                 "fnRender" : function(obj) {
                     if(obj.aData.scheduledStatus == true) {
-                        return "<a href='javascript:void(0);'>" + obj.aData.scheduledTime.date + "</a>";
+                        return "<a href='javascript:void(0);'>" + obj.aData.scheduledTime + "</a>";
                     }else{
                         return "<span href='javascript:void(0);' class='error'>-</span>" ;
                     }

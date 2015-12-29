@@ -362,7 +362,31 @@ $(function(){
             minlength: 2,
             messages: {
                 required: "Please enter Newsletter campaign Subject in email setting step.",
-                minlength: jQuery.validator.format("Please, at least {0} characters are necessary")
+                minlength: jQuery.validator.format("Please, at least {0} characters are necessary"),
+            }
+        });
+        $( "textarea[name='campaignHeader']" ).rules( "add", {
+            required: true,
+            messages: {
+                required: "Please enter Newsletter campaign header in email setting step."
+            }
+        });
+        $( "textarea[name='campaignFooter']" ).rules( "add", {
+            required: true,
+            messages: {
+                required: "Please enter Newsletter campaign footer in email setting step."
+            }
+        });
+        $( "input[name='senderName']" ).rules( "add", {
+            required: true,
+            messages: {
+                required: "Please enter Newsletter senderName in email setting step."
+            }
+        });
+        $( "input[name='scheduleDate']" ).rules( "add", {
+            required: true,
+            messages: {
+                required: "Please enter Newsletter campaign scheduled date."
             }
         });
         if ($("form#NewsletterWizardform").valid()) {
