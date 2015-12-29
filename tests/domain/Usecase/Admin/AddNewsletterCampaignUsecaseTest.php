@@ -31,14 +31,12 @@ class AddNewsletterCampaignUsecaseTest extends \Codeception\TestCase\Test
     public function testAddNewsletterCampaignUsecaseReturnsErrorWhenParamsAreInvalid()
     {
         $params = array(
-            'scheduledTime' => '1232',
             'createdAt' => null,
             'senderEmail' => 'adfsdfsdf'
         );
         $newsletterCampaignRepository = $this->newsletterCampaignRepositoryMock();
         $newsletterCampaignValidator = $this->createNewsletterCampaignValidatorMock(
             array(
-                'scheduledTime' => 'Please enter valid scheduled time',
                 'createdAt' => 'Please enter value',
                 'senderEmail' => 'Please enter valid email ID'
             )
@@ -50,7 +48,6 @@ class AddNewsletterCampaignUsecaseTest extends \Codeception\TestCase\Test
             new Errors()
         ))->execute(new NewsletterCampaign(), $params);
         $errors = new Errors();
-        $errors->setError('Please enter valid scheduled time', 'scheduledTime');
         $errors->setError('Please enter value', 'createdAt');
         $errors->setError('Please enter valid email ID', 'senderEmail');
         $this->assertEquals($errors->getErrorMessages(), $result->getErrorMessages());

@@ -82,7 +82,7 @@ class NewsletterCampaign
     protected $scheduledStatus = 0;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     protected $scheduledTime;
 
