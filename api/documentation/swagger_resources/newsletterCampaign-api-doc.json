@@ -202,7 +202,7 @@
                     "type":"string",
                     "example":"2015-12-12 23:31:51"
                 },
-                "receipientCount":{
+                "recipientCount":{
                     "type":"integer",
                     "example":2100
                 },

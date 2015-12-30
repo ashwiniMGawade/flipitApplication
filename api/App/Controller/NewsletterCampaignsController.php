@@ -61,13 +61,7 @@ class NewsletterCampaignsController extends ApiBaseController
             $this->app->halt(404, json_encode(array('messages' => $newsletterCampaign->getErrorsAll())));
         }
         $params = $this->formatInput($params);
-        if( true === isset($params['email']) ) {
-            $emailCondition = array('email' => $params['email']);
-            $newsletterCampaigns = SystemFactory::getNewsletterCampaigns()->execute($emailCondition);
-            if( count($newsletterCampaigns) > 1 || current($newsletterCampaigns)->getId() != $id ) {
-                $this->app->halt(405, json_encode(array('messages' => array('This Email is already in use.'))));
-            }
-        }
+
         $result = AdminFactory::updateNewsletterCampaign()->execute($newsletterCampaign, $params);
         if ($result instanceof Errors) {
             $this->app->halt(405, json_encode(array('messages' => $result->getErrorsAll())));
@@ -78,41 +72,13 @@ class NewsletterCampaignsController extends ApiBaseController
 
     private  function formatInput($params)
     {
-        if (isset($params['active'])) {
-            $params['active'] = ( $params['active'] === 'Yes' ? 1 : ( $params['active'] === 'No' ? 0 : null ));
-            if(true === is_null($params['active'])) unset($params['active']);
-        }
-        if (isset($params['changePasswordRequest'])) {
-            $params['changePasswordRequest'] = ( $params['changePasswordRequest'] === 'Yes' ? 1 : ( $params['changePasswordRequest'] === 'No' ? 0 : null ));
-            if(true === is_null($params['changePasswordRequest'])) unset($params['changePasswordRequest']);
-        }
-        if (isset($params['codeAlert'])) {
-            $params['codeAlert'] = ( $params['codeAlert'] === 'Yes' ? 1 : ( $params['codeAlert'] === 'No' ? 0 : null ));
-            if(true === is_null($params['codeAlert'])) unset($params['codeAlert']);
+        if (isset($params['scheduledStatus'])) {
+            $params['scheduledStatus'] = ( $params['scheduledStatus'] === 'Pending' ? 0 : ( $params['scheduledStatus'] === 'Scheduled' ? 1 : ( $params['scheduledStatus'] === 'Triggered' ? 2 : ( $params['scheduledStatus'] === 'Sent' ? 3 : null ))));
+            if(true === is_null($params['scheduledStatus'])) unset($params['scheduledStatus']);
         }
         if (isset($params['deleted'])) {
             $params['deleted'] = ( $params['deleted'] === 'Yes' ? 1 : ( $params['deleted'] === 'No' ? 0 : null ));
             if(true === is_null($params['deleted'])) unset($params['deleted']);
-        }
-        if (isset($params['fashionNewsLetter'])) {
-            $params['fashionNewsLetter'] = ( $params['fashionNewsLetter'] === 'Yes' ? 1 : ( $params['fashionNewsLetter'] === 'No' ? 0 : null ));
-            if(true === is_null($params['fashionNewsLetter'])) unset($params['fashionNewsLetter']);
-        }
-        if (isset($params['gender'])) {
-            $params['gender'] = ( $params['gender'] === 'Female' ? 1 : ( $params['gender'] === 'Male' ? 0 : null ));
-            if(true === is_null($params['gender'])) unset($params['gender']);
-        }
-        if (isset($params['status'])) {
-            $params['status'] = ( $params['status'] === 'Online' ? 1 : ( $params['status'] === 'Offline' ? 0 : null ));
-            if(true === is_null($params['status'])) unset($params['status']);
-        }
-        if (isset($params['travelNewsLetter'])) {
-            $params['travelNewsLetter'] = ( $params['travelNewsLetter'] === 'Yes' ? 1 : ( $params['travelNewsLetter'] === 'No' ? 0 : null ));
-            if(true === is_null($params['travelNewsLetter'])) unset($params['travelNewsLetter']);
-        }
-        if (isset($params['weeklyNewsLetter'])) {
-            $params['weeklyNewsLetter'] = ( $params['weeklyNewsLetter'] === 'Yes' ? 1 : ( $params['weeklyNewsLetter'] === 'No' ? 0 : null ));
-            if(true === is_null($params['weeklyNewsLetter'])) unset($params['weeklyNewsLetter']);
         }
         return $params;
     }
@@ -137,7 +103,7 @@ class NewsletterCampaignsController extends ApiBaseController
             'scheduledStatus' => (0 === $newsletterCampaign->getScheduledStatus() ? 'Pending' : ( 1 === $newsletterCampaign->getScheduledStatus() ? 'Scheduled' : ( 2 === $newsletterCampaign->getScheduledStatus() ? 'Triggered' : 'Sent' ))),
             'scheduledTime' => !empty($scheduledTime) ? $scheduledTime->format('Y-m-d H:i:s') : '',
             'newsletterSentTime' => !empty($newsletterSentTime) ? $newsletterSentTime->format('Y-m-d H:i:s') : '',
-            'receipientCount' => $newsletterCampaign->getReceipientCount(),
+            'recipientCount' => $newsletterCampaign->getReceipientCount(),
             'deleted' => (1 === $newsletterCampaign->getDeleted()) ? 'Yes' : 'No'
         );
         return new Hal('/newsletterCampaigns/'.$newsletterCampaign->getId(), $newsletterCampaignData);
