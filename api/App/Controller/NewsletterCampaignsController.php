@@ -121,23 +121,20 @@ class NewsletterCampaignsController extends ApiBaseController
     {
         $newsletterSentTime = $newsletterCampaign->getNewsletterSentTime();
         $scheduledTime = $newsletterCampaign->getScheduledTime();
-        $dateOfBirth = $newsletterCampaign->getDateOfBirth();
-        $lastLogIn = $newsletterCampaign->getLastLogIn();
-        $codeAlertSendDate = $newsletterCampaign->getCodeAlertSendDate();
 
         $newsletterCampaignData = array(
             'id' => $newsletterCampaign->getId(),
-            'campaignName' => $newsletterCampaign->getEmail(),
-            'campaignSubject' => $newsletterCampaign->getFirstName(),
-            'senderName' => $newsletterCampaign->getLastName(),
-            'senderEmail' => $newsletterCampaign->getMailOpenCount(),
-            'header' => !empty($lastEmailOpenDate) ? $lastEmailOpenDate->format('Y-m-d H:i:s') : '',
-            'headerBannerURL' => $newsletterCampaign->getMailClickCount(),
-            'footer' => $newsletterCampaign->getMailSoftBounceCount(),
-            'footerBannerURL' => $newsletterCampaign->getMailHardBounceCount(),
-            'offerPartOneTitle' => (1 === $newsletterCampaign->getActive()) ? 'Yes' : 'No',
-            'offerPartTwoTitle' => $newsletterCampaign->getInactiveStatusReason(),
-            'scheduledStatus' => (0 === $newsletterCampaign->getScheduledStatus() ? 'Pending' : 1 === $newsletterCampaign->getScheduledStatus() ? 'Scheduled' : ''),
+            'campaignName' => $newsletterCampaign->getCampaignName(),
+            'campaignSubject' => $newsletterCampaign->getCampaignSubject(),
+            'senderName' => $newsletterCampaign->getSenderName(),
+            'senderEmail' => $newsletterCampaign->getSenderEmail(),
+            'header' => $newsletterCampaign->getHeader(),
+            'headerBannerURL' => $newsletterCampaign->getHeaderBannerURL(),
+            'footer' => $newsletterCampaign->getFooter(),
+            'footerBannerURL' => $newsletterCampaign->getFooterBannerURL(),
+            'offerPartOneTitle' => $newsletterCampaign->getOfferPartOneTitle(),
+            'offerPartTwoTitle' => $newsletterCampaign->getOfferPartTwoTitle(),
+            'scheduledStatus' => (0 === $newsletterCampaign->getScheduledStatus() ? 'Pending' : ( 1 === $newsletterCampaign->getScheduledStatus() ? 'Scheduled' : ( 2 === $newsletterCampaign->getScheduledStatus() ? 'Triggered' : 'Sent' ))),
             'scheduledTime' => !empty($scheduledTime) ? $scheduledTime->format('Y-m-d H:i:s') : '',
             'newsletterSentTime' => !empty($newsletterSentTime) ? $newsletterSentTime->format('Y-m-d H:i:s') : '',
             'receipientCount' => $newsletterCampaign->getReceipientCount(),
