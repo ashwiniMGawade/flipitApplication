@@ -310,9 +310,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/ckeditor/" ; ?>" ;
 
                 	<?php
         			$isScheduled = $this->data['0']['newletter_is_scheduled'];
-        			$sendDate = $isScheduled ?
-						$this->data['0']['newletter_scheduled_time']->format('d-m-Y')
-						: date('m-d-Y');
+        			$sendDate = $isScheduled ? $this->data['0']['newletter_scheduled_time']->format('m-d-Y') : date('d-m-Y');
 
 					$sendTime = isset($this->data['0']['newletter_is_scheduled'])
 						? $this->data['0']['newletter_scheduled_time']->format('H:i')
@@ -356,7 +354,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/ckeditor/" ; ?>" ;
 	                    	<div class="mainpage-content-right-inner-right-other dateValidationMessage1"></div>
 		                        <div class="mainpage-content-right-inner-left-other" style="width: 269px ! important;">
 		                        	<div data-date-format="mm-dd-yyyy" data-date="<?php echo $sendDate;?>" id="dp3" class="input-append date">
-		                        		<input readonly="readonly" type="text"  style="width:120px !important;" value="<?php echo $sendDate;?>"  placeholder="Sunday, April 1" class="span2 ignore2 date-time-cusor-style" id="offerStartDate" name="sendDate">
+		                        		<input readonly="readonly" type="text"  style="width:120px !important;" value="<?php echo $sendDate; ?>"  placeholder="Sunday, April 1" class="span2 ignore2 date-time-cusor-style" id="offerStartDate" name="sendDate">
 		                        		<span class="add-on"><i class="icon-th"></i></span>
 									</div>
 									<input type="hidden"  value="<?php echo $sendTime;?>" name="currentSendTime" id="currentSendTime" />
