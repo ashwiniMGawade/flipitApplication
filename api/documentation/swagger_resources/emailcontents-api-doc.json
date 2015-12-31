@@ -13,7 +13,7 @@
     ],
     "paths":
         {
-        "/emailcontents/{referenceId}":{
+        "/emailcontents/{emailType}/{referenceId}":{
             "get":{
                 "tags":[
                     "emailcontents"
@@ -27,8 +27,16 @@
                 "parameters":[
                     {
                         "in":"path",
+                        "name":"emailType",
+                        "description":"Type of email to be fetched",
+                        "required":true,
+                        "type":"string",
+                        "enum": ["newsletter"]
+                    },
+                    {
+                        "in":"path",
                         "name":"referenceId",
-                        "description":"Email Content that needs to be fetched",
+                        "description":"Reference Id of email content that needs to be fetched",
                         "required":true,
                         "type":"integer",
                         "format":"int64"

@@ -42,7 +42,7 @@ if (!$isFlipit || ($isFlipit && $locale)) {
     $app->group(
         $localePath . '/emailcontents',
         function () use ($app) {
-            $app->get('/:id', 'Api\Controller\EmailContentsController:getEmailContents');
+            $app->get('/:type/:id', 'Api\Controller\EmailContentsController:getEmailContents');
         }
     );
 
