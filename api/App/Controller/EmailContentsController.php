@@ -21,7 +21,7 @@ class EmailContentsController extends ApiBaseController
         $emailContent = null;
         switch($emailType) {
             case 'newsletter':
-                $emailContent = $this->buildNewsletterEmail();
+                $emailContent = $this->buildNewsletterEmailContent();
                 break;
             default:
                 break;
@@ -33,8 +33,9 @@ class EmailContentsController extends ApiBaseController
         echo $response->asJson();
     }
 
-    private function buildNewsletterEmail ()
+    private function buildNewsletterEmailContent ()
     {
-
+        $html = $this->app->view()->fetch('newsletter.php', array('email' => 'Imbull'));
+        return $html;
     }
 }

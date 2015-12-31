@@ -20,6 +20,8 @@ $app = new \RKA\Slim($config['app']);
 
 $cacheService = CacheFactory::keyValueCache();
 
+$app->config(array( 'templates.path' => 'App/View'));
+
 //Use of JSON middleware
 $app->add(new Api\Middleware\JSON());
 //Use of ErrorHandler middleware
