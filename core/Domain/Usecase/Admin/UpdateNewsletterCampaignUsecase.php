@@ -73,9 +73,7 @@ class UpdateNewsletterCampaignUsecase
             $newsletterCampaign->setSenderEmail($params['senderEmail']);
         }
         if (isset($params['scheduledStatus'])) {
-            $newsletterCampaign->setScheduledStatus($params['scheduledStatus']);
-        } else {
-            $newsletterCampaign->setScheduledStatus(0);
+            $newsletterCampaign->setScheduledStatus((int)$params['scheduledStatus']);
         }
         if (isset($params['scheduledTime'])) {
             $newsletterCampaign->setScheduledTime($params['scheduledTime']);
@@ -87,9 +85,7 @@ class UpdateNewsletterCampaignUsecase
             $newsletterCampaign->setReceipientCount($params['receipientCount']);
         }
         if (isset($params['deleted'])) {
-            $newsletterCampaign->setDeleted($params['deleted']);
-        } else {
-            $newsletterCampaign->setDeleted(0);
+            $newsletterCampaign->setDeleted((int)$params['deleted']);
         }
         $newsletterCampaign->setUpdatedAt(new \DateTime('now'));
         $validationResult = $this->newsletterCampaignValidator->validate($newsletterCampaign);

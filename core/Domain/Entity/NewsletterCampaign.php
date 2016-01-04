@@ -276,7 +276,7 @@ class NewsletterCampaign
      */
     public function getNewsletterSentTime()
     {
-        return $this->newsletterSentTimet;
+        return $this->newsletterSentTime;
     }
 
     /**
