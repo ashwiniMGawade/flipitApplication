@@ -205,18 +205,18 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     AdminFactory::deleteNewsletterCampaignOffer()->execute($offer);
                 }
             }
+            $params['newsletterCampaign'] = AdminFactory::getNewsletterCampaign()->execute(array('id' => $newsletterCampaignId));
+            if ($params['newsletterCampaign'] instanceof Errors) {
+                $errors = $params['newsletterCampaign']->getErrorsAll();
+                $this->setFlashMessage('error', $errors);
+            }
+            $params['section'] = $section;
             foreach ($offers as $index => $offer) {
                 $params['offer'] = SystemFactory::getOffer()->execute(array('id' => $offer));
                 if ($params['offer'] instanceof Errors) {
                     $errors = $params['offer']->getErrorsAll();
                     $this->setFlashMessage('error', $errors);
                 }
-                $params['newsletterCampaign'] = AdminFactory::getNewsletterCampaign()->execute(array('id' => $newsletterCampaignId));
-                if ($params['newsletterCampaign'] instanceof Errors) {
-                    $errors = $params['newsletterCampaign']->getErrorsAll();
-                    $this->setFlashMessage('error', $errors);
-                }
-                $params['section'] = $section;
                 $params['position'] = $index +1;
                 $this->_createOffer($params);
             }
@@ -502,8 +502,9 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $campaignOffers = $result['records'];
             if (false == empty($campaignOffers)) {
                 foreach ($campaignOffers as $campaignOffer) {
-                    $offer = SystemFactory::getOffer()->execute(array( 'id' => $campaignOffer->getOfferId()));
-                    if ($offer instanceof  \Core\Domain\Entity\Offer) {
+                    //$offer = SystemFactory::getOffer()->execute(array( 'id' => $campaignOffer->getOfferId()));
+                    $offer = AdminFactory::getOfferDTO()->execute(array('id' => $campaignOffer->getOfferId()));
+                    if ($offer instanceof  OfferDTO) {
                         $campaignOffersData[] = array(
                             'id' => $campaignOffer->getOffer()->getId(),
                             'offer' => $campaignOffer->getOffer()->getTitle(),

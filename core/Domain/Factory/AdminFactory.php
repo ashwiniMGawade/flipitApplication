@@ -69,6 +69,8 @@ use \Core\Domain\Usecase\Admin\CreateNewsletterCampaignOfferUsecase;
 use \Core\Domain\Usecase\Admin\AddNewsletterCampaignOfferUsecase;
 use \Core\Domain\Usecase\Admin\DeleteNewsletterCampaignOfferUsecase;
 
+use \Core\Domain\Usecase\Admin\getOfferDTOUsecase;
+
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\LandingPageValidator;
 use \Core\Domain\Validator\SettingsValidator;
@@ -444,5 +446,9 @@ class AdminFactory
     public static function deleteNewsletterCampaignOffer()
     {
         return new DeleteNewsletterCampaignOfferUsecase(RepositoryFactory::newsletterCampaignOffer());
+    }
+
+    public static function getOfferDTO() {
+        return new getOfferDTOUsecase(RepositoryFactory::offer(), new Purifier(), new Errors());
     }
 }
