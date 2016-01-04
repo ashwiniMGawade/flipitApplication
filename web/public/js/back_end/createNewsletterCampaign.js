@@ -31,17 +31,19 @@ $(function(){
         });
 
     var getOffersData = function() {
-        $.ajax({
-            url: HOST_PATH + "admin/newslettercampaigns/getOfferslist",
-            type: 'post',
-            data: {'campaignId' : $('#NewsletterWizardform').data('id')},
-            success: function(data) {
-                $("#step2 .mainpage-content").html(data);
-            },
-            error : function(e) {
-                console.log(e);
-            }
-        });
+        if ( ! $("#step2 .mainpage-content").html()) {
+            $.ajax({
+                url: HOST_PATH + "admin/newslettercampaigns/getOfferslist",
+                type: 'post',
+                data: {'campaignId': $('#NewsletterWizardform').data('id')},
+                success: function (data) {
+                    $("#step2 .mainpage-content").html(data);
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        }
     }
 
 
@@ -355,6 +357,7 @@ $(function(){
     });
 
     $('#scheduleButton').on("click", function(e) {
+        $("#scheduleButton").append('<input type="hidden" name="schedule">');
         $( "input[name='campaignSubject']" ).rules( "add", {
             required: true,
             minlength: 2,

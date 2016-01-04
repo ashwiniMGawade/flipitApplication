@@ -262,7 +262,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                         <?php
                         $sessionNamespace = new Zend_Session_Namespace();
                         if (in_array($sessionNamespace->settings['rights']['content']['rights'], array('1', '2'))) { ?>
-                            <li class="btn-primary accessSave" style="display:none;" id="scheduleButton"><input type="hidden" name="schedule"><a href="#">Schedule</a></li>
+                            <li class="btn-primary accessSave" style="display:none;" id="scheduleButton"><a href="#">Schedule</a></li>
                         <?php } else { ?>
                             <li class="btn-primary accessSave" style="display:none;" id="saveCampaign"><a href="#">Save and Exit</a></li>
                         <?php } ?>
