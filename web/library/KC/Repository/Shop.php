@@ -1317,19 +1317,24 @@ class Shop extends \Core\Domain\Entity\Shop
                         ->where("rsrs.shop=" . $shopDetail['id'])
                         ->getQuery()->execute();
                 }
+
                 foreach ($similarstoreordArray as $shop) {
-                    if ($shop!='') {
+                    if (!empty($shop)) {
+
                         $relateshopObj = new \Core\Domain\Entity\RefShopRelatedshop();
                         $relateshopObj->shop = \Zend_Registry::get('emLocale')
                             ->getRepository('\Core\Domain\Entity\Shop')
                             ->find($shopInfo->id);
-                        $relateshopObj->relatedshopId = $shop;
+                        $relateshopObj->relatedShop = \Zend_Registry::get('emLocale')
+                            ->getRepository('\Core\Domain\Entity\Shop')
+                            ->find($shop);
                         $relateshopObj->position = $i;
                         $relateshopObj->created_at = new \DateTime('now');
                         $relateshopObj->updated_at = new \DateTime('now');
                         \Zend_Registry::get('emLocale')->persist($relateshopObj);
                         \Zend_Registry::get('emLocale')->flush();
                         ++$i;
+
                     }
                 }
             }
