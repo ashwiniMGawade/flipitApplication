@@ -487,10 +487,9 @@ class Signupmaxaccount extends \Core\Domain\Entity\Signupmaxaccount
     
     public static function saveScheduledNewsletter($request)
     {
-        $previousNewsletterScheduledDate = self::validateIfNewsLetterCanBeScheduled();
-        $scheduledDate = self::getFormattedScheduleDate(date($request->getParam("sendDate")));
+        $previousNewsletterScheduledDate = date( 'Y-m-d', self::validateIfNewsLetterCanBeScheduled());
+        $scheduledDate = $request->getParam("sendDate");
         $currentDate = \FrontEnd_Helper_viewHelper::getCurrentDate();
-
         if (strtotime($scheduledDate) >= strtotime($currentDate)) {
             if (strtotime($scheduledDate) >= strtotime($previousNewsletterScheduledDate)) {
                 $scheduledTime = $request->getParam("sendTime", false);
