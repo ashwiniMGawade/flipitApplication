@@ -293,7 +293,7 @@
         &.orange-block{
             .offer-holder{
                 &:hover{
-                    padding: 15px 15px 2px;
+                    padding: 15px;
                     border-bottom: 1px solid #eaeaea;
                     @media only screen and (max-width: 767px){
                         padding: 15px 15px 2px;
@@ -383,15 +383,7 @@
         }
         }
         .offer-holder{
-            padding: 15px 15px 2px;
-            @media only screen and (max-width: 767px){
-                padding: 15px 15px 2px;
-            }
-            &:hover{
-                @media only screen and (max-width: 767px){
-                    padding: 15px 15px 2px;
-                }
-            }
+            padding: 15px;
         }
         .clickout-title, .link{
             text-decoration: none !important;
@@ -401,9 +393,12 @@
         }
         .info-area{
             overflow: hidden;
-            background: url(../../images/border.png) repeat-x;
+            background: url(../../images/border.png) repeat-x scroll 0 15px;
             padding: 4px 28px 2px 21px;
             margin: 0 -20px;
+            clear: both;
+            padding-top: 20px;
+            margin-bottom: -8px;
             @media only screen and (max-width: 979px){
                 padding: 4px 20px 2px;
             }
@@ -460,6 +455,16 @@
                         margin: 0 -6px;
                     }
                     li{
+                        .cursor-pointer {
+                          cursor : pointer;
+                        }
+                        .imbull-menu-image.top50 {
+                          float: left;
+                          height: 17px;
+                          margin: 0px 5px 0 5px;
+                          width: 17px;
+                          background: url(../../images/back_end/menu.png) no-repeat scroll -102px 0 transparent;
+                        }
                         float: left;
                         padding: 1px 10px 4px;
                         white-space: nowrap;
@@ -573,7 +578,7 @@
             li{
                 float: left;
                 position: relative;
-                padding: 0 8px 0 6px;
+                padding: 0 5px 0 6px;
                 @media only screen and (max-width: 767px){
                     padding: 0 5px 3px;
                 }
@@ -608,6 +613,14 @@
                     content: "";
                 }
 
+            }
+        }
+    }
+    .section{
+        .active-box {
+            .holder {
+                border: solid #eaeaea;
+                border-width: 1px 1px 0 !important;
             }
         }
     }
@@ -777,4 +790,30 @@
     pointer-events: none;
     z-index: 5999;
     opacity: 0.5;
+}
+
+
+.section .block .text {
+  display: inline-block;
+  vertical-align: top;
+  width: 100%;
+}
+
+@media only screen and (min-width: 768px) {
+  .page-store .section .block .buttons {
+    margin: 0 0 5px 15px;
+    float: right;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .page-store .section .block .buttons {
+    margin: 21px 0 5px 15px;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .section .block .text {
+    max-width: 61.5%;
+    width: auto;
+    float: left;
+  }
 }

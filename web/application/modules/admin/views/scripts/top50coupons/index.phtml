@@ -1,0 +1,103 @@
+<!-- start affiliate network list -->
+<?php
+$this->headTitle()->append($this->translate('Top 50 Coupon Codes'));
+
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+	$this->headScript()
+			->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+	$this->headLink()
+			->appendStylesheet(PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css");
+	
+	$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/back_end/bootstrap-combobox.css" );
+	
+	$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/bootstrap-typeahead.js" );
+	$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/select2.min.js" );
+	
+	$this->headScript()
+			->appendFile(PUBLIC_PATH . "/js/back_end/top50coupons.js");
+?>
+	<div class="wrap columns-2">
+
+          	<h1>
+                <?php echo $this->translate('Top 50 Coupon Codes'); ?>
+            </h1>
+
+            <div class="mt10 mb10 alert alert-success" style="visibility: hidden;" id="popular_success_message">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <label class="successserver">Top 50 coupons has been reordered successfully</label>
+            </div>
+            <div id="poststuff" class="metabox-holder has-right-sidebar">
+
+              <div id="side-info-column" class="inner-sidebar-coupon">
+                <div id="side-sortables" class="meta-box-sortables ui-sortable">
+                  <div class="coupon-sidebar-outer">
+                    <div class="coupon-sidebar-heading">
+                    	<select  style="display: none; width : 389px;" class="combobox" name="offerlist" id="offerlist">
+								<option value=""></option>
+								<?php
+								foreach ($this->offer as $offerDetail) {
+									
+								if (trim ($offerDetail ['title'] ) != '') {
+									$offer = substr ($offerDetail ['title'], 0, 70 );
+								?>
+									<option  value="<?php echo $offerDetail['id']; ?>"><?php echo $offer; ?></option>
+								
+									
+								<?php }} ?>
+						</select> 
+						<input type="hidden" name="selctedOffer" id="selctedOffer" value="">
+						<input type="hidden" name="selctedOfferText" id="selctedOfferText" value="">
+                    	<!--<input placeholder="search offer" id='searchCouponTxt' type="text" class="input-medium search-query">-->
+	                    <input type='hidden' name="SearchedValueIds" id="SearchedValueIds" value="">
+                    </div>
+                    
+                    <!-- coupon code move up -->
+                    <div class="coupon-sidebar-content-box">
+                        <button id='addNewOffer' onClick='addNewOffer();'class="btn">ADD NEW OFFER</button>
+                    </div>
+                    <!-- coupon code move down -->
+                    <div class="coupon-sidebar-content-box mb10 image-loading-icon">
+                        <button id='deleteOne' onClick='deleteOne();' class="btn">DELETE</button>
+                    </div>                    
+                  </div>
+                  
+                </div>
+              </div>
+              <?php 
+              $data = $this->data;
+              ?>
+              <!-- display code div -->
+              <div id="post-body">
+              	<div id="post-body-content-coupon">
+              		<div class="top-coupon-list">
+                        <ul id='top50coupons'>
+                        <?php 
+                        if (!empty($this->data)) {
+                        	foreach ($this->data as $offerDetail) {
+                        		if ($offerDetail['type'] == "TOP50") {
+                        			$lockImage = HTTP_PATH."public/images/back_end/stock_lock.png";
+                        			$image = "<img src=".$lockImage." height='20' style='float:right' width='20'>";
+                        		} else {
+                        			$lockImage = "";
+                        			$image = "";
+                        		}
+                        		echo  "<li class='ui-state-default' reltype='" . $offerDetail['type'] . "' relpos='" . $offerDetail['position'] . "' reloffer='" . $offerDetail['offerId'] . "' id='" . $offerDetail['id'] . "' ><span>" . $offerDetail['title'] ."</span>" .$image."</li>";
+                            }
+                        } else {
+                         	echo  "<li id='0'>No record found !</li>";
+              			} ?>
+              			</ul>
+                    </div>
+                </div>
+              </div>
+              <br class="clear">
+            </div>
+            <!-- /poststuff -->
+        </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
