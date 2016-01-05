@@ -59,12 +59,10 @@ class SendNewsletter
             $newsLetterSettings = Signupmaxaccount::getAllMaxAccounts();
             $localeSettings = LocaleSettings::getLocaleSettings();
             $currentDate = FrontEnd_Helper_viewHelper::getCurrentDate();
-            $scheduledTime =  date('Y-m-d', strtotime($newsLetterSettings[0]['newletter_scheduled_time']));
-            $newsletterSentTime = date('Y-m-d', strtotime($newsLetterSettings[0]['newsletter_sent_time']));
             if ($newsLetterSettings[0]['newletter_is_scheduled'] === true && $newsLetterSettings[0]['started'] !== true) {
                 if ($newsLetterSettings[0]['newletter_is_scheduled'] == 1
-                        && $scheduledTime <= $currentDate
-                        && $newsletterSentTime < $currentDate) {
+                        && strtotime($newsLetterSettings[0]['newletter_scheduled_time']) <= strtotime($currentDate)
+                        && strtotime($newsLetterSettings[0]['newsletter_sent_time']) < strtotime($currentDate)) {
                     $customLocale= !empty($localeSettings[0]['locale']) ? $localeSettings[0]['locale'] : 'nl_NL';
                     $this->_trans = new Zend_Translate(array(
                             'adapter' => 'gettext',
