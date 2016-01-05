@@ -37,21 +37,19 @@ class Application_Service_Offer_TopOffer extends Application_Service_Offer_Offer
 
     private function setVoucherCodesToTopCodes($voucherCodes, $topCouponCodes)
     {
-        if (!empty($topCouponCodes)) {
-            foreach ($voucherCodes as $topVoucherCodeValue) {
-                $shopId = isset($topVoucherCodeValue['shopOffers']['id'])
-                    ? $topVoucherCodeValue['shopOffers']['id']
-                    : '';
-                $shopPermalink = isset($topVoucherCodeValue['shopOffers']['permaLink'])
-                    ? $topVoucherCodeValue['shopOffers']['permaLink']
-                    : '';
-                $topCouponCodes[] = array(
-                    'id'=> $shopId,
-                    'position' => count($topCouponCodes)+1,
-                    'permaLink' => $shopPermalink,
-                    'popularcode' => $topVoucherCodeValue
-                );
-            }
+        foreach ($voucherCodes as $topVoucherCodeValue) {
+            $shopId = isset($topVoucherCodeValue['shopOffers']['id'])
+                ? $topVoucherCodeValue['shopOffers']['id']
+                : '';
+            $shopPermalink = isset($topVoucherCodeValue['shopOffers']['permaLink'])
+                ? $topVoucherCodeValue['shopOffers']['permaLink']
+                : '';
+            $topCouponCodes[] = array(
+                'id'=> $shopId,
+                'position' => count($topCouponCodes)+1,
+                'permaLink' => $shopPermalink,
+                'popularcode' => $topVoucherCodeValue
+            );
         }
         return $topCouponCodes;
     }
