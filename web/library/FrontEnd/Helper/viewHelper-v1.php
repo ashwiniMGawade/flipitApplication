@@ -1,5 +1,5 @@
 <?php
-use \HTMLPurifier;
+//use \HTMLPurifier;
 class FrontEnd_Helper_viewHelper
 {
     public static function writeLog($message, $logfile = '')
@@ -1053,11 +1053,7 @@ EOD;
     public static function getCurrentDate()
     {
         $currentDate = new Zend_Date();
-        $currentMonth = $currentDate->get(Zend_Date::MONTH);
-        $currentYear = $currentDate->get(Zend_Date::YEAR);
-        $currentDay = $currentDate->get(Zend_Date::DAY);
-        $currentDateFormation = $currentYear.'-'.$currentMonth.'-'.$currentDay;
-        return $currentDateFormation;
+        return $currentDate->get(Zend_Date::W3C);
     }
     public static function getTwoReasons($reasons)
     {
