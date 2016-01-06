@@ -26,11 +26,13 @@ class GetNewsletterCampaignOffersUsecase
         }
         $conditions = $this->htmlPurifier->purify($conditions);
 
-        if (false === $isPaginated) {
-            $campaignOffers =$this->newsletterCampaignOfferRepository->findBy('\Core\Domain\Entity\NewsletterCampaignOffer', $conditions, $order, $limit, $offset);
-        } else {
-            $campaignOffers = $this->newsletterCampaignOfferRepository->findAllPaginated('\Core\Domain\Entity\NewsletterCampaignOffer', $conditions, $order, $limit, $offset);
-        }
+        $campaignOffers = $this->newsletterCampaignOfferRepository->findNewsletterCampaignOffers($conditions);
+
+//        if (false === $isPaginated) {
+//            $campaignOffers =$this->newsletterCampaignOfferRepository->findBy('\Core\Domain\Entity\NewsletterCampaignOffer', $conditions, $order, $limit, $offset);
+//        } else {
+//            $campaignOffers = $this->newsletterCampaignOfferRepository->findAllPaginated('\Core\Domain\Entity\NewsletterCampaignOffer', $conditions, $order, $limit, $offset);
+//        }
 
         return $campaignOffers;
     }

@@ -100,7 +100,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         return $response;
     }
 
-    private function checkNewsletterForWarnings($newsletterCampaign, $returWarnings = false) {
+    private function checkNewsletterForWarnings($newsletterCampaign, $returnWarnings = false) {
         $warnings = [];
         if ($newsletterCampaign->getScheduledStatus() == 1 ){
             //another newsletter is scheduled within 24 hours
@@ -115,7 +115,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             );
             if (!empty($scheduledCampaigns)) {
                 $warnings[] = 'Another newsletter is scheduled within 24 hours';
-                if (!$returWarnings) {
+                if (!$returnWarnings) {
                     return true;
                 }
             }
@@ -126,17 +126,17 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                 $this->setFlashMessage('error', $errors);
             } else {
                 foreach($result as $offerData) {
-                    $startDate = $offerData->getOffer()->getStartDate();
+                    $startDate = $offerData['startDate'];
                     if( $newsletterCampaign->getScheduledTime() < $startDate->format('U')) {
-                        $warnings[] = 'Offer "'. $offerData->getOffer()->getTitle(). '" wont be live when newsletter is sent';
-                        if (!$returWarnings) {
+                        $warnings[] = 'Offer "'. $offerData['title'] . '" wont be live when newsletter is sent';
+                        if (!$returnWarnings) {
                             return true;
                         }
                     }
                 }
             }
         }
-        if (!$returWarnings) {
+        if (!$returnWarnings) {
             return false;
         }
         return $warnings;
@@ -159,8 +159,8 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                         $this->setFlashMessage('error', implode('.', $validationResults['error']));
                         return;
                     }
-                    $UserTimezone = new DateTimeZone( $this->view->localeSettings['0']['timezone']);
-                    $date = new DateTime( $params['scheduleDate'] . $params['scheduleTime'] , $UserTimezone );
+                    $userTimezone = new DateTimeZone( $this->view->localeSettings['0']['timezone']);
+                    $date = new DateTime( $params['scheduleDate'] . $params['scheduleTime'] , $userTimezone );
                     $params['scheduledStatus'] = 1;
                     $params['scheduledTime'] = $date->getTimestamp();
                 }
@@ -255,8 +255,8 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     $this->setFlashMessage('error', implode('.', $validationResults['error']));
                     return;
                 }
-                $UserTimezone = new DateTimeZone( $this->view->localeSettings['0']['timezone']);
-                $date = new DateTime( $params['scheduleDate'] . $params['scheduleTime'] , $UserTimezone );
+                $userTimezone = new DateTimeZone( $this->view->localeSettings['0']['timezone']);
+                $date = new DateTime( $params['scheduleDate'] . $params['scheduleTime'] , $userTimezone );
                 $params['scheduledStatus'] = 1;
                 $params['scheduledTime'] = $date->getTimestamp();
             }
@@ -367,9 +367,9 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                 $scheduledTime = $campaign->getScheduledTime();
                 $scheduledDate = '';
                 if (!empty($scheduledTime)) {
-                    $UserTimezone = new DateTimeZone( $localeSettings['0']['timezone']);
+                    $userTimezone = new DateTimeZone( $localeSettings['0']['timezone']);
                     $date = DateTime::createFromFormat( 'U', $scheduledTime );
-                    $date->setTimeZone($UserTimezone);
+                    $date->setTimeZone($userTimezone);
                     $scheduledDate =  $date->format('Y-m-d H:i:s');
                 }
                 $warnings = $this->checkNewsletterForWarnings($campaign);
@@ -493,25 +493,21 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
     private function _getSectionOffers($conditions, $section)
     {
         $conditions['section'] = $section;
-        $result = SystemFactory::getNewsletterCampaignsOffers()->execute($conditions, null, null, null, true);
-        if ($result instanceof Errors) {
-            $errors = $result->getErrorsAll();
+        $campaignOffers = SystemFactory::getNewsletterCampaignsOffers()->execute($conditions, null, null, null, true);
+        if ($campaignOffers instanceof Errors) {
+            $errors = $campaignOffers->getErrorsAll();
             $this->setFlashMessage('error', $errors);
         } else {
             $campaignOffersData = [];
-            $campaignOffers = $result['records'];
             if (false == empty($campaignOffers)) {
                 foreach ($campaignOffers as $campaignOffer) {
-                    //$offer = SystemFactory::getOffer()->execute(array( 'id' => $campaignOffer->getOfferId()));
-                    $offer = AdminFactory::getOfferDTO()->execute(array('id' => $campaignOffer->getOfferId()));
-                    if ($offer instanceof  OfferDTO) {
-                        $campaignOffersData[] = array(
-                            'id' => $campaignOffer->getOffer()->getId(),
-                            'offer' => $campaignOffer->getOffer()->getTitle(),
-                            'position' => $campaignOffer->getPosition(),
-                            'shop'  => $campaignOffer->getOffer()->getShopOffers()->getName(),
-                        );
-                    }
+                    $campaignOffersData[] = array(
+                        'id' => $campaignOffer['id'],
+                        'offer' => $campaignOffer['title'],
+                        'position' => $campaignOffer[0]['position'],
+                        'shop' => ''
+//                            'shop'  => $campaignOffer->getOffer()->getShopOffers()->getName(),
+                    );
                 }
             }
             return $campaignOffersData;
