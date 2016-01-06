@@ -1,0 +1,73 @@
+{
+    "swagger":"2.0",
+    "host":"api.kortingscode.nl",
+    "basePath":"",
+    "tags":[
+        {
+            "name":"emailcontents",
+            "description":"Email Content Operations"
+        }
+    ],
+    "schemes":[
+        "http"
+    ],
+    "paths":
+        {
+        "/emailcontents/{emailType}/{referenceId}":{
+            "get":{
+                "tags":[
+                    "emailcontents"
+                ],
+                "summary":"Get email content by reference id",
+                "description":"Returns a single email content",
+                "operationId":"getEmailByReferenceId",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"emailType",
+                        "description":"Type of email to be fetched",
+                        "required":true,
+                        "type":"string",
+                        "enum": ["newsletter"]
+                    },
+                    {
+                        "in":"path",
+                        "name":"referenceId",
+                        "description":"Reference Id of email content that needs to be fetched",
+                        "required":true,
+                        "type":"integer",
+                        "format":"int64"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"Request was successful",
+                        "schema":{
+                            "$ref":"#/definitions/emailcontents"
+                        }
+                    },
+                    "404":{
+                        "description":"Email Content not found"
+                    },
+                    "400":{
+                        "description":"Invalid Reference Id"
+                    }
+                }
+            }
+        }
+    },
+    "definitions":{
+        "emailcontents":{
+            "type":"object",
+            "properties":{
+                "content":{
+                    "type":"string",
+                    "example":"Complete Email Content as HTML"
+                }
+            }
+        }
+    }
+}
