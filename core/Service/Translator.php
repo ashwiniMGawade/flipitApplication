@@ -1,27 +1,24 @@
 <?php
-namespace Core\Domain\Service;
+
+namespace Core\Service;
+
 
 use Core\Domain\Adapter\TranslatorInterface;
 
-class Zend_Translator implements TranslatorInterface
-{
+class Translator implements TranslatorInterface {
+
     private $translator;
     private $locale;
     private $languageLocale;
 
-    public function __construct($locale, $languageLocale, $addTranslations = false)
+    public function __construct($translator, $locale, $languageLocale)
     {
         $this->locale = $locale;
         $this->languageLocale = $languageLocale;
-        $this->translator = new \Zend_Translate(array(
-            'adapter' => 'gettext',
-            'disableNotices' => true)
-        );
-        if (true === $addTranslations) {
-            $this->addTranslations();
-        }
+        $this->translator = $translator;
+        $this->addTranslations();
     }
-
+    
     public function addTranslation($type = null)
     {
         $fileSuffix = (false === empty($this->locale) && 'en' != $this->locale) ? '_'.$this->locale : '';
@@ -30,7 +27,7 @@ class Zend_Translator implements TranslatorInterface
         $fileName = $type . strtoupper($fileSuffix) .'.mo';
         $this->translator->addTranslation(
             array(
-                'content'   => __DIR__.'/../../../web/public'.$pathSuffix.'/language/'.$fileName,
+                'content'   => __DIR__.'/../../web/public'.$pathSuffix.'/language/'.$fileName,
                 'locale'    => $this->languageLocale
             )
         );
@@ -48,4 +45,4 @@ class Zend_Translator implements TranslatorInterface
     {
         return $this->translator->translate($variable);
     }
-} 
+}

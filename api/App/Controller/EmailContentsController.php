@@ -14,7 +14,7 @@ class EmailContentsController extends ApiBaseController
 
     public function getEmailContents($emailType, $referenceId)
     {
-        $this->translator = TranslationsFactory::keyValueTranslation(LOCALE, 'nl_NL', true);
+        $this->translator = TranslationsFactory::translator(LOCALE, 'nl_NL');
 
         if (!in_array($emailType, $this->emailTypes)) {
             $this->app->halt(400, json_encode(array('messages' => array('Invalid email type'))));

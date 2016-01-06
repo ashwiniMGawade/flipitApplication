@@ -1,13 +1,16 @@
 <?php
 namespace Core\Domain\Factory;
 
-use Core\Domain\Service\Translator;
-use Core\Domain\Service\Zend_Translator;
+use \Core\Service\Translator;
 
 class TranslationsFactory
 {
-    public static function keyValueTranslation($locale, $languageLocale, $addTranslations)
+    public static function translator($locale, $languageLocale)
     {
-        return new Translator(new Zend_Translator($locale, $languageLocale, $addTranslations));
+        return new Translator(
+            new \Zend_Translate(array('adapter' => 'gettext', 'disableNotices' => true)),
+            $locale,
+            $languageLocale
+        );
     }
 }
