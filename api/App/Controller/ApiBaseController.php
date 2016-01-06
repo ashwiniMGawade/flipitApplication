@@ -8,6 +8,7 @@ class ApiBaseController
     protected $app;
     protected $request;
     protected $response;
+    protected $filter;
     const RESPONSE_STATUS_UNSUPPORTED_MEDIA_TYPE = 415;
 
     public function init()
@@ -16,6 +17,7 @@ class ApiBaseController
             $this->app->halt(self::RESPONSE_STATUS_UNSUPPORTED_MEDIA_TYPE, json_encode(array('message'=>'Unsupported media type')));
         }
         $this->authenticate();
+        $this->filter = (array) $this->app->request()->get('filter');
     }
 
     public function setApp($app)
@@ -43,7 +45,22 @@ class ApiBaseController
         if (false === $authenticator->authenticate($apiKey) ) {
             $this->app->halt(401, json_encode(array('message'=>'Invalid API key.')));
         }
+    }
 
-
+    public function getLink($nextLink = false)
+    {
+        $link = '?';
+        foreach ($this->filter as $type => $fields) {
+            if(is_array($fields)) {
+                foreach ($fields as $field => $value) {
+                    $link .= 'filter[' . $type . '][' . $field . ']=' . urlencode($value) . '&';
+                }
+            } else {
+                if($nextLink && $type == 'skip') $fields++;
+                $link .= 'filter[' . $type . ']=' . urlencode($fields) .'&';
+            }
+        }
+        $link .= 'api_key='.urlencode($this->app->request()->get('api_key'));
+        return $link;
     }
 }
