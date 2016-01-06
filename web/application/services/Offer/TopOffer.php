@@ -13,22 +13,25 @@ class Application_Service_Offer_TopOffer extends Application_Service_Offer_Offer
     public function execute($limit)
     {
         $topCouponCodes = $this->offerRepository->getTopCouponCodes(array(), $limit, 'TOP50');
-
+        $popularCode = [];
+        foreach ($topCouponCodes as $coupon) {
+            $popularCode[] = $coupon['popularcode']['id'];
+        }
         if (count($topCouponCodes) < $limit) {
             $totalViewCountOffersLimit = $limit - count($topCouponCodes);
-            $voucherCodes = $this->getOffersByType($limit, $totalViewCountOffersLimit);
+            $voucherCodes = $this->getOffersByType($limit, $totalViewCountOffersLimit, $popularCode);
             $topCouponCodes = $this->setVoucherCodesToTopCodes($voucherCodes, $topCouponCodes);
         }
         $topOffers = $this->traverseTopCouponCodes($topCouponCodes);
         return $topOffers;
     }
 
-    private function getOffersByType($limit, $constraintLimit)
+    private function getOffersByType($limit, $constraintLimit, $exitingCoupons = array())
     {
-        $topVoucherCodes = $this->offerRepository->getOffers('totalViewCount', $constraintLimit);
+        $topVoucherCodes = $this->offerRepository->getOffers('totalViewCount', $constraintLimit,  null, $exitingCoupons);
         if (count($topVoucherCodes) < $constraintLimit) {
             $newestCodesLimit = $constraintLimit - count($topVoucherCodes);
-            $newestVoucherCodes = $this->offerRepository->getOffers('newest', $newestCodesLimit);
+            $newestVoucherCodes = $this->offerRepository->getOffers('newest', $newestCodesLimit, null, $exitingCoupons);
             $topVoucherCodes = $topVoucherCodes + $newestVoucherCodes;
         }
 

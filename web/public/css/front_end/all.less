@@ -792,12 +792,8 @@ div.box a.remove-fovourite.blue{
         }
     }
     .terms-block{
-        padding:0px 15px 10px;
         font-size:12px;
         line-height:18px;
-        color:@grey-color;
-        background:#FFFFFF;
-        border:1px solid @page-header-border-color;
         border-top:0;
         overflow:hidden;
         h2, .term-and-condition{
@@ -808,16 +804,14 @@ div.box a.remove-fovourite.blue{
             margin:0 0 12px;
         }
     }
-    .orange-terms {
-      background: #fff2d8;
-    }
+
     .code-details {
         .terms-block{
             h2{font-weight:bold;}
         }
     }
     .orange-block{
-        .holder, .offer-box{
+        .holder{
             background:#fff2d8;
         }
         .offer-holder:hover{
@@ -1056,10 +1050,8 @@ div.box a.remove-fovourite.blue{
     .offer{
         font-size:15px;
         line-height:18px;
-        background:#fef9f2;
         padding:15px;
         color:@text-color;
-        border:1px solid @page-header-border-color;
         border-top:0;
         span{
             display:inline-block;
@@ -4644,4 +4636,18 @@ ul.ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all.wd1 {
         }
         margin: 0px;
     }
+}
+.offer-holder .text-over{
+  overflow: inherit;
+}
+@media only screen and (max-width: 767px) {
+  .page-store .section .block .offer-holder {
+    padding: 15px 15px 2px;
+  }
+  .page-store .section .block .info-area {
+    background: url(../../images/border.png) repeat-x scroll 0 0px;
+  }
+}
+.page-store .section .block .offer-holder .box {
+  padding-bottom: 0px;
 }

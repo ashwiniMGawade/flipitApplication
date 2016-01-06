@@ -80,24 +80,22 @@ foreach ($this->offers as $offer) {
                 <div class="text">
                     <ul class="meta-items">
                         <?php
+                        $metaItems = '';
                         if ($offer->userGenerated == 0 && (isset($offer->discountType) && $offer->discountType == 'CD') && $expiredOffer == '') {
-                            echo $offerPartial->getVerifiedText();
+                            $metaItems .= $offerPartial->getVerifiedText() . '. ';
                         }
                         ?>
-                        <li>
                         <?php
                         $membersOnly = isset($offer->Visability) && $offer->Visability == 'MEM'
                             ? '<span class="members-only-image"></span><span class="members-only">'.$this->translate("Members Only").'</span>'
                             : '';
-                        echo $membersOnly.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires, $expiredOffer);
+                        $metaItems .= $membersOnly.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires, $expiredOffer);
                         ?>
-                        </li>
                         <?php
-                        if ($expiredOffer != '') { ?>
-                        <li>
-                        <?php echo FrontEnd_Helper_viewHelper::__translate('This code is unfortunately expired. Often these code will still work'); ?>!
-                        </li>
-                        <?php } ?>
+                        if ($expiredOffer != '') {
+                            $metaItems .=  ' . ' . FrontEnd_Helper_viewHelper::__translate('This code is unfortunately expired. Often these code will still work') . '!';
+                        } ?>
+                        <li><?php echo $metaItems; ?></li>
                     </ul>
                     <?php 
                     if ($offer->Visability == 'MEM') {
@@ -278,7 +276,7 @@ foreach ($this->offers as $offer) {
         <?php
     }
     ?>
-    </div>
+
         <div class="offer-box" id="websiteOfferLink<?php echo $offer->id ;?>" <?php echo $style;?>>
             <div class="offer">
                 <span><?php echo $expiredOffer != ''
@@ -304,6 +302,7 @@ foreach ($this->offers as $offer) {
             <?php echo $termsAndConditions;?>
             </ol>
         </div>
+    </div>
     </article>
     <?php
     if ($this->offersType=='simple') {

@@ -3474,7 +3474,7 @@ class Offer extends \Core\Domain\Entity\Offer
         return $futureOffersCount;
     }
 
-    public static function getOffers($type, $limit, $homeSection = '')
+    public static function getOffers($type, $limit, $homeSection = '', $exstingOrders = array())
     {
         $dateTimeFormat = 'Y-m-d H:i:s';
         $currentDate = date($dateTimeFormat);
@@ -3505,6 +3505,10 @@ class Offer extends \Core\Domain\Entity\Offer
             ->andWhere('o.Visability != ?5')
             ->andWhere('o.endDate >'."'".$currentDate."'")
             ->andWhere('o.startDate <='."'".$currentDate."'");
+
+        if (!empty($exstingOrders)) {
+            $query->andWhere($entityManagerUser->expr()->notIn('o.id', $exstingOrders));
+        }
         if ($type == 'UserGeneratedOffers') {
             $query->andWhere('o.userGenerated=1 and o.approved="0"');
         } else {
