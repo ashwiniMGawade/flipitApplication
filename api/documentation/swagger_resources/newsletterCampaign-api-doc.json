@@ -1,0 +1,216 @@
+{
+    "swagger":"2.0",
+    "host":"api.kortingscode.nl",
+    "basePath":"",
+    "tags":[
+        {
+            "name":"newslettercampaigns",
+            "description":"Newsletter Campaign Operations"
+        }
+    ],
+    "schemes":[
+        "http"
+    ],
+    "paths":
+        {
+        "/newslettercampaigns":{
+            "get":{
+                "tags":[
+                    "newsletterCampaign"
+                ],
+                "summary":"Get newsletter campaigns",
+                "description":"",
+                "operationId":"getNewsletterCampaigns",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in":"query",
+                        "name":"page",
+                        "description":"Page number",
+                        "required":false,
+                        "type":"integer",
+                        "default":0
+                    },
+                    {
+                        "in":"query",
+                        "name":"perPage",
+                        "description":"Paginator results per page (max 100)",
+                        "required":false,
+                        "type":"integer",
+                        "default":100
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"Request was successful",
+                        "schema":{
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/newsletterCampaign"
+                            }
+                        }
+                    },
+                    "405":{
+                        "description":"Invalid input"
+                    }
+                }
+            }
+        },
+        "/newslettercampaigns/{newsletterCampaignId}":{
+            "put":{
+                "tags":[
+                    "newsletterCampaign"
+                ],
+                "summary":"Update newsletter campaign information",
+                "description":"",
+                "operationId":"updateNewsletterCampaign",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"newsletterCampaignId",
+                        "description":"Newsletter Campaign Id that needs to be updated",
+                        "required":true,
+                        "type":"integer",
+                        "format":"int64"
+                    },
+                    {
+                        "in":"body",
+                        "name":"body",
+                        "description":"Newsletter Campaign data that needs to be updated",
+                        "required":true,
+                        "schema":{
+                            "$ref":"#/definitions/newsletterCampaign"
+                        }
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"Request was successful"
+                    },
+                    "404":{
+                        "description":"Newsletter Campaign not found"
+                    },
+                    "405":{
+                        "description":"Invalid input"
+                    }
+                }
+            },
+            "get":{
+                "tags":[
+                    "newsletterCampaign"
+                ],
+                "summary":"Find newsletter campaign by id",
+                "description":"Returns a single newsletter campaign",
+                "operationId":"getNewsletterCampaignById",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"newsletterCampaignId",
+                        "description":"Newsletter Campaign that needs to be fetched",
+                        "required":true,
+                        "type":"integer",
+                        "format":"int64"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"Request was successful",
+                        "schema":{
+                            "$ref":"#/definitions/newsletterCampaign"
+                        }
+                    },
+                    "404":{
+                        "description":"Newsletter Campaign not found"
+                    },
+                    "400":{
+                        "description":"Invalid newsletter campaign Id"
+                    }
+                }
+            }
+        }
+    },
+    "definitions":{
+        "newsletterCampaign":{
+            "type":"object",
+            "required":[
+                "email"
+            ],
+            "properties":{
+                "campaignName":{
+                    "type":"string",
+                    "example":"Christmas Eve"
+                },
+                "campaignSubject":{
+                    "type":"string",
+                    "example":"Christmas Special Offers"
+                },
+                "senderName": {
+                    "type": "string",
+                    "example": "Flipit US"
+                },
+                "senderEmail":{
+                    "type":"string",
+                    "example":"us@flipit.com"
+                },
+                "header":{
+                    "type":"string",
+                    "example":"Header Text"
+                },
+                "headerBannerURL":{
+                    "type":"string",
+                    "example":"http://flipit.com/be"
+                },
+                "footer":{
+                    "type":"string",
+                    "example":"Footer Text"
+                },
+                "footerBannerURL":{
+                    "type":"string",
+                    "example":"http://flipit.com/be"
+                },
+                "offerPartOneTitle":{
+                    "type":"string",
+                    "example":"Today's Special Offers"
+                },
+                "offerPartTwoTitle":{
+                    "type":"string",
+                    "example":"Most trading coupons"
+                },
+                "scheduledStatus":{
+                    "type":"string",
+                    "enum": ["Pending", "Scheduled", "Triggered", "Sent"]
+                },
+                "scheduledTime":{
+                    "type":"string",
+                    "example":"2015-12-12 23:31:51"
+                },
+                "newsletterSentTime":{
+                    "type":"string",
+                    "example":"2015-12-12 23:31:51"
+                },
+                "recipientCount":{
+                    "type":"integer",
+                    "example":2100
+                },
+                "deleted":{
+                    "type":"string",
+                    "enum": ["Yes", "No"]
+                }
+            }
+        }
+    }
+}
