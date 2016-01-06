@@ -24,7 +24,8 @@ class NewsletterCampaignsController extends ApiBaseController
             $this->app->halt(404, json_encode(array('messages' => $newsletterCampaigns->getErrorsAll())));
         }
         $newsletterCampaignsData = new Hal($currentLink);
-        if (count($newsletterCampaigns) == $perPage) {
+        //ToDo : Write a limit logic
+        if (count($newsletterCampaigns) === $perPage) {
             $newsletterCampaignsData->addLink('next', $nextLink);
         }
 

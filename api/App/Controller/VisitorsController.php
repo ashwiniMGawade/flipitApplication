@@ -14,7 +14,7 @@ class VisitorsController extends ApiBaseController
         $page = $page > 0 ? ($page*$perPage) : 0;
         $where = isset($this->filter['where']) ? (array) $this->filter['where'] : array();
         $conditions = $this->formatInput($where);
-        if (true === isset($conditions['email']) && false === is_null($conditions['email']) && false === filter_var($conditions['email'], FILTER_VALIDATE_EMAIL)) {
+        if (true === isset($conditions['email']) AND false === is_null($conditions['email']) AND false === filter_var($conditions['email'], FILTER_VALIDATE_EMAIL)) {
             $this->app->halt(405, json_encode(array('messages' => array('Invalid Email'))));
         }
         $visitors = AdminFactory::getVisitors()->execute($conditions, array(), $perPage, $page);
@@ -122,96 +122,96 @@ class VisitorsController extends ApiBaseController
         $fields = isset($this->filter['fields']) ? (array) $this->filter['fields'] : array();
         $limitFields = empty($fields) ? false : true;
         $visitorData['id'] = $visitor->getId();
-        if ($limitFields && isset($fields['email']) && true == $fields['email']) {
+        if (!$limitFields OR isset($fields['email']) AND true == $fields['email']) {
             $visitorData['email'] = $visitor->getEmail();
         }
-        if ($limitFields && isset($fields['firstName']) && true == $fields['firstName']) {
+        if (!$limitFields OR isset($fields['firstName']) AND true == $fields['firstName']) {
             $visitorData['firstName'] = $visitor->getFirstName();
         }
-        if ($limitFields && isset($fields['lastName']) && true == $fields['lastName']) {
+        if (!$limitFields OR isset($fields['lastName']) AND true == $fields['lastName']) {
             $visitorData['lastName'] = $visitor->getLastName();
         }
-        if ($limitFields && isset($fields['mailOpenCount']) && true == $fields['mailOpenCount']) {
+        if (!$limitFields OR isset($fields['mailOpenCount']) AND true == $fields['mailOpenCount']) {
             $visitorData['mailOpenCount'] = $visitor->getMailOpenCount();
         }
-        if ($limitFields && isset($fields['lastEmailOpenDate']) && true == $fields['lastEmailOpenDate']) {
+        if (!$limitFields OR isset($fields['lastEmailOpenDate']) AND true == $fields['lastEmailOpenDate']) {
             $lastEmailOpenDate = $visitor->getLastEmailOpenDate();
             $visitorData['lastEmailOpenDate'] = !empty($lastEmailOpenDate) ? $lastEmailOpenDate->format('Y-m-d H:i:s') : '';
         }
-        if ($limitFields && isset($fields['mailClickCount']) && true == $fields['mailClickCount']) {
+        if (!$limitFields OR isset($fields['mailClickCount']) AND true == $fields['mailClickCount']) {
             $visitorData['mailClickCount'] = $visitor->getMailClickCount();
         }
-        if ($limitFields && isset($fields['mailSoftBounceCount']) && true == $fields['mailSoftBounceCount']) {
+        if (!$limitFields OR isset($fields['mailSoftBounceCount']) AND true == $fields['mailSoftBounceCount']) {
             $visitorData['mailSoftBounceCount'] = $visitor->getMailSoftBounceCount();
         }
-        if ($limitFields && isset($fields['mailHardBounceCount']) && true == $fields['mailHardBounceCount']) {
+        if (!$limitFields OR isset($fields['mailHardBounceCount']) AND true == $fields['mailHardBounceCount']) {
             $visitorData['mailHardBounceCount'] = $visitor->getMailHardBounceCount();
         }
-        if ($limitFields && isset($fields['active']) && true == $fields['active']) {
+        if (!$limitFields OR isset($fields['active']) AND true == $fields['active']) {
             $visitorData['active'] = (1 === $visitor->getActive()) ? 'Yes' : 'No';
         }
-        if ($limitFields && isset($fields['inactiveStatusReason']) && true == $fields['inactiveStatusReason']) {
+        if (!$limitFields OR isset($fields['inactiveStatusReason']) AND true == $fields['inactiveStatusReason']) {
             $visitorData['inactiveStatusReason'] = $visitor->getInactiveStatusReason();
         }
-        if ($limitFields && isset($fields['activeCodeId']) && true == $fields['activeCodeId']) {
+        if (!$limitFields OR isset($fields['activeCodeId']) AND true == $fields['activeCodeId']) {
             $visitorData['activeCodeId'] = $visitor->getActiveCodeId();
         }
-        if ($limitFields && isset($fields['changePasswordRequest']) && true == $fields['changePasswordRequest']) {
+        if (!$limitFields OR isset($fields['changePasswordRequest']) AND true == $fields['changePasswordRequest']) {
             $visitorData['changePasswordRequest'] = (1 === $visitor->getChangePasswordRequest()) ? 'Yes' : 'No';
         }
-        if ($limitFields && isset($fields['codeAlert']) && true == $fields['codeAlert']) {
+        if (!$limitFields OR isset($fields['codeAlert']) AND true == $fields['codeAlert']) {
             $visitorData['codeAlert'] = (1 === $visitor->getCodeAlert()) ? 'Yes' : 'No';
         }
-        if ($limitFields && isset($fields['codeAlertSendDate']) && true == $fields['codeAlertSendDate']) {
+        if (!$limitFields OR isset($fields['codeAlertSendDate']) AND true == $fields['codeAlertSendDate']) {
             $codeAlertSendDate = $visitor->getCodeAlertSendDate();
             $visitorData['codeAlertSendDate'] = !empty($codeAlertSendDate) ? $codeAlertSendDate->format('Y-m-d H:i:s') : '';
         }
-        if ($limitFields && isset($fields['currentLogIn']) && true == $fields['currentLogIn']) {
+        if (!$limitFields OR isset($fields['currentLogIn']) AND true == $fields['currentLogIn']) {
             $currentLogIn = $visitor->getCurrentLogIn();
             $visitorData['currentLogIn'] = !empty($currentLogIn) ? $currentLogIn->format('Y-m-d H:i:s') : '';
         }
-        if ($limitFields && isset($fields['dateOfBirth']) && true == $fields['dateOfBirth']) {
+        if (!$limitFields OR isset($fields['dateOfBirth']) AND true == $fields['dateOfBirth']) {
             $dateOfBirth = $visitor->getDateOfBirth();
             $visitorData['dateOfBirth'] = !empty($dateOfBirth) ? $dateOfBirth->format('Y-m-d') : '';
         }
-        if ($limitFields && isset($fields['deleted']) && true == $fields['deleted']) {
+        if (!$limitFields OR isset($fields['deleted']) AND true == $fields['deleted']) {
             $visitorData['deleted'] = (1 === $visitor->getDeleted()) ? 'Yes' : 'No';
         }
-        if ($limitFields && isset($fields['fashionNewsLetter']) && true == $fields['fashionNewsLetter']) {
+        if (!$limitFields OR isset($fields['fashionNewsLetter']) AND true == $fields['fashionNewsLetter']) {
             $visitorData['fashionNewsLetter'] = (1 === $visitor->getFashionNewsLetter()) ? 'Yes' : 'No';
         }
-        if ($limitFields && isset($fields['gender']) && true == $fields['gender']) {
+        if (!$limitFields OR isset($fields['gender']) AND true == $fields['gender']) {
             $visitorData['gender'] = (1 === $visitor->getGender()) ? 'Female' : 'Male';
         }
-        if ($limitFields && isset($fields['interested']) && true == $fields['interested']) {
+        if (!$limitFields OR isset($fields['interested']) AND true == $fields['interested']) {
             $visitorData['interested'] = $visitor->getInterested();
         }
-        if ($limitFields && isset($fields['lastLogIn']) && true == $fields['lastLogIn']) {
+        if (!$limitFields OR isset($fields['lastLogIn']) AND true == $fields['lastLogIn']) {
             $lastLogIn = $visitor->getLastLogIn();
             $visitorData['lastLogIn'] = !empty($lastLogIn) ? $lastLogIn->format('Y-m-d H:i:s') : '';
         }
-        if ($limitFields && isset($fields['password']) && true == $fields['password']) {
+        if (!$limitFields OR isset($fields['password']) AND true == $fields['password']) {
             $visitorData['password'] = $visitor->getPassword();
         }
-        if ($limitFields && isset($fields['postalCode']) && true == $fields['postalCode']) {
+        if (!$limitFields OR isset($fields['postalCode']) AND true == $fields['postalCode']) {
             $visitorData['postalCode'] = $visitor->getPostalCode();
         }
-        if ($limitFields && isset($fields['profileImg']) && true == $fields['profileImg']) {
+        if (!$limitFields OR isset($fields['profileImg']) AND true == $fields['profileImg']) {
             $visitorData['profileImg'] = $visitor->getProfileImg();
         }
-        if ($limitFields && isset($fields['pwd']) && true == $fields['pwd']) {
+        if (!$limitFields OR isset($fields['pwd']) AND true == $fields['pwd']) {
             $visitorData['pwd'] = $visitor->getPwd();
         }
-        if ($limitFields && isset($fields['status']) && true == $fields['status']) {
+        if (!$limitFields OR isset($fields['status']) AND true == $fields['status']) {
             $visitorData['status'] = (1 === $visitor->getStatus()) ? 'Online' : 'Offline';
         }
-        if ($limitFields && isset($fields['travelNewsLetter']) && true == $fields['travelNewsLetter']) {
+        if (!$limitFields OR isset($fields['travelNewsLetter']) AND true == $fields['travelNewsLetter']) {
             $visitorData['travelNewsLetter'] = (1 === $visitor->getTravelNewsLetter()) ? 'Yes' : 'No';
         }
-        if ($limitFields && isset($fields['weeklyNewsLetter']) && true == $fields['weeklyNewsLetter']) {
+        if (!$limitFields OR isset($fields['weeklyNewsLetter']) AND true == $fields['weeklyNewsLetter']) {
             $visitorData['weeklyNewsLetter'] = (1 === $visitor->getWeeklyNewsLetter()) ? 'Yes' : 'No';
         }
-        if ($limitFields && isset($fields['username']) && true == $fields['username']) {
+        if (!$limitFields OR isset($fields['username']) AND true == $fields['username']) {
             $visitorData['username'] = $visitor->getUsername();
         }
 

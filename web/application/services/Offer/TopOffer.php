@@ -70,4 +70,3 @@ class Application_Service_Offer_TopOffer extends Application_Service_Offer_Offer
         return $topOffers;
     }
 }
-

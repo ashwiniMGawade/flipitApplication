@@ -1,16 +1,21 @@
 <?php
 namespace Api\Controller;
 
+use \Core\Domain\Factory\TranslationsFactory;
 use \Nocarrier\Hal;
 use \Core\Service\Errors;
 
 class EmailContentsController extends ApiBaseController
 {
+    protected $translator;
     protected $emailTypes = array(
         'newsletter'
     );
+
     public function getEmailContents($emailType, $referenceId)
     {
+        $this->translator = TranslationsFactory::translator(LOCALE, 'nl_NL');
+
         if (!in_array($emailType, $this->emailTypes)) {
             $this->app->halt(400, json_encode(array('messages' => array('Invalid email type'))));
         }
