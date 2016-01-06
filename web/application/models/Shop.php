@@ -2222,11 +2222,14 @@ public static function getShopDetail($shopId)
     public static function updateShopFromExcelData($shopDetail, $shopId)
     {
         if (!empty($shopDetail)) {
-            $query = Doctrine_Query::create()->update('Shop');
+            $connection = Doctrine_Manager::connection();
+            $query = 'UPDATE shop SET metadescription = :metaDescription WHERE id = :shopId';
+            $statement = $connection->prepare($query);
             foreach ($shopDetail as $key => $value) {
-                $query = $query->set($key, "'".$value."'");
+                $statement->bindValue(':metaDescription', $value);
             }
-            $query = $query->where('id='. $shopId)->execute();
+            $statement->bindValue(':shopId', $shopId);
+            $statement->execute();
         }
         return true;
     }
