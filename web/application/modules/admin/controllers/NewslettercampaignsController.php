@@ -14,8 +14,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $this->_redirect('/admin/auth/index');
         }
 
-        $this->view->controllerName = $this->getRequest()
-            ->getParam('controller');
+        $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
 
         # redirect of a user don't have any permission for this controller
@@ -28,7 +27,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
     }
     public function init()
     {
-
     }
 
     public function indexAction()
@@ -141,11 +139,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
     public function createAction()
     {
         $this->view->newsletterCampaign = array();
-        $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
-        $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
-        $this->view->partOneSearchOffers = \KC\Repository\PopularCode::searchAllOffer(array());
-        $this->view->partTwoSearchOffers = \KC\Repository\PopularCode::searchAllOffer(array());
-
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
             $newsletterCampaign = AdminFactory::createNewsletterCampaign()->execute();
@@ -190,6 +183,10 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $campaignFooterSetting = SystemFactory::getSetting()->execute(array('name'=>'NEWSLETTER_CAMPAIGN_FOOTER'));
             $this->view->newsletterCampaign['campaignFooter'] = !empty($campaignFooterSetting) ? $campaignFooterSetting->value : '';
         }
+        $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
+        $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
+        $this->view->partOneSearchOffers = \KC\Repository\PopularCode::searchAllOffer(array());
+        $this->view->partTwoSearchOffers = \KC\Repository\PopularCode::searchAllOffer(array());
     }
 
     private function updateOffers($section, $newsletterCampaign, $offers)
@@ -240,19 +237,16 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
     {
         $parameters = $this->getAllParams();
         $this->view->newsletterCampaign = array();
-        $this->view->newsletterCampaign['id'] = $parameters['id'];
-        $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
-        $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
         $newsletterCampaign = AdminFactory::getNewsletterCampaign()->execute(array('id'=>$parameters['id']));
-
-        $this->_getOffersOfCampaign($parameters['id']);
-
-        $this->view->warnings = $this->checkNewsletterForWarnings($newsletterCampaign, true);
         if ($newsletterCampaign instanceof Errors) {
             $errors = $newsletterCampaign->getErrorsAll();
             $this->setFlashMessage('error', $errors);
             $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
         }
+
+        $this->_getOffersOfCampaign($parameters['id']);
+        $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
+
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
             if (isset($params['schedule'])) {
@@ -292,6 +286,8 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         } else {
             $this->view->newsletterCampaign = $this->_dismount($newsletterCampaign);
         }
+        $this->view->warnings = $this->checkNewsletterForWarnings($newsletterCampaign, true);
+        $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
     }
 
     public function deleteAction()
@@ -327,12 +323,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
 
     public function settingsAction()
     {
-        $campaignHeaderSetting = SystemFactory::getSetting()->execute(array('name'=>'NEWSLETTER_CAMPAIGN_HEADER'));
-        $this->view->campaign_header = !empty($campaignHeaderSetting) ? $campaignHeaderSetting->value : '';
-
-        $campaignFooterSetting = SystemFactory::getSetting()->execute(array('name'=>'NEWSLETTER_CAMPAIGN_FOOTER'));
-        $this->view->campaign_footer = !empty($campaignFooterSetting) ? $campaignFooterSetting->value : '';
-
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
             $isValid = true;
@@ -363,7 +353,13 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                 }
             }
         }
+        $campaignHeaderSetting = SystemFactory::getSetting()->execute(array('name'=>'NEWSLETTER_CAMPAIGN_HEADER'));
+        $this->view->campaign_header = !empty($campaignHeaderSetting) ? $campaignHeaderSetting->value : '';
+
+        $campaignFooterSetting = SystemFactory::getSetting()->execute(array('name'=>'NEWSLETTER_CAMPAIGN_FOOTER'));
+        $this->view->campaign_footer = !empty($campaignFooterSetting) ? $campaignFooterSetting->value : '';
     }
+
     private function prepareData($campaigns)
     {
         $returnData = array();
@@ -499,7 +495,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                         'offer' => $campaignOffer['title'],
                         'position' => $campaignOffer[0]['position'],
                         'shop' => ''
-//                            'shop'  => $campaignOffer->getOffer()->getShopOffers()->getName(),
                     );
                 }
             }
