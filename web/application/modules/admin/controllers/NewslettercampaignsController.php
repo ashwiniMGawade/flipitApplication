@@ -77,32 +77,28 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
     private function validateScheduleCampaign($params)
     {
         $response = [];
-        if(isset($params['scheduleDate']) && empty($params['scheduleDate']))
-        {
+        if (isset($params['scheduleDate']) && empty($params['scheduleDate'])) {
             $response['error'][] = "Please enter campaign scheduled Date";
         }
-        if(isset($params['campaignSubject']) && empty($params['campaignSubject']))
-        {
+        if (isset($params['campaignSubject']) && empty($params['campaignSubject'])) {
             $response['error'][] = "Please enter campaign subject";
         }
-        if(isset($params['campaignHeader']) && empty($params['campaignHeader']))
-        {
+        if (isset($params['campaignHeader']) && empty($params['campaignHeader'])) {
             $response['error'][] = "Please enter campaign Header";
         }
-        if(isset($params['campaignFooter']) && empty($params['campaignFooter']))
-        {
+        if (isset($params['campaignFooter']) && empty($params['campaignFooter'])) {
             $response['error'][] = "Please enter campaign Footer";
         }
-        if(isset($params['senderName']) && empty($params['senderName']))
-        {
+        if (isset($params['senderName']) && empty($params['senderName'])) {
             $response['error'][] = "Please enter sender Name";
         }
         return $response;
     }
 
-    private function checkNewsletterForWarnings($newsletterCampaign, $returnWarnings = false) {
+    private function checkNewsletterForWarnings($newsletterCampaign, $returnWarnings = false)
+    {
         $warnings = [];
-        if ($newsletterCampaign->getScheduledStatus() == 1 ){
+        if ($newsletterCampaign->getScheduledStatus() == 1) {
             //another newsletter is scheduled within 24 hours
             $beginOfDay = strtotime("midnight", $newsletterCampaign->getScheduledTime());
             $endOfDay   = strtotime("tomorrow", $beginOfDay) - 1;
@@ -125,9 +121,9 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                 $errors = $result->getErrorsAll();
                 $this->setFlashMessage('error', $errors);
             } else {
-                foreach($result as $offerData) {
+                foreach ($result as $offerData) {
                     $startDate = $offerData['startDate'];
-                    if( $newsletterCampaign->getScheduledTime() < $startDate->format('U')) {
+                    if ($newsletterCampaign->getScheduledTime() < $startDate->format('U')) {
                         $warnings[] = 'Offer "'. $offerData['title'] . '" wont be live when newsletter is sent';
                         if (!$returnWarnings) {
                             return true;
@@ -147,6 +143,9 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $this->view->newsletterCampaign = array();
         $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
+        $this->view->partOneSearchOffers = \KC\Repository\PopularCode::searchAllOffer(array());
+        $this->view->partTwoSearchOffers = \KC\Repository\PopularCode::searchAllOffer(array());
+
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
             $newsletterCampaign = AdminFactory::createNewsletterCampaign()->execute();
@@ -159,8 +158,8 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                         $this->setFlashMessage('error', implode('.', $validationResults['error']));
                         return;
                     }
-                    $userTimezone = new DateTimeZone( $this->view->localeSettings['0']['timezone']);
-                    $date = new DateTime( $params['scheduleDate'] . $params['scheduleTime'] , $userTimezone );
+                    $userTimezone = new DateTimeZone($this->view->localeSettings['0']['timezone']);
+                    $date = new DateTime($params['scheduleDate'] . $params['scheduleTime'], $userTimezone);
                     $params['scheduledStatus'] = 1;
                     $params['scheduledTime'] = $date->getTimestamp();
                 }
@@ -245,6 +244,9 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
         $newsletterCampaign = AdminFactory::getNewsletterCampaign()->execute(array('id'=>$parameters['id']));
+
+        $this->_getOffersOfCampaign($parameters['id']);
+
         $this->view->warnings = $this->checkNewsletterForWarnings($newsletterCampaign, true);
         if ($newsletterCampaign instanceof Errors) {
             $errors = $newsletterCampaign->getErrorsAll();
@@ -259,8 +261,8 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     $this->setFlashMessage('error', implode('.', $validationResults['error']));
                     return;
                 }
-                $userTimezone = new DateTimeZone( $this->view->localeSettings['0']['timezone']);
-                $date = new DateTime( $params['scheduleDate'] . $params['scheduleTime'] , $userTimezone );
+                $userTimezone = new DateTimeZone($this->view->localeSettings['0']['timezone']);
+                $date = new DateTime($params['scheduleDate'] . $params['scheduleTime'], $userTimezone);
                 $params['scheduledStatus'] = 1;
                 $params['scheduledTime'] = $date->getTimestamp();
             }
@@ -371,8 +373,8 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                 $scheduledTime = $campaign->getScheduledTime();
                 $scheduledDate = '';
                 if (!empty($scheduledTime)) {
-                    $userTimezone = new DateTimeZone( $localeSettings['0']['timezone']);
-                    $date = DateTime::createFromFormat( 'U', $scheduledTime );
+                    $userTimezone = new DateTimeZone($localeSettings['0']['timezone']);
+                    $date = DateTime::createFromFormat('U', $scheduledTime);
                     $date->setTimeZone($userTimezone);
                     $scheduledDate =  $date->format('Y-m-d H:i:s');
                 }
@@ -458,40 +460,27 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $varnishObject->addUrl("http://www.flipit.com");
     }
 
-    public function getofferslistAction()
+    private function _getOffersOfCampaign($campaignId)
     {
-        $this->_helper-> layout()->disableLayout();
         $conditions = array('deleted' => 0);
-        $params = $this->getRequest()->getParams();
-        $campaignId = isset($params['campaignId']) ? $params['campaignId']: 0;
-        $this->view->partOneOffers = [];
-        $this->view->partTwoOffers = [];
+
         $existingPartOneOffers = [];
         $existingPartTwoOffers = [];
 
         if (! empty($campaignId)) {
-            $campaignDetails = AdminFactory::getNewsletterCampaign()->execute(array('id' => $campaignId));
-            if ($campaignDetails instanceof Errors) {
-                $errors = $campaignDetails->getErrorsAll();
-                $this->setFlashMessage('error', $errors);
-            } else {
-                $conditions['campaignId'] = $campaignId;
-            }
-            $this->view->partOneOffers = $this->_getSectionOffers($conditions, 1);
-            $this->view->partTwoOffers = $this->_getSectionOffers($conditions, 2);
+            $conditions['campaignId'] = $campaignId;
         }
+        $this->view->partOneOffers = $this->_getSectionOffers($conditions, 1);
+        $this->view->partTwoOffers = $this->_getSectionOffers($conditions, 2);
 
         foreach ($this->view->partOneOffers as $pOffer) {
             $existingPartOneOffers[] = $pOffer['id'];
         }
-
         foreach ($this->view->partTwoOffers as $pOffer) {
             $existingPartTwoOffers[] = $pOffer['id'];
         }
-
         $this->view->partOneSearchOffers = \KC\Repository\PopularCode::searchAllOffer($existingPartOneOffers);
         $this->view->partTwoSearchOffers = \KC\Repository\PopularCode::searchAllOffer($existingPartTwoOffers);
-     
     }
 
     private function _getSectionOffers($conditions, $section)

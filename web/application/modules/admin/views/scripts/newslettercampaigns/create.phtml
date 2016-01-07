@@ -7,6 +7,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.ui.widget.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.bootstrap.wizard.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampaign.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/jquery-ui-1.8.16.custom.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/newsletterCampaignOffers.js");
 $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.dataTables.min.js" );
 $this->headScript ()->appendFile ( PUBLIC_PATH . "js/dataTableComman.js" );
 $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.dataTables.rowReordering.js" );
@@ -193,8 +195,142 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                         </div>
                     </div>
                     <div class="tab-pane" id="step2">
-                        <div class="mainpage-content"></div>
+                        <div class="mainpage-content">
+                            <div class="wrap columns-2" id="campaignOffersOne">
+                                <h1>
+                                    <?php echo $this->translate('Offer part 1'); ?>
+                                </h1>
+                                <?php echo $this->flashMessages(); ?>
+                                <div  class="metabox-holder has-right-sidebar">
+                                    <div id="side-info-column" class="inner-sidebar-coupon">
+                                        <div id="side-sortables" class="meta-box-sortables ui-sortable">
+                                            <div class="coupon-sidebar-outer">
+                                                <div class="coupon-sidebar-heading">
+                                                    <select  style="display: none; width : 389px;" class="combobox" name="PartOneOfferlist" id="PartOneOfferlist">
+                                                        <option value=""></option>
+                                                        <?php
+                                                        foreach ($this->partOneSearchOffers as $offerDetail) {
+                                                            if (trim ($offerDetail ['title'] ) != '') {
+                                                                $offer = substr ($offerDetail ['title'], 0, 70 );
+                                                                ?>
+                                                                <option  value="<?php echo $offerDetail['id']; ?>"><?php echo $offer; ?></option>
+                                                            <?php }} ?>
+                                                    </select>
+                                                    <input type="hidden" name="selctedOffer" id="selctedOffer" value="">
+                                                    <input type="hidden" name="selctedOfferText" id="selctedOfferText" value="">
+                                                    <!--<input placeholder="search offer" id='searchCouponTxt' type="text" class="input-medium search-query">-->
+                                                    <input type='hidden' name="SearchedValueIds" id="SearchedValueIds" value="">
+                                                </div>
+                                                <div class="coupon-sidebar-content-box">
+                                                    <a onClick='addNewOffer(this)' class="btn btn-primary addNewOffer" >ADD NEW OFFER</a>
+                                                </div>
+                                                <div class="mb10"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="post-body">
+                                        <div id="post-body-content-coupon">
+                                            <div class="top-coupon-list">
+                                                <table class="table table-bordered table-striped"  cellpadding="0" cellspacing="0" id="partOneOffers">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th><?php echo $this->translate('Offer Name'); ?></th>
+                                                        <th><?php echo $this->translate('Shop Name'); ?></th>
+                                                        <th><?php echo $this->translate('Action'); ?></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <?php if( !empty($this->partOneOffers)):
+                                                        $row = 1;
+                                                        foreach($this->partOneOffers as $offer): ?>
+                                                            <tr id="row_<?php echo $offer['id']; ?>" data-position="<?php echo $row; ?>">
+                                                                <td><?php echo $row; ?></td>
+                                                                <td><input type="hidden" name="partOneOffers[]" value="<?php echo $offer['id']; ?>"><?php echo $offer['offer']; ?></td>
+                                                                <td><?php echo $offer['shop']; ?></td>
+                                                                <td>
+                                                                    <input type="button" class="btn ml10 mb10" type="button" onClick="deleteOne('row_<?php echo $offer['id']; ?>', 'campaignOffersOne')" value='Delete'>
+                                                                </td>
+                                                            </tr>
+                                                            <?php $row++; endforeach; ?>
+                                                    <?php endif; ?>
+                                                </table>
+                                                <label class="toplinks-outer" style="color: #3a87ad"><i>* <?php echo $this->translate('You can drag & drop the offers to reorder'); ?></i></label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+
+                            <div class="wrap columns-2" id="campaignOffersTwo">
+                                <h1>
+                                    <?php echo $this->translate('Offer part 2'); ?>
+                                </h1>
+                                <?php echo $this->flashMessages(); ?>
+                                <div  class="metabox-holder has-right-sidebar">
+                                    <div id="side-info-column" class="inner-sidebar-coupon">
+                                        <div id="side-sortables" class="meta-box-sortables ui-sortable">
+                                            <div class="coupon-sidebar-outer">
+                                                <div class="coupon-sidebar-heading">
+                                                    <select  style="display: none; width : 389px;" class="combobox" name="PartTwoOfferlist" id="PartTwoOfferlist">
+                                                        <option value=""></option>
+                                                        <?php
+                                                        foreach ($this->partOneSearchOffers as $offerDetail) {
+                                                            if (trim ($offerDetail ['title'] ) != '') {
+                                                                $offer = substr ($offerDetail ['title'], 0, 70 );
+                                                                ?>
+                                                                <option  value="<?php echo $offerDetail['id']; ?>"><?php echo $offer; ?></option>
+                                                            <?php }} ?>
+                                                    </select>
+                                                    <input type="hidden" name="selctedOffer" id="selctedOffer" value="">
+                                                    <input type="hidden" name="selctedOfferText" id="selctedOfferText" value="">
+                                                    <input type='hidden' name="SearchedValueIds" id="SearchedValueIds" value="">
+                                                </div>
+                                                <div class="coupon-sidebar-content-box">
+                                                    <a onClick='addNewOffer(this)' class="btn btn-primary addNewOffer" >ADD NEW OFFER</a>
+                                                </div>
+                                                <div class="mb10"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="post-body">
+                                        <div id="post-body-content-coupon">
+                                            <div class="top-coupon-list">
+                                                <table class="table table-bordered table-striped"  cellpadding="0" cellspacing="0" id="partTwoOffers">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th><?php echo $this->translate('Offer Name'); ?></th>
+                                                        <th><?php echo $this->translate('Shop Name'); ?></th>
+                                                        <th><?php echo $this->translate('Action'); ?></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <?php if( true == !empty($this->partTwoOffers)):
+                                                        $row = 1;
+                                                        foreach($this->partTwoOffers as $offer): ?>
+                                                            <tr id="row_<?php echo $offer['id']; ?>" data-position="<?php echo $row; ?>">
+                                                                <td><?php echo $row; ?></td>
+                                                                <td><input type="hidden" name="partTwoOffers[]" value="<?php echo $offer['id']; ?>"><?php echo $offer['offer']; ?></td>
+                                                                <td><?php echo $offer['shop']; ?></td>
+                                                                <td>
+                                                                    <input type="button" class="btn ml10 mb10" type="button" onClick="deleteOne('row_<?php echo $offer['id']; ?>', 'campaignOffersTwo')"  value='Delete'>
+                                                                </td>
+                                                            </tr>
+                                                            <?php $row++; endforeach; ?>
+                                                    <?php endif; ?>
+                                                </table>
+                                                <label class="toplinks-outer" style="color: #3a87ad"><i>* <?php echo $this->translate('You can drag & drop the offers to reorder'); ?></i></label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
                     </div>
+
                     <div class="tab-pane" id="step3">
                         <div class="mainpage-content">
                             <div class="mainpage-content-line">

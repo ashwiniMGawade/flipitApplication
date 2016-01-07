@@ -2,16 +2,9 @@ $(function(){
         $('#NewsletterWizardform').bootstrapWizard({
             'tabClass': 'nav nav-tabs',
             'onNext': function(tab, navigation, index) {
-                if(tab.next().find('a').attr('id') == 'campaignOffers') {
-                    getOffersData();
-                }
                 return true;
-                // wrire validation logic here
             },
             onTabClick: function(tab, navigation, index) {
-                if(tab.next().find('a').attr('id') == 'campaignOffers') {
-                    getOffersData();
-                }
                 return true;
             },
             onTabShow: function(tab, navigation, index) {
@@ -29,23 +22,6 @@ $(function(){
                 $('#NewsletterWizardform').find('.progress-bar').css({width:$percent+'%'});
             }
         });
-
-    var getOffersData = function() {
-        if ( ! $("#step2 .mainpage-content").html()) {
-            $.ajax({
-                url: HOST_PATH + "admin/newslettercampaigns/getOfferslist",
-                type: 'post',
-                data: {'campaignId': $('#NewsletterWizardform').data('id')},
-                success: function (data) {
-                    $("#step2 .mainpage-content").html(data);
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            });
-        }
-    }
-
 
     var ranNum = Math.floor((Math.random()*50)+1);
     var info = $('#gi'), num='';
