@@ -96,6 +96,8 @@ class UpdateNewsletterCampaignUsecase
         $newsletterCampaign->setUpdatedAt(new \DateTime('now'));
         $validationResult = $this->newsletterCampaignValidator->validate($newsletterCampaign);
 
+        var_dump($newsletterCampaign); exit;
+
         if (true !== $validationResult && is_array($validationResult)) {
             $this->errors->setErrors($validationResult);
             return $this->errors;

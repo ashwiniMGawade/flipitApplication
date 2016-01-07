@@ -69,10 +69,10 @@ use \Core\Domain\Usecase\Admin\CreateNewsletterCampaignOfferUsecase;
 use \Core\Domain\Usecase\Admin\AddNewsletterCampaignOfferUsecase;
 use \Core\Domain\Usecase\Admin\DeleteNewsletterCampaignOfferUsecase;
 
-use \Core\Domain\Usecase\Admin\getOfferDTOUsecase;
-
 use \Core\Domain\Usecase\Admin\ValidateScheduledNewsletterCampaignUsecase;
 use \Core\Domain\Usecase\Admin\GetNewsletterCampaignWarningsUsecase;
+
+
 
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\LandingPageValidator;
@@ -389,7 +389,7 @@ class AdminFactory
 
     public static function getNewsletterCampaign()
     {
-        return new GetNewsletterCampaignUsecase(RepositoryFactory::newsletterCampaign(), new Purifier(), new Errors());
+        return new GetNewsletterCampaignUsecase(RepositoryFactory::newsletterCampaign(), RepositoryFactory::localeSettings(),  new Purifier(), new Errors());
     }
 
     public static function getNewsletterCampaignsByConditions()
@@ -449,10 +449,6 @@ class AdminFactory
     public static function deleteNewsletterCampaignOffer()
     {
         return new DeleteNewsletterCampaignOfferUsecase(RepositoryFactory::newsletterCampaignOffer());
-    }
-
-    public static function getOfferDTO() {
-        return new getOfferDTOUsecase(RepositoryFactory::offer(), new Purifier(), new Errors());
     }
 
     public static function validateScheduledNewsletterCampaign() {

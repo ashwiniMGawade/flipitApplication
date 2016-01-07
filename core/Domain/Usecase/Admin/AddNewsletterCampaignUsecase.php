@@ -95,6 +95,8 @@ class AddNewsletterCampaignUsecase
 
         $validationResult = $this->newsletterCampaignValidator->validate($newsletterCampaign);
 
+
+
         if (true !== $validationResult && is_array($validationResult)) {
             $this->errors->setErrors($validationResult);
             return $this->errors;

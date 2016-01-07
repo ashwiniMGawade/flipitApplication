@@ -65,6 +65,6 @@ class AddNewsletterCampaignOfferUsecase
             $this->errors->setErrors($validationResult);
             return $this->errors;
         }
-        return $this->newsletterCampaignOfferRepository->save($newsletterCampaignOffer);
+        return $this->newsletterCampaignOfferRepository->addNewsletterCampaignOffer($newsletterCampaignOffer);
     }
 }

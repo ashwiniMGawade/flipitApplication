@@ -26,10 +26,10 @@ class NewsletterCampaignOfferValidator
                 $this->validator->notNull(array('message'=>'Newsletter campaign should not be blank.')),
                 $this->validator->type(array('type' => 'object'))
             ),
-            'offer' => array(
-                $this->validator->notNull(array('message'=>'Newsletter campaign offer should not be blank.')),
-                $this->validator->type(array('type' => 'object'))
-            ),
+//            'offer' => array(
+//                $this->validator->notNull(array('message'=>'Newsletter campaign offer should not be blank.')),
+//                $this->validator->type(array('type' => 'object'))
+//            ),
             'position' => array(
                 $this->validator->notNull(array('message'=>'Position should not be blank.')),
                 $this->validator->greaterThan(array('value' => 0, 'message' => 'Position should be numeric and greater than zero.'))

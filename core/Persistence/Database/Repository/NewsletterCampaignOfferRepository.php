@@ -41,5 +41,35 @@ class NewsletterCampaignOfferRepository extends BaseRepository implements Newsle
     public function addNewsletterCampaignOffer($offer)
     {
 
+        $queryBuilder = $this->em->createQueryBuilder();
+
+        $offer->offer = $this->em->getReference('\Core\Domain\Entity\NewsletterCampaignOffer', $offer->getOfferId());
+        $offer->newsletterCampaign = $this->em->getReference('\Core\Domain\Entity\NewsletterCampaign', $offer->getNewsletterCampaign()->getId());
+
+        $this->em->persist($offer);
+        $this->em->flush();
+
+//        $queryBuilder->insert('newsletterCampaignOffers')
+//            ->values(
+//                array(
+//                    'campaignId' => '?',
+//                    'offerId' => '?',
+//                    'position' => '?',
+//                    'section' => '?',
+//                    'deleted' => '?',
+//                    'createdAt' => '?',
+//                    'updatedAt' => '?',
+//
+//                )
+//            )
+//            ->setParameter(0, $offer->getNewsletterCampaign()->getId())
+//            ->setParameter(1, $offer->getOfferId())
+//            ->setParameter(2, $offer->getPosition())
+//            ->setParameter(3, $offer->getSection())
+//            ->setParameter(4, $offer->getDeleted())
+//            ->setParameter(5, $offer->getCreatedAt())
+//            ->setParameter(6, $offer->getUpdatedAt());
+//        $query = $queryBuilder->getQuery();
+//        $query->execute();
     }
 }

@@ -2,12 +2,17 @@
 namespace Core\Domain\Usecase\Admin;
 
 use \Core\Domain\Repository\NewsletterCampaignRepositoryInterface;
+use \Core\Domain\Repository\LocalSettingsRepositoryInterface;
 use \Core\Domain\Adapter\PurifierInterface;
 use \Core\Service\Errors\ErrorsInterface;
 
 class GetNewsletterCampaignUsecase
 {
+    use \Core\Domain\Usecase\Helpers\NewsletterCampaignBuilder;
+
     protected $newsletterCampaignRepository;
+
+    protected $localSettingsRepository;
 
     protected $htmlPurifier;
 
@@ -15,10 +20,12 @@ class GetNewsletterCampaignUsecase
 
     public function __construct(
         NewsletterCampaignRepositoryInterface $newsletterCampaignRepository,
+        LocalSettingsRepositoryInterface $localSettingsRepository,
         PurifierInterface $htmlPurifier,
         ErrorsInterface $errors
     ) {
         $this->newsletterCampaignRepository = $newsletterCampaignRepository;
+        $this->localSettingsRepository = $localSettingsRepository;
         $this->htmlPurifier     = $htmlPurifier;
         $this->errors           = $errors;
     }
@@ -37,6 +44,10 @@ class GetNewsletterCampaignUsecase
             $this->errors->setError('Newsletter Campaign not found');
             return $this->errors;
         }
+
+        $localeSettings =  $this->localSettingsRepository->findBy('\Core\Domain\Entity\LocaleSettings');
+        $newsletterCampaign->warnings = $this->checkNewsletterForWarnings($newsletterCampaign, $localeSettings);
+
         return $newsletterCampaign;
     }
 }
