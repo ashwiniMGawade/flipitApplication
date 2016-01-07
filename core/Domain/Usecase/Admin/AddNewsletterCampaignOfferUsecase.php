@@ -35,12 +35,17 @@ class AddNewsletterCampaignOfferUsecase
             $this->errors->setError('Invalid Parameters');
             return $this->errors;
         }
+
         $params = $this->htmlPurifier->purify($params);
+
         if (isset($params['newsletterCampaign'])) {
             $newsletterCampaignOffer->setNewsletterCampaign($params['newsletterCampaign']);
         }
         if (isset($params['offer'])) {
             $newsletterCampaignOffer->setOffer($params['offer']);
+        }
+        if (isset($params['offerId'])) {
+            $newsletterCampaignOffer->setOfferId($params['offerId']);
         }
         if (isset($params['position'])) {
             $newsletterCampaignOffer->setPosition($params['position']);

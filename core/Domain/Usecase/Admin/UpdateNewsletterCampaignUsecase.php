@@ -35,6 +35,8 @@ class UpdateNewsletterCampaignUsecase
             $this->errors->setError('Invalid Parameters');
             return $this->errors;
         }
+        unset($params['partOneOffers']);
+        unset($params['partTwoOffers']);
         $params = $this->htmlPurifier->purify($params);
         if (isset($params['campaignName'])) {
             $newsletterCampaign->setCampaignName($params['campaignName']);

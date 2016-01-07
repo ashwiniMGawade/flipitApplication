@@ -14,8 +14,12 @@ class DeleteNewsletterCampaignOfferUsecase
         $this->newsletterCampaignOfferRepository = $newsletterCampaignOfferRepository;
     }
 
-    public function execute(NewsletterCampaignOffer $newsletterCampaignOffer)
+    public function execute($offerIds)
     {
-        return $this->newsletterCampaignOfferRepository->remove($newsletterCampaignOffer);
+        if (empty($offerIds)) {
+            $this->errors->setError('Invalid Parameters');
+            return $this->errors;
+        }
+        return $this->newsletterCampaignOfferRepository->deleteNewsletterCampaignOffers($offerIds);
     }
 }

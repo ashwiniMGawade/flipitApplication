@@ -26,4 +26,20 @@ class NewsletterCampaignOfferRepository extends BaseRepository implements Newsle
         $result = $query->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $result;
     }
+
+    public function deleteNewsletterCampaignOffers($offerIds)
+    {
+        $queryBuilder = $this->em->createQueryBuilder();
+
+        $queryBuilder->delete('\Core\Domain\Entity\NewsletterCampaignOffer', 'o')
+        ->where($queryBuilder->expr()->In('o.id', $offerIds))
+        ->getQuery()
+        ->execute();
+    }
+
+
+    public function addNewsletterCampaignOffer($offer)
+    {
+
+    }
 }
