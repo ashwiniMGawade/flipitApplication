@@ -1,7 +1,8 @@
 <?php
 namespace Api\Controller;
 
-use Core\Domain\Factory\SystemFactory;
+use \Core\Domain\Factory\AdminFactory;
+use \Core\Domain\Factory\SystemFactory;
 use \Core\Domain\Factory\TranslationsFactory;
 use \Nocarrier\Hal;
 use \Core\Service\Errors;
@@ -32,7 +33,7 @@ class EmailContentsController extends ApiBaseController
         $emailContent = null;
         switch($emailType) {
             case 'newsletter':
-                $emailContent = $this->buildNewsletterEmailContent();
+                $emailContent = $this->buildNewsletterEmailContent($referenceId);
                 break;
             default:
                 break;
@@ -44,9 +45,13 @@ class EmailContentsController extends ApiBaseController
         echo $response->asJson();
     }
 
-    private function buildNewsletterEmailContent ()
+    private function buildNewsletterEmailContent ($referenceId)
     {
-        $html = $this->app->view()->fetch('newsletter.php', array('email' => 'Imbull'));
+        $newsletterCampaign = AdminFactory::getNewsletterCampaign()->execute(array('id' => $referenceId));
+        if ($newsletterCampaign instanceof Errors) {
+            $this->app->halt(400, json_encode(array('messages' => array('Newsletter campaign record not found'))));
+        }
+        $html = $this->app->view()->fetch('newsletter.php', array('newsletterCampaign' => $newsletterCampaign));
         return $html;
     }
 }
