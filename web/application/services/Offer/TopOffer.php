@@ -10,9 +10,10 @@ class Application_Service_Offer_TopOffer extends Application_Service_Offer_Offer
         $this->offerRepository = $offerRepository;
     }
 
-    public function execute($limit, $offerType='')
+    public function execute($limit, $offerType = 'MN')
     {
         $topCouponCodes = $this->offerRepository->getTopCouponCodes(array(), $limit, $offerType);
+
         $popularCode = [];
         foreach ($topCouponCodes as $coupon) {
             $popularCode[] = $coupon['popularcode']['id'];
