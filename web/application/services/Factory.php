@@ -2,7 +2,7 @@
 
 class Application_Service_Factory
 {
-    public static function topOffers($limit, $offerType='')
+    public static function topOffers($limit, $offerType = 'MN')
     {
         $topOffers = new Application_Service_Offer_TopOffer(new KC\Repository\Offer, $limit);
         return $topOffers->execute($limit, $offerType);
