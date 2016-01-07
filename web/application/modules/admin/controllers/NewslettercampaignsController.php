@@ -72,27 +72,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         return null != $orderByField ? array($orderByField => $orderByDirection) : array();
     }
 
-    private function validateScheduleCampaign($params)
-    {
-        $response = [];
-        if (isset($params['scheduleDate']) && empty($params['scheduleDate'])) {
-            $response['error'][] = "Please enter campaign scheduled Date";
-        }
-        if (isset($params['campaignSubject']) && empty($params['campaignSubject'])) {
-            $response['error'][] = "Please enter campaign subject";
-        }
-        if (isset($params['campaignHeader']) && empty($params['campaignHeader'])) {
-            $response['error'][] = "Please enter campaign Header";
-        }
-        if (isset($params['campaignFooter']) && empty($params['campaignFooter'])) {
-            $response['error'][] = "Please enter campaign Footer";
-        }
-        if (isset($params['senderName']) && empty($params['senderName'])) {
-            $response['error'][] = "Please enter sender Name";
-        }
-        return $response;
-    }
-
     private function checkNewsletterForWarnings($newsletterCampaign, $returnWarnings = false)
     {
         $warnings = [];
@@ -146,7 +125,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $this->view->newsletterCampaign = $this->getAllParams();
             if ($params) {
                 if (isset($params['schedule'])) {
-                    $validationResults = $this->validateScheduleCampaign($params);
+                    $validationResults = AdminFactory::validateScheduledNewsletterCampaign()->execute($params);
                     if (isset($validationResults['error'])) {
                         $this->setFlashMessage('error', implode('.', $validationResults['error']));
                         return;
@@ -187,6 +166,63 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
         $this->view->partOneSearchOffers = \KC\Repository\PopularCode::searchAllOffer(array());
         $this->view->partTwoSearchOffers = \KC\Repository\PopularCode::searchAllOffer(array());
+    }
+
+    public function editAction()
+    {
+        $parameters = $this->getAllParams();
+        $this->view->newsletterCampaign = array();
+        $newsletterCampaign = AdminFactory::getNewsletterCampaign()->execute(array('id'=>$parameters['id']));
+        if ($newsletterCampaign instanceof Errors) {
+            $errors = $newsletterCampaign->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+        }
+
+        $this->_getOffersOfCampaign($parameters['id']);
+        $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
+
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getRequest()->getParams();
+            if (isset($params['schedule'])) {
+                $validationResults = AdminFactory::validateScheduledNewsletterCampaign()->execute($params);
+                if (isset($validationResults['error'])) {
+                    $this->setFlashMessage('error', implode('.', $validationResults['error']));
+                    return;
+                }
+                $userTimezone = new DateTimeZone($this->view->localeSettings['0']['timezone']);
+                $date = new DateTime($params['scheduleDate'] . $params['scheduleTime'], $userTimezone);
+                $params['scheduledStatus'] = 1;
+                $params['scheduledTime'] = $date->getTimestamp();
+            }
+            $params = $this->_handleImageUpload($params, $newsletterCampaign->headerBanner, $newsletterCampaign->footerBanner);
+            $this->view->newsletterCampaign = $this->getAllParams();
+            if ($params) {
+                $newsletterCampaign = AdminFactory::updateNewsletterCampaign()->execute($newsletterCampaign, $params);
+                if ($newsletterCampaign instanceof Errors) {
+                    $errors = $newsletterCampaign->getErrorsAll();
+                    $this->setFlashMessage('error', $errors);
+                } else {
+                    if (isset($params['partOneOffers']) && !empty($params['partOneOffers'])) {
+                        $this->updateOffers(1, $newsletterCampaign, $params['partOneOffers']);
+                    }
+                    if (isset($params['partTwoOffers']) && !empty($params['partTwoOffers'])) {
+                        $this->updateOffers(2, $newsletterCampaign, $params['partTwoOffers']);
+                    }
+                    $this->refreshNewsletterCampaignPageVarnish();
+                    $this->setFlashMessage('success', 'News letter campaign has been updated successfully.</br>'. implode('<br/>', $this->message));
+                    $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+                }
+            }
+        }
+        if ($newsletterCampaign instanceof Errors) {
+            $errors = $newsletterCampaign->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+        } else {
+            $this->view->newsletterCampaign = $this->_dismount($newsletterCampaign);
+        }
+        $this->view->warnings = $this->checkNewsletterForWarnings($newsletterCampaign, true);
+        $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
     }
 
     private function updateOffers($section, $newsletterCampaign, $offers)
@@ -231,63 +267,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $errors = $result->getErrorsAll();
             $this->setFlashMessage('error', $errors);
         }
-    }
-
-    public function editAction()
-    {
-        $parameters = $this->getAllParams();
-        $this->view->newsletterCampaign = array();
-        $newsletterCampaign = AdminFactory::getNewsletterCampaign()->execute(array('id'=>$parameters['id']));
-        if ($newsletterCampaign instanceof Errors) {
-            $errors = $newsletterCampaign->getErrorsAll();
-            $this->setFlashMessage('error', $errors);
-            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
-        }
-
-        $this->_getOffersOfCampaign($parameters['id']);
-        $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
-
-        if ($this->getRequest()->isPost()) {
-            $params = $this->getRequest()->getParams();
-            if (isset($params['schedule'])) {
-                $validationResults = $this->validateScheduleCampaign($params);
-                if (isset($validationResults['error'])) {
-                    $this->setFlashMessage('error', implode('.', $validationResults['error']));
-                    return;
-                }
-                $userTimezone = new DateTimeZone($this->view->localeSettings['0']['timezone']);
-                $date = new DateTime($params['scheduleDate'] . $params['scheduleTime'], $userTimezone);
-                $params['scheduledStatus'] = 1;
-                $params['scheduledTime'] = $date->getTimestamp();
-            }
-            $params = $this->_handleImageUpload($params, $newsletterCampaign->headerBanner, $newsletterCampaign->footerBanner);
-            $this->view->newsletterCampaign = $this->getAllParams();
-            if ($params) {
-                $newsletterCampaign = AdminFactory::updateNewsletterCampaign()->execute($newsletterCampaign, $params);
-                if ($newsletterCampaign instanceof Errors) {
-                    $errors = $newsletterCampaign->getErrorsAll();
-                    $this->setFlashMessage('error', $errors);
-                } else {
-                    if (isset($params['partOneOffers']) && !empty($params['partOneOffers'])) {
-                        $this->updateOffers(1, $newsletterCampaign, $params['partOneOffers']);
-                    }
-                    if (isset($params['partTwoOffers']) && !empty($params['partTwoOffers'])) {
-                        $this->updateOffers(2, $newsletterCampaign, $params['partTwoOffers']);
-                    }
-                    $this->refreshNewsletterCampaignPageVarnish();
-                    $this->setFlashMessage('success', 'News letter campaign has been updated successfully.</br>'. implode('<br/>', $this->message));
-                    $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
-                }
-            }
-        }
-        if ($newsletterCampaign instanceof Errors) {
-            $errors = $newsletterCampaign->getErrorsAll();
-            $this->setFlashMessage('error', $errors);
-        } else {
-            $this->view->newsletterCampaign = $this->_dismount($newsletterCampaign);
-        }
-        $this->view->warnings = $this->checkNewsletterForWarnings($newsletterCampaign, true);
-        $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
     }
 
     public function deleteAction()
