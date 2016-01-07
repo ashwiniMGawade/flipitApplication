@@ -1,6 +1,7 @@
 <?php
 namespace Api\Controller;
 
+use Core\Domain\Factory\SystemFactory;
 use \Core\Domain\Factory\TranslationsFactory;
 use \Nocarrier\Hal;
 use \Core\Service\Errors;
@@ -14,7 +15,12 @@ class EmailContentsController extends ApiBaseController
 
     public function getEmailContents($emailType, $referenceId)
     {
-        $this->translator = TranslationsFactory::translator(LOCALE, 'nl_NL');
+        $localeLanguage = 'nl_NL';
+        $localSetting = SystemFactory::getLocaleSettings()->execute(array(), array(), 1);
+        if (!empty($localSetting)) {
+            $localeLanguage = $localSetting[0]->locale;
+        }
+        $this->translator = TranslationsFactory::translator(LOCALE, $localeLanguage);
 
         if (!in_array($emailType, $this->emailTypes)) {
             $this->app->halt(400, json_encode(array('messages' => array('Invalid email type'))));
