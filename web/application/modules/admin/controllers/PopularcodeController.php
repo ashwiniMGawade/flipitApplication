@@ -140,6 +140,7 @@ class Admin_PopularcodeController extends Application_Admin_BaseController
     {
         \KC\Repository\PopularCode::savePopularOffersPosition($this->getRequest()->getParam('offerid'));
         $popularCode = \KC\Repository\PopularCode::getPopularCode();
+        self::updateVarnish();
         echo \Zend_Json::encode($popularCode);
         exit();
     }
