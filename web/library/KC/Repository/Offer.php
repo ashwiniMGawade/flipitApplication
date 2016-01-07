@@ -3584,6 +3584,7 @@ class Offer extends \Core\Domain\Entity\Offer
             ->andWhere("o.discountType = 'CD'")
             ->andWhere('o.userGenerated = 0')
             ->andWhere("o.Visability != 'MEM'")
+            ->andWhere("p.type = 'MN'")
             ->orderBy('p.position', 'ASC')
             ->setMaxResults($limit)
             ->getQuery()
