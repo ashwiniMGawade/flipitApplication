@@ -1,10 +1,7 @@
 <?php
 namespace Usecase\Helpers;
 
-use Core\Domain\Factory\AdminFactory;
-use Core\Domain\Factory\SystemFactory;
 use Core\Domain\Entity\NewsletterCampaign;
-
 
 /**
  * Class NewsletterCampaignBuilderTest
@@ -14,6 +11,7 @@ use Core\Domain\Entity\NewsletterCampaign;
 class NewsletterCampaignBuilderTest extends \Codeception\TestCase\Test
 {
     use \Core\Domain\Usecase\Helpers\NewsletterCampaignBuilder;
+
     /**
      * @var \DomainTester
      */
@@ -26,5 +24,4 @@ class NewsletterCampaignBuilderTest extends \Codeception\TestCase\Test
     {
         $this->checkNewsletterForWarnings(new NewsletterCampaign);
     }
-
 }
