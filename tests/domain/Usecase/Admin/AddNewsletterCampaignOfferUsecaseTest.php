@@ -65,7 +65,7 @@ class AddNewsletterCampaignOfferUsecaseTest extends \Codeception\TestCase\Test
             'deleted' => 1
         );
 
-        $newsletterCampaignOfferRepository = $this->newsletterCampaignOfferRepositoryMockWithSaveMethod(new NewsletterCampaignOffer());
+        $newsletterCampaignOfferRepository = $this->newsletterCampaignOfferRepositoryMockWithAddNewsletterCampaignOfferMethod(new NewsletterCampaignOffer());
         $newsletterCampaignOfferValidator = $this->createNewsletterCampaignOfferValidatorMock(true);
         $result = (new AddNewsletterCampaignOfferUsecase(
             $newsletterCampaignOfferRepository,
@@ -82,12 +82,12 @@ class AddNewsletterCampaignOfferUsecaseTest extends \Codeception\TestCase\Test
         return $newsletterCampaignOfferRepositoryMock;
     }
 
-    private function newsletterCampaignOfferRepositoryMockWithSaveMethod($returns)
+    private function newsletterCampaignOfferRepositoryMockWithAddNewsletterCampaignOfferMethod($returns)
     {
         $newsletterCampaignOfferRepositoryMock = $this->NewsletterCampaignOfferRepositoryMock();
         $newsletterCampaignOfferRepositoryMock
             ->expects($this->once())
-            ->method('save')
+            ->method('addNewsletterCampaignOffer')
             ->with($this->isInstanceOf('\Core\Domain\Entity\NewsletterCampaignOffer'))
             ->willReturn($returns);
         return $newsletterCampaignOfferRepositoryMock;

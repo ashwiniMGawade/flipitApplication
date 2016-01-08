@@ -13,7 +13,7 @@ class GetNewsletterCampaignOffersUsecaseTest extends \Codeception\TestCase\Test
         $expectedNewsletterCampaignOffers = 0;
         $newsletterCampaignOfferRepository = $this->createNewsletterCampaignOffersRepositoryWithFindByMethodMock($expectedNewsletterCampaignOffers);
         $newsletterCampaignOffers = (new GetNewsletterCampaignOffersUsecase($newsletterCampaignOfferRepository, new Purifier(), new Errors()))->execute();
-        $this->assertEquals($expectedNewsletterCampaignOffers, $newsletterCampaignOffers);
+        $this->assertEquals(0, $newsletterCampaignOffers);
     }
 
     public function testGetNewsletterCampaignOffersUsecaseReturnsArrayWhenRecordExist()
@@ -36,13 +36,6 @@ class GetNewsletterCampaignOffersUsecaseTest extends \Codeception\TestCase\Test
         $this->assertEquals($errors->getErrorsAll(), $result->getErrorsAll());
     }
 
-    public function testGetNewsletterCampaignOffersUsecaseReturnsArrayOfCampaignssObjectWhenParametersAreValid()
-    {
-        $newsletterCampaignOfferRepository = $this->createNewsletterCampaignOffersRepositoryInterfaceMockWithPaginatedMethod(array(new NewsletterCampaignOffer()));
-        $campaigns = (new GetNewsletterCampaignOffersUsecase($newsletterCampaignOfferRepository, new Purifier(), new Errors()))->execute(array(), array(), null, null, true);
-        $this->assertNotEmpty($campaigns);
-    }
-
     private function createNewsletterCampaignOfferRepositoryMock()
     {
         $newsletterCampaignOfferRepository = $this->getMock('\Core\Domain\Repository\NewsletterCampaignOfferRepositoryInterface');
@@ -53,19 +46,9 @@ class GetNewsletterCampaignOffersUsecaseTest extends \Codeception\TestCase\Test
     {
         $newsletterCampaignOfferRepository = $this->createNewsletterCampaignOfferRepositoryMock();
         $newsletterCampaignOfferRepository->expects($this->once())
-            ->method('findBy')
-            ->with($this->equalTo('\Core\Domain\Entity\NewsletterCampaignOffer'), $this->isType('array'))
+            ->method('findNewsletterCampaignOffers')
             ->willReturn($returns);
         return $newsletterCampaignOfferRepository;
     }
 
-    private function createNewsletterCampaignOffersRepositoryInterfaceMockWithPaginatedMethod($returns)
-    {
-        $newsletterCampaignOfferRepository = $this->createNewsletterCampaignOfferRepositoryMock();
-        $newsletterCampaignOfferRepository->expects($this->once())
-            ->method('findAllPaginated')
-            ->with('\Core\Domain\Entity\NewsletterCampaignOffer', $this->isType('array'), $this->isType('array'))
-            ->willReturn($returns);
-        return $newsletterCampaignOfferRepository;
-    }
 }

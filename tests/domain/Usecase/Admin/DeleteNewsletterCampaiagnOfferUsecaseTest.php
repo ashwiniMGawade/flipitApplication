@@ -9,7 +9,7 @@ class DeleteNewsletterCampaignOfferUsecaseTest extends \Codeception\TestCase\Tes
     public function testDeleteNewsletterCampaignOfferUsecase()
     {
         $newsletterCampaignOfferRepository = $this->createDeleteNewsletterCampaignOfferRepositoryInterfaceWithMethodsMock(true);
-        $this->assertEquals(true, (new DeleteNewsletterCampaignOfferUsecase($newsletterCampaignOfferRepository))->execute(new NewsletterCampaignOffer));
+        $this->assertEquals(true, (new DeleteNewsletterCampaignOfferUsecase($newsletterCampaignOfferRepository))->execute([1, 2]));
     }
 
     private function createDeleteNewsletterCampaignOfferRepositoryInterfaceWithMethodsMock($returns)
@@ -17,7 +17,7 @@ class DeleteNewsletterCampaignOfferUsecaseTest extends \Codeception\TestCase\Tes
         $newsletterCampaignOfferRepository = $this->getMock('\Core\Domain\Repository\NewsletterCampaignOfferRepositoryInterface');
         $newsletterCampaignOfferRepository
             ->expects($this->once())
-            ->method('remove')
+            ->method('deleteNewsletterCampaignOffers')
             ->willReturn($returns);
         return $newsletterCampaignOfferRepository;
     }

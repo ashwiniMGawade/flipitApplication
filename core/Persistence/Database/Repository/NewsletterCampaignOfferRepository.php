@@ -5,12 +5,14 @@ use Core\Domain\Repository\NewsletterCampaignOfferRepositoryInterface;
 
 class NewsletterCampaignOfferRepository extends BaseRepository implements NewsletterCampaignOfferRepositoryInterface
 {
-    public function findNewsletterCampaignOffers($conditions)
+    public function findNewsletterCampaignOffers($conditions, $order, $limit, $offset)
     {
         $queryBuilder = $this->em->createQueryBuilder()
             ->select('newsletterCampaignOffer', 'offer.id', 'offer.startDate', 'offer.title')
             ->from('\Core\Domain\Entity\NewsletterCampaignOffer', 'newsletterCampaignOffer')
-            ->join('newsletterCampaignOffer.offer', 'offer');
+            ->join('newsletterCampaignOffer.offer', 'offer')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset);
 
         $conditionsCount = 1;
         foreach ($conditions as $field => $value) {
@@ -20,6 +22,11 @@ class NewsletterCampaignOfferRepository extends BaseRepository implements Newsle
                 $queryBuilder->andWhere("newsletterCampaignOffer.$field='$value'");
             }
             $conditionsCount++;
+        }
+
+        if (false === empty($order)) {
+            $orderField = key($order);
+            $queryBuilder->orderBy("table.$orderField", $order[$orderField]);
         }
 
         $query = $queryBuilder->getQuery();
@@ -35,41 +42,16 @@ class NewsletterCampaignOfferRepository extends BaseRepository implements Newsle
         ->where($queryBuilder->expr()->In('o.id', $offerIds))
         ->getQuery()
         ->execute();
+        return true;
     }
 
 
     public function addNewsletterCampaignOffer($offer)
     {
-
-        $queryBuilder = $this->em->createQueryBuilder();
-
         $offer->offer = $this->em->getReference('\Core\Domain\Entity\NewsletterCampaignOffer', $offer->getOfferId());
         $offer->newsletterCampaign = $this->em->getReference('\Core\Domain\Entity\NewsletterCampaign', $offer->getNewsletterCampaign()->getId());
 
         $this->em->persist($offer);
         $this->em->flush();
-
-//        $queryBuilder->insert('newsletterCampaignOffers')
-//            ->values(
-//                array(
-//                    'campaignId' => '?',
-//                    'offerId' => '?',
-//                    'position' => '?',
-//                    'section' => '?',
-//                    'deleted' => '?',
-//                    'createdAt' => '?',
-//                    'updatedAt' => '?',
-//
-//                )
-//            )
-//            ->setParameter(0, $offer->getNewsletterCampaign()->getId())
-//            ->setParameter(1, $offer->getOfferId())
-//            ->setParameter(2, $offer->getPosition())
-//            ->setParameter(3, $offer->getSection())
-//            ->setParameter(4, $offer->getDeleted())
-//            ->setParameter(5, $offer->getCreatedAt())
-//            ->setParameter(6, $offer->getUpdatedAt());
-//        $query = $queryBuilder->getQuery();
-//        $query->execute();
     }
 }

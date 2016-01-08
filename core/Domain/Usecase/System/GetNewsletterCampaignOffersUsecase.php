@@ -18,7 +18,7 @@ class GetNewsletterCampaignOffersUsecase
         $this->errors                               = $errors;
     }
 
-    public function execute($conditions = array(), $order = array(), $limit = 100, $offset = 0, $isPaginated = false)
+    public function execute($conditions = array(), $order = array(), $limit = 100, $offset = 0)
     {
         if (!is_array($conditions)) {
             $this->errors->setError('Invalid input, unable to find record.');
@@ -26,13 +26,7 @@ class GetNewsletterCampaignOffersUsecase
         }
         $conditions = $this->htmlPurifier->purify($conditions);
 
-        $campaignOffers = $this->newsletterCampaignOfferRepository->findNewsletterCampaignOffers($conditions);
-
-//        if (false === $isPaginated) {
-//            $campaignOffers =$this->newsletterCampaignOfferRepository->findBy('\Core\Domain\Entity\NewsletterCampaignOffer', $conditions, $order, $limit, $offset);
-//        } else {
-//            $campaignOffers = $this->newsletterCampaignOfferRepository->findAllPaginated('\Core\Domain\Entity\NewsletterCampaignOffer', $conditions, $order, $limit, $offset);
-//        }
+        $campaignOffers = $this->newsletterCampaignOfferRepository->findNewsletterCampaignOffers($conditions, $order, $limit, $offset);
 
         return $campaignOffers;
     }
