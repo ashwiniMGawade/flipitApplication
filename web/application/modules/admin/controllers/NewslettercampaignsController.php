@@ -203,11 +203,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
 
             foreach ($offers as $index => $offer) {
                 $params['offerId'] =  $offer;
-//                $params['offer'] = SystemFactory::getOffer()->execute(array('id' => $offer));
-//                if ($params['offer'] instanceof Errors) {
-//                    $errors = $params['offer']->getErrorsAll();
-//                    $this->setFlashMessage('error', $errors);
-//                }
                 $params['position'] = $index +1;
                 $this->_createOffer($params);
             }
