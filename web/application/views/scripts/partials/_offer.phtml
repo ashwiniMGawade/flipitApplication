@@ -82,7 +82,7 @@ foreach ($this->offers as $offer) {
                         <?php
                         $metaItems = '';
                         if ($offer->userGenerated == 0 && (isset($offer->discountType) && $offer->discountType == 'CD') && $expiredOffer == '') {
-                            $metaItems .= $offerPartial->getVerifiedText() . '. ';
+                            $metaItems .= $offerPartial->getVerifiedText() . ' ';
                         }
                         ?>
                         <?php
