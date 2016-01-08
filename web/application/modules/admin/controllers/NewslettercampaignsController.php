@@ -75,8 +75,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         return null != $orderByField ? array($orderByField => $orderByDirection) : array();
     }
 
-    private function _assignSchdeuleTimeSettings($params)
-    {
+    private function _assignSchdeuleTimeSettings($params) {
         if (isset($params['schedule'])) {
             $validationResults = AdminFactory::validateScheduledNewsletterCampaign()->execute($params);
             if (isset($validationResults['error'])) {
@@ -100,7 +99,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $newsletterCampaign = AdminFactory::createNewsletterCampaign()->execute();
             $params = $this->_handleImageUpload($params);
             $this->view->newsletterCampaign = $this->getAllParams();
-            //ToDo:use getlocalsettingsUsecase committed in other branch
             $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
             if ($params) {
                 $params = $this->_assignSchdeuleTimeSettings($params);
@@ -115,7 +113,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     if (isset($params['partTwoOffers']) && !empty($params['partTwoOffers'])) {
                         $this->updateOffers(2, $newsletterCampaign, $params['partTwoOffers']);
                     }
-                    $this->refreshNewsletterCampaignPageVarnish();
                     $this->setFlashMessage('success', 'News letter campaign has been created successfully.</br>'. implode('<br/>', $this->message));
                     $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
                 }
@@ -150,7 +147,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
 
         $this->_getOffersOfCampaign($parameters['id']);
         $this->view->newsletterCampaign = $this->getAllParams();
-        //ToDo:use getlocalsettingsUsecase committed in other branch
         $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
@@ -168,7 +164,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     if (isset($params['partTwoOffers']) && !empty($params['partTwoOffers'])) {
                         $this->updateOffers(2, $newsletterCampaign, $params['partTwoOffers']);
                     }
-                    $this->refreshNewsletterCampaignPageVarnish();
                     $this->setFlashMessage('success', 'News letter campaign has been updated successfully.</br>'. implode('<br/>', $this->message));
                     $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
                 }
@@ -205,6 +200,11 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
 
             foreach ($offers as $index => $offer) {
                 $params['offerId'] =  $offer;
+//                $params['offer'] = SystemFactory::getOffer()->execute(array('id' => $offer));
+//                if ($params['offer'] instanceof Errors) {
+//                    $errors = $params['offer']->getErrorsAll();
+//                    $this->setFlashMessage('error', $errors);
+//                }
                 $params['position'] = $index +1;
                 $this->_createOffer($params);
             }
@@ -368,12 +368,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         } else {
             return false;
         }
-    }
-
-    public function refreshNewsletterCampaignPageVarnish()
-    {
-        $varnishObject = new \KC\Repository\Varnish();
-        $varnishObject->addUrl("http://www.flipit.com");
     }
 
     private function _getOffersOfCampaign($campaignId)
