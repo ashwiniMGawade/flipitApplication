@@ -416,7 +416,9 @@ class AdminFactory
     {
         return new UpdateNewsletterCampaignUsecase(
             RepositoryFactory::newsletterCampaign(),
+            RepositoryFactory::newsletterCampaignOffer(),
             new NewsletterCampaignValidator(new Validator()),
+            new NewsletterCampaignOfferValidator(new Validator()),
             new Purifier(),
             new Errors()
         );

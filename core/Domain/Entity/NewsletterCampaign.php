@@ -118,7 +118,7 @@ class NewsletterCampaign
     protected $newsletterCampaignOffers;
 
     /**
-     * new varaible for warnings
+     * new variable for warnings
      */
     public $warnings;
 
@@ -152,6 +152,21 @@ class NewsletterCampaign
     public function setCampaignSubject($campaignSubject)
     {
         $this->campaignSubject = $campaignSubject;
+    }
+    /**
+     * @return mixed
+     */
+    public function getNewsletterCampaignOffers()
+    {
+        return $this->newsletterCampaignOffers;
+    }
+
+    /**
+     * @param mixed $newsletterCampaignOffers
+     */
+    public function setNewsletterCampaignOffers($newsletterCampaignOffers)
+    {
+        $this->newsletterCampaignOffers = $newsletterCampaignOffers;
     }
 
     /**

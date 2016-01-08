@@ -143,7 +143,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
         }
 
-        $this->_getOffersOfCampaign($parameters['id']);
         $this->view->newsletterCampaign = $this->getAllParams();
         $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         if ($this->getRequest()->isPost()) {
@@ -151,67 +150,24 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $params = $this->_assignSchdeuleTimeSettings($params);
             $params = $this->_handleImageUpload($params, $newsletterCampaign->headerBanner, $newsletterCampaign->footerBanner);
             if ($params) {
-                $newsletterCampaign = AdminFactory::updateNewsletterCampaign()->execute($newsletterCampaign, $params);
-                if ($newsletterCampaign instanceof Errors) {
-                    $errors = $newsletterCampaign->getErrorsAll();
+                $campaignOffer = AdminFactory::createNewsletterCampaignOffer()->execute();
+                $newsletterCampaign = AdminFactory::updateNewsletterCampaign()->execute($newsletterCampaign, $campaignOffer, $params);
+                if (!is_object($newsletterCampaign) && isset($newsletterCampaign['error'])) {
+                    $errors = $newsletterCampaign['error']->getErrorsAll();
+                    $newsletterCampaign = $newsletterCampaign['newsletterCampaign'];
                     $this->setFlashMessage('error', $errors);
                 } else {
-                    if (isset($params['partOneOffers']) && !empty($params['partOneOffers'])) {
-                        $this->updateOffers(1, $newsletterCampaign, $params['partOneOffers']);
-                    }
-                    if (isset($params['partTwoOffers']) && !empty($params['partTwoOffers'])) {
-                        $this->updateOffers(2, $newsletterCampaign, $params['partTwoOffers']);
-                    }
                     $this->setFlashMessage('success', 'News letter campaign has been updated successfully.</br>'. implode('<br/>', $this->message));
                     $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
                 }
             }
         } else {
+            $this->_getSearchOffers($newsletterCampaign->getNewsletterCampaignOffers());
+            $this->view->newsletterCampaign =$newsletterCampaign;
             $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
-            $this->view->newsletterCampaign = $this->dismount($newsletterCampaign);
         }
         $this->view->warnings = $newsletterCampaign->warnings;
         $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
-    }
-
-    private function updateOffers($section, $newsletterCampaign, $offers)
-    {
-        $result = SystemFactory::getNewsletterCampaignsOffers()->execute(array('section' => $section, 'campaignId' => $newsletterCampaign->getId()));
-
-        if ($result instanceof Errors) {
-            $errors = $result->getErrorsAll();
-            $this->setFlashMessage('error', $errors);
-        } else {
-            $offerIds =[];
-            if (!empty($result)) {
-                foreach ($result as $index => $offer) {
-                    $offerIds[] = $offer[0]['id'];
-                }
-                AdminFactory::deleteNewsletterCampaignOffer()->execute($offerIds);
-            }
-            $params['newsletterCampaign'] = $newsletterCampaign;
-            if ($params['newsletterCampaign'] instanceof Errors) {
-                $errors = $params['newsletterCampaign']->getErrorsAll();
-                $this->setFlashMessage('error', $errors);
-            }
-            $params['section'] = $section;
-
-            foreach ($offers as $index => $offer) {
-                $params['offerId'] =  $offer;
-                $params['position'] = $index +1;
-                $this->_createOffer($params);
-            }
-        }
-    }
-
-    private function _createOffer($params)
-    {
-        $campaignOffer = AdminFactory::createNewsletterCampaignOffer()->execute();
-        $result = AdminFactory::addNewsletterCampaignOffer()->execute($campaignOffer, $params);
-        if ($result instanceof Errors) {
-            $errors = $result->getErrorsAll();
-            $this->setFlashMessage('error', $errors);
-        }
     }
 
     public function deleteAction()
@@ -312,50 +268,18 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         }
     }
 
-    private function _getOffersOfCampaign($campaignId)
+    private function _getSearchOffers($campaignOffers)
     {
-        $conditions = array('deleted' => 0);
-
-        $existingPartOneOffers = [];
-        $existingPartTwoOffers = [];
-
-        if (! empty($campaignId)) {
-            $conditions['campaignId'] = $campaignId;
-        }
-        $this->view->partOneOffers = $this->_getSectionOffers($conditions, 1);
-        $this->view->partTwoOffers = $this->_getSectionOffers($conditions, 2);
-
-        foreach ($this->view->partOneOffers as $pOffer) {
-            $existingPartOneOffers[] = $pOffer['id'];
-        }
-        foreach ($this->view->partTwoOffers as $pOffer) {
-            $existingPartTwoOffers[] = $pOffer['id'];
+        $existingPartOneOffers = $existingPartTwoOffers = array();
+        foreach ($campaignOffers as $offer) {
+            if ($offer->getSection() == 1) {
+                $existingPartOneOffers[] = $offer->offer->getId();
+            }
+            if ($offer->getSection() == 2) {
+                $existingPartTwoOffers[] = $offer->offer->getId();
+            }
         }
         $this->view->partOneSearchOffers = \KC\Repository\PopularCode::searchAllOffer($existingPartOneOffers);
         $this->view->partTwoSearchOffers = \KC\Repository\PopularCode::searchAllOffer($existingPartTwoOffers);
-    }
-
-    private function _getSectionOffers($conditions, $section)
-    {
-        $conditions['section'] = $section;
-        $campaignOffers = SystemFactory::getNewsletterCampaignsOffers()->execute($conditions, null, null, null, true);
-        if ($campaignOffers instanceof Errors) {
-            $errors = $campaignOffers->getErrorsAll();
-            $this->setFlashMessage('error', $errors);
-        } else {
-            $campaignOffersData = [];
-            if (false == empty($campaignOffers)) {
-                foreach ($campaignOffers as $campaignOffer) {
-                    $campaignOffersData[] = array(
-                        'id' => $campaignOffer['id'],
-                        'offer' => $campaignOffer['title'],
-                        'position' => $campaignOffer[0]['position'],
-                        'shop' => ''
-                    );
-                }
-            }
-            return $campaignOffersData;
-        }
-        return array();
     }
 }

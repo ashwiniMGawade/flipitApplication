@@ -82,7 +82,6 @@ function addNewOffer(element) {
                 var tr = '<tr id="row_'+position+'" data-position="'+position+'" class="'+className+'">'+
                     '<td class="sorting_1 sorting_2">'+position+'</td>'+
                     '<td><input type="hidden" name="'+name+'" value="'+data.offerId+'">'+data.title.replace(/\\/g, '')+'</td>'+
-                        '<td></td>'+
                         '<td><input type="button" class="btn ml10 mb10" onclick="deleteOne('+"row_"+position+', '+parentId+')" value="Delete"></td>'+
                         '</tr>';
                 $("#"+parentId+" table tbody").append(tr);

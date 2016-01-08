@@ -53,5 +53,6 @@ class NewsletterCampaignOfferRepository extends BaseRepository implements Newsle
 
         $this->em->persist($offer);
         $this->em->flush();
+        return true;
     }
 }
