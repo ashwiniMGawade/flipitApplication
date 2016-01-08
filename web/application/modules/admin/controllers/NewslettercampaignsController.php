@@ -13,7 +13,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
 
@@ -91,7 +90,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         return $params;
     }
 
-
     public function createAction()
     {
         $this->view->newsletterCampaign = array();
@@ -130,8 +128,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $this->view->newsletterCampaign['campaignFooter'] = !empty($campaignFooterSetting) ? $campaignFooterSetting->value : '';
 
             $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
-            $this->view->partOneSearchOffers = \KC\Repository\PopularCode::searchAllOffer(array());
-            $this->view->partTwoSearchOffers = \KC\Repository\PopularCode::searchAllOffer(array());
+            $this->view->partTwoSearchOffers = $this->view->partOneSearchOffers = \KC\Repository\PopularCode::searchAllOffer(array());
         }
     }
 
@@ -171,7 +168,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             }
         } else {
             $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
-            $this->view->newsletterCampaign = $this->_dismount($newsletterCampaign);
+            $this->view->newsletterCampaign = $this->dismount($newsletterCampaign);
         }
         $this->view->warnings = $newsletterCampaign->warnings;
         $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
@@ -235,19 +232,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $this->setFlashMessage('success', 'Newsletter campaign successfully deleted.');
         $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
     }
-
-    private function _dismount($object)
-    {
-        $reflectionClass = new ReflectionClass(get_class($object));
-        $array = array();
-        foreach ($reflectionClass->getProperties() as $property) {
-            $property->setAccessible(true);
-            $array[$property->getName()] = $property->getValue($object);
-            $property->setAccessible(false);
-        }
-        return $array;
-    }
-
+    
     private function prepareData($campaigns)
     {
         $returnData = array();

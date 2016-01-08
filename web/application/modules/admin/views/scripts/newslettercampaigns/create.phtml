@@ -236,7 +236,6 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                                                     <tr>
                                                         <th>#</th>
                                                         <th><?php echo $this->translate('Offer Name'); ?></th>
-                                                        <th><?php echo $this->translate('Shop Name'); ?></th>
                                                         <th><?php echo $this->translate('Action'); ?></th>
                                                     </tr>
                                                     </thead>
@@ -246,7 +245,6 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                                                             <tr id="row_<?php echo $offer['id']; ?>" data-position="<?php echo $row; ?>">
                                                                 <td><?php echo $row; ?></td>
                                                                 <td><input type="hidden" name="partOneOffers[]" value="<?php echo $offer['id']; ?>"><?php echo $offer['offer']; ?></td>
-                                                                <td><?php echo $offer['shop']; ?></td>
                                                                 <td>
                                                                     <input type="button" class="btn ml10 mb10" type="button" onClick="deleteOne('row_<?php echo $offer['id']; ?>', 'campaignOffersOne')" value='Delete'>
                                                                 </td>
@@ -302,7 +300,6 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                                                     <tr>
                                                         <th>#</th>
                                                         <th><?php echo $this->translate('Offer Name'); ?></th>
-                                                        <th><?php echo $this->translate('Shop Name'); ?></th>
                                                         <th><?php echo $this->translate('Action'); ?></th>
                                                     </tr>
                                                     </thead>
@@ -312,7 +309,6 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                                                             <tr id="row_<?php echo $offer['id']; ?>" data-position="<?php echo $row; ?>">
                                                                 <td><?php echo $row; ?></td>
                                                                 <td><input type="hidden" name="partTwoOffers[]" value="<?php echo $offer['id']; ?>"><?php echo $offer['offer']; ?></td>
-                                                                <td><?php echo $offer['shop']; ?></td>
                                                                 <td>
                                                                     <input type="button" class="btn ml10 mb10" type="button" onClick="deleteOne('row_<?php echo $offer['id']; ?>', 'campaignOffersTwo')"  value='Delete'>
                                                                 </td>

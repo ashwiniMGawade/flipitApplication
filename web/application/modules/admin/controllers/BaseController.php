@@ -26,9 +26,21 @@ class Application_Admin_BaseController extends Zend_Controller_Action
     {
         $formattedData = array();
         $getFunction = 'get'.$fieldName;
-        foreach($data as $record) {
+        foreach ($data as $record) {
             $formattedData[$record->$getFunction()] = $record;
         }
         return $formattedData;
+    }
+
+    public function dismount($object)
+    {
+        $reflectionClass = new ReflectionClass(get_class($object));
+        $array = array();
+        foreach ($reflectionClass->getProperties() as $property) {
+            $property->setAccessible(true);
+            $array[$property->getName()] = $property->getValue($object);
+            $property->setAccessible(false);
+        }
+        return $array;
     }
 }

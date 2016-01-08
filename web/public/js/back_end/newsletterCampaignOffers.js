@@ -131,7 +131,6 @@ String.prototype.escapeSingleQuotes = function () {
 };
 
 function deleteOne(id, parentId) {
-    alert(id + " "+ parentId);
     $("#"+parentId + " #" + id).remove();
 }
 
