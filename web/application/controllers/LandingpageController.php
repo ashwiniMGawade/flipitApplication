@@ -56,6 +56,7 @@ class LandingpageController extends Zend_Controller_Action
             ),
             ''
         );
+        $offers = \FrontEnd_Helper_OffersPartialFunctions::reorderOffers($offers);
 
         $offersAddedInShopKey = "offersAdded_".$shop->getId()."_shop";
         $this->view->offersAddedInShop = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
