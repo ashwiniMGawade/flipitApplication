@@ -100,6 +100,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $newsletterCampaign = AdminFactory::createNewsletterCampaign()->execute();
             $params = $this->_handleImageUpload($params);
             $this->view->newsletterCampaign = $this->getAllParams();
+            //ToDo:use getlocalsettingsUsecase committed in other branch
             $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
             if ($params) {
                 $params = $this->_assignSchdeuleTimeSettings($params);
@@ -149,6 +150,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
 
         $this->_getOffersOfCampaign($parameters['id']);
         $this->view->newsletterCampaign = $this->getAllParams();
+        //ToDo:use getlocalsettingsUsecase committed in other branch
         $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
