@@ -41,7 +41,10 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $offset = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayStart')));
         $limit = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('iDisplayLength')));
 
-        $result = (array) SystemFactory::getNewsletterCampaigns()->execute($conditions, $order, $limit, $offset, true);
+        $getPaginatedResults = true;
+        $getCampaignWarnings = true;
+
+        $result = (array) SystemFactory::getNewsletterCampaigns()->execute($conditions, $order, $limit, $offset, $getPaginatedResults, $getCampaignWarnings);
 
         if ($result instanceof Errors) {
             $errors = $result->getErrorsAll();
@@ -72,8 +75,8 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         return null != $orderByField ? array($orderByField => $orderByDirection) : array();
     }
 
-    private function _assignSchdeuleTimeSettings($params) {
-
+    private function _assignSchdeuleTimeSettings($params)
+    {
         if (isset($params['schedule'])) {
             $validationResults = AdminFactory::validateScheduledNewsletterCampaign()->execute($params);
             if (isset($validationResults['error'])) {
@@ -85,6 +88,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $params['scheduledStatus'] = 1;
             $params['scheduledTime'] = $date;
         }
+        return $params;
     }
 
 
@@ -98,7 +102,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $this->view->newsletterCampaign = $this->getAllParams();
             $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
             if ($params) {
-                $this->_assignSchdeuleTimeSettings($params);
+                $params = $this->_assignSchdeuleTimeSettings($params);
                 $newsletterCampaign = AdminFactory::addNewsletterCampaign()->execute($newsletterCampaign, $params);
                 if ($newsletterCampaign instanceof Errors) {
                     $errors = $newsletterCampaign->getErrorsAll();
@@ -136,7 +140,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
     {
         $parameters = $this->getAllParams();
         $this->view->newsletterCampaign = array();
-        $newsletterCampaign = AdminFactory::getNewsletterCampaign()->execute(array('id'=>$parameters['id']));
+        $newsletterCampaign = AdminFactory::getNewsletterCampaign()->execute(array('id'=>$parameters['id']), true);
         if ($newsletterCampaign instanceof Errors) {
             $errors = $newsletterCampaign->getErrorsAll();
             $this->setFlashMessage('error', $errors);
@@ -148,7 +152,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
-            $this->_assignSchdeuleTimeSettings($params);
+            $params = $this->_assignSchdeuleTimeSettings($params);
             $params = $this->_handleImageUpload($params, $newsletterCampaign->headerBanner, $newsletterCampaign->footerBanner);
             if ($params) {
                 $newsletterCampaign = AdminFactory::updateNewsletterCampaign()->execute($newsletterCampaign, $params);
@@ -295,15 +299,13 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $returnData = array();
         if (!empty($campaigns)) {
             foreach ($campaigns as $campaign) {
-                $warnings = false;
-
                 $returnData[] = array(
                     'id' => $campaign->getId(),
                     'campaignName' => $campaign->getCampaignName(),
                     'campaignSubject' => $campaign->getCampaignSubject(),
                     'scheduledStatus' => $campaign->getScheduledStatus(),
                     'scheduledTime' => $campaign->getScheduledTime(),
-                    'warnings' => (!$warnings) ? 'OK' : 'Warnings',
+                    'warnings' => (!$campaign->warnings) ? 'OK' : 'Warnings',
                 );
             }
         }

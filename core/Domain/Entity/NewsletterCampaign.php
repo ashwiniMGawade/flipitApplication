@@ -118,6 +118,11 @@ class NewsletterCampaign
     protected $newsletterCampaignOffers;
 
     /**
+     * new varaible for warnings
+     */
+    public $warnings;
+
+    /**
      * @return mixed
      */
     public function getCampaignName()
@@ -362,15 +367,15 @@ class NewsletterCampaign
      */
     public function getdeleted()
     {
-        return $this->scheduledStatus;
+        return $this->deleted;
     }
 
     /**
-     * @param mixed $scheduledStatus
+     * @param mixed $deleted
      */
-    public function setdeleted($scheduledStatus)
+    public function setdeleted($deleted)
     {
-        $this->scheduledStatus = $scheduledStatus;
+        $this->deleted = $deleted;
     }
 
     /**

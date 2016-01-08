@@ -455,6 +455,7 @@ $(function(){
     }
 
     jQuery('#scheduleTime').timepicker({
+        defaultTime:'value',
         minuteStep: 5,
         template: 'modal',
         showSeconds: false,

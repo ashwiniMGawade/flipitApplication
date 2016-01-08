@@ -38,6 +38,7 @@ class UpdateNewsletterCampaignUsecase
         unset($params['partOneOffers']);
         unset($params['partTwoOffers']);
         $params = $this->htmlPurifier->purify($params);
+
         if (isset($params['campaignName'])) {
             $newsletterCampaign->setCampaignName($params['campaignName']);
         }
@@ -75,9 +76,7 @@ class UpdateNewsletterCampaignUsecase
             $newsletterCampaign->setSenderEmail($params['senderEmail']);
         }
         if (isset($params['scheduledStatus'])) {
-            $newsletterCampaign->setScheduledStatus($params['scheduledStatus']);
-        } else {
-            $newsletterCampaign->setScheduledStatus(0);
+            $newsletterCampaign->setScheduledStatus((int) $params['scheduledStatus']);
         }
         if (isset($params['scheduledTime'])) {
             $newsletterCampaign->setScheduledTime($params['scheduledTime']);
@@ -95,8 +94,6 @@ class UpdateNewsletterCampaignUsecase
         }
         $newsletterCampaign->setUpdatedAt(new \DateTime('now'));
         $validationResult = $this->newsletterCampaignValidator->validate($newsletterCampaign);
-
-        var_dump($newsletterCampaign); exit;
 
         if (true !== $validationResult && is_array($validationResult)) {
             $this->errors->setErrors($validationResult);

@@ -5,7 +5,8 @@ use Core\Domain\Repository\NewsletterCampaignRepositoryInterface;
 
 class NewsletterCampaignRepository extends BaseRepository implements NewsletterCampaignRepositoryInterface
 {
-    public function findByConditions($entity, $conditions, $order, $limit, $offset) {
+    public function findByConditions($entity, $conditions, $order, $limit, $offset)
+    {
         if (empty($conditions)) {
             return false;
         }
@@ -23,9 +24,9 @@ class NewsletterCampaignRepository extends BaseRepository implements NewsletterC
         $conditionsCount=1;
         foreach ($conditions as $field => $value) {
             if ($conditionsCount === 1) {
-                $queryBuilder->where("table.$value[0]$value[1]'$value[2]'");
+                $queryBuilder->where("table.$value[0]$value[1]".$queryBuilder->expr()->literal($value[2]));
             } else {
-                $queryBuilder->andWhere("table.$value[0]$value[1]'$value[2]'");
+                $queryBuilder->andWhere("table.$value[0]$value[1]".$queryBuilder->expr()->literal($value[2]));
             }
             $conditionsCount++;
         }

@@ -389,7 +389,7 @@ class AdminFactory
 
     public static function getNewsletterCampaign()
     {
-        return new GetNewsletterCampaignUsecase(RepositoryFactory::newsletterCampaign(), RepositoryFactory::localeSettings(),  new Purifier(), new Errors());
+        return new GetNewsletterCampaignUsecase(RepositoryFactory::newsletterCampaign(), new Purifier(), new Errors());
     }
 
     public static function getNewsletterCampaignsByConditions()
@@ -451,10 +451,12 @@ class AdminFactory
         return new DeleteNewsletterCampaignOfferUsecase(RepositoryFactory::newsletterCampaignOffer());
     }
 
-    public static function validateScheduledNewsletterCampaign() {
+    public static function validateScheduledNewsletterCampaign()
+    {
         return new ValidateScheduledNewsletterCampaignUsecase();
     }
-    public static function getNewsletterCampaignWarnings() {
+    public static function getNewsletterCampaignWarnings()
+    {
         return new GetNewsletterCampaignWarningsUsecase(RepositoryFactory::newsletterCampaign(), new Purifier(), new Errors());
     }
 }
