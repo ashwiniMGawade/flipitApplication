@@ -12,7 +12,7 @@ trait LocaleExecuteMethod
 
     public function execute(Input\InputInterface $input, OutputInterface $output)
     {
-        $locales = (new LocaleLister)->getAllLocales();
+        $locales = (new LocaleLister)->getAllLocals();
 
         foreach ($locales as $locale) {
             $this->runCommand($input, $output, $locale);

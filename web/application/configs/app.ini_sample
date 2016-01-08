@@ -82,6 +82,14 @@ s3.key = "AKIAIEYP3BZV3WUZXWIQ"
 s3.secret = "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"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; DynamoDb API keys    ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+dynamodb.dynamodbregion = ""
+dynamodb.key = ""
+dynamodb.secret = ""
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Disqus API keys      ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
