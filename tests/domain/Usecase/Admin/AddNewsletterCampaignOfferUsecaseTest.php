@@ -60,6 +60,7 @@ class AddNewsletterCampaignOfferUsecaseTest extends \Codeception\TestCase\Test
         $params = array(
             'newsletterCampaign' => new NewsletterCampaign(),
             'offer'=>  new Offer(),
+            'offerId'=>  1,
             'postion'=> '1',
             'section' => '1',
             'deleted' => 1

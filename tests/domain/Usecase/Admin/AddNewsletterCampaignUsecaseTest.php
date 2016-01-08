@@ -69,6 +69,7 @@ class AddNewsletterCampaignUsecaseTest extends \Codeception\TestCase\Test
             'offerPartTwoTitle' => 'test',
             'senderEmail' => 'test',
             'scheduledStatus' => 1,
+            'scheduledTime' => new \DateTime('now'),
             'newsletterSentTime' => new \DateTime('now'),
             'receipientCount' => 23,
             'deleted' => 1,

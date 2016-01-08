@@ -1,17 +1,26 @@
 <?php
 namespace Core\Domain\Usecase\Admin;
 
-use \Core\Domain\Entity\NewsletterCampaignOffer;
+use \Core\Domain\Adapter\PurifierInterface;
 use \Core\Domain\Repository\NewsletterCampaignOfferRepositoryInterface;
+use \Core\Service\Errors\ErrorsInterface;
 
 class DeleteNewsletterCampaignOfferUsecase
 {
-
     private $newsletterCampaignOfferRepository;
 
-    public function __construct(NewsletterCampaignOfferRepositoryInterface $newsletterCampaignOfferRepository)
-    {
+    protected $htmlPurifier;
+
+    protected $errors;
+
+    public function __construct(
+        NewsletterCampaignOfferRepositoryInterface $newsletterCampaignOfferRepository,
+        PurifierInterface $htmlPurifier,
+        ErrorsInterface $errors
+    ){
         $this->newsletterCampaignOfferRepository = $newsletterCampaignOfferRepository;
+        $this->htmlPurifier     = $htmlPurifier;
+        $this->errors           = $errors;
     }
 
     public function execute($offerIds)
@@ -20,6 +29,8 @@ class DeleteNewsletterCampaignOfferUsecase
             $this->errors->setError('Invalid Parameters');
             return $this->errors;
         }
+        $offerIds = $this->htmlPurifier->purify($offerIds);
+
         return $this->newsletterCampaignOfferRepository->deleteNewsletterCampaignOffers($offerIds);
     }
 }

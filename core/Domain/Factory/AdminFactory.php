@@ -448,7 +448,7 @@ class AdminFactory
     }
     public static function deleteNewsletterCampaignOffer()
     {
-        return new DeleteNewsletterCampaignOfferUsecase(RepositoryFactory::newsletterCampaignOffer());
+        return new DeleteNewsletterCampaignOfferUsecase(RepositoryFactory::newsletterCampaignOffer(), new Purifier(), new Errors());
     }
 
     public static function validateScheduledNewsletterCampaign()
