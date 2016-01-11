@@ -101,17 +101,13 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
             if ($params) {
                 $params = $this->_assignSchdeuleTimeSettings($params);
-                $newsletterCampaign = AdminFactory::addNewsletterCampaign()->execute($newsletterCampaign, $params);
-                if ($newsletterCampaign instanceof Errors) {
-                    $errors = $newsletterCampaign->getErrorsAll();
+                $campaignOffer = AdminFactory::createNewsletterCampaignOffer()->execute();
+                $newsletterCampaign = AdminFactory::addNewsletterCampaign()->execute($newsletterCampaign, $campaignOffer, $params);
+                if (!is_object($newsletterCampaign) && isset($newsletterCampaign['error'])) {
+                    $errors = $newsletterCampaign['error']->getErrorsAll();
+                    $newsletterCampaign = $newsletterCampaign['newsletterCampaign'];
                     $this->setFlashMessage('error', $errors);
                 } else {
-                    if (isset($params['partOneOffers']) && !empty($params['partOneOffers'])) {
-                        $this->updateOffers(1, $newsletterCampaign, $params['partOneOffers']);
-                    }
-                    if (isset($params['partTwoOffers']) && !empty($params['partTwoOffers'])) {
-                        $this->updateOffers(2, $newsletterCampaign, $params['partTwoOffers']);
-                    }
                     $this->setFlashMessage('success', 'Newsletter campaign has been created successfully.</br>'. implode('<br/>', $this->message));
                     $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
                 }
