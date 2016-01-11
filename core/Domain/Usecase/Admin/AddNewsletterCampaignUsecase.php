@@ -111,7 +111,7 @@ class AddNewsletterCampaignUsecase
         $newsletterCampaign = $this->newsletterCampaignRepository->save($newsletterCampaign);
 
         if (isset($params['partOneOffers']) && !empty($params['partOneOffers'])) {
-            $result = $this->updateOffers(1, $newsletterCampaign, $newsletterCampaignOffer, $params['partOneOffers']);
+            $result = $this->addOffers(1, $newsletterCampaign, $newsletterCampaignOffer, $params['partOneOffers']);
             if ($result instanceof Errors) {
                 $errors = $result->getErrorsAll();
                 $this->errors->setErrors($errors);
@@ -121,7 +121,7 @@ class AddNewsletterCampaignUsecase
         }
 
         if (isset($params['partTwoOffers']) && !empty($params['partTwoOffers'])) {
-            $result = $this->updateOffers(2, $newsletterCampaign, $newsletterCampaignOffer, $params['partTwoOffers']);
+            $result = $this->addOffers(2, $newsletterCampaign, $newsletterCampaignOffer, $params['partTwoOffers']);
             if ($result instanceof Errors) {
                 $errors = $result->getErrorsAll();
                 $this->errors->setErrors($errors);
@@ -133,20 +133,8 @@ class AddNewsletterCampaignUsecase
         return true;
     }
 
-    private function updateOffers($section, $newsletterCampaign, $newsletterCampaignOffer, $offers)
+    private function addOffers($section, $newsletterCampaign, $newsletterCampaignOffer, $offers)
     {
-        $campaignOffers = $newsletterCampaign->getNewsletterCampaignOffers();
-        $offerIds =[];
-        if (!empty($campaignOffers)) {
-            foreach ($campaignOffers as $offer) {
-                if ($offer->getSection() == $section) {
-                    $offerIds[] = $offer->getId();
-                }
-            }
-            if (!empty($offerIds)) {
-                $this->newsletterCampaignOfferRepository->deleteNewsletterCampaignOffers($offerIds);
-            }
-        }
         $params['newsletterCampaign'] = $newsletterCampaign;
         $params['section'] = $section;
         foreach ($offers as $index => $offer) {
