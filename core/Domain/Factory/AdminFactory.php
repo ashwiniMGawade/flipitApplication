@@ -408,7 +408,6 @@ class AdminFactory
             RepositoryFactory::newsletterCampaign(),
             RepositoryFactory::newsletterCampaignOffer(),
             new NewsletterCampaignValidator(new Validator()),
-            new NewsletterCampaignOfferValidator(new Validator()),
             new Purifier(),
             new Errors()
         );
@@ -420,7 +419,6 @@ class AdminFactory
             RepositoryFactory::newsletterCampaign(),
             RepositoryFactory::newsletterCampaignOffer(),
             new NewsletterCampaignValidator(new Validator()),
-            new NewsletterCampaignOfferValidator(new Validator()),
             new Purifier(),
             new Errors()
         );

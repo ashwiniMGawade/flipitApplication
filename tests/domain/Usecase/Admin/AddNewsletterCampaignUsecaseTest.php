@@ -2,6 +2,7 @@
 namespace Usecase\Admin;
 
 use Core\Domain\Entity\NewsletterCampaign;
+use Core\Domain\Entity\NewsletterCampaignOffer;
 use Core\Domain\Service\Purifier;
 use Core\Domain\Service\Validator;
 use Core\Domain\Usecase\Admin\AddNewsletterCampaignUsecase;
@@ -16,13 +17,15 @@ class AddNewsletterCampaignUsecaseTest extends \Codeception\TestCase\Test
     {
         $params = array();
         $newsletterCampaignRepository = $this->NewsletterCampaignRepositoryMock();
+        $newsletterCampaignOfferRepository = $this->NewsletterCampaignOfferRepositoryMock();
         $newsletterCampaignValidator = new NewsletterCampaignValidator(new Validator());
         $result = (new AddNewsletterCampaignUsecase(
             $newsletterCampaignRepository,
+            $newsletterCampaignOfferRepository,
             $newsletterCampaignValidator,
             new Purifier(),
             new Errors()
-        ))->execute(new NewsletterCampaign(), $params);
+        ))->execute(new NewsletterCampaign(), new NewsletterCampaignOffer(), $params);
         $errors = new Errors();
         $errors->setError('Invalid Parameters');
         $this->assertEquals($errors->getErrorMessages(), $result->getErrorMessages());
@@ -35,6 +38,7 @@ class AddNewsletterCampaignUsecaseTest extends \Codeception\TestCase\Test
             'senderEmail' => 'adfsdfsdf'
         );
         $newsletterCampaignRepository = $this->newsletterCampaignRepositoryMock();
+        $newsletterCampaignOfferRepository = $this->NewsletterCampaignOfferRepositoryMock();
         $newsletterCampaignValidator = $this->createNewsletterCampaignValidatorMock(
             array(
                 'createdAt' => 'Please enter value',
@@ -43,19 +47,22 @@ class AddNewsletterCampaignUsecaseTest extends \Codeception\TestCase\Test
         );
         $result = (new AddNewsletterCampaignUsecase(
             $newsletterCampaignRepository,
+            $newsletterCampaignOfferRepository,
             $newsletterCampaignValidator,
             new Purifier(),
             new Errors()
-        ))->execute(new NewsletterCampaign(), $params);
+        ))->execute(new NewsletterCampaign(), new NewsletterCampaignOffer(), $params);
         $errors = new Errors();
         $errors->setError('Please enter value', 'createdAt');
         $errors->setError('Please enter valid email ID', 'senderEmail');
-        $this->assertEquals($errors->getErrorMessages(), $result->getErrorMessages());
+        $this->assertEquals($errors->getErrorMessages(), $result['error']->getErrorMessages());
     }
 
     public function testAddNewsletterCampaignUsecaseWithValidInput()
     {
         $params = array(
+            'partOneOffers' => array(1,2),
+            'partTwoOffers' => array(1,2),
             'campaignName' => 'test',
             'campaignHeader'=> 'header',
             'campaignFooter'=> 'footer',
@@ -76,13 +83,15 @@ class AddNewsletterCampaignUsecaseTest extends \Codeception\TestCase\Test
         );
 
         $newsletterCampaignRepository = $this->newsletterCampaignRepositoryMockWithSaveMethod(new NewsletterCampaign());
+        $newsletterCampaignOfferRepository = $this->NewsletterCampaignOfferRepositoryMock();
         $newsletterCampaignValidator = $this->createNewsletterCampaignValidatorMock(true);
         $result = (new AddNewsletterCampaignUsecase(
             $newsletterCampaignRepository,
+            $newsletterCampaignOfferRepository,
             $newsletterCampaignValidator,
             new Purifier(),
             new Errors()
-        ))->execute(new NewsletterCampaign(), $params);
+        ))->execute(new NewsletterCampaign(), new NewsletterCampaignOffer(), $params);
         $this->assertInstanceOf('\Core\Domain\Entity\NewsletterCampaign', $result);
     }
 
@@ -90,6 +99,12 @@ class AddNewsletterCampaignUsecaseTest extends \Codeception\TestCase\Test
     {
         $newsletterCampaignRepositoryMock = $this->getMock('\Core\Domain\Repository\NewsletterCampaignRepositoryInterface');
         return $newsletterCampaignRepositoryMock;
+    }
+
+    private function newsletterCampaignOfferRepositoryMock()
+    {
+        $newsletterCampaignOfferRepositoryMock = $this->getMock('\Core\Domain\Repository\NewsletterCampaignOfferRepositoryInterface');
+        return $newsletterCampaignOfferRepositoryMock;
     }
 
     private function newsletterCampaignRepositoryMockWithSaveMethod($returns)

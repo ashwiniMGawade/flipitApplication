@@ -7,7 +7,6 @@ use \Core\Domain\Entity\NewsletterCampaign;
 use \Core\Domain\Entity\NewsletterCampaignOffer;
 use \Core\Domain\Adapter\PurifierInterface;
 use \Core\Domain\Validator\NewsletterCampaignValidator;
-use \Core\Domain\Validator\NewsletterCampaignOfferValidator;
 use \Core\Service\Errors\ErrorsInterface;
 
 class UpdateNewsletterCampaignUsecase
@@ -18,8 +17,6 @@ class UpdateNewsletterCampaignUsecase
 
     protected $newsletterCampaignValidator;
 
-    protected $newsletterCampaignOfferValidator;
-
     protected $htmlPurifier;
 
     protected $errors;
@@ -28,14 +25,12 @@ class UpdateNewsletterCampaignUsecase
         NewsletterCampaignRepositoryInterface $newsletterCampaignRepository,
         NewsletterCampaignOfferRepositoryInterface $newsletterCampaignOfferRepository,
         NewsletterCampaignValidator $newsletterCampaignValidator,
-        NewsletterCampaignOfferValidator $newsletterCampaignOfferValidator,
         PurifierInterface $htmlPurifier,
         ErrorsInterface $errors
     ) {
         $this->newsletterCampaignRepository = $newsletterCampaignRepository;
         $this->newsletterCampaignOfferRepository = $newsletterCampaignOfferRepository;
         $this->newsletterCampaignValidator  = $newsletterCampaignValidator;
-        $this->newsletterCampaignOfferValidator  = $newsletterCampaignOfferValidator;
         $this->htmlPurifier     = $htmlPurifier;
         $this->errors           = $errors;
     }
@@ -112,26 +107,14 @@ class UpdateNewsletterCampaignUsecase
         $this->newsletterCampaignRepository->save($newsletterCampaign);
 
         if (isset($params['partOneOffers']) && !empty($params['partOneOffers'])) {
-            $result = $this->updateOffers(1, $newsletterCampaign, $newsletterCampaignOffer, $params['partOneOffers']);
-            if ($result instanceof Errors) {
-                $errors = $result->getErrorsAll();
-                $this->errors->setErrors($errors);
-                //$this->newsletterCampaignRepository->rollBack();
-                return array('error' => $this->errors, 'newsletterCampaign' => $newsletterCampaign);
-            }
+            $this->updateOffers(1, $newsletterCampaign, $newsletterCampaignOffer, $params['partOneOffers']);
         }
 
         if (isset($params['partTwoOffers']) && !empty($params['partTwoOffers'])) {
-            $result = $this->updateOffers(2, $newsletterCampaign, $newsletterCampaignOffer, $params['partTwoOffers']);
-            if ($result instanceof Errors) {
-                $errors = $result->getErrorsAll();
-                $this->errors->setErrors($errors);
-                //$this->newsletterCampaignRepository->rollBack();
-                return array('error' => $this->errors, 'newsletterCampaign' => $newsletterCampaign);
-            }
+           $this->updateOffers(2, $newsletterCampaign, $newsletterCampaignOffer, $params['partTwoOffers']);
         }
         //$this->newsletterCampaignRepository->commitTransaction();
-        return true;
+        return $newsletterCampaign;
     }
 
     private function updateOffers($section, $newsletterCampaign, $newsletterCampaignOffer, $offers)
@@ -155,7 +138,7 @@ class UpdateNewsletterCampaignUsecase
             $params['position'] = $index +1;
             $result = $this->_createOffer($newsletterCampaignOffer, $params);
             if ($result instanceof Errors) {
-                return $result;
+                return array('error' => $result, 'newsletterCampaign' => $newsletterCampaign);
             }
         }
         return true;
@@ -169,9 +152,6 @@ class UpdateNewsletterCampaignUsecase
         if (isset($params['newsletterCampaign'])) {
             $newsletterCampaignOffer->setNewsletterCampaign($params['newsletterCampaign']);
         }
-        if (isset($params['offer'])) {
-            $newsletterCampaignOffer->setOffer($params['offer']);
-        }
         if (isset($params['offerId'])) {
             $newsletterCampaignOffer->setOfferId($params['offerId']);
         }
@@ -181,18 +161,9 @@ class UpdateNewsletterCampaignUsecase
         if (isset($params['section'])) {
             $newsletterCampaignOffer->setSection((int)$params['section']);
         }
-        if (isset($params['deleted'])) {
-            $newsletterCampaignOffer->setDeleted($params['deleted']);
-        }
         $newsletterCampaignOffer->setCreatedAt(new \DateTime('now'));
         $newsletterCampaignOffer->setUpdatedAt(new \DateTime('now'));
 
-        $validationResult = $this->newsletterCampaignOfferValidator->validate($newsletterCampaignOffer);
-
-        if (true !== $validationResult && is_array($validationResult)) {
-            $this->errors->setErrors($validationResult);
-            return $this->errors;
-        }
         return $this->newsletterCampaignOfferRepository->addNewsletterCampaignOffer($newsletterCampaignOffer);
     }
 }
