@@ -214,6 +214,16 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                                     <?php echo $this->translate('Offer part 1'); ?>
                                 </h1>
                                 <?php echo $this->flashMessages(); ?>
+                                <div class="mainpage-content-line">
+                                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Offer Part One Title');?></strong></label></div>
+                                    <div class="mainpage-content-right">
+                                        <div class="mainpage-content-right-inner-right-other"></div>
+                                        <div class="mainpage-content-right-inner-left-other">
+                                            <input type="text" class="span3" id="offerPartOneTitle" name="offerPartOneTitle" placeholder="<?php echo $this->translate('Offer Part One Title');?>"
+                                                   value="<?php echo trim($this->newsletterCampaign->getOfferPartOneTitle());?>">
+                                        </div>
+                                    </div>
+                                </div>
                                 <div  class="metabox-holder has-right-sidebar">
                                     <div id="side-info-column" class="inner-sidebar-coupon">
                                         <div id="side-sortables" class="meta-box-sortables ui-sortable">
@@ -279,6 +289,16 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                                     <?php echo $this->translate('Offer part 2'); ?>
                                 </h1>
                                 <?php echo $this->flashMessages(); ?>
+                                <div class="mainpage-content-line">
+                                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Offer Part Two Title');?></strong></label></div>
+                                    <div class="mainpage-content-right">
+                                        <div class="mainpage-content-right-inner-right-other"></div>
+                                        <div class="mainpage-content-right-inner-left-other">
+                                            <input type="text" class="span3" id="offerPartTwoTitle" name="offerPartTwoTitle" placeholder="<?php echo $this->translate('Offer Part Two Title');?>"
+                                                   value="<?php  echo trim($this->newsletterCampaign->getOfferPartTwoTitle());?>">
+                                        </div>
+                                    </div>
+                                </div>
                                 <div  class="metabox-holder has-right-sidebar">
                                     <div id="side-info-column" class="inner-sidebar-coupon">
                                         <div id="side-sortables" class="meta-box-sortables ui-sortable">
