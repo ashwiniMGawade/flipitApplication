@@ -10,8 +10,6 @@ if (fopen($publicLocalePath.'emails/email-header-best.png', 'r')) {
 } else {
     $emailLogo = LOCALE != '' ? $publicPath.'emails/email-header-best-flipit.png' : $publicPath.'emails/email-header-best.png';
 }
-
-echo $emailLogo; exit;
 ?>
 
 <table width="100%" cellspacing="0" cellpadding="0" bgcolor="#f0f0f0">
@@ -61,13 +59,14 @@ echo $emailLogo; exit;
                                     </table>
                                     </td>
                                 </tr>
-                                <?php $haderBanner = $newsletterCampaign->getHeaderBanner();
-                                if(!empty($haderBanner)) { ?>
+                                <?php $headerBanner = $newsletterCampaign->getHeaderBanner();
+                                $headerBannerUrl = $newsletterCampaign->getHeaderBannerURL();
+                                if(!empty($headerBanner)) { ?>
                                 <tr>
                                     <td bgcolor="#0077cc">
-                                        <a href="<?php echo $newsletterCampaign->getHeaderBannerURL(); ?>" target="_blank">
-                                            <img src="<?php echo $publicPathCdn.urldecode($haderBanner); ?>" width="615" alt="<?php echo urldecode($haderBanner); ?>" title="<?php echo urldecode($haderBanner); ?>" style="display:block">
-                                        </a>
+                                        <?php if(!empty($headerBannerUrl)) { ?><a href="<?php echo $headerBannerUrl; ?>" target="_blank"> <?php } ?>
+                                            <img src="<?php echo $publicPathCdn.urldecode($headerBanner); ?>" width="615" alt="<?php echo urldecode($headerBanner); ?>" title="<?php echo urldecode($headerBanner); ?>" style="display:block">
+                                        <?php if(!empty($headerBannerUrl)) { ?></a> <?php } ?>
                                     </td>
                                 </tr>
                                 <?php } ?>
@@ -662,3 +661,42 @@ echo $emailLogo; exit;
     </tr>
 </tbody>
 </table>
+<div>
+    <table width="100%" align="center" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+            <td height="5"></td>
+        </tr>
+        <?php $footerBanner = $newsletterCampaign->getFooterBanner();
+        $footerBannerUrl = $newsletterCampaign->getFooterBannerURL();
+        if(!empty($footerBanner)) { ?>
+        <tr>
+            <td align="center">
+                <?php if(!empty($footerBannerUrl)) { ?><a href="<?php echo $footerBannerUrl; ?>" target="_blank"> <?php } ?>
+                    <img src="<?php echo $publicPathCdn.urldecode($footerBanner); ?>" width="615" alt="<?php echo urldecode($footerBanner); ?>" title="<?php echo urldecode($footerBanner); ?>" style="display:block">
+                <?php if(!empty($footerBannerUrl)) { ?></a> <?php } ?>
+            </td>
+        </tr>
+        <?php } ?>
+        </tbody>
+    </table>
+    <table width="100%" align="center" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+            <td height="46"></td>
+        </tr>
+        <tr>
+            <td align="center" style="padding:0 0 25px; font:12px/20px Arial,Helvetica,sans-serif; color:#878a8d">
+                <?php echo $newsletterCampaign->getHeader(); ?>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" style="text-decoration:none; color:#878a8d; padding:0 0 37px; font:14px/17px Arial,Helvetica,sans-serif; color:#33383e">
+                <a href="http://mandrillapp.com/track/click/15439343/www.kortingscode.nl?p=eyJzIjoiQXA5Rzdjck5hamJ5LXcxbVFKUlRCOGRpSG9vIiwidiI6MSwicCI6IntcInVcIjoxNTQzOTM0MyxcInZcIjoxLFwidXJsXCI6XCJodHRwOlxcXC9cXFwvd3d3LmtvcnRpbmdzY29kZS5ubFxcXC9pbmxvZ2dlblxcXC9kaXJlY3Rsb2dpbnVuc3Vic2NyaWJlXFxcL1VtRnRaWE5vUUhkbFlpMW1iR2xuYUhRdWJtdz1cXFwvYTk4MTNiNjBjZDY1ZWYxZjRmNGQ4MjgxYzA3ZDg5MjNcIixcImlkXCI6XCJhZDU3OTNkNGQzMTQ0ZWYzYTc1ODY0ZmZkOTM5NDhiYlwiLFwidXJsX2lkc1wiOltcIjNjNTdjZTkwNmIzYTE4NzNkNjEyMTRiMzM2NGJmYTI1NGMyMTgyYTVcIl19In0" target="_blank" style="text-decoration:none; color:#33383e">Uitschrijven</a> | <a href="http://mandrillapp.com/track/click/15439343/www.kortingscode.nl?p=eyJzIjoiMUw1TzludjlsS3UzTDhoTC1XV2tNZThHeUhjIiwidiI6MSwicCI6IntcInVcIjoxNTQzOTM0MyxcInZcIjoxLFwidXJsXCI6XCJodHRwOlxcXC9cXFwvd3d3LmtvcnRpbmdzY29kZS5ubFxcXC9pbmxvZ2dlblxcXC9kaXJlY3QtaW5sb2dnZW5cXFwvY21GdFpYTm9RSGRsWWkxbWJHbG5hSFF1Ym13PVxcXC9hOTgxM2I2MGNkNjVlZjFmNGY0ZDgyODFjMDdkODkyM1wiLFwiaWRcIjpcImFkNTc5M2Q0ZDMxNDRlZjNhNzU4NjRmZmQ5Mzk0OGJiXCIsXCJ1cmxfaWRzXCI6W1wiNjRmNTgwNTlmYjRhOGVmY2FkYmQ3Yzg1OGJkMTE2MGI1NGVmNzY5YlwiXX0ifQ" target="_blank" style="text-decoration:none; color:#33383e">Wijzig je profiel</a> | <a href="http://mandrillapp.com/track/click/15439343/www.kortingscode.nl?p=eyJzIjoiNDFnSGpNOTY3QU5HVmFYMmxCN2dFVjR1NnJjIiwidiI6MSwicCI6IntcInVcIjoxNTQzOTM0MyxcInZcIjoxLFwidXJsXCI6XCJodHRwOlxcXC9cXFwvd3d3LmtvcnRpbmdzY29kZS5ubFxcXC9pbmZvXFxcL2NvbnRhY3RcIixcImlkXCI6XCJhZDU3OTNkNGQzMTQ0ZWYzYTc1ODY0ZmZkOTM5NDhiYlwiLFwidXJsX2lkc1wiOltcIjliMzM4MTU3MDVlNWVkMzA0N2JmZGJjOWU5OGY1MGE4YzVkNzE2OTJcIl19In0" target="_blank" style="text-decoration:none; color:#33383e">Contact</a> </td>
+        </tr>
+        <tr>
+            <td align="center"><a href="http://mandrillapp.com/track/click/15439343/www.kortingscode.nl?p=eyJzIjoidVFtVWV2OEhaeGtVUkc0djExbFZTa3U2YUFnIiwidiI6MSwicCI6IntcInVcIjoxNTQzOTM0MyxcInZcIjoxLFwidXJsXCI6XCJodHRwOlxcXC9cXFwvd3d3LmtvcnRpbmdzY29kZS5ubFwiLFwiaWRcIjpcImFkNTc5M2Q0ZDMxNDRlZjNhNzU4NjRmZmQ5Mzk0OGJiXCIsXCJ1cmxfaWRzXCI6W1wiZmEzZTYzMTVlN2JkZTdhYTY4NmU5N2M3NjFiNjU0NGZlMjFkYzQ1YVwiXX0ifQ" target="_blank"><img src="http://www.kortingscode.nl/public/images/front_end/emails/email-footer-kc.png" border="0" alt="Kortingscode" title="Kortingscode" style="vertical-align:top"></a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
