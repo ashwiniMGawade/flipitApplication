@@ -37,7 +37,6 @@ class NewsletterCampaignOfferRepository extends BaseRepository implements Newsle
     public function deleteNewsletterCampaignOffers($offerIds)
     {
         $queryBuilder = $this->em->createQueryBuilder();
-
         $queryBuilder->delete('\Core\Domain\Entity\NewsletterCampaignOffer', 'o')
         ->where($queryBuilder->expr()->In('o.id', $offerIds))
         ->getQuery()
@@ -45,12 +44,10 @@ class NewsletterCampaignOfferRepository extends BaseRepository implements Newsle
         return true;
     }
 
-
     public function addNewsletterCampaignOffer($offer)
     {
         $offer->offer = $this->em->getReference('\Core\Domain\Entity\NewsletterCampaignOffer', $offer->getOfferId());
         $offer->newsletterCampaign = $this->em->getReference('\Core\Domain\Entity\NewsletterCampaign', $offer->getNewsletterCampaign()->getId());
-
         $this->em->persist($offer);
         $this->em->flush();
         return true;

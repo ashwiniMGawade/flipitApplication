@@ -108,6 +108,8 @@ class UpdateNewsletterCampaignUsecase
             return array('error' => $this->errors, 'newsletterCampaign' => $newsletterCampaign);
         }
 
+
+       // $this->newsletterCampaignRepository->beginTransaction();
         $this->newsletterCampaignRepository->save($newsletterCampaign);
 
         if (isset($params['partOneOffers']) && !empty($params['partOneOffers'])) {
@@ -115,6 +117,7 @@ class UpdateNewsletterCampaignUsecase
             if ($result instanceof Errors) {
                 $errors = $result->getErrorsAll();
                 $this->errors->setErrors($errors);
+                //$this->newsletterCampaignRepository->rollBack();
                 return array('error' => $this->errors, 'newsletterCampaign' => $newsletterCampaign);
             }
         }
@@ -124,9 +127,11 @@ class UpdateNewsletterCampaignUsecase
             if ($result instanceof Errors) {
                 $errors = $result->getErrorsAll();
                 $this->errors->setErrors($errors);
+                //$this->newsletterCampaignRepository->rollBack();
                 return array('error' => $this->errors, 'newsletterCampaign' => $newsletterCampaign);
             }
         }
+        //$this->newsletterCampaignRepository->commitTransaction();
         return true;
     }
 
@@ -189,7 +194,6 @@ class UpdateNewsletterCampaignUsecase
             $this->errors->setErrors($validationResult);
             return $this->errors;
         }
-
         return $this->newsletterCampaignOfferRepository->addNewsletterCampaignOffer($newsletterCampaignOffer);
     }
 }
