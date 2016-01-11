@@ -12,7 +12,7 @@ class Application_Admin_BaseController extends Zend_Controller_Action
         $translatableSingleMessage = '';
         if (is_array($message)) {
             foreach ($message as $fieldMessage) {
-                $translatableSingleMessage .= implode('<br>', $fieldMessage) . '<br>';
+                $translatableSingleMessage .=  $fieldMessage. '<br>';
             }
         } else {
             $translatableSingleMessage = $message;

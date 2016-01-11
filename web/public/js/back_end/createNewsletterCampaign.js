@@ -99,7 +99,11 @@ $(function(){
                     .removeClass("error success")
                     .prev("div").removeClass('focus error success') ;
 
+
+                $(".form-error").find('div[for='+o.name).hide();
+
             });
+
         }
 
         var init = function ()
@@ -131,14 +135,14 @@ $(function(){
                 {
                     errorClass : 'error',
                     validClass : 'success',
-                    errorElement : 'span',
+                    errorElement : 'div',
                     ignore: "",
                     afterReset  : resetBorders,
                     errorPlacement : function(error, element) {
-                        element.parent("div").prev("div")
-                            .html(error);
-                        if($(".form-error").find('span[for='+element.attr('name')+']').length == 0  && error.html() != ''){
-                            $(".form-error").append( error );
+                        //element.parent("div").prev("div")
+                        //    .html(error);
+                        if($(".form-error").find('div[for='+element.attr('name')+']').length == 0  && error.html() != ''){
+                            $(".form-error").append(error).show();
                         }
                     },
                     rules : {
@@ -226,13 +230,11 @@ $(function(){
 
                         $('span.help-inline', $(element).parent('div')
                             .prev('div')).removeClass(validClass) ;
-
-
-
                     },
                     unhighlight : function(element, errorClass, validClass) {
                         // check for ignored elemnets and highlight borders when succeed
                         if(! $(element).hasClass("ignore")) {
+                            $(".form-error").find('div[for='+element.name+']').hide();
                             $(element).parent('div')
                                 .removeClass(errorClass)
                                 .addClass(validClass).prev(
@@ -268,12 +270,15 @@ $(function(){
                                     var val = $(element).val();
                                     showError =  $.trim(val).length > 0;
                             }
+
                             if(! showError ) {
                                 // hide errors message and remove highlighted borders
                                 $(
                                     'span.help-inline',
                                     $(element).parent('div')
                                         .prev('div')).hide();
+
+                                $(".form-error").find('div[for='+element.attr('name')+']').hide();
 
                                 $(element).parent('div')
                                     .removeClass(errorClass)
@@ -283,7 +288,6 @@ $(function(){
                                     .removeClass(validClass) ;
                             } else {
                                 // show errors message and  highlight borders
-
                                 // display green border and message
                                 $(element).parent('div')
                                     .removeClass(errorClass)
@@ -298,6 +302,7 @@ $(function(){
 
                     },
                     success: function(label , element) {
+                        //$(".form-error").find('span[for='+element.name+']').hide();
                         $(element).parent('div')
                             .removeClass(this.errorClass)
                             .addClass(this.validClass).prev(

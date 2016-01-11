@@ -108,7 +108,6 @@ class UpdateNewsletterCampaignUsecase
             return array('error' => $this->errors, 'newsletterCampaign' => $newsletterCampaign);
         }
 
-
        // $this->newsletterCampaignRepository->beginTransaction();
         $this->newsletterCampaignRepository->save($newsletterCampaign);
 

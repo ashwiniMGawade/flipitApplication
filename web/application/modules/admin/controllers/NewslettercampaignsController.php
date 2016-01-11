@@ -79,7 +79,11 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         if (isset($params['schedule'])) {
             $validationResults = AdminFactory::validateScheduledNewsletterCampaign()->execute($params);
             if (isset($validationResults['error'])) {
-                $this->setFlashMessage('error', implode('.', $validationResults['error']));
+                $msg = '';
+                foreach ($validationResults['error'] as $element => $error) {
+                    $msg .= "<div for=".$element." class='error help-inline'>".$error."</div>";
+                }
+                $this->setFlashMessage('error', $msg);
                 return;
             }
             $userTimezone = new DateTimeZone($this->view->localeSettings['0']['timezone']);
@@ -138,8 +142,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $this->setFlashMessage('error', $errors);
             $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
         }
-
-        $this->view->newsletterCampaign = $this->getAllParams();
+        $this->view->newsletterCampaign =$newsletterCampaign;
         $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
@@ -151,6 +154,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                 if (!is_object($newsletterCampaign) && isset($newsletterCampaign['error'])) {
                     $errors = $newsletterCampaign['error']->getErrorsAll();
                     $newsletterCampaign = $newsletterCampaign['newsletterCampaign'];
+                    $this->view->newsletterCampaign =$newsletterCampaign;
                     $this->setFlashMessage('error', $errors);
                 } else {
                     $this->setFlashMessage('success', 'News letter campaign has been updated successfully.</br>'. implode('<br/>', $this->message));
@@ -159,7 +163,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             }
         } else {
             $this->_getSearchOffers($newsletterCampaign->getNewsletterCampaignOffers());
-            $this->view->newsletterCampaign =$newsletterCampaign;
             $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         }
         $this->view->warnings = $newsletterCampaign->warnings;

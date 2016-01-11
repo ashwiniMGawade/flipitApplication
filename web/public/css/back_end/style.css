@@ -1387,6 +1387,13 @@ span.error
 	 color: #B94A48;
 }
 
+#newsletterCampaignListDiv .form-error div.error, #newsletterCampaignListDiv .errorserver div.error
+{
+    color: #B94A48;
+    display:block;
+    padding: 8px 35px 8px 14px;
+}
+
 span.errorserver
 {
 	 color: #B94A48;

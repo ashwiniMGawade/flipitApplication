@@ -8,9 +8,10 @@ namespace Core\Domain\Usecase\Admin;
  */
 class ValidateScheduledNewsletterCampaignUsecase
 {
-    public function __construct() {
-    }
+    public function __construct()
+    {
 
+    }
     /**
      * @param $properties
      *
@@ -21,19 +22,19 @@ class ValidateScheduledNewsletterCampaignUsecase
     {
         $response = [];
         if (isset($params['scheduleDate']) && empty($params['scheduleDate'])) {
-            $response['error'][] = "Please enter campaign scheduled Date";
+            $response['error']['scheduleDate'] = "Please enter campaign scheduled Date";
         }
         if (isset($params['campaignSubject']) && empty($params['campaignSubject'])) {
-            $response['error'][] = "Please enter campaign subject";
+            $response['error']['campaignSubject'] = "Please enter campaign subject";
         }
         if (isset($params['campaignHeader']) && empty($params['campaignHeader'])) {
-            $response['error'][] = "Please enter campaign Header";
+            $response['error']['campaignHeader'] = "Please enter campaign Header";
         }
         if (isset($params['campaignFooter']) && empty($params['campaignFooter'])) {
-            $response['error'][] = "Please enter campaign Footer";
+            $response['error']['campaignFooter'] = "Please enter campaign Footer";
         }
         if (isset($params['senderName']) && empty($params['senderName'])) {
-            $response['error'][] = "Please enter sender Name";
+            $response['error']['senderName'] = "Please enter sender Name";
         }
         return $response;
     }

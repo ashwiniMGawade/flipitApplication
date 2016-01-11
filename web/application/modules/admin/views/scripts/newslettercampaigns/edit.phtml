@@ -24,7 +24,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
 <div class="wrap columns-2" id="newsletterCampaignListDiv">
     <div class='wrap columns-2'>
         <?php echo $this->flashMessages(); ?>
-        <div class="error alert-error form-error"></div>
+        <div class="error alert-error form-error mt10"></div>
         <?php
             if(isset($this->warnings) && !empty($this->warnings)) {
                 echo '<div class="alert alert-warning">';
