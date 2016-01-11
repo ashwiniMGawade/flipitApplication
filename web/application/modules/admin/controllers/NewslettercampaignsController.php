@@ -74,7 +74,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         return null != $orderByField ? array($orderByField => $orderByDirection) : array();
     }
 
-    private function _assignSchdeuleTimeSettings($params)
+    private function _assignScheduleTimeSettings($params)
     {
         if (isset($params['schedule'])) {
             $validationResults = AdminFactory::validateScheduledNewsletterCampaign()->execute($params);
@@ -104,7 +104,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $this->view->newsletterCampaign = $this->getAllParams();
             $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
             if ($params) {
-                $params = $this->_assignSchdeuleTimeSettings($params);
+                $params = $this->_assignScheduleTimeSettings($params);
                 $campaignOffer = AdminFactory::createNewsletterCampaignOffer()->execute();
                 $newsletterCampaign = AdminFactory::addNewsletterCampaign()->execute($newsletterCampaign, $campaignOffer, $params);
                 if (!is_object($newsletterCampaign) && isset($newsletterCampaign['error'])) {
@@ -146,7 +146,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
-            $params = $this->_assignSchdeuleTimeSettings($params);
+            $params = $this->_assignScheduleTimeSettings($params);
             $params = $this->_handleImageUpload($params, $newsletterCampaign->headerBanner, $newsletterCampaign->footerBanner);
             if ($params) {
                 $campaignOffer = AdminFactory::createNewsletterCampaignOffer()->execute();
@@ -154,7 +154,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                 if (!is_object($newsletterCampaign) && isset($newsletterCampaign['error'])) {
                     $errors = $newsletterCampaign['error']->getErrorsAll();
                     $newsletterCampaign = $newsletterCampaign['newsletterCampaign'];
-                    $this->view->newsletterCampaign =$newsletterCampaign;
+                    $this->view->newsletterCampaign = $newsletterCampaign;
                     $this->setFlashMessage('error', $errors);
                 } else {
                     $this->setFlashMessage('success', 'News letter campaign has been updated successfully.</br>'. implode('<br/>', $this->message));
