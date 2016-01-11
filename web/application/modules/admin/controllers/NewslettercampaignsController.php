@@ -209,7 +209,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
     private function _handleImageUpload($params, $headerBanner = '', $footerBanner = '')
     {
         if (true === isset($_FILES['headerBanner']) && true === isset($_FILES['headerBanner']['name']) && '' !== $_FILES['headerBanner']['name']) {
-            $rootPath = BASE_PATH . 'images/upload/newslettercampaigns/';
+            $rootPath = UPLOAD_IMG_PATH . 'newslettercampaigns/';
             $image = $this->uploadImage('headerBanner', $rootPath);
             if (false === $image) {
                 $this->setFlashMessage('error', "Please upload valid header banner.");
@@ -222,7 +222,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $params['headerBanner'] = $image;
         }
         if (true === isset($_FILES['footerBanner']) && true === isset($_FILES['footerBanner']['name']) && '' !== $_FILES['footerBanner']['name']) {
-            $rootPath = BASE_PATH . 'images/upload/newslettercampaigns/';
+            $rootPath = UPLOAD_IMG_PATH . 'newslettercampaigns/';
             $image = $this->uploadImage('footerBanner', $rootPath);
             if (false === $image) {
                 $this->setFlashMessage('error', "please upload valid footer banner.");
@@ -235,36 +235,6 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $params['footerBanner'] = $image;
         }
         return $params;
-    }
-
-    public function uploadImage($file, $rootPath)
-    {
-        $adapter = new \Zend_File_Transfer_Adapter_Http();
-        $adapter->getFileInfo($file);
-        if (!file_exists($rootPath)) {
-            mkdir($rootPath, 0755, true);
-        } elseif (!is_writable($rootPath)) {
-            chmod($rootPath, 0755);
-        }
-
-        $adapter->setDestination($rootPath);
-        $adapter->addValidator('Extension', false, array('jpg,jpeg,png,JPG,PNG', true));
-        $imageName = pathinfo($adapter->getFileName($file, false));
-        $imageName = isset($imageName['extension']) ? time().'.'.$imageName['extension'] : '';
-        $targetPath = $rootPath . $imageName;
-        $adapter->addFilter(
-            new \Zend_Filter_File_Rename(
-                array('target' => $targetPath, 'overwrite' => true)
-            ),
-            null,
-            $file
-        );
-        $adapter->receive($file);
-        if ($adapter->isValid($file)) {
-            return $imageName;
-        } else {
-            return false;
-        }
     }
 
     private function _getSearchOffers($campaignOffers)

@@ -43,4 +43,35 @@ class Application_Admin_BaseController extends Zend_Controller_Action
         }
         return $array;
     }
+
+    public function uploadImage($file, $uploadPath)
+    {
+        $rootPath = ROOT_PATH . $uploadPath;
+        $adapter = new \Zend_File_Transfer_Adapter_Http();
+        $adapter->getFileInfo($file);
+        if (!file_exists($rootPath)) {
+            mkdir($rootPath, 0755, true);
+        } elseif (!is_writable($rootPath)) {
+            chmod($rootPath, 0755);
+        }
+
+        $adapter->setDestination($rootPath);
+        $adapter->addValidator('Extension', false, array('jpg,jpeg,png,JPG,PNG', true));
+        $imageName = pathinfo($adapter->getFileName($file, false));
+        $imageName = isset($imageName['extension']) ? time().'.'.$imageName['extension'] : '';
+        $targetPath = $rootPath . $imageName;
+        $adapter->addFilter(
+            new \Zend_Filter_File_Rename(
+                array('target' => $targetPath, 'overwrite' => true)
+            ),
+            null,
+            $file
+        );
+        $adapter->receive($file);
+        if ($adapter->isValid($file)) {
+            return $imageName;
+        } else {
+            return false;
+        }
+    }
 }

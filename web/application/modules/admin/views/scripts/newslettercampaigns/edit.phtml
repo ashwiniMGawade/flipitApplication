@@ -131,7 +131,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                                                 <?php if ( $this->newsletterCampaign->getHeaderBanner()) { ?>
                                                 <div class="browse-container">
                                                     <img class="image-container"
-                                                         src="<?php echo  HTTP_PATH . 'public/images/upload/newslettercampaigns/'.trim($this->newsletterCampaign->getHeaderBanner());?>">
+                                                         src="<?php echo   PUBLIC_PATH_CDN . 'public/images/upload/newslettercampaigns/'.trim($this->newsletterCampaign->getHeaderBanner());?>">
                                                 </div>
                                                 <?php } ?>
                                                 <input type="file" id="headerBanner" class="span3 margin-bottom-tenpx" name="headerBanner">
@@ -178,7 +178,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                                                 <?php if ($this->newsletterCampaign->getFooterBanner()) { ?>
                                                 <div class="browse-container">
                                                     <img class="image-container"
-                                                         src="<?php echo HTTP_PATH . 'public/images/upload/newslettercampaigns/'.trim($this->newsletterCampaign->getFooterBanner()); ?>">
+                                                         src="<?php echo PUBLIC_PATH_CDN . 'public/images/upload/newslettercampaigns/'.trim($this->newsletterCampaign->getFooterBanner()); ?>">
                                                 </div>
                                                 <?php } ?>
                                                 <input type="file" id="footerBanner" class="span3 margin-bottom-tenpx" name="footerBanner">
