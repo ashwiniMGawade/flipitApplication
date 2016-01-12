@@ -75,12 +75,19 @@ class EmailContentsController extends ApiBaseController
             $newsletterCampaign->getHeaderBannerURL(),
             $newsletterCampaign->getHeaderBanner()
         );
-        $this->data['content'] = $this->app->view()->fetch('emailContents/newsletter.phtml', array('newsletterCampaign' => $newsletterCampaign));
         $this->data['footer'] = $this->loadFooter(
             $newsletterCampaign->getFooterBannerURL(),
             $newsletterCampaign->getFooterBanner(),
             $newsletterCampaign->getFooter()
         );
+        $data = array(
+            'newsletterCampaign'    => $newsletterCampaign,
+            'urls'                  => $this->urls,
+            'top50Link'             => $this->urls['httpPathLocale'].$this->translator->translate('link_top-50'),
+            'topOfferText'          => $this->translator->translate('email_Bekijk meer van onze top aanbiedingen'),
+            'exclusiveText'         => $this->translator->translate('email_exclusive')
+        );
+        $this->data['content'] = $this->app->view()->fetch('emailContents/newsletter.phtml', $data);
     }
 
     private function loadHeader($bannerUrl = '', $bannerImage = '')
@@ -90,6 +97,7 @@ class EmailContentsController extends ApiBaseController
         } else {
             $headerLogo = LOCALE != '' ? $this->urls['publicPath'].'emails/email-header-best-flipit.png' : $this->urls['publicPath'].'emails/email-header-best.png';
         }
+
         $headerData = array(
             'headerLogo'    => $headerLogo,
             'bannerUrl'     => $bannerUrl,
@@ -103,14 +111,21 @@ class EmailContentsController extends ApiBaseController
     private function loadFooter($bannerUrl = '', $bannerImage = '', $footerText = '')
     {
         $footerLogo = LOCALE == '' ? $this->urls['publicPath'].'emails/email-footer-kc.png' : $this->urls['publicPath'].'emails/logo-footer.png';
-        $headerData = array(
-            'footerLogo'    => $footerLogo,
-            'bannerUrl'     => $bannerUrl,
-            'bannerImage'   => $bannerImage,
-            'urls'          => $this->urls,
-            'footerText'    => $footerText,
-            'websiteName'   => $this->websiteName
+
+        $footerData = array(
+            'footerLogo'        => $footerLogo,
+            'bannerUrl'         => $bannerUrl,
+            'bannerImage'       => $bannerImage,
+            'urls'              => $this->urls,
+            'footerText'        => $footerText,
+            'websiteName'       => $this->websiteName,
+            'unSubscribeText'   => $this->translator->translate('email_Uitschrijven'),
+            'editProfileText'   => $this->translator->translate('email_Wijzigen profiel'),
+            'contactText'       => $this->translator->translate('email_Contact'),
+            'contactLink'       => $this->translator->translate('link_info') . '/' . $this->translator->translate('link_contact'),
+            'directLoginLink'   => $this->translator->translate('link_login') . '/' . $this->translator->translate('link_directlogin'),
+            'unSubscribeLink'   => $this->translator->translate('link_login') . '/directloginunsubscribe'
         );
-        return $this->app->view()->fetch('emailContents/_partials/_footer.phtml', $headerData);
+        return $this->app->view()->fetch('emailContents/_partials/_footer.phtml', $footerData);
     }
 }

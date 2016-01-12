@@ -1,7 +1,8 @@
 <tr>
     <td height="5"></td>
 </tr>
-<tr>
+<!-- For Exclusive -->
+<tr <?php //if() { ?>style="background:url(<?php echo $urls['httpPath']; ?>public/images/exclusive-star.png) no-repeat right top #fef6ec;">
     <td bgcolor="#ffffff" style="border:1px solid #e4e4e4; border-radius:5px">
         <table width="100%" cellpadding="0" cellspacing="0">
         <tbody>
@@ -29,7 +30,8 @@
                                     <tbody>
                                     <tr>
                                         <td style="padding:0 0 2px; font:14px/17px Arial,Helvetica,sans-serif; color:#363636">
-                                            <a href="http://mandrillapp.com/track/click/15439343/www.flipit.com?p=eyJzIjoiUmM1bEZpdVVoWnNaX1BmenZEUFhkQlNEaExrIiwidiI6MSwicCI6IntcInVcIjoxNTQzOTM0MyxcInZcIjoxLFwidXJsXCI6XCJodHRwOlxcXC9cXFwvd3d3LmZsaXBpdC5jb21cXFwvZXNcXFwvdmVuY2FcIixcImlkXCI6XCJlMWM1MjRkZmM4NGI0ZTUwODZiYzg4ODEzNmJmZDE4ZFwiLFwidXJsX2lkc1wiOltcIjE2YjZmNzE3MWEyZmI1M2ZmZDE4ZWY0N2JkMTc1NmM4ZjkxOWY2YjlcIl19In0" target="_blank" style="text-decoration:none; color:#363636">Venca</a>&nbsp;<span style="color:#e89438; display:inline-block"></span></td>
+                                            <a href="http://mandrillapp.com/track/click/15439343/www.flipit.com?p=eyJzIjoiUmM1bEZpdVVoWnNaX1BmenZEUFhkQlNEaExrIiwidiI6MSwicCI6IntcInVcIjoxNTQzOTM0MyxcInZcIjoxLFwidXJsXCI6XCJodHRwOlxcXC9cXFwvd3d3LmZsaXBpdC5jb21cXFwvZXNcXFwvdmVuY2FcIixcImlkXCI6XCJlMWM1MjRkZmM4NGI0ZTUwODZiYzg4ODEzNmJmZDE4ZFwiLFwidXJsX2lkc1wiOltcIjE2YjZmNzE3MWEyZmI1M2ZmZDE4ZWY0N2JkMTc1NmM4ZjkxOWY2YjlcIl19In0" target="_blank" style="text-decoration:none; color:#363636">Venca</a>&nbsp;<span style="color:#e89438; display:inline-block"><?php echo $exclusiveText; ?></span>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td style="padding:0 0 15px; font:16px/22px Arial,Helvetica,sans-serif; color:#0077cc">
@@ -48,7 +50,8 @@
             </tr>
             <tr>
                 <td bgcolor="#fafafa" align="center" style="border-radius:0 0 4px 4px; padding:12px 0 11px; font:bold 14px/17px Arial,Helvetica,sans-serif; color:#373736">
-                    <a href="http://mandrillapp.com/track/click/15439343/www.flipit.com?p=eyJzIjoiNUwtclAzYURFOVRnOEUtUnFPelJJemhOWHFrIiwidiI6MSwicCI6IntcInVcIjoxNTQzOTM0MyxcInZcIjoxLFwidXJsXCI6XCJodHRwOlxcXC9cXFwvd3d3LmZsaXBpdC5jb21cXFwvZXNcXFwvdG9wLTUwP3V0bV9zb3VyY2U9dHJhbnNhY3Rpb25hbCZ1dG1fbWVkaXVtPWVtYWlsJnV0bV9jYW1wYWlnbj0wNy0wMS0yMDE2JnR5cGU9Y29kZSMzMDQ5NFwiLFwiaWRcIjpcImUxYzUyNGRmYzg0YjRlNTA4NmJjODg4MTM2YmZkMThkXCIsXCJ1cmxfaWRzXCI6W1wiOGU1YjhkMTk1NjljMDExNmJhOWFkZDVhYjVhNjM0NDQ1Y2M3YTI3NFwiXX0ifQ" target="_blank" style="text-decoration:none; color:#373736">Ver más descuentos populares &gt;</a></td>
+                    <a href="<?php echo $top50Link; ?>" target="_blank" style="text-decoration:none; color:#373736"><?php echo $topOfferText; ?> &gt;</a>
+                </td>
             </tr>
         </tbody>
         </table>
@@ -59,7 +62,8 @@
 </tr>
 <tr>
     <td style="padding:0 0 25px 29px; font:24px/27px Arial,Helvetica,sans-serif; color:#32383e">
-        Categoría popular: Bebés &amp; Niños </td>
+        <?php echo $newsletterCampaign->getOfferPartTwoTitle(); ?>
+    </td>
 </tr>
 <tr>
     <td bgcolor="#ffffff" style="border:1px solid #e4e4e4; border-radius:5px">
@@ -108,7 +112,8 @@
             </tr>
             <tr>
                 <td bgcolor="#fafafa" align="center" style="border-radius:0 0 4px 4px; padding:12px 0 11px; font:bold 14px/17px Arial,Helvetica,sans-serif; color:#373736">
-                    <a href="http://mandrillapp.com/track/click/15439343/www.flipit.com?p=eyJzIjoidWIyMUJCRjNPY0lfLWU5VUlGYWt6SlB3ZmtJIiwidiI6MSwicCI6IntcInVcIjoxNTQzOTM0MyxcInZcIjoxLFwidXJsXCI6XCJodHRwOlxcXC9cXFwvd3d3LmZsaXBpdC5jb21cXFwvZXNcXFwvY2F0ZWdvcmlhc1xcXC9iZWJlcy1uaW5vcz91dG1fc291cmNlPXRyYW5zYWN0aW9uYWwmdXRtX21lZGl1bT1lbWFpbCZ1dG1fY2FtcGFpZ249MDctMDEtMjAxNiZ0eXBlPWNvZGUjMzEyNTRcIixcImlkXCI6XCJlMWM1MjRkZmM4NGI0ZTUwODZiYzg4ODEzNmJmZDE4ZFwiLFwidXJsX2lkc1wiOltcIjY1NzdlMjg5MDYyYWFiNmRjMWIxZmI0MTAyZDIwMWZhYTA0NjJmYjRcIl19In0" target="_blank" style="text-decoration:none; color:#373736">Ver más descuentos populares &gt;</a></td>
+                    <a href="<?php echo $top50Link; ?>" target="_blank" style="text-decoration:none; color:#373736"><?php echo $topOfferText; ?> &gt;</a>
+                </td>
             </tr>
             </tbody>
         </table>
