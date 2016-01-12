@@ -17,12 +17,12 @@ class Purifier implements PurifierInterface
         $config->set('HTML.DefinitionRev', 1);
         if ($def = $config->maybeGetRawHTMLDefinition()) {
             $def->addElement('section', 'Block', 'Flow', 'Common');
-            $def->addElement('nav',     'Block', 'Flow', 'Common');
+            $def->addElement('nav', 'Block', 'Flow', 'Common');
             $def->addElement('article', 'Block', 'Flow', 'Common');
             $def->addElement('i', 'Block', 'Flow', 'Common');
-            $def->addElement('aside',   'Block', 'Flow', 'Common');
-            $def->addElement('header',  'Block', 'Flow', 'Common');
-            $def->addElement('footer',  'Block', 'Flow', 'Common');
+            $def->addElement('aside', 'Block', 'Flow', 'Common');
+            $def->addElement('header', 'Block', 'Flow', 'Common');
+            $def->addElement('footer', 'Block', 'Flow', 'Common');
         }
         $this->purifier = new HTMLPurifier($config);
     }
@@ -40,7 +40,7 @@ class Purifier implements PurifierInterface
         $filteredParams = array();
 
         foreach ($params as $key => $value) {
-            if (!is_object($value)) {
+            if (!is_object($value) && (!is_array($value))) {
                 $filteredParams[$key] = $this->purifier->purify($value);
             } else {
                 $filteredParams[$key] = $value;

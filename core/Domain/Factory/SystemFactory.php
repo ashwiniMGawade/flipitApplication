@@ -9,6 +9,8 @@ use \Core\Domain\Usecase\System\GetSplashOffersUsecase;
 use \Core\Domain\Usecase\Guest\GetOfferUsecase;
 use \Core\Domain\Usecase\System\GetSplashPageUsecase;
 use \Core\Domain\Usecase\System\GetNewsletterCampaignsUsecase;
+use \Core\Domain\Usecase\System\GetNewsletterCampaignOffersUsecase;
+use \Core\Domain\Usecase\System\GetNewsletterReceipientCount;
 use \Core\Persistence\Factory\RepositoryFactory;
 use \Core\Domain\Service\Purifier;
 use \Core\Service\Errors;
@@ -53,5 +55,15 @@ class SystemFactory
     public static function getNewsletterCampaigns()
     {
         return new GetNewsletterCampaignsUsecase(RepositoryFactory::newsletterCampaign(), new Purifier(), new Errors());
+    }
+
+    public static function getNewsletterCampaignsOffers()
+    {
+        return new GetNewsletterCampaignOffersUsecase(RepositoryFactory::newsletterCampaignOffer(), new Purifier(), new Errors());
+    }
+
+    public static function getNewsletterReceipientCount()
+    {
+        return new GetNewsletterReceipientCount(RepositoryFactory::visitor(), new Purifier(), new Errors());
     }
 }

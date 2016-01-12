@@ -8,6 +8,7 @@ use \Core\Domain\Service\Purifier;
 use \Core\Domain\Usecase\Admin\AddSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\CreateSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\DeleteSplashOfferUsecase;
+use Core\Domain\Usecase\Admin\GetNewsletterCampaignsByConditionsUsecase;
 use \Core\Domain\Usecase\Admin\GetSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\UpdateSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\UpdateSplashPageUsecase;
@@ -62,6 +63,17 @@ use \Core\Domain\Usecase\Admin\AddNewsletterCampaignUsecase;
 use \Core\Domain\Usecase\Admin\UpdateNewsletterCampaignUsecase;
 use \Core\Domain\Usecase\Admin\DeleteNewsletterCampaignUsecase;
 
+
+use \Core\Domain\Usecase\Admin\GetNewsletterCampaignOfferUsecase;
+use \Core\Domain\Usecase\Admin\CreateNewsletterCampaignOfferUsecase;
+use \Core\Domain\Usecase\Admin\AddNewsletterCampaignOfferUsecase;
+use \Core\Domain\Usecase\Admin\DeleteNewsletterCampaignOfferUsecase;
+
+use \Core\Domain\Usecase\Admin\ValidateScheduledNewsletterCampaignUsecase;
+use \Core\Domain\Usecase\Admin\GetNewsletterCampaignWarningsUsecase;
+
+
+
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\LandingPageValidator;
 use \Core\Domain\Validator\SettingsValidator;
@@ -73,6 +85,7 @@ use \Core\Domain\Validator\VisitorValidator;
 use \Core\Domain\Validator\WidgetValidator;
 use \Core\Domain\Validator\UrlSettingValidator;
 use \Core\Domain\Validator\NewsletterCampaignValidator;
+use \Core\Domain\Validator\NewsletterCampaignOfferValidator;
 
 use \Core\Persistence\Factory\RepositoryFactory;
 
@@ -379,6 +392,11 @@ class AdminFactory
         return new GetNewsletterCampaignUsecase(RepositoryFactory::newsletterCampaign(), new Purifier(), new Errors());
     }
 
+    public static function getNewsletterCampaignsByConditions()
+    {
+        return new GetNewsletterCampaignsByConditionsUsecase(RepositoryFactory::newsletterCampaign(), new Purifier(), new Errors());
+    }
+
     public static function createNewsletterCampaign()
     {
         return new CreateNewsletterCampaignUsecase();
@@ -388,6 +406,7 @@ class AdminFactory
     {
         return new AddNewsletterCampaignUsecase(
             RepositoryFactory::newsletterCampaign(),
+            RepositoryFactory::newsletterCampaignOffer(),
             new NewsletterCampaignValidator(new Validator()),
             new Purifier(),
             new Errors()
@@ -398,6 +417,7 @@ class AdminFactory
     {
         return new UpdateNewsletterCampaignUsecase(
             RepositoryFactory::newsletterCampaign(),
+            RepositoryFactory::newsletterCampaignOffer(),
             new NewsletterCampaignValidator(new Validator()),
             new Purifier(),
             new Errors()
@@ -407,5 +427,38 @@ class AdminFactory
     public static function deleteNewsletterCampaign()
     {
         return new DeleteNewsletterCampaignUsecase(RepositoryFactory::newsletterCampaign());
+    }
+
+    public static function getNewsletterCampaignOffer()
+    {
+        return new GetNewsletterCampaignOfferUsecase(RepositoryFactory::newsletterCampaignOffer(), new Purifier(), new Errors());
+    }
+
+    public static function createNewsletterCampaignOffer()
+    {
+        return new CreateNewsletterCampaignOfferUsecase();
+    }
+
+    public static function addNewsletterCampaignOffer()
+    {
+        return new AddNewsletterCampaignOfferUsecase(
+            RepositoryFactory::newsletterCampaignOffer(),
+            new NewsletterCampaignOfferValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+    public static function deleteNewsletterCampaignOffer()
+    {
+        return new DeleteNewsletterCampaignOfferUsecase(RepositoryFactory::newsletterCampaignOffer(), new Purifier(), new Errors());
+    }
+
+    public static function validateScheduledNewsletterCampaign()
+    {
+        return new ValidateScheduledNewsletterCampaignUsecase();
+    }
+    public static function getNewsletterCampaignWarnings()
+    {
+        return new GetNewsletterCampaignWarningsUsecase(RepositoryFactory::newsletterCampaign(), new Purifier(), new Errors());
     }
 }
