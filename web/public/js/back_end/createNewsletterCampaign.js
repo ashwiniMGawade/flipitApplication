@@ -150,6 +150,10 @@ $(function(){
                             required : true,
                             email    : true
                         },
+                        "campaignSubject" : {
+                            required : true,
+                            minlength: 2
+                        },
                         "campaignHeader": {
                             minlength : 10
                         },
@@ -167,6 +171,10 @@ $(function(){
                         "senderEmail" : {
                             required : __("Please enter your email address"),
                             email : __("Please enter valid email address")
+                        },
+                        "campaignSubject": {
+                            required: "Please enter newsletter campaign subject",
+                            minlength: jQuery.validator.format("Please, at least 2 characters are necessary")
                         },
                         "campaignHeader": {
                             minlength : __("Please enter atleast 10 characters")
@@ -339,36 +347,28 @@ $(function(){
 
     $('#scheduleButton').on("click", function(e) {
         $("#scheduleButton").append('<input type="hidden" name="schedule">');
-        $( "input[name='campaignSubject']" ).rules( "add", {
-            required: true,
-            minlength: 2,
-            messages: {
-                required: "Please enter Newsletter campaign Subject in email setting step.",
-                minlength: jQuery.validator.format("Please, at least {0} characters are necessary"),
-            }
-        });
         $( "textarea[name='campaignHeader']" ).rules( "add", {
             required: true,
             messages: {
-                required: "Please enter Newsletter campaign header in email setting step."
+                required: "Please enter newsletter campaign header in email setting step."
             }
         });
         $( "textarea[name='campaignFooter']" ).rules( "add", {
             required: true,
             messages: {
-                required: "Please enter Newsletter campaign footer in email setting step."
+                required: "Please enter newsletter campaign footer in email setting step."
             }
         });
         $( "input[name='senderName']" ).rules( "add", {
             required: true,
             messages: {
-                required: "Please enter Newsletter senderName in email setting step."
+                required: "Please enter newsletter sender name in email setting step."
             }
         });
         $( "input[name='scheduleDate']" ).rules( "add", {
             required: true,
             messages: {
-                required: "Please enter Newsletter campaign scheduled date."
+                required: "Please enter newsletter campaign scheduled date."
             }
         });
         if ($("form#NewsletterWizardform").valid()) {
