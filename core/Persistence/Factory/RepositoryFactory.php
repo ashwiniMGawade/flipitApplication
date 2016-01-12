@@ -1,6 +1,7 @@
 <?php
 namespace Core\Persistence\Factory;
 
+use Core\Persistence\Database\Repository\BulkEmailRepository;
 use \Core\Persistence\Database\Repository\DashboardRepository;
 use \Core\Persistence\Database\Repository\SettingsRepository;
 use \Core\Persistence\Database\Repository\SplashImageRepository;
@@ -97,9 +98,14 @@ class RepositoryFactory
         return new SplashImageRepository((new Service\DoctrineManager(new Service\AppConfig()))->getUserEntityManager());
     }
 
-    public static function newsletterCampaign()
+    public static function newsletterCampaign($locale = '')
     {
-        return new NewsletterCampaignRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
+        return new NewsletterCampaignRepository((new Service\DoctrineManager(new Service\AppConfig($locale)))->getLocaleEntityManager());
+    }
+
+    public static function bulkEmail()
+    {
+        return new BulkEmailRepository((new Service\DynamoDbManager(new Service\AppConfig()))->getAwsSdk());
     }
 
     public static function newsletterCampaignOffer()

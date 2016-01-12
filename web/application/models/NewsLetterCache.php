@@ -78,7 +78,7 @@ class NewsLetterCache extends BaseNewsLetterCache
             }
         }
         if ($offersExist) {
-            $topVouchercodes = Offer::getOffersForNewsletter($topOffersIds);
+            $topVouchercodes = Offer::getOffersForNewsletter(array_unique($topOffersIds));
         } else {
             $topVouchercodes = Offer::getTopOffers(10);
         }
