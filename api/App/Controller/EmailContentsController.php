@@ -25,6 +25,12 @@ class EmailContentsController extends ApiBaseController
         $this->urls['publicLocalePath'] = LOCALE != '' ? $this->urls['httpPath'].'public/'.LOCALE.'/images/front_end/' : $this->urls['httpPath'].'public/images/front_end/';
         $this->urls['publicPath'] = $this->urls['httpPath'].'public/images/front_end/';
         $this->websiteName = LOCALE != '' ? 'Flipit' : 'Kortingscode';
+        $this->data = array(
+            'header_text'   => '',
+            'header'        => '',
+            'content'       => '',
+            'footer'        => ''
+        );
     }
 
     public function getEmailContents($emailType, $referenceId)
@@ -41,30 +47,26 @@ class EmailContentsController extends ApiBaseController
         }
 
         if (is_null($referenceId) || !is_numeric($referenceId)) {
-            $this->app->halt(400, json_encode(array('messages' => array('Invalid newsletter campaign Id'))));
+            $this->app->halt(400, json_encode(array('messages' => array('Invalid reference Id'))));
         }
         $emailContent = null;
         $this->initData();
-        switch($emailType) {
+        switch ($emailType) {
             case 'newsletter':
                 $this->buildNewsletterEmailContent($referenceId);
                 break;
             default:
-                $this->data['header_text'] = '';
-                $this->data['header'] = '';
-                $this->data['content'] = '';
-                $this->data['footer'] = '';
                 break;
 
         }
-        $emailContent = $this->app->view()->fetch('emailContents/_layouts/layout.phtml', array('data' => $this->data));
-        $selfLink = '/emailcontents/'.$emailType.'/'.$referenceId;
-        $emailContent = array('content' => $emailContent);
-        $response = new Hal($selfLink, $emailContent);
+        $emailContent   = $this->app->view()->fetch('emailContents/_layouts/layout.phtml', array('data' => $this->data));
+        $selfLink       = '/emailcontents/'.$emailType.'/'.$referenceId;
+        $emailContent   = array('content' => $emailContent);
+        $response       = new Hal($selfLink, $emailContent);
         echo $response->asJson();
     }
 
-    private function buildNewsletterEmailContent ($referenceId)
+    private function buildNewsletterEmailContent($referenceId)
     {
         $newsletterCampaign = AdminFactory::getNewsletterCampaign()->execute(array('id' => $referenceId));
         if ($newsletterCampaign instanceof Errors) {
