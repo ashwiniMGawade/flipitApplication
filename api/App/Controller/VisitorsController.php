@@ -14,9 +14,6 @@ class VisitorsController extends ApiBaseController
         $page = $page > 0 ? ($page*$perPage) : 0;
         $where = isset($this->filter['where']) ? (array) $this->filter['where'] : array();
         $conditions = $this->formatInput($where);
-        if (true === isset($conditions['email']) AND false === is_null($conditions['email']) AND false === filter_var($conditions['email'], FILTER_VALIDATE_EMAIL)) {
-            $this->app->halt(405, json_encode(array('messages' => array('Invalid Email'))));
-        }
         $visitors = AdminFactory::getVisitors()->execute($conditions, array(), $perPage, $page);
         if ($visitors instanceof Errors) {
             $this->app->halt(404, json_encode(array('messages' => $visitors->getErrorsAll())));
