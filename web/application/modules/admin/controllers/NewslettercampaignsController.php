@@ -2,6 +2,8 @@
 use \Core\Domain\Factory\AdminFactory;
 use \Core\Domain\Factory\SystemFactory;
 use \Core\Service\Errors;
+use \Core\Domain\Entity\BulkEmail;
+use \Core\Persistence\Factory\RepositoryFactory;
 
 class Admin_NewslettercampaignsController extends Application_Admin_BaseController
 {
@@ -185,6 +187,28 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         }
         AdminFactory::deleteNewsletterCampaign()->execute($result);
         $this->setFlashMessage('success', 'Newsletter campaign successfully deleted.');
+        $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+    }
+
+    public function sendTestEmailAction()
+    {
+        $parameters = $this->getAllParams();
+        $visitor = AdminFactory::getVisitor()->execute(array('email' => $parameters['testEmailId']));
+        if ($visitor instanceof Errors) {
+            $errors = $visitor->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+        }
+        $bulkEmail = new BulkEmail();
+        $bulkEmail->setTimeStamp(time());
+        $bulkEmail->setEmailType('newsletter');
+        $bulkEmail->setLocal('in');
+        $bulkEmail->setReferenceId($parameters['campaignId']);
+        $bulkEmail->setUserId($visitor->getId());
+
+        // Creating a new document in object store
+        $result = RepositoryFactory::bulkEmail()->save($bulkEmail);
+        $this->setFlashMessage('success', 'Test email send');
         $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
     }
     

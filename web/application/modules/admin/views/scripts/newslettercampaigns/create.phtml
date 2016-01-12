@@ -417,14 +417,15 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
         </div>
     </form>
 </div><!-- End code of info campaigns -->
-<div class="modal display-none popup-width" id="sendTest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal display-none popup-width" id="sendTest" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="wrap columns-2">
-        <form method="post" id="sendTestEmailForm" name="sendTestEmailForm">
+        <form method="post" id="sendTestEmailForm" name="sendTestEmailForm" action="/admin/newslettercampaigns/send-test-email">
             <div class="m-item-popup-hdr">Send Test Email</div>
             <div id="poststuff" class="metabox-holder has-right-sidebar">
                 <div id="post-body" style="min-height: 110px;">
                     <div class="mainpage-content-line">
                         <div class="mainpage-content-right ml20">
+                            <div></div>
                             <div class="mainpage-content-right-inner-left-other">
                                 <input type="hidden" id='testEmail' name='testEmail' placeholder="Search Email.." style="width:300px;">
                             </div>
@@ -435,7 +436,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
             </div>
 
             <div class="m-item-popup-btm">
-                <button value="" id="submitUploadBtn" class="btn btn-primary m5" type="button">Send</button>
+                <button value="" id="submitUploadBtn" class="btn btn-primary m5" type="submit">Send</button>
                 <button value="" class="btn ml10 m5" data-dismiss="modal">Cancel</button>
             </div>
         </form>

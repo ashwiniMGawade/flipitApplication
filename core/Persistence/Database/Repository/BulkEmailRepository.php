@@ -37,7 +37,7 @@ class BulkEmailRepository implements BulkEmailInterface
             $itemArray['UserId'] = array('N' => (string) $bulkEmail->getUserId());
         }
         return $this->dynamoDbClient->putItem(array(
-            'TableName' => 'BulkEmailTest',
+            'TableName' => 'BulkEmail',
             'Item' => $itemArray
         ));
     }
