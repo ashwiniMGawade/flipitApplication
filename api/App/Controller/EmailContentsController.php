@@ -87,7 +87,11 @@ class EmailContentsController extends ApiBaseController
             'urls'                  => $this->urls,
             'top50Link'             => $this->urls['httpPathLocale'].$this->translator->translate('link_top-50'),
             'topOfferText'          => $this->translator->translate('email_Bekijk meer van onze top aanbiedingen'),
-            'exclusiveText'         => $this->translator->translate('email_exclusive')
+            'exclusiveText'         => $this->translator->translate('email_exclusive'),
+            'codeText'              => $this->translator->translate('email_CODE'),
+            'offerFromText'         => $this->translator->translate('email_valid from'),
+            'offerToText'           => $this->translator->translate('email_t/m'),
+            'validText'             => $this->translator->translate('email_valid t/m')
         );
         $this->data['content'] = $this->app->view()->fetch('emailContents/newsletter.phtml', $data);
     }
