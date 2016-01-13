@@ -199,17 +199,17 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $this->setFlashMessage('error', $errors);
             $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
         }
+        $locale = LOCALE != '' ? LOCALE : 'en';
         $bulkEmail = new BulkEmail();
         $bulkEmail->setTimeStamp(time());
         $bulkEmail->setEmailType('newsletter');
-        $bulkEmail->setLocal('in');
+        $bulkEmail->setLocal($locale);
         $bulkEmail->setReferenceId($parameters['campaignId']);
         $bulkEmail->setUserId($visitor->getId());
 
-        // Creating a new document in object store
         $result = RepositoryFactory::bulkEmail()->save($bulkEmail);
-        $this->setFlashMessage('success', 'Test email send');
-        $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+        $this->setFlashMessage('success', 'Test email sent successfully');
+        $this->redirect(HTTP_PATH . 'admin/newslettercampaigns/edit/id/'.$parameters['campaignId']);
     }
     
     private function prepareData($campaigns)
