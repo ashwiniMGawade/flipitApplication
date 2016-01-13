@@ -1,7 +1,7 @@
 <?php
 namespace Core\Persistence\Factory;
 
-use Core\Persistence\Database\Repository\BulkEmailRepository;
+use \Core\Persistence\Database\Repository\BulkEmailRepository;
 use \Core\Persistence\Database\Repository\DashboardRepository;
 use \Core\Persistence\Database\Repository\LocaleSettingRepository;
 use \Core\Persistence\Database\Repository\SettingsRepository;
@@ -119,8 +119,8 @@ class RepositoryFactory
         return new LocalSettingsRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 
-    public static function localeSetting()
+    public static function localeSetting($locale = '')
     {
-        return new LocaleSettingRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
+        return new LocaleSettingRepository((new Service\DoctrineManager(new Service\AppConfig($locale)))->getLocaleEntityManager());
     }
 }
