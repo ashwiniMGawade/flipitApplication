@@ -202,7 +202,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $locale = LOCALE != '' ? LOCALE : 'en';
         $bulkEmail = new BulkEmail();
         $bulkEmail->setTimeStamp(time());
-        $bulkEmail->setEmailType('newsletter');
+        $bulkEmail->setEmailType('testnewsletter');
         $bulkEmail->setLocal($locale);
         $bulkEmail->setReferenceId($parameters['campaignId']);
         $bulkEmail->setUserId($visitor->getId());
