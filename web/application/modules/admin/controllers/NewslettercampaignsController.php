@@ -131,6 +131,8 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
 
             $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
             $this->view->partTwoSearchOffers = $this->view->partOneSearchOffers = \KC\Repository\PopularCode::searchAllOffer(array());
+
+            $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         }
     }
 
@@ -144,7 +146,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $this->setFlashMessage('error', $errors);
             $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
         }
-        $this->view->newsletterCampaign =$newsletterCampaign;
+        $this->view->newsletterCampaign = $newsletterCampaign;
         $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
