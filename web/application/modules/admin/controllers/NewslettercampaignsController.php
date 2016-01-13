@@ -147,7 +147,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
             $params = $this->_assignScheduleTimeSettings($params);
-            $params = $this->_handleImageUpload($params, $newsletterCampaign->headerBanner, $newsletterCampaign->footerBanner);
+            $params = $this->_handleImageUpload($params, $newsletterCampaign->getHeaderBanner(), $newsletterCampaign->getfooterBanner());
             if ($params) {
                 $campaignOffer = AdminFactory::createNewsletterCampaignOffer()->execute();
                 $newsletterCampaign = AdminFactory::updateNewsletterCampaign()->execute($newsletterCampaign, $campaignOffer, $params);
