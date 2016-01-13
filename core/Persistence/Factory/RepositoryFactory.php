@@ -2,6 +2,7 @@
 namespace Core\Persistence\Factory;
 
 use \Core\Persistence\Database\Repository\DashboardRepository;
+use \Core\Persistence\Database\Repository\LocaleSettingRepository;
 use \Core\Persistence\Database\Repository\SettingsRepository;
 use \Core\Persistence\Database\Repository\SplashImageRepository;
 use \Core\Persistence\Database\Repository\SplashOfferRepository;
@@ -98,5 +99,10 @@ class RepositoryFactory
     public static function newsletterCampaign()
     {
         return new NewsletterCampaignRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
+    }
+
+    public static function localeSetting()
+    {
+        return new LocaleSettingRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 }

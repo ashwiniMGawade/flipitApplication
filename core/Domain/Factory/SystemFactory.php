@@ -3,6 +3,7 @@ namespace Core\Domain\Factory;
 
 use \Core\Domain\Usecase\System\GetApiKeyUsecase;
 use \Core\Domain\Usecase\System\DeactivateSleepingVisitors;
+use Core\Domain\Usecase\System\GetLocaleSettingsUsecase;
 use \Core\Domain\Usecase\System\GetSettingUsecase;
 use \Core\Domain\Usecase\System\GetSplashImagesUsecase;
 use \Core\Domain\Usecase\System\GetSplashOffersUsecase;
@@ -53,5 +54,10 @@ class SystemFactory
     public static function getNewsletterCampaigns()
     {
         return new GetNewsletterCampaignsUsecase(RepositoryFactory::newsletterCampaign(), new Purifier(), new Errors());
+    }
+
+    public static function getLocaleSettings()
+    {
+        return new GetLocaleSettingsUsecase(RepositoryFactory::localeSetting(), new Purifier(), new Errors());
     }
 }
