@@ -2,6 +2,8 @@
 use \Core\Domain\Factory\AdminFactory;
 use \Core\Domain\Factory\SystemFactory;
 use \Core\Service\Errors;
+use \Core\Domain\Entity\BulkEmail;
+use \Core\Persistence\Factory\RepositoryFactory;
 
 class Admin_NewslettercampaignsController extends Application_Admin_BaseController
 {
@@ -186,6 +188,31 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         AdminFactory::deleteNewsletterCampaign()->execute($result);
         $this->setFlashMessage('success', 'Newsletter campaign successfully deleted.');
         $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+    }
+
+    public function sendTestEmailAction()
+    {
+        $parameters = $this->getAllParams();
+        $visitor = AdminFactory::getVisitor()->execute(array('email' => $parameters['testEmailId']));
+        if ($visitor instanceof Errors) {
+            $errors = $visitor->getErrorsAll();
+            $this->setFlashMessage('error', $errors);
+            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+        }
+        $locale = LOCALE != '' ? LOCALE : 'en';
+        $bulkEmail = new BulkEmail();
+        $bulkEmail->setTimeStamp(time());
+        $bulkEmail->setEmailType('testnewsletter');
+        $bulkEmail->setLocal($locale);
+        $bulkEmail->setReferenceId($parameters['campaignId']);
+        $bulkEmail->setUserId($visitor->getId());
+        try {
+            RepositoryFactory::bulkEmail()->save($bulkEmail);
+            $this->setFlashMessage('success', 'Test email sent successfully');
+        } catch (\Aws\DynamoDb\Exception\DynamoDbException $exception) {
+            $this->setFlashMessage('error', 'Unable to send test newsletter, please contact to administrator.');
+        }
+        $this->redirect(HTTP_PATH . 'admin/newslettercampaigns/edit/id/'.$parameters['campaignId']);
     }
     
     private function prepareData($campaigns)
