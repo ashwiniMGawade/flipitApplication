@@ -2,10 +2,10 @@
 
 namespace Core\Persistence\Database\Repository;
 
-use Core\Domain\Repository\BulkEmailInterface;
+use Core\Domain\Repository\BulkEmailRepositoryInterface;
 use Core\Domain\Entity\BulkEmail;
 
-class BulkEmailRepository implements BulkEmailInterface
+class BulkEmailRepository implements BulkEmailRepositoryInterface
 {
     private $awsSdk;
     private $dynamoDbClient;
@@ -37,7 +37,7 @@ class BulkEmailRepository implements BulkEmailInterface
             $itemArray['UserId'] = array('N' => (string) $bulkEmail->getUserId());
         }
         return $this->dynamoDbClient->putItem(array(
-            'TableName' => 'BulkEmailTest',
+            'TableName' => 'BulkEmail',
             'Item' => $itemArray
         ));
     }
