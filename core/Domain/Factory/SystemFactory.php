@@ -3,7 +3,7 @@ namespace Core\Domain\Factory;
 
 use \Core\Domain\Usecase\System\GetApiKeyUsecase;
 use \Core\Domain\Usecase\System\DeactivateSleepingVisitors;
-use Core\Domain\Usecase\System\GetLocaleSettingsUsecase;
+use \Core\Domain\Usecase\System\GetLocaleSettingsUsecase;
 use \Core\Domain\Usecase\System\GetSettingUsecase;
 use \Core\Domain\Usecase\System\GetSplashImagesUsecase;
 use \Core\Domain\Usecase\System\GetSplashOffersUsecase;
@@ -12,6 +12,8 @@ use \Core\Domain\Usecase\System\GetSplashPageUsecase;
 use \Core\Domain\Usecase\System\GetNewsletterCampaignsUsecase;
 use \Core\Domain\Usecase\System\GetNewsletterCampaignOffersUsecase;
 use \Core\Domain\Usecase\System\GetNewsletterReceipientCount;
+use \Core\Domain\Usecase\System\SendNewsletterTrigger;
+
 use \Core\Persistence\Factory\RepositoryFactory;
 use \Core\Domain\Service\Purifier;
 use \Core\Service\Errors;
@@ -68,8 +70,18 @@ class SystemFactory
         return new GetNewsletterReceipientCount(RepositoryFactory::visitor(), new Purifier(), new Errors());
     }
 
-    public static function getLocaleSettings()
+    public static function getLocaleSettings($locale = '')
     {
-        return new GetLocaleSettingsUsecase(RepositoryFactory::localeSetting(), new Purifier(), new Errors());
+        return new GetLocaleSettingsUsecase(RepositoryFactory::localeSetting($locale), new Purifier(), new Errors());
+    }
+
+    public static function sendNewsletterTrigger($locale)
+    {
+        return new SendNewsletterTrigger(
+            RepositoryFactory::newsletterCampaign($locale),
+            RepositoryFactory::bulkEmail(),
+            RepositoryFactory::localeSetting($locale),
+            $locale
+        );
     }
 }

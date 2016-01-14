@@ -2,10 +2,10 @@
 
 namespace Core\Persistence\Database\Repository;
 
-use Core\Domain\Repository\BulkEmailInterface;
+use Core\Domain\Repository\BulkEmailRepositoryInterface;
 use Core\Domain\Entity\BulkEmail;
 
-class BulkEmailRepository implements BulkEmailInterface
+class BulkEmailRepository implements BulkEmailRepositoryInterface
 {
     private $awsSdk;
     private $dynamoDbClient;

@@ -1,11 +1,8 @@
 <?php
 namespace Command\Email;
 
-use Core\Domain\Factory\SystemFactory;
-use Core\Persistence\Factory\RepositoryFactory;
-use Core\Service\LocaleLister;
-use Core\Domain\Entity\NewsletterCampaign;
-use Core\Domain\Entity\BulkEmail;
+use \Core\Domain\Factory\SystemFactory;
+use \Core\Service\LocaleLister;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,58 +22,31 @@ The <info>%command.name%</info> command will loop all the locale & check whether
 <info>%command.full_name%</info>
 EOT
             );
-
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $locals = (new LocaleLister)->getAllLocals();
+        $locals = (new localeLister)->getAllLocals();
 
-        $newsletterCampaignsToSend = array();
+        $scheduledNewsletterNames = array();
 
         foreach ($locals as $local) {
             $conditions = array('scheduledStatus' => 1);
-            $currentDateTime = new \DateTime('now', (new \DateTimezone("Europe/Amsterdam")));
-            $newsletterCampaignsData = SystemFactory::getNewsletterCampaigns($local)->execute($conditions);
-            foreach ($newsletterCampaignsData as $newsletterCampaign) {
-                if ($newsletterCampaign instanceof NewsletterCampaign && $currentDateTime > $newsletterCampaign->scheduledTime) {
-                    $newsletterCampaignsToSend[$local][] = $newsletterCampaign;
-                }
-            }
-        }
-        $scheduledNewsletters = $this->_scheduleNewsletter($newsletterCampaignsToSend);
-        $output->writeln('<info>' . $scheduledNewsletters . '</info>');
-    }
-
-    private function _scheduleNewsletter($newsletterCampaigns)
-    {
-        $bulkEmailRepository = RepositoryFactory::bulkEmail();
-        $result = array();
-
-        foreach ($newsletterCampaigns as $local => $newsletterCampaigns) {
+            $newsletterCampaigns = SystemFactory::getNewsletterCampaigns($local)->execute($conditions);
             foreach ($newsletterCampaigns as $newsletterCampaign) {
-                $bulkEmail = new BulkEmail;
-                $bulkEmail->setTimeStamp(time());
-                $bulkEmail->setEmailType('newsletter');
-                $bulkEmail->setLocal($local);
-                $bulkEmail->setReferenceId($newsletterCampaign->getId());
-
-                // Creating a new document in object store
-                $bulkEmailRepository->save($bulkEmail);
-
-                // Setting the newsletter campaign to scheduled
-                $newsletterCampaign->setScheduledStatus(2);
-
-                $newsletterCampaignRepository = RepositoryFactory::newsletterCampaign($local);
-                $newsletterCampaignRepository->save($newsletterCampaign);
-
-                array_push($result, $local);
+                array_push($scheduledNewsletterNames, SystemFactory::sendNewsletterTrigger($local)->execute($newsletterCampaign));
             }
         }
 
-        $scheduledLocales = join(' ', $result);
-        return (empty($scheduledLocales)) ?
+        $scheduledNewsletters = null;
+        foreach ($scheduledNewsletterNames as $scheduledNewsletterName) {
+            $scheduledNewsletters .= (!empty($scheduledNewsletterName)) ? "- " . $scheduledNewsletterName . "\n" : "";
+        }
+
+        $resultMessage =  (empty($scheduledNewsletters)) ?
             "No newsletters scheduled." :
-            "For the following local(s) a newsletter is scheduled for sending: " . strtoupper($scheduledLocales);
+            "Newsletter(s) scheduled for sending: \n" . $scheduledNewsletters;
+
+        $output->writeln('<info>' . $resultMessage . '</info>');
     }
 }

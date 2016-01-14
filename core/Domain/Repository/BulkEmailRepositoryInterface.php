@@ -4,7 +4,7 @@ namespace Core\Domain\Repository;
 
 use Core\Domain\Entity\BulkEmail;
 
-interface BulkEmailInterface
+interface BulkEmailRepositoryInterface
 {
     public function save(BulkEmail $entity);
 }
