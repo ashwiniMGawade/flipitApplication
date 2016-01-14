@@ -88,7 +88,7 @@ class Admin_NewsletterCampaignsController extends Application_Admin_BaseControll
                 $this->setFlashMessage('error', $msg);
                 return;
             }
-            $userTimezone = new DateTimeZone($this->view->localeSettings['0']['timezone']);
+            $userTimezone = new DateTimeZone($this->view->localeSettings['0']->timezone);
             $date = new DateTime($params['scheduleDate'] . $params['scheduleTime'], $userTimezone);
             $params['scheduledStatus'] = 1;
             $params['scheduledTime'] = $date;
@@ -99,12 +99,12 @@ class Admin_NewsletterCampaignsController extends Application_Admin_BaseControll
     public function createAction()
     {
         $this->view->newsletterCampaign = array();
+        $this->view->localeSettings = SystemFactory::getLocaleSettings()->execute();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
             $newsletterCampaign = AdminFactory::createNewsletterCampaign()->execute();
             $params = $this->_handleImageUpload($params);
             $this->view->newsletterCampaign = $this->getAllParams();
-            $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
             if ($params) {
                 $params = $this->_assignScheduleTimeSettings($params);
                 $campaignOffer = AdminFactory::createNewsletterCampaignOffer()->execute();
@@ -145,7 +145,7 @@ class Admin_NewsletterCampaignsController extends Application_Admin_BaseControll
             $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns');
         }
         $this->view->newsletterCampaign =$newsletterCampaign;
-        $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
+        $this->view->localeSettings = SystemFactory::getLocaleSettings()->execute();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
             $params = $this->_assignScheduleTimeSettings($params);
@@ -165,7 +165,6 @@ class Admin_NewsletterCampaignsController extends Application_Admin_BaseControll
             }
         } else {
             $this->_getSearchOffers($newsletterCampaign->getNewsletterCampaignOffers());
-            $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         }
         $this->view->warnings = $newsletterCampaign->warnings;
         $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
@@ -197,7 +196,7 @@ class Admin_NewsletterCampaignsController extends Application_Admin_BaseControll
         if ($visitor instanceof Errors) {
             $errors = $visitor->getErrorsAll();
             $this->setFlashMessage('error', $errors);
-            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+            $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns');
         }
         $locale = LOCALE != '' ? LOCALE : 'en';
         $bulkEmail = new BulkEmail();
@@ -212,7 +211,7 @@ class Admin_NewsletterCampaignsController extends Application_Admin_BaseControll
         } catch (\Aws\DynamoDb\Exception\DynamoDbException $exception) {
             $this->setFlashMessage('error', 'Unable to send test newsletter, please contact to administrator.');
         }
-        $this->redirect(HTTP_PATH . 'admin/newslettercampaigns/edit/id/'.$parameters['campaignId']);
+        $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns/edit/id/'.$parameters['campaignId']);
     }
     
     private function prepareData($campaigns)

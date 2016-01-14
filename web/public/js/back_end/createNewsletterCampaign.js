@@ -474,7 +474,7 @@ $(function(){
             $('.next a').removeClass('disable_a_href');
             $('.previous a').removeClass('disable_a_href');
             jQuery("div.dateValidationMessage").removeClass("error").addClass("success")
-                .html(__("<span class='success help-inline'>Valid</span>"))
+                .html(__(""))
                 .next("div").removeClass("error").addClass("success");
         }
     }

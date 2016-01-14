@@ -373,8 +373,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                                             <strong>
                                                 <?php
                                                 # set current timezone for scheduled newsletter if available (in case if it is schediled)
-                                                echo $currentTimezone = isset($this->localeSettings['0']['timezone']) ?
-                                                    $this->localeSettings['0']['timezone'] : "" ;
+                                                echo $this->localeSettings['0']->timezone;
                                                 ?>
                                             </strong>
                                         </label>
