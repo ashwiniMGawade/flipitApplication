@@ -4,6 +4,7 @@ namespace Api\Controller;
 use \Core\Domain\Factory\AdminFactory;
 use \Core\Domain\Factory\SystemFactory;
 use \Core\Domain\Factory\TranslationsFactory;
+use Core\Service\Config;
 use \Nocarrier\Hal;
 use \Core\Service\Errors;
 
@@ -30,11 +31,14 @@ class EmailContentsController extends ApiBaseController
 
     private function defineConstants()
     {
+        $config = new Config();
+        $cdnPath = LOCALE != '' ? (isset($config->getConfig()->cdn->url->kortingscode) ? $config->getConfig()->cdn->url->kortingscode : 'img.kortingscode.nl/public') : (isset($config->getConfig()->cdn->url->flipit) ? $config->getConfig()->cdn->url->flipit : 'img.flipit.com/public');
         defined('HTTP_PATH')        || define('HTTP_PATH', LOCALE != '' ? 'http://www.flipit.com/' : 'http://www.kortingscode.nl/');
         defined('HTTP_PATH_LOCALE') || define('HTTP_PATH_LOCALE', LOCALE != '' ? HTTP_PATH.LOCALE.'/' : HTTP_PATH);
         defined('PUBLIC_PATH')      || define('PUBLIC_PATH', HTTP_PATH.'public/images/front_end/');
-        defined('UPLOAD_PATH')      || define('UPLOAD_PATH', 'http://img.flipit.com/public/images/upload/');
-        defined('PUBLIC_PATH_CDN')  || define('PUBLIC_PATH_CDN', LOCALE != '' ? 'http://img.flipit.com/public/'.LOCALE.'/' : 'http://img.kortingscode.nl/public/');
+        defined('CDN_PATH')         || define('CDN_PATH', 'http://'.$cdnPath);
+        defined('UPLOAD_PATH')      || define('UPLOAD_PATH', CDN_PATH.'/images/upload/');
+        defined('PUBLIC_PATH_CDN')  || define('PUBLIC_PATH_CDN', LOCALE != '' ? CDN_PATH.'/'.LOCALE.'/' : CDN_PATH.'/');
         defined('PUBLIC_LOCALE_PATH') || define('PUBLIC_LOCALE_PATH', LOCALE != '' ? HTTP_PATH.'public/'.LOCALE.'/images/front_end/' : HTTP_PATH.'public/images/front_end/');
     }
 
