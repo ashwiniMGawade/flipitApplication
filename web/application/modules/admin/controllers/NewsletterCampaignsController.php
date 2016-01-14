@@ -5,14 +5,14 @@ use \Core\Service\Errors;
 use \Core\Domain\Entity\BulkEmail;
 use \Core\Persistence\Factory\RepositoryFactory;
 
-class Admin_NewslettercampaignsController extends Application_Admin_BaseController
+class Admin_NewsletterCampaignsController extends Application_Admin_BaseController
 {
     protected $message = [];
     public function preDispatch()
     {
         if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
-            $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+            $referer->refer = "http://".$this->getRequest()->getParam('HTTP_HOST').$this->getRequest()->getParam('REQUEST_URI');
             $this->_redirect('/admin/auth/index');
         }
         $this->view->controllerName = $this->getRequest()->getParam('controller');
@@ -34,7 +34,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
     {
     }
 
-    public function getnewslettercampaignlistAction()
+    public function getNewsletterCampaignListAction()
     {
         $conditions = array('deleted' => 0);
         $campaignList = array();
@@ -54,9 +54,8 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $campaignList['records'] = $this->prepareData($result['records']);
             $sEcho = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sEcho')));
             $response = \DataTable_Helper::createResponse($sEcho, $campaignList['records'], $result['count']);
-            echo Zend_Json::encode($response);
+            $this->_helper->json($response);
         }
-        exit;
     }
 
     private function getOrderByField()
@@ -88,7 +87,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                 $this->setFlashMessage('error', $msg);
                 return;
             }
-            $userTimezone = new DateTimeZone($this->view->localeSettings['0']['timezone']);
+            $userTimezone = new DateTimeZone($this->view->localeSettings['0']->timezone);
             $date = new DateTime($params['scheduleDate'] . $params['scheduleTime'], $userTimezone);
             $params['scheduledStatus'] = 1;
             $params['scheduledTime'] = $date;
@@ -99,12 +98,12 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
     public function createAction()
     {
         $this->view->newsletterCampaign = array();
+        $this->view->localeSettings = SystemFactory::getLocaleSettings()->execute();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
             $newsletterCampaign = AdminFactory::createNewsletterCampaign()->execute();
             $params = $this->_handleImageUpload($params);
             $this->view->newsletterCampaign = $this->getAllParams();
-            $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
             if ($params) {
                 $params = $this->_assignScheduleTimeSettings($params);
                 $campaignOffer = AdminFactory::createNewsletterCampaignOffer()->execute();
@@ -115,7 +114,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     $this->setFlashMessage('error', $errors);
                 } else {
                     $this->setFlashMessage('success', 'Newsletter campaign has been created successfully.</br>'. implode('<br/>', $this->message));
-                    $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+                    $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns');
                 }
             }
         } else {
@@ -144,10 +143,10 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         if ($newsletterCampaign instanceof Errors) {
             $errors = $newsletterCampaign->getErrorsAll();
             $this->setFlashMessage('error', $errors);
-            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+            $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns');
         }
-        $this->view->newsletterCampaign = $newsletterCampaign;
-        $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
+        $this->view->newsletterCampaign =$newsletterCampaign;
+        $this->view->localeSettings = SystemFactory::getLocaleSettings()->execute();
         if ($this->getRequest()->isPost()) {
             $params = $this->getRequest()->getParams();
             $params = $this->_assignScheduleTimeSettings($params);
@@ -162,12 +161,11 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     $this->setFlashMessage('error', $errors);
                 } else {
                     $this->setFlashMessage('success', 'News letter campaign has been updated successfully.</br>'. implode('<br/>', $this->message));
-                    $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+                    $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns');
                 }
             }
         } else {
             $this->_getSearchOffers($newsletterCampaign->getNewsletterCampaignOffers());
-            $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         }
         $this->view->warnings = $newsletterCampaign->warnings;
         $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
@@ -178,18 +176,18 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $newsletterCampaignId = intval($this->getRequest()->getParam('id'));
         if (intval($newsletterCampaignId) < 1) {
             $this->setFlashMessage('error', 'Invalid selection.');
-            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+            $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns');
         }
 
         $result = AdminFactory::getNewsletterCampaign()->execute(array('id' => $newsletterCampaignId));
         if ($result instanceof Errors) {
             $errors = $result->getErrorsAll();
             $this->setFlashMessage('error', $errors);
-            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+            $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns');
         }
         AdminFactory::deleteNewsletterCampaign()->execute($result);
         $this->setFlashMessage('success', 'Newsletter campaign successfully deleted.');
-        $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+        $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns');
     }
 
     public function sendTestEmailAction()
@@ -199,7 +197,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         if ($visitor instanceof Errors) {
             $errors = $visitor->getErrorsAll();
             $this->setFlashMessage('error', $errors);
-            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+            $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns');
         }
         $locale = LOCALE != '' ? LOCALE : 'en';
         $bulkEmail = new BulkEmail();
@@ -214,7 +212,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         } catch (\Aws\DynamoDb\Exception\DynamoDbException $exception) {
             $this->setFlashMessage('error', 'Unable to send test newsletter, please contact to administrator.');
         }
-        $this->redirect(HTTP_PATH . 'admin/newslettercampaigns/edit/id/'.$parameters['campaignId']);
+        $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns/edit/id/'.$parameters['campaignId']);
     }
     
     private function prepareData($campaigns)
@@ -237,7 +235,10 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
 
     private function _handleImageUpload($params, $headerBanner = '', $footerBanner = '')
     {
-        if (true === isset($_FILES['headerBanner']) && true === isset($_FILES['headerBanner']['name']) && '' !== $_FILES['headerBanner']['name']) {
+        $upload = new Zend_File_Transfer();
+        $files = $upload->getFileInfo();
+
+        if (true === isset($files['headerBanner']) && true === isset($files['headerBanner']['name']) && '' !== $files['headerBanner']['name']) {
             $rootPath = UPLOAD_IMG_PATH . 'newslettercampaigns/';
             $image = $this->uploadImage('headerBanner', $rootPath);
             if (false === $image) {
@@ -250,7 +251,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
             $this->message[] = "Successfully uploaded header banner image.";
             $params['headerBanner'] = $image;
         }
-        if (true === isset($_FILES['footerBanner']) && true === isset($_FILES['footerBanner']['name']) && '' !== $_FILES['footerBanner']['name']) {
+        if (true === isset($files['footerBanner']) && true === isset($files['footerBanner']['name']) && '' !== $files['footerBanner']['name']) {
             $rootPath = UPLOAD_IMG_PATH . 'newslettercampaigns/';
             $image = $this->uploadImage('footerBanner', $rootPath);
             if (false === $image) {

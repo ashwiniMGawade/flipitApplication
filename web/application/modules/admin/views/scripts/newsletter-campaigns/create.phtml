@@ -28,7 +28,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
         <h1 class="fl"><?php echo $this->translate('Create Newsletter Campaign');?>
             <img id="loader" src="<?php echo PUBLIC_PATH;?>images/loader.gif" style="display:none;">
             <input type="button" onclick="" href="#" id="saveNewsletterCampaign" class="btn ml10" value="<?php echo $this->translate('Save & Exit');?>"></button>
-            <a type="button" href="<?php echo HTTP_PATH;?>admin/newslettercampaigns" id="cancel" class="btn ml10"><?php echo $this->translate('Cancel');?></a>
+            <a type="button" href="<?php echo HTTP_PATH;?>admin/newsletter-campaigns" id="cancel" class="btn ml10"><?php echo $this->translate('Cancel');?></a>
 
         </h1>
         <div class="clear"></div>
@@ -118,7 +118,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                                                     <div class="browse-container">
                                                         <?php if ( isset($this->newsletterCampaign['headerBanner'])) { ?>
                                                             <img class="image-container"
-                                                                 src="<?php echo  PUBLIC_PATH_CDN . 'public/images/upload/newslettercampaigns/'.trim($this->newsletterCampaign['headerBanner']);?>">
+                                                                 src="<?php echo  PUBLIC_PATH_CDN . 'images/upload/newslettercampaigns/'.trim($this->newsletterCampaign['headerBanner']);?>">
                                                         <?php } ?>
                                                     </div>
                                                     <input type="file" id="headerBanner" class="span3 margin-bottom-tenpx" name="headerBanner">
@@ -165,7 +165,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                                                     <div class="browse-container">
                                                         <?php if ( isset($this->newsletterCampaign['footerBanner']) ) { ?>
                                                             <img class="image-container"
-                                                                 src="<?php echo PUBLIC_PATH_CDN . 'public/images/upload/newslettercampaigns/'.trim($this->newsletterCampaign['footerBanner']); ?>">
+                                                                 src="<?php echo PUBLIC_PATH_CDN . 'images/upload/newslettercampaigns/'.trim($this->newsletterCampaign['footerBanner']); ?>">
                                                         <?php } ?>
                                                     </div>
                                                     <input type="file" id="footerBanner" class="span3 margin-bottom-tenpx" name="footerBanner">
@@ -359,8 +359,8 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
                                                 <strong>
                                                     <?php
                                                     # set current timezone for scheduled newsletter if available (in case if it is schediled)
-                                                    echo $currentTimezone = isset($this->localeSettings['0']['timezone']) ?
-                                                        $this->localeSettings['0']['timezone'] : "" ;
+                                                     echo $this->localeSettings['0']->timezone;
+
                                                     ?>
                                                 </strong>
                                             </label>
