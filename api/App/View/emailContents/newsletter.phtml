@@ -8,11 +8,11 @@
             <?php foreach($newsletterCampaign->getNewsletterCampaignOffers() as $offer) : ?>
             <?php if (1 === $offer->getSection()) :
                     $utmParameters = '?utm_source=transactional&utm_medium=email&utm_campaign='.date('d-m-Y').'&type=code#'.$offer->getOffer()->getId();
-                    $clickOutLink = $urls['httpPathLocale'].$offer->getOffer()->getShopOffers()->getPermalink().$utmParameters;
+                    $clickOutLink = HTTP_PATH_LOCALE.$offer->getOffer()->getShopOffers()->getPermalink().$utmParameters;
                     $exclusiveCode = '';
                     $exclusiveStyle = '';
                     if (1 === $offer->getOffer()->getExclusiveCode()):
-                        $exclusiveStyle  = 'background:url('.$urls['httpPath'].'public/images/exclusive-star.png) no-repeat right top #fef6ec';
+                        $exclusiveStyle  = 'background:url('.HTTP_PATH.'public/images/exclusive-star.png) no-repeat right top #fef6ec';
                         $exclusiveCode = $exclusiveText;
                     endif;
              ?>
@@ -27,7 +27,7 @@
                                     <tr>
                                         <td height="66" align="center">
                                             <a href="<?php echo $clickOutLink; ?>" target="_blank" style="text-decoration:none; color:#fff">
-                                                <img src="<?php echo $urls['publicPathCdn'].ltrim($offer->getOffer()->getShopOffers()->getLogo()->path, '/').'thum_big_'.$offer->getOffer()->getShopOffers()->getLogo()->name; ?>" width="132" height="66" alt="<?php echo $offer->getOffer()->getShopOffers()->getName(); ?>" title="<?php echo $offer->getOffer()->getShopOffers()->getName(); ?>" style="vertical-align:top">
+                                                <img src="<?php echo PUBLIC_PATH_CDN.ltrim($offer->getOffer()->getShopOffers()->getLogo()->path, '/').'thum_big_'.$offer->getOffer()->getShopOffers()->getLogo()->name; ?>" width="132" height="66" alt="<?php echo $offer->getOffer()->getShopOffers()->getName(); ?>" title="<?php echo $offer->getOffer()->getShopOffers()->getName(); ?>" style="vertical-align:top">
                                             </a>
                                         </td>
                                     </tr>
@@ -103,11 +103,11 @@
             <?php foreach($newsletterCampaign->getNewsletterCampaignOffers() as $offer) : ?>
                 <?php if (2 === $offer->getSection()) :
                     $utmParameters = '?utm_source=transactional&utm_medium=email&utm_campaign='.date('d-m-Y').'&type=code#'.$offer->getOffer()->getId();
-                    $clickOutLink = $urls['httpPathLocale'].$offer->getOffer()->getShopOffers()->getPermalink().$utmParameters;
+                    $clickOutLink = HTTP_PATH_LOCALE.$offer->getOffer()->getShopOffers()->getPermalink().$utmParameters;
                     $exclusiveCode = '';
                     $exclusiveStyle = '';
                     if (1 === $offer->getOffer()->getExclusiveCode()):
-                        $exclusiveStyle  = 'background:url('.$urls['httpPath'].'public/images/exclusive-star.png) no-repeat right top #fef6ec';
+                        $exclusiveStyle  = 'background:url('.HTTP_PATH.'public/images/exclusive-star.png) no-repeat right top #fef6ec';
                         $exclusiveCode = $exclusiveText;
                     endif;
                     ?>
@@ -122,7 +122,7 @@
                                             <tr>
                                                 <td height="66" align="center">
                                                     <a href="<?php echo $clickOutLink; ?>" target="_blank" style="text-decoration:none; color:#fff">
-                                                        <img src="<?php echo $urls['publicPathCdn'].ltrim($offer->getOffer()->getShopOffers()->getLogo()->path, '/').'thum_big_'.$offer->getOffer()->getShopOffers()->getLogo()->name; ?>" width="132" height="66" alt="<?php echo $offer->getOffer()->getShopOffers()->getName(); ?>" title="<?php echo $offer->getOffer()->getShopOffers()->getName(); ?>" style="vertical-align:top">
+                                                        <img src="<?php echo PUBLIC_PATH_CDN.ltrim($offer->getOffer()->getShopOffers()->getLogo()->path, '/').'thum_big_'.$offer->getOffer()->getShopOffers()->getLogo()->name; ?>" width="132" height="66" alt="<?php echo $offer->getOffer()->getShopOffers()->getName(); ?>" title="<?php echo $offer->getOffer()->getShopOffers()->getName(); ?>" style="vertical-align:top">
                                                     </a>
                                                 </td>
                                             </tr>

@@ -9,21 +9,16 @@ use \Core\Service\Errors;
 
 class EmailContentsController extends ApiBaseController
 {
-    protected $translator;
-    protected $urls;
-    protected $websiteName;
     protected $data;
+    protected $translator;
+    protected $websiteName;
     protected $emailTypes = array(
         'newsletter'
     );
 
     private function initData()
     {
-        $this->urls['httpPath'] = LOCALE != '' ? 'http://www.flipit.com/' : 'http://www.kortingscode.nl/';
-        $this->urls['httpPathLocale'] = LOCALE != '' ? 'http://www.flipit.com/'.LOCALE.'/' : 'http://www.kortingscode.nl/';
-        $this->urls['publicPathCdn'] = LOCALE != '' ? 'http://img.flipit.com/public/'.LOCALE.'/' : 'http://img.kortingscode.nl/public/';
-        $this->urls['publicLocalePath'] = LOCALE != '' ? $this->urls['httpPath'].'public/'.LOCALE.'/images/front_end/' : $this->urls['httpPath'].'public/images/front_end/';
-        $this->urls['publicPath'] = $this->urls['httpPath'].'public/images/front_end/';
+        $this->defineConstants();
         $this->websiteName = LOCALE != '' ? 'Flipit' : 'Kortingscode';
         $this->data = array(
             'header_text'   => '',
@@ -31,6 +26,16 @@ class EmailContentsController extends ApiBaseController
             'content'       => '',
             'footer'        => ''
         );
+    }
+
+    private function defineConstants()
+    {
+        defined('HTTP_PATH')        || define('HTTP_PATH', LOCALE != '' ? 'http://www.flipit.com/' : 'http://www.kortingscode.nl/');
+        defined('HTTP_PATH_LOCALE') || define('HTTP_PATH_LOCALE', LOCALE != '' ? HTTP_PATH.LOCALE.'/' : HTTP_PATH);
+        defined('PUBLIC_PATH')      || define('PUBLIC_PATH', HTTP_PATH.'public/images/front_end/');
+        defined('UPLOAD_PATH')      || define('UPLOAD_PATH', 'http://img.flipit.com/public/images/upload/');
+        defined('PUBLIC_PATH_CDN')  || define('PUBLIC_PATH_CDN', LOCALE != '' ? 'http://img.flipit.com/public/'.LOCALE.'/' : 'http://img.kortingscode.nl/public/');
+        defined('PUBLIC_LOCALE_PATH') || define('PUBLIC_LOCALE_PATH', LOCALE != '' ? HTTP_PATH.'public/'.LOCALE.'/images/front_end/' : HTTP_PATH.'public/images/front_end/');
     }
 
     public function getEmailContents($emailType, $referenceId)
@@ -75,17 +80,16 @@ class EmailContentsController extends ApiBaseController
         $this->data['header_text'] = $newsletterCampaign->getHeader();
         $this->data['header'] = $this->loadHeader(
             $newsletterCampaign->getHeaderBannerURL(),
-            $newsletterCampaign->getHeaderBanner()
+            UPLOAD_PATH.'newslettercampaigns/'.$newsletterCampaign->getHeaderBanner()
         );
         $this->data['footer'] = $this->loadFooter(
             $newsletterCampaign->getFooterBannerURL(),
-            $newsletterCampaign->getFooterBanner(),
+            UPLOAD_PATH.'newslettercampaigns/'.$newsletterCampaign->getFooterBanner(),
             $newsletterCampaign->getFooter()
         );
         $data = array(
             'newsletterCampaign'    => $newsletterCampaign,
-            'urls'                  => $this->urls,
-            'top50Link'             => $this->urls['httpPathLocale'].$this->translator->translate('link_top-50'),
+            'top50Link'             => HTTP_PATH_LOCALE.$this->translator->translate('link_top-50'),
             'topOfferText'          => $this->translator->translate('email_Bekijk meer van onze top aanbiedingen'),
             'exclusiveText'         => $this->translator->translate('email_exclusive'),
             'codeText'              => $this->translator->translate('email_CODE'),
@@ -98,17 +102,16 @@ class EmailContentsController extends ApiBaseController
 
     private function loadHeader($bannerUrl = '', $bannerImage = '')
     {
-        if (fopen($this->urls['publicLocalePath'].'emails/email-header-best.png', 'r')) {
-            $headerLogo = $this->urls['publicLocalePath'].'emails/email-header-best.png';
+        if (file_exists(PUBLIC_LOCALE_PATH.'emails/email-header-best.png')) {
+            $headerLogo = PUBLIC_LOCALE_PATH.'emails/email-header-best.png';
         } else {
-            $headerLogo = LOCALE != '' ? $this->urls['publicPath'].'emails/email-header-best-flipit.png' : $this->urls['publicPath'].'emails/email-header-best.png';
+            $headerLogo = LOCALE != '' ? PUBLIC_PATH.'emails/email-header-best-flipit.png' : PUBLIC_PATH.'emails/email-header-best.png';
         }
 
         $headerData = array(
             'headerLogo'    => $headerLogo,
             'bannerUrl'     => $bannerUrl,
             'bannerImage'   => $bannerImage,
-            'urls'          => $this->urls,
             'websiteName'   => $this->websiteName
         );
         return $this->app->view()->fetch('emailContents/_partials/_header.phtml', $headerData);
@@ -116,13 +119,12 @@ class EmailContentsController extends ApiBaseController
 
     private function loadFooter($bannerUrl = '', $bannerImage = '', $footerText = '')
     {
-        $footerLogo = LOCALE == '' ? $this->urls['publicPath'].'emails/email-footer-kc.png' : $this->urls['publicPath'].'emails/logo-footer.png';
+        $footerLogo = LOCALE == '' ? PUBLIC_PATH.'emails/email-footer-kc.png' : PUBLIC_PATH.'emails/logo-footer.png';
 
         $footerData = array(
             'footerLogo'        => $footerLogo,
             'bannerUrl'         => $bannerUrl,
             'bannerImage'       => $bannerImage,
-            'urls'              => $this->urls,
             'footerText'        => $footerText,
             'websiteName'       => $this->websiteName,
             'unSubscribeText'   => $this->translator->translate('email_Uitschrijven'),
