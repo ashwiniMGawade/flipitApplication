@@ -48,22 +48,12 @@ var validator =  null;
 function validateNewsTicker() {
     validator = $('form#createNewstickerForm')
     .validate({
+        ignore: [],
         errorClass : 'error',
 		validClass : 'success',
 		errorElement : 'span',
-		ignore: ".ignore, :hidden",
 		errorPlacement : function(error, element) {
 			element.parent("div").prev("div").html(error);
-		},
-		whichshop : { 
-			required : function(el)
-			{
-				if(jQuery("#selctedshop").val() == 1 && jQuery(el).val().length < 1) 
-				{
-					return true ;
-				}
-				return false;
-			}
 		},
         rules: {
             newsTitle: {
@@ -72,7 +62,7 @@ function validateNewsTicker() {
             newsDescription: {
                 required: true
             },
-            whichshop: {
+            "whichshop": {
                 required: true
             }
         },
@@ -83,8 +73,8 @@ function validateNewsTicker() {
             newsDescription: {
                 required:__("Please enter description")
             },
-            whichshop: {
-                required:__("Please enter description")
+            "whichshop": {
+                required:__("Please select a shop")
             }
         },
         onfocusin : function(element) {
