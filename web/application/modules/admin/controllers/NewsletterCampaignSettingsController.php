@@ -3,7 +3,7 @@ use \Core\Domain\Factory\AdminFactory;
 use \Core\Domain\Factory\SystemFactory;
 use \Core\Service\Errors;
 
-class Admin_NewslettercampaignsettingsController extends Application_Admin_BaseController
+class Admin_NewsletterCampaignSettingsController extends Application_Admin_BaseController
 {
     protected $message = [];
     public function preDispatch()
@@ -60,7 +60,7 @@ class Admin_NewslettercampaignsettingsController extends Application_Admin_BaseC
                 }
                 if (true === $isValid) {
                     $this->setFlashMessage('success', 'Campaign settings has been updated successfully');
-                    $this->redirect(HTTP_PATH . 'admin/newslettercampaignsettings');
+                    $this->redirect(HTTP_PATH . 'admin/newsletter-campaign-settings');
                 }
             }
         }

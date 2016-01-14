@@ -15,7 +15,7 @@ $(document).ready(function() {
     }
     function moverToTrash(campaignId) {
         addOverLay();
-        document.location.href = HOST_PATH + "admin/newslettercampaigns/delete/id/"+campaignId ;
+        document.location.href = HOST_PATH + "admin/newsletter-campaigns/delete/id/"+campaignId ;
     }
 });
 
@@ -42,7 +42,7 @@ function getNewsletterCampaignList(iStart,iSortCol,iSortDir) {
         },
         "aaSorting": [[ iSortCol , iSortDir ]],
         "sPaginationType" : "bootstrap",
-        "sAjaxSource" : HOST_PATH + "admin/newslettercampaigns/getNewsletterCampaignList",
+        "sAjaxSource" : HOST_PATH + "admin/newsletter-campaigns/get-newsletter-campaign-list",
         "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
             $(nRow).attr( "data-id", aData.id);
             return nRow;
@@ -121,7 +121,7 @@ function getNewsletterCampaignList(iStart,iSortCol,iSortDir) {
                 state[ 'eId' ] = eId ;
                 click = true;
                 $.bbq.pushState( state );
-                window.location.href = HOST_PATH + "admin/newslettercampaigns/edit/id/" + eId+ "?iStart="+
+                window.location.href = HOST_PATH + "admin/newsletter-campaigns/edit/id/" + eId+ "?iStart="+
                 obj._iDisplayStart+"&iSortCol="+obj.aaSorting[0][0]+"&iSortDir="+
                 obj.aaSorting[0][1];
             });

@@ -3,7 +3,7 @@ use \Core\Domain\Factory\AdminFactory;
 use \Core\Domain\Factory\SystemFactory;
 use \Core\Service\Errors;
 
-class Admin_NewslettercampaignsController extends Application_Admin_BaseController
+class Admin_NewsletterCampaignsController extends Application_Admin_BaseController
 {
     protected $message = [];
     public function preDispatch()
@@ -32,7 +32,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
     {
     }
 
-    public function getnewslettercampaignlistAction()
+    public function getNewsletterCampaignListAction()
     {
         $conditions = array('deleted' => 0);
         $campaignList = array();
@@ -113,7 +113,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     $this->setFlashMessage('error', $errors);
                 } else {
                     $this->setFlashMessage('success', 'Newsletter campaign has been created successfully.</br>'. implode('<br/>', $this->message));
-                    $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+                    $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns');
                 }
             }
         } else {
@@ -140,7 +140,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         if ($newsletterCampaign instanceof Errors) {
             $errors = $newsletterCampaign->getErrorsAll();
             $this->setFlashMessage('error', $errors);
-            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+            $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns');
         }
         $this->view->newsletterCampaign =$newsletterCampaign;
         $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
@@ -158,7 +158,7 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
                     $this->setFlashMessage('error', $errors);
                 } else {
                     $this->setFlashMessage('success', 'News letter campaign has been updated successfully.</br>'. implode('<br/>', $this->message));
-                    $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+                    $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns');
                 }
             }
         } else {
@@ -174,18 +174,18 @@ class Admin_NewslettercampaignsController extends Application_Admin_BaseControll
         $newsletterCampaignId = intval($this->getRequest()->getParam('id'));
         if (intval($newsletterCampaignId) < 1) {
             $this->setFlashMessage('error', 'Invalid selection.');
-            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+            $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns');
         }
 
         $result = AdminFactory::getNewsletterCampaign()->execute(array('id' => $newsletterCampaignId));
         if ($result instanceof Errors) {
             $errors = $result->getErrorsAll();
             $this->setFlashMessage('error', $errors);
-            $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+            $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns');
         }
         AdminFactory::deleteNewsletterCampaign()->execute($result);
         $this->setFlashMessage('success', 'Newsletter campaign successfully deleted.');
-        $this->redirect(HTTP_PATH . 'admin/newslettercampaigns');
+        $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns');
     }
     
     private function prepareData($campaigns)
