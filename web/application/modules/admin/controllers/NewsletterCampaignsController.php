@@ -12,7 +12,7 @@ class Admin_NewsletterCampaignsController extends Application_Admin_BaseControll
     {
         if (!\Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
-            $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+            $referer->refer = "http://".$this->getRequest()->getParam('HTTP_HOST').$this->getRequest()->getParam('REQUEST_URI');
             $this->_redirect('/admin/auth/index');
         }
         $this->view->controllerName = $this->getRequest()->getParam('controller');
@@ -54,9 +54,8 @@ class Admin_NewsletterCampaignsController extends Application_Admin_BaseControll
             $campaignList['records'] = $this->prepareData($result['records']);
             $sEcho = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('sEcho')));
             $response = \DataTable_Helper::createResponse($sEcho, $campaignList['records'], $result['count']);
-            echo Zend_Json::encode($response);
+            $this->_helper->json($response);
         }
-        exit;
     }
 
     private function getOrderByField()
@@ -234,7 +233,10 @@ class Admin_NewsletterCampaignsController extends Application_Admin_BaseControll
 
     private function _handleImageUpload($params, $headerBanner = '', $footerBanner = '')
     {
-        if (true === isset($_FILES['headerBanner']) && true === isset($_FILES['headerBanner']['name']) && '' !== $_FILES['headerBanner']['name']) {
+        $upload = new Zend_File_Transfer();
+        $files = $upload->getFileInfo();
+
+        if (true === isset($files['headerBanner']) && true === isset($files['headerBanner']['name']) && '' !== $files['headerBanner']['name']) {
             $rootPath = UPLOAD_IMG_PATH . 'newslettercampaigns/';
             $image = $this->uploadImage('headerBanner', $rootPath);
             if (false === $image) {
@@ -247,7 +249,7 @@ class Admin_NewsletterCampaignsController extends Application_Admin_BaseControll
             $this->message[] = "Successfully uploaded header banner image.";
             $params['headerBanner'] = $image;
         }
-        if (true === isset($_FILES['footerBanner']) && true === isset($_FILES['footerBanner']['name']) && '' !== $_FILES['footerBanner']['name']) {
+        if (true === isset($files['footerBanner']) && true === isset($files['footerBanner']['name']) && '' !== $files['footerBanner']['name']) {
             $rootPath = UPLOAD_IMG_PATH . 'newslettercampaigns/';
             $image = $this->uploadImage('footerBanner', $rootPath);
             if (false === $image) {
