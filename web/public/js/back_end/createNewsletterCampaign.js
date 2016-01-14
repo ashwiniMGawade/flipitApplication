@@ -376,7 +376,7 @@ $(function(){
         }
     });
 
-    $("#testEmail").select2({
+    $("#testEmailId").select2({
         placeholder: __("Search Email"),
         minimumInputLength: 1,
         ajax: {
@@ -390,7 +390,7 @@ $(function(){
             },
             type: 'post',
             results: function (data, page) {
-                $("#testEmail").trigger('change');
+                $("#testEmailId").trigger('change');
                 return {results: data};
             }
         },
@@ -398,8 +398,28 @@ $(function(){
             return data;
         },
         formatSelection: function (data) {
-            $("#testEmail").val(data);
+            $("#testEmailId").val(data);
             return data;
+        }
+    });
+
+    $("#sendTestEmailForm").validate({
+        ignore: [],
+        errorClass : 'error',
+        validClass : 'success',
+        errorElement : 'span',
+        errorPlacement : function(error, element) {
+            element.parent("div").prev("div").html(error);
+        },
+        rules: {
+            "testEmailId": {
+                required : true
+            }
+        },
+        messages: {
+            "testEmailId" : {
+                required : __("Please select one email address!")
+            }
         }
     });
 

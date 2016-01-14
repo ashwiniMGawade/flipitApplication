@@ -26,7 +26,6 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
     </div>
     <form id="NewsletterWizardform" method="post" action="" enctype="multipart/form-data">
         <h1 class="fl"><?php echo $this->translate('Create Newsletter Campaign');?>
-            <button type="button" onclick="$('#sendTest').modal('show');" href="#" id="sendTestMail" class="btn ml10"><?php echo $this->translate('Send Test Email');?></button>
             <img id="loader" src="<?php echo PUBLIC_PATH;?>images/loader.gif" style="display:none;">
             <input type="button" onclick="" href="#" id="saveNewsletterCampaign" class="btn ml10" value="<?php echo $this->translate('Save & Exit');?>"></button>
             <a type="button" href="<?php echo HTTP_PATH;?>admin/newsletter-campaigns" id="cancel" class="btn ml10"><?php echo $this->translate('Cancel');?></a>
@@ -416,28 +415,4 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
             </div>
         </div>
     </form>
-</div><!-- End code of info campaigns -->
-<div class="modal display-none popup-width" id="sendTest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="wrap columns-2">
-        <form method="post" id="sendTestEmailForm" name="sendTestEmailForm">
-            <div class="m-item-popup-hdr">Send Test Email</div>
-            <div id="poststuff" class="metabox-holder has-right-sidebar">
-                <div id="post-body" style="min-height: 110px;">
-                    <div class="mainpage-content-line">
-                        <div class="mainpage-content-right ml20">
-                            <div class="mainpage-content-right-inner-left-other">
-                                <input type="hidden" id='testEmail' name='testEmail' placeholder="Search Email.." style="width:300px;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br class="clear">
-            </div>
-
-            <div class="m-item-popup-btm">
-                <button value="" id="submitUploadBtn" class="btn btn-primary m5" type="button">Send</button>
-                <button value="" class="btn ml10 m5" data-dismiss="modal">Cancel</button>
-            </div>
-        </form>
-    </div>
 </div>

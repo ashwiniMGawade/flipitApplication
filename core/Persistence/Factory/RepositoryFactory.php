@@ -3,6 +3,7 @@ namespace Core\Persistence\Factory;
 
 use Core\Persistence\Database\Repository\BulkEmailRepository;
 use \Core\Persistence\Database\Repository\DashboardRepository;
+use \Core\Persistence\Database\Repository\LocaleSettingRepository;
 use \Core\Persistence\Database\Repository\SettingsRepository;
 use \Core\Persistence\Database\Repository\SplashImageRepository;
 use \Core\Persistence\Database\Repository\SplashOfferRepository;
@@ -116,5 +117,10 @@ class RepositoryFactory
     public static function localeSettings()
     {
         return new LocalSettingsRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
+    }
+
+    public static function localeSetting()
+    {
+        return new LocaleSettingRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
     }
 }
