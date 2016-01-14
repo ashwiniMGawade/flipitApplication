@@ -14,7 +14,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/locale.js");
     <h1><?php echo $this->translate('Campaign Template Settings');?></h1>
 
     <form id="campaignsettings" name="campaignsettingsform" enctype="multipart/form-data" method="POST"
-          action="<?php echo HTTP_PATH ;?>/admin/newslettercampaigns/settings" _lpchecked="1">
+          action="<?php echo HTTP_PATH ;?>/admin/newsletter-campaign-settings" _lpchecked="1">
 
         <div class="mainpage-content">
             <div class="mainpage-content-line">
@@ -38,7 +38,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/locale.js");
         </div>
         <div class="mainpage-content-colorbox">
             <button id="saveSettings" type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('Save Settings');?></button>
-            <a class="fl m10"  href ="<?php echo HTTP_PATH ;?>/admin/newslettercampaigns/"><strong>CANCEL</strong></a>
+            <a class="fl m10"  href ="<?php echo HTTP_PATH ;?>/admin/newsletter-campaigns/"><strong>CANCEL</strong></a>
         </div>
     </form>
 </div>

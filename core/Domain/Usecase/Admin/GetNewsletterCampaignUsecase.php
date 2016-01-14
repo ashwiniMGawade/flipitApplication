@@ -7,6 +7,8 @@ use \Core\Service\Errors\ErrorsInterface;
 
 class GetNewsletterCampaignUsecase
 {
+    use \Core\Domain\Usecase\Helpers\NewsletterCampaignBuilder;
+
     protected $newsletterCampaignRepository;
 
     protected $htmlPurifier;
@@ -23,7 +25,7 @@ class GetNewsletterCampaignUsecase
         $this->errors           = $errors;
     }
 
-    public function execute($conditions)
+    public function execute($conditions, $returnWarnings = false)
     {
         $conditions = $this->htmlPurifier->purify($conditions);
         if (!is_array($conditions)) {
@@ -37,6 +39,12 @@ class GetNewsletterCampaignUsecase
             $this->errors->setError('Newsletter Campaign not found');
             return $this->errors;
         }
+
+        if ($returnWarnings) {
+            $returnWarningMessages = true;
+            $newsletterCampaign->warnings = $this->checkNewsletterForWarnings($newsletterCampaign, $returnWarningMessages);
+        }
+
         return $newsletterCampaign;
     }
 }

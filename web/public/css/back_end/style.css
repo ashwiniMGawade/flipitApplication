@@ -1387,6 +1387,13 @@ span.error
 	 color: #B94A48;
 }
 
+#newsletterCampaignListDiv .form-error div.error, #newsletterCampaignListDiv .errorserver div.error
+{
+    color: #B94A48;
+    display:block;
+    padding: 8px 35px 8px 14px;
+}
+
 span.errorserver
 {
 	 color: #B94A48;
@@ -3555,14 +3562,14 @@ div#error-message {
 }
 
 
-#NewsletterWizardform .previous a{
+#NewsletterWizardform .previous a, #NewsletterWizardform .btn-primary a{
     float:right;
     background-color:#eeeeee;
     color:#333;
     margin-right:5px;
     border-radius:5px;
 }
-#NewsletterWizardform .next a{
+#NewsletterWizardform .next a, #NewsletterWizardform .btn-primary a{
     color: #fff;
     border-radius:5px;
 }
@@ -3570,11 +3577,11 @@ div#error-message {
     pointer-events: none;
 }
 
- #NewsletterWizardform .next a {
+ #NewsletterWizardform .next a, #NewsletterWizardform .btn-primary a {
     border-color:#ccc;
     border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25)
 }
- #NewsletterWizardform .next a{
+ #NewsletterWizardform .next a, #NewsletterWizardform .btn-primary a{
     background-color:#0074cc;
     *background-color:#05c;
     background-image:-ms-linear-gradient(top, #08c, #05c);

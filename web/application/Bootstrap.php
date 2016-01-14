@@ -132,7 +132,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $this->localeCookieData
         );
     }
-    
+
     public function _initTranslation()
     {
         BootstrapTranslationFunctions::setTranslationInZendRegistery(
@@ -177,7 +177,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->doctype('HTML5');
         $view->headMeta()->appendHttpEquiv('Content-type', 'text/html; charset=UTF-8');
     }
-   
+
     public function _initRouter()
     {
         $permalink = BootstrapRouterFunctions::getPermalink();
@@ -208,7 +208,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
         self::setRoutersByRules($permalink, $httpScheme);
     }
-  
+
     public function setRoutersByRules($permalink, $httpScheme)
     {
         // for 301 redirections of old indexed pages

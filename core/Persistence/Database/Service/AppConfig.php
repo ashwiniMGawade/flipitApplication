@@ -7,10 +7,12 @@ class AppConfig
 {
     private $env = '';
     private $locale = '';
+    private $config = '';
     public function __construct($locale = '')
     {
         $this->env = (new Config)->getEnvironment();
         $this->locale = !empty($locale) ? $locale : (defined('LOCALE') && LOCALE != '' ? LOCALE : 'en');
+        $this->config = (new Config)->getConfig();
     }
 
     public function getConfigs()
@@ -49,7 +51,13 @@ class AppConfig
                     'dbname'   => $dbName,
                     'user'     => 'root',
                     'password' => 'root'
+                ),
+                'dynamoDb' => array(
+                    'dynamoDbRegion' => $this->config->dynamodb->dynamodbregion,
+                    'accessKey' => $this->config->dynamodb->key,
+                    'securityKey' => $this->config->dynamodb->secret
                 )
+
             )
         );
     }
@@ -77,6 +85,11 @@ class AppConfig
                     'dbname'   => 'flipit_test',
                     'user'     => 'root',
                     'password' => 'root'
+                ),
+                'dynamoDb' => array(
+                    'dynamoDbRegion' => '',
+                    'accessKey' => '',
+                    'securityKey' => ''
                 )
             )
         );
@@ -84,10 +97,9 @@ class AppConfig
 
     public function getProductionConfig()
     {
-        $config = (new Config)->getConfig();
         $locale = $this->locale;
-        $applicationDsn = $config->doctrine->$locale->dsn;
-        $memcacheDsn = $config->resources->frontController->params->memcache;
+        $applicationDsn = $this->config->doctrine->$locale->dsn;
+        $memcacheDsn = $this->config->resources->frontController->params->memcache;
         $splitDbName = explode('/', $applicationDsn);
         $splitDbUserName = explode(':', $splitDbName[2]);
         $splitDbPassword = explode('@', $splitDbUserName[1]);
@@ -124,6 +136,11 @@ class AppConfig
                     'dbname'   => $dbName,
                     'user'     => $dsn['user'],
                     'password' => $dsn['password']
+                ),
+                'dynamoDb' => array(
+                    'dynamoDbRegion' => $this->config->dynamodb->dynamodbregion,
+                    'accessKey' => $this->config->dynamodb->key,
+                    'securityKey' => $this->config->dynamodb->secret
                 )
             )
         );

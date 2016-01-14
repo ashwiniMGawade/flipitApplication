@@ -66,9 +66,6 @@ class NewsletterCampaignValidator
                 $this->validator->type(array('type' => 'integer')),
                 $this->validator->length(array('min' => 1, 'max' => 1))
             ),
-            'scheduledTime' => array(
-                $this->validator->dateTime(array('message' => "Please enter valid scheduled time"))
-            ),
             'newsletterSentTime' => array(
                 $this->validator->dateTime()
             ),

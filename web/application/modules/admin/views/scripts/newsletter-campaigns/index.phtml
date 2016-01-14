@@ -14,7 +14,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
 <div class="wrap columns-2" id="newsletterCampaignListDiv">
     <?php echo $this->flashMessages(); ?>
     <h1 class="fl"><?php echo $this->translate('Newsletter Campaigns');?>
-        <a  href="<?php echo  HTTP_PATH . '/admin/newslettercampaigns/create'; ?>" id="sendTestMail" class="btn ml10"><?php echo $this->translate('Create Campaign');?></a>
+        <a  href="<?php echo  HTTP_PATH . 'admin/newsletter-campaigns/create'; ?>" id="sendTestMail" class="btn ml10"><?php echo $this->translate('Create Campaign');?></a>
     </h1>
     <div class="clear"></div>
     <table id="newsletterCampaignListTable" class="table table-bordered table-striped">

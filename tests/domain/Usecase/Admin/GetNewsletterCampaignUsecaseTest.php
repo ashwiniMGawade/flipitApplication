@@ -26,7 +26,18 @@ class GetNewsletterCampaignUsecaseTest extends \Codeception\TestCase\Test
         $newsletterCampaign->setId(0);
         $newsletterCampaignRepositoryMock = $this->createNewsletterCampaignRepositoryWithFindMethodMock($condition, $newsletterCampaign);
         $newsletterCampaignUsecase = new GetNewsletterCampaignUsecase($newsletterCampaignRepositoryMock, new Purifier(), new Errors());
-        $result = $newsletterCampaignUsecase->execute($condition);
+        $result = $newsletterCampaignUsecase->execute($condition, false);
+        $this->assertEquals($newsletterCampaign, $result);
+    }
+
+    public function testGetNewsletterCampaignUsecaseRetunsObjectWithWarningsWhenValidInputPassed()
+    {
+        $condition = array('id' => 0);
+        $newsletterCampaign = new NewsletterCampaign();
+        $newsletterCampaign->setId(0);
+        $newsletterCampaignRepositoryMock = $this->createNewsletterCampaignRepositoryWithFindMethodMock($condition, $newsletterCampaign);
+        $newsletterCampaignUsecase = new GetNewsletterCampaignUsecase($newsletterCampaignRepositoryMock, new Purifier(), new Errors());
+        $result = $newsletterCampaignUsecase->execute($condition, true);
         $this->assertEquals($newsletterCampaign, $result);
     }
 

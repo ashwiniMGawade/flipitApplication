@@ -2,7 +2,9 @@
 namespace Core\Domain\Usecase\Admin;
 
 use \Core\Domain\Repository\NewsletterCampaignRepositoryInterface;
+use \Core\Domain\Repository\NewsletterCampaignOfferRepositoryInterface;
 use \Core\Domain\Entity\NewsletterCampaign;
+use \Core\Domain\Entity\NewsletterCampaignOffer;
 use \Core\Domain\Adapter\PurifierInterface;
 use \Core\Domain\Validator\NewsletterCampaignValidator;
 use \Core\Service\Errors\ErrorsInterface;
@@ -10,6 +12,8 @@ use \Core\Service\Errors\ErrorsInterface;
 class AddNewsletterCampaignUsecase
 {
     protected $newsletterCampaignRepository;
+
+    protected $newsletterCampaignOfferRepository;
 
     protected $newsletterCampaignValidator;
 
@@ -19,17 +23,19 @@ class AddNewsletterCampaignUsecase
 
     public function __construct(
         NewsletterCampaignRepositoryInterface $newsletterCampaignRepository,
+        NewsletterCampaignOfferRepositoryInterface $newsletterCampaignOfferRepository,
         NewsletterCampaignValidator $newsletterCampaignValidator,
         PurifierInterface $htmlPurifier,
         ErrorsInterface $errors
     ) {
         $this->newsletterCampaignRepository = $newsletterCampaignRepository;
+        $this->newsletterCampaignOfferRepository = $newsletterCampaignOfferRepository;
         $this->newsletterCampaignValidator  = $newsletterCampaignValidator;
         $this->htmlPurifier     = $htmlPurifier;
         $this->errors           = $errors;
     }
 
-    public function execute(NewsletterCampaign $newsletterCampaign, $params = array())
+    public function execute(NewsletterCampaign $newsletterCampaign, NewsletterCampaignOffer $newsletterCampaignOffer, $params = array())
     {
         if (empty($params)) {
             $this->errors->setError('Invalid Parameters');
@@ -73,7 +79,7 @@ class AddNewsletterCampaignUsecase
             $newsletterCampaign->setSenderEmail($params['senderEmail']);
         }
         if (isset($params['scheduledStatus'])) {
-            $newsletterCampaign->setScheduledStatus($params['scheduledStatus']);
+            $newsletterCampaign->setScheduledStatus((int)$params['scheduledStatus']);
         }
         if (isset($params['scheduledTime'])) {
             $newsletterCampaign->setScheduledTime($params['scheduledTime']);
@@ -94,8 +100,57 @@ class AddNewsletterCampaignUsecase
 
         if (true !== $validationResult && is_array($validationResult)) {
             $this->errors->setErrors($validationResult);
-            return $this->errors;
+            return array('error' => $this->errors, 'newsletterCampaign' => $newsletterCampaign);
         }
-        return $this->newsletterCampaignRepository->save($newsletterCampaign);
+
+        $newsletterCampaign = $this->newsletterCampaignRepository->save($newsletterCampaign);
+
+        if (isset($params['partOneOffers']) && !empty($params['partOneOffers'])) {
+            $this->addOffers(1, $newsletterCampaign, $newsletterCampaignOffer, $params['partOneOffers']);
+        }
+
+        if (isset($params['partTwoOffers']) && !empty($params['partTwoOffers'])) {
+            $this->addOffers(2, $newsletterCampaign, $newsletterCampaignOffer, $params['partTwoOffers']);
+        }
+        //$this->newsletterCampaignRepository->commitTransaction();
+        return $newsletterCampaign;
+    }
+
+    private function addOffers($section, $newsletterCampaign, $newsletterCampaignOffer, $offers)
+    {
+        $params['newsletterCampaign'] = $newsletterCampaign;
+        $params['section'] = $section;
+        foreach ($offers as $index => $offer) {
+            $params['offerId'] =  $offer;
+            $params['position'] = $index +1;
+            $result = $this->_createOffer($newsletterCampaignOffer, $params);
+            if ($result instanceof Errors) {
+                return $result;
+            }
+        }
+        return true;
+    }
+
+    private function _createOffer($newsletterCampaignOfferObject, $params)
+    {
+        $newsletterCampaignOffer = clone $newsletterCampaignOfferObject;
+        $params = $this->htmlPurifier->purify($params);
+
+        if (isset($params['newsletterCampaign'])) {
+            $newsletterCampaignOffer->setNewsletterCampaign($params['newsletterCampaign']);
+        }
+        if (isset($params['offerId'])) {
+            $newsletterCampaignOffer->setOfferId($params['offerId']);
+        }
+        if (isset($params['position'])) {
+            $newsletterCampaignOffer->setPosition($params['position']);
+        }
+        if (isset($params['section'])) {
+            $newsletterCampaignOffer->setSection((int)$params['section']);
+        }
+        $newsletterCampaignOffer->setCreatedAt(new \DateTime('now'));
+        $newsletterCampaignOffer->setUpdatedAt(new \DateTime('now'));
+
+        return $this->newsletterCampaignOfferRepository->addNewsletterCampaignOffer($newsletterCampaignOffer);
     }
 }

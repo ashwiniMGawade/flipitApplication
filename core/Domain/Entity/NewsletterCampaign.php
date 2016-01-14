@@ -82,17 +82,17 @@ class NewsletterCampaign
     protected $scheduledStatus = 0;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", nullable=false)
      */
     protected $scheduledTime;
 
     /**
-     * @ORM\Column(type="integer", length=1, nullable=false)
+     * @ORM\Column(type="datetime", nullable=false)
      */
     protected $newsletterSentTime;
 
     /**
-     * @ORM\Column(type="integer", length=11, nullable=true)
+     * @ORM\Column(type="integer", length=1, nullable=false)
      */
     protected $receipientCount;
 
@@ -110,6 +110,17 @@ class NewsletterCampaign
      * @ORM\Column(type="datetime", nullable=false)
      */
     protected $updatedAt;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Core\Domain\Entity\NewsletterCampaignOffer", mappedBy="newsletterCampaign")
+     */
+    protected $newsletterCampaignOffers;
+
+    /**
+     * new variable for warnings
+     */
+    public $warnings;
 
     /**
      * @return mixed
@@ -141,6 +152,21 @@ class NewsletterCampaign
     public function setCampaignSubject($campaignSubject)
     {
         $this->campaignSubject = $campaignSubject;
+    }
+    /**
+     * @return mixed
+     */
+    public function getNewsletterCampaignOffers()
+    {
+        return $this->newsletterCampaignOffers;
+    }
+
+    /**
+     * @param mixed $newsletterCampaignOffers
+     */
+    public function setNewsletterCampaignOffers($newsletterCampaignOffers)
+    {
+        $this->newsletterCampaignOffers = $newsletterCampaignOffers;
     }
 
     /**
@@ -356,15 +382,15 @@ class NewsletterCampaign
      */
     public function getdeleted()
     {
-        return $this->scheduledStatus;
+        return $this->deleted;
     }
 
     /**
-     * @param mixed $scheduledStatus
+     * @param mixed $deleted
      */
-    public function setdeleted($scheduledStatus)
+    public function setdeleted($deleted)
     {
-        $this->scheduledStatus = $scheduledStatus;
+        $this->deleted = $deleted;
     }
 
     /**
