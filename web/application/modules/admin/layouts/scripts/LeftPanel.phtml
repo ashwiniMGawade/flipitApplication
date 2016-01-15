@@ -416,6 +416,15 @@ $action = $this->action;
                tabindex="1"><?php echo $this->translate('Visitors'); ?></a>
         </li>
     <?php } ?>
+    <?php if ($sessionNamespace->settings['rights']['administration']['rights'] == '1') { ?>
+        <li class="imbull-has-submenu menu-icon-home <?php echo $controller === 'reports' ? 'imbull-has-current-submenu imbull-menu-open menu-top' : 'imbull-not-current-submenu imbull-menu-open menu-top'; ?>" id="menu-report">
+            <div class="imbull-menu-image"><a href="<?php echo HTTP_PATH ?>admin/reports"><br></a></div>
+            <div class="">
+                <div></div>
+            </div>
+            <a href="<?php echo HTTP_PATH ?>admin/reports" class="imbull-has-submenu imbull-has-current-submenu imbull-menu-open menu-top menu-icon-widgets" tabindex="1"><?php echo $this->translate('Reports'); ?></a>
+        </li>
+    <?php } ?>
 </ul>
 
 <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Email'); ?></h2></div>
