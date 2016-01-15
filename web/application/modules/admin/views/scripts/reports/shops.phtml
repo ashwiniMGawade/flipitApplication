@@ -1,0 +1,197 @@
+<?php 
+ $this->headMeta('keyword', 'Description');
+ $this->headTitle()->append($this->translate('Reports'));
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+ $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/Highcharts-4.2.1/js/highcharts.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/Highcharts-4.2.1/js/highcharts-3d.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/Highcharts-4.2.1/js/modules/exporting.js");
+?>
+
+<div id="chainList">
+    <div class="wrap columns-2">
+        <h1 class="fl"><?php echo $this->translate('Reports'); ?></h1>
+        <div class="clear"></div>
+        <div class="top_navigation">
+            <ul>
+                <li><a href="/admin/reports">Offers</a></li>
+                <li><a href="/admin/reports/shops" class="selected_nav">Shops</a></li>
+                <li><a href="/admin/reports/visitors">Visitors</a></li>
+                <li><a href="/admin/reports/emails">Emails</a></li>
+                <li><a href="/admin/reports/traffic">Traffic</a></li>
+                <li><a href="/admin/reports/global">Global</a></li>
+            </ul>
+        </div>
+        <div class="mainpage-content">
+            <div class="clear"></div>
+            <div id="onlineOfferContainer" style="height: 30%; width:49%; float:left;"></div>
+            <div id="totalCouponsInYearContainer" style="height: 30%; width:49%;"></div>
+            <div class="clear"></div>
+            <br><br><br><br>
+            <div id="monthlyOfferContainer" style="height: 500px"></div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    $('#onlineOfferContainer').highcharts({
+        chart: {
+            type: 'pie',
+            options3d: {
+                enabled: true,
+                alpha: 45
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: 'Total Online Shops'
+        },
+        subtitle: {
+            text: 'Current Online Shops'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                depth: 45,
+                innerSize: 120,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}: {point.y}'
+                }
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+        },
+        series: [{
+            name: 'Online Shops',
+            data: [
+                ['A', 1220],
+                ['A+', 91],
+                ['AA', 67],
+                ['AA+', 35],
+                ['AAA', 20]
+            ]
+        }]
+    });
+
+    $('#totalCouponsInYearContainer').highcharts({
+        chart: {
+            type: 'pie',
+            options3d: {
+                enabled: true,
+                alpha: 45
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: 'Total Money V/s No Money Shops'
+        },
+        subtitle: {
+            text: 'Only Online Shops'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                depth: 45,
+                innerSize: 120,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}: {point.y}'
+                }
+            },
+            series: {
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}: {point.y}'
+                }
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+        },
+        series: [{
+            name: 'Delivered amount',
+            data: [
+                ['Money', 1280],
+                ['No Money', 700]
+            ]
+        }]
+    });
+
+    $('#monthlyOfferContainer').highcharts({
+        chart: {
+            type: 'column',
+            options3d: {
+                enabled: true,
+                alpha: 0,
+                beta: 0,
+                viewDistance: 25,
+                depth: 40
+            },
+            marginTop: 80,
+            marginRight: 0
+        },
+        title: {
+            text: 'Shop Changes In Last 6 Months'
+        },
+        xAxis: {
+            categories: ['January', 'Feb', 'March', 'April', 'May', 'June']
+        },
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: 'Number of shops added/removed'
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        tooltip: {
+            headerFormat: '<b>{point.key}</b><br>',
+            pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} / {point.stackTotal}'
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal',
+                depth: 20
+            }
+        },
+        series: [{
+            name: 'Money Shop Added',
+            data: [3, 4, 2, 5, 3, 1],
+            stack: 'added',
+            color: Highcharts.getOptions().colors[0]
+        }, {
+            name: 'No Money Shop Added',
+            data: [7, 1, 2, 3, 4, 7],
+            stack: 'added',
+            color: Highcharts.getOptions().colors[3]
+        }, {
+            name: 'Money Shop Removed',
+            data: [1, 2, 0, 1, 0, 3],
+            stack: 'expired',
+            color: Highcharts.getOptions().colors[4]
+        }, {
+            name: 'No Money Shop Removed',
+            data: [1, 4, 2, 1, 7, 5],
+            stack: 'expired',
+            color: Highcharts.getOptions().colors[7]
+        }]
+    });
+});
+
+
+</script>
