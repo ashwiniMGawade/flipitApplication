@@ -32,7 +32,7 @@ class EmailContentsController extends ApiBaseController
     private function defineConstants()
     {
         $config = new Config();
-        $cdnPath = LOCALE != '' ? (isset($config->getConfig()->cdn->url->kortingscode) ? $config->getConfig()->cdn->url->kortingscode : 'img.kortingscode.nl/public') : (isset($config->getConfig()->cdn->url->flipit) ? $config->getConfig()->cdn->url->flipit : 'img.flipit.com/public');
+        $cdnPath = LOCALE === '' ? (isset($config->getConfig()->cdn->url->kortingscode) ? $config->getConfig()->cdn->url->kortingscode : 'img.kortingscode.nl/public') : (isset($config->getConfig()->cdn->url->flipit) ? $config->getConfig()->cdn->url->flipit : 'img.flipit.com/public');
         defined('HTTP_PATH')        || define('HTTP_PATH', LOCALE != '' ? 'http://www.flipit.com/' : 'http://www.kortingscode.nl/');
         defined('HTTP_PATH_LOCALE') || define('HTTP_PATH_LOCALE', LOCALE != '' ? HTTP_PATH.LOCALE.'/' : HTTP_PATH);
         defined('PUBLIC_PATH')      || define('PUBLIC_PATH', HTTP_PATH.'public/images/front_end/');
@@ -84,11 +84,11 @@ class EmailContentsController extends ApiBaseController
         $this->data['header_text'] = $newsletterCampaign->getHeader();
         $this->data['header'] = $this->loadHeader(
             $newsletterCampaign->getHeaderBannerURL(),
-            UPLOAD_PATH.'newslettercampaigns/'.$newsletterCampaign->getHeaderBanner()
+            PUBLIC_PATH_CDN.'images/upload/newslettercampaigns/'.$newsletterCampaign->getHeaderBanner()
         );
         $this->data['footer'] = $this->loadFooter(
             $newsletterCampaign->getFooterBannerURL(),
-            UPLOAD_PATH.'newslettercampaigns/'.$newsletterCampaign->getFooterBanner(),
+            PUBLIC_PATH_CDN.'images/upload/newslettercampaigns/'.$newsletterCampaign->getFooterBanner(),
             $newsletterCampaign->getFooter()
         );
         $data = array(
