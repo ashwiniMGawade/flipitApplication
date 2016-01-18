@@ -25,7 +25,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $categories = $this->getLeftColumnCategoriesHtml();
         $specialListPage = $this->getLeftColumnSpicialListHtml();
         $savingGuides = $this->getLeftColumnSavingGuidesListHtml();
-        return $topOffer . $newOffer . $categories . $specialListPage. $savingGuides;
+        return $topOffer . $newOffer . $specialListPage . $categories . $savingGuides;
     }
 
     public function getLeftColumnOffersHtml($offerType)
@@ -272,7 +272,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
     public function getRightColumnOffersList($offerDivName, $dynamicDivId)
     {
         $offersHtml = '';
-        switch ($offerDivName){
+        switch ($offerDivName) {
             case 'topOffers':
                 $offersHtml = $this->getTopOffersRightColumnList('topOffers');
                 break;
