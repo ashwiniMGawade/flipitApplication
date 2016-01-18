@@ -1179,10 +1179,11 @@ class Offer extends \Core\Domain\Entity\Offer
             $query = $query->setMaxResults($limit);
         }
         $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
-        usort($offers, function ($currentOffer, $nextOffer) {
-            return $currentOffer['offer_position'] - $nextOffer['offer_position'];
-        });
+        if ($expired === false) {
+            usort($offers, function ($currentOffer, $nextOffer) {
+                return $currentOffer['offer_position'] - $nextOffer['offer_position'];
+            });
+        }
 
         return $offers;
     }
