@@ -173,7 +173,9 @@ class GlobalShopExport
             2 => 'A+',
             3 => 'AA',
             4 => 'AA+',
-            5 => 'AAA'
+            5 => 'AAA',
+            6 => 'B',
+            7 => 'C'
         );
         if (!empty($localeExport )) {
             $column = 4;
