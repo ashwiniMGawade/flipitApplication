@@ -297,9 +297,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         if (Auth_VisitorAdapter::hasIdentity()) {
             $visitorInformation = \KC\Repository\Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
         }
-
         if (empty($visitorInformation) && isset($currentOffer->Visability) && $currentOffer->Visability == 'MEM') {
-
             $offerLink =
                 '<span class="'.$class.'">
             '.$offerAnchorText.' </span>';
@@ -341,7 +339,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                 $gtmData['variant'] = 'Deal';
                 $gtmData = json_encode($gtmData);
                 $onClick .= "gtmDataBuilder($gtmData);";
-                $class = $class == 'link clickout-title' ? 'link clickout-title ' : 'btn-code ';
+                $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
                 $offerLink =
                     '<a id="'.$currentOffer->id.'" class="'.$class.' '.$imageClass.'" 
                     href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick=\''.$onClick.'\'>
@@ -371,7 +369,6 @@ class FrontEnd_Helper_OffersPartialFunctions
         $offerImage = '',
         $clickedElement
     ) {
-
         $popupLink = self::getPopupLink($currentOffer, $urlToShow);
         echo $mainOfferLink = self::getmainOfferLink(
             $currentOffer,
