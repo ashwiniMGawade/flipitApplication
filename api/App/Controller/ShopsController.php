@@ -12,8 +12,8 @@ class ShopsController extends ApiBaseController
                                             3 => 'AA',
                                             4 => 'AA+',
                                             5 => 'AAA',
-                                            5 => 'B',
-                                            6 => 'C',
+                                            6 => 'B',
+                                            7 => 'C',
                                         );
 
     public function getShop($id)
