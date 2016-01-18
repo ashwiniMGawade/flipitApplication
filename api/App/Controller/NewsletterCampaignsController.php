@@ -62,8 +62,8 @@ class NewsletterCampaignsController extends ApiBaseController
             $this->app->halt(404, json_encode(array('messages' => $newsletterCampaign->getErrorsAll())));
         }
         $params = $this->formatInput($params);
-
-        $result = AdminFactory::updateNewsletterCampaign()->execute($newsletterCampaign, $params);
+        $campaignOffer = AdminFactory::createNewsletterCampaignOffer()->execute();
+        $result = AdminFactory::updateNewsletterCampaign()->execute($newsletterCampaign, $campaignOffer, $params);
         if ($result instanceof Errors) {
             $this->app->halt(405, json_encode(array('messages' => $result->getErrorsAll())));
         }
