@@ -215,7 +215,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
 
         $specialListPage = self::getRightColumnSpicialListHtml();
         $categoryListPage = self::renderCategoryData();
-        return $topOffer.$newOffer.$categoryListPage.$specialListPage.$guidesHtml;
+        return $topOffer . $newOffer . $specialListPage. $categoryListPage . $guidesHtml;
     }
 
     public function renderCategoryData()
