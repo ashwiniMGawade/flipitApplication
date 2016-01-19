@@ -53,8 +53,8 @@ $(document).ready(function(){
                     $(".header-image-cont span.message").html('');
                 });
             },500);
-            var uploadedStatus = data.result;
-            if (uploadedStatus.status == 200 ) {
+            var uploadedStatus = data;
+            if (uploadedStatus) {
                 window.location.reload(true);
             }
         },
