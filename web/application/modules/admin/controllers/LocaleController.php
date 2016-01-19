@@ -1,6 +1,7 @@
 <?php
 
 use \Core\Domain\Factory\AdminFactory;
+use \Core\Domain\Factory\SystemFactory;
 use \Core\Service\Errors;
 
 class Admin_LocaleController extends Application_Admin_BaseController
@@ -76,12 +77,24 @@ class Admin_LocaleController extends Application_Admin_BaseController
             if ($this->_request->isPost()) {
                 $upload = new Zend_File_Transfer();
                 $files = $upload->getFileInfo();
+                $response = [];
                 if (true === isset($files['expiredCouponLogo']['name']) && true === isset($files['expiredCouponLogo']['name']) && '' !== $files['expiredCouponLogo']['name']) {
                     $rootPath = UPLOAD_IMG_PATH . 'expiredCouponLogo/';
                     $image = $this->uploadImage('expiredCouponLogo', $rootPath);
                     if ($image) {
-                        $this->_helper->json($image);
+                        $localSetting = SystemFactory::getLocaleSettings()->execute(array(), array(), 1);
+                        $existingExpiredCouponLogo = (!empty($localSetting) && !empty($localSetting[0])) ? $localSetting[0]->expiredCouponLogo : null;
+                        if (!empty($existingExpiredCouponLogo)) {
+                            //update
+                        } else {
+                            //save
+                        }
+                        $response['status'] = 200;
+                        $response['image'] = $image;
+                    } else {
+                        $response['status'] = -1;
                     }
+                    $this->_helper->json($response);
                 }
             }
         }
