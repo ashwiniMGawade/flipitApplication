@@ -27,6 +27,11 @@ class LocaleSettings
     protected $timezone;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $expiredCouponLogo;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -72,6 +77,22 @@ class LocaleSettings
     public function setTimezone($timezone)
     {
         $this->timezone = $timezone;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExpiredCouponLogo()
+    {
+        return $this->expiredCouponLogo;
+    }
+
+    /**
+     * @param mixed $expiredCouponLogo
+     */
+    public function setExpiredCouponLogo($expiredCouponLogo)
+    {
+        $this->expiredCouponLogo = $expiredCouponLogo;
     }
 
     public function __get($property)
