@@ -21,23 +21,16 @@ class FrontEnd_Helper_HomePagePartialFunctions
     public function getHomePageLeftColumnList()
     {
         $topOffer = $this->getLeftColumnOffersHtml('topOffers');
-        $newOffer = $this->getLeftColumnOffersHtml('newOffers');
         $categories = $this->getLeftColumnCategoriesHtml();
         $specialListPage = $this->getLeftColumnSpicialListHtml();
         $savingGuides = $this->getLeftColumnSavingGuidesListHtml();
-        return $topOffer . $newOffer . $categories . $specialListPage. $savingGuides;
+        return $topOffer . $categories . $specialListPage. $savingGuides;
     }
 
     public function getLeftColumnOffersHtml($offerType)
     {
-        $imageName =
-            $offerType=='topOffers'
-            ? HTTP_PATH ."public/images/img-08.png"
-            : HTTP_PATH .'public/images/img-09.png';
-        $headerText =
-            $offerType=='topOffers'
-            ? \FrontEnd_Helper_viewHelper::__form('form_Our 10 best coupons')
-            : \FrontEnd_Helper_viewHelper::__form('form_New and Fresh Codes');
+        $imageName = HTTP_PATH ."public/images/img-08.png";
+        $headerText = \FrontEnd_Helper_viewHelper::__form('form_Our 10 best coupons');
         return $leftColumnOffersHtml = $this->getLeftColumnContent(
             $offerType,
             $imageName,
@@ -45,7 +38,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
             70,
             $offerType,
             '',
-            $offerType=='topOffers' ? '' : 'newOffer'
+            ''
         );
     }
 
@@ -176,10 +169,6 @@ class FrontEnd_Helper_HomePagePartialFunctions
                 $pageLeftImage = KC\Repository\Page::getPageHomeImageByPermalink(FrontEnd_Helper_viewHelper::__link('link_top-50'));
                 $pageLeftImage = !empty($pageLeftImage) ? $pageLeftImage : HTTP_PATH ."public/images/img-08.png";
                 $imageTagOrSpan = self::getLeftPanelImage($pageLeftImage, $imageSize, $imageDescription);
-            } else if ($listType =='newOffers') {
-                $pageLeftImage = KC\Repository\Page::getPageHomeImageByPermalink(FrontEnd_Helper_viewHelper::__link('link_nieuw'));
-                $pageLeftImage = !empty($pageLeftImage) ? $pageLeftImage : HTTP_PATH ."public/images/img-09.png";
-                $imageTagOrSpan = self::getLeftPanelImage($pageLeftImage, $imageSize, $imageDescription);
             }
         }
         return $imageTagOrSpan;
@@ -201,11 +190,6 @@ class FrontEnd_Helper_HomePagePartialFunctions
             FrontEnd_Helper_viewHelper::__form('form_All Top Codes')
         );
 
-        $newOffer = $this->getRightColumnOffersHtml(
-            'newOffers',
-            HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_nieuw'),
-            FrontEnd_Helper_viewHelper::__form('form_All New Codes')
-        );
         $guidesHtml = self::getMoneySavingGuidesRightForAjax(
             $this->homePageData['moneySavingGuidesList'],
             'moneysaving',
@@ -215,7 +199,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
 
         $specialListPage = self::getRightColumnSpicialListHtml();
         $categoryListPage = self::renderCategoryData();
-        return $topOffer.$newOffer.$categoryListPage.$specialListPage.$guidesHtml;
+        return $topOffer.$categoryListPage.$specialListPage.$guidesHtml;
     }
 
     public function renderCategoryData()
@@ -272,12 +256,9 @@ class FrontEnd_Helper_HomePagePartialFunctions
     public function getRightColumnOffersList($offerDivName, $dynamicDivId)
     {
         $offersHtml = '';
-        switch ($offerDivName){
+        switch ($offerDivName) {
             case 'topOffers':
                 $offersHtml = $this->getTopOffersRightColumnList('topOffers');
-                break;
-            case 'newOffers':
-                $offersHtml = $this->getTopOffersRightColumnList('newOffers');
                 break;
             case 'special':
                 $offersHtml = $this->getSpecialPageRightCoulumnList($dynamicDivId);
