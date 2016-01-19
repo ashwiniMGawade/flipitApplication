@@ -291,7 +291,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         }
         $imageClass = '';
         if ($offerImage == 'offerImage') {
-            $imageClass = 'code';
+            $imageClass = 'code code-2';
         }
         $visitorInformation = '';
         if (Auth_VisitorAdapter::hasIdentity()) {
@@ -369,7 +369,6 @@ class FrontEnd_Helper_OffersPartialFunctions
         $offerImage = '',
         $clickedElement
     ) {
-        
         $popupLink = self::getPopupLink($currentOffer, $urlToShow);
         echo $mainOfferLink = self::getmainOfferLink(
             $currentOffer,
@@ -393,7 +392,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         $expired = ''
     ) {
         $redirectUrl = '';
-        switch ($type){
+        switch ($type) {
             case 'mainOfferClickoutButton':
                 $redirectUrl = self::getRedirectUrlforOffer(
                     $currentOffer,
