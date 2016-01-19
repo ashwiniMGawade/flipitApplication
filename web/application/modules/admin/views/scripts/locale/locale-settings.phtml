@@ -137,4 +137,79 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
             </div>
         </form>
     </div>
+    <div class="mainpage-content">
+        <div class="mainpage-content-line mb10">
+            <div class="mainpage-content-left">
+                <label><strong><?php echo $this->translate('Expired Coupon Logo'); ?></strong></label>
+            </div>
+            <div class="mainpage-content-right">
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-right-inner-left-other">
+                        <div class="mainpage-content-line header-image-cont">
+                            <div class="mainpage-content-right-inner"></div>
+                            <div class="mainpage-content-right-inner">
+                                <div class='browse-container'>
+                                    <?php
+                                    if (!empty($this->expiredCouponLogo['path'])) {
+                                        ?>
+                                        <img class='image-container'
+                                             src="<?php echo PUBLIC_PATH_CDN
+                                                 .$this->expiredCouponLogo['path']
+                                                 .urldecode($this->expiredCouponLogo['name']); ?>">
+                                    <?php
+                                    } ?>
+                                </div>
+                                <div class="mainpage-content-right-inner-left-other"></div>
+                                <div class="progress-file-detail hide">
+                                    <div>
+                                        <img alt="uploadig"
+                                             src="http://www.flipit.com/public/images/back_end/ajax-loader-tran.gif">
+                                        <span id="selected-filename"></span>
+                                    </div>
+                                    <div class="progress progress-success progress-striped" id="progress">
+                                        <div class="bar" style="width: 99%;"></div>
+                                    </div>
+                                </div>
+                                <div class="mainpage-content-right-inner-right-other">
+                                    <span class="message help-inline success margin-bottom-tenpx"></span>
+                                </div>
+                                <?php
+                                if(empty($this->expiredCouponLogo['path'])) {
+                                    ?>
+                                    <input type="file"  id="expiredCouponLogo"
+                                           class="span3 margin-bottom-tenpx"
+                                           name="expiredCouponLogo">
+                                <?php
+                                } else {
+                                    ?>
+                                    <button class="btn btn-primary" type="button"
+                                            alt = "<?php echo urldecode($this->expiredCouponLogo['name']); ?>"
+                                            id="delete-header-image-btn">
+                                        <?php echo $this->translate("Delete Image");?>
+                                    </button>
+                                <?php
+                                }
+                                ?>
+                                <button class="btn btn-primary hide" type="button"
+                                        alt = "<?php echo urldecode($this->expiredCouponLogo['name']); ?>"
+                                        id="delete-expired-coupon-logo-btn">
+                                    <?php echo $this->translate("Delete Image");?>
+                                </button>
+                                <button class="btn btn-primary hide" type="button"
+                                        id="update-expired-coupon-logo-btn">
+                                    <?php echo $this->translate("Update Image");?>
+                                </button>
+                                <div class="margin-bottom-tenpx">
+                                    <span class="help-inline" id="logo_file_message">
+                                        <?php echo $this->translate("Image Size: 615px x 162px (*.jpg or *.png file only)") . "&nbsp;" . $this->translate("Max filesize:") . "&nbsp;" . ini_get('upload_max_filesize'); ?>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
