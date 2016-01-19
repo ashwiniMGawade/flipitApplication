@@ -81,7 +81,7 @@ class AboutController extends Zend_Controller_Action
             ),
             0
         );
-        if (empty($authorDetailsForView)) {
+        if (empty($authorDetailsForView) || empty($authorDetailsForView[0])) {
             $this->_helper->redirector->setCode(301);
             $this->_redirect(HTTP_PATH_LOCALE);
         }
@@ -96,7 +96,8 @@ class AboutController extends Zend_Controller_Action
             array('function' => '\KC\Repository\MoneySaving::getMostReadArticles', 'parameters' => array(4, $authorId)),
             0
         );
-        $authorFullName = $authorDetails['firstName'].' '. $authorDetails['lastName'];
+
+        $authorFullName = $authorDetails[0]['firstName'].' '. $authorDetails[0]['lastName'];
         $permalink = ltrim(\Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = \FrontEnd_Helper_viewHelper::generateCononical($permalink);
         $customHeader = '';
@@ -104,8 +105,8 @@ class AboutController extends Zend_Controller_Action
             $this,
             $authorFullName,
             '',
-            trim($authorDetails['mainText']),
-            \FrontEnd_Helper_viewHelper::__link('link_redactie') .'/'.$authorDetails['slug'],
+            trim($authorDetails[0]['mainText']),
+            \FrontEnd_Helper_viewHelper::__link('link_redactie') .'/'.$authorDetails[0]['slug'],
             FACEBOOK_IMAGE,
             $customHeader
         );
@@ -120,7 +121,7 @@ class AboutController extends Zend_Controller_Action
                 ),
                 ''
             );
-        $this->view->authorDetails = $authorDetailsForView;
+        $this->view->authorDetails = $authorDetailsForView[0];
         $this->view->authorFavouriteShops = $authorFavouriteShops;
         $this->view->authorMostReadArticles = $authorMostReadArticles;
 
