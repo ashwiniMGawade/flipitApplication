@@ -4,6 +4,10 @@ $this->headMeta('keyword', 'Description');
 $this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
 $this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/locale-settings.js" );
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.ui.widget.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.iframe-transport.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.fileupload.js");
 ?>
 <div class="wrap columns-2">
     <div class='wrap columns-2'>
@@ -184,7 +188,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
                                     ?>
                                     <button class="btn btn-primary" type="button"
                                             alt = "<?php echo urldecode($this->expiredCouponLogo['name']); ?>"
-                                            id="delete-header-image-btn">
+                                            id="delete-expired-coupon-logo-btn">
                                         <?php echo $this->translate("Delete Image");?>
                                     </button>
                                 <?php

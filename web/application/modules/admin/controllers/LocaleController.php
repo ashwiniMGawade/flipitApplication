@@ -70,6 +70,73 @@ class Admin_LocaleController extends Application_Admin_BaseController
         }
     }
 
+    public function updateExpiredCouponLogoAction()
+    {
+        if ($this->_request->isXmlHttpRequest()) {
+            if ($this->_request->isPost()) {
+                $upload = new Zend_File_Transfer();
+                $files = $upload->getFileInfo();
+                if (true === isset($files['expiredCouponLogo']['name']) && true === isset($files['expiredCouponLogo']['name']) && '' !== $files['expiredCouponLogo']['name']) {
+                    echo "in if"; exit;
+                    $rootPath = UPLOAD_IMG_PATH . 'expiredCouponLogo/';
+                    $image = $this->uploadImage('expiredCouponLogo', $rootPath);
+                    var_dump(image);exit;
+                    if ($image) {
+                        $this->_helper->json($image);
+                    }
+                } else {
+                    echo "in else"; exit;
+                }
+            }
+        }
+        exit();
+    }
+
+    private function _handleImageUpload($params, $headerBanner = '', $footerBanner = '')
+    {
+
+        if (true === isset($files['headerBanner']) && true === isset($files['headerBanner']['name']) && '' !== $files['headerBanner']['name']) {
+            $rootPath = UPLOAD_IMG_PATH . 'newslettercampaigns/';
+            $image = $this->uploadImage('headerBanner', $rootPath);
+            if (false === $image) {
+                $this->setFlashMessage('error', "Please upload valid header banner.");
+                return false;
+            }
+            if (false !== $image && !empty($headerBanner)) {
+                @unlink(BASE_PATH . 'images/upload/newslettercampaigns/'.$headerBanner);
+            }
+            $this->message[] = "Successfully uploaded header banner image.";
+            $params['headerBanner'] = $image;
+        }
+        if (true === isset($files['footerBanner']) && true === isset($files['footerBanner']['name']) && '' !== $files['footerBanner']['name']) {
+            $rootPath = UPLOAD_IMG_PATH . 'newslettercampaigns/';
+            $image = $this->uploadImage('footerBanner', $rootPath);
+            if (false === $image) {
+                $this->setFlashMessage('error', "please upload valid footer banner.");
+                return false;
+            }
+            if (false !== $image && !empty($footerBanner)) {
+                @unlink(BASE_PATH . 'images/upload/newslettercampaigns/'.$footerBanner);
+            }
+            $this->message[] = "Successfully uploaded footer banner image.";
+            $params['footerBanner'] = $image;
+        }
+        return $params;
+    }
+
+    public function deleteExpiredCouponLogoAction()
+    {
+        if ($this->_request->isXmlHttpRequest()) {
+            if ($this->_request->isPost()) {
+                $parameters = $this->_getAllParams();
+                echo "called";
+               // $result = \KC\Repository\Newsletterbanners::deleteNewsletterImages($parameters['imageType']);
+               // $this->_helper->json($result);
+            }
+        }
+        exit();
+    }
+
     public function savelocaleAction()
     {
         $localeName = $this->getRequest()->getParam('locale');
