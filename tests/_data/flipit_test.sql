@@ -713,6 +713,57 @@ CREATE TABLE IF NOT EXISTS `newsletterbanners` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `newsletterCampaigns`
+--
+
+CREATE TABLE IF NOT EXISTS `newsletterCampaigns` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `campaignName` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `campaignSubject` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `senderName` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `senderEmail` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `header` longtext COLLATE utf8_unicode_ci,
+  `headerBanner` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `headerBannerURL` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `footer` longtext COLLATE utf8_unicode_ci,
+  `footerBanner` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `footerBannerURL` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `offerPartOneTitle` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `offerPartTwoTitle` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `scheduledStatus` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0-Not Scheduled, 1-Scheduled, 2 - Triggered, 3 - Sent',
+  `scheduledTime` datetime DEFAULT NULL,
+  `newsletterSentTime` datetime DEFAULT NULL,
+  `receipientCount` int(11) DEFAULT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1-deleted, 0-Not deleted',
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `newsletterCampaignOffers`
+--
+
+CREATE TABLE IF NOT EXISTS `newsletterCampaignOffers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `campaignId` int(11) NOT NULL,
+  `offerId` bigint(20) NOT NULL,
+  `position` bigint(20) NOT NULL COMMENT 'holds the position of the offer among campaign offers',
+  `section` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1-section one ,2-section 2',
+  `deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1-deleted ,0-not deleted',
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_CC55001EED9296FD` (`campaignId`),
+  KEY `IDX_CC55001E18A467DA` (`offerId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=241 ;
+
 -- --------------------------------------------------------
 
 --
