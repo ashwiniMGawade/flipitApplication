@@ -5398,7 +5398,7 @@ button.list-group-item-danger.active:focus {
 }
 
 .panel-body {
-	padding: 19px;
+	padding: 15px;
 }
 
 .panel-heading {
@@ -5428,7 +5428,7 @@ button.list-group-item-danger.active:focus {
 }
 
 .panel-footer {
-	padding: 19px;
+	padding: 8px 15px;
 	background-color: #fff;
 	border-top: 1px solid #dadada;
 	border-bottom-right-radius: 0;
@@ -6817,6 +6817,7 @@ body {
 .discount-blocks .panel h2 {
 	margin: 0 0 16px;
     color: #33383e;
+    font-weight:bold;
 }
 
 .discount-blocks .panel .panel-footer {
@@ -6853,8 +6854,9 @@ body {
 
 .discount-blocks .panel .offer-teaser-button-wrapper {
 	position: relative;
-	width: 100%;
+	width: 80%;
 	height: 40px;
+    margin: 0 10%;
 }
 
 .discount-blocks .panel .offer-teaser-button-wrapper-inner {
@@ -6945,6 +6947,10 @@ body {
 
 .discount-blocks .panel .page-store .section .block a:hover .link {
 	color: #07c;
+}
+
+.discount-blocks .panel a h2:hover{
+    color: #07c;
 }
 
 .discount-blocks .panel .blue-corner {
@@ -8398,10 +8404,6 @@ body {
 }
 
 @media only screen and (min-width: 1220px) {
-	.discount-blocks .panel .panel-footer {
-		padding-left: 22px;
-		padding-right: 22px;
-	}
 
 	.discount-blocks .panel .panel-footer .link-terms {
 		font-size: 13px;
@@ -8781,8 +8783,6 @@ body {
     font-size: 12px;
     line-height: 18px;
     color: #878a8d;
-    background: #f6f6f6;
-    border-top: 1px solid #eaeaea;
     overflow: hidden;
 }
 
