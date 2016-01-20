@@ -129,7 +129,7 @@ class Admin_NewsletterCampaignsController extends Application_Admin_BaseControll
             $this->view->newsletterCampaign['campaignFooter'] = !empty($campaignFooterSetting) ? $campaignFooterSetting->value : '';
 
             $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
-            $this->view->partTwoSearchOffers = $this->view->partOneSearchOffers = \KC\Repository\PopularCode::searchAllOffer(array());
+            $this->view->partTwoSearchOffers = $this->view->partOneSearchOffers = \KC\Repository\PopularCode::searchAllOffer(array(), false);
 
             $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         }
@@ -278,7 +278,7 @@ class Admin_NewsletterCampaignsController extends Application_Admin_BaseControll
                 $existingPartTwoOffers[] = $offer->offer->getId();
             }
         }
-        $this->view->partOneSearchOffers = \KC\Repository\PopularCode::searchAllOffer($existingPartOneOffers);
-        $this->view->partTwoSearchOffers = \KC\Repository\PopularCode::searchAllOffer($existingPartTwoOffers);
+        $this->view->partOneSearchOffers = \KC\Repository\PopularCode::searchAllOffer($existingPartOneOffers, false);
+        $this->view->partTwoSearchOffers = \KC\Repository\PopularCode::searchAllOffer($existingPartTwoOffers, false);
     }
 }

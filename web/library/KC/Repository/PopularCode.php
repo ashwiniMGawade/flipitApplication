@@ -56,7 +56,7 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
         return $data;
     }
 
-    public static function searchAllOffer($listOfPopularCode)
+    public static function searchAllOffer($listOfPopularCode, $considerDiscountType = true)
     {
         $format = 'Y-m-j H:i:s';
         $date = date($format);
@@ -69,16 +69,18 @@ class PopularCode extends \Core\Domain\Entity\PopularCode
             ->andWhere('s.deleted = 0')
             ->andWhere('o.offline = 0')
             ->andWhere('o.endDate >'."'".$date."'")
-            ->andWhere('o.startDate <='."'".$date."'")
-            ->setParameter(4, 'CD')
-            ->andWhere('o.discountType = ?4')
-            ->setParameter(5, 'MEM')
-            ->andWhere('o.Visability != ?5')
-            ->andWhere('o.userGenerated = 0');
+            ->andWhere('o.startDate <='."'".$date."'");
+        if ($considerDiscountType) {
+            $query
+                ->setParameter(4, 'CD')
+                ->andWhere('o.discountType = ?4');
+        }
+        $query->setParameter(5, 'MEM')
+        ->andWhere('o.Visability != ?5')
+        ->andWhere('o.userGenerated = 0');
         if (!empty($listOfPopularCode)) {
-            $query = $query
-                ->setParameter(1, $listOfPopularCode)
-                ->andWhere($queryBuilder->expr()->notIn('o.id', '?1'));
+            $query = $query->setParameter(1, $listOfPopularCode)
+                    ->andWhere($queryBuilder->expr()->notIn('o.id', '?1'));
         }
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
