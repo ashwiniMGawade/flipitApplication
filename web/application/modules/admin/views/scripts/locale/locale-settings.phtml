@@ -154,12 +154,11 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.fileupload.js"
                             <div class="mainpage-content-right-inner">
                                 <div class='browse-container'>
                                     <?php
-                                    if (!empty($this->expiredCouponLogo['path'])) {
+                                    if (!empty($this->localeSettings['0']['expiredCouponLogo'])) {
                                         ?>
                                         <img class='image-container'
                                              src="<?php echo PUBLIC_PATH_CDN
-                                                 .$this->expiredCouponLogo['path']
-                                                 .urldecode($this->expiredCouponLogo['name']); ?>">
+                                                 .$this->localeSettings['0']['expiredCouponLogo']; ?>">
                                     <?php
                                     } ?>
                                 </div>
@@ -178,7 +177,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.fileupload.js"
                                     <span class="message help-inline success margin-bottom-tenpx"></span>
                                 </div>
                                 <?php
-                                if(empty($this->expiredCouponLogo['path'])) {
+                                if(empty($this->localeSettings['0']['expiredCouponLogo'])) {
                                     ?>
                                     <input type="file"  id="expiredCouponLogo"
                                            class="span3 margin-bottom-tenpx"
@@ -187,7 +186,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.fileupload.js"
                                 } else {
                                     ?>
                                     <button class="btn btn-primary" type="button"
-                                            alt = "<?php echo urldecode($this->expiredCouponLogo['name']); ?>"
+                                            alt = "<?php echo urldecode($this->localeSettings['0']['expiredCouponLogo']); ?>"
                                             id="delete-expired-coupon-logo-btn">
                                         <?php echo $this->translate("Delete Image");?>
                                     </button>
@@ -195,7 +194,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.fileupload.js"
                                 }
                                 ?>
                                 <button class="btn btn-primary hide" type="button"
-                                        alt = "<?php echo urldecode($this->expiredCouponLogo['name']); ?>"
+                                        alt = "<?php echo urldecode($this->localeSettings['0']['expiredCouponLogo']); ?>"
                                         id="delete-expired-coupon-logo-btn">
                                     <?php echo $this->translate("Delete Image");?>
                                 </button>

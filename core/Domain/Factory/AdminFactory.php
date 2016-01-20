@@ -72,7 +72,7 @@ use \Core\Domain\Usecase\Admin\DeleteNewsletterCampaignOfferUsecase;
 use \Core\Domain\Usecase\Admin\ValidateScheduledNewsletterCampaignUsecase;
 use \Core\Domain\Usecase\Admin\GetNewsletterCampaignWarningsUsecase;
 
-
+use \Core\Domain\Usecase\Admin\UpdateLocaleSettingsUsecase;
 
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\LandingPageValidator;
@@ -86,6 +86,7 @@ use \Core\Domain\Validator\WidgetValidator;
 use \Core\Domain\Validator\UrlSettingValidator;
 use \Core\Domain\Validator\NewsletterCampaignValidator;
 use \Core\Domain\Validator\NewsletterCampaignOfferValidator;
+use \Core\Domain\Validator\LocaleSettingValidator;
 
 use \Core\Persistence\Factory\RepositoryFactory;
 
@@ -460,5 +461,10 @@ class AdminFactory
     public static function getNewsletterCampaignWarnings()
     {
         return new GetNewsletterCampaignWarningsUsecase(RepositoryFactory::newsletterCampaign(), new Purifier(), new Errors());
+    }
+
+    public static function updateLocaleSettings()
+    {
+        return new UpdateLocaleSettingsUsecase(RepositoryFactory::localeSetting(), new LocaleSettingValidator(new Validator()), new Purifier(), new Errors());
     }
 }

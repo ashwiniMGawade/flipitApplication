@@ -82,15 +82,16 @@ class Admin_LocaleController extends Application_Admin_BaseController
                     $rootPath = UPLOAD_IMG_PATH . 'expiredCouponLogo/';
                     $image = $this->uploadImage('expiredCouponLogo', $rootPath);
                     if ($image) {
-                        $localSetting = SystemFactory::getLocaleSettings()->execute(array(), array(), 1);
-                        $existingExpiredCouponLogo = (!empty($localSetting) && !empty($localSetting[0])) ? $localSetting[0]->expiredCouponLogo : null;
-                        if (!empty($existingExpiredCouponLogo)) {
-                            //update
+                        $localeSetting = SystemFactory::getLocaleSettings()->execute(array(), array(), 1);
+                        $result = AdminFactory::updateLocaleSettings()->execute($localeSetting[0], array('expiredCouponLogo' => $rootPath.$image));
+                        if ($result instanceof Errors) {
+                            $errors = $result->getErrorsAll();
+                            $response['status'] = -1;
+                            $response['errors'] = $errors;
                         } else {
-                            //save
+                            $response['status'] = 200;
+                            $response['image'] = $image;
                         }
-                        $response['status'] = 200;
-                        $response['image'] = $image;
                     } else {
                         $response['status'] = -1;
                     }
@@ -106,9 +107,16 @@ class Admin_LocaleController extends Application_Admin_BaseController
         if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
                 $parameters = $this->_getAllParams();
-                echo "called";
-               // $result = \KC\Repository\Newsletterbanners::deleteNewsletterImages($parameters['imageType']);
-               // $this->_helper->json($result);
+                $localeSetting = SystemFactory::getLocaleSettings()->execute(array(), array(), 1);
+                $result = AdminFactory::updateLocaleSettings()->execute($localeSetting[0], array('expiredCouponLogo' => null));
+                if ($result instanceof Errors) {
+                    $errors = $result->getErrorsAll();
+                    $response['status'] = -1;
+                    $response['errors'] = $errors;
+                } else {
+                    $response['status'] = 200;
+                }
+                $this->_helper->json($result);
             }
         }
         exit();
