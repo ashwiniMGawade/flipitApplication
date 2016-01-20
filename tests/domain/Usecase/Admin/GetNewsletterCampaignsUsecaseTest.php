@@ -36,6 +36,13 @@ class GetNewsletterCampaignsUsecaseTest extends \Codeception\TestCase\Test
         $this->assertEquals($errors->getErrorsAll(), $result->getErrorsAll());
     }
 
+    public function testGetNewsletterCampaignsUsecaseReturnsArrayOfCampaignssObjectWithWarningsWhenParametersAreValid()
+    {
+        $newsletterCampaignRepository = $this->createNewsletterCampaignsRepositoryInterfaceMockWithPaginatedMethod(array('records' => array(new NewsletterCampaign())));
+        $campaigns = (new GetNewsletterCampaignsUsecase($newsletterCampaignRepository, new Purifier(), new Errors()))->execute(array(), array(), null, null, true, true);
+        $this->assertNotEmpty($campaigns);
+    }
+
     public function testGetNewsletterCampaignsUsecaseReturnsArrayOfCampaignssObjectWhenParametersAreValid()
     {
         $newsletterCampaignRepository = $this->createNewsletterCampaignsRepositoryInterfaceMockWithPaginatedMethod(array(new NewsletterCampaign()));

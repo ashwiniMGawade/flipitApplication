@@ -30,6 +30,19 @@ class GetNewsletterCampaignUsecaseTest extends \Codeception\TestCase\Test
         $this->assertEquals($newsletterCampaign, $result);
     }
 
+    public function testGetNewsletterCampaignUsecaseWithWarnings()
+    {
+        $condition = array('id' => 0);
+        $newsletterCampaign = new NewsletterCampaign();
+        $newsletterCampaign->setId(0);
+        $newsletterCampaign->setScheduledStatus(1);
+        $newsletterCampaign->setScheduledTime(new \DateTime());
+        $newsletterCampaignRepositoryMock = $this->createNewsletterCampaignRepositoryMock($condition, $newsletterCampaign);
+        $newsletterCampaignUsecase = new GetNewsletterCampaignUsecase($newsletterCampaignRepositoryMock, new Purifier(), new Errors());
+        $result = $newsletterCampaignUsecase->checkNewsletterForWarnings($newsletterCampaign, false);
+        $this->assertFalse($result);
+    }
+
     public function testGetNewsletterCampaignUsecaseRetunsObjectWithWarningsWhenValidInputPassed()
     {
         $condition = array('id' => 0);
