@@ -54,7 +54,7 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getDiscountImage($currentOffer)
     {
         $offerDiscountImage ='';
-        if (!empty ( $currentOffer->offerTiles)) {
+        if (!empty($currentOffer->offerTiles)) {
             $offerDiscountImage =
             PUBLIC_PATH_CDN . ltrim($currentOffer->offerTiles[0]['path'], "/").$currentOffer->offerTiles[0]['name'];
         }
@@ -205,6 +205,7 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         $imageTagForOffer = '';
         $grayScaleClass = isset($expired) && $expired != 'grayscale' ? : '';
+        $offerDiscountImage = (isset($expired) && $expired) ?$this->getExpiredCouponLogo(): $offerDiscountImage;
         if ($shopCodeHolder) {
             $imageTag ='<img width="130" height="68" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'" 
             title="'.$altAttributeText.'" class="'.$grayScaleClass.'"/>';
@@ -216,6 +217,14 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $imageTagForOffer;
     }
 
+    public function getExpiredCouponLogo() {
+        $localeSetting = SystemFactory::getLocaleSettings()->execute(array(), array(), 1);
+        $logo = $localeSetting[0]->getExpiredCouponLogo();
+        if (!empty($logo)) {
+            return PUBLIC_PATH_CDN.$logo;
+        }
+        return HTTP_PATH."public/images/front_end/expiredcouponlogo.png";
+    }
     public function getOfferTypeText($currentOffer)
     {
         if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
@@ -227,7 +236,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         } else if (isset($currentOffer->top50rank)) {
             $offerTypeText = '<div class="imbull-menu-image top50"></div><span>'. $currentOffer->top50rank . ' '.FrontEnd_Helper_viewHelper::__translate('OF').' 50</span>';
         } else {
-        $offerTypeText = 'code';
+            $offerTypeText = 'code';
         }
         return $offerTypeText;
     }
@@ -592,8 +601,8 @@ class FrontEnd_Helper_OffersPartialFunctions
             }
         }
 
-        for ($i = 0; $i < count($saleOffers) ; $i++) {
-            for ($j = 0; $j <= $i ; $j++) {
+        for ($i = 0; $i < count($saleOffers); $i++) {
+            for ($j = 0; $j <= $i; $j++) {
                 if ($saleOffers[$j]['startDate']->date < $saleOffers[$i]['startDate']->date) {
                     $temp = $saleOffers[$i];
                     $saleOffers[$i] = $saleOffers[$j];
@@ -730,7 +739,8 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $couponHtml;
     }
 
-    public static function getTotalOfferCount($locale = '') {
+    public static function getTotalOfferCount($locale = '')
+    {
         $totalOfferCount = 0;
         $dashboard = GuestFactory::getDashboard($locale)->execute(array());
         if ($dashboard instanceof \Core\Domain\Entity\Dashboard) {
