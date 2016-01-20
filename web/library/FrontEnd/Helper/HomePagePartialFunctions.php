@@ -25,7 +25,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $categories = $this->getLeftColumnCategoriesHtml();
         $specialListPage = $this->getLeftColumnSpicialListHtml();
         $savingGuides = $this->getLeftColumnSavingGuidesListHtml();
-        return $topOffer . $newOffer . $categories . $specialListPage. $savingGuides;
+        return $topOffer . $newOffer . $specialListPage . $categories . $savingGuides;
     }
 
     public function getLeftColumnOffersHtml($offerType)
@@ -215,7 +215,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
 
         $specialListPage = self::getRightColumnSpicialListHtml();
         $categoryListPage = self::renderCategoryData();
-        return $topOffer.$newOffer.$categoryListPage.$specialListPage.$guidesHtml;
+        return $topOffer . $newOffer . $specialListPage. $categoryListPage . $guidesHtml;
     }
 
     public function renderCategoryData()
@@ -272,7 +272,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
     public function getRightColumnOffersList($offerDivName, $dynamicDivId)
     {
         $offersHtml = '';
-        switch ($offerDivName){
+        switch ($offerDivName) {
             case 'topOffers':
                 $offersHtml = $this->getTopOffersRightColumnList('topOffers');
                 break;
