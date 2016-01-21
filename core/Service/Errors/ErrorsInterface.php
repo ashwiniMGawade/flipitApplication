@@ -24,6 +24,13 @@ interface ErrorsInterface
     public function setErrors($errorMessages = array());
 
     /**
+     * @param array $originalState
+     *
+     * @return mixed
+     */
+    public function setOriginalState($originalState);
+
+    /**
      * @param array $fieldName
      *
      * @return mixed
@@ -34,6 +41,11 @@ interface ErrorsInterface
      * @return mixed
      */
     public function getErrorsAll();
+
+    /**
+     * @return mixed
+     */
+    public function getOriginalState();
 
     /**
      * @return mixed

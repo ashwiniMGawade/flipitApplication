@@ -39,7 +39,8 @@ class UpdateNewsletterCampaignUsecase
     {
         if (empty($params)) {
             $this->errors->setError('Invalid Parameters');
-            return array('error' => $this->errors, 'newsletterCampaign' => $newsletterCampaign);
+            $this->errors->setOriginalState($newsletterCampaign);
+            return $this->errors;
         }
         $params = $this->htmlPurifier->purify($params);
 
@@ -47,7 +48,7 @@ class UpdateNewsletterCampaignUsecase
             $newsletterCampaign->setCampaignName($params['campaignName']);
         }
         if (isset($params['campaignSubject'])) {
-            $newsletterCampaign->setCampaignSubject($params['campaignSubject']);
+            $newsletterCampaign->setCampaignSubject(123);
         }
         if (isset($params['senderName'])) {
             $newsletterCampaign->setSenderName($params['senderName']);
@@ -100,7 +101,8 @@ class UpdateNewsletterCampaignUsecase
 
         if (true !== $validationResult && is_array($validationResult)) {
             $this->errors->setErrors($validationResult);
-            return array('error' => $this->errors, 'newsletterCampaign' => $newsletterCampaign);
+            $this->errors->setOriginalState($newsletterCampaign);
+            return $this->errors;
         }
 
        // $this->newsletterCampaignRepository->beginTransaction();
@@ -138,7 +140,8 @@ class UpdateNewsletterCampaignUsecase
             $params['position'] = $index +1;
             $result = $this->_createOffer($newsletterCampaignOffer, $params);
             if ($result instanceof Errors) {
-                return array('error' => $result, 'newsletterCampaign' => $newsletterCampaign);
+                $result->setOriginalState($newsletterCampaign);
+                return $result;
             }
         }
         return true;
