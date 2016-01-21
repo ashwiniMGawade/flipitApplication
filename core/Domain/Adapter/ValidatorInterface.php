@@ -51,4 +51,9 @@ interface ValidatorInterface
      * @return mixed
      */
     public function email();
+
+    /**
+     * @return mixed
+     */
+    public function url();
 }

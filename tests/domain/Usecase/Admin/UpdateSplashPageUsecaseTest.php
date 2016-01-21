@@ -37,10 +37,7 @@ class UpdateSplashPageUsecaseTest extends \Codeception\TestCase\Test
             'updatedAt' => date('Y-m-d'),
             'infoImage' => 'info.jpg',
             'footer' => 'Footer Content',
-            'visitorsPerMonthCount' => 1,
-            'verifiedActionCount' => 1,
-            'newsletterSignupCount' => 1,
-            'retailerOnlineCount' => 1
+            'statistics' => 'Footer Statistics'
         );
         $splashPageRepository = $this->splashPageRepositoryMockWithSaveMethod();
         $splashPageValidator = $this->createSplashPageValidatorMock(true);
