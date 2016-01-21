@@ -68,6 +68,20 @@ function init() {
         }
     );
 
+    jQuery('#deepLinkOnbtn').click(function() {
+        jQuery('#deepLinkOnbtn').addClass("btn-primary").siblings().removeClass("btn-primary");
+        jQuery('#landingPageRefUrl').removeAttr("disabled");
+        jQuery('#deepLinkStatus').attr("checked", "checked");
+        //	getDeeplinkForShop(jQuery("#whichshop option:selected").val());
+    });
+
+    jQuery('#deepLinkOffbtn').click(function() {
+        jQuery('#deepLinkOffbtn').addClass("btn-primary").siblings().removeClass("btn-primary");
+        jQuery('#landingPageRefUrl').attr("disabled", "disabled");
+        jQuery('#deepLinkStatus').removeAttr("checked");
+        jQuery('#landingPageRefUrl').val('');
+    });
+
     validateForm();
 }
 
@@ -106,6 +120,9 @@ function validateForm() {
                     }
                 }
             },
+            landingPageRefUrl : {
+                "required" : true
+            },
             title : {
                 required : true
             }
@@ -123,11 +140,15 @@ function validateForm() {
                 permalinkRegex : __("Invalid characters"),
                 remote: __("Permalink already in use")
             },
+            landingPageRefUrl : {
+                required : __("Please enter a referring url")
+            },
             title : {
                 required : __("Please enter a title")
             }
         },
         onfocusin : function (element) {
+            if(element.id == 'landingPageRefUrl') { return true; }
             this.showLabel(element, focusRules[element.name]);
             jQuery(element).parent('div')
                 .removeClass(this.settings.errorClass)
