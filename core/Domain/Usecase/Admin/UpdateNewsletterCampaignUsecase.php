@@ -48,7 +48,7 @@ class UpdateNewsletterCampaignUsecase
             $newsletterCampaign->setCampaignName($params['campaignName']);
         }
         if (isset($params['campaignSubject'])) {
-            $newsletterCampaign->setCampaignSubject(123);
+            $newsletterCampaign->setCampaignSubject($params['campaignSubject']);
         }
         if (isset($params['senderName'])) {
             $newsletterCampaign->setSenderName($params['senderName']);
