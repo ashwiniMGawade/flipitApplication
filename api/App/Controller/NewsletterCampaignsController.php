@@ -64,22 +64,27 @@ class NewsletterCampaignsController extends ApiBaseController
         $params = $this->formatInput($params);
         $campaignOffer = AdminFactory::createNewsletterCampaignOffer()->execute();
         $result = AdminFactory::updateNewsletterCampaign()->execute($newsletterCampaign, $campaignOffer, $params);
-        if ($result instanceof Errors) {
-            $this->app->halt(405, json_encode(array('messages' => $result->getErrorsAll())));
+        if (is_array($result) && $result['error'] instanceof Errors) {
+            $this->app->halt(405, json_encode(array('messages' => $result['error']->getErrorsAll())));
         }
+
         $response = $this->generateNewsletterCampaignJsonData($result);
         echo $response->asJson();
     }
 
-    private  function formatInput($params)
+    private function formatInput($params)
     {
         if (isset($params['scheduledStatus'])) {
             $params['scheduledStatus'] = ( $params['scheduledStatus'] === 'Pending' ? 0 : ( $params['scheduledStatus'] === 'Scheduled' ? 1 : ( $params['scheduledStatus'] === 'Triggered' ? 2 : ( $params['scheduledStatus'] === 'Sent' ? 3 : null ))));
-            if(true === is_null($params['scheduledStatus'])) unset($params['scheduledStatus']);
+            if (true === is_null($params['scheduledStatus'])) {
+                unset($params['scheduledStatus']);
+            }
         }
         if (isset($params['deleted'])) {
             $params['deleted'] = ( $params['deleted'] === 'Yes' ? 1 : ( $params['deleted'] === 'No' ? 0 : null ));
-            if(true === is_null($params['deleted'])) unset($params['deleted']);
+            if (true === is_null($params['deleted'])) {
+                unset($params['deleted']);
+            }
         }
         return $params;
     }
