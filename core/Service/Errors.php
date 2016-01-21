@@ -7,6 +7,7 @@ use \Core\Service\Errors\ErrorsInterface;
 class Errors implements ErrorsInterface
 {
     protected $errors;
+    protected $originalState;
 
     public function setError($errorMessage, $fieldName = '')
     {
@@ -24,6 +25,13 @@ class Errors implements ErrorsInterface
         }
     }
 
+    public function setOriginalState($originalState)
+    {
+        if (!empty($originalState)) {
+            $this->originalState = $originalState;
+        }
+    }
+
     public function getError($fieldName)
     {
         if (array_key_exists($fieldName, $this->errors)) {
@@ -34,6 +42,11 @@ class Errors implements ErrorsInterface
     public function getErrorsAll()
     {
         return $this->errors;
+    }
+
+    public function getOriginalState()
+    {
+        return $this->originalState;
     }
 
     public function getErrorMessages()

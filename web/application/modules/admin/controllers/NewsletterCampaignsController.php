@@ -154,9 +154,9 @@ class Admin_NewsletterCampaignsController extends Application_Admin_BaseControll
             if ($params) {
                 $campaignOffer = AdminFactory::createNewsletterCampaignOffer()->execute();
                 $newsletterCampaign = AdminFactory::updateNewsletterCampaign()->execute($newsletterCampaign, $campaignOffer, $params);
-                if (!is_object($newsletterCampaign) && isset($newsletterCampaign['error'])) {
-                    $errors = $newsletterCampaign['error']->getErrorsAll();
-                    $newsletterCampaign = $newsletterCampaign['newsletterCampaign'];
+                if ($newsletterCampaign instanceof Errors) {
+                    $errors = $newsletterCampaign->getErrorMessages();
+                    $newsletterCampaign = $newsletterCampaign->getOriginalState();
                     $this->view->newsletterCampaign = $newsletterCampaign;
                     $this->setFlashMessage('error', $errors);
                 } else {
@@ -167,7 +167,7 @@ class Admin_NewsletterCampaignsController extends Application_Admin_BaseControll
         } else {
             $this->_getSearchOffers($newsletterCampaign->getNewsletterCampaignOffers());
         }
-        $this->view->warnings = $newsletterCampaign->warnings;
+        $this->view->warnings = isset($newsletterCampaign->warnings) ? $newsletterCampaign->warnings : '';
         $this->view->recipientCount = SystemFactory::getNewsletterReceipientCount()->execute();
     }
 
