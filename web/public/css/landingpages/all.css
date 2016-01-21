@@ -2519,7 +2519,6 @@ input[type="search"] {
 	position: relative;
 	display: block;
 	margin-top: 10px;
-	margin-bottom: 10px;
 }
 
 .radio label,
@@ -8770,7 +8769,8 @@ body {
     display: block;
     line-height: 18px;
     border-top: 1px solid #7FC1EB;
-    width: 100%;
+    width: 80%;
+    margin: 0 10%;
 }
 
 .offer-title {
@@ -8779,7 +8779,7 @@ body {
 
 .terms-block{
     display:none;
-    padding: 25px 30px 22px;
+    padding: 10px 30px 22px;
     font-size: 12px;
     line-height: 18px;
     color: #878a8d;
