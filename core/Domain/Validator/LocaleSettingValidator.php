@@ -21,9 +21,6 @@ class LocaleSettingValidator
             ),
             'timezone' => array(
                 $this->validator->notNull(array('message'=>'timezone should not be blank.'))
-            ),
-            'expiredCouponLogo' => array(
-                $this->validator->type(array('type' => 'string'))
             )
         );
         return $this->validator->validate($localeSetting, $constraints);

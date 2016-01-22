@@ -43,9 +43,6 @@ class UpdateLocaleSettingsUsecase
         if (isset($params['timezone'])) {
             $localeSetting->setTimezone($params['timezone']);
         }
-        if (isset($params['expiredCouponLogo'])) {
-            $localeSetting->setExpiredCouponLogo($params['expiredCouponLogo']);
-        }
 
         $validationResult = $this->localeSettingValidator->validate($localeSetting);
 

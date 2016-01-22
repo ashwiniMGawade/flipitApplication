@@ -36,6 +36,10 @@ class Admin_LocaleController extends Application_Admin_BaseController
         $this->view->locale = KC\Repository\Signupmaxaccount::getAllMaxAccounts();
         $this->view->localeSettings = KC\Repository\LocaleSettings::getLocaleSettings();
         $this->view->timezones_list = KC\Repository\Signupmaxaccount::$timezones;
+        $expiredCouponLogo = SystemFactory::getSetting()->execute(array('name'=>'expiredCouponLogo'));
+        if (!empty($expiredCouponLogo)) {
+            $this->view->expiredCouponLogo = $expiredCouponLogo->value;
+        }
         $site_name = "kortingscode.nl";
         if (isset($_COOKIE['site_name'])) {
             $site_name =  $_COOKIE['site_name'];
@@ -82,8 +86,8 @@ class Admin_LocaleController extends Application_Admin_BaseController
                     $rootPath = UPLOAD_IMG_PATH . 'expiredCouponLogo/';
                     $image = $this->uploadImage('expiredCouponLogo', $rootPath);
                     if ($image) {
-                        $localeSetting = SystemFactory::getLocaleSettings()->execute(array(), array(), 1);
-                        $result = AdminFactory::updateLocaleSettings()->execute($localeSetting[0], array('expiredCouponLogo' => $rootPath.$image));
+                        $expiredCouponLogoSettings = SystemFactory::getSetting()->execute(array('name'=>'expiredCouponLogo'));
+                        $result = AdminFactory::updateSetting()->execute($expiredCouponLogoSettings, array('value' => $rootPath.$image));
                         if ($result instanceof Errors) {
                             $errors = $result->getErrorsAll();
                             $response['status'] = -1;
@@ -107,8 +111,8 @@ class Admin_LocaleController extends Application_Admin_BaseController
         if ($this->_request->isXmlHttpRequest()) {
             if ($this->_request->isPost()) {
                 $parameters = $this->_getAllParams();
-                $localeSetting = SystemFactory::getLocaleSettings()->execute(array(), array(), 1);
-                $result = AdminFactory::updateLocaleSettings()->execute($localeSetting[0], array('expiredCouponLogo' => null));
+                $expiredCouponLogoSettings = SystemFactory::getSetting()->execute(array('name'=>'expiredCouponLogo'));
+                $result = AdminFactory::updateSetting()->execute($expiredCouponLogoSettings, array('value' => null));
                 if ($result instanceof Errors) {
                     $errors = $result->getErrorsAll();
                     $response['status'] = -1;

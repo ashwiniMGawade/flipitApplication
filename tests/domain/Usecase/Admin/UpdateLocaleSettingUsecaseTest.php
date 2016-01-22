@@ -48,7 +48,6 @@ class UpdateLocaleSettingsUsecaseTest extends \Codeception\TestCase\Test
     {
         $params = array(
             'locale' => 'be',
-            'expiredCouponLogo' => 'test',
             'timezone' => 'test'
         );
         $localeSettingRepository = $this->localeSettingRepositoryMockWithSaveMethod(new LocaleSettings());
