@@ -75,8 +75,8 @@
                         </div>
                         <div class="mainpage-content-right">
                             <div data-toggle="buttons-checkbox" class="btn-group ">
-                                <button type="button" id="deepLinkOnbtn" class="btn"><?php echo $this->translate('On'); ?></button>
-                                <button type="button" id="deepLinkOffbtn" class="btn mr10 btn-primary" style="border-radius: 0 4px 4px 0;"><?php echo $this->translate('Off'); ?></button>
+                                <button type="button" id="deepLinkOnbtn" class="btn <?php echo (isset($this->landingPage['refUrl']) && !empty($this->landingPage['refUrl'])) ? 'btn-primary' : ''; ?>"><?php echo $this->translate('On'); ?></button>
+                                <button type="button" id="deepLinkOffbtn" class="btn mr10 <?php echo (!isset($this->landingPage['refUrl']) || empty($this->landingPage['refUrl'])) ? 'btn-primary' : ''; ?>" style="border-radius: 0 4px 4px 0;"><?php echo $this->translate('Off'); ?></button>
                                 <input type="checkbox" name="deepLinkStatus" value="1" id="deepLinkStatus" style="display: none;">
                             </div>
                         </div>
@@ -88,7 +88,7 @@
                         <div class="mainpage-content-right">
                             <div class="mainpage-content-right-inner-right-other"></div>
                             <div class="mainpage-content-right-inner-left-other">
-                                <input type="text" id="landingPageRefUrl" disabled="disabled" name="refUrl" placeholder="<?php echo $this->translate('Ref. Url');?>" class="span3" value="<?php echo isset($this->landingPage['refUrl']) ? $this->landingPage['refUrl'] : ''; ?>">
+                                <input type="text" id="landingPageRefUrl" <?php echo (!isset($this->landingPage['refUrl']) || empty($this->landingPage['refUrl'])) ? 'disabled' : ''; ?> name="refUrl" placeholder="<?php echo $this->translate('Ref. Url');?>" class="span3" value="<?php echo isset($this->landingPage['refUrl']) ? $this->landingPage['refUrl'] : ''; ?>">
                             </div>
                         </div>
                     </div>

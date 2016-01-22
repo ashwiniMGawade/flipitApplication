@@ -82,6 +82,7 @@ class Admin_LandingpagesController extends Application_Admin_BaseController
                     $parameters['status'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('status')));
                     $parameters['title'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('title'));
                     $parameters['permalink'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('permalink'));
+                    $parameters['refUrl'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('refUrl'));
                     $parameters['subTitle'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('subTitle'));
                     $parameters['metaTitle'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('overwriteTitle'));
                     $parameters['metaDescription'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('metaDescription'));
@@ -165,7 +166,7 @@ class Admin_LandingpagesController extends Application_Admin_BaseController
                         $parameters['status'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('status')));
                         $parameters['title'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('title'));
                         $parameters['permalink'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('permalink'));
-                        $parameters['refUrl'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('refurl'));
+                        $parameters['refUrl'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('refUrl'));
                         $parameters['subTitle'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('subTitle'));
                         $parameters['metaTitle'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('overwriteTitle'));
                         $parameters['metaDescription'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('metaDescription'));
@@ -176,7 +177,7 @@ class Admin_LandingpagesController extends Application_Admin_BaseController
 
                         if ($result instanceof Errors) {
                             $this->view->landingPage = $this->getAllParams();
-                            $errors = $result->getErrorsAll();
+                            $errors = $result->getErrorMessages();
                             $this->setFlashMessage('error', $errors);
                         } else {
                             self::updateVarnish($permalink);
