@@ -27,13 +27,13 @@ class Admin_ShopController extends Application_Admin_BaseController
     {
         /* Initialize action controller here */
         $this->shopClassifications = array(
+            -1 => 'C',
+            0 => 'B',
             1 => 'A',
             2 => 'A+',
             3 => 'AA',
             4 => 'AA+',
-            5 => 'AAA',
-            6 => 'B',
-            7 => 'C'
+            5 => 'AAA'
         );
 
     }
