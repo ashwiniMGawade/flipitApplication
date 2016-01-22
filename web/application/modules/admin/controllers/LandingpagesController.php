@@ -139,6 +139,7 @@ class Admin_LandingpagesController extends Application_Admin_BaseController
                 'title' => $landingPage->getTitle(),
                 'subTitle' => $landingPage->getSubTitle(),
                 'permalink' => $landingPage->getPermalink(),
+                'refUrl' => $landingPage->getRefUrl(),
                 'pageContent' => $landingPage->getContent(),
                 'metaDescription' => $landingPage->getMetaDescription(),
                 'overwriteTitle' => $landingPage->getMetaTitle(),
@@ -164,6 +165,7 @@ class Admin_LandingpagesController extends Application_Admin_BaseController
                         $parameters['status'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('status')));
                         $parameters['title'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('title'));
                         $parameters['permalink'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('permalink'));
+                        $parameters['refUrl'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('refurl'));
                         $parameters['subTitle'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('subTitle'));
                         $parameters['metaTitle'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('overwriteTitle'));
                         $parameters['metaDescription'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('metaDescription'));
