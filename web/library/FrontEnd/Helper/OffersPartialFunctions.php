@@ -218,8 +218,11 @@ class FrontEnd_Helper_OffersPartialFunctions
     }
 
     public function getExpiredCouponLogo() {
-        $localeSetting = SystemFactory::getLocaleSettings()->execute(array(), array(), 1);
-        $logo = $localeSetting[0]->getExpiredCouponLogo();
+        $logo = '';
+        $expiredCouponLogo = SystemFactory::getSetting()->execute(array('name'=>'expiredCouponLogo'));
+        if (!empty($expiredCouponLogo)) {
+            $logo = $expiredCouponLogo->value;
+        }
         if (!empty($logo)) {
             return PUBLIC_PATH_CDN.$logo;
         }
