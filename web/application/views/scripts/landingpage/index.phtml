@@ -88,7 +88,7 @@ foreach ($this->offers as $offer) {
         $popupLink = $offerPartial->getPopupLink($offer, $urlToShow);
         $onClick .= "OpenInNewTab(\"".HTTP_PATH_LOCALE."glp/".$this->landingPage->getPermalink().$popupLink."\");";
     }
-    $clickoutURL = HTTP_PATH_LOCALE.'out/offer/'.$offer->id;
+    $clickoutURL = HTTP_PATH_LOCALE.'out/glp/'.$this->landingPage->getId().'/'.$offer->id;
 
     $defaultText = '';
     if ($offer->userGenerated == '1') {

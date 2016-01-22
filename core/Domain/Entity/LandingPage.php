@@ -38,6 +38,11 @@ class LandingPage
     protected $permalink;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $refUrl;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $subTitle;
@@ -265,6 +270,22 @@ class LandingPage
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRefUrl()
+    {
+        return $this->refUrl;
+    }
+
+    /**
+     * @param mixed $refUrl
+     */
+    public function setRefUrl($refUrl)
+    {
+        $this->refUrl = $refUrl;
     }
 
     /**
