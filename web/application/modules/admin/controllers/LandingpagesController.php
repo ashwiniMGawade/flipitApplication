@@ -93,7 +93,7 @@ class Admin_LandingpagesController extends Application_Admin_BaseController
 
                     if ($result instanceof Errors) {
                         $this->view->landingPage = $this->getAllParams();
-                        $errors = $result->getErrorsAll();
+                        $errors = $result->getErrorMessages();
                         $this->setFlashMessage('error', $errors);
                     } else {
                         $this->setFlashMessage('success', 'Landing Page has been added successfully');
