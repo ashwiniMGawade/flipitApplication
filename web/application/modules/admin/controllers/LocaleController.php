@@ -1,6 +1,7 @@
 <?php
 
 use \Core\Domain\Factory\AdminFactory;
+use \Core\Domain\Factory\SystemFactory;
 use \Core\Service\Errors;
 
 class Admin_LocaleController extends Application_Admin_BaseController
@@ -35,6 +36,10 @@ class Admin_LocaleController extends Application_Admin_BaseController
         $this->view->locale = KC\Repository\Signupmaxaccount::getAllMaxAccounts();
         $this->view->localeSettings = KC\Repository\LocaleSettings::getLocaleSettings();
         $this->view->timezones_list = KC\Repository\Signupmaxaccount::$timezones;
+        $expiredCouponLogo = SystemFactory::getSetting()->execute(array('name'=>'expiredCouponLogo'));
+        if (!empty($expiredCouponLogo)) {
+            $this->view->expiredCouponLogo = $expiredCouponLogo->value;
+        }
         $site_name = "kortingscode.nl";
         if (isset($_COOKIE['site_name'])) {
             $site_name =  $_COOKIE['site_name'];
@@ -68,6 +73,57 @@ class Admin_LocaleController extends Application_Admin_BaseController
                 $this->redirect(HTTP_PATH . 'admin/locale/locale-settings');
             }
         }
+    }
+
+    public function updateExpiredCouponLogoAction()
+    {
+        if ($this->_request->isXmlHttpRequest()) {
+            if ($this->_request->isPost()) {
+                $upload = new Zend_File_Transfer();
+                $files = $upload->getFileInfo();
+                $response = [];
+                if (true === isset($files['expiredCouponLogo']['name']) && true === isset($files['expiredCouponLogo']['name']) && '' !== $files['expiredCouponLogo']['name']) {
+                    $rootPath = UPLOAD_IMG_PATH . 'expiredCouponLogo/';
+                    $image = $this->uploadImage('expiredCouponLogo', $rootPath);
+                    if ($image) {
+                        $expiredCouponLogoSettings = SystemFactory::getSetting()->execute(array('name'=>'expiredCouponLogo'));
+                        $result = AdminFactory::updateSetting()->execute($expiredCouponLogoSettings, array('value' => $rootPath.$image));
+                        if ($result instanceof Errors) {
+                            $errors = $result->getErrorsAll();
+                            $response['status'] = -1;
+                            $response['errors'] = $errors;
+                        } else {
+                            $response['status'] = 200;
+                            $response['image'] = $image;
+                        }
+                    } else {
+                        $response['status'] = -1;
+                    }
+                    $this->_helper->json($response);
+                }
+            }
+        }
+        exit();
+    }
+
+    public function deleteExpiredCouponLogoAction()
+    {
+        if ($this->_request->isXmlHttpRequest()) {
+            if ($this->_request->isPost()) {
+                $parameters = $this->_getAllParams();
+                $expiredCouponLogoSettings = SystemFactory::getSetting()->execute(array('name'=>'expiredCouponLogo'));
+                $result = AdminFactory::updateSetting()->execute($expiredCouponLogoSettings, array('value' => null));
+                if ($result instanceof Errors) {
+                    $errors = $result->getErrorsAll();
+                    $response['status'] = -1;
+                    $response['errors'] = $errors;
+                } else {
+                    $response['status'] = 200;
+                }
+                $this->_helper->json($result);
+            }
+        }
+        exit();
     }
 
     public function savelocaleAction()
