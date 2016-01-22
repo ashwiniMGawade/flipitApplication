@@ -52,7 +52,6 @@ function init() {
         jQuery('#deepLinkOnbtn').addClass("btn-primary").siblings().removeClass("btn-primary");
         jQuery('#refUrl').removeAttr("disabled");
         jQuery('#deepLinkStatus').attr("checked", "checked");
-        //	getDeeplinkForShop(jQuery("#whichshop option:selected").val());
     });
 
     jQuery('#deepLinkOffbtn').click(function() {
