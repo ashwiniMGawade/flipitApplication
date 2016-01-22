@@ -57,6 +57,7 @@ class UpdateLandingPageUsecaseTest extends \Codeception\TestCase\Test
             'title' => 'Shopname - Landing Page',
             'shop' => $shop,
             'permalink' => 'shopname-landing-page-test',
+            'refUrl' => 'http://kortingscode.nl',
             'subTitle' => 'Latest Offers',
             'metaTitle' => 'Latest Offers',
             'metaDescription' => '<p>Latest Offers</p>',

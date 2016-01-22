@@ -32,6 +32,9 @@ class LandingPageValidator
             'permalink' => array(
                 $this->validator->notNull(array('message'=>'Permalink should not be blank.'))
             ),
+            'refUrl' => array(
+                $this->validator->url()
+            ),
             'offlineSince' => array(
                 $this->validator->dateTime()
             ),

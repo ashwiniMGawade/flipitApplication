@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: comp102
- * Date: 7/1/16
- * Time: 6:58 PM
- */
 
 namespace Core\Domain\Usecase\Helpers;
 
