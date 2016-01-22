@@ -1,6 +1,8 @@
 <?php
 use \Core\Domain\Factory\SystemFactory;
 use \Core\Domain\Factory\GuestFactory;
+use \Core\Domain\Entity\Settings;
+
 
 class FrontEnd_Helper_OffersPartialFunctions
 {
@@ -223,7 +225,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         if (!empty($expiredCouponLogo)) {
             $logo = $expiredCouponLogo->value;
         }
-        if (!empty($logo)) {
+        if ($logo instanceof Settings) {
             return PUBLIC_PATH_CDN.$logo;
         }
         return HTTP_PATH."public/images/front_end/expiredcouponlogo.png";
