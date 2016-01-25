@@ -41,15 +41,6 @@ class GetVisitorsCest
         $I->cantSeeResponseContainsJson(array('email' => 'test@example.com'));
     }
 
-    public function testGetVisitorsReturnsErrorWhenPassedEmailIdIsNotValid(ApiTester $I)
-    {
-        $I->wantTo('Test GET visitors returns error when passed email is not valid');
-        $I->sendGet('/visitors?email=not-email&api_key='.$this->apiKey);
-        $I->seeResponseCodeIs(405);
-        $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(array('messages' => array( 'Invalid Email')));
-    }
-
     private function seedVisitorsTable($I, $email)
     {
         $I->haveInDatabasePDOSite(
