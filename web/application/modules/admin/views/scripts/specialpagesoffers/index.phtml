@@ -71,12 +71,17 @@
                     <ul id='specialPages'>
                     <?php 
                     if (!empty($this->specialPageOffers)) {
+                        $date = new DateTime();
                         foreach ($this->specialPageOffers as $specialPageOffers) {
+                            $expired = '';
+                            if($date > $specialPageOffers['offers']['endDate']) {
+                                $expired = "<i class='pull-right icon icon-time'></i></li>";
+                            }
                             echo  "<li class='ui-state-default'  id='".$specialPageOffers['id']."' 
                             reloffer='".$specialPageOffers['offers']['id']."'
                             relpos='".$specialPageOffers['position']."'
                             relpageId='".$specialPageOffers['pages']['id']."'>
-                            <span>".$specialPageOffers['offers']['title']."</span></li>";
+                            <span>".$specialPageOffers['offers']['title']."</span>".$expired;
                         }
                     } else {             
                         echo  "<li id='0'>". $this->translate('No record found !') ."</li>";
