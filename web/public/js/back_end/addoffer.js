@@ -614,7 +614,6 @@ function selectDiscountType(dIv){
 		    jQuery("#offertitledetail").show();
 		    jQuery("#datesdiv").show();
 		    
-		    jQuery("#attachpagesDiv").show();
 		    jQuery('#extraOptions').show();
 	    	jQuery('#offerrefurlPR').val('');
 	    	jQuery('#uploadoffer').val('');
