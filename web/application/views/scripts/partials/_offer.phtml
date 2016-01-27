@@ -113,7 +113,9 @@ foreach ($this->offers as $offer) {
                     ?>
                 </div>
     <?php
-    $couponClass = isset($offer->discountType) && $offer->discountType != 'CD' ? 'btn-blue-wrapper' : '';
+    $couponClass = (isset($offer->discountType) && $offer->discountType != 'CD') ? 'btn-blue-wrapper' : '';
+    $couponClass = (isset($offer->expiredOffer) && isset($offer->discountType) && $offer->discountType == 'SL') ? '' : $couponClass;
+
     ?>
                 <div class="buttons offer-teaser-button-wrapper" id="offerButton<?php echo $offer->id ;?>">
                     <div class="offer-teaser-button-wrapper-inner <?php echo $couponClass; ?>">

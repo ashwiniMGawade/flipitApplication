@@ -1127,7 +1127,8 @@ class Offer extends \Core\Domain\Entity\Offer
         $getExclusiveOnly = false,
         $includingOffline = false,
         $visibility = false,
-        $expired = false
+        $expired = false,
+        $getAllDiscountTypes = false
     ) {
         $nowDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -1156,9 +1157,15 @@ class Offer extends \Core\Domain\Entity\Offer
 
         if ($expired == true) {
             $query = $query
-                ->andWhere('o.endDate <='."'".$nowDate."'")
-                ->andWhere('o.discountType ='.$entityManagerUser->expr()->literal('CD'))
-                ->addOrderBy('o.endDate', 'DESC');
+                ->andWhere('o.endDate <='."'".$nowDate."'");
+            if ($getAllDiscountTypes === true) {
+                $query = $query
+                    ->andWhere('o.discountType ='.$entityManagerUser->expr()->literal('CD') . ' or o.discountType ='.$entityManagerUser->expr()->literal('SL'));
+            } else {
+                $query = $query
+                    ->andWhere('o.discountType ='.$entityManagerUser->expr()->literal('CD'));
+            }
+            $query = $query->addOrderBy('o.endDate', 'DESC');
         } else {
             $query = $query
                 ->andWhere('o.discountType !='.$entityManagerUser->expr()->literal('NW'))

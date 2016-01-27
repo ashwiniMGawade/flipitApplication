@@ -151,12 +151,12 @@ class StoreController extends Zend_Controller_Action
             $this->_redirect($urlToRedirect);
         }
 
-        $topThreeExpiredOfferKey = 'shop_topthreeexpiredoffers'.$shopList;
+        $topThreeExpiredOfferKey = 'shop_topthreeexpiredofferssdfsd'.$shopList;
         $topThreeExpiredOffers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)$topThreeExpiredOfferKey,
             array(
                 'function' => 'KC\Repository\Offer::getAllOfferOnShop',
-                'parameters' => array($shopId, 10, false, true, false, true)
+                'parameters' => array($shopId, 10, false, true, false, true, true)
             ),
             ''
         );

@@ -324,7 +324,6 @@ class FrontEnd_Helper_OffersPartialFunctions
                 'offerId' => $currentOffer->id,
                 'isExpired' => isset($currentOffer->expiredOffer) ? 'True' : 'False'
             );
-
             if ($currentOffer->discountType == "CD") {
                 $gtmData = json_encode($gtmData);
                 $onClick .= "gtmDataBuilder($gtmData),";
@@ -353,9 +352,10 @@ class FrontEnd_Helper_OffersPartialFunctions
                 $gtmData['variant'] = 'Deal';
                 $gtmData = json_encode($gtmData);
                 $onClick .= "gtmDataBuilder($gtmData);";
+                $offerAnchorText = isset($currentOffer->expiredOffer) && $class == "offer-teaser-button kccode" ? '<span class="offer-teaser-button">'.$offerAnchorText.' </span>' : $offerAnchorText;
                 $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
                 $offerLink =
-                    '<a id="'.$currentOffer->id.'" class="'.$class.' '.$imageClass.'" 
+                    '<a id="'.$currentOffer->id.'" class="'.$class.' '.$imageClass.'"
                     href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick=\''.$onClick.'\'>
                  '.$offerAnchorText.'</a>';
             } else {
