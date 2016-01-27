@@ -75,7 +75,7 @@
                         foreach ($this->currentCategoryHomePageOffers as $categoryOffer) {
                             $expired = '';
                             if($date > $categoryOffer['offers']['endDate']) {
-                                $expired = "<i class='pull-right icon icon-time'></i></li>";
+                                $expired = "<i class='pull-right icon icon-time'></i>";
                             }
                             echo  "<li class='ui-state-default'  id='".$categoryOffer['id']."' 
                             reloffer='".$categoryOffer['offers']['id']."'
