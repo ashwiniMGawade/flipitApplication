@@ -210,7 +210,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         $offerDiscountImage = (isset($expired) && $expired) ?$this->getExpiredCouponLogo(): $offerDiscountImage;
         if ($shopCodeHolder) {
             $imageTag ='<img width="130" height="68" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'" 
-            title="'.$altAttributeText.'" class="small-code '.$grayScaleClass.'"/>';
+            title="'.$altAttributeText.'" class="'.$grayScaleClass.'"/>';
             $imageTagForOffer = '<div class="center"><div class="code-holder">' . $imageTag . '</div></div>';
         } else {
             $imageTagForOffer ='<img class="small-code "'.$grayScaleClass.'" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"
