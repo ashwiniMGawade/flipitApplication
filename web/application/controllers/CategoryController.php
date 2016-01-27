@@ -56,6 +56,11 @@ class CategoryController extends Zend_Controller_Action
                 );
                 $categoryVoucherCodes = array_merge($categoryVoucherCodes, $allCategoryOffers);
             }
+            $categoryOffers = array();
+            foreach($categoryVoucherCodes as $offer) {
+                $categoryOffers[$offer['id']] = $offer;
+            }
+            $categoryVoucherCodes = $categoryOffers;
 
             $offersWithPagination = \FrontEnd_Helper_viewHelper::renderPagination(
                 $categoryVoucherCodes,
