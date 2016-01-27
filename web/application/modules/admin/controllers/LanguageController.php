@@ -103,7 +103,7 @@ class Admin_LanguageController extends Application_Admin_BaseController
         }
     }
 
-    public function uploadimage($files)
+    public function uploadimage($files, $uploadPath = '')
     {
         $uploadPath = "language/";
         $adapter = new \Zend_File_Transfer_Adapter_Http();
