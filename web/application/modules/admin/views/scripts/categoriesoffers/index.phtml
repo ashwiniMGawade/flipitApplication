@@ -73,6 +73,7 @@
                     if (!empty($this->currentCategoryHomePageOffers)) {
                         $date = new DateTime();
                         foreach ($this->currentCategoryHomePageOffers as $categoryOffer) {
+                            $expired = '';
                             if($date > $categoryOffer['offers']['endDate']) {
                                 $expired = "<i class='pull-right icon icon-time'></i></li>";
                             }
