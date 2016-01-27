@@ -239,13 +239,13 @@
             "classification":{
                 "type":"string",
                 "enum": [
+                    "C",
+                    "B",
                     "A",
                     "A+",
                     "AA",
                     "AA+",
-                    "AAA",
-                    "B",
-                    "C"
+                    "AAA"
                 ]
             }
          }

@@ -7,13 +7,13 @@ use \Core\Domain\Factory\AdminFactory;
 class ShopsController extends ApiBaseController
 {
     protected $shopClassification = array(
+                                            -1 => 'C',
+                                            0 => 'B',
                                             1 => 'A',
                                             2 => 'A+',
                                             3 => 'AA',
                                             4 => 'AA+',
-                                            5 => 'AAA',
-                                            6 => 'B',
-                                            7 => 'C',
+                                            5 => 'AAA'
                                         );
 
     public function getShop($id)

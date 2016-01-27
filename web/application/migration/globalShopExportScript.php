@@ -169,13 +169,13 @@ class GlobalShopExport
     public function localeShopsData($shopData, $key, $objPHPExcel, $localeExport = '')
     {
         $shopClassifications = array(
+            -1 => 'C',
+            0 => 'B',
             1 => 'A',
             2 => 'A+',
             3 => 'AA',
             4 => 'AA+',
-            5 => 'AAA',
-            6 => 'B',
-            7 => 'C'
+            5 => 'AAA'
         );
         if (!empty($localeExport )) {
             $column = 4;
