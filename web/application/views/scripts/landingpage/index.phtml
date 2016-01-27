@@ -59,12 +59,14 @@ $count = 1;
 $numOfOffersBeforeSignUpForm = 6;
 $offersCount = count($this->offers);
 $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
+$offerBoxes = array();
 $column1 = '';
 $column2 = '';
 $column3 = '';
-$column4 = '';
-$column5 = '';
-$column6 = '';
+$newsletterForm = $this->partial('partials/_landingpage_signup.phtml', array());
+if(0 == count($this->offers)) {
+    $offerBoxes[1] = $newsletterForm;
+}
 foreach ($this->offers as $offer) {
     $offer = (object)$offer;
     $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
@@ -86,7 +88,7 @@ foreach ($this->offers as $offer) {
         $popupLink = $offerPartial->getPopupLink($offer, $urlToShow);
         $onClick .= "OpenInNewTab(\"".HTTP_PATH_LOCALE."glp/".$this->landingPage->getPermalink().$popupLink."\");";
     }
-    $clickoutURL = HTTP_PATH_LOCALE.'out/offer/'.$offer->id;
+    $clickoutURL = HTTP_PATH_LOCALE.'out/glp/'.$this->landingPage->getId().'/'.$offer->id;
 
     $defaultText = '';
     if ($offer->userGenerated == '1') {
@@ -234,25 +236,21 @@ foreach ($this->offers as $offer) {
                     '.$termsAndConditionsDiv.'
                 </div>
                 ';
-
-    if ($count <= $numOfOffersBeforeSignUpForm) {
-        if ($count % 3 == 1) {
-            $column1 .= $offerPanel;
-        } elseif ($count % 3 == 2) {
-            $column2 .= $offerPanel;
-        } elseif ($count % 3 == 0) {
-            $column3 .= $offerPanel;
-        }
-    } else {
-        if ($count % 3 == 1) {
-            $column4 .= $offerPanel;
-        } elseif ($count % 3 == 2) {
-            $column5 .= $offerPanel;
-        } elseif ($count % 3 == 0) {
-            $column6 .= $offerPanel;
-        }
+    $offerBoxes[$count] = $offerPanel;
+    if(($count == count($this->offers) && $count < 6) || $count == 5 ) {
+        $offerBoxes[] = $newsletterForm;
+        $count++;
     }
     $count++;
+}
+foreach($offerBoxes as $count => $offerPanel) {
+    if ($count % 3 == 1) {
+        $column1 .= $offerPanel;
+    } elseif ($count % 3 == 2) {
+        $column2 .= $offerPanel;
+    } elseif ($count % 3 == 0) {
+        $column3 .= $offerPanel;
+    }
 }
 ?>
 <div id="wrapper">
@@ -309,18 +307,8 @@ foreach ($this->offers as $offer) {
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column2; ?></div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column3; ?></div>
             </div>
-            <?php
-            echo $this->partial('partials/_landingpage_signup.phtml', array());
-            if ($offersCount > $numOfOffersBeforeSignUpForm):
-            ?>
-            <div class="row same-height">
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column4; ?></div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column5; ?></div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column6; ?></div>
-            </div>
-            <?php
-            endif;
-            ?>
+
+            <div class="clear"></div>
             <?php if ($this->landingPage->getContent() != '' ): ?>
             <article class="about">
                 <?php echo $this->landingPage->getContent(); ?>

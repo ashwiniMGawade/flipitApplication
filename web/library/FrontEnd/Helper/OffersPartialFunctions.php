@@ -305,7 +305,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         }
         $imageClass = '';
         if ($offerImage == 'offerImage') {
-            $imageClass = 'code code-2';
+            $imageClass = 'code';
         }
         $visitorInformation = '';
         if (Auth_VisitorAdapter::hasIdentity()) {

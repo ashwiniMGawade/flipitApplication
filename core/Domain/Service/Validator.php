@@ -105,4 +105,12 @@ class Validator implements ValidatorInterface
     {
         return new Assert\Email();
     }
+
+    /**
+     * @return \Symfony\Component\Validator\Constraints\Url
+     */
+    public function url()
+    {
+        return new Assert\Url();
+    }
 }

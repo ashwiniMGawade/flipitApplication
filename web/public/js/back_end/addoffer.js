@@ -455,7 +455,7 @@ function getShopDetail(value){
 			dataType : "json",
 			success : function(data) {
 				if (data != null) {
-                    var shopClassifications = { 1:'A', 2:'A+', 3:'AA', 4:'AA+', 5:'AAA'};
+                    var shopClassifications = { 1:'A', 2:'A+', 3:'AA', 4:'AA+', 5:'AAA', 0:'B', '-1':'C'};
                     if(data[0].classification != '' && data[0].classification != null) {
                         jQuery('span#shopRating span').html(shopClassifications[data[0].classification]);
                         jQuery('span#shopRating').show();

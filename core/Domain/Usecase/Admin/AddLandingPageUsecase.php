@@ -51,6 +51,9 @@ class AddLandingPageUsecase
             $params['permalink'] = strtolower($urlString);
             $landingPage->setPermalink($params['permalink']);
         }
+        if (isset($params['refUrl'])) {
+            $landingPage->setRefUrl($params['refUrl']);
+        }
         if (isset($params['subTitle'])) {
             $landingPage->setSubTitle($params['subTitle']);
         }
