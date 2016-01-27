@@ -12,13 +12,7 @@ class NewsLetterCache extends \Core\Domain\Entity\NewsLetterCache
         self::saveValueInDatebase('top_category_id', $topCategory[0]['category']['id']);
         $topOfferIds = implode(',', self::getOfferIds(\BackEnd_Helper_viewHelper::getTopOffers(10)));
         self::saveValueInDatebase('top_offers_ids', $topOfferIds);
-        $categoryOrderedOffers = self::getOfferIds(
-            \KC\Repository\CategoriesOffers::getCategoryOffersByCategoryIdForFrontEnd($topCategory[0]['category']['id'])
-        );
-        $categoryAllOffers = self::getOfferIds(
-            \KC\Repository\Category::getCategoryVoucherCodesForNewsletterCache($topCategory[0]['category']['id'], 3)
-        );
-        $topCategoryOffersIds = implode(',', array_slice(array_unique(array_merge($categoryOrderedOffers, $categoryAllOffers)), 0, 3));
+        $topCategoryOffersIds = self::getCategoryOffers($topCategory[0]['category']['id']);
         self::saveValueInDatebase('top_category_offers_ids', $topCategoryOffersIds);
         return true;
     }
@@ -136,5 +130,17 @@ class NewsLetterCache extends \Core\Domain\Entity\NewsLetterCache
             $emailFooter = $settingFooter;
         }
         return $emailFooter;
+    }
+
+    public static function getCategoryOffers($categoryId) {
+        $categoryOrderedOffers = self::getOfferIds(
+            \KC\Repository\CategoriesOffers::getCategoryOffersByCategoryIdForFrontEnd($categoryId)
+        );
+        if(count($categoryOrderedOffers) < 3) {
+            $categoryAllOffers = self::getOfferIds(
+                \KC\Repository\Category::getCategoryVoucherCodesForNewsletterCache($categoryId, 3)
+            );
+        }
+        return implode(',', array_slice(array_unique(array_merge($categoryOrderedOffers, $categoryAllOffers)), 0, 3));
     }
 }
