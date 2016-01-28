@@ -79,7 +79,7 @@ function loadSelectedCategoryWidgets() {
     var widgetType =  $('#widgetType').val();
     var widgetCategoryType =  $('#widgetCategoryType').val();
     redirectURL = HOST_PATH + "admin/widget/sort-widget/widgetType/" +  widgetType;
-    if (widgetCategoryType !== '') {
+    if (typeof widgetCategoryType !== "undefined" && widgetCategoryType!= '') {
         redirectURL += "/widgetCategoryType/"+widgetCategoryType;
     }
     window.location.href =  redirectURL;
@@ -119,7 +119,7 @@ function addNewWidget() {
     } else {
         var id = $("input#selctedWidget").val();
         var widgetType = $("input#widgetType").val();
-        var widgetCategoryType =  $('#widgetCategoryType').val();
+        var widgetCategoryType =  (typeof $('#widgetCategoryType').val() !== "undefined") ? $('#widgetCategoryType').val() : '';
         $.ajax({
             url : HOST_PATH + "admin/widget/add-widget-in-sort-list/id/" + id + '/widgetType/' + widgetType + '/widgetCategoryType/' + widgetCategoryType,
             method : "post",

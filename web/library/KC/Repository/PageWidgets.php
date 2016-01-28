@@ -19,41 +19,45 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
         return $pageWidets;
     }
 
-    public static function getAllWidgetsByType($widgetsType)
+    public static function getAllWidgetsByType($widgetsType, $widgetCategoryTypeId = '')
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select('sw, w')
             ->from('\Core\Domain\Entity\pageWidgets', 'sw')
             ->leftJoin('sw.widget', 'w')
-            ->where($queryBuilder->expr()->eq('sw.widget_type', $queryBuilder->expr()->literal($widgetsType)))
-            ->andWhere('w.status= 1')
+            ->where($queryBuilder->expr()->eq('sw.widget_type', $queryBuilder->expr()->literal($widgetsType)));
+        if (!empty($widgetCategoryTypeId)) {
+            $query =  $query->andWhere("sw.referenceId = ". $widgetCategoryTypeId); //CHANGE AND TO OR
+        }
+        $query =  $query->andWhere('w.status= 1')
             ->orderBy('sw.position', 'ASC');
         $pageWidets = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageWidets;
     }
 
-    public static function addWidgetInList($widgetId, $widgetsType, $type = '')
+    public static function addWidgetInList($widgetId, $widgetsType, $widgetCategoryTypeId = '')
     {
         $widget = self::widgetExistance($widgetId);
         $errorStatus = '0';
         if (sizeof($widget) > 0) {
-            $pageWidgets = self::getPageWidget($widgetId, $widgetsType);
+            $pageWidgets = self::getPageWidget($widgetId, $widgetsType, $widgetCategoryTypeId);
             if (!empty($pageWidgets)) {
                 $errorStatus = '2';
             } else {
                 $errorStatus = '1';
-                $pageWidgetMaxPosition = self::getPageWidgetMaxPosition($widgetsType);
+                $pageWidgetMaxPosition = self::getPageWidgetMaxPosition($widgetsType, $widgetCategoryTypeId);
                 if (!empty($pageWidgetMaxPosition)) {
                     $newPosition = $pageWidgetMaxPosition[0]['position'];
                 } else {
                     $newPosition =  0;
                 }
-                $pageWidgetId = self::savePageWidget($widgetId, $widgetsType, $newPosition);
+                $pageWidgetId = self::savePageWidget($widgetId, $widgetsType, $newPosition, $widgetCategoryTypeId);
                 $errorStatus  = array(
                     'id'=>$pageWidgetId,
                     'type'=>'MN',
                     'widgetId'=>$widgetId,
+                    'widgetCategoryTypeId'=>$widgetCategoryTypeId,
                     'position'=>(intval($newPosition) + 1),
                     'title'=>$widget['title']
                 );
@@ -77,7 +81,7 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
         return $widget;
     }
 
-    public static function getPageWidget($widgetId, $widgetsType)
+    public static function getPageWidget($widgetId, $widgetsType, $widgetCategoryTypeId = '')
     {
         $pageWidgets = array();
         if (!empty($widgetId) && !empty($widgetsType)) {
@@ -87,31 +91,40 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
                 ->from('\Core\Domain\Entity\pageWidgets', 'sw')
                 ->where('sw.widget=' . $widgetId)
                 ->andWhere('sw.widget_type=' . $queryBuilder->expr()->literal($widgetsType));
+            if (!empty($widgetCategoryTypeId)) {
+                $query =  $query->andWhere('sw.referenceId=' . $widgetCategoryTypeId);
+            }
             $pageWidgets = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
         return $pageWidgets;
     }
 
-    public static function getPageWidgetMaxPosition($widgetsType)
+    public static function getPageWidgetMaxPosition($widgetsType, $widgetCategoryTypeId = '')
     {
         if (!empty($widgetsType)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->select('p.position')
                 ->from('\Core\Domain\Entity\pageWidgets', 'p')
-                ->where('p.widget_type =' .$queryBuilder->expr()->literal($widgetsType))
-                ->orderBy('p.position', 'DESC')
+                ->where('p.widget_type =' .$queryBuilder->expr()->literal($widgetsType));
+            if (!empty($widgetCategoryTypeId)) {
+                $query =  $query->andWhere('p.referenceId=' . $widgetCategoryTypeId);
+            }
+            $query = $query->orderBy('p.position', 'DESC')
                 ->setMaxResults(1);
             $maxPosition = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
         return $maxPosition;
     }
 
-    public static function savePageWidget($widgetId, $widgetsType, $newPosition)
+    public static function savePageWidget($widgetId, $widgetsType, $newPosition, $widgetCategoryTypeId = '')
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
         $pageWidgets = new \Core\Domain\Entity\pageWidgets();
         $pageWidgets->widget_type = \FrontEnd_Helper_viewHelper::sanitize($widgetsType);
+        if (!empty($widgetCategoryTypeId)) {
+            $pageWidgets->referenceId = \FrontEnd_Helper_viewHelper::sanitize($widgetCategoryTypeId);
+        }
         $pageWidgets->widget = $entityManagerLocale->find(
             '\Core\Domain\Entity\Widget',
             \FrontEnd_Helper_viewHelper::sanitize($widgetId)

@@ -197,12 +197,12 @@ class Admin_WidgetController extends Application_Admin_BaseController
             $widgetType = key($widgetCategories);
         }
 
-        if (isset($widgetCategoryType)) {
+        if (isset($widgetCategoryType) AND !empty($widgetCategoryType)) {
             $widgetCategoryType = $this->getRequest()->getParam('widgetCategoryType');
         }
         $widgetTypeList = $this->_getWidgetTypeList($widgetType);
         
-        $categoryWidgets = \KC\Repository\PageWidgets::getAllWidgetsByType($widgetType);
+        $categoryWidgets = \KC\Repository\PageWidgets::getAllWidgetsByType($widgetType, $widgetCategoryType);
         $widgetsIds = array();
         if (!empty($categoryWidgets)) {
             $widgetsIds = self::getWidgetIds($categoryWidgets);
@@ -232,8 +232,8 @@ class Admin_WidgetController extends Application_Admin_BaseController
         $this->_helper->layout->disableLayout();
         $widgetId = $this->getRequest()->getParam('id');
         $widgetType = $this->getRequest()->getParam('widgetType');
-        $widgetCategoryType = $this->getRequest()->getParam('widgetCategoryType');
-        $savedStatus = \KC\Repository\PageWidgets::addWidgetInList($widgetId, $widgetType, $widgetCategoryType);
+        $widgetCategoryTypeId = $this->getRequest()->getParam('widgetCategoryType');
+        $savedStatus = \KC\Repository\PageWidgets::addWidgetInList($widgetId, $widgetType, $widgetCategoryTypeId);
         echo Zend_Json::encode($savedStatus);
         exit();
     }
