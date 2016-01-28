@@ -33,7 +33,7 @@ if (count($this->offersWithPagination)>0) {
     <?php
     $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
     $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
-    echo $frontendSidebarHelper->sidebarWidgets('categories', $this);
+    echo $frontendSidebarHelper->sidebarWidgets('categories', $this, $this->categoryDetails[0]['id']);
     ?>
     </aside>
 </div>

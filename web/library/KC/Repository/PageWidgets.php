@@ -3,7 +3,7 @@ namespace KC\Repository;
 
 class PageWidgets extends \Core\Domain\Entity\PageWidgets
 {
-    public static function getWidgetsByType($widgetsType)
+    public static function getWidgetsByType($widgetsType, $referenceId = '')
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
@@ -15,6 +15,10 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
             ->andWhere('w.startDate <= CURRENT_DATE() OR w.startDate IS NULL')
             ->andWhere('w.endDate >= CURRENT_DATE() OR w.endDate IS NULL')
             ->orderBy('sw.position', 'ASC');
+
+        if (!empty($referenceId)) {
+            $query = $query->andWhere('sw.referenceId=' . $referenceId);
+        }
         $pageWidets = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageWidets;
     }
