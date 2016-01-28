@@ -1,5 +1,5 @@
 <?php 
- $this->headTitle()->append($this->translate('Add VWO Tag'));
+ $this->headTitle()->append($this->translate('Add Tag'));
  $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
  $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/createURLSettings.js");
 ?>
@@ -8,7 +8,7 @@
     <div id="URLSettingCreate">
         <div class="wrap columns-2">
             <h1>
-                <?php echo $this->translate('Add VWO Tag'); ?>
+                <?php echo $this->translate('Add Tag'); ?>
                 <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/urlsettings'"><?php echo $this->translate('Cancel'); ?></button>
             </h1>
 
@@ -37,6 +37,23 @@
                                         <?php echo $this->translate('On'); ?>
                                     </button>
                                     <button type="button" class="btn" id="statusInactive" onClick="setStatus('statusInactive')">
+                                        <?php echo $this->translate('Off'); ?>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Hotjar Tag'); ?></strong></label></div>
+                        <div class="mainpage-content-right">
+                            <div data-toggle="buttons-checkbox" class="btn-group mb20">
+                                <input type="hidden" id="hotjarStatus" name="hotjarStatus" value="<?php echo isset($this->urlSetting['status']) ? $this->urlSetting['status'] : 1; ?>">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn" id="hotjarActive" onClick="setHotjarStatus('hotjarActive')">
+                                        <?php echo $this->translate('On'); ?>
+                                    </button>
+                                    <button type="button" class="btn" id="hotjarInActive" onClick="setHotjarStatus('hotjarInActive')">
                                         <?php echo $this->translate('Off'); ?>
                                     </button>
                                 </div>

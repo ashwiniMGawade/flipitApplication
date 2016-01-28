@@ -61,7 +61,7 @@ class Admin_UrlsettingsController extends Application_Admin_BaseController
             } else {
                 $url = $result->getUrl();
                 self::updateVarnish($url);
-                $this->setFlashMessage('success', 'VWO Tag has been added successfully');
+                $this->setFlashMessage('success', 'Tag has been updated successfully');
                 $this->redirect(HTTP_PATH.'admin/urlsettings');
             }
         }
@@ -104,7 +104,7 @@ class Admin_UrlsettingsController extends Application_Admin_BaseController
                     $this->setFlashMessage('error', $errors);
                 } else {
                     self::updateVarnish($url);
-                    $this->setFlashMessage('success', 'VWO Tag has been added successfully');
+                    $this->setFlashMessage('success', 'Tag has been added successfully');
                     $this->redirect(HTTP_PATH.'admin/urlsettings');
                 }
             }
@@ -127,7 +127,7 @@ class Admin_UrlsettingsController extends Application_Admin_BaseController
         }
         AdminFactory::deleteURLSetting()->execute($result);
         self::updateVarnish($result->getUrl());
-        $this->setFlashMessage('success', 'VWO Tag deleted successfully.');
+        $this->setFlashMessage('success', 'Tag deleted successfully.');
         exit;
     }
 

@@ -1,5 +1,5 @@
 <?php 
- $this->headTitle()->append($this->translate('VWO Tag Manager'));
+ $this->headTitle()->append($this->translate('Tag Manager'));
  $this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.dataTables.min.js");
  $this->headScript()->appendFile(PUBLIC_PATH . "js/dataTableComman.js");
  $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
@@ -8,9 +8,9 @@
 <div id="UrlSettingsList">
    <div class="wrap columns-2">
        <?php echo $this->flashMessages(); ?>
-        <h1 class="fl"><?php echo $this->translate('VWO Tag Manager'); ?>
+        <h1 class="fl"><?php echo $this->translate('Tag Manager'); ?>
             <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/urlsettings/create'">
-            <?php echo $this->translate('Add VWO Tag'); ?>
+            <?php echo $this->translate('Add Tag'); ?>
             </button>
         </h1>
         <div class="clear"></div>

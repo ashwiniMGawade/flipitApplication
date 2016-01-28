@@ -22,6 +22,14 @@ function init() {
         jQuery('#statusActive').removeClass('btn-primary');
     }
 
+    if(jQuery("#hotjarStatus").val() == 1) {
+        jQuery('#hotjarActive').addClass('btn-primary');
+        jQuery('#hotjarInActive').removeClass('btn-primary');
+    } else {
+        jQuery('#hotjarInActive').addClass('btn-primary');
+        jQuery('#hotjarActive').removeClass('btn-primary');
+    }
+
     validateForm();
 }
 
@@ -31,6 +39,15 @@ function setStatus(status) {
         jQuery('#status').val(1);
     } else {
         jQuery('#status').val(0);
+    }
+}
+
+function setHotjarStatus(status) {
+    jQuery('#' + status).addClass("btn-primary").siblings().removeClass("btn-primary");
+    if(status == 'hotjarActive') {
+        jQuery('#hotjarStatus').val(1);
+    } else {
+        jQuery('#hotjarStatus').val(0);
     }
 }
 
