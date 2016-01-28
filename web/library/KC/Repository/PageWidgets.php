@@ -23,6 +23,23 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
         return $pageWidets;
     }
 
+    public static function getBackendWidgetList($widgetsType, $widgetCategoryTypeId = '')
+    {
+        $widgetCategoryList = array();
+        if (!empty($widgetCategoryTypeId)) {
+            $widgetCategoryList = self::getAllWidgetsByType($widgetsType, $widgetCategoryTypeId);
+        }
+        $allWidgetCategoryList =  self::getAllWidgetsByType($widgetsType);
+        $widgetIds = array_column($widgetCategoryList, 'id');
+        $widgetList = $widgetCategoryList;
+        foreach ($allWidgetCategoryList as $widget) {
+            if (!in_array($widget['id'], $widgetIds)) {
+                $widgetList[] = $widget;
+            }
+        }
+        return $widgetList;
+    }
+
     public static function getAllWidgetsByType($widgetsType, $widgetCategoryTypeId = '')
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -32,7 +49,9 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
             ->leftJoin('sw.widget', 'w')
             ->where($queryBuilder->expr()->eq('sw.widget_type', $queryBuilder->expr()->literal($widgetsType)));
         if (!empty($widgetCategoryTypeId)) {
-            $query =  $query->andWhere("sw.referenceId = ". $widgetCategoryTypeId); //CHANGE AND TO OR
+            $query =  $query->andWhere("sw.referenceId = ". $widgetCategoryTypeId);
+        } else {
+            $query =  $query->andWhere("sw.referenceId IS  NULL");
         }
         $query =  $query->andWhere('w.status= 1')
             ->orderBy('sw.position', 'ASC');
@@ -96,7 +115,7 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
                 ->where('sw.widget=' . $widgetId)
                 ->andWhere('sw.widget_type=' . $queryBuilder->expr()->literal($widgetsType));
             if (!empty($widgetCategoryTypeId)) {
-                $query =  $query->andWhere('sw.referenceId=' . $widgetCategoryTypeId);
+                $query =  $query->andWhere('sw.referenceId=' . $widgetCategoryTypeId. ' or sw.referenceId is null');
             }
             $pageWidgets = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
@@ -113,6 +132,8 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
                 ->where('p.widget_type =' .$queryBuilder->expr()->literal($widgetsType));
             if (!empty($widgetCategoryTypeId)) {
                 $query =  $query->andWhere('p.referenceId=' . $widgetCategoryTypeId);
+            } else {
+                $query =  $query->andWhere('p.referenceId is null');
             }
             $query = $query->orderBy('p.position', 'DESC')
                 ->setMaxResults(1);
@@ -199,26 +220,31 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
         return false;
     }
 
-    public static function savePosition($widgetIds, $widgetType)
+    public static function savePosition($widgetIds, $widgetType, $widgetCategoryTypeId = '')
     {
         if (!empty($widgetIds)) {
-            self::deletePageWidgetsByWidgetType($widgetType);
+            self::deletePageWidgetsByWidgetType($widgetType, $widgetCategoryTypeId);
             $widgetIds = explode(',', $widgetIds);
             $widgetPosition = 0;
             foreach ($widgetIds as $widgetId) {
-                self::savePageWidget($widgetId, $widgetType, $widgetPosition);
+                self::savePageWidget($widgetId, $widgetType, $widgetPosition, $widgetCategoryTypeId);
                 $widgetPosition++;
             }
         }
     }
 
-    public static function deletePageWidgetsByWidgetType($widgetType)
+    public static function deletePageWidgetsByWidgetType($widgetType, $widgetCategoryTypeId = '')
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->delete('\Core\Domain\Entity\PageWidgets', 'spl')
-            ->where('spl.widget_type ='.$queryBuilder->expr()->literal($widgetType))
-            ->getQuery();
+            ->where('spl.widget_type ='.$queryBuilder->expr()->literal($widgetType));
+        if (!empty($widgetCategoryTypeId)) {
+            $query = $query->andWhere('spl.referenceId ='.$widgetCategoryTypeId);
+        } else {
+            $query = $query->andWhere('spl.referenceId is null');
+        }
+        $query = $query->getQuery();
         $query->execute();
         return true;
     }

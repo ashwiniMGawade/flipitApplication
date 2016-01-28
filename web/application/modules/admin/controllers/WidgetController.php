@@ -197,12 +197,12 @@ class Admin_WidgetController extends Application_Admin_BaseController
             $widgetType = key($widgetCategories);
         }
 
-        if (isset($widgetCategoryType) AND !empty($widgetCategoryType)) {
+        if (isset($widgetCategoryType) and !empty($widgetCategoryType)) {
             $widgetCategoryType = $this->getRequest()->getParam('widgetCategoryType');
         }
         $widgetTypeList = $this->_getWidgetTypeList($widgetType);
         
-        $categoryWidgets = \KC\Repository\PageWidgets::getAllWidgetsByType($widgetType, $widgetCategoryType);
+        $categoryWidgets = \KC\Repository\PageWidgets::getBackendWidgetList($widgetType, $widgetCategoryType);
         $widgetsIds = array();
         if (!empty($categoryWidgets)) {
             $widgetsIds = self::getWidgetIds($categoryWidgets);
@@ -254,8 +254,9 @@ class Admin_WidgetController extends Application_Admin_BaseController
     {
         $this->_helper->layout->disableLayout();
         $widgetType = $this->getRequest()->getParam('widgetType');
-        \KC\Repository\PageWidgets::savePosition($this->getRequest()->getParam('offersIds'), $widgetType);
-        $widgets = \KC\Repository\PageWidgets::getWidgetsByType($widgetType);
+        $widgetCategoryType = $this->getRequest()->getParam('widgetCategoryType');
+        \KC\Repository\PageWidgets::savePosition($this->getRequest()->getParam('offersIds'), $widgetType, $widgetCategoryType);
+        $widgets = \KC\Repository\PageWidgets::getBackendWidgetList($widgetType, $widgetCategoryType);
         echo Zend_Json::encode($widgets);
         exit();
     }

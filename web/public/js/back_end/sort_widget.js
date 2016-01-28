@@ -23,42 +23,48 @@ $(document).ready(function() {
     $('ul#sort-widgets-list li').click(changeSelectedClass);
     $("#sort-widgets-list").sortable();
     $("#sort-widgets-list").disableSelection();
+
     $("#sort-widgets-list").on("sortstop", function(event, ui) {
-        var widgetId = new Array();
-        $('.ui-state-default').each(function() {
-            widgetId.push($(this).attr('relwidget'));
-        });
-        $('div.image-loading-icon').append("<img id='img-load' src='" +  HOST_PATH  + "/public/images/validating.gif'/>");
-        var widgetId = widgetId.toString();
-        $.ajax({
-            type : "POST",
-            url : HOST_PATH + "admin/widget/save-position",
-            method : "post",
-            dataType : 'json',
-            data: {offersIds: widgetId, widgetType: $('#widgetType').val()},
-            success : function(json) { 
-                $('#img-load').remove();
-                $("#sort-widgets-list").sortable("refresh");
-                $("#sort-widgets-list").sortable("refreshPositions");
-                $('ul#sort-widgets-list li').remove();
-                var li = '';
-                if (json!='') {
-                    for (var i in json) {
-                        li+= "<li class='ui-state-default' relpos='" + json[i].position 
-                        + "' relwidget='" + json[i]['widget'].id + "' id='" + json[i].id + "' ><span>" 
-                        + json[i]['widget'].title +"</span></li>";
-                    }
-                    $('ul#sort-widgets-list').append(li);
-                    $('ul#sort-widgets-list li').click(changeSelectedClass);
-                }
-                bootbox.alert(__('Offers successfully updated.'));
-                setTimeout(function() {
-                  bootbox.hideAll();
-                }, 3000);
-            }
-        });
+        saveWidgetOrder();
     });
 });
+
+var saveWidgetOrder = function() {
+    var widgetId = new Array();
+    $('.ui-state-default').each(function() {
+        widgetId.push($(this).attr('relwidget'));
+    });
+    $('div.image-loading-icon').append("<img id='img-load' src='" +  HOST_PATH  + "/public/images/validating.gif'/>");
+    var widgetId = widgetId.toString();
+    var widgetCategoryType = (typeof $("#widgetCategoryType").val() !== "undefined" || $("#widgetCategoryType").val() != "") ? $("#widgetCategoryType").val() : '';
+    $.ajax({
+        type : "POST",
+        url : HOST_PATH + "admin/widget/save-position",
+        method : "post",
+        dataType : 'json',
+        data: {offersIds: widgetId, widgetType: $('#widgetType').val(), widgetCategoryType: widgetCategoryType},
+        success : function(json) {
+            $('#img-load').remove();
+            $("#sort-widgets-list").sortable("refresh");
+            $("#sort-widgets-list").sortable("refreshPositions");
+            $('ul#sort-widgets-list li').remove();
+            var li = '';
+            if (json!='') {
+                for (var i in json) {
+                    li+= "<li class='ui-state-default' relpos='" + json[i].position
+                    + "' relwidget='" + json[i]['widget'].id + "' id='" + json[i].id + "' ><span>"
+                    + json[i]['widget'].title +"</span></li>";
+                }
+                $('ul#sort-widgets-list').append(li);
+                $('ul#sort-widgets-list li').click(changeSelectedClass);
+            }
+            bootbox.alert(__('Offers successfully updated.'));
+            setTimeout(function() {
+                bootbox.hideAll();
+            }, 3000);
+        }
+    });
+}
 
 function addWidgetInSortList() {
     $('body').append("<div id='overlay'><img id='img-load' src='" +  HOST_PATH  + "/public/images/front_end/spinner_large.gif'/></div>");
@@ -142,6 +148,7 @@ function addNewWidget() {
                     $("#widgetslist option[value='"+  id +"']").remove();
                     $("input#selctedWidget").val('');
                     selectedElements();
+                    saveWidgetOrder();
                 }
                 $('#addNewWidget').removeAttr('disabled');
             }
