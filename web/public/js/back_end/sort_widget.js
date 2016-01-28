@@ -1,5 +1,6 @@
 $(document).ready(function() {
     $("#widgetCategories").select2();
+    $("#widgetsTypeList").select2({"placeholder":  __("Select")});
 
     $("#widgetCategories").change(function() {
         $('#widgetType').val($(this).val());

@@ -160,16 +160,29 @@ class Admin_WidgetController extends Application_Admin_BaseController
     }
     private function _getWidgetTypeList($widgetType)
     {
+        $widgetTypeList = [];
         switch ($widgetType) {
             case "categories":
-                return \KC\Repository\Category::getCategoryList();
+                $categories =  \KC\Repository\Category::getCategoryList();
+                if (!empty($categories['aaData'])) {
+                    foreach ($categories['aaData'] as $category) {
+                        if ($category['status']) {
+                            $widgetTypeList[$category['id']] = $category['name'];
+                        }
+                    }
+                }
                 break;
             case "special-page":
-                return \KC\Repository\Page::getSpecialListPages();
+                $specialPageList =  \KC\Repository\Page::getSpecialListPages();
+                if (!empty($specialPageList)) {
+                    foreach ($specialPageList as $specialPage) {
+                        $widgetTypeList[$specialPage['id']] = $specialPage['pageTitle'];
+                    }
+                }
                 break;
             default:
-                return "";
         }
+        return $widgetTypeList;
     }
 
     public function sortWidgetAction()
@@ -191,6 +204,7 @@ class Admin_WidgetController extends Application_Admin_BaseController
         }
         $widgetsList = \KC\Repository\Widget::getUserDefinedWidgetList($widgetsIds);
         $this->view->widgetCategories = $widgetCategories;
+        $this->view->widgetTypeList = $widgetTypeList;
         $this->view->widgetsList = $widgetsList;
         $this->view->widgetType = $widgetType;
         $this->view->categoryWidgets = $categoryWidgets;
