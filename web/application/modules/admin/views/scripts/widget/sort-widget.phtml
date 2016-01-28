@@ -28,6 +28,9 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/sort_widget.js");
             }
          }?>
         </select>
+        <select style="display:none;" class="combobox wt-389" name="widgetsTypeList" id="widgetsTypeList">
+            <option value="">Select</option>
+        </select>
     </div>
     <input type="hidden" name="widgetType" id="widgetType" value="<?php echo $this->widgetType;?>">
     <div id="poststuff" class="metabox-holder has-right-sidebar">
@@ -47,7 +50,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/sort_widget.js");
                                 }
                             }
                             ?>
-                        </select> 
+                        </select>
                         <input type="hidden" name="selctedWidget" id="selctedWidget" value="">
                         <input type='hidden' name="SearchedValueIds" id="SearchedValueIds" value="">
                     </div>

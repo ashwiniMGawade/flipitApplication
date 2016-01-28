@@ -158,6 +158,19 @@ class Admin_WidgetController extends Application_Admin_BaseController
             }
         }
     }
+    private function _getWidgetTypeList($widgetType)
+    {
+        switch ($widgetType) {
+            case "categories":
+                return \KC\Repository\Category::getCategoryList();
+                break;
+            case "special-page":
+                return \KC\Repository\Page::getSpecialListPages();
+                break;
+            default:
+                return "";
+        }
+    }
 
     public function sortWidgetAction()
     {
@@ -169,6 +182,8 @@ class Admin_WidgetController extends Application_Admin_BaseController
         } else {
             $widgetType = key($widgetCategories);
         }
+        $widgetTypeList = $this->_getWidgetTypeList($widgetType);
+        
         $categoryWidgets = \KC\Repository\PageWidgets::getAllWidgetsByType($widgetType);
         $widgetsIds = array();
         if (!empty($categoryWidgets)) {

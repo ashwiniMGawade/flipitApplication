@@ -1,7 +1,9 @@
 $(document).ready(function() {
     $("#widgetCategories").select2();
+
     $("#widgetCategories").change(function() {
         $('#widgetType').val($(this).val());
+        $("#widgetsTypeList").show().select2({"placeholder":  __("Select")});;
         addWidgetInSortList();
     });
     $("#widgetslist").select2({placeholder: __("Search a widget")});
