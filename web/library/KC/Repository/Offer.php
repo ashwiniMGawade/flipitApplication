@@ -2945,19 +2945,6 @@ class Offer extends \Core\Domain\Entity\Offer
                 }
             }
 
-
-            if (isset($params['attachedpages'])) {
-                foreach ($params['attachedpages'] as $pageId) {
-                    $offerPage  = new \Core\Domain\Entity\RefOfferPage();
-                    $offerPage->created_at = new \DateTime('now');
-                    $offerPage->updated_at = new \DateTime('now');
-                    $offerPage->offers = $entityManagerUser->find('\Core\Domain\Entity\Page', $pageId);
-                    $offerPage->refoffers = $entityManagerUser->find('\Core\Domain\Entity\Offer', $saveOffer->getId());
-                    $entityManagerUser->persist($offerPage);
-                    $entityManagerUser->flush();
-                }
-            }
-
             if (trim($params['termsAndcondition'])!='') {
                 $offerTerms  = new \Core\Domain\Entity\TermAndCondition();
                 $offerTerms->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['termsAndcondition']);
@@ -3308,18 +3295,6 @@ class Offer extends \Core\Domain\Entity\Offer
             ->where('rop.refoffers = ?1')
             ->getQuery();
         $query->execute();
-
-        if (isset($params['attachedpages'])) {
-            foreach ($params['attachedpages'] as $pageId) {
-                $offerPage  = new \Core\Domain\Entity\RefOfferPage();
-                $offerPage->created_at = new \DateTime('now');
-                $offerPage->updated_at = new \DateTime('now');
-                $offerPage->offers = $entityManagerLocale->find('\Core\Domain\Entity\Page', $pageId);
-                $offerPage->refoffers = $entityManagerLocale->find('\Core\Domain\Entity\Offer', $params['offerId']);
-                $entityManagerLocale->persist($offerPage);
-                $entityManagerLocale->flush();
-            }
-        }
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->delete('\Core\Domain\Entity\RefOfferCategory', 'roc')
