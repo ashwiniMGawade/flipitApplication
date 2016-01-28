@@ -722,13 +722,6 @@ function setFormData(data){
 		jQuery("input#maxoffercheckbox").attr('checked' , 'checked');
 	}
 
-	var pageCount = data.length;
-	for(var i=0 ; i< pageCount ; i++ ){
-		cheboxId = "#attachedPage-"+data[i].pageId;
-		jQuery(cheboxId).attr('checked', 'checked');
-		jQuery(cheboxId).parent().addClass("selected");
-	}
-
 	if(data[0]!=undefined && data[0]!=null && data[0].tilesId){
 		jQuery('a#selectImg_' + data[0].tilesId).show();
 		selectOfferImage(data[0].tilesId);
@@ -960,7 +953,6 @@ function selectDiscountType(dIv){
 		    jQuery("#offertitledetail").show();
 		    jQuery("#datesdiv").show();
 		    
-		    jQuery("#attachpagesDiv").show();
 		    jQuery('#extra-options').show();
 	    	jQuery('#offerrefurlPR').val('');
 	    	jQuery('#uploadoffer').val('');
