@@ -35,7 +35,8 @@ class Admin_UrlsettingsController extends Application_Admin_BaseController
             $urlSettingsData[] = array(
                 'id' => $urlSetting->getId(),
                 'status' => $urlSetting->getStatus(),
-                'url' => $urlSetting->getUrl()
+                'url' => $urlSetting->getUrl(),
+                'hotjarStatus' => $urlSetting->getHotjarStatus()
             );
         }
 
@@ -51,6 +52,7 @@ class Admin_UrlsettingsController extends Application_Admin_BaseController
 
             $parameters['status'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('status')));
             $parameters['url'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('url'));
+            $parameters['hotjarStatus'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('hotjarStatus'));
 
             $result = AdminFactory::addURLSetting()->execute($urlSetting, $parameters);
 
@@ -88,6 +90,7 @@ class Admin_UrlsettingsController extends Application_Admin_BaseController
             $urlSettingInfo = array(
                 'id' => $urlSetting->getId(),
                 'status' => $urlSetting->getStatus(),
+                'hotjarStatus' => $urlSetting->getHotjarStatus(),
                 'url' => $urlSetting->getUrl()
             );
             $this->view->urlSetting = $urlSettingInfo;
@@ -95,6 +98,7 @@ class Admin_UrlsettingsController extends Application_Admin_BaseController
             if ($this->_request->isPost()) {
                 $parameters['status'] = intval(FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('status')));
                 $parameters['url'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('url'));
+                $parameters['hotjarStatus'] = FrontEnd_Helper_viewHelper::sanitize($this->getRequest()->getParam('hotjarStatus'));
 
                 $result = AdminFactory::updateURLSetting()->execute($urlSetting, $parameters);
 
