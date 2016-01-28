@@ -266,12 +266,11 @@ function init()
 
     CKEDITOR.replace( 'featuredtext',
         {
-            //fullPage : true,
-            ////extraPlugins : 'wordcount',
             customConfig : 'config.js' ,
             toolbar :  'BasicToolbar'  ,
             height : "300"
-        });
+        }
+    );
 
     CKEDITOR.replace('shopCustomText',
         {
