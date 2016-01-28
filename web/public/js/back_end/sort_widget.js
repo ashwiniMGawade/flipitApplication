@@ -1,12 +1,18 @@
 $(document).ready(function() {
     $("#widgetCategories").select2();
-    $("#widgetsTypeList").select2({"placeholder":  __("Select")});
+    $("#widgetCategoryType").select2({"placeholder":  __("Select")});
 
     $("#widgetCategories").change(function() {
         $('#widgetType').val($(this).val());
-        $("#widgetsTypeList").show().select2({"placeholder":  __("Select")});;
         addWidgetInSortList();
     });
+
+    $("#widgetCategoryType").change(function() {
+        $('#widgetCategoryType').val($(this).val());
+        addWidgetInSortList();
+    });
+
+
     $("#widgetslist").select2({placeholder: __("Search a widget")});
     $("#widgetslist").change(function() {
         $("#selctedWidget").val($(this).val());
@@ -71,7 +77,12 @@ function addWidgetInSortList() {
 
 function loadSelectedCategoryWidgets() {
     var widgetType =  $('#widgetType').val();
-    window.location.href =  HOST_PATH + "admin/widget/sort-widget/widgetType/" +  widgetType;
+    var widgetCategoryType =  $('#widgetCategoryType').val();
+    redirectURL = HOST_PATH + "admin/widget/sort-widget/widgetType/" +  widgetType;
+    if (widgetCategoryType !== '') {
+        redirectURL += "/widgetCategoryType/"+widgetCategoryType;
+    }
+    window.location.href =  redirectURL;
 }
 
 function changeSelectedClass() {
@@ -108,8 +119,9 @@ function addNewWidget() {
     } else {
         var id = $("input#selctedWidget").val();
         var widgetType = $("input#widgetType").val();
+        var widgetCategoryType =  $('#widgetCategoryType').val();
         $.ajax({
-            url : HOST_PATH + "admin/widget/add-widget-in-sort-list/id/" + id + '/widgetType/' + widgetType,
+            url : HOST_PATH + "admin/widget/add-widget-in-sort-list/id/" + id + '/widgetType/' + widgetType + '/widgetCategoryType/' + widgetCategoryType,
             method : "post",
             dataType : "json",
             type : "post",

@@ -29,13 +29,22 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/sort_widget.js");
          }?>
         </select>
         <?php if (!empty($this->widgetTypeList)) { ?>
-            <select style="" class="combobox wt-389" name="widgetsTypeList" id="widgetsTypeList">
+            <select style="" class="combobox wt-389" name="widgetCategoryType" id="widgetCategoryType">
                 <option  value=""></option>
                 <?php
                 foreach ($this->widgetTypeList as $widgetTypeItemIndex => $widgetTypeItem) {
-                ?>
-                <option  value="<?php echo $widgetTypeItemIndex; ?>"><?php echo $widgetTypeItem; ?></option>
-                <?php }?>
+                    if ($widgetTypeItemIndex == $this->widgetCategoryType) {
+                        ?>
+                        <option selected='selected' value="<?php echo $widgetTypeItemIndex; ?>">
+                            <?php echo $widgetTypeItem; ?>
+                        </option>
+                    <?php
+                    } else {
+                        ?>
+                        <option value="<?php echo $widgetTypeItemIndex; ?>"><?php echo $widgetTypeItem; ?></option>
+                    <?php
+                    }
+                }?>
             </select>
         <?php } ?>
     </div>
