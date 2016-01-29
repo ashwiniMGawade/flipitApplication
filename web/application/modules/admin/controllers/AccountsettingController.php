@@ -183,7 +183,11 @@ class Admin_AccountsettingController extends Application_Admin_BaseController
                 } else {
                     $topCategories = \FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
                 }
-                $categoryVouchers = array_slice(\KC\Repository\Category::getCategoryVoucherCodes($topCategories[0]['category']['id']), 0, 3);
+                $topCategoryOffersIds = \KC\Repository\NewsLetterCache::getCategoryOffers($topCategories[0]['category']['id']);
+                $categoryVouchers = \KC\Repository\NewsLetterCache::getTopCategoryOffersByFallBack(
+                    $topCategoryOffersIds,
+                    $topCategories[0]['id']
+                );
                 $categoryName = $topCategories[0]['category']['name'];
                 $categoryPermalink = $topCategories[0]['category']['permaLink'];
             }

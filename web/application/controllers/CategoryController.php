@@ -46,19 +46,21 @@ class CategoryController extends Zend_Controller_Action
                 )
             );
             if (count($categoryVoucherCodes) < 10) {
-                $allCategoryOffers = $this->_helper->Index->removeDuplicateCode(
-                    \FrontEnd_Helper_viewHelper::
-                        getRequestedDataBySetGetCache(
-                            'category_'.$cacheKey.'_voucherCodes',
-                            array(
-                                'function' => '\KC\Repository\Category::getCategoryVoucherCodes',
-                                'parameters' => array($categoryDetails[0]['id'])
-                            )
-                        ),
-                    'categoryPage'
+                $allCategoryOffers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+
+                    'category_'.$cacheKey.'_voucherCodes',
+                    array(
+                        'function' => '\KC\Repository\Category::getCategoryVoucherCodes',
+                        'parameters' => array($categoryDetails[0]['id'])
+                    )
                 );
                 $categoryVoucherCodes = array_merge($categoryVoucherCodes, $allCategoryOffers);
             }
+            $categoryOffers = array();
+            foreach($categoryVoucherCodes as $offer) {
+                $categoryOffers[$offer['id']] = $offer;
+            }
+            $categoryVoucherCodes = $categoryOffers;
 
             $offersWithPagination = \FrontEnd_Helper_viewHelper::renderPagination(
                 $categoryVoucherCodes,

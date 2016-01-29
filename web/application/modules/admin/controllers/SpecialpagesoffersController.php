@@ -29,7 +29,7 @@ class Admin_SpecialpagesoffersController extends Application_Admin_BaseControlle
         foreach ($specialPageOffers as $pOffer) {
             $offerIds[] = $pOffer['offers']['id'];
         }
-        $allOffer = \KC\Repository\PopularCode::searchAllOffer($offerIds);
+        $allOffer = \KC\Repository\PopularCode::searchAllOffer($offerIds, false);
         $this->view->specialPageOffers = $specialPageOffers;
         $this->view->offer = $allOffer;
         $this->view->specialPages = $specialListPages;
