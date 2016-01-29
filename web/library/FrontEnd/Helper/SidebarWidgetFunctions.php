@@ -3,7 +3,7 @@ class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
 {
     public function sidebarWidgets($widgetType, $currentView, $referenceId = '')
     {
-        $widgets = \KC\Repository\PageWidgets::getWidgetsByType($widgetType, $referenceId);
+        $widgets = \KC\Repository\PageWidgets::getFrontendWidgetList($widgetType, $referenceId);
         if (!empty($widgets)) {
             foreach ($widgets as $widget) {
                 $widgetFunctionName = strtolower($widget['widget']['function_name']);

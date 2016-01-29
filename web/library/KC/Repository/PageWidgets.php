@@ -18,9 +18,34 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
 
         if (!empty($referenceId)) {
             $query = $query->andWhere('sw.referenceId=' . $referenceId);
+        } else {
+            $query =  $query->andWhere("sw.referenceId IS  NULL");
         }
         $pageWidets = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageWidets;
+    }
+
+    public static function getFrontendWidgetList($widgetsType, $widgetCategoryTypeId = '')
+    {
+        $widgetCategoryList = array();
+        if (!empty($widgetCategoryTypeId)) {
+            $widgetCategoryList = self::getWidgetsByType($widgetsType, $widgetCategoryTypeId);
+        }
+        $allWidgetCategoryList =  self::getWidgetsByType($widgetsType);
+        $widgetList =self::mergeWidgets($widgetCategoryList, $allWidgetCategoryList);
+        return $widgetList;
+    }
+
+    public static function mergeWidgets($widgetCategoryList, $allWidgetCategoryList) {
+        $widgets = array_column($widgetCategoryList, 'widget');
+        $widgetIds = array_column($widgets, 'id');
+        $widgetList = $widgetCategoryList;
+        foreach ($allWidgetCategoryList as $widget) {
+            if (!in_array($widget['widget']['id'], $widgetIds)) {
+                $widgetList[] = $widget;
+            }
+        }
+        return $widgetList;
     }
 
     public static function getBackendWidgetList($widgetsType, $widgetCategoryTypeId = '')
@@ -30,14 +55,7 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
             $widgetCategoryList = self::getAllWidgetsByType($widgetsType, $widgetCategoryTypeId);
         }
         $allWidgetCategoryList =  self::getAllWidgetsByType($widgetsType);
-        $widgets = array_column($widgetCategoryList, 'widget');
-        $widgetIds = array_column($widgets, 'id');
-        $widgetList = $widgetCategoryList;
-        foreach ($allWidgetCategoryList as $widget) {
-            if (!in_array($widget['widget']['id'], $widgetIds)) {
-                $widgetList[] = $widget;
-            }
-        }
+        $widgetList =self::mergeWidgets($widgetCategoryList, $allWidgetCategoryList);
         return $widgetList;
     }
 
