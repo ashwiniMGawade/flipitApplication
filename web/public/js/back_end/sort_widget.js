@@ -202,6 +202,7 @@ function deleteWidget() {
             $('ul#sort-widgets-list li#'+id).addClass('selected');
             $('ul#sort-widgets-list li').click(changeSelectedClass);
             selectedElements();
+            saveWidgetOrder();
         }
     });
 }

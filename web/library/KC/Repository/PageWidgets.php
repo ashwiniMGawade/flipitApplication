@@ -36,7 +36,8 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
         return $widgetList;
     }
 
-    public static function mergeWidgets($widgetCategoryList, $allWidgetCategoryList) {
+    public static function mergeWidgets($widgetCategoryList, $allWidgetCategoryList)
+    {
         $widgets = array_column($widgetCategoryList, 'widget');
         $widgetIds = array_column($widgets, 'id');
         $widgetList = $widgetCategoryList;
@@ -194,14 +195,19 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
         return $pageWidgets->id;
     }
 
-    public static function deletePageWidgets($id)
+    public static function deletePageWidgets($id, $widgetCategoryTypeId = '')
     {
         if (!empty($id)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder
                 ->delete('\Core\Domain\Entity\pageWidgets', 'spl')
-                ->where('spl.id ='.$id)
-                ->getQuery();
+                ->where('spl.id ='.$id);
+            if (!empty($widgetCategoryTypeId)) {
+                $query = $query->andWhere('spl.referenceId='. $widgetCategoryTypeId);
+            } else {
+                $query = $query->andWhere('spl.referenceId is null');
+            }
+            $query = $query->getQuery();
             $query->execute();
         }
         return true;
@@ -251,7 +257,7 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
                     self::deletePageWidgetsByWidgetIdAndType($widgetId, $widgetsType);
                 }
             } else {
-                self::deletePageWidgets($pageWidgetId);
+                self::deletePageWidgets($pageWidgetId, $widgetCategoryTypeId);
                 $newPageWidgetsList = self::getNewPageWidgetsList($widgetsType, $widgetCategoryTypeId);
                 $newPosition = 1;
                 foreach ($newPageWidgetsList as $newWidget) {
