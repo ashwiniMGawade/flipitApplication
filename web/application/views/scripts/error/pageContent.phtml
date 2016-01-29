@@ -61,7 +61,7 @@ if ($this->pageMode == true) {
             if ($this->pageCssClass == 'faq-page') {
                 echo $frontendSidebarHelper->sidebarWidgets('faq-pages', $this);
             } else if ($this->page['pageType'] == "offer") {
-                echo $frontendSidebarHelper->sidebarWidgets('special-page', $this);
+                echo $frontendSidebarHelper->sidebarWidgets('special-page', $this, $this->page['id']);
             } else {
                 echo $frontendSidebarHelper->sidebarWidgets('info-pages', $this);
             }
