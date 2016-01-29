@@ -92,9 +92,13 @@ foreach ($this->offers as $offer) {
                         $metaItems .= $membersOnly.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires, $expiredOffer);
                         ?>
                         <?php
-                        if ($expiredOffer != '') {
+                        if ($expiredOffer != '' && isset($offer->discountType) && $offer->discountType == 'CD') {
                             $metaItems .=  ' . ' . FrontEnd_Helper_viewHelper::__translate('This code is unfortunately expired. Often these code will still work') . '!';
-                        } ?>
+                        }
+
+                        if ($expiredOffer != '' && isset($offer->discountType) && $offer->discountType == 'SL') {
+                            $metaItems .=  ' . ' . FrontEnd_Helper_viewHelper::__translate('This offer is unfortunately expired') . '!';
+                        }?>
                         <li><?php echo $metaItems; ?></li>
                     </ul>
                     <?php 
@@ -113,7 +117,9 @@ foreach ($this->offers as $offer) {
                     ?>
                 </div>
     <?php
-    $couponClass = isset($offer->discountType) && $offer->discountType != 'CD' ? 'btn-blue-wrapper' : '';
+    $couponClass = (isset($offer->discountType) && $offer->discountType != 'CD') ? 'btn-blue-wrapper' : '';
+    $couponClass = (isset($offer->expiredOffer) && isset($offer->discountType) && $offer->discountType == 'SL') ? '' : $couponClass;
+
     ?>
                 <div class="buttons offer-teaser-button-wrapper" id="offerButton<?php echo $offer->id ;?>">
                     <div class="offer-teaser-button-wrapper-inner <?php echo $couponClass; ?>">
