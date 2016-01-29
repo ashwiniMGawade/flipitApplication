@@ -181,10 +181,11 @@ function deleteWidget() {
     var id = $('ul#sort-widgets-list li.selected').attr('id');
     var widgetId = $('ul#sort-widgets-list li.selected').attr('relwidget');
     var widgetType = $("input#widgetType").val();
+    var widgetCategoryType = (typeof $("#widgetCategoryType").val() !== "undefined" || $("#widgetCategoryType").val() != "") ? $("#widgetCategoryType").val() : '';
     var title = $('ul#sort-widgets-list li.selected').children('span').html();
     var pos = $('ul#sort-widgets-list li.selected').attr('relpos');
     $.ajax({
-        url : HOST_PATH + "admin/widget/delete-widget/id/" +id+ "/pos/"+pos+"/widgetType/"+widgetType,
+        url : HOST_PATH + "admin/widget/delete-widget/id/" +id+ "/pos/"+pos+"/widgetType/"+widgetType+"/widgetCategoryType/"+widgetCategoryType,
         method : "post",
         dataType : "json",
         type : "post",

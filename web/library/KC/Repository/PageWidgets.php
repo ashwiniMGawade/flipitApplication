@@ -30,10 +30,11 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
             $widgetCategoryList = self::getAllWidgetsByType($widgetsType, $widgetCategoryTypeId);
         }
         $allWidgetCategoryList =  self::getAllWidgetsByType($widgetsType);
-        $widgetIds = array_column($widgetCategoryList, 'id');
+        $widgets = array_column($widgetCategoryList, 'widget');
+        $widgetIds = array_column($widgets, 'id');
         $widgetList = $widgetCategoryList;
         foreach ($allWidgetCategoryList as $widget) {
-            if (!in_array($widget['id'], $widgetIds)) {
+            if (!in_array($widget['widget']['id'], $widgetIds)) {
                 $widgetList[] = $widget;
             }
         }
@@ -122,6 +123,18 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
         return $pageWidgets;
     }
 
+    public static function getPageWidgetDetails($pageWidgetId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('sw', 'w')
+            ->from('\Core\Domain\Entity\pageWidgets', 'sw')
+            ->leftJoin('sw.widget', 'w')
+            ->where('sw.id=' . $pageWidgetId);
+        $pageWidget = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $pageWidget;
+    }
+
     public static function getPageWidgetMaxPosition($widgetsType, $widgetCategoryTypeId = '')
     {
         if (!empty($widgetsType)) {
@@ -176,7 +189,7 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
         return true;
     }
 
-    public static function getNewPageWidgetsList($widgetsType)
+    public static function getNewPageWidgetsList($widgetsType, $widgetCategoryTypeId = '')
     {
         $newWidgetsList = array();
         if (!empty($widgetsType)) {
@@ -184,8 +197,13 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
             $query = $queryBuilder
                 ->select('spo')
                 ->from('\Core\Domain\Entity\pageWidgets', 'spo')
-                ->where('spo.widget_type='. $queryBuilder->expr()->literal($widgetsType))
-                ->orderBy('spo.position', 'ASC');
+                ->where('spo.widget_type='. $queryBuilder->expr()->literal($widgetsType));
+            if (!empty($widgetCategoryTypeId)) {
+                $query = $query->andWhere('spo.referenceId='. $widgetCategoryTypeId);
+            } else {
+                $query = $query->andWhere('spo.referenceId is null');
+            }
+            $query = $query->orderBy('spo.position', 'ASC');
             $newWidgetsList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         }
         return $newWidgetsList;
@@ -205,17 +223,25 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
         return true;
     }
 
-    public static function deleteWidget($pageWidgetId, $position, $widgetsType, $type = '')
+    public static function deleteWidget($pageWidgetId, $position, $widgetsType, $widgetCategoryTypeId = '')
     {
         if ($pageWidgetId) {
-            self::deletePageWidgets($pageWidgetId);
-            $newPageWidgetsList = self::getNewPageWidgetsList($widgetsType);
-            $newPosition = 1;
-            foreach ($newPageWidgetsList as $newWidget) {
-                self::updateWithNewPosition($newPosition, $newWidget);
-                $newPosition++;
+            if (empty($widgetCategoryTypeId)) {
+                $pageWidgetDetails = self::getPageWidgetDetails($pageWidgetId);
+                $widgetId = isset($pageWidgetDetails[0]['widget']) ? $pageWidgetDetails[0]['widget']['id'] : '';
+                if (!empty($widgetId)) {
+                    self::deletePageWidgetsByWidgetIdAndType($widgetId, $widgetsType);
+                }
+            } else {
+                self::deletePageWidgets($pageWidgetId);
+                $newPageWidgetsList = self::getNewPageWidgetsList($widgetsType, $widgetCategoryTypeId);
+                $newPosition = 1;
+                foreach ($newPageWidgetsList as $newWidget) {
+                    self::updateWithNewPosition($newPosition, $newWidget);
+                    $newPosition++;
+                }
+                return true;
             }
-            return true;
         }
         return false;
     }
@@ -246,6 +272,35 @@ class PageWidgets extends \Core\Domain\Entity\PageWidgets
         }
         $query = $query->getQuery();
         $query->execute();
+        return true;
+    }
+
+    public static function deletePageWidgetsByWidgetIdAndType($widgetId, $widgetType)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+
+        $query = $queryBuilder
+            ->select('spl.referenceId')
+            ->from('\Core\Domain\Entity\pageWidgets', 'spl')
+            ->where('spl.widget_type ='.$queryBuilder->expr()->literal($widgetType))
+            ->andWhere('spl.widget=' . $widgetId);
+        $exitingsPageWidgets = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        $query = $queryBuilder
+            ->delete('\Core\Domain\Entity\PageWidgets', 'spl')
+            ->where('spl.widget_type ='.$queryBuilder->expr()->literal($widgetType))
+            ->andWhere('spl.widget=' . $widgetId);
+        $query = $query->getQuery();
+        $query->execute();
+
+        foreach ($exitingsPageWidgets as $widget) {
+            $newPageWidgetsList = self::getNewPageWidgetsList($widgetType, $widget['referenceId']);
+            $newPosition = 1;
+            foreach ($newPageWidgetsList as $newWidget) {
+                self::updateWithNewPosition($newPosition, $newWidget);
+                $newPosition++;
+            }
+        }
         return true;
     }
 }

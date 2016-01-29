@@ -244,8 +244,9 @@ class Admin_WidgetController extends Application_Admin_BaseController
         $pageWidgetId = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         $widgetType = $this->getRequest()->getParam('widgetType');
-        $isUpdated = \KC\Repository\PageWidgets::deleteWidget($pageWidgetId, $position, $widgetType);
-        $widgets = \KC\Repository\PageWidgets::getWidgetsByType($widgetType);
+        $widgetCategoryTypeId = $this->getRequest()->getParam('widgetCategoryType');
+        $isUpdated = \KC\Repository\PageWidgets::deleteWidget($pageWidgetId, $position, $widgetType, $widgetCategoryTypeId);
+        $widgets = \KC\Repository\PageWidgets::getBackendWidgetList($widgetType, $widgetCategoryTypeId);
         echo Zend_Json::encode($widgets);
         exit();
     }
