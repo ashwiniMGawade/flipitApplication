@@ -20,6 +20,8 @@ endif;
         $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
         echo $this->render('landingpage/layout_css.phtml');
     ?>
+    <?php echo $this->render('landingpage/layout_js.phtml'); ?>
+
     <script type="text/javascript">
         dataLayer = [];
         function gtmDataBuilder(gtmData) {
@@ -36,6 +38,7 @@ endif;
     </script>
 </head>
 <body>
+<?php echo $this->render('landingpage/branding_menu.phtml'); ?>
 <?php echo FrontEnd_Helper_LayoutContent::loadGoogleTagManager(); ?>
 <?php
 $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
@@ -124,7 +127,7 @@ foreach ($this->offers as $offer) {
         $gtmDataForButton = json_encode($gtmData);
         $gtmTitleClick = "gtmDataBuilder($gtmDataForTitle);";
         $gtmButtonClick = "gtmDataBuilder($gtmDataForButton);";
-        $offerDiv ='<a rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmTitleClick.$onClick.'\'>
+        $offerDiv ='<a class="link" rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmTitleClick.$onClick.'\'>
                         <h2 class="common-height">'.FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offer->title).'</h2>
                     </a>
                     <a rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmButtonClick.$onClick.'\'>
@@ -152,7 +155,7 @@ foreach ($this->offers as $offer) {
         $gtmDataForButton = json_encode($gtmData);
         $gtmTitleClick = "gtmDataBuilder($gtmDataForTitle);";
         $gtmButtonClick = "gtmDataBuilder($gtmDataForButton);";
-        $offerDiv = '<a rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmTitleClick.$onClick.'\' target="_blank">
+        $offerDiv = '<a class="link" rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmTitleClick.$onClick.'\' target="_blank">
                         <h2 class="common-height">'.FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offer->title).'</h2>
                     </a>
                     <div id="offerButton'.$offer->id.'">
@@ -172,7 +175,7 @@ foreach ($this->offers as $offer) {
         $gtmDataForButton = json_encode($gtmData);
         $gtmTitleClick = "gtmDataBuilder($gtmDataForTitle);";
         $gtmButtonClick = "gtmDataBuilder($gtmDataForButton);";
-        $offerDiv = '<a rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmTitleClick.$onClick.'\' target="_blank">
+        $offerDiv = '<a class="link" rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmTitleClick.$onClick.'\' target="_blank">
                         <h2 class="common-height">'.FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offer->title).'</h2>
                     </a>
                     <div id="offerButton'.$offer->id.'">
@@ -285,7 +288,7 @@ foreach($offerBoxes as $count => $offerPanel) {
                 <?php
                 $offersAdded = '';
                 if (!empty($this->offersAddedInShop) && $this->offersAddedInShop['offersInfo'] != '') :
-                    $offersAdded = '<li><span><i class="icon-timer"></i>  '
+                    $offersAdded = '<li class="couponUsed"><span><i class="icon-timer"></i>  '
                         .FrontEnd_Helper_viewHelper::__translate('This '.$this->offersAddedInShop['type'])
                         . ' '
                         .$this->offersAddedInShop['offersInfo']['amountOffers']
@@ -295,7 +298,7 @@ foreach($offerBoxes as $count => $offerPanel) {
                 ?>
                 <ul class="action-list">
                    <?php echo $offersAdded; ?>
-                    <li>
+                    <li class="couponsCount">
                         <span class="icon-check-circle"></span><?php echo count($this->offers).' '.FrontEnd_Helper_viewHelper::__translate('current offers'); ?>
                     </li>
                 </ul>
@@ -336,8 +339,6 @@ else :
     echo $partialViewPath->render($partialsPath. '_pop_up.phtml');
 endif;
 ?>
-<?php
-echo $this->render('landingpage/layout_js.phtml');
-?>
+
 </body>
 </html>

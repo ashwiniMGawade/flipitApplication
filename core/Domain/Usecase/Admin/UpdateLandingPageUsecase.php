@@ -77,6 +77,9 @@ class UpdateLandingPageUsecase
         if (isset($params['content'])) {
             $landingPage->setContent($params['content']);
         }
+        if (isset($params['brandingCss'])) {
+            $landingPage->setBrandingCss($params['brandingCss']);
+        }
         $landingPage->setUpdatedAt(new \DateTime('now'));
 
         $validationResult = $this->landingPageValidator->validate($landingPage);
