@@ -1,5 +1,5 @@
 <?php
-$this->headTitle()->append($this->translate('Edit VWO Tag'));
+$this->headTitle()->append($this->translate('Edit Tag'));
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/editURLSettings.js");
 ?>
@@ -8,7 +8,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/editURLSettings.js")
     <div id="URLSettingEdit">
         <div class="wrap columns-2">
             <h1>
-                <?php echo $this->translate('Edit VWO Tag'); ?>
+                <?php echo $this->translate('Edit Tag'); ?>
                 <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/urlsettings'"><?php echo $this->translate('Cancel'); ?></button>
             </h1>
 
@@ -44,10 +44,27 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/editURLSettings.js")
                         </div>
                     </div>
 
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Hotjar Tag'); ?></strong></label></div>
+                        <div class="mainpage-content-right">
+                            <div data-toggle="buttons-checkbox" class="btn-group mb20">
+                                <input type="hidden" id="hotjarStatus" name="hotjarStatus" value="<?php echo isset($this->urlSetting['hotjarStatus']) ? $this->urlSetting['hotjarStatus'] : 1; ?>">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn" id="hotjarActive" onClick="setHotjarStatus('hotjarActive')">
+                                        <?php echo $this->translate('On'); ?>
+                                    </button>
+                                    <button type="button" class="btn" id="hotjarInActive" onClick="setHotjarStatus('hotjarInActive')">
+                                        <?php echo $this->translate('Off'); ?>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="mainpage-content-colorbox">
-                    <button id="EditVWOTagButton" type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('Edit VWO Tag'); ?></button>
+                    <button id="EditVWOTagButton" type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('Edit Tag'); ?></button>
                     <a class="fl m10" href="javascript:void(0);" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/urlsettings'" ><strong><?php echo $this->translate('CANCEL'); ?></strong></a>
                 </div>
                 <input type="hidden" name="editId" id="editId" class="hide ignore" value="<?php echo isset($this->urlSetting['id']) ? $this->urlSetting['id'] : ''; ?>"/>
