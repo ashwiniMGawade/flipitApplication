@@ -1,9 +1,9 @@
 <?php $session = new Zend_Session_Namespace('Branding'); ?>
-<?php 
+<?php
 if (
     $session->brandingActivated == true
     && Zend_Controller_Front::getInstance()->getRequest()->getActionName() == 'storedetail'
-): 
+):
     $this->minifyHeadScript()->appendFile(HTTP_PATH."public/js/front_end/branding.js");
     ?>
     <?php echo $this->headStyle()->appendStyle($this->shop()->brandingCss($session->data)); ?>
@@ -19,7 +19,7 @@ if (
             <br />
             <hr>
             <div class="branding_section">
-                
+
                 <input type="hidden" name="preview" id="preview" value="0" />
                 <input type="hidden" name="reset" id="reset" value="0" />
                 <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $this->currentStoreInformation[0]['id']; ?>" />
@@ -70,24 +70,24 @@ if (
                     <label for="<?php echo $item; ?>">Newsletter store logo</label>
                     <input type="file" name="<?php echo $item; ?>" accept="image/x-png, image/gif, image/jpeg, image/jpg" />
                 </p>
-                <p>                    
-                    <?php if(!empty($session->data[$item]['img'])): ?>   
-                        <p>
-                            <img src="<?php echo PUBLIC_PATH.$session->data[$item]['img'] ?>" title="image">
-                            <input type="checkbox" name="delete[]" value="<?php echo $item; ?>"> Delete?
-                        </p>
-                    <?php endif; ?>      
-                </p>
                 <p>
-                    <?php $item = 'header_background'; ?>
-                    <label for="<?php echo $item; ?>">Header Background</label>
-                    <input type="file" name="<?php echo $item; ?>" accept="image/x-png, image/gif, image/jpeg, image/jpg" />  
                     <?php if(!empty($session->data[$item]['img'])): ?>
                         <p>
                             <img src="<?php echo PUBLIC_PATH.$session->data[$item]['img'] ?>" title="image">
                             <input type="checkbox" name="delete[]" value="<?php echo $item; ?>"> Delete?
                         </p>
-                    <?php endif; ?>         
+                    <?php endif; ?>
+                </p>
+                <p>
+                    <?php $item = 'header_background'; ?>
+                    <label for="<?php echo $item; ?>">Header Background</label>
+                    <input type="file" name="<?php echo $item; ?>" accept="image/x-png, image/gif, image/jpeg, image/jpg" />
+                    <?php if(!empty($session->data[$item]['img'])): ?>
+                        <p>
+                            <img src="<?php echo PUBLIC_PATH.$session->data[$item]['img'] ?>" title="image">
+                            <input type="checkbox" name="delete[]" value="<?php echo $item; ?>"> Delete?
+                        </p>
+                    <?php endif; ?>
                 </p>
             </div>
             <hr>

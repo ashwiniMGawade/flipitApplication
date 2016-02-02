@@ -141,7 +141,7 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
 
         $result = AdminFactory::getLandingPage()->execute(array('id' => $pageId));
         if ($result instanceof \Core\Domain\Entity\LandingPage) {
-            $brandingCss = unserialize($result->getBrandingCss());
+            $brandingCss = unserialize(base64_decode($result->getBrandingCss()));
             $session->data = empty($brandingCss) ? $this->defaultStylesGLP() : $brandingCss;
         } else {
             $session->data = $this->defaultStylesGLP();
@@ -173,9 +173,14 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
                 $session->data[$cssSelector]['value'] = $value;
             }
         }
+        if (!empty($_FILES["header_background"]["tmp_name"])) {
+            $headerBackgroundImage = "images/upload/shop/".time().'_'.$_FILES["header_background"]["name"];
+            move_uploaded_file($_FILES["header_background"]["tmp_name"], ROOT_PATH.$headerBackgroundImage);
+            $session->data['header_background']['img'] = $headerBackgroundImage;
+        }
         if (empty($_POST['preview'])) {
            if (empty($_POST['reset'])) {
-                $brandingcss =  serialize($session->data);
+                $brandingcss =  base64_encode(serialize($session->data));
                 $redirectUrl = self::stopGLP();
             } else {
                 $brandingcss  = null;
@@ -229,14 +234,6 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
         $defaultStyles['store_total_coupons']['css-selector']          = '.couponsCount';
         $defaultStyles['store_total_coupons']['css-property']           = 'color';
         $defaultStyles['store_total_coupons']['value']                  = '#949597';
-
-        $defaultStyles['newsletter_background_color']['css-selector']   = '.section .block-form .holder';
-        $defaultStyles['newsletter_background_color']['css-property']   = 'background-color';
-        $defaultStyles['newsletter_background_color']['value']          = '#f6f6f6';
-
-        $defaultStyles['newsletter_title_color']['css-selector']        = '.section .block-form h4';
-        $defaultStyles['newsletter_title_color']['css-property']        = 'color';
-        $defaultStyles['newsletter_title_color']['value']               = '#33383e';
 
         $defaultStyles['overwrite']['value']                            = '';
 

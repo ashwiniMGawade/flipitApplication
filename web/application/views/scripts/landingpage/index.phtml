@@ -19,9 +19,18 @@ endif;
     <?php
         $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
         echo $this->render('landingpage/layout_css.phtml');
-    ?>
-    <?php echo $this->render('landingpage/layout_js.phtml'); ?>
 
+        $session = new Zend_Session_Namespace('BrandingGlp');
+        $pageBranding = unserialize(base64_decode($this->landingPage->getBrandingCss()));
+        if (empty($session->brandingActivated) && !empty($pageBranding)):
+            $this->headStyle()->appendStyle($this->shop()->brandingCss($pageBranding));
+            $this->headScript()->appendScript($this->shop()->brandingJs($pageBranding));
+        endif;
+        echo $this->headStyle();
+    ?>
+    <?php
+        echo $this->render('landingpage/layout_js.phtml');
+    ?>
     <script type="text/javascript">
         dataLayer = [];
         function gtmDataBuilder(gtmData) {

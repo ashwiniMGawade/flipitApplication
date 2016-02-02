@@ -49,37 +49,14 @@ if (
                         <td><label for="<?php echo $item; ?>">Store Total Coupons</label></td>
                         <td class="color_select"><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
                     </tr>
-                    <?php $item = 'newsletter_background_color'; ?>
-                    <tr>
-                        <td><label for="<?php echo $item; ?>">Newsletter background</label></td>
-                        <td class="color_select"><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
-                    </tr>
-                    <?php $item = 'newsletter_title_color'; ?>
-                    <tr>
-                        <td><label for="<?php echo $item; ?>">Newsletter title color</label></td>
-                        <td class="color_select"><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
-                    </tr>
                 </table>
             </div>
             <hr>
             <div class="branding_section">
                 <h3>Images</h3>
-                <?php $item = 'newsletter_store_logo'; ?>
-                <p>
-                    <label for="<?php echo $item; ?>">Newsletter store logo</label>
-                    <input type="file" name="<?php echo $item; ?>" accept="image/x-png, image/gif, image/jpeg, image/jpg" />
-                </p>
-                <p>
-                    <?php if(!empty($session->data[$item]['img'])): ?>
-                        <p>
-                            <img src="<?php echo PUBLIC_PATH.$session->data[$item]['img'] ?>" title="image">
-                            <input type="checkbox" name="delete[]" value="<?php echo $item; ?>"> Delete?
-                        </p>
-                    <?php endif; ?>
-                </p>
                 <p>
                     <?php $item = 'header_background'; ?>
-                    <label for="<?php echo $item; ?>">Header Background</label>
+                    <label for="<?php echo $item; ?>">Background Image</label>
                     <input type="file" name="<?php echo $item; ?>" accept="image/x-png, image/gif, image/jpeg, image/jpg" />
                     <?php if(!empty($session->data[$item]['img'])): ?>
                         <p>
