@@ -63,7 +63,17 @@ class Admin_SpecialpagesoffersController extends Application_Admin_BaseControlle
         $pageId = $this->getRequest()->getParam('pageId');
         \KC\Repository\SpecialPagesOffers::savePosition($this->getRequest()->getParam('offersIds'), $pageId);
         $SpecialPagesOffers = \KC\Repository\SpecialPagesOffers::getSpecialPageOfferById($pageId);
-        echo Zend_Json::encode($SpecialPagesOffers);
+        $date = new DateTime();
+        $newSpecialPagesOffers = array();
+        foreach($SpecialPagesOffers as $offer) {
+            $expired = '';
+            if($date > $offer['offers']['endDate']) {
+                $expired = "<i class='pull-right icon icon-time'></i>";
+            }
+            $offer['offers']['expiredTxt'] = $expired;
+            $newSpecialPagesOffers[] = $offer;
+        }
+        echo Zend_Json::encode($newSpecialPagesOffers);
         exit();
     }
 
