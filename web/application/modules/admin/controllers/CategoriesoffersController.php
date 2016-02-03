@@ -65,7 +65,17 @@ class Admin_CategoriesoffersController extends Application_Admin_BaseController
         $categoryId = $this->getRequest()->getParam('categoryId');
         \KC\Repository\CategoriesOffers::savePosition($this->getRequest()->getParam('offersIds'), $categoryId);
         $categoryOffers = \KC\Repository\CategoriesOffers::getcategoryOffersById($categoryId);
-        echo Zend_Json::encode($categoryOffers);
+        $date = new DateTime();
+        $newCategoryOffers = array();
+        foreach($categoryOffers as $offer) {
+            $expired = '';
+            if($date > $offer['offers']['endDate']) {
+                $expired = "<i class='pull-right icon icon-time'></i>";
+            }
+            $offer['offers']['expiredTxt'] = $expired;
+            $newCategoryOffers[] = $offer;
+        }
+        echo Zend_Json::encode($newCategoryOffers);
         exit();
     }
 }
