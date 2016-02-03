@@ -19,7 +19,8 @@
         "nocarrier/hal": "^0.9.11",
         "symfony/validator": "^2.7",
         "aws/aws-sdk-php": "^3.2",
-        "ezyang/htmlpurifier": "*"
+        "ezyang/htmlpurifier": "*",
+        "flow/jsonpath": "*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "2.0.*@dev",
