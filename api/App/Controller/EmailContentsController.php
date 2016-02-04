@@ -66,7 +66,6 @@ class EmailContentsController extends ApiBaseController
                 break;
             default:
                 break;
-
         }
         $emailContent   = $this->app->view()->fetch('emailContents/_layouts/layout.phtml', array('data' => $this->data));
         $selfLink       = '/emailcontents/'.$emailType.'/'.$referenceId;

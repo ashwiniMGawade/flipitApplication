@@ -41,16 +41,6 @@ class UpdateVisitorCest
         $this->runTest($I, 1, $params, $expectedResult, $status);
     }
 
-    public function testPutVisitorGivesErrorWhenInValidEmailPassed(ApiTester $I)
-    {
-        $I->wantTo('Test PUT visitor gives error when invalid email passed');
-        $this->seedVisitorsTable($I);
-        $params = json_encode(array('email' => 'not an email'));
-        $expectedResult = array('This value is not a valid email address.');
-        $status = 405;
-        $this->runTest($I, 1, $params, $expectedResult, $status);
-    }
-
     private function seedVisitorsTable($I)
     {
         $I->haveInDatabasePDOSite(
