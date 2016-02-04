@@ -13,17 +13,37 @@ class BrandingController extends Zend_Controller_Action
         $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
         $session->saveUrl = 'http://'.$httpScheme.'.kortingscode.nl/';
         $storeUrl = $this->_helper->branding->start();
-        $this->_redirect($storeUrl);
+        $this->redirect($storeUrl);
     }
 
     public function saveAction()
     {
-        $this->_redirect($this->_helper->branding->save());
+        $this->redirect($this->_helper->branding->save());
     }
 
     public function stopAction()
     {
         $redirectUrl = $this->_helper->branding->stop();
-        $this->_redirect($redirectUrl);
+        $this->redirect($redirectUrl);
+    }
+
+    public function startGlpAction()
+    {
+        $session = new Zend_Session_Namespace('BrandingGlp');
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        $session->saveUrl = 'http://'.$httpScheme.'.kortingscode.nl/';
+        $redirectUrl = $this->_helper->branding->startGLP();
+        $this->redirect($redirectUrl);
+    }
+
+    public function saveGlpAction()
+    {
+        $this->redirect($this->_helper->branding->saveGLP());
+    }
+
+    public function stopGlpAction()
+    {
+        $redirectUrl = $this->_helper->branding->stopGLP();
+        $this->redirect($redirectUrl);
     }
 }

@@ -18,6 +18,23 @@
             <h1>
                 <?php echo $this->translate('Edit Landing Page'); ?>
                 <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/landingpages'"><?php echo $this->translate('Cancel'); ?></button>
+                <?php
+                $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+                $host = $httpScheme.'.kortingscode.nl';
+                if (isset($_COOKIE['site_name']))
+                {
+                    $_COOKIE['site_name'] = $_COOKIE['site_name'];
+                } else {
+                    $_COOKIE['site_name'] = 'kortingscode.nl';
+                }
+                if ($_COOKIE['site_name'] != 'kortingscode.nl')
+                {
+                    $host = $httpScheme.'.flipit.com/admin';
+                }
+                date_default_timezone_set('Europe/Amsterdam');
+                $hash = md5($this->landingPage['id'].date('Y').'-'.date('m').'-'.date('d').':'.date('H'));
+                ?>
+                <a href="<?php echo 'http://'.$host.'/branding/start-glp?pageUrl=http://'.$httpScheme.'.'.$_COOKIE['site_name'].'/glp/' ?><?php echo $this->landingPage['permalink'].'&id='.$this->landingPage['id'].'&hash='.$hash; ?>" class="btn btn-primary">Brand this page</a>
             </h1>
 
             <form method="POST" name="editLandingPage" id="editLandingPage">

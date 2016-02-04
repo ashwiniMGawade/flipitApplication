@@ -63,6 +63,11 @@ class LandingPage
     protected $content;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $brandingCss;
+
+    /**
      * @ORM\Column(type="integer", length=1)
      */
     protected $status = 1;
@@ -286,6 +291,22 @@ class LandingPage
     public function setRefUrl($refUrl)
     {
         $this->refUrl = $refUrl;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBrandingCss()
+    {
+        return $this->brandingCss;
+    }
+
+    /**
+     * @param mixed $brandingCss
+     */
+    public function setBrandingCss($brandingCss)
+    {
+        $this->brandingCss = $brandingCss;
     }
 
     /**
