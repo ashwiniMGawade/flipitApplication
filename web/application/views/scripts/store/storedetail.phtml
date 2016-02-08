@@ -186,8 +186,9 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
 </div>
 </div>
 </div>
-<div class="row"> 
-    <div id="content" class ="col-md-8 col-sm-8">
+<div class="row">
+    <?php $sidebarClass = $this->currentStoreInformation[0]['sidebarPosition'] == 1 ? 'pull-right' : ''; ?>
+    <div id="content" class ="col-md-8 col-sm-8 <?php echo $sidebarClass; ?>">
         <div id="floatingCouponContainer"></div>
     <?php
     echo $noMoneyNocodeMessage;
@@ -215,7 +216,7 @@ value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
     echo $this->partial($storeViewPartialPath.'_popup_typeform.phtml');
     ?> 
     </div>
-    <aside id="sidebar" class="col-md-4 col-sm-4">
+    <aside id="sidebar" class="col-md-4 col-sm-4 <?php echo $sidebarClass; ?>">
     <?php
     $widgetType = $this->currentStoreInformation[0]['affliateProgram'] == 1 ? 'money-shops' : "no-money-shops";
     $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
