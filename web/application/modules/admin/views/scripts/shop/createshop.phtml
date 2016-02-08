@@ -625,6 +625,15 @@ $howToIntroductionText = '';
                           </div>
                     </div>
                 </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Sidebar Position");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onClick="setOnOff(event,'sidebarPosition','on');" class="btn" type="button"><?php echo $this->translate('Left'); ?></button>
+                            <button onClick="setOnOff(event,'sidebarPosition','off');" class="btn btn-primary" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('Right'); ?></button>
+                        </div>
+                    </div>
+                </div>
             </div>
 <!-- Start New changes Extra Shop properties --> 
         <div class="mainpage-content">
@@ -913,7 +922,8 @@ $howToIntroductionText = '';
             
             <input type="hidden" name="showChains" id="showChains" value="0" />
             <input type="hidden" name="strictConfirmation" id="strictConfirmation" value="0" />
-            
+            <input type="hidden" name="sidebarPosition" id="sidebarPosition" value="0" />
+
             <!-- Extra shop hidden feilds -->
             
             <input type="hidden" name="displayExtraProperties" id="displayExtraProperties" value="0" />
