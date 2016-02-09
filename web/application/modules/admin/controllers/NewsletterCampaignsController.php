@@ -210,7 +210,7 @@ class Admin_NewsletterCampaignsController extends Application_Admin_BaseControll
             RepositoryFactory::bulkEmail()->save($bulkEmail);
             $this->setFlashMessage('success', 'Test email sent successfully');
         } catch (\Aws\DynamoDb\Exception\DynamoDbException $exception) {
-            $this->setFlashMessage('error', 'Unable to send test newsletter, please contact to administrator.');
+            $this->setFlashMessage('error', $exception->getMessage());
         }
         $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns/edit/id/'.$parameters['campaignId']);
     }
