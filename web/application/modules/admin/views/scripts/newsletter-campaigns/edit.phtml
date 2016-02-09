@@ -438,7 +438,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
 
 <div class="modal display-none popup-width" id="sendTest" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="wrap columns-2" style="">
-        <form method="post" id="sendTestEmailForm" name="sendTestEmailForm" action="/admin/newslettercampaigns/send-test-email">
+        <form method="post" id="sendTestEmailForm" name="sendTestEmailForm" action="/admin/newsletter-campaigns/send-test-email">
             <input type="hidden" name="campaignId" value="<?php echo $this->newsletterCampaign->getId(); ?>">
             <div class="m-item-popup-hdr">Send Test Email</div>
             <div id="poststuff" class="metabox-holder has-right-sidebar">
