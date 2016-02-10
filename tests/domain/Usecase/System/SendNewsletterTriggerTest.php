@@ -22,12 +22,13 @@ class SendNewsletterTriggerTest extends \Codeception\TestCase\Test
 
         $this->newsletterCampaign = new NewsletterCampaign();
         $this->newsletterCampaign->setCampaignName('Super Duper Campaign');
-        $this->newsletterCampaign->setScheduledTime(new \DateTime('now', (new \DateTimezone("Europe/Amsterdam"))));
+        $this->newsletterCampaign->setScheduledTime(new \DateTime('yesterday', (new \DateTimezone("Europe/Amsterdam"))));
         $this->newsletterCampaign->setId(1);
         $this->newsletterCampaign->setScheduledStatus(1);
+        $newsletterCampaignScheduledTime = $this->newsletterCampaign->getScheduledTime();
 
         $this->bulkEmail = new BulkEmail();
-        $this->bulkEmail->setTimeStamp(time());
+        $this->bulkEmail->setTimeStamp($newsletterCampaignScheduledTime->getTimestamp());
         $this->bulkEmail->setReferenceId($this->newsletterCampaign->getId());
         $this->bulkEmail->setEmailType('newsletter');
         $this->bulkEmail->setLocal($this->local);
