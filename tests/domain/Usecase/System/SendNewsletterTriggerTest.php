@@ -28,7 +28,7 @@ class SendNewsletterTriggerTest extends \Codeception\TestCase\Test
         $newsletterCampaignScheduledTime = $this->newsletterCampaign->getScheduledTime();
 
         $this->bulkEmail = new BulkEmail();
-        $this->bulkEmail->setTimeStamp($newsletterCampaignScheduledTime->getTimestamp());
+        $this->bulkEmail->setTimeStamp($newsletterCampaignScheduledTime->getTimestamp()*1000);
         $this->bulkEmail->setReferenceId($this->newsletterCampaign->getId());
         $this->bulkEmail->setEmailType('newsletter');
         $this->bulkEmail->setLocal($this->local);
