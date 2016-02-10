@@ -73,7 +73,7 @@ class UpdateNewsletterCampaignUsecaseTest extends \Codeception\TestCase\Test
         ))->execute(new NewsletterCampaign(), new NewsletterCampaignOffer(), $params);
         $errors = new Errors();
         $errors->setError('Invalid Parameters');
-        $this->assertEquals($errors->getErrorMessages(), $result['error']->getErrorMessages());
+        $this->assertEquals($errors->getErrorMessages(), $result->getErrorMessages());
     }
 
     public function testUpdateNewsletterCampaignUsecaseReturnsErrorWhenParamsAreInvalid()
@@ -103,7 +103,7 @@ class UpdateNewsletterCampaignUsecaseTest extends \Codeception\TestCase\Test
         $errors->setError('Please enter valid scheduled time', 'scheduledTime');
         $errors->setError('Please enter value', 'createdAt');
         $errors->setError('Please enter valid email ID', 'senderEmail');
-        $this->assertEquals($errors->getErrorMessages(), $result['error']->getErrorMessages());
+        $this->assertEquals($errors->getErrorMessages(), $result->getErrorMessages());
     }
 
 
