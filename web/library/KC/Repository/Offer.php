@@ -51,7 +51,7 @@ class Offer extends \Core\Domain\Entity\Offer
             ->from('\Core\Domain\Entity\Offer', 'o')
             ->setParameter(1, $offerId)
             ->where('o.id = ?1');
-        $offers = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $offers = $query->getQuery()->getOneOrNullResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $offers;
     }
 
