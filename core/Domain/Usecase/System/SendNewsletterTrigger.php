@@ -47,7 +47,7 @@ class SendNewsletterTrigger
         $newsletterCampaignScheduledTime = $newsletterCampaign->getScheduledTime();
 
         $bulkEmail = new BulkEmail;
-        $bulkEmail->setTimeStamp($newsletterCampaignScheduledTime->getTimestamp());
+        $bulkEmail->setTimeStamp($newsletterCampaignScheduledTime->getTimestamp()*1000);
         $bulkEmail->setEmailType('newsletter');
         $bulkEmail->setLocal($this->local);
         $bulkEmail->setReferenceId($newsletterCampaign->getId());
