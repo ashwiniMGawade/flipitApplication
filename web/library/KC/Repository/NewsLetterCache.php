@@ -80,7 +80,7 @@ class NewsLetterCache extends \Core\Domain\Entity\NewsLetterCache
         if(!empty($topOffers)) {
             $topOffersIds = explode(',', $topOffers);
             foreach ($topOffersIds as $topOffersId) {
-                if (!\KC\Repository\Offer::offerExistOrNot($topOffersId)) {
+                if (is_null(\KC\Repository\Offer::offerExistOrNot($topOffersId))) {
                     $offersExist = false;
                 }
             }
@@ -100,7 +100,7 @@ class NewsLetterCache extends \Core\Domain\Entity\NewsLetterCache
         $categoryOffersIds =  explode(',', $topCategoryOffersIds);
         $categoryOffersExist = true;
         foreach ($categoryOffersIds as $categoryOffersId) {
-            if (!\KC\Repository\Offer::offerExistOrNot($categoryOffersId)) {
+            if (is_null(\KC\Repository\Offer::offerExistOrNot($categoryOffersId))) {
                 $categoryOffersExist = false;
             }
         }
