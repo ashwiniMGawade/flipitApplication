@@ -794,9 +794,18 @@ echo $this->headTitle()->append('Edit Shop');?>
                         echo $this->translate("Strict Confirmation");?></strong></label></div>
                     <div class="mainpage-content-right">
                         <div data-toggle="buttons-checkbox" class="btn-group">
-                            <button onClick="setOnOff(event,'strictConfirmation','on');" class="btn <?php if($this->data['strictConfirmation']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button onClick="setOnOff(event,'strictConfirmation','on');" class="btn <?php if($this->data['strictConfirmation']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>
                             <button onClick="setOnOff(event,'strictConfirmation','off');" class="btn <?php if($this->data['strictConfirmation']=='0' || $this->data['strictConfirmation']==''){ echo 'btn-primary'; }  ?>" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
                           </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Sidebar Position");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onClick="setOnOff(event,'sidebarPosition','on');" class="btn <?php if($this->data['sidebarPosition']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Left'); ?></button>
+                            <button onClick="setOnOff(event,'sidebarPosition','off');" class="btn <?php if($this->data['sidebarPosition']=='0' || $this->data['sidebarPosition']=='') { echo 'btn-primary'; }  ?>" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('Right'); ?></button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1141,7 +1150,8 @@ echo $this->headTitle()->append('Edit Shop');?>
             <input type="hidden" name="signupOption" id="signupOption" value="<?php echo ( $this->data['showSignupOption'] ) ; ?>" />
 		    <input type="hidden" name="showChains" id="showChains" value="<?php echo ( $this->data['showChains'] ) ; ?>" />
             <input type="hidden" name="strictConfirmation" id="strictConfirmation" value="<?php echo ( $this->data['strictConfirmation'] ) ; ?>" />
-            
+            <input type="hidden" name="sidebarPosition" id="sidebarPosition" value="<?php echo ( $this->data['strictConfirmation'] ) ; ?>" />
+
             <div class="mainpage-content-colorbox">
 
             	<button type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('PUBLISH SHOP'); ?></button>
