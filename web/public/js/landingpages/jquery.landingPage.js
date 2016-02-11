@@ -1,44 +1,43 @@
-jQuery('#sign_up_form').validate({
-    errorClass : 'error',
-    validClass : 'success',
-    focusInvalid: false,
-    errorPlacement : function(error, element) {
-      //  element.parent("div").next("div").html(error);
-    },
-    rules : {
-        emailAddress : {
-            required : true,
-            email : true,
-            remote : {
-                url : HOST_PATH_LOCALE + "signup/checkuser",
-                type : "post"
-            }
-        },
-        privacyPolicy : {
-            required : true
-        }
-    },
-    highlight : function (element, errorClass, validClass) {
-        jQuery(element)
-            .removeClass(validClass)
-            .addClass(errorClass)
-            .next('label')
-            .removeClass(validClass)
-            .addClass('red');
-    },
-    success: function (label, element) {
-        jQuery(element)
-            .removeClass(this.errorClass)
-            .addClass(this.validClass)
-            .next('label')
-            .removeClass('red')
-            .addClass(this.validClass);
-    }
-});
  // page init
 jQuery(function() {
 	initSameHeight();
 	jQuery('input, textarea').placeholder();
+    jQuery('#sign_up_form').validate({
+        errorClass : 'error',
+        validClass : 'success',
+        focusInvalid: false,
+        errorPlacement : function(error, element) {
+        },
+        rules : {
+            emailAddress : {
+                required : true,
+                email : true,
+                remote : {
+                    url : HOST_PATH_LOCALE + "signup/checkuser",
+                    type : "post"
+                }
+            },
+            privacyPolicy : {
+                required : true
+            }
+        },
+        highlight : function (element, errorClass, validClass) {
+            jQuery(element)
+                .removeClass(validClass)
+                .addClass(errorClass)
+                .next('label')
+                .removeClass(validClass)
+                .addClass('red');
+        },
+        success: function (label, element) {
+            jQuery(element)
+                .removeClass(this.errorClass)
+                .addClass(this.validClass)
+                .next('label')
+                .removeClass('red')
+                .addClass(this.validClass);
+        }
+    });
 });
 
 function showTermAndConditions(id) {

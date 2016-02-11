@@ -76,9 +76,6 @@ $column1 = '';
 $column2 = '';
 $column3 = '';
 $newsletterForm = $this->partial('partials/_landingpage_signup.phtml', array());
-if(0 == count($this->offers)) {
-    $offerBoxes[1] = $newsletterForm;
-}
 foreach ($this->offers as $offer) {
     $offer = (object)$offer;
     $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
@@ -249,12 +246,9 @@ foreach ($this->offers as $offer) {
                 </div>
                 ';
     $offerBoxes[$count] = $offerPanel;
-    if(($count == count($this->offers) && $count < 6) || $count == 5 ) {
-        $offerBoxes[] = $newsletterForm;
-        $count++;
-    }
     $count++;
 }
+$offerBoxes[$count] = $newsletterForm;
 foreach($offerBoxes as $count => $offerPanel) {
     if ($count % 3 == 1) {
         $column1 .= $offerPanel;
