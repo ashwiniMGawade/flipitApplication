@@ -156,7 +156,7 @@ class StoreController extends Zend_Controller_Action
             (string)$topThreeExpiredOfferKey,
             array(
                 'function' => 'KC\Repository\Offer::getAllOfferOnShop',
-                'parameters' => array($shopId, 13, false, true, false, true)
+                'parameters' => array($shopId, 13, false, true, false, true, true)
             ),
             ''
         );
