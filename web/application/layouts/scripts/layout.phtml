@@ -19,7 +19,7 @@ $language = !empty($htmlLang) ? $htmlLang: $locale[0];
 <html lang="<?php echo $language; ?>" xml:lang="<?php echo $language;?>" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <?php
-if (FrontEnd_Helper_LayoutContent::loadVWOScript() === true) :
+if (FrontEnd_Helper_LayoutContent::loadScriptTag() === true) :
     echo $this->render('partials/_vwo_script.phtml');
 endif;
 ?>

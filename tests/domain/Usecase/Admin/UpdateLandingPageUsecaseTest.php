@@ -88,6 +88,7 @@ class UpdateLandingPageUsecaseTest extends \Codeception\TestCase\Test
             'metaTitle' => 'Latest Offers',
             'metaDescription' => '<p>Latest Offers</p>',
             'content' => '<p>Test Content</p>',
+            'brandingCss' => '',
             'status' => 1
         );
 

@@ -14,6 +14,7 @@ class Zend_View_Helper_Shop extends Zend_View_Helper_Abstract
 
     public function brandingCss($brandingCss)
     {
+        if(empty($brandingCss)) return '';
         $css = '';
         foreach ($brandingCss as $cssStyle){
             if(!empty($cssStyle['css-selector'])){
@@ -38,6 +39,7 @@ class Zend_View_Helper_Shop extends Zend_View_Helper_Abstract
 
     public function brandingJs($brandingJs)
     {
+        if(empty($brandingJs)) return '';
         $js = "";
         if(!empty($brandingJs['newsletter_store_logo']['img'])){
             $js .= '$(function () {';

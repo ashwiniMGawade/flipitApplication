@@ -43,6 +43,9 @@ class UpdateURLSettingUsecase
         if (isset($params['status'])) {
             $urlSetting->setStatus((int) $params['status']);
         }
+        if (isset($params['hotjarStatus'])) {
+            $urlSetting->setHotjarStatus((int) $params['hotjarStatus']);
+        }
         $urlSetting->setUpdatedAt(new \DateTime('now'));
 
         $validationResult = $this->urlSettingValidator->validate($urlSetting);

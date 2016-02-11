@@ -16,8 +16,11 @@ if(LOCALE !='') :
 else:
     $this->minifyHeadScript()
         ->prependFile("public/js/front_end/json/translation.js")
-        ->prependFile("/public/js/front_end/json/shops.js")
-        ->prependScript("(function(h,o,t,j,a,r){
+        ->prependFile("/public/js/front_end/json/shops.js");
+endif;
+    if (FrontEnd_Helper_LayoutContent::loadScriptTag('hotjar') === true) :
+        $this->minifyHeadScript()
+            ->prependScript("(function(h,o,t,j,a,r){
                 h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
                 h._hjSettings={hjid:61629,hjsv:5};
                 a=o.getElementsByTagName('head')[0];
@@ -25,7 +28,7 @@ else:
                 r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
                 a.appendChild(r);
             })(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');");
-endif;
+    endif;
     $headScript
         ->prependFile("/public/js/front_end/jquery.menu.js")
         ->prependFile("/public/js/front_end/social-code.js")
