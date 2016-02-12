@@ -10,6 +10,7 @@ use \Core\Domain\Usecase\Admin\CreateSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\DeleteSplashOfferUsecase;
 use Core\Domain\Usecase\Admin\GetNewsletterCampaignsByConditionsUsecase;
 use \Core\Domain\Usecase\Admin\GetSplashOfferUsecase;
+use Core\Domain\Usecase\Admin\SendTestNewsletterUsecase;
 use \Core\Domain\Usecase\Admin\UpdateSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\UpdateSplashPageUsecase;
 
@@ -466,5 +467,10 @@ class AdminFactory
     public static function updateLocaleSettings()
     {
         return new UpdateLocaleSettingsUsecase(RepositoryFactory::localeSetting(), new LocaleSettingValidator(new Validator()), new Purifier(), new Errors());
+    }
+
+    public static function sendTestNewsletter()
+    {
+        return new SendTestNewsletterUsecase(RepositoryFactory::bulkEmail());
     }
 }

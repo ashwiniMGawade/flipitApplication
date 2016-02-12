@@ -200,14 +200,8 @@ class Admin_NewsletterCampaignsController extends Application_Admin_BaseControll
             $this->redirect(HTTP_PATH . 'admin/newsletter-campaigns');
         }
         $locale = LOCALE != '' ? LOCALE : 'en';
-        $bulkEmail = new BulkEmail();
-        $bulkEmail->setTimeStamp(time());
-        $bulkEmail->setEmailType('testnewsletter');
-        $bulkEmail->setLocal($locale);
-        $bulkEmail->setReferenceId($parameters['campaignId']);
-        $bulkEmail->setUserId($visitor->getId());
         try {
-            RepositoryFactory::bulkEmail()->save($bulkEmail);
+            AdminFactory::sendTestNewsletter()->execute($parameters['campaignId'], $visitor->getId(), $locale);
             $this->setFlashMessage('success', 'Test email sent successfully');
         } catch (\Aws\DynamoDb\Exception\DynamoDbException $exception) {
             $this->setFlashMessage('error', $exception->getMessage());
