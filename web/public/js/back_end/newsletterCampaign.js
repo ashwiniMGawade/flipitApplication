@@ -62,7 +62,10 @@ function getNewsletterCampaignList(iStart,iSortCol,iSortDir) {
             },
             {
                 "fnRender" : function(obj) {
-                    if(obj.aData.scheduledStatus == true)
+                    if(obj.aData.scheduledStatus == 2)
+                    {
+                        return "<span class='success'>" + __("Triggered") + "</span>" ;
+                    }else if(obj.aData.scheduledStatus == 1)
                     {
                         return "<span class='success'>" + __("Scheduled") + "</span>" ;
                     }else{
@@ -73,10 +76,10 @@ function getNewsletterCampaignList(iStart,iSortCol,iSortDir) {
             },
             {
                 "fnRender" : function(obj) {
-                    if(obj.aData.scheduledStatus == true) {
-                        return "<a href='javascript:void(0);'>" + obj.aData.scheduledTime.date + "</a>";
-                    }else{
+                    if(obj.aData.scheduledStatus == 0) {
                         return "<span href='javascript:void(0);' class='error'>-</span>" ;
+                    }else{
+                        return "<a href='javascript:void(0);'>" + obj.aData.scheduledTime.date + "</a>";
                     }
 
                 },

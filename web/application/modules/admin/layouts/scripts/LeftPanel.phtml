@@ -495,7 +495,7 @@ $action = $this->action;
                 </div>
             </div>
     </li>
-        <li <?php if ($controller == 'newslettercampaigns') { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" <?php } ?>
+        <li <?php if ($controller == 'newsletter-campaigns' || $controller == 'newsletter-campaign-settings') { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" <?php } ?>
         id="menu-links">
             <div class="imbull-menu-image">
                 <a href="<?php echo HTTP_PATH ?>admin/email/code-alert"><br></a>
@@ -507,14 +507,14 @@ $action = $this->action;
                class="imbull-has-current-submenu imbull-has-submenu  imbull-menu-open menu-top menu-icon-lightbox"
                tabindex="1"><?php echo $this->translate('Newsletter Campaigns'); ?>
                 <span
-                    <?php if ($controller == 'newslettercampaigns') { ?>class="arrow-down" <?php } else { ?> class="arrow-up" <?php } ?>></span>
+                    <?php if ($controller == 'newsletter-campaigns') { ?>class="arrow-down" <?php } else { ?> class="arrow-up" <?php } ?>></span>
             </a>
 
             <div class="imbull-submenu">
                 <div class="imbull-submenu-wrap">
                     <div class="imbull-submenu-head"><?php echo $this->translate('Newsletter Campaigns'); ?> </div>
                     <ul>
-                        <?php if ($controller == 'newslettercampaigns' && $action == 'create') {
+                        <?php if ($controller == 'newsletter-campaigns' && $action == 'create') {
                             $userColorClass = "new-blue";
                         } else {
                             $userColorClass = "new-gray";
@@ -524,7 +524,7 @@ $action = $this->action;
                                class="<?php echo $userColorClass; ?>"
                                tabindex="1"><?php echo $this->translate('Create Campaign'); ?> </a>
                         </li>
-                        <?php if ($controller == 'newslettercampaigns' && $action == 'settings') {
+                        <?php if ($controller == 'newsletter-campaign-settings' && $action == 'index') {
                             $userColorClass = "new-blue";
                         } else {
                             $userColorClass = "new-gray";
