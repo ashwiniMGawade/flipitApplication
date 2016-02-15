@@ -136,6 +136,7 @@ class NewsLetterCache extends \Core\Domain\Entity\NewsLetterCache
         $categoryOrderedOffers = self::getOfferIds(
             \KC\Repository\CategoriesOffers::getCategoryOffersByCategoryIdForFrontEnd($categoryId)
         );
+        $categoryAllOffers = array();
         if(count($categoryOrderedOffers) < 3) {
             $categoryAllOffers = self::getOfferIds(
                 \KC\Repository\Category::getCategoryVoucherCodes($categoryId, 3)
