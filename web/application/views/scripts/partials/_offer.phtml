@@ -142,7 +142,7 @@ foreach ($this->offers as $offer) {
     ?>              </div>
                 </div>
                 <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
-                    <strong class="code-value"><?php echo $couponCode;?></strong>
+                    <strong class="code-value <?php echo strlen($couponCode)>12 ? 'font15px' : '';?>"><?php echo $couponCode;?></strong>
                 </div>
                 <div class="btn-blue-wrapper hide" id="websiteButton<?php echo $offer->id; ?>">
                     <a class="btn-code" target="_blank" href="<?php echo $urlToShow;?>" rel="nofollow">
