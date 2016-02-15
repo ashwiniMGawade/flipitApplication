@@ -28,7 +28,7 @@ class NewsLetterCache extends \Core\Domain\Entity\NewsLetterCache
 
     protected static function getOfferIds($offers)
     {
-        $offersIds = '';
+        $offersIds = array();
         foreach ($offers as $offer) {
             $offersIds[] = $offer['id'];
         }
@@ -138,7 +138,7 @@ class NewsLetterCache extends \Core\Domain\Entity\NewsLetterCache
         );
         if(count($categoryOrderedOffers) < 3) {
             $categoryAllOffers = self::getOfferIds(
-                \KC\Repository\Category::getCategoryVoucherCodesForNewsletterCache($categoryId, 3)
+                \KC\Repository\Category::getCategoryVoucherCodes($categoryId, 3)
             );
         }
         return implode(',', array_slice(array_unique(array_merge($categoryOrderedOffers, $categoryAllOffers)), 0, 3));
