@@ -30,7 +30,7 @@ class NewsLetterCache extends BaseNewsLetterCache
 
     protected static function getOfferIds($offers)
     {
-        $offersIds = '';
+        $offersIds = array();
         foreach ($offers as $offer) {
             $offersIds[] = $offer['id'];
         }
