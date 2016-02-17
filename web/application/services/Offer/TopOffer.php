@@ -41,6 +41,11 @@ class Application_Service_Offer_TopOffer extends Application_Service_Offer_Offer
 
     private function setVoucherCodesToTopCodes($voucherCodes, $topCouponCodes)
     {
+        $position = 1;
+        foreach($topCouponCodes as $index => $code) {
+            $topCouponCodes[$index]['position'] = $position;
+            $position++;
+        }
         foreach ($voucherCodes as $topVoucherCodeValue) {
             $shopId = isset($topVoucherCodeValue['shopOffers']['id'])
                 ? $topVoucherCodeValue['shopOffers']['id']
@@ -50,10 +55,11 @@ class Application_Service_Offer_TopOffer extends Application_Service_Offer_Offer
                 : '';
             $topCouponCodes[] = array(
                 'id'=> $shopId,
-                'position' => count($topCouponCodes)+1,
+                'position' => $position,
                 'permaLink' => $shopPermalink,
                 'popularcode' => $topVoucherCodeValue
             );
+            $position++;
         }
         return $topCouponCodes;
     }
