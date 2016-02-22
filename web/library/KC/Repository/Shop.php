@@ -548,12 +548,15 @@ class Shop extends \Core\Domain\Entity\Shop
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $relatedShopsIds = $queryBuilder
-            ->select('s.id, rf.relatedshopId')
+            ->select('s.id, rfs.id as relatedshopId')
             ->from("\Core\Domain\Entity\Shop", "s")
             ->leftJoin("s.relatedshops", "rf")
+            ->leftJoin("rf.relatedShop", "rfs")
             ->where("s.id =".$id)
             ->andWhere('s.status = 1')
             ->andWhere('s.deleted = 0')
+            ->andWhere('rfs.status = 1')
+            ->andWhere('rfs.deleted = 0')
             ->orderBy("rf.position", "ASC")
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -1273,7 +1276,7 @@ class Shop extends \Core\Domain\Entity\Shop
                     ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasontitle6']) : '';
                 $shopReasons['reasonsubtitle6'] = !empty($shopDetail['reasonsubtitle6'])
                     ? \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['reasonsubtitle6']) : '';
-                \KC\Repository\ShopReasons::saveReasons($shopReasons, $shopInfo->id);
+                \KC\Repository\ShopReasons::saveReasons($shopReasons, $shopInfo);
             }
 
             $key = 'shop_similar_shops';
@@ -1314,19 +1317,24 @@ class Shop extends \Core\Domain\Entity\Shop
                         ->where("rsrs.shop=" . $shopDetail['id'])
                         ->getQuery()->execute();
                 }
+
                 foreach ($similarstoreordArray as $shop) {
-                    if ($shop!='') {
+                    if (!empty($shop)) {
+
                         $relateshopObj = new \Core\Domain\Entity\RefShopRelatedshop();
                         $relateshopObj->shop = \Zend_Registry::get('emLocale')
                             ->getRepository('\Core\Domain\Entity\Shop')
                             ->find($shopInfo->id);
-                        $relateshopObj->relatedshopId = $shop;
+                        $relateshopObj->relatedShop = \Zend_Registry::get('emLocale')
+                            ->getRepository('\Core\Domain\Entity\Shop')
+                            ->find($shop);
                         $relateshopObj->position = $i;
                         $relateshopObj->created_at = new \DateTime('now');
                         $relateshopObj->updated_at = new \DateTime('now');
                         \Zend_Registry::get('emLocale')->persist($relateshopObj);
                         \Zend_Registry::get('emLocale')->flush();
                         ++$i;
+
                     }
                 }
             }
@@ -1776,12 +1784,23 @@ class Shop extends \Core\Domain\Entity\Shop
         ->where('s.id='.$params['id']);
         $shopDetail = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
+        $queryBuilderRelatedShop = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilderRelatedShop
+            ->select('rs.shopId')
+            ->from('\Core\Domain\Entity\RefShopRelatedshop', 'rs')
+            ->where('rs.relatedshopId='.$params['id']);
+        $shopRefRelatedShops = (array) $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
         $shop = \Zend_Registry::get('emLocale')->find('\Core\Domain\Entity\Shop', $params['id']);
         $shop->status = $status;
         $shop->offlineSicne = $date;
         $entityManagerLocale->persist($shop);
         $entityManagerLocale->flush();
+        foreach ($shopRefRelatedShops as $refRelatedShop) {
+            $key = 'shop_'.$refRelatedShop['shopId'].'_similar_shops';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        }
         $key = 'shop_similar_shops';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shopDetails_'.$params['id'].'_list';

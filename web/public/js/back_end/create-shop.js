@@ -264,6 +264,14 @@ function init()
                 height : "300"
     });
 
+    CKEDITOR.replace( 'featuredtext',
+        {
+            customConfig : 'config.js' ,
+            toolbar :  'BasicToolbar'  ,
+            height : "300"
+        }
+    );
+
     CKEDITOR.replace('shopCustomText',
         {
             customConfig : 'config.js',  
@@ -371,6 +379,11 @@ function init()
     word_count("#shopDescription", __("Shop description length "),"#shopDescription_count");
     $('#shopDescription').keyup(function(){
             word_count("#shopDescription", __("Shop description length "),"#shopDescription_count");
+    });
+
+    word_count("#featuredtext", __("Shop description length "),"#featuredtext_count");
+    $('#featuredtext').keyup(function(){
+        word_count("#featuredtext", __("Shop description length "),"#featuredtext_count");
     });
     
     validateFormAddNewShop();

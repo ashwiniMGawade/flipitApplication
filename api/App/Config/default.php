@@ -3,7 +3,7 @@
 $config['app']['debug'] = false;
 
 // Max requests per hour
-$config['app']['rate.limit'] = 1000;
+$config['app']['rate.limit'] = 2000;
 
 $config['app']['log.writer'] = new \Flynsarmy\SlimMonolog\Log\MonologWriter(
     array(

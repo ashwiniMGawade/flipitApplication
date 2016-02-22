@@ -1,6 +1,7 @@
 <?php
 namespace Core\Domain\Entity;
-use Doctrine\ORM\Mapping AS ORM;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
@@ -19,6 +20,11 @@ class PageWidgets
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $widget_type;
+
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=true)
+     */
+    protected $referenceId;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=true)

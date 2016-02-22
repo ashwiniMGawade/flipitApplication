@@ -1,0 +1,49 @@
+<div>
+    <table width="100%" align="center" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+            <td height="5"></td>
+        </tr>
+        <?php if(!empty($bannerImage)) { ?>
+            <tr>
+                <td align="center">
+                    <?php if(!empty($bannerUrl)) { ?><a href="<?php echo $bannerUrl; ?>" target="_blank"> <?php } ?>
+                        <img src="<?php echo $bannerImage; ?>" width="615" alt="Footer Banner" title="Footer Banner" style="display:block">
+                    <?php if(!empty($bannerUrl)) { ?></a> <?php } ?>
+                </td>
+            </tr>
+        <?php } ?>
+        </tbody>
+    </table>
+    <table width="100%" align="center" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+            <td height="46"></td>
+        </tr>
+        <?php if(!empty($footerText)) { ?>
+        <tr>
+            <td align="center" style="padding:0 0 25px; font:12px/20px Arial,Helvetica,sans-serif; color:#878a8d">
+                <?php echo $footerText; ?>
+            </td>
+        </tr>
+        <?php } ?>
+        <tr>
+            <td align="center" style="text-decoration:none; color:#878a8d; padding:0 0 37px; font:14px/17px Arial,Helvetica,sans-serif; color:#33383e">
+                <a href="<?php echo HTTP_PATH_LOCALE.$unSubscribeLink; ?>*|loginLinkWithUnsubscribe|*" target="_blank" style="text-decoration:none; color:#33383e"><?php echo $unSubscribeText; ?></a>
+                |
+                <a href="<?php echo HTTP_PATH_LOCALE.$directLoginLink; ?>*|loginLink|*" target="_blank" style="text-decoration:none; color:#33383e"><?php echo $editProfileText; ?></a>
+                |
+                <a href="<?php echo HTTP_PATH_LOCALE.$contactLink; ?>" target="_blank" style="text-decoration:none; color:#33383e"><?php echo $contactText; ?></a>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <a href="<?php echo rtrim(HTTP_PATH_LOCALE, '/'); ?>" target="_blank">
+                    <img src="<?php echo $footerLogo; ?>" border="0" alt="<?php echo $websiteName; ?>" title="<?php echo $websiteName; ?>" style="vertical-align:top">
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</div>

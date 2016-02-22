@@ -47,7 +47,7 @@ $(document).ready(function() {
                     for(var i in json) {
                         li+= "<li class='ui-state-default' relpos='" + json[i].position 
                         + "' reloffer='" + json[i]['offers'].id + "' id='" + json[i].id + "' ><span>" 
-                        + json[i]['offers'].title +"</span></li>";
+                        + json[i]['offers'].title +"</span>"+json[i]['offers'].expiredTxt+"</li>";
                     }
                     $('ul#category').append(li);
                     $('ul#category li').click(changeSelectedClass);

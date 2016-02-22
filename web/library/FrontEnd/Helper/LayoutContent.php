@@ -1,4 +1,6 @@
 <?php
+use \Core\Domain\Factory\SystemFactory;
+
 class FrontEnd_Helper_LayoutContent
 {
     public static function loadFlipitHomePage($flipitUrl)
@@ -291,9 +293,19 @@ class FrontEnd_Helper_LayoutContent
         return false;
     }
 
-    public static function loadVWOScript()
+    public static function loadScriptTag($type = 'VWO')
     {
-        $displayVWOScript = false;
+        $displayScriptTag = false;
+        switch($type) {
+            case 'VWO' :
+                $fieldName = 'status';
+                break;
+            case 'hotjar' :
+                $fieldName = 'hotjarStatus';
+                break;
+            default:
+                return false;
+        }
         $rawUrl = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $url = explode('?', $rawUrl);
         $urlString = $url[0];
@@ -308,13 +320,13 @@ class FrontEnd_Helper_LayoutContent
         }
         $conditions = array(
             'url' => $urlString,
-            'status' => 1
+            $fieldName => 1
         );
         $result = \Core\Domain\Factory\GuestFactory::getURLSetting()->execute($conditions);
         if ($result instanceof \Core\Domain\Entity\URLSetting) {
-            $displayVWOScript = true;
+            $displayScriptTag = true;
         }
-        return $displayVWOScript;
+        return $displayScriptTag;
     }
 
     public static function loadPicreelScript()
@@ -348,5 +360,14 @@ class FrontEnd_Helper_LayoutContent
             $displayPicreelScript = true;
         }
         return $displayPicreelScript;
+    }
+
+    public static function loadSplashPage()
+    {
+        $splashPage = SystemFactory::getSplashPage()->execute(array('id' => 1));
+        if ($splashPage instanceof Core\Service\Errors) {
+            $splashPage = new \Core\Domain\Entity\User\SplashPage();
+        }
+        return $splashPage;
     }
 }

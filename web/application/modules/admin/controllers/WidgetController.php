@@ -158,10 +158,37 @@ class Admin_WidgetController extends Application_Admin_BaseController
             }
         }
     }
+    private function _getWidgetTypeList($widgetType)
+    {
+        $widgetTypeList = [];
+        switch ($widgetType) {
+            case "categories":
+                $categories =  \KC\Repository\Category::getCategoryList();
+                if (!empty($categories['aaData'])) {
+                    foreach ($categories['aaData'] as $category) {
+                        if ($category['status']) {
+                            $widgetTypeList[$category['id']] = $category['name'];
+                        }
+                    }
+                }
+                break;
+            case "special-page":
+                $specialPageList =  \KC\Repository\Page::getSpecialListPages();
+                if (!empty($specialPageList)) {
+                    foreach ($specialPageList as $specialPage) {
+                        $widgetTypeList[$specialPage['id']] = $specialPage['pageTitle'];
+                    }
+                }
+                break;
+            default:
+        }
+        return $widgetTypeList;
+    }
 
     public function sortWidgetAction()
     {
         $widgetType = $this->getRequest()->getParam('widgetType');
+        $widgetCategoryType = $this->getRequest()->getParam('widgetCategoryType');
         $backEndHelper = new BackEnd_Helper_viewHelper();
         $widgetCategories = $backEndHelper->widgetCategories();
         if (isset($widgetType)) {
@@ -169,15 +196,23 @@ class Admin_WidgetController extends Application_Admin_BaseController
         } else {
             $widgetType = key($widgetCategories);
         }
-        $categoryWidgets = \KC\Repository\PageWidgets::getAllWidgetsByType($widgetType);
+
+        if (isset($widgetCategoryType) and !empty($widgetCategoryType)) {
+            $widgetCategoryType = $this->getRequest()->getParam('widgetCategoryType');
+        }
+        $widgetTypeList = $this->_getWidgetTypeList($widgetType);
+        
+        $categoryWidgets = \KC\Repository\PageWidgets::getBackendWidgetList($widgetType, $widgetCategoryType);
         $widgetsIds = array();
         if (!empty($categoryWidgets)) {
             $widgetsIds = self::getWidgetIds($categoryWidgets);
         }
         $widgetsList = \KC\Repository\Widget::getUserDefinedWidgetList($widgetsIds);
         $this->view->widgetCategories = $widgetCategories;
+        $this->view->widgetTypeList = $widgetTypeList;
         $this->view->widgetsList = $widgetsList;
         $this->view->widgetType = $widgetType;
+        $this->view->widgetCategoryType = $widgetCategoryType;
         $this->view->categoryWidgets = $categoryWidgets;
     }
 
@@ -197,7 +232,8 @@ class Admin_WidgetController extends Application_Admin_BaseController
         $this->_helper->layout->disableLayout();
         $widgetId = $this->getRequest()->getParam('id');
         $widgetType = $this->getRequest()->getParam('widgetType');
-        $savedStatus = \KC\Repository\PageWidgets::addWidgetInList($widgetId, $widgetType);
+        $widgetCategoryTypeId = $this->getRequest()->getParam('widgetCategoryType');
+        $savedStatus = \KC\Repository\PageWidgets::addWidgetInList($widgetId, $widgetType, $widgetCategoryTypeId);
         echo Zend_Json::encode($savedStatus);
         exit();
     }
@@ -208,8 +244,9 @@ class Admin_WidgetController extends Application_Admin_BaseController
         $pageWidgetId = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         $widgetType = $this->getRequest()->getParam('widgetType');
-        $isUpdated = \KC\Repository\PageWidgets::deleteWidget($pageWidgetId, $position, $widgetType);
-        $widgets = \KC\Repository\PageWidgets::getWidgetsByType($widgetType);
+        $widgetCategoryTypeId = $this->getRequest()->getParam('widgetCategoryType');
+        $isUpdated = \KC\Repository\PageWidgets::deleteWidget($pageWidgetId, $position, $widgetType, $widgetCategoryTypeId);
+        $widgets = \KC\Repository\PageWidgets::getBackendWidgetList($widgetType, $widgetCategoryTypeId);
         echo Zend_Json::encode($widgets);
         exit();
     }
@@ -218,8 +255,9 @@ class Admin_WidgetController extends Application_Admin_BaseController
     {
         $this->_helper->layout->disableLayout();
         $widgetType = $this->getRequest()->getParam('widgetType');
-        \KC\Repository\PageWidgets::savePosition($this->getRequest()->getParam('offersIds'), $widgetType);
-        $widgets = \KC\Repository\PageWidgets::getWidgetsByType($widgetType);
+        $widgetCategoryType = $this->getRequest()->getParam('widgetCategoryType');
+        \KC\Repository\PageWidgets::savePosition($this->getRequest()->getParam('offersIds'), $widgetType, $widgetCategoryType);
+        $widgets = \KC\Repository\PageWidgets::getBackendWidgetList($widgetType, $widgetCategoryType);
         echo Zend_Json::encode($widgets);
         exit();
     }

@@ -12,9 +12,7 @@ class NewsLetterCache extends \Core\Domain\Entity\NewsLetterCache
         self::saveValueInDatebase('top_category_id', $topCategory[0]['category']['id']);
         $topOfferIds = implode(',', self::getOfferIds(\BackEnd_Helper_viewHelper::getTopOffers(10)));
         self::saveValueInDatebase('top_offers_ids', $topOfferIds);
-        $topCategoryOffersIds = implode(',', self::getOfferIds(
-            \KC\Repository\Category::getCategoryVoucherCodesForNewsletterCache($topCategory[0]['category']['id'], 3)
-        ));
+        $topCategoryOffersIds = self::getCategoryOffers($topCategory[0]['category']['id']);
         self::saveValueInDatebase('top_category_offers_ids', $topCategoryOffersIds);
         return true;
     }
@@ -30,7 +28,7 @@ class NewsLetterCache extends \Core\Domain\Entity\NewsLetterCache
 
     protected static function getOfferIds($offers)
     {
-        $offersIds = '';
+        $offersIds = array();
         foreach ($offers as $offer) {
             $offersIds[] = $offer['id'];
         }
@@ -82,7 +80,7 @@ class NewsLetterCache extends \Core\Domain\Entity\NewsLetterCache
         if(!empty($topOffers)) {
             $topOffersIds = explode(',', $topOffers);
             foreach ($topOffersIds as $topOffersId) {
-                if (!\KC\Repository\Offer::offerExistOrNot($topOffersId)) {
+                if (is_null(\KC\Repository\Offer::offerExistOrNot($topOffersId))) {
                     $offersExist = false;
                 }
             }
@@ -102,7 +100,7 @@ class NewsLetterCache extends \Core\Domain\Entity\NewsLetterCache
         $categoryOffersIds =  explode(',', $topCategoryOffersIds);
         $categoryOffersExist = true;
         foreach ($categoryOffersIds as $categoryOffersId) {
-            if (!\KC\Repository\Offer::offerExistOrNot($categoryOffersId)) {
+            if (is_null(\KC\Repository\Offer::offerExistOrNot($categoryOffersId))) {
                 $categoryOffersExist = false;
             }
         }
@@ -132,5 +130,18 @@ class NewsLetterCache extends \Core\Domain\Entity\NewsLetterCache
             $emailFooter = $settingFooter;
         }
         return $emailFooter;
+    }
+
+    public static function getCategoryOffers($categoryId) {
+        $categoryOrderedOffers = self::getOfferIds(
+            \KC\Repository\CategoriesOffers::getCategoryOffersByCategoryIdForFrontEnd($categoryId)
+        );
+        $categoryAllOffers = array();
+        if(count($categoryOrderedOffers) < 3) {
+            $categoryAllOffers = self::getOfferIds(
+                \KC\Repository\Category::getCategoryVoucherCodes($categoryId, 3)
+            );
+        }
+        return implode(',', array_slice(array_unique(array_merge($categoryOrderedOffers, $categoryAllOffers)), 0, 3));
     }
 }

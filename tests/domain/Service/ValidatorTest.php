@@ -1,6 +1,7 @@
 <?php
 namespace Service;
 
+use Core\Domain\Entity\LandingPage;
 use \Core\Domain\Entity\User\ApiKey;
 use \Core\Domain\Entity\Visitor;
 use \Core\Domain\Service\Validator;
@@ -176,6 +177,29 @@ class ValidatorTest extends \Codeception\TestCase\Test
             )
         );
         $response = (new Validator())->validate($visitor, $rules);
+        $this->assertEquals($expected, $response);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testValidatorReturnsViolationForPropertyEqualsUrl()
+    {
+        $landingPage = new LandingPage();
+        $landingPage->setRefUrl('invalid');
+
+        $validator = new Validator();
+        $rules = array(
+            'refUrl' => array(
+                $validator->url(),
+            )
+        );
+        $expected = array(
+            "refUrl" => array(
+                'This value is not a valid URL.'
+            )
+        );
+        $response = (new Validator())->validate($landingPage, $rules);
         $this->assertEquals($expected, $response);
     }
 }

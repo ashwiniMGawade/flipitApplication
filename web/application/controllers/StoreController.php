@@ -156,7 +156,7 @@ class StoreController extends Zend_Controller_Action
             (string)$topThreeExpiredOfferKey,
             array(
                 'function' => 'KC\Repository\Offer::getAllOfferOnShop',
-                'parameters' => array($shopId, 10, false, true, false, true)
+                'parameters' => array($shopId, 13, false, true, false, true, true)
             ),
             ''
         );
@@ -164,7 +164,7 @@ class StoreController extends Zend_Controller_Action
         $expiredOffersForBottom = array();
         $offersInformation = $offers;
         if (!empty($topThreeExpiredOffers)) {
-            $expiredOffersForBottom = $topThreeExpiredOffers;
+            $expiredOffersForBottom = array_slice($topThreeExpiredOffers, 3, 10);
             $topThreeExpiredOffers = array_slice($topThreeExpiredOffers, 0, 3);
             $offersInformation = $shopInformation[0]['affliateProgram'] != 0
                 ? $this->_helper->Store->mergeExpiredOffersWithLiveOffers($offers, $topThreeExpiredOffers)

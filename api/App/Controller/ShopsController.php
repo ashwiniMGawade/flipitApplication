@@ -7,6 +7,8 @@ use \Core\Domain\Factory\AdminFactory;
 class ShopsController extends ApiBaseController
 {
     protected $shopClassification = array(
+                                            -1 => 'C',
+                                            0 => 'B',
                                             1 => 'A',
                                             2 => 'A+',
                                             3 => 'AA',

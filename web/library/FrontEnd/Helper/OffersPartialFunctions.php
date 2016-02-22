@@ -1,6 +1,8 @@
 <?php
 use \Core\Domain\Factory\SystemFactory;
 use \Core\Domain\Factory\GuestFactory;
+use \Core\Domain\Entity\Settings;
+
 
 class FrontEnd_Helper_OffersPartialFunctions
 {
@@ -54,7 +56,7 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getDiscountImage($currentOffer)
     {
         $offerDiscountImage ='';
-        if (!empty ( $currentOffer->offerTiles)) {
+        if (!empty($currentOffer->offerTiles)) {
             $offerDiscountImage =
             PUBLIC_PATH_CDN . ltrim($currentOffer->offerTiles[0]['path'], "/").$currentOffer->offerTiles[0]['name'];
         }
@@ -205,6 +207,7 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         $imageTagForOffer = '';
         $grayScaleClass = isset($expired) && $expired != 'grayscale' ? : '';
+        $offerDiscountImage = (isset($expired) && $expired) ?$this->getExpiredCouponLogo(): $offerDiscountImage;
         if ($shopCodeHolder) {
             $imageTag ='<img width="130" height="68" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'" 
             title="'.$altAttributeText.'" class="'.$grayScaleClass.'"/>';
@@ -216,15 +219,27 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $imageTagForOffer;
     }
 
+    public function getExpiredCouponLogo() {
+        $logo = '';
+        $expiredCouponLogo = SystemFactory::getSetting()->execute(array('name'=>'expiredCouponLogo'));
+        if (!empty($expiredCouponLogo)) {
+            $logo = $expiredCouponLogo->value;
+        }
+        if ($logo instanceof Settings) {
+            return PUBLIC_PATH_CDN.$logo;
+        }
+        return HTTP_PATH."public/images/front_end/expiredcouponlogo.png";
+    }
     public function getOfferTypeText($currentOffer)
     {
-        
         if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
             $offerTypeText = FrontEnd_Helper_viewHelper::__translate('printable');
         } else if ($currentOffer->discountType=='SL') {
             $offerTypeText = FrontEnd_Helper_viewHelper::__translate('sale');
         } else if (isset($currentOffer->extendedOffer) ? $currentOffer->extendedOffer =='1' : '') {
             $offerTypeText = FrontEnd_Helper_viewHelper::__translate('deal');
+        } else if (isset($currentOffer->top50rank)) {
+            $offerTypeText = '<div class="imbull-menu-image top50"></div><span>'. $currentOffer->top50rank . ' '.FrontEnd_Helper_viewHelper::__translate('OF').' 50</span>';
         } else {
             $offerTypeText = 'code';
         }
@@ -309,7 +324,6 @@ class FrontEnd_Helper_OffersPartialFunctions
                 'offerId' => $currentOffer->id,
                 'isExpired' => isset($currentOffer->expiredOffer) ? 'True' : 'False'
             );
-
             if ($currentOffer->discountType == "CD") {
                 $gtmData = json_encode($gtmData);
                 $onClick .= "gtmDataBuilder($gtmData),";
@@ -338,9 +352,10 @@ class FrontEnd_Helper_OffersPartialFunctions
                 $gtmData['variant'] = 'Deal';
                 $gtmData = json_encode($gtmData);
                 $onClick .= "gtmDataBuilder($gtmData);";
+                $offerAnchorText = isset($currentOffer->expiredOffer) && $class == "offer-teaser-button kccode" ? '<span class="offer-teaser-button">'.$offerAnchorText.' </span>' : $offerAnchorText;
                 $class = $class == 'link clickout-title' ? 'link clickout-title' : 'btn-code';
                 $offerLink =
-                    '<a id="'.$currentOffer->id.'" class="'.$class.' '.$imageClass.'" 
+                    '<a id="'.$currentOffer->id.'" class="'.$class.' '.$imageClass.'"
                     href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick=\''.$onClick.'\'>
                  '.$offerAnchorText.'</a>';
             } else {
@@ -355,6 +370,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     '.$offerAnchorText .'</a>';
             }
         }
+
         return $headOpen. $offerLink . $headClose;
     }
 
@@ -367,7 +383,6 @@ class FrontEnd_Helper_OffersPartialFunctions
         $offerImage = '',
         $clickedElement
     ) {
-        
         $popupLink = self::getPopupLink($currentOffer, $urlToShow);
         echo $mainOfferLink = self::getmainOfferLink(
             $currentOffer,
@@ -391,7 +406,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         $expired = ''
     ) {
         $redirectUrl = '';
-        switch ($type){
+        switch ($type) {
             case 'mainOfferClickoutButton':
                 $redirectUrl = self::getRedirectUrlforOffer(
                     $currentOffer,
@@ -591,8 +606,8 @@ class FrontEnd_Helper_OffersPartialFunctions
             }
         }
 
-        for ($i = 0; $i < count($saleOffers) ; $i++) {
-            for ($j = 0; $j <= $i ; $j++) {
+        for ($i = 0; $i < count($saleOffers); $i++) {
+            for ($j = 0; $j <= $i; $j++) {
                 if ($saleOffers[$j]['startDate']->date < $saleOffers[$i]['startDate']->date) {
                     $temp = $saleOffers[$i];
                     $saleOffers[$i] = $saleOffers[$j];
@@ -686,15 +701,16 @@ class FrontEnd_Helper_OffersPartialFunctions
         }
         return $totalViewCount;
     }
-    public static function getSplashPageTradingCoupons()
+    public static function getSplashPageGlobalCoupons()
     {
         $couponHtml = '';
-        $splashOffers = SystemFactory::getSplashOffers()->execute(array(), array('position'=>'ASC'));
-        $offerCount = 1;
+        $splashOffers = (array) SystemFactory::getSplashOffers()->execute(array(), array('position'=>'ASC'));
+        $splashImages = (array) SystemFactory::getSplashImages()->execute(array(), array('position'=>'ASC'));
+        $offerCount = 0;
         $serverNameScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
         foreach ($splashOffers as $splashOffer) {
             $offer = SystemFactory::getOffer($splashOffer->getLocale())->execute(array( 'id' => $splashOffer->getOfferId()));
-            if ($offer instanceof  \Core\Domain\Entity\Offer && $offerCount < 10) {
+            if ($offer instanceof  \Core\Domain\Entity\Offer) {
                 if ($splashOffer->getLocale() == 'en') {
                     $locale = $splashOffer->getLocale() == 'en' ? 'nl' : $splashOffer->getLocale();
                     $logoPath = $splashOffer->getLocale() == 'en' ? PUBLIC_PATH_CDN : PUBLIC_PATH_CDN . $locale . '/';
@@ -704,36 +720,32 @@ class FrontEnd_Helper_OffersPartialFunctions
                     $logoPath = PUBLIC_PATH_CDN . $locale . '/';
                     $clickUrl = 'http://'.$serverNameScheme.'.flipit.com/'.$locale.'/'.$offer->getShopOffers()->getPermalink();
                 }
-                if (mb_strlen($offer->getTitle(), 'UTF-8') > 42) {
-                    $offerTitle = mb_substr($offer->getTitle(), 0, 42, 'UTF-8')."...";
-                } else {
-                    $offerTitle = $offer->getTitle();
-                }
-                $couponHtml .= '<div class="slide">
-                        <img src="'.PUBLIC_PATH.'images/front_end/trading_coupon/slide_img'.$offerCount.'.jpg" alt="'.$offer->getTitle().'">
+                $offerTitle = (mb_strlen($offer->getTitle(), 'UTF-8') > 42) ? mb_substr($offer->getTitle(), 0, 42, 'UTF-8')."..." : $offer->getTitle();
+                $offerCount = (count($splashImages) < $offerCount) ? 1 : $offerCount;
+                $splashImage = true === array_key_exists($offerCount, $splashImages) ? $splashImages[$offerCount]->getImage() : 'slide_img1.jpg';
+                $couponHtml .= '<div class="slide"><a href="'.$clickUrl.'">
+                        <img src="'.PUBLIC_PATH.'images/upload/splash/'.$splashImage.'" alt="'.$offer->getTitle().'">
                         <div class="caption">
                             <div class="img-holder">
-                                <a href="'.$clickUrl.'"><img src="'.$logoPath.$offer->getShopOffers()->getLogo()->path.'thum_big_'.$offer->getShopOffers()->getLogo()->name.'" alt="'.$offer->getShopOffers()->getName().'"></a>
+                                <img src="'.$logoPath.$offer->getShopOffers()->getLogo()->path.'thum_big_'.$offer->getShopOffers()->getLogo()->name.'" alt="'.$offer->getShopOffers()->getName().'">
                             </div>
                             <div class="text-holder">
-                                <p><strong class="persent"><a href="'.$clickUrl.'">'.$offerTitle.'</a></strong></p>
+                                <p><strong class="persent">'.$offerTitle.'</strong></p>
                                 <span class="flag">
-                                    <a href="'.$clickUrl.'">
-                                        <span class="flag"><span style="display :inline-block" class="country-flags '.$locale.'"></span></span>
-                                        <span class="country">'.$offer->getShopOffers()->getName().'</span>
-                                    </a>
+                                    <span class="flag"><span style="display :inline-block" class="country-flags '.$locale.'"></span></span>
+                                    <span class="country">'.$offer->getShopOffers()->getName().'</span>
                                 </span>
                             </div>
                         </div>
-                    </div>';
+                    </a></div>';
                 $offerCount++;
             }
         }
-
         return $couponHtml;
     }
 
-    public static function getTotalOfferCount($locale = '') {
+    public static function getTotalOfferCount($locale = '')
+    {
         $totalOfferCount = 0;
         $dashboard = GuestFactory::getDashboard($locale)->execute(array());
         if ($dashboard instanceof \Core\Domain\Entity\Dashboard) {

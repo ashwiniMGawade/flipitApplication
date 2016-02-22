@@ -16,6 +16,7 @@ class CategoryController extends Zend_Controller_Action
         }
         $this->viewHelperObject = new \FrontEnd_Helper_viewHelper();
     }
+
     public function showAction()
     {
         $categoryPermalink = $this->getRequest()->getParam('permalink');
@@ -35,14 +36,32 @@ class CategoryController extends Zend_Controller_Action
                 )
             );
         if (count($categoryDetails) > 0) {
+
             $categoryVoucherCodes = \FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                'category_'.$cacheKey.'_voucherCodes',
+                'category_'.$cacheKey.'_voucherCodes_orders',
                 array(
-                    'function' => '\KC\Repository\Category::getCategoryVoucherCodes',
+                    'function' => '\KC\Repository\CategoriesOffers::getCategoryOffersByCategoryIdForFrontEnd',
                     'parameters' => array($categoryDetails[0]['id'])
                 )
             );
+            if (count($categoryVoucherCodes) < 10) {
+                $allCategoryOffers = \FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+
+                    'category_'.$cacheKey.'_voucherCodes',
+                    array(
+                        'function' => '\KC\Repository\Category::getCategoryVoucherCodes',
+                        'parameters' => array($categoryDetails[0]['id'])
+                    )
+                );
+                $categoryVoucherCodes = array_merge($categoryVoucherCodes, $allCategoryOffers);
+            }
+            $categoryOffers = array();
+            foreach($categoryVoucherCodes as $offer) {
+                $categoryOffers[$offer['id']] = $offer;
+            }
+            $categoryVoucherCodes = $categoryOffers;
+
             $offersWithPagination = \FrontEnd_Helper_viewHelper::renderPagination(
                 $categoryVoucherCodes,
                 $this->getAllParams(),

@@ -13,7 +13,7 @@ if (!empty($this->expiredOffers)) {
         ?>
         <div class="line">
             <?php
-            if($offer->shopOffers['affliateProgram'] == 1) { ?>
+            if($offer->shopOffers['affliateProgram'] == 1 && $offer->discountType == "CD") { ?>
             <a href="<?php echo $shopUrl;?>"
                 rel="nofollow" target="<?php echo $target; ?>">
             <?php
@@ -24,20 +24,21 @@ if (!empty($this->expiredOffers)) {
             }
             ?>
                 <div class="holder">
-                    <strong class="mark status"><?php echo  $this->translate('Expired'); ?></strong>
                     <div class="box">
                         <span class="text">
                         <?php 
                         echo $offer->title=='' 
                         ? $this->translate("Description not available right now..") 
-                        : $expiredOffersPartialClass->getOfferTitle($offer->title); ?>
+                        : (($offer->discountType == "CD") ? $expiredOffersPartialClass->getOfferTitle($offer->title) : $offer->title); ?>
                         </span>
                         <?php echo $expiredOffersPartialClass->getOfferCouponCode($offer->couponCode)?>
                     </div>
                 </div>
+                <?php if ($offer->discountType == "CD") { ?>
                 <span class="date"><?php echo $expiredOffersPartialClass->getExpiredOnDate($offer->endDate->format('Y-m-d'));?></span>
+                <?php } ?>
             <?php
-            if($offer->shopOffers['affliateProgram'] == 1) { ?>
+            if($offer->shopOffers['affliateProgram'] == 1 && $offer->discountType == "CD") { ?>
             </a>
             <?php
             } else {

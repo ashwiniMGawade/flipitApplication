@@ -51,6 +51,9 @@ class UpdateLandingPageUsecase
             $params['permalink'] = strtolower($urlString);
             $landingPage->setPermalink($params['permalink']);
         }
+        if (isset($params['refUrl'])) {
+            $landingPage->setRefUrl($params['refUrl']);
+        }
         if (isset($params['subTitle'])) {
             $landingPage->setSubTitle($params['subTitle']);
         }
@@ -73,6 +76,9 @@ class UpdateLandingPageUsecase
         }
         if (isset($params['content'])) {
             $landingPage->setContent($params['content']);
+        }
+        if (isset($params['brandingCss'])) {
+            $landingPage->setBrandingCss($params['brandingCss']);
         }
         $landingPage->setUpdatedAt(new \DateTime('now'));
 

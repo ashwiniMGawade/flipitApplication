@@ -7,7 +7,7 @@ class KeyGenerator
     {
         $key = '';
         if ($length > 7 && $length < 65) {
-            $allowedCharacters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_';
+            $allowedCharacters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $charactersLength = strlen($allowedCharacters);
             for ($i = 0; $i < $length; $i++) {
                 $key .= $allowedCharacters[rand(0, $charactersLength - 1)];

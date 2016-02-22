@@ -415,7 +415,7 @@ function getOfferDetail(){
 
 
 function setFormData(data){
-    var shopClassifications = { 1:'A', 2:'A+', 3:'AA', 4:'AA+', 5:'AAA'};
+    var shopClassifications = { 1:'A', 2:'A+', 3:'AA', 4:'AA+', 5:'AAA', 0:'B', '-1':'C'};
     jQuery('span#shopRating span').html(shopClassifications[data[0].shopClassification]);
 	jQuery('span#newsDiv').append('<div class="mainpage-content-right-inner-left"><label><strong>' +__("Title") +'</strong></label></div><div class="mainpage-content-right-inner-right-other"></div><div class="mainpage-content-right-inner-right-full"><input type="text" name="newsTitle[]" value="" placeholder="' +__('News title') +'" class="span3"></div><div class="mainpage-content-right-inner-left"><label><strong>'+__("Ref URL")+'</strong></label></div><div class="mainpage-content-right-inner-right-other"></div><div class="mainpage-content-right-inner-right-full"><input type="text" name="newsrefUrl[]" value="" id="newsrefUrl" disabled="disabled" placeholder="' +__('Ref.Url') +'" class="span3 ignore" style="width:330px !important;">&nbsp;&nbsp;&nbsp;'+__("Deeplinking is") +' <button class="btn" id="newsdeepLinkOnbtn" name="newsdeepLinkOnbtn" type="button" style="border-radius: 4px 0 0 4px;" onclick="newschangelinkStatus(this)">'+__("On") +'</button><button id="newsdeepLinkoofbtn" name="newsdeepLinkoofbtn" style="border-radius: 0 4px 4px 0;" onclick="newschangelinkStatus(this)" class="btn mr10 btn-primary"  type="button">'+__("Off") +'</button><input type="checkbox" style="display:none;" id="newsdeepLinkStatus" value="1" name="newsdeepLinkStatus[]"></div><div class="mainpage-content-right-inner-left"><label><strong>'+__("Description") +'</strong></label></div><div class="mainpage-content-right-inner-right-other"></div><div class="mainpage-content-right-inner-right-full"><textarea rows="4" cols="3" name="newsDescription[]" id="newsDescription"></textarea></div>');
 	// populate offer type data based based on offer type
@@ -722,13 +722,6 @@ function setFormData(data){
 		jQuery("input#maxoffercheckbox").attr('checked' , 'checked');
 	}
 
-	var pageCount = data.length;
-	for(var i=0 ; i< pageCount ; i++ ){
-		cheboxId = "#attachedPage-"+data[i].pageId;
-		jQuery(cheboxId).attr('checked', 'checked');
-		jQuery(cheboxId).parent().addClass("selected");
-	}
-
 	if(data[0]!=undefined && data[0]!=null && data[0].tilesId){
 		jQuery('a#selectImg_' + data[0].tilesId).show();
 		selectOfferImage(data[0].tilesId);
@@ -960,7 +953,6 @@ function selectDiscountType(dIv){
 		    jQuery("#offertitledetail").show();
 		    jQuery("#datesdiv").show();
 		    
-		    jQuery("#attachpagesDiv").show();
 		    jQuery('#extra-options').show();
 	    	jQuery('#offerrefurlPR').val('');
 	    	jQuery('#uploadoffer').val('');

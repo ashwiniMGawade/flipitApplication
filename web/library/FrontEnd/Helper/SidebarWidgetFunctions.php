@@ -1,9 +1,9 @@
 <?php
 class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
 {
-    public function sidebarWidgets($widgetType, $currentView)
+    public function sidebarWidgets($widgetType, $currentView, $referenceId = '')
     {
-        $widgets = \KC\Repository\PageWidgets::getWidgetsByType($widgetType);
+        $widgets = \KC\Repository\PageWidgets::getFrontendWidgetList($widgetType, $referenceId);
         if (!empty($widgets)) {
             foreach ($widgets as $widget) {
                 $widgetFunctionName = strtolower($widget['widget']['function_name']);
@@ -78,7 +78,7 @@ class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
             }
             $frontShopHeaderHelper = new FrontEnd_Helper_ShopHeaderPartialFunctions();
             $disqusReplyCounter = $frontShopHeaderHelper->getDisqusReplyCounter($currentView->currentStoreInformation[0]);
-            if($currentView->shopEditor != null):
+            if ($currentView->shopEditor != null):
                 $shopEditor = $currentView->partial(
                     'store/_storeEditor.phtml',
                     array(
@@ -288,7 +288,7 @@ EOD;
         $editorId = !empty($editorWidgetInformation[0]['editorId'])
             ? $editorWidgetInformation[0]['editorId'] : '';
         $editorInformation = self::getEditorInformation($editorId);
-        if($editorInformation != '' && $editorWidgetInformation[0]['status'] != ''):
+        if ($editorInformation != '' && $editorWidgetInformation[0]['status'] != ''):
             echo $editorInformation = $currentObject->partial(
                 'partials/_editorWidget.phtml',
                 array(
@@ -362,4 +362,3 @@ EOD;
         echo $recentlyAddedArticles;
     }
 }
-

@@ -1,7 +1,9 @@
 <?php
 namespace Core\Persistence\Factory;
 
+use \Core\Persistence\Database\Repository\BulkEmailRepository;
 use \Core\Persistence\Database\Repository\DashboardRepository;
+use \Core\Persistence\Database\Repository\LocaleSettingRepository;
 use \Core\Persistence\Database\Repository\SettingsRepository;
 use \Core\Persistence\Database\Repository\SplashImageRepository;
 use \Core\Persistence\Database\Repository\SplashOfferRepository;
@@ -17,6 +19,9 @@ use \Core\Persistence\Database\Repository\AffliateNetworkRepository;
 use \Core\Persistence\Database\Repository\WidgetRepository;
 use \Core\Persistence\Database\Repository\LandingPageRepository;
 use \Core\Persistence\Database\Repository\URLSettingRepository;
+use \Core\Persistence\Database\Repository\NewsletterCampaignRepository;
+use \Core\Persistence\Database\Repository\NewsletterCampaignOfferRepository;
+use \Core\Persistence\Database\Repository\LocalSettingsRepository;
 
 class RepositoryFactory
 {
@@ -92,5 +97,30 @@ class RepositoryFactory
     public static function splashImage()
     {
         return new SplashImageRepository((new Service\DoctrineManager(new Service\AppConfig()))->getUserEntityManager());
+    }
+
+    public static function newsletterCampaign($locale = '')
+    {
+        return new NewsletterCampaignRepository((new Service\DoctrineManager(new Service\AppConfig($locale)))->getLocaleEntityManager());
+    }
+
+    public static function bulkEmail()
+    {
+        return new BulkEmailRepository((new Service\DynamoDbManager(new Service\AppConfig()))->getAwsSdk());
+    }
+
+    public static function newsletterCampaignOffer()
+    {
+        return new NewsletterCampaignOfferRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
+    }
+
+    public static function localeSettings()
+    {
+        return new LocalSettingsRepository((new Service\DoctrineManager(new Service\AppConfig()))->getLocaleEntityManager());
+    }
+
+    public static function localeSetting($locale = '')
+    {
+        return new LocaleSettingRepository((new Service\DoctrineManager(new Service\AppConfig($locale)))->getLocaleEntityManager());
     }
 }

@@ -5,4 +5,5 @@ use \Core\Domain\Repository\OfferRepositoryInterface;
 
 class OfferRepository extends BaseRepository implements OfferRepositoryInterface
 {
+
 }

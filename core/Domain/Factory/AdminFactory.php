@@ -8,7 +8,9 @@ use \Core\Domain\Service\Purifier;
 use \Core\Domain\Usecase\Admin\AddSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\CreateSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\DeleteSplashOfferUsecase;
+use Core\Domain\Usecase\Admin\GetNewsletterCampaignsByConditionsUsecase;
 use \Core\Domain\Usecase\Admin\GetSplashOfferUsecase;
+use Core\Domain\Usecase\Admin\SendTestNewsletterUsecase;
 use \Core\Domain\Usecase\Admin\UpdateSplashOfferUsecase;
 use \Core\Domain\Usecase\Admin\UpdateSplashPageUsecase;
 
@@ -56,6 +58,23 @@ use \Core\Domain\Usecase\Admin\GetURLSettingUsecase;
 use \Core\Domain\Usecase\Admin\UpdateURLSettingUsecase;
 use \Core\Domain\Usecase\Admin\DeleteURLSettingUsecase;
 
+use \Core\Domain\Usecase\Admin\GetNewsletterCampaignUsecase;
+use \Core\Domain\Usecase\Admin\CreateNewsletterCampaignUsecase;
+use \Core\Domain\Usecase\Admin\AddNewsletterCampaignUsecase;
+use \Core\Domain\Usecase\Admin\UpdateNewsletterCampaignUsecase;
+use \Core\Domain\Usecase\Admin\DeleteNewsletterCampaignUsecase;
+
+
+use \Core\Domain\Usecase\Admin\GetNewsletterCampaignOfferUsecase;
+use \Core\Domain\Usecase\Admin\CreateNewsletterCampaignOfferUsecase;
+use \Core\Domain\Usecase\Admin\AddNewsletterCampaignOfferUsecase;
+use \Core\Domain\Usecase\Admin\DeleteNewsletterCampaignOfferUsecase;
+
+use \Core\Domain\Usecase\Admin\ValidateScheduledNewsletterCampaignUsecase;
+use \Core\Domain\Usecase\Admin\GetNewsletterCampaignWarningsUsecase;
+
+use \Core\Domain\Usecase\Admin\UpdateLocaleSettingsUsecase;
+
 use \Core\Domain\Validator\ApiKeyValidator;
 use \Core\Domain\Validator\LandingPageValidator;
 use \Core\Domain\Validator\SettingsValidator;
@@ -66,6 +85,9 @@ use \Core\Domain\Validator\SplashPageValidator;
 use \Core\Domain\Validator\VisitorValidator;
 use \Core\Domain\Validator\WidgetValidator;
 use \Core\Domain\Validator\UrlSettingValidator;
+use \Core\Domain\Validator\NewsletterCampaignValidator;
+use \Core\Domain\Validator\NewsletterCampaignOfferValidator;
+use \Core\Domain\Validator\LocaleSettingValidator;
 
 use \Core\Persistence\Factory\RepositoryFactory;
 
@@ -365,5 +387,90 @@ class AdminFactory
     public static function getVisitor()
     {
         return new GetVisitorUsecase(RepositoryFactory::visitor(), new Purifier(), new Errors());
+    }
+
+    public static function getNewsletterCampaign()
+    {
+        return new GetNewsletterCampaignUsecase(RepositoryFactory::newsletterCampaign(), new Purifier(), new Errors());
+    }
+
+    public static function getNewsletterCampaignsByConditions()
+    {
+        return new GetNewsletterCampaignsByConditionsUsecase(RepositoryFactory::newsletterCampaign(), new Purifier(), new Errors());
+    }
+
+    public static function createNewsletterCampaign()
+    {
+        return new CreateNewsletterCampaignUsecase();
+    }
+
+    public static function addNewsletterCampaign()
+    {
+        return new AddNewsletterCampaignUsecase(
+            RepositoryFactory::newsletterCampaign(),
+            RepositoryFactory::newsletterCampaignOffer(),
+            new NewsletterCampaignValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+
+    public static function updateNewsletterCampaign()
+    {
+        return new UpdateNewsletterCampaignUsecase(
+            RepositoryFactory::newsletterCampaign(),
+            RepositoryFactory::newsletterCampaignOffer(),
+            new NewsletterCampaignValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+
+    public static function deleteNewsletterCampaign()
+    {
+        return new DeleteNewsletterCampaignUsecase(RepositoryFactory::newsletterCampaign());
+    }
+
+    public static function getNewsletterCampaignOffer()
+    {
+        return new GetNewsletterCampaignOfferUsecase(RepositoryFactory::newsletterCampaignOffer(), new Purifier(), new Errors());
+    }
+
+    public static function createNewsletterCampaignOffer()
+    {
+        return new CreateNewsletterCampaignOfferUsecase();
+    }
+
+    public static function addNewsletterCampaignOffer()
+    {
+        return new AddNewsletterCampaignOfferUsecase(
+            RepositoryFactory::newsletterCampaignOffer(),
+            new NewsletterCampaignOfferValidator(new Validator()),
+            new Purifier(),
+            new Errors()
+        );
+    }
+    public static function deleteNewsletterCampaignOffer()
+    {
+        return new DeleteNewsletterCampaignOfferUsecase(RepositoryFactory::newsletterCampaignOffer(), new Purifier(), new Errors());
+    }
+
+    public static function validateScheduledNewsletterCampaign()
+    {
+        return new ValidateScheduledNewsletterCampaignUsecase();
+    }
+    public static function getNewsletterCampaignWarnings()
+    {
+        return new GetNewsletterCampaignWarningsUsecase(RepositoryFactory::newsletterCampaign(), new Purifier(), new Errors());
+    }
+
+    public static function updateLocaleSettings()
+    {
+        return new UpdateLocaleSettingsUsecase(RepositoryFactory::localeSetting(), new LocaleSettingValidator(new Validator()), new Purifier(), new Errors());
+    }
+
+    public static function sendTestNewsletter()
+    {
+        return new SendTestNewsletterUsecase(RepositoryFactory::bulkEmail());
     }
 }

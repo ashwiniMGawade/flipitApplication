@@ -43,6 +43,9 @@ class AddURLSettingUsecase
         if (isset($params['status'])) {
             $urlSetting->setStatus((int) $params['status']);
         }
+        if (isset($params['hotjarStatus'])) {
+            $urlSetting->setHotjarStatus((int) $params['hotjarStatus']);
+        }
         $urlSetting->setCreatedAt(new \DateTime('now'));
         $urlSetting->setUpdatedAt(new \DateTime('now'));
 

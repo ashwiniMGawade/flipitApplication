@@ -138,6 +138,18 @@ class GlobalShopExport
         $objPHPExcel->getActiveSheet()->setCellValue('AK3', $this->zendTranslation->translate('Last Updated'));
         $objPHPExcel->getActiveSheet()->setCellValue('AL3', $this->zendTranslation->translate('News Ticker update'));
         $objPHPExcel->getActiveSheet()->setCellValue('AM3', $this->zendTranslation->translate('Locale'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AN3', $this->zendTranslation->translate('Reason 1 Title'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AO3', $this->zendTranslation->translate('Reason 1 Subtitle'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AP3', $this->zendTranslation->translate('Reason 2 Title'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AQ3', $this->zendTranslation->translate('Reason 2 Subtitle'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AR3', $this->zendTranslation->translate('Reason 3 Title'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AS3', $this->zendTranslation->translate('Reason 3 Subtitle'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AT3', $this->zendTranslation->translate('Reason 4 Title'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AU3', $this->zendTranslation->translate('Reason 4 Subtitle'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AV3', $this->zendTranslation->translate('Reason 5 Title'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AW3', $this->zendTranslation->translate('Reason 5 Subtitle'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AX3', $this->zendTranslation->translate('Reason 6 Title'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AY3', $this->zendTranslation->translate('Reason 6 Subtitle'));
         return $objPHPExcel;
     }
 
@@ -157,6 +169,8 @@ class GlobalShopExport
     public function localeShopsData($shopData, $key, $objPHPExcel, $localeExport = '')
     {
         $shopClassifications = array(
+            -1 => 'C',
+            0 => 'B',
             1 => 'A',
             2 => 'A+',
             3 => 'AA',
@@ -280,6 +294,12 @@ class GlobalShopExport
             }
 
             $objPHPExcel->getActiveSheet()->setCellValue('AM'.$column, $localeName);
+            $columnLetter = 'N';
+            foreach($shop['shopreasons'] as $shopreason) {
+                $objPHPExcel->getActiveSheet()->setCellValue('A'.$columnLetter.$column, $shopreason['fieldvalue']);
+                $columnLetter++;
+            }
+
             $column++;
             $row++;
         }
@@ -325,17 +345,17 @@ class GlobalShopExport
             array('outline' =>
                 array('style' => PHPExcel_Style_Border::BORDER_THICK,
                     'color' => array('argb' => '000000'),),),);
-        $objPHPExcel->getActiveSheet()->getStyle('A3:'.'AM3')->applyFromArray($headerStyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:'.'AY3')->applyFromArray($headerStyle);
 
-        $objPHPExcel->getActiveSheet()->getStyle('A3:AM3')->getAlignment()->setHorizontal(
+        $objPHPExcel->getActiveSheet()->getStyle('A3:AY3')->getAlignment()->setHorizontal(
             PHPExcel_Style_Alignment::HORIZONTAL_CENTER
         );
-        $objPHPExcel->getActiveSheet()->getStyle('B4:AM'.$row)->getAlignment()->setVertical(
+        $objPHPExcel->getActiveSheet()->getStyle('B4:AY'.$row)->getAlignment()->setVertical(
             PHPExcel_Style_Alignment::VERTICAL_TOP
         );
-        $objPHPExcel->getActiveSheet()->getStyle('A3:'.'AM3')->applyFromArray($borderStyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:'.'AY3')->applyFromArray($borderStyle);
         $borderColumn =  (intval($column) -1 );
-        $objPHPExcel->getActiveSheet()->getStyle('A3:'.'AM'.$borderColumn)->applyFromArray($borderStyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:'.'AY'.$borderColumn)->applyFromArray($borderStyle);
         $objPHPExcel = $this->setExcelSizeOfCell($objPHPExcel);
         return  $objPHPExcel;
     }
@@ -381,6 +401,18 @@ class GlobalShopExport
         $objPHPExcel->getActiveSheet()->getColumnDimension('AK')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AL')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AM')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AN')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AO')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AP')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AQ')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AR')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AS')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AT')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AU')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AV')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AW')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AX')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AY')->setAutoSize(true);
         return  $objPHPExcel;
     }
 

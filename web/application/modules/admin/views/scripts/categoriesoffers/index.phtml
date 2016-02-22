@@ -71,11 +71,16 @@
                     <ul id='category'>
                     <?php 
                     if (!empty($this->currentCategoryHomePageOffers)) {
+                        $date = new DateTime();
                         foreach ($this->currentCategoryHomePageOffers as $categoryOffer) {
+                            $expired = '';
+                            if($date > $categoryOffer['offers']['endDate']) {
+                                $expired = "<i class='pull-right icon icon-time'></i>";
+                            }
                             echo  "<li class='ui-state-default'  id='".$categoryOffer['id']."' 
                             reloffer='".$categoryOffer['offers']['id']."'
                             relpos='".$categoryOffer['position']."'>
-                            <span>".$categoryOffer['offers']['title']."</span></li>";
+                            <span>".$categoryOffer['offers']['title']."</span>".$expired."</li>";
                         }
                     } else {             
                         echo  "<li id='0'>". $this->translate('No record found !') ."</li>";

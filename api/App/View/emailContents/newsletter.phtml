@@ -1,0 +1,185 @@
+<tr>
+    <td height="5"></td>
+</tr>
+<tr>
+    <td bgcolor="#ffffff" style="border:1px solid #e4e4e4; border-radius:5px">
+        <table width="100%" cellpadding="0" cellspacing="0">
+        <tbody>
+            <?php foreach($newsletterCampaign->getNewsletterCampaignOffers() as $offer) : ?>
+            <?php if (1 === $offer->getSection()) :
+                    $utmParameters = '?utm_source=transactional&utm_medium=email&utm_campaign='.date('d-m-Y').'&type=code#'.$offer->getOffer()->getId();
+                    $clickOutLink = HTTP_PATH_LOCALE.$offer->getOffer()->getShopOffers()->getPermalink().$utmParameters;
+                    $exclusiveCode = '';
+                    $exclusiveStyle = '';
+                    if (1 === $offer->getOffer()->getExclusiveCode()):
+                        $exclusiveStyle  = 'background:url('.HTTP_PATH.'public/images/exclusive-star.png) no-repeat right top #fef6ec';
+                        $exclusiveCode = $exclusiveText;
+                    endif;
+             ?>
+            <tr>
+                <td style="padding:28px 10px 30px 29px; border-bottom:1px solid #eaeaea; <?php echo $exclusiveStyle; ?>">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tbody>
+                        <tr>
+                            <td width="132">
+                                <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #dddddd; border-radius:5px;">
+                                    <tbody>
+                                    <tr>
+                                        <td height="66" align="center">
+                                            <a href="<?php echo $clickOutLink; ?>" target="_blank" style="text-decoration:none; color:#fff">
+                                                <img src="<?php echo PUBLIC_PATH_CDN.ltrim($offer->getOffer()->getShopOffers()->getLogo()->path, '/').'thum_big_'.$offer->getOffer()->getShopOffers()->getLogo()->name; ?>" width="132" height="66" alt="<?php echo $offer->getOffer()->getShopOffers()->getName(); ?>" title="<?php echo $offer->getOffer()->getShopOffers()->getName(); ?>" style="vertical-align:top">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td bgcolor="#ea973d" align="center" style="border-radius:0 0 4px 4px; padding:6px 0 5px; font:11px/17px Arial,Helvetica,sans-serif; color:#fff">
+                                            <a href="<?php echo $clickOutLink; ?>" target="_blank" style="text-decoration:none; color:#fff"><?php echo $codeText; ?></a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td width="30"></td>
+                            <td valign="top">
+                                <table width="100%" cellpadding="0" cellspacing="0">
+                                    <tbody>
+                                    <tr>
+                                        <td style="padding:0 0 2px; font:14px/17px Arial,Helvetica,sans-serif; color:#363636">
+                                            <a href="<?php echo $clickOutLink; ?>" target="_blank" style="text-decoration:none; color:#363636"><?php echo $offer->getOffer()->getShopOffers()->getName(); ?></a>&nbsp;<span style="color:#e89438; display:inline-block"><?php echo $exclusiveCode; ?></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:0 0 15px; font:16px/22px Arial,Helvetica,sans-serif; color:#0077cc">
+                                            <a href="<?php echo $clickOutLink; ?>" target="_blank" style="text-decoration:underline; color:#0077cc"><?php echo $offer->getOffer()->getTitle(); ?></a></td>
+                                    </tr>
+                                    <tr>
+                                        <?php
+                                        $startDate = new Zend_Date(strtotime($offer->getOffer()->startDate->format('Y-m-d')));
+                                        $endDate = new Zend_Date(strtotime($offer->getOffer()->endDate->format('Y-m-d')));
+
+                                        $offerDateText = '';
+                                        $startDateFormat = LOCALE == 'us' ? Zend_Date::MONTH_NAME.' '.Zend_Date::DAY : Zend_Date::DAY.' '.Zend_Date::MONTH_NAME;
+                                        $endDateFormat = LOCALE == 'us' ? Zend_Date::MONTH_NAME.' '.Zend_Date::DAY.', '.Zend_Date::YEAR: Zend_Date::DATE_LONG;
+                                        if ($offer->getOffer()->getDiscountType() == "CD"):
+                                            $offerDateText .= $offerFromText.' '.ucwords($startDate->get($startDateFormat)).' '.$offerToText;
+                                        else:
+                                            $offerDateText .= $validText;
+                                        endif;
+                                        $offerDateText .= ' '.ucwords($endDate->get($endDateFormat));
+                                        ?>
+                                        <td style="font:12px/17px Arial,Helvetica,sans-serif; color:#32383e"><?php echo $offerDateText; ?></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <?php endif; ?>
+            <?php endforeach; ?>
+            <tr>
+                <td bgcolor="#fafafa" align="center" style="border-radius:0 0 4px 4px; padding:12px 0 11px; font:bold 14px/17px Arial,Helvetica,sans-serif; color:#373736">
+                    <a href="<?php echo $top50Link; ?>" target="_blank" style="text-decoration:none; color:#373736"><?php echo $topOfferText; ?> &gt;</a>
+                </td>
+            </tr>
+        </tbody>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td height="45"></td>
+</tr>
+<tr>
+    <td style="padding:0 0 25px 29px; font:24px/27px Arial,Helvetica,sans-serif; color:#32383e">
+        <?php echo $newsletterCampaign->getOfferPartTwoTitle(); ?>
+    </td>
+</tr>
+<tr>
+    <td bgcolor="#ffffff" style="border:1px solid #e4e4e4; border-radius:5px">
+        <table width="100%" cellpadding="0" cellspacing="0">
+            <tbody>
+            <?php foreach($newsletterCampaign->getNewsletterCampaignOffers() as $offer) : ?>
+                <?php if (2 === $offer->getSection()) :
+                    $utmParameters = '?utm_source=transactional&utm_medium=email&utm_campaign='.date('d-m-Y').'&type=code#'.$offer->getOffer()->getId();
+                    $clickOutLink = HTTP_PATH_LOCALE.$offer->getOffer()->getShopOffers()->getPermalink().$utmParameters;
+                    $exclusiveCode = '';
+                    $exclusiveStyle = '';
+                    if (1 === $offer->getOffer()->getExclusiveCode()):
+                        $exclusiveStyle  = 'background:url('.HTTP_PATH.'public/images/exclusive-star.png) no-repeat right top #fef6ec';
+                        $exclusiveCode = $exclusiveText;
+                    endif;
+                    ?>
+                    <tr>
+                        <td style="padding:28px 10px 30px 29px; border-bottom:1px solid #eaeaea; <?php echo $exclusiveStyle; ?>">
+                            <table width="100%" cellpadding="0" cellspacing="0">
+                                <tbody>
+                                <tr>
+                                    <td width="132">
+                                        <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #dddddd; border-radius:5px;">
+                                            <tbody>
+                                            <tr>
+                                                <td height="66" align="center">
+                                                    <a href="<?php echo $clickOutLink; ?>" target="_blank" style="text-decoration:none; color:#fff">
+                                                        <img src="<?php echo PUBLIC_PATH_CDN.ltrim($offer->getOffer()->getShopOffers()->getLogo()->path, '/').'thum_big_'.$offer->getOffer()->getShopOffers()->getLogo()->name; ?>" width="132" height="66" alt="<?php echo $offer->getOffer()->getShopOffers()->getName(); ?>" title="<?php echo $offer->getOffer()->getShopOffers()->getName(); ?>" style="vertical-align:top">
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td bgcolor="#ea973d" align="center" style="border-radius:0 0 4px 4px; padding:6px 0 5px; font:11px/17px Arial,Helvetica,sans-serif; color:#fff">
+                                                    <a href="<?php echo $clickOutLink; ?>" target="_blank" style="text-decoration:none; color:#fff"><?php echo $codeText; ?></a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                    <td width="30"></td>
+                                    <td valign="top">
+                                        <table width="100%" cellpadding="0" cellspacing="0">
+                                            <tbody>
+                                            <tr>
+                                                <td style="padding:0 0 2px; font:14px/17px Arial,Helvetica,sans-serif; color:#363636">
+                                                    <a href="<?php echo $clickOutLink; ?>" target="_blank" style="text-decoration:none; color:#363636"><?php echo $offer->getOffer()->getShopOffers()->getName(); ?></a>&nbsp;<span style="color:#e89438; display:inline-block"><?php echo $exclusiveCode; ?></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:0 0 15px; font:16px/22px Arial,Helvetica,sans-serif; color:#0077cc">
+                                                    <a href="<?php echo $clickOutLink; ?>" target="_blank" style="text-decoration:underline; color:#0077cc"><?php echo $offer->getOffer()->getTitle(); ?></a></td>
+                                            </tr>
+                                            <tr>
+                                                <?php
+                                                $startDate = new Zend_Date(strtotime($offer->getOffer()->startDate->format('Y-m-d')));
+                                                $endDate = new Zend_Date(strtotime($offer->getOffer()->endDate->format('Y-m-d')));
+
+                                                $offerDateText = '';
+                                                $startDateFormat = LOCALE == 'us' ? Zend_Date::MONTH_NAME.' '.Zend_Date::DAY : Zend_Date::DAY.' '.Zend_Date::MONTH_NAME;
+                                                $endDateFormat = LOCALE == 'us' ? Zend_Date::MONTH_NAME.' '.Zend_Date::DAY.', '.Zend_Date::YEAR: Zend_Date::DATE_LONG;
+                                                if ($offer->getOffer()->getDiscountType() == "CD"):
+                                                    $offerDateText .= $offerFromText.' '.ucwords($startDate->get($startDateFormat)).' '.$offerToText;
+                                                else:
+                                                    $offerDateText .= $validText;
+                                                endif;
+                                                $offerDateText .= ' '.ucwords($endDate->get($endDateFormat));
+                                                ?>
+                                                <td style="font:12px/17px Arial,Helvetica,sans-serif; color:#32383e"><?php echo $offerDateText; ?></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <tr>
+                <td bgcolor="#fafafa" align="center" style="border-radius:0 0 4px 4px; padding:12px 0 11px; font:bold 14px/17px Arial,Helvetica,sans-serif; color:#373736">
+                    <a href="<?php echo $top50Link; ?>" target="_blank" style="text-decoration:none; color:#373736"><?php echo $topOfferText; ?> &gt;</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>

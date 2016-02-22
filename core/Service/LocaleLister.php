@@ -4,7 +4,7 @@ namespace Core\Service;
 
 class LocaleLister
 {
-    public function getAllLocales()
+    public function getAllLocals()
     {
         $config = (new Config)->getConfig();
         $locales = array();

@@ -27,6 +27,11 @@ class URLSetting
     protected $status;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    protected $hotjarStatus;
+
+    /**
      * @ORM\Column(type="datetime", nullable=false)
      */
     protected $createdAt;
@@ -124,5 +129,21 @@ class URLSetting
     public function setUrl($url)
     {
         $this->url = $url;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHotjarStatus()
+    {
+        return $this->hotjarStatus;
+    }
+
+    /**
+     * @param mixed $hotjarStatus
+     */
+    public function setHotjarStatus($hotjarStatus)
+    {
+        $this->hotjarStatus = $hotjarStatus;
     }
 }

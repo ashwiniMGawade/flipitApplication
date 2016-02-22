@@ -10,26 +10,29 @@ class Application_Service_Offer_TopOffer extends Application_Service_Offer_Offer
         $this->offerRepository = $offerRepository;
     }
 
-    public function execute($limit)
+    public function execute($limit, $offerType = 'MN')
     {
-        $topCouponCodes = $this->offerRepository->getTopCouponCodes(array(), $limit);
+        $topCouponCodes = $this->offerRepository->getTopCouponCodes(array(), $limit, $offerType);
 
+        $popularCode = [];
+        foreach ($topCouponCodes as $coupon) {
+            $popularCode[] = $coupon['popularcode']['id'];
+        }
         if (count($topCouponCodes) < $limit) {
             $totalViewCountOffersLimit = $limit - count($topCouponCodes);
-            $voucherCodes = $this->getOffersByType($limit, $totalViewCountOffersLimit);
+            $voucherCodes = $this->getOffersByType($limit, $totalViewCountOffersLimit, $popularCode);
             $topCouponCodes = $this->setVoucherCodesToTopCodes($voucherCodes, $topCouponCodes);
         }
         $topOffers = $this->traverseTopCouponCodes($topCouponCodes);
         return $topOffers;
     }
 
-    private function getOffersByType($limit, $constraintLimit)
+    private function getOffersByType($limit, $constraintLimit, $exitingCoupons = array())
     {
-        $topVoucherCodes = $this->offerRepository->getOffers('totalViewCount', $constraintLimit);
-
+        $topVoucherCodes = $this->offerRepository->getOffers('totalViewCount', $constraintLimit,  null, $exitingCoupons);
         if (count($topVoucherCodes) < $constraintLimit) {
             $newestCodesLimit = $constraintLimit - count($topVoucherCodes);
-            $newestVoucherCodes = $this->offerRepository->getOffers('newest', $newestCodesLimit);
+            $newestVoucherCodes = $this->offerRepository->getOffers('newest', $newestCodesLimit, null, $exitingCoupons);
             $topVoucherCodes = $topVoucherCodes + $newestVoucherCodes;
         }
 
@@ -38,22 +41,26 @@ class Application_Service_Offer_TopOffer extends Application_Service_Offer_Offer
 
     private function setVoucherCodesToTopCodes($voucherCodes, $topCouponCodes)
     {
-        if (!empty($topCouponCodes)) {
-            foreach ($voucherCodes as $topVoucherCodeValue) {
-                $shopId = isset($topVoucherCodeValue['shopOffers']['id'])
-                    ? $topVoucherCodeValue['shopOffers']['id']
-                    : '';
-                $shopPermalink = isset($topVoucherCodeValue['shopOffers']['permaLink'])
-                    ? $topVoucherCodeValue['shopOffers']['permaLink']
-                    : '';
-                $topCouponCodes[] = array(
-                    'id'=> $shopId,
-                    'permaLink' => $shopPermalink,
-                    'popularcode' => $topVoucherCodeValue
-                );
-            }
+        $position = 1;
+        foreach($topCouponCodes as $index => $code) {
+            $topCouponCodes[$index]['position'] = $position;
+            $position++;
         }
-        
+        foreach ($voucherCodes as $topVoucherCodeValue) {
+            $shopId = isset($topVoucherCodeValue['shopOffers']['id'])
+                ? $topVoucherCodeValue['shopOffers']['id']
+                : '';
+            $shopPermalink = isset($topVoucherCodeValue['shopOffers']['permaLink'])
+                ? $topVoucherCodeValue['shopOffers']['permaLink']
+                : '';
+            $topCouponCodes[] = array(
+                'id'=> $shopId,
+                'position' => $position,
+                'permaLink' => $shopPermalink,
+                'popularcode' => $topVoucherCodeValue
+            );
+            $position++;
+        }
         return $topCouponCodes;
     }
 
@@ -63,11 +70,10 @@ class Application_Service_Offer_TopOffer extends Application_Service_Offer_Offer
 
         if (!empty($topCouponCodes)) {
             foreach ($topCouponCodes as $topCouponCodeValue) {
-                $topOffers[] = $topCouponCodeValue['popularcode'];
+                $topOffers[] = array_merge(array('top50rank' => $topCouponCodeValue['position']), $topCouponCodeValue['popularcode']);
             }
         }
 
         return $topOffers;
     }
 }
-

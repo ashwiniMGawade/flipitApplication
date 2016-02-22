@@ -23,20 +23,22 @@ class SplashPageValidator
     {
         $constraints = array(
             'content' => array(
-                $this->validator->notNull(array('message'=>'Content should not be blank.'))
+                $this->validator->notNull(array('message' => 'Content should not be blank.'))
             ),
             'image' => array(
-                $this->validator->notNull(array('message'=>'Please upload a valid splash image.'))
+                $this->validator->notNull(array('message' => 'Please upload a valid banner image.'))
             ),
             'popularShops' => array(
-                $this->validator->notNull(array('message'=>'Popular shops should not be blank.'))
+                $this->validator->notNull(array('message' => 'Popular shops should not be blank.'))
             ),
-            'updatedBy' => array(
-                $this->validator->notNull(array('message'=>'Updated by should not be blank.'))
+            'infoImage' => array(
+                $this->validator->notNull(array('message' => 'Please upload a valid splash info image.'))
             ),
-            'updatedAt' => array(
-                $this->validator->notNull(),
-                $this->validator->dateTime()
+            'footer' => array(
+                $this->validator->notNull(array('message' => 'Footer content should not be blank.'))
+            ),
+            'statistics' => array(
+                $this->validator->notNull(array('message' => 'Statistics should not be blank.'))
             )
         );
         return $constraints;

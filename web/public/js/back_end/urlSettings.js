@@ -41,12 +41,17 @@ function getUrlSettings(iStart,iSortCol,iSortDir) {
         {
             "fnRender" : function(obj) {
                 if(obj.aData.status != null) {
-                    var on = (obj.aData.status == 1) ? 'btn-primary' : '';
-                    var off = (obj.aData.status == 0) ? 'btn-primary' : '';
-                    var html = "<div editId='" + obj.aData.id + "' class='btn-group'data-toggle='buttons-checkbox' style='margin-bottom:10px;'>"
-                        + "<button class='btn "+ on +"' onClick='changeStatus("+ obj.aData.id+",this,\"on\")'>"+__('Yes')+"</button>"
-                        + "<button class='btn "+ off +"'onClick='changeStatus("+ obj.aData.id+",this,\"off\")'>"+__('No')+"</button>"
-                        + "</div>";
+                    var html = (obj.aData.status == 1) ? 'Yes' : 'No';
+                    return html;
+                }
+            },
+            "bSortable" : false,
+            "sWidth" : '30%'
+        },
+        {
+            "fnRender" : function(obj) {
+                if(obj.aData.hotjarStatus != null) {
+                    var html = (obj.aData.hotjarStatus == 1) ? 'Yes' : 'No';
                     return html;
                 }
             },

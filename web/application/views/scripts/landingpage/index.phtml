@@ -7,7 +7,7 @@ $language = !empty($htmlLang) ? $htmlLang: $locale[0];
 <html lang="<?php echo $language; ?>" xml:lang="<?php echo $language;?>" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <?php
-if (FrontEnd_Helper_LayoutContent::loadVWOScript() === true) :
+if (FrontEnd_Helper_LayoutContent::loadScriptTag() === true) :
     echo $this->render('partials/_vwo_script.phtml');
 endif;
 ?>
@@ -19,6 +19,17 @@ endif;
     <?php
         $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
         echo $this->render('landingpage/layout_css.phtml');
+
+        $session = new Zend_Session_Namespace('BrandingGlp');
+        $pageBranding = unserialize(base64_decode($this->landingPage->getBrandingCss()));
+        if (empty($session->brandingActivated) && !empty($pageBranding)):
+            $this->headStyle()->appendStyle($this->shop()->brandingCss($pageBranding));
+            $this->headScript()->appendScript($this->shop()->brandingJs($pageBranding));
+        endif;
+        echo $this->headStyle();
+    ?>
+    <?php
+        echo $this->render('landingpage/layout_js.phtml');
     ?>
     <script type="text/javascript">
         dataLayer = [];
@@ -36,6 +47,7 @@ endif;
     </script>
 </head>
 <body>
+<?php echo $this->render('landingpage/branding_menu.phtml'); ?>
 <?php echo FrontEnd_Helper_LayoutContent::loadGoogleTagManager(); ?>
 <?php
 $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
@@ -59,12 +71,14 @@ $count = 1;
 $numOfOffersBeforeSignUpForm = 6;
 $offersCount = count($this->offers);
 $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
+$offerBoxes = array();
 $column1 = '';
 $column2 = '';
 $column3 = '';
-$column4 = '';
-$column5 = '';
-$column6 = '';
+$newsletterForm = $this->partial('partials/_landingpage_signup.phtml', array());
+if(0 == count($this->offers)) {
+    $offerBoxes[1] = $newsletterForm;
+}
 foreach ($this->offers as $offer) {
     $offer = (object)$offer;
     $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
@@ -86,7 +100,7 @@ foreach ($this->offers as $offer) {
         $popupLink = $offerPartial->getPopupLink($offer, $urlToShow);
         $onClick .= "OpenInNewTab(\"".HTTP_PATH_LOCALE."glp/".$this->landingPage->getPermalink().$popupLink."\");";
     }
-    $clickoutURL = HTTP_PATH_LOCALE.'out/offer/'.$offer->id;
+    $clickoutURL = HTTP_PATH_LOCALE.'out/glp/'.$this->landingPage->getId().'/'.$offer->id;
 
     $defaultText = '';
     if ($offer->userGenerated == '1') {
@@ -122,7 +136,7 @@ foreach ($this->offers as $offer) {
         $gtmDataForButton = json_encode($gtmData);
         $gtmTitleClick = "gtmDataBuilder($gtmDataForTitle);";
         $gtmButtonClick = "gtmDataBuilder($gtmDataForButton);";
-        $offerDiv ='<a rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmTitleClick.$onClick.'\'>
+        $offerDiv ='<a class="link" rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmTitleClick.$onClick.'\'>
                         <h2 class="common-height">'.FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offer->title).'</h2>
                     </a>
                     <a rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmButtonClick.$onClick.'\'>
@@ -150,7 +164,7 @@ foreach ($this->offers as $offer) {
         $gtmDataForButton = json_encode($gtmData);
         $gtmTitleClick = "gtmDataBuilder($gtmDataForTitle);";
         $gtmButtonClick = "gtmDataBuilder($gtmDataForButton);";
-        $offerDiv = '<a rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmTitleClick.$onClick.'\' target="_blank">
+        $offerDiv = '<a class="link" rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmTitleClick.$onClick.'\' target="_blank">
                         <h2 class="common-height">'.FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offer->title).'</h2>
                     </a>
                     <div id="offerButton'.$offer->id.'">
@@ -170,7 +184,7 @@ foreach ($this->offers as $offer) {
         $gtmDataForButton = json_encode($gtmData);
         $gtmTitleClick = "gtmDataBuilder($gtmDataForTitle);";
         $gtmButtonClick = "gtmDataBuilder($gtmDataForButton);";
-        $offerDiv = '<a rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmTitleClick.$onClick.'\' target="_blank">
+        $offerDiv = '<a class="link" rel="nofollow" href="'.$clickoutURL.'" onclick=\''.$gtmTitleClick.$onClick.'\' target="_blank">
                         <h2 class="common-height">'.FrontEnd_Helper_viewHelper::replaceStringVariableForOfferTitle($offer->title).'</h2>
                     </a>
                     <div id="offerButton'.$offer->id.'">
@@ -234,25 +248,21 @@ foreach ($this->offers as $offer) {
                     '.$termsAndConditionsDiv.'
                 </div>
                 ';
-
-    if ($count <= $numOfOffersBeforeSignUpForm) {
-        if ($count % 3 == 1) {
-            $column1 .= $offerPanel;
-        } elseif ($count % 3 == 2) {
-            $column2 .= $offerPanel;
-        } elseif ($count % 3 == 0) {
-            $column3 .= $offerPanel;
-        }
-    } else {
-        if ($count % 3 == 1) {
-            $column4 .= $offerPanel;
-        } elseif ($count % 3 == 2) {
-            $column5 .= $offerPanel;
-        } elseif ($count % 3 == 0) {
-            $column6 .= $offerPanel;
-        }
+    $offerBoxes[$count] = $offerPanel;
+    if(($count == count($this->offers) && $count < 6) || $count == 5 ) {
+        $offerBoxes[] = $newsletterForm;
+        $count++;
     }
     $count++;
+}
+foreach($offerBoxes as $count => $offerPanel) {
+    if ($count % 3 == 1) {
+        $column1 .= $offerPanel;
+    } elseif ($count % 3 == 2) {
+        $column2 .= $offerPanel;
+    } elseif ($count % 3 == 0) {
+        $column3 .= $offerPanel;
+    }
 }
 ?>
 <div id="wrapper">
@@ -287,7 +297,7 @@ foreach ($this->offers as $offer) {
                 <?php
                 $offersAdded = '';
                 if (!empty($this->offersAddedInShop) && $this->offersAddedInShop['offersInfo'] != '') :
-                    $offersAdded = '<li><span><i class="icon-timer"></i>  '
+                    $offersAdded = '<li class="couponUsed"><span><i class="icon-timer"></i>  '
                         .FrontEnd_Helper_viewHelper::__translate('This '.$this->offersAddedInShop['type'])
                         . ' '
                         .$this->offersAddedInShop['offersInfo']['amountOffers']
@@ -297,7 +307,7 @@ foreach ($this->offers as $offer) {
                 ?>
                 <ul class="action-list">
                    <?php echo $offersAdded; ?>
-                    <li>
+                    <li class="couponsCount">
                         <span class="icon-check-circle"></span><?php echo count($this->offers).' '.FrontEnd_Helper_viewHelper::__translate('current offers'); ?>
                     </li>
                 </ul>
@@ -309,18 +319,8 @@ foreach ($this->offers as $offer) {
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column2; ?></div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column3; ?></div>
             </div>
-            <?php
-            echo $this->partial('partials/_landingpage_signup.phtml', array());
-            if ($offersCount > $numOfOffersBeforeSignUpForm):
-            ?>
-            <div class="row same-height">
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column4; ?></div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column5; ?></div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><?php echo $column6; ?></div>
-            </div>
-            <?php
-            endif;
-            ?>
+
+            <div class="clear"></div>
             <?php if ($this->landingPage->getContent() != '' ): ?>
             <article class="about">
                 <?php echo $this->landingPage->getContent(); ?>
@@ -348,8 +348,6 @@ else :
     echo $partialViewPath->render($partialsPath. '_pop_up.phtml');
 endif;
 ?>
-<?php
-echo $this->render('landingpage/layout_js.phtml');
-?>
+
 </body>
 </html>

@@ -49,7 +49,8 @@ class UpdateURLSettingUsecaseTest extends \Codeception\TestCase\Test
     {
         $params = array(
             'url' => 'this/is/a/valid/url',
-            'status' => 1
+            'status' => 1,
+            'hotjarStatus' => 1
         );
         $urlSettingRepository = $this->urlSettingRepositoryMockWithSaveMethod(new URLSetting());
         $urlSettingValidator = $this->createUrlSettingValidatorMock(true);

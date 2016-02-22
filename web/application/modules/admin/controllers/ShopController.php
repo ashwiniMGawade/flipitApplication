@@ -27,6 +27,8 @@ class Admin_ShopController extends Application_Admin_BaseController
     {
         /* Initialize action controller here */
         $this->shopClassifications = array(
+            -1 => 'C',
+            0 => 'B',
             1 => 'A',
             2 => 'A+',
             3 => 'AA',
@@ -1020,7 +1022,7 @@ class Admin_ShopController extends Application_Admin_BaseController
                             $userName = $userDetail->firstName;
                             $objReader = PHPExcel_IOFactory::createReader('Excel2007');
                             $objPHPExcel = $objReader->load($excelFile);
-                            $totalShops = $objPHPExcel->setActiveSheetIndex(0)->getHighestRow();
+                            $totalShops = $objPHPExcel->setActiveSheetIndex(0)->getHighestDataRow();
                             \KC\Repository\ShopExcelInformation::saveShopExcelData($totalShops, $userName, $fileName);
                             $message = $this->view->translate($totalShops.' Shops data has been imported Successfully!!');
                             $flashMessage->addMessage(array('success' => $message));
@@ -1054,14 +1056,14 @@ class Admin_ShopController extends Application_Admin_BaseController
 
     public function emptyXlxAction()
     {
-        # set fiel and its trnslattions
+        # set file and its translations
         $file =  APPLICATION_PATH . '/migration/emptyShopDataDemo.xlsx' ;
         $fileName =  $this->view->translate($file);
 
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
-        # set reponse headers and body
+        # set response headers and body
         $this->getResponse()
             ->setHeader('Content-Disposition', 'attachment;filename=' . basename($fileName))
             ->setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')

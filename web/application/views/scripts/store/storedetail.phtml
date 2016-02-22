@@ -1,4 +1,5 @@
 <?php
+
 $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/floatingCoupon.js");
 $session = new Zend_Session_Namespace('Branding');
 if (empty($session->brandingActivated) && !empty($this->shopBranding)): 

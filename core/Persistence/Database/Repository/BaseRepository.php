@@ -78,4 +78,19 @@ class BaseRepository implements BaseRepositoryInterface
         $results['count'] = count($paginator);
         return  $results;
     }
+
+    public function beginTransaction()
+    {
+        $this->em->getConnection()->beginTransaction();
+    }
+
+    public function commitTransaction()
+    {
+        $this->em->getConnection()->commit();
+    }
+
+    public function rollBack()
+    {
+        $this->em->getConnection()->rollBack();
+    }
 }

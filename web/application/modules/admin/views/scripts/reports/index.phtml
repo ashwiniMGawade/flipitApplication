@@ -1,0 +1,37 @@
+<?php 
+ $this->headMeta('keyword', 'Description');
+ $this->headTitle()->append($this->translate('Reports'));
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+ $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/Highcharts-4.2.1/js/highcharts.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/Highcharts-4.2.1/js/highcharts-3d.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/Highcharts-4.2.1/js/modules/exporting.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/reports.js");
+?>
+
+<div id="chainList">
+    <div class="wrap columns-2">
+        <h1 class="fl"><?php echo $this->translate('Reports'); ?></h1>
+        <div class="clear"></div>
+        <div class="top_navigation">
+            <ul>
+                <li><a href="/admin/reports" class="selected_nav">Offers</a></li>
+                <li><a href="/admin/reports/shops">Shops</a></li>
+                <li><a href="#">Visitors</a></li>
+                <li><a href="#">Emails</a></li>
+                <li><a href="#">Traffic</a></li>
+                <li><a href="#">Global</a></li>
+            </ul>
+        </div>
+        <div class="mainpage-content">
+            <div class="clear"></div>
+            <div id="onlineOfferContainer" style="height: 30%; width:49%; float:left;"></div>
+            <div id="totalCouponsInYearContainer" style="float:left; height: 30%; width:49%;"></div>
+            <div class="clear"></div>
+            <br><br><br><br>
+            <div id="monthlyOfferContainer" style="height: 500px"></div>
+        </div>
+
+    </div>
+</div>

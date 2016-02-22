@@ -1,0 +1,464 @@
+<?php
+
+$this->headTitle()->append($this->translate('Edit Newsletter Campaign'));
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/datepicker.css");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/timepicker.css");
+$this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.ui.widget.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.bootstrap.wizard.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/createNewsletterCampaign.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/jquery-ui-1.8.16.custom.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/newsletterCampaignOffers.js");
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.dataTables.min.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/dataTableComman.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.dataTables.rowReordering.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/date.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-timepicker.js" );
+$this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
+
+?>
+
+<!-- Div for campaign info  -->
+
+<div class="wrap columns-2" id="newsletterCampaignListDiv">
+    <div class='wrap columns-2'>
+        <?php echo $this->flashMessages(); ?>
+        <div class="error alert-error form-error mt10"></div>
+        <?php
+            if(isset($this->warnings) && !empty($this->warnings)) {
+                echo '<div class="alert alert-warning">';
+                foreach($this->warnings as $warning) {
+                    echo $warning."<br/>";
+                }
+                echo '</div>';
+            }
+        ?>
+
+
+</div>
+<form id="NewsletterWizardform" method="post" action="" enctype="multipart/form-data" data-id="<?php echo $this->newsletterCampaign->getId();?>">
+    <h1 class="fl"><?php echo $this->translate('Edit Newsletter Campaign');?>
+        <button type="button" onclick="$('#sendTest').modal('show');" href="#" id="sendTestMail" class="btn ml10"><?php echo $this->translate('Send Test Email');?></button>
+        <img id="loader" src="<?php echo PUBLIC_PATH;?>images/loader.gif" style="display:none;">
+        <input type="button"  href="#" id="saveNewsletterCampaign" class="btn ml10" value="<?php echo $this->translate('Save & Exit');?>"></button>
+        <a type="button" href="<?php echo HTTP_PATH;?>admin/newsletter-campaigns" id="cancel" class="btn ml10"><?php echo $this->translate('Cancel');?></a>
+    </h1>
+    <div class="clear"></div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <ul class="nav nav-tabs font-bold">
+                <li class="active ">
+                    <a class=""  id="emailSetting" href="#step1" data-toggle="tab">
+                        1. Email Settings
+                    </a>
+                </li>
+                <li class="">
+                    <a class=""  id="campaignOffers" href="#step2" data-toggle="tab">
+                        2. Coupons
+                    </a>
+                </li>
+                <li class="">
+                    <a href="#step3" data-toggle="tab" class="" id="ScheduleCampaign">
+                        3. Schedule
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="panel-body">
+            <div class="tab-content">
+                <div class="tab-pane active" id="step1">
+                    <div class="mainpage-content">
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('E-mail title(internal use only)');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input type="text" class="span3" id="campaignName" name="campaignName" placeholder="<?php echo $this->translate('Campaign Name');?>"
+                                           value="<?php echo trim($this->newsletterCampaign->getCampaignName()); ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('E-mail');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input type="text" class="span3" id="senderEmail" name="senderEmail"
+                                           value="<?php echo trim($this->newsletterCampaign->getSenderEmail()); ?>" placeholder="<?php echo $this->translate('E-mail');?>"></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Sender Name');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input type="text" class="span3" id="senderName" name="senderName"
+                                           value="<?php echo trim($this->newsletterCampaign->getSenderName()); ?>" placeholder="<?php echo $this->translate('Sender Name');?>"></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('E-mail Subject');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input type="text" class="span3" id="campaignSubject" name="campaignSubject" placeholder="<?php echo $this->translate('E-mail Subject');?>"
+                                           value="<?php echo trim($this->newsletterCampaign->getCampaignSubject()); ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Header');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <textarea class="span3" id="campaignHeader" style="height:135px;"  name="campaignHeader" placeholder="<?php echo trim($this->translate('Header'));?>"><?php echo $this->newsletterCampaign->getHeader();?></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label><strong>Header Banner</strong></label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-line">
+                                    <div class="mainpage-content-right-inner-left-other">
+                                        <div class="mainpage-content-line header-image-cont">
+                                            <div class="mainpage-content-right-inner">
+                                                <?php if ( $this->newsletterCampaign->getHeaderBanner()) { ?>
+                                                <div class="browse-container">
+                                                    <img class="image-container"
+                                                         src="<?php echo   PUBLIC_PATH_CDN . 'images/upload/newslettercampaigns/'.trim($this->newsletterCampaign->getHeaderBanner());?>">
+                                                </div>
+                                                <?php } ?>
+                                                <input type="file" id="headerBanner" class="span3 margin-bottom-tenpx" name="headerBanner">
+                                                <div class="margin-bottom-tenpx">
+                                                        <span class="help-inline" id="headerBanner_file_message">
+                                                        Image Size:(*.jpeg, *.jpg or *.png file only)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Header Banner URL');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input type="text" class="span3" id="headerBannerURL" name="headerBannerURL" placeholder="<?php echo $this->translate('Header Banner URL');?>"
+                                           value="<?php echo trim($this->newsletterCampaign->getHeaderBannerURL());?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Footer');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <textarea class="span3" id="campaignFooter" style="height:135px;" name="campaignFooter" placeholder="<?php echo $this->translate('Footer');?>"><?php echo trim($this->newsletterCampaign->getFooter()); ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label><strong>Footer Banner</strong></label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-line">
+                                    <div class="mainpage-content-right-inner-left-other">
+                                        <div class="mainpage-content-line header-image-cont">
+                                            <div class="mainpage-content-right-inner">
+                                                <?php if ($this->newsletterCampaign->getFooterBanner()) { ?>
+                                                <div class="browse-container">
+                                                    <img class="image-container"
+                                                         src="<?php echo PUBLIC_PATH_CDN . 'images/upload/newslettercampaigns/'.trim($this->newsletterCampaign->getFooterBanner()); ?>">
+                                                </div>
+                                                <?php } ?>
+                                                <input type="file" id="footerBanner" class="span3 margin-bottom-tenpx" name="footerBanner">
+                                                <div class="margin-bottom-tenpx">
+                                                        <span class="help-inline" id="footerBanner_file_message">
+                                                        Image Size:(*.jpeg, *.jpg or *.png file only) </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Footer Banner URL');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input type="text" class="span3" id="footerBannerURL" name="footerBannerURL" placeholder="<?php echo $this->translate('Footer Banner URL');?>"
+                                           value="<?php echo trim($this->newsletterCampaign->getFooterBannerURL());?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">&nbsp;</div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="step2">
+                    <div class="mainpage-content">
+                        <div class="wrap columns-2" id="campaignOffersOne">
+                            <h1>
+                                <?php echo $this->translate('Offer part one'); ?>
+                            </h1>
+                            <?php echo $this->flashMessages(); ?>
+                            <div  class="metabox-holder has-right-sidebar">
+                                <div id="side-info-column" class="inner-sidebar-coupon">
+                                    <div id="side-sortables" class="meta-box-sortables ui-sortable">
+                                        <div class="coupon-sidebar-outer">
+                                            <div class="coupon-sidebar-heading">
+                                                <select  style="display: none; width : 389px;" class="combobox" name="PartOneOfferlist" id="PartOneOfferlist">
+                                                    <option value=""></option>
+                                                    <?php
+                                                    foreach ($this->partOneSearchOffers as $offerDetail) {
+                                                        if (trim ($offerDetail ['title'] ) != '') {
+                                                            $offer = substr ($offerDetail ['title'], 0, 70 );
+                                                            ?>
+                                                            <option  value="<?php echo $offerDetail['id']; ?>"><?php echo $offer; ?></option>
+                                                        <?php }} ?>
+                                                </select>
+                                                <input type="hidden" name="selctedOffer" id="selctedOffer" value="">
+                                                <input type="hidden" name="selctedOfferText" id="selctedOfferText" value="">
+                                                <!--<input placeholder="search offer" id='searchCouponTxt' type="text" class="input-medium search-query">-->
+                                                <input type='hidden' name="SearchedValueIds" id="SearchedValueIds" value="">
+                                            </div>
+                                            <div class="coupon-sidebar-content-box">
+                                                <a onClick='addNewOffer(this)' class="btn btn-primary addNewOffer" >ADD NEW OFFER</a>
+                                            </div>
+                                            <div class="mb10"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="post-body">
+                                    <div id="post-body-content-coupon">
+                                        <div class="top-coupon-list">
+                                            <table class="table table-bordered table-striped"  cellpadding="0" cellspacing="0" id="partOneOffers">
+                                                <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th><?php echo $this->translate('Offer Name'); ?></th>
+                                                    <th><?php echo $this->translate('Action'); ?></th>
+                                                </tr>
+                                                </thead>
+                                                <?php
+                                                    $row = 1;
+                                                    foreach($this->newsletterCampaign->getNewsletterCampaignOffers() as $offer): ?>
+                                                        <?php if ($offer->getSection() == 1) : ?>
+                                                        <tr id="row_<?php echo $offer->offer->getId();?>" data-position="<?php echo $row; ?>">
+                                                            <td><?php echo $row; ?></td>
+                                                            <td><input type="hidden" name="partOneOffers[]" value="<?php echo $offer->offer->getId(); ?>"><?php echo $offer->offer->getTitle(); ?></td>
+                                                            <td>
+                                                                <input type="button" class="btn ml10 mb10" type="button" onClick="deleteOne('row_<?php echo $offer->offer->getId(); ?>', 'campaignOffersOne')" value='Delete'>
+                                                            </td>
+                                                        </tr>
+                                                        <?php $row++; endif; endforeach; ?>
+                                            </table>
+                                            <label class="toplinks-outer" style="color: #3a87ad"><i>* <?php echo $this->translate('You can drag & drop the offers to reorder'); ?></i></label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+
+                        <div class="wrap columns-2" id="campaignOffersTwo">
+                            <h1>
+                                <?php echo $this->translate('Offer part two'); ?>
+                            </h1>
+                            <?php echo $this->flashMessages(); ?>
+                            <div class="mainpage-content-line" style="width: 83.5%;">
+                                <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Offer Part Two Title');?></strong></label></div>
+                                <div class="mainpage-content-right">
+                                    <div class="mainpage-content-right-inner-right-other"></div>
+                                    <div class="mainpage-content-right-inner-left-other">
+                                        <input type="text" class="span3" id="offerPartTwoTitle" name="offerPartTwoTitle" placeholder="<?php echo $this->translate('Offer Part Two Title');?>"
+                                               value="<?php  echo trim($this->newsletterCampaign->getOfferPartTwoTitle());?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div  class="metabox-holder has-right-sidebar">
+                                <div id="side-info-column" class="inner-sidebar-coupon">
+                                    <div id="side-sortables" class="meta-box-sortables ui-sortable">
+                                        <div class="coupon-sidebar-outer">
+                                            <div class="coupon-sidebar-heading">
+                                                <select  style="display: none; width : 389px;" class="combobox" name="PartTwoOfferlist" id="PartTwoOfferlist">
+                                                    <option value=""></option>
+                                                    <?php
+                                                    foreach ($this->partOneSearchOffers as $offerDetail) {
+                                                        if (trim ($offerDetail ['title'] ) != '') {
+                                                            $offer = substr ($offerDetail ['title'], 0, 70 );
+                                                            ?>
+                                                            <option  value="<?php echo $offerDetail['id']; ?>"><?php echo $offer; ?></option>
+                                                        <?php }} ?>
+                                                </select>
+                                                <input type="hidden" name="selctedOffer" id="selctedOffer" value="">
+                                                <input type="hidden" name="selctedOfferText" id="selctedOfferText" value="">
+                                                <input type='hidden' name="SearchedValueIds" id="SearchedValueIds" value="">
+                                            </div>
+                                            <div class="coupon-sidebar-content-box">
+                                                <a onClick='addNewOffer(this)' class="btn btn-primary addNewOffer" >ADD NEW OFFER</a>
+                                            </div>
+                                            <div class="mb10"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="post-body">
+                                    <div id="post-body-content-coupon">
+                                        <div class="top-coupon-list">
+                                            <table class="table table-bordered table-striped"  cellpadding="0" cellspacing="0" id="partTwoOffers">
+                                                <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th><?php echo $this->translate('Offer Name'); ?></th>
+                                                    <th><?php echo $this->translate('Action'); ?></th>
+                                                </tr>
+                                                </thead>
+                                                <?php
+                                                $row = 1;
+                                                foreach($this->newsletterCampaign->getNewsletterCampaignOffers() as $offer): ?>
+                                                <?php if ($offer->getSection() == 2) : ?>
+                                                    <tr id="row_<?php echo $offer->offer->getId(); ?>" data-position="<?php echo $row; ?>">
+                                                        <td><?php echo $row; ?></td>
+                                                        <td><input type="hidden" name="partTwoOffers[]" value="<?php echo $offer->offer->getId(); ?>"><?php echo $offer->offer->getTitle();?></td>
+                                                        <td>
+                                                            <input type="button" class="btn ml10 mb10" type="button" onClick="deleteOne('row_<?php echo $offer->offer->getId(); ?>', 'campaignOffersTwo')"  value='Delete'>
+                                                        </td>
+                                                    </tr>
+                                                <?php $row++; endif; endforeach; ?>
+
+                                            </table>
+                                            <label class="toplinks-outer" style="color: #3a87ad"><i>* <?php echo $this->translate('You can drag & drop the offers to reorder'); ?></i></label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+
+                </div>
+                <div class="tab-pane" id="step3">
+                    <div class="mainpage-content">
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Recipients');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <div class="mb20"><?php echo $this->recipientCount['recepients'] . $this->translate(' Recipients selected');?></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mainpage-content-line mb10">
+                            <div class="mainpage-content-left">
+                                <label><strong><?php echo $this->translate('Time Zone'); ?></strong></label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <div data-toggle="buttons-checkbox" class="btn-group timezone">
+                                        <label>
+                                            <strong>
+                                                <?php
+                                                # set current timezone for scheduled newsletter if available (in case if it is schediled)
+                                                echo $this->localeSettings['0']->timezone;
+                                                ?>
+                                            </strong>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Send Date/Time');?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other dateValidationMessage"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <div>
+                                        <?php
+                                          if($this->newsletterCampaign->getScheduledTime()) {
+                                              $date = $this->newsletterCampaign->getScheduledTime();
+                                          }
+                                        ?>
+                                        <div data-date-format="dd-mm-yyyy" data-date="<?php echo isset($date) ?  $date->format('d-m-Y') : date('d-m-Y');?>" id="dp1" class="input-append date">
+                                            <input readonly="readonly" type="text"  value="<?php echo isset($date) ?  $date->format('d-m-Y') :  date('d-m-Y'); ?>"
+                                                   placeholder=''
+                                                   class="span2 ignore2 date-time-cusor-style" id="scheduleDate"
+                                                   name="scheduleDate">
+                                            <span class="add-on"><i class="icon-th"></i></span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="input-append bootstrap-timepicker-component" style="display: inline-block;">
+                                            <input readonly="readonly" type="text" name="scheduleTime" id="scheduleTime" class="input-small timepicker-default ignore2 date-time-cusor-style"
+                                                value="<?php echo isset( $date) ? $date->format('H:i') : date('H:i');?>">
+                                                <span class="add-on">
+                                                    <i class="icon-time" style="background-position: -47px -24px;"></i>
+                                                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <ul class="pager wizard m-b-sm">
+                    <li class="next last" style="display:none;"><a href="#">Last</a></li>
+                    <li class="next"><a href="#">Next</a></li>
+                    <?php
+                    $sessionNamespace = new Zend_Session_Namespace();
+                    if (in_array($sessionNamespace->settings['rights']['content']['rights'], array('1', '2'))) { ?>
+                    <li class="btn-primary accessSave" style="display:none;" id="scheduleButton"><a href="#">Schedule</a></li>
+                    <?php } else { ?>
+                    <li class="btn-primary accessSave" style="display:none;" id="saveCampaign"><a href="#">Save and Exit</a></li>
+                    <?php } ?>
+                    <li class="previous first disabled" style="display:none;"><a href="#">First</a></li>
+                    <li class="previous disabled"><a href="#">Previous</a></li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</form>
+</div><!-- End code of info campaigns -->
+
+<div class="modal display-none popup-width" id="sendTest" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="wrap columns-2" style="">
+        <form method="post" id="sendTestEmailForm" name="sendTestEmailForm" action="/admin/newsletter-campaigns/send-test-email">
+            <input type="hidden" name="campaignId" value="<?php echo $this->newsletterCampaign->getId(); ?>">
+            <div class="m-item-popup-hdr">Send Test Email</div>
+            <div id="poststuff" class="metabox-holder has-right-sidebar">
+                <div id="post-body" style="min-height: 110px;">
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-right ml20">
+                            <div></div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                <input type="hidden" id='testEmailId' name='testEmailId' placeholder="Search Email.." style="width:300px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br class="clear">
+            </div>
+
+            <div class="m-item-popup-btm">
+                <button value="" id="submitTestEmail" name="submitTestEmail" class="btn btn-primary m5" type="submit">Send</button>
+                <button value="" class="btn ml10 m5" data-dismiss="modal">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

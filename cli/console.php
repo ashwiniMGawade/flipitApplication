@@ -13,6 +13,7 @@ use \Core\Persistence\Database\Service as Service;
 use \Command\LocaleMigrations\Helpers\ConfigurationHelper;
 use \Command\LocaleMigrations as LocaleMigrations;
 use \Command\Email\VisitorInactiveCommand;
+use \Command\Email\SendNewsletterTrigger;
 
 $cli = new Application();
 $cli->setCatchExceptions(true);
@@ -52,4 +53,5 @@ $cli->add(new LocaleMigrations\LocaleVersionCommand());
 
 // Add business logic commands
 $cli->add(new VisitorInactiveCommand());
+$cli->add(new SendNewsletterTrigger());
 $cli->run();

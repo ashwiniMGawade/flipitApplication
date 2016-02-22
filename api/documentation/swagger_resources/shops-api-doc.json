@@ -239,6 +239,8 @@
             "classification":{
                 "type":"string",
                 "enum": [
+                    "C",
+                    "B",
                     "A",
                     "A+",
                     "AA",

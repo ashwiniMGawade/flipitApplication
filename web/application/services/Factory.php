@@ -2,10 +2,10 @@
 
 class Application_Service_Factory
 {
-    public static function topOffers($limit)
+    public static function topOffers($limit, $offerType = 'MN')
     {
         $topOffers = new Application_Service_Offer_TopOffer(new KC\Repository\Offer, $limit);
-        return $topOffers->execute($limit);
+        return $topOffers->execute($limit, $offerType);
     }
 
     public static function similarOffers($shopId, $shopAffiliateprogram)

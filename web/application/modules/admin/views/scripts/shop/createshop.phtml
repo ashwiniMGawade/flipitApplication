@@ -456,8 +456,9 @@ $howToIntroductionText = '';
                     <div class="mainpage-content-right">
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div class="mainpage-content-right-inner-left-other">
-                            <input value="" type="text" class="span3"
-                                placeholder="<?php echo $this->translate('backend_Featured Text'); ?>" name="featuredtext">
+                            <textarea class="input-xlarge mbot bbot ignore word_count"   id="featuredtext" name="featuredtext"
+                                      placeholder="<?php echo $this->translate('backend_Featured Text'); ?>" rows="3"><?php echo $this->data['featuredtext']; ?></textarea>
+                            <input type="text" id='featuredtext_count' class="input-xlarge disabled btop word-count" disabled="disabled">
                         </div>
                     </div>
                 </div>

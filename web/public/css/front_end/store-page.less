@@ -265,7 +265,7 @@
             @media only screen and (max-width: 767px){
               padding-bottom: 5px;
             }
-            padding-bottom: 15px;
+            padding-bottom: 8px;
         }
         .code{
             img{
@@ -293,7 +293,7 @@
         &.orange-block{
             .offer-holder{
                 &:hover{
-                    padding: 20px 20px 2px;
+                    padding: 15px;
                     border-bottom: 1px solid #eaeaea;
                     @media only screen and (max-width: 767px){
                         padding: 15px 15px 2px;
@@ -383,15 +383,7 @@
         }
         }
         .offer-holder{
-            padding: 20px 20px 2px;
-            @media only screen and (max-width: 767px){
-                padding: 15px 15px 2px;
-            }
-            &:hover{
-                @media only screen and (max-width: 767px){
-                    padding: 15px 15px 2px;
-                }
-            }
+            padding: 15px;
         }
         .clickout-title, .link{
             text-decoration: none !important;
@@ -401,14 +393,17 @@
         }
         .info-area{
             overflow: hidden;
-            background: url(../../images/border.png) repeat-x;
-            padding: 8px 28px 6px 21px;
+            background: url(../../images/border.png) repeat-x scroll 0 15px;
+            padding: 4px 28px 2px 21px;
             margin: 0 -20px;
+            clear: both;
+            padding-top: 20px;
+            margin-bottom: -8px;
             @media only screen and (max-width: 979px){
-                padding: 7px 20px 6px;
+                padding: 4px 20px 2px;
             }
             @media only screen and (max-width: 767px){
-                padding: 7px 15px 0;
+                padding: 0px 15px 0;
                 margin: 10px -15px 0;
                 font-size: 11px;
             }
@@ -422,7 +417,7 @@
                 text-decoration: underline;
                 @media only screen and (max-width: 979px){
                     
-                    margin: 4px 0 5px 5px;
+                    margin: 4px 0 0 5px;
                     
                 }
                 @media only screen and (max-width: 767px){
@@ -440,121 +435,131 @@
                     top: 4px;
                     content: "";
                 }
+            }
+            .terms.uparrow{
+                &:after{
+                    background:url(../../images/sprite.png) no-repeat -179px -127px;
                 }
-                .terms.uparrow{
-                    &:after{
-                        background:url(../../images/sprite.png) no-repeat -179px -127px;
+                &:hover:after,
+                &:focus:after{background-position: -180px -157px;}
+            }
+            .info{
+                padding: 4px 0 0;
+                margin: 0;
+                overflow: hidden;
+                ul{
+                    margin: 0 -10px;
+                    list-style: none;
+                    padding: 0;
+                    @media only screen and (max-width: 979px){
+                        margin: 0 -6px;
                     }
-                    &:hover:after,
-                    &:focus:after{background-position: -180px -157px;}
-                }
-                .info{
-                    padding: 4px 0 0;
-                    margin: 0;
-                    overflow: hidden;
-                    ul{
-                        margin: 0 -10px;
-                        list-style: none;
-                        padding: 0;
+                    li{
+                        .cursor-pointer {
+                          cursor : pointer;
+                        }
+                        .imbull-menu-image.top50 {
+                          float: left;
+                          height: 17px;
+                          margin: 0px 5px 0 5px;
+                          width: 17px;
+                          background: url(../../images/sprite2.png) no-repeat scroll -134px -20px transparent;
+                        }
+                        float: left;
+                        padding: 1px 10px 4px;
+                        white-space: nowrap;
                         @media only screen and (max-width: 979px){
-                            margin: 0 -6px;
+                            padding: 0 6px 3px;
                         }
-                        li{
-                            float: left;
-                            padding: 1px 10px 4px;
-                            white-space: nowrap;
-                            @media only screen and (max-width: 979px){
-                                padding: 0 6px 3px;
-                            }
-                            @media only screen and (max-width: 767px){
-                                display: none;
-                                max-width: 100%;
-                            }
-                            &.visible-xs{
-                                display: block !important;
-                            }
-                            &:last-child{
-                                @media only screen and (max-width: 767px){
-                                }
-                            }
-                            &:nth-child(2){
-                                @media only screen and (max-width: 479px){
-                                }
-                            }
-                            .img-author{
-                                float: left;
-                                .square(20px);
-                                border-radius: 1px;
-                                margin: -3px 6px 0 0;
-                            }
-                            .name{
-                                display: inline-block;
-                                vertical-align: top;
-                                .text-blue {
-                                    color: #308cc9;
-                                }
-                            }
-                        }
-                    }
-                    .text{
-                        display: block;
-                        color: #878a8d;
-                        padding: 0;
-                        .text-over{
+                        @media only screen and (max-width: 767px){
+                            display: none;
                             max-width: 100%;
                         }
-                        a{
-                            color: #878a8d;
-                            text-decoration: underline;
-                            
-                            &:hover{
-                                text-decoration: none;
+                        &.visible-xs{
+                            display: block !important;
+                        }
+                        &:last-child{
+                            @media only screen and (max-width: 767px){
+                            }
+                        }
+                        &:nth-child(2){
+                            @media only screen and (max-width: 479px){
+                            }
+                        }
+                        .img-author{
+                            float: left;
+                            .square(20px);
+                            border-radius: 1px;
+                            margin: -3px 6px 0 0;
+                        }
+                        .name{
+                            display: inline-block;
+                            vertical-align: top;
+                            .text-blue {
+                                color: #308cc9;
                             }
                         }
                     }
-                    .text-info{
-                        position: relative;
-                        padding: 0 0 0 26px;
-                        display: block;
-                        color: #878a8d;
-                        @media only screen and (max-width: 767px){
-                            padding: 0 0 0 22px;
-                            margin: 0 0 5px;
-                        }
-                        
-                        &:after{
-                            position: absolute;
-                            left: 0;
-                            top: 0;
-                            background: url(../../images/sprite2.png) no-repeat;
-                            content: "";
-                        }
-                        &.exclusive{
-                            color: #eb9528;
-                            font-weight: 700;
-                            &:after{
-                                background-position: -83px 0;
-                                .square(17px);
-                                @media only screen and (max-width: 979px){
-                                    left: -1px; 
-                                }
-
-                            }
-                        }
-                        &.date:after{
-                            .size(16px, 17px);
-                            top:-1px;
-                        }
-                        &.used{
-                            &:after{
-                                .size(15px, 11px);
-                                background-position: -112px 0;
-                                top: 2px;
-                            }
-                        }
-                    }
-
                 }
+                .text{
+                    display: block;
+                    color: #878a8d;
+                    padding: 0;
+                    .text-over{
+                        max-width: 100%;
+                    }
+                    a{
+                        color: #878a8d;
+                        text-decoration: underline;
+
+                        &:hover{
+                            text-decoration: none;
+                        }
+                    }
+                }
+                .text-info{
+                    position: relative;
+                    padding: 0 0 0 26px;
+                    display: block;
+                    color: #878a8d;
+                    @media only screen and (max-width: 767px){
+                        padding: 0 0 0 22px;
+                        margin: 0 0 5px;
+                    }
+                        
+                    &:after{
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        background: url(../../images/sprite2.png) no-repeat;
+                        content: "";
+                    }
+                    &.exclusive{
+                        color: #eb9528;
+                        font-weight: 700;
+                        &:after{
+                            background-position: -83px 0;
+                            .square(17px);
+                            @media only screen and (max-width: 979px){
+                                left: -1px;
+                            }
+
+                        }
+                    }
+                    &.date:after{
+                        .size(16px, 17px);
+                        top:-1px;
+                    }
+                    &.used{
+                        &:after{
+                            .size(15px, 11px);
+                            background-position: -112px 0;
+                            top: 2px;
+                        }
+                    }
+                }
+
+            }
         }
         .meta-items{
             @media only screen and (max-width: 767px){
@@ -564,7 +569,7 @@
             margin: -1px 0 6px;
             padding: 0;
             color: #878a8d;
-            font-size: 12px;
+            font-size: 11px;
             line-height: 15px;
             .clearfix;
             @media only screen and (max-width: 767px){
@@ -573,7 +578,7 @@
             li{
                 float: left;
                 position: relative;
-                padding: 0 8px 0 6px;
+                padding: 0 5px 0 6px;
                 @media only screen and (max-width: 767px){
                     padding: 0 5px 3px;
                 }
@@ -611,6 +616,7 @@
             }
         }
     }
+
     #sidebar .author-info{
         overflow: hidden;
         border-bottom: 1px solid #e9e9e9;
@@ -777,4 +783,30 @@
     pointer-events: none;
     z-index: 5999;
     opacity: 0.5;
+}
+
+
+.section .block .text {
+  display: inline-block;
+  vertical-align: top;
+  width: 100%;
+}
+
+@media only screen and (min-width: 768px) {
+  .page-store .section .block .buttons {
+    margin: 0 0 5px 15px;
+    float: right;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .page-store .section .block .buttons {
+    margin: 21px 0 5px 15px;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .section .block .text {
+    max-width: 61.5%;
+    width: auto;
+    float: left;
+  }
 }

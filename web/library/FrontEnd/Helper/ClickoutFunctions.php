@@ -10,7 +10,7 @@ class FrontEnd_Helper_ClickoutFunctions
     public $shopActualUrl;
     public $shopPermalink;
 
-    public function __construct($offerId, $shopId)
+    public function __construct($offerId, $shopId, $overWriteRefUrl = null)
     {
         if (isset($offerId)) {
             $this->offerId = $offerId;
@@ -27,6 +27,9 @@ class FrontEnd_Helper_ClickoutFunctions
             $this->shopRefUrl = isset($shopInfo['refUrl']) ? $shopInfo['refUrl'] : '';
             $this->shopActualUrl = isset($shopInfo['actualUrl']) ? $shopInfo['actualUrl'] : '';
             $this->shopPermalink = isset($shopInfo['permalink']) ? $shopInfo['permalink'] : '';
+        }
+        if(false === is_null($overWriteRefUrl)) {
+            $this->shopRefUrl = $overWriteRefUrl;
         }
         $this->network = \KC\Repository\Shop::getAffliateNetworkDetail($shopId);
         $this->shopId = $shopId;

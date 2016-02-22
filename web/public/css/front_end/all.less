@@ -792,12 +792,8 @@ div.box a.remove-fovourite.blue{
         }
     }
     .terms-block{
-        padding:15px 15px 10px;
         font-size:12px;
         line-height:18px;
-        color:@grey-color;
-        background:#FFFFFF;
-        border:1px solid @page-header-border-color;
         border-top:0;
         overflow:hidden;
         h2, .term-and-condition{
@@ -808,6 +804,7 @@ div.box a.remove-fovourite.blue{
             margin:0 0 12px;
         }
     }
+
     .code-details {
         .terms-block{
             h2{font-weight:bold;}
@@ -815,11 +812,17 @@ div.box a.remove-fovourite.blue{
     }
     .orange-block{
         .holder{
-            background:#fef9f2;
+            background:#fff2d8;
         }
         .offer-holder:hover{
-            background:#fff2d9;
+            background:#FFE7AF;
             padding: 30px;
+        }
+        .offer-box:hover{
+          background:#FFE7AF;
+        }
+        .offer {
+          background:none;
         }
         .alt2{
             border-color:#edd5b6;
@@ -832,7 +835,7 @@ div.box a.remove-fovourite.blue{
     .code{
         float:left;
         color:#e69342;
-        margin:0 30px 0 0;
+        margin:0 15px 0 0;
         text-align:center;
         text-transform:uppercase;
         font-size:23px;
@@ -880,6 +883,13 @@ div.box a.remove-fovourite.blue{
             border-radius: 0 0 2px 2px;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
             -webkit-border-radius: 0 0 2px 2px;
+            div.imbull-menu-image.top50 {
+              float: left;
+              height: 17px;
+              margin: -1px -26px 0 15px;
+              width: 17px;
+              background: url(../../images/sprite2.png) no-repeat scroll -109px -19px transparent;
+            }
         }
     }
     article.block{
@@ -887,13 +897,6 @@ div.box a.remove-fovourite.blue{
       border-bottom:10px solid transparent;
     }
     article.block.active:hover{
-        background-color: #fcfcfc;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(255, 255, 255)), to(rgb(250, 250, 250)));
-    background-image: -webkit-linear-gradient(top, rgb(255, 255, 255), rgb(250, 250, 250));
-    background-image: -moz-linear-gradient(top, rgb(255, 255, 255), rgb(250, 250, 250));
-    background-image: -o-linear-gradient(top, rgb(255, 255, 255), rgb(250, 250, 250));
-    background-image: -ms-linear-gradient(top, rgb(255, 255, 255), rgb(250, 250, 250));
-    background-image: linear-gradient(top, rgb(255, 255, 255), rgb(250, 250, 250));
     filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#ffffff', EndColorStr='#fafafa');
         }
     .code-2{
@@ -1025,6 +1028,7 @@ div.box a.remove-fovourite.blue{
     }
     .offer-box{
         display:none;
+        clear: both;
     }
     .websiteButton{
         display:none;
@@ -1047,10 +1051,8 @@ div.box a.remove-fovourite.blue{
     .offer{
         font-size:15px;
         line-height:18px;
-        background:#fef9f2;
-        padding:19px 15px 23px 32px;
+        padding:15px;
         color:@text-color;
-        border:1px solid @page-header-border-color;
         border-top:0;
         span{
             display:inline-block;
@@ -1687,8 +1689,8 @@ hr.alt2{
     display:table;
     float:right;
     text-align:center;
-    /*width: 79.2%;*/
-    margin: 0 0 14px;
+    width: 210px;
+    margin: 21px 0 5px 15px;
     font-size: 12px;
     line-height: 14px;
     font-weight: bold;
@@ -1735,6 +1737,9 @@ hr.alt2{
         border-style:solid;
         border-color:#e3842d;
         .border-radius(4px 4px 4px 4px);
+    }
+    .font15px {
+      font-size: 15px;
     }
 }
 .the-code-2{
@@ -3888,7 +3893,6 @@ span.pop{
         .block{
             .holder{padding:3% 5%;}
             .offer-holder:hover{
-                border: none;
                 padding:3% 5%;
             }
             .link{padding-right: 10px; text-decoration: underline;}
@@ -3958,6 +3962,7 @@ span.pop{
         }
         .offer-box{
           display:none !important;
+          clear:both;
         }
     }
     .code-details{
@@ -4636,4 +4641,21 @@ ul.ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all.wd1 {
         }
         margin: 0px;
     }
+}
+.offer-holder .text-over{
+  overflow: inherit;
+}
+@media only screen and (max-width: 767px) {
+  .page-store .section .block .offer-holder {
+    padding: 15px 15px 2px;
+  }
+  .page-store .section .block .info-area {
+    background: url(../../images/border.png) repeat-x scroll 0 0px;
+  }
+}
+.page-store .section .block .offer-holder .box {
+  padding-bottom: 0px;
+}
+.shoppage .code .center {
+  padding:0px;
 }

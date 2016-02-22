@@ -40,79 +40,6 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 
 	<!-------------------- End Locale Settings -------------------->
 
-	<!-------------------- Start Popular Categories -------------------->
-
-	<div class="mainpage-content">
-	<h3>
-		<strong><?php echo $this->translate('Popular Categories'); ?></strong>
-	</h3>
-	<div id="poststuff" class="metabox-holder has-right-sidebar">
-
-		<!-- button div with searchbar -->
-		<div id="side-info-column" class="inner-sidebar-coupon">
-			<div id="side-sortables" class="meta-box-sortables ui-sortable">
-				<div class="coupon-sidebar-outer">
-
-					<!-- searchbar div -->
-					<div class="coupon-sidebar-heading">
-
-						<input placeholder="search Category" id='searchcatgTxt'
-							type="text" class="input-medium search-query">
-
-					</div>
-
-					<!-- coupon code move up -->
-					<div class="coupon-sidebar-content-box">
-						<button id='moveUpCategory' onClick='moveUpCategory();'
-							class="btn">MOVE UP</button>
-						<button id='addNewCategory' onClick='addNewCategory();'
-							class="btn">ADD NEW CATEGORY</button>
-					</div>
-					<!-- coupon code move down  -->
-					<div class="coupon-sidebar-content-box mb10">
-						<button id='moveDownCategory' onClick='moveDownCategory();'
-							class="btn">MOVE DOWN</button>
-						<button id='deleteCategory' onClick='deleteCategory();'
-							class="btn">DELETE</button>
-					</div>
-
-
-				</div>
-			</div>
-		</div>
-
-              <?php $catg = $this->category; ?>
-              <!-- display code div -->
-		<div id="post-body">
-			<div id="post-body-content-coupon">
-				<div class="top-coupon-list"
-					style="overflow: auto; height: 468px ! important;">
-					<ul id="mostCategories">
-                        <?php if($this->category!=null){
-
-                        	foreach ($this->category as $o){
-
-              					echo  "<li reltype='" . $o['type'] . "' relpos='" . $o['position'] . "' reloffer='" . $o['categoryId'] . "' id='" . $o['id'] . "' >" . $o['name'] ."</li>";
-
-              					}
-                         	} else {
-
-                         		echo  "<li id='noRecord'>No record found</li>";
-
-              				} ?>
-              			</ul>
-				</div>
-			</div>
-		</div>
-		<br class="clear">
-	</div>
-	<!-- /poststuff -->
-
-	<div class="clear"></div>
-	</div>
-	<!-------------------- End Popular Categories -------------------->
-
-
 	<!-------------------- Start Special List -------------------->
 <div class="mainpage-content">
 	<h3>
@@ -180,7 +107,79 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 	<div class="clear"></div>
 	</div>
 	<!-------------------- End Special List -------------------->
-	<!-------------------- Start Money Saving Articles -------------------->
+    <!-------------------- Start Popular Categories -------------------->
+
+    <div class="mainpage-content">
+        <h3>
+            <strong><?php echo $this->translate('Popular Categories'); ?></strong>
+        </h3>
+        <div id="poststuff" class="metabox-holder has-right-sidebar">
+
+            <!-- button div with searchbar -->
+            <div id="side-info-column" class="inner-sidebar-coupon">
+                <div id="side-sortables" class="meta-box-sortables ui-sortable">
+                    <div class="coupon-sidebar-outer">
+
+                        <!-- searchbar div -->
+                        <div class="coupon-sidebar-heading">
+
+                            <input placeholder="search Category" id='searchcatgTxt'
+                                   type="text" class="input-medium search-query">
+
+                        </div>
+
+                        <!-- coupon code move up -->
+                        <div class="coupon-sidebar-content-box">
+                            <button id='moveUpCategory' onClick='moveUpCategory();'
+                                    class="btn">MOVE UP</button>
+                            <button id='addNewCategory' onClick='addNewCategory();'
+                                    class="btn">ADD NEW CATEGORY</button>
+                        </div>
+                        <!-- coupon code move down  -->
+                        <div class="coupon-sidebar-content-box mb10">
+                            <button id='moveDownCategory' onClick='moveDownCategory();'
+                                    class="btn">MOVE DOWN</button>
+                            <button id='deleteCategory' onClick='deleteCategory();'
+                                    class="btn">DELETE</button>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <?php $catg = $this->category; ?>
+            <!-- display code div -->
+            <div id="post-body">
+                <div id="post-body-content-coupon">
+                    <div class="top-coupon-list"
+                         style="overflow: auto; height: 468px ! important;">
+                        <ul id="mostCategories">
+                            <?php if($this->category!=null){
+
+                                foreach ($this->category as $o){
+
+                                    echo  "<li reltype='" . $o['type'] . "' relpos='" . $o['position'] . "' reloffer='" . $o['categoryId'] . "' id='" . $o['id'] . "' >" . $o['name'] ."</li>";
+
+                                }
+                            } else {
+
+                                echo  "<li id='noRecord'>No record found</li>";
+
+                            } ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <br class="clear">
+        </div>
+        <!-- /poststuff -->
+
+        <div class="clear"></div>
+    </div>
+    <!-------------------- End Popular Categories -------------------->
+
+    <!-------------------- Start Money Saving Articles -------------------->
 <div class="mainpage-content">
 	<h3>
 		<strong><?php echo $this->translate('Money Saving Articles'); ?></strong>

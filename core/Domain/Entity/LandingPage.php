@@ -38,6 +38,11 @@ class LandingPage
     protected $permalink;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $refUrl;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $subTitle;
@@ -56,6 +61,11 @@ class LandingPage
      * @ORM\Column(type="text", nullable=true)
      */
     protected $content;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $brandingCss;
 
     /**
      * @ORM\Column(type="integer", length=1)
@@ -265,6 +275,38 @@ class LandingPage
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRefUrl()
+    {
+        return $this->refUrl;
+    }
+
+    /**
+     * @param mixed $refUrl
+     */
+    public function setRefUrl($refUrl)
+    {
+        $this->refUrl = $refUrl;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBrandingCss()
+    {
+        return $this->brandingCss;
+    }
+
+    /**
+     * @param mixed $brandingCss
+     */
+    public function setBrandingCss($brandingCss)
+    {
+        $this->brandingCss = $brandingCss;
     }
 
     /**

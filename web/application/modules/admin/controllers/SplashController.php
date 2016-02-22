@@ -62,10 +62,21 @@ class Admin_SplashController extends Application_Admin_BaseController
             $pageParams = $this->getRequest()->getParam('splashPage', false);
             if (true === isset($_FILES['splashImage']) && true === isset($_FILES['splashImage']['name']) && '' !== $_FILES['splashImage']['name']) {
                 $rootPath = BASE_PATH . 'images/upload/splash/';
-                $image = $this->uploadImage('splashImage', $rootPath);
+                $imageSizeValidator = array('minwidth' => 1400, 'minheight' => 600);
+                $image = $this->uploadImage('splashImage', $rootPath, $imageSizeValidator);
                 $pageParams['image'] = $image;
                 $oldFile = $rootPath . $splashPage->getImage();
                 if ($image !== false && $image !== $splashPage->getImage() && true === file_exists($oldFile)) {
+                    unlink($oldFile);
+                }
+            }
+            if (true === isset($_FILES['splashInfoImage']) && true === isset($_FILES['splashInfoImage']['name']) && '' !== $_FILES['splashInfoImage']['name']) {
+                $rootPath = BASE_PATH . 'images/upload/splash/';
+                $imageSizeValidator = array('minwidth' => 1400, 'minheight' => 600);
+                $infoImage = $this->uploadImage('splashInfoImage', $rootPath, $imageSizeValidator);
+                $pageParams['infoImage'] = $infoImage;
+                $oldFile = $rootPath . $splashPage->getInfoImage();
+                if ($infoImage !== false && $infoImage !== $splashPage->getInfoImage() && true === file_exists($oldFile)) {
                     unlink($oldFile);
                 }
             }
@@ -164,7 +175,8 @@ class Admin_SplashController extends Application_Admin_BaseController
             $rootPath = BASE_PATH . 'images/upload/splash/';
             $uploadedImage = '';
             if (true === isset($_FILES['featuredImage']) && true === isset($_FILES['featuredImage']['name']) && '' !== $_FILES['featuredImage']['name']) {
-                $uploadedImage = $this->uploadImage('featuredImage', $rootPath);
+                $imageSizeValidator = array('minwidth' => 350, 'minheight' => 300);
+                $uploadedImage = $this->uploadImage('featuredImage', $rootPath, $imageSizeValidator);
             }
             $params['image'] = $uploadedImage;
             $params['position'] = count($splashImages) + 1;
@@ -211,6 +223,13 @@ class Admin_SplashController extends Application_Admin_BaseController
             $this->redirect(HTTP_PATH . 'admin/splash/images');
         }
 
+        $splashImages = ( array ) SystemFactory::getSplashImages()->execute(array());
+        $splashOffers = ( array ) SystemFactory::getSplashOffers()->execute(array());
+        if (count($splashOffers) >= count($splashImages)) {
+            $this->setFlashMessage('error', 'You can\'t delete this image as it is associated with an offer.');
+            $this->redirect(HTTP_PATH . 'admin/splash/images');
+        }
+
         $result = AdminFactory::getSplashImage()->execute(array('id' => $splashImageId));
         if ($result instanceof Errors) {
             $errors = $result->getErrorsAll();
@@ -227,7 +246,7 @@ class Admin_SplashController extends Application_Admin_BaseController
         $this->redirect(HTTP_PATH . 'admin/splash/images');
     }
 
-    public function uploadImage($file, $rootPath)
+    public function uploadImage($file, $rootPath, $imageSizeValidator = array())
     {
         $adapter = new \Zend_File_Transfer_Adapter_Http();
         $adapter->getFileInfo($file);
@@ -239,6 +258,10 @@ class Admin_SplashController extends Application_Admin_BaseController
 
         $adapter->setDestination($rootPath);
         $adapter->addValidator('Extension', false, array('jpg,jpeg,png', true));
+        if (!empty($imageSizeValidator)) {
+            $adapter->addValidator('ImageSize', false, $imageSizeValidator);
+        }
+
         $imageName = $adapter->getFileName($file, false);
         $targetPath = $rootPath . $imageName;
         $adapter->addFilter(

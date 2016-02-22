@@ -416,6 +416,15 @@ $action = $this->action;
                tabindex="1"><?php echo $this->translate('Visitors'); ?></a>
         </li>
     <?php } ?>
+    <?php if ($sessionNamespace->settings['rights']['administration']['rights'] == '1') { ?>
+        <li class="imbull-has-submenu menu-icon-home <?php echo $controller === 'reports' ? 'imbull-has-current-submenu imbull-menu-open menu-top' : 'imbull-not-current-submenu imbull-menu-open menu-top'; ?>" id="menu-report">
+            <div class="imbull-menu-image"><a href="<?php echo HTTP_PATH ?>admin/reports"><br></a></div>
+            <div class="">
+                <div></div>
+            </div>
+            <a href="<?php echo HTTP_PATH ?>admin/reports" class="imbull-has-submenu imbull-has-current-submenu imbull-menu-open menu-top menu-icon-widgets" tabindex="1"><?php echo $this->translate('Reports'); ?></a>
+        </li>
+    <?php } ?>
 </ul>
 
 <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Email'); ?></h2></div>
@@ -485,8 +494,52 @@ $action = $this->action;
                     </ul>
                 </div>
             </div>
+    </li>
+        <li <?php if ($controller == 'newsletter-campaigns' || $controller == 'newsletter-campaign-settings') { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" <?php } ?>
+        id="menu-links">
+            <div class="imbull-menu-image">
+                <a href="<?php echo HTTP_PATH ?>admin/email/code-alert"><br></a>
+            </div>
+            <div class="">
+                <div></div>
+            </div>
+            <a href="<?php echo HTTP_PATH ?>admin/newsletter-campaigns/index"
+               class="imbull-has-current-submenu imbull-has-submenu  imbull-menu-open menu-top menu-icon-lightbox"
+               tabindex="1"><?php echo $this->translate('Newsletter Campaigns'); ?>
+                <span
+                    <?php if ($controller == 'newsletter-campaigns') { ?>class="arrow-down" <?php } else { ?> class="arrow-up" <?php } ?>></span>
+            </a>
+
+            <div class="imbull-submenu">
+                <div class="imbull-submenu-wrap">
+                    <div class="imbull-submenu-head"><?php echo $this->translate('Newsletter Campaigns'); ?> </div>
+                    <ul>
+                        <?php if ($controller == 'newsletter-campaigns' && $action == 'create') {
+                            $userColorClass = "new-blue";
+                        } else {
+                            $userColorClass = "new-gray";
+                        } ?>
+                        <li>
+                            <a href="<?php echo HTTP_PATH ?>admin/newsletter-campaigns/create"
+                               class="<?php echo $userColorClass; ?>"
+                               tabindex="1"><?php echo $this->translate('Create Campaign'); ?> </a>
+                        </li>
+                        <?php if ($controller == 'newsletter-campaign-settings' && $action == 'index') {
+                            $userColorClass = "new-blue";
+                        } else {
+                            $userColorClass = "new-gray";
+                        } ?>
+                        <li>
+                            <a href="<?php echo HTTP_PATH ?>admin/newsletter-campaign-settings"
+                               class="<?php echo $userColorClass; ?>"
+                               tabindex="1"><?php echo $this->translate('Campaign Settings'); ?> </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </li>
     </ul>
+
 
 <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Template Settings'); ?></h2></div>
 <ul id="adminmenu" role="navigation">
@@ -568,6 +621,17 @@ $action = $this->action;
         </div>
         <a href="<?php echo HTTP_PATH; ?>admin/popularcode"
            class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile"><?php echo $this->translate('Popular Codes'); ?></a>
+    </li>
+
+    <li <?php if ($controller == 'top50coupons') { ?> class="imbull-has-submenu  menu-top menu-icon-popular imbull-has-current-submenu current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-popular" <?php } ?>
+        id="menu-links">
+
+        <div class="imbull-menu-image"><a href="<?php echo HTTP_PATH; ?>admin/top50coupons"><br></a></div>
+        <div class="">
+            <div></div>
+        </div>
+        <a href="<?php echo HTTP_PATH; ?>admin/top50coupons"
+           class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile"><?php echo $this->translate('Top 50 page offers'); ?></a>
     </li>
 
     <li
@@ -741,7 +805,7 @@ $action = $this->action;
             echo 'style=color:#0088CC';
             endif; ?>
             href="<?php echo HTTP_PATH; ?>admin/urlsettings"
-            class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-pages"><?php echo $this->translate('VWO Manager'); ?></a>
+            class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-pages"><?php echo $this->translate('Tag Manager'); ?></a>
     </li>
 </ul>
 

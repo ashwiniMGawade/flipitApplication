@@ -1,6 +1,7 @@
 <?php
 namespace Core\Domain\Entity;
-use Doctrine\ORM\Mapping AS ORM;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
@@ -218,6 +219,7 @@ class Offer
 
     /**
      * @ORM\OneToMany(targetEntity="Core\Domain\Entity\PopularCode", mappedBy="popularcode")
+     * @ORM\JoinColumn(name="id", referencedColumnName="offerid", onDelete="restrict")
      */
     protected $offer;
 
@@ -281,6 +283,11 @@ class Offer
      * @ORM\OneToMany(targetEntity="Core\Domain\Entity\CategoriesOffers", mappedBy="offers")
      */
     protected $categoriesOffers;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Core\Domain\Entity\NewsletterCampaignOffer", mappedBy="offer")
+     */
+    protected $campaignOffer;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)

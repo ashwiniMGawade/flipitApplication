@@ -65,7 +65,8 @@ foreach ($this->offers as $offer) {
     ?>
     <article class="block <?php echo $offerClass.' '.$expiredDealClass; ?>">
         <div class="holder <?php echo $offerHolderClass; ?>" id="<?php echo $offer->id; ?>">
-    <?php 
+    <?php
+
     echo $offerPartial->getCommonRedirectUrlForOffer(
         $offer,
         $urlToShow,
@@ -79,24 +80,26 @@ foreach ($this->offers as $offer) {
                 <div class="text">
                     <ul class="meta-items">
                         <?php
+                        $metaItems = '';
                         if ($offer->userGenerated == 0 && (isset($offer->discountType) && $offer->discountType == 'CD') && $expiredOffer == '') {
-                            echo $offerPartial->getVerifiedText();
+                            $metaItems .= $offerPartial->getVerifiedText() . ' ';
                         }
                         ?>
-                        <li>
                         <?php
                         $membersOnly = isset($offer->Visability) && $offer->Visability == 'MEM'
                             ? '<span class="members-only-image"></span><span class="members-only">'.$this->translate("Members Only").'</span>'
                             : '';
-                        echo $membersOnly.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires, $expiredOffer);
+                        $metaItems .= $membersOnly.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires, $expiredOffer);
                         ?>
-                        </li>
                         <?php
-                        if ($expiredOffer != '') { ?>
-                        <li>
-                        <?php echo FrontEnd_Helper_viewHelper::__translate('This code is unfortunately expired. Often these code will still work'); ?>!
-                        </li>
-                        <?php } ?>
+                        if ($expiredOffer != '' && isset($offer->discountType) && $offer->discountType == 'CD') {
+                            $metaItems .=  ' . ' . FrontEnd_Helper_viewHelper::__translate('This code is unfortunately expired. Often these code will still work') . '!';
+                        }
+
+                        if ($expiredOffer != '' && isset($offer->discountType) && $offer->discountType == 'SL') {
+                            $metaItems .=  ' . ' . FrontEnd_Helper_viewHelper::__translate('This offer is unfortunately expired') . '!';
+                        }?>
+                        <li><?php echo $metaItems; ?></li>
                     </ul>
                     <?php 
                     if ($offer->Visability == 'MEM') {
@@ -114,7 +117,9 @@ foreach ($this->offers as $offer) {
                     ?>
                 </div>
     <?php
-    $couponClass = isset($offer->discountType) && $offer->discountType != 'CD' ? 'btn-blue-wrapper' : '';
+    $couponClass = (isset($offer->discountType) && $offer->discountType != 'CD') ? 'btn-blue-wrapper' : '';
+    $couponClass = (isset($offer->expiredOffer) && isset($offer->discountType) && $offer->discountType == 'SL') ? '' : $couponClass;
+
     ?>
                 <div class="buttons offer-teaser-button-wrapper" id="offerButton<?php echo $offer->id ;?>">
                     <div class="offer-teaser-button-wrapper-inner <?php echo $couponClass; ?>">
@@ -137,7 +142,7 @@ foreach ($this->offers as $offer) {
     ?>              </div>
                 </div>
                 <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
-                    <strong class="code-value"><?php echo $couponCode;?></strong>
+                    <strong class="code-value <?php echo strlen($couponCode)>12 ? 'font15px' : '';?>"><?php echo $couponCode;?></strong>
                 </div>
                 <div class="btn-blue-wrapper hide" id="websiteButton<?php echo $offer->id; ?>">
                     <a class="btn-code" target="_blank" href="<?php echo $urlToShow;?>" rel="nofollow">
@@ -197,14 +202,25 @@ foreach ($this->offers as $offer) {
             $offer->shopOffers['permaLink']
         );
     }
+    $top50coupon = '';
+    if (isset($offer->offer) && !empty($offer->offer)) {
+        foreach ($offer->offer as $popularcode) {
+            if ($popularcode['type'] == 'TOP50') {
+                $top50coupon = '<li class="cursor-pointer" title="This coupon is listed in our top 50 coupons"><span class="imbull-menu-image top50" ></span>Top 50 code</li>';
+            }
+        }
+    }
     $combinedOfferBottomText = $offerBottomTermsAndConditionLink
         .$offerBottomTextForExclusiveOrSocialOrEditor
+        .$top50coupon
         .$offerBottomDaysTillExpireText
         .$offerBottomViewAllShopsLink.$offerBottomExtendedLink;
+
     if (!empty($combinedOfferBottomText)) {
         ?>
         <div class="info-area">
-            <?php echo $offerBottomTermsAndConditionLink;?>
+            <?php echo $offerBottomTermsAndConditionLink; ?>
+
             <div class="info">
                <ul>
                     <?php
@@ -213,7 +229,8 @@ foreach ($this->offers as $offer) {
                         $offerBottomDaysTillExpireText,
                         $offerBottomViewAllShopsLink,
                         $offerBottomExtendedLink
-                    ); 
+                    );
+
                     $offerBottomTextForExclusiveOrSocialOrEditor = 
                         isset($offerOptionsWithPriorityClasses['offerBottomTextForExclusiveOrSocialOrEditor']) 
                         ? $offerOptionsWithPriorityClasses['offerBottomTextForExclusiveOrSocialOrEditor'] 
@@ -236,6 +253,7 @@ foreach ($this->offers as $offer) {
                         : '';
 
                     echo $offerBottomTextForExclusiveOrSocialOrEditor
+                        .$top50coupon
                         .$offerBottomDaysTillExpireText
                         .$offerBottomViewAllShopsLink;
                     $showUsedCode = false;
@@ -261,10 +279,10 @@ foreach ($this->offers as $offer) {
                </ul>
             </div>
         </div>
-        <?php 
+        <?php
     }
     ?>
-    </div>
+
         <div class="offer-box" id="websiteOfferLink<?php echo $offer->id ;?>" <?php echo $style;?>>
             <div class="offer">
                 <span><?php echo $expiredOffer != ''
@@ -277,39 +295,22 @@ foreach ($this->offers as $offer) {
                 </a>
             </div>
         </div>
-        <div class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
+        <?php
+            $termsClass = 'terms-block';
+            if ($offer->exclusiveCode == '1') {
+                $termsClass .= $expiredOffer != '' ? '' : ' orange-terms';
+            }
+        ?>
+        <div class="<?php echo $termsClass; ?>" id='termAndConditions<?php echo $offer->id ;?>'>
             <div class='term-and-condition'>
-                <?php
-                if (empty($defaultText)) {
-                    echo $this->translate('Terms &amp; Conditions');
-                } else {
-                    echo '<span class="social-term-font">' .$defaultText.'</span>';
-                }
-                ?>
             </div>
             <ol class="num-list">
             <?php echo $termsAndConditions;?>
             </ol>
         </div>
+    </div>
     </article>
     <?php
-    $widgetPosition = !empty($this->widgetPosition) ? $this->widgetPosition : 1;
-    if (!empty($this->shopPage)) {
-        $showSignupOption = $this->showSignupOption;
-        if ($this->shop['affliateProgram'] == 1) {
-            $widgetPosition = $this->widgetPosition;
-        }
-    } else {
-        $showSignupOption = 1;
-    }
-    if ($offerCounter == $widgetPosition && $showSignupOption == 1 && $widgetPosition > 0) :
-        if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage'
-            || $this->offersType=='offerWithPagenation' || $this->offersType=='newestOffer'):
-            $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-            echo $this->esi($this->locale.'signup/signupwidgetlarge?shopId='.$this->currentStoreInformation[0]['id']
-                .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage=');
-        endif;
-    endif;
     if ($this->offersType=='simple') {
         if ($offer->shopOffers['showcustomtext'] == 1
             && $offerCounter == $offer->shopOffers['customtextposition']) { ?>
