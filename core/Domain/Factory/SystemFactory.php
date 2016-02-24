@@ -78,7 +78,6 @@ class SystemFactory
     public static function sendNewsletterTrigger($locale)
     {
         return new SendNewsletterTrigger(
-            RepositoryFactory::newsletterCampaign($locale),
             RepositoryFactory::bulkEmail(),
             RepositoryFactory::localeSetting($locale),
             $locale
