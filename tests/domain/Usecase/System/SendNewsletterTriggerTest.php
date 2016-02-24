@@ -12,7 +12,6 @@ class SendNewsletterTriggerTest extends \Codeception\TestCase\Test
     protected $newsletterCampaign;
     protected $bulkEmail;
     protected $local;
-    protected $newsletterCampaignRepositoryMock;
     protected $bulkEmailRepositoryMock;
     protected $localeSettingsMock;
 
@@ -27,13 +26,18 @@ class SendNewsletterTriggerTest extends \Codeception\TestCase\Test
         $this->newsletterCampaign->setScheduledStatus(1);
         $newsletterCampaignScheduledTime = $this->newsletterCampaign->getScheduledTime();
 
+        // Setting converting the time to UTC as Lambda works with this timezone.
+        $newsletterCampaignScheduledTimeUTC = new \DateTime(
+            $newsletterCampaignScheduledTime->format("d-m-Y\\TH:i:s"),
+            (new \DateTimezone("UTC"))
+        );
+
         $this->bulkEmail = new BulkEmail();
-        $this->bulkEmail->setTimeStamp($newsletterCampaignScheduledTime->getTimestamp()*1000);
+        $this->bulkEmail->setTimeStamp($newsletterCampaignScheduledTimeUTC->getTimestamp()*1000);
         $this->bulkEmail->setReferenceId($this->newsletterCampaign->getId());
         $this->bulkEmail->setEmailType('newsletter');
         $this->bulkEmail->setLocal($this->local);
 
-        $this->newsletterCampaignRepositoryMock = $this->createNewsletterCampaignRepositoryMock();
         $this->bulkEmailRepositoryMock = $this->createBulkEmailRepositoryMock();
         $this->localeSettingsMock = $this->createLocaleSettingsMock();
     }
@@ -43,15 +47,11 @@ class SendNewsletterTriggerTest extends \Codeception\TestCase\Test
         $expectedNewsletterCampaign = clone $this->newsletterCampaign;
         $expectedNewsletterCampaign->setScheduledStatus(2);
 
-        $newsletterCampaignRepositoryMock = $this->scheduleNewsletterCampaignMock(
-            $this->newsletterCampaignRepositoryMock,
-            $expectedNewsletterCampaign
-        );
         $bulkEmailRepositoryMock = $this->scheduleBulkEmailMock(
             $this->bulkEmailRepositoryMock,
             $this->bulkEmail
         );
-        $sendNewsletterTrigger = new SendNewsletterTrigger($newsletterCampaignRepositoryMock, $bulkEmailRepositoryMock, $this->localeSettingsMock, $this->local);
+        $sendNewsletterTrigger = new SendNewsletterTrigger($bulkEmailRepositoryMock, $this->localeSettingsMock, $this->local);
 
         $result = $sendNewsletterTrigger->execute($this->newsletterCampaign);
         $expectedResult = $this->newsletterCampaign->getCampaignName() . " (" . $this->newsletterCampaign->getId() . ") " . strtoupper($this->local);
@@ -66,9 +66,8 @@ class SendNewsletterTriggerTest extends \Codeception\TestCase\Test
             $notToBeScheduledNewsletterOnStatus = clone $this->newsletterCampaign;
             $notToBeScheduledNewsletterOnStatus->setScheduledStatus($scheduleStatus);
 
-            $newsletterCampaignRepositoryMock = $this->dontScheduleNewsletterCampaignMock($this->newsletterCampaignRepositoryMock);
             $bulkEmailRepositoryMock = $this->dontScheduleBulkEmailMock($this->bulkEmailRepositoryMock);
-            $sendNewsletterTrigger = new SendNewsletterTrigger($newsletterCampaignRepositoryMock, $bulkEmailRepositoryMock, $this->localeSettingsMock, $this->local);
+            $sendNewsletterTrigger = new SendNewsletterTrigger($bulkEmailRepositoryMock, $this->localeSettingsMock, $this->local);
 
             $result = $sendNewsletterTrigger->execute($notToBeScheduledNewsletterOnStatus);
             $this->assertEquals('', $result);
@@ -80,36 +79,11 @@ class SendNewsletterTriggerTest extends \Codeception\TestCase\Test
         $notToBeScheduledNewsletterOnScheduleTime = clone $this->newsletterCampaign;
         $notToBeScheduledNewsletterOnScheduleTime->setScheduledTime(new \DateTime('tomorrow'));
 
-        $newsletterCampaignRepositoryMock = $this->dontScheduleNewsletterCampaignMock($this->newsletterCampaignRepositoryMock);
         $bulkEmailRepositoryMock = $this->dontScheduleBulkEmailMock($this->bulkEmailRepositoryMock);
-        $sendNewsletterTrigger = new SendNewsletterTrigger($newsletterCampaignRepositoryMock, $bulkEmailRepositoryMock, $this->localeSettingsMock, $this->local);
+        $sendNewsletterTrigger = new SendNewsletterTrigger($bulkEmailRepositoryMock, $this->localeSettingsMock, $this->local);
 
         $result = $sendNewsletterTrigger->execute($notToBeScheduledNewsletterOnScheduleTime);
         $this->assertEquals('', $result);
-    }
-
-    private function createNewsletterCampaignRepositoryMock()
-    {
-        return $this->getMockBuilder('\Core\Domain\Repository\NewsletterCampaignRepositoryInterface')->getMock();
-    }
-
-    private function scheduleNewsletterCampaignMock($newsletterCampaignRepositoryMock, $expectedNewsletterCampaign)
-    {
-        $newsletterCampaignRepositoryMock
-            ->expects($this->once())
-            ->method('save')
-            ->with($expectedNewsletterCampaign)
-            ->willReturn(null);
-        return $newsletterCampaignRepositoryMock;
-    }
-
-    private function dontScheduleNewsletterCampaignMock($newsletterCampaignRepositoryMock)
-    {
-        $newsletterCampaignRepositoryMock
-            ->expects($this->never())
-            ->method('save')
-            ->willReturn(null);
-        return $newsletterCampaignRepositoryMock;
     }
 
     private function createBulkEmailRepositoryMock()
