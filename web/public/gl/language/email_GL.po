@@ -1,0 +1,255 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Flipit\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-29 21:07+0530\n"
+"PO-Revision-Date: 2015-04-29 17:39+0100\n"
+"Last-Translator: Joanna <joanna@imbull.com>\n"
+"Language-Team: Flipit <joanna@imbull.com>\n"
+"Language: en_IN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ContactController.php:74 LoginController.php:170 SignupController.php:198
+msgid "email_sitename"
+msgstr "Flipit India"
+
+#: ContactController.php:76
+msgid "email_"
+msgstr " "
+
+#: ContactController.php:78
+msgid "email_Contact header"
+msgstr "Contact us"
+
+#: LoginController.php:174
+msgid "email_Forgot Password"
+msgstr "Forgot Flipit Password"
+
+#: LoginController.php:176
+msgid "email_Forgot password header"
+msgstr "Forgot Flipit Password"
+
+#: SignupController.php:202
+msgid "email_Welcome e-mail subject"
+msgstr "Welcome to Flipit India!"
+
+#: SignupController.php:204
+msgid "email_Welcome e-mail header"
+msgstr ""
+"You've successfully subscribed to Flipit India's newsletter. Congratulations!"
+
+#: scripts/emails/contactform.phtml:32
+msgid "email_Dear KC/ Flipit admin,"
+msgstr "Dear Flipit admin,"
+
+#: scripts/emails/contactform.phtml:45
+msgid "email_Visitor Name:"
+msgstr "Visitor's Name:"
+
+#: scripts/emails/contactform.phtml:52
+msgid "email_From email:"
+msgstr "From email:"
+
+#: scripts/emails/contactform.phtml:59
+msgid "email_Subject:"
+msgstr "Subject:"
+
+#: scripts/emails/contactform.phtml:66
+msgid "email_Message:"
+msgstr "Message:"
+
+#: scripts/emails/contactform.phtml:72
+msgid "email_Have a great day,"
+msgstr "Have a great day,"
+
+#: scripts/emails/contactform.phtml:77
+msgid "email_Tech team!"
+msgstr "The Tech team!"
+
+#: scripts/emails/emailOffers.phtml:10
+msgid "email_Popular category:"
+msgstr "What's popular this month:"
+
+#: scripts/emails/emailOffers.phtml:32 scripts/emails/codeAlert.phtml:14
+msgid "email_exclusive"
+msgstr "Exclusively on Flipit"
+
+#: scripts/emails/emailOffers.phtml:46 scripts/emails/codeAlert.phtml:48
+msgid "email_CODE"
+msgstr "COUPON"
+
+#: scripts/emails/emailOffers.phtml:70 scripts/emails/codeAlert.phtml:93
+msgid "email_Bekijk meer van onze top aanbiedingen"
+msgstr "Check out even more top coupon codes we have for you"
+
+#: scripts/emails/footer.phtml:26
+msgid ""
+"email_Je ontvangt deze nieuwsbrief omdat je ons toestemming hebt gegeven om "
+"je op de"
+msgstr ""
+"You are receiving this email because you have given Flipit India consent to "
+"contact you"
+
+#: scripts/emails/footer.phtml:28
+msgid "email_hoogte te houden van onze laatste acties."
+msgstr "so that you can know all about our more recent promo codes and news."
+
+#: scripts/emails/footer.phtml:29
+msgid "email_is een onderdeel van"
+msgstr "Flipit.com is a part of"
+
+#: scripts/emails/footer.phtml:31
+msgid "email_Imbull. Weteringschans 120, 1017XT Amsterdam - KvK #34339618"
+msgstr "Imbull, Van Ostadestraat 149, 1073 TK, Amsterdam. KvK # 34339618"
+
+#: scripts/emails/footer.phtml:36
+msgid "email_Uitschrijven"
+msgstr "Unsubscribe"
+
+#: scripts/emails/footer.phtml:38
+msgid "email_Wijzigen profiel"
+msgstr "Edit your profile"
+
+#: scripts/emails/footer.phtml:40
+msgid "email_Contact"
+msgstr "Contact us"
+
+#: scripts/emails/codeAlert.phtml:24
+msgid "email_New Code Alert"
+msgstr "New Code Alert!"
+
+#: scripts/emails/forgotpassword.phtml:41
+msgid "email_Dear Flipit visitor"
+msgstr "Dear Smart Shopper,"
+
+#: scripts/emails/forgotpassword.phtml:45
+msgid "email_We received a request to reset your account password."
+msgstr "We've received a request to reset your account password"
+
+#: scripts/emails/forgotpassword.phtml:49
+msgid ""
+"email_to reset click on the link below or copy and paste the URL into your "
+"browser"
+msgstr ""
+"To reset your password, click on the link below or copy and paste the URL "
+"into your browser:"
+
+#: scripts/emails/forgotpassword.phtml:61
+msgid "email_Check out our support page for more information"
+msgstr "Check out our support page for more information: "
+
+#: scripts/emails/forgotpassword.phtml:63
+msgid "email_support page"
+msgstr "support page"
+
+#: scripts/emails/forgotpassword.phtml:68
+#: scripts/emails/welcomeTopBlock.phtml:16
+msgid "email_Regards,"
+msgstr "Regards,"
+
+#: scripts/emails/forgotpassword.phtml:72
+msgid "email_Flipit team"
+msgstr "The Flipit India team"
+
+#: scripts/emails/welcomeTopBlock.phtml:10
+msgid "email_Welkom to"
+msgstr "Welcome to Flipit!"
+
+#: scripts/emails/welcomeTopBlock.phtml:13
+msgid ""
+"email_Get ready to flip some great deals! We selected the top 10 offers in "
+"this email especially for you! Have some great time fliping deals!"
+msgstr ""
+"Get ready to flip some great deals with our coupon codes. Each week, we "
+"select the top 10 offers we think will please you the most based on your "
+"preferences. Have a great time fliping over a great deal with us so that you "
+"can shop and save with ease! "
+
+#: scripts/emails/welcomeTopBlock.phtml:19
+msgid "email_The Flipit Team"
+msgstr "The Tech team!"
+
+#: scripts/emails/welcomeTopBlock.phtml:32
+msgid "email_Top 5 kortingscodes"
+msgstr "Our Top 5 Promo Codes "
+
+#: admin/controllers/AuthController.php:227
+#: admin/views/scripts/template/template.phtml:3
+msgid "email_Hi"
+msgstr "Hi there!"
+
+#: admin/views/scripts/template/template.phtml:4
+msgid "email_Your password has been reset as per your request on our website"
+msgstr "Your password has been reset as per your request on our website."
+
+#: admin/views/scripts/template/template.phtml:5
+msgid "email_Your new password is:"
+msgstr "Your new password is:"
+
+#: admin/views/scripts/template/template.phtml:7
+msgid "email_Regards"
+msgstr "Regards,"
+
+#: admin/views/scripts/template/template.phtml:7
+msgid "email_Kortingscode Team"
+msgstr "The Flipit India team"
+
+#: Helper/MandrillHelper.php:149
+msgid "email_valid from"
+msgstr "valid starting from"
+
+#: Helper/MandrillHelper.php:152
+msgid "email_t/m"
+msgstr " until: "
+
+#: Helper/MandrillHelper.php:154
+msgid "email_valid t/m"
+msgstr "valid from:"
+
+#~ msgid "email_added"
+#~ msgstr "added"
+
+#~ msgid "email_only"
+#~ msgstr "only"
+
+#~ msgid "email_days left!"
+#~ msgstr "days left!"
+
+#~ msgid "email_day left!"
+#~ msgstr "day left!"
+
+#~ msgid "email_expires today"
+#~ msgstr "expires today"
+
+#~ msgid "email_expires on:"
+#~ msgstr "expires on:"
+
+#~ msgid "CODE"
+#~ msgstr "CODE"
+
+#~ msgid "email_Beste '.$websiteName.' email_bezoeker"
+#~ msgstr "Dear Smart Shopper, "
+
+#~ msgid "email_account password"
+#~ msgstr "account's password."
+
+#~ msgid "email_To reset click on the link below"
+#~ msgstr "To reset your password, please click on the link below"
+
+#~ msgid "email_Check out our"
+#~ msgstr "You can check out our"
+
+#~ msgid "email_Groet"
+#~ msgstr "All the best,"
+
+#~ msgid "email_The '.$this->websiteName.' Team"
+#~ msgstr "The Flipit India team"

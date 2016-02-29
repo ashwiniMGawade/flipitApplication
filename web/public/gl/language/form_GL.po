@@ -1,0 +1,416 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Flipit\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-05-15 17:31+0530\n"
+"PO-Revision-Date: 2015-05-15 14:01+0100\n"
+"Last-Translator: Joanna <joanna@imbull.com>\n"
+"Language-Team: Flipit India <LL@li.org>\n"
+"Language: en_IN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: LoginController.php:64 LoginController.php:143 LoginController.php:205
+msgid "form_Members Only"
+msgstr "Member's Only"
+
+#: scripts/search/index.phtml:2
+msgid "form_Results for"
+msgstr "Results for"
+
+#: scripts/offer/_lightBoxPartial.phtml:24
+msgid "COPIED"
+msgstr ""
+
+#: scripts/offer/_lightBoxPartial.phtml:38
+msgid "form_Open"
+msgstr "Click to go to"
+
+#: scripts/offer/_lightBoxPartial.phtml:39
+msgid "form_New year sale code"
+msgstr " "
+
+#: scripts/error/pageNotFound.phtml:77 scripts/partials/_headerSearch.phtml:9
+msgid "form_Type in a Store e.g. Avis"
+msgstr "Search for a shop"
+
+#: scripts/socialcode/social-code.phtml:41
+msgid "form_share vouchercode"
+msgstr "share coupon code"
+
+#: scripts/socialcode/socialcodethanks.phtml:5
+msgid "form_Social Code"
+msgstr "Social Code"
+
+#: scripts/socialcode/socialcodethanks.phtml:6
+msgid "form_Thank you for sharing your offer"
+msgstr "Thanks for sharing your offer code"
+
+#: scripts/socialcode/socialcodethanks.phtml:10
+msgid ""
+"form_Thanks for sharing your coupon with the [websitename] Community Our "
+"team will check the details and publish the code"
+msgstr ""
+"Thanks for sharing your coupon with Flipit India's community! Our team will "
+"check the details of your coupon and publish the code"
+
+#: scripts/socialcode/socialcodethanks.phtml:16
+msgid "form_Share coupon codes for other shops"
+msgstr "Would you like to share more coupons for other shops?"
+
+#: scripts/partials/_user_nav_logged_in.phtml:8
+msgid "form_Welcome"
+msgstr "Welcome!"
+
+#: scripts/partials/_user_nav_logged_in.phtml:17
+msgid "form_Your offers"
+msgstr "Your coupons"
+
+#: scripts/partials/_user_nav_logged_in.phtml:22
+msgid "form_Your brands"
+msgstr "Favourite shops"
+
+#: scripts/partials/_user_nav_logged_in.phtml:29
+msgid "form_Account Settings"
+msgstr "Account Settings"
+
+#: scripts/partials/_user_nav_logged_in.phtml:36
+msgid "form_Sign Out"
+msgstr "Log Out"
+
+#: scripts/partials/_signupwidget.phtml:43
+msgid "form_Subscribe & get code"
+msgstr "Subscribe & Print "
+
+#: scripts/partials/_signupwidget.phtml:44
+msgid "form_signup_button"
+msgstr "GO"
+
+#: scripts/partials/_header.phtml:50
+msgid "form_website logo alt"
+msgstr "flipit coupons india"
+
+#: scripts/partials/_header.phtml:52
+msgid "form_website logo title"
+msgstr "flipit coupons india"
+
+#: scripts/partials/_user_nav.phtml:5
+#, fuzzy
+msgid "form_home"
+msgstr "Codes"
+
+#: scripts/partials/_user_nav.phtml:10 scripts/login/index.phtml:45
+msgid "form_Sign In"
+msgstr "Log in"
+
+#: scripts/partials/_user_nav.phtml:16
+msgid "form_Sign up"
+msgstr "Sign up"
+
+#: scripts/partials/_discussion.phtml:20
+msgid "form_disqus_shortname"
+msgstr "wwwflipitcomin"
+
+#: scripts/signup/index.phtml:78
+msgid "form_Create account"
+msgstr "Create an account"
+
+#: scripts/signup/signuplightbox.phtml:39
+msgid "form_Follow Sign up"
+msgstr "Follow"
+
+#: scripts/signup/profile.phtml:109
+msgid "form_update your settings"
+msgstr "Update your Settings"
+
+#: scripts/store/followbutton.phtml:5
+msgid "form_Remove from Favourite"
+msgstr "Remove from your Favourites"
+
+#: scripts/store/followbutton.phtml:10
+msgid "form_Add in Favourite"
+msgstr "Add to Favourites"
+
+#: scripts/store/_similar-and-category-related-shops.phtml:26
+msgid "form_discount vouchers"
+msgstr "discount vouchers"
+
+#: scripts/login/forgotpassword.phtml:31
+msgid "form_Forgot Password"
+msgstr "Reset Password"
+
+#: scripts/login/resetpassword.phtml:42
+msgid "form_Change Password"
+msgstr "Change Password"
+
+#: scripts/index/_homePageSearch.phtml:14
+msgid "form_What deal are you looking for?"
+msgstr "Tell us more about the deal you're looking for"
+
+#: scripts/index/_homePageSearch.phtml:23
+msgid "form_Find"
+msgstr "GO!"
+
+#: scripts/category/_categories-overview.phtml:44
+msgid "form_Coupons inside"
+msgstr "coupons inside"
+
+#: admin/controllers/RssController.php:91 generateOfferFeeds.php:172
+msgid "form_Newest offers"
+msgstr "India's Newest Offers"
+
+#: admin/controllers/RssController.php:104 generateOfferFeeds.php:181
+msgid "form_newest-offers"
+msgstr "India's Latest Offers"
+
+#: admin/controllers/RssController.php:121
+msgid "form_RSS feed  for newest offers has been created successfully!!!"
+msgstr ""
+"Your RSS feed for India's newest offers has been created successfully! "
+
+#: admin/controllers/RssController.php:170 generateOfferFeeds.php:221
+msgid "form_Popular offers"
+msgstr "India's Most Popular Offers"
+
+#: admin/controllers/RssController.php:183 generateOfferFeeds.php:230
+msgid "form_popular-offers"
+msgstr "popular-offers"
+
+#: admin/controllers/RssController.php:200
+msgid "form_RSS feed  for popular offers has been created successfully!!!"
+msgstr ""
+"Your RSS feed for India's popular offers has been created successfully!"
+
+#: admin/views/scripts/email/email-settings.phtml:34
+msgid "Sender Email Address"
+msgstr "what's your e-mail address?"
+
+#: admin/views/scripts/email/email-settings.phtml:43
+msgid "Email Address"
+msgstr "enter your e-mail address"
+
+#: admin/views/scripts/email/email-settings.phtml:51
+msgid "Sender Name"
+msgstr ""
+
+#: admin/views/scripts/email/email-settings.phtml:59
+msgid "Name"
+msgstr ""
+
+#: admin/views/scripts/email/email-settings.phtml:71
+msgid "Submit"
+msgstr ""
+
+#: admin/views/scripts/ipaddresses/addipaddress.phtml:58
+#, fuzzy
+msgid "form_ADD"
+msgstr "All"
+
+#: admin/views/scripts/ipaddresses/editipaddress.phtml:63
+msgid "form_SAVE CHANGES"
+msgstr "SAVE CHANGES"
+
+#: generateOffersFeedOnCategories.php:139
+msgid "form_Special Page offers"
+msgstr "India's Most Popular Offers"
+
+#: generateOffersFeedOnCategories.php:190
+msgid "form_Category Page offers"
+msgstr "Coupons for you"
+
+#: createSiteMaps.php:69 sitemap_refresh_varnish.php:135
+msgid "form_sitemap"
+msgstr "Site Map"
+
+#: createSiteMaps.php:70 sitemap_refresh_varnish.php:136
+msgid "form_plus"
+msgstr "Plus"
+
+#: createSiteMaps.php:71 sitemap_refresh_varnish.php:137
+msgid "form_main"
+msgstr "Main"
+
+#: createSiteMaps.php:72 sitemap_refresh_varnish.php:138 SocialCode.php:13
+msgid "form_shops"
+msgstr "Shops"
+
+#: Helper/viewHelper.php:462 Helper/viewHelper-v1.php:464
+#: Helper/HomePagePartialFunctions.php:13
+msgid "form_All Categories"
+msgstr "View all of our categories"
+
+#: Helper/HomePagePartialFunctions.php:39
+msgid "form_Our 10 best coupons"
+msgstr "Flipit India's Top 10 Coupons"
+
+#: Helper/HomePagePartialFunctions.php:40
+msgid "form_New and Fresh Codes"
+msgstr "India's Freshest Codes"
+
+#: Helper/HomePagePartialFunctions.php:44
+#: Helper/HomePagePartialFunctions.php:67
+msgid "form_Offers"
+msgstr "Offers"
+
+#: Helper/HomePagePartialFunctions.php:69
+#: Helper/HomePagePartialFunctions.php:93
+msgid "form_coupons"
+msgstr "Coupons"
+
+#: Helper/HomePagePartialFunctions.php:110
+msgid "form_articles worth your time"
+msgstr "Articles worth reading"
+
+#: Helper/HomePagePartialFunctions.php:114
+msgid "form_Smarter shopping"
+msgstr "Learn How to Shop Smartly"
+
+#: Helper/HomePagePartialFunctions.php:201
+msgid "form_All Top Codes"
+msgstr "View all of our best codes"
+
+#: Helper/HomePagePartialFunctions.php:207
+msgid "form_All New Codes"
+msgstr "Click to see all new codes"
+
+#: Helper/HomePagePartialFunctions.php:212
+msgid "form_All Saving Guides"
+msgstr "Did you like these articles? We have more for you"
+
+#: Helper/HomePagePartialFunctions.php:230
+#: Helper/HomePagePartialFunctions.php:264
+msgid "form_All"
+msgstr "All"
+
+#: Helper/HomePagePartialFunctions.php:231
+msgid "form_Code"
+msgstr "Codes"
+
+#: Helper/HomePagePartialFunctions.php:248
+#: Helper/HomePagePartialFunctions.php:265
+msgid "form_Codes"
+msgstr "Codes"
+
+#: Register.php:21 Profile.php:11
+msgid "form_Email"
+msgstr "What's your e-mail address?"
+
+#: Register.php:28 ResetPassword.php:15 Login.php:28 Profile.php:20
+msgid "form_Password"
+msgstr "Enter Password"
+
+#: Register.php:34 Profile.php:32
+msgid "form_First name"
+msgstr "First Name"
+
+#: Register.php:39 Profile.php:37
+msgid "form_Last name"
+msgstr "Last Name"
+
+#: Register.php:44 Profile.php:74
+msgid "form_Gender"
+msgstr "Male or female? "
+
+#: ResetPassword.php:22 Profile.php:26
+msgid "form_Confirm Password"
+msgstr "Confirm Password"
+
+#: Login.php:22 ForgotPassword.php:21
+msgid "form_Email address"
+msgstr "What's your e-mail address?"
+
+#: Profile.php:41
+msgid "form_Date of Birth"
+msgstr "Date of Birth"
+
+#: Profile.php:80
+msgid "form_Postcode"
+msgstr "Postal Code "
+
+#: SocialCodeSettingForm.php:14
+msgid "form_nickname"
+msgstr "Nickname"
+
+#: SocialCodeSettingForm.php:31
+msgid "form_expireddate"
+msgstr "Expiry date"
+
+#: SocialCodeSettingForm.php:37
+msgid "form_Coupon title"
+msgstr "Describe the discount your coupon gives"
+
+#: SocialCodeSettingForm.php:42
+msgid "form_Coupon link"
+msgstr "Link us to where your coupon can be used"
+
+#: SocialCodeSettingForm.php:47 SocialCode.php:21
+msgid "form_Coupon code"
+msgstr "Coupon code"
+
+#: SocialCodeSettingForm.php:52
+msgid "form_Term and Conditions"
+msgstr "Describe your coupon's discount"
+
+#: EmailSettings.php:20
+msgid "form_Sender Email Address"
+msgstr "here goes your e-mail address"
+
+#: EmailSettings.php:24
+msgid "form_Sender Name"
+msgstr "What's your Name?"
+
+#: SocialCode.php:28
+msgid "form_Offer Details"
+msgstr "Description, terms and conditions"
+
+#: SocialCode.php:34
+msgid "form_expirydate"
+msgstr "Expiry date"
+
+#: SearchBrand.php:11
+msgid "form_Search brand"
+msgstr "Search for a brand to follow"
+
+#: IpAddress.php:13
+#, fuzzy
+msgid "form_name"
+msgstr "Nickname"
+
+#: IpAddress.php:20
+#, fuzzy
+msgid "form_ipaddress"
+msgstr "What's your e-mail address?"
+
+#: SignUp.php:32
+msgid "form_email_address"
+msgstr "What's your e-mail address?"
+
+#: SignUp.php:34
+msgid "from_email_address"
+msgstr "What's your e-mail address?"
+
+#~ msgid "form_Offer Title"
+#~ msgstr "Offer summary"
+
+#~ msgid "form_Offer URL"
+#~ msgstr "Offer URL"
+
+#~ msgid "form_Sing up"
+#~ msgstr "Sign up"
+
+#~ msgid "form_Type in a Store e.g.  Avis"
+#~ msgstr "Search for"
+
+#~ msgid "form_moneysaving"
+#~ msgstr "Flipit Plus"
+
+#~ msgid "from_All Category Codes"
+#~ msgstr "Show me more codes like these"
