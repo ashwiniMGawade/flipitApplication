@@ -1,4 +1,4 @@
 Options -Indexes
-ErrorDocument 403 /public/mx/403.php
+ErrorDocument 403 /public/gl/403.php
 RewriteEngine on
-RewriteRule ^403.php$ http://www.flipit.com/mx [L,R=301]
+RewriteRule ^403.php$ http://www.flipit.com/gl [L,R=301]
