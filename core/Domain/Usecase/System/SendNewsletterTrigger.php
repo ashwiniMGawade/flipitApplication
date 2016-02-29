@@ -10,18 +10,15 @@ use Core\Domain\Entity\BulkEmail;
 
 class SendNewsletterTrigger
 {
-    private $newsletterCampaignRepository;
     private $bulkEmailRepository;
     private $localeSettingsRepository;
     private $local;
 
     public function __construct(
-        NewsletterCampaignRepositoryInterface $newsletterCampaignRepository,
         BulkEmailRepositoryInterface $bulkEmailRepository,
         LocaleSettingRepositoryInterface $localeSettingsRepository,
         $local
     ) {
-        $this->newsletterCampaignRepository = $newsletterCampaignRepository;
         $this->bulkEmailRepository = $bulkEmailRepository;
         $this->localeSettingsRepository = $localeSettingsRepository;
         $this->local = $local;
@@ -45,19 +42,19 @@ class SendNewsletterTrigger
     private function _scheduleNewsletter($newsletterCampaign)
     {
         $newsletterCampaignScheduledTime = $newsletterCampaign->getScheduledTime();
+        $newsletterCampaignScheduledTimeUTC = new \DateTime(
+            $newsletterCampaignScheduledTime->format("d-m-Y\\TH:i:s"),
+            (new \DateTimezone("UTC"))
+        );
 
         $bulkEmail = new BulkEmail;
-        $bulkEmail->setTimeStamp($newsletterCampaignScheduledTime->getTimestamp()*1000);
+        $bulkEmail->setTimeStamp($newsletterCampaignScheduledTimeUTC->getTimestamp()*1000);
         $bulkEmail->setEmailType('newsletter');
         $bulkEmail->setLocal($this->local);
         $bulkEmail->setReferenceId($newsletterCampaign->getId());
 
         // Creating a new document in object store
         $this->bulkEmailRepository->save($bulkEmail);
-
-        // Setting the newsletter campaign to scheduled
-        $newsletterCampaign->setScheduledStatus(2);
-        $this->newsletterCampaignRepository->save($newsletterCampaign);
 
         return $newsletterCampaign->getCampaignName() . " (" . $newsletterCampaign->getId() . ") " . strtoupper($this->local);
     }

@@ -1,0 +1,362 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: links_kortingscode\n"
+"POT-Creation-Date: 2015-03-03 17:39+0530\n"
+"PO-Revision-Date: 2015-03-03 13:10+0100\n"
+"Last-Translator: Joanna <joanna@imbull.com>\n"
+"Language-Team: KC-Team <kortingscode@seasiaconsulting.com>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.4\n"
+"X-Poedit-KeywordsList: __link\n"
+"X-Poedit-Basepath: C:\\wamp\\www\\kortingscode.nl\\kortingscode.nl\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: application/controllers\n"
+"X-Poedit-SearchPath-1: application/views\n"
+"X-Poedit-SearchPath-2: public/js/front_end\n"
+
+#: ContactController.php:65 scripts/emails/footer.phtml:30
+#: createSiteMaps.php:73
+msgid "link_info"
+msgstr "info"
+
+#: ContactController.php:66 scripts/emails/footer.phtml:30
+msgid "link_contact"
+msgstr "contact"
+
+#: StoreController.php:426 LoginController.php:115 LoginController.php:161
+#: LoginController.php:182 LoginController.php:189 LoginController.php:238
+#: LoginController.php:242 LoginController.php:249 LoginController.php:266
+#: LoginController.php:272 LoginController.php:279 SignupController.php:311
+#: SignupController.php:317 SignupController.php:334 SignupController.php:415
+#: SignupController.php:420 scripts/partials/_user_nav_logged_in.phtml:34
+#: scripts/partials/_user_nav.phtml:5 scripts/login/index.phtml:18
+#: createSiteMaps.php:76 Helper/MandrillMailFunctions.php:34
+#: Helper/MandrillMailFunctions.php:59 Helper/MandrillMailFunctions.php:116
+#: Helper/MandrillMailFunctions.php:177 Helper/MandrillMailFunctions.php:200
+msgid "link_login"
+msgstr "login"
+
+#: HomeajaxController.php:25 CategoryController.php:63
+#: CategoryController.php:91 scripts/category/_categories-overview.phtml:31
+#: scripts/emails/emailOffers.phtml:5 scripts/o2feed/index.phtml:158
+#: scripts/marktplaatsfeed/index.phtml:102
+#: admin/controllers/ShopController.php:1074
+#: admin/controllers/UsergeneratedofferController.php:149
+#: admin/controllers/CategoryController.php:337
+#: admin/controllers/OfferController.php:1113 Category.php:683 Offer.php:3351
+#: Shop.php:1852 Page.php:799 Helper/HomePagePartialFunctions.php:12
+#: Helper/SidebarWidgetFunctions.php:96
+msgid "link_categorieen"
+msgstr "category"
+
+#: HomeajaxController.php:42 OfferController.php:216
+#: scripts/o2feed/index.phtml:156 admin/controllers/ShopController.php:1067
+#: admin/controllers/UsergeneratedofferController.php:147
+#: admin/controllers/OfferController.php:1111 CouponCode.php:51
+#: Helper/HomePagePartialFunctions.php:177
+msgid "link_nieuw"
+msgstr "new"
+
+#: HomeajaxController.php:59 scripts/store/_moneySavingGuideArticle.phtml:17
+#: scripts/o2feed/index.phtml:157 scripts/plus/_articleInformation.phtml:26
+#: admin/controllers/RefreshvarnishController.php:54 Articles.php:976
+#: Helper/HomePagePartialFunctions.php:165
+#: Helper/HomePagePartialFunctions.php:296
+#: Helper/HomePagePartialFunctions.php:395
+msgid "link_plus"
+msgstr "plus"
+
+#: LoginController.php:37 LoginController.php:300 LoginController.php:360
+#: SignupController.php:49 SignupController.php:90 SignupController.php:101
+#: SignupController.php:269 SignupController.php:325 SignupController.php:392
+#: SignupController.php:427 scripts/partials/_user_nav_logged_in.phtml:27
+#: scripts/partials/_user_nav.phtml:11 scripts/login/index.phtml:50
+#: createSiteMaps.php:77 Helper/SignUpPartialFunction.php:54
+#: Helper/viewHelper.php:1004
+msgid "link_inschrijven"
+msgstr "subscription"
+
+#: LoginController.php:38 LoginController.php:243 LoginController.php:302
+#: LoginController.php:359 SignupController.php:50 SignupController.php:270
+#: scripts/partials/_user_nav_logged_in.phtml:28 Helper/viewHelper.php:1005
+msgid "link_profiel"
+msgstr "profile"
+
+#: LoginController.php:76 LoginController.php:86 SignupController.php:158
+#: SignupController.php:166 scripts/partials/_user_nav_logged_in.phtml:15
+#: scripts/partials/_user_nav_logged_in.phtml:21
+#: scripts/favourite/yourbrands.phtml:69
+#: scripts/favourite/_favouriteShopsOffers.phtml:43
+#: scripts/favourite/_favouriteStores.phtml:26
+#: scripts/favourite/_popularStores.phtml:33 Helper/viewHelper.php:884
+#: Helper/viewHelper.php:987 Helper/viewHelper.php:989
+#: Helper/viewHelper.php:998 Helper/viewHelper.php:1001
+msgid "link_mijn-favorieten"
+msgstr "my-favourites"
+
+#: LoginController.php:77 scripts/partials/_user_nav_logged_in.phtml:16
+#: scripts/favourite/_favouriteShopsOffers.phtml:44 Helper/viewHelper.php:990
+#: Helper/viewHelper.php:999
+msgid "link_memberonlycodes"
+msgstr "membersonlycodes"
+
+#: LoginController.php:162 LoginController.php:250
+#: Helper/MandrillMailFunctions.php:35
+msgid "link_resetpassword"
+msgstr "resetpassword"
+
+#: LoginController.php:183 LoginController.php:190 SignupController.php:312
+#: SignupController.php:416 scripts/login/index.phtml:19
+msgid "link_forgotpassword"
+msgstr "forgotpassword"
+
+#: SignupController.php:394
+#, fuzzy
+msgid "link_membersonlysetsessions"
+msgstr "membersonlycodes"
+
+#: SearchController.php:30 scripts/index/_homePageSearch.phtml:4
+#: createSiteMaps.php:75
+msgid "link_zoeken"
+msgstr "search"
+
+#: AboutController.php:36 AboutController.php:106
+#: scripts/partials/_authorsList.phtml:15
+#: scripts/plus/_recentlyAddedArticles.phtml:8
+msgid "link_redactie"
+msgstr "editors"
+
+#: OfferController.php:43 OfferController.php:125 Offer.php:3336 Shop.php:1871
+#: Helper/OffersPartialFunctions.php:452
+#: Helper/ExpiredOffersPartialFunction.php:8
+msgid "link_deals"
+msgstr "deals"
+
+#: scripts/store/socialcodethanks.phtml:17 scripts/store/socialcode.phtml:33
+#: scripts/favourite/sharesocialcode.phtml:45
+msgid "link_sharesocialcode"
+msgstr "sharesocialcode"
+
+#: scripts/store/_all-stores-searchalphabet.phtml:3
+#: scripts/o2feed/index.phtml:154 admin/controllers/ShopController.php:1069
+#: Helper/LayoutContent.php:216
+msgid "link_alle-winkels-09-e"
+msgstr "all-shops-09-e"
+
+#: scripts/store/_all-stores-searchalphabet.phtml:8
+#: admin/controllers/ShopController.php:1070
+msgid "link_alle-winkels-f-j"
+msgstr "all-shops-f-j"
+
+#: scripts/store/_all-stores-searchalphabet.phtml:13
+#: admin/controllers/ShopController.php:1071
+msgid "link_alle-winkels-k-o"
+msgstr "all-shops-k-o"
+
+#: scripts/store/_all-stores-searchalphabet.phtml:18
+#: admin/controllers/ShopController.php:1072
+msgid "link_alle-winkels-p-t"
+msgstr "all-shops-p-t"
+
+#: scripts/store/_all-stores-searchalphabet.phtml:23
+#: admin/controllers/ShopController.php:1073
+msgid "link_alle-winkels-u-z"
+msgstr "all-shops-u-z"
+
+#: scripts/store/_storeEditor.phtml:5 scripts/plus/guidedetail.phtml:4
+#: admin/controllers/UserController.php:938 User.php:1122
+#: Helper/MoneySavingGuidesPartialFunctions.php:8
+#: scripts/emails/emailOffers.phtml:2 scripts/emails/codeAlert.phtml:2
+#: scripts/o2feed/index.phtml:155 admin/controllers/EmailController.php:249
+#: admin/controllers/ShopController.php:1068
+#: admin/controllers/UsergeneratedofferController.php:148
+#: admin/controllers/OfferController.php:1112 CouponCode.php:52
+#: Helper/MandrillMailFunctions.php:124
+#: Helper/HomePagePartialFunctions.php:173
+#: Helper/HomePagePartialFunctions.php:197
+msgid "link_top-20"
+msgstr "top-20"
+
+#: scripts/partials/_user_nav_logged_in.phtml:35
+msgid "link_logout"
+msgstr "logout"
+
+#: scripts/signup/signuplightbox.phtml:31
+#: scripts/signup/signuplightbox.phtml:47
+#: scripts/signup/signuplightbox.phtml:32
+msgid "link_signuplightboxsetsessions"
+msgstr ""
+
+#: scripts/signup/signuplightbox.phtml:48
+#, fuzzy
+msgid "link_setsession"
+msgstr "resetpassword"
+
+#: scripts/signup/index.phtml:84
+msgid "link_privacy-cookies"
+msgstr "privacy-cookies"
+
+#: scripts/signup/index.phtml:88
+msgid "link_terms"
+msgstr "disclaimer"
+
+#: scripts/o2feed/index.phtml:150
+msgid "link_veelgestelde-vragen"
+msgstr "faq"
+
+#: admin/controllers/RefreshvarnishController.php:53
+msgid "link_sitemap"
+msgstr "sitemap"
+
+#: admin/controllers/RefreshvarnishController.php:55
+msgid "link_main"
+msgstr "main"
+
+#: admin/controllers/RefreshvarnishController.php:56
+msgid "link_shops"
+msgstr "shops"
+
+#: Offer.php:3344 Shop.php:1840
+msgid "link_how-to"
+msgstr "how-to"
+
+#: invalidUrls.php:11
+msgid "link_categorieen_url_block"
+msgstr "categorieen"
+
+#: invalidUrls.php:12
+#, fuzzy
+msgid "link_plus_url_block"
+msgstr "alle-winkels"
+
+#: invalidUrls.php:13
+#, fuzzy
+msgid "link_deals_url_block"
+msgstr "alle-winkels"
+
+#: invalidUrls.php:14
+msgid "link_redactie_url_block"
+msgstr "redactie"
+
+#: invalidUrls.php:16
+msgid "link_alle-winkels_url_block"
+msgstr "alle-winkels"
+
+#: invalidUrls.php:17
+msgid "link_top-20_url_block"
+msgstr "top-20"
+
+#: invalidUrls.php:18
+msgid "link_nieuw_url_block"
+msgstr "nieuw"
+
+#: invalidUrls.php:23
+#, fuzzy
+msgid "link_inschrijven_url_block"
+msgstr "inschrijven"
+
+#: invalidUrls.php:24
+#, fuzzy
+msgid "link_login_url_block"
+msgstr "logindirect"
+
+#: invalidUrls.php:25
+#, fuzzy
+msgid "link_profiel_url_block"
+msgstr "alle-winkels"
+
+#: invalidUrls.php:26
+#, fuzzy
+msgid "link_resetpassword_url_block"
+msgstr "resetpassword"
+
+#: invalidUrls.php:27
+msgid "link_forgotpassword_url_block"
+msgstr "forgotpassword"
+
+#: invalidUrls.php:28
+#, fuzzy
+msgid "link_logout_url_block"
+msgstr "alle-winkels"
+
+#: invalidUrls.php:29
+msgid "link_directlogin_url_block"
+msgstr "logindirect"
+
+#: invalidUrls.php:30
+#, fuzzy
+msgid "link_directloginunsubscribe_url_block"
+msgstr "logindirect"
+
+#: invalidUrls.php:31
+msgid "link_how-to_url_block"
+msgstr "alle-winkels"
+
+#: createSiteMaps.php:74
+msgid "link_rssfeed"
+msgstr "rssfeed"
+
+#: Helper/viewHelper.php:460 Helper/MandrillMailFunctions.php:117
+msgid "link_directlogin"
+msgstr "directlogin"
+
+#: Helper/MandrillMailFunctions.php:177
+msgid "link_confirmemail"
+msgstr "confirmemail"
+
+#~ msgid "link_moneysaving"
+#~ msgstr "Plus"
+
+#~ msgid "link_search"
+#~ msgstr "search"
+
+#~ msgid "bespaarwijzer"
+#~ msgstr "advantage"
+
+#~ msgid "stap2"
+#~ msgstr "step2"
+
+#~ msgid "stap1"
+#~ msgstr "step1"
+
+#~ msgid "populair"
+#~ msgstr "popular"
+
+#~ msgid "bespaarwijzer_url_block"
+#~ msgstr "bespaarwijzer"
+
+#~ msgid "bespaarwijzercat_url_block"
+#~ msgstr "bespaarwijzercat"
+
+#~ msgid "populair_url_block"
+#~ msgstr "populair"
+
+#, fuzzy
+#~ msgid "memberonlycodes_url_block"
+#~ msgstr "membersonlycodes"
+
+#, fuzzy
+#~ msgid "mijn-favorieten_url_block"
+#~ msgstr "my-favourites"
+
+#, fuzzy
+#~ msgid "compleet_url_block"
+#~ msgstr "complete"
+
+#~ msgid "bespaarwijzercat"
+#~ msgstr "advantagecat"
+
+#~ msgid "compleet"
+#~ msgstr "complete"
+
+#~ msgid "stap3"
+#~ msgstr "step3"
+
+#~ msgid "nieuws"
+#~ msgstr "news"
+
+#~ msgid "store"
+#~ msgstr "alle-winkels"
