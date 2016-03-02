@@ -75,7 +75,11 @@ $offerBoxes = array();
 $column1 = '';
 $column2 = '';
 $column3 = '';
-$newsletterForm = $this->partial('partials/_landingpage_signup.phtml', array());
+$newsletterForm = '';
+$signupWidgetSetting = \FrontEnd_Helper_viewHelper::getSetting('SHOW_SIGNUP_WIDGET_ON_GLP');
+if ($signupWidgetSetting instanceof Core\Domain\Entity\Settings && $signupWidgetSetting->getValue()):
+    $newsletterForm = $this->partial('partials/_landingpage_signup.phtml', array());
+endif;
 foreach ($this->offers as $offer) {
     $offer = (object)$offer;
     $esiLocale = LOCALE != 'en' ? LOCALE . '/' : '';
