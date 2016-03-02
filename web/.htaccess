@@ -857,6 +857,10 @@ RewriteCond %{REQUEST_URI}  ^/gl(.*)?$ [NC]
 RewriteCond %{REQUEST_URI} !^/gl/glp(.*)$ [NC]
 RewriteRule ^gl(.*)?$ http://%{SERVER_NAME} [R=301,L]
 
+RewriteCond %{REQUEST_URI}  ^/ar(.*)?$ [NC]
+RewriteCond %{REQUEST_URI} !^/ar/glp(.*)$ [NC]
+RewriteRule ^ar(.*)?$ http://%{SERVER_NAME} [R=301,L]
+
 RewriteCond %{REQUEST_URI} ^/be/link_top-50?$ [NC]
 RewriteCond %{QUERY_STRING} ^(.*)$ [NC]
 RewriteRule ^be/link_top-50?$ http://%{SERVER_NAME}/be/top50?%{QUERY_STRING} [R=301,L]
