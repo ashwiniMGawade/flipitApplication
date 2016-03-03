@@ -853,7 +853,7 @@ RewriteRule ^ca/wimdu?$	http://www.flipit.com/us? [R=301,L]
 RewriteRule ^ca/yves-rocher?$	http://www.flipit.com/us? [R=301,L]
 
 
-RewriteCond %{REQUEST_URI}  ^/gl(.*)?$ [NC]
+RewriteCond %{REQUEST_URI}  ^/gl(/|$)(.*)?$ [NC]
 RewriteCond %{REQUEST_URI} !^/gl/glp(.*)$ [NC]
 RewriteRule ^gl(.*)?$ http://%{SERVER_NAME} [R=301,L]
 
