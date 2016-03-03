@@ -978,6 +978,8 @@ class Shop extends \Core\Domain\Entity\Shop
         $shopInfo->showChains = \BackEnd_Helper_viewHelper::stripSlashesFromString($showChains);
         $strictConfirmation = !empty($shopDetail['strictConfirmation']) ? $shopDetail['strictConfirmation'] : '0';
         $shopInfo->strictConfirmation = \BackEnd_Helper_viewHelper::stripSlashesFromString($strictConfirmation);
+        $sidebarPosition = !empty($shopDetail['sidebarPosition']) ? $shopDetail['sidebarPosition'] : '0';
+        $shopInfo->sidebarPosition = \BackEnd_Helper_viewHelper::stripSlashesFromString($sidebarPosition);
         // shop extra properties
         $displayExtraProperties = !empty($shopDetail['displayExtraProperties']) ? $shopDetail['displayExtraProperties'] : '0';
         $shopInfo->displayExtraProperties = \BackEnd_Helper_viewHelper::stripSlashesFromString($displayExtraProperties);

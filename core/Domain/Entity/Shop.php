@@ -512,6 +512,11 @@ class Shop
      * @ORM\Column(type="integer", length=11, nullable=true)
      */
     protected $offerCount = 0;
+
+    /**
+     * @ORM\Column(type="integer", length=1, nullable=false)
+     */
+    protected $sidebarPosition;
  
     public function __get($property)
     {
@@ -2047,5 +2052,21 @@ class Shop
     public function setOfferCount($offerCount)
     {
         $this->offerCount = $offerCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSidebarPosition()
+    {
+        return $this->sidebarPosition;
+    }
+
+    /**
+     * @param mixed $sidebarPosition
+     */
+    public function setSidebarPosition($sidebarPosition)
+    {
+        $this->sidebarPosition = $sidebarPosition;
     }
 }

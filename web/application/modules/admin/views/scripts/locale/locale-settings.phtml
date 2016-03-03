@@ -116,7 +116,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.fileupload.js"
                         </div>
                         <div class="mainpage-content-right">
                             <div data-toggle="buttons-checkbox" class="btn-group">
-                            <?php if($setting->getName() == 'SHOW_FLOATING_COUPON') : ?>
+                            <?php if($setting->getName() == 'SHOW_FLOATING_COUPON' || $setting->getName() == 'SHOW_SIGNUP_WIDGET_ON_GLP' ) : ?>
                                 <button type="button" data-option="1" id="<?php echo $setting->getName(); ?>_ON_BTN" class="btn <?php echo 1 ==  $setting->getValue() ? 'btn-primary' : ''; ?>" onclick="localeSettingToggle(this, '<?php echo $setting->getName(); ?>');"><?php echo $this->translate('Yes'); ?></button>
                                 <button type="button" data-option="0" id="<?php echo $setting->getName(); ?>_OFF_BTN" class="btn <?php echo 1 ==  $setting->getValue() ? '' : 'btn-primary'; ?>" style="border-radius: 0 4px 4px 0;" onclick="localeSettingToggle(this, '<?php echo $setting->getName(); ?>');"><?php echo $this->translate('No'); ?></button>
                                 <input type="hidden" value="<?php echo $setting->getValue(); ?>" name="settings[<?php echo $setting->getName(); ?>]" id="<?php echo $setting->getName(); ?>" class="span3">
